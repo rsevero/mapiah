@@ -101,7 +101,7 @@ class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     _initialUnit = _selectedUnit;
     _initialSelectedChoice = _selectedChoice;
 
-    _updateIsValid(notify: true);
+    _updateIsValid();
   }
 
   @override
@@ -128,10 +128,10 @@ class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     return 0; // unset or ''
   }
 
-  void _updateIsValid({bool notify = false}) {
+  void _updateIsValid() {
     final int refsCount = _getRefCount();
 
-    _isValid = _selectedChoice == mpUnsetOptionID || _selectedChoice != '';
+    _isValid = (_selectedChoice == mpUnsetOptionID) || (_selectedChoice != '');
 
     for (int i = 0; i < refsCount; i++) {
       final double? value = double.tryParse(_lengthControllers[i].text);
@@ -146,12 +146,11 @@ class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
     }
 
     _updateOkButtonEnabled();
-    if (notify) {
-      if (_isValid) {
-        widget.onValidOptionChanged?.call(buildCurrentOption());
-      } else {
-        widget.onValidOptionChanged?.call(null);
-      }
+
+    if (_isValid) {
+      widget.onValidOptionChanged?.call(buildCurrentOption());
+    } else {
+      widget.onValidOptionChanged?.call(null);
     }
   }
 
@@ -437,7 +436,7 @@ class MPScrapScaleOptionWidgetState extends State<MPScrapScaleOptionWidget> {
           groupValue: _selectedChoice,
           onChanged: (value) {
             _selectedChoice = value ?? '';
-            _updateIsValid(notify: true);
+            _updateIsValid();
           },
           child: Column(children: optionWidgets),
         ),

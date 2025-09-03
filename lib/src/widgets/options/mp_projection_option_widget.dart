@@ -78,7 +78,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     _initialUnit = _selectedUnit;
     _initialSelectedChoice = _selectedChoice;
 
-    _updateIsValid(notify: true);
+    _updateIsValid();
   }
 
   @override
@@ -89,7 +89,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
     super.dispose();
   }
 
-  void _updateIsValid({bool notify = false}) {
+  void _updateIsValid() {
     if (_selectedChoice == mpUnsetOptionID ||
         _selectedChoice == 'extended' ||
         _selectedChoice == 'none' ||
@@ -116,12 +116,11 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
       );
     }
     _updateOkButtonEnabled();
-    if (notify) {
-      if (_isValid) {
-        widget.onValidOptionChanged?.call(buildCurrentOption());
-      } else {
-        widget.onValidOptionChanged?.call(null);
-      }
+
+    if (_isValid) {
+      widget.onValidOptionChanged?.call(buildCurrentOption());
+    } else {
+      widget.onValidOptionChanged?.call(null);
     }
   }
 
@@ -277,7 +276,7 @@ class MPProjectionOptionWidgetState extends State<MPProjectionOptionWidget> {
           groupValue: _selectedChoice,
           onChanged: (value) {
             _selectedChoice = value ?? '';
-            _updateIsValid(notify: true);
+            _updateIsValid();
           },
           child: Column(children: optionWidgets),
         ),

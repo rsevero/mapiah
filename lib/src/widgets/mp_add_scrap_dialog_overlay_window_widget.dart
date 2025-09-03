@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_widget.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 
 class MPAddScrapDialogOverlayWindowWidget extends StatefulWidget {
   final VoidCallback onPressedClose;
@@ -22,13 +23,27 @@ class MPAddScrapDialogOverlayWindowWidget extends StatefulWidget {
 class _MPAddScrapDialogOverlayWindowWidgetState
     extends State<MPAddScrapDialogOverlayWindowWidget> {
   late String _currentValidScrapTHID;
+  THProjectionCommandOption? _projectionOption;
+  THScrapScaleCommandOption? _scaleOption;
 
   void _create() {
+    final List<THCommandOption> scrapOptions = [];
+
+    // Apply projection option if user selected one
+    if (_projectionOption != null) {
+      scrapOptions.add(_projectionOption!);
+    }
+    // Apply scrap scale option if provided
+    if (_scaleOption != null) {
+      scrapOptions.add(_scaleOption!);
+    }
+
     // scrap id validated by kernel
     widget.fileEditController.elementEditController.createScrap(
       _currentValidScrapTHID,
+      scrapOptions: scrapOptions,
     );
-    // TODO: apply projection/scale options if needed in future (domain support TBD)
+
     widget.onPressedClose();
   }
 
@@ -47,8 +62,8 @@ class _MPAddScrapDialogOverlayWindowWidgetState
       onPressedCreate: _create,
       onPressedCancel: widget.onPressedClose,
       onValidScrapTHIDChanged: (id) => _currentValidScrapTHID = id,
-      onProjectionChanged: (_) {},
-      onScaleChanged: (_) {},
+      onProjectionChanged: (opt) => _projectionOption = opt,
+      onScaleChanged: (opt) => _scaleOption = opt,
     );
   }
 }
