@@ -119,6 +119,7 @@ class MPGeneralController {
         TH2FileEditControllerBase.createFromNewTHFile(thFile);
 
     createdController.setActiveScrap(thScrapMPID);
+    createdController.setFilename(filename);
 
     _t2hFileEditControllers[filename] = createdController;
 

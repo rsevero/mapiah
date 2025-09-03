@@ -5,11 +5,13 @@
   * Get list of available encodings from 'therion --print-encodings'.
   * Create new th2 file.
   * Create scrap dialog presenting both scrap scale and projection used both in scrap and in file creation.
+  * On save as, force '.th2' extension.
 * Fixed bugs:
   * Multiple clicks in radio groups sometimes raised "RadioGroup policy does not support multiple selected items".
   * Editing scrap multiple options option not working.
   * Regression that blocked element options editing after inclusion of support for scrap options.
   * MPAddLineCommand.fromExisting leaves addAreaTHIDCommand parameter uninitialized when line wasn´t part of an area.
+  * Filename at status bar not updated after save as.
 * Infrastructure maintenance:
   * Separating _mp_projection_option_widget_ in _mp_projection_option_widget_ and _mp_projection_option_overlay_window_widget_ so _mp_projection_option_widget_ can be reused in _mp_add_file_dialog_widget_.
   * Substituting placeholder at THCommandOption creation.

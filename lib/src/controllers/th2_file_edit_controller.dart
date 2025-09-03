@@ -100,18 +100,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   final GlobalKey thFileWidgetKey = GlobalKey();
 
-  @computed
-  String get filenameAndScrap {
-    String filename = p.basename(_thFile.filename);
-
-    if (_hasMultipleScraps && _activeScrapID > 0) {
-      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
-
-      filename += ' | ${scrap.thID}';
-    }
-
-    return filename;
-  }
+  @readonly
+  String _filenameAndScrap = '';
 
   @readonly
   bool _isAddElementMode = false;
@@ -472,6 +462,8 @@ abstract class TH2FileEditControllerBase with Store {
     selectionController.resetSelectableElements();
 
     elementEditController.initializeMostUsedTypes();
+
+    setFilename(_thFile.filename);
 
     _isLoading = false;
 
@@ -1108,6 +1100,7 @@ abstract class TH2FileEditControllerBase with Store {
       _actualSave(file);
 
       _thFile.isNewFile = false;
+      setFilename(_thFile.filename);
     }
   }
 
@@ -1193,6 +1186,19 @@ abstract class TH2FileEditControllerBase with Store {
       case MPMultipleElementsCommandCompletionType.lineSegmentsRemoved:
       case MPMultipleElementsCommandCompletionType.optionsEdited:
         elementEditController.updateOptionEdited();
+    }
+  }
+
+  @action
+  void setFilename(String filename) {
+    _thFile.filename = filename;
+
+    _filenameAndScrap = p.basename(_thFile.filename);
+
+    if (_activeScrapID > 0) {
+      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
+
+      _filenameAndScrap += ' | ${scrap.thID}';
     }
   }
 }

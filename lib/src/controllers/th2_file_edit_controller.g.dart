@@ -17,14 +17,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.canvasScaleAsPercentageText,
         name: 'TH2FileEditControllerBase.canvasScaleAsPercentageText',
       )).value;
-  Computed<String>? _$filenameAndScrapComputed;
-
-  @override
-  String get filenameAndScrap =>
-      (_$filenameAndScrapComputed ??= Computed<String>(
-        () => super.filenameAndScrap,
-        name: 'TH2FileEditControllerBase.filenameAndScrap',
-      )).value;
   Computed<MPButtonType>? _$activeAddElementButtonComputed;
 
   @override
@@ -470,6 +462,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _redoDescription(String value) {
     _$_redoDescriptionAtom.reportWrite(value, super._redoDescription, () {
       super._redoDescription = value;
+    });
+  }
+
+  late final _$_filenameAndScrapAtom = Atom(
+    name: 'TH2FileEditControllerBase._filenameAndScrap',
+    context: context,
+  );
+
+  String get filenameAndScrap {
+    _$_filenameAndScrapAtom.reportRead();
+    return super._filenameAndScrap;
+  }
+
+  @override
+  String get _filenameAndScrap => filenameAndScrap;
+
+  @override
+  set _filenameAndScrap(String value) {
+    _$_filenameAndScrapAtom.reportWrite(value, super._filenameAndScrap, () {
+      super._filenameAndScrap = value;
     });
   }
 
@@ -1700,10 +1712,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void setFilename(String filename) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setFilename');
+    try {
+      return super.setFilename(filename);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 canvasScaleAsPercentageText: ${canvasScaleAsPercentageText},
-filenameAndScrap: ${filenameAndScrap},
 activeAddElementButton: ${activeAddElementButton},
 selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
