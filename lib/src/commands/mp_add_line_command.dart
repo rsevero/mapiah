@@ -42,14 +42,18 @@ class MPAddLineCommand extends MPCommand {
     final int existingLineMPID = existingLine.mpID;
     final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
 
-    if (areaMPID != null) {
+    if (areaMPID == null) {
+      addAreaTHIDCommand = null;
+    } else {
       final THArea area = thFile.areaByMPID(areaMPID);
       final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
         existingLineMPID,
         thFile,
       );
 
-      if (areaTHID != null) {
+      if (areaTHID == null) {
+        addAreaTHIDCommand = null;
+      } else {
         addAreaTHIDCommand = MPAddAreaBorderTHIDCommand.fromExisting(
           existingAreaBorderTHID: areaTHID,
           thFile: thFile,
