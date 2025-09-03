@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/widgets/mp_add_scrap_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_encoding_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_projection_option_widget.dart';
-import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
 class MPAddFileDialogWidget extends StatefulWidget {
   final VoidCallback onPressedClose;
@@ -20,66 +18,37 @@ class MPAddFileDialogWidget extends StatefulWidget {
 }
 
 class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
-  final TextEditingController _scrapTHIDController = TextEditingController();
-  final FocusNode _scrapTHIDFocusNode = FocusNode();
-  String? _scrapTHIDError;
-
-  // Projection & Encoding selections
-  THProjectionCommandOption? _selectedProjectionOption;
   String _selectedEncoding = mpDefaultEncoding;
+  String _validScrapTHID = '';
+  THProjectionCommandOption? _projectionOption;
+  THScrapScaleCommandOption? _scaleOption;
+  bool _scrapConfigValid = false;
 
-  // Keys (if parent later wants to pull state, kept internal now)
-  final GlobalKey<MPProjectionOptionWidgetState> _projectionKey =
-      GlobalKey<MPProjectionOptionWidgetState>();
-  final GlobalKey<MPEncodingWidgetState> _encodingKey =
-      GlobalKey<MPEncodingWidgetState>();
+  final GlobalKey<MPEncodingWidgetState> _encodingKey = GlobalKey();
+  final GlobalKey _scrapKernelKey = GlobalKey();
 
-  bool get _isValidScrapID => _scrapTHIDError == null;
-  bool get _isOkEnabled => _isValidScrapID;
+  bool get _isOkEnabled => _scrapConfigValid;
 
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrapTHIDController.text = "${mpScrapTHIDPrefix}1";
-    _validateScrapID();
-  }
-
-  @override
-  void dispose() {
-    _scrapTHIDController.dispose();
-    _scrapTHIDFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _validateScrapID() {
-    final String text = _scrapTHIDController.text.trim();
-
-    String? err;
-
-    if (text.isEmpty) {
-      err = appLocalizations.mpIDMissingErrorMessage;
-    } else if (!RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_\-]*$').hasMatch(text)) {
-      err = appLocalizations.mpIDInvalidValueErrorMessage;
-    }
-
-    setState(() {
-      _scrapTHIDError = err;
-    });
-  }
-
   void _onOkPressed() {
     if (!_isOkEnabled) return;
-
-    final String scrapTHID = _scrapTHIDController.text.trim();
-    final THProjectionCommandOption? proj = _selectedProjectionOption;
+    final String scrapTHID = _validScrapTHID;
     final String encoding = _selectedEncoding;
+    final List<THCommandOption> scrapOptions = [];
+
+    if (_projectionOption != null) {
+      scrapOptions.add(_projectionOption!);
+    }
+    if (_scaleOption != null) {
+      scrapOptions.add(_scaleOption!);
+    }
+
     final TH2FileEditController th2FileEditController = mpLocator
         .mpGeneralController
         .getTH2FileEditControllerForNewFile(
           scrapTHID: scrapTHID,
-          projectionOption: proj,
+          scrapOptions: scrapOptions,
           encoding: encoding,
         );
     final String fileName = th2FileEditController.thFile.filename;
@@ -102,13 +71,30 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
     widget.onPressedClose();
   }
 
+  // Generic helper to defer a state update until after the current frame,
+  // avoiding setState() during build and reducing repeated boilerplate.
+  void _deferUpdate<T>(
+    T newValue,
+    T Function() currentGetter,
+    void Function(T) assign,
+  ) {
+    if ((!mounted) || (currentGetter() == newValue)) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      if (currentGetter() != newValue) {
+        setState(() => assign(newValue));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final MPOptionInfo projectionOptionInfo = MPOptionInfo(
-      type: THCommandOptionType.projection,
-      state: MPOptionStateType.unset,
-    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -120,21 +106,7 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
         ),
         const SizedBox(height: mpButtonSpace),
 
-        // 1. Scrap name field
-        TextField(
-          controller: _scrapTHIDController,
-          focusNode: _scrapTHIDFocusNode,
-          autofocus: true,
-          onChanged: (_) => _validateScrapID(),
-          decoration: InputDecoration(
-            labelText: appLocalizations.mpNewScrapDialogCreateScrapIDLabel,
-            errorText: _scrapTHIDError,
-            hintText: appLocalizations.mpNewScrapDialogCreateScrapIDHint,
-          ),
-        ),
-        const SizedBox(height: mpButtonSpace),
-
-        // 2. Encoding widget (dropdown)
+        // 1. Encoding widget (dropdown)
         Text(
           appLocalizations.mpEncodingLabel,
           style: theme.textTheme.titleSmall,
@@ -148,22 +120,29 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
             if (enc != null) _selectedEncoding = enc;
           },
         ),
-        const SizedBox(height: mpButtonSpace * 2),
 
-        // 3. Projection option widget (no internal buttons)
-        Text(appLocalizations.thProjection, style: theme.textTheme.titleSmall),
-        const SizedBox(height: 4),
-        MPProjectionOptionWidget(
-          key: _projectionKey,
-          optionInfo: projectionOptionInfo,
+        // 2. Scrap configuration (id + scale + projection)
+        const SizedBox(height: mpButtonSpace * 2),
+        MPAddScrapDialogWidget(
+          key: _scrapKernelKey,
+          initialScrapTHID: '${mpScrapTHIDPrefix}1',
           showActionButtons: false,
-          onValidOptionChanged: (opt) {
-            _selectedProjectionOption = opt;
-          },
+          onValidScrapTHIDChanged: (id) => _deferUpdate<String>(
+            id,
+            () => _validScrapTHID,
+            (v) => _validScrapTHID = v,
+          ),
+          onProjectionChanged: (opt) => _projectionOption = opt,
+          onScaleChanged: (opt) => _scaleOption = opt,
+          onValidityChanged: (isValid) => _deferUpdate<bool>(
+            isValid,
+            () => _scrapConfigValid,
+            (v) => _scrapConfigValid = v,
+          ),
         ),
-        const SizedBox(height: mpButtonSpace),
 
         // Action buttons
+        const SizedBox(height: mpButtonSpace),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

@@ -4,6 +4,7 @@
 * New features:
   * Get list of available encodings from 'therion --print-encodings'.
   * Create new th2 file.
+  * Create scrap dialog presenting both scrap scale and projection used both in scrap and in file creation.
 * Fixed bugs:
   * Multiple clicks in radio groups sometimes raised "RadioGroup policy does not support multiple selected items".
   * Editing scrap multiple options option not working.

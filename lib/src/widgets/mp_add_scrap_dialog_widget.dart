@@ -11,22 +11,24 @@ import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
 /// Kernel widget that collects scrap parameters (id, scale, projection).
 class MPAddScrapDialogWidget extends StatefulWidget {
-  final TH2FileEditController fileEditController;
+  final TH2FileEditController? fileEditController;
   final String? initialScrapTHID;
   final ValueChanged<String>? onValidScrapTHIDChanged;
   final ValueChanged<THProjectionCommandOption?>? onProjectionChanged;
   final ValueChanged<THScrapScaleCommandOption?>? onScaleChanged;
+  final ValueChanged<bool>? onValidityChanged;
   final bool showActionButtons;
   final VoidCallback? onPressedCreate;
   final VoidCallback? onPressedCancel;
 
   const MPAddScrapDialogWidget({
     super.key,
-    required this.fileEditController,
+    this.fileEditController,
     this.initialScrapTHID,
     this.onValidScrapTHIDChanged,
     this.onProjectionChanged,
     this.onScaleChanged,
+    this.onValidityChanged,
     this.showActionButtons = false,
     this.onPressedCreate,
     this.onPressedCancel,
@@ -42,6 +44,8 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
   bool get _isValidScrapID => _scrapTHIDError == null;
   bool _isValid = false;
   bool _pendingValidation = false;
+  bool _hasSentInitialValidityCallback = false;
+  bool _isInitializing = true; // avoids setState during init/build
 
   final GlobalKey<MPProjectionOptionWidgetState> _projectionKey = GlobalKey();
   final GlobalKey<MPScrapScaleOptionWidgetState> _scaleKey = GlobalKey();
@@ -53,7 +57,14 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
     _scrapTHIDController = TextEditingController(
       text: widget.initialScrapTHID ?? '',
     );
-    _validateScrapID();
+    // Compute initial error without setState to avoid build-phase mutation.
+    _scrapTHIDError = _computeScrapIDError(_scrapTHIDController.text.trim());
+    // Defer full validation (which may call setState) until after first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _isInitializing = false;
+      _validateScrap();
+    });
   }
 
   @override
@@ -62,29 +73,37 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
     super.dispose();
   }
 
+  String? _computeScrapIDError(String text) {
+    if (text.isEmpty) {
+      return appLocalizations.mpIDMissingErrorMessage;
+    } else if (!RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_\-]*$').hasMatch(text)) {
+      return appLocalizations.mpIDInvalidValueErrorMessage;
+    } else if (widget.fileEditController?.thFile.hasElementByTHID(text) ??
+        false) {
+      return appLocalizations.mpIDNonUniqueValueErrorMessage;
+    }
+    return null;
+  }
+
   void _validateScrapID() {
     final String text = _scrapTHIDController.text.trim();
+    final String? err = _computeScrapIDError(text);
 
-    String? err;
-
-    if (text.isEmpty) {
-      err = appLocalizations.mpIDMissingErrorMessage;
-    } else if (!RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_\-]*$').hasMatch(text)) {
-      err = appLocalizations.mpIDInvalidValueErrorMessage;
-    } else if (widget.fileEditController.thFile.hasElementByTHID(text)) {
-      err = appLocalizations.mpIDNonUniqueValueErrorMessage;
-    }
-    setState(() {
+    if (_isInitializing) {
+      // Direct assignment; no setState during build.
       _scrapTHIDError = err;
-    });
-    if (err == null) {
-      widget.onValidScrapTHIDChanged?.call(text);
-    } else {
-      widget.onValidScrapTHIDChanged?.call('');
+    } else if (_scrapTHIDError != err) {
+      setState(() => _scrapTHIDError = err);
     }
+    final bool isValidNow = err == null;
+    // Always notify (deferred parent handles its own post-frame safety).
+    widget.onValidScrapTHIDChanged?.call(isValidNow ? text : '');
   }
 
   void _validateScrap() {
+    // Ensure scrap ID error & callback updated before overall validation aggregation.
+    _validateScrapID();
+
     final bool scrapIDValid = _isValidScrapID;
     final bool projectionValid = _projectionKey.currentState?.isValid ?? true;
     final bool scaleValid = _scaleKey.currentState?.isValid ?? true;
@@ -102,7 +121,14 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
       }
       if (_isValid != newValid) {
         setState(() => _isValid = newValid);
+        widget.onValidityChanged?.call(newValid);
+      } else {
+        // Still notify if state unchanged but we never notified before (initial call path)
+        if (!_hasSentInitialValidityCallback) {
+          widget.onValidityChanged?.call(newValid);
+        }
       }
+      _hasSentInitialValidityCallback = true;
     });
   }
 

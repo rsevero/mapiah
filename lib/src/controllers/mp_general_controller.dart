@@ -76,7 +76,7 @@ class MPGeneralController {
 
   TH2FileEditController getTH2FileEditControllerForNewFile({
     required String scrapTHID,
-    required THProjectionCommandOption? projectionOption,
+    required List<THCommandOption> scrapOptions,
     required String encoding,
   }) {
     final THFile thFile = THFile();
@@ -102,8 +102,11 @@ class MPGeneralController {
       elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
 
-    if (projectionOption != null) {
-      thScrap.addUpdateOption(projectionOption);
+    for (THCommandOption option in scrapOptions) {
+      if (option.parentMPID != thScrapMPID) {
+        option = option.copyWith(parentMPID: thScrapMPID);
+      }
+      thScrap.addUpdateOption(option);
     }
 
     if (_t2hFileEditControllers.containsKey(filename)) {
