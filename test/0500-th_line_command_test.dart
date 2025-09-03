@@ -9,9 +9,6 @@ final MPLocator mpLocator = MPLocator();
 
 void main() {
   group('line', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00080-line_only.th2',
@@ -168,6 +165,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -182,18 +182,36 @@ endscrap
     }
   });
 
-  group('line unknown type failure', () {
-    const failures = ['th_file_parser-00082-line_unknown_type-failure.th2'];
+  group('line unknown type', () {
+    const successes = [
+      {
+        'file': 'th_file_parser-00082-line_unknown_type.th2',
+        'length': 5,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line cable
+  endline
+endscrap
+''',
+      },
+    ];
 
-    for (var failure in failures) {
-      test(failure, () async {
+    for (var success in successes) {
+      test(success, () async {
         final parser = THFileParser();
-
+        final writer = THFileWriter();
         mpLocator.mpGeneralController.reset();
-        final (_, isSuccessful, error) = await parser.parse(
-          THTestAux.testPath(failure),
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, false);
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
       });
     }
   });

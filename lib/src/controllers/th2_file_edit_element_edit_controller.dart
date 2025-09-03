@@ -21,9 +21,6 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
@@ -182,34 +179,34 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  THAreaType get lastUsedAreaType {
+  String get lastUsedAreaType {
     if (_lastUsedAreaTypes.isEmpty) {
-      return thDefaultAreaType;
+      return thDefaultAreaType.name;
     }
 
     final String lastUsedAreaType = _lastUsedAreaTypes.first;
 
-    return THAreaType.values.byName(lastUsedAreaType);
+    return lastUsedAreaType;
   }
 
-  THLineType get lastUsedLineType {
+  String get lastUsedLineType {
     if (_lastUsedLineTypes.isEmpty) {
-      return thDefaultLineType;
+      return thDefaultLineType.name;
     }
 
     final String lastUsedLineType = _lastUsedLineTypes.first;
 
-    return THLineType.values.byName(lastUsedLineType);
+    return lastUsedLineType;
   }
 
-  THPointType get lastUsedPointType {
+  String get lastUsedPointType {
     if (_lastUsedPointTypes.isEmpty) {
-      return thDefaultPointType;
+      return thDefaultPointType.name;
     }
 
     final String lastUsedPointType = _lastUsedPointTypes.first;
 
-    return THPointType.values.byName(lastUsedPointType);
+    return lastUsedPointType;
   }
 
   List<THLineSegment> getLineSegmentsList({
@@ -445,9 +442,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   THArea _createNewArea() {
-    final THArea newArea = THArea(
+    final THArea newArea = THArea.fromString(
       parentMPID: _th2FileEditController.activeScrapID,
-      areaType: lastUsedAreaType,
+      areaTypeString: lastUsedAreaType,
     );
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
@@ -645,9 +642,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
-        _newLine = THLine(
+        _newLine = THLine.fromString(
           parentMPID: _th2FileEditController.activeScrapID,
-          lineType: lastUsedLineType,
+          lineTypeString: lastUsedLineType,
         );
 
         final int newLineMPID = _newLine!.mpID;

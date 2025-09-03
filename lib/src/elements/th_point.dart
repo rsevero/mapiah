@@ -29,8 +29,8 @@ part of 'th_element.dart';
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
 class THPoint extends THElement
-    with THHasOptionsMixin, MPBoundingBox
-    implements THHasPLATypeMixin, THPointInterface {
+    with THHasOptionsMixin, MPBoundingBox, THHasPLATypeMixin
+    implements THPointInterface {
   final THPositionPart position;
   final THPointType pointType;
 
@@ -40,10 +40,12 @@ class THPoint extends THElement
     super.sameLineComment,
     required this.position,
     required this.pointType,
+    required String unknownPLAType,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
+    _unknownPLAType = unknownPLAType;
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
   }
@@ -53,9 +55,11 @@ class THPoint extends THElement
     super.sameLineComment,
     required this.position,
     required this.pointType,
-
+    required String unknownPLAType,
     super.originalLineInTH2File = '',
-  }) : super.getMPID();
+  }) : super.getMPID() {
+    _unknownPLAType = unknownPLAType;
+  }
 
   @override
   THElementType get elementType => THElementType.point;
@@ -68,8 +72,23 @@ class THPoint extends THElement
     super.originalLineInTH2File = '',
   }) : position = THPositionPart.fromStringList(list: pointDataList),
        pointType = THPointType.fromFileString(pointTypeString),
-
-       super.getMPID();
+       super.getMPID() {
+    _unknownPLAType = THPointType.hasPointType(pointTypeString)
+        ? ''
+        : pointTypeString;
+  }
+  THPoint.pointTypeFromString({
+    required super.parentMPID,
+    super.sameLineComment,
+    required this.position,
+    required String pointTypeString,
+    super.originalLineInTH2File = '',
+  }) : pointType = THPointType.fromFileString(pointTypeString),
+       super.getMPID() {
+    _unknownPLAType = THPointType.hasPointType(pointTypeString)
+        ? ''
+        : pointTypeString;
+  }
 
   @override
   Map<String, dynamic> toMap() {
@@ -78,6 +97,7 @@ class THPoint extends THElement
     map.addAll({
       'position': position.toMap(),
       'pointType': pointType.name,
+      'unknownPLAType': unknownPLAType,
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
     });
@@ -93,6 +113,7 @@ class THPoint extends THElement
       originalLineInTH2File: map['originalLineInTH2File'],
       position: THPositionPart.fromMap(map['position']),
       pointType: THPointType.values.byName(map['pointType']),
+      unknownPLAType: map['unknownPLAType'],
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
         map['attrOptionsMap'],
@@ -113,6 +134,7 @@ class THPoint extends THElement
     String? originalLineInTH2File,
     THPositionPart? position,
     THPointType? pointType,
+    String? unknownPLAType,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
@@ -126,6 +148,7 @@ class THPoint extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       position: position ?? this.position,
       pointType: pointType ?? this.pointType,
+      unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
     );
@@ -141,14 +164,20 @@ class THPoint extends THElement
 
     return other.position == position &&
         other.pointType == pointType &&
+        other.unknownPLAType == unknownPLAType &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      Object.hash(position, pointType, optionsMap, attrOptionsMap);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    position,
+    pointType,
+    unknownPLAType,
+    optionsMap,
+    attrOptionsMap,
+  );
 
   @override
   bool isSameClass(Object object) {
@@ -164,7 +193,9 @@ class THPoint extends THElement
 
   @override
   String get plaType {
-    return pointType.toFileString();
+    return (pointType == THPointType.unknown)
+        ? unknownPLAType
+        : pointType.toFileString();
   }
 
   @override

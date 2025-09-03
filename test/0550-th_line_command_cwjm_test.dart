@@ -22,7 +22,7 @@ endline
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall\n","lineType":"wall","childrenMPIDs":[4],"lineSegmentMPIDs":[],"optionsMap":{},"attrOptionsMap":{}}''',
+            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall\n","lineType":"wall","unknownPLAType":"","childrenMPIDs":[4],"lineSegmentMPIDs":[],"optionsMap":{},"attrOptionsMap":{}}''',
       },
     ];
 

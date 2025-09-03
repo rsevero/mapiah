@@ -1,4 +1,5 @@
 import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 
 enum THPointType {
   airDraught,
@@ -108,6 +109,7 @@ enum THPointType {
   traverse,
   treeTrunk,
   u,
+  unknown,
   vegetableDebris,
   viaFerrata,
   volcano,
@@ -127,19 +129,21 @@ enum THPointType {
       pointType,
     );
 
+    if (normalizedPLAType == mpUnknownPLAType) {
+      return false;
+    }
+
     return nameSet.contains(normalizedPLAType);
   }
 
   static THPointType fromFileString(String value) {
-    if (!hasPointType(value)) {
-      throw ArgumentError(
-        'At THPointType.fromFileString: Invalid THPointType value: $value',
-      );
+    if (hasPointType(value)) {
+      value = MPTypeAux.convertHyphenatedToCamelCase(value);
+
+      return THPointType.values.byName(value);
+    } else {
+      return THPointType.unknown;
     }
-
-    value = MPTypeAux.convertHyphenatedToCamelCase(value);
-
-    return THPointType.values.byName(value);
   }
 
   String toFileString() {

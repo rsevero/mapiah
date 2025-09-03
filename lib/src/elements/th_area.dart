@@ -1,8 +1,7 @@
 part of 'th_element.dart';
 
 class THArea extends THElement
-    with THHasOptionsMixin, THIsParentMixin, MPBoundingBox
-    implements THHasPLATypeMixin {
+    with THHasOptionsMixin, THIsParentMixin, MPBoundingBox, THHasPLATypeMixin {
   final THAreaType areaType;
 
   Set<String>? _lineTHIDs;
@@ -13,11 +12,13 @@ class THArea extends THElement
     required super.parentMPID,
     required super.sameLineComment,
     required this.areaType,
+    required String unknownPLAType,
     required List<int> childrenMPIDs,
     required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
     required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
+    _unknownPLAType = unknownPLAType;
     this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
     addAttrOptionsMap(attrOptionsMap);
@@ -26,17 +27,22 @@ class THArea extends THElement
   THArea({
     required super.parentMPID,
     required this.areaType,
-
+    required String unknownPLAType,
     super.originalLineInTH2File = '',
-  }) : super.getMPID();
+  }) : super.getMPID() {
+    _unknownPLAType = unknownPLAType;
+  }
 
   THArea.fromString({
     required super.parentMPID,
     required String areaTypeString,
     super.originalLineInTH2File = '',
   }) : areaType = THAreaType.fromFileString(areaTypeString),
-
-       super.getMPID();
+       super.getMPID() {
+    _unknownPLAType = THAreaType.hasAreaType(areaTypeString)
+        ? ''
+        : areaTypeString;
+  }
 
   @override
   THElementType get elementType => THElementType.area;
@@ -47,6 +53,7 @@ class THArea extends THElement
 
     map.addAll({
       'areaType': areaType.name,
+      'unknownPLAType': unknownPLAType,
       'childrenMPIDs': childrenMPIDs.toList(),
       'optionsMap': THHasOptionsMixin.optionsMapToMap(optionsMap),
       'attrOptionsMap': THHasOptionsMixin.attrOptionsMapToMap(attrOptionsMap),
@@ -62,6 +69,7 @@ class THArea extends THElement
       sameLineComment: map['sameLineComment'],
       originalLineInTH2File: map['originalLineInTH2File'],
       areaType: THAreaType.values.byName(map['areaType']),
+      unknownPLAType: map['unknownPLAType'],
       childrenMPIDs: List<int>.from(map['childrenMPIDs']),
       optionsMap: THHasOptionsMixin.optionsMapFromMap(map['optionsMap']),
       attrOptionsMap: THHasOptionsMixin.attrOptionsMapFromMap(
@@ -82,6 +90,7 @@ class THArea extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THAreaType? areaType,
+    String? unknownPLAType,
     List<int>? childrenMPIDs,
     LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
     LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
@@ -95,7 +104,7 @@ class THArea extends THElement
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       areaType: areaType ?? this.areaType,
-
+      unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
       optionsMap: optionsMap ?? this.optionsMap,
       attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
@@ -111,6 +120,7 @@ class THArea extends THElement
     final Function deepEq = const DeepCollectionEquality().equals;
 
     return other.areaType == areaType &&
+        other.unknownPLAType == unknownPLAType &&
         deepEq(other.childrenMPIDs, childrenMPIDs) &&
         deepEq(other.optionsMap, optionsMap) &&
         deepEq(other.attrOptionsMap, attrOptionsMap);
@@ -120,6 +130,7 @@ class THArea extends THElement
   int get hashCode => Object.hash(
     super.hashCode,
     areaType,
+    unknownPLAType,
     childrenMPIDs,
     optionsMap,
     attrOptionsMap,
@@ -127,7 +138,9 @@ class THArea extends THElement
 
   @override
   String get plaType {
-    return areaType.toFileString();
+    return (areaType == THAreaType.unknown)
+        ? unknownPLAType
+        : areaType.toFileString();
   }
 
   @override

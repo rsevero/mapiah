@@ -8,7 +8,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddAreaStatusBarMessage(
-        elementEditController.lastUsedAreaType.name,
+        elementEditController.lastUsedAreaType,
       ),
     );
   }

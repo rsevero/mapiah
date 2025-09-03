@@ -256,6 +256,8 @@ const String mpNonMultipleChoiceSetID = 'SET';
 const String mpScrapFromFileTHID = 'FROM_FILE';
 const String mpScrapFreeTextTHID = 'FREE_TEXT';
 
+const String mpUnknownPLAType = 'unknown';
+
 const String mpAreaTHIDPrefix = 'area';
 const String mpLineTHIDPrefix = 'line';
 const String mpScrapTHIDPrefix = 'scrap';
