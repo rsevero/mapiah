@@ -47,7 +47,7 @@ Version 0.3
 [X] - Release automation MacOS
 [X] - Release automation for Web
 [X] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
-[ ] - Create new file
+[X] - Create new file
 [X] - Create new scrap [requested by Marco Corvi]
 [ ] - Snap points
 [ ] - Add/remove lines from areas
