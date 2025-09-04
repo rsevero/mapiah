@@ -45,12 +45,10 @@ class THLine extends THElement
     required String lineTypeString,
     super.sameLineComment,
     super.originalLineInTH2File = '',
-  }) : lineType = THLineType.fromFileString(lineTypeString),
+  }) : lineType = THLineType.fromString(lineTypeString),
        _lineSegmentMPIDs = [],
        super.getMPID() {
-    _unknownPLAType = THLineType.hasLineType(lineTypeString)
-        ? ''
-        : lineTypeString;
+    _unknownPLAType = THLineType.unknownPLATypeFromString(lineTypeString);
   }
 
   @override

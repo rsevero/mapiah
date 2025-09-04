@@ -6,6 +6,7 @@
   * Create new th2 file.
   * Create scrap dialog presenting both scrap scale and projection used both in scrap and in file creation.
   * On save as, force '.th2' extension.
+  * Support for unknown point, line, and area types.
 * Fixed bugs:
   * Multiple clicks in radio groups sometimes raised "RadioGroup policy does not support multiple selected items".
   * Editing scrap multiple options option not working.

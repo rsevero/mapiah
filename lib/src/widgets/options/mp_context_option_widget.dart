@@ -190,6 +190,7 @@ class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
                 initialValue: _elementType,
                 onChanged: _onElementTypeChanged,
                 onChangedPLAType: _onPLATypeChanged,
+                th2FileEditController: widget.th2FileEditController,
               ),
             ],
           ],

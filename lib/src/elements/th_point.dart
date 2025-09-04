@@ -71,11 +71,9 @@ class THPoint extends THElement
     required String pointTypeString,
     super.originalLineInTH2File = '',
   }) : position = THPositionPart.fromStringList(list: pointDataList),
-       pointType = THPointType.fromFileString(pointTypeString),
+       pointType = THPointType.fromString(pointTypeString),
        super.getMPID() {
-    _unknownPLAType = THPointType.hasPointType(pointTypeString)
-        ? ''
-        : pointTypeString;
+    _unknownPLAType = THPointType.unknownPLATypeFromString(pointTypeString);
   }
   THPoint.pointTypeFromString({
     required super.parentMPID,
@@ -83,7 +81,7 @@ class THPoint extends THElement
     required this.position,
     required String pointTypeString,
     super.originalLineInTH2File = '',
-  }) : pointType = THPointType.fromFileString(pointTypeString),
+  }) : pointType = THPointType.fromString(pointTypeString),
        super.getMPID() {
     _unknownPLAType = THPointType.hasPointType(pointTypeString)
         ? ''

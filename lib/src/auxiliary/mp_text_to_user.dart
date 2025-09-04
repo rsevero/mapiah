@@ -1235,21 +1235,37 @@ class MPTextToUser {
     return choices;
   }
 
-  static Map<String, String> getAreaTypeChoices() {
+  static Map<String, String> getAreaTypeChoices({List<String>? extraTypes}) {
     final Map<String, String> choices = {};
 
     for (final choiceType in THAreaType.values) {
       choices[choiceType.name] = getAreaType(choiceType);
     }
 
+    if (extraTypes != null) {
+      for (final String extraType in extraTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
+    }
+
     return choices;
   }
 
-  static Map<String, String> getLineTypeChoices() {
+  static Map<String, String> getLineTypeChoices({List<String>? extraTypes}) {
     final Map<String, String> choices = {};
 
     for (final choiceType in THLineType.values) {
       choices[choiceType.name] = getLineType(choiceType);
+    }
+
+    if (extraTypes != null) {
+      for (final String extraType in extraTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
     }
 
     return choices;
@@ -1266,11 +1282,19 @@ class MPTextToUser {
     return choices;
   }
 
-  static Map<String, String> getPointTypeChoices() {
+  static Map<String, String> getPointTypeChoices({List<String>? extraTypes}) {
     final Map<String, String> choices = {};
 
-    for (final choiceType in THPointType.values) {
+    for (final THPointType choiceType in THPointType.values) {
       choices[choiceType.name] = getPointType(choiceType);
+    }
+
+    if (extraTypes != null) {
+      for (final String extraType in extraTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
     }
 
     return choices;

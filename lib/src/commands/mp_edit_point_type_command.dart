@@ -3,6 +3,7 @@ part of 'mp_command.dart';
 class MPEditPointTypeCommand extends MPCommand {
   final int pointMPID;
   final THPointType newPointType;
+  final String unknownPLAType;
   final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editPointType;
@@ -10,6 +11,7 @@ class MPEditPointTypeCommand extends MPCommand {
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,
     required this.newPointType,
+    required this.unknownPLAType,
     required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
@@ -17,6 +19,7 @@ class MPEditPointTypeCommand extends MPCommand {
   MPEditPointTypeCommand({
     required this.pointMPID,
     required this.newPointType,
+    required this.unknownPLAType,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super();
@@ -37,6 +40,7 @@ class MPEditPointTypeCommand extends MPCommand {
         .pointByMPID(pointMPID)
         .copyWith(
           pointType: newPointType,
+          unknownPLAType: unknownPLAType,
           originalLineInTH2File: keepOriginalLineTH2File
               ? originalLineInTH2File
               : '',
@@ -57,6 +61,7 @@ class MPEditPointTypeCommand extends MPCommand {
     final MPCommand oppositeCommand = MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID,
       newPointType: originalPoint.pointType,
+      unknownPLAType: originalPoint.unknownPLAType,
       originalLineInTH2File: originalPoint.originalLineInTH2File,
       descriptionType: descriptionType,
     );
@@ -71,12 +76,14 @@ class MPEditPointTypeCommand extends MPCommand {
   MPEditPointTypeCommand copyWith({
     int? pointMPID,
     THPointType? newPointType,
+    String? unknownPLAType,
     String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID ?? this.pointMPID,
       newPointType: newPointType ?? this.newPointType,
+      unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
@@ -87,6 +94,7 @@ class MPEditPointTypeCommand extends MPCommand {
     return MPEditPointTypeCommand.forCWJM(
       pointMPID: map['pointMPID'] as int,
       newPointType: THPointType.values.byName(map['newPointType']),
+      unknownPLAType: map['unknownPLAType'] as String,
       originalLineInTH2File: map['originalLineInTH2File'] as String,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
@@ -105,6 +113,7 @@ class MPEditPointTypeCommand extends MPCommand {
     map.addAll({
       'pointMPID': pointMPID,
       'newPointType': newPointType.name,
+      'unknownPLAType': unknownPLAType,
       'originalLineInTH2File': originalLineInTH2File,
     });
 
@@ -119,6 +128,7 @@ class MPEditPointTypeCommand extends MPCommand {
     return other is MPEditPointTypeCommand &&
         other.pointMPID == pointMPID &&
         other.newPointType == newPointType &&
+        other.unknownPLAType == unknownPLAType &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
 
@@ -127,6 +137,7 @@ class MPEditPointTypeCommand extends MPCommand {
     super.hashCode,
     pointMPID,
     newPointType,
+    unknownPLAType,
     originalLineInTH2File,
   );
 }

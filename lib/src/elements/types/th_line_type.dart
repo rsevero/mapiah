@@ -59,7 +59,7 @@ enum THLineType {
     return nameSet.contains(normalizedPLAType);
   }
 
-  static THLineType fromFileString(String value) {
+  static THLineType fromString(String value) {
     if (hasLineType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
@@ -67,6 +67,10 @@ enum THLineType {
     } else {
       return THLineType.unknown;
     }
+  }
+
+  static String unknownPLATypeFromString(String value) {
+    return hasLineType(value) ? '' : value;
   }
 
   String toFileString() {

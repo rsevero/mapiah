@@ -555,11 +555,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditAreaTypeCommand(
             areaMPID: mpIDs.first,
-            newAreaType: THAreaType.values.byName(newPLAType),
+            newAreaType: THAreaType.fromString(newPLAType),
+            unknownPLAType: THAreaType.unknownPLATypeFromString(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editAreasType(
-            newAreaType: THAreaType.values.byName(newPLAType),
+            newAreaType: THAreaType.fromString(newPLAType),
+            unknownPLAType: THAreaType.unknownPLATypeFromString(newPLAType),
             areaMPIDs: mpIDs,
           );
         }
@@ -583,11 +585,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditLineTypeCommand(
             lineMPID: mpIDs.first,
-            newLineType: THLineType.values.byName(newPLAType),
+            newLineType: THLineType.fromString(newPLAType),
+            unknownPLAType: THLineType.unknownPLATypeFromString(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editLinesType(
-            newLineType: THLineType.values.byName(newPLAType),
+            newLineType: THLineType.fromString(newPLAType),
+            unknownPLAType: THLineType.unknownPLATypeFromString(newPLAType),
             lineMPIDs: mpIDs,
           );
         }
@@ -611,11 +615,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditPointTypeCommand(
             pointMPID: mpIDs.first,
-            newPointType: THPointType.values.byName(newPLAType),
+            newPointType: THPointType.fromString(newPLAType),
+            unknownPLAType: THPointType.unknownPLATypeFromString(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editPointsType(
-            newPointType: THPointType.values.byName(newPLAType),
+            newPointType: THPointType.fromString(newPLAType),
+            unknownPLAType: THPointType.unknownPLATypeFromString(newPLAType),
             pointMPIDs: mpIDs,
           );
         }

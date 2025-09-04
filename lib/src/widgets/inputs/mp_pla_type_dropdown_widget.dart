@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 
 class MPPLATypeDropdownWidget extends StatefulWidget {
   final String elementType;
   final String initialValue;
   final Function(String, bool) onChanged;
+  final TH2FileEditController th2FileEditController;
 
   const MPPLATypeDropdownWidget({
     super.key,
     required this.elementType,
     this.initialValue = '',
     required this.onChanged,
+    required this.th2FileEditController,
   });
 
   @override
@@ -31,18 +35,33 @@ class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
   }
 
   Map<String, String> _getPLATypes() {
+    final TH2FileEditElementEditController elementEditController =
+        widget.th2FileEditController.elementEditController;
+
     switch (widget.elementType) {
       case 'point':
         return MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getPointTypeChoices(),
+          MPTextToUser.getPointTypeChoices(
+            extraTypes:
+                elementEditController.lastUsedPointTypes +
+                elementEditController.mostUsedPointTypes,
+          ),
         );
       case 'line':
         return MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getLineTypeChoices(),
+          MPTextToUser.getLineTypeChoices(
+            extraTypes:
+                elementEditController.lastUsedLineTypes +
+                elementEditController.mostUsedLineTypes,
+          ),
         );
       case 'area':
         return MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getAreaTypeChoices(),
+          MPTextToUser.getAreaTypeChoices(
+            extraTypes:
+                elementEditController.lastUsedAreaTypes +
+                elementEditController.mostUsedAreaTypes,
+          ),
         );
       default:
         return {};

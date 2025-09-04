@@ -37,11 +37,9 @@ class THArea extends THElement
     required super.parentMPID,
     required String areaTypeString,
     super.originalLineInTH2File = '',
-  }) : areaType = THAreaType.fromFileString(areaTypeString),
+  }) : areaType = THAreaType.fromString(areaTypeString),
        super.getMPID() {
-    _unknownPLAType = THAreaType.hasAreaType(areaTypeString)
-        ? ''
-        : areaTypeString;
+    _unknownPLAType = THAreaType.unknownPLATypeFromString(areaTypeString);
   }
 
   @override

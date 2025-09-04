@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_pla_type_dropdown_widget.dart';
@@ -9,6 +10,7 @@ class MPPLATypeRadioButtonWidget extends StatefulWidget {
   final String initialPLAType;
   final Function(String, bool) onChanged;
   final Function(String, bool) onChangedPLAType;
+  final TH2FileEditController th2FileEditController;
 
   const MPPLATypeRadioButtonWidget({
     super.key,
@@ -16,6 +18,7 @@ class MPPLATypeRadioButtonWidget extends StatefulWidget {
     this.initialPLAType = '',
     required this.onChanged,
     required this.onChangedPLAType,
+    required this.th2FileEditController,
   }) : super();
 
   @override
@@ -73,6 +76,7 @@ class _MPPLATypeRadioButtonWidgetState
             elementType: elementTypeText,
             initialValue: widget.initialPLAType,
             onChanged: widget.onChangedPLAType,
+            th2FileEditController: widget.th2FileEditController,
           ),
         );
       }

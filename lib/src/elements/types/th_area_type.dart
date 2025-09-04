@@ -41,7 +41,7 @@ enum THAreaType {
     return nameSet.contains(normalizedPLAType);
   }
 
-  static THAreaType fromFileString(String value) {
+  static THAreaType fromString(String value) {
     if (hasAreaType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
@@ -49,6 +49,10 @@ enum THAreaType {
     } else {
       return THAreaType.unknown;
     }
+  }
+
+  static String unknownPLATypeFromString(String value) {
+    return hasAreaType(value) ? '' : value;
   }
 
   String toFileString() {

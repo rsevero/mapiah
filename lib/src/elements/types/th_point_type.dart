@@ -136,7 +136,7 @@ enum THPointType {
     return nameSet.contains(normalizedPLAType);
   }
 
-  static THPointType fromFileString(String value) {
+  static THPointType fromString(String value) {
     if (hasPointType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 
@@ -144,6 +144,10 @@ enum THPointType {
     } else {
       return THPointType.unknown;
     }
+  }
+
+  static String unknownPLATypeFromString(String value) {
+    return hasPointType(value) ? '' : value;
   }
 
   String toFileString() {

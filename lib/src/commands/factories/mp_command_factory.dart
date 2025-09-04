@@ -461,6 +461,7 @@ class MPCommandFactory {
   static MPCommand editAreasType({
     required List<int> areaMPIDs,
     required THAreaType newAreaType,
+    required String unknownPLAType,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editAreasType,
   }) {
@@ -470,6 +471,7 @@ class MPCommandFactory {
       final MPCommand editAreaTypeCommand = MPEditAreaTypeCommand(
         areaMPID: areaMPID,
         newAreaType: newAreaType,
+        unknownPLAType: unknownPLAType,
         descriptionType: descriptionType,
       );
 
@@ -489,6 +491,7 @@ class MPCommandFactory {
   static MPCommand editLinesType({
     required List<int> lineMPIDs,
     required THLineType newLineType,
+    required String unknownPLAType,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editLinesType,
   }) {
@@ -498,6 +501,7 @@ class MPCommandFactory {
       final MPCommand editLineTypeCommand = MPEditLineTypeCommand(
         lineMPID: lineMPID,
         newLineType: newLineType,
+        unknownPLAType: unknownPLAType,
         descriptionType: descriptionType,
       );
 
@@ -517,6 +521,7 @@ class MPCommandFactory {
   static MPCommand editPointsType({
     required List<int> pointMPIDs,
     required THPointType newPointType,
+    required String unknownPLAType,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editPointsType,
   }) {
@@ -526,6 +531,7 @@ class MPCommandFactory {
       final MPCommand editPointTypeCommand = MPEditPointTypeCommand(
         pointMPID: pointMPID,
         newPointType: newPointType,
+        unknownPLAType: unknownPLAType,
         descriptionType: descriptionType,
       );
 

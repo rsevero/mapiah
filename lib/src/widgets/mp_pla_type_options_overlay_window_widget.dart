@@ -4,6 +4,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -69,61 +70,50 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final TH2FileEditElementEditController elementEditController =
+        widget.th2FileEditController.elementEditController;
     late Map<String, String> choices;
     late List<String> lastUsedChoices;
     late List<String> lastUsedChoicesReduced = [];
     late List<String> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
-    String selectedPLATypeForRadioGroup = _selectedPLATypeForRadioGroup;
 
     switch (widget.elementType) {
       case THElementType.area:
         title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
+        lastUsedChoices = elementEditController.lastUsedAreaTypes;
+        mostUsedChoices = elementEditController.mostUsedAreaTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getAreaTypeChoices(),
+          MPTextToUser.getAreaTypeChoices(
+            extraTypes: lastUsedChoices + mostUsedChoices,
+          ),
         );
-        lastUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .lastUsedAreaTypes;
-        mostUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .mostUsedAreaTypes;
       case THElementType.line:
         title = mpLocator.appLocalizations.mpPLATypeLineTitle;
+        lastUsedChoices = elementEditController.lastUsedLineTypes;
+        mostUsedChoices = elementEditController.mostUsedLineTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getLineTypeChoices(),
+          MPTextToUser.getLineTypeChoices(
+            extraTypes: lastUsedChoices + mostUsedChoices,
+          ),
         );
-        lastUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .lastUsedLineTypes;
-        mostUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .mostUsedLineTypes;
       case THElementType.point:
         title = mpLocator.appLocalizations.mpPLATypePointTitle;
+        lastUsedChoices = elementEditController.lastUsedPointTypes;
+        mostUsedChoices = elementEditController.mostUsedPointTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
-          MPTextToUser.getPointTypeChoices(),
+          MPTextToUser.getPointTypeChoices(
+            extraTypes: lastUsedChoices + mostUsedChoices,
+          ),
         );
-        lastUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .lastUsedPointTypes;
-        mostUsedChoices = widget
-            .th2FileEditController
-            .elementEditController
-            .mostUsedPointTypes;
       default:
         return const SizedBox.shrink();
     }
 
-    if (selectedPLATypeForRadioGroup.isNotEmpty &&
-        !choices.containsKey(selectedPLATypeForRadioGroup)) {
-      selectedPLATypeForRadioGroup = mpUnknownPLAType;
+    if (_selectedPLATypeForRadioGroup.isNotEmpty &&
+        !choices.containsKey(_selectedPLATypeForRadioGroup)) {
+      _selectedPLATypeForRadioGroup = mpUnknownPLAType;
     }
 
     final bool initiallyUnknown =

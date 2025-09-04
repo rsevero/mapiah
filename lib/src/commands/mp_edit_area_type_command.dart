@@ -3,6 +3,7 @@ part of 'mp_command.dart';
 class MPEditAreaTypeCommand extends MPCommand {
   final int areaMPID;
   final THAreaType newAreaType;
+  final String unknownPLAType;
   late final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editAreaType;
@@ -10,6 +11,7 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPEditAreaTypeCommand.forCWJM({
     required this.areaMPID,
     required this.newAreaType,
+    required this.unknownPLAType,
     required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
@@ -17,6 +19,7 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPEditAreaTypeCommand({
     required this.areaMPID,
     required this.newAreaType,
+    required this.unknownPLAType,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super();
@@ -37,6 +40,7 @@ class MPEditAreaTypeCommand extends MPCommand {
         .areaByMPID(areaMPID)
         .copyWith(
           areaType: newAreaType,
+          unknownPLAType: unknownPLAType,
           originalLineInTH2File: keepOriginalLineTH2File ? null : '',
         );
 
@@ -55,6 +59,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     final MPCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaMPID,
       newAreaType: originalArea.areaType,
+      unknownPLAType: originalArea.unknownPLAType,
       originalLineInTH2File: originalArea.originalLineInTH2File,
       descriptionType: descriptionType,
     );
@@ -69,12 +74,14 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPEditAreaTypeCommand copyWith({
     int? areaBorderTHIDMPID,
     THAreaType? newAreaType,
+    String? unknownPLAType,
     String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaBorderTHIDMPID ?? this.areaMPID,
       newAreaType: newAreaType ?? this.newAreaType,
+      unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
@@ -85,6 +92,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     return MPEditAreaTypeCommand.forCWJM(
       areaMPID: map['areaMPID'] as int,
       newAreaType: THAreaType.values.byName(map['newAreaType']),
+      unknownPLAType: map['unknownPLAType'] as String,
       originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
@@ -103,6 +111,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     map.addAll({
       'areaMPID': areaMPID,
       'newAreaType': newAreaType.name,
+      'unknownPLAType': unknownPLAType,
       'originalLineInTH2File': originalLineInTH2File,
     });
 
@@ -117,10 +126,16 @@ class MPEditAreaTypeCommand extends MPCommand {
     return other is MPEditAreaTypeCommand &&
         other.areaMPID == areaMPID &&
         other.newAreaType == newAreaType &&
+        other.unknownPLAType == unknownPLAType &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, areaMPID, newAreaType, originalLineInTH2File);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    areaMPID,
+    newAreaType,
+    unknownPLAType,
+    originalLineInTH2File,
+  );
 }
