@@ -62,9 +62,9 @@ class _MPOptionsEditOverlayWindowWidgetState
         bool hasArea = false;
         bool hasLine = false;
         bool hasPoint = false;
-        THAreaType? selectedAreaPLAType;
-        THLineType? selectedLinePLAType;
-        THPointType? selectedPointPLAType;
+        String? selectedAreaPLAType;
+        String? selectedLinePLAType;
+        String? selectedPointPLAType;
         String? selectedAreaSubtype;
         String? selectedLineSubtype;
         String? selectedPointSubtype;
@@ -75,11 +75,11 @@ class _MPOptionsEditOverlayWindowWidgetState
         for (final mpSelectedElement in mpSelectedElements) {
           switch (mpSelectedElement) {
             case MPSelectedArea _:
-              if (mpSelectedElement.originalAreaClone.areaType !=
+              if (mpSelectedElement.originalAreaClone.plaType !=
                   selectedAreaPLAType) {
                 if ((selectedAreaPLAType == null) && !hasArea) {
                   selectedAreaPLAType =
-                      mpSelectedElement.originalAreaClone.areaType;
+                      mpSelectedElement.originalAreaClone.plaType;
                 } else {
                   selectedAreaPLAType = null;
                 }
@@ -98,11 +98,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
               hasArea = true;
             case MPSelectedLine _:
-              if (mpSelectedElement.originalLineClone.lineType !=
+              if (mpSelectedElement.originalLineClone.plaType !=
                   selectedLinePLAType) {
                 if ((selectedLinePLAType == null) && !hasLine) {
                   selectedLinePLAType =
-                      mpSelectedElement.originalLineClone.lineType;
+                      mpSelectedElement.originalLineClone.plaType;
                 } else {
                   selectedLinePLAType = null;
                 }
@@ -121,11 +121,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
               hasLine = true;
             case MPSelectedPoint _:
-              if (mpSelectedElement.originalPointClone.pointType !=
+              if (mpSelectedElement.originalPointClone.plaType !=
                   selectedPointPLAType) {
                 if ((selectedPointPLAType == null) && !hasPoint) {
                   selectedPointPLAType =
-                      mpSelectedElement.originalPointClone.pointType;
+                      mpSelectedElement.originalPointClone.plaType;
                 } else {
                   selectedPointPLAType = null;
                   break;
@@ -155,23 +155,31 @@ class _MPOptionsEditOverlayWindowWidgetState
           final List<Widget> plaTypeWidgets = [];
 
           if (hasPoint) {
-            String? pointType;
+            String? pointTypeAsString;
 
             if (selectedPointPLAType == null) {
-              pointType = null;
+              pointTypeAsString = null;
             } else {
-              pointType = MPTextToUser.getPointType(selectedPointPLAType);
+              if (THPointType.hasPointType(selectedPointPLAType)) {
+                final THPointType pointType = THPointType.values.byName(
+                  selectedPointPLAType,
+                );
+
+                pointTypeAsString = MPTextToUser.getPointType(pointType);
+              } else {
+                pointTypeAsString = selectedPointPLAType;
+              }
 
               if (selectedPointSubtype != null) {
-                pointType =
-                    '$pointType:${MPTextToUser.getSubtypeAsString(selectedPointSubtype)}';
+                pointTypeAsString =
+                    '$pointTypeAsString:${MPTextToUser.getSubtypeAsString(selectedPointSubtype)}';
               }
             }
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedPointPLAType?.name,
-                selectedPLATypeToUser: pointType,
+                selectedPLAType: selectedPointPLAType,
+                selectedPLATypeToUser: pointTypeAsString,
                 elementType: THElementType.point,
                 th2FileEditController: th2FileEditController,
               ),
@@ -179,23 +187,31 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
 
           if (hasLine) {
-            String? lineType;
+            String? lineTypeAsString;
 
             if (selectedLinePLAType == null) {
-              lineType = null;
+              lineTypeAsString = null;
             } else {
-              lineType = MPTextToUser.getLineType(selectedLinePLAType);
+              if (THLineType.hasLineType(selectedLinePLAType)) {
+                final THLineType lineType = THLineType.values.byName(
+                  selectedLinePLAType,
+                );
+
+                lineTypeAsString = MPTextToUser.getLineType(lineType);
+              } else {
+                lineTypeAsString = selectedLinePLAType;
+              }
 
               if (selectedLineSubtype != null) {
-                lineType =
-                    '$lineType:${MPTextToUser.getSubtypeAsString(selectedLineSubtype)}';
+                lineTypeAsString =
+                    '$lineTypeAsString:${MPTextToUser.getSubtypeAsString(selectedLineSubtype)}';
               }
             }
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedLinePLAType?.name,
-                selectedPLATypeToUser: lineType,
+                selectedPLAType: selectedLinePLAType,
+                selectedPLATypeToUser: lineTypeAsString,
                 elementType: THElementType.line,
                 th2FileEditController: th2FileEditController,
               ),
@@ -203,23 +219,31 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
 
           if (hasArea) {
-            String? areaType;
+            String? areaTypeAsString;
 
             if (selectedAreaPLAType == null) {
-              areaType = null;
+              areaTypeAsString = null;
             } else {
-              areaType = MPTextToUser.getAreaType(selectedAreaPLAType);
+              if (THAreaType.hasAreaType(selectedAreaPLAType)) {
+                final THAreaType areaType = THAreaType.values.byName(
+                  selectedAreaPLAType,
+                );
+
+                areaTypeAsString = MPTextToUser.getAreaType(areaType);
+              } else {
+                areaTypeAsString = selectedAreaPLAType;
+              }
 
               if (selectedAreaSubtype != null) {
-                areaType =
-                    '$areaType:${MPTextToUser.getSubtypeAsString(selectedAreaSubtype)}';
+                areaTypeAsString =
+                    '$areaTypeAsString:${MPTextToUser.getSubtypeAsString(selectedAreaSubtype)}';
               }
             }
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedAreaPLAType?.name,
-                selectedPLATypeToUser: areaType,
+                selectedPLAType: selectedAreaPLAType,
+                selectedPLATypeToUser: areaTypeAsString,
                 elementType: THElementType.area,
                 th2FileEditController: th2FileEditController,
               ),
