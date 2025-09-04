@@ -350,23 +350,42 @@ class THGrammar extends GrammarDefinition {
   Parser projectionSpec() =>
       // type: none
       ((stringIgnoreCase('none') &
-                  ((char(':') & keyword()).pick(1)).optional()) |
+                  ((char(':') & keyword()).pick(
+                    1,
+                  )).optional().map((value) => {'index': value})) |
               // type: plan with optional index
-              ((stringIgnoreCase('plan') &
-                  ((char(':') & keyword()).pick(1)).optional())) |
-              // type: elevation with optional index
-              ((stringIgnoreCase('elevation') &
-                  ((char(':') & keyword()).pick(1)).optional())) |
+              (stringIgnoreCase('plan') &
+                  ((char(':') & keyword()).pick(
+                    1,
+                  )).optional().map((value) => {'index': value})) |
+              // type: elevation with optional index without view direction
+              (stringIgnoreCase('elevation') &
+                  ((char(':') & keyword()).pick(
+                    1,
+                  )).optional().map((value) => {'index': value})) |
               // type: elevation with view direction
               (bracketStringTemplate(
                 stringIgnoreCase('elevation') &
-                    ((char(':') & keyword()).pick(1)).optional() &
-                    number().trim() &
-                    angleUnit().optional(),
-              )) |
+                    ((char(':') & keyword()).pick(
+                      1,
+                    )).optional() & // index (optional)
+                    number().trim() & // angle
+                    angleUnit().optional(), // angle unit (optional)
+              ).map((list) {
+                // list structure BEFORE this map:
+                // ['elevation', indexOrNull, angle, angleUnitOrNull]
+                final Map<String, dynamic> map = <String, dynamic>{
+                  'index': list[1],
+                  'angle': list[2],
+                  'angle_unit': list[3],
+                }..removeWhere((k, v) => v == null);
+                return ['elevation', map];
+              })) |
               // type: extended with optional index
               (stringIgnoreCase('extended') &
-                  ((char(':') & keyword()).pick(1)).optional()))
+                  ((char(':') & keyword()).pick(
+                    1,
+                  )).optional().map((value) => {'index': value})))
           .trim();
   Parser projectionOption() =>
       stringIgnoreCase('projection') & projectionSpec();

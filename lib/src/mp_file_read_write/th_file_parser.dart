@@ -2116,27 +2116,27 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THProjectionCommandOption');
     }
 
-    final bool currentLengthOnePlus = _currentSpec.length > 1;
-    final bool projectionTypeElevation = _currentSpec[0] == 'elevation';
+    final Map<String, dynamic> projectionExtraMap =
+        _currentSpec[1] as Map<String, dynamic>;
+    final String index =
+        projectionExtraMap.containsKey('index') &&
+            (projectionExtraMap['index'] != null)
+        ? projectionExtraMap['index'] as String
+        : '';
+    final String? elevationAngle = projectionExtraMap.containsKey('angle')
+        ? projectionExtraMap['angle'] as String
+        : null;
+    final String? elevationAngleUnit =
+        projectionExtraMap.containsKey('angle_unit')
+        ? projectionExtraMap['angle_unit'] as String
+        : null;
 
     THProjectionCommandOption.fromString(
       optionParent: _currentHasOptions,
       projectionType: _currentSpec[0],
-      index: (currentLengthOnePlus && (_currentSpec[1] != null))
-          ? _currentSpec[1]
-          : '',
-      elevationAngle:
-          (currentLengthOnePlus &&
-              projectionTypeElevation &&
-              (_currentSpec[2] != null))
-          ? _currentSpec[2]
-          : null,
-      elevationUnit:
-          (currentLengthOnePlus &&
-              projectionTypeElevation &&
-              (_currentSpec[3] != null))
-          ? _currentSpec[3]
-          : null,
+      index: index,
+      elevationAngle: elevationAngle,
+      elevationUnit: elevationAngleUnit,
       originalLineInTH2File: _currentOriginalLine,
     );
   }

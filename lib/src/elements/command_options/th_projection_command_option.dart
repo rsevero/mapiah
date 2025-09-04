@@ -6,14 +6,14 @@ enum THProjectionModeType { elevation, extended, none, plan }
 // projection is identified by a type and optionally by an index in the form
 // type[:index]. The index can be any keyword. The following projection types
 // are supported:
-// 1. none . no projection, used for cross sections or maps that are independent
+// 1. none: no projection, used for cross sections or maps that are independent
 // of survey data (e.g. digitization of old maps where no centreline data are
 // available). No index is allowed for this projection.
-// 2. plan . basic plan projection (default).
-// 3. elevation . orthogonal projection (a.k.a. projected profile) which
+// 2. plan: basic plan projection (default).
+// 3. elevation: orthogonal projection (a.k.a. projected profile) which
 // optionally takes a view direction as an argument (e.g. [elevation 10] or
 // [elevation 10 deg]).
-// 4. extended . extended elevation (a.k.a. extended profile).
+// 4. extended: extended elevation (a.k.a. extended profile).
 class THProjectionCommandOption extends THCommandOption {
   final THProjectionModeType mode;
   final String index;
