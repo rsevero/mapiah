@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.14 - not yet released
+## 0.2.14 - 2025-09-04
 * New features:
   * Get list of available encodings from 'therion --print-encodings'.
   * Create new th2 file.

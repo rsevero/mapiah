@@ -3,7 +3,7 @@
 1. Update Mapiah version in `pubspec.yaml`.
 2. Update `CHANGELOG.md` with the new version and changes.
 3. Update Flutter version in:
-   1. .github/workflows/linux.yml
+   1. .github/workflows/linux_and_web.yml
    2. .github/workflows/windows.yml
    3. codemagic.yaml
 4. Push the previous changes
