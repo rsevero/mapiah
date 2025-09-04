@@ -1070,6 +1070,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thAreaU => 'Usuário';
 
   @override
+  String get thAreaUnknown => 'Desconhecido';
+
+  @override
   String get thAreaWater => 'Água';
 
   @override
@@ -1371,7 +1374,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thLineRockBorder => 'Borda de Rocha';
 
   @override
-  String get thLineRockEdge => 'Borda de Rocha';
+  String get thLineRockEdge => 'Quina de Rocha';
 
   @override
   String get thLineRope => 'Corda';
@@ -1393,6 +1396,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thLineU => 'Usuário';
+
+  @override
+  String get thLineUnknown => 'Desconhecido';
 
   @override
   String get thLineViaFerrata => 'Via Ferrata';
@@ -1792,6 +1798,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thPointU => 'Usuário';
+
+  @override
+  String get thPointUnknown => 'Desconhecido';
 
   @override
   String get thPointVegetableDebris => 'Detritos vegetais';

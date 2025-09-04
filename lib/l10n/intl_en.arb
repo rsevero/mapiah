@@ -1687,6 +1687,11 @@
     "description": "The label for the user defined area type",
     "type": "text"
   },
+  "thAreaUnknown": "Unknown",
+  "@thAreaUnknown": {
+    "description": "The label for the unknown area type",
+    "type": "text"
+  },
   "thAreaWater": "Water",
   "@thAreaWater": {
     "description": "The label for the water area type",
@@ -2225,6 +2230,11 @@
   "thLineU": "User",
   "@thLineU": {
     "description": "The label for the U line type",
+    "type": "text"
+  },
+  "thLineUnknown": "Unknown",
+  "@thLineUnknown": {
+    "description": "The label for the unknown line type",
     "type": "text"
   },
   "thLineViaFerrata": "Via Ferrata",
@@ -2887,9 +2897,14 @@
     "description": "The label for the tree trunk point type",
     "type": "text"
   },
-  "thPointU": "user defined",
+  "thPointU": "User",
   "@thPointU": {
     "description": "The label for the user defined point type",
+    "type": "text"
+  },
+  "thPointUnknown": "Unknown",
+  "@thPointUnknown": {
+    "description": "The label for the unknown point type",
     "type": "text"
   },
   "thPointVegetableDebris": "Vegetable Debris",

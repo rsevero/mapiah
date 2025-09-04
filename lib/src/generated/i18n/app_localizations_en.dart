@@ -1062,6 +1062,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thAreaU => 'User';
 
   @override
+  String get thAreaUnknown => 'Unknown';
+
+  @override
   String get thAreaWater => 'Water';
 
   @override
@@ -1384,6 +1387,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thLineU => 'User';
+
+  @override
+  String get thLineUnknown => 'Unknown';
 
   @override
   String get thLineViaFerrata => 'Via Ferrata';
@@ -1782,7 +1788,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thPointTreeTrunk => 'Tree Trunk';
 
   @override
-  String get thPointU => 'user defined';
+  String get thPointU => 'User';
+
+  @override
+  String get thPointUnknown => 'Unknown';
 
   @override
   String get thPointVegetableDebris => 'Vegetable Debris';

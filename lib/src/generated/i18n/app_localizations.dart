@@ -2085,6 +2085,12 @@ abstract class AppLocalizations {
   /// **'User'**
   String get thAreaU;
 
+  /// The label for the unknown area type
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get thAreaUnknown;
+
   /// The label for the water area type
   ///
   /// In en, this message translates to:
@@ -2732,6 +2738,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'User'**
   String get thLineU;
+
+  /// The label for the unknown line type
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get thLineUnknown;
 
   /// The label for the via ferrata line type
   ///
@@ -3528,8 +3540,14 @@ abstract class AppLocalizations {
   /// The label for the user defined point type
   ///
   /// In en, this message translates to:
-  /// **'user defined'**
+  /// **'User'**
   String get thPointU;
+
+  /// The label for the unknown point type
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get thPointUnknown;
 
   /// The label for the vegetable debris point type
   ///

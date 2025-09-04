@@ -623,6 +623,7 @@ class MPTextToUser {
     _pointTypeAsString[THPointType.traverse] = localizations.thPointTraverse;
     _pointTypeAsString[THPointType.treeTrunk] = localizations.thPointTreeTrunk;
     _pointTypeAsString[THPointType.u] = localizations.thPointU;
+    _pointTypeAsString[THPointType.unknown] = localizations.thPointUnknown;
     _pointTypeAsString[THPointType.vegetableDebris] =
         localizations.thPointVegetableDebris;
     _pointTypeAsString[THPointType.viaFerrata] =
@@ -687,6 +688,7 @@ class MPTextToUser {
     _lineTypeAsString[THLineType.steps] = localizations.thLineSteps;
     _lineTypeAsString[THLineType.survey] = localizations.thLineSurvey;
     _lineTypeAsString[THLineType.u] = localizations.thLineU;
+    _lineTypeAsString[THLineType.unknown] = localizations.thLineUnknown;
     _lineTypeAsString[THLineType.viaFerrata] = localizations.thLineViaFerrata;
     _lineTypeAsString[THLineType.walkWay] = localizations.thLineWalkWay;
     _lineTypeAsString[THLineType.wall] = localizations.thLineWall;
@@ -725,6 +727,7 @@ class MPTextToUser {
     _areaTypeAsString[THAreaType.stalagmite] = localizations.thAreaStalagmite;
     _areaTypeAsString[THAreaType.sump] = localizations.thAreaSump;
     _areaTypeAsString[THAreaType.u] = localizations.thAreaU;
+    _areaTypeAsString[THAreaType.unknown] = localizations.thAreaUnknown;
     _areaTypeAsString[THAreaType.water] = localizations.thAreaWater;
   }
 
