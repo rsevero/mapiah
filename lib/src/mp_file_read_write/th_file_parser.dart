@@ -2116,11 +2116,17 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THProjectionCommandOption');
     }
 
-    final Map<String, dynamic> projectionExtraMap =
-        _currentSpec[1] as Map<String, dynamic>;
-    final String index =
-        projectionExtraMap.containsKey('index') &&
-            (projectionExtraMap['index'] != null)
+    Map<String, dynamic> projectionExtraMap = <String, dynamic>{};
+
+    if (_currentSpec[1] is Map) {
+      final map = _currentSpec[1] as Map;
+
+      if (map.isNotEmpty) {
+        projectionExtraMap = _currentSpec[1] as Map<String, dynamic>;
+      }
+    }
+
+    final String index = projectionExtraMap.containsKey('index')
         ? projectionExtraMap['index'] as String
         : '';
     final String? elevationAngle = projectionExtraMap.containsKey('angle')
