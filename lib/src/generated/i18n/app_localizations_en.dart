@@ -555,6 +555,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPLATypePointTitle => 'Point types';
 
   @override
+  String get mpPLATypeUnknownInvalid => 'Invalid type';
+
+  @override
+  String get mpPLATypeUnknownLabel => 'Type';
+
+  @override
   String get mpPLScaleCommandOptionNamed => 'Named';
 
   @override

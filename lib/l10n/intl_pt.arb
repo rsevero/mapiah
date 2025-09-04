@@ -171,6 +171,8 @@
   "mpPLATypeLineTitle": "Tipos de linha",
   "mpPLATypeMostUsed": "Mais usados",
   "mpPLATypePointTitle": "Tipos de ponto",
+  "mpPLATypeUnknownInvalid": "Tipo inválido",
+  "mpPLATypeUnknownLabel": "Tipo",
   "mpPLScaleCommandOptionNamed": "Pré-definidos",
   "mpPLScaleCommandOptionNumeric": "Numérico",
   "mpPLScaleNumericLabel": "Tamanho",

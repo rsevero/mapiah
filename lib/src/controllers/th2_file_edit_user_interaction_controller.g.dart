@@ -122,15 +122,18 @@ mixin _$TH2FileEditUserInteractionController
 
   @override
   void prepareSetPLAType({
-    required THElementType plaType,
-    required String newType,
+    required THElementType elementType,
+    required String newPLAType,
   }) {
     final _$actionInfo =
         _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
           name: 'TH2FileEditUserInteractionControllerBase.prepareSetPLAType',
         );
     try {
-      return super.prepareSetPLAType(plaType: plaType, newType: newType);
+      return super.prepareSetPLAType(
+        elementType: elementType,
+        newPLAType: newPLAType,
+      );
     } finally {
       _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
         _$actionInfo,

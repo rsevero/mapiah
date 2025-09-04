@@ -520,31 +520,32 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   @action
   void prepareSetPLAType({
-    required THElementType plaType,
-    required String newType,
+    required THElementType elementType,
+    required String newPLAType,
   }) {
-    final mpSelectedElements = _th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .values;
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
 
     MPCommand setPLATypeCommand;
     List<int> mpIDs = [];
 
-    switch (plaType) {
+    switch (elementType) {
       case THElementType.area:
         for (final mpSelectedElement in mpSelectedElements) {
           if ((mpSelectedElement.originalElementClone is! THArea) ||
               (mpSelectedElement.originalElementClone as THArea)
                       .areaType
                       .name ==
-                  newType) {
+                  newPLAType) {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
-          elementEditController.setUsedAreaType(newType);
+          elementEditController.setUsedAreaType(newPLAType);
         }
 
         if (mpIDs.isEmpty) {
@@ -554,25 +555,25 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditAreaTypeCommand(
             areaMPID: mpIDs.first,
-            newAreaType: THAreaType.values.byName(newType),
+            newAreaType: THAreaType.values.byName(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editAreasType(
-            newAreaType: THAreaType.values.byName(newType),
+            newAreaType: THAreaType.values.byName(newPLAType),
             areaMPIDs: mpIDs,
           );
         }
       case THElementType.line:
-        for (final mpSelectedElement in mpSelectedElements) {
+        for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
           if ((mpSelectedElement.originalElementClone is! THLine) ||
               (mpSelectedElement.originalElementClone as THLine)
                       .lineType
                       .name ==
-                  newType) {
+                  newPLAType) {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
-          elementEditController.setUsedLineType(newType);
+          elementEditController.setUsedLineType(newPLAType);
         }
 
         if (mpIDs.isEmpty) {
@@ -582,25 +583,25 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditLineTypeCommand(
             lineMPID: mpIDs.first,
-            newLineType: THLineType.values.byName(newType),
+            newLineType: THLineType.values.byName(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editLinesType(
-            newLineType: THLineType.values.byName(newType),
+            newLineType: THLineType.values.byName(newPLAType),
             lineMPIDs: mpIDs,
           );
         }
       case THElementType.point:
-        for (final mpSelectedElement in mpSelectedElements) {
+        for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
           if ((mpSelectedElement.originalElementClone is! THPoint) ||
               (mpSelectedElement.originalElementClone as THPoint)
                       .pointType
                       .name ==
-                  newType) {
+                  newPLAType) {
             continue;
           }
           mpIDs.add(mpSelectedElement.originalElementClone.mpID);
-          elementEditController.setUsedPointType(newType);
+          elementEditController.setUsedPointType(newPLAType);
         }
 
         if (mpIDs.isEmpty) {
@@ -610,11 +611,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         if (mpIDs.length == 1) {
           setPLATypeCommand = MPEditPointTypeCommand(
             pointMPID: mpIDs.first,
-            newPointType: THPointType.values.byName(newType),
+            newPointType: THPointType.values.byName(newPLAType),
           );
         } else {
           setPLATypeCommand = MPCommandFactory.editPointsType(
-            newPointType: THPointType.values.byName(newType),
+            newPointType: THPointType.values.byName(newPLAType),
             pointMPIDs: mpIDs,
           );
         }

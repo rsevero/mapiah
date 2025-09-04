@@ -864,6 +864,16 @@
     "description": "The title for the point types",
     "type": "text"
   },
+  "mpPLATypeUnknownInvalid": "Invalid type",
+  "@mpPLATypeUnknownInvalid": {
+    "description": "The label for the invalid type",
+    "type": "text"
+  },
+  "mpPLATypeUnknownLabel": "Type",
+  "@mpPLATypeUnknownLabel": {
+    "description": "The label for the unknown type",
+    "type": "text"
+  },
   "mpPLScaleCommandOptionNamed": "Named",
   "@mpPLScaleCommandOptionNamed": {
     "description": "The label for the named scale option",

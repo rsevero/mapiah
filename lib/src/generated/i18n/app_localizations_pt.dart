@@ -558,6 +558,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPLATypePointTitle => 'Tipos de ponto';
 
   @override
+  String get mpPLATypeUnknownInvalid => 'Tipo inválido';
+
+  @override
+  String get mpPLATypeUnknownLabel => 'Tipo';
+
+  @override
   String get mpPLScaleCommandOptionNamed => 'Pré-definidos';
 
   @override

@@ -1124,6 +1124,18 @@ abstract class AppLocalizations {
   /// **'Point types'**
   String get mpPLATypePointTitle;
 
+  /// The label for the invalid type
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid type'**
+  String get mpPLATypeUnknownInvalid;
+
+  /// The label for the unknown type
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get mpPLATypeUnknownLabel;
+
   /// The label for the named scale option
   ///
   /// In en, this message translates to:

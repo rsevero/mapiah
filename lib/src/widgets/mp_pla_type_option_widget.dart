@@ -5,19 +5,25 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 class MPPLATypeOptionWidget extends StatelessWidget {
   final String value;
   final String label;
+  final String? valueKeyID;
   final TH2FileEditController th2FileEditController;
 
   MPPLATypeOptionWidget({
     super.key,
     required this.value,
     required this.label,
+    this.valueKeyID,
     required this.th2FileEditController,
   });
 
   @override
   Widget build(BuildContext context) {
+    final String key = (valueKeyID == null)
+        ? "MPPLATypeOptionWidget|RadioListTile|$value"
+        : "MPPLATypeOptionWidget|RadioListTile|$valueKeyID|$value";
+
     return RadioListTile<String>(
-      key: ValueKey("MPPLATypeOptionWidget|RadioListTile|$value"),
+      key: ValueKey(key),
       title: Text(label),
       value: value,
       visualDensity: VisualDensity.adaptivePlatformDensity,

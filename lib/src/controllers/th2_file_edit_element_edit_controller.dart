@@ -43,16 +43,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     : _thFile = _th2FileEditController.thFile;
 
   void initializeMostUsedTypes() {
-    final elements = _thFile.elements.values;
+    final Iterable<THElement> elements = _thFile.elements.values;
 
-    for (final element in elements) {
+    for (final THElement element in elements) {
       switch (element) {
         case THArea _:
-          _setMostUsedAreaType(element.areaType.name);
+          _setMostUsedAreaType(element.plaType);
         case THLine _:
-          _setMostUsedLineType(element.lineType.name);
+          _setMostUsedLineType(element.plaType);
         case THPoint _:
-          _setMostUsedPointType(element.pointType.name);
+          _setMostUsedPointType(element.plaType);
         default:
       }
     }
