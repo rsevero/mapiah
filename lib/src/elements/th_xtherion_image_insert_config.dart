@@ -264,7 +264,8 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
   }
 
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
-    if (_xviFile == null && isXVI) {
+    /// TODO: fix web XVI file loading
+    if (_xviFile == null && isXVI && !kIsWeb) {
       final XVIFileParser parser = XVIFileParser();
       final XVIFile? xviFile;
       final bool isSuccessful;
