@@ -1,7 +1,12 @@
 # Changelog
 
 ## 0.2.15 - not yet released
-
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * flutter pub upgrade.
+  * flutter upgrade to 3.35.3.
+  * 
 ## 0.2.14 - 2025-09-04
 * New features:
   * Get list of available encodings from 'therion --print-encodings'.
