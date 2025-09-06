@@ -6,12 +6,12 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 class MPAddScrapDialogOverlayWindowWidget extends StatefulWidget {
   final VoidCallback onPressedClose;
   final String? initialScrapTHID;
-  final TH2FileEditController fileEditController;
+  final TH2FileEditController th2FileEditController;
 
   const MPAddScrapDialogOverlayWindowWidget({
     super.key,
     required this.onPressedClose,
-    required this.fileEditController,
+    required this.th2FileEditController,
     this.initialScrapTHID,
   });
 
@@ -39,7 +39,7 @@ class _MPAddScrapDialogOverlayWindowWidgetState
     }
 
     // scrap id validated by kernel
-    widget.fileEditController.elementEditController.createScrap(
+    widget.th2FileEditController.elementEditController.createScrap(
       _currentValidScrapTHID,
       scrapOptions: scrapOptions,
     );
@@ -56,7 +56,7 @@ class _MPAddScrapDialogOverlayWindowWidgetState
   @override
   Widget build(BuildContext context) {
     return MPAddScrapDialogWidget(
-      fileEditController: widget.fileEditController,
+      fileEditController: widget.th2FileEditController,
       initialScrapTHID: widget.initialScrapTHID,
       showActionButtons: true,
       onPressedCreate: _create,

@@ -1167,7 +1167,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       childBuilder: (onPressedClose) => MPAddScrapDialogOverlayWindowWidget(
         initialScrapTHID: initialScrapTHID,
         onPressedClose: onPressedClose,
-        fileEditController: _th2FileEditController,
+        th2FileEditController: _th2FileEditController,
       ),
     );
   }

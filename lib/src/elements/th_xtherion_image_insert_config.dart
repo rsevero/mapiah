@@ -264,28 +264,30 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
   }
 
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
-    /// TODO: fix web XVI file loading
-    if (_xviFile == null && isXVI && !kIsWeb) {
-      final XVIFileParser parser = XVIFileParser();
-      final XVIFile? xviFile;
-      final bool isSuccessful;
-      final List<String> errors;
-      final String resolvedPath = MPDirectoryAux.getResolvedPath(
-        th2FileEditController.thFile.filename,
-        filename,
-      );
-
-      (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
-
-      if (isSuccessful && (xviFile != null)) {
-        _xviFile = xviFile;
-
-        _fixXVIRoot();
+    if (_xviFile == null && isXVI) {
+      if (kIsWeb) {
       } else {
-        _xviFile = null;
+        final XVIFileParser parser = XVIFileParser();
+        final XVIFile? xviFile;
+        final bool isSuccessful;
+        final List<String> errors;
+        final String resolvedPath = MPDirectoryAux.getResolvedPath(
+          th2FileEditController.thFile.filename,
+          filename,
+        );
 
-        // TODO: present XVI parse errors to the user
-        print(errors.join('\n'));
+        (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
+
+        if (isSuccessful && (xviFile != null)) {
+          _xviFile = xviFile;
+
+          _fixXVIRoot();
+        } else {
+          _xviFile = null;
+
+          // TODO: present XVI parse errors to the user
+          print(errors.join('\n'));
+        }
       }
     }
 
