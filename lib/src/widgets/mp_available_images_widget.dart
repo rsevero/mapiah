@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -58,6 +60,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
             final Iterable<THXTherionImageInsertConfig> images = thFile
                 .getXTherionImageInsertConfigs();
+            final ThemeData theme = Theme.of(context);
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -71,6 +74,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                         if (images.isNotEmpty)
                           ...images.map((image) {
                             final bool isVisible = image.isVisible;
+                            final bool isLoaded = image.isLoaded(
+                              th2FileEditController,
+                            );
                             final String name = p.basename(image.filename);
 
                             return Row(
@@ -90,6 +96,19 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                   ),
                                 ),
                                 Expanded(child: Text(name)),
+                                if (kIsWeb)
+                                  IconButton(
+                                    onPressed: () => _pickFile(image),
+                                    icon: Icon(
+                                      isLoaded
+                                          ? Icons.check_circle
+                                          : Icons.radio_button_unchecked,
+                                      color: isLoaded
+                                          ? Colors.green
+                                          : theme.disabledColor,
+                                      size: 20,
+                                    ),
+                                  ),
                                 IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,
@@ -120,6 +139,19 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
         ),
       ],
     );
+  }
+
+  Future<void> _pickFile(THXTherionImageInsertConfig image) async {
+    final BuildContext buildContext = context;
+    final String imagePath = await MPDialogAux.pickImageFile(buildContext);
+
+    if (imagePath.isEmpty) {
+      return;
+    }
+    // Use existing controller API: remove old then add new fresh positioned (simpler MVP)
+    widget.th2FileEditController.elementEditController.removeImage(image.mpID);
+    widget.th2FileEditController.elementEditController.addImage();
+    setState(_refreshImages);
   }
 
   void _imageVisibilityChanged(int imageMPID, bool? newVisibility) {

@@ -54,15 +54,54 @@ class MPDialogAux {
       if (result != null) {
         String? pickedFilePath = result.files.single.path;
 
-        if (pickedFilePath == null) {
-          return '';
+        if (kIsWeb) {
+          // On web, we can't use file paths or File IO. Use bytes and filename.
+          final Uint8List? fileBytes = result.files.single.bytes;
+          final String fileName = result.files.single.name;
+
+          if (fileBytes == null) {
+            return;
+          }
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TH2FileEditPage(
+                key: ValueKey("TH2FileEditPage|$fileName"),
+                filename: fileName,
+                fileBytes: fileBytes,
+              ),
+            ),
+          );
+        } else {
+          if (pickedFilePath == null) {
+            return;
+          }
+
+          mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+            pickedFilePath,
+          );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TH2FileEditPage(
+                key: ValueKey("TH2FileEditPage|$pickedFilePath"),
+                filename: pickedFilePath,
+              ),
+            ),
+          );
         }
 
-        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-          pickedFilePath,
-        );
+        // if (pickedFilePath == null) {
+        //   return '';
+        // }
 
-        return pickedFilePath;
+        // mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+        //   pickedFilePath,
+        // );
+
+        // return pickedFilePath;
       } else {
         mpLocator.mpLog.i('No file selected.');
       }

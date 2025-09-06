@@ -323,7 +323,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
 
   double get xviRootedYY => _xviRootedYY;
 
-  Future<ui.Image> getRasterImageFrameInfo(
+  Future<ui.Image?> getRasterImageFrameInfo(
     TH2FileEditController th2FileEditController,
   ) {
     _rasterImage ??=
@@ -379,5 +379,12 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
         Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
     return MPNumericAux.orderedRectFromRect(boundingBox.shift(xviOffset));
+  }
+
+  bool isLoaded(TH2FileEditController th2FileEditController) {
+    if (isXVI) {
+      return getXVIFile(th2FileEditController) != null;
+    }
+    return getRasterImageFrameInfo(th2FileEditController) != null;
   }
 }
