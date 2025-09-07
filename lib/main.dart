@@ -65,6 +65,7 @@ class MapiahApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) => MaterialApp(
+        navigatorKey: mpLocator.mpNavigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,

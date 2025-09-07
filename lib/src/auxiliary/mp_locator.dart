@@ -21,6 +21,8 @@ class MPLocator {
 
   late AppLocalizations appLocalizations;
 
+  final GlobalKey<NavigatorState> mpNavigatorKey = GlobalKey<NavigatorState>();
+
   void resetAppLocalizations(BuildContext context) {
     appLocalizations = AppLocalizations.of(context);
   }
