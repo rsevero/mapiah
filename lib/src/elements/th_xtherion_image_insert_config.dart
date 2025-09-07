@@ -285,8 +285,11 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
         } else {
           _xviFile = null;
 
-          // TODO: present XVI parse errors to the user
-          print(errors.join('\n'));
+          final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+          if (context != null) {
+            MPDialogAux.showXVIParsingErrorsDialog(context, errors);
+          }
         }
       }
     }
@@ -323,7 +326,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
 
   double get xviRootedYY => _xviRootedYY;
 
-  Future<ui.Image?> getRasterImageFrameInfo(
+  Future<ui.Image>? getRasterImageFrameInfo(
     TH2FileEditController th2FileEditController,
   ) {
     _rasterImage ??=
@@ -385,6 +388,17 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
     if (isXVI) {
       return getXVIFile(th2FileEditController) != null;
     }
+
     return getRasterImageFrameInfo(th2FileEditController) != null;
+  }
+
+  void setXVIFile(XVIFile? xviFile) {
+    _xviFile = xviFile;
+
+    _fixXVIRoot();
+  }
+
+  void setRasterImage(ui.Image? image) {
+    _decodedRasterImage = image;
   }
 }

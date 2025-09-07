@@ -8,6 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';

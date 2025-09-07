@@ -1172,7 +1172,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
   }
 
-  void addImage() async {
+  Future<void> addImage() async {
     final BuildContext? currentContext = _th2FileEditController
         .overlayWindowController
         .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeImageButton]!
@@ -1182,14 +1182,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final String imagePath = await MPDialogAux.pickImageFile(currentContext);
+    final PickImageFileReturn imageResult = await MPDialogAux.pickImageFile(
+      currentContext,
+    );
 
-    if (imagePath.isEmpty) {
+    if (imageResult.type == PickImageFileReturnType.empty) {
       return;
     }
 
     final String relativeImagePath = p.relative(
-      imagePath,
+      imageResult.fileName!,
       from: p.dirname(_thFile.filename),
     );
     final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);

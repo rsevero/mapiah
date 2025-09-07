@@ -143,15 +143,13 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   Future<void> _pickFile(THXTherionImageInsertConfig image) async {
     final BuildContext buildContext = context;
-    final String imagePath = await MPDialogAux.pickImageFile(buildContext);
+    final PickImageFileReturn imageResult = await MPDialogAux.pickImageFile(
+      buildContext,
+    );
 
-    if (imagePath.isEmpty) {
+    if (imageResult.type == PickImageFileReturnType.empty) {
       return;
     }
-    // Use existing controller API: remove old then add new fresh positioned (simpler MVP)
-    widget.th2FileEditController.elementEditController.removeImage(image.mpID);
-    widget.th2FileEditController.elementEditController.addImage();
-    setState(_refreshImages);
   }
 
   void _imageVisibilityChanged(int imageMPID, bool? newVisibility) {
