@@ -28,11 +28,11 @@ class XVIFileParser {
   }
 
   (XVIFile?, bool, List<String>) parse(
-    String filename, {
+    String fileName, {
     Uint8List? fileBytes,
     bool runTraceParser = false,
   }) {
-    final File file = File(filename);
+    final File file = File(fileName);
 
     _runTraceParser = runTraceParser;
     _errors.clear();
@@ -41,7 +41,7 @@ class XVIFileParser {
       if (file.existsSync()) {
         _fileBytes = file.readAsBytesSync();
       } else {
-        _errors.add("File '$filename' not found.");
+        _errors.add("File '$fileName' not found.");
 
         return (null, false, _errors);
       }

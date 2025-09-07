@@ -48,7 +48,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           selectionController.removeSelectedElements(clickedElements);
         }
 
-        return Future.value();
+        return;
       } else {
         if (shiftPressed) {
           selectionController.addSelectedElements(
@@ -62,7 +62,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           );
         }
 
-        return Future.value();
+        return;
       }
     } else {
       if (!shiftPressed) {
@@ -73,7 +73,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       }
     }
 
-    return Future.value();
+    return;
   }
 
   /// 1. Moves all selected objects by the distance indicated by [event].
