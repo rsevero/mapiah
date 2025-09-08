@@ -32,41 +32,55 @@ class MPDialogAux {
   ///   - XVIFile (parsed) if an .xvi file was chosen.
   ///   - ui.Image if a raster image (png/jpg/jpeg/webp/gif) was chosen.
   ///   - null if cancelled or error.
-  static Future<PickImageFileReturn> pickImageFile(BuildContext context) async {
+  static Future<PickImageFileReturn> pickImageFile(
+    BuildContext context, {
+    List<String>? allowedExtensions,
+  }) async {
     if (_isFilePickerOpen[MPFilePickerType.image] == true) {
       return PickImageFileReturn(type: PickImageFileReturnType.empty);
     }
+
     _isFilePickerOpen[MPFilePickerType.image] = true;
 
-    try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
-        type: FileType.custom,
-        allowedExtensions: [
-          'gif',
-          'GIF',
-          'jpeg',
-          'JPEG',
-          'jpg',
-          'JPG',
-          'png',
-          'PNG',
+    allowedExtensions = getMulticaseList(
+      (allowedExtensions == null || allowedExtensions.isEmpty)
+          ? [
+              'gif',
+              'jpeg',
+              'jpg',
+              'png',
 
-          /// PNM and PPM are not supported by dart:ui package.
-          // 'pnm',
-          // 'PNM',
-          // 'ppm',
-          // 'PPM',
-          'xvi',
-          'XVI',
-        ],
-        lockParentWindow: true,
-        initialDirectory: kIsWeb
-            ? null
-            : (mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-                  ? (kDebugMode ? thDebugPath : './')
-                  : mpLocator.mpGeneralController.lastAccessedDirectory),
-      );
+              /// PNM and PPM are not supported by dart:ui package.
+              // 'pnm',
+              // 'ppm',
+              'xvi',
+            ]
+          : allowedExtensions,
+    ).toList();
+
+    try {
+      final FilePickerResult? result;
+
+      try {
+        result = await FilePicker.platform.pickFiles(
+          dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
+          type: FileType.custom,
+          allowedExtensions: allowedExtensions,
+          lockParentWindow: true,
+          initialDirectory:
+              mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+              ? (kDebugMode ? thDebugPath : './')
+              : mpLocator.mpGeneralController.lastAccessedDirectory,
+        );
+      } catch (e) {
+        mpLocator.mpLog.e(
+          'Error picking image/XVI file',
+          error: e,
+          stackTrace: StackTrace.current,
+        );
+
+        return PickImageFileReturn(type: PickImageFileReturnType.empty);
+      }
 
       if (result == null) {
         mpLocator.mpLog.i('No file selected (image/XVI).');
@@ -75,7 +89,9 @@ class MPDialogAux {
       }
 
       final PlatformFile picked = result.files.single;
-      final String filename = picked.path ?? picked.name;
+      final String filename = kIsWeb
+          ? picked.name
+          : (picked.path ?? picked.name);
       final String lowerName = filename.toLowerCase();
 
       Uint8List? bytes = picked.bytes;
@@ -164,6 +180,21 @@ class MPDialogAux {
     }
   }
 
+  static Set<String> getMulticaseList(Iterable<String> items) {
+    final Set<String> multicase = {};
+    final Set<String> lowerSet = {};
+
+    for (final String item in items) {
+      lowerSet.add(item.toLowerCase());
+    }
+    for (final String item in lowerSet) {
+      multicase.add(item);
+      multicase.add(item.toUpperCase());
+    }
+
+    return multicase;
+  }
+
   static Future<void> showXVIParsingErrorsDialog(
     BuildContext context,
     List<String> errors,
@@ -202,7 +233,7 @@ class MPDialogAux {
     );
   }
 
-  static void pickTH2File(BuildContext context) async {
+  static Future<void> pickTH2File(BuildContext context) async {
     if (_isFilePickerOpen[MPFilePickerType.th2] == true) {
       return;
     }
@@ -210,7 +241,7 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.th2] = true;
 
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],

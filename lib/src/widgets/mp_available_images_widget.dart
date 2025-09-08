@@ -98,7 +98,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 Expanded(child: Text(name)),
                                 if (kIsWeb)
                                   IconButton(
-                                    onPressed: () => _pickFile(image),
+                                    onPressed: () => pickFile(image),
                                     icon: Icon(
                                       isLoaded
                                           ? Icons.check_circle
@@ -141,15 +141,34 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     );
   }
 
-  Future<void> _pickFile(THXTherionImageInsertConfig image) async {
+  Future<void> pickFile(THXTherionImageInsertConfig image) async {
+    String extension = p.extension(image.filename).toLowerCase();
+
+    if (extension.startsWith('.')) {
+      extension = extension.substring(1);
+    }
+
+    final List<String>? allowedExtensions = extension.isEmpty
+        ? null
+        : [extension];
     final BuildContext buildContext = context;
     final PickImageFileReturn imageResult = await MPDialogAux.pickImageFile(
       buildContext,
+      allowedExtensions: allowedExtensions,
     );
 
-    if (imageResult.type == PickImageFileReturnType.empty) {
-      return;
+    switch (imageResult.type) {
+      case PickImageFileReturnType.empty:
+        return;
+      case PickImageFileReturnType.rasterImage:
+        print("DEBUG: Setting raster image");
+        image.setRasterImage(imageResult.image!);
+      case PickImageFileReturnType.xviFile:
+        print("DEBUG: Setting XVI file");
+        image.setXVIFile(imageResult.xviFile!);
     }
+
+    th2FileEditController.triggerImagesRedraw();
   }
 
   void _imageVisibilityChanged(int imageMPID, bool? newVisibility) {
