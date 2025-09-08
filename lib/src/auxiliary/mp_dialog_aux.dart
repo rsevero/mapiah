@@ -51,10 +51,12 @@ class MPDialogAux {
           'JPG',
           'png',
           'PNG',
-          'pnm',
-          'PNM',
-          'ppm',
-          'PPM',
+
+          /// PNM and PPM are not supported by dart:ui package.
+          // 'pnm',
+          // 'PNM',
+          // 'ppm',
+          // 'PPM',
           'xvi',
           'XVI',
         ],
@@ -225,7 +227,7 @@ class MPDialogAux {
         if (kIsWeb) {
           // On web, we can't use file paths or File IO. Use bytes and filename.
           final Uint8List? fileBytes = result.files.single.bytes;
-          final String fileName = result.files.single.name;
+          final String filename = result.files.single.name;
 
           if (fileBytes == null) {
             return;
@@ -235,8 +237,8 @@ class MPDialogAux {
             context,
             MaterialPageRoute(
               builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$fileName"),
-                filename: fileName,
+                key: ValueKey("TH2FileEditPage|$filename"),
+                filename: filename,
                 fileBytes: fileBytes,
               ),
             ),

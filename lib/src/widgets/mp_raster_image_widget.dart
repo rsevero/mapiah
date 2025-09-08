@@ -50,9 +50,11 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerImages;
 
+        /// The Y coordinate is negated because in Therion's coordinate system,
+        /// positive Y goes up, while in Flutter's canvas, positive Y goes down.
         final Offset offset = Offset(
-          widget.image.xviRootedXX,
-          widget.image.xviRootedYY,
+          widget.image.xx.value,
+          -widget.image.yy.value,
         );
 
         return _image == null

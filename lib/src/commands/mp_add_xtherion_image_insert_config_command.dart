@@ -12,6 +12,12 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
+  MPAddXTherionImageInsertConfigCommand({
+    required this.newImageInsertConfig,
+    required this.xTherionImageInsertConfigPositionInParent,
+    super.descriptionType = _defaultDescriptionType,
+  }) : super();
+
   MPAddXTherionImageInsertConfigCommand.fromExisting({
     required THXTherionImageInsertConfig existingImageInsertConfig,
     required TH2FileEditController th2FileEditController,

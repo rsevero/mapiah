@@ -1190,10 +1190,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final String relativeImagePath = p.relative(
+    final String rawRelativeImagePath = p.relative(
       imageResult.filename!,
       from: p.dirname(_thFile.filename),
     );
+    final String relativeImagePath =
+        (rawRelativeImagePath.startsWith('./') ||
+            rawRelativeImagePath.startsWith('../'))
+        ? rawRelativeImagePath
+        : './$rawRelativeImagePath';
     final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);
     final THXTherionImageInsertConfig
     newImage = THXTherionImageInsertConfig.adjustPosition(
@@ -1209,9 +1214,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       th2FileEditController: _th2FileEditController,
     );
     final MPAddXTherionImageInsertConfigCommand addImageCommand =
-        MPAddXTherionImageInsertConfigCommand.fromExisting(
-          existingImageInsertConfig: newImage,
-          th2FileEditController: _th2FileEditController,
+        MPAddXTherionImageInsertConfigCommand(
+          newImageInsertConfig: newImage,
+          xTherionImageInsertConfigPositionInParent:
+              mpAddChildAtEndOfParentChildrenList,
         );
 
     _th2FileEditController.execute(addImageCommand);

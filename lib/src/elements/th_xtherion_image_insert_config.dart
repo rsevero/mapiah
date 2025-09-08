@@ -264,8 +264,9 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
   }
 
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
-    if (_xviFile == null && isXVI) {
+    if ((_xviFile == null) && isXVI) {
       if (kIsWeb) {
+        return null;
       } else {
         final XVIFileParser parser = XVIFileParser();
         final XVIFile? xviFile;
@@ -280,8 +281,6 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
 
         if (isSuccessful && (xviFile != null)) {
           _xviFile = xviFile;
-
-          _fixXVIRoot();
         } else {
           _xviFile = null;
 
@@ -290,8 +289,12 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
           if (context != null) {
             MPDialogAux.showXVIParsingErrorsDialog(context, errors);
           }
+
+          return null;
         }
       }
+
+      _fixXVIRoot();
     }
 
     return _xviFile;
@@ -302,11 +305,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
     _xviRootedXX = xx.value;
     _xviRootedYY = yy.value;
 
-    if (!isXVI || xviRoot.isEmpty) {
-      return;
-    }
-
-    if (_xviFile == null) {
+    if (!isXVI || xviRoot.isEmpty || (_xviFile == null)) {
       return;
     }
 
