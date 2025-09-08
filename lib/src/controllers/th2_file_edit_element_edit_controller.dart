@@ -1191,7 +1191,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final String relativeImagePath = p.relative(
-      imageResult.fileName!,
+      imageResult.filename!,
       from: p.dirname(_thFile.filename),
     );
     final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);

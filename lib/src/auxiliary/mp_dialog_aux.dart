@@ -68,12 +68,13 @@ class MPDialogAux {
 
       if (result == null) {
         mpLocator.mpLog.i('No file selected (image/XVI).');
+
         return PickImageFileReturn(type: PickImageFileReturnType.empty);
       }
 
       final PlatformFile picked = result.files.single;
-      final String fileName = picked.name;
-      final String lowerName = fileName.toLowerCase();
+      final String filename = picked.path ?? picked.name;
+      final String lowerName = filename.toLowerCase();
 
       Uint8List? bytes = picked.bytes;
       String? pickedPath = picked.path;
@@ -101,7 +102,7 @@ class MPDialogAux {
           final XVIFileParser xviParser = XVIFileParser();
 
           final (xviFile, isSuccessful, errors) = xviParser.parse(
-            fileName,
+            filename,
             fileBytes: bytes,
           );
 
@@ -114,7 +115,7 @@ class MPDialogAux {
           return PickImageFileReturn(
             type: PickImageFileReturnType.xviFile,
             xviFile: xviFile,
-            fileName: fileName,
+            filename: filename,
           );
         } catch (e, st) {
           mpLocator.mpLog.e(
@@ -141,7 +142,7 @@ class MPDialogAux {
         return PickImageFileReturn(
           type: PickImageFileReturnType.rasterImage,
           image: image,
-          fileName: fileName,
+          filename: filename,
         );
       } catch (e, st) {
         mpLocator.mpLog.e('Failed to decode image', error: e, stackTrace: st);
@@ -293,12 +294,12 @@ class PickImageFileReturn {
   final PickImageFileReturnType type;
   final ui.Image? image;
   final XVIFile? xviFile;
-  final String? fileName;
+  final String? filename;
 
   PickImageFileReturn({
     required this.type,
     this.image,
     this.xviFile,
-    this.fileName,
+    this.filename,
   });
 }
