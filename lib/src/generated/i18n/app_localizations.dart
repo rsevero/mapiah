@@ -1808,6 +1808,12 @@ abstract class AppLocalizations {
   /// **'Empty selection'**
   String get th2FileEditPageEmptySelectionStatusBarMessage;
 
+  /// The label for the load image button
+  ///
+  /// In en, this message translates to:
+  /// **'Load image'**
+  String get th2FileEditPageLoadImageButton;
+
   /// The label for the loading file message
   ///
   /// In en, this message translates to:

@@ -1443,6 +1443,11 @@
     "description": "The status bar message for the empty selection",
     "type": "text"
   },
+  "th2FileEditPageLoadImageButton": "Load image",
+  "@th2FileEditPageLoadImageButton": {
+    "description": "The label for the load image button",
+    "type": "text"
+  },
   "th2FileEditPageLoadingFile": "Loading file {filename} ...",
   "@th2FileEditPageLoadingFile": {
     "description": "The label for the loading file message",

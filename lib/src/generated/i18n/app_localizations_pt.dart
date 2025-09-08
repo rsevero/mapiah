@@ -916,6 +916,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhum elemento selecionado';
 
   @override
+  String get th2FileEditPageLoadImageButton => 'Carregar imagem';
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Lendo arquivo $filename ...';
   }

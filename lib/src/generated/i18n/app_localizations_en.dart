@@ -908,6 +908,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';
 
   @override
+  String get th2FileEditPageLoadImageButton => 'Load image';
+
+  @override
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Loading file $filename ...';
   }

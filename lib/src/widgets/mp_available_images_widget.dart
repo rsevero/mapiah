@@ -60,7 +60,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
             final Iterable<THXTherionImageInsertConfig> images = thFile
                 .getXTherionImageInsertConfigs();
-            final ThemeData theme = Theme.of(context);
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -98,16 +97,15 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 Expanded(child: Text(name)),
                                 if (kIsWeb)
                                   IconButton(
-                                    onPressed: () => pickFile(image),
+                                    onPressed: () => _pickFile(image),
                                     icon: Icon(
                                       isLoaded
-                                          ? Icons.check_circle
-                                          : Icons.radio_button_unchecked,
-                                      color: isLoaded
-                                          ? Colors.green
-                                          : theme.disabledColor,
-                                      size: 20,
+                                          ? Icons.cloud_done_rounded
+                                          : Icons.cloud_upload_outlined,
+                                      color: colorScheme.onSecondary,
                                     ),
+                                    tooltip: appLocalizations
+                                        .th2FileEditPageLoadImageButton,
                                   ),
                                 IconButton(
                                   icon: Icon(
@@ -141,7 +139,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     );
   }
 
-  Future<void> pickFile(THXTherionImageInsertConfig image) async {
+  Future<void> _pickFile(THXTherionImageInsertConfig image) async {
     String extension = p.extension(image.filename).toLowerCase();
 
     if (extension.startsWith('.')) {
