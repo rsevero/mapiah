@@ -34,12 +34,12 @@ class MPInteractionAux {
     MPPointShapeType.x: _drawXPoint,
   };
 
-  static bool isShiftPressed() {
+  static bool isAltPressed() {
     return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.shiftLeft,
+          LogicalKeyboardKey.altLeft,
         ) ||
         HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.shiftRight,
+          LogicalKeyboardKey.altRight,
         );
   }
 
@@ -52,12 +52,21 @@ class MPInteractionAux {
         );
   }
 
-  static bool isAltPressed() {
+  static bool isMetaPressed() {
     return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.altLeft,
+          LogicalKeyboardKey.metaLeft,
         ) ||
         HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.altRight,
+          LogicalKeyboardKey.metaRight,
+        );
+  }
+
+  static bool isShiftPressed() {
+    return HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftLeft,
+        ) ||
+        HardwareKeyboard.instance.logicalKeysPressed.contains(
+          LogicalKeyboardKey.shiftRight,
         );
   }
 

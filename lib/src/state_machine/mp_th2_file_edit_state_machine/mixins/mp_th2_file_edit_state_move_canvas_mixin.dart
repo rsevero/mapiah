@@ -15,11 +15,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
   void _onKeyDownEvent(KeyDownEvent event) {
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
-        if (isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
           selectionController.selectAllElements();
         } else if (!isAltPressed && !isShiftPressed) {
           th2FileEditController.stateController.setState(
@@ -27,11 +30,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           );
         }
       case LogicalKeyboardKey.keyC:
-        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
           selectionController.setSelectionState();
         }
       case LogicalKeyboardKey.keyI:
-        if (!isShiftPressed && !isCtrlPressed) {
+        if (!isShiftPressed && !isCtrlPressed && !isMetaPressed) {
           if (isAltPressed) {
             th2FileEditController.overlayWindowController.toggleOverlayWindow(
               MPWindowType.changeImage,
@@ -41,7 +47,10 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyL:
-        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addLine,
           );
@@ -49,6 +58,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed &&
             !isCtrlPressed &&
+            !isMetaPressed &&
             !isShiftPressed &&
             (th2FileEditController
                     .selectionController
@@ -67,19 +77,25 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           );
         }
       case LogicalKeyboardKey.keyO:
-        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.optionsEdit,
           );
         }
       case LogicalKeyboardKey.keyP:
-        if (!isAltPressed && !isCtrlPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addPoint,
           );
         }
       case LogicalKeyboardKey.keyS:
-        if (isCtrlPressed && !isAltPressed) {
+        if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
           if (th2FileEditController.enableSaveButton) {
             if (isShiftPressed && !kIsWeb) {
               th2FileEditController.saveAsTH2File();
@@ -87,7 +103,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
               th2FileEditController.saveTH2File();
             }
           }
-        } else if (!isCtrlPressed && !isShiftPressed) {
+        } else if (!isCtrlPressed && !isMetaPressed && !isShiftPressed) {
           if (isAltPressed) {
             th2FileEditController.toggleToNextAvailableScrap();
           } else {
@@ -95,14 +111,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyY:
-        if (isCtrlPressed &&
+        if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed &&
             th2FileEditController.hasRedo) {
           th2FileEditController.redo();
         }
       case LogicalKeyboardKey.keyZ:
-        if (isCtrlPressed &&
+        if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed &&
             th2FileEditController.hasUndo) {
