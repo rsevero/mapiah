@@ -7,6 +7,7 @@
   * Support Cmd+keyboard shortcuts on MacOS.
   * Escape dismisses overlay modal windows.
 * Fixed bugs:
+  * Going back to file_picker 10.2.1 as 10.3.2 broke initial directory.
 * Infrastructure maintenance:
   * flutter pub upgrade.
   * flutter upgrade to 3.35.3.
