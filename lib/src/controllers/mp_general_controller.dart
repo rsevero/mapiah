@@ -193,8 +193,8 @@ class MPGeneralController {
         stdoutString,
       );
 
-      if (encodings.isNotEmpty) {
-        _availableEncodings = encodings;
+      for (final String encoding in encodings) {
+        addAvailableEncoding(encoding);
       }
     } catch (_) {
       // Ignore (therion not installed or not in PATH)

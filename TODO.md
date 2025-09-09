@@ -90,3 +90,5 @@ Version 0.4
 [ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
 [ ] - Edit file properties (enconding and?...)
 
+Version 0.5
+[ ] - Raster images tracing
