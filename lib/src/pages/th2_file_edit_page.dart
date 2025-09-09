@@ -561,13 +561,39 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         final bool hasRedo = th2FileEditController.hasRedo;
         final bool enableRemoveButton =
             th2FileEditController.enableRemoveButton;
+        final bool isSnapTargetsButtonPressed = th2FileEditController
+            .overlayWindowController
+            .getIsOverlayWindowShown(MPWindowType.snapTargets);
 
         return Positioned(
           top: 16,
           right: 16,
           child: Row(
             children: [
+              FloatingActionButton(
+                key:
+                    th2FileEditController
+                        .overlayWindowController
+                        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
+                        .snapTargetsButton]!,
+                heroTag: 'snap',
+                mini: true,
+                tooltip: mpLocator.appLocalizations.th2FileEditPageSnapButton,
+                onPressed: () {
+                  th2FileEditController.overlayWindowController
+                      .toggleOverlayWindow(MPWindowType.snapTargets);
+                },
+                backgroundColor: isSnapTargetsButtonPressed
+                    ? null
+                    : colorScheme.surfaceContainerLowest,
+                foregroundColor: isSnapTargetsButtonPressed
+                    ? null
+                    : colorScheme.surfaceContainerHighest,
+                elevation: isSnapTargetsButtonPressed ? 6.0 : 3.0,
+                child: const Icon(Icons.gps_fixed),
+              ),
               if (th2FileEditController.showRemoveButton) ...[
+                SizedBox(width: mpButtonSpace),
                 FloatingActionButton(
                   heroTag: 'remove',
                   mini: true,

@@ -404,4 +404,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       outerAnchorPosition: outerAnchorPosition,
     );
   }
+
+  bool getIsOverlayWindowShown(MPWindowType type) {
+    return _isOverlayWindowShown[type] ?? false;
+  }
 }

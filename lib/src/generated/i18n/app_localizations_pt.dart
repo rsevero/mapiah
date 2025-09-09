@@ -980,6 +980,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSaveAsDialogTitle => 'Salvar arquivo TH2 como';
 
   @override
+  String get th2FileEditPageSnapButton => 'Ajustar a pontos';
+
+  @override
   String th2FileEditPageRedo(Object redoDescription) {
     return 'Refazer \'$redoDescription\' (Ctrl+Y)';
   }

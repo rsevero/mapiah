@@ -10,4 +10,5 @@ enum MPWindowType {
   optionChoices,
   plaTypes,
   scrapOptions,
+  snapTargets,
 }

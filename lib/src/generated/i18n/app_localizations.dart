@@ -1911,6 +1911,12 @@ abstract class AppLocalizations {
   /// **'Save TH2 file as'**
   String get th2FileEditPageSaveAsDialogTitle;
 
+  /// The label for the snap tool button
+  ///
+  /// In en, this message translates to:
+  /// **'Snap'**
+  String get th2FileEditPageSnapButton;
+
   /// The label for the redo shortcut
   ///
   /// In en, this message translates to:

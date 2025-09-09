@@ -19,6 +19,7 @@ import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget
 import 'package:mapiah/src/widgets/mp_options_edit_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
+import 'package:mapiah/src/widgets/mp_snap_targets_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_attr_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_author_option_widget.dart';
@@ -164,6 +165,17 @@ class MPOverlayWindowFactory {
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerRight,
+        );
+      case MPWindowType.snapTargets:
+        outerAnchorPosition = MPInteractionAux.getButtonOuterAnchor(
+          MPGlobalKeyWidgetType.snapTargetsButton,
+          th2FileEditController,
+        );
+
+        overlayWindowWidget = MPSnapTargetsWidget(
+          key: ValueKey("MPSnapTargetsWidget|$thFileMPID"),
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
         );
     }
 

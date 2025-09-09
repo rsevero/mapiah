@@ -1536,6 +1536,11 @@
     "description": "The title for the save as dialog",
     "type": "text"
   },
+  "th2FileEditPageSnapButton": "Snap",
+  "@th2FileEditPageSnapButton": {
+    "description": "The label for the snap tool button",
+    "type": "text"
+  },
   "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
   "@th2FileEditPageRedo": {
     "description": "The label for the redo shortcut",
