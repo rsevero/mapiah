@@ -58,16 +58,16 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
     context: context,
   );
 
-  List<Offset> get snapTargets {
+  List<THPositionPart> get snapTargets {
     _$_snapTargetsAtom.reportRead();
     return super._snapTargets;
   }
 
   @override
-  List<Offset> get _snapTargets => snapTargets;
+  List<THPositionPart> get _snapTargets => snapTargets;
 
   @override
-  set _snapTargets(List<Offset> value) {
+  set _snapTargets(List<THPositionPart> value) {
     _$_snapTargetsAtom.reportWrite(value, super._snapTargets, () {
       super._snapTargets = value;
     });

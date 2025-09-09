@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mobx/mobx.dart';
@@ -21,7 +21,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
     : _thFile = _th2FileEditController.thFile;
 
   @readonly
-  List<Offset> _snapTargets = [];
+  List<THPositionPart> _snapTargets = [];
 
   @readonly
   MPSnapPointTarget _snapPointTargetType = MPSnapPointTarget.none;
@@ -128,7 +128,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
           continue;
         }
 
-        _snapTargets.add(element.position.coordinates);
+        _snapTargets.add(element.position);
       } else if (element is THLine) {
         if ((_snapLinePointTargetType == MPSnapLinePointTarget.none) ||
             (_snapLinePointTargetType ==
@@ -138,11 +138,11 @@ abstract class TH2FileEditSnapControllerBase with Store {
         }
 
         for (final int segmentMPID in element.lineSegmentMPIDs) {
-          final THElement segmentElement = _thFile.elementByMPID(segmentMPID);
+          final THLineSegment lineSegmentElement = _thFile.lineSegmentByMPID(
+            segmentMPID,
+          );
 
-          if (segmentElement is THLineSegment) {
-            _snapTargets.add(segmentElement.endPoint.coordinates);
-          }
+          _snapTargets.add(lineSegmentElement.endPoint);
         }
       }
     }
