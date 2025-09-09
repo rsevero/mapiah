@@ -134,24 +134,6 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get buttonClose;
 
-  /// The label for the about Mapiah dialog
-  ///
-  /// In en, this message translates to:
-  /// **'About Mapiah'**
-  String get initialPageAboutMapiahDialog;
-
-  /// The label for the language selection
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get initialPageLanguage;
-
-  /// The label for the open file button
-  ///
-  /// In en, this message translates to:
-  /// **'Open file (Ctrl+O)'**
-  String get initialPageOpenFile;
-
   /// The initial page presentation of the application
   ///
   /// In en, this message translates to:
@@ -179,8 +161,14 @@ abstract class AppLocalizations {
   /// The tooltip for the help dialog button
   ///
   /// In en, this message translates to:
-  /// **'Help'**
+  /// **'Help (F1)'**
   String get helpDialogTooltip;
+
+  /// The label for the about Mapiah dialog
+  ///
+  /// In en, this message translates to:
+  /// **'About Mapiah'**
+  String get mapiahHomeAboutMapiahDialog;
 
   /// The title for the main page of the help dialog
   ///
@@ -188,10 +176,22 @@ abstract class AppLocalizations {
   /// **'Main page'**
   String get mapiahHomeHelpDialogTitle;
 
+  /// The label for the language selection
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get mapiahHomeLanguage;
+
+  /// The label for the open file button
+  ///
+  /// In en, this message translates to:
+  /// **'Open file (Ctrl+O or Ctrl+Shift+O)'**
+  String get mapiahHomeOpenFile;
+
   /// The tooltip for the new file button on the main page
   ///
   /// In en, this message translates to:
-  /// **'New file (Ctrl+N)'**
+  /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
   String get mapiahHomeNewFileButtonTooltip;
 
   /// The description for the degree angle unit

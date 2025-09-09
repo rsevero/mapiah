@@ -29,15 +29,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get buttonClose => 'Fechar';
 
   @override
-  String get initialPageAboutMapiahDialog => 'Sobre o Mapiah';
-
-  @override
-  String get initialPageLanguage => 'Idioma';
-
-  @override
-  String get initialPageOpenFile => 'Abrir arquivo (Ctrl+O)';
-
-  @override
   String get initialPagePresentation =>
       'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
 
@@ -59,13 +50,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get helpDialogFailureToLoad => 'Falha ao carregar o conteúdo de ajuda';
 
   @override
-  String get helpDialogTooltip => 'Ajuda';
+  String get helpDialogTooltip => 'Ajuda (F1)';
+
+  @override
+  String get mapiahHomeAboutMapiahDialog => 'Sobre o Mapiah';
 
   @override
   String get mapiahHomeHelpDialogTitle => 'Tela inicial';
 
   @override
-  String get mapiahHomeNewFileButtonTooltip => 'Novo arquivo (Ctrl+N)';
+  String get mapiahHomeLanguage => 'Idioma';
+
+  @override
+  String get mapiahHomeOpenFile => 'Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)';
+
+  @override
+  String get mapiahHomeNewFileButtonTooltip =>
+      'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
 
   @override
   String get mpAngleUnitDegree => 'grau';

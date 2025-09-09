@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
@@ -47,7 +48,7 @@ class _MapiahHomeState extends State<MapiahHome> {
     }
     initializeMPCommandLocalizations(context);
 
-    return Scaffold(
+    final Scaffold scaffold = Scaffold(
       appBar: AppBar(
         elevation: 4,
         title: Text(appLocalizations.appTitle),
@@ -62,7 +63,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             icon: Icon(Icons.file_open_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.pickTH2File(context),
-            tooltip: appLocalizations.initialPageOpenFile,
+            tooltip: appLocalizations.mapiahHomeOpenFile,
           ),
           buildLanguageDropdown(context),
           MPHelpButtonWidget(
@@ -74,12 +75,14 @@ class _MapiahHomeState extends State<MapiahHome> {
             icon: Icon(Icons.info_outline),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => showAboutDialog(context),
-            tooltip: appLocalizations.initialPageAboutMapiahDialog,
+            tooltip: appLocalizations.mapiahHomeAboutMapiahDialog,
           ),
         ],
       ),
       body: Center(child: Text(appLocalizations.initialPagePresentation)),
     );
+
+    return _withShortcuts(scaffold);
   }
 
   Widget buildLanguageDropdown(BuildContext context) {
@@ -194,6 +197,70 @@ class _MapiahHomeState extends State<MapiahHome> {
           ],
         );
       },
+    );
+  }
+}
+
+// Shortcut handling using CallbackShortcuts (simpler than Intent/Action for basic triggers)
+extension on _MapiahHomeState {
+  Widget _withShortcuts(Widget child) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+    final bindings = <ShortcutActivator, VoidCallback>{
+      // New file
+      const SingleActivator(LogicalKeyboardKey.keyN, control: true): () =>
+          MPDialogAux.newFile(context),
+      const SingleActivator(LogicalKeyboardKey.keyN, meta: true): () =>
+          MPDialogAux.newFile(context),
+      // macOS Cmd+Shift+N
+      const SingleActivator(
+        LogicalKeyboardKey.keyN,
+        meta: true,
+        shift: true,
+      ): () =>
+          MPDialogAux.newFile(context),
+      // Web-safe fallback (Ctrl+Shift+N) since some browsers block Ctrl+N
+      const SingleActivator(
+        LogicalKeyboardKey.keyN,
+        control: true,
+        shift: true,
+      ): () =>
+          MPDialogAux.newFile(context),
+      // Open file: desktop standard Ctrl/Cmd+O
+      const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
+          MPDialogAux.pickTH2File(context),
+      const SingleActivator(LogicalKeyboardKey.keyO, meta: true): () =>
+          MPDialogAux.pickTH2File(context),
+      // macOS Cmd+Shift+O
+      const SingleActivator(
+        LogicalKeyboardKey.keyO,
+        meta: true,
+        shift: true,
+      ): () =>
+          MPDialogAux.pickTH2File(context),
+      const SingleActivator(
+        LogicalKeyboardKey.keyO,
+        control: true,
+        shift: true,
+      ): () =>
+          MPDialogAux.pickTH2File(context),
+      // Help
+      const SingleActivator(LogicalKeyboardKey.f1): () =>
+          MPDialogAux.showHelpDialog(
+            context,
+            'mapiah_home_help',
+            appLocalizations.mapiahHomeHelpDialogTitle,
+          ),
+    };
+
+    return CallbackShortcuts(
+      bindings: bindings,
+      child: Focus(
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          return KeyEventResult.ignored;
+        },
+        child: child,
+      ),
     );
   }
 }

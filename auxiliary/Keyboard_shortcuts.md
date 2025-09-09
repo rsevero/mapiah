@@ -7,13 +7,14 @@
 | Change active scrap                             | Alt+S                        |
 | Change images                                   | Alt+I                        |
 | Create area                                     | A                            |
-| Create file                                     | Ctrl+N                       |
+| Create file                                     | Ctrl+N or Ctrl+Shift+N       |
 | Create line                                     | L                            |
 | Create point                                    | P                            |
 | Create scrap                                    | S                            |
 | Delete point, line, area or line segment        | Del or Backspace             |
 | Force option setting on non-supporting types    | Ctrl+click on option setting |
-| Open file                                       | Ctrl+O                       |
+| Help                                            | F1                           |
+| Open file                                       | Ctrl+O or Ctrl+Shift+O       |
 | Options edit                                    | O                            |
 | Line node edit                                  | N                            |
 | Redo                                            | Ctrl+Y                       |

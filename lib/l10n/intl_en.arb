@@ -33,21 +33,6 @@
     "description": "The label for the close button",
     "type": "text"
   },
-  "initialPageAboutMapiahDialog": "About Mapiah",
-  "@initialPageAboutMapiahDialog": {
-    "description": "The label for the about Mapiah dialog",
-    "type": "text"
-  },
-  "initialPageLanguage": "Language",
-  "@initialPageLanguage": {
-    "description": "The label for the language selection",
-    "type": "text"
-  },
-  "initialPageOpenFile": "Open file (Ctrl+O)",
-  "@initialPageOpenFile": {
-    "description": "The label for the open file button",
-    "type": "text"
-  },
   "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
   "@initialPagePresentation": {
     "description": "The initial page presentation of the application",
@@ -71,9 +56,14 @@
     "description": "The message displayed when the help content fails to load",
     "type": "text"
   },
-  "helpDialogTooltip": "Help",
+  "helpDialogTooltip": "Help (F1)",
   "@helpDialogTooltip": {
     "description": "The tooltip for the help dialog button",
+    "type": "text"
+  },
+  "mapiahHomeAboutMapiahDialog": "About Mapiah",
+  "@mapiahHomeAboutMapiahDialog": {
+    "description": "The label for the about Mapiah dialog",
     "type": "text"
   },
   "mapiahHomeHelpDialogTitle": "Main page",
@@ -81,7 +71,17 @@
     "description": "The title for the main page of the help dialog",
     "type": "text"
   },
-  "mapiahHomeNewFileButtonTooltip": "New file (Ctrl+N)",
+  "mapiahHomeLanguage": "Language",
+  "@mapiahHomeLanguage": {
+    "description": "The label for the language selection",
+    "type": "text"
+  },
+  "mapiahHomeOpenFile": "Open file (Ctrl+O or Ctrl+Shift+O)",
+  "@mapiahHomeOpenFile": {
+    "description": "The label for the open file button",
+    "type": "text"
+  },
+  "mapiahHomeNewFileButtonTooltip": "New file (Ctrl+N or Ctrl+Shift+N)",
   "@mapiahHomeNewFileButtonTooltip": {
     "description": "The tooltip for the new file button on the main page",
     "type": "text"

@@ -53,8 +53,8 @@ Version 0.3
 [ ] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
-[ ] - Implement Ctrl+O (open file) keyboard shortcut
-[ ] - Implement F1 shortcut to help page
+[X] - Implement Ctrl+O (open file) keyboard shortcut
+[X] - Implement F1 shortcut to help page
 [X] - Support XVI images
 [X] - Support xth_me_image_insert additional formats
 [ ] - Properly present lines with partial subtypes

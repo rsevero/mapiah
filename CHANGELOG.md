@@ -3,6 +3,7 @@
 ## 0.2.15 - not yet released
 * New features:
   * Loading images on web.
+  * Added keyboard shortcuts for initial page.
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter pub upgrade.
