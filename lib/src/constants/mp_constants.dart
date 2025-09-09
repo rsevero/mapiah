@@ -33,6 +33,7 @@ const int thMaxDecimalPositions = 12;
 const int mpCalculatedDecimalPositions = 6;
 const int thDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
+const double mpDefaultSnapOnScreenDistance = 9;
 
 const String mpDefaultEncoding = 'UTF-8';
 

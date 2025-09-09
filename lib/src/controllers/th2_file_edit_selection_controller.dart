@@ -455,10 +455,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _selectedEndControlPoints.clear;
   }
 
-  void setDragStartCoordinates(Offset screenCoordinates) {
+  void setDragStartCoordinatesFromScreenCoordinates(Offset screenCoordinates) {
     dragStartCanvasCoordinates = _th2FileEditController.offsetScreenToCanvas(
       screenCoordinates,
     );
+  }
+
+  void setDragStartCoordinatesFromCanvasCoordinates(Offset canvasCoordinates) {
+    dragStartCanvasCoordinates = canvasCoordinates;
   }
 
   void _calculateSelectionHandleCentersAndBoundingBox() {
@@ -1080,7 +1084,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     final Offset localDeltaPositionOnCanvas =
         canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
-    final mpSelectedElements = _mpSelectedElementsLogical.values;
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _mpSelectedElementsLogical.values;
 
     for (final MPSelectedElement selectedElement in mpSelectedElements) {
       switch (selectedElement) {

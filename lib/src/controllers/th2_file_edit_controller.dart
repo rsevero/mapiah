@@ -144,6 +144,10 @@ abstract class TH2FileEditControllerBase with Store {
   int _currentDecimalPositions = thDefaultDecimalPositions;
 
   @readonly
+  double _currentSnapOnCanvasDistanceSquaredLimit =
+      mpDefaultSnapOnScreenDistance * mpDefaultSnapOnScreenDistance;
+
+  @readonly
   int _activeScrapID = 0;
 
   @readonly
@@ -476,6 +480,16 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void _initializeReactions() {
+    _disposers.add(
+      autorun((_) {
+        final double snapOnCanvasDistance =
+            mpDefaultSnapOnScreenDistance / _canvasScale;
+
+        _currentSnapOnCanvasDistanceSquaredLimit =
+            snapOnCanvasDistance * snapOnCanvasDistance;
+      }),
+    );
+
     _disposers.add(
       autorun((_) {
         final double magnitude = MPNumericAux.log10(_canvasScale);

@@ -48,7 +48,9 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// Marks the start point of the pan.
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
-    selectionController.setDragStartCoordinates(event.localPosition);
+    selectionController.setDragStartCoordinatesFromScreenCoordinates(
+      event.localPosition,
+    );
   }
 
   /// Draws the selection window.

@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_snap_controller.g.dart';
@@ -146,6 +148,168 @@ abstract class TH2FileEditSnapControllerBase with Store {
         }
       }
     }
+  }
+
+  Offset getCanvasSnapedOffsetFromScreenOffset(Offset screenPosition) {
+    final THPositionPart? snapTarget = getCanvasSnapedPositionFromScreenOffset(
+      screenPosition,
+    );
+
+    return (snapTarget == null) ? screenPosition : snapTarget.coordinates;
+  }
+
+  Offset getCanvasSnapedOffsetFromCanvasOffset(Offset canvasPosition) {
+    final THPositionPart? snapTarget = getCanvasSnapedPositionFromCanvasOffset(
+      canvasPosition,
+    );
+
+    return (snapTarget == null) ? canvasPosition : snapTarget.coordinates;
+  }
+
+  THPositionPart? getCanvasSnapedPositionFromScreenOffset(
+    Offset screenPosition,
+  ) {
+    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
+      screenPosition,
+    );
+
+    return getCanvasSnapedPositionFromCanvasOffset(canvasPosition);
+  }
+
+  THPositionPart? getCanvasSnapedPositionFromCanvasOffset(
+    Offset canvasPosition,
+  ) {
+    if (_snapTargets.isEmpty) {
+      return null;
+    }
+
+    double closestDistanceSquared = double.infinity;
+    THPositionPart? closestSnapTarget;
+    final double currentSnapOnCanvasDistanceSquaredLimit =
+        _th2FileEditController.currentSnapOnCanvasDistanceSquaredLimit;
+
+    for (final THPositionPart snapTarget in _snapTargets) {
+      final double distanceSquared =
+          (snapTarget.coordinates - canvasPosition).distanceSquared;
+
+      if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
+          (distanceSquared < closestDistanceSquared)) {
+        closestDistanceSquared = distanceSquared;
+        closestSnapTarget = snapTarget;
+      }
+    }
+
+    return closestSnapTarget;
+  }
+
+  THElement? getNearerSelectedElement(Offset canvasCoordinates) {
+    THElement? nearerElement;
+    double nearerDistanceSquared = double.infinity;
+
+    for (final MPSelectedElement selectedElement
+        in _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          final double pointDistanceSquared =
+              (selectedElement.originalElementClone.position.coordinates -
+                      canvasCoordinates)
+                  .distanceSquared;
+
+          if (pointDistanceSquared < nearerDistanceSquared) {
+            nearerDistanceSquared = pointDistanceSquared;
+            nearerElement = selectedElement.originalElementClone;
+          }
+        case MPSelectedLine _:
+          final ({THLineSegment? lineSegment, double distanceSquared})
+          nearerLineSegment = getNearerLineSegmentFromLine(
+            canvasCoordinates,
+            selectedElement.originalLineClone,
+          );
+
+          if ((nearerLineSegment.lineSegment != null) &&
+              (nearerLineSegment.distanceSquared < nearerDistanceSquared)) {
+            nearerDistanceSquared = nearerLineSegment.distanceSquared;
+            nearerElement = nearerLineSegment.lineSegment;
+          }
+        case MPSelectedArea _:
+          final ({THLineSegment? lineSegment, double distanceSquared})
+          nearerLineSegment = getNearerLineSegmentFromArea(
+            canvasCoordinates,
+            selectedElement.originalAreaClone,
+          );
+
+          if ((nearerLineSegment.lineSegment != null) &&
+              (nearerLineSegment.distanceSquared < nearerDistanceSquared)) {
+            nearerDistanceSquared = nearerLineSegment.distanceSquared;
+            nearerElement = nearerLineSegment.lineSegment;
+          }
+        default:
+          throw Exception(
+            'TH2FileEditSelectionController.getNearerSelectedElement() found unknown selected element type',
+          );
+      }
+    }
+
+    return nearerElement;
+  }
+
+  ({THLineSegment? lineSegment, double distanceSquared})
+  getNearerLineSegmentFromLine(Offset canvasCoordinates, THLine line) {
+    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+
+    if (lineSegments.isEmpty) {
+      return (lineSegment: null, distanceSquared: double.infinity);
+    }
+
+    THLineSegment nearerElement = lineSegments.first;
+    double nearerDistanceSquared =
+        (nearerElement.endPoint.coordinates - canvasCoordinates)
+            .distanceSquared;
+
+    for (final THLineSegment lineSegment in lineSegments.skip(1)) {
+      final double endPointDistanceSquared =
+          (lineSegment.endPoint.coordinates - canvasCoordinates)
+              .distanceSquared;
+
+      if (endPointDistanceSquared < nearerDistanceSquared) {
+        nearerDistanceSquared = endPointDistanceSquared;
+        nearerElement = lineSegment;
+      }
+    }
+
+    return (lineSegment: nearerElement, distanceSquared: nearerDistanceSquared);
+  }
+
+  ({THLineSegment? lineSegment, double distanceSquared})
+  getNearerLineSegmentFromArea(Offset canvasCoordinates, THArea area) {
+    final Set<int> areaLineSegments = area.getLineMPIDs(_thFile);
+
+    if (areaLineSegments.isEmpty) {
+      return (lineSegment: null, distanceSquared: double.infinity);
+    }
+
+    THLineSegment? nearerLineSegmentFinal;
+    double nearerDistanceSquaredFinal = double.infinity;
+    final Iterable<int> areaLineMPIDs = area.getLineMPIDs(_thFile);
+
+    for (final int lineMPID in areaLineMPIDs) {
+      final THLine line = _thFile.lineByMPID(lineMPID);
+      final ({double distanceSquared, THLineSegment? lineSegment})
+      nearerPerLine = getNearerLineSegmentFromLine(canvasCoordinates, line);
+
+      if (nearerPerLine.distanceSquared < nearerDistanceSquaredFinal) {
+        nearerDistanceSquaredFinal = nearerPerLine.distanceSquared;
+        nearerLineSegmentFinal = nearerPerLine.lineSegment;
+      }
+    }
+
+    return (
+      lineSegment: nearerLineSegmentFinal,
+      distanceSquared: nearerDistanceSquaredFinal,
+    );
   }
 }
 

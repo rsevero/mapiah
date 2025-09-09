@@ -661,6 +661,31 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_currentSnapOnCanvasDistanceSquaredLimitAtom = Atom(
+    name: 'TH2FileEditControllerBase._currentSnapOnCanvasDistanceSquaredLimit',
+    context: context,
+  );
+
+  double get currentSnapOnCanvasDistanceSquaredLimit {
+    _$_currentSnapOnCanvasDistanceSquaredLimitAtom.reportRead();
+    return super._currentSnapOnCanvasDistanceSquaredLimit;
+  }
+
+  @override
+  double get _currentSnapOnCanvasDistanceSquaredLimit =>
+      currentSnapOnCanvasDistanceSquaredLimit;
+
+  @override
+  set _currentSnapOnCanvasDistanceSquaredLimit(double value) {
+    _$_currentSnapOnCanvasDistanceSquaredLimitAtom.reportWrite(
+      value,
+      super._currentSnapOnCanvasDistanceSquaredLimit,
+      () {
+        super._currentSnapOnCanvasDistanceSquaredLimit = value;
+      },
+    );
+  }
+
   late final _$_activeScrapIDAtom = Atom(
     name: 'TH2FileEditControllerBase._activeScrapID',
     context: context,

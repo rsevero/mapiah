@@ -1,17 +1,24 @@
 import 'dart:convert';
 import 'dart:core';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 class THPositionPart extends THPart {
   late final Offset coordinates;
-  late final int decimalPositions;
+  late final int _decimalPositions;
 
-  THPositionPart({required this.coordinates, required this.decimalPositions});
+  THPositionPart({required this.coordinates, int? decimalPositions})
+    : _decimalPositions =
+          decimalPositions ??
+          max(
+            MPNumericAux.getMinimumNumberOfDecimals(coordinates.dx),
+            MPNumericAux.getMinimumNumberOfDecimals(coordinates.dy),
+          );
 
   THPositionPart.fromStrings({
     required String xAsString,
@@ -80,10 +87,10 @@ class THPositionPart extends THPart {
     );
 
     coordinates = Offset(xDoublePart.value, yDoublePart.value);
-    decimalPositions =
-        (xDoublePart.decimalPositions > yDoublePart.decimalPositions)
-        ? xDoublePart.decimalPositions
-        : yDoublePart.decimalPositions;
+    decimalPositions = max(
+      xDoublePart.decimalPositions,
+      yDoublePart.decimalPositions,
+    );
   }
 
   @override
@@ -102,4 +109,16 @@ class THPositionPart extends THPart {
   double get x => coordinates.dx;
 
   double get y => coordinates.dy;
+
+  int get decimalPositions => _decimalPositions;
+
+  set decimalPositions(int decimalPositions) {
+    if (decimalPositions < 0) {
+      decimalPositions = 0;
+    } else if (decimalPositions > thMaxDecimalPositions) {
+      decimalPositions = thMaxDecimalPositions;
+    }
+
+    _decimalPositions = decimalPositions;
+  }
 }

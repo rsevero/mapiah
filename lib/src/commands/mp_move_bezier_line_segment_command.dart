@@ -73,6 +73,28 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
        originalLineInTH2File = '',
        super();
 
+  MPMoveBezierLineSegmentCommand.fromEndPointExactPosition({
+    required this.lineSegmentMPID,
+    required this.originalEndPointPosition,
+    required this.originalControlPoint1Position,
+    required this.originalControlPoint2Position,
+    required THPositionPart lineSegmentFinalPosition,
+    super.descriptionType = _defaultDescriptionType,
+  }) : originalLineInTH2File = '',
+       super() {
+    final Offset deltaOnCanvas =
+        lineSegmentFinalPosition.coordinates -
+        originalEndPointPosition.coordinates;
+
+    modifiedEndPointPosition = lineSegmentFinalPosition;
+    modifiedControlPoint1Position = originalControlPoint1Position.copyWith(
+      coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
+    );
+    modifiedControlPoint2Position = originalControlPoint2Position.copyWith(
+      coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
+    );
+  }
+
   @override
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
 

@@ -45,6 +45,33 @@ class MPMoveLineCommand extends MPCommand {
         );
   }
 
+  MPMoveLineCommand.fromLineSegmentExactPosition({
+    required this.lineMPID,
+    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+    required THPositionPart lineSegmentFinalPosition,
+    required THLineSegment referenceLineSegment,
+    super.descriptionType = _defaultDescriptionType,
+  }) : originalLineInTH2File = '',
+       super() {
+    final int referenceLineSegmentMPID = referenceLineSegment.mpID;
+    final MPCommand moveReferenceLineSegmentCommand =
+        (referenceLineSegment is THBezierCurveLineSegment)
+        ? MPMoveBezierLineSegmentCommand.fromEndPointExactPosition(
+            lineSegmentMPID: referenceLineSegmentMPID,
+            originalEndPointPosition: referenceLineSegment.endPoint,
+            originalControlPoint1Position: referenceLineSegment.controlPoint1,
+            originalControlPoint2Position: referenceLineSegment.controlPoint2,
+            lineSegmentFinalPosition: lineSegmentFinalPosition,
+            descriptionType: descriptionType,
+          )
+        : MPMoveStraightLineSegmentCommand(
+            lineSegmentMPID: referenceLineSegmentMPID,
+            originalEndPointPosition: referenceLineSegment.endPoint,
+            modifiedEndPointPosition: lineSegmentFinalPosition,
+            descriptionType: descriptionType,
+          );
+  }
+
   @override
   MPCommandType get type => MPCommandType.moveLine;
 

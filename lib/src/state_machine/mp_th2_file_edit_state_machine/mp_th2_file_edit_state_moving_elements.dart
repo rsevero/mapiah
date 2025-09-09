@@ -4,7 +4,12 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     with
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  MPTH2FileEditStateMovingElements({required super.th2FileEditController});
+  final TH2FileEditSnapController snapController;
+  THElement? _clickedElementAtPointerDown;
+  bool _searchedForClickedElementAtPointerDown = false;
+
+  MPTH2FileEditStateMovingElements({required super.th2FileEditController})
+    : snapController = th2FileEditController.snapController;
 
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
@@ -79,8 +84,35 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController.moveSelectedElementsToScreenCoordinates(
+    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
+    );
+    final Offset snapedCanvasOffset = snapController
+        .getCanvasSnapedOffsetFromCanvasOffset(canvasOffset);
+
+    if (!_searchedForClickedElementAtPointerDown) {
+      _searchedForClickedElementAtPointerDown = true;
+      _clickedElementAtPointerDown = snapController.getNearerSelectedElement(
+        canvasOffset,
+      );
+      if (_clickedElementAtPointerDown != null) {
+        switch (_clickedElementAtPointerDown) {
+          case THPoint _:
+            selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+              (_clickedElementAtPointerDown as THPoint).position.coordinates,
+            );
+          case THLineSegment _:
+            selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+              (_clickedElementAtPointerDown as THLineSegment)
+                  .endPoint
+                  .coordinates,
+            );
+        }
+      }
+    }
+
+    selectionController.moveSelectedElementsToCanvasCoordinates(
+      snapedCanvasOffset,
     );
   }
 
@@ -93,8 +125,18 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount =
         selectionController.mpSelectedElementsLogical.length;
+    final THPositionPart snapedPosition =
+        snapController.getCanvasSnapedPositionFromScreenOffset(
+          event.localPosition,
+        ) ??
+        THPositionPart(
+          coordinates: th2FileEditController.offsetScreenToCanvas(
+            event.localPosition,
+          ),
+          decimalPositions: th2FileEditController.currentDecimalPositions,
+        );
     final Offset panDeltaOnCanvas =
-        th2FileEditController.offsetScreenToCanvas(event.localPosition) -
+        snapedPosition.coordinates -
         selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
@@ -110,18 +152,17 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
       switch (selected) {
         case MPSelectedPoint _:
-          moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
+          moveCommand = MPMovePointCommand(
             pointMPID: selectedElement.mpID,
             originalPosition: (selectedElement as THPoint).position,
-            deltaOnCanvas: panDeltaOnCanvas,
-            decimalPositions: th2FileEditController.currentDecimalPositions,
+            modifiedPosition: snapedPosition,
           );
         case MPSelectedLine _:
-          moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
+          moveCommand = MPMoveLineCommand.fromLineSegmentExactPosition(
             lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-            deltaOnCanvas: panDeltaOnCanvas,
-            decimalPositions: th2FileEditController.currentDecimalPositions,
+            lineSegmentFinalPosition: snapedPosition,
+            referenceLineSegment: selectedElement as THLineSegment,
           );
         case MPSelectedArea _:
           moveCommand = MPMoveAreaCommand.fromDeltaOnCanvas(

@@ -112,7 +112,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           selectionType: THSelectionType.pla,
         );
 
-    selectionController.setDragStartCoordinates(event.localPosition);
+    selectionController.setDragStartCoordinatesFromScreenCoordinates(
+      event.localPosition,
+    );
 
     if (clickedElements.isNotEmpty) {
       if (!shiftPressed) {
