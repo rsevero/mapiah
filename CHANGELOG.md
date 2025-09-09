@@ -6,6 +6,7 @@
   * Added keyboard shortcuts for initial page.
   * Support Cmd+keyboard shortcuts on MacOS.
   * Escape dismisses overlay modal windows.
+  * Writing XTherion configs together at the beginning of THFile.
 * Fixed bugs:
   * Going back to _file_picker_ 10.2.1 as 10.3.2 broke initial directory setting.
   * Encodings got from _therion --print-encodings_ could overwrite encoding got from file called by command line.
