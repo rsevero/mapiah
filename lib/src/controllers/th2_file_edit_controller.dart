@@ -14,6 +14,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -42,6 +43,7 @@ abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditOptionEditController optionEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
   late final TH2FileEditSelectionController selectionController;
+  late final TH2FileEditSnapController snapController;
   late final TH2FileEditStateController stateController;
   late final TH2FileEditUserInteractionController userInteractionController;
 
@@ -410,6 +412,7 @@ abstract class TH2FileEditControllerBase with Store {
     selectionController = TH2FileEditSelectionController(
       this as TH2FileEditController,
     );
+    snapController = TH2FileEditSnapController(this as TH2FileEditController);
     stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
     visualController = MPVisualController(this as TH2FileEditController);
