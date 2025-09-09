@@ -5,6 +5,7 @@
   * Loading images on web.
   * Added keyboard shortcuts for initial page.
   * Support Cmd+keyboard shortcuts on MacOS.
+  * Escape dismisses overlay modal windows.
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter pub upgrade.

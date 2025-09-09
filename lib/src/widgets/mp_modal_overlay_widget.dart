@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 
 typedef MPModalChildBuilder = Widget Function(VoidCallback onPressedClose);
@@ -56,20 +57,36 @@ class MPModalOverlayWidget {
                     constraints: const BoxConstraints(minWidth: 280),
                     child: IntrinsicWidth(
                       child: IntrinsicHeight(
-                        child: FocusScope(
-                          autofocus: true,
-                          child: Padding(
-                            padding: const EdgeInsets.all(
-                              mpOverlayWindowPadding,
-                            ),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxHeight:
-                                    maxDialogHeight -
-                                    (mpOverlayWindowPadding * 2),
+                        child: Shortcuts(
+                          shortcuts: <LogicalKeySet, Intent>{
+                            LogicalKeySet(LogicalKeyboardKey.escape):
+                                const DismissIntent(),
+                          },
+                          child: Actions(
+                            actions: <Type, Action<Intent>>{
+                              DismissIntent: CallbackAction<DismissIntent>(
+                                onInvoke: (_) {
+                                  remove();
+                                  return null;
+                                },
                               ),
-                              child: SingleChildScrollView(
-                                child: childBuilder(remove),
+                            },
+                            child: FocusScope(
+                              autofocus: true,
+                              child: Padding(
+                                padding: const EdgeInsets.all(
+                                  mpOverlayWindowPadding,
+                                ),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight:
+                                        maxDialogHeight -
+                                        (mpOverlayWindowPadding * 2),
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: childBuilder(remove),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
