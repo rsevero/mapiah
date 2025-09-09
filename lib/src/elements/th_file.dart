@@ -55,6 +55,7 @@ class THFile
   final Set<int> _pointsMPIDs = {};
   final Set<int> _scrapMPIDs = {};
   final Set<int> _imageMPIDs = {};
+  final Set<int> _xtherionSettingMPIDs = {};
 
   Map<int, int>? _areaMPIDByLineMPID;
   Map<String, int>? _areaMPIDByLineTHID;
@@ -372,8 +373,11 @@ class THFile
         _clearAreaXLineInfo(element);
       case THScrap _:
         _scrapMPIDs.add(element.mpID);
+      case THXTherionConfig _:
+        _xtherionSettingMPIDs.add(element.mpID);
       case THXTherionImageInsertConfig _:
         _imageMPIDs.add(element.mpID);
+        _xtherionSettingMPIDs.add(element.mpID);
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
@@ -434,8 +438,11 @@ class THFile
         _drawableElementMPIDs.remove(element.mpID);
       case THScrap _:
         _scrapMPIDs.remove(element.mpID);
+      case THXTherionConfig _:
+        _xtherionSettingMPIDs.remove(element.mpID);
       case THXTherionImageInsertConfig _:
         _imageMPIDs.remove(element.mpID);
+        _xtherionSettingMPIDs.remove(element.mpID);
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
@@ -650,6 +657,7 @@ class THFile
     _linesMPIDs.clear();
     _pointsMPIDs.clear();
     _imageMPIDs.clear();
+    _xtherionSettingMPIDs.clear();
     mpLocator.mpGeneralController
         .getTH2FileEditControllerIfExists(filename)
         ?.updateShowImages();
@@ -687,6 +695,10 @@ class THFile
 
   Set<int> get imageMPIDs {
     return _imageMPIDs;
+  }
+
+  Set<int> get xtherionSettingMPIDs {
+    return _xtherionSettingMPIDs;
   }
 
   Iterable<THScrap> getScraps() {

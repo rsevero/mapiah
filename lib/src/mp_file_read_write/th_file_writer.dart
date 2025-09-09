@@ -20,6 +20,7 @@ class THFileWriter {
   late bool _useOriginalRepresentation;
   String _lineEnding = MPDirectoryAux.getDefaultLineEnding();
   bool _insideMultiLineComment = false;
+  bool _xTherionConfigWritten = false;
 
   late THFile _thFile;
 
@@ -32,6 +33,8 @@ class THFileWriter {
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
     _lineEnding = _thFile.lineEnding;
+    _insideMultiLineComment = false;
+    _xTherionConfigWritten = false;
 
     String asString = '';
 
@@ -42,7 +45,57 @@ class THFileWriter {
       asString += newLine;
     }
 
+    asString += _trySerializeXTherionConfig();
     asString += _childrenAsString(thFile);
+
+    return asString;
+  }
+
+  String _trySerializeXTherionConfig() {
+    if (_xTherionConfigWritten) {
+      return '';
+    }
+
+    bool onlyNewXTherionConfigs = true;
+
+    for (final int xtherionSettingMPID in _thFile.xtherionSettingMPIDs) {
+      final THElement element = _thFile.elementByMPID(xtherionSettingMPID);
+
+      if (element.originalLineInTH2File.isNotEmpty) {
+        onlyNewXTherionConfigs = false;
+        break;
+      }
+    }
+
+    if (!onlyNewXTherionConfigs) {
+      return '';
+    }
+
+    return _serializeAllXTherionConfigs();
+  }
+
+  String _serializeAllXTherionConfigs() {
+    if (_xTherionConfigWritten) {
+      return '';
+    }
+
+    String asString = '';
+
+    for (final int xtherionSettingMPID in _thFile.xtherionSettingMPIDs) {
+      final THElement thElement = _thFile.elementByMPID(xtherionSettingMPID);
+
+      if (thElement is THXTherionConfig) {
+        asString += _serializeXTherionConfig(thElement);
+      } else if (thElement is THXTherionImageInsertConfig) {
+        asString += _serializeXTherionImageInsertConfig(thElement);
+      } else {
+        throw THCustomException(
+          "At THFileWriter._serializeAllXTherionConfigs: thelement with MPID '$xtherionSettingMPID' is not a Therion config.",
+        );
+      }
+    }
+
+    _xTherionConfigWritten = true;
 
     return asString;
   }
@@ -137,6 +190,7 @@ class THFileWriter {
         asString += _serializeArea(thElement);
       case THElementType.areaBorderTHID:
         final String newLine = (thElement as THAreaBorderTHID).thID;
+
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
       case THElementType.comment:
         asString += _serializeComment(thElement);
@@ -144,6 +198,7 @@ class THFileWriter {
         asString += _serializeEmptyLine(thElement);
       case THElementType.encoding:
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
+
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
       case THElementType.endarea:
         _reducePrefix();
@@ -191,11 +246,11 @@ class THFileWriter {
       case THElementType.scrap:
         asString += _serializeScrap(thElement);
       case THElementType.xTherionConfig:
-        asString += _serializeXTherionConfig(thElement);
       case THElementType.xTherionImageInsertConfig:
-        asString += _serializeXTherionImageInsertConfig(thElement);
+        asString += _serializeAllXTherionConfigs();
       case THElementType.unrecognizedCommand:
         final String newLine = "Unrecognized element: '$thElement'";
+
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
     }
 
@@ -313,7 +368,9 @@ class THFileWriter {
     String asString = '';
 
     for (final int childMPID in thParent.childrenMPIDs) {
-      asString += serializeElement(_thFile.elementByMPID(childMPID));
+      final THElement child = _thFile.elementByMPID(childMPID);
+
+      asString += serializeElement(child);
     }
 
     return asString;
