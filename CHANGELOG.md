@@ -7,7 +7,7 @@
   * Support Cmd+keyboard shortcuts on MacOS.
   * Escape dismisses overlay modal windows.
 * Fixed bugs:
-  * Going back to file_picker 10.2.1 as 10.3.2 broke initial directory.
+  * Going back to _file_picker_ 10.2.1 as 10.3.2 broke initial directory setting.
   * Encodings got from _therion --print-encodings_ could overwrite encoding got from file called by command line.
 * Infrastructure maintenance:
   * flutter pub upgrade.
