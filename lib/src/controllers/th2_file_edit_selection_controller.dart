@@ -371,6 +371,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         addSelectedElement(element);
       }
     }
+
+    _th2FileEditController.snapController.updateSnapTargets();
   }
 
   @action
@@ -389,6 +391,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       }
     }
 
+    _th2FileEditController.snapController.updateSnapTargets();
+
     if (setState) {
       return setSelectionState();
     }
@@ -397,7 +401,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool removeSelectedElement(THElement element, {bool setState = false}) {
+  bool removeSelectedElement(
+    THElement element, {
+    bool setState = false,
+    bool updateSnapTargets = true,
+  }) {
     _mpSelectedElementsLogical.remove(element.mpID);
 
     if (element is THArea) {
@@ -411,6 +419,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     _isSelected.remove(element.mpID);
+    if (updateSnapTargets) {
+      _th2FileEditController.snapController.updateSnapTargets();
+    }
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -423,8 +434,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElements(List<THElement> elements) {
     for (THElement element in elements) {
-      removeSelectedElement(element);
+      removeSelectedElement(element, updateSnapTargets: false);
     }
+    _th2FileEditController.snapController.updateSnapTargets();
   }
 
   void setSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
@@ -1536,6 +1548,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void clearSelectedElements() {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
+
+    _th2FileEditController.snapController.updateSnapTargets();
   }
 
   void clearIsSelected() {
