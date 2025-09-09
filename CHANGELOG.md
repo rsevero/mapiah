@@ -10,7 +10,7 @@
   * Going back to file_picker 10.2.1 as 10.3.2 broke initial directory.
 * Infrastructure maintenance:
   * flutter pub upgrade.
-  * flutter upgrade to 3.35.3.
+  * Flutter upgrade to 3.35.3.
 
 ## 0.2.14 - 2025-09-04
 * New features:
