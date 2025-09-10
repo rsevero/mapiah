@@ -28,9 +28,9 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  }) : modifiedEndPointPosition = originalEndPointPosition.copyWith(
+  }) : modifiedEndPointPosition = THPositionPart(
          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),

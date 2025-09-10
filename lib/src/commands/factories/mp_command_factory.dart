@@ -5,6 +5,7 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -380,6 +381,79 @@ class MPCommandFactory {
             deltaOnCanvas: deltaOnCanvas,
             decimalPositions: decimalPositions,
           );
+        default:
+          throw ArgumentError(
+            'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
+          );
+      }
+
+      commandsList.add(moveLineSegmentCommand);
+    }
+
+    return (commandsList.length == 1)
+        ? commandsList.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commandsList,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+            descriptionType: descriptionType,
+          );
+  }
+
+  static MPCommand moveLineSegmentsFromLineSegmentExactPosition({
+    required LinkedHashMap<int, THLineSegment> originalElementsMap,
+    required THPositionPart lineSegmentFinalPosition,
+    required THLineSegment referenceLineSegment,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveLineSegments,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final int referenceLineSegmentMPID = referenceLineSegment.mpID;
+    final Offset deltaOnCanvas =
+        lineSegmentFinalPosition.coordinates -
+        referenceLineSegment.endPoint.coordinates;
+
+    for (final entry in originalElementsMap.entries) {
+      final int originalElementMPID = entry.key;
+      final THLineSegment originalElement = entry.value;
+      final MPCommand moveLineSegmentCommand;
+
+      switch (originalElement) {
+        case THStraightLineSegment _:
+          moveLineSegmentCommand =
+              (originalElementMPID == referenceLineSegmentMPID)
+              ? MPMoveStraightLineSegmentCommand(
+                  lineSegmentMPID: referenceLineSegmentMPID,
+                  originalEndPointPosition: originalElement.endPoint,
+                  modifiedEndPointPosition: lineSegmentFinalPosition,
+                  descriptionType: descriptionType,
+                )
+              : MPMoveStraightLineSegmentCommand.fromDelta(
+                  lineSegmentMPID: originalElementMPID,
+                  originalEndPointPosition: originalElement.endPoint,
+                  deltaOnCanvas: deltaOnCanvas,
+                );
+        case THBezierCurveLineSegment _:
+          moveLineSegmentCommand =
+              (originalElementMPID == referenceLineSegmentMPID)
+              ? MPMoveBezierLineSegmentCommand.fromEndPointExactPosition(
+                  lineSegmentMPID: referenceLineSegmentMPID,
+                  originalEndPointPosition: referenceLineSegment.endPoint,
+                  originalControlPoint1Position:
+                      (referenceLineSegment as THBezierCurveLineSegment)
+                          .controlPoint1,
+                  originalControlPoint2Position:
+                      referenceLineSegment.controlPoint2,
+                  lineSegmentFinalPosition: lineSegmentFinalPosition,
+                  descriptionType: descriptionType,
+                )
+              : MPMoveBezierLineSegmentCommand.fromDelta(
+                  lineSegmentMPID: originalElementMPID,
+                  originalEndPointPosition: originalElement.endPoint,
+                  originalControlPoint1Position: originalElement.controlPoint1,
+                  originalControlPoint2Position: originalElement.controlPoint2,
+                  deltaOnCanvas: deltaOnCanvas,
+                );
         default:
           throw ArgumentError(
             'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',

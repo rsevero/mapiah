@@ -56,17 +56,17 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint1Position,
     required this.originalControlPoint2Position,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
-  }) : modifiedEndPointPosition = originalEndPointPosition.copyWith(
+  }) : modifiedEndPointPosition = THPositionPart(
          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       modifiedControlPoint1Position = originalControlPoint1Position.copyWith(
+       modifiedControlPoint1Position = THPositionPart(
          coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       modifiedControlPoint2Position = originalControlPoint2Position.copyWith(
+       modifiedControlPoint2Position = THPositionPart(
          coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
@@ -79,6 +79,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint1Position,
     required this.originalControlPoint2Position,
     required THPositionPart lineSegmentFinalPosition,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
@@ -87,11 +88,13 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         originalEndPointPosition.coordinates;
 
     modifiedEndPointPosition = lineSegmentFinalPosition;
-    modifiedControlPoint1Position = originalControlPoint1Position.copyWith(
+    modifiedControlPoint1Position = THPositionPart(
       coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
+      decimalPositions: decimalPositions,
     );
-    modifiedControlPoint2Position = originalControlPoint2Position.copyWith(
+    modifiedControlPoint2Position = THPositionPart(
       coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
+      decimalPositions: decimalPositions,
     );
   }
 

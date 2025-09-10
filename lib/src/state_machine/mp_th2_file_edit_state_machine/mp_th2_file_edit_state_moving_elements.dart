@@ -162,7 +162,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
             lineSegmentFinalPosition: snapedPosition,
-            referenceLineSegment: selectedElement as THLineSegment,
+            referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
           );
         case MPSelectedArea _:
           moveCommand = MPMoveAreaCommand.fromDeltaOnCanvas(
