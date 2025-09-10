@@ -4,6 +4,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
 
@@ -203,30 +204,32 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   THElement? getNearerSelectedElement(Offset canvasCoordinates) {
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
+
     THElement? nearerElement;
     double nearerDistanceSquared = double.infinity;
 
-    for (final MPSelectedElement selectedElement
-        in _th2FileEditController
-            .selectionController
-            .mpSelectedElementsLogical
-            .values) {
-      switch (selectedElement) {
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      switch (mpSelectedElement) {
         case MPSelectedPoint _:
           final double pointDistanceSquared =
-              (selectedElement.originalElementClone.position.coordinates -
+              (mpSelectedElement.originalElementClone.position.coordinates -
                       canvasCoordinates)
                   .distanceSquared;
 
           if (pointDistanceSquared < nearerDistanceSquared) {
             nearerDistanceSquared = pointDistanceSquared;
-            nearerElement = selectedElement.originalElementClone;
+            nearerElement = mpSelectedElement.originalElementClone;
           }
         case MPSelectedLine _:
           final ({THLineSegment? lineSegment, double distanceSquared})
           nearerLineSegment = getNearerLineSegmentFromLine(
             canvasCoordinates,
-            selectedElement.originalLineClone,
+            mpSelectedElement.originalLineClone,
           );
 
           if ((nearerLineSegment.lineSegment != null) &&
@@ -238,7 +241,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
           final ({THLineSegment? lineSegment, double distanceSquared})
           nearerLineSegment = getNearerLineSegmentFromArea(
             canvasCoordinates,
-            selectedElement.originalAreaClone,
+            mpSelectedElement.originalAreaClone,
           );
 
           if ((nearerLineSegment.lineSegment != null) &&
@@ -254,6 +257,42 @@ abstract class TH2FileEditSnapControllerBase with Store {
     }
 
     return nearerElement;
+  }
+
+  THElement? getNearerSelectedLineSegment(Offset canvasCoordinates) {
+    final Iterable<MPSelectedEndControlPoint> mpSelectedEndControlPoints =
+        _th2FileEditController
+            .selectionController
+            .selectedEndControlPoints
+            .values;
+
+    THLineSegment? nearerLineSegment;
+    double nearerDistanceSquared = double.infinity;
+
+    for (final MPSelectedEndControlPoint mpSelectedEndControlPoint
+        in mpSelectedEndControlPoints) {
+      final MPEndControlPointType endControlPointType =
+          mpSelectedEndControlPoint.type;
+
+      if ((endControlPointType == MPEndControlPointType.endPointBezierCurve) ||
+          (endControlPointType == MPEndControlPointType.endPointStraight)) {
+        final double pointDistanceSquared =
+            (mpSelectedEndControlPoint
+                        .originalElementClone
+                        .endPoint
+                        .coordinates -
+                    canvasCoordinates)
+                .distanceSquared;
+
+        if (pointDistanceSquared < nearerDistanceSquared) {
+          nearerDistanceSquared = pointDistanceSquared;
+          nearerLineSegment = mpSelectedEndControlPoint.originalElementClone;
+        }
+        continue;
+      }
+    }
+
+    return nearerLineSegment;
   }
 
   ({THLineSegment? lineSegment, double distanceSquared})

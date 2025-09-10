@@ -50,6 +50,8 @@ Version 0.3
 [X] - Create new file
 [X] - Create new scrap [requested by Marco Corvi]
 [ ] - Snap points
+[ ] - Snap to XVIFile elements: stations, sketch line ends, grid line crossings
+[ ] - Optimize snap search with spatial index
 [ ] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible

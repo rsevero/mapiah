@@ -4,9 +4,13 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
+  final TH2FileEditSnapController snapController;
+  THElement? _clickedElementAtPointerDown;
+  bool _searchedForClickedElementAtPointerDown = false;
+
   MPTH2FileEditStateMovingEndControlPoints({
     required super.th2FileEditController,
-  });
+  }) : snapController = th2FileEditController.snapController;
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
@@ -27,19 +31,36 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController.moveSelectedEndControlPointsToScreenCoordinates(
+    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
+    );
+    final Offset snapedCanvasOffset = snapController
+        .getCanvasSnapedOffsetFromCanvasOffset(canvasOffset);
+
+    if (!_searchedForClickedElementAtPointerDown) {
+      _searchedForClickedElementAtPointerDown = true;
+      _clickedElementAtPointerDown = snapController
+          .getNearerSelectedLineSegment(canvasOffset);
+      if (_clickedElementAtPointerDown != null) {
+        selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+          (_clickedElementAtPointerDown as THLineSegment).endPoint.coordinates,
+        );
+      }
+    }
+
+    selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
+      snapedCanvasOffset,
     );
   }
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine selected =
+    final MPSelectedLine mpSelectedLine =
         selectionController.mpSelectedElementsLogical.values.first
             as MPSelectedLine;
-    final THLine selectedLine = selected.originalElementClone as THLine;
+    final THLine selectedLine = mpSelectedLine.originalElementClone as THLine;
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
-        selected.originalLineSegmentsMapClone;
+        mpSelectedLine.originalLineSegmentsMapClone;
     final List<int> lineLineSegmentsMPIDs = selectionController
         .getSelectedLineLineSegmentsMPIDs();
     final List<int> selectedLineSegmentMPIDs = selectionController

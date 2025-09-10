@@ -75,30 +75,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   int? _multipleElementsClickedHighlightedMPID;
 
-  MPSelectedEndControlPointPointType
-  getCurrentSelectedEndControlPointPointType() {
-    if (_selectedEndControlPoints.length > 1) {
-      return MPSelectedEndControlPointPointType.endPoint;
-    } else if (_selectedEndControlPoints.length == 1) {
-      return MPEditElementAux.isEndPoint(
-            _selectedEndControlPoints.values.first.type,
-          )
-          ? MPSelectedEndControlPointPointType.endPoint
-          : MPSelectedEndControlPointPointType.controlPoint;
-    } else {
-      return MPSelectedEndControlPointPointType.none;
-    }
-  }
-
   Completer<void> multipleClickedSemaphore = Completer<void>();
 
   bool selectionCanBeMultiple = false;
-
-  Rect get selectedElementsBoundingBox {
-    _selectedElementsBoundingBox ??= getSelectedElementsBoundingBoxOnCanvas();
-
-    return _selectedElementsBoundingBox!;
-  }
 
   Rect? _selectedElementsBoundingBox;
 
@@ -117,6 +96,32 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   Rect? _selectionHandlesBoundingBox;
 
+  /// Used to search for selected elements by list of selectable coordinates.
+  Map<int, MPSelectable>? _mpSelectableElements;
+
+  Offset dragStartCanvasCoordinates = Offset.zero;
+
+  Rect get selectedElementsBoundingBox {
+    _selectedElementsBoundingBox ??= getSelectedElementsBoundingBoxOnCanvas();
+
+    return _selectedElementsBoundingBox!;
+  }
+
+  MPSelectedEndControlPointPointType
+  getCurrentSelectedEndControlPointPointType() {
+    if (_selectedEndControlPoints.length > 1) {
+      return MPSelectedEndControlPointPointType.endPoint;
+    } else if (_selectedEndControlPoints.length == 1) {
+      return MPEditElementAux.isEndPoint(
+            _selectedEndControlPoints.values.first.type,
+          )
+          ? MPSelectedEndControlPointPointType.endPoint
+          : MPSelectedEndControlPointPointType.controlPoint;
+    } else {
+      return MPSelectedEndControlPointPointType.none;
+    }
+  }
+
   Map<MPSelectionHandleType, Offset> getSelectionHandleCenters() {
     if (_selectionHandleCenters == null) {
       _calculateSelectionHandleCentersAndBoundingBox();
@@ -132,11 +137,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     return _selectionHandlesBoundingBox!;
   }
-
-  /// Used to search for selected elements by list of selectable coordinates.
-  Map<int, MPSelectable>? _mpSelectableElements;
-
-  Offset dragStartCanvasCoordinates = Offset.zero;
 
   Map<int, MPSelectable> getMPSelectableElements() {
     if (_mpSelectableElements == null) {
