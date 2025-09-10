@@ -1114,6 +1114,41 @@
     "description": "The label for the Y coordinate type",
     "type": "text"
   },
+  "mpSnapLinePointTargetsLabel": "Line point snap",
+  "@mpSnapLinePointTargetsLabel": {
+    "description": "The label for the line point snap",
+    "type": "text"
+  },
+  "mpSnapPointTargetsLabel": "Point snap",
+  "@mpSnapPointTargetsLabel": {
+    "description": "The label for the point snap",
+    "type": "text"
+  },
+  "mpSnapTargetNone": "None",
+  "@mpSnapTargetNone": {
+    "description": "The label for the none snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetLinePoint": "Line point",
+  "@mpSnapTargetLinePoint": {
+    "description": "The label for the line point snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetLinePointByType": "Line point by line type",
+  "@mpSnapTargetLinePointByType": {
+    "description": "The label for the line point by type snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetPoint": "Point",
+  "@mpSnapTargetPoint": {
+    "description": "The label for the point snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetPointByType": "Point by type",
+  "@mpSnapTargetPointByType": {
+    "description": "The label for the point by type snap target option",
+    "type": "text"
+  },
   "mpStationNamesPrefixLabel": "Prefix",
   "@mpStationNamesPrefixLabel": {
     "description": "The label for the station names prefix type",

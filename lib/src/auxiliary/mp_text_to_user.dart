@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
@@ -13,78 +14,106 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPTextToUser {
+  static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
+  static final Map<THAreaType, String> _areaTypeAsString = {};
+  static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
+  static final Map<THElementType, String> _elementTypeAsString = {};
   static final Map<MPCommandDescriptionType, String>
   _commandDescriptionTypeAsString = {};
   static final Map<THLengthUnitType, String> _lengthUnitTypeAsString = {};
   static final Map<THLengthUnitType, String>
   _lengthUnitTypeAbbreviationAsString = {};
-  static final Map<THElementType, String> _elementTypeAsString = {};
-  static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THLineType, String> _lineTypeAsString = {};
-  static final Map<THAreaType, String> _areaTypeAsString = {};
-  static final Map<THCommandOptionType, String> _commandOptionTypeAsString = {};
   static final Map<THOptionChoicesAdjustType, String>
   _multipleChoiceAdjustChoiceAsString = {};
   static final Map<THOptionChoicesAlignType, String>
   _multipleChoiceAlignChoiceAsString = {};
-  static final Map<THOptionChoicesOnOffType, String>
-  _multipleChoiceOnOffChoiceAsString = {};
-  static final Map<THOptionChoicesOnOffAutoType, String>
-  _multipleChoiceOnOffAutoChoiceAsString = {};
-  static final Map<THOptionChoicesFlipType, String>
-  _multipleChoiceFlipChoiceAsString = {};
   static final Map<THOptionChoicesArrowPositionType, String>
   _multipleChoiceArrowPositionChoiceAsString = {};
+  static final Map<THOptionChoicesFlipType, String>
+  _multipleChoiceFlipChoiceAsString = {};
   static final Map<THOptionChoicesLineGradientType, String>
   _multipleChoiceLineGradientChoiceAsString = {};
   static final Map<THOptionChoicesLinePointDirectionType, String>
   _multipleChoiceLinePointDirectionChoiceAsString = {};
   static final Map<THOptionChoicesLinePointGradientType, String>
   _multipleChoiceLinePointGradientChoiceAsString = {};
+  static final Map<THOptionChoicesOnOffType, String>
+  _multipleChoiceOnOffChoiceAsString = {};
+  static final Map<THOptionChoicesOnOffAutoType, String>
+  _multipleChoiceOnOffAutoChoiceAsString = {};
   static final Map<THOptionChoicesOutlineType, String>
   _multipleChoiceOutlineChoiceAsString = {};
   static final Map<THOptionChoicesPlaceType, String>
   _multipleChoicePlaceChoiceAsString = {};
-  static final Map<THPLScaleCommandOptionType, String>
-  _plScaleCommandOptionTypeAsString = {};
+  static final Map<String, String> _namedScaleOptionsAsString = {};
   static final Map<THPassageHeightModes, String>
   _passageHeightModesChoiceAsString = {};
+  static final Map<THPLScaleCommandOptionType, String>
+  _plScaleCommandOptionTypeAsString = {};
   static final Map<THPointHeightValueMode, String>
   _pointHeightValueModeAsString = {};
+  static final Map<THPointType, String> _pointTypeAsString = {};
   static final Map<THProjectionModeType, String> _projectionModeTypeAsString =
       {};
-  static final Map<THAngleUnitType, String> _angleUnitTypeAsString = {};
-  static final Map<String, String> _namedScaleOptionsAsString = {};
+  static final Map<MPSnapLinePointTarget, String> _snapLinePointTargetAsString =
+      {};
+  static final Map<MPSnapPointTarget, String> _snapPointTargetAsString = {};
   static final Map<String, String> _subtypeAsString = {};
+
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
-    _initializeCommandDescriptionTypeAsString();
-    _initializeLengthUnitTypeAsString();
-    _initializeLengthUnitTypeAbbreviationAsString();
-    _initializeElementTypeAsString();
-    _initializePointTypeAsString();
-    _initializeLineTypeAsString();
+    _initializeAngleUnitTypeAsString();
     _initializeAreaTypeAsString();
+    _initializeCommandDescriptionTypeAsString();
     _initializeCommandOptionTypeAsString();
+    _initializeElementTypeAsString();
+    _initializeLengthUnitTypeAbbreviationAsString();
+    _initializeLengthUnitTypeAsString();
+    _initializeLineTypeAsString();
     _initializeMultipleChoiceAdjustChoiceAsString();
     _initializeMultipleChoiceAlignChoiceAsString();
-    _initializeMultipleChoiceOnOffChoiceAsString();
-    _initializeMultipleChoiceOnOffAutoChoiceAsString();
-    _initializeMultipleChoiceFlipChoiceAsString();
     _initializeMultipleChoiceArrowPositionChoiceAsString();
+    _initializeMultipleChoiceFlipChoiceAsString();
     _initializeMultipleChoiceLineGradientChoiceAsString();
     _initializeMultipleChoiceLinePointDirectionChoiceAsString();
     _initializeMultipleChoiceLinePointGradientChoiceAsString();
+    _initializeMultipleChoiceOnOffAutoChoiceAsString();
+    _initializeMultipleChoiceOnOffChoiceAsString();
     _initializeMultipleChoiceOutlineChoiceAsString();
     _initializeMultipleChoicePlaceChoiceAsString();
-    _initializePLScaleCommandOptionTypeAsString();
-    _initializePassageHeightModesChoiceAsString();
-    _initializePointHeightValueModeAsString();
-    _initializeProjectionModeTypeAsString();
-    _initializeAngleUnitTypeAsString();
     _initializeNamedScaleOptionsAsString();
+    _initializePassageHeightModesChoiceAsString();
+    _initializePLScaleCommandOptionTypeAsString();
+    _initializePointHeightValueModeAsString();
+    _initializePointTypeAsString();
+    _initializeProjectionModeTypeAsString();
+    _initializeSnapLinePointTargetAsString();
+    _initializeSnapPointTargetAsString();
     _initializeSubtypeAsString();
+  }
+
+  static void _initializeSnapLinePointTargetAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _snapLinePointTargetAsString[MPSnapLinePointTarget.none] =
+        localizations.mpSnapTargetNone;
+    _snapLinePointTargetAsString[MPSnapLinePointTarget.linePoint] =
+        localizations.mpSnapTargetLinePoint;
+    _snapLinePointTargetAsString[MPSnapLinePointTarget.linePointByType] =
+        localizations.mpSnapTargetLinePointByType;
+  }
+
+  static void _initializeSnapPointTargetAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _snapPointTargetAsString[MPSnapPointTarget.none] =
+        localizations.mpSnapTargetNone;
+    _snapPointTargetAsString[MPSnapPointTarget.point] =
+        localizations.mpSnapTargetPoint;
+    _snapPointTargetAsString[MPSnapPointTarget.pointByType] =
+        localizations.mpSnapTargetPointByType;
   }
 
   static void _initializeSubtypeAsString() {
@@ -1036,6 +1065,18 @@ class MPTextToUser {
         : type.name;
   }
 
+  static String getSnapLinePointTargetChoice(MPSnapLinePointTarget type) {
+    return _snapLinePointTargetAsString.containsKey(type)
+        ? _snapLinePointTargetAsString[type]!
+        : type.name;
+  }
+
+  static String getSnapPointTargetChoice(MPSnapPointTarget type) {
+    return _snapPointTargetAsString.containsKey(type)
+        ? _snapPointTargetAsString[type]!
+        : type.name;
+  }
+
   static void _initializeMultipleChoiceOutlineChoiceAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
@@ -1175,16 +1216,6 @@ class MPTextToUser {
     }
   }
 
-  static Map<String, String> getProjectionModeTypeChoices() {
-    final Map<String, String> choices = {};
-
-    for (final choiceType in THProjectionModeType.values) {
-      choices[choiceType.name] = getProjectionModeType(choiceType);
-    }
-
-    return choices;
-  }
-
   static Map<String, String> getAngleUnitTypeChoices() {
     final Map<String, String> choices = {};
 
@@ -1295,6 +1326,16 @@ class MPTextToUser {
           choices[extraType] = extraType;
         }
       }
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getProjectionModeTypeChoices() {
+    final Map<String, String> choices = {};
+
+    for (final choiceType in THProjectionModeType.values) {
+      choices[choiceType.name] = getProjectionModeType(choiceType);
     }
 
     return choices;
@@ -1423,6 +1464,27 @@ class MPTextToUser {
 
     for (final choiceType in THOptionChoicesPlaceType.values) {
       choices[choiceType.name] = getMultipleChoicePlaceChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getSnapLinePointTargetChoices() {
+    final Map<String, String> choices = {};
+
+    for (final MPSnapLinePointTarget choiceType
+        in MPSnapLinePointTarget.values) {
+      choices[choiceType.name] = getSnapLinePointTargetChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getSnapPointTargetChoices() {
+    final Map<String, String> choices = {};
+
+    for (final MPSnapPointTarget choiceType in MPSnapPointTarget.values) {
+      choices[choiceType.name] = getSnapPointTargetChoice(choiceType);
     }
 
     return choices;

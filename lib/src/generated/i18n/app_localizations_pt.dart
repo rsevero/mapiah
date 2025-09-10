@@ -716,6 +716,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSketchYLabel => 'Y';
 
   @override
+  String get mpSnapLinePointTargetsLabel => 'Ajuste a pontos de linha';
+
+  @override
+  String get mpSnapPointTargetsLabel => 'Ajuste a pontos';
+
+  @override
+  String get mpSnapTargetNone => 'Nenhum';
+
+  @override
+  String get mpSnapTargetLinePoint => 'Ponto de linha';
+
+  @override
+  String get mpSnapTargetLinePointByType => 'Ponto de linha por tipo de linha';
+
+  @override
+  String get mpSnapTargetPoint => 'Ponto';
+
+  @override
+  String get mpSnapTargetPointByType => 'Ponto por tipo';
+
+  @override
   String get mpStationNamesPrefixLabel => 'Prefixo';
 
   @override

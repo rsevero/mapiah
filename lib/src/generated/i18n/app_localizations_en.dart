@@ -710,6 +710,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSketchYLabel => 'Y';
 
   @override
+  String get mpSnapLinePointTargetsLabel => 'Line point snap';
+
+  @override
+  String get mpSnapPointTargetsLabel => 'Point snap';
+
+  @override
+  String get mpSnapTargetNone => 'None';
+
+  @override
+  String get mpSnapTargetLinePoint => 'Line point';
+
+  @override
+  String get mpSnapTargetLinePointByType => 'Line point by line type';
+
+  @override
+  String get mpSnapTargetPoint => 'Point';
+
+  @override
+  String get mpSnapTargetPointByType => 'Point by type';
+
+  @override
   String get mpStationNamesPrefixLabel => 'Prefix';
 
   @override

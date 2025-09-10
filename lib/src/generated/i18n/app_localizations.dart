@@ -1424,6 +1424,48 @@ abstract class AppLocalizations {
   /// **'Y'**
   String get mpSketchYLabel;
 
+  /// The label for the line point snap
+  ///
+  /// In en, this message translates to:
+  /// **'Line point snap'**
+  String get mpSnapLinePointTargetsLabel;
+
+  /// The label for the point snap
+  ///
+  /// In en, this message translates to:
+  /// **'Point snap'**
+  String get mpSnapPointTargetsLabel;
+
+  /// The label for the none snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get mpSnapTargetNone;
+
+  /// The label for the line point snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Line point'**
+  String get mpSnapTargetLinePoint;
+
+  /// The label for the line point by type snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Line point by line type'**
+  String get mpSnapTargetLinePointByType;
+
+  /// The label for the point snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Point'**
+  String get mpSnapTargetPoint;
+
+  /// The label for the point by type snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Point by type'**
+  String get mpSnapTargetPointByType;
+
   /// The label for the station names prefix type
   ///
   /// In en, this message translates to:

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
@@ -66,30 +67,36 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
   }
 
   Widget _buildPointTargetGroup() {
+    final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
+      MPTextToUser.getSnapPointTargetChoices(),
+    );
+
     return Observer(
       builder: (_) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Snap point targets',
+              appLocalizations.mpSnapPointTargetsLabel,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             RadioGroup(
-              groupValue: snapController.snapPointTargetType,
+              groupValue: snapController.snapPointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
-                  snapController.setSnapPointTargetType(value);
+                  snapController.setSnapPointTargetType(
+                    MPSnapPointTarget.values.byName(value),
+                  );
                 }
               },
               child: Column(
                 children: [
-                  ...MPSnapPointTarget.values.map(
-                    (t) => RadioListTile<MPSnapPointTarget>(
+                  ...choices.entries.map(
+                    (entry) => RadioListTile<String>(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      title: Text(t.name),
-                      value: t,
+                      title: Text(entry.value),
+                      value: entry.key,
                     ),
                   ),
                 ],
@@ -102,30 +109,36 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
   }
 
   Widget _buildLinePointTargetGroup() {
+    final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
+      MPTextToUser.getSnapLinePointTargetChoices(),
+    );
+
     return Observer(
       builder: (_) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Snap line point targets',
+              appLocalizations.mpSnapLinePointTargetsLabel,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             RadioGroup(
-              groupValue: snapController.snapLinePointTargetType,
+              groupValue: snapController.snapLinePointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
-                  snapController.setSnapLinePointTargetType(value);
+                  snapController.setSnapLinePointTargetType(
+                    MPSnapLinePointTarget.values.byName(value),
+                  );
                 }
               },
               child: Column(
                 children: [
-                  ...MPSnapLinePointTarget.values.map(
-                    (t) => RadioListTile<MPSnapLinePointTarget>(
+                  ...choices.entries.map(
+                    (entry) => RadioListTile<String>(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      title: Text(t.name),
-                      value: t,
+                      title: Text(entry.value),
+                      value: entry.key,
                     ),
                   ),
                 ],
