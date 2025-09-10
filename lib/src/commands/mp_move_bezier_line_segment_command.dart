@@ -50,7 +50,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
        originalLineInTH2File = '',
        super();
 
-  MPMoveBezierLineSegmentCommand.fromDelta({
+  MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas({
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required this.originalControlPoint1Position,

@@ -49,14 +49,14 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMPID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required THLineSegment referenceLineSegment,
-    required THPositionPart lineSegmentFinalPosition,
+    required THPositionPart referenceLineSegmentFinalPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromLineSegmentExactPosition(
           originalElementsMap: originalLineSegmentsMap,
-          lineSegmentFinalPosition: lineSegmentFinalPosition,
+          referenceLineSegmentFinalPosition: referenceLineSegmentFinalPosition,
           referenceLineSegment: referenceLineSegment,
           descriptionType: descriptionType,
         );

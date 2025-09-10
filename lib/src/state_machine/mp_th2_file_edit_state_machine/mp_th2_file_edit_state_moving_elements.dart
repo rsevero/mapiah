@@ -135,9 +135,6 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           ),
           decimalPositions: th2FileEditController.currentDecimalPositions,
         );
-    final Offset panDeltaOnCanvas =
-        snapedPosition.coordinates -
-        selectionController.dragStartCanvasCoordinates;
     late MPCommand moveCommand;
 
     if (selectedCount == 0) {
@@ -161,27 +158,28 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           moveCommand = MPMoveLineCommand.fromLineSegmentExactPosition(
             lineMPID: selectedElement.mpID,
             originalLineSegmentsMap: selected.originalLineSegmentsMapClone,
-            lineSegmentFinalPosition: snapedPosition,
             referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
+            referenceLineSegmentFinalPosition: snapedPosition,
           );
         case MPSelectedArea _:
           moveCommand = MPMoveAreaCommand.fromLineSegmentExactPosition(
             areaMPID: selectedElement.mpID,
             originalLines: selected.originalLines,
-            lineSegmentFinalPosition: snapedPosition,
             referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
+            referenceLineSegmentFinalPosition: snapedPosition,
           );
       }
 
       th2FileEditController.execute(moveCommand);
       selectionController.updateSelectedElementClone(selectedElement.mpID);
     } else if (selectedCount > 1) {
-      moveCommand = MPCommandFactory.moveElementsFromDeltaOnCanvas(
-        deltaOnCanvas: panDeltaOnCanvas,
-        mpSelectedElements:
-            selectionController.mpSelectedElementsLogical.values,
-        decimalPositions: th2FileEditController.currentDecimalPositions,
-      );
+      moveCommand =
+          MPCommandFactory.moveElementsFromReferenceElementExactPosition(
+            mpSelectedElements:
+                selectionController.mpSelectedElementsLogical.values,
+            referenceElement: _clickedElementAtPointerDown!,
+            referenceElementFinalPosition: snapedPosition,
+          );
 
       th2FileEditController.execute(moveCommand);
       selectionController.updateSelectedElementsClones();

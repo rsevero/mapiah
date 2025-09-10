@@ -28,11 +28,11 @@ class MPMovePointCommand extends MPCommand {
     required this.pointMPID,
     required this.originalPosition,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
-    modifiedPosition = originalPosition.copyWith(
+    modifiedPosition = THPositionPart(
       coordinates: originalPosition.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
     );

@@ -24,7 +24,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   }) : originalLineInTH2File = '',
        super();
 
-  MPMoveStraightLineSegmentCommand.fromDelta({
+  MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas({
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required Offset deltaOnCanvas,

@@ -31,13 +31,13 @@ class MPMoveAreaCommand extends MPCommand {
     required this.areaMPID,
     required Iterable<MPSelectedLine> originalLines,
     required THLineSegment referenceLineSegment,
-    required THPositionPart lineSegmentFinalPosition,
+    required THPositionPart referenceLineSegmentFinalPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromLineSegmentExactPosition(
       lines: originalLines,
       referenceLineSegment: referenceLineSegment,
-      lineSegmentFinalPosition: lineSegmentFinalPosition,
+      referenceLineSegmentFinalPosition: referenceLineSegmentFinalPosition,
       descriptionType: descriptionType,
     );
   }

@@ -251,9 +251,9 @@ class MPCommandFactory {
   }
 
   static MPCommand moveElementsFromDeltaOnCanvas({
-    required Offset deltaOnCanvas,
-    required int decimalPositions,
     required Iterable<MPSelectedElement> mpSelectedElements,
+    required Offset deltaOnCanvas,
+    int? decimalPositions,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveElements,
   }) {
@@ -279,6 +279,104 @@ class MPCommandFactory {
             deltaOnCanvas: deltaOnCanvas,
             decimalPositions: decimalPositions,
           );
+        default:
+          throw ArgumentError(
+            'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
+          );
+      }
+
+      commandsList.add(moveCommand);
+    }
+
+    return (commandsList.length == 1)
+        ? commandsList.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commandsList,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+            descriptionType: descriptionType,
+          );
+  }
+
+  static MPCommand moveElementsFromReferenceElementExactPosition({
+    required Iterable<MPSelectedElement> mpSelectedElements,
+    required THElement referenceElement,
+    required THPositionPart referenceElementFinalPosition,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final int referenceElementMPID = referenceElement.mpID;
+    late final Offset deltaOnCanvas;
+    int? referenceElementParentMPID;
+
+    if (referenceElement is THPoint) {
+      deltaOnCanvas =
+          referenceElementFinalPosition.coordinates -
+          referenceElement.position.coordinates;
+    } else if (referenceElement is THLineSegment) {
+      deltaOnCanvas =
+          referenceElementFinalPosition.coordinates -
+          referenceElement.endPoint.coordinates;
+      referenceElementParentMPID = referenceElement.parentMPID;
+    } else {
+      throw ArgumentError(
+        'Unsupported referenceElement type in MPCommandFactory.moveElementsFromReferenceElementExactPosition',
+      );
+    }
+
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      final THElement element = mpSelectedElement.originalElementClone;
+      final MPCommand moveCommand;
+
+      switch (element) {
+        case THPoint _:
+          moveCommand = (element.mpID == referenceElementMPID)
+              ? MPMovePointCommand(
+                  pointMPID: element.mpID,
+                  originalPosition: element.position,
+                  modifiedPosition: referenceElementFinalPosition,
+                  descriptionType: descriptionType,
+                )
+              : MPMovePointCommand.fromDeltaOnCanvas(
+                  pointMPID: element.mpID,
+                  originalPosition: element.position,
+                  deltaOnCanvas: deltaOnCanvas,
+                );
+        case THLine _:
+          moveCommand = (element.mpID == referenceElementParentMPID)
+              ? MPMoveLineCommand.fromLineSegmentExactPosition(
+                  lineMPID: element.mpID,
+                  originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                      .originalLineSegmentsMapClone,
+                  referenceLineSegment: referenceElement as THLineSegment,
+                  referenceLineSegmentFinalPosition:
+                      referenceElementFinalPosition,
+                  descriptionType: descriptionType,
+                )
+              : MPMoveLineCommand.fromDeltaOnCanvas(
+                  lineMPID: element.mpID,
+                  originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                      .originalLineSegmentsMapClone,
+                  deltaOnCanvas: deltaOnCanvas,
+                );
+        case THArea _:
+          moveCommand = (referenceElement is THLineSegment)
+              ? MPMoveAreaCommand.fromLineSegmentExactPosition(
+                  areaMPID: element.mpID,
+                  originalLines:
+                      (mpSelectedElement as MPSelectedArea).originalLines,
+                  referenceLineSegment: referenceElement,
+                  referenceLineSegmentFinalPosition:
+                      referenceElementFinalPosition,
+                  descriptionType: descriptionType,
+                )
+              : MPMoveAreaCommand.fromDeltaOnCanvas(
+                  areaMPID: element.mpID,
+                  originalLines:
+                      (mpSelectedElement as MPSelectedArea).originalLines,
+                  deltaOnCanvas: deltaOnCanvas,
+                );
         default:
           throw ArgumentError(
             'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',
@@ -366,21 +464,23 @@ class MPCommandFactory {
 
       switch (originalElement) {
         case THStraightLineSegment _:
-          moveLineSegmentCommand = MPMoveStraightLineSegmentCommand.fromDelta(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
+          moveLineSegmentCommand =
+              MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas(
+                lineSegmentMPID: originalElementMPID,
+                originalEndPointPosition: originalElement.endPoint,
+                deltaOnCanvas: deltaOnCanvas,
+                decimalPositions: decimalPositions,
+              );
         case THBezierCurveLineSegment _:
-          moveLineSegmentCommand = MPMoveBezierLineSegmentCommand.fromDelta(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            originalControlPoint1Position: originalElement.controlPoint1,
-            originalControlPoint2Position: originalElement.controlPoint2,
-            deltaOnCanvas: deltaOnCanvas,
-            decimalPositions: decimalPositions,
-          );
+          moveLineSegmentCommand =
+              MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas(
+                lineSegmentMPID: originalElementMPID,
+                originalEndPointPosition: originalElement.endPoint,
+                originalControlPoint1Position: originalElement.controlPoint1,
+                originalControlPoint2Position: originalElement.controlPoint2,
+                deltaOnCanvas: deltaOnCanvas,
+                decimalPositions: decimalPositions,
+              );
         default:
           throw ArgumentError(
             'Unsupported THLineSegment type in MPMultipleElementsCommand.moveLineSegments',
@@ -402,7 +502,7 @@ class MPCommandFactory {
 
   static MPCommand moveLineSegmentsFromLineSegmentExactPosition({
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
-    required THPositionPart lineSegmentFinalPosition,
+    required THPositionPart referenceLineSegmentFinalPosition,
     required THLineSegment referenceLineSegment,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLineSegments,
@@ -410,7 +510,7 @@ class MPCommandFactory {
     final List<MPCommand> commandsList = [];
     final int referenceLineSegmentMPID = referenceLineSegment.mpID;
     final Offset deltaOnCanvas =
-        lineSegmentFinalPosition.coordinates -
+        referenceLineSegmentFinalPosition.coordinates -
         referenceLineSegment.endPoint.coordinates;
 
     for (final entry in originalElementsMap.entries) {
@@ -425,10 +525,10 @@ class MPCommandFactory {
               ? MPMoveStraightLineSegmentCommand(
                   lineSegmentMPID: referenceLineSegmentMPID,
                   originalEndPointPosition: originalElement.endPoint,
-                  modifiedEndPointPosition: lineSegmentFinalPosition,
+                  modifiedEndPointPosition: referenceLineSegmentFinalPosition,
                   descriptionType: descriptionType,
                 )
-              : MPMoveStraightLineSegmentCommand.fromDelta(
+              : MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas(
                   lineSegmentMPID: originalElementMPID,
                   originalEndPointPosition: originalElement.endPoint,
                   deltaOnCanvas: deltaOnCanvas,
@@ -444,10 +544,10 @@ class MPCommandFactory {
                           .controlPoint1,
                   originalControlPoint2Position:
                       referenceLineSegment.controlPoint2,
-                  lineSegmentFinalPosition: lineSegmentFinalPosition,
+                  lineSegmentFinalPosition: referenceLineSegmentFinalPosition,
                   descriptionType: descriptionType,
                 )
-              : MPMoveBezierLineSegmentCommand.fromDelta(
+              : MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas(
                   lineSegmentMPID: originalElementMPID,
                   originalEndPointPosition: originalElement.endPoint,
                   originalControlPoint1Position: originalElement.controlPoint1,
@@ -535,14 +635,14 @@ class MPCommandFactory {
   static MPCommand moveLinesFromLineSegmentExactPosition({
     required Iterable<MPSelectedLine> lines,
     required THLineSegment referenceLineSegment,
-    required THPositionPart lineSegmentFinalPosition,
+    required THPositionPart referenceLineSegmentFinalPosition,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLines,
   }) {
     final List<MPCommand> commandsList = [];
     final int referenceLineMPID = referenceLineSegment.parentMPID;
     final Offset deltaOnCanvas =
-        lineSegmentFinalPosition.coordinates -
+        referenceLineSegmentFinalPosition.coordinates -
         referenceLineSegment.endPoint.coordinates;
 
     for (final MPSelectedLine line in lines) {
@@ -551,7 +651,8 @@ class MPCommandFactory {
               lineMPID: referenceLineMPID,
               originalLineSegmentsMap: line.originalLineSegmentsMapClone,
               referenceLineSegment: referenceLineSegment,
-              lineSegmentFinalPosition: lineSegmentFinalPosition,
+              referenceLineSegmentFinalPosition:
+                  referenceLineSegmentFinalPosition,
               descriptionType: descriptionType,
             )
           : MPMoveLineCommand.fromDeltaOnCanvas(
