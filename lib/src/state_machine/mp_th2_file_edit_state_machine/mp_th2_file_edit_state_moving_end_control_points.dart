@@ -71,11 +71,26 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         LinkedHashMap<int, THLineSegment>();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
+    final int referenceLineSegmentMPID = _clickedElementAtPointerDown!.mpID;
+    final THPositionPart snapedPosition =
+        snapController.getCanvasSnapedPositionFromScreenOffset(
+          event.localPosition,
+        ) ??
+        THPositionPart(
+          coordinates: th2FileEditController.offsetScreenToCanvas(
+            event.localPosition,
+          ),
+          decimalPositions: th2FileEditController.currentDecimalPositions,
+        );
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] = thFile
-            .lineSegmentByMPID(selectedLineSegmentMPID);
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
+            (selectedLineSegmentMPID == referenceLineSegmentMPID)
+            ? thFile
+                  .lineSegmentByMPID(selectedLineSegmentMPID)
+                  .copyWith(endPoint: snapedPosition)
+            : thFile.lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
@@ -93,7 +108,10 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         );
 
         if (nextLineSegment is THBezierCurveLineSegment) {
-          modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
+          modifiedLineSegmentsMap[nextLineSegmentMPID] =
+              (nextLineSegmentMPID == referenceLineSegmentMPID)
+              ? nextLineSegment.copyWith(endPoint: snapedPosition)
+              : nextLineSegment;
           originalLineSegmentsMap[nextLineSegmentMPID] =
               originalLineSegmentsMapClone[nextLineSegmentMPID]!;
         }
