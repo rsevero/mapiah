@@ -32,7 +32,7 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMPID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
@@ -48,8 +48,8 @@ class MPMoveLineCommand extends MPCommand {
   MPMoveLineCommand.fromLineSegmentExactPosition({
     required this.lineMPID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-    required THPositionPart lineSegmentFinalPosition,
     required THLineSegment referenceLineSegment,
+    required THPositionPart lineSegmentFinalPosition,
     super.descriptionType = _defaultDescriptionType,
   }) : originalLineInTH2File = '',
        super() {
@@ -125,7 +125,7 @@ class MPMoveLineCommand extends MPCommand {
   factory MPMoveLineCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveLineCommand.forCWJM(
       lineMPID: map['lineMPID'],
-      lineSegmentsMoveCommand: MPMultipleElementsCommand.fromMap(
+      lineSegmentsMoveCommand: MPCommand.fromMap(
         map['lineSegmentsMoveCommand'],
       ),
       originalLineInTH2File: map['originalLineInTH2File'],

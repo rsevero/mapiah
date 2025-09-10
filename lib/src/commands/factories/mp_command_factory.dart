@@ -353,7 +353,7 @@ class MPCommandFactory {
   static MPCommand moveLineSegmentsFromDeltaOnCanvas({
     required LinkedHashMap<int, THLineSegment> originalElementsMap,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLineSegments,
   }) {
@@ -504,7 +504,7 @@ class MPCommandFactory {
   static MPCommand moveLinesFromDeltaOnCanvas({
     required Iterable<MPSelectedLine> lines,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLines,
   }) {
@@ -518,6 +518,48 @@ class MPCommandFactory {
         decimalPositions: decimalPositions,
         descriptionType: descriptionType,
       );
+
+      commandsList.add(moveLineCommand);
+    }
+
+    return (commandsList.length == 1)
+        ? commandsList.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commandsList,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+            descriptionType: descriptionType,
+          );
+  }
+
+  static MPCommand moveLinesFromLineSegmentExactPosition({
+    required Iterable<MPSelectedLine> lines,
+    required THLineSegment referenceLineSegment,
+    required THPositionPart lineSegmentFinalPosition,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveLines,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final int referenceLineMPID = referenceLineSegment.parentMPID;
+    final Offset deltaOnCanvas =
+        lineSegmentFinalPosition.coordinates -
+        referenceLineSegment.endPoint.coordinates;
+
+    for (final MPSelectedLine line in lines) {
+      final MPCommand moveLineCommand = (line.mpID == referenceLineMPID)
+          ? MPMoveLineCommand.fromLineSegmentExactPosition(
+              lineMPID: referenceLineMPID,
+              originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+              referenceLineSegment: referenceLineSegment,
+              lineSegmentFinalPosition: lineSegmentFinalPosition,
+              descriptionType: descriptionType,
+            )
+          : MPMoveLineCommand.fromDeltaOnCanvas(
+              lineMPID: line.mpID,
+              originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+              deltaOnCanvas: deltaOnCanvas,
+              descriptionType: descriptionType,
+            );
 
       commandsList.add(moveLineCommand);
     }

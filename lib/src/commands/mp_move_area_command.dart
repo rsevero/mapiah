@@ -16,13 +16,28 @@ class MPMoveAreaCommand extends MPCommand {
     required this.areaMPID,
     required Iterable<MPSelectedLine> originalLines,
     required Offset deltaOnCanvas,
-    required int decimalPositions,
+    int? decimalPositions,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromDeltaOnCanvas(
       lines: originalLines,
       deltaOnCanvas: deltaOnCanvas,
       decimalPositions: decimalPositions,
+      descriptionType: descriptionType,
+    );
+  }
+
+  MPMoveAreaCommand.fromLineSegmentExactPosition({
+    required this.areaMPID,
+    required Iterable<MPSelectedLine> originalLines,
+    required THLineSegment referenceLineSegment,
+    required THPositionPart lineSegmentFinalPosition,
+    super.descriptionType = _defaultDescriptionType,
+  }) : super() {
+    linesMoveCommand = MPCommandFactory.moveLinesFromLineSegmentExactPosition(
+      lines: originalLines,
+      referenceLineSegment: referenceLineSegment,
+      lineSegmentFinalPosition: lineSegmentFinalPosition,
       descriptionType: descriptionType,
     );
   }
@@ -82,9 +97,7 @@ class MPMoveAreaCommand extends MPCommand {
   factory MPMoveAreaCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveAreaCommand.forCWJM(
       areaMPID: map['areaMPID'],
-      linesMoveCommand: MPMultipleElementsCommand.fromMap(
-        map['linesMoveCommand'],
-      ),
+      linesMoveCommand: MPCommand.fromMap(map['linesMoveCommand']),
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),

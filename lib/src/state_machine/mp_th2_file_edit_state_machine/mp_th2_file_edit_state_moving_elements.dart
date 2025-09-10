@@ -165,11 +165,11 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
           );
         case MPSelectedArea _:
-          moveCommand = MPMoveAreaCommand.fromDeltaOnCanvas(
+          moveCommand = MPMoveAreaCommand.fromLineSegmentExactPosition(
             areaMPID: selectedElement.mpID,
             originalLines: selected.originalLines,
-            deltaOnCanvas: panDeltaOnCanvas,
-            decimalPositions: th2FileEditController.currentDecimalPositions,
+            lineSegmentFinalPosition: snapedPosition,
+            referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
           );
       }
 
