@@ -6,9 +6,11 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
+import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
 class MPSnapTargetsWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -77,25 +79,29 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
           ),
         );
 
-    return Observer(
-      builder: (_) {
-        th2FileEditController.redrawSnapTargetsWindow;
+    return MPOverlayWindowBlockWidget(
+      title: appLocalizations.mpSnapPointTargetsLabel,
+      overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+      padding: mpOverlayWindowBlockEdgeInsets,
+      children: [
+        Observer(
+          builder: (_) {
+            th2FileEditController.redrawSnapTargetsWindow;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              appLocalizations.mpSnapPointTargetsLabel,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            RadioGroup(
+            return RadioGroup(
               groupValue: snapController.snapPointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
                   final MPSnapPointTarget target = MPSnapPointTarget.values
                       .byName(value);
-
                   snapController.setSnapPointTargetType(target);
+
+                  if (target == MPSnapPointTarget.pointByType &&
+                      snapController.pointTargetPLATypes.isEmpty) {
+                    snapController.setPointTargetPLATypes(
+                      pointTypeChoices.keys,
+                    );
+                  }
                 }
               },
               child: Column(
@@ -108,7 +114,6 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
                       value: entry.key,
                     );
 
-                    // Expand with checkbox list when pointByType is selected
                     if (entry.key == MPSnapPointTarget.pointByType.name) {
                       final bool expanded =
                           snapController.snapPointTargetType ==
@@ -180,10 +185,10 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
                   }),
                 ],
               ),
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -198,26 +203,30 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
           ),
         );
 
-    return Observer(
-      builder: (_) {
-        th2FileEditController.redrawSnapTargetsWindow;
+    return MPOverlayWindowBlockWidget(
+      title: appLocalizations.mpSnapLinePointTargetsLabel,
+      overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+      padding: mpOverlayWindowBlockEdgeInsets,
+      children: [
+        Observer(
+          builder: (_) {
+            th2FileEditController.redrawSnapTargetsWindow;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              appLocalizations.mpSnapLinePointTargetsLabel,
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            RadioGroup(
+            return RadioGroup(
               groupValue: snapController.snapLinePointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
                   final MPSnapLinePointTarget target = MPSnapLinePointTarget
                       .values
                       .byName(value);
-
                   snapController.setSnapLinePointTargetType(target);
+
+                  if (target == MPSnapLinePointTarget.linePointByType &&
+                      snapController.linePointTargetPLATypes.isEmpty) {
+                    snapController.setLinePointTargetPLATypes(
+                      lineTypeChoices.keys,
+                    );
+                  }
                 }
               },
               child: Column(
@@ -306,10 +315,10 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
                   }),
                 ],
               ),
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 }
