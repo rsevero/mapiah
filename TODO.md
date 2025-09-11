@@ -49,7 +49,7 @@ Version 0.3
 [X] - Moving control points in smooth line segments should move the other control point visually attached to the same end point
 [X] - Create new file
 [X] - Create new scrap [requested by Marco Corvi]
-[ ] - Snap points
+[X] - Snap points
 [ ] - Snap to XVIFile elements: stations, sketch line ends, grid line crossings
 [ ] - Optimize snap search with spatial index
 [ ] - Add/remove lines from areas
