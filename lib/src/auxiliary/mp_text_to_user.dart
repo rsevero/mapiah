@@ -60,6 +60,7 @@ class MPTextToUser {
   static final Map<MPSnapLinePointTarget, String> _snapLinePointTargetAsString =
       {};
   static final Map<MPSnapPointTarget, String> _snapPointTargetAsString = {};
+  static final Map<MPSnapXVIFileTarget, String> _snapXVIFileTargetAsString = {};
   static final Map<String, String> _subtypeAsString = {};
 
   static Locale _locale = mpLocator.mpSettingsController.locale;
@@ -92,6 +93,7 @@ class MPTextToUser {
     _initializeProjectionModeTypeAsString();
     _initializeSnapLinePointTargetAsString();
     _initializeSnapPointTargetAsString();
+    _initializeSnapXVIFileTargetAsString();
     _initializeSubtypeAsString();
   }
 
@@ -115,6 +117,19 @@ class MPTextToUser {
         localizations.mpSnapTargetPoint;
     _snapPointTargetAsString[MPSnapPointTarget.pointByType] =
         localizations.mpSnapTargetPointByType;
+  }
+
+  static void _initializeSnapXVIFileTargetAsString() {
+    final AppLocalizations localizations = mpLocator.appLocalizations;
+
+    _snapXVIFileTargetAsString[MPSnapXVIFileTarget.gridLineIntersection] =
+        localizations.mpSnapTargetXVIFileGridLineIntersection;
+    _snapXVIFileTargetAsString[MPSnapXVIFileTarget.shot] =
+        localizations.mpSnapTargetXVIFileShot;
+    _snapXVIFileTargetAsString[MPSnapXVIFileTarget.sketchLine] =
+        localizations.mpSnapTargetXVIFileSketchLine;
+    _snapXVIFileTargetAsString[MPSnapXVIFileTarget.station] =
+        localizations.mpSnapTargetXVIFileStation;
   }
 
   static void _initializeSubtypeAsString() {
@@ -1078,6 +1093,12 @@ class MPTextToUser {
         : type.name;
   }
 
+  static String getSnapXVIFileTargetChoice(MPSnapXVIFileTarget type) {
+    return _snapXVIFileTargetAsString.containsKey(type)
+        ? _snapXVIFileTargetAsString[type]!
+        : type.name;
+  }
+
   static void _initializeMultipleChoiceOutlineChoiceAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
@@ -1507,6 +1528,16 @@ class MPTextToUser {
 
     for (final MPSnapPointTarget choiceType in MPSnapPointTarget.values) {
       choices[choiceType.name] = getSnapPointTargetChoice(choiceType);
+    }
+
+    return choices;
+  }
+
+  static Map<String, String> getSnapXVIFileTargetChoices() {
+    final Map<String, String> choices = {};
+
+    for (final MPSnapXVIFileTarget choiceType in MPSnapXVIFileTarget.values) {
+      choices[choiceType.name] = getSnapXVIFileTargetChoice(choiceType);
     }
 
     return choices;

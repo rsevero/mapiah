@@ -1154,6 +1154,31 @@
     "description": "The label for the point by type snap target option",
     "type": "text"
   },
+  "mpSnapTargetXVIFileGridLineIntersection": "Grid line intersection",
+  "@mpSnapTargetXVIFileGridLineIntersection": {
+    "description": "The label for the grid line intersection snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetXVIFileShot": "Shot",
+  "@mpSnapTargetXVIFileShot": {
+    "description": "The label for the shot snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetXVIFileSketchLine": "Sketch line",
+  "@mpSnapTargetXVIFileSketchLine": {
+    "description": "The label for the sketch line snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetXVIFileStation": "Station",
+  "@mpSnapTargetXVIFileStation": {
+    "description": "The label for the station snap target option",
+    "type": "text"  
+  },
+  "mpSnapXVIFileTargetsLabel": "XVI file snap",
+  "@mpSnapXVIFileTargetsLabel": {
+    "description": "The label for the XVI file snap",
+    "type": "text"
+  },
   "mpStationNamesPrefixLabel": "Prefix",
   "@mpStationNamesPrefixLabel": {
     "description": "The label for the station names prefix type",

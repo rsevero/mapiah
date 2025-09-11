@@ -191,4 +191,31 @@ class XVIGrid with MPBoundingBox {
       bottom: maxY,
     );
   }
+
+  List<Offset> calculateGridLineIntersections() {
+    final List<Offset> intersections = [];
+
+    final double ox = gx.value;
+    final double oy = gy.value;
+
+    final int nx = ngx.value.toInt();
+    final int ny = ngy.value.toInt();
+
+    final double vxX = gxx.value;
+    final double vxY = gxy.value;
+
+    final double vyX = gyx.value;
+    final double vyY = gyy.value;
+
+    for (int ix = 0; ix <= nx; ix++) {
+      for (int iy = 0; iy <= ny; iy++) {
+        final double x = ox + (vxX * ix) + (vyX * iy);
+        final double y = oy + (vxY * ix) + (vyY * iy);
+
+        intersections.add(Offset(x, y));
+      }
+    }
+
+    return intersections;
+  }
 }

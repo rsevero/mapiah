@@ -50,6 +50,8 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
       th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
+        _buildXVIFileTargetGroup(),
+        const SizedBox(height: mpButtonSpace),
         _buildPointTargetGroup(),
         const SizedBox(height: mpButtonSpace),
         _buildLinePointTargetGroup(),
@@ -63,6 +65,52 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
             },
             child: Text(appLocalizations.buttonClose),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildXVIFileTargetGroup() {
+    final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
+      MPTextToUser.getSnapXVIFileTargetChoices(),
+    );
+
+    return MPOverlayWindowBlockWidget(
+      title: appLocalizations.mpSnapXVIFileTargetsLabel,
+      overlayWindowBlockType: MPOverlayWindowBlockType.choices,
+      padding: mpOverlayWindowBlockEdgeInsets,
+      children: [
+        Observer(
+          builder: (_) {
+            th2FileEditController.redrawSnapTargetsWindow;
+
+            return Column(
+              children: choices.entries.map((entry) {
+                return CheckboxListTile(
+                  controlAffinity: ListTileControlAffinity.leading,
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(entry.value),
+                  value: snapController.xviFileTargets.contains(
+                    MPSnapXVIFileTarget.values.byName(entry.key),
+                  ),
+                  onChanged: (checked) {
+                    if (checked == true) {
+                      snapController.addXVITarget(
+                        MPSnapXVIFileTarget.values.byName(entry.key),
+                      );
+                    } else {
+                      snapController.removeXVITarget(
+                        MPSnapXVIFileTarget.values.byName(entry.key),
+                      );
+                    }
+                    snapController.updateSnapTargets();
+                    th2FileEditController.triggerSnapTargetsWindowRedraw();
+                  },
+                );
+              }).toList(),
+            );
+          },
         ),
       ],
     );

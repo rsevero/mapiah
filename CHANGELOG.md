@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.16 - not release yet
+* New features:
+  * Using _MPOverlayWindowBlockWidget_ at _MPSnapTargetsWidget_ to improve reading.
+  * Snap to XVI file features.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.15 - 2025-09-11
 * New features:
   * Loading images on web.

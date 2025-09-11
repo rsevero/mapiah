@@ -5,6 +5,11 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
+import 'package:mapiah/src/elements/xvi/xvi_file.dart';
+import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
+import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
+import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
+import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mobx/mobx.dart';
 
@@ -37,6 +42,9 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   @readonly
   Set<String> _linePointTargetPLATypes = {};
+
+  @readonly
+  Set<MPSnapXVIFileTarget> _xviFileTargets = {};
 
   @action
   void setSnapPointTargetType(MPSnapPointTarget target) {
@@ -80,6 +88,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
     _snapLinePointTargetType = MPSnapLinePointTarget.none;
     _pointTargetPLATypes = {};
     _linePointTargetPLATypes = {};
+    _xviFileTargets = {};
     updateSnapTargets();
     _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
@@ -155,6 +164,64 @@ abstract class TH2FileEditSnapControllerBase with Store {
           );
 
           _snapTargets.add(lineSegmentElement.endPoint);
+        }
+      }
+    }
+
+    if (_xviFileTargets.isNotEmpty) {
+      final Set<int> imageInsetConfigMPIDs = _thFile.imageMPIDs;
+
+      for (final int imageInsertConfigMPID in imageInsetConfigMPIDs) {
+        final THXTherionImageInsertConfig imageInsertConfig = _thFile
+            .imageByMPID(imageInsertConfigMPID);
+
+        if (!imageInsertConfig.isXVI) {
+          continue;
+        }
+
+        final XVIFile? xviFile = imageInsertConfig.getXVIFile(
+          _th2FileEditController,
+        );
+
+        if (xviFile == null) {
+          continue;
+        }
+
+        if (_xviFileTargets.contains(
+          MPSnapXVIFileTarget.gridLineIntersection,
+        )) {
+          final XVIGrid xviGrid = xviFile.grid;
+          final List<Offset> intersections = xviGrid
+              .calculateGridLineIntersections();
+
+          for (final Offset intersection in intersections) {
+            _snapTargets.add(THPositionPart(coordinates: intersection));
+          }
+        }
+
+        if (_xviFileTargets.contains(MPSnapXVIFileTarget.shot)) {
+          for (final XVIShot xviShot in xviFile.shots) {
+            _snapTargets.add(xviShot.start);
+            _snapTargets.add(xviShot.end);
+          }
+        }
+
+        if (_xviFileTargets.contains(MPSnapXVIFileTarget.sketchLine)) {
+          for (final XVISketchLine xviSketchLine in xviFile.sketchLines) {
+            final List<THPositionPart> sketchLinePoints = xviSketchLine.points;
+
+            for (final sketchLinePoint in sketchLinePoints) {
+              _snapTargets.add(sketchLinePoint);
+            }
+          }
+        }
+
+        if (_xviFileTargets.contains(MPSnapXVIFileTarget.station)) {
+          final List<XVIStation> xviStations = xviFile.stations;
+
+          for (final XVIStation xviStation in xviStations) {
+            _snapTargets.add(xviStation.position);
+          }
         }
       }
     }
@@ -359,8 +426,42 @@ abstract class TH2FileEditSnapControllerBase with Store {
       distanceSquared: nearerDistanceSquaredFinal,
     );
   }
+
+  void clearSnapXVITargets() {
+    _xviFileTargets = {};
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  void addXVITarget(MPSnapXVIFileTarget target) {
+    if (_xviFileTargets.contains(target)) {
+      return;
+    }
+
+    _xviFileTargets.add(target);
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  void removeXVITarget(MPSnapXVIFileTarget target) {
+    if (!_xviFileTargets.contains(target)) {
+      return;
+    }
+
+    _xviFileTargets.remove(target);
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  void setXVITargets(Iterable<MPSnapXVIFileTarget> targets) {
+    _xviFileTargets = targets.toSet();
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
 }
 
 enum MPSnapLinePointTarget { none, linePoint, linePointByType }
 
 enum MPSnapPointTarget { none, point, pointByType }
+
+enum MPSnapXVIFileTarget { gridLineIntersection, shot, sketchLine, station }

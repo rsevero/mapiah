@@ -1472,6 +1472,36 @@ abstract class AppLocalizations {
   /// **'Point by type'**
   String get mpSnapTargetPointByType;
 
+  /// The label for the grid line intersection snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Grid line intersection'**
+  String get mpSnapTargetXVIFileGridLineIntersection;
+
+  /// The label for the shot snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Shot'**
+  String get mpSnapTargetXVIFileShot;
+
+  /// The label for the sketch line snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Sketch line'**
+  String get mpSnapTargetXVIFileSketchLine;
+
+  /// The label for the station snap target option
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
+  String get mpSnapTargetXVIFileStation;
+
+  /// The label for the XVI file snap
+  ///
+  /// In en, this message translates to:
+  /// **'XVI file snap'**
+  String get mpSnapXVIFileTargetsLabel;
+
   /// The label for the station names prefix type
   ///
   /// In en, this message translates to:

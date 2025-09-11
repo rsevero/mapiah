@@ -169,6 +169,26 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
     );
   }
 
+  late final _$_xviFileTargetsAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._xviFileTargets',
+    context: context,
+  );
+
+  Set<MPSnapXVIFileTarget> get xviFileTargets {
+    _$_xviFileTargetsAtom.reportRead();
+    return super._xviFileTargets;
+  }
+
+  @override
+  Set<MPSnapXVIFileTarget> get _xviFileTargets => xviFileTargets;
+
+  @override
+  set _xviFileTargets(Set<MPSnapXVIFileTarget> value) {
+    _$_xviFileTargetsAtom.reportWrite(value, super._xviFileTargets, () {
+      super._xviFileTargets = value;
+    });
+  }
+
   late final _$TH2FileEditSnapControllerBaseActionController = ActionController(
     name: 'TH2FileEditSnapControllerBase',
     context: context,

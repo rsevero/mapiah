@@ -740,6 +740,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapTargetPointByType => 'Ponto por tipo';
 
   @override
+  String get mpSnapTargetXVIFileGridLineIntersection =>
+      'Interseção de linhas de grade';
+
+  @override
+  String get mpSnapTargetXVIFileShot => 'Medida';
+
+  @override
+  String get mpSnapTargetXVIFileSketchLine => 'Linha do croqui';
+
+  @override
+  String get mpSnapTargetXVIFileStation => 'Base';
+
+  @override
+  String get mpSnapXVIFileTargetsLabel => 'Ajuste a arquivo XVI';
+
+  @override
   String get mpStationNamesPrefixLabel => 'Prefixo';
 
   @override
