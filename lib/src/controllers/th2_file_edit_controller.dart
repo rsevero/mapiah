@@ -361,6 +361,9 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerOptionsList = mpMinimumInt;
 
   @readonly
+  int _redrawSnapTargetsWindow = mpMinimumInt;
+
+  @readonly
   Offset _mousePosition = Offset.zero;
 
   @readonly
@@ -879,6 +882,11 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void triggerImagesRedraw() {
     _redrawTriggerImages++;
+  }
+
+  @action
+  void triggerSnapTargetsWindowRedraw() {
+    _redrawSnapTargetsWindow++;
   }
 
   void _setCanvasCenterFromCurrent() {

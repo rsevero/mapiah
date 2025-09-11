@@ -1082,6 +1082,12 @@ abstract class AppLocalizations {
   /// **'All'**
   String get mpPLATypeAll;
 
+  /// The label for the none type
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get mpPLATypeNone;
+
   /// The title for the area types
   ///
   /// In en, this message translates to:

@@ -70,9 +70,17 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
     final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getSnapPointTargetChoices(),
     );
+    final Map<String, String> pointTypeChoices =
+        MPTextToUser.getOrderedChoicesMap(
+          MPTextToUser.getPointTypeChoices(
+            elementEditController: th2FileEditController.elementEditController,
+          ),
+        );
 
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawSnapTargetsWindow;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -84,21 +92,92 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
               groupValue: snapController.snapPointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
-                  snapController.setSnapPointTargetType(
-                    MPSnapPointTarget.values.byName(value),
-                  );
+                  final MPSnapPointTarget target = MPSnapPointTarget.values
+                      .byName(value);
+
+                  snapController.setSnapPointTargetType(target);
                 }
               },
               child: Column(
                 children: [
-                  ...choices.entries.map(
-                    (entry) => RadioListTile<String>(
+                  ...choices.entries.map((entry) {
+                    final Widget tile = RadioListTile<String>(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       title: Text(entry.value),
                       value: entry.key,
-                    ),
-                  ),
+                    );
+
+                    // Expand with checkbox list when pointByType is selected
+                    if (entry.key == MPSnapPointTarget.pointByType.name) {
+                      final bool expanded =
+                          snapController.snapPointTargetType ==
+                          MPSnapPointTarget.pointByType;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tile,
+                          if (expanded)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 32.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: mpButtonSpace / 2),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          snapController.setPointTargetPLATypes(
+                                            pointTypeChoices.keys,
+                                          );
+                                        },
+                                        child: Text(
+                                          appLocalizations.mpPLATypeAll,
+                                        ),
+                                      ),
+                                      const SizedBox(width: mpButtonSpace),
+                                      TextButton(
+                                        onPressed: () {
+                                          snapController.setPointTargetPLATypes(
+                                            {},
+                                          );
+                                        },
+                                        child: Text(
+                                          appLocalizations.mpPLATypeNone,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ...pointTypeChoices.entries.map(
+                                    (pt) => CheckboxListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(pt.value),
+                                      value: snapController.pointTargetPLATypes
+                                          .contains(pt.key),
+                                      onChanged: (checked) {
+                                        if (checked == true) {
+                                          snapController.addPointTargetPLAType(
+                                            pt.key,
+                                          );
+                                        } else {
+                                          snapController
+                                              .removePointTargetPLAType(pt.key);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+
+                    return tile;
+                  }),
                 ],
               ),
             ),
@@ -112,9 +191,17 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
     final Map<String, String> choices = MPTextToUser.getOrderedChoicesMap(
       MPTextToUser.getSnapLinePointTargetChoices(),
     );
+    final Map<String, String> lineTypeChoices =
+        MPTextToUser.getOrderedChoicesMap(
+          MPTextToUser.getLineTypeChoices(
+            elementEditController: th2FileEditController.elementEditController,
+          ),
+        );
 
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawSnapTargetsWindow;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -126,21 +213,97 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
               groupValue: snapController.snapLinePointTargetType.name,
               onChanged: (value) {
                 if (value != null) {
-                  snapController.setSnapLinePointTargetType(
-                    MPSnapLinePointTarget.values.byName(value),
-                  );
+                  final MPSnapLinePointTarget target = MPSnapLinePointTarget
+                      .values
+                      .byName(value);
+
+                  snapController.setSnapLinePointTargetType(target);
                 }
               },
               child: Column(
                 children: [
-                  ...choices.entries.map(
-                    (entry) => RadioListTile<String>(
+                  ...choices.entries.map((entry) {
+                    final Widget tile = RadioListTile<String>(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       title: Text(entry.value),
                       value: entry.key,
-                    ),
-                  ),
+                    );
+
+                    if (entry.key ==
+                        MPSnapLinePointTarget.linePointByType.name) {
+                      final bool expanded =
+                          snapController.snapLinePointTargetType ==
+                          MPSnapLinePointTarget.linePointByType;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tile,
+                          if (expanded)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 32.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: mpButtonSpace / 2),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          snapController
+                                              .setLinePointTargetPLATypes(
+                                                lineTypeChoices.keys,
+                                              );
+                                        },
+                                        child: Text(
+                                          appLocalizations.mpPLATypeAll,
+                                        ),
+                                      ),
+                                      const SizedBox(width: mpButtonSpace),
+                                      TextButton(
+                                        onPressed: () {
+                                          snapController
+                                              .setLinePointTargetPLATypes({});
+                                        },
+                                        child: Text(
+                                          appLocalizations.mpPLATypeNone,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ...lineTypeChoices.entries.map(
+                                    (lt) => CheckboxListTile(
+                                      dense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(lt.value),
+                                      value: snapController
+                                          .linePointTargetPLATypes
+                                          .contains(lt.key),
+                                      onChanged: (checked) {
+                                        if (checked == true) {
+                                          snapController
+                                              .addLinePointTargetPLAType(
+                                                lt.key,
+                                              );
+                                        } else {
+                                          snapController
+                                              .removeLinePointTargetPLAType(
+                                                lt.key,
+                                              );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    }
+
+                    return tile;
+                  }),
                 ],
               ),
             ),

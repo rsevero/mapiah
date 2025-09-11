@@ -86,7 +86,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         mostUsedChoices = elementEditController.mostUsedAreaTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getAreaTypeChoices(
-            extraTypes: lastUsedChoices + mostUsedChoices,
+            elementEditController: elementEditController,
           ),
         );
       case THElementType.line:
@@ -95,7 +95,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         mostUsedChoices = elementEditController.mostUsedLineTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getLineTypeChoices(
-            extraTypes: lastUsedChoices + mostUsedChoices,
+            elementEditController: elementEditController,
           ),
         );
       case THElementType.point:
@@ -104,7 +104,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         mostUsedChoices = elementEditController.mostUsedPointTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getPointTypeChoices(
-            extraTypes: lastUsedChoices + mostUsedChoices,
+            elementEditController: elementEditController,
           ),
         );
       default:

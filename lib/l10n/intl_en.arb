@@ -829,6 +829,11 @@
     "description": "The label for the all type",
     "type": "text"
   },
+  "mpPLATypeNone": "None",
+  "@mpPLATypeNone": {
+    "description": "The label for the none type",
+    "type": "text"
+  },
   "mpPLATypeAreaTitle": "Area types",
   "@mpPLATypeAreaTitle": {
     "description": "The title for the area types",

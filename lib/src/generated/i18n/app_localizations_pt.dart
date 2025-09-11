@@ -538,6 +538,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPLATypeAll => 'Todos';
 
   @override
+  String get mpPLATypeNone => 'Nenhum';
+
+  @override
   String get mpPLATypeAreaTitle => 'Tipos de área';
 
   @override

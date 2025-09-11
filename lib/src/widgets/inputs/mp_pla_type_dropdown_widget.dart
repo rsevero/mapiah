@@ -42,25 +42,19 @@ class _MPPLATypeDropdownWidgetState extends State<MPPLATypeDropdownWidget> {
       case 'point':
         return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getPointTypeChoices(
-            extraTypes:
-                elementEditController.lastUsedPointTypes +
-                elementEditController.mostUsedPointTypes,
+            elementEditController: elementEditController,
           ),
         );
       case 'line':
         return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getLineTypeChoices(
-            extraTypes:
-                elementEditController.lastUsedLineTypes +
-                elementEditController.mostUsedLineTypes,
+            elementEditController: elementEditController,
           ),
         );
       case 'area':
         return MPTextToUser.getOrderedChoicesMap(
           MPTextToUser.getAreaTypeChoices(
-            extraTypes:
-                elementEditController.lastUsedAreaTypes +
-                elementEditController.mostUsedAreaTypes,
+            elementEditController: elementEditController,
           ),
         );
       default:

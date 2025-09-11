@@ -535,6 +535,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPLATypeAll => 'All';
 
   @override
+  String get mpPLATypeNone => 'None';
+
+  @override
   String get mpPLATypeAreaTitle => 'Area types';
 
   @override

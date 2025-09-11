@@ -164,6 +164,7 @@
   "mpPersonNameLabel": "Nome",
   "mpPersonNameHint": "'Nome Sobrenome' ou 'Nomes/Sobrenomes'",
   "mpPLATypeAll": "Todos",
+  "mpPLATypeNone": "Nenhum",
   "mpPLATypeAreaTitle": "Tipos de área",
   "mpPLATypeCurrent": "Atual",
   "mpPLATypeDropdownSelectATypeLabel": "Selecione um tipo",

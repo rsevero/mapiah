@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
@@ -1266,15 +1267,22 @@ class MPTextToUser {
     return choices;
   }
 
-  static Map<String, String> getAreaTypeChoices({List<String>? extraTypes}) {
+  static Map<String, String> getAreaTypeChoices({
+    TH2FileEditElementEditController? elementEditController,
+  }) {
     final Map<String, String> choices = {};
 
     for (final choiceType in THAreaType.values) {
       choices[choiceType.name] = getAreaType(choiceType);
     }
 
-    if (extraTypes != null) {
-      for (final String extraType in extraTypes) {
+    if (elementEditController != null) {
+      for (final String extraType in elementEditController.lastUsedAreaTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
+      for (final String extraType in elementEditController.mostUsedAreaTypes) {
         if (!choices.containsKey(extraType)) {
           choices[extraType] = extraType;
         }
@@ -1284,15 +1292,22 @@ class MPTextToUser {
     return choices;
   }
 
-  static Map<String, String> getLineTypeChoices({List<String>? extraTypes}) {
+  static Map<String, String> getLineTypeChoices({
+    TH2FileEditElementEditController? elementEditController,
+  }) {
     final Map<String, String> choices = {};
 
     for (final choiceType in THLineType.values) {
       choices[choiceType.name] = getLineType(choiceType);
     }
 
-    if (extraTypes != null) {
-      for (final String extraType in extraTypes) {
+    if (elementEditController != null) {
+      for (final String extraType in elementEditController.lastUsedLineTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
+      for (final String extraType in elementEditController.mostUsedLineTypes) {
         if (!choices.containsKey(extraType)) {
           choices[extraType] = extraType;
         }
@@ -1313,15 +1328,22 @@ class MPTextToUser {
     return choices;
   }
 
-  static Map<String, String> getPointTypeChoices({List<String>? extraTypes}) {
+  static Map<String, String> getPointTypeChoices({
+    TH2FileEditElementEditController? elementEditController,
+  }) {
     final Map<String, String> choices = {};
 
     for (final THPointType choiceType in THPointType.values) {
       choices[choiceType.name] = getPointType(choiceType);
     }
 
-    if (extraTypes != null) {
-      for (final String extraType in extraTypes) {
+    if (elementEditController != null) {
+      for (final String extraType in elementEditController.lastUsedPointTypes) {
+        if (!choices.containsKey(extraType)) {
+          choices[extraType] = extraType;
+        }
+      }
+      for (final String extraType in elementEditController.mostUsedPointTypes) {
         if (!choices.containsKey(extraType)) {
           choices[extraType] = extraType;
         }

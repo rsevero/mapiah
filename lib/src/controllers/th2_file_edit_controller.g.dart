@@ -1296,6 +1296,30 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_redrawSnapTargetsWindowAtom = Atom(
+    name: 'TH2FileEditControllerBase._redrawSnapTargetsWindow',
+    context: context,
+  );
+
+  int get redrawSnapTargetsWindow {
+    _$_redrawSnapTargetsWindowAtom.reportRead();
+    return super._redrawSnapTargetsWindow;
+  }
+
+  @override
+  int get _redrawSnapTargetsWindow => redrawSnapTargetsWindow;
+
+  @override
+  set _redrawSnapTargetsWindow(int value) {
+    _$_redrawSnapTargetsWindowAtom.reportWrite(
+      value,
+      super._redrawSnapTargetsWindow,
+      () {
+        super._redrawSnapTargetsWindow = value;
+      },
+    );
+  }
+
   late final _$_mousePositionAtom = Atom(
     name: 'TH2FileEditControllerBase._mousePosition',
     context: context,
@@ -1550,6 +1574,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.triggerImagesRedraw');
     try {
       return super.triggerImagesRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerSnapTargetsWindowRedraw() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerSnapTargetsWindowRedraw',
+        );
+    try {
+      return super.triggerSnapTargetsWindowRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -46,6 +46,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
     _snapPointTargetType = target;
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
@@ -56,18 +57,21 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
     _snapLinePointTargetType = target;
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void setPointTargetPLATypes(Iterable<String> types) {
     _pointTargetPLATypes = types.toSet();
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void setLinePointTargetPLATypes(Iterable<String> types) {
     _linePointTargetPLATypes = types.toSet();
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
@@ -77,30 +81,35 @@ abstract class TH2FileEditSnapControllerBase with Store {
     _pointTargetPLATypes = {};
     _linePointTargetPLATypes = {};
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void addPointTargetPLAType(String type) {
     _pointTargetPLATypes.add(type);
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void removePointTargetPLAType(String type) {
     _pointTargetPLATypes.remove(type);
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void addLinePointTargetPLAType(String type) {
     _linePointTargetPLATypes.add(type);
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   @action
   void removeLinePointTargetPLAType(String type) {
     _linePointTargetPLATypes.remove(type);
     updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
   void updateSnapTargets() {
