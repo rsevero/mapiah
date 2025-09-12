@@ -1615,7 +1615,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
+  void setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
     _multipleElementsClickedHighlightedMPID = mpID;
   }
 

@@ -199,9 +199,9 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
 
         _defaultSubtype = allowedSubtypesInfo['default'] as String;
 
-        for (final subtype in allowedSubtypes) {
+        for (final String subtype in allowedSubtypes) {
           options[subtype] = MPTextToUser.getSubtypeAsString(
-            '$elementTypeAsString|$plaTypeTypeAsString|${subtype}',
+            '$elementTypeAsString|$plaTypeTypeAsString|$subtype',
           );
         }
 

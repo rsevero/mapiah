@@ -110,12 +110,12 @@ class MPMoveAreaCommand extends MPCommand {
 
   @override
   MPMoveAreaCommand copyWith({
-    int? areaBorderTHIDMPID,
+    int? areaMPID,
     MPMultipleElementsCommand? linesMoveCommand,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveAreaCommand.forCWJM(
-      areaMPID: areaBorderTHIDMPID ?? this.areaMPID,
+      areaMPID: areaMPID ?? this.areaMPID,
       linesMoveCommand: linesMoveCommand ?? this.linesMoveCommand,
       descriptionType: descriptionType ?? this.descriptionType,
     );

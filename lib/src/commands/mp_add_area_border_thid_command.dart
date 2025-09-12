@@ -70,13 +70,13 @@ class MPAddAreaBorderTHIDCommand extends MPCommand {
   @override
   MPAddAreaBorderTHIDCommand copyWith({
     THAreaBorderTHID? newAreaBorderTHID,
-    int? areaPositionInParent,
+    int? areaBorderTHIDPositionInParent,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaBorderTHIDCommand.forCWJM(
       newAreaBorderTHID: newAreaBorderTHID ?? this.newAreaBorderTHID,
       areaBorderTHIDPositionInParent:
-          areaPositionInParent ?? this.areaBorderTHIDPositionInParent,
+          areaBorderTHIDPositionInParent ?? this.areaBorderTHIDPositionInParent,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

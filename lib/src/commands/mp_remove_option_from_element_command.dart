@@ -75,14 +75,14 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
 
   @override
   MPRemoveOptionFromElementCommand copyWith({
-    THCommandOptionType? attrName,
+    THCommandOptionType? optionType,
     int? parentMPID,
     String? newOriginalLineInTH2File,
     String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveOptionFromElementCommand.forCWJM(
-      optionType: attrName ?? this.optionType,
+      optionType: optionType ?? this.optionType,
       parentMPID: parentMPID ?? this.parentMPID,
       newOriginalLineInTH2File:
           newOriginalLineInTH2File ?? this.newOriginalLineInTH2File,

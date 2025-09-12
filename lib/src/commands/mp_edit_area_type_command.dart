@@ -72,14 +72,14 @@ class MPEditAreaTypeCommand extends MPCommand {
 
   @override
   MPEditAreaTypeCommand copyWith({
-    int? areaBorderTHIDMPID,
+    int? areaMPID,
     THAreaType? newAreaType,
     String? unknownPLAType,
     String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditAreaTypeCommand.forCWJM(
-      areaMPID: areaBorderTHIDMPID ?? this.areaMPID,
+      areaMPID: areaMPID ?? this.areaMPID,
       newAreaType: newAreaType ?? this.newAreaType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:

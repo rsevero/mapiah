@@ -52,11 +52,11 @@ class MPRemoveAreaCommand extends MPCommand {
 
   @override
   MPRemoveAreaCommand copyWith({
-    int? scrapMPID,
+    int? areaMPID,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveAreaCommand.forCWJM(
-      areaMPID: scrapMPID ?? this.areaMPID,
+      areaMPID: areaMPID ?? this.areaMPID,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

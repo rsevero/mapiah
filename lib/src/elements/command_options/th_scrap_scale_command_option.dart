@@ -78,7 +78,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     int? parentMPID,
     String? originalLineInTH2File,
     List<THDoublePart>? numericSpecifications,
-    THLengthUnitPart? unit,
+    THLengthUnitPart? unitPart,
   }) {
     return THScrapScaleCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
@@ -86,7 +86,7 @@ class THScrapScaleCommandOption extends THCommandOption {
           originalLineInTH2File ?? this.originalLineInTH2File,
       numericSpecifications:
           numericSpecifications ?? this.numericSpecifications,
-      unitPart: unit ?? this.unitPart,
+      unitPart: unitPart ?? this.unitPart,
     );
   }
 

@@ -615,7 +615,7 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  dynamic setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
+  void setMultipleElementsClickedHighlightedMPIDs(int? mpID) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
           name:

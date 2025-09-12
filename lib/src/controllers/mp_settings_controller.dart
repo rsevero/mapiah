@@ -30,7 +30,7 @@ abstract class MPSettingsControllerBase with Store {
   @readonly
   double _lineThickness = thDefaultLineThickness;
 
-  THSettingsControllerBase() {
+  MPSettingsControllerBase() {
     _initialize();
   }
 
