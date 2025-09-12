@@ -686,6 +686,30 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_currentSnapGridCellSizeAtom = Atom(
+    name: 'TH2FileEditControllerBase._currentSnapGridCellSize',
+    context: context,
+  );
+
+  double get currentSnapGridCellSize {
+    _$_currentSnapGridCellSizeAtom.reportRead();
+    return super._currentSnapGridCellSize;
+  }
+
+  @override
+  double get _currentSnapGridCellSize => currentSnapGridCellSize;
+
+  @override
+  set _currentSnapGridCellSize(double value) {
+    _$_currentSnapGridCellSizeAtom.reportWrite(
+      value,
+      super._currentSnapGridCellSize,
+      () {
+        super._currentSnapGridCellSize = value;
+      },
+    );
+  }
+
   late final _$_activeScrapIDAtom = Atom(
     name: 'TH2FileEditControllerBase._activeScrapID',
     context: context,

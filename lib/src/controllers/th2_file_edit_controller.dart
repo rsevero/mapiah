@@ -148,6 +148,10 @@ abstract class TH2FileEditControllerBase with Store {
       mpDefaultSnapOnScreenDistance * mpDefaultSnapOnScreenDistance;
 
   @readonly
+  double _currentSnapGridCellSize =
+      mpDefaultSnapOnScreenDistance * mpSnapGridCellSizeFactor;
+
+  @readonly
   int _activeScrapID = 0;
 
   @readonly
@@ -490,6 +494,9 @@ abstract class TH2FileEditControllerBase with Store {
 
         _currentSnapOnCanvasDistanceSquaredLimit =
             snapOnCanvasDistance * snapOnCanvasDistance;
+        _currentSnapGridCellSize =
+            snapOnCanvasDistance * mpSnapGridCellSizeFactor;
+        snapController.updateSnapTargetsGrid();
       }),
     );
 

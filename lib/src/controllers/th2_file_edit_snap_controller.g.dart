@@ -169,23 +169,44 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
     );
   }
 
-  late final _$_xviFileTargetsAtom = Atom(
-    name: 'TH2FileEditSnapControllerBase._xviFileTargets',
+  late final _$_snapXVIFileTargetsAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapXVIFileTargets',
     context: context,
   );
 
-  Set<MPSnapXVIFileTarget> get xviFileTargets {
-    _$_xviFileTargetsAtom.reportRead();
+  Set<MPSnapXVIFileTarget> get snapXVIFileTargets {
+    _$_snapXVIFileTargetsAtom.reportRead();
     return super._snapXVIFileTargets;
   }
 
   @override
-  Set<MPSnapXVIFileTarget> get _snapXVIFileTargets => xviFileTargets;
+  Set<MPSnapXVIFileTarget> get _snapXVIFileTargets => snapXVIFileTargets;
 
   @override
   set _snapXVIFileTargets(Set<MPSnapXVIFileTarget> value) {
-    _$_xviFileTargetsAtom.reportWrite(value, super._snapXVIFileTargets, () {
+    _$_snapXVIFileTargetsAtom.reportWrite(value, super._snapXVIFileTargets, () {
       super._snapXVIFileTargets = value;
+    });
+  }
+
+  late final _$_snapTargetsGridAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapTargetsGrid',
+    context: context,
+  );
+
+  Map<MPSnapGridCell, List<THPositionPart>> get snapTargetsGrid {
+    _$_snapTargetsGridAtom.reportRead();
+    return super._snapTargetsGrid;
+  }
+
+  @override
+  Map<MPSnapGridCell, List<THPositionPart>> get _snapTargetsGrid =>
+      snapTargetsGrid;
+
+  @override
+  set _snapTargetsGrid(Map<MPSnapGridCell, List<THPositionPart>> value) {
+    _$_snapTargetsGridAtom.reportWrite(value, super._snapTargetsGrid, () {
+      super._snapTargetsGrid = value;
     });
   }
 

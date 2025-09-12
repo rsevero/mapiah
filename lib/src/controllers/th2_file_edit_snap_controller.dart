@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/controllers/auxiliary/mp_snap_grid_cell.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -45,6 +46,9 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   @readonly
   Set<MPSnapXVIFileTarget> _snapXVIFileTargets = {};
+
+  @readonly
+  Map<MPSnapGridCell, List<THPositionPart>> _snapTargetsGrid = {};
 
   @action
   void setSnapPointTargetType(MPSnapPointTarget target) {
@@ -262,6 +266,37 @@ abstract class TH2FileEditSnapControllerBase with Store {
         }
       }
     }
+
+    updateSnapTargetsGrid();
+  }
+
+  MPSnapGridCell getSnapGridCellPosition(Offset canvasPosition) {
+    final double snapGridSize = _th2FileEditController.currentSnapGridCellSize;
+
+    return MPSnapGridCell(
+      (canvasPosition.dx / snapGridSize).floor(),
+      (canvasPosition.dy / snapGridSize).floor(),
+    );
+  }
+
+  void updateSnapTargetsGrid() {
+    _snapTargetsGrid.clear();
+
+    if (_snapTargets.isEmpty) {
+      return;
+    }
+
+    for (final THPositionPart snapTarget in _snapTargets) {
+      final MPSnapGridCell cell = getSnapGridCellPosition(
+        snapTarget.coordinates,
+      );
+
+      if (!_snapTargetsGrid.containsKey(cell)) {
+        _snapTargetsGrid[cell] = [];
+      }
+
+      _snapTargetsGrid[cell]!.add(snapTarget);
+    }
   }
 
   Offset getCanvasSnapedOffsetFromScreenOffset(Offset screenPosition) {
@@ -301,15 +336,31 @@ abstract class TH2FileEditSnapControllerBase with Store {
     THPositionPart? closestSnapTarget;
     final double currentSnapOnCanvasDistanceSquaredLimit =
         _th2FileEditController.currentSnapOnCanvasDistanceSquaredLimit;
+    final MPSnapGridCell centerCell = getSnapGridCellPosition(canvasPosition);
+    final List<MPSnapGridCell> cellsToCheck = [];
 
-    for (final THPositionPart snapTarget in _snapTargets) {
-      final double distanceSquared =
-          (snapTarget.coordinates - canvasPosition).distanceSquared;
+    for (int dx = -1; dx <= 1; dx++) {
+      for (int dy = -1; dy <= 1; dy++) {
+        cellsToCheck.add(MPSnapGridCell(centerCell.x + dx, centerCell.y + dy));
+      }
+    }
 
-      if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
-          (distanceSquared < closestDistanceSquared)) {
-        closestDistanceSquared = distanceSquared;
-        closestSnapTarget = snapTarget;
+    for (final MPSnapGridCell cellToCheck in cellsToCheck) {
+      if (!_snapTargetsGrid.containsKey(cellToCheck)) {
+        continue;
+      }
+
+      final List<THPositionPart> cellTargets = _snapTargetsGrid[cellToCheck]!;
+
+      for (final target in cellTargets) {
+        final double distanceSquared =
+            (target.coordinates - canvasPosition).distanceSquared;
+
+        if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
+            (distanceSquared < closestDistanceSquared)) {
+          closestDistanceSquared = distanceSquared;
+          closestSnapTarget = target;
+        }
       }
     }
 

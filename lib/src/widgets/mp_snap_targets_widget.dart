@@ -91,7 +91,7 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
                   dense: true,
                   contentPadding: EdgeInsets.zero,
                   title: Text(entry.value),
-                  value: snapController.xviFileTargets.contains(
+                  value: snapController.snapXVIFileTargets.contains(
                     MPSnapXVIFileTarget.values.byName(entry.key),
                   ),
                   onChanged: (checked) {
