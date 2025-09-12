@@ -62,35 +62,34 @@ class MPXVIImageWidget extends StatelessWidget {
       return;
     }
 
-    double xx = image.xviRootedXX;
-    double yy = image.xviRootedYY;
-
-    final Offset imageOffset = Offset(xx, yy);
+    final double xx = image.xviRootedXX;
+    final double yy = image.xviRootedYY;
+    final Offset imageGridOffset = Offset(xx, yy);
     // Understaing xTherion variables:
     // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
     // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
     // These original xTherion variables are used to calculate imageGridOffset.
-    final Offset imageGridOffset =
-        imageOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+    final Offset imageOffset =
+        imageGridOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
     setXVIGridPainters(
       xviFile: xviFile,
-      imageOffset: imageOffset,
+      imageOffset: imageGridOffset,
       painters: painters,
     );
     setXVIShotsPainters(
       xviFile: xviFile,
-      imageGridOffset: imageGridOffset,
+      imageGridOffset: imageOffset,
       painters: painters,
     );
     setXVIStationsPainters(
       xviFile: xviFile,
-      imageGridOffset: imageGridOffset,
+      imageGridOffset: imageOffset,
       painters: painters,
     );
     setXVISketchLinesPainters(
       xviFile: xviFile,
-      imageGridOffset: imageGridOffset,
+      imageGridOffset: imageOffset,
       painters: painters,
     );
   }

@@ -96,16 +96,14 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
                   ),
                   onChanged: (checked) {
                     if (checked == true) {
-                      snapController.addXVITarget(
+                      snapController.addSnapXVITarget(
                         MPSnapXVIFileTarget.values.byName(entry.key),
                       );
                     } else {
-                      snapController.removeXVITarget(
+                      snapController.removeSnapXVITarget(
                         MPSnapXVIFileTarget.values.byName(entry.key),
                       );
                     }
-                    snapController.updateSnapTargets();
-                    th2FileEditController.triggerSnapTargetsWindowRedraw();
                   },
                 );
               }).toList(),

@@ -6,6 +6,7 @@
   * Snap to XVI file features.
 * Fixed bugs:
 * Infrastructure maintenance:
+  * dart fix --apply
 
 ## 0.2.15 - 2025-09-11
 * New features:

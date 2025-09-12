@@ -176,16 +176,16 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
 
   Set<MPSnapXVIFileTarget> get xviFileTargets {
     _$_xviFileTargetsAtom.reportRead();
-    return super._xviFileTargets;
+    return super._snapXVIFileTargets;
   }
 
   @override
-  Set<MPSnapXVIFileTarget> get _xviFileTargets => xviFileTargets;
+  Set<MPSnapXVIFileTarget> get _snapXVIFileTargets => xviFileTargets;
 
   @override
-  set _xviFileTargets(Set<MPSnapXVIFileTarget> value) {
-    _$_xviFileTargetsAtom.reportWrite(value, super._xviFileTargets, () {
-      super._xviFileTargets = value;
+  set _snapXVIFileTargets(Set<MPSnapXVIFileTarget> value) {
+    _$_xviFileTargetsAtom.reportWrite(value, super._snapXVIFileTargets, () {
+      super._snapXVIFileTargets = value;
     });
   }
 

@@ -207,8 +207,8 @@ class XVIGrid with MPBoundingBox {
     final double vyX = gyx.value;
     final double vyY = gyy.value;
 
-    for (int ix = 0; ix <= nx; ix++) {
-      for (int iy = 0; iy <= ny; iy++) {
+    for (int ix = 0; ix < nx; ix++) {
+      for (int iy = 0; iy < ny; iy++) {
         final double x = ox + (vxX * ix) + (vyX * iy);
         final double y = oy + (vxY * ix) + (vyY * iy);
 
