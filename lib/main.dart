@@ -15,7 +15,7 @@ void main(List<String> arguments) {
   String? fileToRead;
 
   // Parse command line arguments: first arg not starting with '-'
-  for (var arg in arguments) {
+  for (final String arg in arguments) {
     if (!arg.startsWith('-')) {
       fileToRead = arg;
       break;

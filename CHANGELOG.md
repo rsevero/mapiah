@@ -9,6 +9,7 @@
 * Fixed bugs:
 * Infrastructure maintenance:
   * dart fix --apply
+  * flutter pub upgrade.
 
 ## 0.2.15 - 2025-09-11
 * New features:
