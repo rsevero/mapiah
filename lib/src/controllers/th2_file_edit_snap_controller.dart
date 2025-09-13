@@ -337,29 +337,31 @@ abstract class TH2FileEditSnapControllerBase with Store {
     final double currentSnapOnCanvasDistanceSquaredLimit =
         _th2FileEditController.currentSnapOnCanvasDistanceSquaredLimit;
     final MPSnapGridCell centerCell = getSnapGridCellPosition(canvasPosition);
-    final List<MPSnapGridCell> cellsToCheck = [];
+    final int centerCellX = centerCell.x;
+    final int centerCellY = centerCell.y;
 
     for (int dx = -1; dx <= 1; dx++) {
       for (int dy = -1; dy <= 1; dy++) {
-        cellsToCheck.add(MPSnapGridCell(centerCell.x + dx, centerCell.y + dy));
-      }
-    }
+        final MPSnapGridCell cellToCheck = MPSnapGridCell(
+          centerCellX + dx,
+          centerCellY + dy,
+        );
 
-    for (final MPSnapGridCell cellToCheck in cellsToCheck) {
-      if (!_snapTargetsGrid.containsKey(cellToCheck)) {
-        continue;
-      }
+        if (!_snapTargetsGrid.containsKey(cellToCheck)) {
+          continue;
+        }
 
-      final List<THPositionPart> cellTargets = _snapTargetsGrid[cellToCheck]!;
+        final List<THPositionPart> cellTargets = _snapTargetsGrid[cellToCheck]!;
 
-      for (final target in cellTargets) {
-        final double distanceSquared =
-            (target.coordinates - canvasPosition).distanceSquared;
+        for (final THPositionPart target in cellTargets) {
+          final double distanceSquared =
+              (target.coordinates - canvasPosition).distanceSquared;
 
-        if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
-            (distanceSquared < closestDistanceSquared)) {
-          closestDistanceSquared = distanceSquared;
-          closestSnapTarget = target;
+          if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
+              (distanceSquared < closestDistanceSquared)) {
+            closestDistanceSquared = distanceSquared;
+            closestSnapTarget = target;
+          }
         }
       }
     }
