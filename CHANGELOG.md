@@ -5,6 +5,7 @@
   * Using _MPOverlayWindowBlockWidget_ at _MPSnapTargetsWidget_ to improve reading.
   * Snap to XVI file features.
   * Snap spatial index.
+  * Improved snap icon.
 * Fixed bugs:
 * Infrastructure maintenance:
   * dart fix --apply

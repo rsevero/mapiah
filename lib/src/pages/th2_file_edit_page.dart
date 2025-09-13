@@ -292,8 +292,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         tooltip: tooltip,
         child: Image.asset(
           buttonIcon,
-          width: thFloatingActionIconSize,
-          height: thFloatingActionIconSize,
+          width: mpFloatingActionIconSize,
+          height: mpFloatingActionIconSize,
           color: isPressedButton
               ? colorScheme.onPrimary
               : colorScheme.onSecondaryContainer,
@@ -410,8 +410,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         tooltip: tooltip,
         child: Image.asset(
           imageAssetPath,
-          width: thFloatingActionIconSize,
-          height: thFloatingActionIconSize,
+          width: mpFloatingActionIconSize,
+          height: mpFloatingActionIconSize,
           color: isPressed
               ? colorScheme.onPrimary
               : colorScheme.onSecondaryContainer,
@@ -464,8 +464,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         tooltip: mpLocator.appLocalizations.th2FileEditPageSelectTool,
         child: Image.asset(
           'assets/icons/select-tool.png',
-          width: thFloatingActionIconSize,
-          height: thFloatingActionIconSize,
+          width: mpFloatingActionIconSize,
+          height: mpFloatingActionIconSize,
           color: isSelectMode
               ? colorScheme.onPrimary
               : colorScheme.onSecondaryContainer,
@@ -482,7 +482,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         tooltip: mpLocator.appLocalizations.th2FileEditPageNodeEditTool,
         child: Icon(
           Icons.polyline_outlined,
-          size: thFloatingActionIconSize,
+          size: mpFloatingActionIconSize,
           color: enableNodeEditButton
               ? (isEditLineMode
                     ? colorScheme.onPrimary
@@ -565,6 +565,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
             .overlayWindowController
             .getIsOverlayWindowShown(MPWindowType.snapTargets);
 
+        th2FileEditController.redrawSnapTargetsWindow;
+
         return Positioned(
           top: 16,
           right: 16,
@@ -582,6 +584,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                 onPressed: () {
                   th2FileEditController.overlayWindowController
                       .toggleOverlayWindow(MPWindowType.snapTargets);
+                  th2FileEditController.triggerSnapTargetsWindowRedraw();
                 },
                 backgroundColor: isSnapTargetsButtonPressed
                     ? null
@@ -590,7 +593,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     ? null
                     : colorScheme.surfaceContainerHighest,
                 elevation: isSnapTargetsButtonPressed ? 6.0 : 3.0,
-                child: const Icon(Icons.gps_fixed),
+                child: Image.asset(
+                  'assets/icons/snap-tool.png',
+                  width: mpFloatingStateActionZoomIconSize,
+                  height: mpFloatingStateActionZoomIconSize,
+                  color: isSnapTargetsButtonPressed
+                      ? null
+                      : colorScheme.surfaceContainerHighest,
+                ),
               ),
               if (th2FileEditController.showRemoveButton) ...[
                 SizedBox(width: mpButtonSpace),
@@ -688,8 +698,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       tooltip: mpLocator.appLocalizations.th2FileEditPageZoomIn,
                       child: Image.asset(
                         'assets/icons/zoom_plus.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
                       backgroundColor: colorScheme.secondaryContainer,
@@ -703,8 +713,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           .th2FileEditPageZoomOneToOne,
                       child: Image.asset(
                         'assets/icons/zoom_one_to_one.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
                       backgroundColor: colorScheme.secondaryContainer,
@@ -718,8 +728,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           .th2FileEditPageZoomToSelection,
                       child: Image.asset(
                         'assets/icons/zoom_selection.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
                         color: selectedElementsEmpty
                             ? Colors.grey
                             : colorScheme.onSecondaryContainer,
@@ -734,7 +744,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           mpLocator.appLocalizations.th2FileEditPageZoomOutFile,
                       child: Icon(
                         Icons.zoom_out_map,
-                        size: thFloatingActionIconSize,
+                        size: mpFloatingActionIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
                       backgroundColor: colorScheme.secondaryContainer,
@@ -750,8 +760,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           .th2FileEditPageZoomOutScrap,
                       child: Image.asset(
                         'assets/icons/zoom-out-scrap.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
                         color: th2FileEditController.hasMultipleScraps
                             ? colorScheme.onSecondaryContainer
                             : Colors.grey,
@@ -766,8 +776,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           mpLocator.appLocalizations.th2FileEditPageZoomOut,
                       child: Image.asset(
                         'assets/icons/zoom_minus.png',
-                        width: thFloatingActionZoomIconSize,
-                        height: thFloatingActionZoomIconSize,
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
                         color: colorScheme.onSecondaryContainer,
                       ),
                       backgroundColor: colorScheme.secondaryContainer,
@@ -783,8 +793,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
               tooltip: mpLocator.appLocalizations.th2FileEditPageZoomOptions,
               child: Image.asset(
                 'assets/icons/zoom_plus_minus.png',
-                width: thFloatingActionZoomIconSize,
-                height: thFloatingActionZoomIconSize,
+                width: mpFloatingActionZoomIconSize,
+                height: mpFloatingActionZoomIconSize,
                 color: colorScheme.onSecondaryContainer,
               ),
               backgroundColor: colorScheme.secondaryContainer,

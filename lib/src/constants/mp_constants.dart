@@ -105,8 +105,9 @@ const String thMainConfigFilename = 'mapiah.toml';
 const String thDefaultLocaleID = 'sys';
 const String thEnglishLocaleID = 'en';
 
-const double thFloatingActionIconSize = 32;
-const double thFloatingActionZoomIconSize = 24;
+const double mpFloatingActionIconSize = 32;
+const double mpFloatingActionZoomIconSize = 24;
+const double mpFloatingStateActionZoomIconSize = 24;
 const double mpButtonSpace = 8;
 const double mpButtonMargin = mpButtonSpace * 4;
 const double mpOverlayWindowPadding = 16;
