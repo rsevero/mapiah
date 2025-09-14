@@ -6,6 +6,7 @@ class THArea extends THElement
 
   Set<String>? _lineTHIDs;
   Set<int>? _lineMPIDs;
+  List<int>? _areaBorderTHIDMPIDs;
 
   THArea.forCWJM({
     required super.mpID,
@@ -153,6 +154,7 @@ class THArea extends THElement
   void _updateAreaXLineInfo(THFile thFile) {
     _lineTHIDs = <String>{};
     _lineMPIDs = <int>{};
+    _areaBorderTHIDMPIDs = <int>[];
 
     for (final int childMPID in childrenMPIDs) {
       final THElement element = thFile.elementByMPID(childMPID);
@@ -165,6 +167,7 @@ class THArea extends THElement
 
       _lineMPIDs!.add(lineMPID);
       _lineTHIDs!.add(element.thID);
+      _areaBorderTHIDMPIDs!.add(element.mpID);
     }
   }
 
@@ -182,6 +185,14 @@ class THArea extends THElement
     }
 
     return _lineMPIDs!;
+  }
+
+  List<int> getAreaBorderTHIDMPIDs(THFile thFile) {
+    if (_areaBorderTHIDMPIDs == null) {
+      _updateAreaXLineInfo(thFile);
+    }
+
+    return _areaBorderTHIDMPIDs!;
   }
 
   bool hasLineTHID(String thID, THFile thFile) {
@@ -228,6 +239,7 @@ class THArea extends THElement
   void clearAreaXLineInfo() {
     _lineTHIDs = null;
     _lineMPIDs = null;
+    _areaBorderTHIDMPIDs = null;
   }
 
   @override

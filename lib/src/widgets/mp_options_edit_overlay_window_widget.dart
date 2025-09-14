@@ -8,6 +8,9 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -59,25 +62,23 @@ class _MPOptionsEditOverlayWindowWidgetState
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
 
-        bool hasArea = false;
-        bool hasLine = false;
-        bool hasPoint = false;
         String? selectedAreaPLAType;
         String? selectedLinePLAType;
         String? selectedPointPLAType;
         String? selectedAreaSubtype;
         String? selectedLineSubtype;
         String? selectedPointSubtype;
-        bool firstArea = true;
-        bool firstLine = true;
-        bool firstPoint = true;
+        int countPoints = 0;
+        int countLines = 0;
+        int countAreas = 0;
+        THArea? singleSelectedArea;
 
         for (final mpSelectedElement in mpSelectedElements) {
           switch (mpSelectedElement) {
             case MPSelectedArea _:
               if (mpSelectedElement.originalAreaClone.plaType !=
                   selectedAreaPLAType) {
-                if ((selectedAreaPLAType == null) && !hasArea) {
+                if ((selectedAreaPLAType == null) && (countAreas == 0)) {
                   selectedAreaPLAType =
                       mpSelectedElement.originalAreaClone.plaType;
                 } else {
@@ -89,18 +90,19 @@ class _MPOptionsEditOverlayWindowWidgetState
                 mpSelectedElement.originalAreaClone,
               );
 
-              if (firstArea) {
-                firstArea = false;
+              if (countAreas == 0) {
                 selectedAreaSubtype = areaSubtype;
+                singleSelectedArea = mpSelectedElement.originalAreaClone;
               } else if (selectedAreaSubtype != areaSubtype) {
                 selectedAreaSubtype = null;
+                singleSelectedArea = null;
               }
 
-              hasArea = true;
+              countAreas++;
             case MPSelectedLine _:
               if (mpSelectedElement.originalLineClone.plaType !=
                   selectedLinePLAType) {
-                if ((selectedLinePLAType == null) && !hasLine) {
+                if ((selectedLinePLAType == null) && (countLines == 0)) {
                   selectedLinePLAType =
                       mpSelectedElement.originalLineClone.plaType;
                 } else {
@@ -112,18 +114,17 @@ class _MPOptionsEditOverlayWindowWidgetState
                 mpSelectedElement.originalLineClone,
               );
 
-              if (firstLine) {
-                firstLine = false;
+              if (countLines == 0) {
                 selectedLineSubtype = lineSubtype;
               } else if (selectedLineSubtype != lineSubtype) {
                 selectedLineSubtype = null;
               }
 
-              hasLine = true;
+              countLines++;
             case MPSelectedPoint _:
               if (mpSelectedElement.originalPointClone.plaType !=
                   selectedPointPLAType) {
-                if ((selectedPointPLAType == null) && !hasPoint) {
+                if ((selectedPointPLAType == null) && (countPoints == 0)) {
                   selectedPointPLAType =
                       mpSelectedElement.originalPointClone.plaType;
                 } else {
@@ -136,14 +137,13 @@ class _MPOptionsEditOverlayWindowWidgetState
                 mpSelectedElement.originalPointClone,
               );
 
-              if (firstPoint) {
-                firstPoint = false;
+              if (countPoints == 0) {
                 selectedPointSubtype = pointSubtype;
               } else if (selectedPointSubtype != pointSubtype) {
                 selectedPointSubtype = null;
               }
 
-              hasPoint = true;
+              countPoints++;
             default:
               throw Exception(
                 'Unsupported element type: $mpSelectedElement in MPOptionsEditWidget',
@@ -151,10 +151,10 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
         }
 
-        if (hasArea || hasLine || hasPoint) {
+        if ((countAreas > 0) || (countLines > 0) || (countPoints > 0)) {
           final List<Widget> plaTypeWidgets = [];
 
-          if (hasPoint) {
+          if (countPoints > 0) {
             String? pointTypeAsString;
 
             if (selectedPointPLAType == null) {
@@ -186,7 +186,7 @@ class _MPOptionsEditOverlayWindowWidgetState
             );
           }
 
-          if (hasLine) {
+          if (countLines > 0) {
             String? lineTypeAsString;
 
             if (selectedLinePLAType == null) {
@@ -218,7 +218,7 @@ class _MPOptionsEditOverlayWindowWidgetState
             );
           }
 
-          if (hasArea) {
+          if (countAreas > 0) {
             String? areaTypeAsString;
 
             if (selectedAreaPLAType == null) {
@@ -238,6 +238,79 @@ class _MPOptionsEditOverlayWindowWidgetState
                 areaTypeAsString =
                     '$areaTypeAsString:${MPTextToUser.getSubtypeAsString(selectedAreaSubtype)}';
               }
+            }
+
+            if ((countAreas == 1) && (singleSelectedArea != null)) {
+              final THFile thFile = th2FileEditController.thFile;
+              final List<THAreaBorderTHID> areaBorders = [];
+
+              for (final childMPID in singleSelectedArea.childrenMPIDs) {
+                final THElement element = thFile.elementByMPID(childMPID);
+                if (element is THAreaBorderTHID) {
+                  areaBorders.add(element);
+                }
+              }
+
+              // Build rows for each border with delete icon.
+              final List<Widget> areaBorderWidgets = areaBorders.map((border) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          border.thID,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: mpLocator
+                            .appLocalizations
+                            .mpCommandDescriptionRemoveAreaBorderTHID,
+                        onPressed: () {
+                          th2FileEditController.execute(
+                            MPRemoveAreaBorderTHIDCommand(
+                              areaBorderTHIDMPID: border.mpID,
+                              th2FileEditController: th2FileEditController,
+                            ),
+                          );
+                          th2FileEditController.triggerAllElementsRedraw();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }).toList();
+
+              areaBorderWidgets.add(
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () {
+                      // TODO(mapiah): Implement adding an existing line as a border to this area.
+                      // Proposed workflow:
+                      // 1. Close this options window (optional).
+                      // 2. Enter a transient state where user clicks a line.
+                      // 3. If line lacks an id, generate one (like in AddArea state).
+                      // 4. Create THAreaBorderTHID(parentMPID: area.mpID, thID: lineTHID) and execute MPAddAreaBorderTHIDCommand.
+                      // 5. Return to previous selection state and reopen this window.
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add area border'),
+                  ),
+                ),
+              );
+
+              MPInteractionAux.addWidgetWithTopSpace(
+                widgets,
+                MPOverlayWindowBlockWidget(
+                  title: 'Area borders',
+                  overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
+                  padding: mpOverlayWindowBlockEdgeInsets,
+                  children: areaBorderWidgets,
+                ),
+              );
             }
 
             plaTypeWidgets.add(
