@@ -312,7 +312,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           th2FileEditController: _th2FileEditController,
         );
 
-        final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+        final List<int> lineMPIDs = element.getLineMPIDs(_thFile);
 
         for (final int lineMPID in lineMPIDs) {
           final THLine line = _thFile.lineByMPID(lineMPID);
@@ -409,7 +409,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _mpSelectedElementsLogical.remove(element.mpID);
 
     if (element is THArea) {
-      final Set<int> lineMPIDs = element.getLineMPIDs(_thFile);
+      final List<int> lineMPIDs = element.getLineMPIDs(_thFile);
 
       for (final int lineMPID in lineMPIDs) {
         _selectedElementsDrawable.remove(lineMPID);

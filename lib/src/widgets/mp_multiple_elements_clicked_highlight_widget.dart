@@ -102,7 +102,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   ),
                 );
               case THArea _:
-                final Set<int> areaLineMPIDs = highlightedElement.getLineMPIDs(
+                final List<int> areaLineMPIDs = highlightedElement.getLineMPIDs(
                   thFile,
                 );
 

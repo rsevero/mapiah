@@ -490,7 +490,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   ({THLineSegment? lineSegment, double distanceSquared})
   getNearerLineSegmentFromArea(Offset canvasCoordinates, THArea area) {
-    final Set<int> areaLineSegments = area.getLineMPIDs(_thFile);
+    final List<int> areaLineSegments = area.getLineMPIDs(_thFile);
 
     if (areaLineSegments.isEmpty) {
       return (lineSegment: null, distanceSquared: double.infinity);

@@ -224,6 +224,18 @@ abstract class AppLocalizations {
   /// **'Invalid altitude'**
   String get mpAltitudeInvalidValueErrorMessage;
 
+  /// Title for the area borders block listing area border THIDs
+  ///
+  /// In en, this message translates to:
+  /// **'Area borders'**
+  String get mpAreaBordersPanelTitle;
+
+  /// Label for the button to add a new area border THID reference
+  ///
+  /// In en, this message translates to:
+  /// **'Add area border'**
+  String get mpAreaBordersAddButton;
+
   /// The error message for an empty attribute name
   ///
   /// In en, this message translates to:

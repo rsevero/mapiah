@@ -5,7 +5,7 @@ class THArea extends THElement
   final THAreaType areaType;
 
   Set<String>? _lineTHIDs;
-  Set<int>? _lineMPIDs;
+  List<int>? _lineMPIDs;
   List<int>? _areaBorderTHIDMPIDs;
 
   THArea.forCWJM({
@@ -153,7 +153,7 @@ class THArea extends THElement
 
   void _updateAreaXLineInfo(THFile thFile) {
     _lineTHIDs = <String>{};
-    _lineMPIDs = <int>{};
+    _lineMPIDs = <int>[];
     _areaBorderTHIDMPIDs = <int>[];
 
     for (final int childMPID in childrenMPIDs) {
@@ -179,12 +179,34 @@ class THArea extends THElement
     return _lineTHIDs!;
   }
 
-  Set<int> getLineMPIDs(THFile thFile) {
+  List<int> getLineMPIDs(THFile thFile) {
     if (_lineMPIDs == null) {
       _updateAreaXLineInfo(thFile);
     }
 
     return _lineMPIDs!;
+  }
+
+  List<THLine> getLines(THFile thFile) {
+    final List<int> lineMPIDs = getLineMPIDs(thFile);
+    final List<THLine> lines = [];
+
+    for (final int lineMPID in lineMPIDs) {
+      lines.add(thFile.lineByMPID(lineMPID));
+    }
+
+    return lines;
+  }
+
+  List<THAreaBorderTHID> getAreaBorderTHIDs(THFile thFile) {
+    final List<int> areaBorderTHIDMPIDs = getAreaBorderTHIDMPIDs(thFile);
+    final List<THAreaBorderTHID> areaBorders = [];
+
+    for (final int areaBorderTHIDMPID in areaBorderTHIDMPIDs) {
+      areaBorders.add(thFile.areaBorderTHIDByMPID(areaBorderTHIDMPID));
+    }
+
+    return areaBorders;
   }
 
   List<int> getAreaBorderTHIDMPIDs(THFile thFile) {
@@ -245,7 +267,7 @@ class THArea extends THElement
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
-    final Set<int> lineMPIDs = getLineMPIDs(thFile);
+    final List<int> lineMPIDs = getLineMPIDs(thFile);
     Rect? boundingBox;
 
     for (final lineMPID in lineMPIDs) {

@@ -21,6 +21,8 @@
   "mpAngleUnitMil": "mil",
   "mpAngleUnitMinute": "minuto",
   "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",
+  "mpAreaBordersPanelTitle": "Bordas da área",
+  "mpAreaBordersAddButton": "Adicionar borda",
   "mpAttrNameEmpty": "Nome do atributo vazio",
   "mpAttrNameInvalid": "Nome de atributo com characteres inválidos",
   "mpAttrNameLabel": "Nome",

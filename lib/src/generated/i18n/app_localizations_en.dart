@@ -84,6 +84,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
+  String get mpAreaBordersPanelTitle => 'Area borders';
+
+  @override
+  String get mpAreaBordersAddButton => 'Add area border';
+
+  @override
   String get mpAttrNameEmpty => 'Empty attribute name';
 
   @override

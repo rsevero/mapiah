@@ -84,6 +84,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
+  String get mpAreaBordersPanelTitle => 'Bordas da área';
+
+  @override
+  String get mpAreaBordersAddButton => 'Adicionar borda';
+
+  @override
   String get mpAttrNameEmpty => 'Nome do atributo vazio';
 
   @override

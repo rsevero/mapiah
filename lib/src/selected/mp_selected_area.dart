@@ -24,7 +24,7 @@ class MPSelectedArea extends MPSelectedElement {
 
     originalAreaClone = originalArea.copyWith(optionsMap: optionsMapClone);
 
-    final Set<int> lineMPIDs = originalArea.getLineMPIDs(
+    final List<int> lineMPIDs = originalArea.getLineMPIDs(
       th2FileEditController.thFile,
     );
     final Map<int, MPSelectable> mpSelectableElements = th2FileEditController

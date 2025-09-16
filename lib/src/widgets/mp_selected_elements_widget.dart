@@ -67,7 +67,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THArea _:
-              final Set<int> areaLineMPIDs = element.getLineMPIDs(thFile);
+              final List<int> areaLineMPIDs = element.getLineMPIDs(thFile);
               final THLinePaint areaPaint = visualController
                   .getSelectedAreaPaint(element);
 

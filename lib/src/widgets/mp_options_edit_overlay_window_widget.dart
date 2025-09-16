@@ -242,46 +242,42 @@ class _MPOptionsEditOverlayWindowWidgetState
 
             if ((countAreas == 1) && (singleSelectedArea != null)) {
               final THFile thFile = th2FileEditController.thFile;
-              final List<THAreaBorderTHID> areaBorders = [];
-
-              for (final childMPID in singleSelectedArea.childrenMPIDs) {
-                final THElement element = thFile.elementByMPID(childMPID);
-                if (element is THAreaBorderTHID) {
-                  areaBorders.add(element);
-                }
-              }
+              final List<THAreaBorderTHID> areaBorders = singleSelectedArea
+                  .getAreaBorderTHIDs(thFile);
 
               // Build rows for each border with delete icon.
-              final List<Widget> areaBorderWidgets = areaBorders.map((border) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          border.thID,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        tooltip: mpLocator
-                            .appLocalizations
-                            .mpCommandDescriptionRemoveAreaBorderTHID,
-                        onPressed: () {
-                          th2FileEditController.execute(
-                            MPRemoveAreaBorderTHIDCommand(
-                              areaBorderTHIDMPID: border.mpID,
-                              th2FileEditController: th2FileEditController,
+              final List<Widget> areaBorderWidgets = areaBorders
+                  .map<Widget>(
+                    (border) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              border.thID,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          );
-                          th2FileEditController.triggerAllElementsRedraw();
-                        },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline),
+                            tooltip: mpLocator
+                                .appLocalizations
+                                .mpCommandDescriptionRemoveAreaBorderTHID,
+                            onPressed: () {
+                              th2FileEditController.execute(
+                                MPRemoveAreaBorderTHIDCommand(
+                                  areaBorderTHIDMPID: border.mpID,
+                                  th2FileEditController: th2FileEditController,
+                                ),
+                              );
+                              th2FileEditController.triggerAllElementsRedraw();
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              }).toList();
+                    ),
+                  )
+                  .toList();
 
               areaBorderWidgets.add(
                 Align(
@@ -297,7 +293,7 @@ class _MPOptionsEditOverlayWindowWidgetState
                       // 5. Return to previous selection state and reopen this window.
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text('Add area border'),
+                    label: Text(appLocalizations.mpAreaBordersAddButton),
                   ),
                 ),
               );
@@ -305,7 +301,7 @@ class _MPOptionsEditOverlayWindowWidgetState
               MPInteractionAux.addWidgetWithTopSpace(
                 widgets,
                 MPOverlayWindowBlockWidget(
-                  title: 'Area borders',
+                  title: appLocalizations.mpAreaBordersPanelTitle,
                   overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
                   padding: mpOverlayWindowBlockEdgeInsets,
                   children: areaBorderWidgets,

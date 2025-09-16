@@ -745,7 +745,7 @@ class THFile
 
     for (final int areaMPID in _areasMPIDs) {
       final THArea area = areaByMPID(areaMPID);
-      final Set<int> lineMPIDs = area.getLineMPIDs(this);
+      final List<int> lineMPIDs = area.getLineMPIDs(this);
       final Set<String> lineTHIDs = area.getLineTHIDs(this);
 
       for (final int lineMPID in lineMPIDs) {

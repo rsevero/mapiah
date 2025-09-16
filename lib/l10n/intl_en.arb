@@ -111,6 +111,16 @@
     "description": "The error message for invalid altitude value",
     "type": "text"
   },
+  "mpAreaBordersPanelTitle": "Area borders",
+  "@mpAreaBordersPanelTitle": {
+    "description": "Title for the area borders block listing area border THIDs",
+    "type": "text"
+  },
+  "mpAreaBordersAddButton": "Add area border",
+  "@mpAreaBordersAddButton": {
+    "description": "Label for the button to add a new area border THID reference",
+    "type": "text"
+  },
   "mpAttrNameEmpty": "Empty attribute name",
   "@mpAttrNameEmpty": {
     "description": "The error message for an empty attribute name",
