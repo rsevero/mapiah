@@ -608,6 +608,12 @@ abstract class AppLocalizations {
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
+  /// The description for the toggle reverse option command
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle reverse option'**
+  String get mpCommandDescriptionToggleReverseOption;
+
   /// The error message for invalid context value
   ///
   /// In en, this message translates to:

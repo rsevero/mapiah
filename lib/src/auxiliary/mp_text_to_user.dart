@@ -422,6 +422,9 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .setOptionToElements] =
         localizations.mpCommandDescriptionSetOptionToElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .toggleReverseOption] =
+        localizations.mpCommandDescriptionToggleReverseOption;
   }
 
   static String getCommandDescription(

@@ -18,6 +18,7 @@
 | Options edit                                    | O                            |
 | Line node edit                                  | N                            |
 | Redo                                            | Ctrl+Y                       |
+| Reverse line                                    | R                            |
 | Save file                                       | Ctrl+S                       |
 | Save file as                                    | Shift+Ctrl+S                 |
 | Select all                                      | Ctrl+A                       |

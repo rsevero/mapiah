@@ -431,6 +431,11 @@
     "description": "The description for the set option to elements command",
     "type": "text"
   },
+  "mpCommandDescriptionToggleReverseOption": "Toggle reverse option",
+  "@mpCommandDescriptionToggleReverseOption": {
+    "description": "The description for the toggle reverse option command",
+    "type": "text"
+  },
   "mpContextInvalidValueErrorMessage": "Both fields are mandatory",
   "@mpContextInvalidValueErrorMessage": {
     "description": "The error message for invalid context value",

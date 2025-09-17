@@ -1493,6 +1493,57 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     return null;
   }
+
+  @action
+  void toggleSelectedLinesReverseOption() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final List<MPCommand> toggleCommands = [];
+
+    for (final MPSelectedElement selectedElement
+        in selectionController.mpSelectedElementsLogical.values) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+      final THLine originalLine =
+          selectedElement.originalElementClone as THLine;
+      final THReverseCommandOption? reverseOption =
+          MPCommandOptionAux.isReverse(originalLine)
+          ? null
+          : THReverseCommandOption(
+              optionParent: originalLine,
+              choice: THOptionChoicesOnOffType.on,
+            );
+      final MPCommand toggleCommand = (reverseOption == null)
+          ? MPRemoveOptionFromElementCommand(
+              optionType: THCommandOptionType.reverse,
+              parentMPID: originalLine.mpID,
+              descriptionType: MPCommandDescriptionType.toggleReverseOption,
+            )
+          : MPSetOptionToElementCommand(
+              option: reverseOption,
+              descriptionType: MPCommandDescriptionType.toggleReverseOption,
+            );
+
+      toggleCommands.add(toggleCommand);
+    }
+
+    if (toggleCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand toggleAllCommand = (toggleCommands.length == 1)
+        ? toggleCommands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: toggleCommands,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+            descriptionType: MPCommandDescriptionType.toggleReverseOption,
+          );
+
+    _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+  }
 }
 
 class MPTypeUsed {

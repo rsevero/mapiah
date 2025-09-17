@@ -663,6 +663,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleSelectedLinesReverseOption() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleSelectedLinesReverseOption',
+        );
+    try {
+      return super.toggleSelectedLinesReverseOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

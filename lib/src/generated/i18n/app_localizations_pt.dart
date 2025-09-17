@@ -288,6 +288,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Definir opção para diversos elementos';
 
   @override
+  String get mpCommandDescriptionToggleReverseOption =>
+      'Alternar opção de reversão de linha';
+
+  @override
   String get mpContextInvalidValueErrorMessage =>
       'Ambos os campos são obrigatórios';
 

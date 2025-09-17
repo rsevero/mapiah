@@ -82,7 +82,7 @@ Version 0.4
 [ ] - Copy/Paste
 [ ] - Show status message listing what's selected in 'single line edit' mode
 [ ] - Highlight slope lines without at least one line point with orientation
-[ ] - Create shortcut to reverse line
+[X] - Create shortcut to reverse line
 [ ] - Migrate away from Github
 [ ] - Include options and point/line count in multiple elements clicked dialog box
 [ ] - Implement default option values

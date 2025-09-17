@@ -94,6 +94,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             MPTH2FileEditStateType.addPoint,
           );
         }
+      case LogicalKeyboardKey.keyR:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedLinesReverseOption();
+        }
       case LogicalKeyboardKey.keyS:
         if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
           if (th2FileEditController.enableSaveButton) {

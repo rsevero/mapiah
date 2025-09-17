@@ -285,6 +285,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Set option to multiple elements';
 
   @override
+  String get mpCommandDescriptionToggleReverseOption => 'Toggle reverse option';
+
+  @override
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override

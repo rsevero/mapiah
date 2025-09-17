@@ -2,6 +2,7 @@
 
 ## 0.2.17 - not yet released
 * New features:
+  * Create shortcut to reverse line.
 * Fixed bugs:
 * Infrastructure maintenance:
 
