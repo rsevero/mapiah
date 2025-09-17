@@ -286,7 +286,9 @@ class _MPOptionsEditOverlayWindowWidgetState
                         vertical: 10,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(
+                          mpDefaultButtonRadius,
+                        ),
                       ),
                     ),
                     onPressed: () => onAddLineToAreaButtonPressed(),

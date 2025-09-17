@@ -109,6 +109,7 @@ const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;
 const double mpFloatingStateActionZoomIconSize = 24;
 const double mpButtonSpace = 8;
+const double mpDefaultButtonRadius = 8;
 const double mpButtonMargin = mpButtonSpace * 4;
 const double mpOverlayWindowPadding = 16;
 const double mpOverlayWindowCornerRadius = 18;
