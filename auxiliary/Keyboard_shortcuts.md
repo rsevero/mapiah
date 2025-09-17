@@ -24,6 +24,7 @@
 | Select all                                      | Ctrl+A                       |
 | Select none                                     | Esc                          |
 | Select tool                                     | C                            |
+| Simplify line                                   | Ctrl+L                       |
 | Undo                                            | Ctrl+Z                       |
 | Zoom 1:1                                        | 1                            |
 | Zoom file                                       | 3                            |

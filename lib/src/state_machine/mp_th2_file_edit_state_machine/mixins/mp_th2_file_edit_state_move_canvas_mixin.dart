@@ -47,13 +47,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyL:
-        if (!isAltPressed &&
-            !isCtrlPressed &&
-            !isMetaPressed &&
-            !isShiftPressed) {
-          th2FileEditController.stateController.setState(
-            MPTH2FileEditStateType.addLine,
-          );
+        if (!isAltPressed && !isMetaPressed && !isShiftPressed) {
+          if (isCtrlPressed) {
+            th2FileEditController.elementEditController.simplifySelectedLines();
+          } else {
+            th2FileEditController.stateController.setState(
+              MPTH2FileEditStateType.addLine,
+            );
+          }
         }
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed &&

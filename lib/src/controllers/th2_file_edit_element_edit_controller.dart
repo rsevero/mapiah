@@ -1544,6 +1544,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.execute(toggleAllCommand);
     _th2FileEditController.triggerSelectedElementsRedraw();
   }
+
+  @action
+  void simplifySelectedLines() {}
 }
 
 class MPTypeUsed {

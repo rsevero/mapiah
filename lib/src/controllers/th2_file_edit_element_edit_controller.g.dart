@@ -679,6 +679,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void simplifySelectedLines() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.simplifySelectedLines',
+        );
+    try {
+      return super.simplifySelectedLines();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
