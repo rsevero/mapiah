@@ -9,7 +9,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -263,15 +262,8 @@ class _MPOptionsEditOverlayWindowWidgetState
                             tooltip: mpLocator
                                 .appLocalizations
                                 .mpCommandDescriptionRemoveAreaBorderTHID,
-                            onPressed: () {
-                              th2FileEditController.execute(
-                                MPRemoveAreaBorderTHIDCommand(
-                                  areaBorderTHIDMPID: border.mpID,
-                                  th2FileEditController: th2FileEditController,
-                                ),
-                              );
-                              th2FileEditController.triggerAllElementsRedraw();
-                            },
+                            onPressed: () =>
+                                onRemoveAreaBorderTHIDPressed(border.mpID),
                           ),
                         ],
                       ),
@@ -390,6 +382,12 @@ class _MPOptionsEditOverlayWindowWidgetState
     th2FileEditController.optionEditController.performToggleOptionShownStatus(
       optionType: type,
       outerAnchorPosition: outerAnchorPosition,
+    );
+  }
+
+  void onRemoveAreaBorderTHIDPressed(int areaBorderTHIDMPID) {
+    th2FileEditController.userInteractionController.prepareRemoveAreaBorderTHID(
+      areaBorderTHIDMPID,
     );
   }
 }

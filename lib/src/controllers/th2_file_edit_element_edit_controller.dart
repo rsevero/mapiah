@@ -354,13 +354,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _thFile.removeElement(element);
-    selectionController.removeSelectableElement(element.mpID);
-    selectionController.removeSelectedElement(element, setState: setState);
+    selectionController.removeElementFromSelectable(element.mpID);
+    selectionController.removeElementFromSelected(element, setState: setState);
 
     if (element is THLineSegment) {
       selectionController.removeSelectedLineSegment(element);
     } else if (element is THScrap) {
       _th2FileEditController.updateHasMultipleScraps();
+    }
+
+    final int parentMPID = element.parentMPID;
+    final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
+
+    if (parent is THElement) {
+      selectionController.updateSelectedElementClone(parentMPID);
     }
   }
 

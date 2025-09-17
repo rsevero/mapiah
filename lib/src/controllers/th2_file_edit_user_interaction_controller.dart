@@ -632,4 +632,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _th2FileEditController.execute(setPLATypeCommand);
     _th2FileEditController.triggerSelectedElementsRedraw();
   }
+
+  @action
+  void prepareRemoveAreaBorderTHID(int areaBorderTHIDMPID) {
+    final MPCommand removeAreaBorderTHIDCommand = MPRemoveAreaBorderTHIDCommand(
+      areaBorderTHIDMPID: areaBorderTHIDMPID,
+      th2FileEditController: _th2FileEditController,
+    );
+
+    _th2FileEditController.execute(removeAreaBorderTHIDCommand);
+    _th2FileEditController.triggerAllElementsRedraw();
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
 }

@@ -448,7 +448,9 @@ class THFile
             ?.updateShowImages();
     }
 
-    element.parent(this).removeElementFromParent(this, element);
+    final THIsParentMixin parent = element.parent(this);
+
+    parent.removeElementFromParent(this, element);
     _elementByMPID.remove(element.mpID);
   }
 

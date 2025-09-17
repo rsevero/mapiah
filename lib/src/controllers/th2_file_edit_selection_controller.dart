@@ -401,7 +401,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool removeSelectedElement(
+  bool removeElementFromSelected(
     THElement element, {
     bool setState = false,
     bool updateSnapTargets = true,
@@ -434,7 +434,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElements(List<THElement> elements) {
     for (THElement element in elements) {
-      removeSelectedElement(element, updateSnapTargets: false);
+      removeElementFromSelected(element, updateSnapTargets: false);
     }
     _th2FileEditController.snapController.updateSnapTargets();
   }
@@ -622,7 +622,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void removeSelectableElement(int mpID) {
+  void removeElementFromSelectable(int mpID) {
     _mpSelectableElements?.remove(mpID);
     _isSelected.remove(mpID);
   }
@@ -983,7 +983,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void removeSelectedLineSegment(THLineSegment lineSegment) {
     _selectedEndControlPoints.remove(lineSegment.mpID);
-    updateSelectedElementClone(lineSegment.parentMPID);
   }
 
   void removeSelectedEndControlPoints(List<THLineSegment> lineSegments) {

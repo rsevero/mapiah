@@ -142,6 +142,22 @@ mixin _$TH2FileEditUserInteractionController
   }
 
   @override
+  void prepareRemoveAreaBorderTHID(int areaBorderTHIDMPID) {
+    final _$actionInfo =
+        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
+          name:
+              'TH2FileEditUserInteractionControllerBase.prepareRemoveAreaBorderTHID',
+        );
+    try {
+      return super.prepareRemoveAreaBorderTHID(areaBorderTHIDMPID);
+    } finally {
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
