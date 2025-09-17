@@ -60,6 +60,7 @@ class _MPOptionsEditOverlayWindowWidgetState
         final List<Widget> widgets = [];
         final TH2FileEditOptionEditController optionEditController =
             th2FileEditController.optionEditController;
+        final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
         String? selectedAreaPLAType;
         String? selectedLinePLAType;
@@ -274,9 +275,20 @@ class _MPOptionsEditOverlayWindowWidgetState
               areaBorderWidgets.add(
                 Align(
                   alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    icon: const Icon(Icons.add),
+                  child: ElevatedButton.icon(
                     label: Text(appLocalizations.mpAreaBordersAddButton),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colorScheme.primary,
+                      foregroundColor: colorScheme.onPrimary,
+                      elevation: 2,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                     onPressed: () => onAddLineToAreaButtonPressed(),
                   ),
                 ),
