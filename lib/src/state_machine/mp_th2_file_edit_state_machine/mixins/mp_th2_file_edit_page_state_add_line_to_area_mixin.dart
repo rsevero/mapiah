@@ -8,9 +8,7 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
   }) async {
     final TH2FileEditSelectionController selectionController =
         th2FileEditController.selectionController;
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
+    final List<MPCommand> commands = [];
     final Map<int, THElement> clickedLines = await selectionController
         .getSelectableElementsClickedWithDialog(
           screenCoordinates: event.localPosition,
@@ -27,20 +25,37 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
 
     if (!line.hasOption(THCommandOptionType.id)) {
       if (!area.hasOption(THCommandOptionType.id)) {
-        elementEditController.addAutomaticTHIDOption(
+        final String newAreaTHID = th2FileEditController.thFile.getNewTHID(
           element: area,
           prefix: mpAreaTHIDPrefix,
         );
+        final THIDCommandOption areaTHIDOption = THIDCommandOption(
+          optionParent: area,
+          thID: newAreaTHID,
+        );
+        final MPCommand addAreaTHIDCommand = MPSetOptionToElementCommand(
+          option: areaTHIDOption,
+        );
+
+        commands.add(addAreaTHIDCommand);
       }
 
       final String areaTHID =
           (area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
       final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
-
-      elementEditController.addAutomaticTHIDOption(
+      final String newLineTHID = th2FileEditController.thFile.getNewTHID(
         element: line,
         prefix: lineTHIDPrefix,
       );
+      final THIDCommandOption lineTHIDOption = THIDCommandOption(
+        optionParent: line,
+        thID: newLineTHID,
+      );
+      final MPCommand addLineTHIDCommand = MPSetOptionToElementCommand(
+        option: lineTHIDOption,
+      );
+
+      commands.add(addLineTHIDCommand);
     }
 
     final String lineTHID =
@@ -49,9 +64,19 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
       parentMPID: area.mpID,
       thID: lineTHID,
     );
-    final MPCommand command = MPAddAreaBorderTHIDCommand(
+    final MPCommand addAreaBorderTHIDCommand = MPAddAreaBorderTHIDCommand(
       newAreaBorderTHID: areaBorderTHID,
     );
+
+    commands.add(addAreaBorderTHIDCommand);
+
+    final MPCommand command = (commands.length == 1)
+        ? commands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commands,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+          );
 
     th2FileEditController.execute(command);
     th2FileEditController.triggerAllElementsRedraw();

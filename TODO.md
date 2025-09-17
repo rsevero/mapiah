@@ -52,7 +52,7 @@ Version 0.3
 [X] - Snap points
 [X] - Snap to XVIFile elements: stations, sketch line ends, grid line crossings
 [X] - Optimize snap search with spatial index
-[ ] - Add/remove lines from areas
+[X] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [X] - Implement Ctrl+O (open file) keyboard shortcut
@@ -67,7 +67,7 @@ Version 0.3
 [X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
 [ ] - BUG: Mapiah throws if line referred by area does not exist.
-[ ] - BUG: lines added to areas not getting IDs associated.
+[X] - BUG: lines added to areas not getting IDs associated.
 
 Version 0.4
 [ ] - Open multiple files simultaneously

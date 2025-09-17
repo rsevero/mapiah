@@ -6,7 +6,9 @@
   * Snap to XVI file features.
   * Snap spatial index.
   * Improved snap icon.
+  * Add/remove lines from areas.
 * Fixed bugs:
+  * Lines added to areas not getting IDs associated.
 * Infrastructure maintenance:
   * dart fix --apply
   * flutter pub upgrade.
