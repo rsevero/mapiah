@@ -289,12 +289,8 @@ class THFile
     return elementByMPID(_mpIDByTHID[thID]!);
   }
 
-  int mpIDByTHID(String thID) {
-    if (!hasElementByTHID(thID)) {
-      throw THCustomException("No element with thID '$thID' found.");
-    }
-
-    return _mpIDByTHID[thID]!;
+  int? mpIDByTHID(String thID) {
+    return hasElementByTHID(thID) ? _mpIDByTHID[thID]! : null;
   }
 
   void _clearTHFileAndParentBoundingBoxes(THElement element) {

@@ -1,0 +1,12 @@
+encoding utf-8
+scrap poco_surubim_SCP03 -projection plan -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]
+  line wall -close on
+    2057.2 -718
+    1924.4 -828.8
+    2072.7 -924.1
+    2197.1 -822
+  endline
+  area water -id area1
+    area1-line1
+  endarea
+endscrap

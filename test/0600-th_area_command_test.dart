@@ -52,6 +52,25 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': '2025-09-17-001-line_included_in_area_without_id.th2',
+        'length': 12,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap poco_surubim_SCP03 -projection plan -scale [ -164 -2396 3308 -2396 0 0 \
+    88.1888 0 m ]
+  line wall -close on
+    2057.2 -718
+    1924.4 -828.8
+    2072.7 -924.1
+    2197.1 -822
+  endline
+  area water -id area1
+    area1-line1
+  endarea
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

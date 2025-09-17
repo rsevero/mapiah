@@ -164,11 +164,11 @@ class THArea extends THElement
       }
 
       final String lineTHID = element.thID;
-      final int lineMPID = thFile.mpIDByTHID(lineTHID);
+      final int? lineMPID = thFile.mpIDByTHID(lineTHID);
 
       /// Checking _lineTHIDs for previous existence because _lineTHIDs is a Set
       /// so we solve eventual duplicate THIDs in the same area.
-      if (!_lineTHIDs!.contains(lineTHID)) {
+      if ((lineMPID != null) && !_lineTHIDs!.contains(lineTHID)) {
         _lineTHIDs!.add(lineTHID);
         _lineMPIDs!.add(lineMPID);
         _areaBorderTHIDMPIDs!.add(element.mpID);

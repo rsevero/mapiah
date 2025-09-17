@@ -8,7 +8,8 @@
   * Improved snap icon.
   * Add/remove lines from areas.
 * Fixed bugs:
-  * Lines added to areas not getting IDs associated.
+  * Lines added to areas not getting IDs associated to them.
+  * Mapiah throws if line referred by area does not exist.
 * Infrastructure maintenance:
   * dart fix --apply
   * flutter pub upgrade.
