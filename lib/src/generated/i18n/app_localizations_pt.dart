@@ -935,6 +935,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String th2FileEditPageAddLineToAreaStatusBarMessage(Object type) {
+    return 'Selecione uma linha para ser incluída como borda da área $type selecionada';
+  }
+
+  @override
   String get th2FileEditPageAddPoint => 'Criar ponto (P)';
 
   @override

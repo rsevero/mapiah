@@ -20,6 +20,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     );
   }
 
+  @override
+  void onStateExit(MPTH2FileEditState nextState) {
+    onStateExitClearSelectionOnExit(nextState);
+  }
+
   /// 1. Clicked on an object?
   /// 1.1. If yes, select object. Change to [MPTH2FileEditStateType.selectNonEmptySelection];
   /// 1.2. If no, do nothing.

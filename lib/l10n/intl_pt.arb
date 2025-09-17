@@ -292,6 +292,7 @@
   "th2FileEditPageAddImageButton": "Adicionar imagem (I)",
   "th2FileEditPageAddLine": "Criar linha (L)",
   "th2FileEditPageAddLineStatusBarMessage": "Clique para criar uma linha do tipo {type}",
+  "th2FileEditPageAddLineToAreaStatusBarMessage": "Selecione uma linha para ser incluída como borda da área {type} selecionada",
   "th2FileEditPageAddPoint": "Criar ponto (P)",
   "th2FileEditPageAddPointStatusBarMessage": "Clique para criar um ponto do tipo {type}",
   "th2FileEditPageAddScrapButton": "Adicionar croqui (S)",

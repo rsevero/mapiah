@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_user_interaction_controller.g.dart';
@@ -651,5 +652,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _th2FileEditController.execute(removeAreaBorderTHIDCommand);
     _th2FileEditController.triggerAllElementsRedraw();
     _th2FileEditController.triggerOptionsListRedraw();
+  }
+
+  @action
+  void prepareAddAreaBorderTHID() {
+    _th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.addLineToArea,
+    );
   }
 }

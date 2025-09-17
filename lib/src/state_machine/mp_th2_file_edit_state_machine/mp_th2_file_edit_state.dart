@@ -9,6 +9,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -27,12 +28,14 @@ import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 
+part 'mixins/mp_th2_file_edit_page_state_add_line_to_area_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
+part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
@@ -67,6 +70,10 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.addLine:
         return MPTH2FileEditStateAddLine(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.addLineToArea:
+        return MPTH2FileEditStateAddLineToArea(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.addPoint:
@@ -159,6 +166,11 @@ abstract class MPTH2FileEditState {
       case MPButtonType.addLine:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.addLine,
+        );
+        return true;
+      case MPButtonType.addLineToArea:
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.addLineToArea,
         );
         return true;
       case MPButtonType.addPoint:

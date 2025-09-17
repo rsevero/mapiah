@@ -1,7 +1,9 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddArea extends MPTH2FileEditState
-    with MPTH2FileEditStateMoveCanvasMixin {
+    with
+        MPTH2FileEditPageStateAddLineToAreaMixin,
+        MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateAddArea({required super.th2FileEditController});
 
   @override
@@ -21,53 +23,13 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    final Map<int, THElement> clickedLines = await selectionController
-        .getSelectableElementsClickedWithDialog(
-          screenCoordinates: event.localPosition,
-          selectionType: THSelectionType.line,
-          canBeMultiple: false,
-          presentMultipleElementsClickedWidget: true,
-        );
-
-    if (clickedLines.isEmpty) {
-      return Future.value();
-    }
-
     final THArea area = elementEditController.getNewArea();
-    final THLine line = clickedLines.values.first as THLine;
 
-    if (!line.hasOption(THCommandOptionType.id)) {
-      if (!area.hasOption(THCommandOptionType.id)) {
-        elementEditController.addAutomaticTHIDOption(
-          element: area,
-          prefix: mpAreaTHIDPrefix,
-        );
-      }
-
-      final String areaTHID =
-          (area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
-      final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
-
-      elementEditController.addAutomaticTHIDOption(
-        element: line,
-        prefix: lineTHIDPrefix,
-      );
-    }
-
-    final String lineTHID =
-        (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
-    final THAreaBorderTHID areaBorderTHID = THAreaBorderTHID(
-      parentMPID: area.mpID,
-      thID: lineTHID,
+    return addLineToArea(
+      event: event,
+      th2FileEditController: th2FileEditController,
+      area: area,
     );
-    final MPCommand command = MPAddAreaBorderTHIDCommand(
-      newAreaBorderTHID: areaBorderTHID,
-    );
-
-    th2FileEditController.execute(command);
-    th2FileEditController.triggerAllElementsRedraw();
-
-    return Future.value();
   }
 
   @override

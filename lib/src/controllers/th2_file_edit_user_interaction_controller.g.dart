@@ -158,6 +158,22 @@ mixin _$TH2FileEditUserInteractionController
   }
 
   @override
+  void prepareAddAreaBorderTHID() {
+    final _$actionInfo =
+        _$TH2FileEditUserInteractionControllerBaseActionController.startAction(
+          name:
+              'TH2FileEditUserInteractionControllerBase.prepareAddAreaBorderTHID',
+        );
+    try {
+      return super.prepareAddAreaBorderTHID();
+    } finally {
+      _$TH2FileEditUserInteractionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

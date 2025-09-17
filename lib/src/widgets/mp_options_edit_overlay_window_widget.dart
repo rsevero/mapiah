@@ -275,17 +275,9 @@ class _MPOptionsEditOverlayWindowWidgetState
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton.icon(
-                    onPressed: () {
-                      // TODO(mapiah): Implement adding an existing line as a border to this area.
-                      // Proposed workflow:
-                      // 1. Close this options window (optional).
-                      // 2. Enter a transient state where user clicks a line.
-                      // 3. If line lacks an id, generate one (like in AddArea state).
-                      // 4. Create THAreaBorderTHID(parentMPID: area.mpID, thID: lineTHID) and execute MPAddAreaBorderTHIDCommand.
-                      // 5. Return to previous selection state and reopen this window.
-                    },
                     icon: const Icon(Icons.add),
                     label: Text(appLocalizations.mpAreaBordersAddButton),
+                    onPressed: () => onAddLineToAreaButtonPressed(),
                   ),
                 ),
               );
@@ -389,5 +381,9 @@ class _MPOptionsEditOverlayWindowWidgetState
     th2FileEditController.userInteractionController.prepareRemoveAreaBorderTHID(
       areaBorderTHIDMPID,
     );
+  }
+
+  void onAddLineToAreaButtonPressed() {
+    th2FileEditController.userInteractionController.prepareAddAreaBorderTHID();
   }
 }

@@ -66,6 +66,8 @@ Version 0.3
 [ ] - Manually edit position of end and control points in line segments
 [X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
+[ ] - BUG: Mapiah throws if line referred by area does not exist.
+[ ] - BUG: lines added to areas not getting IDs associated.
 
 Version 0.4
 [ ] - Open multiple files simultaneously
@@ -90,7 +92,8 @@ Version 0.4
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks [requested by Marco Corvi]
 [ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
-[ ] - Edit file properties (enconding and?...)
+[ ] - Edit file properties (encoding and?...)
+[ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
 
 Version 0.5
 [ ] - Raster images tracing

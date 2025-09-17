@@ -1850,6 +1850,12 @@ abstract class AppLocalizations {
   /// **'Click to add a {type} line'**
   String th2FileEditPageAddLineStatusBarMessage(Object type);
 
+  /// The status bar message for the add line to area tool
+  ///
+  /// In en, this message translates to:
+  /// **'Select a line to be included as border of the selected {type} area'**
+  String th2FileEditPageAddLineToAreaStatusBarMessage(Object type);
+
   /// The label for the add point button
   ///
   /// In en, this message translates to:

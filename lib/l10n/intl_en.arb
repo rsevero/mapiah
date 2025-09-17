@@ -1475,6 +1475,14 @@
       "type": {}
     }
   },
+  "th2FileEditPageAddLineToAreaStatusBarMessage": "Select a line to be included as border of the selected {type} area",
+  "@th2FileEditPageAddLineToAreaStatusBarMessage": {
+    "description": "The status bar message for the add line to area tool",
+    "type": "text",
+    "placeholders": {
+      "type": {}
+    }
+  },
   "th2FileEditPageAddPoint": "Add point (P)",
   "@th2FileEditPageAddPoint": {
     "description": "The label for the add point button",

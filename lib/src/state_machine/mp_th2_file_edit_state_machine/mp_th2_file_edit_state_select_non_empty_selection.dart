@@ -17,6 +17,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     _updateStatusBarMessage();
   }
 
+  @override
+  void onStateExit(MPTH2FileEditState nextState) {
+    onStateExitClearSelectionOnExit(nextState);
+  }
+
   /// 1. Clicked on an object?
   /// 1.1. Yes. Was the object already selected?
   /// 1.1.1. Yes. Is Shift pressed?
