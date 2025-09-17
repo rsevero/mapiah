@@ -635,10 +635,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   @action
   void prepareRemoveAreaBorderTHID(int areaBorderTHIDMPID) {
-    final MPCommand removeAreaBorderTHIDCommand = MPRemoveAreaBorderTHIDCommand(
-      areaBorderTHIDMPID: areaBorderTHIDMPID,
-      th2FileEditController: _th2FileEditController,
+    final THAreaBorderTHID areaBorderTHID = _thFile.areaBorderTHIDByMPID(
+      areaBorderTHIDMPID,
     );
+    final int areaMPID = areaBorderTHID.parentMPID;
+    final THArea area = _thFile.areaByMPID(areaMPID);
+    final MPCommand removeAreaBorderTHIDCommand =
+        (area.getAreaBorderTHIDMPIDs(_thFile).length == 1)
+        ? MPRemoveAreaCommand(areaMPID: areaMPID)
+        : MPRemoveAreaBorderTHIDCommand(
+            areaBorderTHIDMPID: areaBorderTHIDMPID,
+            th2FileEditController: _th2FileEditController,
+          );
 
     _th2FileEditController.execute(removeAreaBorderTHIDCommand);
     _th2FileEditController.triggerAllElementsRedraw();

@@ -163,11 +163,16 @@ class THArea extends THElement
         continue;
       }
 
-      final int lineMPID = thFile.mpIDByTHID(element.thID);
+      final String lineTHID = element.thID;
+      final int lineMPID = thFile.mpIDByTHID(lineTHID);
 
-      _lineMPIDs!.add(lineMPID);
-      _lineTHIDs!.add(element.thID);
-      _areaBorderTHIDMPIDs!.add(element.mpID);
+      /// Checking _lineTHIDs for previous existence because _lineTHIDs is a Set
+      /// so we solve eventual duplicate THIDs in the same area.
+      if (!_lineTHIDs!.contains(lineTHID)) {
+        _lineTHIDs!.add(lineTHID);
+        _lineMPIDs!.add(lineMPID);
+        _areaBorderTHIDMPIDs!.add(element.mpID);
+      }
     }
   }
 
