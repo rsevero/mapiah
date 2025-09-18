@@ -406,7 +406,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     bool setState = false,
     bool updateSnapTargets = true,
   }) {
-    _mpSelectedElementsLogical.remove(element.mpID);
+    final int elementMPID = element.mpID;
+
+    _mpSelectedElementsLogical.remove(elementMPID);
 
     if (element is THArea) {
       final List<int> lineMPIDs = element.getLineMPIDs(_thFile);
@@ -415,10 +417,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         _selectedElementsDrawable.remove(lineMPID);
       }
     } else {
-      _selectedElementsDrawable.remove(element.mpID);
+      _selectedElementsDrawable.remove(elementMPID);
     }
 
-    _isSelected.remove(element.mpID);
+    _isSelected.remove(elementMPID);
     if (updateSnapTargets) {
       _th2FileEditController.snapController.updateSnapTargets();
     }

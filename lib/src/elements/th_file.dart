@@ -420,25 +420,27 @@ class THFile
       unregisterElementTHIDByElement(element);
     }
 
+    final int elementMPID = element.mpID;
+
     switch (element) {
       case THArea _:
         _clearAreaXLineInfo(element);
-        _areasMPIDs.remove(element.mpID);
+        _areasMPIDs.remove(elementMPID);
       case THAreaBorderTHID _:
         _clearAreaXLineInfo(element);
       case THLine _:
-        _linesMPIDs.remove(element.mpID);
-        _drawableElementMPIDs.remove(element.mpID);
+        _linesMPIDs.remove(elementMPID);
+        _drawableElementMPIDs.remove(elementMPID);
       case THPoint _:
-        _pointsMPIDs.remove(element.mpID);
-        _drawableElementMPIDs.remove(element.mpID);
+        _pointsMPIDs.remove(elementMPID);
+        _drawableElementMPIDs.remove(elementMPID);
       case THScrap _:
-        _scrapMPIDs.remove(element.mpID);
+        _scrapMPIDs.remove(elementMPID);
       case THXTherionConfig _:
-        _xtherionSettingMPIDs.remove(element.mpID);
+        _xtherionSettingMPIDs.remove(elementMPID);
       case THXTherionImageInsertConfig _:
-        _imageMPIDs.remove(element.mpID);
-        _xtherionSettingMPIDs.remove(element.mpID);
+        _imageMPIDs.remove(elementMPID);
+        _xtherionSettingMPIDs.remove(elementMPID);
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
@@ -447,7 +449,7 @@ class THFile
     final THIsParentMixin parent = element.parent(this);
 
     parent.removeElementFromParent(this, element);
-    _elementByMPID.remove(element.mpID);
+    _elementByMPID.remove(elementMPID);
   }
 
   bool hasElementByMPID(int mpID) {

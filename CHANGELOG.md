@@ -4,6 +4,7 @@
 * New features:
   * Create shortcut to reverse line.
 * Fixed bugs:
+  * Removing XTherion inserted images throwing errors.
 * Infrastructure maintenance:
   * flutter pub upgrade.
   * Flutter upgrade to 3.35.4.
