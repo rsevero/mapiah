@@ -5,6 +5,8 @@
   * Create shortcut to reverse line.
 * Fixed bugs:
 * Infrastructure maintenance:
+  * flutter pub upgrade.
+  * Flutter upgrade to 3.35.4.
 
 ## 0.2.16 - 2025-09-17
 * New features:
