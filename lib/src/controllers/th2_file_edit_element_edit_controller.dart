@@ -365,7 +365,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     final int parentMPID = element.parentMPID;
 
-    if (parentMPID >= 0) {
+    if (parentMPID > 0) {
       final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
 
       if (parent is THElement) {
