@@ -55,6 +55,9 @@ Version 0.3
 [X] - Add/remove lines from areas
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
+[ ] - When deleting the second to last line segment of a line, the whole line should be deleted.
+[ ] - When opening files, delete empty lines.
+[ ] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
 [X] - Implement Ctrl+O (open file) keyboard shortcut
 [X] - Implement F1 shortcut to help page
 [X] - Support XVI images
@@ -68,6 +71,7 @@ Version 0.3
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
 [X] - BUG: Mapiah throws if line referred by area does not exist.
 [X] - BUG: lines added to areas not getting IDs associated to them.
+[ ] - BUG: empty lines produce overflow as its bounding box is infinite.
 
 Version 0.4
 [ ] - Open multiple files simultaneously

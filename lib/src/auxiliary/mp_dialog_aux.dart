@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
@@ -15,6 +16,9 @@ import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:path/path.dart' as p;
 
 class MPDialogAux {
+  // Prevent multiple stacked error dialogs
+  static bool _isXVIErrorDialogOpen = false;
+
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
   };
@@ -202,35 +206,64 @@ class MPDialogAux {
     if (errors.isEmpty) {
       return;
     }
+    // If one is already open, don’t open another (avoids double-tap to dismiss)
+    if (_isXVIErrorDialogOpen) {
+      return;
+    }
+    _isXVIErrorDialogOpen = true;
 
-    await showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(mpLocator.appLocalizations.th2FilePickSelectImageFile),
-        content: SizedBox(
-          width: 420,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: errors
-                  .map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text('• $e', style: const TextStyle(fontSize: 13)),
-                    ),
-                  )
-                  .toList(),
+    final Completer<void> completer = Completer<void>();
+
+    void showNow() {
+      final BuildContext ctx =
+          mpLocator.mpNavigatorKey.currentContext ?? context;
+
+      showDialog<void>(
+        context: ctx,
+        useRootNavigator: true, // ensure a single, top-level dialog
+        barrierDismissible: true, // allow outside tap to dismiss if desired
+        builder: (ctx2) => AlertDialog(
+          title: Text(mpLocator.appLocalizations.mpErrorReadingXVIFile),
+          content: SizedBox(
+            width: 420,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: errors
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          '• $e',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx2, rootNavigator: true).pop(),
+              child: Text(mpLocator.appLocalizations.mpButtonOK),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(mpLocator.appLocalizations.mpButtonOK),
-          ),
-        ],
-      ),
-    );
+      ).whenComplete(() {
+        _isXVIErrorDialogOpen = false; // clear guard
+        if (!completer.isCompleted) completer.complete();
+      });
+    }
+
+    final SchedulerPhase phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.idle) {
+      showNow();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) => showNow());
+    }
+
+    return completer.future;
   }
 
   static Future<void> pickTH2File(BuildContext context) async {

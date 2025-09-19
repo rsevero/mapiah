@@ -5,6 +5,7 @@
   * Create shortcut to reverse line.
 * Fixed bugs:
   * Removing XTherion inserted images throwing errors.
+  * Showing XVI parse errors at TH file open would throw because there was already a widget being built.
 * Infrastructure maintenance:
   * flutter pub upgrade.
   * Flutter upgrade to 3.35.4.
