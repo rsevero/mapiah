@@ -49,10 +49,10 @@ const double thFineZoomFactor = thRoundToFactor / 2 + 1;
 const double thCanvasMovementFactor = 0.1;
 const double thCanvasRoundFactor = 25.0;
 
-const double mpNextEpsilon = 2.220446049250313e-16;
-const double mpPositiveNextEpsilonFactor = 1.0 + mpNextEpsilon;
-const double mpNegativeNextEpsilonFactor = 1.0 - mpNextEpsilon;
-const double mpComparisonEpsilon = 1e-9;
+const double mpDoubleNextEpsilon = 2.220446049250313e-16;
+const double mpDoublePositiveNextEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
+const double mpDoubleNegativeNextEpsilonFactor = 1.0 - mpDoubleNextEpsilon;
+const double mpDoubleComparisonEpsilon = 1e-9;
 
 /// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
 /// web version. The higher limits
@@ -63,6 +63,8 @@ const int mpMaximumInt = 2 ^ 53 - 1;
 
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;
+
+const double mpStraightLineSimplifyEpsilonOnScreen = 1.5;
 
 const double thMinimumSizeForDrawing = 10.0;
 

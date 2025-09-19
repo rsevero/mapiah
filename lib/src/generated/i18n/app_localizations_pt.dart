@@ -288,6 +288,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Definir opção para diversos elementos';
 
   @override
+  String get mpCommandDescriptionSimplifyLine => 'Simplificar linha';
+
+  @override
+  String get mpCommandDescriptionSimplifyLines => 'Simplificar linhas';
+
+  @override
   String get mpCommandDescriptionToggleReverseOption =>
       'Alternar opção de reversão de linha';
 
@@ -376,6 +382,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpEncodingLabel => 'Codificação';
+
+  @override
+  String get mpErrorReadingXVIFile => 'Erro ao ler arquivo XVI';
 
   @override
   String get mpExploredLengthLabel => 'Extensão';

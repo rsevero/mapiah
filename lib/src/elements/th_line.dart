@@ -382,4 +382,18 @@ class THLine extends THElement
     _lineSegmentMPIDs.insert(lineSegmentsMPIDsIndex, lineSegment.mpID);
     clearBoundingBox();
   }
+
+  LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THFile thFile) {
+    final LinkedHashMap<int, THLineSegment> lineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final int lineSegmentMPID in _lineSegmentMPIDs) {
+      final THLineSegment lineSegment =
+          thFile.elementByMPID(lineSegmentMPID) as THLineSegment;
+
+      lineSegmentsMap[lineSegmentMPID] = lineSegment;
+    }
+
+    return lineSegmentsMap;
+  }
 }

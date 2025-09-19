@@ -608,6 +608,18 @@ abstract class AppLocalizations {
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
 
+  /// The description for the simplify line command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify line'**
+  String get mpCommandDescriptionSimplifyLine;
+
+  /// The description for the simplify lines command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify lines'**
+  String get mpCommandDescriptionSimplifyLines;
+
   /// The description for the toggle reverse option command
   ///
   /// In en, this message translates to:
@@ -769,6 +781,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Encoding'**
   String get mpEncodingLabel;
+
+  /// The error message displayed when there is an error reading an XVI file
+  ///
+  /// In en, this message translates to:
+  /// **'Error reading XVI file'**
+  String get mpErrorReadingXVIFile;
 
   /// The label for the explored length type
   ///

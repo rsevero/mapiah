@@ -285,6 +285,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Set option to multiple elements';
 
   @override
+  String get mpCommandDescriptionSimplifyLine => 'Simplify line';
+
+  @override
+  String get mpCommandDescriptionSimplifyLines => 'Simplify lines';
+
+  @override
   String get mpCommandDescriptionToggleReverseOption => 'Toggle reverse option';
 
   @override
@@ -370,6 +376,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpEncodingLabel => 'Encoding';
+
+  @override
+  String get mpErrorReadingXVIFile => 'Error reading XVI file';
 
   @override
   String get mpExploredLengthLabel => 'Length';

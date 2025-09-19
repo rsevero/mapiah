@@ -229,6 +229,8 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegments,
   }) {
+    assert(lineSegmentMPIDs.isNotEmpty);
+
     final List<MPCommand> commandsList = [];
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;

@@ -40,6 +40,8 @@ enum MPCommandDescriptionType {
   removeXTherionImageInsertConfig,
   setOptionToElement,
   setOptionToElements,
+  simplifyLine,
+  simplifyLines,
   toggleReverseOption;
 
   static MPCommandDescriptionType getOppositeDescription(

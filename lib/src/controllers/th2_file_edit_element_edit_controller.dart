@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_line_simplification_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -1549,7 +1550,103 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void simplifySelectedLines() {}
+  void simplifySelectedLines() {
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
+    final List<MPCommand> simplifyCommands = [];
+    int lineCount = 0;
+
+    for (final MPSelectedElement selectedElement in mpSelectedElements) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+
+      lineCount++;
+
+      final THLine originalLine =
+          selectedElement.originalElementClone as THLine;
+      final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+          originalLine.getLineSegmentsMap(_thFile);
+      final MPLineTypePerLineSegmentType lineTypePerLineSegmentType =
+          getLineTypePerLineSegmentType(originalLine);
+
+      switch (lineTypePerLineSegmentType) {
+        case MPLineTypePerLineSegmentType.bezierCurve:
+          break;
+        case MPLineTypePerLineSegmentType.mixed:
+          break;
+        case MPLineTypePerLineSegmentType.straight:
+          final double straightLineSimplifyEpsilonOnCanvas =
+              _th2FileEditController.straightLineSimplifyEpsilonOnCanvas;
+          final List<THLineSegment> removedLineSegments =
+              MPLineSimplificationAux.raumerDouglasPeuckerIterative(
+                originalStraightLineSegments: originalLineSegmentsMap.values
+                    .toList(),
+                epsilon: straightLineSimplifyEpsilonOnCanvas,
+              );
+
+          for (final THLineSegment removedLineSegment in removedLineSegments) {
+            final MPCommand removeLineSegmentCommand =
+                MPRemoveLineSegmentCommand(
+                  lineSegment: removedLineSegment,
+                  descriptionType: MPCommandDescriptionType.simplifyLine,
+                );
+
+            simplifyCommands.add(removeLineSegmentCommand);
+          }
+      }
+    }
+
+    if (simplifyCommands.isEmpty) {
+      return;
+    } else {
+      final MPCommand simplifyCommand = (simplifyCommands.length == 1)
+          ? simplifyCommands.first
+          : MPMultipleElementsCommand.forCWJM(
+              commandsList: simplifyCommands,
+              completionType:
+                  MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+              descriptionType: lineCount == 1
+                  ? MPCommandDescriptionType.simplifyLine
+                  : MPCommandDescriptionType.simplifyLines,
+            );
+
+      _th2FileEditController.execute(simplifyCommand);
+      _th2FileEditController.triggerSelectedElementsRedraw();
+    }
+  }
+
+  MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(THLine line) {
+    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+
+    bool hasBezierCurve = false;
+    bool hasStraight = false;
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (lineSegment is THBezierCurveLineSegment) {
+        hasBezierCurve = true;
+      } else if (lineSegment is THStraightLineSegment) {
+        hasStraight = true;
+      }
+
+      if (hasBezierCurve && hasStraight) {
+        return MPLineTypePerLineSegmentType.mixed;
+      }
+    }
+
+    if (hasBezierCurve) {
+      return MPLineTypePerLineSegmentType.bezierCurve;
+    } else if (hasStraight) {
+      return MPLineTypePerLineSegmentType.straight;
+    } else {
+      throw Exception(
+        'Error: line has no line segments at TH2FileEditElementEditController.getLineTypePerLineSegmentType().',
+      );
+    }
+  }
 }
 
 class MPTypeUsed {
@@ -1564,3 +1661,5 @@ class MPTypeUsed {
     lastUsed = DateTime.now();
   }
 }
+
+enum MPLineTypePerLineSegmentType { bezierCurve, mixed, straight }

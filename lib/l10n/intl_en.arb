@@ -431,6 +431,16 @@
     "description": "The description for the set option to elements command",
     "type": "text"
   },
+  "mpCommandDescriptionSimplifyLine": "Simplify line",
+  "@mpCommandDescriptionSimplifyLine": {
+    "description": "The description for the simplify line command",
+    "type": "text"
+  },
+  "mpCommandDescriptionSimplifyLines": "Simplify lines",
+  "@mpCommandDescriptionSimplifyLines": {
+    "description": "The description for the simplify lines command",
+    "type": "text"
+  },
   "mpCommandDescriptionToggleReverseOption": "Toggle reverse option",
   "@mpCommandDescriptionToggleReverseOption": {
     "description": "The description for the toggle reverse option command",
@@ -567,6 +577,11 @@
   "mpEncodingLabel": "Encoding",
   "@mpEncodingLabel": {
     "description": "The label for the encoding type",
+    "type": "text"
+  },
+  "mpErrorReadingXVIFile": "Error reading XVI file",
+  "@mpErrorReadingXVIFile": {
+    "description": "The error message displayed when there is an error reading an XVI file",
     "type": "text"
   },
   "mpExploredLengthLabel": "Length",
@@ -1187,7 +1202,7 @@
   "mpSnapTargetXVIFileStation": "Station",
   "@mpSnapTargetXVIFileStation": {
     "description": "The label for the station snap target option",
-    "type": "text"  
+    "type": "text"
   },
   "mpSnapXVIFileTargetsLabel": "XVI file snap",
   "@mpSnapXVIFileTargetsLabel": {

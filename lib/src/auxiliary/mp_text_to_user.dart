@@ -422,6 +422,10 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .setOptionToElements] =
         localizations.mpCommandDescriptionSetOptionToElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyLine] =
+        localizations.mpCommandDescriptionSimplifyLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyLines] =
+        localizations.mpCommandDescriptionSimplifyLines;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleReverseOption] =
         localizations.mpCommandDescriptionToggleReverseOption;

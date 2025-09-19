@@ -145,7 +145,7 @@ class MPEditElementAux {
     required Offset junction,
     required Offset currentControlPoint2,
     required Offset nextControlPoint1,
-    double epsilon = mpComparisonEpsilon,
+    double epsilon = mpDoubleComparisonEpsilon,
   }) {
     final Offset vCurrentControlPoint2 =
         currentControlPoint2 -
