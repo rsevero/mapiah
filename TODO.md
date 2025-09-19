@@ -71,7 +71,7 @@ Version 0.3
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
 [X] - BUG: Mapiah throws if line referred by area does not exist.
 [X] - BUG: lines added to areas not getting IDs associated to them.
-[ ] - BUG: empty lines produce overflow as its bounding box is infinite.
+[X] - BUG: empty lines produce overflow as its bounding box is infinite.
 
 Version 0.4
 [ ] - Open multiple files simultaneously

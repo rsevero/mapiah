@@ -12,23 +12,19 @@ void main() {
     const successes = [
       {
         'file': 'th_file_parser-00080-line_only.th2',
-        'length': 5,
+        'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line wall
-  endline
 endscrap
 ''',
       },
       {
         'file': 'th_file_parser-00081-line_with_last_line_with_spaces_only.th2',
-        'length': 6,
+        'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line wall
-  endline
 endscrap
 ''',
       },
@@ -186,11 +182,13 @@ endscrap
     const successes = [
       {
         'file': 'th_file_parser-00082-line_unknown_type.th2',
-        'length': 5,
+        'length': 7,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
   line cable
+    650 900
+    650 900 827.81 933.28 850 900
   endline
 endscrap
 ''',

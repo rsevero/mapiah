@@ -1,5 +1,7 @@
 encoding UTF-8
 scrap test
 	line cable
+650 900
+650 900 827.81 933.28 850 900
 	endline
 endscrap

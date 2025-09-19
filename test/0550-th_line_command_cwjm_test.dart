@@ -12,17 +12,19 @@ void main() {
 
     const successes = [
       {
-        'file': 'th_file_parser-00080-line_only.th2',
-        'length': 5,
+        'file': 'th_file_parser-00082-line_unknown_type.th2',
+        'length': 7,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-line wall
-endline
+  line cable
+    650 900
+    650 900 827.81 933.28 850 900
+  endline
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline wall\n","lineType":"wall","unknownPLAType":"","childrenMPIDs":[4],"lineSegmentMPIDs":[],"optionsMap":{},"attrOptionsMap":{}}''',
+            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline cable\n","lineType":"unknown","unknownPLAType":"cable","childrenMPIDs":[4,5,6],"lineSegmentMPIDs":[4,5],"optionsMap":{},"attrOptionsMap":{}}''',
       },
     ];
 

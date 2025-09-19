@@ -201,13 +201,13 @@ class THFileParser {
         case 'encoding':
           _injectEncoding(element);
         case 'endarea':
-          _injectEndarea();
+          _injectEndArea();
         case 'endmultilinecomment':
           _injectEndMultiLineComment();
         case 'endline':
-          _injectEndline();
+          _injectEndLine();
         case 'endscrap':
-          _injectEndscrap();
+          _injectEndScrap();
         case 'fulllinecomment':
           _commentContentToParse = element;
           _injectComment();
@@ -765,7 +765,7 @@ class THFileParser {
     _addChildParser(_scrapContentParser);
   }
 
-  void _injectEndscrap() {
+  void _injectEndScrap() {
     _currentElement = THEndscrap(
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
@@ -917,7 +917,7 @@ class THFileParser {
     }
   }
 
-  void _injectEndarea() {
+  void _injectEndArea() {
     _currentElement = THEndarea(
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
@@ -931,17 +931,36 @@ class THFileParser {
     _returnToParentParser();
   }
 
-  void _injectEndline() {
-    _currentElement = THEndline(
-      parentMPID: _currentParentMPID,
-      originalLineInTH2File: _currentOriginalLine,
-    );
-    _th2FileElementEditController.applyAddElement(
-      newElement: _currentElement,
-      parent: _currentParent,
-      childPositionInParent: mpAddChildAtEndOfParentChildrenList,
-    );
-    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+  void _injectEndLine() {
+    if (_currentParent is! THLine) {
+      _addError(
+        'endline without a line parent',
+        '_injectEndLine',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
+      setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+
+      return;
+    }
+
+    if ((_currentParent as THLine).lineSegmentMPIDs.length < 2) {
+      final THLine lineToRemove = _currentParent as THLine;
+
+      setCurrentParent((lineToRemove).parent(_parsedTHFile));
+      _th2FileElementEditController.removeElement(lineToRemove);
+    } else {
+      _currentElement = THEndline(
+        parentMPID: _currentParentMPID,
+        originalLineInTH2File: _currentOriginalLine,
+      );
+      _th2FileElementEditController.applyAddElement(
+        newElement: _currentElement,
+        parent: _currentParent,
+        childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+      setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+    }
+
     _returnToParentParser();
   }
 
@@ -1087,7 +1106,7 @@ class THFileParser {
       case 'context':
         _injectContextCommandOption();
       case 'endarea':
-        _injectEndarea();
+        _injectEndArea();
       case 'id':
         _injectIDCommandOption();
       default:
