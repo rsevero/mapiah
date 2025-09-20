@@ -3,10 +3,12 @@
 ## 0.2.17 - not yet released
 * New features:
   * Create shortcut to reverse line.
+  * When opening files, delete empty areas.
+  * When opening files, delete empty lines.
 * Fixed bugs:
   * Removing XTherion inserted images throwing errors.
   * Showing XVI parse errors at TH file open would throw because there was already a widget being built.
-  * Files with empty lines (with no line segments) would throw an exception when calculating bounding box.
+  * Files with empty lines (with no line segments) or empty areas (no valid line TH ID) would throw an exception when calculating bounding box.
 * Infrastructure maintenance:
   * flutter pub upgrade.
   * Flutter upgrade to 3.35.4.

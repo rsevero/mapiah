@@ -56,8 +56,8 @@ Version 0.3
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [ ] - When deleting the second to last line segment of a line, the whole line should be deleted.
-[ ] - When opening files, delete empty lines.
-[ ] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
+[X] - When opening files, delete empty lines.
+[X] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
 [X] - Implement Ctrl+O (open file) keyboard shortcut
 [X] - Implement F1 shortcut to help page
 [X] - Support XVI images

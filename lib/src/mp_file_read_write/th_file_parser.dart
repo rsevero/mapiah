@@ -2317,6 +2317,7 @@ class THFileParser {
     }
 
     _injectContents();
+    _cleanEmptyAreas(_parsedTHFile);
 
     if (!(_parsedTHFile).isSameClass(_currentParent) ||
         (_currentParent != _parsedTHFile)) {
@@ -2348,6 +2349,32 @@ class THFileParser {
     }
 
     return (-1, 0);
+  }
+
+  void _cleanEmptyAreas(THIsParentMixin parent) {
+    final List<THElement> children = parent.getChildren(_parsedTHFile).toList();
+
+    for (final THElement child in children) {
+      if (child is THArea) {
+        final List<THAreaBorderTHID> borders = child.getAreaBorderTHIDs(
+          _parsedTHFile,
+        );
+
+        int validBorders = 0;
+
+        for (final THAreaBorderTHID border in borders) {
+          if (_parsedTHFile.hasElementByTHID(border.thID)) {
+            validBorders++;
+          }
+        }
+
+        if (validBorders == 0) {
+          _th2FileElementEditController.removeElement(child);
+        }
+      } else if (child is THIsParentMixin) {
+        _cleanEmptyAreas(child as THIsParentMixin);
+      }
+    }
   }
 
   void _splitContents(String contents) {
