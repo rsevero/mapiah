@@ -2356,15 +2356,24 @@ class THFileParser {
 
     for (final THElement child in children) {
       if (child is THArea) {
-        final List<THAreaBorderTHID> borders = child.getAreaBorderTHIDs(
-          _parsedTHFile,
-        );
+        final List<int> areaChildrenMPIDs = child.childrenMPIDs.toList();
 
         int validBorders = 0;
 
-        for (final THAreaBorderTHID border in borders) {
-          if (_parsedTHFile.hasElementByTHID(border.thID)) {
+        for (final int areaChildMPID in areaChildrenMPIDs) {
+          final THElement areaChild = _parsedTHFile.elementByMPID(
+            areaChildMPID,
+          );
+
+          if (areaChild is! THAreaBorderTHID) {
+            continue;
+          }
+
+          if (_parsedTHFile.hasElementByTHID(areaChild.thID) &&
+              (_parsedTHFile.elementByTHID(areaChild.thID) is THLine)) {
             validBorders++;
+          } else {
+            _th2FileElementEditController.removeElement(areaChild);
           }
         }
 

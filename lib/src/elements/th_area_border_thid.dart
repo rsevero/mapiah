@@ -16,12 +16,6 @@ class THAreaBorderTHID extends THElement {
     required this.thID,
     super.originalLineInTH2File = '',
   }) : super.getMPID();
-  //  {
-  //   if (parent is! THArea) {
-  //     throw THCustomException(
-  //         'THAreaBorder parent must be THArea, but it is ${parent.runtimeType}');
-  //   }
-  // }
 
   @override
   THElementType get elementType => THElementType.areaBorderTHID;

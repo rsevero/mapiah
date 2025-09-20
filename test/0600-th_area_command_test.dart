@@ -63,6 +63,68 @@ scrap poco_surubim_SCP03 -projection plan -scale [ -164 -2396 3308 -2396 0 0 \
 endscrap
 ''',
       },
+      {
+        'file': '2025-09-20-001-area_line_exists_but_has_no_id.th2',
+        'length': 17,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  area clay
+    l85-3732--20
+  endarea
+  line border -id l85-3732--20 -close on -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line floor-step
+    650 900 827.81 933.28 850 900
+    650 900
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-09-20-002-area_line_exists_but_is_empty.th2',
+        'length': 13,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  area clay
+    l85-3732--20
+  endarea
+  line border -id l85-3732--20 -close on -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-09-20-003-area_border_th_id_exists_but_in_a_point.th2',
+        'length': 14,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  area clay
+    l85-3732--20
+  endarea
+  line border -id l85-3732--20 -close on -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  point 296 468 debris -id floor-step-line
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
