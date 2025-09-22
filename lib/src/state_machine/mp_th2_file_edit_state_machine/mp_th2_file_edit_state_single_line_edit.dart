@@ -28,6 +28,8 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
 
+    elementEditController.setOriginalSimplifiedLines(null);
+
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
       if (!singleLineEditModes.contains(nextStateType)) {
@@ -43,14 +45,26 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
   void onKeyDownEvent(KeyDownEvent event) {
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
-        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
           elementEditController.applyRemoveSelectedLineSegments();
           return;
+        }
+      case LogicalKeyboardKey.keyL:
+        if (isCtrlPressed || isMetaPressed) {
+          elementEditController.updateStraightLineSimplificationTolerance();
+          elementEditController.updateOriginalSimplifiedLines();
+          if (!isAltPressed && !isShiftPressed) {
+            th2FileEditController.elementEditController.simplifySelectedLines();
+          }
         }
     }
 
@@ -58,7 +72,10 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     /// (AltRght + Q) on one of my keyboards.
     switch (event.character) {
       case '/':
-        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
           elementEditController
               .applyAddLineSegmentsBetweenSelectedLineSegments();
           return;

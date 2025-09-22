@@ -138,6 +138,56 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_originalSimplifiedLinesAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._originalSimplifiedLines',
+    context: context,
+  );
+
+  List<MPSelectedLine>? get originalSimplifiedLines {
+    _$_originalSimplifiedLinesAtom.reportRead();
+    return super._originalSimplifiedLines;
+  }
+
+  @override
+  List<MPSelectedLine>? get _originalSimplifiedLines => originalSimplifiedLines;
+
+  @override
+  set _originalSimplifiedLines(List<MPSelectedLine>? value) {
+    _$_originalSimplifiedLinesAtom.reportWrite(
+      value,
+      super._originalSimplifiedLines,
+      () {
+        super._originalSimplifiedLines = value;
+      },
+    );
+  }
+
+  late final _$_straightLineSimplifyEpsilonOnCanvasAtom = Atom(
+    name:
+        'TH2FileEditElementEditControllerBase._straightLineSimplifyEpsilonOnCanvas',
+    context: context,
+  );
+
+  double get straightLineSimplifyEpsilonOnCanvas {
+    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportRead();
+    return super._straightLineSimplifyEpsilonOnCanvas;
+  }
+
+  @override
+  double get _straightLineSimplifyEpsilonOnCanvas =>
+      straightLineSimplifyEpsilonOnCanvas;
+
+  @override
+  set _straightLineSimplifyEpsilonOnCanvas(double value) {
+    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportWrite(
+      value,
+      super._straightLineSimplifyEpsilonOnCanvas,
+      () {
+        super._straightLineSimplifyEpsilonOnCanvas = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',

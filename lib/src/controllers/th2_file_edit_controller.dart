@@ -215,10 +215,6 @@ abstract class TH2FileEditControllerBase with Store {
   double _selectionHandleLineThicknessOnCanvas = thSelectionHandleLineThickness;
 
   @readonly
-  double _straightLineSimplifyEpsilonOnCanvas =
-      mpStraightLineSimplifyEpsilonOnScreen;
-
-  @readonly
   bool _shouldShowImages = true;
 
   @computed
@@ -501,13 +497,6 @@ abstract class TH2FileEditControllerBase with Store {
         _currentSnapGridCellSize =
             snapOnCanvasDistance * mpSnapGridCellSizeFactor;
         snapController.updateSnapTargetsGrid();
-      }),
-    );
-
-    _disposers.add(
-      autorun((_) {
-        _straightLineSimplifyEpsilonOnCanvas =
-            mpStraightLineSimplifyEpsilonOnScreen / _canvasScale;
       }),
     );
 

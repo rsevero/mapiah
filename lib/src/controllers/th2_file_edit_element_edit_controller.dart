@@ -75,6 +75,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   THScrap? _newScrap;
 
+  @readonly
+  List<MPSelectedLine>? _originalSimplifiedLines;
+
+  @readonly
+  double _straightLineSimplifyEpsilonOnCanvas =
+      mpStraightLineSimplifyEpsilonOnScreen;
+
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
   late MPMoveControlPointSmoothInfo moveControlPointSmoothInfo;
@@ -1551,15 +1558,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void simplifySelectedLines() {
-    final Iterable<MPSelectedElement> mpSelectedElements =
-        _th2FileEditController
-            .selectionController
-            .mpSelectedElementsLogical
-            .values;
     final List<MPCommand> simplifyCommands = [];
     int lineCount = 0;
 
-    for (final MPSelectedElement selectedElement in mpSelectedElements) {
+    for (final MPSelectedElement selectedElement in _originalSimplifiedLines!) {
       if (selectedElement is! MPSelectedLine) {
         continue;
       }
@@ -1579,13 +1581,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         case MPLineTypePerLineSegmentType.mixed:
           break;
         case MPLineTypePerLineSegmentType.straight:
-          final double straightLineSimplifyEpsilonOnCanvas =
-              _th2FileEditController.straightLineSimplifyEpsilonOnCanvas;
           final List<THLineSegment> removedLineSegments =
               MPLineSimplificationAux.raumerDouglasPeuckerIterative(
                 originalStraightLineSegments: originalLineSegmentsMap.values
                     .toList(),
-                epsilon: straightLineSimplifyEpsilonOnCanvas,
+                epsilon: _straightLineSimplifyEpsilonOnCanvas,
               );
 
           for (final THLineSegment removedLineSegment in removedLineSegments) {
@@ -1615,7 +1615,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             );
 
       _th2FileEditController.execute(simplifyCommand);
+      _th2FileEditController.selectionController
+          .updateSelectableEndAndControlPoints();
       _th2FileEditController.triggerSelectedElementsRedraw();
+      _th2FileEditController.triggerEditLineRedraw();
     }
   }
 
@@ -1646,6 +1649,47 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         'Error: line has no line segments at TH2FileEditElementEditController.getLineTypePerLineSegmentType().',
       );
     }
+  }
+
+  void setOriginalSimplifiedLines(List<MPSelectedLine>? lines) {
+    _originalSimplifiedLines = lines;
+  }
+
+  void updateStraightLineSimplificationTolerance() {
+    final double straightLineSimplifyEpsilonOnCanvasIncrease =
+        mpStraightLineSimplifyEpsilonOnScreen /
+        _th2FileEditController.canvasScale;
+
+    if (_originalSimplifiedLines == null) {
+      _straightLineSimplifyEpsilonOnCanvas =
+          straightLineSimplifyEpsilonOnCanvasIncrease;
+    } else {
+      _straightLineSimplifyEpsilonOnCanvas +=
+          straightLineSimplifyEpsilonOnCanvasIncrease;
+    }
+  }
+
+  void updateOriginalSimplifiedLines() {
+    if (_originalSimplifiedLines != null) {
+      return;
+    }
+
+    final List<MPSelectedLine> simplifiedLines = [];
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
+
+    for (final MPSelectedElement selectedElement in mpSelectedElements) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+
+      simplifiedLines.add(selectedElement);
+    }
+
+    _originalSimplifiedLines = simplifiedLines;
   }
 }
 

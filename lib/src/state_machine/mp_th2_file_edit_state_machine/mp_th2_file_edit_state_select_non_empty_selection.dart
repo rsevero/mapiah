@@ -19,6 +19,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
+    th2FileEditController.elementEditController.setOriginalSimplifiedLines(
+      null,
+    );
     onStateExitClearSelectionOnExit(nextState);
   }
 
@@ -264,6 +267,27 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     }
 
     th2FileEditController.setStatusBarMessage(statusBarMessage);
+  }
+
+  @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.keyL:
+        if (isCtrlPressed || isMetaPressed) {
+          elementEditController.updateStraightLineSimplificationTolerance();
+          elementEditController.updateOriginalSimplifiedLines();
+          if (!isAltPressed && !isShiftPressed) {
+            th2FileEditController.elementEditController.simplifySelectedLines();
+          }
+        }
+    }
+
+    _onKeyDownEvent(event);
   }
 
   @override

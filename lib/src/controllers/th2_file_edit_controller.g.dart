@@ -1091,31 +1091,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
-  late final _$_straightLineSimplifyEpsilonOnCanvasAtom = Atom(
-    name: 'TH2FileEditControllerBase._straightLineSimplifyEpsilonOnCanvas',
-    context: context,
-  );
-
-  double get straightLineSimplifyEpsilonOnCanvas {
-    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportRead();
-    return super._straightLineSimplifyEpsilonOnCanvas;
-  }
-
-  @override
-  double get _straightLineSimplifyEpsilonOnCanvas =>
-      straightLineSimplifyEpsilonOnCanvas;
-
-  @override
-  set _straightLineSimplifyEpsilonOnCanvas(double value) {
-    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportWrite(
-      value,
-      super._straightLineSimplifyEpsilonOnCanvas,
-      () {
-        super._straightLineSimplifyEpsilonOnCanvas = value;
-      },
-    );
-  }
-
   late final _$_shouldShowImagesAtom = Atom(
     name: 'TH2FileEditControllerBase._shouldShowImages',
     context: context,
