@@ -122,6 +122,8 @@ class MPTextToUser {
   static void _initializeSnapXVIFileTargetAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
+    _snapXVIFileTargetAsString[MPSnapXVIFileTarget.gridLine] =
+        localizations.mpSnapTargetXVIFileGridLine;
     _snapXVIFileTargetAsString[MPSnapXVIFileTarget.gridLineIntersection] =
         localizations.mpSnapTargetXVIFileGridLineIntersection;
     _snapXVIFileTargetAsString[MPSnapXVIFileTarget.shot] =

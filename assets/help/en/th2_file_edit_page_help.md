@@ -77,18 +77,19 @@ Each Ctrl+L press runs a round of line simplification. Mapiah uses an interactiv
 There are several snap options available that can be controled on the window presented when the button ![Snap button](assets/help/images/buttonSnap.png "Snap") is pressed:
 
 * XVI file snap (zero or more options can be selected):
-  * __Grid line intersections__: snap at the grid line intersections on the XVI file.
-  * __Shot__: snap at the shot start and end points on the XVI file.
-  * __Sketch line__: snap at the sketch line line points on the XVI file.
-  * __Station__: snap at the stations defined on the XVI file.
-* Point snap (single one option):
+  * __Grid lines__: snap to grid lines.
+  * __Grid line intersections__: snap to grid line intersections on the XVI file.
+  * __Shots__: snap to shot start and end points on the XVI file.
+  * __Sketch lines__: snap to sketch line line points on the XVI file.
+  * __Stations__: snap to stations defined on the XVI file.
+* Point snap (single option):
   * __None__: no snaping to points in the TH2 file.
-  * __Point__: snap at all defined points in the TH2 file.
-  * __Point by type__: snap only at the selected point types in the TH@ file.
-* Line point snap:
-  * __Line point__: snap at all line points in the TH2 file.
-  * __Line point by type__: snap only at the line points of the line types selcted.
-  * __None__: no snaping at line points.
+  * __Points__: snap to all defined points in the TH2 file.
+  * __Points by type__: snap only to the selected point types in the TH2 file.
+* Line point snap (single option):
+  * __Lines point__: snap to all line points in the TH2 file.
+  * __Lines point by type__: snap only to the line points of the line types selcted.
+  * __None__: no snaping to line points.
 
 ## Zoom and panning
 The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.

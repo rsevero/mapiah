@@ -187,52 +187,18 @@ class MPXVIImageWidget extends StatelessWidget {
     required List<CustomPainter> painters,
   }) {
     final XVIGrid grid = xviFile.grid;
-    final double gridX = imageOffset.dx;
-    final double gridY = imageOffset.dy;
-    final double xIncForXRepetition = grid.gxx.value;
-    final double yIncForXRepetition = grid.gxy.value;
-    final double xIncForYRepetition = grid.gyx.value;
-    final double yIncForYRepetition = grid.gyy.value;
-    final double repetitionOnXAxis = grid.ngx.value;
-    final double repetitionOnYAxis = grid.ngy.value;
-    final double xIncForHorizontalGridLine =
-        repetitionOnXAxis * xIncForXRepetition;
-    final double yIncForHorizontalGridLine =
-        repetitionOnXAxis * yIncForXRepetition;
-    final double xIncForVerticalGridLine =
-        repetitionOnYAxis * xIncForYRepetition;
-    final double yIncForVerticalGridLine =
-        repetitionOnYAxis * yIncForYRepetition;
     final THLinePaint xviGridLinePaint = th2FileEditController.visualController
         .getXVIGridLinePaint();
 
-    /// Horizontal grid lines
-    for (int i = 0; i <= repetitionOnYAxis; i++) {
-      final double leftX = gridX + (i * xIncForYRepetition);
-      final double leftY = gridY + (i * yIncForYRepetition);
-      final double rightX = leftX + xIncForHorizontalGridLine;
-      final double rightY = leftY + yIncForHorizontalGridLine;
+    final List<({Offset end, Offset start})> lines = grid.calculateGridLines(
+      origin: imageOffset,
+    );
 
+    for (final ({Offset end, Offset start}) line in lines) {
       painters.add(
         XVILinePainter(
-          start: Offset(leftX, leftY),
-          end: Offset(rightX, rightY),
-          linePaint: xviGridLinePaint,
-        ),
-      );
-    }
-
-    /// Vertical grid lines
-    for (int j = 0; j <= repetitionOnXAxis; j++) {
-      final double topX = gridX + (j * xIncForXRepetition);
-      final double topY = gridY + (j * yIncForXRepetition);
-      final double bottomX = topX + xIncForVerticalGridLine;
-      final double bottomY = topY + yIncForVerticalGridLine;
-
-      painters.add(
-        XVILinePainter(
-          start: Offset(topX, topY),
-          end: Offset(bottomX, bottomY),
+          start: line.start,
+          end: line.end,
           linePaint: xviGridLinePaint,
         ),
       );

@@ -1164,42 +1164,47 @@
     "description": "The label for the none snap target option",
     "type": "text"
   },
-  "mpSnapTargetLinePoint": "Line point",
+  "mpSnapTargetLinePoint": "Line points",
   "@mpSnapTargetLinePoint": {
     "description": "The label for the line point snap target option",
     "type": "text"
   },
-  "mpSnapTargetLinePointByType": "Line point by line type",
+  "mpSnapTargetLinePointByType": "Line points by line type",
   "@mpSnapTargetLinePointByType": {
     "description": "The label for the line point by type snap target option",
     "type": "text"
   },
-  "mpSnapTargetPoint": "Point",
+  "mpSnapTargetPoint": "Points",
   "@mpSnapTargetPoint": {
     "description": "The label for the point snap target option",
     "type": "text"
   },
-  "mpSnapTargetPointByType": "Point by type",
+  "mpSnapTargetPointByType": "Points by type",
   "@mpSnapTargetPointByType": {
     "description": "The label for the point by type snap target option",
     "type": "text"
   },
-  "mpSnapTargetXVIFileGridLineIntersection": "Grid line intersection",
+  "mpSnapTargetXVIFileGridLine": "Grid lines",
+  "@mpSnapTargetXVIFileGridLine": {
+    "description": "The label for the grid line snap target option",
+    "type": "text"
+  },
+  "mpSnapTargetXVIFileGridLineIntersection": "Grid line intersections",
   "@mpSnapTargetXVIFileGridLineIntersection": {
     "description": "The label for the grid line intersection snap target option",
     "type": "text"
   },
-  "mpSnapTargetXVIFileShot": "Shot",
+  "mpSnapTargetXVIFileShot": "Shots",
   "@mpSnapTargetXVIFileShot": {
     "description": "The label for the shot snap target option",
     "type": "text"
   },
-  "mpSnapTargetXVIFileSketchLine": "Sketch line",
+  "mpSnapTargetXVIFileSketchLine": "Sketch lines",
   "@mpSnapTargetXVIFileSketchLine": {
     "description": "The label for the sketch line snap target option",
     "type": "text"
   },
-  "mpSnapTargetXVIFileStation": "Station",
+  "mpSnapTargetXVIFileStation": "Stations",
   "@mpSnapTargetXVIFileStation": {
     "description": "The label for the station snap target option",
     "type": "text"

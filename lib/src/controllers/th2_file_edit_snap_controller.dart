@@ -30,7 +30,10 @@ abstract class TH2FileEditSnapControllerBase with Store {
     : _thFile = _th2FileEditController.thFile;
 
   @readonly
-  List<THPositionPart> _snapTargets = [];
+  List<THPositionPart> _snapPointTargets = [];
+
+  @readonly
+  List<({Offset start, Offset end})> _snapLineTargets = [];
 
   @readonly
   MPSnapPointTarget _snapPointTargetType = MPSnapPointTarget.none;
@@ -48,7 +51,11 @@ abstract class TH2FileEditSnapControllerBase with Store {
   Set<MPSnapXVIFileTarget> _snapXVIFileTargets = {};
 
   @readonly
-  Map<MPSnapGridCell, List<THPositionPart>> _snapTargetsGrid = {};
+  Map<MPSnapGridCell, List<THPositionPart>> _snapPointTargetsGrid = {};
+
+  @readonly
+  Map<MPSnapGridCell, List<({Offset start, Offset end})>> _snapLineTargetsGrid =
+      {};
 
   @action
   void setSnapPointTargetType(MPSnapPointTarget target) {
@@ -126,7 +133,8 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   void updateSnapTargets() {
-    _snapTargets.clear();
+    _snapPointTargets.clear();
+    _snapLineTargets.clear();
 
     if ((_snapLinePointTargetType == MPSnapLinePointTarget.none) &&
         (_snapPointTargetType == MPSnapPointTarget.none) &&
@@ -154,7 +162,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
           continue;
         }
 
-        _snapTargets.add(element.position);
+        _snapPointTargets.add(element.position);
       } else if (element is THLine) {
         if ((_snapLinePointTargetType == MPSnapLinePointTarget.none) ||
             (_snapLinePointTargetType ==
@@ -168,7 +176,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
             segmentMPID,
           );
 
-          _snapTargets.add(lineSegmentElement.endPoint);
+          _snapPointTargets.add(lineSegmentElement.endPoint);
         }
       }
     }
@@ -203,6 +211,15 @@ abstract class TH2FileEditSnapControllerBase with Store {
             imageBaseOffset -
             Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
+        if (_snapXVIFileTargets.contains(MPSnapXVIFileTarget.gridLine)) {
+          final XVIGrid grid = xviFile.grid;
+          final List<({Offset end, Offset start})> lines = grid
+              .calculateGridLines(origin: imageBaseOffset);
+          for (final ({Offset end, Offset start}) line in lines) {
+            _snapLineTargets.add((start: line.start, end: line.end));
+          }
+        }
+
         if (_snapXVIFileTargets.contains(
           MPSnapXVIFileTarget.gridLineIntersection,
         )) {
@@ -211,7 +228,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
               .calculateGridLineIntersections();
 
           for (final Offset intersection in intersections) {
-            _snapTargets.add(
+            _snapPointTargets.add(
               THPositionPart(coordinates: intersection + imageOffset),
             );
           }
@@ -219,12 +236,12 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
         if (_snapXVIFileTargets.contains(MPSnapXVIFileTarget.shot)) {
           for (final XVIShot xviShot in xviFile.shots) {
-            _snapTargets.add(
+            _snapPointTargets.add(
               xviShot.start.copyWith(
                 coordinates: xviShot.start.coordinates + imageOffset,
               ),
             );
-            _snapTargets.add(
+            _snapPointTargets.add(
               xviShot.end.copyWith(
                 coordinates: xviShot.end.coordinates + imageOffset,
               ),
@@ -237,14 +254,14 @@ abstract class TH2FileEditSnapControllerBase with Store {
             final List<THPositionPart> xviSketchLinePoints =
                 xviSketchLine.points;
 
-            _snapTargets.add(
+            _snapPointTargets.add(
               xviSketchLine.start.copyWith(
                 coordinates: xviSketchLine.start.coordinates + imageOffset,
               ),
             );
 
             for (final sketchLinePoint in xviSketchLinePoints) {
-              _snapTargets.add(
+              _snapPointTargets.add(
                 sketchLinePoint.copyWith(
                   coordinates: sketchLinePoint.coordinates + imageOffset,
                 ),
@@ -257,7 +274,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
           final List<XVIStation> xviStations = xviFile.stations;
 
           for (final XVIStation xviStation in xviStations) {
-            _snapTargets.add(
+            _snapPointTargets.add(
               xviStation.position.copyWith(
                 coordinates: xviStation.position.coordinates + imageOffset,
               ),
@@ -280,22 +297,100 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   void updateSnapTargetsGrid() {
-    _snapTargetsGrid.clear();
+    _snapPointTargetsGrid.clear();
+    _snapLineTargetsGrid.clear();
 
-    if (_snapTargets.isEmpty) {
+    for (final THPositionPart snapPointTarget in _snapPointTargets) {
+      final MPSnapGridCell cell = getSnapGridCellPosition(
+        snapPointTarget.coordinates,
+      );
+
+      _snapPointTargetsGrid.putIfAbsent(cell, () => []);
+      _snapPointTargetsGrid[cell]!.add(snapPointTarget);
+    }
+
+    final double cellSize = _th2FileEditController.currentSnapGridCellSize;
+
+    for (final ({Offset start, Offset end}) snapLineTarget
+        in _snapLineTargets) {
+      final Iterable<MPSnapGridCell> cells = _cellsCrossedBySegment(
+        snapLineTarget.start,
+        snapLineTarget.end,
+        cellSize,
+      );
+
+      for (final MPSnapGridCell cell in cells) {
+        _snapLineTargetsGrid.putIfAbsent(cell, () => []);
+        _snapLineTargetsGrid[cell]!.add(snapLineTarget);
+      }
+    }
+  }
+
+  Iterable<MPSnapGridCell> _cellsCrossedBySegment(
+    Offset a,
+    Offset b,
+    double cellSize,
+  ) sync* {
+    // Handle degenerate zero-length segment
+    if ((a.dx == b.dx) && (a.dy == b.dy)) {
+      yield getSnapGridCellPosition(a);
       return;
     }
 
-    for (final THPositionPart snapTarget in _snapTargets) {
-      final MPSnapGridCell cell = getSnapGridCellPosition(
-        snapTarget.coordinates,
-      );
+    int cellX = (a.dx / cellSize).floor();
+    int cellY = (a.dy / cellSize).floor();
+    final int endX = (b.dx / cellSize).floor();
+    final int endY = (b.dy / cellSize).floor();
 
-      if (!_snapTargetsGrid.containsKey(cell)) {
-        _snapTargetsGrid[cell] = [];
+    yield MPSnapGridCell(cellX, cellY);
+
+    if (cellX == endX && cellY == endY) {
+      return;
+    }
+
+    final double dx = b.dx - a.dx;
+    final double dy = b.dy - a.dy;
+
+    final int stepX = dx > 0 ? 1 : (dx < 0 ? -1 : 0);
+    final int stepY = dy > 0 ? 1 : (dy < 0 ? -1 : 0);
+
+    double tMaxX;
+    double tMaxY;
+    double tDeltaX;
+    double tDeltaY;
+
+    if (stepX != 0) {
+      final double nextBoundaryX = (stepX > 0)
+          ? (cellX + 1) * cellSize
+          : cellX * cellSize;
+      tMaxX = (nextBoundaryX - a.dx) / dx;
+      tDeltaX = cellSize.abs() / dx.abs();
+    } else {
+      tMaxX = double.infinity;
+      tDeltaX = double.infinity;
+    }
+
+    if (stepY != 0) {
+      final double nextBoundaryY = (stepY > 0)
+          ? (cellY + 1) * cellSize
+          : cellY * cellSize;
+      tMaxY = (nextBoundaryY - a.dy) / dy;
+      tDeltaY = cellSize.abs() / dy.abs();
+    } else {
+      tMaxY = double.infinity;
+      tDeltaY = double.infinity;
+    }
+
+    // Traverse through the grid until we reach the end cell
+    while (cellX != endX || cellY != endY) {
+      if (tMaxX < tMaxY) {
+        cellX += stepX;
+        tMaxX += tDeltaX;
+      } else {
+        cellY += stepY;
+        tMaxY += tDeltaY;
       }
-
-      _snapTargetsGrid[cell]!.add(snapTarget);
+      yield MPSnapGridCell(cellX, cellY);
     }
   }
 
@@ -328,7 +423,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
   THPositionPart? getCanvasSnapedPositionFromCanvasOffset(
     Offset canvasPosition,
   ) {
-    if (_snapTargets.isEmpty) {
+    if (_snapPointTargets.isEmpty && _snapLineTargets.isEmpty) {
       return null;
     }
 
@@ -346,14 +441,11 @@ abstract class TH2FileEditSnapControllerBase with Store {
           centerCellX + dx,
           centerCellY + dy,
         );
+        // Check point targets in this cell (if any)
+        final List<THPositionPart> cellPointTargets =
+            _snapPointTargetsGrid[cellToCheck] ?? const [];
 
-        if (!_snapTargetsGrid.containsKey(cellToCheck)) {
-          continue;
-        }
-
-        final List<THPositionPart> cellTargets = _snapTargetsGrid[cellToCheck]!;
-
-        for (final THPositionPart target in cellTargets) {
+        for (final THPositionPart target in cellPointTargets) {
           final double distanceSquared =
               (target.coordinates - canvasPosition).distanceSquared;
 
@@ -363,10 +455,45 @@ abstract class TH2FileEditSnapControllerBase with Store {
             closestSnapTarget = target;
           }
         }
+
+        // Check line targets in this cell (if any)
+        final List<({Offset start, Offset end})> cellLineTargets =
+            _snapLineTargetsGrid[cellToCheck] ?? const [];
+
+        for (final ({Offset start, Offset end}) line in cellLineTargets) {
+          final Offset projected = _closestPointOnSegment(
+            canvasPosition,
+            line.start,
+            line.end,
+          );
+
+          final double distanceSquared =
+              (projected - canvasPosition).distanceSquared;
+
+          if ((distanceSquared < currentSnapOnCanvasDistanceSquaredLimit) &&
+              (distanceSquared < closestDistanceSquared)) {
+            closestDistanceSquared = distanceSquared;
+            closestSnapTarget = THPositionPart(coordinates: projected);
+          }
+        }
       }
     }
 
     return closestSnapTarget;
+  }
+
+  Offset _closestPointOnSegment(Offset p, Offset a, Offset b) {
+    final double abx = b.dx - a.dx;
+    final double aby = b.dy - a.dy;
+    final double len2 = abx * abx + aby * aby;
+    if (len2 == 0.0) {
+      return a; // Degenerate segment, treat as a point
+    }
+    final double apx = p.dx - a.dx;
+    final double apy = p.dy - a.dy;
+    final double t = (apx * abx + apy * aby) / len2;
+    final double clampedT = t.clamp(0.0, 1.0);
+    return Offset(a.dx + clampedT * abx, a.dy + clampedT * aby);
   }
 
   THElement? getNearerSelectedElement(Offset canvasCoordinates) {
@@ -554,4 +681,10 @@ enum MPSnapLinePointTarget { none, linePoint, linePointByType }
 
 enum MPSnapPointTarget { none, point, pointByType }
 
-enum MPSnapXVIFileTarget { gridLineIntersection, shot, sketchLine, station }
+enum MPSnapXVIFileTarget {
+  gridLine,
+  gridLineIntersection,
+  shot,
+  sketchLine,
+  station,
+}

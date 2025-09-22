@@ -218,4 +218,58 @@ class XVIGrid with MPBoundingBox {
 
     return intersections;
   }
+
+  /// Calculates the grid lines as line segments using a provided grid origin.
+  ///
+  /// The [origin] should be the canvas coordinate where the grid's (0,0)
+  /// origin is placed. For example, when drawing an XVI image, this is
+  /// typically the (xx, yy) position of the image, so lines are computed in
+  /// canvas space directly.
+  ///
+  /// Returns a list of records with named fields (start, end), where each
+  /// field is an Offset representing the endpoints of a grid line segment.
+  List<({Offset start, Offset end})> calculateGridLines({
+    required Offset origin,
+  }) {
+    final double gridX = origin.dx;
+    final double gridY = origin.dy;
+
+    // Grid increments and repetition counts
+    final double gxxV = gxx.value;
+    final double gxyV = gxy.value;
+    final double gyxV = gyx.value;
+    final double gyyV = gyy.value;
+    final int nx = ngx.value.toInt();
+    final int ny = ngy.value.toInt();
+
+    // Total span along each axis for a full line
+    final double xIncForHorizontalGridLine = nx * gxxV;
+    final double yIncForHorizontalGridLine = nx * gxyV;
+    final double xIncForVerticalGridLine = ny * gyxV;
+    final double yIncForVerticalGridLine = ny * gyyV;
+
+    final List<({Offset start, Offset end})> lines = [];
+
+    // Horizontal grid lines (vary along Y axis)
+    for (int i = 0; i <= ny; i++) {
+      final double leftX = gridX + (i * gyxV);
+      final double leftY = gridY + (i * gyyV);
+      final double rightX = leftX + xIncForHorizontalGridLine;
+      final double rightY = leftY + yIncForHorizontalGridLine;
+
+      lines.add((start: Offset(leftX, leftY), end: Offset(rightX, rightY)));
+    }
+
+    // Vertical grid lines (vary along X axis)
+    for (int j = 0; j <= nx; j++) {
+      final double topX = gridX + (j * gxxV);
+      final double topY = gridY + (j * gxyV);
+      final double bottomX = topX + xIncForVerticalGridLine;
+      final double bottomY = topY + yIncForVerticalGridLine;
+
+      lines.add((start: Offset(topX, topY), end: Offset(bottomX, bottomY)));
+    }
+
+    return lines;
+  }
 }

@@ -53,23 +53,43 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
     );
   }
 
-  late final _$_snapTargetsAtom = Atom(
-    name: 'TH2FileEditSnapControllerBase._snapTargets',
+  late final _$_snapPointTargetsAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapPointTargets',
     context: context,
   );
 
-  List<THPositionPart> get snapTargets {
-    _$_snapTargetsAtom.reportRead();
-    return super._snapTargets;
+  List<THPositionPart> get snapPointTargets {
+    _$_snapPointTargetsAtom.reportRead();
+    return super._snapPointTargets;
   }
 
   @override
-  List<THPositionPart> get _snapTargets => snapTargets;
+  List<THPositionPart> get _snapPointTargets => snapPointTargets;
 
   @override
-  set _snapTargets(List<THPositionPart> value) {
-    _$_snapTargetsAtom.reportWrite(value, super._snapTargets, () {
-      super._snapTargets = value;
+  set _snapPointTargets(List<THPositionPart> value) {
+    _$_snapPointTargetsAtom.reportWrite(value, super._snapPointTargets, () {
+      super._snapPointTargets = value;
+    });
+  }
+
+  late final _$_snapLineTargetsAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapLineTargets',
+    context: context,
+  );
+
+  List<({Offset end, Offset start})> get snapLineTargets {
+    _$_snapLineTargetsAtom.reportRead();
+    return super._snapLineTargets;
+  }
+
+  @override
+  List<({Offset end, Offset start})> get _snapLineTargets => snapLineTargets;
+
+  @override
+  set _snapLineTargets(List<({Offset end, Offset start})> value) {
+    _$_snapLineTargetsAtom.reportWrite(value, super._snapLineTargets, () {
+      super._snapLineTargets = value;
     });
   }
 
@@ -189,25 +209,57 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
     });
   }
 
-  late final _$_snapTargetsGridAtom = Atom(
-    name: 'TH2FileEditSnapControllerBase._snapTargetsGrid',
+  late final _$_snapPointTargetsGridAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapPointTargetsGrid',
     context: context,
   );
 
-  Map<MPSnapGridCell, List<THPositionPart>> get snapTargetsGrid {
-    _$_snapTargetsGridAtom.reportRead();
-    return super._snapTargetsGrid;
+  Map<MPSnapGridCell, List<THPositionPart>> get snapPointTargetsGrid {
+    _$_snapPointTargetsGridAtom.reportRead();
+    return super._snapPointTargetsGrid;
   }
 
   @override
-  Map<MPSnapGridCell, List<THPositionPart>> get _snapTargetsGrid =>
-      snapTargetsGrid;
+  Map<MPSnapGridCell, List<THPositionPart>> get _snapPointTargetsGrid =>
+      snapPointTargetsGrid;
 
   @override
-  set _snapTargetsGrid(Map<MPSnapGridCell, List<THPositionPart>> value) {
-    _$_snapTargetsGridAtom.reportWrite(value, super._snapTargetsGrid, () {
-      super._snapTargetsGrid = value;
-    });
+  set _snapPointTargetsGrid(Map<MPSnapGridCell, List<THPositionPart>> value) {
+    _$_snapPointTargetsGridAtom.reportWrite(
+      value,
+      super._snapPointTargetsGrid,
+      () {
+        super._snapPointTargetsGrid = value;
+      },
+    );
+  }
+
+  late final _$_snapLineTargetsGridAtom = Atom(
+    name: 'TH2FileEditSnapControllerBase._snapLineTargetsGrid',
+    context: context,
+  );
+
+  Map<MPSnapGridCell, List<({Offset end, Offset start})>>
+  get snapLineTargetsGrid {
+    _$_snapLineTargetsGridAtom.reportRead();
+    return super._snapLineTargetsGrid;
+  }
+
+  @override
+  Map<MPSnapGridCell, List<({Offset end, Offset start})>>
+  get _snapLineTargetsGrid => snapLineTargetsGrid;
+
+  @override
+  set _snapLineTargetsGrid(
+    Map<MPSnapGridCell, List<({Offset end, Offset start})>> value,
+  ) {
+    _$_snapLineTargetsGridAtom.reportWrite(
+      value,
+      super._snapLineTargetsGrid,
+      () {
+        super._snapLineTargetsGrid = value;
+      },
+    );
   }
 
   late final _$TH2FileEditSnapControllerBaseActionController = ActionController(

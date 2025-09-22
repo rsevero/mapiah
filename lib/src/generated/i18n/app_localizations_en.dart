@@ -740,29 +740,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSnapTargetNone => 'None';
 
   @override
-  String get mpSnapTargetLinePoint => 'Line point';
+  String get mpSnapTargetLinePoint => 'Line points';
 
   @override
-  String get mpSnapTargetLinePointByType => 'Line point by line type';
+  String get mpSnapTargetLinePointByType => 'Line points by line type';
 
   @override
-  String get mpSnapTargetPoint => 'Point';
+  String get mpSnapTargetPoint => 'Points';
 
   @override
-  String get mpSnapTargetPointByType => 'Point by type';
+  String get mpSnapTargetPointByType => 'Points by type';
+
+  @override
+  String get mpSnapTargetXVIFileGridLine => 'Grid lines';
 
   @override
   String get mpSnapTargetXVIFileGridLineIntersection =>
-      'Grid line intersection';
+      'Grid line intersections';
 
   @override
-  String get mpSnapTargetXVIFileShot => 'Shot';
+  String get mpSnapTargetXVIFileShot => 'Shots';
 
   @override
-  String get mpSnapTargetXVIFileSketchLine => 'Sketch line';
+  String get mpSnapTargetXVIFileSketchLine => 'Sketch lines';
 
   @override
-  String get mpSnapTargetXVIFileStation => 'Station';
+  String get mpSnapTargetXVIFileStation => 'Stations';
 
   @override
   String get mpSnapXVIFileTargetsLabel => 'XVI file snap';
