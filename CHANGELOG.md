@@ -6,6 +6,7 @@
   * When opening files, delete empty areas.
   * When opening files, delete TH IDs from areas that do not refer to any existing line.
   * When opening files, delete empty lines.
+  * Help page update.
 * Fixed bugs:
   * Removing XTherion inserted images throwing errors.
   * Showing XVI parse errors at TH file open would throw because there was already a widget being built.

@@ -8,6 +8,8 @@ This is where all TH2 file editing is done.
   - [Bottom right corner](#bottom-right-corner)
 - [Drawing lines](#drawing-lines)
 - [Element options](#element-options)
+- [Simplify lines](#simplify-lines)
+  - [Straight line segments](#straight-line-segments)
 - [Snap](#snap)
 - [Zoom and panning](#zoom-and-panning)
 - [Web releases](#web-releases)
@@ -64,6 +66,12 @@ The options available depend on the type of element selected.
 To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
+
+## Simplify lines
+Bezier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process. 
+
+### Straight line segments
+Each Ctrl+L press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
 
 ## Snap
 There are several snap options available that can be controled on the window presented when the button ![Snap button](assets/help/images/buttonSnap.png "Snap") is pressed:
