@@ -6,9 +6,10 @@ This is where all TH2 file editing is done.
 - [Edit window](#edit-window)
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
-- [Zoom and panning](#zoom-and-panning)
-- [Element options](#element-options)
 - [Drawing lines](#drawing-lines)
+- [Element options](#element-options)
+- [Snap](#snap)
+- [Zoom and panning](#zoom-and-panning)
 - [Web releases](#web-releases)
   - [Save](#save)
 
@@ -24,6 +25,7 @@ This is where all TH2 file editing is done.
 ## Edit window
 
 ### Top right corner
+* ![Snap button](assets/help/images/buttonSnap.png "Snap")  _Snap_: toggles the snap window where are presented the snap options. (Ctrl+L)
 * ![Delete button](assets/help/images/buttonDelete.png "Delete")  _Delete_: deletes the currently selected elements. Only enabled if there is at least one element selected. (Delete/Backspace)
 * ![Undo button](assets/help/images/buttonUndo.png "Undo")  _Undo_: undos the last executed edit operation. Only enabled if there is at elast one edit operation to be undone. (Ctrl+Z)
 * ![Redo button](assets/help/images/buttonRedo.png "Redo")  _Redo_: redoes the last undone edit operation. Only enabled if there is at least one edit operation to be redone. (Ctrl+Y)
@@ -31,7 +33,8 @@ This is where all TH2 file editing is done.
 In case there are available redoes when a new edit operation is performed, the redo stack is migrated to the undo stack making redoes still accessible.
 
 ### Bottom right corner
-* ![Scraps button](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: for single scrap files, opens the scrap options overlay window. For multiple scrap files, opens a dialog box to change the current scrap. The dialog box shows all available scraps and allows to select one of them. On multiple scraps files, the scrap options overlay window is presented when right clicking on the desired scrap. (Alt+C)
+* ![Images button](assets/help/images/buttonImages.png "Imges")  _Images_: opens the images options overlay window. Shows all images inserted in the current file. Presents a "Delete" button for each image and a "Add Image (I)" button. (Alt+I)
+* ![Scraps button](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: opens a dialog box to change the current scrap, delete an existing scrap and add a new one. The dialog box shows all available scraps and allows to select one of them. The scrap options overlay window is presented when right clicking on the desired scrap. (Alt+C)
 * ![Select element button](assets/help/images/buttonSelectElement.png "Select element")  _Select element_: allows to select elements in the TH2 file. (C)
 * ![Line edit button](assets/help/images/buttonLineEdit.png "Line edit")  _Line edit_: allows to edit individual lines in the TH2 file. (N)
 * ![Add element button](assets/help/images/buttonAddElement.png "Add element")  _Add element_: allows to add new elements to the TH2 file. On mouse over the following buttons are shown:
@@ -46,10 +49,13 @@ In case there are available redoes when a new edit operation is performed, the r
   * ![Zoom to scrap button](assets/help/images/buttonZoomScrap.png "Zoom to scrap")  _Zoom to scrap_: zooms the TH2 file view to show the currently selected scrap. (4)
   * ![Zoom out button](assets/help/images/buttonZoomOut.png "Zoom out")  _Zoom out_: zooms out the TH2 file view. (-)
 
-## Zoom and panning
-The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.
-The view can also be panned by right clicking and dragging the mouse.
-_Ctrl+mouse wheel_ pans vertically, _Shift+mouse wheel_ pans horizontally.
+## Drawing lines
+
+When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated as the position of the single control point of a quadratic Bézier Curve.
+
+Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
+
+Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
 
 ## Element options
 Right clicking on a selected element presents an overlay window with the options available for the currently selected elements.
@@ -59,13 +65,27 @@ To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
 
-## Drawing lines
+## Snap
+There are several snap options available that can be controled on the window presented when the button ![Snap button](assets/help/images/buttonSnap.png "Snap") is pressed:
 
-When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated as the position of the single control point of a quadratic Bézier Curve.
+* XVI file snap (zero or more options can be selected):
+  * __Grid line intersections__: snap at the grid line intersections on the XVI file.
+  * __Shot__: snap at the shot start and end points on the XVI file.
+  * __Sketch line__: snap at the sketch line line points on the XVI file.
+  * __Station__: snap at the stations defined on the XVI file.
+* Point snap (single one option):
+  * __None__: no snaping to points in the TH2 file.
+  * __Point__: snap at all defined points in the TH2 file.
+  * __Point by type__: snap only at the selected point types in the TH@ file.
+* Line point snap:
+  * __Line point__: snap at all line points in the TH2 file.
+  * __Line point by type__: snap only at the line points of the line types selcted.
+  * __None__: no snaping at line points.
 
-Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
-
-Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
+## Zoom and panning
+The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.
+The view can also be panned by right clicking and dragging the mouse.
+_Ctrl+mouse wheel_ pans vertically, _Shift+mouse wheel_ pans horizontally.
 
 ## Web releases
 

@@ -67,6 +67,7 @@ Version 0.3
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
 [ ] - Manually edit position of points
 [ ] - Manually edit position of end and control points in line segments
+[ ] - Snap to grid lines.
 [X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
 [X] - BUG: Mapiah throws if line referred by area does not exist.

@@ -53,10 +53,12 @@ flutter:
     - assets/help/images/buttonAddLine.png
     - assets/help/images/buttonAddPoint.png
     - assets/help/images/buttonDelete.png
+    - assets/help/images/buttonImages.png
     - assets/help/images/buttonLineEdit.png
     - assets/help/images/buttonRedo.png
     - assets/help/images/buttonScraps.png
     - assets/help/images/buttonSelectElement.png
+    - assets/help/images/buttonSnap.png
     - assets/help/images/buttonUndo.png
     - assets/help/images/buttonZoomFile.png
     - assets/help/images/buttonZoomIn.png
