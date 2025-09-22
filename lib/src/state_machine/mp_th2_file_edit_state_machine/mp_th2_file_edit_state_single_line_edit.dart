@@ -20,6 +20,7 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.resetSelectedLineLineSegmentsMPIDs();
     selectionController.updateSelectableEndAndControlPoints();
+    elementEditController.setOriginalSimplifiedLines(null);
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage('');
   }
@@ -48,6 +49,9 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
+    bool cleanOriginalSimplifiedLines = true;
+    bool keyProcessed = false;
+
     switch (event.logicalKey) {
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
@@ -56,16 +60,18 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
             !isAltPressed &&
             !isShiftPressed) {
           elementEditController.applyRemoveSelectedLineSegments();
-          return;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyL:
         if (isCtrlPressed || isMetaPressed) {
           elementEditController.updateStraightLineSimplificationTolerance();
           elementEditController.updateOriginalSimplifiedLines();
           if (!isAltPressed && !isShiftPressed) {
-            th2FileEditController.elementEditController.simplifySelectedLines();
+            elementEditController.simplifySelectedLines();
           }
         }
+        keyProcessed = true;
+        cleanOriginalSimplifiedLines = false;
     }
 
     /// The slash character can be produced with keyboard combinations
@@ -78,11 +84,17 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
             !isShiftPressed) {
           elementEditController
               .applyAddLineSegmentsBetweenSelectedLineSegments();
-          return;
+          keyProcessed = true;
         }
     }
 
-    _onKeyDownEvent(event);
+    if (cleanOriginalSimplifiedLines) {
+      elementEditController.setOriginalSimplifiedLines(null);
+    }
+
+    if (!keyProcessed) {
+      _onKeyDownEvent(event);
+    }
   }
 
   @override
@@ -225,6 +237,7 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
+    elementEditController.setOriginalSimplifiedLines(null);
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =

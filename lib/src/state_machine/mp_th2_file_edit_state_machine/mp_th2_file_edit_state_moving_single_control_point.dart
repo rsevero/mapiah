@@ -63,22 +63,6 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
-
-      // final int? nextLineSegmentMPID =
-      //     selectionController.getNextLineSegmentMPID(
-      //         selectedLineSegmentMPID, lineLineSegmentsMPIDs);
-
-      // if ((nextLineSegmentMPID != null) &&
-      //     !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
-      //   final THLineSegment nextLineSegment =
-      //       thFile.lineSegmentByMPID(nextLineSegmentMPID);
-
-      //   if (nextLineSegment is THBezierCurveLineSegment) {
-      //     modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
-      //     originalLineSegmentsMap[nextLineSegmentMPID] =
-      //         originalLineSegmentsMapClone[nextLineSegmentMPID]!;
-      //   }
-      // }
     }
 
     final MPMoveControlPointSmoothInfo moveControlPointSmoothInfo =

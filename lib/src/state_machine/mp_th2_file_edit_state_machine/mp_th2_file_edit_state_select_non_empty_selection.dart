@@ -14,14 +14,13 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
+    elementEditController.setOriginalSimplifiedLines(null);
     _updateStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    th2FileEditController.elementEditController.setOriginalSimplifiedLines(
-      null,
-    );
+    elementEditController.setOriginalSimplifiedLines(null);
     onStateExitClearSelectionOnExit(nextState);
   }
 
@@ -120,6 +119,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           selectionType: THSelectionType.pla,
         );
 
+    elementEditController.setOriginalSimplifiedLines(null);
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
@@ -276,18 +276,29 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
+    bool cleanOriginalSimplifiedLines = true;
+    bool keyProcessed = false;
+
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyL:
         if (isCtrlPressed || isMetaPressed) {
           elementEditController.updateStraightLineSimplificationTolerance();
           elementEditController.updateOriginalSimplifiedLines();
           if (!isAltPressed && !isShiftPressed) {
-            th2FileEditController.elementEditController.simplifySelectedLines();
+            elementEditController.simplifySelectedLines();
           }
         }
+        keyProcessed = true;
+        cleanOriginalSimplifiedLines = false;
     }
 
-    _onKeyDownEvent(event);
+    if (cleanOriginalSimplifiedLines) {
+      elementEditController.setOriginalSimplifiedLines(null);
+    }
+
+    if (!keyProcessed) {
+      _onKeyDownEvent(event);
+    }
   }
 
   @override
