@@ -11,7 +11,7 @@
   * Showing XVI parse errors at TH file open would throw because there was already a widget being built.
   * Files with empty lines (with no line segments) or empty areas (no valid line TH ID) would throw an exception when calculating bounding box.
 * Infrastructure maintenance:
-  * flutter pub upgrade.
+  * flutter pub upgrade --major-versions.
   * Flutter upgrade to 3.35.4.
 
 ## 0.2.16 - 2025-09-17
