@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.17 - not yet released
+## 0.2.17 - 2025-09-25
 * New features:
   * Create shortcut to reverse line (R).
   * When opening files, delete empty areas.
