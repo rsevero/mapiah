@@ -2,12 +2,13 @@
 
 ## 0.2.17 - not yet released
 * New features:
-  * Create shortcut to reverse line.
+  * Create shortcut to reverse line (R).
   * When opening files, delete empty areas.
   * When opening files, delete TH IDs from areas that do not refer to any existing line.
   * When opening files, delete empty lines.
   * Help page update.
   * Snap to grid lines.
+  * Straight line segments line simplification.
 * Fixed bugs:
   * Removing XTherion inserted images throwing errors.
   * Showing XVI parse errors at TH file open would throw because there was already a widget being built.

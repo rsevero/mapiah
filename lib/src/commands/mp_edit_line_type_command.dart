@@ -20,9 +20,9 @@ class MPEditLineTypeCommand extends MPCommand {
     required this.lineMPID,
     required this.newLineType,
     required this.unknownPLAType,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editLineType;

@@ -47,6 +47,7 @@ part 'mp_remove_scrap_command.dart';
 part 'mp_remove_xtherion_image_insert_config_command.dart';
 part 'mp_set_attr_option_to_element_command.dart';
 part 'mp_set_option_to_element_command.dart';
+part 'mp_replace_line_segments_command.dart';
 part 'types/mp_command_type.dart';
 
 /// Abstract class that defines the structure of a command.
@@ -182,6 +183,8 @@ abstract class MPCommand {
         return MPSetAttrOptionToElementCommand.fromMap(map);
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
+      case MPCommandType.substituteLineSegments:
+        return MPReplaceLineSegmentsCommand.fromMap(map);
     }
   }
 }

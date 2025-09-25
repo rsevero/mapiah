@@ -396,4 +396,27 @@ class THLine extends THElement
 
     return lineSegmentsMap;
   }
+
+  List<({int lineSegmentPosition, THLineSegment lineSegment})>
+  getLineSegmentsPositionList(THFile thFile) {
+    final List<int> originalLineSegmentMPIDs = childrenMPIDs.toList();
+    final List<({int lineSegmentPosition, THLineSegment lineSegment})>
+    originalLineSegments = [];
+
+    for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
+      final THLineSegment originalLineSegment = thFile.lineSegmentByMPID(
+        originalLineSegmentMPID,
+      );
+      final int originalLineSegmentPosition = getChildPosition(
+        originalLineSegment,
+      );
+
+      originalLineSegments.add((
+        lineSegmentPosition: originalLineSegmentPosition,
+        lineSegment: originalLineSegment,
+      ));
+    }
+
+    return originalLineSegments;
+  }
 }

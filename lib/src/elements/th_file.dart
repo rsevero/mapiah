@@ -405,6 +405,12 @@ class THFile
     removeElement(element);
   }
 
+  void removeElementByMPID(int mpID) {
+    final THElement element = elementByMPID(mpID);
+
+    removeElement(element);
+  }
+
   void removeElement(THElement element) {
     if (element is THIsParentMixin) {
       final List<int> childrenMPIDsCopy = (element as THIsParentMixin)

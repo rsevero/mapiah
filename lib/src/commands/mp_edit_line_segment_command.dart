@@ -17,9 +17,9 @@ class MPEditLineSegmentCommand extends MPCommand {
   MPEditLineSegmentCommand({
     required this.originalLineSegment,
     required this.newLineSegment,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editLineSegment;

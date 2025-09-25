@@ -20,18 +20,18 @@ class MPMovePointCommand extends MPCommand {
     required this.pointMPID,
     required this.originalPosition,
     required this.modifiedPosition,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
     required this.originalPosition,
     required Offset deltaOnCanvas,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super() {
+  }) : super() {
     modifiedPosition = THPositionPart(
       coordinates: originalPosition.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,

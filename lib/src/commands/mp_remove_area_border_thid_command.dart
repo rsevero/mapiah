@@ -96,5 +96,5 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => super.hashCode ^ areaBorderTHIDMPID.hashCode;
+  int get hashCode => Object.hash(super.hashCode, areaBorderTHIDMPID);
 }

@@ -20,9 +20,9 @@ class MPEditAreaTypeCommand extends MPCommand {
     required this.areaMPID,
     required this.newAreaType,
     required this.unknownPLAType,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editAreaType;

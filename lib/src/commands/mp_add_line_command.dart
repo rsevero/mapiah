@@ -99,8 +99,8 @@ class MPAddLineCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPRemoveLineCommand(
       lineMPID: newLine.mpID,
-      descriptionType: descriptionType,
       isInteractiveLineCreation: lineStartScreenPosition != null,
+      descriptionType: descriptionType,
     );
 
     return MPUndoRedoCommand(

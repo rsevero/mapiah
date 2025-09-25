@@ -426,7 +426,12 @@
     "description": "The description for the set option command",
     "type": "text"
   },
-  "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
+  "mpCommandDescriptionSimplifyBezier": "Simplify Bèzier curve",
+  "@mpCommandDescriptionSimplifyBezier": {
+    "description": "The description for the simplify Bèzier curve command",
+    "type": "text"
+  },
+    "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
   "@mpCommandDescriptionSetOptionToElements": {
     "description": "The description for the set option to elements command",
     "type": "text"
@@ -439,6 +444,26 @@
   "mpCommandDescriptionSimplifyLines": "Simplify lines",
   "@mpCommandDescriptionSimplifyLines": {
     "description": "The description for the simplify lines command",
+    "type": "text"
+  },
+  "mpCommandDescriptionSimplifyStraight": "Simplify straight line",
+  "@mpCommandDescriptionSimplifyStraight": {
+    "description": "The description for the simplify straight line command",
+    "type": "text"
+  },
+  "mpCommandDescriptionSimplifyToBezier": "Simplify into Bèzier curve",
+  "@mpCommandDescriptionSimplifyToBezier": {
+    "description": "The description for the simplify Bèzier curve line command",
+    "type": "text"
+  },
+  "mpCommandDescriptionSimplifyToStraight": "Simplify into straight line",
+  "@mpCommandDescriptionSimplifyToStraight": {
+    "description": "The description for the simplify into straight line command",
+    "type": "text"
+  },
+  "mpCommandDescriptionSubstituteLineSegments": "Substitute line segments",
+  "@mpCommandDescriptionSubstituteLineSegments": {
+    "description": "The description for the substitute line segments command",
     "type": "text"
   },
   "mpCommandDescriptionToggleReverseOption": "Toggle reverse option",

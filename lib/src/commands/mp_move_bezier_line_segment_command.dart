@@ -32,13 +32,14 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.modifiedControlPoint1Position,
     required this.originalControlPoint2Position,
     required this.modifiedControlPoint2Position,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   MPMoveBezierLineSegmentCommand.fromLineSegments({
     required THBezierCurveLineSegment originalLineSegment,
     required THBezierCurveLineSegment modifiedLineSegment,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : lineSegmentMPID = originalLineSegment.mpID,
        originalEndPointPosition = originalLineSegment.endPoint,
@@ -47,7 +48,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
        modifiedControlPoint1Position = modifiedLineSegment.controlPoint1,
        originalControlPoint2Position = originalLineSegment.controlPoint2,
        modifiedControlPoint2Position = modifiedLineSegment.controlPoint2,
-       originalLineInTH2File = '',
        super();
 
   MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas({
@@ -57,6 +57,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint2Position,
     required Offset deltaOnCanvas,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : modifiedEndPointPosition = THPositionPart(
          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
@@ -70,7 +71,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
          coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       originalLineInTH2File = '',
        super();
 
   MPMoveBezierLineSegmentCommand.fromEndPointExactPosition({
@@ -80,9 +80,9 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.originalControlPoint2Position,
     required THPositionPart lineSegmentFinalPosition,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super() {
+  }) : super() {
     final Offset deltaOnCanvas =
         lineSegmentFinalPosition.coordinates -
         originalEndPointPosition.coordinates;

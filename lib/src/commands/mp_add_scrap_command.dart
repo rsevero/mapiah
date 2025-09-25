@@ -182,7 +182,10 @@ class MPAddScrapCommand extends MPCommand {
     return other is MPAddScrapCommand &&
         other.newScrap == newScrap &&
         other.scrapPositionInParent == scrapPositionInParent &&
-        other.scrapChildren == scrapChildren;
+        const DeepCollectionEquality().equals(
+          other.scrapChildren,
+          scrapChildren,
+        );
   }
 
   @override
@@ -190,6 +193,6 @@ class MPAddScrapCommand extends MPCommand {
     super.hashCode,
     newScrap,
     scrapPositionInParent,
-    scrapChildren,
+    Object.hashAll(scrapChildren),
   );
 }

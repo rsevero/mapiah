@@ -20,9 +20,9 @@ class MPEditPointTypeCommand extends MPCommand {
     required this.pointMPID,
     required this.newPointType,
     required this.unknownPLAType,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editPointType;

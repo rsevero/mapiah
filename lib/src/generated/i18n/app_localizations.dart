@@ -602,6 +602,12 @@ abstract class AppLocalizations {
   /// **'Set option'**
   String get mpCommandDescriptionSetOptionToElement;
 
+  /// The description for the simplify Bèzier curve command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify Bèzier curve'**
+  String get mpCommandDescriptionSimplifyBezier;
+
   /// The description for the set option to elements command
   ///
   /// In en, this message translates to:
@@ -619,6 +625,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Simplify lines'**
   String get mpCommandDescriptionSimplifyLines;
+
+  /// The description for the simplify straight line command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify straight line'**
+  String get mpCommandDescriptionSimplifyStraight;
+
+  /// The description for the simplify Bèzier curve line command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify into Bèzier curve'**
+  String get mpCommandDescriptionSimplifyToBezier;
+
+  /// The description for the simplify into straight line command
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify into straight line'**
+  String get mpCommandDescriptionSimplifyToStraight;
+
+  /// The description for the substitute line segments command
+  ///
+  /// In en, this message translates to:
+  /// **'Substitute line segments'**
+  String get mpCommandDescriptionSubstituteLineSegments;
 
   /// The description for the toggle reverse option command
   ///

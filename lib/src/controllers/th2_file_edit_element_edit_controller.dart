@@ -5,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_line_simplification_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -278,6 +279,34 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       modifiedLineSegmentsMap.values.first.parentMPID,
     );
     line.clearBoundingBox();
+  }
+
+  void replaceLineLineSegments(
+    int lineMPID,
+    List<({int lineSegmentPosition, THLineSegment lineSegment})>
+    newLineSegments,
+  ) {
+    final THLine line = _thFile.lineByMPID(lineMPID);
+    final List<int> originalLineSegmentMPIDs = line.childrenMPIDs.toList();
+
+    for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
+      final THLineSegment originalLineSegment = _thFile.lineSegmentByMPID(
+        originalLineSegmentMPID,
+      );
+
+      _thFile.removeElement(originalLineSegment);
+      line.removeElementFromParent(_thFile, originalLineSegment);
+    }
+
+    for (final ({int lineSegmentPosition, THLineSegment lineSegment})
+        newLineSegment
+        in newLineSegments) {
+      _thFile.addElement(newLineSegment.lineSegment);
+      line.addElementToParent(
+        newLineSegment.lineSegment,
+        elementPositionInParent: newLineSegment.lineSegmentPosition,
+      );
+    }
   }
 
   @action
@@ -1559,6 +1588,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void simplifySelectedLines() {
     final List<MPCommand> simplifyCommands = [];
+
     int lineCount = 0;
 
     for (final MPSelectedElement selectedElement in _originalSimplifiedLines!) {
@@ -1577,16 +1607,65 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       switch (lineTypePerLineSegmentType) {
         case MPLineTypePerLineSegmentType.bezierCurve:
-          break;
+
+          /// Disabled until properly tested.
+          return;
+
+          final List<THLineSegment> originalLineSegmentsList =
+              originalLineSegmentsMap.values.toList();
+          final List<THLineSegment> simplifiedLineSegmentsList =
+              mpSimplifyTHLineSegmentsToTHBeziers(originalLineSegmentsList);
+
+          print(
+            'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
+          );
+
+          if (simplifiedLineSegmentsList.length ==
+              originalLineSegmentsList.length) {
+            // No simplification was possible.
+            continue;
+          }
+
+          final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+          originalLineSegments = originalLine.getLineSegmentsPositionList(
+            _thFile,
+          );
+          final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+          newLineSegments = simplifiedLineSegmentsList
+              .map<({THLineSegment lineSegment, int lineSegmentPosition})>(
+                (s) => (
+                  lineSegment: s,
+                  lineSegmentPosition:
+                      mpAddChildAtEndMinusOneOfParentChildrenList,
+                ),
+              )
+              .toList();
+          final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
+            lineMPID: originalLine.mpID,
+            originalLineSegments: originalLineSegments,
+            newLineSegments: newLineSegments,
+          );
+
+          simplifyCommands.add(simplifyCommand);
         case MPLineTypePerLineSegmentType.mixed:
           break;
         case MPLineTypePerLineSegmentType.straight:
+          final List<THLineSegment> originalLineSegmentsList =
+              originalLineSegmentsMap.values.toList();
           final List<THLineSegment> removedLineSegments =
               MPLineSimplificationAux.raumerDouglasPeuckerIterative(
-                originalStraightLineSegments: originalLineSegmentsMap.values
-                    .toList(),
+                originalStraightLineSegments: originalLineSegmentsList,
                 epsilon: _straightLineSimplifyEpsilonOnCanvas,
               );
+
+          print(
+            'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
+          );
+
+          if (originalLineSegmentsList.length == removedLineSegments.length) {
+            /// No simplification found.
+            return;
+          }
 
           for (final THLineSegment removedLineSegment in removedLineSegments) {
             final MPCommand removeLineSegmentCommand =
@@ -1625,22 +1704,29 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(THLine line) {
     final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
 
+    if (lineSegments.length < 2) {
+      throw Exception(
+        'Error: line has less than 2 line segments at TH2FileEditElementEditController.getLineTypePerLineSegmentType(). Length: ${lineSegments.length}',
+      );
+    }
+
     bool hasBezierCurve = false;
     bool hasStraight = false;
 
-    for (final THLineSegment lineSegment in lineSegments) {
+    /// Skipping the first line segment because the first one only provides the
+    /// starting point of the line. It doesn't matter if it's straight or
+    /// bezier curve.
+    for (final THLineSegment lineSegment in lineSegments.skip(1)) {
       if (lineSegment is THBezierCurveLineSegment) {
         hasBezierCurve = true;
       } else if (lineSegment is THStraightLineSegment) {
         hasStraight = true;
       }
-
-      if (hasBezierCurve && hasStraight) {
-        return MPLineTypePerLineSegmentType.mixed;
-      }
     }
 
-    if (hasBezierCurve) {
+    if (hasBezierCurve && hasStraight) {
+      return MPLineTypePerLineSegmentType.mixed;
+    } else if (hasBezierCurve) {
       return MPLineTypePerLineSegmentType.bezierCurve;
     } else if (hasStraight) {
       return MPLineTypePerLineSegmentType.straight;

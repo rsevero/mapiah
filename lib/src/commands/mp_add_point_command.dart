@@ -115,5 +115,5 @@ class MPAddPointCommand extends MPCommand {
 
   @override
   int get hashCode =>
-      Object.hashAll([super.hashCode, newPoint, pointPositionInParent]);
+      Object.hash(super.hashCode, newPoint, pointPositionInParent);
 }

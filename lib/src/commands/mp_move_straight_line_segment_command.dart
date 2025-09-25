@@ -20,21 +20,21 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required this.modifiedEndPointPosition,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super();
+  }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas({
     required this.lineSegmentMPID,
     required this.originalEndPointPosition,
     required Offset deltaOnCanvas,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : modifiedEndPointPosition = THPositionPart(
          coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       originalLineInTH2File = '',
        super();
 
   @override

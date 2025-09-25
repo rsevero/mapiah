@@ -18,9 +18,9 @@ class MPMoveLineCommand extends MPCommand {
     required this.lineMPID,
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super() {
+  }) : super() {
     lineSegmentsMoveCommand = MPCommandFactory.moveLineSegments(
       originalElementsMap: originalLineSegmentsMap,
       modifiedElementsMap: modifiedLineSegmentsMap,
@@ -33,9 +33,9 @@ class MPMoveLineCommand extends MPCommand {
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required Offset deltaOnCanvas,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super() {
+  }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromDeltaOnCanvas(
           originalElementsMap: originalLineSegmentsMap,
@@ -50,9 +50,9 @@ class MPMoveLineCommand extends MPCommand {
     required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
     required THLineSegment referenceLineSegment,
     required THPositionPart referenceLineSegmentFinalPosition,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
-  }) : originalLineInTH2File = '',
-       super() {
+  }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromLineSegmentExactPosition(
           originalElementsMap: originalLineSegmentsMap,

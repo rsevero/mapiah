@@ -424,10 +424,22 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .setOptionToElements] =
         localizations.mpCommandDescriptionSetOptionToElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyBezier] =
+        localizations.mpCommandDescriptionSimplifyBezier;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyLine] =
         localizations.mpCommandDescriptionSimplifyLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyLines] =
         localizations.mpCommandDescriptionSimplifyLines;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyStraight] =
+        localizations.mpCommandDescriptionSimplifyStraight;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.simplifyToBezier] =
+        localizations.mpCommandDescriptionSimplifyToBezier;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .simplifyToStraight] =
+        localizations.mpCommandDescriptionSimplifyToStraight;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .substituteLineSegments] =
+        localizations.mpCommandDescriptionSubstituteLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleReverseOption] =
         localizations.mpCommandDescriptionToggleReverseOption;

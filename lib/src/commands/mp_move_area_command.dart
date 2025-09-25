@@ -3,12 +3,14 @@ part of 'mp_command.dart';
 class MPMoveAreaCommand extends MPCommand {
   final int areaMPID;
   late final MPCommand linesMoveCommand;
+  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveArea;
 
   MPMoveAreaCommand.forCWJM({
     required this.areaMPID,
     required this.linesMoveCommand,
+    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -17,6 +19,7 @@ class MPMoveAreaCommand extends MPCommand {
     required Iterable<MPSelectedLine> originalLines,
     required Offset deltaOnCanvas,
     int? decimalPositions,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromDeltaOnCanvas(
@@ -32,6 +35,7 @@ class MPMoveAreaCommand extends MPCommand {
     required Iterable<MPSelectedLine> originalLines,
     required THLineSegment referenceLineSegment,
     required THPositionPart referenceLineSegmentFinalPosition,
+    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromLineSegmentExactPosition(
@@ -74,6 +78,7 @@ class MPMoveAreaCommand extends MPCommand {
       areaMPID: areaMPID,
       linesMoveCommand: oppositeLinesMoveCommand,
       descriptionType: descriptionType,
+      originalLineInTH2File: originalLineInTH2File,
     );
 
     return MPUndoRedoCommand(
@@ -89,6 +94,7 @@ class MPMoveAreaCommand extends MPCommand {
     map.addAll({
       'areaMPID': areaMPID,
       'linesMoveCommand': linesMoveCommand.toMap(),
+      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -98,6 +104,7 @@ class MPMoveAreaCommand extends MPCommand {
     return MPMoveAreaCommand.forCWJM(
       areaMPID: map['areaMPID'],
       linesMoveCommand: MPCommand.fromMap(map['linesMoveCommand']),
+      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -112,11 +119,14 @@ class MPMoveAreaCommand extends MPCommand {
   MPMoveAreaCommand copyWith({
     int? areaMPID,
     MPMultipleElementsCommand? linesMoveCommand,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveAreaCommand.forCWJM(
       areaMPID: areaMPID ?? this.areaMPID,
       linesMoveCommand: linesMoveCommand ?? this.linesMoveCommand,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -128,6 +138,7 @@ class MPMoveAreaCommand extends MPCommand {
 
     return other is MPMoveAreaCommand &&
         other.areaMPID == areaMPID &&
+        other.originalLineInTH2File == originalLineInTH2File &&
         const DeepCollectionEquality().equals(
           other.linesMoveCommand,
           linesMoveCommand,
@@ -135,5 +146,10 @@ class MPMoveAreaCommand extends MPCommand {
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, areaMPID, linesMoveCommand);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    areaMPID,
+    originalLineInTH2File,
+    linesMoveCommand,
+  );
 }

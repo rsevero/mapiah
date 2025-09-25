@@ -284,6 +284,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override
+  String get mpCommandDescriptionSimplifyBezier => 'Simplificar curva Bèzier';
+
+  @override
   String get mpCommandDescriptionSetOptionToElements =>
       'Definir opção para diversos elementos';
 
@@ -292,6 +295,21 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionSimplifyLines => 'Simplificar linhas';
+
+  @override
+  String get mpCommandDescriptionSimplifyStraight => 'Simplificar linha reta';
+
+  @override
+  String get mpCommandDescriptionSimplifyToBezier =>
+      'Simplificar transformando em curva Bèzier';
+
+  @override
+  String get mpCommandDescriptionSimplifyToStraight =>
+      'Simplificar transformando em linha reta';
+
+  @override
+  String get mpCommandDescriptionSubstituteLineSegments =>
+      'Substituir segmentos de linha';
 
   @override
   String get mpCommandDescriptionToggleReverseOption =>

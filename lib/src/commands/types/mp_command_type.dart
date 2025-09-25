@@ -29,4 +29,5 @@ enum MPCommandType {
   removeXTherionImageInsertConfig,
   setAttrOptionToElement,
   setOptionToElement,
+  substituteLineSegments,
 }
