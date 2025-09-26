@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.2.17 - 2025-09-25
+## 0.2.19 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+
+## 0.2.18 - 2025-09-26 - the anoying bug release
+* Fixed bugs:
+  * Failure to load XVI files dialog box was repeatly shown.
+
+## 0.2.17 - 2025-09-25 - the polish cave rescue release
 * New features:
   * Create shortcut to reverse line (R).
   * When opening files, delete empty areas.
@@ -17,7 +26,7 @@
   * flutter pub upgrade --major-versions.
   * Flutter upgrade to 3.35.4.
 
-## 0.2.16 - 2025-09-17
+## 0.2.16 - 2025-09-17 - the hidden diamonds release
 * New features:
   * Using _MPOverlayWindowBlockWidget_ at _MPSnapTargetsWidget_ to improve reading.
   * Snap to XVI file features.
