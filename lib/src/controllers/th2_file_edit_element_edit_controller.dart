@@ -83,6 +83,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   double _straightLineSimplifyEpsilonOnCanvas =
       mpStraightLineSimplifyEpsilonOnScreen;
 
+  @readonly
+  MPLineSimplificationMethod _lineSimplificationMethod =
+      MPLineSimplificationMethod.keepOriginalTypes;
+
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
   late MPMoveControlPointSmoothInfo moveControlPointSmoothInfo;
@@ -1777,6 +1781,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _originalSimplifiedLines = simplifiedLines;
   }
+
+  void setLineSimplificationMethod(MPLineSimplificationMethod method) {
+    if (_lineSimplificationMethod == method) {
+      return;
+    }
+
+    _lineSimplificationMethod = method;
+    setOriginalSimplifiedLines(null);
+  }
 }
 
 class MPTypeUsed {
@@ -1793,3 +1806,9 @@ class MPTypeUsed {
 }
 
 enum MPLineTypePerLineSegmentType { bezierCurve, mixed, straight }
+
+enum MPLineSimplificationMethod {
+  forceStraight,
+  forceBezier,
+  keepOriginalTypes,
+}

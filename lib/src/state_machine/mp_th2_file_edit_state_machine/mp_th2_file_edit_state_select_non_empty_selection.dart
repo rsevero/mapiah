@@ -282,14 +282,34 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyL:
         if (isCtrlPressed || isMetaPressed) {
-          elementEditController.updateStraightLineSimplificationTolerance();
-          elementEditController.updateOriginalSimplifiedLines();
-          if (!isAltPressed && !isShiftPressed) {
+          cleanOriginalSimplifiedLines = false;
+          if (isAltPressed && isShiftPressed) {
+            /// TODO open line simplification dialog box.
+          } else {
+            MPLineSimplificationMethod newLineSimplificationMethod;
+
+            if (isAltPressed) {
+              newLineSimplificationMethod =
+                  MPLineSimplificationMethod.forceStraight;
+            } else if (isShiftPressed) {
+              newLineSimplificationMethod =
+                  MPLineSimplificationMethod.forceBezier;
+            } else {
+              newLineSimplificationMethod =
+                  MPLineSimplificationMethod.keepOriginalTypes;
+            }
+
+            elementEditController.setLineSimplificationMethod(
+              newLineSimplificationMethod,
+            );
+
+            elementEditController.updateStraightLineSimplificationTolerance();
+            elementEditController.updateOriginalSimplifiedLines();
+
             elementEditController.simplifySelectedLines();
           }
+          keyProcessed = true;
         }
-        keyProcessed = true;
-        cleanOriginalSimplifiedLines = false;
     }
 
     if (cleanOriginalSimplifiedLines) {

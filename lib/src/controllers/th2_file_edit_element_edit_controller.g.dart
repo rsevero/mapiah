@@ -188,6 +188,31 @@ mixin _$TH2FileEditElementEditController
     );
   }
 
+  late final _$_lineSimplificationMethodAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._lineSimplificationMethod',
+    context: context,
+  );
+
+  MPLineSimplificationMethod get lineSimplificationMethod {
+    _$_lineSimplificationMethodAtom.reportRead();
+    return super._lineSimplificationMethod;
+  }
+
+  @override
+  MPLineSimplificationMethod get _lineSimplificationMethod =>
+      lineSimplificationMethod;
+
+  @override
+  set _lineSimplificationMethod(MPLineSimplificationMethod value) {
+    _$_lineSimplificationMethodAtom.reportWrite(
+      value,
+      super._lineSimplificationMethod,
+      () {
+        super._lineSimplificationMethod = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
