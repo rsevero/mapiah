@@ -6,6 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_line_simplification_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
+import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -291,7 +292,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     newLineSegments,
   ) {
     final THLine line = _thFile.lineByMPID(lineMPID);
-    final List<int> originalLineSegmentMPIDs = line.childrenMPIDs.toList();
+    final List<int> originalLineSegmentMPIDs = line.lineSegmentMPIDs.toList();
 
     for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
       final THLineSegment originalLineSegment = _thFile.lineSegmentByMPID(
@@ -299,7 +300,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
 
       _thFile.removeElement(originalLineSegment);
-      line.removeElementFromParent(_thFile, originalLineSegment);
     }
 
     for (final ({int lineSegmentPosition, THLineSegment lineSegment})
@@ -1611,74 +1611,102 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       switch (lineTypePerLineSegmentType) {
         case MPLineTypePerLineSegmentType.bezierCurve:
-
-          /// Disabled until properly tested.
-          return;
-
-          final List<THLineSegment> originalLineSegmentsList =
-              originalLineSegmentsMap.values.toList();
-          final List<THLineSegment> simplifiedLineSegmentsList =
-              mpSimplifyTHLineSegmentsToTHBeziers(originalLineSegmentsList);
-
-          print(
-            'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
-          );
-
-          if (simplifiedLineSegmentsList.length ==
-              originalLineSegmentsList.length) {
-            // No simplification was possible.
-            continue;
-          }
-
-          final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-          originalLineSegments = originalLine.getLineSegmentsPositionList(
-            _thFile,
-          );
-          final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-          newLineSegments = simplifiedLineSegmentsList
-              .map<({THLineSegment lineSegment, int lineSegmentPosition})>(
-                (s) => (
-                  lineSegment: s,
-                  lineSegmentPosition:
-                      mpAddChildAtEndMinusOneOfParentChildrenList,
-                ),
-              )
-              .toList();
-          final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
-            lineMPID: originalLine.mpID,
-            originalLineSegments: originalLineSegments,
-            newLineSegments: newLineSegments,
-          );
-
-          simplifyCommands.add(simplifyCommand);
-        case MPLineTypePerLineSegmentType.mixed:
-          break;
-        case MPLineTypePerLineSegmentType.straight:
-          final List<THLineSegment> originalLineSegmentsList =
-              originalLineSegmentsMap.values.toList();
-          final List<THLineSegment> removedLineSegments =
-              MPLineSimplificationAux.raumerDouglasPeuckerIterative(
-                originalStraightLineSegments: originalLineSegmentsList,
-                epsilon: _straightLineSimplifyEpsilonOnCanvas,
-              );
-
-          print(
-            'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
-          );
-
-          if (originalLineSegmentsList.length == removedLineSegments.length) {
-            /// No simplification found.
-            return;
-          }
-
-          for (final THLineSegment removedLineSegment in removedLineSegments) {
-            final MPCommand removeLineSegmentCommand =
-                MPRemoveLineSegmentCommand(
-                  lineSegment: removedLineSegment,
-                  descriptionType: MPCommandDescriptionType.simplifyLine,
+          if (_lineSimplificationMethod ==
+              MPLineSimplificationMethod.forceStraight) {
+            /// TODO convert Bèzier curve to straight and them simplify
+          } else {
+            final List<THLineSegment> originalLineSegmentsList =
+                originalLineSegmentsMap.values.toList();
+            final List<THLineSegment> simplifiedLineSegmentsList =
+                mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+                  originalLineSegmentsList,
                 );
 
-            simplifyCommands.add(removeLineSegmentCommand);
+            print(
+              'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
+            );
+
+            if (simplifiedLineSegmentsList.length ==
+                originalLineSegmentsList.length) {
+              // No simplification was possible.
+              continue;
+            }
+
+            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+            originalLineSegments = originalLine.getLineSegmentsPositionList(
+              _thFile,
+            );
+            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+            newLineSegments =
+                convertTHLineSegmentListToLineSegmentWithPositionList(
+                  simplifiedLineSegmentsList,
+                );
+            final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
+              lineMPID: originalLine.mpID,
+              originalLineSegments: originalLineSegments,
+              newLineSegments: newLineSegments,
+            );
+
+            simplifyCommands.add(simplifyCommand);
+          }
+        case MPLineTypePerLineSegmentType.mixed:
+
+          /// TODO separate each line in it's per type parts and them treat each
+          /// part as a separate line.
+          break;
+        case MPLineTypePerLineSegmentType.straight:
+          if (_lineSimplificationMethod ==
+              MPLineSimplificationMethod.forceBezier) {
+            final List<THLineSegment> originalLineSegmentsList =
+                originalLineSegmentsMap.values.toList();
+            final List<THLineSegment> bezierLineSegments =
+                convertTHStraightLinesToTHBezierCurveLineSegments(
+                  originalStraightLineSegmentsList: originalLineSegmentsList,
+                );
+            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+            newLineSegments =
+                convertTHLineSegmentListToLineSegmentWithPositionList(
+                  bezierLineSegments,
+                );
+            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+            originalLineSegments = originalLine.getLineSegmentsPositionList(
+              _thFile,
+            );
+            final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
+              lineMPID: originalLine.mpID,
+              originalLineSegments: originalLineSegments,
+              newLineSegments: newLineSegments,
+            );
+
+            simplifyCommands.add(simplifyCommand);
+          } else {
+            final List<THLineSegment> originalLineSegmentsList =
+                originalLineSegmentsMap.values.toList();
+            final List<THLineSegment> removedLineSegments =
+                MPLineSimplificationAux.raumerDouglasPeuckerIterative(
+                  originalStraightLineSegments: originalLineSegmentsList,
+                  epsilon: _straightLineSimplifyEpsilonOnCanvas,
+                );
+
+            print(
+              'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
+            );
+
+            if (removedLineSegments.isEmpty) {
+              /// No simplification found.
+              return;
+            }
+
+            for (final THLineSegment removedLineSegment
+                in removedLineSegments) {
+              final MPCommand removeLineSegmentCommand =
+                  MPRemoveLineSegmentCommand(
+                    lineSegment: removedLineSegment,
+                    descriptionType: MPCommandDescriptionType.simplifyLine,
+                  );
+
+              simplifyCommands.add(removeLineSegmentCommand);
+            }
           }
       }
     }
@@ -1782,13 +1810,30 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _originalSimplifiedLines = simplifiedLines;
   }
 
-  void setLineSimplificationMethod(MPLineSimplificationMethod method) {
-    if (_lineSimplificationMethod == method) {
+  void setLineSimplificationMethod(MPLineSimplificationMethod newMethod) {
+    if (_lineSimplificationMethod == newMethod) {
       return;
     }
 
-    _lineSimplificationMethod = method;
+    _lineSimplificationMethod = newMethod;
     setOriginalSimplifiedLines(null);
+  }
+
+  List<({THLineSegment lineSegment, int lineSegmentPosition})>
+  convertTHLineSegmentListToLineSegmentWithPositionList(
+    List<THLineSegment> lineSegmentsList,
+  ) {
+    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+    lineSegmentsWithPosition = lineSegmentsList
+        .map<({THLineSegment lineSegment, int lineSegmentPosition})>(
+          (s) => (
+            lineSegment: s,
+            lineSegmentPosition: mpAddChildAtEndMinusOneOfParentChildrenList,
+          ),
+        )
+        .toList();
+
+    return lineSegmentsWithPosition;
   }
 }
 

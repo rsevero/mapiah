@@ -46,7 +46,7 @@ enum MPCommandDescriptionType {
   simplifyStraight,
   simplifyToBezier,
   simplifyToStraight,
-  substituteLineSegments,
+  replaceLineSegments,
   toggleReverseOption;
 
   static MPCommandDescriptionType getOppositeDescription(

@@ -27,6 +27,7 @@ enum MPCommandType {
   removePoint,
   removeScrap,
   removeXTherionImageInsertConfig,
+  replaceLineSegments,
   setAttrOptionToElement,
   setOptionToElement,
   substituteLineSegments,

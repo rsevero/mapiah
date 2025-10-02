@@ -29,6 +29,8 @@ class Vec2 {
   Vec2 operator *(double s) => Vec2(x * s, y * s);
   Vec2 operator /(double s) => Vec2(x / s, y / s);
 
+  Vec2 operator -() => Vec2(-x, -y);
+
   double dot(Vec2 o) => x * o.x + y * o.y;
   double cross(Vec2 o) => x * o.y - y * o.x;
   double hypot() => math.sqrt(x * x + y * y);
@@ -47,7 +49,8 @@ class Point {
   Vec2 toVec2() => Vec2(x, y);
 
   double distanceSquared(Point p) {
-    final dx = x - p.x, dy = y - p.y;
+    final double dx = x - p.x, dy = y - p.y;
+
     return dx * dx + dy * dy;
   }
 
@@ -105,72 +108,99 @@ class Line {
 
 class CubicBez {
   final Point p0, p1, p2, p3;
+
   CubicBez(this.p0, this.p1, this.p2, this.p3);
 
   Point eval(double t) {
-    final u = 1 - t;
-    final tt = t * t, uu = u * u;
-    final uuu = uu * u, ttt = tt * t;
-    final x = uuu * p0.x + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x;
-    final y = uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y;
+    final double u = 1 - t;
+    final double tt = t * t;
+    final double uu = u * u;
+    final double uuu = uu * u;
+    final double ttt = tt * t;
+    final double x =
+        uuu * p0.x + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x;
+    final double y =
+        uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y;
+
     return Point(x, y);
   }
 
   Vec2 deriv(double t) {
     // derivative of cubic Bezier
-    final u = 1 - t;
-    final x =
+    final double u = 1 - t;
+    final double x =
         3 * u * u * (p1.x - p0.x) +
         6 * u * t * (p2.x - p1.x) +
         3 * t * t * (p3.x - p2.x);
-    final y =
+    final double y =
         3 * u * u * (p1.y - p0.y) +
         6 * u * t * (p2.y - p1.y) +
         3 * t * t * (p3.y - p2.y);
+
     return Vec2(x, y);
   }
 
   double arclen(double eps) {
     // 16-point Gauss-Legendre quadrature of |p'(t)|
     double sum = 0;
-    for (final wxi in gaussLegendre16) {
-      final w = wxi.$1, xi = wxi.$2;
-      final t = 0.5 * (xi + 1); // map [-1,1] -> [0,1]
+
+    for (final (double, double) wxi in gaussLegendre16) {
+      final double w = wxi.$1;
+      final double xi = wxi.$2;
+      final double t = 0.5 * (xi + 1); // map [-1,1] -> [0,1]
+
       sum += w * deriv(t).hypot();
     }
+
     return 0.5 * sum;
   }
 
   double invArclen(double s, double eps) {
     // Invert arclength numerically via bisection (monotone).
     double lo = 0, hi = 1;
+
     const maxIter = 40;
-    final total = arclen(eps);
-    if (s <= 0) return 0;
-    if (s >= total) return 1;
-    for (var i = 0; i < maxIter; i++) {
-      final mid = 0.5 * (lo + hi);
-      final mlen = _partialArclen(mid);
+
+    final double total = arclen(eps);
+
+    if (s <= 0) {
+      return 0;
+    }
+    if (s >= total) {
+      return 1;
+    }
+    for (int i = 0; i < maxIter; i++) {
+      final double mid = 0.5 * (lo + hi);
+      final double mlen = _partialArclen(mid);
+
       if (mlen < s) {
         lo = mid;
       } else {
         hi = mid;
       }
-      if ((hi - lo) < 1e-9) break;
+      if ((hi - lo) < 1e-9) {
+        break;
+      }
     }
+
     return 0.5 * (lo + hi);
   }
 
   double _partialArclen(double tEnd) {
     // Gauss-Legendre on [0, tEnd]
-    final t0 = 0.5 * tEnd;
-    final dt = t0;
+    final double t0 = 0.5 * tEnd;
+    final double dt = t0;
+
     double sum = 0;
-    for (final wxi in gaussLegendre16) {
-      final w = wxi.$1, xi = wxi.$2;
-      final t = t0 + xi * dt * 0.5; // careful mapping
+
+    for (final (double, double) wxi in gaussLegendre16) {
+      final double w = wxi.$1;
+      final double xi = wxi.$2;
+      final double t = t0 + xi * dt * 0.5; // careful mapping
+
       sum += w * deriv(math.max(0.0, math.min(1.0, t))).hypot();
     }
+
     return dt * sum;
   }
 
@@ -184,27 +214,37 @@ class CubicBez {
 
 class BezPath {
   final List<_Cmd> _elements = [];
+
   bool isEmpty() => _elements.isEmpty;
   List<Object> elements() => _elements;
+
   void moveTo(Point p) => _elements.add(_MoveTo(p));
+
   void curveTo(Point p1, Point p2, Point p3) =>
       _elements.add(_CurveTo(p1, p2, p3));
+
   void truncate(int n) => _elements.length = math.min(n, _elements.length);
 
   // Convert the path to a list of cubic Bezier segments.
   // This avoids exposing the private command types to callers.
   List<CubicBez> toCubics() {
-    final out = <CubicBez>[];
+    final List<CubicBez> out = <CubicBez>[];
+
     Point? current;
-    for (final e in _elements) {
+
+    for (final _Cmd e in _elements) {
       if (e is _MoveTo) {
         current = e.p;
       } else if (e is _CurveTo) {
-        if (current == null) throw StateError('Curve before moveTo');
+        if (current == null) {
+          throw StateError('Curve before moveTo');
+        }
+
         out.add(CubicBez(current, e.p1, e.p2, e.p3));
         current = e.p3;
       }
     }
+
     return out;
   }
 }
@@ -213,11 +253,13 @@ abstract class _Cmd {}
 
 class _MoveTo extends _Cmd {
   final Point p;
+
   _MoveTo(this.p);
 }
 
 class _CurveTo extends _Cmd {
   final Point p1, p2, p3;
+
   _CurveTo(this.p1, this.p2, this.p3);
 }
 
@@ -228,19 +270,21 @@ class _CurveTo extends _Cmd {
 class CurveFitSample {
   final Point p;
   final Vec2 tangent;
+
   CurveFitSample(this.p, this.tangent);
 
   List<double> intersect(CubicBez c) {
     // Solve dot(c(t) - p, tangent) == 0 for t in [0, 1]
-    final p1 = (c.p1 - c.p0) * 3.0;
-    final p2 =
+    final Vec2 p1 = (c.p1 - c.p0) * 3.0;
+    final Vec2 p2 =
         (c.p2.toVec2() * 3.0) - (c.p1.toVec2() * 6.0) + (c.p0.toVec2() * 3.0);
-    final p3 = (c.p3 - c.p0) - (c.p2 - c.p1) * 3.0;
-    final c0 = (c.p0 - p).dot(tangent);
-    final c1 = p1.dot(tangent);
-    final c2 = p2.dot(tangent);
-    final c3 = p3.dot(tangent);
-    final roots = solveCubic(c0, c1, c2, c3);
+    final Vec2 p3 = (c.p3 - c.p0) - (c.p2 - c.p1) * 3.0;
+    final double c0 = (c.p0 - p).dot(tangent);
+    final double c1 = p1.dot(tangent);
+    final double c2 = p2.dot(tangent);
+    final double c3 = p3.dot(tangent);
+    final List<double> roots = solveCubic(c0, c1, c2, c3);
+
     return roots.where((t) => t >= 0.0 && t <= 1.0).toList();
   }
 }

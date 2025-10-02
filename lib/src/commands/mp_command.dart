@@ -179,6 +179,8 @@ abstract class MPCommand {
         return MPRemoveScrapCommand.fromMap(map);
       case MPCommandType.removeXTherionImageInsertConfig:
         return MPRemoveXTherionImageInsertConfigCommand.fromMap(map);
+      case MPCommandType.replaceLineSegments:
+        return MPReplaceLineSegmentsCommand.fromMap(map);
       case MPCommandType.setAttrOptionToElement:
         return MPSetAttrOptionToElementCommand.fromMap(map);
       case MPCommandType.setOptionToElement:

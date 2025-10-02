@@ -6,6 +6,9 @@
 
 import 'dart:math' as math;
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_fit_cubic_schneider.dart';
+import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 
 /// Minimal ParamCurveFit adapter for a polyline (piecewise linear curve).
 /// Each segment shares the global parameter uniformly.
@@ -145,4 +148,34 @@ List<Point> resampleCubics(
   // `backToPolyline` shows a simple way to get a polyline approximation back.
   // This function intentionally has no prints to keep example quiet.
   return (cubics, backToPolyline);
+}
+
+List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
+  required List<THLineSegment> originalStraightLineSegmentsList,
+}) {
+  final List<Point> points = originalStraightLineSegmentsList
+      .map(
+        (seg) =>
+            Point(seg.endPoint.coordinates.dx, seg.endPoint.coordinates.dy),
+      )
+      .toList();
+
+  if (points.isEmpty) {
+    return [];
+  }
+
+  // final List<CubicBez> cubicBezs = mpFitPolylineToCubics(
+  //   points,
+  //   accuracy: 0.5,
+  //   breakAtJoints: false,
+  //   nearOptimal: false,
+  // );
+  final List<CubicBez> cubicBezs = fitCubicSchneider(points, errorSquared: 0.5);
+  final List<THLineSegment> lineSegmentsList =
+      mpConvertCubicBezsToTHBezierCurveLineSegments(
+        cubicBezs: cubicBezs,
+        originalLineSegmentsList: originalStraightLineSegmentsList,
+      );
+
+  return lineSegmentsList;
 }

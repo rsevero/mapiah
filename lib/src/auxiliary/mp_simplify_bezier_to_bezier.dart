@@ -94,7 +94,8 @@ List<CubicBez> mpSimplifyCubicChain(
   return bezPathToCubics(simplified);
 }
 
-List<THLineSegment> mpSimplifyTHLineSegmentsToTHBeziers(
+List<THLineSegment>
+mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
   double accuracy = 0.5,
 }) {
@@ -117,7 +118,20 @@ List<THLineSegment> mpSimplifyTHLineSegmentsToTHBeziers(
     );
   }
 
-  final List<THLineSegment> simplifiedLineSegmentsList = [];
+  final List<THLineSegment> simplifiedLineSegmentsList =
+      mpConvertCubicBezsToTHBezierCurveLineSegments(
+        cubicBezs: fittedCubics,
+        originalLineSegmentsList: originalLineSegmentsList,
+      );
+
+  return simplifiedLineSegmentsList;
+}
+
+List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
+  required List<CubicBez> cubicBezs,
+  required List<THLineSegment> originalLineSegmentsList,
+}) {
+  final List<THLineSegment> lineSegmentsList = [];
   final THLineSegment firstOriginalLineSegment = originalLineSegmentsList.first;
   final int parentMPID = firstOriginalLineSegment.parentMPID;
   final THStraightLineSegment firstFittedLineSegment =
@@ -128,14 +142,14 @@ List<THLineSegment> mpSimplifyTHLineSegmentsToTHBeziers(
           endPoint: firstOriginalLineSegment.endPoint,
         );
 
-  simplifiedLineSegmentsList.add(firstFittedLineSegment);
+  lineSegmentsList.add(firstFittedLineSegment);
 
   /// Skip the first and last fitted cubics, as they are handled separately to
   /// guarantee that the the first and last points of the original line segments
   /// are preserved in the simplified result.
-  final Iterable<CubicBez> trimmedFittedCubics = fittedCubics
+  final Iterable<CubicBez> trimmedFittedCubics = cubicBezs
       .skip(1)
-      .take(fittedCubics.length - 2);
+      .take(cubicBezs.length - 2);
 
   for (final CubicBez fittedCubic in trimmedFittedCubics) {
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
@@ -145,19 +159,19 @@ List<THLineSegment> mpSimplifyTHLineSegmentsToTHBeziers(
       endPoint: THPositionPart(coordinates: fittedCubic.p3.toOffset()),
     );
 
-    simplifiedLineSegmentsList.add(fittedLineSegment);
+    lineSegmentsList.add(fittedLineSegment);
   }
 
   final THLineSegment lastOriginalSegment = originalLineSegmentsList.last;
   final THBezierCurveLineSegment
   lastFittedLineSegment = THBezierCurveLineSegment(
     parentMPID: parentMPID,
-    controlPoint1: THPositionPart(coordinates: fittedCubics.last.p1.toOffset()),
-    controlPoint2: THPositionPart(coordinates: fittedCubics.last.p2.toOffset()),
+    controlPoint1: THPositionPart(coordinates: cubicBezs.last.p1.toOffset()),
+    controlPoint2: THPositionPart(coordinates: cubicBezs.last.p2.toOffset()),
     endPoint: lastOriginalSegment.endPoint,
   );
 
-  simplifiedLineSegmentsList.add(lastFittedLineSegment);
+  lineSegmentsList.add(lastFittedLineSegment);
 
-  return simplifiedLineSegmentsList;
+  return lineSegmentsList;
 }

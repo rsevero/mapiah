@@ -399,11 +399,10 @@ class THLine extends THElement
 
   List<({int lineSegmentPosition, THLineSegment lineSegment})>
   getLineSegmentsPositionList(THFile thFile) {
-    final List<int> originalLineSegmentMPIDs = childrenMPIDs.toList();
     final List<({int lineSegmentPosition, THLineSegment lineSegment})>
     originalLineSegments = [];
 
-    for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
+    for (final int originalLineSegmentMPID in lineSegmentMPIDs) {
       final THLineSegment originalLineSegment = thFile.lineSegmentByMPID(
         originalLineSegmentMPID,
       );

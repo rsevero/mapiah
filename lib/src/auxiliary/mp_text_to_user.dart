@@ -438,7 +438,7 @@ class MPTextToUser {
             .simplifyToStraight] =
         localizations.mpCommandDescriptionSimplifyToStraight;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
-            .substituteLineSegments] =
+            .replaceLineSegments] =
         localizations.mpCommandDescriptionSubstituteLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleReverseOption] =
