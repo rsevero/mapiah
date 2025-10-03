@@ -185,8 +185,6 @@ abstract class MPCommand {
         return MPSetAttrOptionToElementCommand.fromMap(map);
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
-      case MPCommandType.substituteLineSegments:
-        return MPReplaceLineSegmentsCommand.fromMap(map);
     }
   }
 }

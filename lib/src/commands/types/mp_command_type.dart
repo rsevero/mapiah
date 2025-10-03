@@ -30,5 +30,4 @@ enum MPCommandType {
   replaceLineSegments,
   setAttrOptionToElement,
   setOptionToElement,
-  substituteLineSegments,
 }
