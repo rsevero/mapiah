@@ -1,11 +1,11 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
-import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
-import 'package:test/test.dart';
 
 import 'th_test_aux.dart';
 
@@ -13,6 +13,7 @@ import 'th_test_aux.dart';
 final MPLocator mpLocator = MPLocator();
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('actions: simplify straight line (Ctrl+L)', () {
     setUp(() {
       // Provide localizations to avoid null access in updateUndoRedoStatus()
