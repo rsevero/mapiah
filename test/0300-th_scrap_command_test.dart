@@ -100,9 +100,6 @@ endscrap
   });
 
   group('scrap -copyright', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00270-scrap_with_copyright_option.th2',
@@ -147,9 +144,6 @@ endscrap
   });
 
   group('scrap -cs', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00220-scrap_with_cs_option.th2',
@@ -191,9 +185,6 @@ endscrap
   });
 
   group('scrap -flip', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00280-scrap_with_flip_option.th2',
@@ -253,6 +244,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
+        final parser = THFileParser();
+        mpLocator.mpGeneralController.reset();
         final (_, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(failure),
         );
