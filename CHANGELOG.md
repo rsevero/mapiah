@@ -4,6 +4,7 @@
 * New features:
 * Fixed bugs:
 * Infrastructure maintenance:
+  * Fixing error 'Binding has not yet been initialized' on all tests.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
