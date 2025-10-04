@@ -34,6 +34,8 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
   Future<ui.Image>? _rasterImage;
   ui.Image? _decodedRasterImage;
 
+  bool _loadFailuredialogShown = false;
+
   double _xviRootedXX = 0.0;
   double _xviRootedYY = 0.0;
 
@@ -286,7 +288,8 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
 
           final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
 
-          if (context != null) {
+          if ((context != null) && !_loadFailuredialogShown) {
+            _loadFailuredialogShown = true;
             MPDialogAux.showXVIParsingErrorsDialog(context, errors);
           }
 
