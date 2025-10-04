@@ -1,15 +1,23 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
+
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp'; // or any fake path
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
+  final MPLocator mpLocator = MPLocator();
   group('scrap -author', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00260-scrap_with_author_option.th2',
@@ -74,6 +82,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -118,6 +129,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -159,6 +173,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -213,6 +230,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
           // trace: true,
@@ -242,9 +262,6 @@ endscrap
   });
 
   group('scrap -projection', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00070-scrap_and_endscrap_projection_none.th2',
@@ -318,6 +335,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -333,9 +353,6 @@ endscrap
   });
 
   group('scrap -scale', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00012-encoding_with_trailing_comment.th2',
@@ -374,6 +391,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -389,9 +409,6 @@ endscrap
   });
 
   group('scrap -sketch', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00300-scrap_with_sketch_option.th2',
@@ -406,6 +423,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -421,9 +441,6 @@ endscrap
   });
 
   group('scrap -station-names', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00310-scrap_with_station-names_option.th2',
@@ -438,6 +455,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -453,9 +473,6 @@ endscrap
   });
 
   group('scrap -stations', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00230-scrap_with_stations_option.th2',
@@ -470,6 +487,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -485,9 +505,6 @@ endscrap
   });
 
   group('scrap -title', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00240-scrap_with_title_option.th2',
@@ -502,6 +519,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -549,9 +569,6 @@ endscrap
   });
 
   group('scrap MULTIPLE OPTIONS', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file':
@@ -579,6 +596,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -594,9 +614,6 @@ endscrap
   });
 
   group('scrap NO OPTIONS', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-02077-scrap_with_no_option.th2',
@@ -611,6 +628,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -626,8 +646,6 @@ endscrap
   });
 
   group('scrap failures', () {
-    final parser = THFileParser();
-
     const failures = [
       'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',
       'th_file_parser-00063-scrap_with_another_scrap_inside-failure.th2',
@@ -635,6 +653,8 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
+        final parser = THFileParser();
+        mpLocator.mpGeneralController.reset();
         final (_, isSuccessful, error) = await parser.parse(
           THTestAux.testPath(failure),
         );

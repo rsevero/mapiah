@@ -7,13 +7,20 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
 
-// Use the same singleton used by the app code
-final MPLocator mpLocator = MPLocator();
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp'; // or any fake path
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
+  final MPLocator mpLocator = MPLocator();
   group('actions: simplify straight line (Ctrl+L)', () {
     setUp(() {
       // Provide localizations to avoid null access in updateUndoRedoStatus()

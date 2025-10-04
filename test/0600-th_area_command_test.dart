@@ -3,12 +3,20 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
 
-final MPLocator mpLocator = MPLocator();
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp'; // or any fake path
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
+  final MPLocator mpLocator = MPLocator();
   group('area', () {
     const successes = [
       {

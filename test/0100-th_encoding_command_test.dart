@@ -1,15 +1,23 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
+
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp'; // or any fake path
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
+  final MPLocator mpLocator = MPLocator();
   group('encoding', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     const successes = [
       {
         'file': 'th_file_parser-00011-encoding_with_trailing_space.th2',
@@ -70,6 +78,9 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
           // trace: true,

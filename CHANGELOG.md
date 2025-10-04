@@ -3,10 +3,14 @@
 ## 0.2.19 - not-yet released - the polish refactoring
 * New features:
 * Fixed bugs:
+  * THFile creation through forCWJM constructor resulted in duplicated childrenMPIDs.
+  * hash calculation and == operator not working in most elements with list or maps.
+  * No implementation found for method getApplicationDocumentsDirectory.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
   * flutter pub upgrade --major-versions.
+  * Implemented MPAddAreaTHIDCommand test.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
