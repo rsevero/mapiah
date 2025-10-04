@@ -37,9 +37,6 @@ mixin MPTH2FileEditPageSimplifyLineMixin on MPTH2FileEditState {
               newLineSimplificationMethod,
             );
 
-            elementEditController.updateStraightLineSimplificationTolerance();
-            elementEditController.updateOriginalSimplifiedLines();
-
             elementEditController.simplifySelectedLines();
           }
           keyProcessed = true;

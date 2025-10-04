@@ -52,9 +52,6 @@ void main() {
           controller.elementEditController.setLineSimplificationMethod(
             MPLineSimplificationMethod.forceStraight,
           );
-          controller.elementEditController
-              .updateStraightLineSimplificationTolerance();
-          controller.elementEditController.updateOriginalSimplifiedLines();
           controller.elementEditController.simplifySelectedLines();
 
           // Undo the action

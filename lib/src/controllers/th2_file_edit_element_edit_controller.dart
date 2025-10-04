@@ -1595,6 +1595,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     int lineCount = 0;
 
+    updateStraightLineSimplificationTolerance();
+    updateOriginalSimplifiedLines();
+
     for (final MPSelectedElement selectedElement in _originalSimplifiedLines!) {
       if (selectedElement is! MPSelectedLine) {
         continue;
