@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.19 - not yet released
+## 0.2.19 - not-yet released - the polish refactoring
 * New features:
 * Fixed bugs:
 * Infrastructure maintenance:
