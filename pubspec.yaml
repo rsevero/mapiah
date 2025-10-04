@@ -10,7 +10,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
-  analyzer: ^7.7.1
+  analyzer: ^8.2.0
   charset: ^2.0.0
   collection: ^1.19.0
   file_picker: ^10.3.3

@@ -6,6 +6,7 @@
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
+  * flutter pub upgrade --major-versions.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
