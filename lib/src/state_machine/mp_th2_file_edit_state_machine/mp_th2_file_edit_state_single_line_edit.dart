@@ -2,10 +2,11 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     with
-        MPTH2FileEditStateMoveCanvasMixin,
-        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditPageSimplifyLineMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
-        MPTH2FileEditStateLineSegmentOptionsEditMixin {
+        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateLineSegmentOptionsEditMixin,
+        MPTH2FileEditStateMoveCanvasMixin {
   bool _dragShouldMovePoints = false;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
@@ -49,7 +50,6 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
-    bool cleanOriginalSimplifiedLines = true;
     bool keyProcessed = false;
 
     switch (event.logicalKey) {
@@ -63,15 +63,7 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyL:
-        if (isCtrlPressed || isMetaPressed) {
-          elementEditController.updateStraightLineSimplificationTolerance();
-          elementEditController.updateOriginalSimplifiedLines();
-          if (!isAltPressed && !isShiftPressed) {
-            elementEditController.simplifySelectedLines();
-          }
-        }
-        keyProcessed = true;
-        cleanOriginalSimplifiedLines = false;
+        keyProcessed = onKeyLDownEvent(event);
     }
 
     /// The slash character can be produced with keyboard combinations
@@ -86,10 +78,6 @@ class MPTH2FileEditStateSingleLineEdit extends MPTH2FileEditState
               .applyAddLineSegmentsBetweenSelectedLineSegments();
           keyProcessed = true;
         }
-    }
-
-    if (cleanOriginalSimplifiedLines) {
-      elementEditController.setOriginalSimplifiedLines(null);
     }
 
     if (!keyProcessed) {
