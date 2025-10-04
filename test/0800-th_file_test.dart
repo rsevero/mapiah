@@ -1,13 +1,14 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
-import 'package:test/test.dart';
 import 'th_test_aux.dart';
 
 final MPLocator mpLocator = MPLocator();
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('initial', () {
     final file = THFile();
 
@@ -59,7 +60,7 @@ endscrap
     ];
 
     for (var success in successes) {
-      test(success['file'], () async {
+      test(success['file']!, () async {
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -105,7 +106,7 @@ endscrap
     ];
 
     for (var success in successes) {
-      test(success['file'], () async {
+      test(success['file']!, () async {
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );

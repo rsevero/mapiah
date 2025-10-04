@@ -1,3 +1,4 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
@@ -7,7 +8,6 @@ import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
-import 'package:test/test.dart';
 
 const String testFilesPath = 'test/auxiliary/xvi';
 const String extension = '.xvi';
@@ -17,6 +17,7 @@ String _getFilePath(String fileName) {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('XVIGrid', () {
     final XVIFileParser parser = XVIFileParser();
     final List<String> fileNames = [

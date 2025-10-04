@@ -1,8 +1,8 @@
-import 'package:test/test.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('THDoublePart from double', () {
     var successes = [
       {'value': 9322.91263, 'decimalPositions': 5, 'asString': '9322.91263'},

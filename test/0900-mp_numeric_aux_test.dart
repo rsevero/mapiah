@@ -1,7 +1,8 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:test/test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('nextUp() and nextDown() for a positive number', () {
     double original = 1734.12;
 

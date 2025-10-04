@@ -1,9 +1,10 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:test/test.dart';
 
 import 'package:mapiah/src/mp_file_read_write/th_grammar.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('comment', () {
     final grammar = THGrammar();
     final parser = grammar.buildFrom(grammar.endLineComment()).end();
