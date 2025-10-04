@@ -1,6 +1,6 @@
 part of '../th_command_option.dart';
 
-enum THCommandOptionType {
+enum THCommandOptionType implements Comparable<THCommandOptionType> {
   adjust,
   align,
   altitude,
@@ -51,5 +51,8 @@ enum THCommandOptionType {
   title,
   unrecognizedCommandOption,
   visibility,
-  walls,
+  walls;
+
+  @override
+  int compareTo(THCommandOptionType other) => index.compareTo(other.index);
 }

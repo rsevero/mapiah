@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -14,7 +16,7 @@ final MPLocator mpLocator = MPLocator();
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  group('actions: simplify straight line (Ctrl+L)', () {
+  group('command: MPAddAreaBorderTHIDCommand', () {
     setUp(() {
       // Provide localizations to avoid null access in updateUndoRedoStatus()
       mpLocator.appLocalizations = AppLocalizationsEn();
@@ -24,49 +26,45 @@ void main() {
 
     const successes = [
       {
-        'file': '2025-10-03-001-simplify_straight_line.th2',
-        'length': 23,
+        'file': '2025-10-04-001-area_and_line.th2',
+        'length': 20,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
-scrap Trianglinho-1R1-2p
-  line wall
-    64.21 -61.41
-    72.46 -61.74
-    80.37 -62.39
-    94.52 -63.03
-    108.76 -65.62
-    122.36 -69.18
-    136.13 -72.61
-    149.51 -75.33
-    163.77 -75.33
-    176.39 -81.51
-    181.55 -94.76
-    182.36 -109.48
-    184.3 -123.49
-    187.86 -137.32
-    189.64 -150.59
-    193.21 -164.67
-    207.76 -171.21
+scrap test
+  area clay
+    l85-3732--20
+  endarea
+  line border -close on -id l85-3732--20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
   endline
 endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
-scrap Trianglinho-1R1-2p
-  line wall
-    64.21 -61.41
-    94.52 -63.03
-    108.76 -65.62
-    136.13 -72.61
-    149.51 -75.33
-    163.77 -75.33
-    176.39 -81.51
-    181.55 -94.76
-    182.36 -109.48
-    184.3 -123.49
-    187.86 -137.32
-    189.64 -150.59
-    193.21 -164.67
-    207.76 -171.21
+scrap test
+  area clay
+    l85-3732--20
+    blaus
+  endarea
+  line border -close on -id l85-3732--20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
   endline
 endscrap
 ''',
@@ -102,17 +100,31 @@ endscrap
               controller.thFile.toMap(),
             );
 
-            // Select the single line in the file
-            final THLine line = controller.thFile.getLines().first;
-            controller.selectionController.addSelectedElement(line);
+            THLine? secondLine;
+            for (final int mpID in parsedFile.linesMPIDs) {
+              final THLine line = parsedFile.lineByMPID(mpID);
 
-            controller.setCanvasScale(5);
+              if (line.hasOption(THCommandOptionType.id) &&
+                  (line.optionByType(THCommandOptionType.id)
+                              as THIDCommandOption)
+                          .thID ==
+                      'blaus') {
+                secondLine = line;
+                break;
+              }
+            }
 
-            // Act: set method, prepare tolerance and original set, then simplify
-            controller.elementEditController.setLineSimplificationMethod(
-              MPLineSimplificationMethod.forceStraight,
-            );
-            controller.elementEditController.simplifySelectedLines();
+            expect(secondLine, isNotNull);
+
+            final THArea area = parsedFile.getAreas().first;
+            final MPCommand addLineToAreaCommand =
+                MPCommandFactory.addLineToArea(
+                  area: area,
+                  line: secondLine!,
+                  thFile: parsedFile,
+                );
+
+            controller.execute(addLineToAreaCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
             expect(asFileChanged, success['asFileChanged']);
@@ -124,8 +136,8 @@ endscrap
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object
-            expect(controller.thFile == originalSnapshot, isTrue);
             expect(identical(controller.thFile, originalSnapshot), isFalse);
+            expect(controller.thFile == originalSnapshot, isTrue);
           } catch (e, st) {
             fail('Unexpected exception: $e\n$st');
           }

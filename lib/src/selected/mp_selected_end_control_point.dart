@@ -12,8 +12,8 @@ class MPSelectedEndControlPoint extends MPSelectedElement {
   }
 
   void _createClone(THLineSegment originalLineSegment) {
-    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
-        LinkedHashMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
+        SplayTreeMap<THCommandOptionType, THCommandOption>();
 
     originalLineSegment.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();

@@ -52,8 +52,8 @@ endscrap
         'countElements': 4,
         'asFile': r"""encoding UTF-8
 scrap poco_surubim_SCP01
-  point 2374 -482 station:fixed -visibility off -name \
-      E15@final_de_semana_31_de_julho_de_2016
+  point 2374 -482 station:fixed -name E15@final_de_semana_31_de_julho_de_2016 \
+      -visibility off
 endscrap
 """,
       },
@@ -133,7 +133,7 @@ The scrap below is really complex.
 Take care!!
 endcomment
 scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
-  point 42.1 -5448.8 guano -visibility off -id P1
+  point 42.1 -5448.8 guano -id P1 -visibility off
   comment
 
 Another comment block.
@@ -283,7 +283,7 @@ Take care!!
 endcomment
 
 scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
-  point 42.1 -5448.8 guano -visibility off -id P1
+  point 42.1 -5448.8 guano -id P1 -visibility off
 
   comment
 

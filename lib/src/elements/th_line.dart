@@ -18,8 +18,8 @@ class THLine extends THElement
     required String unknownPLAType,
     required List<int> childrenMPIDs,
     required List<int> lineSegmentMPIDs,
-    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    required SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
+    required SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : _lineSegmentMPIDs = lineSegmentMPIDs,
        super.forCWJM() {
@@ -102,8 +102,8 @@ class THLine extends THElement
     String? unknownPLAType,
     List<int>? childrenMPIDs,
     List<int>? lineSegmentMPIDs,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THLine.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -143,10 +143,10 @@ class THLine extends THElement
     super.hashCode,
     lineType,
     unknownPLAType,
-    childrenMPIDs,
-    _lineSegmentMPIDs,
-    optionsMap,
-    attrOptionsMap,
+    const DeepCollectionEquality().hash(childrenMPIDs),
+    const DeepCollectionEquality().hash(_lineSegmentMPIDs),
+    const DeepCollectionEquality().hash(optionsMap),
+    const DeepCollectionEquality().hash(attrOptionsMap),
   );
 
   @override

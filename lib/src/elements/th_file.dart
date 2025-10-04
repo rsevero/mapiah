@@ -80,10 +80,6 @@ class THFile
     final Iterable<THElement> elements = _elementByMPID.values;
 
     for (final THElement element in elements) {
-      if (element.parentMPID == _mpID) {
-        childrenMPIDs.add(element.mpID);
-      }
-
       _updateSupportMaps(element);
     }
   }
@@ -146,17 +142,30 @@ class THFile
     if (other is! THFile) return false;
 
     final Function deepEq = const DeepCollectionEquality().equals;
+    final Function unorderedEq =
+        const DeepCollectionEquality.unordered().equals;
 
-    return other.filename == filename &&
-        other.encoding == encoding &&
-        other._mpID == _mpID &&
-        deepEq(other._elementByMPID, _elementByMPID) &&
-        deepEq(other.childrenMPIDs, childrenMPIDs);
+    return mpID == other.mpID &&
+        filename == other.filename &&
+        encoding == other.encoding &&
+        deepEq(other.childrenMPIDs, childrenMPIDs) &&
+        unorderedEq(other._elementByMPID, _elementByMPID);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(filename, encoding, _mpID, _elementByMPID, childrenMPIDs);
+  int get hashCode {
+    final Map<int, THElement> orderedElementsByMPID = Map.fromEntries(
+      _elementByMPID.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+    );
+
+    return Object.hash(
+      filename,
+      encoding,
+      _mpID,
+      const DeepCollectionEquality().hash(orderedElementsByMPID),
+      const DeepCollectionEquality().hash(childrenMPIDs),
+    );
+  }
 
   Map<int, THElement> get elements {
     return _elementByMPID;

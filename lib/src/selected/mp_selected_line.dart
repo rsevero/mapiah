@@ -29,8 +29,8 @@ class MPSelectedLine extends MPSelectedElement {
         continue;
       }
 
-      final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap =
-          LinkedHashMap<THCommandOptionType, THCommandOption>();
+      final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap =
+          SplayTreeMap<THCommandOptionType, THCommandOption>();
 
       element.optionsMap.forEach((key, value) {
         optionsMap[key] = value.copyWith();
@@ -43,8 +43,8 @@ class MPSelectedLine extends MPSelectedElement {
 
     final List<int> childrenMPIDsClone = originalLine.childrenMPIDs.toList();
 
-    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
-        LinkedHashMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
+        SplayTreeMap<THCommandOptionType, THCommandOption>();
     originalLine.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();
     });

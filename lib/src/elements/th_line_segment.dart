@@ -11,8 +11,8 @@ abstract class THLineSegment extends THElement
     required super.parentMPID,
     super.sameLineComment,
     required this.endPoint,
-    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    required SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
+    required SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
@@ -85,18 +85,20 @@ abstract class THLineSegment extends THElement
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THPositionPart? endPoint,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   });
 
   @override
   bool equalsBase(Object other) {
     if (!super.equalsBase(other)) return false;
 
+    final Function deepEq = DeepCollectionEquality().equals;
+
     return other is THLineSegment &&
         endPoint == other.endPoint &&
-        mapEquals(optionsMap, other.optionsMap) &&
-        mapEquals(attrOptionsMap, other.attrOptionsMap);
+        deepEq(optionsMap, other.optionsMap) &&
+        deepEq(attrOptionsMap, other.attrOptionsMap);
   }
 
   @override
@@ -109,7 +111,12 @@ abstract class THLineSegment extends THElement
 
   @override
   int get hashCode =>
-      super.hashCode ^ Object.hash(endPoint, optionsMap, attrOptionsMap);
+      super.hashCode ^
+      Object.hash(
+        endPoint,
+        DeepCollectionEquality().hash(optionsMap),
+        DeepCollectionEquality().hash(attrOptionsMap),
+      );
 
   Rect getBoundingBox(Offset startPoint) {
     _boundingBox ??= _calculateBoundingBox(startPoint);

@@ -1,10 +1,10 @@
 part of '../th_element.dart';
 
 mixin THHasOptionsMixin on THElement {
-  final LinkedHashMap<THCommandOptionType, THCommandOption> _optionsMap =
-      LinkedHashMap<THCommandOptionType, THCommandOption>();
-  final LinkedHashMap<String, THAttrCommandOption> _attrOptionsMap =
-      LinkedHashMap<String, THAttrCommandOption>();
+  final SplayTreeMap<THCommandOptionType, THCommandOption> _optionsMap =
+      SplayTreeMap<THCommandOptionType, THCommandOption>();
+  final SplayTreeMap<String, THAttrCommandOption> _attrOptionsMap =
+      SplayTreeMap<String, THAttrCommandOption>();
 
   void addUpdateOption(THCommandOption option) {
     if (option is THAttrCommandOption) {
@@ -92,12 +92,12 @@ mixin THHasOptionsMixin on THElement {
   }
 
   static Map<String, dynamic> optionsMapToMap(
-    LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
   ) => optionsMap.map((key, value) => MapEntry(key.name, value.toMap()));
 
-  static LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapFromMap(
+  static SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapFromMap(
     Map<String, dynamic> map,
-  ) => LinkedHashMap<THCommandOptionType, THCommandOption>.from(
+  ) => SplayTreeMap<THCommandOptionType, THCommandOption>.from(
     map.map(
       (key, value) => MapEntry(
         THCommandOptionType.values.byName(key),
@@ -106,7 +106,7 @@ mixin THHasOptionsMixin on THElement {
     ),
   );
 
-  LinkedHashMap<THCommandOptionType, THCommandOption> get optionsMap =>
+  SplayTreeMap<THCommandOptionType, THCommandOption> get optionsMap =>
       _optionsMap;
 
   void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
@@ -116,16 +116,16 @@ mixin THHasOptionsMixin on THElement {
   }
 
   static Map<String, dynamic> attrOptionsMapToMap(
-    LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
   ) => attrOptionsMap.map((key, value) => MapEntry(key, value.toMap()));
 
-  static LinkedHashMap<String, THAttrCommandOption> attrOptionsMapFromMap(
+  static SplayTreeMap<String, THAttrCommandOption> attrOptionsMapFromMap(
     Map<String, dynamic> map,
-  ) => LinkedHashMap<String, THAttrCommandOption>.from(
+  ) => SplayTreeMap<String, THAttrCommandOption>.from(
     map.map((key, value) => MapEntry(key, THAttrCommandOption.fromMap(value))),
   );
 
-  LinkedHashMap<String, THAttrCommandOption> get attrOptionsMap =>
+  SplayTreeMap<String, THAttrCommandOption> get attrOptionsMap =>
       _attrOptionsMap;
 
   void addAttrOptionsMap(Map<String, THAttrCommandOption> attrOptionsMap) {

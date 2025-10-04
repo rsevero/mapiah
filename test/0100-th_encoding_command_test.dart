@@ -70,11 +70,15 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final (file, isSuccessful, _) = await parser.parse(
+        final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
           // trace: true,
         );
-        expect(isSuccessful, true);
+        expect(
+          isSuccessful,
+          true,
+          reason: 'Parsing failed with errors: $errors',
+        );
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);

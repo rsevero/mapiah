@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -14,6 +15,72 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 class MPCommandFactory {
+  static MPCommand addLineToArea({
+    required THArea area,
+    required THLine line,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.addAreaBorderTHID,
+  }) {
+    final List<MPCommand> commands = [];
+
+    if (!line.hasOption(THCommandOptionType.id)) {
+      if (!area.hasOption(THCommandOptionType.id)) {
+        final String newAreaTHID = thFile.getNewTHID(
+          element: area,
+          prefix: mpAreaTHIDPrefix,
+        );
+        final THIDCommandOption areaTHIDOption = THIDCommandOption(
+          optionParent: area,
+          thID: newAreaTHID,
+        );
+        final MPCommand addAreaTHIDCommand = MPSetOptionToElementCommand(
+          option: areaTHIDOption,
+        );
+
+        commands.add(addAreaTHIDCommand);
+      }
+
+      final String areaTHID =
+          (area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+      final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
+      final String newLineTHID = thFile.getNewTHID(
+        element: line,
+        prefix: lineTHIDPrefix,
+      );
+      final THIDCommandOption lineTHIDOption = THIDCommandOption(
+        optionParent: line,
+        thID: newLineTHID,
+      );
+      final MPCommand addLineTHIDCommand = MPSetOptionToElementCommand(
+        option: lineTHIDOption,
+      );
+      commands.add(addLineTHIDCommand);
+    }
+
+    final String lineTHID =
+        (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+    final THAreaBorderTHID areaBorderTHID = THAreaBorderTHID(
+      parentMPID: area.mpID,
+      thID: lineTHID,
+    );
+    final MPCommand addAreaBorderTHIDCommand = MPAddAreaBorderTHIDCommand(
+      newAreaBorderTHID: areaBorderTHID,
+    );
+
+    commands.add(addAreaBorderTHIDCommand);
+
+    final MPCommand command = (commands.length == 1)
+        ? commands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commands,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+          );
+
+    return command;
+  }
+
   static MPCommand setOptionOnElements({
     required THCommandOption option,
     required List<THElement> elements,

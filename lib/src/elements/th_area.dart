@@ -15,8 +15,8 @@ class THArea extends THElement
     required this.areaType,
     required String unknownPLAType,
     required List<int> childrenMPIDs,
-    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    required SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
+    required SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _unknownPLAType = unknownPLAType;
@@ -91,8 +91,8 @@ class THArea extends THElement
     THAreaType? areaType,
     String? unknownPLAType,
     List<int>? childrenMPIDs,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THArea.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -130,9 +130,9 @@ class THArea extends THElement
     super.hashCode,
     areaType,
     unknownPLAType,
-    childrenMPIDs,
-    optionsMap,
-    attrOptionsMap,
+    DeepCollectionEquality().hash(childrenMPIDs),
+    DeepCollectionEquality().hash(optionsMap),
+    DeepCollectionEquality().hash(attrOptionsMap),
   );
 
   @override

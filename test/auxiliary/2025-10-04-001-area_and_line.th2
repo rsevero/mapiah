@@ -1,0 +1,20 @@
+encoding UTF-8
+scrap test
+area clay
+  l85-3732--20
+endarea
+
+line border -id l85-3732--20 -close on -visibility off
+  3592.0 208.0
+  3539.45 249.03 3447.39 245.1 3392.0 208.0
+  3233.22 101.65 3066.45 -131.93 3204.0 -332.0
+  3266.87 -423.45 3365.54 -513.28 3476.0 -524.0
+  3929.86 -568.03 3743.42 89.77 3592.0 208.0
+endline
+
+  line contour -close on -visibility off -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+endline
+endscrap

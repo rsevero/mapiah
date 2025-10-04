@@ -34,8 +34,8 @@ class THScrap extends THElement
     super.sameLineComment,
     required String thID,
     required List<int> childrenMPIDs,
-    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    required SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
+    required SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _thID = thID;
@@ -97,8 +97,8 @@ class THScrap extends THElement
     String? originalLineInTH2File,
     String? thID,
     List<int>? childrenMPIDs,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THScrap.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -133,9 +133,9 @@ class THScrap extends THElement
   int get hashCode => Object.hash(
     super.hashCode,
     _thID,
-    childrenMPIDs,
-    optionsMap,
-    attrOptionsMap,
+    const DeepCollectionEquality().hash(childrenMPIDs),
+    const DeepCollectionEquality().hash(optionsMap),
+    const DeepCollectionEquality().hash(attrOptionsMap),
   );
 
   @override

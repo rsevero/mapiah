@@ -193,7 +193,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap poco_surubim_SCP01 -projection [ elevation 10 ] -flip vertical -sketch \
+scrap poco_surubim_SCP01 -flip vertical -projection [ elevation 10 ] -sketch \
     ./FrozenDeep_p.xvi 12 32
 endscrap
 ''',
@@ -559,7 +559,7 @@ endscrap
         'length': 3,
         'encoding': 'ISO8859-15',
         'asFile': r'''encoding ISO8859-15
-scrap poco_surubim_SCP01 -projection [ elevation 10 ] -flip horizontal -sketch \
+scrap poco_surubim_SCP01 -flip horizontal -projection [ elevation 10 ] -sketch \
     ./FrozenDeep_p.xvi 12 32
 endscrap
 ''',
@@ -570,7 +570,7 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap s8-1p -projection plan -author 2016.05.29 "Adolpho Milhommen" -scale [ 0 0 \
+scrap s8-1p -author 2016.05.29 "Adolpho Milhommen" -projection plan -scale [ 0 0 \
     96 0 0 0 200 0 in ]
 endscrap
 ''',

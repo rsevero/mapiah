@@ -86,8 +86,8 @@ class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
     THPositionPart? controlPoint1,
     THPositionPart? controlPoint2,
     THPositionPart? endPoint,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THBezierCurveLineSegment.forCWJM(
       mpID: mpID ?? this.mpID,

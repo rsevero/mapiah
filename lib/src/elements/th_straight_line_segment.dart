@@ -57,8 +57,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     bool makeSameLineCommentNull = false,
     String? originalLineInTH2File,
     THPositionPart? endPoint,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THStraightLineSegment.forCWJM(
       mpID: mpID ?? this.mpID,

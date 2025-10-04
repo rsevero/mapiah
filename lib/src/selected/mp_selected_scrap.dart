@@ -8,8 +8,8 @@ class MPSelectedScrap extends MPSelectedElement {
   }
 
   void _createClone(THScrap originalScrap) {
-    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
-        LinkedHashMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
+        SplayTreeMap<THCommandOptionType, THCommandOption>();
 
     originalScrap.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();

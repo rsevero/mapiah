@@ -41,8 +41,8 @@ class THPoint extends THElement
     required this.position,
     required this.pointType,
     required String unknownPLAType,
-    required LinkedHashMap<THCommandOptionType, THCommandOption> optionsMap,
-    required LinkedHashMap<String, THAttrCommandOption> attrOptionsMap,
+    required SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
+    required SplayTreeMap<String, THAttrCommandOption> attrOptionsMap,
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     _unknownPLAType = unknownPLAType;
@@ -133,8 +133,8 @@ class THPoint extends THElement
     THPositionPart? position,
     THPointType? pointType,
     String? unknownPLAType,
-    LinkedHashMap<THCommandOptionType, THCommandOption>? optionsMap,
-    LinkedHashMap<String, THAttrCommandOption>? attrOptionsMap,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
   }) {
     return THPoint.forCWJM(
       mpID: mpID ?? this.mpID,
@@ -173,8 +173,8 @@ class THPoint extends THElement
     position,
     pointType,
     unknownPLAType,
-    optionsMap,
-    attrOptionsMap,
+    DeepCollectionEquality().hash(optionsMap),
+    DeepCollectionEquality().hash(attrOptionsMap),
   );
 
   @override

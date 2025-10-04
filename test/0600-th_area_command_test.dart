@@ -38,7 +38,7 @@ scrap test
   area clay -clip on
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -73,7 +73,7 @@ scrap test
   area clay
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -96,7 +96,7 @@ scrap test
   area clay
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -115,7 +115,7 @@ scrap test
   area clay
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -158,7 +158,7 @@ scrap test
   area pool -clip on
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -203,7 +203,7 @@ scrap test
   area clay -clip off
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -222,7 +222,7 @@ scrap test
   area clay -clip off
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -281,7 +281,7 @@ scrap test
   area water -context point anchor
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -301,7 +301,7 @@ scrap test
   area water -context point anchor
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -343,7 +343,7 @@ scrap test
   area water -id area51
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -362,7 +362,7 @@ scrap test
   area water -id area51
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -404,7 +404,7 @@ scrap test
   area clay -place top
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -423,7 +423,7 @@ scrap test
   area clay -place top
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -443,7 +443,7 @@ scrap test
   area clay -place top # With a same line comment in the command like option
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -502,7 +502,7 @@ scrap test
   area clay -visibility off
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -522,7 +522,7 @@ scrap test
   area clay -visibility off
     l85-3732--20
   endarea
-  line border -id l85-3732--20 -close on -visibility off
+  line border -close on -id l85-3732--20 -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332

@@ -622,8 +622,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               coordinates: controlPoint2,
               decimalPositions: currentDecimalPositions,
             ),
-            optionsMap: LinkedHashMap<THCommandOptionType, THCommandOption>(),
-            attrOptionsMap: LinkedHashMap<String, THAttrCommandOption>(),
+            optionsMap: SplayTreeMap<THCommandOptionType, THCommandOption>(),
+            attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>(),
             originalLineInTH2File: '',
             sameLineComment: '',
           );

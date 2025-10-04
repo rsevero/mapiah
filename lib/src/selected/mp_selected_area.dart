@@ -15,8 +15,8 @@ class MPSelectedArea extends MPSelectedElement {
     THArea originalArea,
     TH2FileEditController th2FileEditController,
   ) {
-    final LinkedHashMap<THCommandOptionType, THCommandOption> optionsMapClone =
-        LinkedHashMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
+        SplayTreeMap<THCommandOptionType, THCommandOption>();
 
     originalArea.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();

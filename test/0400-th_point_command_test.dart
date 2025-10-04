@@ -296,7 +296,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 1.2 3.4 u:test -attr foo "the foo value" -attr bar "the bar value"
+  point 1.2 3.4 u:test -attr bar "the bar value" -attr foo "the foo value"
 endscrap
 ''',
         'attrs': {'foo': 'the foo value', 'bar': 'the bar value'},
@@ -758,7 +758,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station:fixed -name A2@final_de_semana -id A2
+  point 782 -1740 station:fixed -id A2 -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -768,7 +768,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station:fixed -name A2@final_de_semana -id A2
+  point 782 -1740 station:fixed -id A2 -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -1178,7 +1178,7 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap extranotesSP -projection plan -scale [ -128 -128 698.865 -128 0 0 \
     21.002371 0 m ]
-  point 284.25 34.25 label -text "Anchor SEB7529X" -align bottom
+  point 284.25 34.25 label -align bottom -text "Anchor SEB7529X"
 endscrap
 ''',
       },
@@ -1370,7 +1370,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282 80 date -value 2022.02.05 -scale xs -align bottom-left
+  point 2282 80 date -align bottom-left -value 2022.02.05 -scale xs
 endscrap
 ''',
       },
@@ -1390,7 +1390,7 @@ endscrap
         'length': 4,
         'encoding': 'UTF-8',
         'asFile':
-            'encoding UTF-8\r\nscrap 141c-TradeElevEXT-s1\r\n  point 16235 903.25 date -value 2024.06.08 -scale xs -align bottom-right\r\nendscrap\r\n',
+            'encoding UTF-8\r\nscrap 141c-TradeElevEXT-s1\r\n  point 16235 903.25 date -align bottom-right -value 2024.06.08 -scale xs\r\nendscrap\r\n',
       },
     ];
 
