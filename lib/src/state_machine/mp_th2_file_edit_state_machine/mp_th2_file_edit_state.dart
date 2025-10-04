@@ -26,6 +26,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_simplify_line_mixin.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 
 part 'mixins/mp_th2_file_edit_page_state_add_line_to_area_mixin.dart';

@@ -2,9 +2,10 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     with
+        MPTH2FileEditPageSimplifyLineMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateOptionsEditMixin {
   MPTH2FileEditStateSelectNonEmptySelection({
     required super.th2FileEditController,
@@ -271,52 +272,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
-    final bool isAltPressed = MPInteractionAux.isAltPressed();
-    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
-    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
-
-    bool cleanOriginalSimplifiedLines = true;
-    bool keyProcessed = false;
-
-    switch (event.logicalKey) {
-      case LogicalKeyboardKey.keyL:
-        if (isCtrlPressed || isMetaPressed) {
-          cleanOriginalSimplifiedLines = false;
-          if (isAltPressed && isShiftPressed) {
-            /// TODO open line simplification dialog box.
-          } else {
-            MPLineSimplificationMethod newLineSimplificationMethod;
-
-            if (isAltPressed) {
-              newLineSimplificationMethod =
-                  MPLineSimplificationMethod.forceStraight;
-            } else if (isShiftPressed) {
-              newLineSimplificationMethod =
-                  MPLineSimplificationMethod.forceBezier;
-            } else {
-              newLineSimplificationMethod =
-                  MPLineSimplificationMethod.keepOriginalTypes;
-            }
-
-            elementEditController.setLineSimplificationMethod(
-              newLineSimplificationMethod,
-            );
-
-            elementEditController.updateStraightLineSimplificationTolerance();
-            elementEditController.updateOriginalSimplifiedLines();
-
-            elementEditController.simplifySelectedLines();
-          }
-          keyProcessed = true;
-        }
-    }
-
-    if (cleanOriginalSimplifiedLines) {
-      elementEditController.setOriginalSimplifiedLines(null);
-    }
-
-    if (!keyProcessed) {
+    if (!onKeyLDownEvent(event)) {
       _onKeyDownEvent(event);
     }
   }
