@@ -28,6 +28,8 @@ class THScrap extends THElement
     implements THHasTHID {
   late String _thID;
 
+  static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
+
   THScrap.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -121,7 +123,7 @@ class THScrap extends THElement
     if (other is! THScrap) return false;
     if (!super.equalsBase(other)) return false;
 
-    final Function deepEq = const DeepCollectionEquality().equals;
+    final Function deepEq = _deepEq.equals;
 
     return other._thID == _thID &&
         deepEq(other.childrenMPIDs, childrenMPIDs) &&
@@ -133,9 +135,9 @@ class THScrap extends THElement
   int get hashCode => Object.hash(
     super.hashCode,
     _thID,
-    const DeepCollectionEquality().hash(childrenMPIDs),
-    const DeepCollectionEquality().hash(optionsMap),
-    const DeepCollectionEquality().hash(attrOptionsMap),
+    _deepEq.hash(childrenMPIDs),
+    _deepEq.hash(optionsMap),
+    _deepEq.hash(attrOptionsMap),
   );
 
   @override

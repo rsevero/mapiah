@@ -13,7 +13,7 @@ import 'th_test_aux.dart';
 class FakePathProviderPlatform extends PathProviderPlatform {
   @override
   Future<String?> getApplicationDocumentsPath() async {
-    return '/tmp'; // or any fake path
+    return '/tmp';
   }
 }
 
@@ -23,9 +23,7 @@ void main() {
   final MPLocator mpLocator = MPLocator();
   group('actions: simplify straight line (Ctrl+L)', () {
     setUp(() {
-      // Provide localizations to avoid null access in updateUndoRedoStatus()
       mpLocator.appLocalizations = AppLocalizationsEn();
-      // Reset IDs and cached controllers between tests
       mpLocator.mpGeneralController.reset();
     });
 

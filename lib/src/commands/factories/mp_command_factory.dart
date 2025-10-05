@@ -23,43 +23,56 @@ class MPCommandFactory {
         MPCommandDescriptionType.addAreaBorderTHID,
   }) {
     final List<MPCommand> commands = [];
+    final String lineTHID;
 
-    if (!line.hasOption(THCommandOptionType.id)) {
-      if (!area.hasOption(THCommandOptionType.id)) {
+    if (line.hasOption(THCommandOptionType.id)) {
+      lineTHID =
+          (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+    } else {
+      final String areaTHID;
+
+      if (area.hasOption(THCommandOptionType.id)) {
+        areaTHID =
+            (area.optionByType(THCommandOptionType.id) as THIDCommandOption)
+                .thID;
+      } else {
         final String newAreaTHID = thFile.getNewTHID(
           element: area,
           prefix: mpAreaTHIDPrefix,
         );
-        final THIDCommandOption areaTHIDOption = THIDCommandOption(
-          optionParent: area,
+        final THIDCommandOption areaTHIDOption = THIDCommandOption.forCWJM(
+          parentMPID: area.mpID,
           thID: newAreaTHID,
+          originalLineInTH2File: '',
         );
         final MPCommand addAreaTHIDCommand = MPSetOptionToElementCommand(
           option: areaTHIDOption,
+          currentOriginalLineInTH2File: area.originalLineInTH2File,
         );
 
         commands.add(addAreaTHIDCommand);
+        areaTHID = newAreaTHID;
       }
 
-      final String areaTHID =
-          (area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
       final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
       final String newLineTHID = thFile.getNewTHID(
         element: line,
         prefix: lineTHIDPrefix,
       );
-      final THIDCommandOption lineTHIDOption = THIDCommandOption(
-        optionParent: line,
+      final THIDCommandOption lineTHIDOption = THIDCommandOption.forCWJM(
+        parentMPID: line.mpID,
         thID: newLineTHID,
+        originalLineInTH2File: '',
       );
       final MPCommand addLineTHIDCommand = MPSetOptionToElementCommand(
         option: lineTHIDOption,
+        currentOriginalLineInTH2File: line.originalLineInTH2File,
       );
+
       commands.add(addLineTHIDCommand);
+      lineTHID = newLineTHID;
     }
 
-    final String lineTHID =
-        (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
     final THAreaBorderTHID areaBorderTHID = THAreaBorderTHID(
       parentMPID: area.mpID,
       thID: lineTHID,

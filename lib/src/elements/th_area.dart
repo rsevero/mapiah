@@ -8,6 +8,8 @@ class THArea extends THElement
   List<int>? _lineMPIDs;
   List<int>? _areaBorderTHIDMPIDs;
 
+  static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
+
   THArea.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -116,7 +118,7 @@ class THArea extends THElement
     if (other is! THArea) return false;
     if (!super.equalsBase(other)) return false;
 
-    final Function deepEq = const DeepCollectionEquality().equals;
+    final Function deepEq = _deepEq.equals;
 
     return other.areaType == areaType &&
         other.unknownPLAType == unknownPLAType &&
