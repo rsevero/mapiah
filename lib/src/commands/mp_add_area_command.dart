@@ -129,6 +129,6 @@ class MPAddAreaCommand extends MPCommand {
     super.hashCode,
     newArea,
     areaPositionInParent,
-    Object.hashAll(areaChildren),
+    DeepCollectionEquality().hash(areaChildren),
   );
 }

@@ -163,10 +163,7 @@ class MPMoveLineCommand extends MPCommand {
 
     return other is MPMoveLineCommand &&
         other.lineMPID == lineMPID &&
-        const DeepCollectionEquality().equals(
-          other.lineSegmentsMoveCommand,
-          lineSegmentsMoveCommand,
-        ) &&
+        other.lineSegmentsMoveCommand == lineSegmentsMoveCommand &&
         other.originalLineInTH2File == originalLineInTH2File;
   }
 

@@ -139,10 +139,7 @@ class MPMoveAreaCommand extends MPCommand {
     return other is MPMoveAreaCommand &&
         other.areaMPID == areaMPID &&
         other.originalLineInTH2File == originalLineInTH2File &&
-        const DeepCollectionEquality().equals(
-          other.linesMoveCommand,
-          linesMoveCommand,
-        );
+        other.linesMoveCommand == linesMoveCommand;
   }
 
   @override

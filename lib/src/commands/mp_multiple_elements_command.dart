@@ -110,8 +110,11 @@ class MPMultipleElementsCommand extends MPCommand {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, Object.hashAll(commandsList), completionType);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    DeepCollectionEquality().hash(commandsList),
+    completionType,
+  );
 }
 
 enum MPMultipleElementsCommandCompletionType {

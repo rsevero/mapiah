@@ -193,6 +193,6 @@ class MPAddScrapCommand extends MPCommand {
     super.hashCode,
     newScrap,
     scrapPositionInParent,
-    Object.hashAll(scrapChildren),
+    DeepCollectionEquality().hash(scrapChildren),
   );
 }

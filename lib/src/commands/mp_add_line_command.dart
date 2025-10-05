@@ -204,6 +204,6 @@ class MPAddLineCommand extends MPCommand {
     linePositionInParent,
     lineStartScreenPosition,
     addAreaTHIDCommand,
-    Object.hashAll(lineChildren),
+    DeepCollectionEquality().hash(lineChildren),
   );
 }
