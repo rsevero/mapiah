@@ -41,11 +41,20 @@ class MPTH2FileEditStateAddLineToArea extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
-    return addLineToArea(
+    final MPCommand? addLineToAreaCommand = await getAddLineToAreaCommand(
       event: event,
       th2FileEditController: th2FileEditController,
       area: area,
     );
+
+    if (addLineToAreaCommand == null) {
+      return Future.value();
+    }
+
+    th2FileEditController.execute(addLineToAreaCommand);
+    th2FileEditController.triggerAllElementsRedraw();
+
+    return Future.value();
   }
 
   @override

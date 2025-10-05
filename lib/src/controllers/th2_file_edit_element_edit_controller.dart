@@ -402,6 +402,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       selectionController.removeSelectedLineSegment(element);
     } else if (element is THScrap) {
       _th2FileEditController.updateHasMultipleScraps();
+    } else if (element is THArea) {
+      if ((_newArea != null) && (_newArea!.mpID == element.mpID)) {
+        clearNewArea();
+      }
     }
 
     final int parentMPID = element.parentMPID;

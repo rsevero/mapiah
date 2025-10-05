@@ -24,9 +24,7 @@ mixin THIsParentMixin {
     final int elementMPID = element.mpID;
 
     if (childrenMPIDs.contains(elementMPID)) {
-      throw THCustomException(
-        "At THIsParentMixin.addElementToParent: '$element' already a child.",
-      );
+      return;
     }
 
     if (elementPositionInParent == mpAddChildAtEndOfParentChildrenList) {

@@ -1,7 +1,7 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditPageStateAddLineToAreaMixin {
-  Future<void> addLineToArea({
+  Future<MPCommand?> getAddLineToAreaCommand({
     required PointerUpEvent event,
     required TH2FileEditController th2FileEditController,
     required THArea area,
@@ -27,9 +27,6 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
       thFile: th2FileEditController.thFile,
     );
 
-    th2FileEditController.execute(addLineToAreaCommand);
-    th2FileEditController.triggerAllElementsRedraw();
-
-    return Future.value();
+    return addLineToAreaCommand;
   }
 }

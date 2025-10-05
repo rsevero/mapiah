@@ -24,12 +24,33 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     final THArea area = elementEditController.getNewArea();
-
-    return addLineToArea(
+    final MPCommand? addLineToAreaCommand = await getAddLineToAreaCommand(
       event: event,
       th2FileEditController: th2FileEditController,
       area: area,
     );
+
+    if (addLineToAreaCommand == null) {
+      elementEditController.applyRemoveArea(area.mpID);
+
+      return Future.value();
+    }
+
+    final MPCommand addAreaCommand = MPAddAreaCommand.fromExisting(
+      existingArea: area,
+      th2FileEditController: th2FileEditController,
+    );
+    final List<MPCommand> commands = [addAreaCommand, addLineToAreaCommand];
+    final MPCommand addAreaWithLineCommand = MPMultipleElementsCommand.forCWJM(
+      commandsList: commands,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+      descriptionType: MPCommandDescriptionType.addArea,
+    );
+
+    th2FileEditController.execute(addAreaWithLineCommand);
+    th2FileEditController.triggerAllElementsRedraw();
+
+    return Future.value();
   }
 
   @override

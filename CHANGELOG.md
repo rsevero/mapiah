@@ -7,12 +7,14 @@
   * hash calculation and == operator not working in most elements with list or maps.
   * No implementation found for method getApplicationDocumentsDirectory.
   * Original TH2FileLine being lost on set option.
+  * Undoing add area left an empty area hanging.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
   * flutter pub upgrade --major-versions.
   * Implemented MPAddAreaTHIDCommand test.
-  * Adding add area THID test that creates area and line THIDs.
+  * Added add area THID test that creates area and line THIDs.
+  * Added add area test.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
