@@ -33,13 +33,18 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   void onKeyDownEvent(KeyDownEvent event) {
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.enter:
       case LogicalKeyboardKey.numpadEnter:
-        if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
           elementEditController.finalizeNewLineCreation();
+
           return;
         }
     }

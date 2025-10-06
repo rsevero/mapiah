@@ -9,13 +9,16 @@
   * Original TH2FileLine being lost on set option.
   * Undoing add area left an empty area hanging.
   * Only adding THIDs to new areas if necessary to create a line THID.
+  * Add line should not checking for Meta key.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
   * flutter pub upgrade --major-versions.
   * Implemented MPAddAreaTHIDCommand test.
-  * Added add area THID test that creates area and line THIDs.
-  * Added add area test.
+  * Added tests:
+    * add area THID that creates area and line THIDs;
+    * add area;
+    * add line.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:

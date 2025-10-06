@@ -57,7 +57,7 @@ endscrap
 ''',
       },
       {
-        'file': '2025-10-06-001-line.th2',
+        'file': '2025-10-06-001-line_without_id.th2',
         'length': 8,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
@@ -109,7 +109,7 @@ endscrap
                 .getTH2FileEditController(filename: path);
 
             // Snapshot original state (deep clone via toMap/fromMap)
-            final THFile originalSnapshot = THFile.fromMap(
+            final THFile snapshotOriginal = THFile.fromMap(
               controller.thFile.toMap(),
             );
 
@@ -153,8 +153,8 @@ endscrap
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object
-            expect(identical(controller.thFile, originalSnapshot), isFalse);
-            expect(controller.thFile == originalSnapshot, isTrue);
+            expect(identical(controller.thFile, snapshotOriginal), isFalse);
+            expect(controller.thFile == snapshotOriginal, isTrue);
           } catch (e, st) {
             fail('Unexpected exception: $e\n$st');
           }
