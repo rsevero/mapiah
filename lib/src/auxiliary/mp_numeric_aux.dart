@@ -20,11 +20,51 @@ class MPNumericAux {
   }
 
   static int getMinimumNumberOfDecimals(double value) {
-    String valueString = value.toStringAsFixed(thMaxDecimalPositions);
+    String valueString = value.toStringAsFixed(mpMaxDecimalPositions);
 
     valueString = removeTrailingZeros(valueString);
 
     return valueString.contains('.') ? valueString.split('.')[1].length : 0;
+  }
+
+  /// Robust floating-point comparison adapted from the C++ implementation
+  /// available at https://stackoverflow.com/a/32334103
+  ///
+  /// Returns true when `a` and `b` are nearly equal taking into account
+  /// a relative epsilon and an absolute threshold. Defaults use float64
+  /// tolerances (so behaviour is not similar to the original C++ code).
+  ///
+  /// The defaults use double precision tolerances: epsilon = 128 * DBL_EPSILON,
+  /// absTh = DBL_MIN.
+  static bool nearlyEqual(
+    double a,
+    double b, {
+    double epsilon = 128 * mpDoubleNextEpsilon, // 128 * DBL_EPSILON
+    double absTh = mpDoubleMinNormalized, // DBL_MIN (normalized)
+  }) {
+    // sanity checks similar to the C++ asserts
+    assert(epsilon >= mpDoubleNextEpsilon);
+    assert(epsilon < 1.0);
+
+    // NaNs are never equal
+    if (a.isNaN || b.isNaN) {
+      return false;
+    }
+
+    // Fast path for exact equality (covers infinities of same sign too)
+    if (a == b) {
+      return true;
+    }
+
+    // If either is infinite (and they aren't equal above) they are not nearly equal
+    if (a.isInfinite || b.isInfinite) {
+      return false;
+    }
+
+    final double diff = (a - b).abs();
+    final double norm = math.min((a.abs() + b.abs()), double.maxFinite);
+
+    return diff < math.max(absTh, epsilon * norm);
   }
 
   static THDoublePart fromString(String valueString) {
@@ -510,7 +550,7 @@ class MPNumericAux {
   static double bezierArcLength(
     List<Offset> controlPoints,
     double t, {
-    int steps = 5,
+    int steps = mpArcBezierLengthSteps,
   }) {
     double length = 0.0;
     Offset prev = controlPoints.first;
@@ -523,9 +563,10 @@ class MPNumericAux {
     return length;
   }
 
-  static List<THBezierCurveLineSegment> splitBezierCurveAtHalfLength({
+  static List<THBezierCurveLineSegment> splitBezierCurveAtPart({
     required Offset startPoint,
     required THBezierCurveLineSegment lineSegment,
+    required double part,
   }) {
     final List<Offset> controlPoints = [
       startPoint,
@@ -535,19 +576,65 @@ class MPNumericAux {
     ];
 
     // Estimate total length
-    final double totalLength = bezierArcLength(controlPoints, 1.0);
+    final double totalLength = bezierArcLength(
+      controlPoints,
+      mpCompleteBezierArcT,
+    );
+    // Clamp requested part to [0,1]
+    final double targetPart = part.clamp(0.0, 1.0);
+    final double arcLengthTarget = totalLength * targetPart;
 
-    // Binary search for t where arc length is half
+    // Fast paths
+    if (targetPart <= 0.0) {
+      return splitBezierCurve(
+        startPoint: startPoint,
+        lineSegment: lineSegment,
+        t: 0.0,
+      );
+    }
+    if (targetPart >= 1.0) {
+      return splitBezierCurve(
+        startPoint: startPoint,
+        lineSegment: lineSegment,
+        t: 1.0,
+      );
+    }
+
     double tLow = 0.0;
     double tHigh = 1.0;
-    double tMid = 0.5;
-    for (int i = 0; i < 5; i++) {
-      tMid = (tLow + tHigh) / 2;
-      double len = bezierArcLength(controlPoints, tMid);
-      if (len < totalLength / 2) {
+    double tMid = targetPart;
+
+    // Initialize lengths at the interval endpoints.
+    double lenLow = 0.0;
+    double lenHigh = totalLength;
+
+    for (int i = 0; i < mpSplitBezierCurveAtHalfLengthIterations; i++) {
+      if (lenHigh != lenLow) {
+        // Regula falsi (false position) step
+        tMid =
+            tLow +
+            (arcLengthTarget - lenLow) * (tHigh - tLow) / (lenHigh - lenLow);
+        // If interpolation is out of bounds, fallback to midpoint
+        if (!((tMid > tLow) && (tMid < tHigh))) {
+          tMid = (tLow + tHigh) * 0.5;
+        }
+      } else {
+        // Degenerate: fallback to midpoint
+        tMid = (tLow + tHigh) * 0.5;
+      }
+
+      final double len = bezierArcLength(controlPoints, tMid);
+
+      if (nearlyEqual(len, arcLengthTarget)) {
+        break;
+      }
+
+      if (len < arcLengthTarget) {
         tLow = tMid;
+        lenLow = len;
       } else {
         tHigh = tMid;
+        lenHigh = len;
       }
     }
 
@@ -581,17 +668,14 @@ class MPNumericAux {
 
     final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
-      sameLineComment: lineSegment.sameLineComment,
       controlPoint1: THPositionPart(coordinates: q0),
       controlPoint2: THPositionPart(coordinates: r0),
       endPoint: THPositionPart(coordinates: s),
     );
-    final THBezierCurveLineSegment secondSegment = THBezierCurveLineSegment(
-      parentMPID: lineSegment.parentMPID,
-      sameLineComment: lineSegment.sameLineComment,
+    final THBezierCurveLineSegment secondSegment = lineSegment.copyWith(
       controlPoint1: THPositionPart(coordinates: r1),
       controlPoint2: THPositionPart(coordinates: q2),
-      endPoint: lineSegment.endPoint,
+      originalLineInTH2File: '',
     );
 
     return [firstSegment, secondSegment];

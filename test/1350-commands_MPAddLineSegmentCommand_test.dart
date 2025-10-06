@@ -55,6 +55,36 @@ scrap test
 endscrap
 ''',
       },
+      {
+        'file': '2025-10-06-003-line_mixed.th2',
+        'length': 9,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap scrap1 -projection plan
+  line wall
+    -112.6398 155.7781
+    30.6251 132.406
+    94.8295 93.0684 99.2447 54.1784 43.8707 15.7361
+    -23.5472 -51.5453
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap scrap1 -projection plan
+  line wall
+    -112.6398 155.7781
+    -41.00735 144.09205
+    30.6251 132.406
+    60.439879675246 114.138686903811 77.361588548345 95.967895227729 \
+        81.390226619298 77.893634985588
+    86.037027138871 57.046023359799 73.530518265772 36.326839908952 43.8707 \
+        15.7361
+    10.16175 -17.9046
+    -23.5472 -51.5453
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

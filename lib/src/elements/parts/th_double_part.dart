@@ -65,8 +65,8 @@ class THDoublePart extends THPart {
   set decimalPositions(int decimalPositions) {
     if (decimalPositions < 0) {
       decimalPositions = 0;
-    } else if (decimalPositions > thMaxDecimalPositions) {
-      decimalPositions = thMaxDecimalPositions;
+    } else if (decimalPositions > mpMaxDecimalPositions) {
+      decimalPositions = mpMaxDecimalPositions;
     }
 
     _decimalPositions = decimalPositions;

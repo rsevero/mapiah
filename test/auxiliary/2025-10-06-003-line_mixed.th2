@@ -1,0 +1,9 @@
+encoding UTF-8
+scrap scrap1 -projection plan
+  line wall
+    -112.6398 155.7781
+    30.6251 132.406
+    94.8295 93.0684 99.2447 54.1784 43.8707 15.7361
+    -23.5472 -51.5453
+  endline
+endscrap

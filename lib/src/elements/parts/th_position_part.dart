@@ -12,13 +12,14 @@ class THPositionPart extends THPart {
   late final Offset coordinates;
   late final int _decimalPositions;
 
-  THPositionPart({required this.coordinates, int? decimalPositions})
-    : _decimalPositions =
-          decimalPositions ??
-          max(
-            MPNumericAux.getMinimumNumberOfDecimals(coordinates.dx),
-            MPNumericAux.getMinimumNumberOfDecimals(coordinates.dy),
-          );
+  THPositionPart({required this.coordinates, int? decimalPositions}) {
+    this.decimalPositions =
+        decimalPositions ??
+        max(
+          MPNumericAux.getMinimumNumberOfDecimals(coordinates.dx),
+          MPNumericAux.getMinimumNumberOfDecimals(coordinates.dy),
+        );
+  }
 
   THPositionPart.fromStrings({
     required String xAsString,
@@ -115,8 +116,8 @@ class THPositionPart extends THPart {
   set decimalPositions(int decimalPositions) {
     if (decimalPositions < 0) {
       decimalPositions = 0;
-    } else if (decimalPositions > thMaxDecimalPositions) {
-      decimalPositions = thMaxDecimalPositions;
+    } else if (decimalPositions > mpMaxDecimalPositions) {
+      decimalPositions = mpMaxDecimalPositions;
     }
 
     _decimalPositions = decimalPositions;

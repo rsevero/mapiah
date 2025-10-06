@@ -29,7 +29,7 @@ const String thIndentation = '  ';
 
 const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
-const int thMaxDecimalPositions = 12;
+const int mpMaxDecimalPositions = 12;
 const int mpCalculatedDecimalPositions = 6;
 const int thDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
@@ -53,6 +53,15 @@ const double mpDoubleNextEpsilon = 2.220446049250313e-16;
 const double mpDoublePositiveNextEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
 const double mpDoubleNegativeNextEpsilonFactor = 1.0 - mpDoubleNextEpsilon;
 const double mpDoubleComparisonEpsilon = 1e-9;
+
+/// Smallest *normalized* positive double (DBL_MIN). Note this is different
+/// from `double.minPositive` (the smallest positive subnormal value).
+const double mpDoubleMinNormalized = 2.2250738585072014e-308;
+
+const double mpCompleteBezierArcT = 1.0;
+const double mpHalfBezierArcPart = 0.5;
+const int mpArcBezierLengthSteps = 5;
+const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 
 /// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
 /// web version. The higher limits
@@ -140,9 +149,6 @@ const int mpEPSGESRIMin = 1;
 const int mpEPSGESRIMax = 99999;
 const int mpUTMMin = 1;
 const int mpUTMMax = 60;
-
-const int mpInitialZOrder = 0;
-const int mpDefaultZOrderIncrement = 1000;
 
 const double thClickDragThreshold = 2.0;
 const double thClickDragThresholdSquared =

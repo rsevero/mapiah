@@ -13,6 +13,7 @@
   * Multiple line segment addition positioning new line segments after first at wrong position.
   * lineSegmentsMPIDs in wrong order after line segment addition.
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
+  * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.

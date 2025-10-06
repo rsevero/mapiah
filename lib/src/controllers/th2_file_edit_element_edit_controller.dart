@@ -1121,22 +1121,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         in selectedEndControlPoints) {
       final THLineSegment lineSegment =
           endControlPoint.originalLineSegmentClone;
+      final int lineSegmentPos = lineSegmentMPIDs.indexOf(lineSegment.mpID);
 
-      selectedLineSegmentsPosMap[lineSegmentMPIDs.indexOf(
-            endControlPoint.mpID,
-          )] =
-          lineSegment;
+      selectedLineSegmentsPosMap[lineSegmentPos] = lineSegment;
     }
+
+    final Iterable<int> selectedLineSegmentsPos =
+        selectedLineSegmentsPosMap.keys;
 
     int? previousLineSegmentPos;
 
-    for (final int lineSegmentPos in selectedLineSegmentsPosMap.keys) {
-      if (previousLineSegmentPos == null) {
-        previousLineSegmentPos = lineSegmentPos;
-        continue;
-      }
-
-      if (lineSegmentPos == previousLineSegmentPos + 1) {
+    for (final int lineSegmentPos in selectedLineSegmentsPos) {
+      if ((previousLineSegmentPos != null) &&
+          (lineSegmentPos == previousLineSegmentPos + 1)) {
         final THLineSegment lineSegment =
             selectedLineSegmentsPosMap[lineSegmentPos]!;
         final int lineSegmentPositionInParent = line.getChildPosition(
@@ -1146,13 +1143,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             selectedLineSegmentsPosMap[previousLineSegmentPos]!;
 
         if (lineSegment is THStraightLineSegment) {
-          final Offset newLineSegmentendPoint =
+          final Offset newLineSegmentEndPoint =
               (previousLineSegment.endPoint.coordinates +
                   lineSegment.endPoint.coordinates) /
               2;
           final THStraightLineSegment newLineSegment = THStraightLineSegment(
             parentMPID: lineSegment.parentMPID,
-            endPoint: THPositionPart(coordinates: newLineSegmentendPoint),
+            endPoint: THPositionPart(coordinates: newLineSegmentEndPoint),
           );
 
           addLineSegmentsCommands.add(
@@ -1162,9 +1159,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             ),
           );
         } else {
-          final newLineSegments = MPNumericAux.splitBezierCurveAtHalfLength(
+          final newLineSegments = MPNumericAux.splitBezierCurveAtPart(
             startPoint: previousLineSegment.endPoint.coordinates,
             lineSegment: lineSegment as THBezierCurveLineSegment,
+            part: mpHalfBezierArcPart,
           );
 
           if (newLineSegments.length != 2) {
@@ -1182,10 +1180,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           addLineSegmentsCommands.add(
             MPEditLineSegmentCommand(
               originalLineSegment: lineSegment,
-              newLineSegment: lineSegment.copyWith(
-                controlPoint1: newLineSegments[1].controlPoint1,
-                controlPoint2: newLineSegments[1].controlPoint2,
-              ),
+              newLineSegment: newLineSegments[1],
             ),
           );
         }
