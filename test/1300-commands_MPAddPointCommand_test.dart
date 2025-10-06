@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -19,7 +21,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPAddLineCommand', () {
+  group('command: MPAddPointCommand', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -34,21 +36,9 @@ void main() {
 scrap test
 endscrap
 ''',
-        'asFileIntermediate1': r'''encoding UTF-8
-scrap test
-  line wall
-    2 -4
-    6 -8
-  endline
-endscrap
-''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  line wall
-    2 -4
-    6 -8
-    2 10
-  endline
+  point 2 -4 station
 endscrap
 ''',
       },
@@ -86,47 +76,23 @@ endscrap
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
             controller.setCanvasScale(0.5);
 
-            controller.elementEditController.addNewLineLineSegment(
-              Offset(1, 2),
-            );
-            controller.elementEditController.addNewLineLineSegment(
-              Offset(3, 4),
-            );
-
-            final THFile snapshotIntermediate1 = THFile.fromMap(
-              controller.thFile.toMap(),
+            final MPCommand command = MPCommandFactory.addPoint(
+              screenPosition: Offset(1, 2),
+              pointTypeString:
+                  controller.elementEditController.lastUsedPointType,
+              th2FileEditController: controller,
             );
 
-            String asFileIntermediate = writer.serialize(controller.thFile);
-
-            expect(asFileIntermediate, success['asFileIntermediate1']);
-
-            controller.elementEditController.addNewLineLineSegment(
-              Offset(1, -5),
-            );
+            controller.execute(command);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 
             expect(asFileChanged, success['asFileChanged']);
 
-            // Undo last add line segment
+            // Undo add point
             controller.undo();
 
-            String asFileUndone = writer.serialize(controller.thFile);
-
-            expect(asFileUndone, success['asFileIntermediate1']);
-
-            // Assert: final state equals original by value but is not the same object
-            expect(
-              identical(controller.thFile, snapshotIntermediate1),
-              isFalse,
-            );
-            expect(controller.thFile == snapshotIntermediate1, isTrue);
-
-            // Undo line create
-            controller.undo();
-
-            asFileUndone = writer.serialize(controller.thFile);
+            final String asFileUndone = writer.serialize(controller.thFile);
 
             expect(asFileUndone, success['asFileOriginal']);
 

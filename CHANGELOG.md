@@ -18,7 +18,8 @@
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
-    * add line.
+    * add line;
+    * add point.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:

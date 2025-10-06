@@ -20,17 +20,11 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) {
-    final THPoint newPoint = THPoint.pointTypeFromString(
-      parentMPID: th2FileEditController.activeScrapID,
+    final MPCommand command = MPCommandFactory.addPoint(
+      screenPosition: event.localPosition,
       pointTypeString: elementEditController.lastUsedPointType,
-      position: THPositionPart(
-        coordinates: th2FileEditController.offsetScreenToCanvas(
-          event.localPosition,
-        ),
-        decimalPositions: th2FileEditController.currentDecimalPositions,
-      ),
+      th2FileEditController: th2FileEditController,
     );
-    final MPAddPointCommand command = MPAddPointCommand(newPoint: newPoint);
 
     th2FileEditController.execute(command);
     th2FileEditController.triggerNonSelectedElementsRedraw();

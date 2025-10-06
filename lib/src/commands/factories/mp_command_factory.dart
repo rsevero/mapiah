@@ -94,6 +94,25 @@ class MPCommandFactory {
     return command;
   }
 
+  static MPCommand addPoint({
+    required Offset screenPosition,
+    required String pointTypeString,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final THPoint newPoint = THPoint.pointTypeFromString(
+      parentMPID: th2FileEditController.activeScrapID,
+      pointTypeString:
+          th2FileEditController.elementEditController.lastUsedPointType,
+      position: THPositionPart(
+        coordinates: th2FileEditController.offsetScreenToCanvas(screenPosition),
+        decimalPositions: th2FileEditController.currentDecimalPositions,
+      ),
+    );
+    final MPAddPointCommand command = MPAddPointCommand(newPoint: newPoint);
+
+    return command;
+  }
+
   static MPCommand setOptionOnElements({
     required THCommandOption option,
     required List<THElement> elements,
