@@ -26,7 +26,7 @@ class _MPAddScrapDialogOverlayWindowWidgetState
   THProjectionCommandOption? _projectionOption;
   THScrapScaleCommandOption? _scaleOption;
 
-  void _create() {
+  void _createScrap() {
     final List<THCommandOption> scrapOptions = [];
 
     // Apply projection option if user selected one
@@ -40,7 +40,7 @@ class _MPAddScrapDialogOverlayWindowWidgetState
 
     // scrap id validated by kernel
     widget.th2FileEditController.elementEditController.createScrap(
-      _currentValidScrapTHID,
+      thID: _currentValidScrapTHID,
       scrapOptions: scrapOptions,
     );
 
@@ -59,9 +59,9 @@ class _MPAddScrapDialogOverlayWindowWidgetState
       fileEditController: widget.th2FileEditController,
       initialScrapTHID: widget.initialScrapTHID,
       showActionButtons: true,
-      onPressedCreate: _create,
+      onPressedCreate: _createScrap,
       onPressedCancel: widget.onPressedClose,
-      onValidScrapTHIDChanged: (id) => _currentValidScrapTHID = id,
+      onValidScrapTHIDChanged: (thID) => _currentValidScrapTHID = thID,
       onProjectionChanged: (opt) => _projectionOption = opt,
       onScaleChanged: (opt) => _scaleOption = opt,
     );

@@ -380,8 +380,8 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void createScrap(
-    String id, {
+  void createScrap({
+    required String thID,
     List<THElement>? scrapChildren,
     List<THCommandOption>? scrapOptions,
   }) {
@@ -389,7 +389,7 @@ mixin _$TH2FileEditElementEditController
         .startAction(name: 'TH2FileEditElementEditControllerBase.createScrap');
     try {
       return super.createScrap(
-        id,
+        thID: thID,
         scrapChildren: scrapChildren,
         scrapOptions: scrapOptions,
       );

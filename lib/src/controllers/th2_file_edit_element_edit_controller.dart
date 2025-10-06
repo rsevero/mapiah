@@ -465,16 +465,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void createScrap(
-    String id, {
+  void createScrap({
+    required String thID,
     List<THElement>? scrapChildren,
     List<THCommandOption>? scrapOptions,
   }) {
-    scrapChildren ??= [];
-    scrapOptions ??= [];
-
-    final MPCommand addScrapCommand = _createAddScrapCommandForNewScrap(
-      id,
+    final MPCommand addScrapCommand = MPCommandFactory.addScrap(
+      thID: thID,
+      thFile: _thFile,
       scrapChildren: scrapChildren,
       scrapOptions: scrapOptions,
     );
@@ -508,56 +506,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     applyAddArea(newArea: newArea, areaChildren: [endarea]);
 
     return newArea;
-  }
-
-  THScrap _getNewScrap(
-    String thID, {
-    required List<THElement> scrapChildren,
-    required List<THCommandOption> scrapOptions,
-  }) {
-    final THScrap newScrap = THScrap(parentMPID: _thFile.mpID, thID: thID);
-    final int newScrapMPID = newScrap.mpID;
-
-    for (THCommandOption option in scrapOptions) {
-      if (option.parentMPID != newScrapMPID) {
-        option = option.copyWith(parentMPID: newScrapMPID);
-      }
-
-      newScrap.addUpdateOption(option);
-    }
-
-    // Re-parent existing children so they belong to the new scrap.
-    for (int i = 0; i < scrapChildren.length; i++) {
-      final THElement child = scrapChildren[i];
-
-      if (child.parentMPID != newScrapMPID) {
-        final THElement updated = child.copyWith(parentMPID: newScrapMPID);
-
-        scrapChildren[i] = updated;
-      }
-    }
-
-    scrapChildren.add(THEndscrap(parentMPID: newScrapMPID));
-
-    return newScrap;
-  }
-
-  MPCommand _createAddScrapCommandForNewScrap(
-    String thID, {
-    required List<THElement> scrapChildren,
-    required List<THCommandOption> scrapOptions,
-  }) {
-    final THScrap newScrap = _getNewScrap(
-      thID,
-      scrapChildren: scrapChildren,
-      scrapOptions: scrapOptions,
-    );
-    final MPCommand addScrapCommandForNewScrap = MPAddScrapCommand(
-      newScrap: newScrap,
-      scrapChildren: scrapChildren,
-    );
-
-    return addScrapCommandForNewScrap;
   }
 
   void addAutomaticTHIDOption({

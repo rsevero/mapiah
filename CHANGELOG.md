@@ -26,7 +26,8 @@
     * add area;
     * add line;
     * add line segment;
-    * add point.
+    * add point;
+    * add scrap.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
