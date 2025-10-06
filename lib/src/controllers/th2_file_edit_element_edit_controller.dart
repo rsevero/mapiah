@@ -504,7 +504,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
     applyAddArea(newArea: newArea, areaChildren: [endarea]);
-    addAutomaticTHIDOption(element: newArea, prefix: mpAreaTHIDPrefix);
 
     return newArea;
   }

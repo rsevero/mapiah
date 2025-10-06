@@ -8,6 +8,7 @@
   * No implementation found for method getApplicationDocumentsDirectory.
   * Original TH2FileLine being lost on set option.
   * Undoing add area left an empty area hanging.
+  * Only adding THIDs to new areas if necessary to create a line THID.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.

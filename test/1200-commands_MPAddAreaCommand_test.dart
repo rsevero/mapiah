@@ -50,8 +50,34 @@ scrap test
     2894.3 -202.7
     2264.5 -205.7
   endline
-  area water -id area1
+  area water
     blaus
+  endarea
+endscrap
+''',
+      },
+      {
+        'file': '2025-10-06-001-line.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  line contour
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+  line contour -id area1-line1
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+  area water -id area1
+    area1-line1
   endarea
 endscrap
 ''',
