@@ -73,6 +73,8 @@ endscrap
               controller.thFile.toMap(),
             );
 
+            /// Execution: taken from MPTH2FileEditStateAddPoint.onPrimaryButtonClick()
+
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
             controller.setCanvasScale(0.5);
 

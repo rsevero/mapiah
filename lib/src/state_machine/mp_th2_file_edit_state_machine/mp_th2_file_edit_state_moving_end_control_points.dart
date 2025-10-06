@@ -18,7 +18,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
-      if (!MPTH2FileEditStateSingleLineEdit.singleLineEditModes.contains(
+      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
         nextStateType,
       )) {
         selectionController.clearSelectedLineSegments();

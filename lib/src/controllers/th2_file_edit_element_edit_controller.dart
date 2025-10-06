@@ -292,7 +292,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     newLineSegments,
   ) {
     final THLine line = _thFile.lineByMPID(lineMPID);
-    final List<int> originalLineSegmentMPIDs = line.lineSegmentMPIDs.toList();
+    final List<int> originalLineSegmentMPIDs = line
+        .getLineSegmentMPIDs(_thFile)
+        .toList();
 
     for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
       final THLineSegment originalLineSegment = _thFile.lineSegmentByMPID(
@@ -584,14 +586,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     final int currentDecimalPositions =
         _th2FileEditController.currentDecimalPositions;
-
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_thFile);
     final THLineSegment lastLineSegment = _thFile.lineSegmentByMPID(
-      _newLine!.lineSegmentMPIDs.last,
+      lineSegmentMPIDs.last,
     );
     final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
-      _newLine!.lineSegmentMPIDs.elementAt(
-        _newLine!.lineSegmentMPIDs.length - 2,
-      ),
+      lineSegmentMPIDs.elementAt(lineSegmentMPIDs.length - 2),
     );
 
     final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
@@ -1094,14 +1094,31 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
     final THLine line = _thFile.lineByMPID(
       selectedEndControlPoints.values.first.originalLineSegmentClone.parentMPID,
     );
-    final List<int> lineSegmentMPIDs = line.lineSegmentMPIDs;
+    final MPCommand addLineSegmentsCommand = getAddLineSegmentsCommand(
+      line: line,
+      selectedEndControlPoints: selectedEndControlPoints.values,
+    );
+
+    _th2FileEditController.execute(addLineSegmentsCommand);
+    _th2FileEditController.selectionController
+        .updateSelectableEndAndControlPoints();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  MPCommand getAddLineSegmentsCommand({
+    required THLine line,
+    required Iterable<MPSelectedEndControlPoint> selectedEndControlPoints,
+  }) {
+    final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(_thFile);
+    final SplayTreeMap<int, THLineSegment> selectedLineSegmentsPosMap =
+        SplayTreeMap();
+    final List<MPCommand> addLineSegmentsCommands = [];
 
     for (final MPSelectedEndControlPoint endControlPoint
-        in selectedEndControlPoints.values) {
+        in selectedEndControlPoints) {
       final THLineSegment lineSegment =
           endControlPoint.originalLineSegmentClone;
 
@@ -1111,15 +1128,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           lineSegment;
     }
 
-    final List<int> orderedSelectedLineSegmentMPIDs =
-        selectedLineSegmentsPosMap.keys.toList()
-          ..sort((a, b) => a.compareTo(b));
-    final int decimalPositions = _th2FileEditController.currentDecimalPositions;
-    final List<MPCommand> addLineSegmentsCommands = [];
-
     int? previousLineSegmentPos;
 
-    for (final int lineSegmentPos in orderedSelectedLineSegmentMPIDs) {
+    for (final int lineSegmentPos in selectedLineSegmentsPosMap.keys) {
       if (previousLineSegmentPos == null) {
         previousLineSegmentPos = lineSegmentPos;
         continue;
@@ -1141,10 +1152,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               2;
           final THStraightLineSegment newLineSegment = THStraightLineSegment(
             parentMPID: lineSegment.parentMPID,
-            endPoint: THPositionPart(
-              coordinates: newLineSegmentendPoint,
-              decimalPositions: decimalPositions,
-            ),
+            endPoint: THPositionPart(coordinates: newLineSegmentendPoint),
           );
 
           addLineSegmentsCommands.add(
@@ -1157,7 +1165,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           final newLineSegments = MPNumericAux.splitBezierCurveAtHalfLength(
             startPoint: previousLineSegment.endPoint.coordinates,
             lineSegment: lineSegment as THBezierCurveLineSegment,
-            decimalPositions: decimalPositions,
           );
 
           if (newLineSegments.length != 2) {
@@ -1187,16 +1194,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       previousLineSegmentPos = lineSegmentPos;
     }
 
-    final MPCommand addLineSegmentsCommand = MPMultipleElementsCommand.forCWJM(
-      commandsList: addLineSegmentsCommands,
-      completionType: MPMultipleElementsCommandCompletionType.lineSegmentsAdded,
-      descriptionType: MPCommandDescriptionType.addLineSegment,
-    );
+    final MPCommand addLineSegmentsCommand =
+        (addLineSegmentsCommands.length == 1)
+        ? addLineSegmentsCommands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: addLineSegmentsCommands.reversed.toList(),
+            completionType:
+                MPMultipleElementsCommandCompletionType.lineSegmentsAdded,
+          );
 
-    _th2FileEditController.execute(addLineSegmentsCommand);
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
-    _th2FileEditController.triggerEditLineRedraw();
+    return addLineSegmentsCommand;
   }
 
   void addScrap() {

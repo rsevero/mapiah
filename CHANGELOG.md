@@ -10,15 +10,20 @@
   * Undoing add area left an empty area hanging.
   * Only adding THIDs to new areas if necessary to create a line THID.
   * Add line should not checking for Meta key.
+  * Multiple line segment addition positioning new line segments after first at wrong position.
+  * lineSegmentsMPIDs in wrong order after line segment addition.
+  * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
   * flutter pub upgrade --major-versions.
   * Implemented MPAddAreaTHIDCommand test.
+  * Renamed MPTH2FileEditStateSingleLineEdit to MPTH2FileEditStateEditSingleLine
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
     * add line;
+    * add line segment;
     * add point.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release

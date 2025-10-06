@@ -943,7 +943,10 @@ class THFileParser {
       return;
     }
 
-    if ((_currentParent as THLine).lineSegmentMPIDs.length < 2) {
+    final List<int> lineSegmentMPIDs = (_currentParent as THLine)
+        .getLineSegmentMPIDs(_parsedTHFile);
+
+    if (lineSegmentMPIDs.length < 2) {
       final THLine lineToRemove = _currentParent as THLine;
 
       setCurrentParent((lineToRemove).parent(_parsedTHFile));

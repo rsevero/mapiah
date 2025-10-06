@@ -551,7 +551,7 @@ abstract class TH2FileEditControllerBase with Store {
         final MPTH2FileEditState state = stateController.state;
 
         _isEditLineMode =
-            ((state is MPTH2FileEditStateSingleLineEdit) ||
+            ((state is MPTH2FileEditStateEditSingleLine) ||
             (state is MPTH2FileEditStateMovingEndControlPoints) ||
             (state is MPTH2FileEditStateMovingSingleControlPoint));
       }),

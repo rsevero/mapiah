@@ -151,6 +151,8 @@ endscrap
               controller.thFile.toMap(),
             );
 
+            /// Execution: taken from MPTH2FileEditStateAddArea.onPrimaryButtonClick()
+
             THLine? secondLine;
             for (final int mpID in parsedFile.linesMPIDs) {
               final THLine line = parsedFile.lineByMPID(mpID);

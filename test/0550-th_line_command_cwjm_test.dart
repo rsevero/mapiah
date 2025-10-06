@@ -34,7 +34,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline cable\n","lineType":"unknown","unknownPLAType":"cable","childrenMPIDs":[4,5,6],"lineSegmentMPIDs":[4,5],"optionsMap":{},"attrOptionsMap":{}}''',
+            r'''{"elementType":"line","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"\tline cable\n","lineType":"unknown","unknownPLAType":"cable","childrenMPIDs":[4,5,6],"optionsMap":{},"attrOptionsMap":{}}''',
       },
     ];
 

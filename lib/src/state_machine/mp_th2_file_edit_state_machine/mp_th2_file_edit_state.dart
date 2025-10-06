@@ -43,7 +43,7 @@ part 'mp_th2_file_edit_state_moving_single_control_point.dart';
 part 'mp_th2_file_edit_state_options_edit.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
-part 'mp_th2_file_edit_state_single_line_edit.dart';
+part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
@@ -80,7 +80,7 @@ abstract class MPTH2FileEditState {
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:
-        return MPTH2FileEditStateSingleLineEdit(
+        return MPTH2FileEditStateEditSingleLine(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.movingElements:

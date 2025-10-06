@@ -113,6 +113,8 @@ endscrap
               controller.thFile.toMap(),
             );
 
+            /// Execution: taken from MPTH2FileEditStateAddArea.onPrimaryButtonClick()
+
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
             final THArea area = controller.elementEditController.getNewArea();

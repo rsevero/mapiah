@@ -171,7 +171,9 @@ abstract class TH2FileEditSnapControllerBase with Store {
           continue;
         }
 
-        for (final int segmentMPID in element.lineSegmentMPIDs) {
+        final List<int> lineSegmentMPIDs = element.getLineSegmentMPIDs(_thFile);
+
+        for (final int segmentMPID in lineSegmentMPIDs) {
           final THLineSegment lineSegmentElement = _thFile.lineSegmentByMPID(
             segmentMPID,
           );

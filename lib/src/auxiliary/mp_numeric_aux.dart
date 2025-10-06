@@ -526,7 +526,6 @@ class MPNumericAux {
   static List<THBezierCurveLineSegment> splitBezierCurveAtHalfLength({
     required Offset startPoint,
     required THBezierCurveLineSegment lineSegment,
-    required int decimalPositions,
   }) {
     final List<Offset> controlPoints = [
       startPoint,
@@ -557,7 +556,6 @@ class MPNumericAux {
       startPoint: startPoint,
       lineSegment: lineSegment,
       t: tMid,
-      decimalPositions: decimalPositions,
     );
   }
 
@@ -565,7 +563,6 @@ class MPNumericAux {
     required Offset startPoint,
     required THBezierCurveLineSegment lineSegment,
     required double t,
-    required int decimalPositions,
   }) {
     final Offset p0 = startPoint;
     final Offset p1 = lineSegment.controlPoint1.coordinates;
@@ -585,30 +582,15 @@ class MPNumericAux {
     final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
       sameLineComment: lineSegment.sameLineComment,
-      controlPoint1: THPositionPart(
-        coordinates: q0,
-        decimalPositions: decimalPositions,
-      ),
-      controlPoint2: THPositionPart(
-        coordinates: r0,
-        decimalPositions: decimalPositions,
-      ),
-      endPoint: THPositionPart(
-        coordinates: s,
-        decimalPositions: decimalPositions,
-      ),
+      controlPoint1: THPositionPart(coordinates: q0),
+      controlPoint2: THPositionPart(coordinates: r0),
+      endPoint: THPositionPart(coordinates: s),
     );
     final THBezierCurveLineSegment secondSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
       sameLineComment: lineSegment.sameLineComment,
-      controlPoint1: THPositionPart(
-        coordinates: r1,
-        decimalPositions: decimalPositions,
-      ),
-      controlPoint2: THPositionPart(
-        coordinates: q2,
-        decimalPositions: decimalPositions,
-      ),
+      controlPoint1: THPositionPart(coordinates: r1),
+      controlPoint2: THPositionPart(coordinates: q2),
       endPoint: lineSegment.endPoint,
     );
 
