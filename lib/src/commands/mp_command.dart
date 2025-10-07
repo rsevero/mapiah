@@ -85,11 +85,20 @@ abstract class MPCommand {
     TH2FileEditController th2FileEditController, {
     bool keepOriginalLineTH2File = false,
   }) {
-    _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
-    _actualExecute(
-      th2FileEditController,
-      keepOriginalLineTH2File: keepOriginalLineTH2File,
-    );
+    if (hasNewExecuteMethod) {
+      _prepareUndoRedoInfo();
+      _newActualExecute(
+        th2FileEditController,
+        keepOriginalLineTH2File: keepOriginalLineTH2File,
+      );
+      _undoRedoCommand ??= _newCreateUndoRedoCommand(th2FileEditController);
+    } else {
+      _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
+      _actualExecute(
+        th2FileEditController,
+        keepOriginalLineTH2File: keepOriginalLineTH2File,
+      );
+    }
   }
 
   void _actualExecute(
@@ -186,5 +195,24 @@ abstract class MPCommand {
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
     }
+  }
+
+  bool get hasNewExecuteMethod => false;
+
+  void _prepareUndoRedoInfo() {
+    throw UnimplementedError();
+  }
+
+  void _newActualExecute(
+    TH2FileEditController th2FileEditController, {
+    required bool keepOriginalLineTH2File,
+  }) {
+    throw UnimplementedError();
+  }
+
+  MPUndoRedoCommand _newCreateUndoRedoCommand(
+    TH2FileEditController th2FileEditController,
+  ) {
+    throw UnimplementedError();
   }
 }
