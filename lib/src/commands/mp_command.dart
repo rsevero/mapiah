@@ -87,11 +87,11 @@ abstract class MPCommand {
   }) {
     if (hasNewExecuteMethod) {
       _prepareUndoRedoInfo();
-      _newActualExecute(
+      _actualExecute(
         th2FileEditController,
         keepOriginalLineTH2File: keepOriginalLineTH2File,
       );
-      _undoRedoCommand ??= _newCreateUndoRedoCommand(th2FileEditController);
+      _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
     } else {
       _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
       _actualExecute(
@@ -200,19 +200,6 @@ abstract class MPCommand {
   bool get hasNewExecuteMethod => false;
 
   void _prepareUndoRedoInfo() {
-    throw UnimplementedError();
-  }
-
-  void _newActualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
-    throw UnimplementedError();
-  }
-
-  MPUndoRedoCommand _newCreateUndoRedoCommand(
-    TH2FileEditController th2FileEditController,
-  ) {
     throw UnimplementedError();
   }
 }

@@ -31,6 +31,8 @@
     * add point;
     * add scrap;
     * add XTherionImageInsert.
+  * Migrated to new MPCommand execute (the polish refactoring):
+    * MPAddAreaTHIDCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
