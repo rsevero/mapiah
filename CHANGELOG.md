@@ -34,7 +34,8 @@
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaTHIDCommand;
     * MPAddAreaCommand;
-    * MPAddLineCommand.
+    * MPAddLineCommand;
+    * MPAddLineSegmentCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
