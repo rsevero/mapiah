@@ -4,6 +4,7 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -29,22 +30,72 @@ void main() {
 
     const successes = [
       {
-        'file': '2025-10-06-004-only_encoding_2.th2',
-        'length': 1,
+        'file': '2025-10-07-001-area_with_line.th2',
+        'length': 11,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
+scrap test
+  area clay
+    blaus
+  endarea
+  line contour -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
-##XTHERION## xth_me_image_insert {-0 1 1} {-433} "./xvi/2025-10-07-001-color_as_rgb_hex.xvi" 0 {}
+scrap test
+  area debris
+    blaus
+  endarea
+  line contour -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
 ''',
-        'imageInsertFile':
-            './test/auxiliary/xvi/2025-10-07-001-color_as_rgb_hex.xvi',
+        'newPLAType': 'debris',
+      },
+      {
+        'file': '2025-10-07-001-area_with_line.th2',
+        'length': 11,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  area clay
+    blaus
+  endarea
+  line contour -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+  area spaceport
+    blaus
+  endarea
+  line contour -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+        'newPLAType': 'spaceport',
       },
     ];
 
+    int count = 1;
+
     for (var success in successes) {
       test(
-        'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
+        'apply and undo yields original state (equal by value, not identity) : ${success['file']} - ${count++}',
         () async {
           try {
             final parser = THFileParser();
@@ -71,15 +122,21 @@ void main() {
 
             /// Execution: taken from TH2FileEditUserInteractionController.prepareSetPLAType()
 
-            controller.setCanvasScale(1);
+            controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
-            final MPCommand addImageCommand =
-                MPCommandFactory.addXTherionInsertImageConfig(
-                  imageFilename: success['imageInsertFile'] as String,
-                  th2FileEditController: controller,
-                );
+            final int areaMPID = parsedFile.getAreas().first.mpID;
 
-            controller.execute(addImageCommand);
+            final MPCommand setPLATypeCommand = MPCommandFactory.editAreasType(
+              newAreaType: THAreaType.fromString(
+                success['newPLAType'] as String,
+              ),
+              unknownPLAType: THAreaType.unknownPLATypeFromString(
+                success['newPLAType'] as String,
+              ),
+              areaMPIDs: [areaMPID],
+            );
+
+            controller.execute(setPLATypeCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 

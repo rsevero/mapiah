@@ -41,7 +41,9 @@ class MPEditAreaTypeCommand extends MPCommand {
         .copyWith(
           areaType: newAreaType,
           unknownPLAType: unknownPLAType,
-          originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+          originalLineInTH2File: keepOriginalLineTH2File
+              ? originalLineInTH2File
+              : '',
         );
 
     th2FileEditController.elementEditController.substituteElement(newArea);

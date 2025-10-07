@@ -15,6 +15,7 @@
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
   * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
   * XTherion settings wrtten before encoding.
+  * Area original line lost on area type change undo.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
@@ -30,7 +31,8 @@
     * add line segment;
     * add point;
     * add scrap;
-    * add XTherionImageInsert.
+    * add XTherionImageInsert;
+    * MPEditAreaTypeCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaTHIDCommand;
     * MPAddAreaCommand;
