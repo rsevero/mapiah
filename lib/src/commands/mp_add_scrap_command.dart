@@ -69,6 +69,14 @@ class MPAddScrapCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo() {
+    // Nothing to prepare for this command.
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
