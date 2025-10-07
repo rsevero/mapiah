@@ -33,7 +33,8 @@
     * add XTherionImageInsert.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaTHIDCommand;
-    * MPAddAreaCommand.
+    * MPAddAreaCommand;
+    * MPAddLineCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
