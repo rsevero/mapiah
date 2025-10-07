@@ -110,5 +110,11 @@ class XVIGrammar extends GrammarDefinition {
         return {'color': color, 'coordinates': coordinates};
       });
 
-  Parser xviSketchLineColor() => (letter().plus().flatten());
+  Parser xviSketchLineColor() {
+    // Accept either a named color (letters) or a HEX RGB color like #RRGGBB
+    final Parser hex6 = (char('#') & pattern('0-9A-Fa-f').times(6)).flatten();
+    final Parser name = letter().plus().flatten();
+
+    return (hex6 | name).trim();
+  }
 }

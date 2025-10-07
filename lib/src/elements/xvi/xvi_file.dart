@@ -21,6 +21,8 @@ class XVIFile with MPBoundingBox {
   List<XVISketchLine> sketchLines;
   XVIGrid grid;
 
+  static const _listEquality = ListEquality();
+
   XVIFile({
     this.filename = '',
     this.gridSizeLength = 0.0,
@@ -114,9 +116,9 @@ class XVIFile with MPBoundingBox {
         filename == other.filename &&
         gridSizeLength == other.gridSizeLength &&
         gridSizeUnit == other.gridSizeUnit &&
-        const ListEquality().equals(stations, other.stations) &&
-        const ListEquality().equals(shots, other.shots) &&
-        const ListEquality().equals(sketchLines, other.sketchLines) &&
+        _listEquality.equals(stations, other.stations) &&
+        _listEquality.equals(shots, other.shots) &&
+        _listEquality.equals(sketchLines, other.sketchLines) &&
         grid == other.grid;
   }
 
@@ -125,9 +127,9 @@ class XVIFile with MPBoundingBox {
     filename,
     gridSizeLength,
     gridSizeUnit,
-    const ListEquality().hash(stations),
-    const ListEquality().hash(shots),
-    const ListEquality().hash(sketchLines),
+    _listEquality.hash(stations),
+    _listEquality.hash(shots),
+    _listEquality.hash(sketchLines),
     grid,
   );
 

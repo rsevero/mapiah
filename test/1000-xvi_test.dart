@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 const String testFilesPath = 'test/auxiliary/xvi';
 const String extension = '.xvi';
@@ -16,10 +17,17 @@ String _getFilePath(String fileName) {
   return '$testFilesPath/$fileName$extension';
 }
 
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp'; // or any fake path
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
   group('XVIGrid', () {
-    final XVIFileParser parser = XVIFileParser();
     final List<String> fileNames = [
       '2025-07-04-001-xvi-xvigrid_without_space_around_curly_braces',
       '2025-07-04-002-xvi-xvigrid_with_space_around_curly_braces',
@@ -39,6 +47,7 @@ void main() {
 
     for (final fileName in fileNames) {
       test('XVIGrammar parses $fileName', () {
+        final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(fileName),
           // runTraceParser: true,
@@ -54,9 +63,7 @@ void main() {
   });
 
   group('XVIGridSize', () {
-    final XVIFileParser parser = XVIFileParser();
     final List<String> fileNames = ['2025-07-09-001-xvi-xvigridsize'];
-
     final double gridSizeLength = 1.0;
     final THLengthUnitPart gridSizeUnit = THLengthUnitPart(
       unit: THLengthUnitType.meter,
@@ -64,6 +71,7 @@ void main() {
 
     for (final fileName in fileNames) {
       test('XVIGrammar parses $fileName', () {
+        final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(fileName),
           // runTraceParser: true,
@@ -80,7 +88,6 @@ void main() {
   });
 
   group('XVIstations', () {
-    final XVIFileParser parser = XVIFileParser();
     final XVIStation stationA1 = XVIStation(
       position: THPositionPart.fromStrings(
         xAsString: '-505.14',
@@ -116,6 +123,7 @@ void main() {
 
     for (final testFile in testFiles) {
       test('XVIGrammar parses ${testFile['file']}', () {
+        final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(testFile['file']),
           // runTraceParser: true,
@@ -132,7 +140,6 @@ void main() {
   });
 
   group('XVIShots', () {
-    final XVIFileParser parser = XVIFileParser();
     final XVIShot shot1 = XVIShot(
       start: THPositionPart.fromStrings(
         xAsString: '-3536.69',
@@ -166,6 +173,7 @@ void main() {
 
     for (final testFile in testFiles) {
       test('XVIGrammar parses ${testFile['file']}', () {
+        final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(testFile['file']),
           // runTraceParser: true,
@@ -296,7 +304,6 @@ void main() {
   });
 
   group('XVIGridSize and XVIGrid', () {
-    final XVIFileParser parser = XVIFileParser();
     final String fileName = '2025-07-09-003-xvi-xvigridsize_and_xvigrid';
 
     final double gridSizeLength = 1.0;
@@ -316,6 +323,7 @@ void main() {
     ]);
 
     test('XVIGrammar parses $fileName', () {
+      final XVIFileParser parser = XVIFileParser();
       final (file, isSuccessful, _) = parser.parse(
         _getFilePath(fileName),
         // runTraceParser: true,
@@ -332,7 +340,6 @@ void main() {
   });
 
   group('Complete XVI File', () {
-    final XVIFileParser parser = XVIFileParser();
     final String fileName = '2025-07-10-005-xvi-complete_file';
 
     final double gridSizeLength = 1.0;
@@ -413,6 +420,7 @@ void main() {
     ];
 
     test('XVIGrammar parses complete file $fileName', () {
+      final XVIFileParser parser = XVIFileParser();
       final (file, isSuccessful, _) = parser.parse(
         _getFilePath(fileName),
         // runTraceParser: true,
@@ -470,5 +478,32 @@ void main() {
         expect(lastSketchLine.points[0].y, -769.44);
       }
     });
+  });
+
+  group('Complete file from JSON', () {
+    final List<Map<String, dynamic>> testFiles = [
+      {
+        'file': '2025-10-07-001-color_as_rgb_hex',
+        'asJSON':
+            '{"filename":"/home/rodrigo/devel/mapiah/test/auxiliary/xvi/2025-10-07-001-color_as_rgb_hex.xvi","gridSizeLength":1.0,"gridSizeUnit":{"partType":"lengthUnit","unit":"m"},"stations":[{"position":{"partType":"position","coordinates":{"dx":196.85,"dy":-236.22},"decimalPositions":2},"name":"1"},{"position":{"partType":"position","coordinates":{"dx":195.48,"dy":-275.47},"decimalPositions":2},"name":"0"}],"shots":[{"start":{"partType":"position","coordinates":{"dx":195.48,"dy":-275.47},"decimalPositions":2},"end":{"partType":"position","coordinates":{"dx":196.85,"dy":-236.22},"decimalPositions":2}}],"sketchLines":[{"color":"#FF0000","start":{"partType":"position","coordinates":{"dx":173.9,"dy":-231.72},"decimalPositions":2},"points":[{"partType":"position","coordinates":{"dx":172.36,"dy":-232.71},"decimalPositions":2},{"partType":"position","coordinates":{"dx":170.69,"dy":-233.93},"decimalPositions":2},{"partType":"position","coordinates":{"dx":169.36,"dy":-235.55},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.59,"dy":-238.93},"decimalPositions":2},{"partType":"position","coordinates":{"dx":164.73,"dy":-243.82},"decimalPositions":2},{"partType":"position","coordinates":{"dx":165.21,"dy":-248.22},"decimalPositions":2},{"partType":"position","coordinates":{"dx":165.64,"dy":-252.13},"decimalPositions":2},{"partType":"position","coordinates":{"dx":167.16,"dy":-256.64},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.75,"dy":-261.55},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.59,"dy":-263.5},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.39,"dy":-265.45},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.36,"dy":-267.4},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.28,"dy":-271.72},"decimalPositions":2},{"partType":"position","coordinates":{"dx":166.54,"dy":-276.84},"decimalPositions":2},{"partType":"position","coordinates":{"dx":169.2,"dy":-280.5},"decimalPositions":2},{"partType":"position","coordinates":{"dx":177.45,"dy":-291.88},"decimalPositions":2},{"partType":"position","coordinates":{"dx":198.79,"dy":-302.66},"decimalPositions":2},{"partType":"position","coordinates":{"dx":211.77,"dy":-294.24},"decimalPositions":2},{"partType":"position","coordinates":{"dx":212.85,"dy":-293.21},"decimalPositions":2},{"partType":"position","coordinates":{"dx":213.94,"dy":-292.19},"decimalPositions":2},{"partType":"position","coordinates":{"dx":215.02,"dy":-291.16},"decimalPositions":2},{"partType":"position","coordinates":{"dx":215.86,"dy":-290.34},"decimalPositions":2},{"partType":"position","coordinates":{"dx":216.69,"dy":-289.51},"decimalPositions":2},{"partType":"position","coordinates":{"dx":217.53,"dy":-288.69},"decimalPositions":2},{"partType":"position","coordinates":{"dx":218.17,"dy":-288.06},"decimalPositions":2},{"partType":"position","coordinates":{"dx":218.82,"dy":-287.43},"decimalPositions":2},{"partType":"position","coordinates":{"dx":219.46,"dy":-286.8},"decimalPositions":2},{"partType":"position","coordinates":{"dx":219.91,"dy":-286.36},"decimalPositions":2},{"partType":"position","coordinates":{"dx":220.29,"dy":-285.83},"decimalPositions":2},{"partType":"position","coordinates":{"dx":220.8,"dy":-285.46},"decimalPositions":2},{"partType":"position","coordinates":{"dx":221.18,"dy":-285.19},"decimalPositions":2},{"partType":"position","coordinates":{"dx":221.75,"dy":-285.21},"decimalPositions":2},{"partType":"position","coordinates":{"dx":222.11,"dy":-284.89},"decimalPositions":2},{"partType":"position","coordinates":{"dx":225.96,"dy":-281.43},"decimalPositions":2},{"partType":"position","coordinates":{"dx":224.43,"dy":-271.9},"decimalPositions":2},{"partType":"position","coordinates":{"dx":224.51,"dy":-267.77},"decimalPositions":2},{"partType":"position","coordinates":{"dx":224.75,"dy":-255.58},"decimalPositions":2},{"partType":"position","coordinates":{"dx":229.82,"dy":-240.33},"decimalPositions":2},{"partType":"position","coordinates":{"dx":223.17,"dy":-228.97},"decimalPositions":2}]},{"color":"#FF0000","start":{"partType":"position","coordinates":{"dx":173.9,"dy":-231.72},"decimalPositions":2},"points":[{"partType":"position","coordinates":{"dx":183.98,"dy":-225.86},"decimalPositions":2},{"partType":"position","coordinates":{"dx":176.08,"dy":-210.24},"decimalPositions":2},{"partType":"position","coordinates":{"dx":176.1,"dy":-202.69},"decimalPositions":2},{"partType":"position","coordinates":{"dx":176.1,"dy":-202.05},"decimalPositions":2},{"partType":"position","coordinates":{"dx":176.41,"dy":-201.42},"decimalPositions":2},{"partType":"position","coordinates":{"dx":176.8,"dy":-200.92},"decimalPositions":2},{"partType":"position","coordinates":{"dx":184.51,"dy":-191.12},"decimalPositions":2},{"partType":"position","coordinates":{"dx":207.16,"dy":-180.77},"decimalPositions":2},{"partType":"position","coordinates":{"dx":219.57,"dy":-180.4},"decimalPositions":2},{"partType":"position","coordinates":{"dx":219.87,"dy":-178.02},"decimalPositions":2},{"partType":"position","coordinates":{"dx":219.17,"dy":-166.62},"decimalPositions":2},{"partType":"position","coordinates":{"dx":216.61,"dy":-158.12},"decimalPositions":2},{"partType":"position","coordinates":{"dx":210.45,"dy":-154.13},"decimalPositions":2},{"partType":"position","coordinates":{"dx":199.37,"dy":-153.13},"decimalPositions":2},{"partType":"position","coordinates":{"dx":185.55,"dy":-153.91},"decimalPositions":2},{"partType":"position","coordinates":{"dx":175.4,"dy":-152.5},"decimalPositions":2},{"partType":"position","coordinates":{"dx":168.72,"dy":-148.83},"decimalPositions":2},{"partType":"position","coordinates":{"dx":164.42,"dy":-145.53},"decimalPositions":2},{"partType":"position","coordinates":{"dx":162.61,"dy":-145.15},"decimalPositions":2}]},{"color":"#FF0000","start":{"partType":"position","coordinates":{"dx":223.17,"dy":-228.97},"decimalPositions":2},"points":[{"partType":"position","coordinates":{"dx":223.09,"dy":-228.4},"decimalPositions":2},{"partType":"position","coordinates":{"dx":223.46,"dy":-227.46},"decimalPositions":2},{"partType":"position","coordinates":{"dx":222.92,"dy":-227.26},"decimalPositions":2},{"partType":"position","coordinates":{"dx":215.83,"dy":-224.67},"decimalPositions":2},{"partType":"position","coordinates":{"dx":203.16,"dy":-220.81},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.15,"dy":-211.0},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.07,"dy":-210.23},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.03,"dy":-209.45},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.09,"dy":-208.68},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.2,"dy":-207.32},"decimalPositions":2},{"partType":"position","coordinates":{"dx":202.8,"dy":-205.8},"decimalPositions":2},{"partType":"position","coordinates":{"dx":203.85,"dy":-204.81},"decimalPositions":2},{"partType":"position","coordinates":{"dx":210.08,"dy":-198.95},"decimalPositions":2},{"partType":"position","coordinates":{"dx":217.53,"dy":-193.42},"decimalPositions":2},{"partType":"position","coordinates":{"dx":222.57,"dy":-186.02},"decimalPositions":2}]}],"grid":{"gx":{"partType":"double","value":101.59,"decimalPositions":2},"gy":{"partType":"double","value":-441.88,"decimalPositions":2},"gxx":{"partType":"double","value":39.37,"decimalPositions":2},"gxy":{"partType":"double","value":0.0,"decimalPositions":1},"gyx":{"partType":"double","value":0.0,"decimalPositions":1},"gyy":{"partType":"double","value":39.37,"decimalPositions":2},"ngx":{"partType":"double","value":4.0,"decimalPositions":0},"ngy":{"partType":"double","value":11.0,"decimalPositions":0}}}',
+      },
+    ];
+    for (final testFile in testFiles) {
+      test('XVIGrammar parses ${testFile['file']}', () {
+        final XVIFileParser parser = XVIFileParser();
+        final (file, isSuccessful, _) = parser.parse(
+          _getFilePath(testFile['file']),
+          // runTraceParser: true,
+        );
+
+        expect(isSuccessful, true);
+        expect(file, isA<XVIFile>());
+        if (file is XVIFile) {
+          final XVIFile fileFromJSON = XVIFile.fromJson(testFile['asJSON']);
+
+          expect(file == fileFromJSON, isTrue);
+        }
+      });
+    }
   });
 }

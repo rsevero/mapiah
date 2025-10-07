@@ -576,24 +576,41 @@ class TKColorMap {
   /// The color object is created on demand and cached for subsequent requests.
   /// Returns null if the color name is not found.
   static Color getColor(String tkColorName) {
-    // Special Color Handling
-    // There's one special case color transformation:
-    //
-    // "connect" → gray (dashed): When the color is specified as "connect", it
-    // gets converted to:
-    // Color: gray
-    // Line style: Dashed (dash pattern: .)
-    if (tkColorName == 'connect') {
-      tkColorName = 'gray';
-    }
-    if (!_colorCache.containsKey(tkColorName)) {
-      final int hexValue =
-          _colorHexValues[tkColorName] ?? _colorHexValues['gray']!;
-      final Color color = Color(hexValue);
+    // Normalize to lowercase for case-insensitive lookup and caching.
+    final String canonical = tkColorName.toLowerCase();
 
-      _colorCache[tkColorName] = color;
+    // Special Color Handling (case-insensitive):
+    // "connect" -> gray (dashed).
+    final String effectiveKey = (canonical == 'connect') ? 'gray' : canonical;
+
+    if (!_colorCache.containsKey(effectiveKey)) {
+      int? hexValue = _colorHexValues[effectiveKey];
+
+      // If not found in predefined map, try to parse tkColorName as a HEX
+      // color. Accept formats like '#RRGGBB' (case-insensitive).
+      if (hexValue == null) {
+        String s = canonical;
+
+        if (s.startsWith('#')) s = s.substring(1);
+
+        try {
+          if (s.length == 6) {
+            final int rgb = int.parse(s, radix: 16);
+
+            hexValue = 0xFF000000 | rgb;
+          }
+        } catch (_) {
+          hexValue = null;
+        }
+      }
+
+      final int finalHex = hexValue ?? _colorHexValues['gray']!;
+      final Color color = Color(finalHex);
+
+      // Cache under the canonical lowercase key so lookups are case-insensitive
+      _colorCache[effectiveKey] = color;
     }
 
-    return _colorCache[tkColorName]!;
+    return _colorCache[effectiveKey]!;
   }
 }

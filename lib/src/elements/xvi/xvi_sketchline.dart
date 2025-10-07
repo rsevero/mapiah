@@ -7,6 +7,8 @@ class XVISketchLine {
   THPositionPart start;
   List<THPositionPart> points;
 
+  static const _listEquality = ListEquality();
+
   XVISketchLine({
     required this.color,
     required this.start,
@@ -59,10 +61,9 @@ class XVISketchLine {
     return other is XVISketchLine &&
         color == other.color &&
         start == other.start &&
-        const ListEquality().equals(points, other.points);
+        _listEquality.equals(points, other.points);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(color, start, const ListEquality().hash(points));
+  int get hashCode => Object.hash(color, start, _listEquality.hash(points));
 }
