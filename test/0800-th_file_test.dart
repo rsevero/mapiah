@@ -28,9 +28,6 @@ void main() {
   });
 
   group('line breaks', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     var successes = [
       {
         'file': 'th_file_parser-00000-line_breaks.th2',
@@ -70,6 +67,9 @@ endscrap
 
     for (var success in successes) {
       test(success['file']!, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -84,9 +84,6 @@ endscrap
   });
 
   group('xtherion config', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     var successes = [
       {
         'file': 'th_file_parser-00020-xtherionsetting_only.th2',
@@ -116,10 +113,17 @@ endscrap
 
     for (var success in successes) {
       test(success['file']!, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(
+          isSuccessful,
+          true,
+          reason: 'Failed to parse ${success['file']}: $errors',
+        );
         expect(file, isA<THFile>());
         expect(file.countElements(), success['countElements']);
 
@@ -130,9 +134,6 @@ endscrap
   });
 
   group('remove elements', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     var success = {
       'file': 'th_file_parser-02300-delete_elements.th2',
       'countElements': 26,
@@ -201,6 +202,8 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
+      final parser = THFileParser();
+      final writer = THFileWriter();
       mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
@@ -262,6 +265,9 @@ endcomment
     });
 
     test("${success['file']} as once", () async {
+      final parser = THFileParser();
+      final writer = THFileWriter();
+      mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
         forceNewController: true,
@@ -279,9 +285,6 @@ endcomment
   });
 
   group('keep empty lines', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
-
     var success = {
       'file': 'th_file_parser-02300-delete_elements.th2',
       'countElements': 26,
@@ -315,6 +318,9 @@ endscrap
     };
 
     test("${success['file']} as once", () async {
+      final parser = THFileParser();
+      final writer = THFileWriter();
+      mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
         forceNewController: true,

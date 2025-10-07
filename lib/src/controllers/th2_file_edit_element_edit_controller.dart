@@ -360,12 +360,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newElement,
       elementPositionInParent: childPositionInParent,
     );
-
-    if (newElement is THXTherionImageInsertConfig) {
-      print(
-        'image JSON: ${newElement.getXVIFile(_th2FileEditController)!.toJson()}',
-      );
-    }
   }
 
   @action
