@@ -52,8 +52,8 @@ scrap scrap1 -projection plan -scale [ 0.15 m ]
 endscrap
 ''',
         'scrapOptions': [
-          r'{"optionType":"projection","parentMPID":0,"originalLineInTH2File":"","mode":"plan","index":""}',
           r'{"optionType":"scrapScale","parentMPID":0,"originalLineInTH2File":"","numericSpecifications":[{"partType":"double","value":0.15,"decimalPositions":2}],"unit":{"partType":"lengthUnit","unit":"m"}}',
+          r'{"optionType":"projection","parentMPID":0,"originalLineInTH2File":"","mode":"plan","index":""}',
         ],
         'scrapChildren': [
           '{"elementType":"point","mpID":4,"parentMPID":0,"sameLineComment":null,"originalLineInTH2File":"","position":{"partType":"position","coordinates":{"dx":-2.073076837713069,"dy":0.04164428710937518},"decimalPositions":3},"pointType":"station","unknownPLAType":"","optionsMap":{},"attrOptionsMap":{}}',

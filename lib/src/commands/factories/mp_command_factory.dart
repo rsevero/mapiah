@@ -6,6 +6,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -13,6 +14,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:path/path.dart' as p;
 
 class MPCommandFactory {
   static MPCommand addLineToArea({
@@ -152,6 +154,44 @@ class MPCommandFactory {
     );
 
     return addScrapCommandForNewScrap;
+  }
+
+  static MPCommand addXTherionInsertImageConfig({
+    required String imageFilename,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final THFile thFile = th2FileEditController.thFile;
+    final String rawRelativeImagePath = p.relative(
+      imageFilename,
+      from: p.dirname(thFile.filename),
+    );
+    final String relativeImagePath =
+        (rawRelativeImagePath.startsWith('./') ||
+            rawRelativeImagePath.startsWith('../'))
+        ? rawRelativeImagePath
+        : './$rawRelativeImagePath';
+    final Rect fileBoundingBox = thFile.getBoundingBox(th2FileEditController);
+    final THXTherionImageInsertConfig
+    newImage = THXTherionImageInsertConfig.adjustPosition(
+      parentMPID: thFile.mpID,
+      filename: relativeImagePath,
+      xx: THDoublePart(value: fileBoundingBox.left),
+      // For Flutter's canvas, the top is 0 and positive values of Y go down but
+      // in the TH2 format, the top is the maximum Y value.
+      // That's why Flutter calls the maximum Y value "bottom" and despite being
+      // called *bottom*, we use it to align the new image to the *top* left
+      // point of the current drawing.
+      yy: THDoublePart(value: fileBoundingBox.bottom),
+      th2FileEditController: th2FileEditController,
+    );
+    final MPAddXTherionImageInsertConfigCommand addImageCommand =
+        MPAddXTherionImageInsertConfigCommand(
+          newImageInsertConfig: newImage,
+          xTherionImageInsertConfigPositionInParent:
+              mpAddChildAtEndOfParentChildrenList,
+        );
+
+    return addImageCommand;
   }
 
   static MPCommand setOptionOnElements({

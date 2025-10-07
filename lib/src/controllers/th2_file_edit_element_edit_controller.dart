@@ -19,7 +19,6 @@ import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -28,7 +27,6 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
-import 'package:path/path.dart' as p;
 
 part 'th2_file_edit_element_edit_controller.g.dart';
 
@@ -1194,34 +1192,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final String rawRelativeImagePath = p.relative(
-      imageResult.filename!,
-      from: p.dirname(_thFile.filename),
-    );
-    final String relativeImagePath =
-        (rawRelativeImagePath.startsWith('./') ||
-            rawRelativeImagePath.startsWith('../'))
-        ? rawRelativeImagePath
-        : './$rawRelativeImagePath';
-    final Rect fileBoundingBox = _thFile.getBoundingBox(_th2FileEditController);
-    final THXTherionImageInsertConfig
-    newImage = THXTherionImageInsertConfig.adjustPosition(
-      parentMPID: _thFile.mpID,
-      filename: relativeImagePath,
-      xx: THDoublePart(value: fileBoundingBox.left),
-      // For Flutter's canvas, the top is 0 and positive values of Y go down but
-      // in the TH2 format, the top is the maximum Y value.
-      // That's why Flutter calls the maximum Y value "bottom" and despite being
-      // called *bottom*, we use it to align the new image to the *top* left
-      // point of the current drawing.
-      yy: THDoublePart(value: fileBoundingBox.bottom),
-      th2FileEditController: _th2FileEditController,
-    );
-    final MPAddXTherionImageInsertConfigCommand addImageCommand =
-        MPAddXTherionImageInsertConfigCommand(
-          newImageInsertConfig: newImage,
-          xTherionImageInsertConfigPositionInParent:
-              mpAddChildAtEndOfParentChildrenList,
+    final MPCommand addImageCommand =
+        MPCommandFactory.addXTherionInsertImageConfig(
+          imageFilename: imageResult.filename!,
+          th2FileEditController: _th2FileEditController,
         );
 
     _th2FileEditController.execute(addImageCommand);
