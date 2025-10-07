@@ -33,7 +33,8 @@
     * add scrap;
     * add XTherionImageInsert;
     * MPEditAreaTypeCommand;
-    * MPEditLineTypeCommand.
+    * MPEditLineTypeCommand;
+    * MPEditPointTypeCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaTHIDCommand;
     * MPAddAreaCommand;

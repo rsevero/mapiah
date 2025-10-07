@@ -8,6 +8,8 @@ class MPEditPointTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editPointType;
 
+  final Map<String, dynamic> _undoRedoInfo = {};
+
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,
     required this.newPointType,
@@ -32,6 +34,21 @@ class MPEditPointTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
+      pointMPID,
+    );
+
+    _undoRedoInfo['originalPointType'] = originalPoint.pointType;
+    _undoRedoInfo['originalUnknownPLAType'] = originalPoint.unknownPLAType;
+    _undoRedoInfo['originalLineInTH2File'] =
+        originalPoint.originalLineInTH2File;
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -54,15 +71,11 @@ class MPEditPointTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
-      pointMPID,
-    );
-
     final MPCommand oppositeCommand = MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID,
-      newPointType: originalPoint.pointType,
-      unknownPLAType: originalPoint.unknownPLAType,
-      originalLineInTH2File: originalPoint.originalLineInTH2File,
+      newPointType: _undoRedoInfo['originalPointType'],
+      unknownPLAType: _undoRedoInfo['originalUnknownPLAType'],
+      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'],
       descriptionType: descriptionType,
     );
 
