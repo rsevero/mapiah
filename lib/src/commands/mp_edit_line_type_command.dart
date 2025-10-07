@@ -8,6 +8,8 @@ class MPEditLineTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineType;
 
+  final Map<String, dynamic> _undoRedoInfo = {};
+
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,
     required this.newLineType,
@@ -32,6 +34,20 @@ class MPEditLineTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
+      lineMPID,
+    );
+
+    _undoRedoInfo['originalLineType'] = originalLine.lineType;
+    _undoRedoInfo['originalUnknownPLAType'] = originalLine.unknownPLAType;
+    _undoRedoInfo['originalLineInTH2File'] = originalLine.originalLineInTH2File;
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -54,15 +70,11 @@ class MPEditLineTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
-      lineMPID,
-    );
-
     final MPCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID,
-      newLineType: originalLine.lineType,
-      unknownPLAType: originalLine.unknownPLAType,
-      originalLineInTH2File: originalLine.originalLineInTH2File,
+      newLineType: _undoRedoInfo['originalLineType'] as THLineType,
+      unknownPLAType: _undoRedoInfo['originalUnknownPLAType'] as String,
+      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 
