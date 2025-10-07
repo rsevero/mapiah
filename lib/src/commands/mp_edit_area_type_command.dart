@@ -8,6 +8,8 @@ class MPEditAreaTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editAreaType;
 
+  final Map<String, dynamic> _undoRedoInfo = {};
+
   MPEditAreaTypeCommand.forCWJM({
     required this.areaMPID,
     required this.newAreaType,
@@ -32,6 +34,20 @@ class MPEditAreaTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THArea originalArea = th2FileEditController.thFile.areaByMPID(
+      areaMPID,
+    );
+
+    _undoRedoInfo['newAreaType'] = originalArea.areaType;
+    _undoRedoInfo['unknownPLAType'] = originalArea.unknownPLAType;
+    _undoRedoInfo['originalLineInTH2File'] = originalArea.originalLineInTH2File;
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -54,15 +70,11 @@ class MPEditAreaTypeCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THArea originalArea = th2FileEditController.thFile.areaByMPID(
-      areaMPID,
-    );
-
     final MPCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaMPID,
-      newAreaType: originalArea.areaType,
-      unknownPLAType: originalArea.unknownPLAType,
-      originalLineInTH2File: originalArea.originalLineInTH2File,
+      newAreaType: _undoRedoInfo['newAreaType'] as THAreaType,
+      unknownPLAType: _undoRedoInfo['unknownPLAType'] as String,
+      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 
