@@ -86,7 +86,7 @@ abstract class MPCommand {
     bool keepOriginalLineTH2File = false,
   }) {
     if (hasNewExecuteMethod) {
-      _prepareUndoRedoInfo();
+      _prepareUndoRedoInfo(th2FileEditController);
       _actualExecute(
         th2FileEditController,
         keepOriginalLineTH2File: keepOriginalLineTH2File,
@@ -199,7 +199,7 @@ abstract class MPCommand {
 
   bool get hasNewExecuteMethod => false;
 
-  void _prepareUndoRedoInfo() {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     throw UnimplementedError();
   }
 }

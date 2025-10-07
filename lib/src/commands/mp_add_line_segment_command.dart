@@ -43,7 +43,7 @@ class MPAddLineSegmentCommand extends MPCommand {
   bool get hasNewExecuteMethod => true;
 
   @override
-  void _prepareUndoRedoInfo() {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     // Nothing to prepare for this command.
   }
 
