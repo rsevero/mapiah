@@ -37,7 +37,8 @@
     * MPAddLineCommand;
     * MPAddLineSegmentCommand;
     * MPAddPointCommand;
-    * MPAddScrapCommand.
+    * MPAddScrapCommand;
+    * MPAddXTherionInsertImageCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
