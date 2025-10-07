@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -30,34 +29,27 @@ void main() {
 
     const successes = [
       {
-        'file': '2025-10-06-004-no_scrap.th2',
+        'file': '2025-10-06-004-only_encoding.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 ''',
         'asFileChanged': r'''encoding UTF-8
-scrap scrap1
-endscrap
+##XTHERION## xth_me_image_insert {-0 1 1} {-433} "./xvi/2025-10-07-001-color_as_rgb_hex.xvi" 0 {}
 ''',
+        'imageInsertFile':
+            './test/auxiliary/xvi/2025-10-07-001-color_as_rgb_hex.xvi',
       },
       {
-        'file': '2025-10-06-004-no_scrap.th2',
+        'file': '2025-10-06-004-only_encoding.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 ''',
         'asFileChanged': r'''encoding UTF-8
-scrap scrap1 -projection plan -scale [ 0.15 m ]
-  point -2.073 0.042 station
-endscrap
+##XTHERION## xth_me_image_insert {-0 1 1} {0} "./jpg/2025-10-07-001.jpg" 0 {}
 ''',
-        'scrapOptions': [
-          r'{"optionType":"scrapScale","parentMPID":0,"originalLineInTH2File":"","numericSpecifications":[{"partType":"double","value":0.15,"decimalPositions":2}],"unit":{"partType":"lengthUnit","unit":"m"}}',
-          r'{"optionType":"projection","parentMPID":0,"originalLineInTH2File":"","mode":"plan","index":""}',
-        ],
-        'scrapChildren': [
-          '{"elementType":"point","mpID":4,"parentMPID":0,"sameLineComment":null,"originalLineInTH2File":"","position":{"partType":"position","coordinates":{"dx":-2.073076837713069,"dy":0.04164428710937518},"decimalPositions":3},"pointType":"station","unknownPLAType":"","optionsMap":{},"attrOptionsMap":{}}',
-        ],
+        'imageInsertFile': './test/auxiliary/jpg/2025-10-07-001.jpg',
       },
     ];
 
@@ -88,30 +80,17 @@ endscrap
             // Snapshot original state (deep clone via toMap/fromMap)
             final THFile snapshotOriginal = THFile.fromMap(parsedFile.toMap());
 
-            /// Execution: taken from _MPAddScrapDialogOverlayWindowWidgetState._createScrap()
+            /// Execution: taken from TH2FileEditElementEditController.addImage()
 
             controller.setCanvasScale(1);
 
-            final List<THCommandOption>? scrapOptions =
-                (success['scrapOptions'] != null)
-                ? (success['scrapOptions'] as List<dynamic>)
-                      .map(
-                        (s) => THCommandOption.fromMap(jsonDecode(s as String)),
-                      )
-                      .toList()
-                : null;
-            final List<THElement>? scrapChildren =
-                (success['scrapChildren'] != null)
-                ? (success['scrapChildren'] as List<dynamic>)
-                      .map((s) => THElement.fromMap(jsonDecode(s as String)))
-                      .toList()
-                : null;
+            final MPCommand addImageCommand =
+                MPCommandFactory.addXTherionInsertImageConfig(
+                  imageFilename: success['imageInsertFile'] as String,
+                  th2FileEditController: controller,
+                );
 
-            controller.elementEditController.createScrap(
-              thID: 'scrap1',
-              scrapChildren: scrapChildren,
-              scrapOptions: scrapOptions,
-            );
+            controller.execute(addImageCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 

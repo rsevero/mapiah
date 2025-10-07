@@ -43,9 +43,10 @@ class THFileWriter {
       final String newLine = 'encoding ${thFile.encoding}$_lineEnding';
 
       asString += newLine;
+
+      asString += _trySerializeXTherionConfig();
     }
 
-    asString += _trySerializeXTherionConfig();
     asString += _childrenAsString(thFile);
 
     return asString;
@@ -200,6 +201,7 @@ class THFileWriter {
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
 
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
+        asString += _trySerializeXTherionConfig();
       case THElementType.endarea:
         _reducePrefix();
         asString += _prepareLineWithOriginalRepresentation(

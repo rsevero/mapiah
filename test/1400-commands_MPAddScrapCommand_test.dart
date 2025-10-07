@@ -30,7 +30,7 @@ void main() {
 
     const successes = [
       {
-        'file': '2025-10-06-004-no_scrap.th2',
+        'file': '2025-10-06-004-only_encoding.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
@@ -41,7 +41,7 @@ endscrap
 ''',
       },
       {
-        'file': '2025-10-06-004-no_scrap.th2',
+        'file': '2025-10-06-004-only_encoding.th2',
         'length': 1,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8

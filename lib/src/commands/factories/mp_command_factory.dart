@@ -161,9 +161,10 @@ class MPCommandFactory {
     required TH2FileEditController th2FileEditController,
   }) {
     final THFile thFile = th2FileEditController.thFile;
+    final String fromPath = p.dirname(thFile.filename);
     final String rawRelativeImagePath = p.relative(
       imageFilename,
-      from: p.dirname(thFile.filename),
+      from: fromPath,
     );
     final String relativeImagePath =
         (rawRelativeImagePath.startsWith('./') ||

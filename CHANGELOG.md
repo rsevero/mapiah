@@ -14,6 +14,7 @@
   * lineSegmentsMPIDs in wrong order after line segment addition.
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
   * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
+  * XTherion settings wrtten before encoding.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
@@ -28,7 +29,8 @@
     * add line;
     * add line segment;
     * add point;
-    * add scrap.
+    * add scrap;
+    * add XTherionImageInsert.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
