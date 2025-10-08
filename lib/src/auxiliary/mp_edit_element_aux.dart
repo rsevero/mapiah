@@ -14,7 +14,7 @@ class MPEditElementAux {
   getBezierCurveLineSegmentFromStraightLineSegment({
     required Offset start,
     required THStraightLineSegment straightLineSegment,
-    required int decimalPositions,
+    int? decimalPositions,
   }) {
     final Offset end = straightLineSegment.endPoint.coordinates;
     final double dxThird = (end.dx - start.dx) / 3;

@@ -937,8 +937,22 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void setSelectedEndPoints(List<THLineSegment> lineSegments) {
+  void setSelectedEndPoints(Iterable<THLineSegment> lineSegments) {
     _selectedEndControlPoints.clear();
+    addSelectedEndPoints(lineSegments);
+  }
+
+  void setSelectedEndPointsByMPID(Iterable<int> lineSegmentMPIDs) {
+    _selectedEndControlPoints.clear();
+
+    final List<THLineSegment> lineSegments = [];
+
+    for (final int mpID in lineSegmentMPIDs) {
+      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(mpID);
+
+      lineSegments.add(lineSegment);
+    }
+
     addSelectedEndPoints(lineSegments);
   }
 
@@ -973,7 +987,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
   }
 
-  void addSelectedEndPoints(List<THLineSegment> lineSegments) {
+  void addSelectedEndPoints(Iterable<THLineSegment> lineSegments) {
     for (final THLineSegment lineSegment in lineSegments) {
       _selectedEndControlPoints[lineSegment.mpID] =
           getNewMPSelectedEndControlPoint(lineSegment);

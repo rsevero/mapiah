@@ -1,10 +1,12 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -193,6 +195,65 @@ class MPCommandFactory {
         );
 
     return addImageCommand;
+  }
+
+  static MPCommand setLineSegmentsType({
+    required MPSelectedLineSegmentType selectedLineSegmentType,
+    required THFile thFile,
+    required List<THLineSegment> originalLineSegments,
+  }) {
+    final List<THLineSegment> changedLineSegments = [];
+
+    switch (selectedLineSegmentType) {
+      case MPSelectedLineSegmentType.bezierCurveLineSegment:
+        final THLine line = thFile.lineByMPID(
+          originalLineSegments.first.parentMPID,
+        );
+
+        for (final THLineSegment currentLineSegment in originalLineSegments) {
+          final THLineSegment? previousLineSegment = line
+              .getPreviousLineSegment(currentLineSegment, thFile);
+
+          if (previousLineSegment == null) {
+            continue;
+          }
+
+          final THBezierCurveLineSegment changedLineSegment =
+              MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+                start: previousLineSegment.endPoint.coordinates,
+                straightLineSegment:
+                    (currentLineSegment as THStraightLineSegment),
+              );
+
+          changedLineSegments.add(changedLineSegment);
+        }
+      case MPSelectedLineSegmentType.straightLineSegment:
+        for (final THLineSegment currentLineSegment in originalLineSegments) {
+          final THStraightLineSegment changedLineSegment =
+              THStraightLineSegment.forCWJM(
+                mpID: currentLineSegment.mpID,
+                parentMPID: currentLineSegment.parentMPID,
+                endPoint: currentLineSegment.endPoint,
+                optionsMap: currentLineSegment.optionsMap,
+                attrOptionsMap: currentLineSegment.attrOptionsMap,
+                originalLineInTH2File: '',
+              );
+
+          changedLineSegments.add(changedLineSegment);
+        }
+      default:
+        throw ArgumentError(
+          'Unsupported selectedLineSegmentType in MPCommandFactory.setLineSegmentType',
+        );
+    }
+
+    final MPCommand setLineSegmentTypeCommand =
+        MPCommandFactory.editLinesSegmentType(
+          thFile: thFile,
+          changedLineSegments: changedLineSegments,
+        );
+
+    return setLineSegmentTypeCommand;
   }
 
   static MPCommand setOptionOnElements({
@@ -757,17 +818,17 @@ class MPCommandFactory {
   }
 
   static MPCommand editLinesSegmentType({
-    required List<THLineSegment> newLineSegments,
+    required List<THLineSegment> changedLineSegments,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editLineSegmentsType,
   }) {
     final List<MPCommand> commandsList = [];
 
-    for (final THLineSegment newLineSegment in newLineSegments) {
+    for (final THLineSegment changedLineSegment in changedLineSegments) {
       final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
-        originalLineSegment: thFile.lineSegmentByMPID(newLineSegment.mpID),
-        newLineSegment: newLineSegment,
+        originalLineSegment: thFile.lineSegmentByMPID(changedLineSegment.mpID),
+        newLineSegment: changedLineSegment,
         descriptionType: descriptionType,
       );
 

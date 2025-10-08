@@ -1,5 +1,4 @@
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -441,77 +440,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
-    final List<THLineSegment> newLineSegments = [];
-
-    switch (selectedLineSegmentType) {
-      case MPSelectedLineSegmentType.bezierCurveLineSegment:
-        final THFile thFile = _th2FileEditController.thFile;
-        final THLine line = thFile.lineByMPID(
-          willChangeLineSegments.first.parentMPID,
+    final MPCommand setLineSegmentsTypeCommand =
+        MPCommandFactory.setLineSegmentsType(
+          selectedLineSegmentType: selectedLineSegmentType,
+          thFile: _th2FileEditController.thFile,
+          originalLineSegments: willChangeLineSegments.toList(),
         );
-        final int decimalPositions =
-            _th2FileEditController.currentDecimalPositions;
 
-        for (final THLineSegment currentLineSegment in willChangeLineSegments) {
-          final THLineSegment? previousLineSegment = line
-              .getPreviousLineSegment(currentLineSegment, thFile);
-
-          if (previousLineSegment == null) {
-            continue;
-          }
-
-          final THBezierCurveLineSegment newLineSegment =
-              MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-                start: previousLineSegment.endPoint.coordinates,
-                straightLineSegment:
-                    (currentLineSegment as THStraightLineSegment),
-                decimalPositions: decimalPositions,
-              );
-
-          newLineSegments.add(newLineSegment);
-        }
-      case MPSelectedLineSegmentType.straightLineSegment:
-        for (final THLineSegment currentLineSegment in willChangeLineSegments) {
-          final THStraightLineSegment newLineSegment =
-              THStraightLineSegment.forCWJM(
-                mpID: currentLineSegment.mpID,
-                parentMPID: currentLineSegment.parentMPID,
-                endPoint: currentLineSegment.endPoint,
-                optionsMap: currentLineSegment.optionsMap,
-                attrOptionsMap: currentLineSegment.attrOptionsMap,
-                originalLineInTH2File: '',
-              );
-
-          newLineSegments.add(newLineSegment);
-        }
-      default:
-        return;
-    }
-
-    final MPCommand setLineSegmentTypeCommand;
-
-    if (newLineSegments.length == 1) {
-      final THLineSegment newLineSegment = newLineSegments.first;
-
-      setLineSegmentTypeCommand = MPEditLineSegmentCommand(
-        originalLineSegment: _th2FileEditController.thFile.lineSegmentByMPID(
-          newLineSegment.mpID,
-        ),
-        newLineSegment: newLineSegment,
-        descriptionType: MPCommandDescriptionType.editLineSegmentType,
-      );
-    } else {
-      setLineSegmentTypeCommand = MPCommandFactory.editLinesSegmentType(
-        thFile: _th2FileEditController.thFile,
-        newLineSegments: newLineSegments,
-      );
-
-      _th2FileEditController.execute(setLineSegmentTypeCommand);
-    }
-
-    _th2FileEditController.execute(setLineSegmentTypeCommand);
-    _th2FileEditController.selectionController.setSelectedEndPoints(
-      newLineSegments,
+    _th2FileEditController.execute(setLineSegmentsTypeCommand);
+    _th2FileEditController.selectionController.setSelectedEndPointsByMPID(
+      willChangeLineSegments.map((e) => e.mpID),
     );
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
