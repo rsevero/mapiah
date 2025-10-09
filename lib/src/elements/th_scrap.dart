@@ -28,6 +28,10 @@ class THScrap extends THElement
     implements THHasTHID {
   late String _thID;
 
+  List<int>? _areasMPIDs;
+  List<int>? _linesMPIDs;
+  List<int>? _pointsMPIDs;
+
   static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
 
   THScrap.forCWJM({
@@ -158,5 +162,111 @@ class THScrap extends THElement
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
     return calculateChildrenBoundingBox(th2FileEditController, childrenMPIDs);
+  }
+
+  List<int> getAreasMPIDs(THFile thFile) {
+    if (_areasMPIDs == null) {
+      _initializeAreasList(thFile);
+    }
+
+    return _areasMPIDs!;
+  }
+
+  List<int> getLinesMPIDs(THFile thFile) {
+    if (_linesMPIDs == null) {
+      _initializeLinesList(thFile);
+    }
+
+    return _linesMPIDs!;
+  }
+
+  List<int> getPointsMPIDs(THFile thFile) {
+    if (_pointsMPIDs == null) {
+      _initializePointsList(thFile);
+    }
+
+    return _pointsMPIDs!;
+  }
+
+  Iterable<THArea> getAreas(THFile thFile) {
+    return getAreasMPIDs(thFile).map((int mpID) => thFile.areaByMPID(mpID));
+  }
+
+  Iterable<THLine> getLines(THFile thFile) {
+    return getLinesMPIDs(thFile).map((int mpID) => thFile.lineByMPID(mpID));
+  }
+
+  Iterable<THPoint> getPoints(THFile thFile) {
+    return getPointsMPIDs(thFile).map((int mpID) => thFile.pointByMPID(mpID));
+  }
+
+  void _initializeAreasList(THFile thFile) {
+    final Iterable<THElement> children = getChildren(thFile);
+
+    _areasMPIDs = [];
+
+    for (final THElement child in children) {
+      if (child is THArea) {
+        _areasMPIDs!.add(child.mpID);
+      }
+    }
+  }
+
+  void _initializeLinesList(THFile thFile) {
+    final Iterable<THElement> children = getChildren(thFile);
+
+    _linesMPIDs = [];
+
+    for (final THElement child in children) {
+      if (child is THLine) {
+        _linesMPIDs!.add(child.mpID);
+      }
+    }
+  }
+
+  void _initializePointsList(THFile thFile) {
+    final Iterable<THElement> children = getChildren(thFile);
+
+    _pointsMPIDs = [];
+
+    for (final THElement child in children) {
+      if (child is THPoint) {
+        _pointsMPIDs!.add(child.mpID);
+      }
+    }
+  }
+
+  @override
+  void addElementToParent(
+    THElement element, {
+    int elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+  }) {
+    super.addElementToParent(
+      element,
+      elementPositionInParent: elementPositionInParent,
+    );
+
+    switch (element) {
+      case THArea _:
+        _areasMPIDs = null;
+      case THLine _:
+        _linesMPIDs = null;
+      case THPoint _:
+        _pointsMPIDs = null;
+    }
+  }
+
+  @override
+  void removeElementFromParent(THFile thFile, THElement element) {
+    super.removeElementFromParent(thFile, element);
+
+    switch (element) {
+      case THArea a:
+        _areasMPIDs?.remove(a.mpID);
+      case THLine l:
+        _linesMPIDs?.remove(l.mpID);
+      case THPoint p:
+        _pointsMPIDs?.remove(p.mpID);
+    }
   }
 }

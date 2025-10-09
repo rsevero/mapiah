@@ -24,6 +24,8 @@
   * Renamed MPTH2FileEditStateSingleLineEdit to MPTH2FileEditStateEditSingleLine
   * flutter upgrade to 3.35.5
   * Created MPCommandFactory.addXTherionInsertImageConfig().
+  * Removed mpCalculatedDecimalPositions constant.
+  * Added getAreas(), getLines() and getPoints() methods to THScrap.
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
