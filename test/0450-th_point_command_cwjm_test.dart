@@ -42,7 +42,7 @@ scrap test
 endscrap
 ''',
         'asJson':
-            r'''{"elementType":"point","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.48195403809 468.93754612064 debris\n","position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":11},"pointType":"debris","unknownPLAType":"","optionsMap":{},"attrOptionsMap":{}}''',
+            r'''{"elementType":"point","mpID":3,"parentMPID":2,"sameLineComment":null,"originalLineInTH2File":"point 296.48195403809 468.93754612064 debris\n","position":{"partType":"position","coordinates":{"dx":296.48195403809,"dy":468.93754612064},"decimalPositions":6},"pointType":"debris","unknownPLAType":"","optionsMap":{},"attrOptionsMap":{}}''',
       },
       // th_file_parser-00195-passage_height_point_with_value_option_with_unit.th2
     ];

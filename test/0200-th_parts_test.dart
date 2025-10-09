@@ -39,26 +39,66 @@ void main() {
 
   group('THDoublePart from string', () {
     var successes = [
-      {'value': 9322.91263, 'decimalPositions': 5, 'asString': '9322.91263'},
-      {'value': 9322.9115, 'decimalPositions': 4, 'asString': '9322.9115'},
-      {'value': 5.550, 'decimalPositions': 2, 'asString': '5.55'},
-      {'value': 2.3456789, 'decimalPositions': 7, 'asString': '2.3456789'},
-      {'value': 2.275, 'decimalPositions': 3, 'asString': '2.275'},
-      {'value': 312, 'decimalPositions': 0, 'asString': '312'},
-      {'value': 312.0, 'decimalPositions': 0, 'asString': '312'},
-      {'value': 312.00, 'decimalPositions': 0, 'asString': '312'},
+      {
+        'value': 9322.91263,
+        'decimalPositions': 5,
+        'asStringFrom': '9322.91263',
+        'asStringFromTo': '9322.91263',
+      },
+      {
+        'value': 9322.9115,
+        'decimalPositions': 4,
+        'asStringFrom': '9322.9115',
+        'asStringFromTo': '9322.9115',
+      },
+      {
+        'value': 5.550,
+        'decimalPositions': 2,
+        'asStringFrom': '5.55',
+        'asStringFromTo': '5.55',
+      },
+      {
+        'value': 2.3456789,
+        'decimalPositions': 6,
+        'asStringFrom': '2.3456789',
+        'asStringFromTo': '2.345679',
+      },
+      {
+        'value': 2.275,
+        'decimalPositions': 3,
+        'asStringFrom': '2.275',
+        'asStringFromTo': '2.275',
+      },
+      {
+        'value': 312,
+        'decimalPositions': 0,
+        'asStringFrom': '312',
+        'asStringFromTo': '312',
+      },
+      {
+        'value': 312.0,
+        'decimalPositions': 0,
+        'asStringFrom': '312',
+        'asStringFromTo': '312',
+      },
+      {
+        'value': 312.00,
+        'decimalPositions': 0,
+        'asStringFrom': '312',
+        'asStringFromTo': '312',
+      },
     ];
     var id = 1;
     for (var success in successes) {
       test(
-        "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asString']}",
+        "$id - ${success['value']} - ${success['decimalPositions']} - ${success['asStringFrom']}",
         () {
           var aTHDoublePart = THDoublePart.fromString(
-            valueString: success['asString'] as String,
+            valueString: success['asStringFrom'] as String,
           );
           expect(aTHDoublePart.value, success['value']);
           expect(aTHDoublePart.decimalPositions, success['decimalPositions']);
-          expect(aTHDoublePart.toString(), success['asString']);
+          expect(aTHDoublePart.toString(), success['asStringFromTo']);
         },
       );
       id++;

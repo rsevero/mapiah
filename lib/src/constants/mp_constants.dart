@@ -29,7 +29,7 @@ const String thIndentation = '  ';
 
 const int thMaxEncodingLength = 20;
 const int thMaxFileLineLength = 80;
-const int mpMaxDecimalPositions = 12;
+const int mpMaxDecimalPositions = 6;
 const int thDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
 const double mpDefaultSnapOnScreenDistance = 9;

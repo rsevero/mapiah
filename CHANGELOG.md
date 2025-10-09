@@ -26,6 +26,7 @@
   * Created MPCommandFactory.addXTherionInsertImageConfig().
   * Removed mpCalculatedDecimalPositions constant.
   * Added getAreas(), getLines() and getPoints() methods to THScrap.
+  * Changed mpMaxDecimalPositions from 12 to 6.
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
