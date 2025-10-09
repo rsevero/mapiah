@@ -1374,17 +1374,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           );
 
           modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint1: THPositionPart(
-              coordinates: newPosition,
-              decimalPositions: mpCalculatedDecimalPositions,
-            ),
+            controlPoint1: THPositionPart(coordinates: newPosition),
             originalLineInTH2File: '',
           );
         } else {
           modifiedLineSegment = originalControlPointLineSegment.copyWith(
             controlPoint1: THPositionPart(
               coordinates: canvasCoordinatesFinalPosition,
-              decimalPositions: currentDecimalPositions,
             ),
             originalLineInTH2File: '',
           );
@@ -1402,10 +1398,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           if (newPosition != null) {
             final THBezierCurveLineSegment newMirrorLineSegment =
                 moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
-                  controlPoint2: THPositionPart(
-                    coordinates: newPosition,
-                    decimalPositions: mpCalculatedDecimalPositions,
-                  ),
+                  controlPoint2: THPositionPart(coordinates: newPosition),
                   originalLineInTH2File: '',
                 );
 
@@ -1424,10 +1417,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           );
 
           modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint2: THPositionPart(
-              coordinates: newPosition,
-              decimalPositions: mpCalculatedDecimalPositions,
-            ),
+            controlPoint2: THPositionPart(coordinates: newPosition),
             originalLineInTH2File: '',
           );
         } else {
@@ -1452,10 +1442,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           if (newPosition != null) {
             final THBezierCurveLineSegment newMirrorLineSegment =
                 moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
-                  controlPoint1: THPositionPart(
-                    coordinates: newPosition,
-                    decimalPositions: mpCalculatedDecimalPositions,
-                  ),
+                  controlPoint1: THPositionPart(coordinates: newPosition),
                   originalLineInTH2File: '',
                 );
 

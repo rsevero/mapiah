@@ -1417,10 +1417,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             return null;
           }
           alignedBezierLineSegment = lineSegment.copyWith(
-            controlPoint2: THPositionPart(
-              coordinates: alignedControlPoint,
-              decimalPositions: mpCalculatedDecimalPositions,
-            ),
+            controlPoint2: THPositionPart(coordinates: alignedControlPoint),
             originalLineInTH2File: '',
           );
         } else {
@@ -1447,10 +1444,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             return null;
           }
           alignedBezierLineSegment = nextLineSegment.copyWith(
-            controlPoint1: THPositionPart(
-              coordinates: alignedControlPoint,
-              decimalPositions: mpCalculatedDecimalPositions,
-            ),
+            controlPoint1: THPositionPart(coordinates: alignedControlPoint),
             originalLineInTH2File: '',
           );
         }

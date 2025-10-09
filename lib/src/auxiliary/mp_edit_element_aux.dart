@@ -118,7 +118,6 @@ class MPEditElementAux {
     final THBezierCurveLineSegment newLineSegment = lineSegment.copyWith(
       controlPoint2: THPositionPart(
         coordinates: result.newCurrentControlPoint2,
-        decimalPositions: mpCalculatedDecimalPositions,
       ),
       originalLineInTH2File: '',
     );
@@ -126,7 +125,6 @@ class MPEditElementAux {
         .copyWith(
           controlPoint1: THPositionPart(
             coordinates: result.newNextControlPoint1,
-            decimalPositions: mpCalculatedDecimalPositions,
           ),
           originalLineInTH2File: '',
         );
