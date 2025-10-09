@@ -200,7 +200,7 @@ class MPCommandFactory {
   static MPCommand setLineSegmentsType({
     required MPSelectedLineSegmentType selectedLineSegmentType,
     required THFile thFile,
-    required List<THLineSegment> originalLineSegments,
+    required Iterable<THLineSegment> originalLineSegments,
   }) {
     final List<THLineSegment> changedLineSegments = [];
 

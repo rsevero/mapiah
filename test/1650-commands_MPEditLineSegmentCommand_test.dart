@@ -3,8 +3,9 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -86,19 +87,25 @@ endscrap
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
-            final int pointMPID = parsedFile.getPoints().first.mpID;
-
-            final MPCommand setPLATypeCommand = MPCommandFactory.editPointsType(
-              newPointType: THPointType.fromString(
-                success['newPLAType'] as String,
-              ),
-              unknownPLAType: THPointType.unknownPLATypeFromString(
-                success['newPLAType'] as String,
-              ),
-              pointMPIDs: [pointMPID],
+            final THScrap activeScrap = controller.thFile.scrapByMPID(
+              controller.activeScrapID,
             );
+            final THLine selectedLine = activeScrap.getLines(parsedFile).first;
+            final Iterable<THLineSegment> selectedLineSegments = selectedLine
+                .getLineSegments(parsedFile)
+                .skip(1);
 
-            controller.execute(setPLATypeCommand);
+            expect(selectedLineSegments.length, 3);
+
+            final MPCommand setLineSegmentsTypeCommand =
+                MPCommandFactory.setLineSegmentsType(
+                  selectedLineSegmentType:
+                      MPSelectedLineSegmentType.bezierCurveLineSegment,
+                  thFile: parsedFile,
+                  originalLineSegments: selectedLineSegments,
+                );
+
+            controller.execute(setLineSegmentsTypeCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 
@@ -120,6 +127,5 @@ endscrap
         },
       );
     }
-    ;
   });
 }
