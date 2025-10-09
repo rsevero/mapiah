@@ -130,14 +130,13 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount =
         selectionController.mpSelectedElementsLogical.length;
+    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
+      event.localPosition,
+    );
     final THPositionPart snapedPosition =
-        snapController.getCanvasSnapedPositionFromScreenOffset(
-          event.localPosition,
-        ) ??
+        snapController.getCanvasSnapedPositionFromCanvasOffset(canvasOffset) ??
         THPositionPart(
-          coordinates: th2FileEditController.offsetScreenToCanvas(
-            event.localPosition,
-          ),
+          coordinates: canvasOffset,
           decimalPositions: th2FileEditController.currentDecimalPositions,
         );
     late MPCommand moveCommand;
@@ -146,6 +145,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       th2FileEditController.stateController.setState(
         MPTH2FileEditStateType.selectEmptySelection,
       );
+
       return;
     } else if (selectedCount == 1) {
       final MPSelectedElement selected =

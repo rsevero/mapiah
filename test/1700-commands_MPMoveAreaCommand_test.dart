@@ -23,7 +23,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPEditLineSegmentCommand', () {
+  group('command: MPMoveAreaCommand', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -32,12 +32,15 @@ void main() {
     const successes = [
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 8,
+        'length': 11,
         'encoding': 'UTF-8',
         'selectedLineSegmentsCount': 3,
         'asFileOriginal': r'''encoding UTF-8
 scrap test
-  line contour -id blaus
+  area clay
+    blaus
+  endarea
+  line contour -close on -visibility off -id blaus
     2736.2 -808.5
     2894.3 -202.7
     2264.5 -205.7
@@ -46,10 +49,13 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  line contour -id blaus
+  area clay
+    blaus
+  endarea
+  line contour -close on -visibility off -id blaus
     2736.2 -808.5
-    2788.9 -606.566667 2841.6 -404.633333 2894.3 -202.7
-    2684.366667 -203.7 2474.433333 -204.7 2264.5 -205.7
+    2894.3 -202.7
+    2264.5 -205.7
   endline
 endscrap
 ''',
@@ -85,7 +91,8 @@ endscrap
             // Snapshot original state (deep clone via toMap/fromMap)
             final THFile snapshotOriginal = THFile.fromMap(parsedFile.toMap());
 
-            /// Execution: taken from TH2FileEditUserInteractionController.prepareSetLineSegmentType()
+            /// Execution: taken from MPTH2FileEditStateMovingElements.onPrimaryButtonDragEnd()
+            /// Execution: taken from MPCommandFactory.moveElementsFromReferenceElementExactPosition()
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
