@@ -32,8 +32,9 @@ void main() {
     const successes = [
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 4,
+        'length': 8,
         'encoding': 'UTF-8',
+        'selectedLineSegmentsCount': 3,
         'asFileOriginal': r'''encoding UTF-8
 scrap test
   line contour -id blaus
@@ -45,7 +46,11 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  point 12.2 42.7 stalactite
+  line contour -id blaus
+    2736.2 -808.5
+    2788.9 -606.566667 2841.6 -404.633333 2894.3 -202.7
+    2684.366667 -203.7 2474.433333 -204.7 2264.5 -205.7
+  endline
 endscrap
 ''',
         'newPLAType': 'stalactite',
@@ -92,10 +97,12 @@ endscrap
             );
             final THLine selectedLine = activeScrap.getLines(parsedFile).first;
             final Iterable<THLineSegment> selectedLineSegments = selectedLine
-                .getLineSegments(parsedFile)
-                .skip(1);
+                .getLineSegments(parsedFile);
 
-            expect(selectedLineSegments.length, 3);
+            expect(
+              selectedLineSegments.length,
+              success['selectedLineSegmentsCount'],
+            );
 
             final MPCommand setLineSegmentsTypeCommand =
                 MPCommandFactory.setLineSegmentsType(
