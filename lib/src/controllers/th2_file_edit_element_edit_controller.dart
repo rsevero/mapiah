@@ -530,8 +530,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final int currentDecimalPositions =
-        _th2FileEditController.currentDecimalPositions;
     final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_thFile);
     final THLineSegment lastLineSegment = _thFile.lineSegmentByMPID(
       lineSegmentMPIDs.last,
@@ -540,8 +538,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       lineSegmentMPIDs.elementAt(lineSegmentMPIDs.length - 2),
     );
 
-    final Offset startPoint = secondToLastLineSegment.endPoint.coordinates;
-    final Offset endPoint = lastLineSegment.endPoint.coordinates;
+    final THPositionPart startPoint = secondToLastLineSegment.endPoint;
+    final THPositionPart endPoint = lastLineSegment.endPoint;
+    final Offset startPointCoordinates = startPoint.coordinates;
+    final Offset endPointCoordinates = endPoint.coordinates;
 
     final Offset quadraticControlPointPositionCanvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(
@@ -551,30 +551,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         quadraticControlPointPositionCanvasCoordinates * (2 / 3);
 
     /// Based on https://pomax.github.io/bezierinfo/#reordering
-    final Offset controlPoint1 = (startPoint / 3) + twoThirdsControlPoint;
-    final Offset controlPoint2 = (endPoint / 3) + twoThirdsControlPoint;
+    final Offset controlPoint1 =
+        (startPointCoordinates / 3) + twoThirdsControlPoint;
+    final Offset controlPoint2 =
+        (endPointCoordinates / 3) + twoThirdsControlPoint;
 
     if (lastLineSegment is THStraightLineSegment) {
       final THBezierCurveLineSegment bezierCurveLineSegment =
           THBezierCurveLineSegment.forCWJM(
             mpID: lastLineSegment.mpID,
             parentMPID: _newLine!.mpID,
-            endPoint: THPositionPart(
-              coordinates: endPoint,
-              decimalPositions: currentDecimalPositions,
-            ),
-            controlPoint1: THPositionPart(
-              coordinates: controlPoint1,
-              decimalPositions: currentDecimalPositions,
-            ),
-            controlPoint2: THPositionPart(
-              coordinates: controlPoint2,
-              decimalPositions: currentDecimalPositions,
-            ),
-            optionsMap: SplayTreeMap<THCommandOptionType, THCommandOption>(),
-            attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>(),
+            endPoint: endPoint,
+            controlPoint1: THPositionPart(coordinates: controlPoint1),
+            controlPoint2: THPositionPart(coordinates: controlPoint2),
+            optionsMap: lastLineSegment.optionsMap,
+            attrOptionsMap: lastLineSegment.attrOptionsMap,
             originalLineInTH2File: '',
-            sameLineComment: '',
+            sameLineComment: lastLineSegment.sameLineComment,
           );
       final THSmoothCommandOption smoothOn = THSmoothCommandOption(
         optionParent: bezierCurveLineSegment,
@@ -593,14 +586,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     } else {
       final THBezierCurveLineSegment bezierCurveLineSegment =
           (lastLineSegment as THBezierCurveLineSegment).copyWith(
-            controlPoint1: THPositionPart(
-              coordinates: controlPoint1,
-              decimalPositions: currentDecimalPositions,
-            ),
-            controlPoint2: THPositionPart(
-              coordinates: controlPoint2,
-              decimalPositions: currentDecimalPositions,
-            ),
+            controlPoint1: THPositionPart(coordinates: controlPoint1),
+            controlPoint2: THPositionPart(coordinates: controlPoint2),
             originalLineInTH2File: '',
           );
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
