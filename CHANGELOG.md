@@ -49,7 +49,8 @@
     * MPAddXTherionInsertImageCommand;
     * MPEditAreaTypeCommand;
     * MPEditLineTypeCommand;
-    * MPEditPointTypeCommand.
+    * MPEditPointTypeCommand;
+    * MPEditLineSegmentCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:
