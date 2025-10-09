@@ -87,8 +87,6 @@ endscrap
             final THFile snapshotOriginal = THFile.fromMap(parsedFile.toMap());
 
             /// Execution: taken from TH2FileEditUserInteractionController.prepareSetLineSegmentType()
-            /// Taken from TH2FileEditElementEditController.updateBezierLineSegment()
-            /// Taken from TH2FileEditElementEditController.getAddLineSegmentsCommand()
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
