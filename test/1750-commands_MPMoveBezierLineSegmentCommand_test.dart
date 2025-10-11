@@ -1,9 +1,8 @@
+import 'dart:collection';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -23,7 +22,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPMoveAreaCommand', () {
+  group('command: MPMoveBezierLineSegmentCommand', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -31,31 +30,32 @@ void main() {
 
     const successes = [
       {
-        'file': '2025-10-09-001-area_and_line.th2',
-        'length': 11,
+        'file': '2025-10-11-001-bezier_line.th2',
+        'length': 8,
         'encoding': 'UTF-8',
-        'selectedLineSegmentsCount': 3,
+        'originalLineSegmentsMap': 3,
+        'deltaOnCanvas': Offset(2.8, 3.5),
         'asFileOriginal': r'''encoding UTF-8
 scrap test
-  area clay
-    blaus
-  endarea
-  line contour -close on -visibility off -id blaus
+  line contour -id blaus
     2736.2 -808.5
-    2894.3 -202.7
-    2264.5 -205.7
+      smooth on
+    2796.913461 -619.928547 2973.7 -370.9 2886.6 -215.5
+      smooth on
+    2783.918502 -32.367149 2448.1 -179.8 2264.5 -205.7
+      smooth on
   endline
 endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  area clay
-    blaus
-  endarea
-  line contour -close on -visibility off -id blaus
-    2736.2 -808.5
-    2894.3 -202.7
-    2264.5 -205.7
+  line contour -id blaus
+    2739 -805
+      smooth on
+    2799.713461 -616.428547 2976.5 -367.4 2889.4 -212
+      smooth on
+    2786.718502 -28.867149 2450.9 -176.3 2267.3 -202.2
+      smooth on
   endline
 endscrap
 ''',
@@ -91,8 +91,7 @@ endscrap
             // Snapshot original state (deep clone via toMap/fromMap)
             final THFile snapshotOriginal = THFile.fromMap(parsedFile.toMap());
 
-            /// Execution: taken from MPTH2FileEditStateMovingElements.onPrimaryButtonDragEnd()
-            /// Execution: taken from MPCommandFactory.moveElementsFromReferenceElementExactPosition()
+            /// Execution: taken from MPMoveLineCommand()
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
@@ -100,23 +99,22 @@ endscrap
               controller.activeScrapID,
             );
             final THLine selectedLine = activeScrap.getLines(parsedFile).first;
-            final Iterable<THLineSegment> selectedLineSegments = selectedLine
-                .getLineSegments(parsedFile);
+            final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+                selectedLine.getLineSegmentsMap(parsedFile);
 
             expect(
-              selectedLineSegments.length,
-              success['selectedLineSegmentsCount'],
+              originalLineSegmentsMap.length,
+              success['originalLineSegmentsMap'],
             );
 
-            final MPCommand setLineSegmentsTypeCommand =
-                MPCommandFactory.setLineSegmentsType(
-                  selectedLineSegmentType:
-                      MPSelectedLineSegmentType.bezierCurveLineSegment,
-                  thFile: parsedFile,
-                  originalLineSegments: selectedLineSegments,
+            final MPCommand moveLineCommand =
+                MPMoveLineCommand.fromDeltaOnCanvas(
+                  lineMPID: selectedLine.mpID,
+                  deltaOnCanvas: success['deltaOnCanvas'] as Offset,
+                  fromLineSegmentsMap: originalLineSegmentsMap,
                 );
 
-            controller.execute(setLineSegmentsTypeCommand);
+            controller.execute(moveLineCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 

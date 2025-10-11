@@ -2,39 +2,43 @@ part of 'mp_command.dart';
 
 class MPMoveStraightLineSegmentCommand extends MPCommand {
   final int lineSegmentMPID;
-  final THPositionPart originalEndPointPosition;
-  late final THPositionPart modifiedEndPointPosition;
-  final String originalLineInTH2File;
+  final THPositionPart fromEndPointPosition;
+  late final THPositionPart toEndPointPosition;
+  final String fromOriginalLineInTH2File;
+  final String toOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.modifiedEndPointPosition,
-    required this.originalLineInTH2File,
+    required this.fromEndPointPosition,
+    required this.toEndPointPosition,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.modifiedEndPointPosition,
-    this.originalLineInTH2File = '',
+    required this.fromEndPointPosition,
+    required this.toEndPointPosition,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
+    required this.fromEndPointPosition,
     required Offset deltaOnCanvas,
     int? decimalPositions,
-    this.originalLineInTH2File = '',
+    required this.fromOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
-  }) : modifiedEndPointPosition = THPositionPart(
-         coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
+  }) : toEndPointPosition = THPositionPart(
+         coordinates: fromEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
+       toOriginalLineInTH2File = '',
        super();
 
   @override
@@ -53,8 +57,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
         .thFile
         .straightLineSegmentByMPID(lineSegmentMPID);
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
-      endPoint: modifiedEndPointPosition,
-      originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+      endPoint: toEndPointPosition,
+      originalLineInTH2File: toOriginalLineInTH2File,
     );
 
     th2FileEditController.elementEditController
@@ -69,11 +73,10 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID,
-      originalEndPointPosition: modifiedEndPointPosition,
-      modifiedEndPointPosition: originalEndPointPosition,
-      originalLineInTH2File: th2FileEditController.thFile
-          .elementByMPID(lineSegmentMPID)
-          .originalLineInTH2File,
+      fromEndPointPosition: toEndPointPosition,
+      toEndPointPosition: fromEndPointPosition,
+      fromOriginalLineInTH2File: toOriginalLineInTH2File,
+      toOriginalLineInTH2File: fromOriginalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -89,9 +92,10 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'lineSegmentMPID': lineSegmentMPID,
-      'originalEndPointPosition': originalEndPointPosition.toMap(),
-      'modifiedEndPointPosition': modifiedEndPointPosition.toMap(),
-      'originalLineInTH2File': originalLineInTH2File,
+      'fromEndPointPosition': fromEndPointPosition.toMap(),
+      'toEndPointPosition': toEndPointPosition.toMap(),
+      'fromOriginalLineInTH2File': fromOriginalLineInTH2File,
+      'toOriginalLineInTH2File': toOriginalLineInTH2File,
     });
 
     return map;
@@ -100,13 +104,10 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   factory MPMoveStraightLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: map['lineSegmentMPID'],
-      originalEndPointPosition: THPositionPart.fromMap(
-        map['originalEndPointPosition'],
-      ),
-      modifiedEndPointPosition: THPositionPart.fromMap(
-        map['modifiedEndPointPosition'],
-      ),
-      originalLineInTH2File: map['originalLineInTH2File'],
+      fromEndPointPosition: THPositionPart.fromMap(map['fromEndPointPosition']),
+      toEndPointPosition: THPositionPart.fromMap(map['toEndPointPosition']),
+      fromOriginalLineInTH2File: map['fromOriginalLineInTH2File'],
+      toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -120,19 +121,20 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   @override
   MPMoveStraightLineSegmentCommand copyWith({
     int? lineSegmentMPID,
-    THPositionPart? originalEndPointPosition,
-    THPositionPart? modifiedEndPointPosition,
-    String? originalLineInTH2File,
+    THPositionPart? fromEndPointPosition,
+    THPositionPart? toEndPointPosition,
+    String? fromOriginalLineInTH2File,
+    String? toOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveStraightLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
-      originalEndPointPosition:
-          originalEndPointPosition ?? this.originalEndPointPosition,
-      modifiedEndPointPosition:
-          modifiedEndPointPosition ?? this.modifiedEndPointPosition,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+      fromEndPointPosition: fromEndPointPosition ?? this.fromEndPointPosition,
+      toEndPointPosition: toEndPointPosition ?? this.toEndPointPosition,
+      fromOriginalLineInTH2File:
+          fromOriginalLineInTH2File ?? this.fromOriginalLineInTH2File,
+      toOriginalLineInTH2File:
+          toOriginalLineInTH2File ?? this.toOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -144,17 +146,19 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
     return other is MPMoveStraightLineSegmentCommand &&
         other.lineSegmentMPID == lineSegmentMPID &&
-        other.originalEndPointPosition == originalEndPointPosition &&
-        other.modifiedEndPointPosition == modifiedEndPointPosition &&
-        other.originalLineInTH2File == originalLineInTH2File;
+        other.fromEndPointPosition == fromEndPointPosition &&
+        other.toEndPointPosition == toEndPointPosition &&
+        other.fromOriginalLineInTH2File == fromOriginalLineInTH2File &&
+        other.toOriginalLineInTH2File == toOriginalLineInTH2File;
   }
 
   @override
   int get hashCode => Object.hash(
     super.hashCode,
     lineSegmentMPID,
-    originalEndPointPosition,
-    modifiedEndPointPosition,
-    originalLineInTH2File,
+    fromEndPointPosition,
+    toEndPointPosition,
+    fromOriginalLineInTH2File,
+    toOriginalLineInTH2File,
   );
 }

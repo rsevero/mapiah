@@ -1372,7 +1372,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             );
 
         if (smoothedBezierSegments.isNotEmpty) {
-          final Map<int, THLineSegment> originalSegmentsMap = {
+          final Map<int, THLineSegment> fromLineSegmentsMap = {
             lineSegment.mpID: lineSegment,
             nextLineSegment.mpID: nextLineSegment,
           };
@@ -1380,9 +1380,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             for (final segment in smoothedBezierSegments) segment.mpID: segment,
           };
 
-          return MPCommandFactory.moveLineSegments(
-            originalElementsMap: originalSegmentsMap,
-            modifiedElementsMap: smoothedSegmentsMap,
+          return MPMoveLineCommand(
+            lineMPID: line.mpID,
+            fromLineSegmentsMap: fromLineSegmentsMap,
+            toLineSegmentsMap: smoothedSegmentsMap,
           );
         }
       } else {
@@ -1437,8 +1438,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         }
 
         return MPMoveBezierLineSegmentCommand.fromLineSegments(
-          originalLineSegment: unalignedBezierLineSegment,
-          modifiedLineSegment: alignedBezierLineSegment,
+          fromLineSegment: unalignedBezierLineSegment,
+          toLineSegment: alignedBezierLineSegment,
         );
       }
     }

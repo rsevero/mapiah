@@ -518,7 +518,7 @@ class MPCommandFactory {
         case THLine _:
           moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
             lineMPID: element.mpID,
-            originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+            fromLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
                 .originalLineSegmentsMapClone,
             deltaOnCanvas: deltaOnCanvas,
             decimalPositions: decimalPositions,
@@ -591,7 +591,7 @@ class MPCommandFactory {
           moveCommand = (element.mpID == referenceElementParentMPID)
               ? MPMoveLineCommand.fromLineSegmentExactPosition(
                   lineMPID: element.mpID,
-                  originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                  fromLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
                       .originalLineSegmentsMapClone,
                   referenceLineSegment: referenceElement as THLineSegment,
                   referenceLineSegmentFinalPosition:
@@ -600,7 +600,7 @@ class MPCommandFactory {
                 )
               : MPMoveLineCommand.fromDeltaOnCanvas(
                   lineMPID: element.mpID,
-                  originalLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
+                  fromLineSegmentsMap: (mpSelectedElement as MPSelectedLine)
                       .originalLineSegmentsMapClone,
                   deltaOnCanvas: deltaOnCanvas,
                 );
@@ -641,37 +641,40 @@ class MPCommandFactory {
   }
 
   static MPCommand moveLineSegments({
-    required Map<int, THLineSegment> originalElementsMap,
-    required Map<int, THLineSegment> modifiedElementsMap,
+    required Map<int, THLineSegment> fromLineSegmentsMap,
+    required Map<int, THLineSegment> toLineSegmentsMap,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.moveLineSegments,
   }) {
     final List<MPCommand> commandsList = [];
 
-    for (final entry in originalElementsMap.entries) {
-      final int originalElementMPID = entry.key;
-      final THLineSegment originalElement = entry.value;
-      final THLineSegment modifiedElement =
-          modifiedElementsMap[originalElementMPID]!;
+    for (final entry in fromLineSegmentsMap.entries) {
+      final int elementMPID = entry.key;
+      final THLineSegment fromElement = entry.value;
+      final THLineSegment toElement = toLineSegmentsMap[elementMPID]!;
       final MPCommand moveLineSegmentCommand;
 
-      switch (originalElement) {
+      switch (fromElement) {
         case THStraightLineSegment _:
           moveLineSegmentCommand = MPMoveStraightLineSegmentCommand(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            modifiedEndPointPosition: modifiedElement.endPoint,
+            lineSegmentMPID: elementMPID,
+            fromEndPointPosition: fromElement.endPoint,
+            toEndPointPosition: toElement.endPoint,
+            fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
+            toOriginalLineInTH2File: toElement.originalLineInTH2File,
           );
         case THBezierCurveLineSegment _:
           moveLineSegmentCommand = MPMoveBezierLineSegmentCommand(
-            lineSegmentMPID: originalElementMPID,
-            originalEndPointPosition: originalElement.endPoint,
-            modifiedEndPointPosition: modifiedElement.endPoint,
-            originalControlPoint1Position: originalElement.controlPoint1,
-            modifiedControlPoint1Position:
-                (modifiedElement as THBezierCurveLineSegment).controlPoint1,
-            originalControlPoint2Position: originalElement.controlPoint2,
-            modifiedControlPoint2Position: modifiedElement.controlPoint2,
+            lineSegmentMPID: elementMPID,
+            fromEndPointPosition: fromElement.endPoint,
+            toEndPointPosition: toElement.endPoint,
+            fromControlPoint1Position: fromElement.controlPoint1,
+            toControlPoint1Position:
+                (toElement as THBezierCurveLineSegment).controlPoint1,
+            fromControlPoint2Position: fromElement.controlPoint2,
+            toControlPoint2Position: toElement.controlPoint2,
+            fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
+            toOriginalLineInTH2File: toElement.originalLineInTH2File,
           );
         default:
           throw ArgumentError(
@@ -693,7 +696,7 @@ class MPCommandFactory {
   }
 
   static MPCommand moveLineSegmentsFromDeltaOnCanvas({
-    required LinkedHashMap<int, THLineSegment> originalElementsMap,
+    required LinkedHashMap<int, THLineSegment> fromElementsMap,
     required Offset deltaOnCanvas,
     int? decimalPositions,
     MPCommandDescriptionType descriptionType =
@@ -701,29 +704,31 @@ class MPCommandFactory {
   }) {
     final List<MPCommand> commandsList = [];
 
-    for (final entry in originalElementsMap.entries) {
-      final int originalElementMPID = entry.key;
-      final THLineSegment originalElement = entry.value;
+    for (final entry in fromElementsMap.entries) {
+      final int elementMPID = entry.key;
+      final THLineSegment fromElement = entry.value;
       final MPCommand moveLineSegmentCommand;
 
-      switch (originalElement) {
+      switch (fromElement) {
         case THStraightLineSegment _:
           moveLineSegmentCommand =
               MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas(
-                lineSegmentMPID: originalElementMPID,
-                originalEndPointPosition: originalElement.endPoint,
+                lineSegmentMPID: elementMPID,
+                fromEndPointPosition: fromElement.endPoint,
                 deltaOnCanvas: deltaOnCanvas,
                 decimalPositions: decimalPositions,
+                fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
               );
         case THBezierCurveLineSegment _:
           moveLineSegmentCommand =
               MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas(
-                lineSegmentMPID: originalElementMPID,
-                originalEndPointPosition: originalElement.endPoint,
-                originalControlPoint1Position: originalElement.controlPoint1,
-                originalControlPoint2Position: originalElement.controlPoint2,
+                lineSegmentMPID: elementMPID,
+                fromEndPointPosition: fromElement.endPoint,
+                fromControlPoint1Position: fromElement.controlPoint1,
+                fromControlPoint2Position: fromElement.controlPoint2,
                 deltaOnCanvas: deltaOnCanvas,
                 decimalPositions: decimalPositions,
+                fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
               );
         default:
           throw ArgumentError(
@@ -745,7 +750,7 @@ class MPCommandFactory {
   }
 
   static MPCommand moveLineSegmentsFromLineSegmentExactPosition({
-    required LinkedHashMap<int, THLineSegment> originalElementsMap,
+    required LinkedHashMap<int, THLineSegment> fromElementsMap,
     required THPositionPart referenceLineSegmentFinalPosition,
     required THLineSegment referenceLineSegment,
     MPCommandDescriptionType descriptionType =
@@ -757,46 +762,50 @@ class MPCommandFactory {
         referenceLineSegmentFinalPosition.coordinates -
         referenceLineSegment.endPoint.coordinates;
 
-    for (final entry in originalElementsMap.entries) {
-      final int originalElementMPID = entry.key;
-      final THLineSegment originalElement = entry.value;
+    for (final entry in fromElementsMap.entries) {
+      final int elementMPID = entry.key;
+      final THLineSegment fromElement = entry.value;
       final MPCommand moveLineSegmentCommand;
 
-      switch (originalElement) {
+      switch (fromElement) {
         case THStraightLineSegment _:
-          moveLineSegmentCommand =
-              (originalElementMPID == referenceLineSegmentMPID)
+          moveLineSegmentCommand = (elementMPID == referenceLineSegmentMPID)
               ? MPMoveStraightLineSegmentCommand(
                   lineSegmentMPID: referenceLineSegmentMPID,
-                  originalEndPointPosition: originalElement.endPoint,
-                  modifiedEndPointPosition: referenceLineSegmentFinalPosition,
+                  fromEndPointPosition: fromElement.endPoint,
+                  toEndPointPosition: referenceLineSegmentFinalPosition,
+                  fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
+                  toOriginalLineInTH2File: '',
                   descriptionType: descriptionType,
                 )
               : MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas(
-                  lineSegmentMPID: originalElementMPID,
-                  originalEndPointPosition: originalElement.endPoint,
+                  lineSegmentMPID: elementMPID,
+                  fromEndPointPosition: fromElement.endPoint,
                   deltaOnCanvas: deltaOnCanvas,
+                  fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
+                  descriptionType: descriptionType,
                 );
         case THBezierCurveLineSegment _:
-          moveLineSegmentCommand =
-              (originalElementMPID == referenceLineSegmentMPID)
+          moveLineSegmentCommand = (elementMPID == referenceLineSegmentMPID)
               ? MPMoveBezierLineSegmentCommand.fromEndPointExactPosition(
                   lineSegmentMPID: referenceLineSegmentMPID,
-                  originalEndPointPosition: referenceLineSegment.endPoint,
-                  originalControlPoint1Position:
+                  fromEndPointPosition: referenceLineSegment.endPoint,
+                  fromControlPoint1Position:
                       (referenceLineSegment as THBezierCurveLineSegment)
                           .controlPoint1,
-                  originalControlPoint2Position:
-                      referenceLineSegment.controlPoint2,
+                  fromControlPoint2Position: referenceLineSegment.controlPoint2,
                   lineSegmentFinalPosition: referenceLineSegmentFinalPosition,
+                  fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
                   descriptionType: descriptionType,
                 )
               : MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas(
-                  lineSegmentMPID: originalElementMPID,
-                  originalEndPointPosition: originalElement.endPoint,
-                  originalControlPoint1Position: originalElement.controlPoint1,
-                  originalControlPoint2Position: originalElement.controlPoint2,
+                  lineSegmentMPID: elementMPID,
+                  fromEndPointPosition: fromElement.endPoint,
+                  fromControlPoint1Position: fromElement.controlPoint1,
+                  fromControlPoint2Position: fromElement.controlPoint2,
                   deltaOnCanvas: deltaOnCanvas,
+                  fromOriginalLineInTH2File: fromElement.originalLineInTH2File,
+                  descriptionType: descriptionType,
                 );
         default:
           throw ArgumentError(
@@ -857,7 +866,7 @@ class MPCommandFactory {
     for (final MPSelectedLine line in lines) {
       final MPCommand moveLineCommand = MPMoveLineCommand.fromDeltaOnCanvas(
         lineMPID: line.mpID,
-        originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+        fromLineSegmentsMap: line.originalLineSegmentsMapClone,
         deltaOnCanvas: deltaOnCanvas,
         decimalPositions: decimalPositions,
         descriptionType: descriptionType,
@@ -893,7 +902,7 @@ class MPCommandFactory {
       final MPCommand moveLineCommand = (line.mpID == referenceLineMPID)
           ? MPMoveLineCommand.fromLineSegmentExactPosition(
               lineMPID: referenceLineMPID,
-              originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
               referenceLineSegment: referenceLineSegment,
               referenceLineSegmentFinalPosition:
                   referenceLineSegmentFinalPosition,
@@ -901,7 +910,7 @@ class MPCommandFactory {
             )
           : MPMoveLineCommand.fromDeltaOnCanvas(
               lineMPID: line.mpID,
-              originalLineSegmentsMap: line.originalLineSegmentsMapClone,
+              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
               deltaOnCanvas: deltaOnCanvas,
               descriptionType: descriptionType,
             );

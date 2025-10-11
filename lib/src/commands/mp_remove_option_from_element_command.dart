@@ -77,7 +77,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   MPRemoveOptionFromElementCommand copyWith({
     THCommandOptionType? optionType,
     int? parentMPID,
-    String? newOriginalLineInTH2File,
+    String? fromOriginalLineInTH2File,
     String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
@@ -85,7 +85,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
       optionType: optionType ?? this.optionType,
       parentMPID: parentMPID ?? this.parentMPID,
       newOriginalLineInTH2File:
-          newOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
+          fromOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
       currentOriginalLineInTH2File:
           currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,

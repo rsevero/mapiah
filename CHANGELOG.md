@@ -16,6 +16,7 @@
   * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
   * XTherion settings wrtten before encoding.
   * Area original line lost on area type change undo.
+  * Original TH2 file representation lost on some situaitons for MPMoveBezierLineSegmentCommand.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.
@@ -28,6 +29,7 @@
   * Added getAreas(), getLines() and getPoints() methods to THScrap.
   * Changed mpMaxDecimalPositions from 12 to 6.
   * Created find_deprecated_packages script.
+  * Renamed originalXXX/modifiedXXX to fromXXX/toXXX in MPMoveLineCommands.
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
@@ -39,7 +41,8 @@
     * MPEditAreaTypeCommand;
     * MPEditLineTypeCommand;
     * MPEditPointTypeCommand;
-    * MPEditLineSegmentCommand.
+    * MPEditLineSegmentCommand;
+    * MPMoveBezierLineSegmentCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaTHIDCommand;
     * MPAddAreaCommand;

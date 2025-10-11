@@ -3,42 +3,38 @@ part of 'mp_command.dart';
 class MPMoveLineCommand extends MPCommand {
   final int lineMPID;
   late final MPCommand lineSegmentsMoveCommand;
-  final String originalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveLine;
 
   MPMoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.lineSegmentsMoveCommand,
-    required this.originalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveLineCommand({
     required this.lineMPID,
-    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
-    required LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
-    this.originalLineInTH2File = '',
+    required Map<int, THLineSegment> fromLineSegmentsMap,
+    required Map<int, THLineSegment> toLineSegmentsMap,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand = MPCommandFactory.moveLineSegments(
-      originalElementsMap: originalLineSegmentsMap,
-      modifiedElementsMap: modifiedLineSegmentsMap,
+      fromLineSegmentsMap: fromLineSegmentsMap,
+      toLineSegmentsMap: toLineSegmentsMap,
       descriptionType: descriptionType,
     );
   }
 
   MPMoveLineCommand.fromDeltaOnCanvas({
     required this.lineMPID,
-    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+    required LinkedHashMap<int, THLineSegment> fromLineSegmentsMap,
     required Offset deltaOnCanvas,
     int? decimalPositions,
-    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromDeltaOnCanvas(
-          originalElementsMap: originalLineSegmentsMap,
+          fromElementsMap: fromLineSegmentsMap,
           deltaOnCanvas: deltaOnCanvas,
           decimalPositions: decimalPositions,
           descriptionType: descriptionType,
@@ -47,15 +43,14 @@ class MPMoveLineCommand extends MPCommand {
 
   MPMoveLineCommand.fromLineSegmentExactPosition({
     required this.lineMPID,
-    required LinkedHashMap<int, THLineSegment> originalLineSegmentsMap,
+    required LinkedHashMap<int, THLineSegment> fromLineSegmentsMap,
     required THLineSegment referenceLineSegment,
     required THPositionPart referenceLineSegmentFinalPosition,
-    this.originalLineInTH2File = '',
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromLineSegmentExactPosition(
-          originalElementsMap: originalLineSegmentsMap,
+          fromElementsMap: fromLineSegmentsMap,
           referenceLineSegmentFinalPosition: referenceLineSegmentFinalPosition,
           referenceLineSegment: referenceLineSegment,
           descriptionType: descriptionType,
@@ -74,14 +69,9 @@ class MPMoveLineCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    lineSegmentsMoveCommand.execute(
-      th2FileEditController,
-      keepOriginalLineTH2File: keepOriginalLineTH2File,
-    );
+    lineSegmentsMoveCommand.execute(th2FileEditController);
     th2FileEditController.elementEditController.substituteElement(
-      th2FileEditController.thFile
-          .elementByMPID(lineMPID)
-          .copyWith(originalLineInTH2File: keepOriginalLineTH2File ? null : ''),
+      th2FileEditController.thFile.elementByMPID(lineMPID),
     );
     th2FileEditController.triggerNewLineRedraw();
     th2FileEditController.triggerSelectedElementsRedraw();
@@ -98,9 +88,6 @@ class MPMoveLineCommand extends MPCommand {
       lineMPID: lineMPID,
       lineSegmentsMoveCommand: oppositeLineSegmentsMoveCommand,
       descriptionType: descriptionType,
-      originalLineInTH2File: th2FileEditController.thFile
-          .elementByMPID(lineMPID)
-          .originalLineInTH2File,
     );
 
     return MPUndoRedoCommand(
@@ -116,7 +103,6 @@ class MPMoveLineCommand extends MPCommand {
     map.addAll({
       'lineMPID': lineMPID,
       'lineSegmentsMoveCommand': lineSegmentsMoveCommand.toMap(),
-      'originalLineInTH2File': originalLineInTH2File,
     });
 
     return map;
@@ -128,7 +114,6 @@ class MPMoveLineCommand extends MPCommand {
       lineSegmentsMoveCommand: MPCommand.fromMap(
         map['lineSegmentsMoveCommand'],
       ),
-      originalLineInTH2File: map['originalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -143,15 +128,12 @@ class MPMoveLineCommand extends MPCommand {
   MPMoveLineCommand copyWith({
     int? lineMPID,
     MPMultipleElementsCommand? lineSegmentsMoveCommand,
-    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveLineCommand.forCWJM(
       lineMPID: lineMPID ?? this.lineMPID,
       lineSegmentsMoveCommand:
           lineSegmentsMoveCommand ?? this.lineSegmentsMoveCommand,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -163,15 +145,10 @@ class MPMoveLineCommand extends MPCommand {
 
     return other is MPMoveLineCommand &&
         other.lineMPID == lineMPID &&
-        other.lineSegmentsMoveCommand == lineSegmentsMoveCommand &&
-        other.originalLineInTH2File == originalLineInTH2File;
+        other.lineSegmentsMoveCommand == lineSegmentsMoveCommand;
   }
 
   @override
-  int get hashCode => Object.hash(
-    super.hashCode,
-    lineMPID,
-    lineSegmentsMoveCommand,
-    originalLineInTH2File,
-  );
+  int get hashCode =>
+      Object.hash(super.hashCode, lineMPID, lineSegmentsMoveCommand);
 }

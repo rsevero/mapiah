@@ -2,98 +2,103 @@ part of 'mp_command.dart';
 
 class MPMoveBezierLineSegmentCommand extends MPCommand {
   final int lineSegmentMPID;
-  final THPositionPart originalEndPointPosition;
-  final THPositionPart originalControlPoint1Position;
-  final THPositionPart originalControlPoint2Position;
-  late final THPositionPart modifiedEndPointPosition;
-  late final THPositionPart modifiedControlPoint1Position;
-  late final THPositionPart modifiedControlPoint2Position;
-  final String originalLineInTH2File;
+  final THPositionPart fromEndPointPosition;
+  final THPositionPart fromControlPoint1Position;
+  final THPositionPart fromControlPoint2Position;
+  late final THPositionPart toEndPointPosition;
+  late final THPositionPart toControlPoint1Position;
+  late final THPositionPart toControlPoint2Position;
+  final String fromOriginalLineInTH2File;
+  final String toOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveBezierLineSegment;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.modifiedEndPointPosition,
-    required this.originalControlPoint1Position,
-    required this.modifiedControlPoint1Position,
-    required this.originalControlPoint2Position,
-    required this.modifiedControlPoint2Position,
-    required this.originalLineInTH2File,
+    required this.fromEndPointPosition,
+    required this.toEndPointPosition,
+    required this.fromControlPoint1Position,
+    required this.toControlPoint1Position,
+    required this.fromControlPoint2Position,
+    required this.toControlPoint2Position,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveBezierLineSegmentCommand({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.modifiedEndPointPosition,
-    required this.originalControlPoint1Position,
-    required this.modifiedControlPoint1Position,
-    required this.originalControlPoint2Position,
-    required this.modifiedControlPoint2Position,
-    this.originalLineInTH2File = '',
+    required this.fromEndPointPosition,
+    required this.toEndPointPosition,
+    required this.fromControlPoint1Position,
+    required this.toControlPoint1Position,
+    required this.fromControlPoint2Position,
+    required this.toControlPoint2Position,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMoveBezierLineSegmentCommand.fromLineSegments({
-    required THBezierCurveLineSegment originalLineSegment,
-    required THBezierCurveLineSegment modifiedLineSegment,
-    this.originalLineInTH2File = '',
+    required THBezierCurveLineSegment fromLineSegment,
+    required THBezierCurveLineSegment toLineSegment,
     super.descriptionType = _defaultDescriptionType,
-  }) : lineSegmentMPID = originalLineSegment.mpID,
-       originalEndPointPosition = originalLineSegment.endPoint,
-       modifiedEndPointPosition = modifiedLineSegment.endPoint,
-       originalControlPoint1Position = originalLineSegment.controlPoint1,
-       modifiedControlPoint1Position = modifiedLineSegment.controlPoint1,
-       originalControlPoint2Position = originalLineSegment.controlPoint2,
-       modifiedControlPoint2Position = modifiedLineSegment.controlPoint2,
+  }) : lineSegmentMPID = fromLineSegment.mpID,
+       fromEndPointPosition = fromLineSegment.endPoint,
+       toEndPointPosition = toLineSegment.endPoint,
+       fromControlPoint1Position = fromLineSegment.controlPoint1,
+       toControlPoint1Position = toLineSegment.controlPoint1,
+       fromControlPoint2Position = fromLineSegment.controlPoint2,
+       toControlPoint2Position = toLineSegment.controlPoint2,
+       fromOriginalLineInTH2File = fromLineSegment.originalLineInTH2File,
+       toOriginalLineInTH2File = '',
        super();
 
   MPMoveBezierLineSegmentCommand.fromDeltaOnCanvas({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.originalControlPoint1Position,
-    required this.originalControlPoint2Position,
+    required this.fromEndPointPosition,
+    required this.fromControlPoint1Position,
+    required this.fromControlPoint2Position,
     required Offset deltaOnCanvas,
     int? decimalPositions,
-    this.originalLineInTH2File = '',
+    required this.fromOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
-  }) : modifiedEndPointPosition = THPositionPart(
-         coordinates: originalEndPointPosition.coordinates + deltaOnCanvas,
+  }) : toEndPointPosition = THPositionPart(
+         coordinates: fromEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       modifiedControlPoint1Position = THPositionPart(
-         coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
+       toControlPoint1Position = THPositionPart(
+         coordinates: fromControlPoint1Position.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
-       modifiedControlPoint2Position = THPositionPart(
-         coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
+       toControlPoint2Position = THPositionPart(
+         coordinates: fromControlPoint2Position.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
        ),
+       toOriginalLineInTH2File = '',
        super();
 
   MPMoveBezierLineSegmentCommand.fromEndPointExactPosition({
     required this.lineSegmentMPID,
-    required this.originalEndPointPosition,
-    required this.originalControlPoint1Position,
-    required this.originalControlPoint2Position,
+    required this.fromEndPointPosition,
+    required this.fromControlPoint1Position,
+    required this.fromControlPoint2Position,
     required THPositionPart lineSegmentFinalPosition,
     int? decimalPositions,
-    this.originalLineInTH2File = '',
+    required this.fromOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
+  }) : toOriginalLineInTH2File = '',
+       super() {
     final Offset deltaOnCanvas =
-        lineSegmentFinalPosition.coordinates -
-        originalEndPointPosition.coordinates;
+        lineSegmentFinalPosition.coordinates - fromEndPointPosition.coordinates;
 
-    modifiedEndPointPosition = lineSegmentFinalPosition;
-    modifiedControlPoint1Position = THPositionPart(
-      coordinates: originalControlPoint1Position.coordinates + deltaOnCanvas,
+    toEndPointPosition = lineSegmentFinalPosition;
+    toControlPoint1Position = THPositionPart(
+      coordinates: fromControlPoint1Position.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
     );
-    modifiedControlPoint2Position = THPositionPart(
-      coordinates: originalControlPoint2Position.coordinates + deltaOnCanvas,
+    toControlPoint2Position = THPositionPart(
+      coordinates: fromControlPoint2Position.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
     );
   }
@@ -115,10 +120,10 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
         .bezierCurveLineSegmentByMPID(lineSegmentMPID);
     final THBezierCurveLineSegment newLineSegment = originalLineSegment
         .copyWith(
-          endPoint: modifiedEndPointPosition,
-          controlPoint1: modifiedControlPoint1Position,
-          controlPoint2: modifiedControlPoint2Position,
-          originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+          endPoint: toEndPointPosition,
+          controlPoint1: toControlPoint1Position,
+          controlPoint2: toControlPoint2Position,
+          originalLineInTH2File: toOriginalLineInTH2File,
         );
 
     th2FileEditController.elementEditController
@@ -133,15 +138,14 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID,
-      originalEndPointPosition: modifiedEndPointPosition,
-      modifiedEndPointPosition: originalEndPointPosition,
-      originalControlPoint1Position: modifiedControlPoint1Position,
-      modifiedControlPoint1Position: originalControlPoint1Position,
-      originalControlPoint2Position: modifiedControlPoint2Position,
-      modifiedControlPoint2Position: originalControlPoint2Position,
-      originalLineInTH2File: th2FileEditController.thFile
-          .elementByMPID(lineSegmentMPID)
-          .originalLineInTH2File,
+      fromEndPointPosition: toEndPointPosition,
+      toEndPointPosition: fromEndPointPosition,
+      fromControlPoint1Position: toControlPoint1Position,
+      toControlPoint1Position: fromControlPoint1Position,
+      fromControlPoint2Position: toControlPoint2Position,
+      toControlPoint2Position: fromControlPoint2Position,
+      fromOriginalLineInTH2File: toOriginalLineInTH2File,
+      toOriginalLineInTH2File: fromOriginalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -157,13 +161,14 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
     map.addAll({
       'lineSegmentMPID': lineSegmentMPID,
-      'originalEndPointPosition': originalEndPointPosition.toMap(),
-      'modifiedEndPointPosition': modifiedEndPointPosition.toMap(),
-      'originalControlPoint1Position': originalControlPoint1Position.toMap(),
-      'modifiedControlPoint1Position': modifiedControlPoint1Position.toMap(),
-      'originalControlPoint2Position': originalControlPoint2Position.toMap(),
-      'modifiedControlPoint2Position': modifiedControlPoint2Position.toMap(),
-      'originalLineInTH2File': originalLineInTH2File,
+      'originalEndPointPosition': fromEndPointPosition.toMap(),
+      'modifiedEndPointPosition': toEndPointPosition.toMap(),
+      'originalControlPoint1Position': fromControlPoint1Position.toMap(),
+      'modifiedControlPoint1Position': toControlPoint1Position.toMap(),
+      'originalControlPoint2Position': fromControlPoint2Position.toMap(),
+      'modifiedControlPoint2Position': toControlPoint2Position.toMap(),
+      'fromOriginalLineInTH2File': fromOriginalLineInTH2File,
+      'toOriginalLineInTH2File': toOriginalLineInTH2File,
     });
 
     return map;
@@ -172,25 +177,26 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   factory MPMoveBezierLineSegmentCommand.fromMap(Map<String, dynamic> map) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegmentMPID: map['lineSegmentMPID'],
-      originalEndPointPosition: THPositionPart.fromMap(
+      fromEndPointPosition: THPositionPart.fromMap(
         map['originalEndPointPosition'],
       ),
-      modifiedEndPointPosition: THPositionPart.fromMap(
+      toEndPointPosition: THPositionPart.fromMap(
         map['modifiedEndPointPosition'],
       ),
-      originalControlPoint1Position: THPositionPart.fromMap(
+      fromControlPoint1Position: THPositionPart.fromMap(
         map['originalControlPoint1Position'],
       ),
-      modifiedControlPoint1Position: THPositionPart.fromMap(
+      toControlPoint1Position: THPositionPart.fromMap(
         map['modifiedControlPoint1Position'],
       ),
-      originalControlPoint2Position: THPositionPart.fromMap(
+      fromControlPoint2Position: THPositionPart.fromMap(
         map['originalControlPoint2Position'],
       ),
-      modifiedControlPoint2Position: THPositionPart.fromMap(
+      toControlPoint2Position: THPositionPart.fromMap(
         map['modifiedControlPoint2Position'],
       ),
-      originalLineInTH2File: map['originalLineInTH2File'],
+      fromOriginalLineInTH2File: map['fromOriginalLineInTH2File'],
+      toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -204,31 +210,32 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   @override
   MPMoveBezierLineSegmentCommand copyWith({
     int? lineSegmentMPID,
-    THPositionPart? originalEndPointPosition,
-    THPositionPart? modifiedEndPointPosition,
-    THPositionPart? originalControlPoint1Position,
-    THPositionPart? modifiedControlPoint1Position,
-    THPositionPart? originalControlPoint2Position,
-    THPositionPart? modifiedControlPoint2Position,
-    String? originalLineInTH2File,
+    THPositionPart? fromEndPointPosition,
+    THPositionPart? toEndPointPosition,
+    THPositionPart? fromControlPoint1Position,
+    THPositionPart? toControlPoint1Position,
+    THPositionPart? fromControlPoint2Position,
+    THPositionPart? toControlPoint2Position,
+    String? fromOriginalLineInTH2File,
+    String? toOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveBezierLineSegmentCommand.forCWJM(
       lineSegmentMPID: lineSegmentMPID ?? this.lineSegmentMPID,
-      originalEndPointPosition:
-          originalEndPointPosition ?? this.originalEndPointPosition,
-      modifiedEndPointPosition:
-          modifiedEndPointPosition ?? this.modifiedEndPointPosition,
-      originalControlPoint1Position:
-          originalControlPoint1Position ?? this.originalControlPoint1Position,
-      modifiedControlPoint1Position:
-          modifiedControlPoint1Position ?? this.modifiedControlPoint1Position,
-      originalControlPoint2Position:
-          originalControlPoint2Position ?? this.originalControlPoint2Position,
-      modifiedControlPoint2Position:
-          modifiedControlPoint2Position ?? this.modifiedControlPoint2Position,
-      originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+      fromEndPointPosition: fromEndPointPosition ?? this.fromEndPointPosition,
+      toEndPointPosition: toEndPointPosition ?? this.toEndPointPosition,
+      fromControlPoint1Position:
+          fromControlPoint1Position ?? this.fromControlPoint1Position,
+      toControlPoint1Position:
+          toControlPoint1Position ?? this.toControlPoint1Position,
+      fromControlPoint2Position:
+          fromControlPoint2Position ?? this.fromControlPoint2Position,
+      toControlPoint2Position:
+          toControlPoint2Position ?? this.toControlPoint2Position,
+      fromOriginalLineInTH2File:
+          fromOriginalLineInTH2File ?? this.fromOriginalLineInTH2File,
+      toOriginalLineInTH2File:
+          toOriginalLineInTH2File ?? this.toOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -240,25 +247,27 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
     return other is MPMoveBezierLineSegmentCommand &&
         other.lineSegmentMPID == lineSegmentMPID &&
-        other.originalEndPointPosition == originalEndPointPosition &&
-        other.modifiedEndPointPosition == modifiedEndPointPosition &&
-        other.originalControlPoint1Position == originalControlPoint1Position &&
-        other.modifiedControlPoint1Position == modifiedControlPoint1Position &&
-        other.originalControlPoint2Position == originalControlPoint2Position &&
-        other.modifiedControlPoint2Position == modifiedControlPoint2Position &&
-        other.originalLineInTH2File == originalLineInTH2File;
+        other.fromEndPointPosition == fromEndPointPosition &&
+        other.toEndPointPosition == toEndPointPosition &&
+        other.fromControlPoint1Position == fromControlPoint1Position &&
+        other.toControlPoint1Position == toControlPoint1Position &&
+        other.fromControlPoint2Position == fromControlPoint2Position &&
+        other.toControlPoint2Position == toControlPoint2Position &&
+        other.fromOriginalLineInTH2File == fromOriginalLineInTH2File &&
+        other.toOriginalLineInTH2File == toOriginalLineInTH2File;
   }
 
   @override
   int get hashCode => Object.hash(
     super.hashCode,
     lineSegmentMPID,
-    originalEndPointPosition,
-    modifiedEndPointPosition,
-    originalControlPoint1Position,
-    modifiedControlPoint1Position,
-    originalControlPoint2Position,
-    modifiedControlPoint2Position,
-    originalLineInTH2File,
+    fromEndPointPosition,
+    toEndPointPosition,
+    fromControlPoint1Position,
+    toControlPoint1Position,
+    fromControlPoint2Position,
+    toControlPoint2Position,
+    fromOriginalLineInTH2File,
+    toOriginalLineInTH2File,
   );
 }

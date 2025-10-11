@@ -55,7 +55,9 @@ class MPMovePointCommand extends MPCommand {
     );
     final THPoint modifiedPoint = originalPoint.copyWith(
       position: modifiedPosition,
-      originalLineInTH2File: keepOriginalLineTH2File ? null : '',
+      originalLineInTH2File: keepOriginalLineTH2File
+          ? originalLineInTH2File
+          : '',
     );
 
     th2FileEditController.elementEditController.substituteElement(
@@ -121,7 +123,7 @@ class MPMovePointCommand extends MPCommand {
     int? pointMPID,
     THPositionPart? originalPosition,
     THPositionPart? modifiedPosition,
-    String? originalLineInTH2File,
+    String? fromOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
@@ -129,7 +131,7 @@ class MPMovePointCommand extends MPCommand {
       originalPosition: originalPosition ?? this.originalPosition,
       modifiedPosition: modifiedPosition ?? this.modifiedPosition,
       originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

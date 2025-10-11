@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap test
+line contour -id blaus
+2736.2 -808.5
+smooth on
+2796.913461 -619.928547 2973.7 -370.9 2886.6 -215.5
+smooth on
+2783.918502 -32.367149 2448.1 -179.8 2264.5 -205.7
+smooth on
+endline
+endscrap

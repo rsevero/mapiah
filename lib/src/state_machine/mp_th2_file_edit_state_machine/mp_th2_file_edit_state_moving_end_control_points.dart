@@ -120,8 +120,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     final MPCommand lineEditCommand = MPMoveLineCommand(
       lineMPID: selectedLine.mpID,
-      originalLineSegmentsMap: originalLineSegmentsMap,
-      modifiedLineSegmentsMap: modifiedLineSegmentsMap,
+      fromLineSegmentsMap: originalLineSegmentsMap,
+      toLineSegmentsMap: modifiedLineSegmentsMap,
       descriptionType: MPCommandDescriptionType.editLine,
     );
 

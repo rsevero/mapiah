@@ -90,7 +90,7 @@ class MPEditPointTypeCommand extends MPCommand {
     int? pointMPID,
     THPointType? newPointType,
     String? unknownPLAType,
-    String? originalLineInTH2File,
+    String? fromOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditPointTypeCommand.forCWJM(
@@ -98,7 +98,7 @@ class MPEditPointTypeCommand extends MPCommand {
       newPointType: newPointType ?? this.newPointType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

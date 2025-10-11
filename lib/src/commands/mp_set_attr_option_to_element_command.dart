@@ -76,14 +76,14 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
   @override
   MPSetAttrOptionToElementCommand copyWith({
     THAttrCommandOption? option,
-    String? newOriginalLineInTH2File,
+    String? fromOriginalLineInTH2File,
     String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPSetAttrOptionToElementCommand.forCWJM(
       option: option ?? this.option,
       newOriginalLineInTH2File:
-          newOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
+          fromOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
       currentOriginalLineInTH2File:
           currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,

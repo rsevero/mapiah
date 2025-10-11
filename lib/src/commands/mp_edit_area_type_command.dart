@@ -89,7 +89,7 @@ class MPEditAreaTypeCommand extends MPCommand {
     int? areaMPID,
     THAreaType? newAreaType,
     String? unknownPLAType,
-    String? originalLineInTH2File,
+    String? fromOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditAreaTypeCommand.forCWJM(
@@ -97,7 +97,7 @@ class MPEditAreaTypeCommand extends MPCommand {
       newAreaType: newAreaType ?? this.newAreaType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:
-          originalLineInTH2File ?? this.originalLineInTH2File,
+          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
