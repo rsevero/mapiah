@@ -156,8 +156,10 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         case MPSelectedPoint _:
           moveCommand = MPMovePointCommand(
             pointMPID: selectedElement.mpID,
-            originalPosition: (selectedElement as THPoint).position,
-            modifiedPosition: snapedPosition,
+            fromPosition: (selectedElement as THPoint).position,
+            toPosition: snapedPosition,
+            fromOriginalLineInTH2File: selectedElement.originalLineInTH2File,
+            toOriginalLineInTH2File: '',
           );
         case MPSelectedLine _:
           moveCommand = MPMoveLineCommand.fromLineSegmentExactPosition(

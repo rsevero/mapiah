@@ -2,38 +2,42 @@ part of 'mp_command.dart';
 
 class MPMovePointCommand extends MPCommand {
   late final int pointMPID;
-  late final THPositionPart originalPosition;
-  late final THPositionPart modifiedPosition;
-  final String originalLineInTH2File;
+  late final THPositionPart fromPosition;
+  late final THPositionPart toPosition;
+  final String fromOriginalLineInTH2File;
+  final String toOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
 
   MPMovePointCommand.forCWJM({
     required this.pointMPID,
-    required this.originalPosition,
-    required this.modifiedPosition,
-    required this.originalLineInTH2File,
+    required this.fromPosition,
+    required this.toPosition,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMovePointCommand({
     required this.pointMPID,
-    required this.originalPosition,
-    required this.modifiedPosition,
-    this.originalLineInTH2File = '',
+    required this.fromPosition,
+    required this.toPosition,
+    required this.fromOriginalLineInTH2File,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
     required this.pointMPID,
-    required this.originalPosition,
+    required this.fromPosition,
     required Offset deltaOnCanvas,
     int? decimalPositions,
-    this.originalLineInTH2File = '',
+    required this.fromOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
-  }) : super() {
-    modifiedPosition = THPositionPart(
-      coordinates: originalPosition.coordinates + deltaOnCanvas,
+  }) : toOriginalLineInTH2File = '',
+       super() {
+    toPosition = THPositionPart(
+      coordinates: fromPosition.coordinates + deltaOnCanvas,
       decimalPositions: decimalPositions,
     );
   }
@@ -54,10 +58,8 @@ class MPMovePointCommand extends MPCommand {
       pointMPID,
     );
     final THPoint modifiedPoint = originalPoint.copyWith(
-      position: modifiedPosition,
-      originalLineInTH2File: keepOriginalLineTH2File
-          ? originalLineInTH2File
-          : '',
+      position: toPosition,
+      originalLineInTH2File: toOriginalLineInTH2File,
     );
 
     th2FileEditController.elementEditController.substituteElement(
@@ -74,11 +76,10 @@ class MPMovePointCommand extends MPCommand {
     /// message on undo and redo are the same.
     final MPCommand oppositeCommand = MPMovePointCommand.forCWJM(
       pointMPID: pointMPID,
-      originalPosition: modifiedPosition,
-      modifiedPosition: originalPosition,
-      originalLineInTH2File: th2FileEditController.thFile
-          .elementByMPID(pointMPID)
-          .originalLineInTH2File,
+      fromPosition: toPosition,
+      toPosition: fromPosition,
+      fromOriginalLineInTH2File: toOriginalLineInTH2File,
+      toOriginalLineInTH2File: fromOriginalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -94,9 +95,10 @@ class MPMovePointCommand extends MPCommand {
 
     map.addAll({
       'pointMPID': pointMPID,
-      'originalPosition': originalPosition.toMap(),
-      'modifiedPosition': modifiedPosition.toMap(),
-      'originalLineInTH2File': originalLineInTH2File,
+      'fromPosition': fromPosition.toMap(),
+      'toPosition': toPosition.toMap(),
+      'fromOriginalLineInTH2File': fromOriginalLineInTH2File,
+      'toOriginalLineInTH2File': toOriginalLineInTH2File,
     });
 
     return map;
@@ -105,9 +107,10 @@ class MPMovePointCommand extends MPCommand {
   factory MPMovePointCommand.fromMap(Map<String, dynamic> map) {
     return MPMovePointCommand.forCWJM(
       pointMPID: map['pointMPID'],
-      originalPosition: THPositionPart.fromMap(map['originalPosition']),
-      modifiedPosition: THPositionPart.fromMap(map['modifiedPosition']),
-      originalLineInTH2File: map['originalLineInTH2File'],
+      fromPosition: THPositionPart.fromMap(map['fromPosition']),
+      toPosition: THPositionPart.fromMap(map['toPosition']),
+      fromOriginalLineInTH2File: map['fromOriginalLineInTH2File'],
+      toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -121,17 +124,20 @@ class MPMovePointCommand extends MPCommand {
   @override
   MPMovePointCommand copyWith({
     int? pointMPID,
-    THPositionPart? originalPosition,
-    THPositionPart? modifiedPosition,
+    THPositionPart? fromPosition,
+    THPositionPart? toPosition,
     String? fromOriginalLineInTH2File,
+    String? toOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMovePointCommand.forCWJM(
       pointMPID: pointMPID ?? this.pointMPID,
-      originalPosition: originalPosition ?? this.originalPosition,
-      modifiedPosition: modifiedPosition ?? this.modifiedPosition,
-      originalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
+      fromPosition: fromPosition ?? this.fromPosition,
+      toPosition: toPosition ?? this.toPosition,
+      fromOriginalLineInTH2File:
+          fromOriginalLineInTH2File ?? this.fromOriginalLineInTH2File,
+      toOriginalLineInTH2File:
+          toOriginalLineInTH2File ?? this.toOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -143,17 +149,19 @@ class MPMovePointCommand extends MPCommand {
 
     return other is MPMovePointCommand &&
         other.pointMPID == pointMPID &&
-        other.originalPosition == originalPosition &&
-        other.modifiedPosition == modifiedPosition &&
-        other.originalLineInTH2File == originalLineInTH2File;
+        other.fromPosition == fromPosition &&
+        other.toPosition == toPosition &&
+        other.fromOriginalLineInTH2File == fromOriginalLineInTH2File &&
+        other.toOriginalLineInTH2File == toOriginalLineInTH2File;
   }
 
   @override
   int get hashCode => Object.hash(
     super.hashCode,
     pointMPID,
-    originalPosition,
-    modifiedPosition,
-    originalLineInTH2File,
+    fromPosition,
+    toPosition,
+    fromOriginalLineInTH2File,
+    toOriginalLineInTH2File,
   );
 }

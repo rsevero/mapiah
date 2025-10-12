@@ -511,9 +511,10 @@ class MPCommandFactory {
         case THPoint _:
           moveCommand = MPMovePointCommand.fromDeltaOnCanvas(
             pointMPID: element.mpID,
-            originalPosition: element.position,
+            fromPosition: element.position,
             deltaOnCanvas: deltaOnCanvas,
             decimalPositions: decimalPositions,
+            fromOriginalLineInTH2File: element.originalLineInTH2File,
           );
         case THLine _:
           moveCommand = MPMoveLineCommand.fromDeltaOnCanvas(
@@ -578,14 +579,17 @@ class MPCommandFactory {
           moveCommand = (element.mpID == referenceElementMPID)
               ? MPMovePointCommand(
                   pointMPID: element.mpID,
-                  originalPosition: element.position,
-                  modifiedPosition: referenceElementFinalPosition,
+                  fromPosition: element.position,
+                  toPosition: referenceElementFinalPosition,
+                  fromOriginalLineInTH2File: element.originalLineInTH2File,
+                  toOriginalLineInTH2File: '',
                   descriptionType: descriptionType,
                 )
               : MPMovePointCommand.fromDeltaOnCanvas(
                   pointMPID: element.mpID,
-                  originalPosition: element.position,
+                  fromPosition: element.position,
                   deltaOnCanvas: deltaOnCanvas,
+                  fromOriginalLineInTH2File: element.originalLineInTH2File,
                 );
         case THLine _:
           moveCommand = (element.mpID == referenceElementParentMPID)
