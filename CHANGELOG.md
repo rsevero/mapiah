@@ -59,6 +59,7 @@
     * MPEditLineTypeCommand;
     * MPEditPointTypeCommand;
     * MPMoveBezierLineSegmentCommand;
+    * MPMovePointCommand;
     * MPMoveStraightLineSegmentCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
