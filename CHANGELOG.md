@@ -42,7 +42,8 @@
     * MPEditLineSegmentCommand;
     * MPEditLineTypeCommand;
     * MPEditPointTypeCommand;
-    * MPMoveBezierLineSegmentCommand.
+    * MPMoveBezierLineSegmentCommand;
+    * MPMoveStraightLineSegmentCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPAddAreaCommand;
     * MPAddAreaTHIDCommand;
