@@ -76,6 +76,8 @@ Version 0.3
 [X] - BUG: Mapiah throws if line referred by area does not exist.
 [X] - BUG: lines added to areas not getting IDs associated to them.
 [X] - BUG: empty lines produce overflow as its bounding box is infinite.
+[ ] - BUG: on a new file, create a line: can't edit nodes of this line.
+[ ] - BUG: on newly created lines, Bèzier line segments are set as smooth but the control points don't respect this smoothness.
 
 Version 0.4
 [ ] - Open multiple files simultaneously

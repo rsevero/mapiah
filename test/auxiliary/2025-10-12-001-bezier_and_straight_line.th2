@@ -1,0 +1,14 @@
+encoding UTF-8
+scrap scrap1 -projection plan -scale [ 0.05 m ]
+  line wall
+    -93.4 466.2
+    -102.4 288.4
+    -224.9 198.6
+    -277.415302 154.397253 -223.6 64.6 -182.3 40.6
+      smooth on
+    -122.259903 5.561805 -2.07686 6.380264 0.3 66.5
+      smooth on
+    3.146907 139.772475 44.6 181.1 83.5 205.6
+      smooth on
+  endline
+endscrap
