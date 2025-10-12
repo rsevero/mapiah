@@ -33,28 +33,30 @@
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
-    * add line;
     * add line segment;
+    * add line;
     * add point;
     * add scrap;
     * add XTherionImageInsert;
     * MPEditAreaTypeCommand;
+    * MPEditLineSegmentCommand;
     * MPEditLineTypeCommand;
     * MPEditPointTypeCommand;
-    * MPEditLineSegmentCommand;
     * MPMoveBezierLineSegmentCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
-    * MPAddAreaTHIDCommand;
     * MPAddAreaCommand;
+    * MPAddAreaTHIDCommand;
     * MPAddLineCommand;
     * MPAddLineSegmentCommand;
     * MPAddPointCommand;
     * MPAddScrapCommand;
     * MPAddXTherionInsertImageCommand;
     * MPEditAreaTypeCommand;
+    * MPEditLineSegmentCommand;
     * MPEditLineTypeCommand;
     * MPEditPointTypeCommand;
-    * MPEditLineSegmentCommand.
+    * MPMoveBezierLineSegmentCommand;
+    * MPMoveStraightLineSegmentCommand.
 
 ## 0.2.18 - 2025-09-26 - the anoying bug release
 * Fixed bugs:

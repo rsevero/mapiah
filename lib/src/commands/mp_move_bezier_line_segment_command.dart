@@ -111,6 +111,14 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    // No preparation needed
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
