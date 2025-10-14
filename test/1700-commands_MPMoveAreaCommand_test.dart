@@ -40,7 +40,7 @@ scrap test
   area clay
     blaus
   endarea
-  line contour -close on -visibility off -id blaus
+  line contour -close on -id blaus -visibility off
     2736.2 -808.5
     2894.3 -202.7
     2264.5 -205.7
@@ -52,10 +52,10 @@ scrap test
   area clay
     blaus
   endarea
-  line contour -close on -visibility off -id blaus
+  line contour -close on -id blaus -visibility off
     2736.2 -808.5
-    2894.3 -202.7
-    2264.5 -205.7
+    2788.9 -606.566667 2841.6 -404.633333 2894.3 -202.7
+    2684.366667 -203.7 2474.433333 -204.7 2264.5 -205.7
   endline
 endscrap
 ''',

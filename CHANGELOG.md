@@ -5,6 +5,7 @@
 * Fixed bugs:
 * Infrastructure maintenance:
   * Migrated to new MPCommand execute (the polish refactoring):
+    * MPMoveAreaCommand;
     * MPMoveLineCommand.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
