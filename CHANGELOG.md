@@ -3,14 +3,14 @@
 ## 0.2.19 - 2025-10-14 - The polish refactoring- Part 1
 * Fixed bugs:
   * THFile creation through forCWJM constructor resulted in duplicated childrenMPIDs.
-  * hash calculation and == operator not working in most elements with list or maps.
+  * Hash calculation and == operator not working in most elements with list or maps.
   * No implementation found for method getApplicationDocumentsDirectory.
   * Original TH2FileLine being lost on set option.
   * Undoing add area left an empty area hanging.
   * Only adding THIDs to new areas if necessary to create a line THID.
   * Add line should not checking for Meta key.
   * Multiple line segment addition positioning new line segments after first at wrong position.
-  * lineSegmentsMPIDs in wrong order after line segment addition.
+  * LineSegmentsMPIDs in wrong order after line segment addition.
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
   * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
   * XTherion settings wrtten before encoding.
