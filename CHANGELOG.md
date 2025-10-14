@@ -1,7 +1,6 @@
 # Changelog
 
-## 0.2.19 - not-yet released - the polish refactoring
-* New features:
+## 0.2.19 - 2025-10-14 - the polish refactoring part 1
 * Fixed bugs:
   * THFile creation through forCWJM constructor resulted in duplicated childrenMPIDs.
   * hash calculation and == operator not working in most elements with list or maps.
