@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.20 - not yet release - the polish refactoring part 2
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.19 - 2025-10-14 - the polish refactoring part 1
 * Fixed bugs:
   * THFile creation through forCWJM constructor resulted in duplicated childrenMPIDs.
