@@ -11,6 +11,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';

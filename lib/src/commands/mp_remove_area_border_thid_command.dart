@@ -2,8 +2,11 @@ part of "mp_command.dart";
 
 class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   final int areaBorderTHIDMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeAreaBorderTHID;
+
+  final Map<String, dynamic> _undoRedoInfo = {};
 
   MPRemoveAreaBorderTHIDCommand.forCWJM({
     required this.areaBorderTHIDMPID,
@@ -24,6 +27,25 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
+      areaBorderTHIDMPID,
+    );
+    final THIsParentMixin parent = thFile.parentByMPID(
+      areaBorderTHID.parentMPID,
+    );
+    final int positionInParent = parent.getChildPosition(areaBorderTHID);
+
+    _undoRedoInfo['removedAreaBorderTHIDMPID'] = areaBorderTHID;
+    _undoRedoInfo['removedAreaBorderTHIDMPIDPositionInParent'] =
+        positionInParent;
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -37,13 +59,11 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THAreaBorderTHID originalAreaBorderTHID = thFile.areaBorderTHIDByMPID(
-      areaBorderTHIDMPID,
-    );
     final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand.fromExisting(
-      existingAreaBorderTHID: originalAreaBorderTHID,
-      thFile: thFile,
+      existingAreaBorderTHID: _undoRedoInfo['removedAreaBorderTHIDMPID'],
+      thFile: th2FileEditController.thFile,
+      areaBorderTHIDPositionInParent:
+          _undoRedoInfo['removedAreaBorderTHIDMPIDPositionInParent'],
       descriptionType: descriptionType,
     );
 
