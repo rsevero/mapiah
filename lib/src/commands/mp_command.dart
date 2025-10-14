@@ -73,7 +73,14 @@ abstract class MPCommand {
   MPUndoRedoCommand getUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
+    if (_undoRedoCommand == null) {
+      if (_needsUndoRedoInfo && (_undoRedoInfo == null)) {
+        throw Exception(
+          'Command of type ${type.name} needs to prepare undo/redo info but did not.',
+        );
+      }
+      _undoRedoCommand = _createUndoRedoCommand(th2FileEditController);
+    }
 
     return _undoRedoCommand!;
   }
