@@ -8,8 +8,6 @@ class MPEditAreaTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editAreaType;
 
-  final Map<String, dynamic> _undoRedoInfo = {};
-
   MPEditAreaTypeCommand.forCWJM({
     required this.areaMPID,
     required this.newAreaType,

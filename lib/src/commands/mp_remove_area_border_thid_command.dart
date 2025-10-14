@@ -6,8 +6,6 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeAreaBorderTHID;
 
-  final Map<String, dynamic> _undoRedoInfo = {};
-
   MPRemoveAreaBorderTHIDCommand.forCWJM({
     required this.areaBorderTHIDMPID,
     super.descriptionType = _defaultDescriptionType,
@@ -59,9 +57,8 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand.fromExisting(
-      existingAreaBorderTHID: _undoRedoInfo['removedAreaBorderTHIDMPID'],
-      thFile: th2FileEditController.thFile,
+    final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand(
+      newAreaBorderTHID: _undoRedoInfo['removedAreaBorderTHIDMPID'],
       areaBorderTHIDPositionInParent:
           _undoRedoInfo['removedAreaBorderTHIDMPIDPositionInParent'],
       descriptionType: descriptionType,

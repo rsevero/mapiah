@@ -8,8 +8,6 @@ class MPEditLineTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineType;
 
-  final Map<String, dynamic> _undoRedoInfo = {};
-
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,
     required this.newLineType,

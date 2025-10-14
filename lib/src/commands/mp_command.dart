@@ -57,7 +57,10 @@ part 'types/mp_command_type.dart';
 /// actions that should support undo must be implemented as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
+  final Map<String, dynamic> _undoRedoInfo = {};
+
   MPUndoRedoCommand? _undoRedoCommand;
+  bool _needsUndoRedoInfo = true;
 
   MPCommand.forCWJM({required this.descriptionType});
 
@@ -92,6 +95,12 @@ abstract class MPCommand {
         th2FileEditController,
         keepOriginalLineTH2File: keepOriginalLineTH2File,
       );
+
+      if (_needsUndoRedoInfo && (_undoRedoInfo.isEmpty)) {
+        throw Exception(
+          'Command of type ${type.name} needs to prepare undo/redo info but did not.',
+        );
+      }
       _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
     } else {
       _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
@@ -100,6 +109,12 @@ abstract class MPCommand {
         keepOriginalLineTH2File: keepOriginalLineTH2File,
       );
     }
+  }
+
+  bool get hasNewExecuteMethod => false;
+
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    _needsUndoRedoInfo = false;
   }
 
   void _actualExecute(
@@ -196,11 +211,5 @@ abstract class MPCommand {
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
     }
-  }
-
-  bool get hasNewExecuteMethod => false;
-
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    throw UnimplementedError();
   }
 }

@@ -8,8 +8,6 @@ class MPEditPointTypeCommand extends MPCommand {
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editPointType;
 
-  final Map<String, dynamic> _undoRedoInfo = {};
-
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,
     required this.newPointType,
