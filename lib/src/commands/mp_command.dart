@@ -57,8 +57,8 @@ part 'types/mp_command_type.dart';
 /// actions that should support undo must be implemented as a command.
 abstract class MPCommand {
   final MPCommandDescriptionType descriptionType;
-  final Map<String, dynamic> _undoRedoInfo = {};
 
+  Map<String, dynamic>? _undoRedoInfo;
   MPUndoRedoCommand? _undoRedoCommand;
   bool _needsUndoRedoInfo = true;
 
@@ -96,7 +96,9 @@ abstract class MPCommand {
         keepOriginalLineTH2File: keepOriginalLineTH2File,
       );
 
-      if (_needsUndoRedoInfo && (_undoRedoInfo.isEmpty)) {
+      if ((_undoRedoCommand == null) &&
+          _needsUndoRedoInfo &&
+          (_undoRedoInfo == null)) {
         throw Exception(
           'Command of type ${type.name} needs to prepare undo/redo info but did not.',
         );

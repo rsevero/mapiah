@@ -40,9 +40,11 @@ class MPEditLineTypeCommand extends MPCommand {
       lineMPID,
     );
 
-    _undoRedoInfo['originalLineType'] = originalLine.lineType;
-    _undoRedoInfo['originalUnknownPLAType'] = originalLine.unknownPLAType;
-    _undoRedoInfo['originalLineInTH2File'] = originalLine.originalLineInTH2File;
+    _undoRedoInfo = {
+      'originalLineType': originalLine.lineType,
+      'originalUnknownPLAType': originalLine.unknownPLAType,
+      'originalLineInTH2File': originalLine.originalLineInTH2File,
+    };
   }
 
   @override
@@ -70,9 +72,9 @@ class MPEditLineTypeCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPEditLineTypeCommand.forCWJM(
       lineMPID: lineMPID,
-      newLineType: _undoRedoInfo['originalLineType'] as THLineType,
-      unknownPLAType: _undoRedoInfo['originalUnknownPLAType'] as String,
-      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'] as String,
+      newLineType: _undoRedoInfo!['originalLineType'] as THLineType,
+      unknownPLAType: _undoRedoInfo!['originalUnknownPLAType'] as String,
+      originalLineInTH2File: _undoRedoInfo!['originalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 

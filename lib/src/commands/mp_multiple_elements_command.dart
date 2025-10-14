@@ -20,6 +20,18 @@ class MPMultipleElementsCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    for (final MPCommand command in commandsList) {
+      command._prepareUndoRedoInfo(th2FileEditController);
+    }
+
+    _undoRedoInfo = {};
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,

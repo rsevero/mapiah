@@ -40,9 +40,11 @@ class MPEditAreaTypeCommand extends MPCommand {
       areaMPID,
     );
 
-    _undoRedoInfo['originalAreaType'] = originalArea.areaType;
-    _undoRedoInfo['originalUnknownPLAType'] = originalArea.unknownPLAType;
-    _undoRedoInfo['originalLineInTH2File'] = originalArea.originalLineInTH2File;
+    _undoRedoInfo = {
+      'originalAreaType': originalArea.areaType,
+      'originalUnknownPLAType': originalArea.unknownPLAType,
+      'originalLineInTH2File': originalArea.originalLineInTH2File,
+    };
   }
 
   @override
@@ -70,9 +72,9 @@ class MPEditAreaTypeCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPEditAreaTypeCommand.forCWJM(
       areaMPID: areaMPID,
-      newAreaType: _undoRedoInfo['originalAreaType'] as THAreaType,
-      unknownPLAType: _undoRedoInfo['originalUnknownPLAType'] as String,
-      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'] as String,
+      newAreaType: _undoRedoInfo!['originalAreaType'] as THAreaType,
+      unknownPLAType: _undoRedoInfo!['originalUnknownPLAType'] as String,
+      originalLineInTH2File: _undoRedoInfo!['originalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 

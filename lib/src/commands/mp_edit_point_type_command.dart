@@ -40,10 +40,11 @@ class MPEditPointTypeCommand extends MPCommand {
       pointMPID,
     );
 
-    _undoRedoInfo['originalPointType'] = originalPoint.pointType;
-    _undoRedoInfo['originalUnknownPLAType'] = originalPoint.unknownPLAType;
-    _undoRedoInfo['originalLineInTH2File'] =
-        originalPoint.originalLineInTH2File;
+    _undoRedoInfo = {
+      'originalPointType': originalPoint.pointType,
+      'originalUnknownPLAType': originalPoint.unknownPLAType,
+      'originalLineInTH2File': originalPoint.originalLineInTH2File,
+    };
   }
 
   @override
@@ -71,9 +72,9 @@ class MPEditPointTypeCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPEditPointTypeCommand.forCWJM(
       pointMPID: pointMPID,
-      newPointType: _undoRedoInfo['originalPointType'],
-      unknownPLAType: _undoRedoInfo['originalUnknownPLAType'],
-      originalLineInTH2File: _undoRedoInfo['originalLineInTH2File'],
+      newPointType: _undoRedoInfo!['originalPointType'] as THPointType,
+      unknownPLAType: _undoRedoInfo!['originalUnknownPLAType'] as String,
+      originalLineInTH2File: _undoRedoInfo!['originalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 

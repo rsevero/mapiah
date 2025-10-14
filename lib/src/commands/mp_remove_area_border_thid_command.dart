@@ -38,9 +38,10 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
     );
     final int positionInParent = parent.getChildPosition(areaBorderTHID);
 
-    _undoRedoInfo['removedAreaBorderTHIDMPID'] = areaBorderTHID;
-    _undoRedoInfo['removedAreaBorderTHIDMPIDPositionInParent'] =
-        positionInParent;
+    _undoRedoInfo = {
+      'removedAreaBorderTHID': areaBorderTHID,
+      'removedAreaBorderTHIDPositionInParent': positionInParent,
+    };
   }
 
   @override
@@ -58,9 +59,10 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPCommand oppositeCommand = MPAddAreaBorderTHIDCommand(
-      newAreaBorderTHID: _undoRedoInfo['removedAreaBorderTHIDMPID'],
+      newAreaBorderTHID:
+          _undoRedoInfo!['removedAreaBorderTHID'] as THAreaBorderTHID,
       areaBorderTHIDPositionInParent:
-          _undoRedoInfo['removedAreaBorderTHIDMPIDPositionInParent'],
+          _undoRedoInfo!['removedAreaBorderTHIDPositionInParent'] as int,
       descriptionType: descriptionType,
     );
 
