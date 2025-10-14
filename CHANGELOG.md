@@ -17,6 +17,7 @@
   * XTherion settings wrtten before encoding.
   * Area original line lost on area type change undo.
   * Original TH2 file representation lost on some situaitons for MPMoveBezierLineSegmentCommand.
+  * THScrapScaleCommandoption hash code marking equal elements as different.
 * Infrastructure maintenance:
   * Fixing error 'Binding has not yet been initialized' on all tests.
   * Removing pub test.

@@ -17,6 +17,8 @@ class THScrapScaleCommandOption extends THCommandOption {
   final List<THDoublePart> numericSpecifications;
   final THLengthUnitPart unitPart;
 
+  static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
+
   THScrapScaleCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
@@ -96,7 +98,7 @@ class THScrapScaleCommandOption extends THCommandOption {
     if (other is! THScrapScaleCommandOption) return false;
     if (!super.equalsBase(other)) return false;
 
-    return other.numericSpecifications == numericSpecifications &&
+    return _deepEq.equals(other.numericSpecifications, numericSpecifications) &&
         other.unitPart == unitPart;
   }
 
@@ -104,7 +106,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   int get hashCode {
     final int h =
         super.hashCode ^
-        Object.hash(Object.hashAll(numericSpecifications), unitPart);
+        Object.hash(_deepEq.hash(numericSpecifications), unitPart);
 
     if (kDebugMode && THCommandOption.enableCommandOptionHashDebug) {
       debugPrint('[COMMAND OPTION HASH] hash=$h details=${debugHashString()}');
