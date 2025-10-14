@@ -6,6 +6,8 @@ part of 'th_command_option.dart';
 class THStationsCommandOption extends THCommandOption {
   final List<String> stations;
 
+  static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
+
   THStationsCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
@@ -62,11 +64,11 @@ class THStationsCommandOption extends THCommandOption {
     if (other is! THStationsCommandOption) return false;
     if (!super.equalsBase(other)) return false;
 
-    return other.stations == stations;
+    return _deepEq.equals(other.stations, stations);
   }
 
   @override
-  int get hashCode => super.hashCode ^ stations.hashCode;
+  int get hashCode => super.hashCode ^ _deepEq.hash(stations);
 
   @override
   String specToFile() {
