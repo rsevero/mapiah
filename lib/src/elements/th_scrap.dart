@@ -35,7 +35,7 @@ class THScrap extends THElement
   static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
 
   /// Enable scrap-specific hash debug output when true.
-  static bool enableScrapHashDebug = true;
+  static bool enableScrapHashDebug = false;
 
   THScrap.forCWJM({
     required super.mpID,
