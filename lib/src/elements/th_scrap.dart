@@ -34,6 +34,9 @@ class THScrap extends THElement
 
   static const DeepCollectionEquality _deepEq = DeepCollectionEquality();
 
+  /// Enable scrap-specific hash debug output when true.
+  static bool enableScrapHashDebug = true;
+
   THScrap.forCWJM({
     required super.mpID,
     required super.parentMPID,
@@ -136,13 +139,49 @@ class THScrap extends THElement
   }
 
   @override
-  int get hashCode => Object.hash(
-    super.hashCode,
-    _thID,
-    _deepEq.hash(childrenMPIDs),
-    _deepEq.hash(optionsMap),
-    _deepEq.hash(attrOptionsMap),
-  );
+  int get hashCode {
+    final int h = Object.hash(
+      super.hashCode,
+      _thID,
+      _deepEq.hash(childrenMPIDs),
+      _deepEq.hash(optionsMap),
+      _deepEq.hash(attrOptionsMap),
+    );
+
+    if (kDebugMode && THScrap.enableScrapHashDebug) {
+      debugPrint('--> SCRAP HASH DEBUG <--');
+      debugPrint('[SCRAP HASH] hash=$h details=${debugHashString()}');
+      debugPrint(
+        '[SCRAP OPTIONS MAP HASH] optionsMap=$optionsMap optionsMapHash=${_deepEq.hash(optionsMap)}',
+      );
+      debugPrint('[SCRAP OPTIONS MAP ENTRIES]:');
+      optionsMap.forEach((key, value) {
+        debugPrint('  $key (${key.hashCode}) -> $value (${value.hashCode})');
+      });
+      debugPrint('[SCRAP ATTR OPTIONS MAP ENTRIES]:');
+      attrOptionsMap.forEach((key, value) {
+        debugPrint('  $key (${key.hashCode}) -> $value (${value.hashCode})');
+      });
+    }
+
+    return h;
+  }
+
+  @visibleForTesting
+  @override
+  Map<String, dynamic> debugHashDetails() {
+    final Map<String, dynamic> base = super.debugHashDetails();
+
+    base.addAll({
+      'thID': _thID,
+      'childrenMPIDs': childrenMPIDs.toList(),
+      'childrenHash': _deepEq.hash(childrenMPIDs),
+      'optionsMapHash': _deepEq.hash(optionsMap),
+      'attrOptionsMapHash': _deepEq.hash(attrOptionsMap),
+    });
+
+    return base;
+  }
 
   @override
   bool isSameClass(Object object) {

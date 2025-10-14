@@ -1,7 +1,8 @@
 library;
 
 import 'dart:convert';
-
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
@@ -11,9 +12,9 @@ import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
-import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/th_person_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
+import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -114,6 +115,9 @@ abstract class THCommandOption {
     THCommandOptionType.visibility,
     THCommandOptionType.walls,
   };
+
+  /// Enable command option hash debug output when true.
+  static bool enableCommandOptionHashDebug = false;
 
   THCommandOption.forCWJM({
     required this.parentMPID,
@@ -521,7 +525,31 @@ abstract class THCommandOption {
   }
 
   @override
-  int get hashCode => Object.hash(type, parentMPID, originalLineInTH2File);
+  int get hashCode {
+    final int h = Object.hash(type, parentMPID, originalLineInTH2File);
+
+    if (kDebugMode && THCommandOption.enableCommandOptionHashDebug) {
+      debugPrint('[COMMAND OPTION HASH] hash=$h details=${debugHashString()}');
+    }
+
+    return h;
+  }
+
+  /// Return a map of the fields used to compute `hashCode` so tests and
+  /// debugging helpers can inspect and compare them.
+  @visibleForTesting
+  Map<String, dynamic> debugHashDetails() {
+    return {
+      'type': type.name,
+      'parentMPID': parentMPID,
+      'originalLineInTH2File': originalLineInTH2File,
+    };
+  }
+
+  /// Human-friendly debug string describing the hash inputs.
+  @visibleForTesting
+  String debugHashString() =>
+      debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
   THHasOptionsMixin optionParent(THFile thFile) =>
       thFile.hasOptionByMPID(parentMPID);

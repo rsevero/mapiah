@@ -1,11 +1,14 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
 class THLengthUnitPart extends THPart {
   late final THLengthUnitType unit;
+
+  /// Enable length unit part hash debug output when true.
+  static bool enableLengthUnitPartHashDebug = false;
 
   static const stringToLengthUnit = {
     'centimeter': THLengthUnitType.centimeter,
@@ -68,7 +71,27 @@ class THLengthUnitPart extends THPart {
   }
 
   @override
-  int get hashCode => unit.hashCode;
+  int get hashCode {
+    final int h = unit.hashCode;
+
+    if (kDebugMode && THLengthUnitPart.enableLengthUnitPartHashDebug) {
+      debugPrint(
+        '[LENGTH UNIT PART HASH] hash=$h details=${debugHashString()}',
+      );
+    }
+
+    return h;
+  }
+
+  /// Return a map of the fields used to compute `hashCode` so tests and
+  /// debugging helpers can inspect and compare them.
+  Map<String, dynamic> debugHashDetails() {
+    return {'unit': unit.name};
+  }
+
+  /// Human-friendly debug string describing the hash inputs.
+  String debugHashString() =>
+      debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
   void fromString(String unitString) {
     if (!isUnit(unitString)) {

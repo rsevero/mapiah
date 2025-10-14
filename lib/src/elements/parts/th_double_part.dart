@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
@@ -8,6 +8,9 @@ import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 class THDoublePart extends THPart {
   late final double _value;
   late final int _decimalPositions;
+
+  /// Enable double part hash debug output when true.
+  static bool enableDoublePartHashDebug = false;
 
   THDoublePart({required double value, int? decimalPositions})
     : _value = value {
@@ -60,7 +63,29 @@ class THDoublePart extends THPart {
   }
 
   @override
-  int get hashCode => Object.hash(_value, _decimalPositions);
+  int get hashCode {
+    final int h = Object.hash(_value, _decimalPositions);
+
+    if (kDebugMode && THDoublePart.enableDoublePartHashDebug) {
+      debugPrint('[DOUBLE PART HASH] hash=$h details=${debugHashString()}');
+    }
+
+    return h;
+  }
+
+  /// Return a map of the fields used to compute `hashCode` so tests and
+  /// debugging helpers can inspect and compare them.
+  Map<String, dynamic> debugHashDetails() {
+    return {
+      'type': type.name,
+      'value': _value,
+      'decimalPositions': _decimalPositions,
+    };
+  }
+
+  /// Human-friendly debug string describing the hash inputs.
+  String debugHashString() =>
+      debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
   set decimalPositions(int decimalPositions) {
     if (decimalPositions < 0) {

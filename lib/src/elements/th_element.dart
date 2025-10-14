@@ -87,6 +87,11 @@ abstract class THElement {
   String? sameLineComment;
   final String originalLineInTH2File;
 
+  /// Runtime flag to enable/disable hash debug logging. Toggle at runtime in
+  /// debug builds to control output from `logHashComparison` and related
+  /// helpers.
+  static bool enableElementHashDebug = false;
+
   THElement.forCWJM({
     required int mpID,
     required this.parentMPID,
@@ -145,8 +150,39 @@ abstract class THElement {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(mpID, parentMPID, sameLineComment, originalLineInTH2File);
+  int get hashCode {
+    final int h = Object.hash(
+      mpID,
+      elementType,
+      parentMPID,
+      sameLineComment,
+      originalLineInTH2File,
+    );
+
+    if (kDebugMode && THElement.enableElementHashDebug) {
+      debugPrint('[THElement HASH] actual=$h details=${debugHashString()}');
+    }
+
+    return h;
+  }
+
+  /// Return a map of the fields used to compute `hashCode` so tests and
+  /// debugging helpers can inspect and compare them.
+  @visibleForTesting
+  Map<String, dynamic> debugHashDetails() {
+    return {
+      'elementType': elementType.name,
+      'mpID': mpID,
+      'parentMPID': parentMPID,
+      'sameLineComment': sameLineComment,
+      'originalLineInTH2File': originalLineInTH2File,
+    };
+  }
+
+  /// Human-friendly debug string describing the hash inputs.
+  @visibleForTesting
+  String debugHashString() =>
+      debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
   THElement copyWith({
     int? mpID,

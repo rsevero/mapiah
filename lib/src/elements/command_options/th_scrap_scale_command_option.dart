@@ -101,8 +101,40 @@ class THScrapScaleCommandOption extends THCommandOption {
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^ Object.hash(numericSpecifications, unitPart);
+  int get hashCode {
+    final int h =
+        super.hashCode ^
+        Object.hash(Object.hashAll(numericSpecifications), unitPart);
+
+    if (kDebugMode && THCommandOption.enableCommandOptionHashDebug) {
+      debugPrint('[COMMAND OPTION HASH] hash=$h details=${debugHashString()}');
+    }
+
+    return h;
+  }
+
+  /// Return a map of the fields used to compute `hashCode` so tests and
+  /// debugging helpers can inspect and compare them.
+  @visibleForTesting
+  @override
+  Map<String, dynamic> debugHashDetails() {
+    final Map<String, dynamic> base = super.debugHashDetails();
+
+    base.addAll({
+      'numericSpecifications': numericSpecifications
+          .map((e) => e.debugHashDetails())
+          .toList(),
+      'unitPart': unitPart.debugHashDetails(),
+    });
+
+    return base;
+  }
+
+  /// Human-friendly debug string describing the hash inputs.
+  @visibleForTesting
+  @override
+  String debugHashString() =>
+      debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
   double get lengthUnitsPerPoint {
     switch (numericSpecifications.length) {
