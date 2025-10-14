@@ -39,7 +39,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   ) {
     final THXTherionImageInsertConfig originalElement = th2FileEditController
         .thFile
-        .xtherionImageInsertConfigByMPID(xtherionImageInsertConfigMPID);
+        .imageByMPID(xtherionImageInsertConfigMPID);
     final MPCommand oppositeCommand =
         MPAddXTherionImageInsertConfigCommand.fromExisting(
           existingImageInsertConfig: originalElement,

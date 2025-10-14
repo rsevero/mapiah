@@ -1675,10 +1675,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void setImageVisibility(int imageMPID, bool isVisible) {
-    _th2FileEditController.thFile
-            .xtherionImageInsertConfigByMPID(imageMPID)
-            .isVisible =
-        isVisible;
+    _th2FileEditController.thFile.imageByMPID(imageMPID).isVisible = isVisible;
     _th2FileEditController.triggerImagesRedraw();
   }
 

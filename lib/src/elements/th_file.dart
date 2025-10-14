@@ -53,9 +53,9 @@ class THFile
   final Set<int> _areasMPIDs = {};
   final Set<int> _linesMPIDs = {};
   final Set<int> _pointsMPIDs = {};
-  final Set<int> _scrapMPIDs = {};
-  final Set<int> _imageMPIDs = {};
-  final Set<int> _xtherionSettingMPIDs = {};
+  List<int>? _scrapMPIDs;
+  List<int>? _imageMPIDs;
+  List<int>? _xtherionSettingMPIDs;
 
   Map<int, int>? _areaMPIDByLineMPID;
   Map<String, int>? _areaMPIDByLineTHID;
@@ -381,12 +381,12 @@ class THFile
       case THAreaBorderTHID _:
         _clearAreaXLineInfo(element);
       case THScrap _:
-        _scrapMPIDs.add(element.mpID);
+        _scrapMPIDs = null;
       case THXTherionConfig _:
-        _xtherionSettingMPIDs.add(element.mpID);
+        _xtherionSettingMPIDs = null;
       case THXTherionImageInsertConfig _:
-        _imageMPIDs.add(element.mpID);
-        _xtherionSettingMPIDs.add(element.mpID);
+        _imageMPIDs = null;
+        _xtherionSettingMPIDs = null;
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
@@ -454,12 +454,30 @@ class THFile
         _pointsMPIDs.remove(elementMPID);
         _drawableElementMPIDs.remove(elementMPID);
       case THScrap _:
-        _scrapMPIDs.remove(elementMPID);
+        if ((_scrapMPIDs != null) && _scrapMPIDs!.contains(elementMPID)) {
+          _scrapMPIDs!.remove(elementMPID);
+        } else {
+          _scrapMPIDs = null;
+        }
       case THXTherionConfig _:
-        _xtherionSettingMPIDs.remove(elementMPID);
+        if ((_xtherionSettingMPIDs != null) &&
+            _xtherionSettingMPIDs!.contains(elementMPID)) {
+          _xtherionSettingMPIDs!.remove(elementMPID);
+        } else {
+          _xtherionSettingMPIDs = null;
+        }
       case THXTherionImageInsertConfig _:
-        _imageMPIDs.remove(elementMPID);
-        _xtherionSettingMPIDs.remove(elementMPID);
+        if ((_imageMPIDs != null) && _imageMPIDs!.contains(elementMPID)) {
+          _imageMPIDs!.remove(elementMPID);
+        } else {
+          _imageMPIDs = null;
+        }
+        if ((_xtherionSettingMPIDs != null) &&
+            _xtherionSettingMPIDs!.contains(elementMPID)) {
+          _xtherionSettingMPIDs!.remove(elementMPID);
+        } else {
+          _xtherionSettingMPIDs = null;
+        }
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.updateShowImages();
@@ -663,16 +681,16 @@ class THFile
     return element;
   }
 
-  THXTherionImageInsertConfig xtherionImageInsertConfigByMPID(int mpID) {
+  THXTherionConfig xtherionConfigByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);
     }
 
     final THElement element = _elementByMPID[mpID]!;
 
-    if (element is! THXTherionImageInsertConfig) {
+    if (element is! THXTherionConfig) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an image in THFile.imageByMPID.",
+        "Element with MPID '$mpID' is not an THXTherionConfig in THFile.xtherionConfigByMPID.",
       );
     }
 
@@ -685,14 +703,15 @@ class THFile
 
   void clear() {
     _elementByMPID.clear();
-    _scrapMPIDs.clear();
+    childrenMPIDs.clear();
     _mpIDByTHID.clear();
     _thIDByMPID.clear();
     _areasMPIDs.clear();
     _linesMPIDs.clear();
     _pointsMPIDs.clear();
-    _imageMPIDs.clear();
-    _xtherionSettingMPIDs.clear();
+    _scrapMPIDs = null;
+    _imageMPIDs = null;
+    _xtherionSettingMPIDs = null;
     mpLocator.mpGeneralController
         .getTH2FileEditControllerIfExists(filename)
         ?.updateShowImages();
@@ -712,50 +731,88 @@ class THFile
     return elementByMPID(mpID).elementType;
   }
 
-  Set<int> get scrapMPIDs {
-    return _scrapMPIDs;
-  }
-
+  /// Returns a set of all area MPIDs in the THFile.
+  /// There might be more than one scrap where the areas will be, so this method
+  /// does not indicate the order of the areas, thus, we return a Set.
   Set<int> get areasMPIDs {
     return _areasMPIDs;
   }
 
+  /// Returns a set of all line MPIDs in the THFile.
+  /// There might be more than one scrap where the lines will be, so this method
+  /// does not indicate the order of the lines, thus, we return a Set.
   Set<int> get linesMPIDs {
     return _linesMPIDs;
   }
 
+  /// Returns a set of all point MPIDs in the THFile.
+  /// There might be more than one scrap where the points will be, so this
+  /// method does not indicate the order of the points, thus, we return a Set.
   Set<int> get pointsMPIDs {
     return _pointsMPIDs;
   }
 
-  Set<int> get imageMPIDs {
-    return _imageMPIDs;
+  /// Returns a list of all scrap MPIDs in the THFile.
+  /// Scraps are all children of the THFile itself, so the order of the scraps
+  /// is the same as the order of the childrenMPIDs of the THFile, thus we
+  /// return a List.
+  List<int> get scrapMPIDs {
+    _scrapMPIDs ??= childrenMPIDs
+        .where((int mpID) => elementByMPID(mpID) is THScrap)
+        .toList();
+
+    return _scrapMPIDs!;
   }
 
-  Set<int> get xtherionSettingMPIDs {
-    return _xtherionSettingMPIDs;
+  /// Returns a list of all image MPIDs in the THFile.
+  /// Images are all children of the THFile itself, so the order of the images
+  /// is the same as the order of the childrenMPIDs of the THFile, thus we
+  /// return a List.
+  List<int> get imageMPIDs {
+    _imageMPIDs ??= childrenMPIDs
+        .where((int mpID) => elementByMPID(mpID) is THXTherionImageInsertConfig)
+        .toList();
+
+    return _imageMPIDs!;
+  }
+
+  /// Returns a list of all xtherion setting MPIDs in the THFile.
+  /// XTherion settings are all children of the THFile itself, so the order of
+  /// the settings is the same as the order of the childrenMPIDs of the THFile,
+  /// thus we return a List.
+  List<int> get xtherionSettingMPIDs {
+    _xtherionSettingMPIDs ??= childrenMPIDs.where((int mpID) {
+      final THElement element = elementByMPID(mpID);
+
+      return ((element is THXTherionConfig) ||
+          (element is THXTherionImageInsertConfig));
+    }).toList();
+
+    return _xtherionSettingMPIDs!;
   }
 
   Iterable<THScrap> getScraps() {
-    return _scrapMPIDs.map((int mpID) => scrapByMPID(mpID));
+    return scrapMPIDs.map((int mpID) => scrapByMPID(mpID));
   }
 
   Iterable<THArea> getAreas() {
-    return _areasMPIDs.map((int mpID) => areaByMPID(mpID));
+    return areasMPIDs.map((int mpID) => areaByMPID(mpID));
   }
 
   Iterable<THLine> getLines() {
-    return _linesMPIDs.map((int mpID) => lineByMPID(mpID));
+    return linesMPIDs.map((int mpID) => lineByMPID(mpID));
   }
 
   Iterable<THPoint> getPoints() {
-    return _pointsMPIDs.map((int mpID) => pointByMPID(mpID));
+    return pointsMPIDs.map((int mpID) => pointByMPID(mpID));
   }
 
-  Iterable<THXTherionImageInsertConfig> getXTherionImageInsertConfigs() {
-    return _imageMPIDs.map(
-      (int mpID) => elementByMPID(mpID) as THXTherionImageInsertConfig,
-    );
+  Iterable<THXTherionImageInsertConfig> getImages() {
+    return imageMPIDs.map((int mpID) => imageByMPID(mpID));
+  }
+
+  Iterable<THXTherionConfig> getXTherionSettings() {
+    return xtherionSettingMPIDs.map((int mpID) => xtherionConfigByMPID(mpID));
   }
 
   void _updateAreaXLineInfo() {

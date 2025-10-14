@@ -59,7 +59,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
             th2FileEditController.redrawTriggerImages;
 
             final Iterable<THXTherionImageInsertConfig> images = thFile
-                .getXTherionImageInsertConfigs();
+                .getImages();
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,

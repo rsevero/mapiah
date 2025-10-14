@@ -75,7 +75,7 @@ endscrap
             // Snapshot original state (deep clone via toMap/fromMap)
             final THFile snapshotOriginal = THFile.fromMap(parsedFile.toMap());
 
-            /// Execution: taken from MPMoveLineCommand()
+            /// Execution: taken from MPMovePointCommand()
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 

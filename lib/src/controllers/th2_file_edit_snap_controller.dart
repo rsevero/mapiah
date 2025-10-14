@@ -184,7 +184,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
     }
 
     if (_snapXVIFileTargets.isNotEmpty) {
-      final Set<int> imageInsetConfigMPIDs = _thFile.imageMPIDs;
+      final List<int> imageInsetConfigMPIDs = _thFile.imageMPIDs;
 
       for (final int imageInsertConfigMPID in imageInsetConfigMPIDs) {
         final THXTherionImageInsertConfig imageInsertConfig = _thFile

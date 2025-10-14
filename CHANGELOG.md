@@ -30,6 +30,7 @@
   * Changed mpMaxDecimalPositions from 12 to 6.
   * Created find_deprecated_packages script.
   * Renamed originalXXX/modifiedXXX to fromXXX/toXXX in MPMoveLineCommands.
+  * Changed scrapMPIDs, imageMPIDs and xtherionSettingMPIDs in THFile from Set to List so they indicate the order of the elements in the file.
   * Added tests:
     * add area THID that creates area and line THIDs;
     * add area;
