@@ -226,37 +226,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return;
     }
 
-    late MPCommand mpCommand;
-
-    if (_mpSelectedElementsLogical.length == 1) {
-      final THElement singleSelectedElement = _mpSelectedElementsLogical.values
-          .toList()
-          .first
-          .originalElementClone;
-
-      switch (singleSelectedElement) {
-        case THPoint _:
-          mpCommand = MPRemovePointCommand(
-            pointMPID: singleSelectedElement.mpID,
-          );
-        case THLine _:
-          mpCommand = MPRemoveLineCommand(
-            lineMPID: singleSelectedElement.mpID,
-            isInteractiveLineCreation:
-                _th2FileEditController
-                    .elementEditController
-                    .lineStartScreenPosition !=
-                null,
-          );
-      }
-    } else {
-      final List<int> selectedMPIDs = _mpSelectedElementsLogical.keys.toList();
-
-      mpCommand = MPCommandFactory.removeElements(
-        mpIDs: selectedMPIDs,
-        thFile: _thFile,
-      );
-    }
+    final List<int> selectedMPIDs = _mpSelectedElementsLogical.keys.toList();
+    final MPCommand mpCommand = MPCommandFactory.removeElements(
+      mpIDs: selectedMPIDs,
+      thFile: _thFile,
+    );
 
     _th2FileEditController.execute(mpCommand);
     clearSelectedElements();

@@ -417,6 +417,8 @@ class MPCommandFactory {
             lineMPID: mpID,
             isInteractiveLineCreation: false,
           );
+        case THElementType.area:
+          removeCommand = MPRemoveAreaCommand(areaMPID: mpID);
         default:
           throw ArgumentError(
             'Unsupported element type in MPMultipleElementsCommand.removeElements',

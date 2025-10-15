@@ -3,7 +3,10 @@
 ## 0.2.20 - not yet release - the polish refactoring part 2
 * New features:
 * Fixed bugs:
+  * Delete button only removes points and lines but no areas.
 * Infrastructure maintenance:
+  * Added tests:
+    * MPRemoveAreaCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand.
