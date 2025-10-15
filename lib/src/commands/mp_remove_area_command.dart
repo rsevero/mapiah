@@ -23,6 +23,24 @@ class MPRemoveAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THArea area = thFile.areaByMPID(areaMPID);
+    final List<THElement> areaChildren = area.getChildren(thFile).toList();
+    final THIsParentMixin areaParent = area.parent(thFile);
+    final int areaPositionInParent = areaParent.getChildPosition(area);
+
+    _undoRedoInfo = {
+      'removedArea': area,
+      'removedAreaChildren': areaChildren,
+      'removedAreaPositionInParent': areaPositionInParent,
+    };
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -36,11 +54,10 @@ class MPRemoveAreaCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THArea originalArea = thFile.areaByMPID(areaMPID);
-    final MPCommand oppositeCommand = MPAddAreaCommand.fromExisting(
-      existingArea: originalArea,
-      th2FileEditController: th2FileEditController,
+    final MPCommand oppositeCommand = MPAddAreaCommand.forCWJM(
+      newArea: _undoRedoInfo!['removedArea'],
+      areaChildren: _undoRedoInfo!['removedAreaChildren'],
+      areaPositionInParent: _undoRedoInfo!['removedAreaPositionInParent'],
       descriptionType: descriptionType,
     );
 

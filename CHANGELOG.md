@@ -9,7 +9,8 @@
     * MPRemoveAreaCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
-    * MPMoveLineCommand.
+    * MPMoveLineCommand;
+    * MPRemoveAreaCommand.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:
