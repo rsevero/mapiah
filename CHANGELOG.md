@@ -10,7 +10,8 @@
 * Infrastructure maintenance:
   * Added tests:
     * MPRemoveAreaCommand;
-    * MPRemoveAttrOptionFromElementCommand.
+    * MPRemoveAttrOptionFromElementCommand;
+    * MPSetAttrOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand;
@@ -30,7 +31,7 @@
   * LineSegmentsMPIDs in wrong order after line segment addition.
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
   * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
-  * XTherion settings wrtten before encoding.
+  * XTherion settings written before encoding.
   * Area original line lost on area type change undo.
   * Original TH2 file representation lost on some situaitons for MPMoveBezierLineSegmentCommand.
   * THScrapScaleCommandoption hash code marking equal elements as different.
