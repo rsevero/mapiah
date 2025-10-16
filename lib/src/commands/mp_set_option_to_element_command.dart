@@ -33,7 +33,9 @@ class MPSetOptionToElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applySetOptionToElement(option);
+    th2FileEditController.elementEditController.applySetOptionToElement(
+      option: option,
+    );
   }
 
   @override

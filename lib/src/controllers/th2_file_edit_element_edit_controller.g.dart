@@ -630,13 +630,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applySetOptionToElement(THCommandOption option) {
+  void applySetOptionToElement({
+    required THCommandOption option,
+    String plaOriginalLineInTH2File = '',
+  }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.applySetOptionToElement',
         );
     try {
-      return super.applySetOptionToElement(option);
+      return super.applySetOptionToElement(
+        option: option,
+        plaOriginalLineInTH2File: plaOriginalLineInTH2File,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

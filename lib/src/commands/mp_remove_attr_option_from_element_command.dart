@@ -56,6 +56,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     final MPCommand oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
       toOption: option,
       toOriginalLineInTH2File: option.originalLineInTH2File,
+      toPLAOriginalLineInTH2File: parentElement.originalLineInTH2File,
       descriptionType: descriptionType,
     );
 

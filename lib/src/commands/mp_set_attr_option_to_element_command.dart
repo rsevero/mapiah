@@ -3,19 +3,22 @@ part of 'mp_command.dart';
 class MPSetAttrOptionToElementCommand extends MPCommand {
   final THAttrCommandOption toOption;
   final String toOriginalLineInTH2File;
+  final String toPLAOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetAttrOptionToElementCommand.forCWJM({
     required this.toOption,
     required this.toOriginalLineInTH2File,
+    required this.toPLAOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPSetAttrOptionToElementCommand({
     required this.toOption,
-    super.descriptionType = _defaultDescriptionType,
     this.toOriginalLineInTH2File = '',
+    this.toPLAOriginalLineInTH2File = '',
+    super.descriptionType = _defaultDescriptionType,
   }) : super();
 
   @override
@@ -31,7 +34,8 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     required bool keepOriginalLineTH2File,
   }) {
     th2FileEditController.elementEditController.applySetOptionToElement(
-      toOption,
+      option: toOption,
+      plaOriginalLineInTH2File: toPLAOriginalLineInTH2File,
     );
   }
 
@@ -53,6 +57,7 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
       oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
         toOption: fromOption,
         toOriginalLineInTH2File: fromOption.originalLineInTH2File,
+        toPLAOriginalLineInTH2File: parentElement.originalLineInTH2File,
         descriptionType: descriptionType,
       );
     } else {
@@ -73,12 +78,15 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
   MPSetAttrOptionToElementCommand copyWith({
     THAttrCommandOption? toOption,
     String? toOriginalLineInTH2File,
+    String? toPLAOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPSetAttrOptionToElementCommand.forCWJM(
       toOption: toOption ?? this.toOption,
       toOriginalLineInTH2File:
           toOriginalLineInTH2File ?? this.toOriginalLineInTH2File,
+      toPLAOriginalLineInTH2File:
+          toPLAOriginalLineInTH2File ?? this.toPLAOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -87,6 +95,7 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     return MPSetAttrOptionToElementCommand.forCWJM(
       toOption: THAttrCommandOption.fromMap(map['toOption']),
       toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
+      toPLAOriginalLineInTH2File: map['toPLAOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -104,6 +113,7 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     map.addAll({
       'toOption': toOption.toMap(),
       'toOriginalLineInTH2File': toOriginalLineInTH2File,
+      'toPLAOriginalLineInTH2File': toPLAOriginalLineInTH2File,
     });
 
     return map;
@@ -116,10 +126,15 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
 
     return other is MPSetAttrOptionToElementCommand &&
         other.toOption == toOption &&
-        other.toOriginalLineInTH2File == toOriginalLineInTH2File;
+        other.toOriginalLineInTH2File == toOriginalLineInTH2File &&
+        other.toPLAOriginalLineInTH2File == toPLAOriginalLineInTH2File;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, toOption, toOriginalLineInTH2File);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    toOption,
+    toOriginalLineInTH2File,
+    toPLAOriginalLineInTH2File,
+  );
 }

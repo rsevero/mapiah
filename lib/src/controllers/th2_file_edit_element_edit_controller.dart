@@ -847,7 +847,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetOptionToElement(THCommandOption option) {
+  void applySetOptionToElement({
+    required THCommandOption option,
+    String plaOriginalLineInTH2File = '',
+  }) {
     option.optionParent(_thFile).addUpdateOption(option);
 
     if (option is THIDCommandOption) {
@@ -858,7 +861,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final THElement parentElement = _thFile.elementByMPID(option.parentMPID);
 
       _thFile.substituteElement(
-        parentElement.copyWith(originalLineInTH2File: ''),
+        parentElement.copyWith(originalLineInTH2File: plaOriginalLineInTH2File),
       );
     }
 
