@@ -1378,7 +1378,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 2282 80 date -align bottom-left -value 2022.02.05 -scale xs
+  point 2282 80 date -align bottom-left -scale xs -value 2022.02.05
 endscrap
 ''',
       },
@@ -1398,7 +1398,7 @@ endscrap
         'length': 4,
         'encoding': 'UTF-8',
         'asFile':
-            'encoding UTF-8\r\nscrap 141c-TradeElevEXT-s1\r\n  point 16235 903.25 date -align bottom-right -value 2024.06.08 -scale xs\r\nendscrap\r\n',
+            'encoding UTF-8\r\nscrap 141c-TradeElevEXT-s1\r\n  point 16235 903.25 date -align bottom-right -scale xs -value 2024.06.08\r\nendscrap\r\n',
       },
     ];
 

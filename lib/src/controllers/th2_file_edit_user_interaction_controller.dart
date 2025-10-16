@@ -145,21 +145,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     if (candidateElementsForNewOption.isEmpty) {
       return;
-    } else if (candidateElementsForNewOption.length == 1) {
-      final THElement selectedElement = candidateElementsForNewOption.first;
-
-      if ((selectedElement is! THHasOptionsMixin) ||
-          (!selectedElement.hasAttrOption(attrName))) {
-        return;
-      }
-
-      final MPRemoveAttrOptionFromElementCommand removeOptionCommand =
-          MPRemoveAttrOptionFromElementCommand(
-            attrName: attrName,
-            parentMPID: selectedElement.mpID,
-          );
-
-      _th2FileEditController.execute(removeOptionCommand);
     } else {
       final List<int> parentMPIDs = [];
 

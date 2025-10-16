@@ -61,9 +61,8 @@ mixin THHasOptionsMixin on THElement {
   }
 
   String optionsAsString() {
-    String asString = '';
-
     final Iterable<THCommandOptionType> optionTypeList = _optionsMap.keys;
+    final List<String> optionsList = [];
 
     for (THCommandOptionType type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
@@ -76,17 +75,19 @@ mixin THHasOptionsMixin on THElement {
       final String typeToFile = option.typeToFile();
       final String spec = option.specToFile();
 
-      asString += " -$typeToFile $spec";
+      optionsList.add("-$typeToFile $spec");
     }
 
     for (THAttrCommandOption attrOption in _attrOptionsMap.values) {
       final String name = attrOption.name.content;
       final String value = attrOption.value.content;
 
-      asString += " -attr $name \"$value\"";
+      optionsList.add("-attr $name \"$value\"");
     }
 
-    asString = asString.trim();
+    optionsList.sort();
+
+    final String asString = optionsList.join(' ').trim();
 
     return asString;
   }

@@ -5,6 +5,7 @@
 * Fixed bugs:
   * Delete button only removes points and lines but no areas.
   * Original TH2File line management in MPRemoveAttrOptionFromElementCommand and MPSetAttrOptionToElementCommand.
+  * Sometimes PLA options not presented in alphabetical order.
 * Infrastructure maintenance:
   * Added tests:
     * MPRemoveAreaCommand.
