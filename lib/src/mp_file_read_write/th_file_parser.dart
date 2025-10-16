@@ -1833,8 +1833,8 @@ class THFileParser {
 
     THAttrCommandOption(
       optionParent: _currentHasOptions,
-      nameText: name,
-      valueText: value,
+      attrName: name,
+      attrValue: value,
       originalLineInTH2File: _currentOriginalLine,
     );
   }

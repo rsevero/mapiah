@@ -43,8 +43,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     }
 
     _undoRedoInfo = {
-      'toOption': option,
-      'toOriginalLineInTH2File': option.originalLineInTH2File,
+      'fromOption': option,
       'toPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
     };
   }
@@ -66,9 +65,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPCommand oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
-      toOption: _undoRedoInfo!['toOption'] as THAttrCommandOption,
-      toOriginalLineInTH2File:
-          _undoRedoInfo!['toOriginalLineInTH2File'] as String,
+      toOption: _undoRedoInfo!['fromOption'] as THAttrCommandOption,
       toPLAOriginalLineInTH2File:
           _undoRedoInfo!['toPLAOriginalLineInTH2File'] as String,
       descriptionType: descriptionType,

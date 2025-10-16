@@ -675,6 +675,28 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void applySetAttrOptionToElement({
+    required THAttrCommandOption attrOption,
+    String plaOriginalLineInTH2File = '',
+  }) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.applySetAttrOptionToElement',
+        );
+    try {
+      return super.applySetAttrOptionToElement(
+        attrOption: attrOption,
+        plaOriginalLineInTH2File: plaOriginalLineInTH2File,
+      );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void applyRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,

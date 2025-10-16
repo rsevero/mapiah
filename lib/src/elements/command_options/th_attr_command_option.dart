@@ -16,11 +16,11 @@ class THAttrCommandOption extends THCommandOption {
 
   THAttrCommandOption({
     required super.optionParent,
-    required String nameText,
-    required String valueText,
+    required String attrName,
+    required String attrValue,
     super.originalLineInTH2File = '',
-  }) : name = THStringPart(content: nameText),
-       value = THStringPart(content: valueText),
+  }) : name = THStringPart(content: attrName),
+       value = THStringPart(content: attrValue),
        super();
 
   @override

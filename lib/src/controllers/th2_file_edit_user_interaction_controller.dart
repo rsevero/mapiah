@@ -65,35 +65,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     if (candidateElementsForNewOption.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (candidateElementsForNewOption.length == 1) {
-      final THElement selectedElement = candidateElementsForNewOption.first;
-
-      if ((selectedElement is! THHasOptionsMixin) ||
-          (!isCtrlPressed &&
-              !MPCommandOptionAux.elementTypeSupportsOptionType(
-                selectedElement,
-                option.type,
-              )) ||
-          (selectedElement.hasOption(option.type) &&
-              (option.type != THCommandOptionType.attr) &&
-              selectedElement.optionByType(option.type) == option)) {
-        return;
-      }
-
-      final MPCommand setOptionCommand =
-          (option.type == THCommandOptionType.attr)
-          ? MPSetAttrOptionToElementCommand(
-              toOption:
-                  option.copyWith(parentMPID: selectedElement.mpID)
-                      as THAttrCommandOption,
-            )
-          : MPSetOptionToElementCommand(
-              option: option.copyWith(parentMPID: selectedElement.mpID),
-              currentOriginalLineInTH2File:
-                  selectedElement.originalLineInTH2File,
-            );
-
-      _th2FileEditController.execute(setOptionCommand);
     } else {
       final List<THElement> actualElementsForNewOption = [];
 
@@ -115,7 +86,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             (option.type == THCommandOptionType.attr)
             ? MPCommandFactory.setAttrOptionOnElements(
                 elements: actualElementsForNewOption,
-                option: option as THAttrCommandOption,
+                toOption: option as THAttrCommandOption,
                 thFile: _th2FileEditController.thFile,
               )
             : MPCommandFactory.setOptionOnElements(

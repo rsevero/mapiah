@@ -328,7 +328,7 @@ class MPCommandFactory {
   }
 
   static MPCommand setAttrOptionOnElements({
-    required THAttrCommandOption option,
+    required THAttrCommandOption toOption,
     required List<THElement> elements,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
@@ -345,7 +345,7 @@ class MPCommandFactory {
 
       final MPSetAttrOptionToElementCommand setOptionToElementCommand =
           MPSetAttrOptionToElementCommand(
-            toOption: option.copyWith(parentMPID: element.mpID),
+            toOption: toOption.copyWith(parentMPID: element.mpID),
             descriptionType: descriptionType,
           );
 

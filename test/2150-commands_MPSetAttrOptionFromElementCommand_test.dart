@@ -90,12 +90,12 @@ endscrap
             final THLine line = parsedFile.getLines().first;
             final THAttrCommandOption option = THAttrCommandOption(
               optionParent: line,
-              nameText: 'custom',
-              valueText: 'attribute',
+              attrName: 'custom',
+              attrValue: 'attribute',
             );
             final MPCommand setCommand =
                 MPCommandFactory.setAttrOptionOnElements(
-                  option: option,
+                  toOption: option,
                   elements: [line],
                   thFile: parsedFile,
                 );

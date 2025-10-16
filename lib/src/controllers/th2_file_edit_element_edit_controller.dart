@@ -865,9 +865,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
     }
 
-    updateOptionEdited(
-      attrOptionEdited: option.type != THCommandOptionType.attr,
-    );
+    updateOptionEdited(attrOptionEdited: false);
   }
 
   @action
@@ -888,6 +886,28 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File),
     );
     updateOptionEdited();
+  }
+
+  @action
+  void applySetAttrOptionToElement({
+    required THAttrCommandOption attrOption,
+    String plaOriginalLineInTH2File = '',
+  }) {
+    final int parentMPID = attrOption.parentMPID;
+    if (parentMPID <= 0) {
+      throw Exception(
+        'Error: parentMPID is not valid at TH2FileEditElementEditController.applySetAttrOptionToElement().',
+      );
+    }
+    final THHasOptionsMixin parentElement = _thFile.hasOptionByMPID(parentMPID);
+
+    _thFile.substituteElement(
+      parentElement.copyWith(originalLineInTH2File: plaOriginalLineInTH2File),
+    );
+
+    attrOption.optionParent(_thFile).addUpdateOption(attrOption);
+
+    updateOptionEdited(attrOptionEdited: true);
   }
 
   @action
