@@ -891,14 +891,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applyRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
-    required String newOriginalLineInTH2File,
   }) {
     final THHasOptionsMixin parentElement = _th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
 
     parentElement.removeAttrOption(attrName);
     _thFile.substituteElement(
-      parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File),
+      parentElement.copyWith(originalLineInTH2File: ''),
     );
     updateOptionEdited(attrOptionEdited: false);
   }

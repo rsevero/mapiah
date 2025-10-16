@@ -1041,13 +1041,6 @@ class THFileParser {
 
       final String optionType = _currentOptions[0].toString().toLowerCase();
 
-      // if (_parsedOptions.contains(optionType)) {
-      //   final elementType = _currentElement.type;
-      //   _addError("Duplicated option '$optionType' in $elementType.",
-      //       '_optionFromElement', element.toString());
-      //   continue;
-      // }
-
       // This "if null" is here to deal with command options that have optional
       // extra data, i.e, they might be defined alone. In these situations
       // _currentOptions[1] will be simply null. As we need a list in
@@ -1055,7 +1048,6 @@ class THFileParser {
       // null value we received from the parser.
       _currentSpec = _currentOptions[1] ?? [null];
       _currentHasOptions = _currentElement as THHasOptionsMixin;
-      // _parsedOptions.add(optionType);
 
       try {
         if (createRegularOption(optionType)) {

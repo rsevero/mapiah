@@ -345,11 +345,8 @@ class MPCommandFactory {
 
       final MPSetAttrOptionToElementCommand setOptionToElementCommand =
           MPSetAttrOptionToElementCommand(
-            option: option.copyWith(parentMPID: element.mpID),
+            toOption: option.copyWith(parentMPID: element.mpID),
             descriptionType: descriptionType,
-            currentOriginalLineInTH2File: thFile
-                .elementByMPID(element.mpID)
-                .originalLineInTH2File,
           );
 
       commandsList.add(setOptionToElementCommand);
@@ -379,9 +376,6 @@ class MPCommandFactory {
       removeAttrOptionFromElementCommand = MPRemoveAttrOptionFromElementCommand(
         attrName: attrName,
         parentMPID: parentMPID,
-        currentOriginalLineInTH2File: thFile
-            .elementByMPID(parentMPID)
-            .originalLineInTH2File,
         descriptionType: descriptionType,
       );
 

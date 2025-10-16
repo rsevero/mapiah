@@ -3,16 +3,12 @@ part of 'mp_command.dart';
 class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final int parentMPID;
   final String attrName;
-  final String newOriginalLineInTH2File;
-  final String currentOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
 
   MPRemoveAttrOptionFromElementCommand.forCWJM({
     required this.attrName,
     required this.parentMPID,
-    required this.newOriginalLineInTH2File,
-    required this.currentOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -20,8 +16,6 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     required this.attrName,
     required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-    this.currentOriginalLineInTH2File = '',
-    this.newOriginalLineInTH2File = '',
   }) : super();
 
   @override
@@ -40,9 +34,6 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
         .applyRemoveAttrOptionFromElement(
           attrName: attrName,
           parentMPID: parentMPID,
-          newOriginalLineInTH2File: keepOriginalLineTH2File
-              ? currentOriginalLineInTH2File
-              : newOriginalLineInTH2File,
         );
   }
 
@@ -52,7 +43,6 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   ) {
     final THHasOptionsMixin parentElement = th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
-
     final THAttrCommandOption? option = parentElement.attrOptionByName(
       attrName,
     );
@@ -64,9 +54,8 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     }
 
     final MPCommand oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
-      option: option,
-      newOriginalLineInTH2File: currentOriginalLineInTH2File,
-      currentOriginalLineInTH2File: newOriginalLineInTH2File,
+      toOption: option,
+      toOriginalLineInTH2File: option.originalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -80,17 +69,11 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   MPRemoveAttrOptionFromElementCommand copyWith({
     String? attrName,
     int? parentMPID,
-    String? fromOriginalLineInTH2File,
-    String? currentOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveAttrOptionFromElementCommand.forCWJM(
       attrName: attrName ?? this.attrName,
       parentMPID: parentMPID ?? this.parentMPID,
-      newOriginalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
-      currentOriginalLineInTH2File:
-          currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -101,8 +84,6 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     return MPRemoveAttrOptionFromElementCommand.forCWJM(
       attrName: map['attrName'],
       parentMPID: map['parentMPID'],
-      newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
-      currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -117,12 +98,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({
-      'attrName': attrName,
-      'parentMPID': parentMPID,
-      'newOriginalLineInTH2File': newOriginalLineInTH2File,
-      'currentOriginalLineInTH2File': currentOriginalLineInTH2File,
-    });
+    map.addAll({'attrName': attrName, 'parentMPID': parentMPID});
 
     return map;
   }
@@ -134,17 +110,9 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
 
     return other is MPRemoveAttrOptionFromElementCommand &&
         other.attrName == attrName &&
-        other.parentMPID == parentMPID &&
-        other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
+        other.parentMPID == parentMPID;
   }
 
   @override
-  int get hashCode => Object.hash(
-    super.hashCode,
-    attrName,
-    parentMPID,
-    newOriginalLineInTH2File,
-    currentOriginalLineInTH2File,
-  );
+  int get hashCode => Object.hash(super.hashCode, attrName, parentMPID);
 }

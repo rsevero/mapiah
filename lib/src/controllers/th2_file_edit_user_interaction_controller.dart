@@ -83,11 +83,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       final MPCommand setOptionCommand =
           (option.type == THCommandOptionType.attr)
           ? MPSetAttrOptionToElementCommand(
-              option:
+              toOption:
                   option.copyWith(parentMPID: selectedElement.mpID)
                       as THAttrCommandOption,
-              currentOriginalLineInTH2File:
-                  selectedElement.originalLineInTH2File,
             )
           : MPSetOptionToElementCommand(
               option: option.copyWith(parentMPID: selectedElement.mpID),
@@ -159,9 +157,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           MPRemoveAttrOptionFromElementCommand(
             attrName: attrName,
             parentMPID: selectedElement.mpID,
-            currentOriginalLineInTH2File: _thFile
-                .elementByMPID(selectedElement.mpID)
-                .originalLineInTH2File,
           );
 
       _th2FileEditController.execute(removeOptionCommand);

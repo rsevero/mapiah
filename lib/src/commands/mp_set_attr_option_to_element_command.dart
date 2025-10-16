@@ -1,24 +1,21 @@
 part of 'mp_command.dart';
 
 class MPSetAttrOptionToElementCommand extends MPCommand {
-  final THAttrCommandOption option;
-  final String newOriginalLineInTH2File;
-  final String currentOriginalLineInTH2File;
+  final THAttrCommandOption toOption;
+  final String toOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
 
   MPSetAttrOptionToElementCommand.forCWJM({
-    required this.option,
-    required this.newOriginalLineInTH2File,
-    required this.currentOriginalLineInTH2File,
+    required this.toOption,
+    required this.toOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPSetAttrOptionToElementCommand({
-    required this.option,
+    required this.toOption,
     super.descriptionType = _defaultDescriptionType,
-    this.newOriginalLineInTH2File = '',
-    this.currentOriginalLineInTH2File = '',
+    this.toOriginalLineInTH2File = '',
   }) : super();
 
   @override
@@ -33,36 +30,35 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applySetOptionToElement(option);
+    th2FileEditController.elementEditController.applySetOptionToElement(
+      toOption,
+    );
   }
 
   @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement = option.optionParent(
+    final THHasOptionsMixin parentElement = toOption.optionParent(
       th2FileEditController.thFile,
     );
 
     MPCommand oppositeCommand;
 
-    if (parentElement.hasAttrOption(option.name.content)) {
-      final THAttrCommandOption currentOption = parentElement.getAttrOption(
-        option.name.content,
+    if (parentElement.hasAttrOption(toOption.name.content)) {
+      final THAttrCommandOption fromOption = parentElement.getAttrOption(
+        toOption.name.content,
       )!;
 
       oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
-        option: currentOption,
-        newOriginalLineInTH2File: currentOriginalLineInTH2File,
-        currentOriginalLineInTH2File: newOriginalLineInTH2File,
+        toOption: fromOption,
+        toOriginalLineInTH2File: fromOption.originalLineInTH2File,
         descriptionType: descriptionType,
       );
     } else {
       oppositeCommand = MPRemoveAttrOptionFromElementCommand(
-        attrName: option.name.content,
-        parentMPID: option.parentMPID,
-        newOriginalLineInTH2File: currentOriginalLineInTH2File,
-        currentOriginalLineInTH2File: newOriginalLineInTH2File,
+        attrName: toOption.name.content,
+        parentMPID: toOption.parentMPID,
         descriptionType: descriptionType,
       );
     }
@@ -75,26 +71,22 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
 
   @override
   MPSetAttrOptionToElementCommand copyWith({
-    THAttrCommandOption? option,
-    String? fromOriginalLineInTH2File,
-    String? currentOriginalLineInTH2File,
+    THAttrCommandOption? toOption,
+    String? toOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPSetAttrOptionToElementCommand.forCWJM(
-      option: option ?? this.option,
-      newOriginalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
-      currentOriginalLineInTH2File:
-          currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
+      toOption: toOption ?? this.toOption,
+      toOriginalLineInTH2File:
+          toOriginalLineInTH2File ?? this.toOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
   factory MPSetAttrOptionToElementCommand.fromMap(Map<String, dynamic> map) {
     return MPSetAttrOptionToElementCommand.forCWJM(
-      option: THAttrCommandOption.fromMap(map['option']),
-      newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
-      currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
+      toOption: THAttrCommandOption.fromMap(map['toOption']),
+      toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -110,9 +102,8 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     Map<String, dynamic> map = super.toMap();
 
     map.addAll({
-      'option': option.toMap(),
-      'newOriginalLineInTH2File': newOriginalLineInTH2File,
-      'currentOriginalLineInTH2File': currentOriginalLineInTH2File,
+      'toOption': toOption.toMap(),
+      'toOriginalLineInTH2File': toOriginalLineInTH2File,
     });
 
     return map;
@@ -124,16 +115,11 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
     if (!super.equalsBase(other)) return false;
 
     return other is MPSetAttrOptionToElementCommand &&
-        other.option == option &&
-        other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
+        other.toOption == toOption &&
+        other.toOriginalLineInTH2File == toOriginalLineInTH2File;
   }
 
   @override
-  int get hashCode => Object.hash(
-    super.hashCode,
-    option,
-    newOriginalLineInTH2File,
-    currentOriginalLineInTH2File,
-  );
+  int get hashCode =>
+      Object.hash(super.hashCode, toOption, toOriginalLineInTH2File);
 }

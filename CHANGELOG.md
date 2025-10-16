@@ -4,6 +4,7 @@
 * New features:
 * Fixed bugs:
   * Delete button only removes points and lines but no areas.
+  * Original TH2File line management in MPRemoveAttrOptionFromElementCommand and MPSetAttrOptionToElementCommand.
 * Infrastructure maintenance:
   * Added tests:
     * MPRemoveAreaCommand.

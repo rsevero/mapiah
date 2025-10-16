@@ -672,7 +672,6 @@ mixin _$TH2FileEditElementEditController
   void applyRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
-    required String newOriginalLineInTH2File,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -683,7 +682,6 @@ mixin _$TH2FileEditElementEditController
       return super.applyRemoveAttrOptionFromElement(
         attrName: attrName,
         parentMPID: parentMPID,
-        newOriginalLineInTH2File: newOriginalLineInTH2File,
       );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
