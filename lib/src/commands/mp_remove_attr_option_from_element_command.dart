@@ -26,6 +26,30 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THHasOptionsMixin parentElement = th2FileEditController.thFile
+        .hasOptionByMPID(parentMPID);
+    final THAttrCommandOption? option = parentElement.attrOptionByName(
+      attrName,
+    );
+
+    if (option == null) {
+      throw StateError(
+        'Parent element does not have attr option with name $attrName',
+      );
+    }
+
+    _undoRedoInfo = {
+      'toOption': option,
+      'toOriginalLineInTH2File': option.originalLineInTH2File,
+      'toPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
+    };
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -41,22 +65,12 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement = th2FileEditController.thFile
-        .hasOptionByMPID(parentMPID);
-    final THAttrCommandOption? option = parentElement.attrOptionByName(
-      attrName,
-    );
-
-    if (option == null) {
-      throw StateError(
-        'Parent element does not have attr option with name $attrName',
-      );
-    }
-
     final MPCommand oppositeCommand = MPSetAttrOptionToElementCommand.forCWJM(
-      toOption: option,
-      toOriginalLineInTH2File: option.originalLineInTH2File,
-      toPLAOriginalLineInTH2File: parentElement.originalLineInTH2File,
+      toOption: _undoRedoInfo!['toOption'] as THAttrCommandOption,
+      toOriginalLineInTH2File:
+          _undoRedoInfo!['toOriginalLineInTH2File'] as String,
+      toPLAOriginalLineInTH2File:
+          _undoRedoInfo!['toPLAOriginalLineInTH2File'] as String,
       descriptionType: descriptionType,
     );
 

@@ -9,11 +9,13 @@
   * PLA original TH2File lost on setattr option undo/redo.
 * Infrastructure maintenance:
   * Added tests:
-    * MPRemoveAreaCommand.
+    * MPRemoveAreaCommand;
+    * MPRemoveAttrOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand;
-    * MPRemoveAreaCommand.
+    * MPRemoveAreaCommand;
+    * MPRemoveAttrOptionFromElementCommand.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:
