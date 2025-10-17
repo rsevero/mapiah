@@ -1,23 +1,21 @@
 part of 'th_command_option.dart';
 
 abstract class THMultipleChoiceCommandOption extends THCommandOption {
-  final THElementType parentElementType;
+  THElementType? parentElementType;
 
   THMultipleChoiceCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required this.parentElementType,
   }) : super.forCWJM();
 
   THMultipleChoiceCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     super.originalLineInTH2File = '',
-  }) : parentElementType = optionParent.elementType,
-       super();
+  }) : super();
 
   Enum get choice;
 
-  static String getParentTypeNameForChecking(String parentTypeName) {
+  static String _getParentTypeNameForChecking(String parentTypeName) {
     String parentTypeNameForChecking = parentTypeName;
 
     if ((parentTypeNameForChecking == THElementType.straightLineSegment.name) ||
@@ -31,14 +29,22 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
     return parentTypeNameForChecking;
   }
 
-  String get parentTypeNameForChecking =>
-      getParentTypeNameForChecking(parentElementType.name);
+  THElementType getParentElementType(THFile thFile) {
+    parentElementType ??= thFile.getElementTypeByMPID(parentMPID);
+
+    return parentElementType!;
+  }
+
+  String getParentElementTypeName(THFile thFile) {
+    return getParentElementType(thFile).name;
+  }
+
+  String getParentTypeNameForChecking(THFile thFile) =>
+      _getParentTypeNameForChecking(getParentElementTypeName(thFile));
 
   @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
-
-    map.addAll({'parentElementType': parentElementType.name});
 
     return map;
   }
@@ -47,17 +53,14 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
   bool equalsBase(Object other) {
     if (!super.equalsBase(other)) return false;
 
-    return other is THMultipleChoiceCommandOption &&
-        other.parentElementType == parentElementType;
+    return other is THMultipleChoiceCommandOption;
   }
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return equalsBase(other);
   }
-
-  @override
-  int get hashCode => super.hashCode ^ parentElementType.hashCode;
 }

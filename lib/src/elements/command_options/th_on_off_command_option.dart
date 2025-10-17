@@ -7,18 +7,17 @@ abstract class THOnOffCommandOption extends THMultipleChoiceCommandOption {
   THOnOffCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
   THOnOffCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THOnOffCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : choice = THOptionChoicesOnOffType.values.byName(choice),

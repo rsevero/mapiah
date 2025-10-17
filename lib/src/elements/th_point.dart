@@ -47,7 +47,7 @@ class THPoint extends THElement
   }) : super.forCWJM() {
     _unknownPLAType = unknownPLAType;
     addOptionsMap(optionsMap);
-    addAttrOptionsMap(attrOptionsMap);
+    addUpdateAttrOptionsMap(attrOptionsMap);
   }
 
   THPoint({

@@ -14,7 +14,7 @@ class THStationNamesCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THStationNamesCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.prefix,
     required this.suffix,
     super.originalLineInTH2File = '',

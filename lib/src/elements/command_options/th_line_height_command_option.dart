@@ -12,7 +12,7 @@ class THLineHeightCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THLineHeightCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String height,
     super.originalLineInTH2File = '',
   }) : super() {

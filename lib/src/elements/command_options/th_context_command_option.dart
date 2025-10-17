@@ -17,7 +17,7 @@ class THContextCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THContextCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.elementType,
     required this.symbolType,
     super.originalLineInTH2File = '',

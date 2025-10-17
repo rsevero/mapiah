@@ -15,7 +15,7 @@ class THStationsCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THStationsCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.stations,
     super.originalLineInTH2File = '',
   }) : super();

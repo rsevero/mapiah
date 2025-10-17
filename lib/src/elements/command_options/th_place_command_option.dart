@@ -9,18 +9,17 @@ class THPlaceCommandOption extends THMultipleChoiceCommandOption {
   THPlaceCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
   THPlaceCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THPlaceCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : choice = _setChoiceFromString(choice),
@@ -55,7 +54,6 @@ class THPlaceCommandOption extends THMultipleChoiceCommandOption {
     return THPlaceCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: _setChoiceFromString(map['choice']),
     );
   }
@@ -68,14 +66,12 @@ class THPlaceCommandOption extends THMultipleChoiceCommandOption {
   THPlaceCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THElementType? parentElementType,
     THOptionChoicesPlaceType? choice,
   }) {
     return THPlaceCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
       choice: choice ?? this.choice,
     );
   }

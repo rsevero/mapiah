@@ -30,7 +30,7 @@ class THProjectionCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THProjectionCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String projectionType,
     this.index = '',
     String? elevationAngle,

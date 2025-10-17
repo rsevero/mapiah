@@ -24,7 +24,7 @@ class THPointHeightValueCommandOption extends THCommandOption
   }
 
   THPointHeightValueCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String height,
     required this.isPresumed,
     String? unit,

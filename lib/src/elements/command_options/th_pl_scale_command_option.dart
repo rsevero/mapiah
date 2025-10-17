@@ -27,7 +27,7 @@ class THPLScaleCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THPLScaleCommandOption.sizeAsNamed({
-    required super.optionParent,
+    required super.parentMPID,
     required String textScaleSize,
     super.originalLineInTH2File = '',
   }) : super() {
@@ -47,7 +47,7 @@ class THPLScaleCommandOption extends THCommandOption {
   }
 
   THPLScaleCommandOption.sizeAsNumber({
-    required super.optionParent,
+    required super.parentMPID,
     required THDoublePart numericScaleSize,
     super.originalLineInTH2File = '',
   }) : numericSize = numericScaleSize,
@@ -57,7 +57,7 @@ class THPLScaleCommandOption extends THCommandOption {
   }
 
   THPLScaleCommandOption.sizeAsNumberFromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String numericScaleSize,
     super.originalLineInTH2File = '',
   }) : super() {

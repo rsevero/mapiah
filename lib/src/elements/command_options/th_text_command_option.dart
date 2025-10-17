@@ -38,7 +38,7 @@ class THTextCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THTextCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required String textContent,
     super.originalLineInTH2File = '',
   }) : text = THStringPart(content: textContent),

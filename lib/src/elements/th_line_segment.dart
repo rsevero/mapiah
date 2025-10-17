@@ -16,7 +16,7 @@ abstract class THLineSegment extends THElement
     required super.originalLineInTH2File,
   }) : super.forCWJM() {
     addOptionsMap(optionsMap);
-    addAttrOptionsMap(attrOptionsMap);
+    addUpdateAttrOptionsMap(attrOptionsMap);
   }
 
   THLineSegment.withEndPoint({

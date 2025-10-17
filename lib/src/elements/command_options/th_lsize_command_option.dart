@@ -14,7 +14,7 @@ class THLSizeCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THLSizeCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String number,
     super.originalLineInTH2File = '',
   }) : super() {

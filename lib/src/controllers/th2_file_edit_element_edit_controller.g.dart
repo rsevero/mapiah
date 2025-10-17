@@ -677,7 +677,7 @@ mixin _$TH2FileEditElementEditController
   @override
   void applySetAttrOptionToElement({
     required THAttrCommandOption attrOption,
-    String plaOriginalLineInTH2File = '',
+    required String plaOriginalLineInTH2File,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -700,6 +700,7 @@ mixin _$TH2FileEditElementEditController
   void applyRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
+    required String plaOriginalLineInTH2File,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -710,6 +711,7 @@ mixin _$TH2FileEditElementEditController
       return super.applyRemoveAttrOptionFromElement(
         attrName: attrName,
         parentMPID: parentMPID,
+        plaOriginalLineInTH2File: plaOriginalLineInTH2File,
       );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(

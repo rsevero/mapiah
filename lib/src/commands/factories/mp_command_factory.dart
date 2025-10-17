@@ -374,8 +374,11 @@ class MPCommandFactory {
     for (final int parentMPID in parentMPIDs) {
       final MPRemoveAttrOptionFromElementCommand
       removeAttrOptionFromElementCommand = MPRemoveAttrOptionFromElementCommand(
-        attrName: attrName,
         parentMPID: parentMPID,
+        attrName: attrName,
+        plaOriginalTH2FileLine: thFile
+            .elementByMPID(parentMPID)
+            .originalLineInTH2File,
         descriptionType: descriptionType,
       );
 

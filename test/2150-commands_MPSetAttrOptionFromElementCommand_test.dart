@@ -89,7 +89,7 @@ endscrap
 
             final THLine line = parsedFile.getLines().first;
             final THAttrCommandOption option = THAttrCommandOption(
-              optionParent: line,
+              parentMPID: line.mpID,
               attrName: 'custom',
               attrValue: 'attribute',
             );

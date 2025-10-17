@@ -30,7 +30,7 @@ class THPassageHeightValueCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THPassageHeightValueCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String plusNumber,
     required String minusNumber,
     String? unit,

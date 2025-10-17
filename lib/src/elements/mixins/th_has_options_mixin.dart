@@ -6,12 +6,33 @@ mixin THHasOptionsMixin on THElement {
   final SplayTreeMap<String, THAttrCommandOption> _attrOptionsMap =
       SplayTreeMap<String, THAttrCommandOption>();
 
-  void addUpdateOption(THCommandOption option) {
-    if (option is THAttrCommandOption) {
-      _attrOptionsMap[option.name.content] = option;
-    } else {
-      _optionsMap[option.type] = option;
+  /// The return value is true if:
+  /// 1. the were no option with the same name and it was added; or
+  /// 2. there was an option with the same name but with a different value.
+  bool addUpdateOption(THCommandOption option) {
+    if (option.parentMPID != mpID) {
+      option = option.copyWith(parentMPID: mpID);
     }
+
+    bool changedValue = false;
+
+    if (option is THAttrCommandOption) {
+      final String attrName = option.name.content;
+
+      if (!_attrOptionsMap.containsKey(attrName) ||
+          (_attrOptionsMap[attrName] != option)) {
+        changedValue = true;
+        _attrOptionsMap[attrName] = option;
+      }
+    } else {
+      if (!_optionsMap.containsKey(option.type) ||
+          (_optionsMap[option.type] != option)) {
+        changedValue = true;
+        _optionsMap[option.type] = option;
+      }
+    }
+
+    return changedValue;
   }
 
   bool hasOption(THCommandOptionType type) {
@@ -129,7 +150,9 @@ mixin THHasOptionsMixin on THElement {
   SplayTreeMap<String, THAttrCommandOption> get attrOptionsMap =>
       _attrOptionsMap;
 
-  void addAttrOptionsMap(Map<String, THAttrCommandOption> attrOptionsMap) {
+  void addUpdateAttrOptionsMap(
+    Map<String, THAttrCommandOption> attrOptionsMap,
+  ) {
     for (final String name in attrOptionsMap.keys) {
       addUpdateOption(attrOptionsMap[name]!);
     }

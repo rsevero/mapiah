@@ -512,7 +512,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final String newTHID = _thFile.getNewTHID(element: element, prefix: prefix);
 
-    THIDCommandOption(optionParent: element, thID: newTHID);
+    THIDCommandOption(parentMPID: element.mpID, thID: newTHID);
 
     registerElementWithTHID(element, newTHID);
   }
@@ -570,7 +570,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             sameLineComment: lastLineSegment.sameLineComment,
           );
       final THSmoothCommandOption smoothOn = THSmoothCommandOption(
-        optionParent: bezierCurveLineSegment,
+        parentMPID: bezierCurveLineSegment.mpID,
         choice: THOptionChoicesOnOffAutoType.on,
       );
 
@@ -891,21 +891,31 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void applySetAttrOptionToElement({
     required THAttrCommandOption attrOption,
-    String plaOriginalLineInTH2File = '',
+    required String plaOriginalLineInTH2File,
   }) {
     final int parentMPID = attrOption.parentMPID;
+
     if (parentMPID <= 0) {
       throw Exception(
         'Error: parentMPID is not valid at TH2FileEditElementEditController.applySetAttrOptionToElement().',
       );
     }
+
     final THHasOptionsMixin parentElement = _thFile.hasOptionByMPID(parentMPID);
 
-    _thFile.substituteElement(
-      parentElement.copyWith(originalLineInTH2File: plaOriginalLineInTH2File),
+    MPEditElementAux.addOptionToElement(
+      option: attrOption,
+      element: parentElement,
     );
 
-    attrOption.optionParent(_thFile).addUpdateOption(attrOption);
+    final THElement newElement =
+        parentElement.originalLineInTH2File == plaOriginalLineInTH2File
+        ? parentElement
+        : parentElement.copyWith(
+            originalLineInTH2File: plaOriginalLineInTH2File,
+          );
+
+    _thFile.substituteElement(newElement);
 
     updateOptionEdited(attrOptionEdited: true);
   }
@@ -914,14 +924,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applyRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
+    required String plaOriginalLineInTH2File,
   }) {
     final THHasOptionsMixin parentElement = _th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
 
     parentElement.removeAttrOption(attrName);
-    _thFile.substituteElement(
-      parentElement.copyWith(originalLineInTH2File: ''),
-    );
+
+    final THElement newElement =
+        parentElement.originalLineInTH2File == plaOriginalLineInTH2File
+        ? parentElement
+        : parentElement.copyWith(
+            originalLineInTH2File: plaOriginalLineInTH2File,
+          );
+
+    _thFile.substituteElement(newElement);
     updateOptionEdited(attrOptionEdited: false);
   }
 
@@ -1486,7 +1503,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           MPCommandOptionAux.isReverse(originalLine)
           ? null
           : THReverseCommandOption(
-              optionParent: originalLine,
+              parentMPID: originalLine.mpID,
               choice: THOptionChoicesOnOffType.on,
             );
       final MPCommand toggleCommand = (reverseOption == null)

@@ -11,7 +11,7 @@ class THIDCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THIDCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.thID,
     super.originalLineInTH2File = '',
   }) : super();

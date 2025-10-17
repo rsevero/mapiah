@@ -10,18 +10,17 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
   THAlignCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
   THAlignCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THAlignCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : choice = _setChoiceFromString(choice),
@@ -75,7 +74,6 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
     return THAlignCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: _setChoiceFromString(map['choice']),
     );
   }
@@ -88,14 +86,12 @@ class THAlignCommandOption extends THMultipleChoiceCommandOption {
   THAlignCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THElementType? parentElementType,
     THOptionChoicesAlignType? choice,
   }) {
     return THAlignCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
       choice: choice ?? this.choice,
     );
   }

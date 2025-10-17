@@ -24,7 +24,7 @@ class THArea extends THElement
     _unknownPLAType = unknownPLAType;
     this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
-    addAttrOptionsMap(attrOptionsMap);
+    addUpdateAttrOptionsMap(attrOptionsMap);
   }
 
   THArea({

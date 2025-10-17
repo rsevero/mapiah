@@ -12,18 +12,17 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
   THAdjustCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
   THAdjustCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THAdjustCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : choice = _setChoiceFromString(choice),
@@ -61,7 +60,6 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
     return THAdjustCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: _setChoiceFromString(map['choice']),
     );
   }
@@ -74,14 +72,12 @@ class THAdjustCommandOption extends THMultipleChoiceCommandOption {
   THAdjustCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THElementType? parentElementType,
     THOptionChoicesAdjustType? choice,
   }) {
     return THAdjustCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
       choice: choice ?? this.choice,
     );
   }

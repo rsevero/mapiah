@@ -50,7 +50,7 @@ class THScrap extends THElement
     _thID = thID;
     this.childrenMPIDs.addAll(childrenMPIDs);
     addOptionsMap(optionsMap);
-    addAttrOptionsMap(attrOptionsMap);
+    addUpdateAttrOptionsMap(attrOptionsMap);
   }
 
   THScrap({

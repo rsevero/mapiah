@@ -17,7 +17,7 @@ class THDistCommandOption extends THCommandOption with THHasLengthMixin {
   }
 
   THDistCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String distance,
     String? unit,
     super.originalLineInTH2File = '',

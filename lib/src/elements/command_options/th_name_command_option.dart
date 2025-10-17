@@ -12,7 +12,7 @@ class THNameCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THNameCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.reference,
     super.originalLineInTH2File = '',
   }) : super();

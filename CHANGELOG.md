@@ -8,6 +8,7 @@
   * Sometimes PLA options not presented in alphabetical order.
   * PLA original TH2File lost on setattr option undo/redo.
 * Infrastructure maintenance:
+  * THCommmandOption changed from having its parent to having only its parent MPID.
   * Added tests:
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;

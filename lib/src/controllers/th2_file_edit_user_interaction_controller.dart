@@ -276,7 +276,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           MPCommandFactory.setOptionOnElements(
             elements: elements,
             option: THCommandOption.byType(
-              optionParent: elements.first as THHasOptionsMixin,
+              /// This parentMPID will be replaced in the command factory.
+              parentMPID: _thFile.mpID,
               type: optionType,
               value: choice,
             ),

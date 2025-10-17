@@ -27,7 +27,7 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   THAltitudeCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required THDoublePart length,
     required bool isFix,
     bool isNan = false,
@@ -41,7 +41,7 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   THAltitudeCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String height,
     required bool isFix,
     bool isNan = false,
@@ -69,7 +69,7 @@ class THAltitudeCommandOption extends THCommandOption
   }
 
   THAltitudeCommandOption.fromNan({
-    required super.optionParent,
+    required super.parentMPID,
     super.originalLineInTH2File = '',
   }) : super() {
     length = THDoublePart.fromString(valueString: '0');

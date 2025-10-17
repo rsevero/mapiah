@@ -3,18 +3,21 @@ part of 'mp_command.dart';
 class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final int parentMPID;
   final String attrName;
+  final String plaOriginalTH2FileLine;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
 
   MPRemoveAttrOptionFromElementCommand.forCWJM({
-    required this.attrName,
     required this.parentMPID,
+    required this.attrName,
+    required this.plaOriginalTH2FileLine,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPRemoveAttrOptionFromElementCommand({
-    required this.attrName,
     required this.parentMPID,
+    required this.attrName,
+    required this.plaOriginalTH2FileLine,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -55,8 +58,9 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   }) {
     th2FileEditController.elementEditController
         .applyRemoveAttrOptionFromElement(
-          attrName: attrName,
           parentMPID: parentMPID,
+          attrName: attrName,
+          plaOriginalLineInTH2File: plaOriginalTH2FileLine,
         );
   }
 
@@ -79,13 +83,16 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
 
   @override
   MPRemoveAttrOptionFromElementCommand copyWith({
-    String? attrName,
     int? parentMPID,
+    String? attrName,
+    String? plaOriginalTH2FileLine,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveAttrOptionFromElementCommand.forCWJM(
-      attrName: attrName ?? this.attrName,
       parentMPID: parentMPID ?? this.parentMPID,
+      attrName: attrName ?? this.attrName,
+      plaOriginalTH2FileLine:
+          plaOriginalTH2FileLine ?? this.plaOriginalTH2FileLine,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -94,8 +101,9 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     Map<String, dynamic> map,
   ) {
     return MPRemoveAttrOptionFromElementCommand.forCWJM(
-      attrName: map['attrName'],
       parentMPID: map['parentMPID'],
+      attrName: map['attrName'],
+      plaOriginalTH2FileLine: map['plaOriginalTH2FileLine'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -110,7 +118,11 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'attrName': attrName, 'parentMPID': parentMPID});
+    map.addAll({
+      'parentMPID': parentMPID,
+      'attrName': attrName,
+      'plaOriginalTH2FileLine': plaOriginalTH2FileLine,
+    });
 
     return map;
   }
@@ -121,10 +133,12 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
     if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveAttrOptionFromElementCommand &&
+        other.parentMPID == parentMPID &&
         other.attrName == attrName &&
-        other.parentMPID == parentMPID;
+        other.plaOriginalTH2FileLine == plaOriginalTH2FileLine;
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, attrName, parentMPID);
+  int get hashCode =>
+      Object.hash(super.hashCode, parentMPID, attrName, plaOriginalTH2FileLine);
 }

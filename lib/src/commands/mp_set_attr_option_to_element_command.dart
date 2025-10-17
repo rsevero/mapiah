@@ -44,6 +44,7 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
         'alreadyHasAttrOption': false,
         'parentMPID': parentMPID,
         'attrName': attrName,
+        'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
       };
     } else {
       _undoRedoInfo = {
@@ -78,8 +79,10 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
             descriptionType: descriptionType,
           )
         : MPRemoveAttrOptionFromElementCommand(
-            attrName: _undoRedoInfo!['attrName'] as String,
             parentMPID: _undoRedoInfo!['parentMPID'] as int,
+            attrName: _undoRedoInfo!['attrName'] as String,
+            plaOriginalTH2FileLine:
+                _undoRedoInfo!['fromPLAOriginalLineInTH2File'] as String,
             descriptionType: descriptionType,
           );
 

@@ -10,7 +10,7 @@ class THUnrecognizedCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THUnrecognizedCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.value,
     super.originalLineInTH2File = '',
   }) : super();

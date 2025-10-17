@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:charset/charset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
@@ -604,9 +605,12 @@ class THFileParser {
       try {
         // Including subtype defined with type (type:subtype).
         if (element[2][1] != null) {
-          THSubtypeCommandOption(
-            optionParent: newPoint,
-            subtype: element[2][1],
+          MPEditElementAux.addOptionToElement(
+            option: THSubtypeCommandOption(
+              parentMPID: newPoint.mpID,
+              subtype: element[2][1],
+            ),
+            element: newPoint,
           );
         }
       } catch (e, s) {
@@ -854,7 +858,13 @@ class THFileParser {
       try {
         // Including subtype defined with type (type:subtype).
         if ((element[1][1] != null) && (element[1][0] == 'u')) {
-          THSubtypeCommandOption(optionParent: newArea, subtype: element[1][1]);
+          MPEditElementAux.addOptionToElement(
+            option: THSubtypeCommandOption(
+              parentMPID: newArea.mpID,
+              subtype: element[1][1],
+            ),
+            element: newArea,
+          );
         }
       } catch (e, s) {
         _addError(
@@ -899,7 +909,13 @@ class THFileParser {
       try {
         // Including subtype defined with type (type:subtype).
         if (element[1][1] != null) {
-          THSubtypeCommandOption(optionParent: newLine, subtype: element[1][1]);
+          MPEditElementAux.addOptionToElement(
+            option: THSubtypeCommandOption(
+              parentMPID: newLine.mpID,
+              subtype: element[1][1],
+            ),
+            element: newLine,
+          );
         }
       } catch (e, s) {
         _addError(
@@ -1289,16 +1305,22 @@ class THFileParser {
 
     switch (optionType) {
       case 'direction':
-        THLinePointDirectionCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THLinePointDirectionCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'gradient':
-        THLinePointGradientCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THLinePointGradientCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw UnimplementedError();
@@ -1329,106 +1351,157 @@ class THFileParser {
 
     switch (type) {
       case 'adjust':
-        THAdjustCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THAdjustCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'align':
-        THAlignCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THAlignCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'anchors':
-        THAnchorsCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THAnchorsCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'border':
-        THBorderCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THBorderCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'clip':
-        THClipCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THClipCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'close':
-        THCloseCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THCloseCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'direction':
-        THLineDirectionCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THLineDirectionCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'flip':
-        THFlipCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THFlipCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'gradient':
-        THLineGradientCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THLineGradientCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'head':
-        THHeadCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THHeadCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'outline':
-        THOutlineCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THOutlineCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'place':
-        THPlaceCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THPlaceCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'rebelays':
-        THRebelaysCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THRebelaysCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'reverse':
-        THReverseCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THReverseCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'smooth':
-        THSmoothCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THSmoothCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'visibility':
-        THVisibilityCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THVisibilityCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'walls':
-        THWallsCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          choice: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THWallsCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            choice: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw UnimplementedError();
@@ -1444,17 +1517,23 @@ class THFileParser {
 
     switch (_currentSpec.length) {
       case 1:
-        THDistCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          distance: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THDistCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            distance: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 2:
-        THDistCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          distance: _currentSpec[0],
-          unit: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THDistCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            distance: _currentSpec[0],
+            unit: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw THCustomException(
@@ -1472,17 +1551,23 @@ class THFileParser {
 
     switch (_currentSpec.length) {
       case 1:
-        THExploredCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          distance: _currentSpec[0],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THExploredCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            distance: _currentSpec[0],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 2:
-        THExploredCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          distance: _currentSpec[0],
-          unit: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THExploredCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            distance: _currentSpec[0],
+            unit: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw THCustomException(
@@ -1498,10 +1583,13 @@ class THFileParser {
       );
     }
 
-    THLineHeightCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      height: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THLineHeightCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        height: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1512,11 +1600,14 @@ class THFileParser {
       );
     }
 
-    THContextCommandOption(
-      optionParent: _currentHasOptions,
-      elementType: _currentSpec[0],
-      symbolType: _currentSpec[1],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THContextCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        elementType: _currentSpec[0],
+        symbolType: _currentSpec[1],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1527,10 +1618,13 @@ class THFileParser {
       );
     }
 
-    THFromCommandOption(
-      optionParent: _currentHasOptions,
-      station: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THFromCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        station: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1541,15 +1635,19 @@ class THFileParser {
       );
     }
 
-    if (_currentSpec[0] == null) {
-      THExtendCommandOption(optionParent: _currentHasOptions, station: '');
-    } else {
-      THExtendCommandOption(
-        optionParent: _currentHasOptions,
-        station: _currentSpec[0],
-        originalLineInTH2File: _currentOriginalLine,
-      );
-    }
+    MPEditElementAux.addOptionToElement(
+      option: _currentSpec[0] == null
+          ? THExtendCommandOption(
+              parentMPID: _currentHasOptions.mpID,
+              station: '',
+            )
+          : THExtendCommandOption(
+              parentMPID: _currentHasOptions.mpID,
+              station: _currentSpec[0],
+              originalLineInTH2File: _currentOriginalLine,
+            ),
+      element: _currentHasOptions,
+    );
   }
 
   void _injectIDCommandOption() {
@@ -1559,7 +1657,13 @@ class THFileParser {
       );
     }
 
-    THIDCommandOption(optionParent: _currentHasOptions, thID: _currentSpec[0]);
+    MPEditElementAux.addOptionToElement(
+      option: THIDCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        thID: _currentSpec[0],
+      ),
+      element: _currentHasOptions,
+    );
     _th2FileElementEditController.registerElementWithTHID(
       _currentHasOptions,
       _currentSpec[0],
@@ -1573,10 +1677,13 @@ class THFileParser {
       );
     }
 
-    THNameCommandOption(
-      optionParent: _currentHasOptions,
-      reference: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THNameCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        reference: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1596,11 +1703,14 @@ class THFileParser {
 
     final String filename = _parseTHString(_currentSpec[0]);
 
-    THSketchCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      filename: filename,
-      pointList: _currentSpec[1],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THSketchCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        filename: filename,
+        pointList: _currentSpec[1],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1612,11 +1722,14 @@ class THFileParser {
       );
     }
 
-    THStationNamesCommandOption(
-      optionParent: _currentHasOptions,
-      prefix: _currentSpec[0],
-      suffix: _currentSpec[1],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THStationNamesCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        prefix: _currentSpec[0],
+        suffix: _currentSpec[1],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1628,16 +1741,19 @@ class THFileParser {
       );
     }
 
-    final stations = _currentSpec[0].toString().split(',');
+    final List<String> stations = _currentSpec[0].toString().split(',');
 
     if (stations.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException('> 0', stations);
     }
 
-    THStationsCommandOption(
-      optionParent: _currentHasOptions,
-      stations: stations,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THStationsCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        stations: stations,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1650,10 +1766,13 @@ class THFileParser {
     }
 
     _optionParentAsTHLineSegment();
-    THLSizeCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      number: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THLSizeCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        number: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1666,10 +1785,13 @@ class THFileParser {
     }
 
     _optionParentAsTHLineSegment();
-    THMarkCommandOption(
-      optionParent: _currentHasOptions,
-      mark: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THMarkCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        mark: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1681,11 +1803,14 @@ class THFileParser {
       );
     }
 
-    THAuthorCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      datetime: _currentSpec[0],
-      person: _currentSpec[1],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THAuthorCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        datetime: _currentSpec[0],
+        person: _currentSpec[1],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1697,10 +1822,13 @@ class THFileParser {
       );
     }
 
-    THSubtypeCommandOption(
-      optionParent: _currentHasOptions,
-      subtype: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THSubtypeCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        subtype: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1714,16 +1842,22 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THPLScaleCommandOption.sizeAsNumberFromString(
-          optionParent: _currentHasOptions,
-          numericScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THPLScaleCommandOption.sizeAsNumberFromString(
+            parentMPID: _currentHasOptions.mpID,
+            numericScaleSize: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'multiplechoice':
-        THPLScaleCommandOption.sizeAsNamed(
-          optionParent: _currentHasOptions,
-          textScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THPLScaleCommandOption.sizeAsNamed(
+            parentMPID: _currentHasOptions.mpID,
+            textScaleSize: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw THCustomException(
@@ -1742,16 +1876,22 @@ class THFileParser {
 
     switch (_currentSpec[0]) {
       case 'numeric':
-        THPLScaleCommandOption.sizeAsNumberFromString(
-          optionParent: _currentHasOptions,
-          numericScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THPLScaleCommandOption.sizeAsNumberFromString(
+            parentMPID: _currentHasOptions.mpID,
+            numericScaleSize: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       case 'multiplechoice':
-        THPLScaleCommandOption.sizeAsNamed(
-          optionParent: _currentHasOptions,
-          textScaleSize: _currentSpec[1],
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THPLScaleCommandOption.sizeAsNamed(
+            parentMPID: _currentHasOptions.mpID,
+            textScaleSize: _currentSpec[1],
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
       default:
         throw THCustomException(
@@ -1767,10 +1907,13 @@ class THFileParser {
       );
     }
 
-    THScrapCommandOption(
-      optionParent: _currentHasOptions,
-      reference: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THScrapCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        reference: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1782,10 +1925,13 @@ class THFileParser {
       );
     }
 
-    THOrientationCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      azimuth: _currentSpec[0],
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THOrientationCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        azimuth: _currentSpec[0],
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1799,11 +1945,14 @@ class THFileParser {
 
     final String message = _parseTHString(_currentSpec[1]);
 
-    THCopyrightCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      datetime: _currentSpec[0],
-      copyrightMessage: message,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THCopyrightCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        datetime: _currentSpec[0],
+        copyrightMessage: message,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1812,11 +1961,14 @@ class THFileParser {
       throw THCreateObjectFromNullValueException('THCSCommandOption');
     }
 
-    THCSCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      csString: _currentSpec[0],
-      forOutputOnly: false,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THCSCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        csString: _currentSpec[0],
+        forOutputOnly: false,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1831,11 +1983,14 @@ class THFileParser {
     final String name = _parseTHString(_currentSpec[0]);
     final String value = _parseTHString(_currentSpec[1]);
 
-    THAttrCommandOption(
-      optionParent: _currentHasOptions,
-      attrName: name,
-      attrValue: value,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THAttrCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        attrName: name,
+        attrValue: value,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1849,10 +2004,13 @@ class THFileParser {
 
     final String stringContent = _parseTHString(_currentSpec[0]);
 
-    THTitleCommandOption(
-      optionParent: _currentHasOptions,
-      titleText: stringContent,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THTitleCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        titleText: stringContent,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1866,10 +2024,13 @@ class THFileParser {
 
     final String stringContent = _parseTHString(_currentSpec[0]);
 
-    THTextCommandOption(
-      optionParent: _currentHasOptions,
-      textContent: stringContent,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THTextCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        textContent: stringContent,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -1906,9 +2067,12 @@ class THFileParser {
 
     _optionParentAsTHLineSegment();
     if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
-      THAltitudeCommandOption.fromNan(
-        optionParent: _currentHasOptions,
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THAltitudeCommandOption.fromNan(
+          parentMPID: _currentHasOptions.mpID,
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else if (fixNumberLengthUnitRegex.hasMatch(specs)) {
       final bool isFix = specs.trim().toLowerCase().startsWith('fix');
@@ -1920,12 +2084,15 @@ class THFileParser {
       final RegExpMatch match = fixNumberLengthUnitRegex.firstMatch(specs)!;
       final String number = "${match.group(1)!}${match.group(2)!}";
 
-      THAltitudeCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        height: number,
-        isFix: isFix,
-        unit: match.group(3),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THAltitudeCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          height: number,
+          isFix: isFix,
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     }
   }
@@ -1934,9 +2101,12 @@ class THFileParser {
     String specs = _currentSpec[0].toString().trim();
 
     if (hyphenPointRegex.hasMatch(specs) || nanRegex.hasMatch(specs)) {
-      THAltitudeValueCommandOption.fromNan(
-        optionParent: _currentHasOptions,
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THAltitudeValueCommandOption.fromNan(
+          parentMPID: _currentHasOptions.mpID,
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else if (fixNumberLengthUnitRegex.hasMatch(specs)) {
       final bool isFix = specs.trim().toLowerCase().startsWith('fix');
@@ -1948,12 +2118,15 @@ class THFileParser {
       final RegExpMatch match = fixNumberLengthUnitRegex.firstMatch(specs)!;
       final String height = "${match.group(1)!}${match.group(2)!}";
 
-      THAltitudeValueCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        height: height,
-        isFix: isFix,
-        unit: match.group(3),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THAltitudeValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          height: height,
+          isFix: isFix,
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else {
       throw THCustomException(
@@ -1972,10 +2145,13 @@ class THFileParser {
 
     for (final RegExp regex in dateValueRegexes) {
       if (regex.hasMatch(specs)) {
-        THDateValueCommandOption.fromString(
-          optionParent: _currentHasOptions,
-          datetime: specs,
-          originalLineInTH2File: _currentOriginalLine,
+        MPEditElementAux.addOptionToElement(
+          option: THDateValueCommandOption.fromString(
+            parentMPID: _currentHasOptions.mpID,
+            datetime: specs,
+            originalLineInTH2File: _currentOriginalLine,
+          ),
+          element: _currentHasOptions,
         );
         return;
       }
@@ -1994,12 +2170,15 @@ class THFileParser {
         specs,
       )!;
 
-      THDimensionsValueCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        above: match.group(1)!,
-        below: match.group(2)!,
-        unit: match.group(3),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THDimensionsValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          above: match.group(1)!,
+          below: match.group(2)!,
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else {
       throw THCustomException(
@@ -2017,12 +2196,15 @@ class THFileParser {
       )!;
       final String number = "${match.group(1)!}${match.group(2)!}";
 
-      THPointHeightValueCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        height: number,
-        isPresumed: match.group(3) != null,
-        unit: match.group(4),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THPointHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          height: number,
+          isPresumed: match.group(3) != null,
+          unit: match.group(4),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else {
       throw THCustomException(
@@ -2040,22 +2222,28 @@ class THFileParser {
       )!;
       final String number = "${match.group(1)!}${match.group(2)!}";
 
-      THPassageHeightValueCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        plusNumber: number,
-        minusNumber: '',
-        unit: match.group(3),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THPassageHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          plusNumber: number,
+          minusNumber: '',
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else if (plusMinusNumbersWithOptionalUnitRegex.hasMatch(specs)) {
       final RegExpMatch match = plusMinusNumbersWithOptionalUnitRegex
           .firstMatch(specs)!;
-      THPassageHeightValueCommandOption.fromString(
-        optionParent: _currentHasOptions,
-        plusNumber: match.group(1)!,
-        minusNumber: match.group(2)!,
-        unit: match.group(3),
-        originalLineInTH2File: _currentOriginalLine,
+      MPEditElementAux.addOptionToElement(
+        option: THPassageHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          plusNumber: match.group(1)!,
+          minusNumber: match.group(2)!,
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
       );
     } else {
       throw THCustomException(
@@ -2113,11 +2301,14 @@ class THFileParser {
       }
     }
 
-    THScrapScaleCommandOption(
-      optionParent: _currentHasOptions,
-      numericSpecifications: values,
-      unitPart: unit,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THScrapScaleCommandOption(
+        parentMPID: _currentHasOptions.mpID,
+        numericSpecifications: values,
+        unitPart: unit,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 
@@ -2151,13 +2342,16 @@ class THFileParser {
         ? projectionExtraMap['angle_unit'] as String
         : null;
 
-    THProjectionCommandOption.fromString(
-      optionParent: _currentHasOptions,
-      projectionType: _currentSpec[0],
-      index: index,
-      elevationAngle: elevationAngle,
-      elevationUnit: elevationAngleUnit,
-      originalLineInTH2File: _currentOriginalLine,
+    MPEditElementAux.addOptionToElement(
+      option: THProjectionCommandOption.fromString(
+        parentMPID: _currentHasOptions.mpID,
+        projectionType: _currentSpec[0],
+        index: index,
+        elevationAngle: elevationAngle,
+        elevationUnit: elevationAngleUnit,
+        originalLineInTH2File: _currentOriginalLine,
+      ),
+      element: _currentHasOptions,
     );
   }
 

@@ -124,12 +124,7 @@ abstract class THCommandOption {
     required this.originalLineInTH2File,
   });
 
-  THCommandOption({
-    required THHasOptionsMixin optionParent,
-    this.originalLineInTH2File = '',
-  }) : parentMPID = optionParent.mpID {
-    optionParent.addUpdateOption(this);
-  }
+  THCommandOption({required this.parentMPID, this.originalLineInTH2File = ''});
 
   THCommandOptionType get type;
 
@@ -268,18 +263,18 @@ abstract class THCommandOption {
 
   factory THCommandOption.byType({
     required THCommandOptionType type,
-    required THHasOptionsMixin optionParent,
+    required int parentMPID,
     dynamic value,
   }) {
     switch (type) {
       case THCommandOptionType.adjust:
         return THAdjustCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.align:
         return THAlignCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.altitude:
@@ -288,7 +283,7 @@ abstract class THCommandOption {
       // return THAltitudeValueCommandOption(value);
       case THCommandOptionType.anchors:
         return THAnchorsCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.attr:
@@ -297,17 +292,17 @@ abstract class THCommandOption {
       // return THAuthorCommandOption(value);
       case THCommandOptionType.border:
         return THBorderCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.clip:
         return THClipCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.close:
         return THCloseCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.context:
@@ -328,38 +323,38 @@ abstract class THCommandOption {
       // return THExtendCommandOption(value);
       case THCommandOptionType.flip:
         return THFlipCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.from:
       // return THFromCommandOption(value);
       case THCommandOptionType.head:
         return THHeadCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.id:
       // return THIDCommandOption(value);
       case THCommandOptionType.lineDirection:
         return THLineDirectionCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.lineGradient:
         return THLineGradientCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.lineHeight:
       // return THLineHeightCommandOption(value);
       case THCommandOptionType.linePointDirection:
         return THLinePointDirectionCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.linePointGradient:
         return THLinePointGradientCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.plScale:
@@ -374,14 +369,14 @@ abstract class THCommandOption {
       // return THOrientationCommandOption(value);
       case THCommandOptionType.outline:
         return THOutlineCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.passageHeightValue:
       // return THPassageHeightValueCommandOption(value);
       case THCommandOptionType.place:
         return THPlaceCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.pointHeightValue:
@@ -390,12 +385,12 @@ abstract class THCommandOption {
       // return THProjectionCommandOption(value);
       case THCommandOptionType.rebelays:
         return THRebelaysCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.reverse:
         return THReverseCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.scrap:
@@ -406,7 +401,7 @@ abstract class THCommandOption {
       // return THSketchCommandOption(value);
       case THCommandOptionType.smooth:
         return THSmoothCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.stationNames:
@@ -423,7 +418,7 @@ abstract class THCommandOption {
       // return THUnrecognizedCommandOption(value);
       case THCommandOptionType.visibility:
         return THVisibilityCommandOption.fromString(
-          optionParent: optionParent,
+          parentMPID: parentMPID,
           choice: value,
         );
       case THCommandOptionType.walls:

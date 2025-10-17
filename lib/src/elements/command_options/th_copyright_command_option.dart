@@ -14,7 +14,7 @@ class THCopyrightCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THCopyrightCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.datetime,
     required String copyrightMessage,
     super.originalLineInTH2File = '',
@@ -22,7 +22,7 @@ class THCopyrightCommandOption extends THCommandOption {
        super();
 
   THCopyrightCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String datetime,
     required String copyrightMessage,
     super.originalLineInTH2File = '',

@@ -15,7 +15,7 @@ class THAttrCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THAttrCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required String attrName,
     required String attrValue,
     super.originalLineInTH2File = '',

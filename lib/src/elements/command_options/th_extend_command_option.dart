@@ -13,7 +13,7 @@ class THExtendCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THExtendCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.station,
     super.originalLineInTH2File = '',
   }) : super();

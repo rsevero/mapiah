@@ -14,7 +14,7 @@ class THCSCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THCSCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String csString,
     required bool forOutputOnly,
     super.originalLineInTH2File = '',

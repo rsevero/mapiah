@@ -12,7 +12,7 @@ class THOrientationCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THOrientationCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String azimuth,
     super.originalLineInTH2File = '',
   }) : super() {

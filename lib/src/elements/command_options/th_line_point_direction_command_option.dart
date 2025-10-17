@@ -11,18 +11,17 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   THLinePointDirectionCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required this.choice,
   }) : super.forCWJM();
 
   THLinePointDirectionCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THLinePointDirectionCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : choice = THOptionChoicesLinePointDirectionType.values.byName(choice),
@@ -54,7 +53,6 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
     return THLinePointDirectionCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesLinePointDirectionType.values.byName(
         map['choice'],
       ),
@@ -69,14 +67,12 @@ class THLinePointDirectionCommandOption extends THMultipleChoiceCommandOption {
   THLinePointDirectionCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THElementType? parentElementType,
     THOptionChoicesLinePointDirectionType? choice,
   }) {
     return THLinePointDirectionCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
       choice: choice ?? this.choice,
     );
   }

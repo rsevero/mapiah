@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -253,6 +254,18 @@ class MPEditElementAux {
   static String getFilenameFromPath(String path) {
     // Handles both '/' and '\' as separators
     return path.split(RegExp(r'[\\/]+')).last;
+  }
+
+  static void addOptionToElement({
+    required THCommandOption option,
+    required THHasOptionsMixin element,
+    THFile? thFile,
+  }) {
+    final bool elementUpdated = element.addUpdateOption(option);
+
+    if (elementUpdated && (thFile != null)) {
+      thFile.substituteElement(element);
+    }
   }
 }
 

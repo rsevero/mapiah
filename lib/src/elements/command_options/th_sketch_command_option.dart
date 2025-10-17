@@ -16,7 +16,7 @@ class THSketchCommandOption extends THCommandOption {
   }
 
   THSketchCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String filename,
     required List<dynamic> pointList,
     super.originalLineInTH2File = '',

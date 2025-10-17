@@ -11,7 +11,7 @@ class THDateValueCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THDateValueCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String datetime,
     super.originalLineInTH2File = '',
   }) : super() {

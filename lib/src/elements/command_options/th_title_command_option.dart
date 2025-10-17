@@ -11,7 +11,7 @@ class THTitleCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THTitleCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required String titleText,
     super.originalLineInTH2File = '',
   }) : title = THStringPart(content: titleText),

@@ -19,7 +19,7 @@ class THDimensionsValueCommandOption extends THCommandOption {
        super.forCWJM();
 
   THDimensionsValueCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String above,
     required String below,
     String? unit,

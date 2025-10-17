@@ -12,7 +12,7 @@ class THScrapCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THScrapCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.reference,
     super.originalLineInTH2File = '',
   }) : super();

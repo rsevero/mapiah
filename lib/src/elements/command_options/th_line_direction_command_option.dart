@@ -8,18 +8,17 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
   THLineDirectionCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required super.parentElementType,
     required super.choice,
   }) : super.forCWJM();
 
   THLineDirectionCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required super.choice,
     super.originalLineInTH2File = '',
   }) : super();
 
   THLineDirectionCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String choice,
     super.originalLineInTH2File = '',
   }) : super(choice: THOptionChoicesArrowPositionType.values.byName(choice));
@@ -36,7 +35,6 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
     return THLineDirectionCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      parentElementType: THElementType.values.byName(map['parentElementType']),
       choice: THOptionChoicesArrowPositionType.values.byName(map['choice']),
     );
   }
@@ -49,14 +47,12 @@ class THLineDirectionCommandOption extends THArrowPositionCommandOption {
   THLineDirectionCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    THElementType? parentElementType,
     THOptionChoicesArrowPositionType? choice,
   }) {
     return THLineDirectionCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      parentElementType: parentElementType ?? this.parentElementType,
       choice: choice ?? this.choice,
     );
   }

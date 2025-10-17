@@ -30,7 +30,7 @@ class THSubtypeCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THSubtypeCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.subtype,
     super.originalLineInTH2File = '',
   }) : super();

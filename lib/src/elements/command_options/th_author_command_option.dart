@@ -13,14 +13,14 @@ class THAuthorCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THAuthorCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.datetime,
     required this.person,
     super.originalLineInTH2File = '',
   }) : super();
 
   THAuthorCommandOption.fromString({
-    required super.optionParent,
+    required super.parentMPID,
     required String datetime,
     required String person,
     super.originalLineInTH2File = '',

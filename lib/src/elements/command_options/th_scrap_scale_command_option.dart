@@ -27,7 +27,7 @@ class THScrapScaleCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   THScrapScaleCommandOption({
-    required super.optionParent,
+    required super.parentMPID,
     required this.numericSpecifications,
     required this.unitPart,
     super.originalLineInTH2File = '',
