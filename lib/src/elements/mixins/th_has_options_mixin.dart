@@ -41,7 +41,7 @@ mixin THHasOptionsMixin on THElement {
         : _optionsMap.containsKey(type);
   }
 
-  THCommandOption? optionByType(THCommandOptionType type) {
+  THCommandOption? getOption(THCommandOptionType type) {
     return (type == THCommandOptionType.attr) ? null : _optionsMap[type];
   }
 
@@ -92,7 +92,7 @@ mixin THHasOptionsMixin on THElement {
         continue;
       }
 
-      final THCommandOption option = optionByType(type)!;
+      final THCommandOption option = getOption(type)!;
       final String typeToFile = option.typeToFile();
       final String spec = option.specToFile();
 

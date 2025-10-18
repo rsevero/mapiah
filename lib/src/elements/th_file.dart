@@ -363,7 +363,7 @@ class THFile
     } else if (hasOption(element, THCommandOptionType.id)) {
       registerElementWithTHID(
         element,
-        ((element as THHasOptionsMixin).optionByType(THCommandOptionType.id)!
+        ((element as THHasOptionsMixin).getOption(THCommandOptionType.id)!
                 as THIDCommandOption)
             .thID,
       );

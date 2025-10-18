@@ -244,7 +244,7 @@ class THArea extends THElement
     }
 
     final String lineTHID =
-        (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+        (line.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
 
     return areaBorderByLineTHID(lineTHID, thFile);
   }

@@ -3,16 +3,14 @@ part of 'mp_command.dart';
 class MPRemoveOptionFromElementCommand extends MPCommand {
   final int parentMPID;
   final THCommandOptionType optionType;
-  final String newOriginalLineInTH2File;
-  final String currentOriginalLineInTH2File;
+  final String plaOriginalLineInTH2File;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
 
   MPRemoveOptionFromElementCommand.forCWJM({
     required this.optionType,
     required this.parentMPID,
-    required this.newOriginalLineInTH2File,
-    required this.currentOriginalLineInTH2File,
+    required this.plaOriginalLineInTH2File,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -20,8 +18,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     required this.optionType,
     required this.parentMPID,
     super.descriptionType = _defaultDescriptionType,
-    this.currentOriginalLineInTH2File = '',
-    this.newOriginalLineInTH2File = '',
+    this.plaOriginalLineInTH2File = '',
   }) : super();
 
   @override
@@ -39,9 +36,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     th2FileEditController.elementEditController.applyRemoveOptionFromElement(
       optionType: optionType,
       parentMPID: parentMPID,
-      newOriginalLineInTH2File: keepOriginalLineTH2File
-          ? currentOriginalLineInTH2File
-          : newOriginalLineInTH2File,
+      newOriginalLineInTH2File: plaOriginalLineInTH2File,
     );
   }
 
@@ -52,7 +47,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     final THHasOptionsMixin parentElement = th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
 
-    final THCommandOption? option = parentElement.optionByType(optionType);
+    final THCommandOption? option = parentElement.getOption(optionType);
 
     if (option == null) {
       throw StateError(
@@ -61,9 +56,8 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     }
 
     final MPCommand oppositeCommand = MPSetOptionToElementCommand.forCWJM(
-      option: option,
-      newOriginalLineInTH2File: currentOriginalLineInTH2File,
-      currentOriginalLineInTH2File: newOriginalLineInTH2File,
+      toOption: option,
+      toPLAOriginalLineInTH2File: plaOriginalLineInTH2File,
       descriptionType: descriptionType,
     );
 
@@ -77,17 +71,14 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   MPRemoveOptionFromElementCommand copyWith({
     THCommandOptionType? optionType,
     int? parentMPID,
-    String? fromOriginalLineInTH2File,
-    String? currentOriginalLineInTH2File,
+    String? plaOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveOptionFromElementCommand.forCWJM(
       optionType: optionType ?? this.optionType,
       parentMPID: parentMPID ?? this.parentMPID,
-      newOriginalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.newOriginalLineInTH2File,
-      currentOriginalLineInTH2File:
-          currentOriginalLineInTH2File ?? this.currentOriginalLineInTH2File,
+      plaOriginalLineInTH2File:
+          plaOriginalLineInTH2File ?? this.plaOriginalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -96,8 +87,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     return MPRemoveOptionFromElementCommand.forCWJM(
       optionType: THCommandOptionType.values.byName(map['optionType']),
       parentMPID: map['parentMPID'],
-      newOriginalLineInTH2File: map['newOriginalLineInTH2File'],
-      currentOriginalLineInTH2File: map['currentOriginalLineInTH2File'],
+      plaOriginalLineInTH2File: map['plaOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -115,8 +105,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     map.addAll({
       'optionType': optionType.name,
       'parentMPID': parentMPID,
-      'newOriginalLineInTH2File': newOriginalLineInTH2File,
-      'currentOriginalLineInTH2File': currentOriginalLineInTH2File,
+      'plaOriginalLineInTH2File': plaOriginalLineInTH2File,
     });
 
     return map;
@@ -130,8 +119,7 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     return other is MPRemoveOptionFromElementCommand &&
         other.optionType == optionType &&
         other.parentMPID == parentMPID &&
-        other.newOriginalLineInTH2File == newOriginalLineInTH2File &&
-        other.currentOriginalLineInTH2File == currentOriginalLineInTH2File;
+        other.plaOriginalLineInTH2File == plaOriginalLineInTH2File;
   }
 
   @override
@@ -139,7 +127,6 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
     super.hashCode,
     optionType,
     parentMPID,
-    newOriginalLineInTH2File,
-    currentOriginalLineInTH2File,
+    plaOriginalLineInTH2File,
   );
 }

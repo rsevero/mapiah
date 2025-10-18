@@ -130,14 +130,14 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
               case MPOptionStateType.unset:
                 if (isFirst) {
                   optionStateType = MPOptionStateType.set;
-                  option = selectedElement.optionByType(optionType)!;
+                  option = selectedElement.getOption(optionType)!;
                   optionValue = option.specToFile();
                 } else {
                   optionStateType = MPOptionStateType.setMixed;
                 }
               case MPOptionStateType.set:
                 final String newOptionValue = selectedElement
-                    .optionByType(optionType)!
+                    .getOption(optionType)!
                     .specToFile();
 
                 if (optionValue != newOptionValue) {

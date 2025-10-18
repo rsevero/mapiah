@@ -303,7 +303,7 @@ abstract class TH2FileEditControllerBase with Store {
     if (scrapHasScaleOption) {
       final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
-      return (scrap.optionByType(THCommandOptionType.scrapScale)
+      return (scrap.getOption(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
           .unitPart
           .unit;
@@ -317,7 +317,7 @@ abstract class TH2FileEditControllerBase with Store {
     if (scrapHasScaleOption) {
       final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
 
-      return (scrap.optionByType(THCommandOptionType.scrapScale)
+      return (scrap.getOption(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
           .lengthUnitsPerPoint;
     } else {

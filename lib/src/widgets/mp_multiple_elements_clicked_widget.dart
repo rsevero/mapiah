@@ -56,7 +56,7 @@ class _MPMultipleElementsClickedWidgetState
 
   String getLineName(THLine line) {
     final String lineName = (line.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementLine} ${line.plaType} ${(line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+        ? "${appLocalizations.thElementLine} ${line.plaType} ${(line.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
         : "${appLocalizations.thElementLine} ${line.plaType}";
 
     return lineName;
@@ -64,7 +64,7 @@ class _MPMultipleElementsClickedWidgetState
 
   String getAreaName(THArea area) {
     final String areaName = (area.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementArea} ${area.plaType} ${(area.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+        ? "${appLocalizations.thElementArea} ${area.plaType} ${(area.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
         : "${appLocalizations.thElementArea} ${area.plaType}";
 
     return areaName;
@@ -85,7 +85,7 @@ class _MPMultipleElementsClickedWidgetState
       switch (element) {
         case THPoint _:
           final String pointName = (element.hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementPoint} ${element.plaType} ${(element.optionByType(THCommandOptionType.id) as THIDCommandOption).thID}"
+              ? "${appLocalizations.thElementPoint} ${element.plaType} ${(element.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
               : "${appLocalizations.thElementPoint} ${element.plaType}";
           options[element.mpID] = pointName;
         case THBezierCurveLineSegment _:

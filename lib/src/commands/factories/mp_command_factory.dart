@@ -31,14 +31,13 @@ class MPCommandFactory {
 
     if (line.hasOption(THCommandOptionType.id)) {
       lineTHID =
-          (line.optionByType(THCommandOptionType.id) as THIDCommandOption).thID;
+          (line.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
     } else {
       final String areaTHID;
 
       if (area.hasOption(THCommandOptionType.id)) {
         areaTHID =
-            (area.optionByType(THCommandOptionType.id) as THIDCommandOption)
-                .thID;
+            (area.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
       } else {
         final String newAreaTHID = thFile.getNewTHID(
           element: area,
@@ -50,8 +49,7 @@ class MPCommandFactory {
           originalLineInTH2File: '',
         );
         final MPCommand addAreaTHIDCommand = MPSetOptionToElementCommand(
-          option: areaTHIDOption,
-          currentOriginalLineInTH2File: area.originalLineInTH2File,
+          toOption: areaTHIDOption,
         );
 
         commands.add(addAreaTHIDCommand);
@@ -69,8 +67,7 @@ class MPCommandFactory {
         originalLineInTH2File: '',
       );
       final MPCommand addLineTHIDCommand = MPSetOptionToElementCommand(
-        option: lineTHIDOption,
-        currentOriginalLineInTH2File: line.originalLineInTH2File,
+        toOption: lineTHIDOption,
       );
 
       commands.add(addLineTHIDCommand);
@@ -257,7 +254,7 @@ class MPCommandFactory {
   }
 
   static MPCommand setOptionOnElements({
-    required THCommandOption option,
+    required THCommandOption toOption,
     required List<THElement> elements,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
@@ -272,13 +269,11 @@ class MPCommandFactory {
         );
       }
 
+      final int parentMPID = element.mpID;
       final MPSetOptionToElementCommand setOptionToElementCommand =
           MPSetOptionToElementCommand(
-            option: option.copyWith(parentMPID: element.mpID),
+            toOption: toOption.copyWith(parentMPID: parentMPID),
             descriptionType: descriptionType,
-            currentOriginalLineInTH2File: thFile
-                .elementByMPID(element.mpID)
-                .originalLineInTH2File,
           );
 
       commandsList.add(setOptionToElementCommand);
@@ -308,9 +303,6 @@ class MPCommandFactory {
           MPRemoveOptionFromElementCommand(
             optionType: optionType,
             parentMPID: parentMPID,
-            currentOriginalLineInTH2File: thFile
-                .elementByMPID(parentMPID)
-                .originalLineInTH2File,
             descriptionType: descriptionType,
           );
 

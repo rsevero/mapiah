@@ -1513,7 +1513,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               descriptionType: MPCommandDescriptionType.toggleReverseOption,
             )
           : MPSetOptionToElementCommand(
-              option: reverseOption,
+              toOption: reverseOption,
               descriptionType: MPCommandDescriptionType.toggleReverseOption,
             );
 

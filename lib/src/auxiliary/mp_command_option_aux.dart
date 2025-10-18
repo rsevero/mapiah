@@ -217,8 +217,7 @@ class MPCommandOptionAux {
   static bool isSmooth(THElement element) {
     return (element is THHasOptionsMixin) &&
         element.hasOption(THCommandOptionType.smooth) &&
-        (element.optionByType(THCommandOptionType.smooth)
-                    as THSmoothCommandOption)
+        (element.getOption(THCommandOptionType.smooth) as THSmoothCommandOption)
                 .choice ==
             THOptionChoicesOnOffAutoType.on;
   }
@@ -226,7 +225,7 @@ class MPCommandOptionAux {
   static bool isReverse(THElement element) {
     return (element is THHasOptionsMixin) &&
         element.hasOption(THCommandOptionType.reverse) &&
-        (element.optionByType(THCommandOptionType.reverse)
+        (element.getOption(THCommandOptionType.reverse)
                     as THReverseCommandOption)
                 .choice ==
             THOptionChoicesOnOffType.on;
@@ -235,7 +234,7 @@ class MPCommandOptionAux {
   static String? getSubtype(THElement element) {
     return (element is THHasOptionsMixin) &&
             element.hasOption(THCommandOptionType.subtype)
-        ? (element.optionByType(THCommandOptionType.subtype)
+        ? (element.getOption(THCommandOptionType.subtype)
                   as THSubtypeCommandOption)
               .subtype
         : null;

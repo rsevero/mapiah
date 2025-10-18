@@ -121,8 +121,7 @@ endscrap
           final THPoint point = file.pointByMPID(3);
 
           expect(
-            (point.optionByType(THCommandOptionType.text)
-                    as THTextCommandOption)
+            (point.getOption(THCommandOptionType.text) as THTextCommandOption)
                 .text
                 .content,
             success['quoted_content'],

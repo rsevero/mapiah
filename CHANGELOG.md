@@ -12,12 +12,15 @@
   * Added tests:
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
-    * MPSetAttrOptionFromElementCommand.
+    * MPSetAttrOptionFromElementCommand;
+    * MPSetOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand;
     * MPRemoveAreaCommand;
-    * MPRemoveAttrOptionFromElementCommand.
+    * MPRemoveAttrOptionFromElementCommand;
+    * MPSetAttrOptionFromElementCommand;
+    * MPSetOptionFromElementCommand.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:

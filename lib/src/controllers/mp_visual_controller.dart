@@ -1100,7 +1100,7 @@ abstract class MPVisualControllerBase with Store {
       pointPaint = pointTypePaints[pointType]!;
     } else {
       final String pointSubtype = point.hasOption(THCommandOptionType.subtype)
-          ? (point.optionByType(THCommandOptionType.subtype)
+          ? (point.getOption(THCommandOptionType.subtype)
                     as THSubtypeCommandOption)
                 .subtype
           : mpNoSubtypeID;
@@ -1145,7 +1145,7 @@ abstract class MPVisualControllerBase with Store {
       linePaint = lineTypePaints[lineType]!;
     } else {
       final String lineSubtype = line.hasOption(THCommandOptionType.subtype)
-          ? (line.optionByType(THCommandOptionType.subtype)
+          ? (line.getOption(THCommandOptionType.subtype)
                     as THSubtypeCommandOption)
                 .subtype
           : mpNoSubtypeID;

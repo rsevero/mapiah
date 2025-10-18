@@ -273,7 +273,7 @@ class THFileWriter {
 
       if (thArea.hasOption(THCommandOptionType.subtype)) {
         newLine +=
-            ":${thArea.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+            ":${thArea.getOption(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thArea.optionsAsString()}";
       newLine = newLine.trim();
@@ -297,7 +297,7 @@ class THFileWriter {
 
       if (thLine.hasOption(THCommandOptionType.subtype)) {
         newLine +=
-            ":${thLine.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+            ":${thLine.getOption(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thLine.optionsAsString()}";
       newLine = newLine.trim();
@@ -322,7 +322,7 @@ class THFileWriter {
 
       if (thPoint.hasOption(THCommandOptionType.subtype)) {
         newLine +=
-            ":${thPoint.optionByType(THCommandOptionType.subtype)!.specToFile()}";
+            ":${thPoint.getOption(THCommandOptionType.subtype)!.specToFile()}";
       }
       newLine += " ${thPoint.optionsAsString()}";
       newLine = newLine.trim();
@@ -492,7 +492,7 @@ class THFileWriter {
     _increasePrefix();
 
     for (THCommandOptionType linePointOptionType in optionTypeList) {
-      final THCommandOption option = thHasOptions.optionByType(
+      final THCommandOption option = thHasOptions.getOption(
         linePointOptionType,
       )!;
 
