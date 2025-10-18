@@ -12,6 +12,7 @@
   * Added tests:
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
+    * MPRemoveOptionFromElementCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
@@ -19,6 +20,7 @@
     * MPMoveLineCommand;
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
+    * MPRemoveOptionFromElementCommand
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
 

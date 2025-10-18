@@ -4,7 +4,6 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -23,7 +22,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPSetOptionFromElementCommand', () {
+  group('command: MPRemoveOptionFromElementCommand', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -46,7 +45,7 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  line contour -id blaus -visibility off
+  line contour
     2736.2 -808.5
     2894.3 -202.7
     2264.5 -205.7
@@ -85,18 +84,15 @@ endscrap
               controller.thFile.toMap(),
             );
 
-            /// Execution: taken from TH2FileEditUserInteractionController.prepareSetOption()
+            /// Execution: taken from TH2FileEditUserInteractionController.prepareUnsetsOption()
 
-            final THLine line = parsedFile.getLines().first;
-            final THCommandOption option = THVisibilityCommandOption(
-              parentMPID: line.mpID,
-              choice: THOptionChoicesOnOffType.off,
-            );
-            final MPCommand setCommand = MPCommandFactory.setOptionOnElements(
-              toOption: option,
-              elements: [line],
-              thFile: parsedFile,
-            );
+            final int lineMPID = parsedFile.linesMPIDs.first;
+            final MPCommand setCommand =
+                MPCommandFactory.removeOptionFromElements(
+                  optionType: THCommandOptionType.id,
+                  parentMPIDs: [lineMPID],
+                  thFile: parsedFile,
+                );
 
             controller.execute(setCommand);
 

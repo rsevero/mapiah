@@ -29,6 +29,26 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THHasOptionsMixin parentElement = th2FileEditController.thFile
+        .hasOptionByMPID(parentMPID);
+    final THCommandOption? fromOption = parentElement.getOption(optionType);
+
+    if (fromOption == null) {
+      throw StateError(
+        'Parent element does not have option of type $optionType',
+      );
+    }
+    _undoRedoInfo = {
+      'fromOption': fromOption,
+      'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
+    };
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -44,20 +64,10 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THHasOptionsMixin parentElement = th2FileEditController.thFile
-        .hasOptionByMPID(parentMPID);
-
-    final THCommandOption? option = parentElement.getOption(optionType);
-
-    if (option == null) {
-      throw StateError(
-        'Parent element does not have option of type $optionType',
-      );
-    }
-
     final MPCommand oppositeCommand = MPSetOptionToElementCommand.forCWJM(
-      toOption: option,
-      toPLAOriginalLineInTH2File: plaOriginalLineInTH2File,
+      toOption: _undoRedoInfo!['fromOption'],
+      toPLAOriginalLineInTH2File:
+          _undoRedoInfo!['fromPLAOriginalLineInTH2File'],
       descriptionType: descriptionType,
     );
 
