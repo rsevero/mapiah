@@ -26,6 +26,47 @@ class MPRemoveLineCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool hasNewExecuteMethod = true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THLine originalLine = thFile.lineByMPID(lineMPID);
+    final THIsParentMixin parent = thFile.parentByMPID(originalLine.parentMPID);
+    final int linePositionInParent = parent.getChildPosition(originalLine);
+    final List<THElement> lineChildren = originalLine
+        .getChildren(thFile)
+        .toList();
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+    MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
+
+    if (areaMPID != null) {
+      final THArea area = thFile.areaByMPID(areaMPID);
+      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
+        lineMPID,
+        thFile,
+      );
+
+      if (areaTHID != null) {
+        addAreaTHIDCommand = MPAddAreaBorderTHIDCommand.fromExisting(
+          existingAreaBorderTHID: areaTHID,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
+      }
+    }
+
+    _undoRedoInfo = {
+      'originalLine': originalLine,
+      'linePositionInParent': linePositionInParent,
+      'lineStartScreenPosition':
+          th2FileEditController.elementEditController.lineStartScreenPosition,
+      'lineChildren': lineChildren,
+      'addAreaTHIDCommand': addAreaTHIDCommand,
+    };
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -60,13 +101,14 @@ class MPRemoveLineCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THLine originalLine = thFile.lineByMPID(lineMPID);
-    final MPCommand oppositeCommand = MPAddLineCommand.fromExisting(
-      existingLine: originalLine,
+    final MPCommand oppositeCommand = MPAddLineCommand(
+      newLine: _undoRedoInfo!['originalLine'] as THLine,
+      linePositionInParent: _undoRedoInfo!['linePositionInParent'] as int,
       lineStartScreenPosition:
-          th2FileEditController.elementEditController.lineStartScreenPosition,
-      thFile: thFile,
+          _undoRedoInfo!['lineStartScreenPosition'] as Offset?,
+      lineChildren: _undoRedoInfo!['lineChildren'] as List<THElement>,
+      addAreaTHIDCommand:
+          _undoRedoInfo!['addAreaTHIDCommand'] as MPAddAreaBorderTHIDCommand?,
       descriptionType: descriptionType,
     );
 

@@ -22,6 +22,7 @@
     * MPMoveLineCommand;
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
+    * MPRemoveLineCommand;
     * MPRemoveOptionFromElementCommand
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
