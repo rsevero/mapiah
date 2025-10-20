@@ -998,9 +998,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         (lineSegmentIndex == lineSegments.length - 1)) {
       return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
     } else {
-      final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool deletedLineSegmentIsStraight =
           lineSegment is THStraightLineSegment;
+      final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool nextLineSegmentIsStraight =
           nextLineSegment is THStraightLineSegment;
 
