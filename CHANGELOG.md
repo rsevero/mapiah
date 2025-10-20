@@ -12,6 +12,7 @@
   * Added tests:
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
+    * MPRemoveLineCommand;
     * MPRemoveOptionFromElementCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
