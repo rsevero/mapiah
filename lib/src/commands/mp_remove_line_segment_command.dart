@@ -23,6 +23,22 @@ class MPRemoveLineSegmentCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool hasNewExecuteMethod = true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final MPCommand addLineSegmentCommand =
+        MPAddLineSegmentCommand.fromExisting(
+          existingLineSegment: lineSegment,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
+
+    _undoRedoInfo = {'addLineSegmentCommand': addLineSegmentCommand};
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -37,12 +53,8 @@ class MPRemoveLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final MPCommand oppositeCommand = MPAddLineSegmentCommand.fromExisting(
-      existingLineSegment: lineSegment,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
+    final MPCommand oppositeCommand =
+        _undoRedoInfo!['addLineSegmentCommand'] as MPCommand;
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
