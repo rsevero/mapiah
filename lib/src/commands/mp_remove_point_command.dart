@@ -23,6 +23,22 @@ class MPRemovePointCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THPoint originalPoint = thFile.pointByMPID(pointMPID);
+    final MPCommand addPointCommand = MPAddPointCommand.fromExisting(
+      existingPoint: originalPoint,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    _undoRedoInfo = {'addPointCommand': addPointCommand};
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -36,12 +52,8 @@ class MPRemovePointCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final MPCommand oppositeCommand = MPAddPointCommand.fromExisting(
-      existingPoint: thFile.pointByMPID(pointMPID),
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
+    final MPCommand oppositeCommand =
+        _undoRedoInfo!['addPointCommand'] as MPCommand;
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
