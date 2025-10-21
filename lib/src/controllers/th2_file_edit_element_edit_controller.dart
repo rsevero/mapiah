@@ -1239,12 +1239,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void removeScrap(int scrapID) {
+  void removeScrap(int scrapMPID) {
     final MPRemoveScrapCommand removeScrapCommand = MPRemoveScrapCommand(
-      scrapMPID: scrapID,
+      scrapMPID: scrapMPID,
     );
 
-    _th2FileEditController.setActiveScrapForScrapRemoval(scrapID);
+    _th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
     _th2FileEditController.execute(removeScrapCommand);
   }
 
