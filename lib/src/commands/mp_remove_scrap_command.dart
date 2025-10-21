@@ -28,6 +28,22 @@ class MPRemoveScrapCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
+    final MPCommand addScrapCommand = MPAddScrapCommand.fromExisting(
+      existingScrap: originalScrap,
+      th2FileEditController: th2FileEditController,
+      descriptionType: descriptionType,
+    );
+
+    _undoRedoInfo = {'addScrapCommand': addScrapCommand};
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -43,14 +59,8 @@ class MPRemoveScrapCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
-
-    final MPCommand oppositeCommand = MPAddScrapCommand.fromExisting(
-      existingScrap: originalScrap,
-      th2FileEditController: th2FileEditController,
-      descriptionType: descriptionType,
-    );
+    final MPCommand oppositeCommand =
+        _undoRedoInfo!['addScrapCommand'] as MPCommand;
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
