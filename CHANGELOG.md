@@ -15,6 +15,7 @@
     * MPRemoveLineCommand;
     * MPRemoveLineSegmentCommand;
     * MPRemoveOptionFromElementCommand;
+    * MPRemovePointCommand:
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
