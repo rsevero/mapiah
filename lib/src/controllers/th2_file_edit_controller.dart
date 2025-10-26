@@ -230,8 +230,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   bool get showEditLineSegment => _isEditLineMode;
 
-  @readonly
-  bool _showImages = false;
+  bool? _showImages;
 
   @computed
   bool get showMultipleElementsClickedHighlight =>
@@ -658,14 +657,26 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.clear();
   }
 
+  bool get showImages {
+    if (_showImages == null) {
+      _updateShowImages();
+    }
+
+    return _showImages!;
+  }
+
+  void resetShowImages() {
+    _showImages = null;
+  }
+
   @action
-  void updateShowImages() {
+  void _updateShowImages() {
     _showImages = _shouldShowImages && _thFile.getImages().isNotEmpty;
   }
 
   void setShouldShowImages(bool shouldShow) {
     _shouldShowImages = shouldShow;
-    updateShowImages();
+    resetShowImages();
   }
 
   @action

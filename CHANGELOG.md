@@ -7,6 +7,7 @@
   * Original TH2File line management in MPRemoveAttrOptionFromElementCommand and MPSetAttrOptionToElementCommand.
   * Sometimes PLA options not presented in alphabetical order.
   * PLA original TH2File lost on setattr option undo/redo.
+  * File parsing with XTherion Insert Image Config being treated as if the last image set doesn't exist.
 * Infrastructure maintenance:
   * THCommmandOption changed from having its parent to having only its parent MPID.
   * Added tests:

@@ -1111,26 +1111,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_showImagesAtom = Atom(
-    name: 'TH2FileEditControllerBase._showImages',
-    context: context,
-  );
-
-  bool get showImages {
-    _$_showImagesAtom.reportRead();
-    return super._showImages;
-  }
-
-  @override
-  bool get _showImages => showImages;
-
-  @override
-  set _showImages(bool value) {
-    _$_showImagesAtom.reportWrite(value, super._showImages, () {
-      super._showImages = value;
-    });
-  }
-
   late final _$_statusBarMessageAtom = Atom(
     name: 'TH2FileEditControllerBase._statusBarMessage',
     context: context,
@@ -1410,11 +1390,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   );
 
   @override
-  void updateShowImages() {
+  void _updateShowImages() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.updateShowImages');
+        .startAction(name: 'TH2FileEditControllerBase._updateShowImages');
     try {
-      return super.updateShowImages();
+      return super._updateShowImages();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

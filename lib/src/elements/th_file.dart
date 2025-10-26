@@ -389,7 +389,7 @@ class THFile
         _xtherionSettingMPIDs = null;
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
-            ?.updateShowImages();
+            ?.resetShowImages();
     }
   }
 
@@ -480,7 +480,7 @@ class THFile
         }
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
-            ?.updateShowImages();
+            ?.resetShowImages();
     }
 
     final THIsParentMixin parent = element.parent(this);
@@ -714,7 +714,7 @@ class THFile
     _xtherionSettingMPIDs = null;
     mpLocator.mpGeneralController
         .getTH2FileEditControllerIfExists(filename)
-        ?.updateShowImages();
+        ?.resetShowImages();
     _drawableElementMPIDs.clear();
     _areaMPIDByLineMPID = null;
     _areaMPIDByLineTHID = null;
