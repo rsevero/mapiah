@@ -24,6 +24,26 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THXTherionImageInsertConfig originalElement = th2FileEditController
+        .thFile
+        .imageByMPID(xtherionImageInsertConfigMPID);
+    final MPCommand addXTherionImageInsertCommand =
+        MPAddXTherionImageInsertConfigCommand.fromExisting(
+          existingImageInsertConfig: originalElement,
+          th2FileEditController: th2FileEditController,
+          descriptionType: descriptionType,
+        );
+
+    _undoRedoInfo = {
+      'addXTherionImageInsertConfigCommand': addXTherionImageInsertCommand,
+    };
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -37,15 +57,9 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THXTherionImageInsertConfig originalElement = th2FileEditController
-        .thFile
-        .imageByMPID(xtherionImageInsertConfigMPID);
     final MPCommand oppositeCommand =
-        MPAddXTherionImageInsertConfigCommand.fromExisting(
-          existingImageInsertConfig: originalElement,
-          th2FileEditController: th2FileEditController,
-          descriptionType: descriptionType,
-        );
+        _undoRedoInfo!['addXTherionImageInsertConfigCommand']
+            as MPAddXTherionImageInsertConfigCommand;
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
