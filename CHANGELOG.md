@@ -18,6 +18,7 @@
     * MPRemoveOptionFromElementCommand;
     * MPRemovePointCommand:
     * MPRemoveScrapCommand:
+    * MPRemoveXTherionImageInsertConfigCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
