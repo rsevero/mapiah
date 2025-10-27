@@ -23,7 +23,8 @@
     * MPReplaceLineSegmentsCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand;
-    * UI: add line via mouse click + drag.
+    * UI: add line via mouse click + drag;
+    * UI: new file dialog flow.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand;

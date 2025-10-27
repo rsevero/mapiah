@@ -44,7 +44,15 @@ class _MapiahHomeState extends State<MapiahHome> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     if (!kIsWeb) {
-      setWindowTitle(appLocalizations.appTitle);
+      try {
+        setWindowTitle(appLocalizations.appTitle);
+      } on MissingPluginException {
+        // In widget tests, desktop plugins (like window_size) may not be
+        // registered. Ignore the missing plugin so tests can run headless.
+      } on PlatformException {
+        // Also ignore other platform exceptions in non-desktop environments
+        // during tests.
+      }
     }
     initializeMPCommandLocalizations(context);
 
