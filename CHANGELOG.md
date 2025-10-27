@@ -33,6 +33,7 @@
     * MPRemovePointCommand;
     * MPRemoveScrapCommand;
     * MPRemoveXTherionImageInsertConfigCommand;
+    * MPReplaceLineSegmentsCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
 

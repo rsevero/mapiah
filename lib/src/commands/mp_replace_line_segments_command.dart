@@ -41,6 +41,25 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
+  bool get hasNewExecuteMethod => true;
+
+  @override
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    final THFile thFile = th2FileEditController.thFile;
+    final THLine line = thFile.lineByMPID(lineMPID);
+    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+    originalLineSegments = line.getLineSegmentsPositionList(thFile);
+    final MPCommand replaceLineSegmentsCommand =
+        MPReplaceLineSegmentsCommand.forCWJM(
+          lineMPID: lineMPID,
+          originalLineSegments: newLineSegments,
+          newLineSegments: originalLineSegments,
+        );
+
+    _undoRedoInfo = {'replaceLineSegmentsCommand': replaceLineSegmentsCommand};
+  }
+
+  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -58,15 +77,8 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THLine line = thFile.lineByMPID(lineMPID);
-    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-    originalLineSegments = line.getLineSegmentsPositionList(thFile);
-    final MPCommand oppositeCommand = MPReplaceLineSegmentsCommand.forCWJM(
-      lineMPID: lineMPID,
-      originalLineSegments: newLineSegments,
-      newLineSegments: originalLineSegments,
-    );
+    final MPCommand oppositeCommand =
+        _undoRedoInfo!['replaceLineSegmentsCommand'] as MPCommand;
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
