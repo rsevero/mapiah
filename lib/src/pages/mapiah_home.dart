@@ -54,12 +54,14 @@ class _MapiahHomeState extends State<MapiahHome> {
         title: Text(appLocalizations.appTitle),
         actions: <Widget>[
           IconButton(
+            key: ValueKey('MapiahHomeNewFileButton'),
             icon: Icon(Icons.insert_drive_file_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.newFile(context),
             tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
           ),
           IconButton(
+            key: ValueKey('MapiahHomeOpenFileButton'),
             icon: Icon(Icons.file_open_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.pickTH2File(context),
@@ -72,6 +74,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             appLocalizations.mapiahHomeHelpDialogTitle,
           ),
           IconButton(
+            key: ValueKey('MapiahHomeAboutButton'),
             icon: Icon(Icons.info_outline),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => showAboutDialog(context),

@@ -1,11 +1,11 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
-import 'package:mapiah/src/widgets/th_file_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -30,42 +30,31 @@ void main() {
     testWidgets('creates a new line after two clicks and a drag', (
       tester,
     ) async {
-      // Arrange: controller with an empty THFile and one scrap
-      final TH2FileEditController controller = mpLocator.mpGeneralController
-          .getTH2FileEditController(
-            filename: 'ui-add-line.th2',
-            forceNewController: true,
+      final TH2FileEditController th2Controller = mpLocator.mpGeneralController
+          .getTH2FileEditControllerForNewFile(
+            scrapTHID: 'scrap-1',
+            scrapOptions: const [],
+            encoding: 'utf-8',
           );
 
-      // Create a scrap so new line has a valid parent
-      controller.elementEditController.createScrap(thID: 'scrap1');
-
-      // Pump a minimal app with the THFileWidget sized to a canvas
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: SizedBox(
-                width: 800,
-                height: 600,
-                child: THFileWidget(
-                  key: ValueKey('THFileWidget|${controller.thFileMPID}'),
-                  th2FileEditController: controller,
-                ),
-              ),
-            ),
+          home: TH2FileEditPage(
+            key: ValueKey('TH2FileEditPage|${th2Controller.thFile.filename}'),
+            filename: th2Controller.thFile.filename,
+            th2FileEditController: th2Controller,
           ),
         ),
       );
       await tester.pumpAndSettle();
 
       // Enter add-line state (equivalent to pressing the Add Line tool)
-      controller.stateController.setState(MPTH2FileEditStateType.addLine);
+      th2Controller.stateController.setState(MPTH2FileEditStateType.addLine);
       await tester.pump();
 
       // Target the listener surface to send mouse events
       final listenerFinder = find.byKey(
-        ValueKey('MPListenerWidget|${controller.thFileMPID}'),
+        ValueKey('MPListenerWidget|${th2Controller.thFileMPID}'),
       );
       expect(listenerFinder, findsOneWidget);
 
@@ -95,11 +84,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert: one line exists in the THFile (under the active scrap)
-      final lines = controller.thFile.getLines().toList();
+      final lines = th2Controller.thFile.getLines().toList();
       expect(lines.length, 1);
 
       // Optional: the line should have at least one line segment
-      final lineSegments = lines.first.getLineSegments(controller.thFile);
+      final lineSegments = lines.first.getLineSegments(th2Controller.thFile);
       expect(lineSegments.isNotEmpty, isTrue);
     });
   });
