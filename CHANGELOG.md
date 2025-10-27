@@ -22,7 +22,8 @@
     * MPRemoveXTherionImageInsertConfigCommand;
     * MPReplaceLineSegmentsCommand;
     * MPSetAttrOptionFromElementCommand;
-    * MPSetOptionFromElementCommand.
+    * MPSetOptionFromElementCommand;
+    * UI: add line via mouse click + drag.
   * Migrated to new MPCommand execute (the polish refactoring):
     * MPMoveAreaCommand;
     * MPMoveLineCommand;
