@@ -49,9 +49,6 @@ class MPAddPointCommand extends MPCommand {
   }
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {

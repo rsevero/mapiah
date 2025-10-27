@@ -32,9 +32,6 @@ class MPEditLineTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THLine originalLine = th2FileEditController.thFile.lineByMPID(
       lineMPID,

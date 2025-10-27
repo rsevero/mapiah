@@ -23,9 +23,6 @@ class MPRemoveAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THArea area = thFile.areaByMPID(areaMPID);

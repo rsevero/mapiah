@@ -24,9 +24,6 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THXTherionImageInsertConfig originalElement = th2FileEditController
         .thFile

@@ -96,31 +96,21 @@ abstract class MPCommand {
     TH2FileEditController th2FileEditController, {
     bool keepOriginalLineTH2File = false,
   }) {
-    if (hasNewExecuteMethod) {
-      _prepareUndoRedoInfo(th2FileEditController);
-      _actualExecute(
-        th2FileEditController,
-        keepOriginalLineTH2File: keepOriginalLineTH2File,
-      );
+    _prepareUndoRedoInfo(th2FileEditController);
+    _actualExecute(
+      th2FileEditController,
+      keepOriginalLineTH2File: keepOriginalLineTH2File,
+    );
 
-      if ((_undoRedoCommand == null) &&
-          _needsUndoRedoInfo &&
-          (_undoRedoInfo == null)) {
-        throw Exception(
-          'Command of type ${type.name} needs to prepare undo/redo info but did not.',
-        );
-      }
-      _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
-    } else {
-      _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
-      _actualExecute(
-        th2FileEditController,
-        keepOriginalLineTH2File: keepOriginalLineTH2File,
+    if ((_undoRedoCommand == null) &&
+        _needsUndoRedoInfo &&
+        (_undoRedoInfo == null)) {
+      throw Exception(
+        'Command of type ${type.name} needs to prepare undo/redo info but did not.',
       );
     }
+    _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
   }
-
-  bool get hasNewExecuteMethod => false;
 
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     _needsUndoRedoInfo = false;

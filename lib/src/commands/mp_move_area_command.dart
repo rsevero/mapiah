@@ -54,9 +54,6 @@ class MPMoveAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     linesMoveCommand._prepareUndoRedoInfo(th2FileEditController);
     _undoRedoInfo = {};

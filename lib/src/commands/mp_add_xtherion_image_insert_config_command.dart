@@ -36,9 +36,6 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,

@@ -23,9 +23,6 @@ class MPRemoveLineSegmentCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool hasNewExecuteMethod = true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final MPCommand addLineSegmentCommand =

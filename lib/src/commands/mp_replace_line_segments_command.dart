@@ -41,9 +41,6 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  bool get hasNewExecuteMethod => true;
-
-  @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THLine line = thFile.lineByMPID(lineMPID);

@@ -10,6 +10,7 @@
   * File parsing with XTherion Insert Image Config being treated as if the last image set doesn't exist.
 * Infrastructure maintenance:
   * THCommmandOption changed from having its parent to having only its parent MPID.
+  * MPCommand migration to _prepareUndoRedoInfo() completed.
   * Added tests:
     * MPRemoveAreaCommand;
     * MPRemoveAttrOptionFromElementCommand;
