@@ -8,6 +8,7 @@
   * Sometimes PLA options not presented in alphabetical order.
   * PLA original TH2File lost on setattr option undo/redo.
   * File parsing with XTherion Insert Image Config being treated as if the last image set doesn't exist.
+  * Line creation with Bèzier segments throwing "Command of type editLineSegment needs to prepare undo/redo info but did not.".
 * Infrastructure maintenance:
   * THCommmandOption changed from having its parent to having only its parent MPID.
   * MPCommand migration to _prepareUndoRedoInfo() completed.

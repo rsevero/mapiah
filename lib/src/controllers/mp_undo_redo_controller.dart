@@ -94,11 +94,11 @@ abstract class MPUndoRedoControllerBase with Store {
       return;
     }
 
+    command.execute(_th2FileEditController);
+
     final MPUndoRedoCommand undo = command.getUndoRedoCommand(
       _th2FileEditController,
     );
-
-    command.execute(_th2FileEditController);
 
     _undos.removeLast();
     _undos.add(undo);
