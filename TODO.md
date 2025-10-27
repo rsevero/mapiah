@@ -105,6 +105,7 @@ Version 0.4
 [ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...)
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
+[ ] - When deleting an element, all imediate empty lines before it should also be deleted. 
 
 Version 0.5
 [ ] - Raster images tracing

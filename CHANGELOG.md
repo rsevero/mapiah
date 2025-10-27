@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.20 - not yet release - the polish refactoring part 2
+## 0.2.20 - not yet release - The polish refactoring - Part 2, The Pará Ending
 * New features:
 * Fixed bugs:
   * Delete button only removes points and lines but no areas.
@@ -19,6 +19,7 @@
     * MPRemovePointCommand:
     * MPRemoveScrapCommand:
     * MPRemoveXTherionImageInsertConfigCommand;
+    * MPReplaceLineSegmentsCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
   * Migrated to new MPCommand execute (the polish refactoring):
