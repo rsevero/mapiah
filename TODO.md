@@ -106,6 +106,9 @@ Version 0.4
 [ ] - Edit file properties (encoding and?...)
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
 [ ] - When deleting an element, all imediate empty lines before it should also be deleted.
+[ ] - Split one line in two.
+[ ] - Join 2 lines.
+[ ] - Merge 2 areas.
 
 Version 0.5
 [ ] - Raster images tracing

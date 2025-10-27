@@ -918,12 +918,8 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void setCanvasScale(double newScale) {
     _canvasScale = newScale;
-  }
 
-  @action
-  void updateCanvasScale(double newScale) {
-    setCanvasScale(MPNumericAux.roundScale(newScale));
-    _canvasSize = _screenSize / _canvasScale;
+    _changedCanvasTransform();
   }
 
   @action
@@ -935,8 +931,6 @@ abstract class TH2FileEditControllerBase with Store {
         isIncrease: true,
       ),
     );
-
-    _changedCanvasTransform();
   }
 
   @action
@@ -948,15 +942,11 @@ abstract class TH2FileEditControllerBase with Store {
         isIncrease: false,
       ),
     );
-
-    _changedCanvasTransform();
   }
 
   @action
   void zoomOneToOne() {
     setCanvasScale(1);
-
-    _changedCanvasTransform();
   }
 
   @action
@@ -977,8 +967,6 @@ abstract class TH2FileEditControllerBase with Store {
         (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
       ),
     );
-
-    _changedCanvasTransform();
   }
 
   void _changedCanvasTransform() {

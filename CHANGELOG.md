@@ -40,6 +40,9 @@
     * MPReplaceLineSegmentsCommand;
     * MPSetAttrOptionFromElementCommand;
     * MPSetOptionFromElementCommand.
+  * Create at least one test per MPCommand.
+  * Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
+  * MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:
