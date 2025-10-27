@@ -53,9 +53,9 @@ Version 0.3
 [X] - Snap to XVIFile elements: stations, sketch line ends, grid line crossings
 [X] - Optimize snap search with spatial index
 [X] - Add/remove lines from areas
-[ ] - Create at least one test per MPCommand
-[ ] - Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
-[ ] - MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
+[X] - Create at least one test per MPCommand
+[X] - Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
+[X] - MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
 [ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [ ] - When deleting the second to last line segment of a line, the whole line should be deleted.
@@ -105,7 +105,7 @@ Version 0.4
 [ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...)
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
-[ ] - When deleting an element, all imediate empty lines before it should also be deleted. 
+[ ] - When deleting an element, all imediate empty lines before it should also be deleted.
 
 Version 0.5
 [ ] - Raster images tracing
