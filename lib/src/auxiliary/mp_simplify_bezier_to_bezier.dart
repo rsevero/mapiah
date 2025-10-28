@@ -154,6 +154,7 @@ List<CubicBez> mpSimplifyCubicChain(
 
   // Precompute cusp boundaries (indices between segments where merging is forbidden).
   final Set<int> cuspBoundaries = <int>{};
+
   for (int i = 1; i < n; i++) {
     if (source._isCuspAtJoin(i)) {
       cuspBoundaries.add(i);

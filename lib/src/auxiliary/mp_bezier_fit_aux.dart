@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 
 class Range {
   double start, end;
+
   Range(this.start, this.end);
   Range copy() => Range(start, end);
 }
@@ -615,8 +616,10 @@ void _fitToBezPathRec(
 
   var (double area, double x, double y) = source.momentIntegrals(range.copy());
 
-  final double x0 = start.p.x, y0 = start.p.y;
-  final double dx = d.x, dy = d.y;
+  final double x0 = start.p.x;
+  final double y0 = start.p.y;
+  final double dx = d.x;
+  final double dy = d.y;
 
   area -= dx * (y0 + 0.5 * dy);
 
@@ -679,9 +682,10 @@ Iterable<(CubicBez, double, double)> _cubicFit(
   double area,
   double mx,
 ) sync* {
-  final double s0 = math.sin(th0), c0 = math.cos(th0);
-  final double s1 = math.sin(th1), c1 = math.cos(th1);
-
+  final double s0 = math.sin(th0);
+  final double c0 = math.cos(th0);
+  final double s1 = math.sin(th1);
+  final double c1 = math.cos(th1);
   final double a4 =
       -9 *
       c0 *
@@ -1117,9 +1121,14 @@ List<double> solveCubic(double c0, double c1, double c2, double c3) {
     return solveQuadratic(c0, c1, c2);
   }
   // Normalize
-  final double a = c3, b = c2, c = c1, d = c0;
+  final double a = c3;
+  final double b = c2;
+  final double c = c1;
+  final double d = c0;
   final double inva = 1.0 / a;
-  final double bb = b * inva, cc = c * inva, dd = d * inva;
+  final double bb = b * inva;
+  final double cc = c * inva;
+  final double dd = d * inva;
   // Depressed cubic: y^3 + py + q = 0 via x = y - b/3a
   final double b3 = bb / 3.0;
   final double p = cc - bb * bb / 3.0;
