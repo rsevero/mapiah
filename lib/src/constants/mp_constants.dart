@@ -181,6 +181,8 @@ const double mpXVILineThickness = 1.0;
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;
 
+const double mpDefaultBezierSimplifyAccuracy = 3.0;
+
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';
 const String thFileEditConfigSection = 'FileEdit';

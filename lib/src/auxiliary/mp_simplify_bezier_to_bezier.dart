@@ -1,6 +1,7 @@
 // Adapter: a source curve made of consecutive cubic Beziers
 import 'dart:math' as math;
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
@@ -138,7 +139,8 @@ List<CubicBez> bezPathToCubics(BezPath path) => path.toCubics();
 
 List<CubicBez> mpSimplifyCubicChain(
   List<CubicBez> chain, {
-  double accuracy = 1.5, // tolerance in your coordinate units
+  double accuracy =
+      mpDefaultBezierSimplifyAccuracy, // tolerance in your coordinate units
 }) {
   // Merge-only simplification: never split original segments; only merge
   // consecutive segments when a single cubic fits the span within accuracy.
@@ -210,7 +212,7 @@ List<CubicBez> mpSimplifyCubicChain(
 List<THLineSegment>
 mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
-  double accuracy = 1.5,
+  double accuracy = mpDefaultBezierSimplifyAccuracy,
 }) {
   final List<CubicBez> asCubicBez = mpConvertTHBeziersToCubicsBez(
     originalLineSegmentsList,
@@ -266,12 +268,10 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
 
   lineSegmentsList.add(firstFittedLineSegment);
 
-  /// Skip the first and last fitted cubics, as they are handled separately to
-  /// guarantee that the the first and last points of the original line segments
-  /// are preserved in the simplified result.
-  final Iterable<CubicBez> trimmedFittedCubics = cubicBezs
-      .skip(1)
-      .take(cubicBezs.length - 2);
+  /// Skip the first fitted cubic, as it is handled separately to guarantee that
+  /// the first point of the original line segments is preserved in the
+  /// simplified result.
+  final Iterable<CubicBez> trimmedFittedCubics = cubicBezs.skip(1);
 
   for (final CubicBez fittedCubic in trimmedFittedCubics) {
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
@@ -283,17 +283,6 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
 
     lineSegmentsList.add(fittedLineSegment);
   }
-
-  final THLineSegment lastOriginalSegment = originalLineSegmentsList.last;
-  final THBezierCurveLineSegment
-  lastFittedLineSegment = THBezierCurveLineSegment(
-    parentMPID: parentMPID,
-    controlPoint1: THPositionPart(coordinates: cubicBezs.last.p1.toOffset()),
-    controlPoint2: THPositionPart(coordinates: cubicBezs.last.p2.toOffset()),
-    endPoint: lastOriginalSegment.endPoint,
-  );
-
-  lineSegmentsList.add(lastFittedLineSegment);
 
   return lineSegmentsList;
 }
