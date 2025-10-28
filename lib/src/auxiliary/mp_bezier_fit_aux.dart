@@ -106,6 +106,11 @@ class Line {
   }
 }
 
+/// Cubic Bezier curve representation.
+/// p0: start point
+/// p1: first control point
+/// p2: second control point
+/// p3: end point
 class CubicBez {
   final Point p0, p1, p2, p3;
 
@@ -666,7 +671,7 @@ double? _fitToBezPathOptInner(
     final (c, err2) = fit;
     err = math.sqrt(err2);
     if (err < accuracy) {
-      if (range.start == 0.0) path.moveTo(c.p0);
+      if (path.isEmpty()) path.moveTo(c.p0);
       path.curveTo(c.p1, c.p2, c.p3);
       return null;
     }
@@ -677,7 +682,9 @@ double? _fitToBezPathOptInner(
   var t0 = range.start;
   final t1 = range.end;
   var n = 0;
-  double lastErr;
+  // Initialize with the current fit error so bracketing below is valid even if
+  // we don't hit a _SegmentError in the exploratory loop (edge cases).
+  double lastErr = err;
   while (true) {
     n += 1;
     final r = _fitOptSegment(source, accuracy, Range(t0, t1));
@@ -727,8 +734,39 @@ double? _fitToBezPathOptInner(
           })()
         : range.end;
 
-    final seg = fitToCubic(source, Range(t0, tNext), accuracy)!.$1;
-    if (i == 0 && range.start == 0.0) path.moveTo(seg.p0);
+    final (CubicBez, double)? fitSeg = fitToCubic(
+      source,
+      Range(t0, tNext),
+      accuracy,
+    );
+
+    CubicBez seg;
+
+    if (fitSeg != null) {
+      seg = fitSeg.$1;
+    } else {
+      // Fallback: try a straight-line cubic segment if a precise fit fails.
+      final Point startP = source.samplePtTangent(t0, 1.0).p;
+      final Point endP = source.samplePtTangent(tNext, -1.0).p;
+      final (CubicBez, double)? line = _tryFitLine(
+        source,
+        accuracy,
+        Range(t0, tNext),
+        startP,
+        endP,
+      );
+
+      if (line != null) {
+        seg = line.$1;
+      } else {
+        // Last-resort: degenerate cubic along the chord.
+        final Point p1 = startP.lerp(endP, 1.0 / 3.0);
+        final Point p2 = endP.lerp(startP, 1.0 / 3.0);
+
+        seg = CubicBez(startP, p1, p2, endP);
+      }
+    }
+    if (path.isEmpty()) path.moveTo(seg.p0);
     path.curveTo(seg.p1, seg.p2, seg.p3);
     t0 = tNext;
     if (t0 == range.end) break;
@@ -1029,9 +1067,10 @@ List<CubicBez> mpConvertTHBeziersToCubicsBez(List<THLineSegment> segs) {
     final Offset controlPoint1 = seg.controlPoint1.coordinates;
     final Offset controlPoint2 = seg.controlPoint2.coordinates;
     final Point p0 = Point(startPoint.dx, startPoint.dy);
-    final Point p1 = Point(endPoint.dx, endPoint.dy);
-    final Point p2 = Point(controlPoint1.dx, controlPoint1.dy);
-    final Point p3 = Point(controlPoint2.dx, controlPoint2.dy);
+    // Standard cubic Bezier ordering: (start, control1, control2, end)
+    final Point p1 = Point(controlPoint1.dx, controlPoint1.dy);
+    final Point p2 = Point(controlPoint2.dx, controlPoint2.dy);
+    final Point p3 = Point(endPoint.dx, endPoint.dy);
 
     startPoint = endPoint;
 

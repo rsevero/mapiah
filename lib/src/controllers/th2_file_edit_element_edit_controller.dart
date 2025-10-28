@@ -1577,7 +1577,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
             );
 
-            if (simplifiedLineSegmentsList.length ==
+            if (simplifiedLineSegmentsList.length >=
                 originalLineSegmentsList.length) {
               // No simplification was possible.
               continue;

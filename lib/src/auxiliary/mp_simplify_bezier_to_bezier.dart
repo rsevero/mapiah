@@ -1,4 +1,5 @@
 // Adapter: a source curve made of consecutive cubic Beziers
+import 'dart:math' as math;
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -9,6 +10,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 /// Or, if you prefer the near-optimal approach, swap the call inside the function to fitToBezPathOpt.
 class CubicChainSource implements ParamCurveFit {
   final List<CubicBez> curves;
+
   CubicChainSource(this.curves) {
     if (curves.isEmpty) {
       throw ArgumentError('curves must not be empty');
@@ -51,12 +53,44 @@ class CubicChainSource implements ParamCurveFit {
 
   @override
   double? breakCusp(Range range) {
-    // Treat joins between segments as “cusps” so we don’t fit across them.
+    // Always break only at actual cusps (sharp direction change), not at every join.
     for (var i = 1; i < _n; i++) {
       final b = i / _n;
-      if (b > range.start && b < range.end) return b;
+      if (b <= range.start || b >= range.end) continue;
+      if (_isCuspAtJoin(i)) return b;
     }
     return null;
+  }
+
+  // Heuristic cusp detector at the join between curves[i-1] and curves[i].
+  // Returns true when the tangent direction changes acutely (angle > threshold).
+  bool _isCuspAtJoin(int i) {
+    final CubicBez prev = curves[i - 1];
+    final CubicBez next = curves[i];
+    // Tangents at the boundary
+    Vec2 t1 = prev.deriv(1.0);
+    Vec2 t2 = next.deriv(0.0);
+
+    const double eps = 1e-12;
+    // If derivative nearly zero at the junction (rare), peek slightly inside
+    if (t1.hypot() < eps) {
+      t1 = prev.deriv(1.0 - 1e-5);
+    }
+    if (t2.hypot() < eps) {
+      t2 = next.deriv(1e-5);
+    }
+
+    final double n1 = t1.hypot();
+    final double n2 = t2.hypot();
+    if (n1 < eps || n2 < eps) return false; // can't classify, assume no cusp
+
+    final double dot = (t1.dot(t2)) / (n1 * n2);
+    final double clamped = dot.clamp(-1.0, 1.0);
+    final double angle = math.acos(clamped);
+
+    // Threshold: treat as cusp when turn exceeds 60 degrees.
+    const double cuspAngleThreshold = math.pi / 3.0; // 60°
+    return angle > cuspAngleThreshold;
   }
 
   // Provide moment integrals (area and first moments) using quadrature,
@@ -81,34 +115,95 @@ class CubicChainSource implements ParamCurveFit {
 // Helper: turn a BezPath back into a list of CubicBez
 List<CubicBez> bezPathToCubics(BezPath path) => path.toCubics();
 
-// Example usage: returns the simplified chain as cubics
 List<CubicBez> mpSimplifyCubicChain(
   List<CubicBez> chain, {
-  double accuracy = 0.5, // tolerance in your coordinate units
+  double accuracy = 1.5, // tolerance in your coordinate units
 }) {
-  final source = CubicChainSource(chain);
-  // Fast recursive fitter
-  final simplified = fitToBezPath(source, accuracy);
-  // Or, near-optimal (slower)
-  // final simplified = fitToBezPathOpt(source, accuracy);
-  return bezPathToCubics(simplified);
+  // Merge-only simplification: never split original segments; only merge
+  // consecutive segments when a single cubic fits the span within accuracy.
+  // This guarantees the output segment count is <= input.
+  if (chain.length <= 1) return List<CubicBez>.from(chain);
+
+  final CubicChainSource source = CubicChainSource(chain);
+  final int n = chain.length;
+
+  // Precompute cusp boundaries (indices between segments where merging is forbidden).
+  final Set<int> cuspBoundaries = <int>{};
+  for (int i = 1; i < n; i++) {
+    if (source._isCuspAtJoin(i)) cuspBoundaries.add(i);
+  }
+
+  final List<CubicBez> out = <CubicBez>[];
+
+  int i = 0;
+  while (i < n) {
+    // We can try to merge from segment i up to just before the next cusp boundary.
+    int hardEnd = n;
+    for (int k = i + 1; k < n; k++) {
+      if (cuspBoundaries.contains(k)) {
+        hardEnd = k; // can't cross this boundary
+        break;
+      }
+    }
+
+    // Prefer longest-possible merge first: try [i, j) from hardEnd down to i+2.
+    // This remains merge-only (never splits) and improves reduction odds vs. early break.
+    CubicBez? merged;
+    int nextI = i + 1; // default advance if no merge found
+    for (int j = hardEnd; j >= i + 2; j--) {
+      final double t0 = i / n;
+      final double t1 = j / n;
+      final (CubicBez, double)? fit = fitToCubic(
+        source,
+        Range(t0, t1),
+        accuracy,
+      );
+      if (fit != null) {
+        merged = fit.$1;
+        nextI = j; // consume [i, j)
+        break; // take the longest successful span
+      }
+    }
+
+    if (merged != null) {
+      out.add(merged);
+      i = nextI;
+    } else {
+      // No merge possible; keep the original segment exactly.
+      out.add(chain[i]);
+      i += 1;
+    }
+  }
+
+  return out;
 }
+
+// Note: cusp detection is implemented once in CubicChainSource._isCuspAtJoin.
 
 List<THLineSegment>
 mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
-  double accuracy = 0.5,
+  double accuracy = 1.5,
 }) {
   final List<CubicBez> asCubicBez = mpConvertTHBeziersToCubicsBez(
     originalLineSegmentsList,
   );
-  final List<CubicBez> fittedCubics = mpSimplifyCubicChain(asCubicBez);
+  final List<CubicBez> fittedCubics = mpSimplifyCubicChain(
+    asCubicBez,
+    accuracy: accuracy,
+  );
 
   print("Original segments: ${originalLineSegmentsList.length}");
+  print("asCubicBez segments: ${asCubicBez.length}");
   print("Fitted cubics: ${fittedCubics.length}");
 
+  // Invariant: merge-only simplifier guarantees non-increase.
+  assert(
+    fittedCubics.length <= asCubicBez.length,
+    'Simplifier must not increase segment count',
+  );
   if (fittedCubics.length == asCubicBez.length) {
-    // No simplification was possible.
+    // No effective simplification; keep original for stability.
     return originalLineSegmentsList;
   }
 
