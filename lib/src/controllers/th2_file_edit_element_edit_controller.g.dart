@@ -162,28 +162,26 @@ mixin _$TH2FileEditElementEditController
     );
   }
 
-  late final _$_straightLineSimplifyEpsilonOnCanvasAtom = Atom(
-    name:
-        'TH2FileEditElementEditControllerBase._straightLineSimplifyEpsilonOnCanvas',
+  late final _$_lineSimplifyEpsilonOnCanvasAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._lineSimplifyEpsilonOnCanvas',
     context: context,
   );
 
-  double get straightLineSimplifyEpsilonOnCanvas {
-    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportRead();
-    return super._straightLineSimplifyEpsilonOnCanvas;
+  double get lineSimplifyEpsilonOnCanvas {
+    _$_lineSimplifyEpsilonOnCanvasAtom.reportRead();
+    return super._lineSimplifyEpsilonOnCanvas;
   }
 
   @override
-  double get _straightLineSimplifyEpsilonOnCanvas =>
-      straightLineSimplifyEpsilonOnCanvas;
+  double get _lineSimplifyEpsilonOnCanvas => lineSimplifyEpsilonOnCanvas;
 
   @override
-  set _straightLineSimplifyEpsilonOnCanvas(double value) {
-    _$_straightLineSimplifyEpsilonOnCanvasAtom.reportWrite(
+  set _lineSimplifyEpsilonOnCanvas(double value) {
+    _$_lineSimplifyEpsilonOnCanvasAtom.reportWrite(
       value,
-      super._straightLineSimplifyEpsilonOnCanvas,
+      super._lineSimplifyEpsilonOnCanvas,
       () {
-        super._straightLineSimplifyEpsilonOnCanvas = value;
+        super._lineSimplifyEpsilonOnCanvas = value;
       },
     );
   }

@@ -79,8 +79,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   List<MPSelectedLine>? _originalSimplifiedLines;
 
   @readonly
-  double _straightLineSimplifyEpsilonOnCanvas =
-      mpStraightLineSimplifyEpsilonOnScreen;
+  double _lineSimplifyEpsilonOnCanvas = mpLineSimplifyEpsilonOnScreen;
 
   @readonly
   MPLineSimplificationMethod _lineSimplificationMethod =
@@ -1543,7 +1542,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     int lineCount = 0;
 
-    updateStraightLineSimplificationTolerance();
+    updateLineSimplificationTolerance();
     updateOriginalSimplifiedLines();
 
     for (final MPSelectedElement selectedElement in _originalSimplifiedLines!) {
@@ -1571,6 +1570,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             final List<THLineSegment> simplifiedLineSegmentsList =
                 mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
                   originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
 
             print(
@@ -1636,7 +1636,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             final List<THLineSegment> removedLineSegments =
                 MPLineSimplificationAux.raumerDouglasPeuckerIterative(
                   originalStraightLineSegments: originalLineSegmentsList,
-                  epsilon: _straightLineSimplifyEpsilonOnCanvas,
+                  epsilon: _lineSimplifyEpsilonOnCanvas,
                 );
 
             print(
@@ -1724,17 +1724,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _originalSimplifiedLines = lines;
   }
 
-  void updateStraightLineSimplificationTolerance() {
-    final double straightLineSimplifyEpsilonOnCanvasIncrease =
-        mpStraightLineSimplifyEpsilonOnScreen /
-        _th2FileEditController.canvasScale;
+  void updateLineSimplificationTolerance() {
+    final double lineSimplifyEpsilonOnCanvasIncrease =
+        mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
 
     if (_originalSimplifiedLines == null) {
-      _straightLineSimplifyEpsilonOnCanvas =
-          straightLineSimplifyEpsilonOnCanvasIncrease;
+      _lineSimplifyEpsilonOnCanvas = lineSimplifyEpsilonOnCanvasIncrease;
     } else {
-      _straightLineSimplifyEpsilonOnCanvas +=
-          straightLineSimplifyEpsilonOnCanvasIncrease;
+      _lineSimplifyEpsilonOnCanvas += lineSimplifyEpsilonOnCanvasIncrease;
     }
   }
 

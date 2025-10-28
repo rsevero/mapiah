@@ -140,7 +140,7 @@ List<CubicBez> bezPathToCubics(BezPath path) => path.toCubics();
 List<CubicBez> mpSimplifyCubicChain(
   List<CubicBez> chain, {
   double accuracy =
-      mpDefaultBezierSimplifyAccuracy, // tolerance in your coordinate units
+      mpLineSimplifyEpsilonOnScreen, // tolerance in your coordinate units
 }) {
   // Merge-only simplification: never split original segments; only merge
   // consecutive segments when a single cubic fits the span within accuracy.
@@ -213,7 +213,7 @@ List<CubicBez> mpSimplifyCubicChain(
 List<THLineSegment>
 mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
-  double accuracy = mpDefaultBezierSimplifyAccuracy,
+  double accuracy = mpLineSimplifyEpsilonOnScreen,
 }) {
   final List<CubicBez> asCubicBez = mpConvertTHBeziersToCubicsBez(
     originalLineSegmentsList,

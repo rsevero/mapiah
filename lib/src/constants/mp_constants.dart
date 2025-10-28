@@ -72,7 +72,7 @@ const int mpMaximumInt = 2 ^ 53 - 1;
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;
 
-const double mpStraightLineSimplifyEpsilonOnScreen = 1.5;
+const double mpLineSimplifyEpsilonOnScreen = 1.5;
 
 const double thMinimumSizeForDrawing = 10.0;
 
@@ -180,8 +180,6 @@ const double mpXVILineThickness = 1.0;
 
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;
-
-const double mpDefaultBezierSimplifyAccuracy = 3.0;
 
 const String thMainConfigSection = 'Main';
 const String thMainConfigLocale = 'Locale';
