@@ -123,7 +123,7 @@ endscrap
       {
         'file': '2025-10-27-002-bezier_line.th2',
         'length': 14,
-        'scale': 1.0,
+        'scale': 0.1,
         'encoding': 'UTF-8',
         'lineID': 'blaus',
         'asFileOriginal': r'''encoding UTF-8

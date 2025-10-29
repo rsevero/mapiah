@@ -23,6 +23,7 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -1168,12 +1169,14 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void updateUndoRedoStatus() {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
     _hasUndo = undoRedoController.hasUndo;
     _hasRedo = undoRedoController.hasRedo;
-    _undoDescription = mpLocator.appLocalizations.th2FileEditPageUndo(
+    _undoDescription = appLocalizations.th2FileEditPageUndo(
       undoRedoController.undoDescription,
     );
-    _redoDescription = mpLocator.appLocalizations.th2FileEditPageRedo(
+    _redoDescription = appLocalizations.th2FileEditPageRedo(
       undoRedoController.redoDescription,
     );
   }

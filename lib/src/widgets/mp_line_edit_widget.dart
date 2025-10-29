@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -38,29 +39,19 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
           return SizedBox.shrink();
         }
 
-        final THPointPaint selectedEndPointPaint = th2FileEditController
-            .visualController
+        final MPVisualController visualController =
+            th2FileEditController.visualController;
+        final THPointPaint selectedEndPointPaint = visualController
             .getSelectedEndPointPaint();
-
-        final THPointPaint unselectedEndPointPaint = th2FileEditController
-            .visualController
+        final THPointPaint unselectedEndPointPaint = visualController
             .getUnselectedEndPointPaint();
-
-        final THPointPaint unselectedControlPointPaint = th2FileEditController
-            .visualController
+        final THPointPaint unselectedControlPointPaint = visualController
             .getUnselectedControlPointPaint();
-
-        final THPointPaint selectedControlPointPaint = th2FileEditController
-            .visualController
+        final THPointPaint selectedControlPointPaint = visualController
             .getSelectedControlPointPaint();
-
-        final Paint controlPointLinePaint = th2FileEditController
-            .visualController
+        final Paint controlPointLinePaint = visualController
             .getControlPointLinePaint();
-
-        final THLinePaint linePaint = th2FileEditController.visualController
-            .getEditLinePaint();
-
+        final THLinePaint linePaint = visualController.getEditLinePaint();
         final MPSelectedEndControlPoint? selectedControlPoint;
 
         if (selectionController.selectedEndControlPoints.length == 1) {
@@ -79,8 +70,8 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         } else {
           selectedControlPoint = null;
         }
-        final List<CustomPainter> painters = [];
 
+        final List<CustomPainter> painters = [];
         final THLine line =
             selectionController
                     .mpSelectedElementsLogical
@@ -88,7 +79,6 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
                     .first
                     .originalElementClone
                 as THLine;
-
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,
