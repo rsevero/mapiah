@@ -32,6 +32,7 @@ void main() {
         'length': 22,
         'encoding': 'UTF-8',
         'lineID': 'blaus',
+        'canvasScale': 1.0,
         'asFileOriginal': r'''encoding UTF-8
 scrap Trianglinho-1R1-2p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
   line wall
@@ -76,6 +77,7 @@ endscrap
         'length': 14,
         'encoding': 'UTF-8',
         'lineID': 'blaus',
+        'canvasScale': 0.1,
         'asFileOriginal': r'''encoding UTF-8
 scrap test
   line contour -id blaus
@@ -95,14 +97,10 @@ endscrap
 scrap test
   line contour -id blaus
     2736.2 -808.5
-    2750.782742 -763.207098 2753.753042 -701.893597 2758.628372 -639.551633
-    2763.257801 -580.354048 2769.604935 -520.22913 2789.2 -472
-    2809.032418 -423.426792 2838.554614 -384.357056 2861.959832 -348.981931
+    2758.628372 -639.551633 2770.547019 -487.145127 2861.959832 -348.981931
     2892.706019 -302.511515 2912.896336 -262.41677 2886.6 -215.5
     2855.709105 -160.405969 2808.046183 -173.796362 2749.134226 -199.081695
-    2705.425227 -217.841836 2655.523955 -243.149803 2601.7 -251.9
-    2547.483456 -260.696578 2488.777976 -248.14154 2432.707201 -233.731693
-    2370.020304 -217.621543 2310.626565 -199.193039 2264.5 -205.7
+    2465.034553 -321.018826 2344.466397 -194.419337 2264.5 -205.7
   endline
 endscrap
 ''',
@@ -142,7 +140,7 @@ endscrap
 
             final Iterable<THElement> lines = parsedFile.getLines();
 
-            controller.setCanvasScale(1);
+            controller.setCanvasScale(success['canvasScale'] as double);
             controller.selectionController.setSelectedElements(
               lines,
               setState: true,
@@ -150,12 +148,14 @@ endscrap
             controller.elementEditController.simplifySelectedLines();
 
             final String asFileChanged = writer.serialize(controller.thFile);
+
             expect(asFileChanged, success['asFileChanged']);
 
             // Undo the action
             controller.undo();
 
             final String asFileUndone = writer.serialize(controller.thFile);
+
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object

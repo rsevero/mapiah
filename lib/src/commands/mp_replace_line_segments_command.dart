@@ -61,13 +61,10 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.replaceLineLineSegments(
+    th2FileEditController.elementEditController.applyReplaceLineLineSegments(
       lineMPID,
       newLineSegments,
     );
-
-    th2FileEditController.triggerNewLineRedraw();
-    th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @override

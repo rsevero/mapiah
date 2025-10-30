@@ -2,6 +2,7 @@
 
 ## 0.2.20 - not yet release - The polish refactoring - Part 2, The Pará Ending
 * New features:
+  * Bèzier curve lines simplification.
 * Fixed bugs:
   * Delete button only removes points and lines but no areas.
   * Original TH2File line management in MPRemoveAttrOptionFromElementCommand and MPSetAttrOptionToElementCommand.
@@ -43,6 +44,7 @@
   * Create at least one test per MPCommand.
   * Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
   * MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
+  * flutter upgrade to 3.35.7.
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:

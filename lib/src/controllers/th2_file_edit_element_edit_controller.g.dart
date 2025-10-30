@@ -218,6 +218,26 @@ mixin _$TH2FileEditElementEditController
       );
 
   @override
+  void applyReplaceLineLineSegments(
+    int lineMPID,
+    List<({THLineSegment lineSegment, int lineSegmentPosition})>
+    newLineSegments,
+  ) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.applyReplaceLineLineSegments',
+        );
+    try {
+      return super.applyReplaceLineLineSegments(lineMPID, newLineSegments);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void applyAddLineSegment({
     required THLineSegment newLineSegment,
     required int lineSegmentPositionInParent,

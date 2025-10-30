@@ -283,7 +283,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     line.clearBoundingBox();
   }
 
-  void replaceLineLineSegments(
+  @action
+  void applyReplaceLineLineSegments(
     int lineMPID,
     List<({int lineSegmentPosition, THLineSegment lineSegment})>
     newLineSegments,
@@ -310,6 +311,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         elementPositionInParent: newLineSegment.lineSegmentPosition,
       );
     }
+
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
+    selectionController.updateSelectedElementsClones();
+    selectionController.updateSelectableEndAndControlPoints();
+    selectionController.clearSelectedEndControlPoints();
+    _th2FileEditController.triggerNewLineRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
+    _th2FileEditController.triggerSelectedElementsRedraw();
   }
 
   @action
@@ -1677,10 +1688,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             );
 
       _th2FileEditController.execute(simplifyCommand);
-      _th2FileEditController.selectionController
-          .updateSelectableEndAndControlPoints();
-      _th2FileEditController.triggerSelectedElementsRedraw();
-      _th2FileEditController.triggerEditLineRedraw();
     }
   }
 
