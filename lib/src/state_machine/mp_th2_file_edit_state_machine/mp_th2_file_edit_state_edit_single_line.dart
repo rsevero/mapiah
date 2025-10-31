@@ -21,7 +21,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.resetSelectedLineLineSegmentsMPIDs();
     selectionController.updateSelectableEndAndControlPoints();
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage('');
   }
@@ -30,7 +30,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
 
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
@@ -225,7 +225,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =

@@ -8,19 +8,25 @@ class MPLineSimplificationAux {
     required List<THLineSegment> originalStraightLineSegments,
     required double epsilon,
   }) {
-    if (originalStraightLineSegments.length <= 2) {
-      return List<THStraightLineSegment>.from(originalStraightLineSegments);
+    final List<THStraightLineSegment> result = <THStraightLineSegment>[];
+    final int numberOfStraightLineSegmentsLength =
+        originalStraightLineSegments.length;
+
+    if (numberOfStraightLineSegmentsLength <= 2) {
+      return result;
     }
 
     final double epsSq = epsilon * epsilon;
-    final int n = originalStraightLineSegments.length;
-    final List<bool> keep = List<bool>.filled(n, false);
+    final List<bool> keep = List<bool>.filled(
+      numberOfStraightLineSegmentsLength,
+      false,
+    );
 
     keep[0] = true;
-    keep[n - 1] = true;
+    keep[numberOfStraightLineSegmentsLength - 1] = true;
 
     final List<List<int>> stack = <List<int>>[
-      <int>[0, n - 1],
+      <int>[0, numberOfStraightLineSegmentsLength - 1],
     ];
 
     while (stack.isNotEmpty) {
@@ -58,9 +64,7 @@ class MPLineSimplificationAux {
       }
     }
 
-    final List<THStraightLineSegment> result = <THStraightLineSegment>[];
-
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < numberOfStraightLineSegmentsLength; i++) {
       if (!keep[i]) {
         if (originalStraightLineSegments[i] is! THStraightLineSegment) {
           throw Exception(
@@ -75,25 +79,29 @@ class MPLineSimplificationAux {
   }
 
   /// Squared perpendicular distance from point P to segment AB.
-  static double _pointToSegmentDistanceSquared(Offset p, Offset a, Offset b) {
-    final double abx = b.dx - a.dx;
-    final double aby = b.dy - a.dy;
+  static double _pointToSegmentDistanceSquared(
+    Offset point,
+    Offset segmentStart,
+    Offset segmentEnd,
+  ) {
+    final double abx = segmentEnd.dx - segmentStart.dx;
+    final double aby = segmentEnd.dy - segmentStart.dy;
     final double ab2 = abx * abx + aby * aby;
 
     if (ab2 == 0.0) {
-      final double dx = p.dx - a.dx;
-      final double dy = p.dy - a.dy;
+      final double dx = point.dx - segmentStart.dx;
+      final double dy = point.dy - segmentStart.dy;
 
       return dx * dx + dy * dy;
     }
 
-    final double apx = p.dx - a.dx;
-    final double apy = p.dy - a.dy;
+    final double apx = point.dx - segmentStart.dx;
+    final double apy = point.dy - segmentStart.dy;
     final double t = ((apx * abx + apy * aby) / ab2).clamp(0.0, 1.0);
-    final double projx = a.dx + t * abx;
-    final double projy = a.dy + t * aby;
-    final double dx = p.dx - projx;
-    final double dy = p.dy - projy;
+    final double projx = segmentStart.dx + t * abx;
+    final double projy = segmentStart.dy + t * aby;
+    final double dx = point.dx - projx;
+    final double dy = point.dy - projy;
 
     return dx * dx + dy * dy;
   }

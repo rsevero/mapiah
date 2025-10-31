@@ -89,19 +89,18 @@ abstract class MPUndoRedoControllerBase with Store {
     add(command);
   }
 
-  void executeAndSubstituteLastUndo(MPCommand command) {
+  void executeSubstitutingLastUndo(MPCommand command) {
     if (_undos.isEmpty) {
       return;
     }
 
+    final MPUndoRedoCommand lastUndo = _undos.removeLast();
+    final MPCommand undoCommand = lastUndo.undoCommand;
+
+    undoCommand.execute(_th2FileEditController, keepOriginalLineTH2File: true);
     command.execute(_th2FileEditController);
 
-    final MPUndoRedoCommand undo = command.getUndoRedoCommand(
-      _th2FileEditController,
-    );
-
-    _undos.removeLast();
-    _undos.add(undo);
+    add(command);
   }
 
   void clearUndoRedoStack() {

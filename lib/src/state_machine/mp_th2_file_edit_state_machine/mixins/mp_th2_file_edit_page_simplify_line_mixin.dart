@@ -20,7 +20,7 @@ mixin MPTH2FileEditPageSimplifyLineMixin on MPTH2FileEditState {
           if (isAltPressed && isShiftPressed) {
             /// TODO open line simplification dialog box.
           } else {
-            MPLineSimplificationMethod newLineSimplificationMethod;
+            final MPLineSimplificationMethod newLineSimplificationMethod;
 
             if (isAltPressed) {
               newLineSimplificationMethod =
@@ -44,7 +44,7 @@ mixin MPTH2FileEditPageSimplifyLineMixin on MPTH2FileEditState {
     }
 
     if (cleanOriginalSimplifiedLines) {
-      elementEditController.setOriginalSimplifiedLines(null);
+      elementEditController.resetOriginalFileForLineSimplification();
     }
 
     return keyProcessed;

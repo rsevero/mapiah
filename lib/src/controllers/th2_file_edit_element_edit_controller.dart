@@ -75,8 +75,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   THScrap? _newScrap;
 
-  @readonly
-  List<MPSelectedLine>? _originalSimplifiedLines;
+  THFile? _originalFileForLineSimplification;
+
+  bool _isFirstLineSimplification = true;
 
   @readonly
   double _lineSimplifyEpsilonOnCanvas = mpLineSimplifyEpsilonOnScreen;
@@ -606,7 +607,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
 
       if (_missingStepsPreserveStraightToBezierConversionUndoRedo == 0) {
-        _th2FileEditController.executeAndSubstituteLastUndo(command);
+        _th2FileEditController.executeSubstitutingLastUndo(command);
       } else {
         _th2FileEditController.execute(command);
         _missingStepsPreserveStraightToBezierConversionUndoRedo--;
@@ -1550,25 +1551,32 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void simplifySelectedLines() {
     final List<MPCommand> simplifyCommands = [];
+    final Iterable<MPSelectedElement> mpSelectedElements =
+        _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values;
 
     int lineCount = 0;
 
-    updateLineSimplificationTolerance();
-    updateOriginalSimplifiedLines();
+    prepareLineSimplificationInfo();
 
-    for (final MPSelectedElement selectedElement in _originalSimplifiedLines!) {
-      if (selectedElement is! MPSelectedLine) {
+    for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      if (mpSelectedElement is! MPSelectedLine) {
         continue;
       }
 
       lineCount++;
 
-      final THLine originalLine =
-          selectedElement.originalElementClone as THLine;
+      final THLine originalLine = _originalFileForLineSimplification!
+          .lineByMPID(mpSelectedElement.mpID);
       final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
-          originalLine.getLineSegmentsMap(_thFile);
+          originalLine.getLineSegmentsMap(_originalFileForLineSimplification!);
       final MPLineTypePerLineSegmentType lineTypePerLineSegmentType =
-          getLineTypePerLineSegmentType(originalLine);
+          getLineTypePerLineSegmentType(
+            originalLine,
+            thFile: _originalFileForLineSimplification!,
+          );
 
       switch (lineTypePerLineSegmentType) {
         case MPLineTypePerLineSegmentType.bezierCurve:
@@ -1596,7 +1604,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
             final List<({THLineSegment lineSegment, int lineSegmentPosition})>
             originalLineSegments = originalLine.getLineSegmentsPositionList(
-              _thFile,
+              _originalFileForLineSimplification!,
             );
             final List<({THLineSegment lineSegment, int lineSegmentPosition})>
             newLineSegments =
@@ -1632,7 +1640,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 );
             final List<({THLineSegment lineSegment, int lineSegmentPosition})>
             originalLineSegments = originalLine.getLineSegmentsPositionList(
-              _thFile,
+              _originalFileForLineSimplification!,
             );
             final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
               lineMPID: originalLine.mpID,
@@ -1687,12 +1695,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   : MPCommandDescriptionType.simplifyLines,
             );
 
-      _th2FileEditController.execute(simplifyCommand);
+      if (_isFirstLineSimplification) {
+        _th2FileEditController.execute(simplifyCommand);
+      } else {
+        _th2FileEditController.executeSubstitutingLastUndo(simplifyCommand);
+      }
     }
   }
 
-  MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(THLine line) {
-    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+  MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(
+    THLine line, {
+    THFile? thFile,
+  }) {
+    thFile ??= _thFile;
+
+    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
 
     if (lineSegments.length < 2) {
       throw Exception(
@@ -1727,42 +1744,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  void setOriginalSimplifiedLines(List<MPSelectedLine>? lines) {
-    _originalSimplifiedLines = lines;
+  void resetOriginalFileForLineSimplification() {
+    _originalFileForLineSimplification = null;
   }
 
-  void updateLineSimplificationTolerance() {
+  void prepareLineSimplificationInfo() {
     final double lineSimplifyEpsilonOnCanvasIncrease =
         mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
 
-    if (_originalSimplifiedLines == null) {
+    if (_originalFileForLineSimplification == null) {
+      _originalFileForLineSimplification = _thFile.copyWith();
       _lineSimplifyEpsilonOnCanvas = lineSimplifyEpsilonOnCanvasIncrease;
+      _isFirstLineSimplification = true;
     } else {
       _lineSimplifyEpsilonOnCanvas += lineSimplifyEpsilonOnCanvasIncrease;
-    }
-  }
-
-  void updateOriginalSimplifiedLines() {
-    if (_originalSimplifiedLines != null) {
-      return;
+      _isFirstLineSimplification = false;
     }
 
-    final List<MPSelectedLine> simplifiedLines = [];
-    final Iterable<MPSelectedElement> mpSelectedElements =
-        _th2FileEditController
-            .selectionController
-            .mpSelectedElementsLogical
-            .values;
-
-    for (final MPSelectedElement selectedElement in mpSelectedElements) {
-      if (selectedElement is! MPSelectedLine) {
-        continue;
-      }
-
-      simplifiedLines.add(selectedElement);
-    }
-
-    _originalSimplifiedLines = simplifiedLines;
+    print(
+      'Line simplification epsilon on canvas: $_lineSimplifyEpsilonOnCanvas',
+    );
   }
 
   void setLineSimplificationMethod(MPLineSimplificationMethod newMethod) {
@@ -1771,7 +1772,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _lineSimplificationMethod = newMethod;
-    setOriginalSimplifiedLines(null);
+    resetOriginalFileForLineSimplification();
   }
 
   List<({THLineSegment lineSegment, int lineSegmentPosition})>

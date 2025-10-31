@@ -1162,8 +1162,8 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void executeAndSubstituteLastUndo(MPCommand command) {
-    undoRedoController.executeAndSubstituteLastUndo(command);
+  void executeSubstitutingLastUndo(MPCommand command) {
+    undoRedoController.executeSubstitutingLastUndo(command);
     updateUndoRedoStatus();
   }
 

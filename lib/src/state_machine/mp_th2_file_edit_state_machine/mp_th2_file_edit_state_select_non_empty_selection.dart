@@ -15,13 +15,13 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
     _updateStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
     onStateExitClearSelectionOnExit(nextState);
   }
 
@@ -120,7 +120,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           selectionType: THSelectionType.pla,
         );
 
-    elementEditController.setOriginalSimplifiedLines(null);
+    elementEditController.resetOriginalFileForLineSimplification();
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );

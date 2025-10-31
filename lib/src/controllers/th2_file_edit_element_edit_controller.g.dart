@@ -138,30 +138,6 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
-  late final _$_originalSimplifiedLinesAtom = Atom(
-    name: 'TH2FileEditElementEditControllerBase._originalSimplifiedLines',
-    context: context,
-  );
-
-  List<MPSelectedLine>? get originalSimplifiedLines {
-    _$_originalSimplifiedLinesAtom.reportRead();
-    return super._originalSimplifiedLines;
-  }
-
-  @override
-  List<MPSelectedLine>? get _originalSimplifiedLines => originalSimplifiedLines;
-
-  @override
-  set _originalSimplifiedLines(List<MPSelectedLine>? value) {
-    _$_originalSimplifiedLinesAtom.reportWrite(
-      value,
-      super._originalSimplifiedLines,
-      () {
-        super._originalSimplifiedLines = value;
-      },
-    );
-  }
-
   late final _$_lineSimplifyEpsilonOnCanvasAtom = Atom(
     name: 'TH2FileEditElementEditControllerBase._lineSimplifyEpsilonOnCanvas',
     context: context,

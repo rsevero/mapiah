@@ -10,6 +10,7 @@
   * PLA original TH2File lost on setattr option undo/redo.
   * File parsing with XTherion Insert Image Config being treated as if the last image set doesn't exist.
   * Line creation with Bèzier segments throwing "Command of type editLineSegment needs to prepare undo/redo info but did not.".
+  * THFile.copyWith() does not deep copy elements.
 * Infrastructure maintenance:
   * THCommmandOption changed from having its parent to having only its parent MPID.
   * MPCommand migration to _prepareUndoRedoInfo() completed.
@@ -45,6 +46,7 @@
   * Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
   * MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
   * flutter upgrade to 3.35.7.
+  * Changed undoRedoController.executeAndSubstituteLastUndo() to executeSubstitutingLastUndo().
 
 ## 0.2.19 - 2025-10-14 - The polish refactoring - Part 1
 * Fixed bugs:

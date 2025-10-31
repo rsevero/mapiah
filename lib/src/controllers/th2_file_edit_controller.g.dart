@@ -1707,13 +1707,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void executeAndSubstituteLastUndo(MPCommand command) {
+  void executeSubstitutingLastUndo(MPCommand command) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(
-          name: 'TH2FileEditControllerBase.executeAndSubstituteLastUndo',
+          name: 'TH2FileEditControllerBase.executeSubstitutingLastUndo',
         );
     try {
-      return super.executeAndSubstituteLastUndo(command);
+      return super.executeSubstitutingLastUndo(command);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
