@@ -127,11 +127,26 @@ class THFile
     LinkedHashMap<int, THElement>? elementByMPID,
     List<int>? childrenMPIDs,
   }) {
+    // Elements:
+    // - If a map is provided, use it as-is (caller controls ownership).
+    // - If not provided, deep-clone elements from this THFile to avoid
+    //   sharing mutable instances between the original and the copy.
+    final LinkedHashMap<int, THElement> effectiveElements =
+        elementByMPID ??
+        LinkedHashMap.fromEntries(
+          _elementByMPID.entries.map(
+            (MapEntry<int, THElement> e) => MapEntry<int, THElement>(
+              e.key,
+              THElement.fromMap(e.value.toMap()),
+            ),
+          ),
+        );
+
     return THFile.forCWJM(
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mpID: mpID ?? _mpID,
-      elementByMPID: elementByMPID ?? _elementByMPID,
+      elementByMPID: effectiveElements,
       childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
     );
   }
