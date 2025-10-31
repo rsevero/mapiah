@@ -149,15 +149,17 @@ endscrap
               controller.elementEditController.simplifySelectedLines();
             }
 
+            final int simplifiedLineSegmentCount = controller.thFile
+                .lineByMPID(lineMPID)
+                .getLineSegmentMPIDs(controller.thFile)
+                .length;
+            final int originalLineSegmentCount = snapshotOriginal
+                .lineByMPID(lineMPID)
+                .getLineSegmentMPIDs(snapshotOriginal)
+                .length;
+
             expect(
-              controller.thFile
-                      .lineByMPID(lineMPID)
-                      .getLineSegmentMPIDs(controller.thFile)
-                      .length <
-                  snapshotOriginal
-                      .lineByMPID(lineMPID)
-                      .getLineSegmentMPIDs(snapshotOriginal)
-                      .length,
+              simplifiedLineSegmentCount < originalLineSegmentCount,
               isTrue,
             );
 

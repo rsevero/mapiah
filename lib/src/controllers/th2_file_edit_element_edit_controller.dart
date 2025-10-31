@@ -1697,6 +1697,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       if (_isFirstLineSimplification) {
         _th2FileEditController.execute(simplifyCommand);
+        _isFirstLineSimplification = false;
       } else {
         _th2FileEditController.executeSubstitutingLastUndo(simplifyCommand);
       }
@@ -1758,7 +1759,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _isFirstLineSimplification = true;
     } else {
       _lineSimplifyEpsilonOnCanvas += lineSimplifyEpsilonOnCanvasIncrease;
-      _isFirstLineSimplification = false;
     }
 
     print(
