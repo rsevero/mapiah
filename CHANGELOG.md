@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.21 - not yet release -
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
+
 ## 0.2.20 - 2025-11-01 - The polish refactoring - Part 2, The Pará Ending
 * New features:
   * Bèzier curve lines simplification.

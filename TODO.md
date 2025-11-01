@@ -79,7 +79,7 @@ Version 0.3
 [ ] - BUG: on a new file, create a line: can't edit nodes of this line.
 [ ] - BUG: on newly created lines, Bèzier line segments are set as smooth but the control points don't respect this smoothness.
 [ ] - BUG: all options except the ones of line segments should have empty original TH2File line.
-[ ] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
+[X] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
 
 Version 0.4
 [ ] - Open multiple files simultaneously
