@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.20 - not yet release - The polish refactoring - Part 2, The Pará Ending
+## 0.2.20 - 2025-11-01 - The polish refactoring - Part 2, The Pará Ending
 * New features:
   * Bèzier curve lines simplification.
 * Fixed bugs:

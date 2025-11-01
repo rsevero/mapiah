@@ -1,6 +1,6 @@
 name: mapiah
 description: Graphical interface for Therion cave mapping software written in Flutter.
-version: 0.2.19
+version: 0.2.20
 homepage: https://mapiah.org
 repository: https://github.com/rsevero/mapiah.git
 issue_tracker: https://github.com/rsevero/mapiah/issues
