@@ -2,6 +2,7 @@
 
 ## 0.2.21 - not yet release -
 * New features:
+  * Setting canvas scale to 100% for new files.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.

@@ -53,6 +53,8 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
         );
     final String fileName = th2FileEditController.thFile.filename;
 
+    th2FileEditController.setCanvasScale(thDefaultTHFileScale);
+
     Navigator.push(
       context,
       MaterialPageRoute(
