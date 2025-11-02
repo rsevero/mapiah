@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -64,7 +65,7 @@ void main() {
       // Verify the Add Element FAB is present by hero tag before changing state
       // Note: The heroTag uses the enum name, so 'addLine' becomes 'add_element_addLine'.
       // Initially, the active button is 'addElement'.
-      final addElementHero = find.byWidgetPredicate(
+      final Finder addElementHero = find.byWidgetPredicate(
         (w) => w is Hero && w.tag == 'add_element_addElement',
         description: 'Hero(tag: add_element_addElement)',
       );
@@ -77,14 +78,14 @@ void main() {
       await tester.pump();
 
       // After switching to addLine state, the active FAB hero tag changes accordingly.
-      final addLineHero = find.byWidgetPredicate(
+      final Finder addLineHero = find.byWidgetPredicate(
         (w) => w is Hero && w.tag == 'add_element_addLine',
         description: 'Hero(tag: add_element_addLine)',
       );
       expect(addLineHero, findsOneWidget);
 
       // Target the listener surface to send mouse events
-      final listenerFinder = find.byKey(
+      final Finder listenerFinder = find.byKey(
         ValueKey('MPListenerWidget|${th2Controller.thFileMPID}'),
       );
       expect(listenerFinder, findsOneWidget);
@@ -120,19 +121,31 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert: one line exists in the THFile (under the active scrap)
-      final lines = th2Controller.thFile.getLines().toList();
+      final List<THLine> lines = th2Controller.thFile.getLines().toList();
       expect(lines.length, 1);
 
       // Optional: the line should have at least one line segment
-      final lineSegments = lines.first.getLineSegments(th2Controller.thFile);
+      final List<THLineSegment> lineSegments = lines.first.getLineSegments(
+        th2Controller.thFile,
+      );
       expect(lineSegments.isNotEmpty, isTrue);
 
-      // The node edit FAB should be present and the controller should report it as enabled
-      final nodeEditFinder = find.byWidgetPredicate(
+      // The node edit FAB should be present
+      final Finder nodeEditFinder = find.byWidgetPredicate(
         (w) => w is FloatingActionButton && w.heroTag == 'node_edit_tool',
         description: "FloatingActionButton(heroTag: node_edit_tool)",
       );
       expect(nodeEditFinder, findsOneWidget);
+
+      // Click the node-edit FAB (heroTag: 'node_edit_tool').
+      await tester.tap(nodeEditFinder);
+      await tester.pumpAndSettle();
+
+      // Selecting the line to enable node edit FAB.
+      await tester.sendEventToBinding(mouse.down(p1, buttons: kPrimaryButton));
+      await tester.pump();
+      await tester.sendEventToBinding(mouse.up());
+      await tester.pump();
 
       // Check controller flag that governs the FAB appearance/availability
       expect(th2Controller.enableNodeEditButton, isTrue);

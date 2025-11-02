@@ -1592,9 +1592,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
 
-            print(
-              'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
-            );
+            // print(
+            //   'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
+            // );
 
             if (simplifiedLineSegmentsList.length >=
                 originalLineSegmentsList.length) {
@@ -1658,9 +1658,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   epsilon: _lineSimplifyEpsilonOnCanvas,
                 );
 
-            print(
-              'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
-            );
+            // print(
+            //   'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
+            // );
 
             if (removedLineSegments.isEmpty) {
               /// No simplification found.
@@ -1761,9 +1761,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _lineSimplifyEpsilonOnCanvas += lineSimplifyEpsilonOnCanvasIncrease;
     }
 
-    print(
-      'Line simplification epsilon on canvas: $_lineSimplifyEpsilonOnCanvas',
-    );
+    // print(
+    //   'Line simplification epsilon on canvas: $_lineSimplifyEpsilonOnCanvas',
+    // );
   }
 
   void setLineSimplificationMethod(MPLineSimplificationMethod newMethod) {

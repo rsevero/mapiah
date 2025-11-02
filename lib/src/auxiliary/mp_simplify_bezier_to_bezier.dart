@@ -223,9 +223,9 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
     accuracy: accuracy,
   );
 
-  print("Original segments: ${originalLineSegmentsList.length}");
-  print("asCubicBez segments: ${asCubicBez.length}");
-  print("Fitted cubics: ${fittedCubics.length}");
+  // print("Original segments: ${originalLineSegmentsList.length}");
+  // print("asCubicBez segments: ${asCubicBez.length}");
+  // print("Fitted cubics: ${fittedCubics.length}");
 
   // Invariant: merge-only simplifier guarantees non-increase.
   assert(

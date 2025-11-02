@@ -33,7 +33,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap the New file button on the home app bar
-      final newFileButton = find.byKey(
+      final Finder newFileButton = find.byKey(
         const ValueKey('MapiahHomeNewFileButton'),
       );
       expect(newFileButton, findsOneWidget);
@@ -43,7 +43,7 @@ void main() {
       // The modal overlay should be visible; tap the OK button to create the file
       // We expect the defaults to be valid (scrap-1, no-op options, default encoding),
       // so OK should be enabled without extra input.
-      final okButton = find.widgetWithText(ElevatedButton, 'OK');
+      final Finder okButton = find.widgetWithText(ElevatedButton, 'OK');
       expect(okButton, findsOneWidget);
       // Ensure it's in view in case the dialog content overflows the viewport
       await tester.ensureVisible(okButton);
