@@ -30,8 +30,8 @@ dependencies:
   path: ^1.9.0
   path_drawing: ^1.0.1
   path_provider: ^2.0.0
-  petitparser: ^6.0.0
-  toml: ^0.16.0
+  petitparser: ^7.0.1
+  toml: ^0.17.0
   url_launcher: ^6.3.1
   web: ^1.1.1
   window_size: ^0.1.0

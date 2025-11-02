@@ -1,3 +1,4 @@
+import 'package:mapiah/src/mp_file_read_write/grammar_utils.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// .xvi file grammar.
@@ -15,6 +16,9 @@ class XVIGrammar extends GrammarDefinition {
               digit().plus() &
               (char('.') & digit().plus()).optional())
           .flatten();
+
+  /// Delegate to the shared case-insensitive matcher in [GrammarUtils].
+  Parser stringIgnoreCase(String s) => GrammarUtils.stringIgnoreCase(s);
 
   /// length unit
   Parser lengthUnit() =>

@@ -8,6 +8,7 @@
   * Added tests:
     * asserting the fitter first command is always a moveTo before any curveTo, ensuring regressions don’t return;
     * editing a new line in a new file.
+  * flutter pub upgrade --major-versions.
 
 ## 0.2.20 - 2025-11-01 - The polish refactoring - Part 2, The Pará Ending
 * New features:

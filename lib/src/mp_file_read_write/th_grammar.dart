@@ -1,4 +1,5 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/mp_file_read_write/grammar_utils.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// .th file grammar.
@@ -68,6 +69,9 @@ class THGrammar extends GrammarDefinition {
 
   /// Alphanumeric chars
   Parser alphanumericChars() => pattern('A-Za-z0-9').plus();
+
+  /// Delegate to the shared case-insensitive matcher in [GrammarUtils].
+  Parser stringIgnoreCase(String s) => GrammarUtils.stringIgnoreCase(s);
 
   /// Any string
   Parser anyString() =>
