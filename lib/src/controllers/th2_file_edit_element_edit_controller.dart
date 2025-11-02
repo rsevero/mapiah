@@ -580,12 +580,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             originalLineInTH2File: '',
             sameLineComment: lastLineSegment.sameLineComment,
           );
-      final THSmoothCommandOption smoothOn = THSmoothCommandOption(
-        parentMPID: bezierCurveLineSegment.mpID,
-        choice: THOptionChoicesOnOffAutoType.on,
-      );
-
-      bezierCurveLineSegment.addUpdateOption(smoothOn);
 
       final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
         originalLineSegment: lastLineSegment,

@@ -5,6 +5,7 @@
   * Setting canvas scale to 100% for new files.
 * Fixed bugs:
   * New files don´t update internal status on element add/edit/remove.
+  * On line creation, smooth option was set to Bèzier line segments but control points were adjusted only after line creation completion.
 * Infrastructure maintenance:
   * Added tests:
     * asserting the fitter first command is always a moveTo before any curveTo, ensuring regressions don’t return;
