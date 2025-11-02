@@ -403,6 +403,7 @@ abstract class TH2FileEditControllerBase with Store {
         TH2FileEditController._create();
 
     th2FileEditController._basicInitialization(thFile);
+    th2FileEditController._finalFilePreparations(thFile);
 
     return th2FileEditController;
   }
@@ -458,6 +459,14 @@ abstract class TH2FileEditControllerBase with Store {
     bool isSuccessful,
     List<String> errors,
   ) {
+    _finalFilePreparations(parsedFile);
+
+    if (!isSuccessful) {
+      errorMessages.addAll(errors);
+    }
+  }
+
+  void _finalFilePreparations(THFile parsedFile) {
     if (_thFile.scrapMPIDs.isNotEmpty) {
       _activeScrapID = _thFile.scrapMPIDs.first;
       updateHasMultipleScraps();
@@ -480,10 +489,6 @@ abstract class TH2FileEditControllerBase with Store {
     setFilename(_thFile.filename);
 
     _isLoading = false;
-
-    if (!isSuccessful) {
-      errorMessages.addAll(errors);
-    }
   }
 
   void _initializeReactions() {

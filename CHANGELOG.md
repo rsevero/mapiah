@@ -4,11 +4,13 @@
 * New features:
   * Setting canvas scale to 100% for new files.
 * Fixed bugs:
+  * New files don´t update internal status on element add/edit/remove.
 * Infrastructure maintenance:
   * Added tests:
     * asserting the fitter first command is always a moveTo before any curveTo, ensuring regressions don’t return;
     * editing a new line in a new file.
-  * flutter pub upgrade --major-versions.
+  * flutter pub upgrade --major-versions:
+    * upgraded to petite_parser 7.0.1.
 
 ## 0.2.20 - 2025-11-01 - The polish refactoring - Part 2, The Pará Ending
 * New features:
