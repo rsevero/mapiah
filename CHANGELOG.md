@@ -1,10 +1,10 @@
 # Changelog
 
-## 0.2.21 - not yet release -
+## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:
   * Setting canvas scale to 100% for new files.
 * Fixed bugs:
-  * New files don´t update internal status on element add/edit/remove.
+  * New files don´t update internal status on element add/edit/remove: caused all kinds of strange problems on new file editing.
   * On line creation, smooth option was set to Bèzier line segments but control points were adjusted only after line creation completion.
 * Infrastructure maintenance:
   * Added tests:

@@ -7,13 +7,14 @@
    1. .github/workflows/linux_and_web.yml
    2. .github/workflows/windows.yml
    3. codemagic.yaml
-5. Push the previous changes
-6. Create a new tag with the new version:
+5. Commit the previous changes with a comment like 'v0.2.22'
+6. Push the previous changes
+7. Create a new tag with the new version:
    ```bash
-   git tag -a v0.2.6 -m "v0.2.6"
-   git push origin v0.2.6
+   git tag -a v0.2.22 -m "v0.2.22"
+   git push origin v0.2.22
    ```
-7. After the new release has been created in GitHub:
+8. After the new release has been created in GitHub:
    1. update the release title to include the version number and the name of the release;
    2. update the release description including the changelog for the release.
 
