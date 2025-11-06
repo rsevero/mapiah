@@ -589,6 +589,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_enableSelectButtonAtom = Atom(
+    name: 'TH2FileEditControllerBase._enableSelectButton',
+    context: context,
+  );
+
+  bool get enableSelectButton {
+    _$_enableSelectButtonAtom.reportRead();
+    return super._enableSelectButton;
+  }
+
+  @override
+  bool get _enableSelectButton => enableSelectButton;
+
+  @override
+  set _enableSelectButton(bool value) {
+    _$_enableSelectButtonAtom.reportWrite(value, super._enableSelectButton, () {
+      super._enableSelectButton = value;
+    });
+  }
+
   late final _$_isZoomButtonsHoveredAtom = Atom(
     name: 'TH2FileEditControllerBase._isZoomButtonsHovered',
     context: context,
@@ -1772,6 +1792,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setFilename');
     try {
       return super.setFilename(filename);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setEnableSelectButton(bool enable) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setEnableSelectButton');
+    try {
+      return super.setEnableSelectButton(enable);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

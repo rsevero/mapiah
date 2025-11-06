@@ -35,6 +35,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   bool _th2FileEditControllerLoaded = false;
   late ColorScheme colorScheme;
   bool isSelectMode = false;
+  bool enableSelectedButton = false;
 
   @override
   void initState() {
@@ -240,6 +241,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       builder: (context) {
         final List<Widget> generalActionButtons = [];
 
+        enableSelectedButton = th2FileEditController.enableSelectButton;
         isSelectMode = th2FileEditController.isSelectMode;
 
         generalActionButtons.addAll(_changeImageButton());
@@ -460,25 +462,29 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
       SizedBox(height: mpButtonSpace),
       FloatingActionButton(
         heroTag: 'select_tool',
-        onPressed: _onSelectToolPressed,
+        onPressed: enableSelectedButton ? _onSelectToolPressed : null,
         tooltip: mpLocator.appLocalizations.th2FileEditPageSelectTool,
         child: Image.asset(
           'assets/icons/select-tool.png',
           width: mpFloatingActionIconSize,
           height: mpFloatingActionIconSize,
-          color: isSelectMode
-              ? colorScheme.onPrimary
-              : colorScheme.onSecondaryContainer,
+          color: enableSelectedButton
+              ? (isSelectMode
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSecondaryContainer)
+              : colorScheme.surfaceContainerHighest,
         ),
-        backgroundColor: isSelectMode
-            ? colorScheme.primary
-            : colorScheme.secondaryContainer,
-        elevation: isSelectMode ? 0 : null,
+        backgroundColor: enableSelectedButton
+            ? (isSelectMode
+                  ? colorScheme.primary
+                  : colorScheme.secondaryContainer)
+            : colorScheme.surfaceContainerLowest,
+        elevation: isSelectMode && enableSelectedButton ? 0 : null,
       ),
       SizedBox(height: mpButtonSpace),
       FloatingActionButton(
         heroTag: 'node_edit_tool',
-        onPressed: _onNodeEditToolPressed,
+        onPressed: enableNodeEditButton ? _onNodeEditToolPressed : null,
         tooltip: mpLocator.appLocalizations.th2FileEditPageNodeEditTool,
         child: Icon(
           Icons.polyline_outlined,
@@ -494,7 +500,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   ? colorScheme.primary
                   : colorScheme.secondaryContainer)
             : colorScheme.surfaceContainerLowest,
-        elevation: isEditLineMode ? 0 : null,
+        elevation: isEditLineMode && enableNodeEditButton ? 0 : null,
       ),
     ];
   }

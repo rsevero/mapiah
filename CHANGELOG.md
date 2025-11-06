@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.22 - not yet released
+* New features:
+* Fixed bugs:
+  * Select and Node Edit buttons enabling/disabling logic.
+* Infrastructure maintenance:
+
 ## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:
   * Setting canvas scale to 100% for new files.

@@ -122,6 +122,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool _isSelectMode = false;
 
   @readonly
+  bool _enableSelectButton = false;
+
+  @readonly
   bool _isZoomButtonsHovered = false;
 
   @readonly
@@ -1238,6 +1241,11 @@ abstract class TH2FileEditControllerBase with Store {
 
       _filenameAndScrap += ' | ${scrap.thID}';
     }
+  }
+
+  @action
+  void setEnableSelectButton(bool enable) {
+    _enableSelectButton = enable;
   }
 }
 

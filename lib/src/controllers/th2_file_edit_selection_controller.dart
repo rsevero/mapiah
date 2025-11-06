@@ -162,6 +162,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       addSelectableElement(element);
     }
+
+    _th2FileEditController.setEnableSelectButton(
+      _mpSelectableElements!.isNotEmpty,
+    );
   }
 
   Rect _getElementsListBoundingBoxOnCanvas(Iterable<THElement> elements) {

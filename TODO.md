@@ -79,7 +79,7 @@ Version 0.3
 [X] - BUG: on a new file, create a line: can't edit nodes of this line.
 [X] - BUG: on newly created lines, Bèzier line segments are set as smooth but the control points don't respect this smoothness.
 [X] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
-[ ] - On an empty file, the select button should be disabled.
+[X] - On an empty file, the select button should be disabled.
 
 Version 0.4
 [ ] - Open multiple files simultaneously
