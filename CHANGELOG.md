@@ -5,6 +5,8 @@
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
 * Infrastructure maintenance:
+  * Added test:
+    * Open a file, select a line and simplify pressing Ctrl+L.
 
 ## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:

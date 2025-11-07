@@ -2491,6 +2491,11 @@ class THFileParser {
       if (fileBytes == null) {
         final File file = File(filename);
 
+        assert(
+          await file.exists(),
+          'The file to parse does not exist: $filename',
+        );
+
         fileBytes = await file.readAsBytes();
       }
 
