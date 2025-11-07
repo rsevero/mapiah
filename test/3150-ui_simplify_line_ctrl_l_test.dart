@@ -9,6 +9,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -74,6 +75,9 @@ void main() {
       expect(linePre.getLineSegmentMPIDs(thFile).length == 17, isTrue);
 
       selectionController.setSelectedElements([linePre]);
+      th2Controller.stateController.setState(
+        MPTH2FileEditStateType.editSingleLine,
+      );
 
       await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
       await tester.sendKeyDownEvent(LogicalKeyboardKey.keyL);
