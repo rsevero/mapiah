@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_line_simplification_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -1578,46 +1577,61 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               MPLineSimplificationMethod.forceStraight) {
             /// TODO convert Bèzier curve to straight and them simplify
           } else {
-            final List<THLineSegment> originalLineSegmentsList =
-                originalLineSegmentsMap.values.toList();
-            final List<THLineSegment> simplifiedLineSegmentsList =
-                mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
-                  originalLineSegmentsList,
+            final MPCommand? simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegments(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsMap.values
+                      .toList(),
                   accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
 
-            // print(
-            //   'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
-            // );
-
-            if (simplifiedLineSegmentsList.length >=
-                originalLineSegmentsList.length) {
-              // No simplification was possible.
-              continue;
+            if (simplifyCommand != null) {
+              simplifyCommands.add(simplifyCommand);
             }
-
-            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-            originalLineSegments = originalLine.getLineSegmentsPositionList(
-              _originalFileForLineSimplification!,
-            );
-            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-            newLineSegments =
-                convertTHLineSegmentListToLineSegmentWithPositionList(
-                  simplifiedLineSegmentsList,
-                );
-            final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
-              lineMPID: originalLine.mpID,
-              originalLineSegments: originalLineSegments,
-              newLineSegments: newLineSegments,
-            );
-
-            simplifyCommands.add(simplifyCommand);
           }
         case MPLineTypePerLineSegmentType.mixed:
+          final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
+              MPEditElementAux.separateLineSegmentsPerType(
+                line: originalLine,
+                thFile: _originalFileForLineSimplification!,
+              );
+          final List<THLineSegment> simplifiedLineSegments = [];
 
-          /// TODO separate each line in it's per type parts and them treat each
-          /// part as a separate line.
-          break;
+          for (final MPSingleTypeLineSegmentList typeLineSegments
+              in perTypeLineSegments) {
+            switch (typeLineSegments.type) {
+              case THElementType.bezierCurveLineSegment:
+                if (_lineSimplificationMethod ==
+                    MPLineSimplificationMethod.forceStraight) {
+                  /// TODO convert Bèzier curve to straight and them simplify
+                } else {
+                  final List<THLineSegment> originalLineSegmentsList =
+                      typeLineSegments.lineSegments;
+                  final List<THLineSegment> simplifiedLineSegmentsList =
+                      mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+                        originalLineSegmentsList,
+                        accuracy: _lineSimplifyEpsilonOnCanvas,
+                      );
+
+                  simplifiedLineSegments.addAll(
+                    (simplifiedLineSegmentsList.length <
+                            originalLineSegmentsList.length)
+                        ? simplifiedLineSegmentsList
+                        : originalLineSegmentsList,
+                  );
+                }
+              case THElementType.straightLineSegment:
+                if (_lineSimplificationMethod ==
+                    MPLineSimplificationMethod.forceBezier) {
+                  /// TODO convert straight to Bèzier curve and them simplify
+                } else {}
+              default:
+                throw Exception(
+                  'Error: Unsupported line segment type in mixed line at TH2FileEditElementEditController.simplifySelectedLines(). Type: ${typeLineSegments.type}',
+                );
+            }
+          }
         case MPLineTypePerLineSegmentType.straight:
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceBezier) {
@@ -1629,7 +1643,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 );
             final List<({THLineSegment lineSegment, int lineSegmentPosition})>
             newLineSegments =
-                convertTHLineSegmentListToLineSegmentWithPositionList(
+                MPEditElementAux.convertTHLineSegmentListToLineSegmentWithPositionList(
                   bezierLineSegments,
                 );
             final List<({THLineSegment lineSegment, int lineSegmentPosition})>
@@ -1644,32 +1658,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
             simplifyCommands.add(simplifyCommand);
           } else {
-            final List<THLineSegment> originalLineSegmentsList =
-                originalLineSegmentsMap.values.toList();
-            final List<THLineSegment> removedLineSegments =
-                MPLineSimplificationAux.raumerDouglasPeuckerIterative(
-                  originalStraightLineSegments: originalLineSegmentsList,
-                  epsilon: _lineSimplifyEpsilonOnCanvas,
+            final MPCommand? simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForStraightLineSegments(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsMap.values
+                      .toList(),
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
 
-            // print(
-            //   'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${removedLineSegments.length}',
-            // );
-
-            if (removedLineSegments.isEmpty) {
-              /// No simplification found.
-              return;
-            }
-
-            for (final THLineSegment removedLineSegment
-                in removedLineSegments) {
-              final MPCommand removeLineSegmentCommand =
-                  MPRemoveLineSegmentCommand(
-                    lineSegment: removedLineSegment,
-                    descriptionType: MPCommandDescriptionType.simplifyLine,
-                  );
-
-              simplifyCommands.add(removeLineSegmentCommand);
+            if (simplifyCommand != null) {
+              simplifyCommands.add(simplifyCommand);
             }
           }
       }
@@ -1767,23 +1766,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _lineSimplificationMethod = newMethod;
     resetOriginalFileForLineSimplification();
-  }
-
-  List<({THLineSegment lineSegment, int lineSegmentPosition})>
-  convertTHLineSegmentListToLineSegmentWithPositionList(
-    List<THLineSegment> lineSegmentsList,
-  ) {
-    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-    lineSegmentsWithPosition = lineSegmentsList
-        .map<({THLineSegment lineSegment, int lineSegmentPosition})>(
-          (s) => (
-            lineSegment: s,
-            lineSegmentPosition: mpAddChildAtEndMinusOneOfParentChildrenList,
-          ),
-        )
-        .toList();
-
-    return lineSegmentsWithPosition;
   }
 }
 

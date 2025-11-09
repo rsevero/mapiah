@@ -139,8 +139,7 @@ List<CubicBez> bezPathToCubics(BezPath path) => path.toCubics();
 
 List<CubicBez> mpSimplifyCubicChain(
   List<CubicBez> chain, {
-  double accuracy =
-      mpLineSimplifyEpsilonOnScreen, // tolerance in your coordinate units
+  double accuracy = mpLineSimplifyEpsilonOnScreen,
 }) {
   // Merge-only simplification: never split original segments; only merge
   // consecutive segments when a single cubic fits the span within accuracy.

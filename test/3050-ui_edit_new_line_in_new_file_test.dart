@@ -120,15 +120,14 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
 
-      // Assert: one line exists in the THFile (under the active scrap)
+      // Assert: one line exists in the THFile
       final List<THLine> lines = th2Controller.thFile.getLines().toList();
       expect(lines.length, 1);
 
-      // Optional: the line should have at least one line segment
       final List<THLineSegment> lineSegments = lines.first.getLineSegments(
         th2Controller.thFile,
       );
-      expect(lineSegments.isNotEmpty, isTrue);
+      expect(lineSegments.length == 3, isTrue);
 
       // The node edit FAB should be present
       final Finder nodeEditFinder = find.byWidgetPredicate(
@@ -146,6 +145,11 @@ void main() {
       await tester.pump();
       await tester.sendEventToBinding(mouse.up());
       await tester.pump();
+
+      expect(
+        th2Controller.selectionController.mpSelectedElementsLogical.length == 1,
+        isTrue,
+      );
 
       // Check controller flag that governs the FAB appearance/availability
       expect(th2Controller.enableNodeEditButton, isTrue);

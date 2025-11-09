@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
-class MPLineSimplificationAux {
+class MPStraightLineSimplificationAux {
   /// Douglas–Peucker line simplification (iterative).
-  /// Returns the list of endpoints to be removed.
+  /// Returns the list of endpoints to be kept.
   static List<THStraightLineSegment> raumerDouglasPeuckerIterative({
     required List<THLineSegment> originalStraightLineSegments,
     required double epsilon,
@@ -65,7 +65,7 @@ class MPLineSimplificationAux {
     }
 
     for (int i = 0; i < numberOfStraightLineSegmentsLength; i++) {
-      if (!keep[i]) {
+      if (keep[i]) {
         if (originalStraightLineSegments[i] is! THStraightLineSegment) {
           throw Exception(
             'Expected THStraightLineSegment, got ${originalStraightLineSegments[i].runtimeType}',
