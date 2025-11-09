@@ -281,7 +281,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
 
   @override
-  String get mpCommandDescriptionSimplifyBezier => 'Simplify Bèzier curve';
+  String get mpCommandDescriptionSimplifyBezier => 'Simplify Bézier curve';
 
   @override
   String get mpCommandDescriptionSetOptionToElements =>
@@ -298,7 +298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionSimplifyToBezier =>
-      'Simplify into Bèzier curve';
+      'Simplify into Bézier curve';
 
   @override
   String get mpCommandDescriptionSimplifyToStraight =>

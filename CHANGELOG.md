@@ -5,17 +5,18 @@
   * Simplify complex (that contains straight and Bézier curve segments) lines.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
-  * On Bézier curve line simplfication, first line segment being lost.
+  * On Bézier curve line simplification, first line segment being lost.
 * Infrastructure maintenance:
   * Added test:
     * Open a file, select a line and simplify pressing Ctrl+L.
+  * Fixed Bézier spelling.
 
 ## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:
   * Setting canvas scale to 100% for new files.
 * Fixed bugs:
   * New files don´t update internal status on element add/edit/remove: caused all kinds of strange problems on new file editing.
-  * On line creation, smooth option was set to Bèzier line segments but control points were adjusted only after line creation completion.
+  * On line creation, smooth option was set to Bézier line segments but control points were adjusted only after line creation completion.
 * Infrastructure maintenance:
   * Added tests:
     * asserting the fitter first command is always a moveTo before any curveTo, ensuring regressions don’t return;
@@ -25,14 +26,14 @@
 
 ## 0.2.20 - 2025-11-01 - The polish refactoring - Part 2, The Pará Ending
 * New features:
-  * Bèzier curve lines simplification.
+  * Bézier curve lines simplification.
 * Fixed bugs:
   * Delete button only removes points and lines but no areas.
   * Original TH2File line management in MPRemoveAttrOptionFromElementCommand and MPSetAttrOptionToElementCommand.
   * Sometimes PLA options not presented in alphabetical order.
   * PLA original TH2File lost on setattr option undo/redo.
   * File parsing with XTherion Insert Image Config being treated as if the last image set doesn't exist.
-  * Line creation with Bèzier segments throwing "Command of type editLineSegment needs to prepare undo/redo info but did not.".
+  * Line creation with Bézier segments throwing "Command of type editLineSegment needs to prepare undo/redo info but did not.".
   * THFile.copyWith() does not deep copy elements.
   * Repetitive line simplification isn´t written in file.
 * Infrastructure maintenance:
@@ -247,7 +248,7 @@
   * Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
   * When selecting a control point 1 the control points of the adjacent line segments weren't properly selected.
   * Changing first point of a line to bezier curve throws an exception.
-  * When a Bèzier control point is selected, an end point appears as selected also.
+  * When a Bézier control point is selected, an end point appears as selected also.
   * When multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements.
   * Right clicking anywhere when a control point is selected raises an exception.
   * Opening a TH2 file that calls for a non existent XVI file should not hang Mapiah.

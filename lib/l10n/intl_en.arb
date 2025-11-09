@@ -426,12 +426,12 @@
     "description": "The description for the set option command",
     "type": "text"
   },
-  "mpCommandDescriptionSimplifyBezier": "Simplify Bèzier curve",
+  "mpCommandDescriptionSimplifyBezier": "Simplify Bézier curve",
   "@mpCommandDescriptionSimplifyBezier": {
-    "description": "The description for the simplify Bèzier curve command",
+    "description": "The description for the simplify Bézier curve command",
     "type": "text"
   },
-    "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
+  "mpCommandDescriptionSetOptionToElements": "Set option to multiple elements",
   "@mpCommandDescriptionSetOptionToElements": {
     "description": "The description for the set option to elements command",
     "type": "text"
@@ -451,9 +451,9 @@
     "description": "The description for the simplify straight line command",
     "type": "text"
   },
-  "mpCommandDescriptionSimplifyToBezier": "Simplify into Bèzier curve",
+  "mpCommandDescriptionSimplifyToBezier": "Simplify into Bézier curve",
   "@mpCommandDescriptionSimplifyToBezier": {
-    "description": "The description for the simplify Bèzier curve line command",
+    "description": "The description for the simplify Bézier curve line command",
     "type": "text"
   },
   "mpCommandDescriptionSimplifyToStraight": "Simplify into straight line",

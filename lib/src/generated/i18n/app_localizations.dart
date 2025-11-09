@@ -602,10 +602,10 @@ abstract class AppLocalizations {
   /// **'Set option'**
   String get mpCommandDescriptionSetOptionToElement;
 
-  /// The description for the simplify Bèzier curve command
+  /// The description for the simplify Bézier curve command
   ///
   /// In en, this message translates to:
-  /// **'Simplify Bèzier curve'**
+  /// **'Simplify Bézier curve'**
   String get mpCommandDescriptionSimplifyBezier;
 
   /// The description for the set option to elements command
@@ -632,10 +632,10 @@ abstract class AppLocalizations {
   /// **'Simplify straight line'**
   String get mpCommandDescriptionSimplifyStraight;
 
-  /// The description for the simplify Bèzier curve line command
+  /// The description for the simplify Bézier curve line command
   ///
   /// In en, this message translates to:
-  /// **'Simplify into Bèzier curve'**
+  /// **'Simplify into Bézier curve'**
   String get mpCommandDescriptionSimplifyToBezier;
 
   /// The description for the simplify into straight line command
