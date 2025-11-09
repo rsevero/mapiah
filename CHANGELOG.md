@@ -5,6 +5,7 @@
   * Simplify complex (that contains straight and Bézier curve segments) lines.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
+  * On Bézier curve line simplfication, first line segment being lost.
 * Infrastructure maintenance:
   * Added test:
     * Open a file, select a line and simplify pressing Ctrl+L.
