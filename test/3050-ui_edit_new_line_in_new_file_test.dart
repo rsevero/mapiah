@@ -90,6 +90,8 @@ void main() {
       );
       expect(listenerFinder, findsOneWidget);
 
+      expect(th2Controller.enableSelectButton, isFalse);
+
       final Offset origin = tester.getTopLeft(listenerFinder);
       final Offset p1 = origin + const Offset(120, 120); // first click (start)
       final Offset p2 =
@@ -129,15 +131,18 @@ void main() {
       );
       expect(lineSegments.length == 3, isTrue);
 
-      // The node edit FAB should be present
-      final Finder nodeEditFinder = find.byWidgetPredicate(
-        (w) => w is FloatingActionButton && w.heroTag == 'node_edit_tool',
-        description: "FloatingActionButton(heroTag: node_edit_tool)",
-      );
-      expect(nodeEditFinder, findsOneWidget);
+      expect(th2Controller.enableSelectButton, isTrue);
+      expect(th2Controller.enableNodeEditButton, isFalse);
 
-      // Click the node-edit FAB (heroTag: 'node_edit_tool').
-      await tester.tap(nodeEditFinder);
+      // The select element FAB should be present
+      final Finder selectFinder = find.byWidgetPredicate(
+        (w) => w is FloatingActionButton && w.heroTag == 'select_tool',
+        description: "FloatingActionButton(heroTag: select_tool)",
+      );
+      expect(selectFinder, findsOneWidget);
+
+      // Click the select tool FAB (heroTag: 'select_tool').
+      await tester.tap(selectFinder);
       await tester.pumpAndSettle();
 
       // Selecting the line to enable node edit FAB.
@@ -153,6 +158,17 @@ void main() {
 
       // Check controller flag that governs the FAB appearance/availability
       expect(th2Controller.enableNodeEditButton, isTrue);
+
+      // The node edit FAB should be present
+      final Finder nodeEditFinder = find.byWidgetPredicate(
+        (w) => w is FloatingActionButton && w.heroTag == 'node_edit_tool',
+        description: "FloatingActionButton(heroTag: node_edit_tool)",
+      );
+      expect(nodeEditFinder, findsOneWidget);
+
+      // Click the node-edit FAB (heroTag: 'node_edit_tool').
+      await tester.tap(nodeEditFinder);
+      await tester.pumpAndSettle();
     });
   });
 }
