@@ -276,17 +276,22 @@ class MPEditElementAux {
     required THFile thFile,
   }) {
     final List<MPSingleTypeLineSegmentList> segmentsByType = [];
-    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
+    final List<THLineSegment> lineSegmentsComplete = line.getLineSegments(
+      thFile,
+    );
 
-    if (lineSegments.isEmpty) {
+    if (lineSegmentsComplete.length <= 2) {
       return segmentsByType;
     }
 
-    final List<THLineSegment> currentTypeSegments = [];
+    final Iterable<THLineSegment> lineSegmentsSkipFirst = lineSegmentsComplete
+        .skip(1);
 
-    THElementType currentType = lineSegments.first.elementType;
+    THLineSegment lastLineSegment = lineSegmentsComplete.first;
+    List<THLineSegment> currentTypeSegments = [lastLineSegment];
+    THElementType currentType = lineSegmentsSkipFirst.first.elementType;
 
-    for (final THLineSegment segment in lineSegments) {
+    for (final THLineSegment segment in lineSegmentsSkipFirst) {
       final THElementType segmentType = segment.elementType;
 
       if (segmentType != currentType) {
@@ -296,11 +301,12 @@ class MPEditElementAux {
             lineSegments: currentTypeSegments,
           ),
         );
-        currentTypeSegments.clear();
+        currentTypeSegments = [lastLineSegment];
         currentType = segmentType;
       }
 
       currentTypeSegments.add(segment);
+      lastLineSegment = segment;
     }
 
     if (currentTypeSegments.isNotEmpty) {

@@ -6,6 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
+import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -1596,7 +1597,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 line: originalLine,
                 thFile: _originalFileForLineSimplification!,
               );
-          final List<THLineSegment> simplifiedLineSegments = [];
+          final THLineSegment firstLineSegment =
+              perTypeLineSegments.first.lineSegments.first;
+          final List<THLineSegment> simplifiedLineSegmentsCompleteList = [
+            firstLineSegment is THStraightLineSegment
+                ? firstLineSegment
+                : THStraightLineSegment(
+                    parentMPID: firstLineSegment.parentMPID,
+                    endPoint: firstLineSegment.endPoint,
+                  ),
+          ];
 
           for (final MPSingleTypeLineSegmentList typeLineSegments
               in perTypeLineSegments) {
@@ -1614,23 +1624,50 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                         accuracy: _lineSimplifyEpsilonOnCanvas,
                       );
 
-                  simplifiedLineSegments.addAll(
+                  simplifiedLineSegmentsCompleteList.addAll(
                     (simplifiedLineSegmentsList.length <
                             originalLineSegmentsList.length)
-                        ? simplifiedLineSegmentsList
-                        : originalLineSegmentsList,
+                        ? simplifiedLineSegmentsList.skip(1).toList()
+                        : originalLineSegmentsList.skip(1).toList(),
                   );
                 }
               case THElementType.straightLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceBezier) {
                   /// TODO convert straight to Bèzier curve and them simplify
-                } else {}
+                } else {
+                  final List<THLineSegment> originalLineSegmentsList =
+                      typeLineSegments.lineSegments;
+                  final List<THLineSegment> simplifiedLineSegmentsList =
+                      MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
+                        originalStraightLineSegments: originalLineSegmentsList,
+                        epsilon: _lineSimplifyEpsilonOnCanvas,
+                      );
+
+                  simplifiedLineSegmentsCompleteList.addAll(
+                    (simplifiedLineSegmentsList.length <
+                            originalLineSegmentsList.length)
+                        ? simplifiedLineSegmentsList.skip(1).toList()
+                        : originalLineSegmentsList.skip(1).toList(),
+                  );
+                }
               default:
                 throw Exception(
                   'Error: Unsupported line segment type in mixed line at TH2FileEditElementEditController.simplifySelectedLines(). Type: ${typeLineSegments.type}',
                 );
             }
+          }
+
+          if (simplifiedLineSegmentsCompleteList.length <
+              originalLineSegmentsMap.length) {
+            final MPCommand simplifyCommand =
+                MPEditElementAux.getReplaceLineSegmentsCommand(
+                  originalLine: originalLine,
+                  thFile: _originalFileForLineSimplification!,
+                  newLineSegmentsList: simplifiedLineSegmentsCompleteList,
+                );
+
+            simplifyCommands.add(simplifyCommand);
           }
         case MPLineTypePerLineSegmentType.straight:
           if (_lineSimplificationMethod ==

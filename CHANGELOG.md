@@ -2,6 +2,7 @@
 
 ## 0.2.22 - not yet released
 * New features:
+  * Simplify complex (that contains straight and Bézier curve segments) lines.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
 * Infrastructure maintenance:

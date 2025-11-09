@@ -57,14 +57,23 @@ class MPStraightLineSimplificationAux {
         }
       }
 
-      if (index != -1 && dMaxSq > epsSq) {
+      if ((index != -1) && (dMaxSq > epsSq)) {
         keep[index] = true;
         stack.add(<int>[start, index]);
         stack.add(<int>[index, end]);
       }
     }
 
-    for (int i = 0; i < numberOfStraightLineSegmentsLength; i++) {
+    final THStraightLineSegment firstSegment =
+        originalStraightLineSegments[0] is THStraightLineSegment
+        ? originalStraightLineSegments[0] as THStraightLineSegment
+        : THStraightLineSegment(
+            parentMPID: originalStraightLineSegments[0].parentMPID,
+            endPoint: originalStraightLineSegments[0].endPoint,
+          );
+
+    result.add(firstSegment);
+    for (int i = 1; i < numberOfStraightLineSegmentsLength; i++) {
       if (keep[i]) {
         if (originalStraightLineSegments[i] is! THStraightLineSegment) {
           throw Exception(

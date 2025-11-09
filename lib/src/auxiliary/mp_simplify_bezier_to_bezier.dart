@@ -236,9 +236,9 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
     return originalLineSegmentsList;
   }
 
-  if (fittedCubics.length < 2) {
+  if (fittedCubics.isEmpty) {
     throw Exception(
-      'Error: fittedCubics.length < 2 at TH2FileEditElementEditController.simplifySelectedLines(). Length: ${fittedCubics.length}',
+      'Error: fittedCubics.isEmpty at TH2FileEditElementEditController.simplifySelectedLines(). Length: ${fittedCubics.length}',
     );
   }
 
@@ -268,12 +268,7 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
 
   lineSegmentsList.add(firstFittedLineSegment);
 
-  /// Skip the first fitted cubic, as it is handled separately to guarantee that
-  /// the first point of the original line segments is preserved in the
-  /// simplified result.
-  final Iterable<CubicBez> trimmedFittedCubics = cubicBezs.skip(1);
-
-  for (final CubicBez fittedCubic in trimmedFittedCubics) {
+  for (final CubicBez fittedCubic in cubicBezs) {
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
       parentMPID: parentMPID,
       controlPoint1: THPositionPart(coordinates: fittedCubic.p1.toOffset()),

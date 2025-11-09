@@ -80,6 +80,10 @@ Version 0.3
 [X] - BUG: on newly created lines, Bèzier line segments are set as smooth but the control points don't respect this smoothness.
 [X] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
 [X] - On an empty file, the select button should be disabled.
+[ ] - BUG: when several elements are selected and one is deselected, the status bar message is not updated.
+[ ] - When an element is deleted, the empty lines after it should also be deleted.
+[ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
+[ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 
 Version 0.4
 [ ] - Open multiple files simultaneously
