@@ -98,6 +98,9 @@ void main() {
           origin + const Offset(240, 160); // second click (creates line)
       final Offset p3 =
           origin + const Offset(300, 200); // third click (third line point)
+      final Offset p4 =
+          origin + const Offset(400, 250); // fourth point (fourth line point)
+      final Offset pDragEnd = origin + const Offset(350, 220); // drag end point
 
       final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
 
@@ -112,6 +115,15 @@ void main() {
       await tester.pump();
 
       await tester.sendEventToBinding(mouse.down(p3, buttons: kPrimaryButton));
+      await tester.pump();
+      await tester.sendEventToBinding(
+        mouse.move(pDragEnd, buttons: kPrimaryButton),
+      );
+      await tester.pump();
+      await tester.sendEventToBinding(mouse.up());
+      await tester.pumpAndSettle();
+
+      await tester.sendEventToBinding(mouse.down(p4, buttons: kPrimaryButton));
       await tester.pump();
       await tester.sendEventToBinding(mouse.up());
       await tester.pumpAndSettle();
@@ -129,7 +141,11 @@ void main() {
       final List<THLineSegment> lineSegments = lines.first.getLineSegments(
         th2Controller.thFile,
       );
-      expect(lineSegments.length == 3, isTrue);
+      expect(lineSegments.length == 4, isTrue);
+      expect(lineSegments[0], isA<THStraightLineSegment>());
+      expect(lineSegments[1], isA<THStraightLineSegment>());
+      expect(lineSegments[2], isA<THBezierCurveLineSegment>());
+      expect(lineSegments[3], isA<THStraightLineSegment>());
 
       expect(th2Controller.enableSelectButton, isTrue);
       expect(th2Controller.enableNodeEditButton, isFalse);
