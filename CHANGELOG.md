@@ -85,7 +85,7 @@
   * Multiple line segment addition positioning new line segments after first at wrong position.
   * LineSegmentsMPIDs in wrong order after line segment addition.
   * Add line segments control point should be exact, i.e., not use currentDecimalPositions.
-  * When adding line segment to Bezier curve line segment, new calculated control point values not saved.
+  * When adding line segment to Bézier curve line segment, new calculated control point values not saved.
   * XTherion settings written before encoding.
   * Area original line lost on area type change undo.
   * Original TH2 file representation lost on some situaitons for MPMoveBezierLineSegmentCommand.
@@ -240,14 +240,14 @@
   * Open th2 file from command line [proposed and implemented by Thomas Holder]
   * Moving control points in smooth line segments should move the other control point visually attached to the same end point.
   * When editing smooth option, the affected endpoints are automatically redrawn to indicate the new smooth setting.
-  * When setting 'smooth' option to on on line segments, the bezier curve line segments should be smoothed.
+  * When setting 'smooth' option to on on line segments, the Bézier curve line segments should be smoothed.
   * Consider XVI and raster image files bounding boxes when calculating THFile bounding box.
 * Fixed bugs:
   * Setting multiple option options in line segments not working.
   * Clicking in another controlpoint after moving a control point would unselect everything.
   * Making selection tolerance and point radius the same to avoid clicking near the border of a point and not selecting it.
   * When selecting a control point 1 the control points of the adjacent line segments weren't properly selected.
-  * Changing first point of a line to bezier curve throws an exception.
+  * Changing first point of a line to Bézier curve throws an exception.
   * When a Bézier control point is selected, an end point appears as selected also.
   * When multiple elements are selected and the user asks for the options window, options that were set on the last selected element would be shown as if it were selected for all elements.
   * Right clicking anywhere when a control point is selected raises an exception.
