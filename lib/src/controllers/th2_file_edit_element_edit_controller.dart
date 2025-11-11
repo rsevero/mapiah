@@ -1610,52 +1610,50 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           for (final MPSingleTypeLineSegmentList typeLineSegments
               in perTypeLineSegments) {
+            final List<THLineSegment> originalLineSegmentsList =
+                typeLineSegments.lineSegments;
+            final List<THLineSegment> simplifiedLineSegmentsList;
+
             switch (typeLineSegments.type) {
               case THElementType.bezierCurveLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceStraight) {
                   /// TODO convert Bézier curve to straight and them simplify
+                  simplifiedLineSegmentsList = originalLineSegmentsList;
                 } else {
-                  final List<THLineSegment> originalLineSegmentsList =
-                      typeLineSegments.lineSegments;
-                  final List<THLineSegment> simplifiedLineSegmentsList =
+                  simplifiedLineSegmentsList =
                       mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
                         originalLineSegmentsList,
                         accuracy: _lineSimplifyEpsilonOnCanvas,
                       );
-
-                  simplifiedLineSegmentsCompleteList.addAll(
-                    (simplifiedLineSegmentsList.length <
-                            originalLineSegmentsList.length)
-                        ? simplifiedLineSegmentsList.skip(1).toList()
-                        : originalLineSegmentsList.skip(1).toList(),
-                  );
                 }
               case THElementType.straightLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceBezier) {
                   /// TODO convert straight to Bézier curve and them simplify
+                  simplifiedLineSegmentsList = originalLineSegmentsList;
                 } else {
-                  final List<THLineSegment> originalLineSegmentsList =
-                      typeLineSegments.lineSegments;
-                  final List<THLineSegment> simplifiedLineSegmentsList =
+                  simplifiedLineSegmentsList =
                       MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
                         originalStraightLineSegments: originalLineSegmentsList,
                         epsilon: _lineSimplifyEpsilonOnCanvas,
                       );
-
-                  simplifiedLineSegmentsCompleteList.addAll(
-                    (simplifiedLineSegmentsList.length <
-                            originalLineSegmentsList.length)
-                        ? simplifiedLineSegmentsList.skip(1).toList()
-                        : originalLineSegmentsList.skip(1).toList(),
-                  );
                 }
               default:
                 throw Exception(
                   'Error: Unsupported line segment type in mixed line at TH2FileEditElementEditController.simplifySelectedLines(). Type: ${typeLineSegments.type}',
                 );
             }
+
+            final List<THLineSegment> simplifiedLineSegmentsToAdd =
+                (simplifiedLineSegmentsList.length <
+                    originalLineSegmentsList.length)
+                ? simplifiedLineSegmentsList
+                : originalLineSegmentsList;
+
+            simplifiedLineSegmentsCompleteList.addAll(
+              simplifiedLineSegmentsToAdd.skip(1).toList(),
+            );
           }
 
           if (simplifiedLineSegmentsCompleteList.length <
