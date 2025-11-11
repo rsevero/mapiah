@@ -69,6 +69,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
 
   @override
+  String get mapiahKeyboardShortcutsTitle => 'Atalhos de teclado';
+
+  @override
+  String get mapiahKeyboardShortcutsTooltip => 'Atalhos de teclado (Ctrl+K)';
+
+  @override
   String get mpAngleUnitDegree => 'grau';
 
   @override

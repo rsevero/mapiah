@@ -48,6 +48,8 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/help/en/keyboard_shortcuts_edit.md
+    - assets/help/en/keyboard_shortcuts_main.md
     - assets/help/en/mapiah_home_help.md
     - assets/help/en/th2_file_edit_page_help.md
     - assets/help/images/buttonAddArea.png
@@ -78,6 +80,8 @@ flutter:
     - assets/help/images/iconOpenFile.png
     - assets/help/images/iconSave.png
     - assets/help/images/iconSaveAs.png
+    - assets/help/pt/keyboard_shortcuts_edit.md
+    - assets/help/pt/keyboard_shortcuts_main.md
     - assets/icons/add_element-addArea.png
     - assets/icons/add_element-addElement.png
     - assets/icons/add_element-addLine.png

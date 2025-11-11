@@ -16,6 +16,8 @@
   "mapiahHomeLanguage": "Idioma",
   "mapiahHomeNewFileButtonTooltip": "Novo arquivo (Ctrl+N ou Ctrl+Shift+N)",
   "mapiahHomeOpenFile": "Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)",
+  "mapiahKeyboardShortcutsTitle": "Atalhos de teclado",
+  "mapiahKeyboardShortcutsTooltip": "Atalhos de teclado (Ctrl+K)",
   "mpAngleUnitDegree": "grau",
   "mpAngleUnitGrad": "grad",
   "mpAngleUnitMil": "mil",

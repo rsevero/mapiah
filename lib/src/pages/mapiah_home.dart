@@ -78,6 +78,13 @@ class _MapiahHomeState extends State<MapiahHome> {
           buildLanguageDropdown(context),
           MPHelpButtonWidget(
             context,
+            'keyboard_shortcuts_main',
+            appLocalizations.mapiahKeyboardShortcutsTitle,
+            iconData: Icons.keyboard_alt_outlined,
+            tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
+          ),
+          MPHelpButtonWidget(
+            context,
             'mapiah_home_help',
             appLocalizations.mapiahHomeHelpDialogTitle,
           ),
@@ -260,6 +267,13 @@ extension on _MapiahHomeState {
             context,
             'mapiah_home_help',
             appLocalizations.mapiahHomeHelpDialogTitle,
+          ),
+      // Keyboard shortcuts
+      const SingleActivator(LogicalKeyboardKey.keyK, control: true): () =>
+          MPDialogAux.showHelpDialog(
+            context,
+            'keyboard_shortcuts_main',
+            appLocalizations.mapiahKeyboardShortcutsTitle,
           ),
     };
 

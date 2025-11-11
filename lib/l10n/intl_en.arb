@@ -86,6 +86,16 @@
     "description": "The tooltip for the new file button on the main page",
     "type": "text"
   },
+  "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
+  "@mapiahKeyboardShortcutsTitle": {
+    "description": "The title for the keyboard shortcuts help dialog",
+    "type": "text"
+  },
+  "mapiahKeyboardShortcutsTooltip": "Keyboard Shortcuts (Ctrl+K)",
+  "@mapiahKeyboardShortcutsTooltip": {
+    "description": "The tooltip for the keyboard shortcuts help button",
+    "type": "text"
+  },
   "mpAngleUnitDegree": "degree",
   "@mpAngleUnitDegree": {
     "description": "The description for the degree angle unit",

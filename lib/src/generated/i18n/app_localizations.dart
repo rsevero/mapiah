@@ -194,6 +194,18 @@ abstract class AppLocalizations {
   /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
   String get mapiahHomeNewFileButtonTooltip;
 
+  /// The title for the keyboard shortcuts help dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard Shortcuts'**
+  String get mapiahKeyboardShortcutsTitle;
+
+  /// The tooltip for the keyboard shortcuts help button
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard Shortcuts (Ctrl+K)'**
+  String get mapiahKeyboardShortcutsTooltip;
+
   /// The description for the degree angle unit
   ///
   /// In en, this message translates to:

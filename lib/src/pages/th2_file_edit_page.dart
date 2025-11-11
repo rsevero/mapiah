@@ -116,6 +116,13 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                   ],
                   MPHelpButtonWidget(
                     context,
+                    'keyboard_shortcuts_edit',
+                    appLocalizations.mapiahKeyboardShortcutsTitle,
+                    iconData: Icons.keyboard_alt_outlined,
+                    tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
+                  ),
+                  MPHelpButtonWidget(
+                    context,
                     'th2_file_edit_page_help',
                     appLocalizations.th2FileEditPageHelpDialogTitle,
                   ),

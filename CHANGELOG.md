@@ -3,6 +3,7 @@
 ## 0.2.22 - not yet released
 * New features:
   * Simplify complex (that contains straight and Bézier curve segments) lines.
+  * Keyboard shortcuts help page.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
   * On Bézier curve line simplification, first line segment being lost.
