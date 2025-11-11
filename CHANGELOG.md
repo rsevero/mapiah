@@ -11,6 +11,7 @@
   * Added test:
     * Open a file, select a line and simplify pressing Ctrl+L.
   * Fixed Bézier spelling.
+  * Improving line segments list line generation.
 
 ## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:
