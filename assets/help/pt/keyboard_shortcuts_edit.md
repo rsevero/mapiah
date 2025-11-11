@@ -23,8 +23,8 @@
 | Selecionar nada                                               | Esc                                  |
 | Selecionar tudo                                               | Ctrl+A                               |
 | Simplificar linha                                             | Ctrl+L                               |
-| Simplificar linha - para segmentos de linha curva de Bézier   | Ctrl+Shift+L                         |
-| Simplificar linha - para segmentos de linha reta              | Ctrl+Alt+L                           |
+| Simplificar linha - para segmentos de linha curva de Bézier   | Ctrl+Alt+L                           |
+| Simplificar linha - para segmentos de linha reta              | Ctrl+Shift+L                         |
 | Zoom 1:1                                                      | 1                                    |
 | Zoom arquivo                                                  | 3                                    |
 | Zoom croqui                                                   | 4                                    |

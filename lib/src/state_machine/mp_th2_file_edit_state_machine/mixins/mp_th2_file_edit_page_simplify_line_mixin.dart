@@ -24,10 +24,10 @@ mixin MPTH2FileEditPageSimplifyLineMixin on MPTH2FileEditState {
 
             if (isAltPressed) {
               newLineSimplificationMethod =
-                  MPLineSimplificationMethod.forceStraight;
+                  MPLineSimplificationMethod.forceBezier;
             } else if (isShiftPressed) {
               newLineSimplificationMethod =
-                  MPLineSimplificationMethod.forceBezier;
+                  MPLineSimplificationMethod.forceStraight;
             } else {
               newLineSimplificationMethod =
                   MPLineSimplificationMethod.keepOriginalTypes;

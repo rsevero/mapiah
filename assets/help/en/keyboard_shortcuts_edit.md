@@ -22,8 +22,8 @@
 | Select none                                     | Esc                          |
 | Select tool                                     | C                            |
 | Simplify line                                   | Ctrl+L                       |
-| Simplify line - to Bézier curve line segments   | Ctrl+Shift+L                 |
-| Simplify line - to straight line segments       | Ctrl+Alt+L                   |
+| Simplify line - to Bézier curve line segments   | Ctrl+Alt+L                   |
+| Simplify line - to straight line segments       | Ctrl+Shift+L                 |
 | Undo                                            | Ctrl+Z                       |
 | Zoom 1:1                                        | 1                            |
 | Zoom file                                       | 3                            |

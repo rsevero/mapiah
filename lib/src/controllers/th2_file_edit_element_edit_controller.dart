@@ -1564,8 +1564,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       final THLine originalLine = _originalFileForLineSimplification!
           .lineByMPID(mpSelectedElement.mpID);
-      final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
-          originalLine.getLineSegmentsMap(_originalFileForLineSimplification!);
+      final List<THLineSegment> originalLineSegmentsList = originalLine
+          .getLineSegments(_originalFileForLineSimplification!);
       final MPLineTypePerLineSegmentType lineTypePerLineSegmentType =
           getLineTypePerLineSegmentType(
             originalLine,
@@ -1574,22 +1574,29 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       switch (lineTypePerLineSegmentType) {
         case MPLineTypePerLineSegmentType.bezierCurve:
+          final MPCommand? simplifyCommand;
+
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceStraight) {
-            /// TODO convert Bézier curve to straight and them simplify
+            simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
+                );
           } else {
-            final MPCommand? simplifyCommand =
+            simplifyCommand =
                 MPEditElementAux.getSimplifyCommandForBezierCurveLineSegments(
                   thFile: _originalFileForLineSimplification!,
                   originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsMap.values
-                      .toList(),
+                  originalLineSegmentsList: originalLineSegmentsList,
                   accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
+          }
 
-            if (simplifyCommand != null) {
-              simplifyCommands.add(simplifyCommand);
-            }
+          if (simplifyCommand != null) {
+            simplifyCommands.add(simplifyCommand);
           }
         case MPLineTypePerLineSegmentType.mixed:
           final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
@@ -1610,8 +1617,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           for (final MPSingleTypeLineSegmentList typeLineSegments
               in perTypeLineSegments) {
-            final List<THLineSegment> originalLineSegmentsList =
-                typeLineSegments.lineSegments;
             final List<THLineSegment> simplifiedLineSegmentsList;
 
             switch (typeLineSegments.type) {
@@ -1657,7 +1662,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           }
 
           if (simplifiedLineSegmentsCompleteList.length <
-              originalLineSegmentsMap.length) {
+              originalLineSegmentsList.length) {
             final MPCommand simplifyCommand =
                 MPEditElementAux.getReplaceLineSegmentsCommand(
                   originalLine: originalLine,
@@ -1670,8 +1675,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         case MPLineTypePerLineSegmentType.straight:
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceBezier) {
-            final List<THLineSegment> originalLineSegmentsList =
-                originalLineSegmentsMap.values.toList();
             final List<THLineSegment> bezierLineSegments =
                 convertTHStraightLinesToTHBezierCurveLineSegments(
                   originalStraightLineSegmentsList: originalLineSegmentsList,
@@ -1697,8 +1700,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 MPEditElementAux.getSimplifyCommandForStraightLineSegments(
                   thFile: _originalFileForLineSimplification!,
                   originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsMap.values
-                      .toList(),
+                  originalLineSegmentsList: originalLineSegmentsList,
                   accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
 

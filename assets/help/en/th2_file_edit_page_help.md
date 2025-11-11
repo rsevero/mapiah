@@ -9,6 +9,9 @@ This is where all TH2 file editing is done.
 - [Drawing lines](#drawing-lines)
 - [Element options](#element-options)
 - [Simplify lines](#simplify-lines)
+  - [Simplification methods](#simplification-methods)
+  - [Bézier curve line segments](#bézier-curve-line-segments)
+  - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
 - [Snap](#snap)
 - [Zoom and panning](#zoom-and-panning)
@@ -68,10 +71,22 @@ To edit scrap options, right click on:
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
 
 ## Simplify lines
-Bezier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process. 
+Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.
+
+### Simplification methods
+There are three line simplification methods available:
+* __Keep original types (Ctrl+L)__: each line segment is simplified using its own type simplification algorithm.
+* __Force Bézier (Ctrl+Alt+L)__: all line segments are, if necessary, first converted to Bézier curves and then simplified using the Bézier curve simplification algorithm.
+* __Force straight (Ctrl+Shift+L)__: all line segments are, if necessary, first converted to straight lines and then simplified using the straight line simplification algorithm.
+
+### Bézier curve line segments
+Each _Ctrl+[Alt]+L_ press runs a round of line simplification. Mapiah uses an interactive algorithm to simplify Bézier curve line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
+
+### Mixed line segments
+When a line contains both Bézier curve and straight line segments, Mapiah treats each part of the line separately. Each part containing only Bézier curve segments is simplified using the Bézier curve simplification algorithm. Each part containing only straight line segments is simplified using the straight line simplification algorithm.
 
 ### Straight line segments
-Each Ctrl+L press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
+Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
 
 ## Snap
 There are several snap options available that can be controled on the window presented when the button ![Snap button](assets/help/images/buttonSnap.png "Snap") is pressed:
