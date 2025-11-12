@@ -1578,13 +1578,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceStraight) {
-            simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                );
+            simplifyCommand = null;
+            // simplifyCommand =
+            //     MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
+            //       thFile: _originalFileForLineSimplification!,
+            //       originalLine: originalLine,
+            //       originalLineSegmentsList: originalLineSegmentsList,
+            //       accuracy: _lineSimplifyEpsilonOnCanvas,
+            //     );
           } else {
             simplifyCommand =
                 MPEditElementAux.getSimplifyCommandForBezierCurveLineSegments(
@@ -1637,8 +1638,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               case THElementType.straightLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceBezier) {
-                  /// TODO convert straight to Bézier curve and them simplify
-                  simplifiedLineSegmentsList = originalPerTypeLineSegmentsList;
+                  simplifiedLineSegmentsList =
+                      convertTHStraightLinesToTHBezierCurveLineSegments(
+                        originalStraightLineSegmentsList:
+                            originalPerTypeLineSegmentsList,
+                        accuracy: _lineSimplifyEpsilonOnCanvas,
+                      );
                 } else {
                   simplifiedLineSegmentsList =
                       MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
@@ -1678,26 +1683,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         case MPLineTypePerLineSegmentType.straight:
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceBezier) {
-            final List<THLineSegment> bezierLineSegments =
-                convertTHStraightLinesToTHBezierCurveLineSegments(
-                  originalStraightLineSegmentsList: originalLineSegmentsList,
+            final MPCommand? simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
-            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-            newLineSegments =
-                MPEditElementAux.convertTHLineSegmentListToLineSegmentWithPositionList(
-                  bezierLineSegments,
-                );
-            final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-            originalLineSegments = originalLine.getLineSegmentsPositionList(
-              _originalFileForLineSimplification!,
-            );
-            final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
-              lineMPID: originalLine.mpID,
-              originalLineSegments: originalLineSegments,
-              newLineSegments: newLineSegments,
-            );
 
-            simplifyCommands.add(simplifyCommand);
+            if (simplifyCommand != null) {
+              simplifyCommands.add(simplifyCommand);
+            }
           } else {
             final MPCommand? simplifyCommand =
                 MPEditElementAux.getSimplifyCommandForStraightLineSegments(

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
+import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -411,6 +412,34 @@ class MPEditElementAux {
         .toList();
 
     return lineSegmentsWithPosition;
+  }
+
+  static MPCommand?
+  getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves({
+    required THFile thFile,
+    required THLine originalLine,
+    required List<THLineSegment> originalLineSegmentsList,
+    required double accuracy,
+  }) {
+    final List<THLineSegment> bezierLineSegments =
+        convertTHStraightLinesToTHBezierCurveLineSegments(
+          originalStraightLineSegmentsList: originalLineSegmentsList,
+          accuracy: accuracy,
+        );
+    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+    newLineSegments =
+        MPEditElementAux.convertTHLineSegmentListToLineSegmentWithPositionList(
+          bezierLineSegments,
+        );
+    final List<({THLineSegment lineSegment, int lineSegmentPosition})>
+    originalLineSegments = originalLine.getLineSegmentsPositionList(thFile);
+    final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
+      lineMPID: originalLine.mpID,
+      originalLineSegments: originalLineSegments,
+      newLineSegments: newLineSegments,
+    );
+
+    return simplifyCommand;
   }
 }
 

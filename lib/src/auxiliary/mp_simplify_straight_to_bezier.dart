@@ -152,6 +152,7 @@ List<Point> resampleCubics(
 
 List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
   required List<THLineSegment> originalStraightLineSegmentsList,
+  required double accuracy,
 }) {
   final List<Point> points = originalStraightLineSegmentsList
       .map(
@@ -170,7 +171,10 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
   //   breakAtJoints: false,
   //   nearOptimal: false,
   // );
-  final List<CubicBez> cubicBezs = fitCubicSchneider(points, errorSquared: 0.5);
+  final List<CubicBez> cubicBezs = fitCubicSchneider(
+    points,
+    errorSquared: accuracy * accuracy,
+  );
   final List<THLineSegment> lineSegmentsList =
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: cubicBezs,
