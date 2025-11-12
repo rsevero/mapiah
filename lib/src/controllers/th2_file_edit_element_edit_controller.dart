@@ -1618,17 +1618,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           for (final MPSingleTypeLineSegmentList typeLineSegments
               in perTypeLineSegments) {
             final List<THLineSegment> simplifiedLineSegmentsList;
+            final List<THLineSegment> originalPerTypeLineSegmentsList =
+                typeLineSegments.lineSegments;
 
             switch (typeLineSegments.type) {
               case THElementType.bezierCurveLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceStraight) {
                   /// TODO convert Bézier curve to straight and them simplify
-                  simplifiedLineSegmentsList = originalLineSegmentsList;
+                  simplifiedLineSegmentsList = originalPerTypeLineSegmentsList;
                 } else {
                   simplifiedLineSegmentsList =
                       mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
-                        originalLineSegmentsList,
+                        originalPerTypeLineSegmentsList,
                         accuracy: _lineSimplifyEpsilonOnCanvas,
                       );
                 }
@@ -1636,11 +1638,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceBezier) {
                   /// TODO convert straight to Bézier curve and them simplify
-                  simplifiedLineSegmentsList = originalLineSegmentsList;
+                  simplifiedLineSegmentsList = originalPerTypeLineSegmentsList;
                 } else {
                   simplifiedLineSegmentsList =
                       MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
-                        originalStraightLineSegments: originalLineSegmentsList,
+                        originalStraightLineSegments:
+                            originalPerTypeLineSegmentsList,
                         epsilon: _lineSimplifyEpsilonOnCanvas,
                       );
                 }
@@ -1652,9 +1655,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
             final List<THLineSegment> simplifiedLineSegmentsToAdd =
                 (simplifiedLineSegmentsList.length <
-                    originalLineSegmentsList.length)
+                    originalPerTypeLineSegmentsList.length)
                 ? simplifiedLineSegmentsList
-                : originalLineSegmentsList;
+                : originalPerTypeLineSegmentsList;
 
             simplifiedLineSegmentsCompleteList.addAll(
               simplifiedLineSegmentsToAdd.skip(1).toList(),
