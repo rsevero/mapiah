@@ -48,8 +48,8 @@ class MPStraightLineSimplificationAux {
       for (int i = start + 1; i < end; i++) {
         final double dSq = MPNumericAux.distanceSquaredToLineSegment(
           point: originalStraightLineSegments[i].endPoint.coordinates,
-          startPoint: a,
-          endPoint: b,
+          segmentStart: a,
+          segmentEnd: b,
         );
 
         if (dSq > dMaxSq) {

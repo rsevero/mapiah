@@ -432,24 +432,38 @@ class MPNumericAux {
 
   static double distanceSquaredToLineSegment({
     required Offset point,
-    required Offset startPoint,
-    required Offset endPoint,
+    required Offset segmentStart,
+    required Offset segmentEnd,
   }) {
-    final Offset lineVector = endPoint - startPoint;
-    final Offset pointVector = point - startPoint;
+    final double abx = segmentEnd.dx - segmentStart.dx;
+    final double aby = segmentEnd.dy - segmentStart.dy;
+    final double ab2 = abx * abx + aby * aby;
 
-    final double dotProduct =
-        lineVector.dx * pointVector.dx + lineVector.dy * pointVector.dy;
-    final double lineLengthSquared =
-        lineVector.dx * lineVector.dx + lineVector.dy * lineVector.dy;
+    // Degenerate segment: distance to the endpoint
+    if (ab2 == 0.0) {
+      final double dx = point.dx - segmentStart.dx;
+      final double dy = point.dy - segmentStart.dy;
 
-    final double t = (lineLengthSquared == 0)
-        ? 0
-        : (dotProduct / lineLengthSquared).clamp(0, 1);
+      return dx * dx + dy * dy;
+    }
 
-    final Offset closestPoint = startPoint + lineVector * t;
+    final double apx = point.dx - segmentStart.dx;
+    final double apy = point.dy - segmentStart.dy;
 
-    return (point - closestPoint).distanceSquared;
+    // Clamp projection t to [0,1]
+    double t = (apx * abx + apy * aby) / ab2;
+    if (t < 0.0) {
+      t = 0.0;
+    } else if (t > 1.0) {
+      t = 1.0;
+    }
+
+    final double projx = segmentStart.dx + t * abx;
+    final double projy = segmentStart.dy + t * aby;
+    final double dx = point.dx - projx;
+    final double dy = point.dy - projy;
+
+    return dx * dx + dy * dy;
   }
 
   // Helper: test if cubic Bezier (p0,p1,p2,p3) is "flat enough".
@@ -554,8 +568,8 @@ class MPNumericAux {
   }) {
     return distanceSquaredToLineSegment(
           point: point,
-          startPoint: segmentStart,
-          endPoint: segmentEnd,
+          segmentStart: segmentStart,
+          segmentEnd: segmentEnd,
         ) <=
         toleranceSquared;
   }
