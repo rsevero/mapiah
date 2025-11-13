@@ -303,21 +303,6 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void removeElementByTHID(String thID) {
-    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditElementEditControllerBase.removeElementByTHID',
-        );
-    try {
-      return super.removeElementByTHID(thID);
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
   void applyRemoveElements(List<int> mpIDs) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

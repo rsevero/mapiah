@@ -6,6 +6,7 @@
   * Keyboard shortcuts help page.
   * Simplified line segments forced to Bézier curves.
   * Simplified line segments forced to straight.
+  * AreaBorderTHID add/remove commmands removing empty lines after.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
   * On Bézier curve line simplification, first line segment being lost.

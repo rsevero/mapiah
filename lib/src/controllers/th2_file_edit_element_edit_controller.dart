@@ -437,13 +437,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void removeElementByTHID(String thID) {
-    final THElement element = _thFile.elementByTHID(thID);
-
-    removeElement(element);
-  }
-
-  @action
   void applyRemoveElements(List<int> mpIDs) {
     for (final int mpID in mpIDs) {
       applyRemoveElementByMPID(mpID);
