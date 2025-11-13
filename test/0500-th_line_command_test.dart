@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -16,7 +17,13 @@ class FakePathProviderPlatform extends PathProviderPlatform {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
+
   final MPLocator mpLocator = MPLocator();
+
+  setUp(() {
+    mpLocator.appLocalizations = AppLocalizationsEn();
+    mpLocator.mpGeneralController.reset();
+  });
   group('line', () {
     const successes = [
       {
