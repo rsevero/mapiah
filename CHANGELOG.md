@@ -1,12 +1,17 @@
 # Changelog
 
+## 0.2.23 - not yet released
+* New features:
+  * AreaBorderTHID add/remove commmands removing empty lines after.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.22 - 2025-11-13 - The line simplification release
 * New features:
   * Simplify complex (that contains straight and Bézier curve segments) lines.
   * Keyboard shortcuts help page.
-  * Simplified line segments forced to Bézier curves.
-  * Simplified line segments forced to straight.
-  * AreaBorderTHID add/remove commmands removing empty lines after.
+  * Simplified line segments forced to Bézier curves (Ctrl+Alt+L).
+  * Simplified line segments forced to straight (Ctrl+Shift+L).
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
   * On Bézier curve line simplification, first line segment being lost.
