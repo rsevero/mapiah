@@ -276,7 +276,7 @@ class MPNumericAux {
     required Rect rect,
     required double delta,
   }) {
-    return MPNumericAux.orderedRectFromLTRB(
+    return orderedRectFromLTRB(
       left: rect.left - delta,
       top: rect.top - delta,
       right: rect.right + delta,
@@ -288,7 +288,7 @@ class MPNumericAux {
     required Rect rect,
     required Offset offset,
   }) {
-    return MPNumericAux.orderedRectFromLTRB(
+    return orderedRectFromLTRB(
       left: math.min(rect.left, offset.dx),
       top: math.min(rect.top, offset.dy),
       right: math.max(rect.right, offset.dx),
@@ -539,7 +539,7 @@ class MPNumericAux {
       final List<Offset> c = stack.removeLast();
       final Offset q0 = c[0], q1 = c[1], q2 = c[2], q3 = c[3];
 
-      if (MPNumericAux.isFlat(q0, q1, q2, q3, toleranceSquared)) {
+      if (isFlat(q0, q1, q2, q3, toleranceSquared)) {
         // Accept this as a straight segment from q0 to q3; store the end.
         result.add(q3);
       } else {
@@ -832,7 +832,7 @@ class MPNumericAux {
       }
     }
 
-    return MPNumericAux.orderedRectFromLTRB(
+    return orderedRectFromLTRB(
       left: minX,
       top: minY,
       right: maxX,
