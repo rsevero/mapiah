@@ -56,7 +56,7 @@ Version 0.3
 [X] - Create at least one test per MPCommand
 [X] - Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
 [X] - MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
-[ ] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
+[X] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [ ] - When deleting the second to last line segment of a line, the whole line should be deleted.
 [X] - When opening files, delete empty lines.
@@ -80,7 +80,7 @@ Version 0.3
 [X] - BUG: on newly created lines, Bézier line segments are set as smooth but the control points don't respect this smoothness.
 [X] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
 [X] - On an empty file, the select button should be disabled.
-[ ] - BUG: when several elements are selected and one is deselected, the status bar message is not updated.
+[X] - BUG: when several elements are selected and one is deselected, the status bar message is not updated.
 [ ] - When an element is deleted, the empty lines after it should also be deleted.
 [ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
@@ -114,6 +114,7 @@ Version 0.4
 [ ] - Split one line in two.
 [ ] - Join 2 lines.
 [ ] - Merge 2 areas.
+[ ] - Implement simplify lines interactive dialog box.
 
 Version 0.5
 [ ] - Raster images tracing

@@ -13,8 +13,15 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
   }) : snapController = th2FileEditController.snapController;
 
   @override
+  void onStateEnter(MPTH2FileEditState previousState) {
+    setStatusBarMessage();
+  }
+
+  @override
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
+
+    th2FileEditController.setStatusBarMessage('');
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
@@ -27,6 +34,18 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     } else {
       clearAllSelections();
     }
+  }
+
+  @override
+  void setStatusBarMessage() {
+    final List<int> lineLineSegmentsMPIDs = selectionController
+        .getSelectedLineLineSegmentsMPIDs();
+
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.mpMovingEndControlPointsStateBarMessage(
+        lineLineSegmentsMPIDs.length,
+      ),
+    );
   }
 
   @override
@@ -47,6 +66,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         );
       }
     }
+
+    setStatusBarMessage();
 
     selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
       snapedCanvasOffset,
@@ -82,6 +103,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
           ),
           decimalPositions: th2FileEditController.currentDecimalPositions,
         );
+
+    setStatusBarMessage();
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {

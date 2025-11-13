@@ -475,6 +475,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpMarkTextLabel => 'Identificador';
 
   @override
+  String mpMovingElementsStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  ) {
+    return 'Movendo $pointsAmount ponto(s), $linesAmount linha(s), e $areaAmount área(s)';
+  }
+
+  @override
+  String mpMovingEndControlPointsStateBarMessage(Object endPointsAmount) {
+    return 'Movendo $endPointsAmount pontos de controle';
+  }
+
+  @override
+  String get mpMovingSingleControlPointStateBarMessage =>
+      'Movendo ponto de controle';
+
+  @override
   String get mpMultipleElementsClickedAllChoice => 'Todos';
 
   @override
@@ -519,6 +537,15 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get mpNewScrapDialogCreateScrapIDHint =>
       'Digite o identificador do croqui';
+
+  @override
+  String mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  ) {
+    return '$pointsAmount pontos(s), $linesAmount linhas(s), e $areaAmount área(s) selecionados';
+  }
 
   @override
   String get mpOptionsEditLineSegmentTypes => 'Tipos de segmentos de linha';
@@ -803,6 +830,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapXVIFileTargetsLabel => 'Ajuste a arquivo XVI';
 
   @override
+  String get mpEditSingleLineStateStatusBarMessage => 'Editando linha';
+
+  @override
   String get mpStationNamesPrefixLabel => 'Prefixo';
 
   @override
@@ -1018,28 +1048,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
-
-  @override
-  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
-    Object amount,
-  ) {
-    return '$amount linha(s) selecionadas';
-  }
-
-  @override
-  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-    Object amount,
-  ) {
-    return '$amount pontos(s) selecionados';
-  }
-
-  @override
-  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-    Object pointsAmount,
-    Object linesAmount,
-  ) {
-    return '$pointsAmount pontos(s) e $linesAmount linhas(s) selecionados';
-  }
 
   @override
   String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';

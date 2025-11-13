@@ -15,14 +15,20 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     selectionController.clearSelectedElements();
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
-    th2FileEditController.setStatusBarMessage(
-      mpLocator.appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage,
-    );
+    setStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     onStateExitClearSelectionOnExit(nextState);
+    th2FileEditController.setStatusBarMessage('');
+  }
+
+  @override
+  void setStatusBarMessage() {
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage,
+    );
   }
 
   /// 1. Clicked on an object?

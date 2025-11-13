@@ -11,11 +11,16 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.elementEditController.updateControlPointSmoothInfo();
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.mpMovingSingleControlPointStateBarMessage,
+    );
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
+
+    th2FileEditController.setStatusBarMessage('');
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {

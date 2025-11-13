@@ -387,13 +387,21 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  bool addSelectedElement(THElement element, {bool setState = false}) {
+  bool addSelectedElement(
+    THElement element, {
+    bool setState = false,
+    bool updateStatusBarMessage = true,
+  }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
           name: 'TH2FileEditSelectionControllerBase.addSelectedElement',
         );
     try {
-      return super.addSelectedElement(element, setState: setState);
+      return super.addSelectedElement(
+        element,
+        setState: setState,
+        updateStatusBarMessage: updateStatusBarMessage,
+      );
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,
@@ -469,6 +477,7 @@ mixin _$TH2FileEditSelectionController
     THElement element, {
     bool setState = false,
     bool updateSnapTargets = true,
+    bool updateStatusBarMessage = true,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
@@ -479,6 +488,7 @@ mixin _$TH2FileEditSelectionController
         element,
         setState: setState,
         updateSnapTargets: updateSnapTargets,
+        updateStatusBarMessage: updateStatusBarMessage,
       );
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(

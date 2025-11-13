@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.22 - not yet released
+## 0.2.22 - not yet released - Another birthday
 * New features:
   * Simplify complex (that contains straight and Bézier curve segments) lines.
   * Keyboard shortcuts help page.
@@ -9,12 +9,13 @@
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
   * On Bézier curve line simplification, first line segment being lost.
+  * When several elements are selected and one is deselected, the status bar message is not updated.
 * Infrastructure maintenance:
   * Added test:
     * Open a file, select a line and simplify pressing Ctrl+L.
   * Fixed Bézier spelling.
   * Improving line segments list line generation.
-  * Flutter upgraded to 3.38.0.
+  * Flutter upgraded to 3.38.1.
 
 ## 0.2.21 - 2025-11-06 - Life isn't only programming
 * New features:

@@ -16,13 +16,14 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
     elementEditController.resetOriginalFileForLineSimplification();
-    _updateStatusBarMessage();
+    setStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     elementEditController.resetOriginalFileForLineSimplification();
     onStateExitClearSelectionOnExit(nextState);
+    th2FileEditController.setStatusBarMessage('');
   }
 
   /// 1. Clicked on an object?
@@ -84,7 +85,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
 
         if (!stateChanged) {
-          _updateStatusBarMessage();
+          setStatusBarMessage();
         }
 
         return Future.value();
@@ -210,7 +211,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       );
 
       if (!stateChanged) {
-        _updateStatusBarMessage();
+        setStatusBarMessage();
       }
     } else {
       if (elementsInsideSelectionWindow.isEmpty) {
@@ -225,47 +226,21 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         );
 
         if (!stateChanged) {
-          _updateStatusBarMessage();
+          setStatusBarMessage();
         }
       }
     }
   }
 
-  void _updateStatusBarMessage() {
-    int pointCount = 0;
-    int lineCount = 0;
-
-    final selectedElements =
-        selectionController.mpSelectedElementsLogical.values;
-
-    for (final selectedElement in selectedElements) {
-      switch (selectedElement) {
-        case MPSelectedLine _:
-          lineCount++;
-          break;
-        case MPSelectedPoint _:
-          pointCount++;
-          break;
-      }
-    }
-
-    String statusBarMessage = '';
-
-    if ((lineCount > 0) && (pointCount > 0)) {
-      statusBarMessage = mpLocator.appLocalizations
-          .th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-            pointCount,
-            lineCount,
-          );
-    } else if (lineCount > 0) {
-      statusBarMessage = mpLocator.appLocalizations
-          .th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(lineCount);
-    } else {
-      statusBarMessage = mpLocator.appLocalizations
-          .th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-            pointCount,
-          );
-    }
+  @override
+  void setStatusBarMessage() {
+    final List<int> selectedElementsCount = getSelectedElementsCount();
+    final String statusBarMessage = mpLocator.appLocalizations
+        .mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
+          selectedElementsCount[0],
+          selectedElementsCount[1],
+          selectedElementsCount[2],
+        );
 
     th2FileEditController.setStatusBarMessage(statusBarMessage);
   }

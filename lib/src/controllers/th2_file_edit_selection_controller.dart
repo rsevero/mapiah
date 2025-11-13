@@ -192,10 +192,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void setClickedElementsAtPointerDown(Iterable<THElement> clickedElements) {
     _clickedElementsAtPointerDown = clickedElements;
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void clearClickedElementsAtPointerDown() {
     _clickedElementsAtPointerDown = <THElement>[];
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   @action
@@ -203,7 +205,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _mpSelectedElementsLogical.clear();
     _selectedElementsDrawable.clear();
     for (final THElement clickedElement in _clickedElementsAtPointerDown) {
-      addSelectedElement(clickedElement);
+      addSelectedElement(clickedElement, updateStatusBarMessage: false);
     }
     clearClickedElementsAtPointerDown();
   }
@@ -271,7 +273,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool addSelectedElement(THElement element, {bool setState = false}) {
+  bool addSelectedElement(
+    THElement element, {
+    bool setState = false,
+    bool updateStatusBarMessage = true,
+  }) {
     switch (element) {
       case THPoint _:
         _mpSelectedElementsLogical[element.mpID] = MPSelectedPoint(
@@ -305,6 +311,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
     _th2FileEditController.triggerSelectedListChanged();
 
+    if (updateStatusBarMessage) {
+      _th2FileEditController.stateController.updateStatusBarMessage();
+    }
+
     if (setState) {
       return setSelectionState();
     }
@@ -315,8 +325,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   bool addSelectedElements(List<THElement> elements, {bool setState = false}) {
     for (THElement element in elements) {
-      addSelectedElement(element);
+      addSelectedElement(element, updateStatusBarMessage: false);
     }
+
+    _th2FileEditController.stateController.updateStatusBarMessage();
 
     if (setState) {
       return setSelectionState();
@@ -328,6 +340,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void deselectAllElements() {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
+    _th2FileEditController.stateController.updateStatusBarMessage();
     _th2FileEditController.triggerSelectedListChanged();
   }
 
@@ -351,6 +364,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     _th2FileEditController.snapController.updateSnapTargets();
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   @action
@@ -370,6 +384,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     _th2FileEditController.snapController.updateSnapTargets();
+    _th2FileEditController.stateController.updateStatusBarMessage();
 
     if (setState) {
       return setSelectionState();
@@ -383,6 +398,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     THElement element, {
     bool setState = false,
     bool updateSnapTargets = true,
+    bool updateStatusBarMessage = true,
   }) {
     final int elementMPID = element.mpID;
 
@@ -402,6 +418,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (updateSnapTargets) {
       _th2FileEditController.snapController.updateSnapTargets();
     }
+    if (updateStatusBarMessage) {
+      _th2FileEditController.stateController.updateStatusBarMessage();
+    }
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -414,9 +433,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElements(List<THElement> elements) {
     for (THElement element in elements) {
-      removeElementFromSelected(element, updateSnapTargets: false);
+      removeElementFromSelected(
+        element,
+        updateSnapTargets: false,
+        updateStatusBarMessage: false,
+      );
     }
     _th2FileEditController.snapController.updateSnapTargets();
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void setSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
@@ -429,10 +453,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void clearSelectedEndControlPoints() {
     _selectedEndControlPoints.clear;
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void setDragStartCoordinatesFromScreenCoordinates(Offset screenCoordinates) {
@@ -944,6 +970,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void addSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
@@ -952,6 +979,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           originalLineSegment: endControlPoint.lineSegment,
           type: endControlPoint.type,
         );
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   MPSelectedEndControlPoint getNewMPSelectedEndControlPoint(
@@ -973,6 +1001,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void removeSelectedLineSegment(THLineSegment lineSegment) {

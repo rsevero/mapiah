@@ -37,4 +37,26 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
 
     return selectedElementsWithLines;
   }
+
+  List<int> getSelectedElementsCount() {
+    int pointCount = 0;
+    int lineCount = 0;
+    int areaCount = 0;
+
+    final Iterable<MPSelectedElement> selectedElements =
+        selectionController.mpSelectedElementsLogical.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      switch (selectedElement) {
+        case MPSelectedArea _:
+          areaCount++;
+        case MPSelectedLine _:
+          lineCount++;
+        case MPSelectedPoint _:
+          pointCount++;
+      }
+    }
+
+    return [pointCount, lineCount, areaCount];
+  }
 }

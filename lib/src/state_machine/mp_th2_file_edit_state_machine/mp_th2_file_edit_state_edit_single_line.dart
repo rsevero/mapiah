@@ -23,7 +23,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     selectionController.updateSelectableEndAndControlPoints();
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.triggerEditLineRedraw();
-    th2FileEditController.setStatusBarMessage('');
+    th2FileEditController.setStatusBarMessage(
+      mpLocator.appLocalizations.mpEditSingleLineStateStatusBarMessage,
+    );
   }
 
   @override
@@ -31,6 +33,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     final MPTH2FileEditStateType nextStateType = nextState.type;
 
     elementEditController.resetOriginalFileForLineSimplification();
+    th2FileEditController.setStatusBarMessage('');
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {

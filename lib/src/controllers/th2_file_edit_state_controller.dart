@@ -48,6 +48,10 @@ abstract class TH2FileEditStateControllerBase
     return true;
   }
 
+  void updateStatusBarMessage() {
+    _state.setStatusBarMessage();
+  }
+
   @override
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) {
     _state.onPrimaryButtonPointerDown(event);

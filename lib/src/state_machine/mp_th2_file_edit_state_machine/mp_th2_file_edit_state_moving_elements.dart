@@ -12,8 +12,28 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     : snapController = th2FileEditController.snapController;
 
   @override
+  void onStateEnter(MPTH2FileEditState previousState) {
+    setStatusBarMessage();
+  }
+
+  @override
   void onStateExit(MPTH2FileEditState nextState) {
     onStateExitClearSelectionOnExit(nextState);
+    th2FileEditController.setStatusBarMessage('');
+  }
+
+  @override
+  void setStatusBarMessage() {
+    final List<int> selectedElementsCount = getSelectedElementsCount();
+
+    final String statusBarMessage = mpLocator.appLocalizations
+        .mpMovingElementsStateAreasLinesAndPointsStatusBarMessage(
+          selectedElementsCount[0],
+          selectedElementsCount[1],
+          selectedElementsCount[2],
+        );
+
+    th2FileEditController.setStatusBarMessage(statusBarMessage);
   }
 
   /// 1. Clicked on an object?

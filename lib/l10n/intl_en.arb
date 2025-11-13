@@ -724,6 +724,29 @@
     "description": "The label for the mark text type",
     "type": "text"
   },
+  "mpMovingElementsStateAreasLinesAndPointsStatusBarMessage": "Moving {pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s)",
+  "@mpMovingElementsStateAreasLinesAndPointsStatusBarMessage": {
+    "description": "The label for points, lines, and areas moving status bar messagee",
+    "type": "text",
+    "placeholders": {
+      "pointsAmount": {},
+      "linesAmount": {},
+      "areaAmount": {}
+    }
+  },
+  "mpMovingEndControlPointsStateBarMessage": "Moving {endPointsAmount} end control points",
+  "@mpMovingEndControlPointsStateBarMessage": {
+    "description": "The label for the moving end control points status bar message",
+    "type": "text",
+    "placeholders": {
+      "endPointsAmount": {}
+    }
+  },
+  "mpMovingSingleControlPointStateBarMessage": "Moving control point",
+  "@mpMovingSingleControlPointStateBarMessage": {
+    "description": "The label for the moving single control point status bar message",
+    "type": "text"
+  },
   "mpMultipleElementsClickedAllChoice": "All",
   "@mpMultipleElementsClickedAllChoice": {
     "description": "The label for the all choice in the multiple elements clicked dialog",
@@ -798,6 +821,16 @@
   "@mpNewScrapDialogCreateScrapIDHint": {
     "description": "The hint text for the scrap ID input field in the new scrap dialog",
     "type": "text"
+  },
+  "mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage": "{pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s) selected",
+  "@mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage": {
+    "description": "The label for points, lines, and areas selected status bar messagee",
+    "type": "text",
+    "placeholders": {
+      "pointsAmount": {},
+      "linesAmount": {},
+      "areaAmount": {}
+    }
   },
   "mpOptionsEditLineSegmentTypes": "Line segments types",
   "@mpOptionsEditLineSegmentTypes": {
@@ -1249,6 +1282,11 @@
     "description": "The label for the XVI file snap",
     "type": "text"
   },
+  "mpEditSingleLineStateStatusBarMessage": "Editing line",
+  "@mpEditSingleLineStateStatusBarMessage": {
+    "description": "The status bar message when editing a line",
+    "type": "text"
+  },
   "mpStationNamesPrefixLabel": "Prefix",
   "@mpStationNamesPrefixLabel": {
     "description": "The label for the station names prefix type",
@@ -1603,31 +1641,6 @@
   "@th2FileEditPageNodeEditTool": {
     "description": "The label for the node edit tool button",
     "type": "text"
-  },
-  "th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": "{amount} line(s) selected",
-  "@th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage": {
-    "description": "The label for only lines selected status bar messagee",
-    "type": "text",
-    "placeholders": {
-      "amount": {}
-    }
-  },
-  "th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": "{amount} point(s) selected",
-  "@th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage": {
-    "description": "The label for only points selected status bar messagee",
-    "type": "text",
-    "placeholders": {
-      "amount": {}
-    }
-  },
-  "th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": "{pointsAmount} point(s) and {linesAmount} line(s) selected",
-  "@th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage": {
-    "description": "The label for points and lines selected status bar messagee",
-    "type": "text",
-    "placeholders": {
-      "pointsAmount": {},
-      "linesAmount": {}
-    }
   },
   "th2FileEditPageNoUndoAvailable": "No undo available",
   "@th2FileEditPageNoUndoAvailable": {

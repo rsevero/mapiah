@@ -469,6 +469,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpMarkTextLabel => 'Mark';
 
   @override
+  String mpMovingElementsStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  ) {
+    return 'Moving $pointsAmount point(s), $linesAmount line(s), and $areaAmount area(s)';
+  }
+
+  @override
+  String mpMovingEndControlPointsStateBarMessage(Object endPointsAmount) {
+    return 'Moving $endPointsAmount end control points';
+  }
+
+  @override
+  String get mpMovingSingleControlPointStateBarMessage =>
+      'Moving control point';
+
+  @override
   String get mpMultipleElementsClickedAllChoice => 'All';
 
   @override
@@ -513,6 +531,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpNewScrapDialogCreateScrapIDHint => 'Enter the scrap identifier';
+
+  @override
+  String mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  ) {
+    return '$pointsAmount point(s), $linesAmount line(s), and $areaAmount area(s) selected';
+  }
 
   @override
   String get mpOptionsEditLineSegmentTypes => 'Line segments types';
@@ -795,6 +822,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSnapXVIFileTargetsLabel => 'XVI file snap';
 
   @override
+  String get mpEditSingleLineStateStatusBarMessage => 'Editing line';
+
+  @override
   String get mpStationNamesPrefixLabel => 'Prefix';
 
   @override
@@ -1008,28 +1038,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageNodeEditTool => 'Node edit (N)';
-
-  @override
-  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
-    Object amount,
-  ) {
-    return '$amount line(s) selected';
-  }
-
-  @override
-  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-    Object amount,
-  ) {
-    return '$amount point(s) selected';
-  }
-
-  @override
-  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-    Object pointsAmount,
-    Object linesAmount,
-  ) {
-    return '$pointsAmount point(s) and $linesAmount line(s) selected';
-  }
 
   @override
   String get th2FileEditPageNoUndoAvailable => 'No undo available';

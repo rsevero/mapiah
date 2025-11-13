@@ -956,6 +956,28 @@ abstract class AppLocalizations {
   /// **'Mark'**
   String get mpMarkTextLabel;
 
+  /// The label for points, lines, and areas moving status bar messagee
+  ///
+  /// In en, this message translates to:
+  /// **'Moving {pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s)'**
+  String mpMovingElementsStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  );
+
+  /// The label for the moving end control points status bar message
+  ///
+  /// In en, this message translates to:
+  /// **'Moving {endPointsAmount} end control points'**
+  String mpMovingEndControlPointsStateBarMessage(Object endPointsAmount);
+
+  /// The label for the moving single control point status bar message
+  ///
+  /// In en, this message translates to:
+  /// **'Moving control point'**
+  String get mpMovingSingleControlPointStateBarMessage;
+
   /// The label for the all choice in the multiple elements clicked dialog
   ///
   /// In en, this message translates to:
@@ -1045,6 +1067,16 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter the scrap identifier'**
   String get mpNewScrapDialogCreateScrapIDHint;
+
+  /// The label for points, lines, and areas selected status bar messagee
+  ///
+  /// In en, this message translates to:
+  /// **'{pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s) selected'**
+  String mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
+    Object pointsAmount,
+    Object linesAmount,
+    Object areaAmount,
+  );
 
   /// The label for the line segment types in the options edit dialog
   ///
@@ -1586,6 +1618,12 @@ abstract class AppLocalizations {
   /// **'XVI file snap'**
   String get mpSnapXVIFileTargetsLabel;
 
+  /// The status bar message when editing a line
+  ///
+  /// In en, this message translates to:
+  /// **'Editing line'**
+  String get mpEditSingleLineStateStatusBarMessage;
+
   /// The label for the station names prefix type
   ///
   /// In en, this message translates to:
@@ -1993,31 +2031,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Node edit (N)'**
   String get th2FileEditPageNodeEditTool;
-
-  /// The label for only lines selected status bar messagee
-  ///
-  /// In en, this message translates to:
-  /// **'{amount} line(s) selected'**
-  String th2FileEditPageNonEmptySelectionOnlyLinesStatusBarMessage(
-    Object amount,
-  );
-
-  /// The label for only points selected status bar messagee
-  ///
-  /// In en, this message translates to:
-  /// **'{amount} point(s) selected'**
-  String th2FileEditPageNonEmptySelectionOnlyPointsStatusBarMessage(
-    Object amount,
-  );
-
-  /// The label for points and lines selected status bar messagee
-  ///
-  /// In en, this message translates to:
-  /// **'{pointsAmount} point(s) and {linesAmount} line(s) selected'**
-  String th2FileEditPageNonEmptySelectionPointsAndLinesStatusBarMessage(
-    Object pointsAmount,
-    Object linesAmount,
-  );
 
   /// The label for the no undo available message
   ///
