@@ -4,7 +4,8 @@
 * New features:
   * Simplify complex (that contains straight and Bézier curve segments) lines.
   * Keyboard shortcuts help page.
-  * Simplify line converting to Bézier curves.
+  * Simplified line segments forced to Bézier curves.
+  * Simplified line segments forced to straight.
 * Fixed bugs:
   * Select and Node Edit buttons enabling/disabling logic.
   * On Bézier curve line simplification, first line segment being lost.

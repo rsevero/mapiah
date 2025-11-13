@@ -452,6 +452,100 @@ class MPNumericAux {
     return (point - closestPoint).distanceSquared;
   }
 
+  // Helper: test if cubic Bezier (p0,p1,p2,p3) is "flat enough".
+  static bool isFlat(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    double toleranceSquared,
+  ) {
+    // Precompute chord vector and its squared length once.
+    final Offset ab = p3 - p0;
+    final double abLen2 = ab.dx * ab.dx + ab.dy * ab.dy;
+
+    // Degenerate chord: treat distances as to the single point p0.
+    if (abLen2 == 0.0) {
+      final Offset ap1 = p1 - p0;
+      final Offset ap2 = p2 - p0;
+      final double d1sq = ap1.dx * ap1.dx + ap1.dy * ap1.dy;
+      final double d2sq = ap2.dx * ap2.dx + ap2.dy * ap2.dy;
+
+      if ((d1sq > toleranceSquared) || (d2sq > toleranceSquared)) {
+        return false;
+      }
+      // Projection check is irrelevant for zero-length chord.
+      return true;
+    }
+
+    // Fast perpendicular distance checks to the infinite line through p0->p3.
+    final Offset ap1 = p1 - p0;
+    final double cross1 = ap1.dx * ab.dy - ap1.dy * ab.dx;
+    final double d1sq = (cross1 * cross1) / abLen2;
+
+    if (d1sq > toleranceSquared) {
+      return false;
+    }
+
+    final Offset ap2 = p2 - p0;
+    final double cross2 = ap2.dx * ab.dy - ap2.dy * ab.dx;
+    final double d2sq = (cross2 * cross2) / abLen2;
+
+    if (d2sq > toleranceSquared) {
+      return false;
+    }
+
+    // Secondary projection range guard to avoid control points far beyond the
+    // chord endpoints even with small perpendicular distances.
+    const double projSlack = 0.05; // 5% slack beyond [0,1]
+    final double t1 = (ap1.dx * ab.dx + ap1.dy * ab.dy) / abLen2;
+    final double t2 = (ap2.dx * ab.dx + ap2.dy * ab.dy) / abLen2;
+    final bool inRange1 = (t1 >= -projSlack) && (t1 <= 1.0 + projSlack);
+    final bool inRange2 = (t2 >= -projSlack) && (t2 <= 1.0 + projSlack);
+
+    return inRange1 && inRange2;
+  }
+
+  // Helper: flatten cubic into a list of end points (excluding the initial
+  // p0, including final p3) so the caller can build straight segments from
+  // successive points. Uses an explicit stack to avoid deep recursion.
+  static List<Offset> flattenCubic(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    double toleranceSquared,
+  ) {
+    final List<Offset> result = [];
+    final List<List<Offset>> stack = [
+      [p0, p1, p2, p3],
+    ];
+
+    while (stack.isNotEmpty) {
+      final List<Offset> c = stack.removeLast();
+      final Offset q0 = c[0], q1 = c[1], q2 = c[2], q3 = c[3];
+
+      if (MPNumericAux.isFlat(q0, q1, q2, q3, toleranceSquared)) {
+        // Accept this as a straight segment from q0 to q3; store the end.
+        result.add(q3);
+      } else {
+        final (List<Offset> left, List<Offset> right) = splitBezierCurveOffsets(
+          q0,
+          q1,
+          q2,
+          q3,
+          0.5,
+        );
+
+        // Process right later so left is emitted first (depth-first order).
+        stack.add(right);
+        stack.add(left);
+      }
+    }
+
+    return result;
+  }
+
   static bool isPointNearLineSegment({
     required Offset point,
     required Offset segmentStart,
@@ -586,14 +680,14 @@ class MPNumericAux {
 
     // Fast paths
     if (targetPart <= 0.0) {
-      return splitBezierCurve(
+      return splitBezierCurveTHLineSegment(
         startPoint: startPoint,
         lineSegment: lineSegment,
         t: 0.0,
       );
     }
     if (targetPart >= 1.0) {
-      return splitBezierCurve(
+      return splitBezierCurveTHLineSegment(
         startPoint: startPoint,
         lineSegment: lineSegment,
         t: 1.0,
@@ -639,23 +733,48 @@ class MPNumericAux {
     }
 
     // Now split at tMid
-    return splitBezierCurve(
+    return splitBezierCurveTHLineSegment(
       startPoint: startPoint,
       lineSegment: lineSegment,
       t: tMid,
     );
   }
 
-  static List<THBezierCurveLineSegment> splitBezierCurve({
+  static List<THBezierCurveLineSegment> splitBezierCurveTHLineSegment({
     required Offset startPoint,
     required THBezierCurveLineSegment lineSegment,
     required double t,
   }) {
-    final Offset p0 = startPoint;
-    final Offset p1 = lineSegment.controlPoint1.coordinates;
-    final Offset p2 = lineSegment.controlPoint2.coordinates;
-    final Offset p3 = lineSegment.endPoint.coordinates;
+    final (List<Offset> left, List<Offset> right) = splitBezierCurveOffsets(
+      startPoint,
+      lineSegment.controlPoint1.coordinates,
+      lineSegment.controlPoint2.coordinates,
+      lineSegment.endPoint.coordinates,
+      t,
+    );
 
+    final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
+      parentMPID: lineSegment.parentMPID,
+      controlPoint1: THPositionPart(coordinates: left[1]),
+      controlPoint2: THPositionPart(coordinates: left[2]),
+      endPoint: THPositionPart(coordinates: left[3]),
+    );
+    final THBezierCurveLineSegment secondSegment = lineSegment.copyWith(
+      controlPoint1: THPositionPart(coordinates: right[1]),
+      controlPoint2: THPositionPart(coordinates: right[2]),
+      originalLineInTH2File: '',
+    );
+
+    return [firstSegment, secondSegment];
+  }
+
+  static (List<Offset> left, List<Offset> right) splitBezierCurveOffsets(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    double t,
+  ) {
     // De Casteljau's algorithm
     final Offset q0 = Offset.lerp(p0, p1, t)!;
     final Offset q1 = Offset.lerp(p1, p2, t)!;
@@ -666,19 +785,10 @@ class MPNumericAux {
 
     final Offset s = Offset.lerp(r0, r1, t)!;
 
-    final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
-      parentMPID: lineSegment.parentMPID,
-      controlPoint1: THPositionPart(coordinates: q0),
-      controlPoint2: THPositionPart(coordinates: r0),
-      endPoint: THPositionPart(coordinates: s),
-    );
-    final THBezierCurveLineSegment secondSegment = lineSegment.copyWith(
-      controlPoint1: THPositionPart(coordinates: r1),
-      controlPoint2: THPositionPart(coordinates: q2),
-      originalLineInTH2File: '',
-    );
+    final List<Offset> left = [p0, q0, r0, s];
+    final List<Offset> right = [s, r1, q2, p3];
 
-    return [firstSegment, secondSegment];
+    return (left, right);
   }
 
   static Rect boundingBoxFromOffsets(List<Offset> points) {
@@ -694,10 +804,18 @@ class MPNumericAux {
     for (int i = 1; i < points.length; i++) {
       final Offset p = points[i];
 
-      if (p.dx < minX) minX = p.dx;
-      if (p.dx > maxX) maxX = p.dx;
-      if (p.dy < minY) minY = p.dy;
-      if (p.dy > maxY) maxY = p.dy;
+      if (p.dx < minX) {
+        minX = p.dx;
+      }
+      if (p.dx > maxX) {
+        maxX = p.dx;
+      }
+      if (p.dy < minY) {
+        minY = p.dy;
+      }
+      if (p.dy > maxY) {
+        maxY = p.dy;
+      }
     }
 
     return MPNumericAux.orderedRectFromLTRB(

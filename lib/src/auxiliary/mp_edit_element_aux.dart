@@ -2,6 +2,7 @@ import 'dart:io' show File;
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
@@ -440,6 +441,108 @@ class MPEditElementAux {
     );
 
     return simplifyCommand;
+  }
+
+  static List<THLineSegment>
+  mpSimplifyBezierCurveLineSegmentsToStraightLineSegments({
+    required THFile thFile,
+    required THLine originalLine,
+    required List<THLineSegment> originalLineSegmentsList,
+    required double accuracy,
+  }) {
+    if (originalLineSegmentsList.length <= 1) {
+      return originalLineSegmentsList;
+    }
+
+    // Strategy:
+    // 1) Ensure first segment is a straight "move-to" point (defines start).
+    // 2) For each following segment:
+    //    - If straight: keep it.
+    //    - If Bézier: flatten adaptively using de Casteljau with a large
+    //      flatness tolerance eps = accuracy * 10, and emit straight segments
+    //      approximating the curve.
+
+    final double tolerance = accuracy * 10.0;
+    final double toleranceSquared = tolerance * tolerance;
+    final List<THLineSegment> straightSegments = <THLineSegment>[];
+
+    // 1) First segment defines the starting point; ensure it's straight.
+    final THLineSegment firstSeg = originalLineSegmentsList.first;
+
+    straightSegments.add(
+      firstSeg is THStraightLineSegment
+          ? firstSeg
+          : THStraightLineSegment(
+              parentMPID: firstSeg.parentMPID,
+              endPoint: firstSeg.endPoint,
+            ),
+    );
+
+    Offset start = firstSeg.endPoint.coordinates;
+
+    // 2) Convert remaining segments.
+    for (final THLineSegment seg in originalLineSegmentsList.skip(1)) {
+      if (seg is THStraightLineSegment) {
+        straightSegments.add(seg);
+        start = seg.endPoint.coordinates;
+      } else if (seg is THBezierCurveLineSegment) {
+        final Offset p0 = start;
+        final Offset p1 = seg.controlPoint1.coordinates;
+        final Offset p2 = seg.controlPoint2.coordinates;
+        final Offset p3 = seg.endPoint.coordinates;
+        final List<Offset> endPoints = MPNumericAux.flattenCubic(
+          p0,
+          p1,
+          p2,
+          p3,
+          toleranceSquared,
+        );
+        for (final Offset pt in endPoints) {
+          straightSegments.add(
+            THStraightLineSegment(
+              parentMPID: seg.parentMPID,
+              endPoint: THPositionPart(coordinates: pt),
+            ),
+          );
+        }
+        start = p3;
+      } else {
+        throw Exception(
+          'Unsupported line segment type for simplification to straight lines at MPEditElementAux.flattenCubic().',
+        );
+      }
+    }
+
+    final List<THLineSegment> simplifiedLineSegments =
+        MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
+          originalStraightLineSegments: straightSegments,
+          epsilon: accuracy,
+        );
+
+    return simplifiedLineSegments;
+  }
+
+  static MPCommand
+  getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments({
+    required THFile thFile,
+    required THLine originalLine,
+    required List<THLineSegment> originalLineSegmentsList,
+    required double accuracy,
+  }) {
+    final List<THLineSegment> simplifiedStraightSegments =
+        mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
+          thFile: thFile,
+          originalLine: originalLine,
+          originalLineSegmentsList: originalLineSegmentsList,
+          accuracy: accuracy,
+        );
+    final MPCommand replaceCommand = getReplaceLineSegmentsCommand(
+      originalLine: originalLine,
+      thFile: thFile,
+      newLineSegmentsList: simplifiedStraightSegments,
+    );
+
+    return replaceCommand;
   }
 }
 

@@ -1578,14 +1578,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           if (_lineSimplificationMethod ==
               MPLineSimplificationMethod.forceStraight) {
-            simplifyCommand = null;
-            // simplifyCommand =
-            //     MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
-            //       thFile: _originalFileForLineSimplification!,
-            //       originalLine: originalLine,
-            //       originalLineSegmentsList: originalLineSegmentsList,
-            //       accuracy: _lineSimplifyEpsilonOnCanvas,
-            //     );
+            simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
+                );
           } else {
             simplifyCommand =
                 MPEditElementAux.getSimplifyCommandForBezierCurveLineSegments(
@@ -1598,6 +1597,33 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           if (simplifyCommand != null) {
             simplifyCommands.add(simplifyCommand);
+          }
+        case MPLineTypePerLineSegmentType.straight:
+          if (_lineSimplificationMethod ==
+              MPLineSimplificationMethod.forceBezier) {
+            final MPCommand? simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
+                );
+
+            if (simplifyCommand != null) {
+              simplifyCommands.add(simplifyCommand);
+            }
+          } else {
+            final MPCommand? simplifyCommand =
+                MPEditElementAux.getSimplifyCommandForStraightLineSegments(
+                  thFile: _originalFileForLineSimplification!,
+                  originalLine: originalLine,
+                  originalLineSegmentsList: originalLineSegmentsList,
+                  accuracy: _lineSimplifyEpsilonOnCanvas,
+                );
+
+            if (simplifyCommand != null) {
+              simplifyCommands.add(simplifyCommand);
+            }
           }
         case MPLineTypePerLineSegmentType.mixed:
           final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
@@ -1679,33 +1705,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 );
 
             simplifyCommands.add(simplifyCommand);
-          }
-        case MPLineTypePerLineSegmentType.straight:
-          if (_lineSimplificationMethod ==
-              MPLineSimplificationMethod.forceBezier) {
-            final MPCommand? simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                );
-
-            if (simplifyCommand != null) {
-              simplifyCommands.add(simplifyCommand);
-            }
-          } else {
-            final MPCommand? simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForStraightLineSegments(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                );
-
-            if (simplifyCommand != null) {
-              simplifyCommands.add(simplifyCommand);
-            }
           }
       }
     }
