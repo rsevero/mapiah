@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.22 - not yet released - Another birthday
+## 0.2.22 - 2025-11-13 - The line simplification release
 * New features:
   * Simplify complex (that contains straight and Bézier curve segments) lines.
   * Keyboard shortcuts help page.
