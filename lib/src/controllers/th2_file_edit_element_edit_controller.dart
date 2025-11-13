@@ -1650,6 +1650,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             final List<THLineSegment> originalPerTypeLineSegmentsList =
                 typeLineSegments.lineSegments;
 
+            bool onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = true;
+
             switch (typeLineSegments.type) {
               case THElementType.bezierCurveLineSegment:
                 if (_lineSimplificationMethod ==
@@ -1664,6 +1666,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                             getLineSimplifyEpsilonOnCanvasIncrease(),
                         accuracy: _lineSimplifyEpsilonOnCanvas,
                       );
+
+                  /// When forcing straight lines, it's exptected to have a
+                  /// higher amount of line segments after convertion +
+                  /// simplification.
+                  onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
                 } else {
                   simplifiedLineSegmentsList =
                       mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
@@ -1695,10 +1702,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             }
 
             final List<THLineSegment> simplifiedLineSegmentsToAdd =
-                (simplifiedLineSegmentsList.length <
-                    originalPerTypeLineSegmentsList.length)
-                ? simplifiedLineSegmentsList
-                : originalPerTypeLineSegmentsList;
+                (onlyUseSimplifiedSegmentsIfReducedAmountOfSegments &&
+                    (simplifiedLineSegmentsList.length >=
+                        originalPerTypeLineSegmentsList.length))
+                ? originalPerTypeLineSegmentsList
+                : simplifiedLineSegmentsList;
 
             simplifiedLineSegmentsCompleteList.addAll(
               simplifiedLineSegmentsToAdd.skip(1).toList(),
