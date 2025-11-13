@@ -61,6 +61,7 @@ const double mpCompleteBezierArcT = 1.0;
 const double mpHalfBezierArcPart = 0.5;
 const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
+const double mpConvertBezierToStraightFactor = 10.0;
 
 /// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
 /// web version. The higher limits

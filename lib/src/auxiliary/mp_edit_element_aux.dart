@@ -382,7 +382,7 @@ class MPEditElementAux {
     final List<THLineSegment> simplifiedLineSegmentsList =
         MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
           originalStraightLineSegments: originalLineSegmentsList,
-          epsilon: accuracy,
+          accuracy: accuracy,
         );
 
     if (simplifiedLineSegmentsList.length >= originalLineSegmentsList.length) {
@@ -448,6 +448,7 @@ class MPEditElementAux {
     required THFile thFile,
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
+    required double convertToStraightRefTolerance,
     required double accuracy,
   }) {
     if (originalLineSegmentsList.length <= 1) {
@@ -462,7 +463,8 @@ class MPEditElementAux {
     //      flatness tolerance eps = accuracy * 10, and emit straight segments
     //      approximating the curve.
 
-    final double tolerance = accuracy * 10.0;
+    final double tolerance =
+        convertToStraightRefTolerance * mpConvertBezierToStraightFactor;
     final double toleranceSquared = tolerance * tolerance;
     final List<THLineSegment> straightSegments = <THLineSegment>[];
 
@@ -516,7 +518,7 @@ class MPEditElementAux {
     final List<THLineSegment> simplifiedLineSegments =
         MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
           originalStraightLineSegments: straightSegments,
-          epsilon: accuracy,
+          accuracy: accuracy,
         );
 
     return simplifiedLineSegments;
@@ -527,6 +529,7 @@ class MPEditElementAux {
     required THFile thFile,
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
+    required double convertToStraightRefTolerance,
     required double accuracy,
   }) {
     final List<THLineSegment> simplifiedStraightSegments =
@@ -534,6 +537,7 @@ class MPEditElementAux {
           thFile: thFile,
           originalLine: originalLine,
           originalLineSegmentsList: originalLineSegmentsList,
+          convertToStraightRefTolerance: convertToStraightRefTolerance,
           accuracy: accuracy,
         );
     final MPCommand replaceCommand = getReplaceLineSegmentsCommand(

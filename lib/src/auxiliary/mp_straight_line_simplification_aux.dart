@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 class MPStraightLineSimplificationAux {
@@ -6,7 +7,7 @@ class MPStraightLineSimplificationAux {
   /// Returns the list of endpoints to be kept.
   static List<THStraightLineSegment> raumerDouglasPeuckerIterative({
     required List<THLineSegment> originalStraightLineSegments,
-    required double epsilon,
+    required double accuracy,
   }) {
     final List<THStraightLineSegment> result = <THStraightLineSegment>[];
     final int numberOfStraightLineSegmentsLength =
@@ -16,7 +17,7 @@ class MPStraightLineSimplificationAux {
       return result;
     }
 
-    final double epsSq = epsilon * epsilon;
+    final double accuracySq = accuracy * accuracy;
     final List<bool> keep = List<bool>.filled(
       numberOfStraightLineSegmentsLength,
       false,
@@ -45,10 +46,10 @@ class MPStraightLineSimplificationAux {
       int index = -1;
 
       for (int i = start + 1; i < end; i++) {
-        final double dSq = _pointToSegmentDistanceSquared(
-          originalStraightLineSegments[i].endPoint.coordinates,
-          a,
-          b,
+        final double dSq = MPNumericAux.distanceSquaredToLineSegment(
+          point: originalStraightLineSegments[i].endPoint.coordinates,
+          startPoint: a,
+          endPoint: b,
         );
 
         if (dSq > dMaxSq) {
@@ -57,7 +58,7 @@ class MPStraightLineSimplificationAux {
         }
       }
 
-      if ((index != -1) && (dMaxSq > epsSq)) {
+      if ((index != -1) && (dMaxSq > accuracySq)) {
         keep[index] = true;
         stack.add(<int>[start, index]);
         stack.add(<int>[index, end]);
@@ -85,33 +86,5 @@ class MPStraightLineSimplificationAux {
     }
 
     return result;
-  }
-
-  /// Squared perpendicular distance from point P to segment AB.
-  static double _pointToSegmentDistanceSquared(
-    Offset point,
-    Offset segmentStart,
-    Offset segmentEnd,
-  ) {
-    final double abx = segmentEnd.dx - segmentStart.dx;
-    final double aby = segmentEnd.dy - segmentStart.dy;
-    final double ab2 = abx * abx + aby * aby;
-
-    if (ab2 == 0.0) {
-      final double dx = point.dx - segmentStart.dx;
-      final double dy = point.dy - segmentStart.dy;
-
-      return dx * dx + dy * dy;
-    }
-
-    final double apx = point.dx - segmentStart.dx;
-    final double apy = point.dy - segmentStart.dy;
-    final double t = ((apx * abx + apy * aby) / ab2).clamp(0.0, 1.0);
-    final double projx = segmentStart.dx + t * abx;
-    final double projy = segmentStart.dy + t * aby;
-    final double dx = point.dx - projx;
-    final double dy = point.dy - projy;
-
-    return dx * dx + dy * dy;
   }
 }

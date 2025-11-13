@@ -573,7 +573,7 @@ endscrap
     }
   });
 
-  group('actions: simplify lines forcing straight line segments (Ctrl+Alt+L)', () {
+  group('actions: simplify lines forcing straight line segments (Ctrl+Shift+L)', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();

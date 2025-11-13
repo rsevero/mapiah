@@ -1583,6 +1583,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   thFile: _originalFileForLineSimplification!,
                   originalLine: originalLine,
                   originalLineSegmentsList: originalLineSegmentsList,
+                  convertToStraightRefTolerance:
+                      getLineSimplifyEpsilonOnCanvasIncrease(),
                   accuracy: _lineSimplifyEpsilonOnCanvas,
                 );
           } else {
@@ -1675,7 +1677,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                       MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
                         originalStraightLineSegments:
                             originalPerTypeLineSegmentsList,
-                        epsilon: _lineSimplifyEpsilonOnCanvas,
+                        accuracy: _lineSimplifyEpsilonOnCanvas,
                       );
                 }
               default:
@@ -1777,9 +1779,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _originalFileForLineSimplification = null;
   }
 
+  double getLineSimplifyEpsilonOnCanvasIncrease() {
+    return mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
+  }
+
   void prepareLineSimplificationInfo() {
     final double lineSimplifyEpsilonOnCanvasIncrease =
-        mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
+        getLineSimplifyEpsilonOnCanvasIncrease();
 
     if (_originalFileForLineSimplification == null) {
       _originalFileForLineSimplification = _thFile.copyWith();
