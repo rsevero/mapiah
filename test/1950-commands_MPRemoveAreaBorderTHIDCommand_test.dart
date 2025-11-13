@@ -113,9 +113,9 @@ endscrap
                 .getAreaBorderTHIDMPIDs(parsedFile)
                 .first;
             final MPCommand removeAreaBorderCommand =
-                MPRemoveAreaBorderTHIDCommand(
-                  areaBorderTHIDMPID: areaBorderMPID,
-                  th2FileEditController: controller,
+                MPRemoveAreaBorderTHIDCommand.fromExisting(
+                  existingAreaBorderTHIDMPID: areaBorderMPID,
+                  thFile: parsedFile,
                 );
 
             controller.execute(removeAreaBorderCommand);

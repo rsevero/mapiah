@@ -2,21 +2,50 @@ part of "mp_command.dart";
 
 class MPRemoveLineCommand extends MPCommand {
   final int lineMPID;
+  late final MPCommand? removeAreaTHIDCommand;
   final bool isInteractiveLineCreation;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeLine;
 
   MPRemoveLineCommand.forCWJM({
     required this.lineMPID,
+    required this.removeAreaTHIDCommand,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
   MPRemoveLineCommand({
     required this.lineMPID,
+    required this.removeAreaTHIDCommand,
     required this.isInteractiveLineCreation,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
+
+  MPRemoveLineCommand.fromExisting({
+    required int existingLineMPID,
+    required this.isInteractiveLineCreation,
+    required THFile thFile,
+    super.descriptionType = _defaultDescriptionType,
+  }) : lineMPID = existingLineMPID,
+       super() {
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+
+    if (areaMPID != null) {
+      final THArea area = thFile.areaByMPID(areaMPID);
+      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
+        lineMPID,
+        thFile,
+      );
+
+      if (areaTHID != null) {
+        removeAreaTHIDCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
+          existingAreaBorderTHIDMPID: areaTHID.mpID,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
+      }
+    }
+  }
 
   @override
   MPCommandType get type => MPCommandType.removeLine;
@@ -54,8 +83,10 @@ class MPRemoveLineCommand extends MPCommand {
 
       if (areaTHID != null) {
         final MPCommand removeAreaTHIDCommand =
-            MPRemoveAreaBorderTHIDCommand.forCWJM(
-              areaBorderTHIDMPID: areaTHID.mpID,
+            MPRemoveAreaBorderTHIDCommand.fromExisting(
+              existingAreaBorderTHIDMPID: areaTHID.mpID,
+              thFile: thFile,
+              descriptionType: descriptionType,
             );
 
         removeAreaTHIDCommand.execute(
@@ -84,11 +115,18 @@ class MPRemoveLineCommand extends MPCommand {
   @override
   MPRemoveLineCommand copyWith({
     int? lineMPID,
+    bool? isInteractiveLineCreation,
+    MPCommand? removeAreaTHIDCommand,
+    bool makeRemoveAreaTHIDCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveLineCommand.forCWJM(
       lineMPID: lineMPID ?? this.lineMPID,
-      isInteractiveLineCreation: isInteractiveLineCreation,
+      isInteractiveLineCreation:
+          isInteractiveLineCreation ?? this.isInteractiveLineCreation,
+      removeAreaTHIDCommand: makeRemoveAreaTHIDCommandNull
+          ? null
+          : (removeAreaTHIDCommand ?? this.removeAreaTHIDCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -97,6 +135,9 @@ class MPRemoveLineCommand extends MPCommand {
     return MPRemoveLineCommand.forCWJM(
       lineMPID: map['lineMPID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
+      removeAreaTHIDCommand: map['removeAreaTHIDCommand'] != null
+          ? MPCommand.fromMap(map['removeAreaTHIDCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -114,6 +155,7 @@ class MPRemoveLineCommand extends MPCommand {
     map.addAll({
       'lineMPID': lineMPID,
       'isInteractiveLineCreation': isInteractiveLineCreation,
+      'removeAreaTHIDCommand': removeAreaTHIDCommand?.toMap(),
     });
 
     return map;
@@ -126,10 +168,19 @@ class MPRemoveLineCommand extends MPCommand {
 
     return other is MPRemoveLineCommand &&
         other.lineMPID == lineMPID &&
-        other.isInteractiveLineCreation == isInteractiveLineCreation;
+        other.isInteractiveLineCreation == isInteractiveLineCreation &&
+        ((other.removeAreaTHIDCommand == null &&
+                removeAreaTHIDCommand == null) ||
+            (other.removeAreaTHIDCommand != null &&
+                removeAreaTHIDCommand != null &&
+                other.removeAreaTHIDCommand == removeAreaTHIDCommand));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, lineMPID, isInteractiveLineCreation);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineMPID,
+    isInteractiveLineCreation,
+    removeAreaTHIDCommand,
+  );
 }

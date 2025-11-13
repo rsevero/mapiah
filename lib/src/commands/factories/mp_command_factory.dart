@@ -80,6 +80,7 @@ class MPCommandFactory {
     );
     final MPCommand addAreaBorderTHIDCommand = MPAddAreaBorderTHIDCommand(
       newAreaBorderTHID: areaBorderTHID,
+      emptyLinesAfterMPIDs: const [],
     );
 
     commands.add(addAreaBorderTHIDCommand);
@@ -402,9 +403,10 @@ class MPCommandFactory {
         case THElementType.point:
           removeCommand = MPRemovePointCommand(pointMPID: mpID);
         case THElementType.line:
-          removeCommand = MPRemoveLineCommand(
-            lineMPID: mpID,
+          removeCommand = MPRemoveLineCommand.fromExisting(
+            existingLineMPID: mpID,
             isInteractiveLineCreation: false,
+            thFile: thFile,
           );
         case THElementType.area:
           removeCommand = MPRemoveAreaCommand(areaMPID: mpID);
