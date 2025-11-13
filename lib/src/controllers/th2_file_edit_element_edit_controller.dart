@@ -1654,8 +1654,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               case THElementType.bezierCurveLineSegment:
                 if (_lineSimplificationMethod ==
                     MPLineSimplificationMethod.forceStraight) {
-                  /// TODO convert Bézier curve to straight and them simplify
-                  simplifiedLineSegmentsList = originalPerTypeLineSegmentsList;
+                  simplifiedLineSegmentsList =
+                      MPEditElementAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
+                        thFile: _originalFileForLineSimplification!,
+                        originalLine: originalLine,
+                        originalLineSegmentsList:
+                            originalPerTypeLineSegmentsList,
+                        convertToStraightRefTolerance:
+                            getLineSimplifyEpsilonOnCanvasIncrease(),
+                        accuracy: _lineSimplifyEpsilonOnCanvas,
+                      );
                 } else {
                   simplifiedLineSegmentsList =
                       mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
