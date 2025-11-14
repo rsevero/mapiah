@@ -90,17 +90,11 @@ abstract class MPCommand {
     return _undoRedoCommand!;
   }
 
-  /// The description for the undo/redo command should be the description of
-  /// the original command so the message on undo and redo are the same even
-  /// if the actual original and opposite commands are different.
-  MPUndoRedoCommand _createUndoRedoCommand(
-    TH2FileEditController th2FileEditController,
-  );
-
   void execute(
     TH2FileEditController th2FileEditController, {
     bool keepOriginalLineTH2File = false,
   }) {
+    _prePrepareUndoRedoInfo(th2FileEditController);
     _prepareUndoRedoInfo(th2FileEditController);
     _actualExecute(
       th2FileEditController,
@@ -114,7 +108,12 @@ abstract class MPCommand {
         'Command of type ${type.name} needs to prepare undo/redo info but did not.',
       );
     }
+    _posCreateUndoRedoCommand(th2FileEditController);
     _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
+  }
+
+  void _prePrepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    // Default implementation does nothing.
   }
 
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
@@ -125,6 +124,17 @@ abstract class MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   });
+
+  /// The description for the undo/redo command should be the description of
+  /// the original command so the message on undo and redo are the same even
+  /// if the actual original and opposite commands are different.
+  MPUndoRedoCommand _createUndoRedoCommand(
+    TH2FileEditController th2FileEditController,
+  );
+
+  void _posCreateUndoRedoCommand(TH2FileEditController th2FileEditController) {
+    /// Default implementation does nothing.
+  }
 
   MPCommand copyWith({MPCommandDescriptionType? descriptionType});
 

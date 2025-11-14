@@ -19,7 +19,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     required this.areaBorderTHIDMPID,
     required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveAreaBorderTHIDCommand.fromExisting({
     required int existingAreaBorderTHIDMPID,
@@ -49,8 +51,6 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    prepareUndoRedoInfoPreCommand(th2FileEditController: th2FileEditController);
-
     final THFile thFile = th2FileEditController.thFile;
     final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
       areaBorderTHIDMPID,
@@ -71,8 +71,6 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    actualExecutePreCommand(th2FileEditController: th2FileEditController);
-
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
@@ -88,7 +86,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
           _undoRedoInfo!['removedAreaBorderTHID'] as THAreaBorderTHID,
       areaBorderTHIDPositionInParent:
           _undoRedoInfo!['removedAreaBorderTHIDPositionInParent'] as int,
-      posCommand: _undoRedoInfo!['posCommand'] as MPCommand?,
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       descriptionType: descriptionType,
     );
 

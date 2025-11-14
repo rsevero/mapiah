@@ -186,6 +186,7 @@ endscrap
             controller.execute(addLineToAreaCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
+
             expect(asFileChanged, success['asFileChanged']);
 
             // Undo the action

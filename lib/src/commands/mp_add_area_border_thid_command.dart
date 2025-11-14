@@ -54,11 +54,6 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    prepareUndoRedoInfoPosCommand(th2FileEditController: th2FileEditController);
-  }
-
-  @override
   void _actualExecute(
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
@@ -67,8 +62,6 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
       newElement: newAreaBorderTHID,
       childPositionInParent: areaBorderTHIDPositionInParent,
     );
-
-    actualExecutePosCommand(th2FileEditController: th2FileEditController);
 
     th2FileEditController.triggerNonSelectedElementsRedraw();
     th2FileEditController.triggerSelectedElementsRedraw();
@@ -80,10 +73,9 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
   ) {
     final MPCommand oppositeCommand = MPRemoveAreaBorderTHIDCommand(
       areaBorderTHIDMPID: newAreaBorderTHID.mpID,
-      preCommand:
-          ((_undoRedoInfo != null) && _undoRedoInfo!.containsKey('preCommand'))
-          ? _undoRedoInfo!['preCommand'] as MPCommand?
-          : null,
+      preCommand: posCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       descriptionType: descriptionType,
     );
 
