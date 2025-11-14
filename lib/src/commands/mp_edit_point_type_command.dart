@@ -32,19 +32,16 @@ class MPEditPointTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
       pointMPID,
     );
-    final Map<String, dynamic> undoRedoInfo = {
+
+    _undoRedoInfo = {
       'originalPointType': originalPoint.pointType,
       'originalUnknownPLAType': originalPoint.unknownPLAType,
       'originalLineInTH2File': originalPoint.originalLineInTH2File,
     };
-
-    return undoRedoInfo;
   }
 
   @override

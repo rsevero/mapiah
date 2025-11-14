@@ -20,16 +20,12 @@ class MPMultipleElementsCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     for (final MPCommand command in commandsList) {
       command._prepareUndoRedoInfo(th2FileEditController);
     }
 
-    _needsUndoRedoInfo = false;
-
-    return null;
+    _undoRedoInfo = {};
   }
 
   @override

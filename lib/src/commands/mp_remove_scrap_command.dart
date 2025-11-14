@@ -28,9 +28,7 @@ class MPRemoveScrapCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
     final MPCommand addScrapCommand = MPAddScrapCommand.fromExisting(
@@ -38,11 +36,8 @@ class MPRemoveScrapCommand extends MPCommand {
       th2FileEditController: th2FileEditController,
       descriptionType: descriptionType,
     );
-    final Map<String, dynamic> undoRedoInfo = {
-      'addScrapCommand': addScrapCommand,
-    };
 
-    return undoRedoInfo;
+    _undoRedoInfo = {'addScrapCommand': addScrapCommand};
   }
 
   @override

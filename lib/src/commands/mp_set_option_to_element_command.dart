@@ -26,33 +26,28 @@ class MPSetOptionToElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final int parentMPID = toOption.parentMPID;
     final THHasOptionsMixin parentElement =
         th2FileEditController.thFile.elementByMPID(parentMPID)
             as THHasOptionsMixin;
     final THCommandOptionType optionType = toOption.type;
     final THCommandOption? fromOption = parentElement.getOption(optionType);
-    final Map<String, dynamic> undoRedoInfo;
 
     if (fromOption == null) {
-      undoRedoInfo = {
+      _undoRedoInfo = {
         'alreadyHasAttrOption': false,
         'parentMPID': parentMPID,
         'optionType': optionType,
         'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
       };
     } else {
-      undoRedoInfo = {
+      _undoRedoInfo = {
         'alreadyHasAttrOption': true,
         'fromOption': fromOption,
         'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
       };
     }
-
-    return undoRedoInfo;
   }
 
   @override

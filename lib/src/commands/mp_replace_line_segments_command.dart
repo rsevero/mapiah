@@ -41,9 +41,7 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THLine line = thFile.lineByMPID(lineMPID);
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
@@ -54,11 +52,8 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
           originalLineSegments: newLineSegments,
           newLineSegments: originalLineSegments,
         );
-    final Map<String, dynamic> undoRedoInfo = {
-      'replaceLineSegmentsCommand': replaceLineSegmentsCommand,
-    };
 
-    return undoRedoInfo;
+    _undoRedoInfo = {'replaceLineSegmentsCommand': replaceLineSegmentsCommand};
   }
 
   @override

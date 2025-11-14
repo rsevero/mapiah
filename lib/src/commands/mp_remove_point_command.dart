@@ -23,9 +23,7 @@ class MPRemovePointCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THPoint originalPoint = thFile.pointByMPID(pointMPID);
     final MPCommand addPointCommand = MPAddPointCommand.fromExisting(
@@ -33,11 +31,8 @@ class MPRemovePointCommand extends MPCommand {
       thFile: thFile,
       descriptionType: descriptionType,
     );
-    final Map<String, dynamic> undoRedoInfo = {
-      'addPointCommand': addPointCommand,
-    };
 
-    return undoRedoInfo;
+    _undoRedoInfo = {'addPointCommand': addPointCommand};
   }
 
   @override

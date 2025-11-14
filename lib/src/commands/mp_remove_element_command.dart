@@ -23,9 +23,7 @@ class MPRemoveElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THElement originalElement = thFile.elementByMPID(elementMPID);
     final MPCommand addElementCommand = MPAddElementCommand.fromExisting(
@@ -33,11 +31,8 @@ class MPRemoveElementCommand extends MPCommand {
       thFile: thFile,
       descriptionType: descriptionType,
     );
-    final Map<String, dynamic> undoRedoInfo = {
-      'addElementCommand': addElementCommand,
-    };
 
-    return undoRedoInfo;
+    _undoRedoInfo = {'addElementCommand': addElementCommand};
   }
 
   @override

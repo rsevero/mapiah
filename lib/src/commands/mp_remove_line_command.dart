@@ -52,20 +52,15 @@ class MPRemoveLineCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  Map<String, dynamic>? _getUndoRedoInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
+  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THLine originalLine = thFile.lineByMPID(lineMPID);
     final MPCommand addLineCommand = MPAddLineCommand.fromExisting(
       existingLine: originalLine,
       thFile: thFile,
     );
-    final Map<String, dynamic> undoRedoInfo = {
-      'addLineCommand': addLineCommand,
-    };
 
-    return undoRedoInfo;
+    _undoRedoInfo = {'addLineCommand': addLineCommand};
   }
 
   @override
