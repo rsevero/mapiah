@@ -1,8 +1,4 @@
-import 'package:mapiah/src/commands/mp_command.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
-import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+part of '../mp_command.dart';
 
 mixin MPEmptyLinesAfterMixin on MPCommand {
   List<int> getEmptyLinesAfter({
@@ -29,12 +25,64 @@ mixin MPEmptyLinesAfterMixin on MPCommand {
     return emptyLinesAfter;
   }
 
-  void actualExecuteLinesAfterRemoval({
-    required TH2FileEditElementEditController elementEditController,
-    required List<int> emptyLinesAfter,
+  MPCommand? getRemoveEmptyLinesAfterCommand({
+    required THFile thFile,
+    required THIsParentMixin parent,
+    required int positionInParent,
+    required MPCommandDescriptionType descriptionType,
   }) {
-    for (final int emptyLineMPID in emptyLinesAfter) {
-      elementEditController.applyRemoveElementByMPID(emptyLineMPID);
+    final List<int> emptyLinesAfter = getEmptyLinesAfter(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: positionInParent,
+    );
+
+    if (emptyLinesAfter.isEmpty) {
+      return null;
     }
+
+    return MPCommandFactory.removeElements(
+      mpIDs: emptyLinesAfter,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+  }
+
+  MPCommand? getAddEmptyLinesAfterCommand({
+    required THFile thFile,
+    required THIsParentMixin parent,
+    required int positionInParent,
+    required MPCommandDescriptionType descriptionType,
+  }) {
+    final List<int> emptyLinesAfter = getEmptyLinesAfter(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: positionInParent,
+    );
+
+    if (emptyLinesAfter.isEmpty) {
+      return null;
+    }
+
+    final List<MPCommand> addEmptyLinesAfterCommands = [];
+
+    for (final int emptyLineMPID in emptyLinesAfter) {
+      final THElement emptyLine = thFile.elementByMPID(emptyLineMPID);
+      final MPCommand addEmptyLineCommand = MPAddElementCommand.fromExisting(
+        existingElement: emptyLine,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+      addEmptyLinesAfterCommands.add(addEmptyLineCommand);
+    }
+
+    return (addEmptyLinesAfterCommands.length == 1)
+        ? addEmptyLinesAfterCommands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: addEmptyLinesAfterCommands,
+            descriptionType: descriptionType,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          );
   }
 }

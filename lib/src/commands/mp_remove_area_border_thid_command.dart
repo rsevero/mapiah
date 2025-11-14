@@ -1,22 +1,23 @@
 part of "mp_command.dart";
 
 class MPRemoveAreaBorderTHIDCommand extends MPCommand
-    with MPEmptyLinesAfterMixin {
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int areaBorderTHIDMPID;
-  late final List<int> emptyLinesAfterMPIDs;
 
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeAreaBorderTHID;
 
   MPRemoveAreaBorderTHIDCommand.forCWJM({
     required this.areaBorderTHIDMPID,
-    required this.emptyLinesAfterMPIDs,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveAreaBorderTHIDCommand({
     required this.areaBorderTHIDMPID,
-    required this.emptyLinesAfterMPIDs,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -29,15 +30,13 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
       existingAreaBorderTHIDMPID,
     );
-    final THIsParentMixin parent = thFile.parentByMPID(
-      areaBorderTHID.parentMPID,
-    );
-    final int positionInParent = parent.getChildPosition(areaBorderTHID);
+    final THIsParentMixin parent = areaBorderTHID.parent(thFile);
 
-    emptyLinesAfterMPIDs = getEmptyLinesAfter(
+    preCommand = getRemoveEmptyLinesAfterCommand(
       thFile: thFile,
       parent: parent,
-      positionInParent: positionInParent,
+      positionInParent: parent.getChildPosition(areaBorderTHID),
+      descriptionType: descriptionType,
     );
   }
 
@@ -50,6 +49,8 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    prepareUndoRedoInfoPreCommand(th2FileEditController: th2FileEditController);
+
     final THFile thFile = th2FileEditController.thFile;
     final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
       areaBorderTHIDMPID,
@@ -70,15 +71,12 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
+    actualExecutePreCommand(th2FileEditController: th2FileEditController);
+
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
     elementEditController.applyRemoveElementByMPID(areaBorderTHIDMPID);
-
-    actualExecuteLinesAfterRemoval(
-      elementEditController: elementEditController,
-      emptyLinesAfter: emptyLinesAfterMPIDs,
-    );
   }
 
   @override
@@ -90,7 +88,7 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
           _undoRedoInfo!['removedAreaBorderTHID'] as THAreaBorderTHID,
       areaBorderTHIDPositionInParent:
           _undoRedoInfo!['removedAreaBorderTHIDPositionInParent'] as int,
-      emptyLinesAfterMPIDs: emptyLinesAfterMPIDs,
+      posCommand: _undoRedoInfo!['posCommand'] as MPCommand?,
       descriptionType: descriptionType,
     );
 
@@ -103,12 +101,13 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
   @override
   MPRemoveAreaBorderTHIDCommand copyWith({
     int? areaBorderTHIDMPID,
-    List<int>? emptyLinesAfterMPIDs,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveAreaBorderTHIDCommand.forCWJM(
       areaBorderTHIDMPID: areaBorderTHIDMPID ?? this.areaBorderTHIDMPID,
-      emptyLinesAfterMPIDs: emptyLinesAfterMPIDs ?? this.emptyLinesAfterMPIDs,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -116,7 +115,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
   factory MPRemoveAreaBorderTHIDCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveAreaBorderTHIDCommand.forCWJM(
       areaBorderTHIDMPID: map['areaBorderTHIDMPID'],
-      emptyLinesAfterMPIDs: List<int>.from(map['emptyLinesAfterMPIDs']),
+      preCommand: (map.containsKey('preCommand') && (map['preCommand'] != null))
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -133,7 +134,7 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
 
     map.addAll({
       'areaBorderTHIDMPID': areaBorderTHIDMPID,
-      'emptyLinesAfterMPIDs': emptyLinesAfterMPIDs.toList(),
+      'preCommand': preCommand?.toMap(),
     });
 
     return map;
@@ -146,16 +147,10 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
 
     return other is MPRemoveAreaBorderTHIDCommand &&
         other.areaBorderTHIDMPID == areaBorderTHIDMPID &&
-        const DeepCollectionEquality().equals(
-          other.emptyLinesAfterMPIDs,
-          emptyLinesAfterMPIDs,
-        );
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode => Object.hash(
-    super.hashCode,
-    areaBorderTHIDMPID,
-    Object.hashAll(emptyLinesAfterMPIDs),
-  );
+  int get hashCode =>
+      Object.hash(super.hashCode, areaBorderTHIDMPID, preCommand);
 }

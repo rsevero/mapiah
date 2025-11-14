@@ -80,7 +80,7 @@ class MPCommandFactory {
     );
     final MPCommand addAreaBorderTHIDCommand = MPAddAreaBorderTHIDCommand(
       newAreaBorderTHID: areaBorderTHID,
-      emptyLinesAfterMPIDs: const [],
+      posCommand: null,
     );
 
     commands.add(addAreaBorderTHIDCommand);
@@ -400,20 +400,29 @@ class MPCommandFactory {
       final MPCommand removeCommand;
 
       switch (thFile.getElementTypeByMPID(mpID)) {
-        case THElementType.point:
-          removeCommand = MPRemovePointCommand(pointMPID: mpID);
+        case THElementType.area:
+          removeCommand = MPRemoveAreaCommand(areaMPID: mpID);
+        case THElementType.areaBorderTHID:
+          removeCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
+            existingAreaBorderTHIDMPID: mpID,
+            thFile: thFile,
+          );
         case THElementType.line:
           removeCommand = MPRemoveLineCommand.fromExisting(
             existingLineMPID: mpID,
             isInteractiveLineCreation: false,
             thFile: thFile,
           );
-        case THElementType.area:
-          removeCommand = MPRemoveAreaCommand(areaMPID: mpID);
-        default:
-          throw ArgumentError(
-            'Unsupported element type in MPMultipleElementsCommand.removeElements',
+        case THElementType.point:
+          removeCommand = MPRemovePointCommand(pointMPID: mpID);
+        case THElementType.scrap:
+          removeCommand = MPRemoveScrapCommand(scrapMPID: mpID);
+        case THElementType.xTherionImageInsertConfig:
+          removeCommand = MPRemoveXTherionImageInsertConfigCommand(
+            xtherionImageInsertConfigMPID: mpID,
           );
+        default:
+          removeCommand = MPRemoveElementCommand(elementMPID: mpID);
       }
 
       commandsList.add(removeCommand);
