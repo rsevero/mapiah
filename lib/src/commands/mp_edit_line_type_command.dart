@@ -32,16 +32,19 @@ class MPEditLineTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THLine originalLine = th2FileEditController.thFile.lineByMPID(
       lineMPID,
     );
-
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'originalLineType': originalLine.lineType,
       'originalUnknownPLAType': originalLine.unknownPLAType,
       'originalLineInTH2File': originalLine.originalLineInTH2File,
     };
+
+    return undoRedoInfo;
   }
 
   @override

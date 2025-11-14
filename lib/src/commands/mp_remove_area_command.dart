@@ -23,18 +23,21 @@ class MPRemoveAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THFile thFile = th2FileEditController.thFile;
     final THArea area = thFile.areaByMPID(areaMPID);
     final List<THElement> areaChildren = area.getChildren(thFile).toList();
     final THIsParentMixin areaParent = area.parent(thFile);
     final int areaPositionInParent = areaParent.getChildPosition(area);
-
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'removedArea': area,
       'removedAreaChildren': areaChildren,
       'removedAreaPositionInParent': areaPositionInParent,
     };
+
+    return undoRedoInfo;
   }
 
   @override

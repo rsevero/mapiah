@@ -29,7 +29,9 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THHasOptionsMixin parentElement = th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
     final THAttrCommandOption? option = parentElement.attrOptionByName(
@@ -42,10 +44,12 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
       );
     }
 
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'fromOption': option,
       'toPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
     };
+
+    return undoRedoInfo;
   }
 
   @override

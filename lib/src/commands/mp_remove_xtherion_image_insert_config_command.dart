@@ -24,7 +24,9 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THXTherionImageInsertConfig originalElement = th2FileEditController
         .thFile
         .imageByMPID(xtherionImageInsertConfigMPID);
@@ -34,10 +36,11 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
           th2FileEditController: th2FileEditController,
           descriptionType: descriptionType,
         );
-
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'addXTherionImageInsertConfigCommand': addXTherionImageInsertCommand,
     };
+
+    return undoRedoInfo;
   }
 
   @override

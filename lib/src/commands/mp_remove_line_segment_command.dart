@@ -23,7 +23,9 @@ class MPRemoveLineSegmentCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THFile thFile = th2FileEditController.thFile;
     final MPCommand addLineSegmentCommand =
         MPAddLineSegmentCommand.fromExisting(
@@ -31,8 +33,11 @@ class MPRemoveLineSegmentCommand extends MPCommand {
           thFile: thFile,
           descriptionType: descriptionType,
         );
+    final Map<String, dynamic> undoRedoInfo = {
+      'addLineSegmentCommand': addLineSegmentCommand,
+    };
 
-    _undoRedoInfo = {'addLineSegmentCommand': addLineSegmentCommand};
+    return undoRedoInfo;
   }
 
   @override

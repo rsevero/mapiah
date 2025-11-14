@@ -118,7 +118,26 @@ abstract class MPCommand {
   }
 
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    _needsUndoRedoInfo = false;
+    final Map<String, dynamic>? undoRedoInfo = _getUndoRedoInfo(
+      th2FileEditController,
+    );
+
+    if (undoRedoInfo == null || undoRedoInfo.isEmpty) {
+      _needsUndoRedoInfo = false;
+    } else {
+      _needsUndoRedoInfo = true;
+      if (_undoRedoInfo == null) {
+        _undoRedoInfo = undoRedoInfo;
+      } else {
+        _undoRedoInfo!.addAll(undoRedoInfo);
+      }
+    }
+  }
+
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
+    return null;
   }
 
   void _actualExecute(

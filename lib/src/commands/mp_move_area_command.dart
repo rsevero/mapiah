@@ -54,9 +54,13 @@ class MPMoveAreaCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     linesMoveCommand._prepareUndoRedoInfo(th2FileEditController);
-    _undoRedoInfo = {};
+    _needsUndoRedoInfo = false;
+
+    return null;
   }
 
   @override

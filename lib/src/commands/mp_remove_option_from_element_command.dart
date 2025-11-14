@@ -29,7 +29,9 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THHasOptionsMixin parentElement = th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
     final THCommandOption? fromOption = parentElement.getOption(optionType);
@@ -39,10 +41,13 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
         'Parent element does not have option of type $optionType',
       );
     }
-    _undoRedoInfo = {
+
+    final Map<String, dynamic> undoRedoInfo = {
       'fromOption': fromOption,
       'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
     };
+
+    return undoRedoInfo;
   }
 
   @override

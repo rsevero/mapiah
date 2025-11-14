@@ -48,7 +48,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     prepareUndoRedoInfoPreCommand(th2FileEditController: th2FileEditController);
 
     final THFile thFile = th2FileEditController.thFile;
@@ -59,11 +61,12 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
       areaBorderTHID.parentMPID,
     );
     final int positionInParent = parent.getChildPosition(areaBorderTHID);
-
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'removedAreaBorderTHID': areaBorderTHID,
       'removedAreaBorderTHIDPositionInParent': positionInParent,
     };
+
+    return undoRedoInfo;
   }
 
   @override

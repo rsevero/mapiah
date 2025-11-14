@@ -32,16 +32,19 @@ class MPEditAreaTypeCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     final THArea originalArea = th2FileEditController.thFile.areaByMPID(
       areaMPID,
     );
-
-    _undoRedoInfo = {
+    final Map<String, dynamic> undoRedoInfo = {
       'originalAreaType': originalArea.areaType,
       'originalUnknownPLAType': originalArea.unknownPLAType,
       'originalLineInTH2File': originalArea.originalLineInTH2File,
     };
+
+    return undoRedoInfo;
   }
 
   @override

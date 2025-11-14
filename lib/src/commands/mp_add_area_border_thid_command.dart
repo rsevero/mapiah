@@ -54,8 +54,14 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
       _defaultDescriptionType;
 
   @override
-  void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    prepareUndoRedoInfoPosCommand(th2FileEditController: th2FileEditController);
+  Map<String, dynamic>? _getUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
+    final Map<String, dynamic>? undoRedoInfo = posCommand?._getUndoRedoInfo(
+      th2FileEditController,
+    );
+
+    return undoRedoInfo;
   }
 
   @override
