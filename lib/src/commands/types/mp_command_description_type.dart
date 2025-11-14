@@ -1,6 +1,7 @@
 enum MPCommandDescriptionType {
   addArea,
   addAreaBorderTHID,
+  addElement,
   addElements,
   addLine,
   addLineSegment,
@@ -29,6 +30,7 @@ enum MPCommandDescriptionType {
   multipleElements,
   removeArea,
   removeAreaBorderTHID,
+  removeElement,
   removeElements,
   removeLine,
   removeLineSegment,
@@ -38,6 +40,7 @@ enum MPCommandDescriptionType {
   removePoint,
   removeScrap,
   removeXTherionImageInsertConfig,
+  replaceLineSegments,
   setOptionToElement,
   setOptionToElements,
   simplifyBezier,
@@ -46,7 +49,6 @@ enum MPCommandDescriptionType {
   simplifyStraight,
   simplifyToBezier,
   simplifyToStraight,
-  replaceLineSegments,
   toggleReverseOption;
 
   static MPCommandDescriptionType getOppositeDescription(
@@ -55,6 +57,8 @@ enum MPCommandDescriptionType {
     switch (description) {
       case MPCommandDescriptionType.addArea:
         return MPCommandDescriptionType.removeArea;
+      case MPCommandDescriptionType.addElement:
+        return MPCommandDescriptionType.removeElement;
       case MPCommandDescriptionType.addElements:
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.addLine:
@@ -69,6 +73,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeXTherionImageInsertConfig;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;
+      case MPCommandDescriptionType.removeElement:
+        return MPCommandDescriptionType.addElement;
       case MPCommandDescriptionType.removeElements:
         return MPCommandDescriptionType.addElements;
       case MPCommandDescriptionType.removeLine:

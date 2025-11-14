@@ -3,6 +3,7 @@ part of '../mp_command.dart';
 enum MPCommandType {
   addArea,
   addAreaBorderTHID,
+  addElement,
   addLine,
   addLineSegment,
   addPoint,
@@ -21,6 +22,7 @@ enum MPCommandType {
   removeArea,
   removeAreaBorderTHID,
   removeAttrOptionFromElement,
+  removeElement,
   removeLine,
   removeLineSegment,
   removeOptionFromElement,

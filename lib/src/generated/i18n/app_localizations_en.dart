@@ -166,6 +166,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddAreaBorderTHID => 'Add area border line';
 
   @override
+  String get mpCommandDescriptionAddElement => 'Add element';
+
+  @override
   String get mpCommandDescriptionAddElements => 'Add elements';
 
   @override
@@ -253,6 +256,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mpCommandDescriptionRemoveAreaBorderTHID =>
       'Remove area border line';
+
+  @override
+  String get mpCommandDescriptionRemoveElement => 'Remove element';
 
   @override
   String get mpCommandDescriptionRemoveElements => 'Remove elements';

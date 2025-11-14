@@ -3,6 +3,7 @@
 ## 0.2.23 - not yet released
 * New features:
   * AreaBorderTHID add/remove commmands removing empty lines after.
+  * Created MP[Add|Remove]ElementCommand.
 * Fixed bugs:
 * Infrastructure maintenance:
 

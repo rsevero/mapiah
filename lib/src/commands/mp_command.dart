@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
-import 'package:mapiah/src/commands/mixins/mp_empty_lines_after_mixin.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -21,8 +20,11 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
+part 'mixins/mp_empty_lines_after_mixin.dart';
+part 'mixins/mp_pre_command_mixin.dart';
 part 'mp_add_area_border_thid_command.dart';
 part 'mp_add_area_command.dart';
+part 'mp_add_element_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
@@ -41,15 +43,16 @@ part 'mp_multiple_elements_command.dart';
 part 'mp_remove_area_border_thid_command.dart';
 part 'mp_remove_area_command.dart';
 part 'mp_remove_attr_option_from_element_command.dart';
+part 'mp_remove_element_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
 part 'mp_remove_scrap_command.dart';
 part 'mp_remove_xtherion_image_insert_config_command.dart';
+part 'mp_replace_line_segments_command.dart';
 part 'mp_set_attr_option_to_element_command.dart';
 part 'mp_set_option_to_element_command.dart';
-part 'mp_replace_line_segments_command.dart';
 part 'types/mp_command_type.dart';
 
 /// Abstract class that defines the structure of a command.
@@ -156,6 +159,8 @@ abstract class MPCommand {
         return MPAddAreaCommand.fromMap(map);
       case MPCommandType.addAreaBorderTHID:
         return MPAddAreaBorderTHIDCommand.fromMap(map);
+      case MPCommandType.addElement:
+        return MPAddElementCommand.fromMap(map);
       case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
@@ -192,6 +197,8 @@ abstract class MPCommand {
         return MPRemoveAreaCommand.fromMap(map);
       case MPCommandType.removeAreaBorderTHID:
         return MPRemoveAreaBorderTHIDCommand.fromMap(map);
+      case MPCommandType.removeElement:
+        return MPRemoveElementCommand.fromMap(map);
       case MPCommandType.removeLine:
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:
