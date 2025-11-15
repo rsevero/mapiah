@@ -29,15 +29,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     super.descriptionType = _defaultDescriptionType,
   }) : areaBorderTHIDMPID = existingAreaBorderTHIDMPID,
        super() {
-    final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
-      existingAreaBorderTHIDMPID,
-    );
-    final THIsParentMixin parent = areaBorderTHID.parent(thFile);
-
     preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingAreaBorderTHIDMPID,
       thFile: thFile,
-      parent: parent,
-      positionInParent: parent.getChildPosition(areaBorderTHID),
       descriptionType: descriptionType,
     );
   }
@@ -150,6 +144,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, areaBorderTHIDMPID, preCommand);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    areaBorderTHIDMPID,
+    preCommand?.hashCode ?? 0,
+  );
 }

@@ -3,6 +3,11 @@ scrap test
 area clay
 blaus
 endarea
+
+
+    
+       
+
 line contour -id blaus
 2736.2 -808.5
 2894.3 -202.7

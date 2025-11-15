@@ -31,6 +31,126 @@ void main() {
       {
         'file': '2025-10-14-001-area_with_2_lines.th2',
         'length': 20,
+
+        /// There is an empty line that is not shown on the sanitized output.
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  area clay
+    l85-3732--20
+    blaus
+  endarea
+  line border -close on -id l85-3732--20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+  area clay
+    blaus
+  endarea
+  line border -close on -id l85-3732--20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(
+        'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
+        () async {
+          try {
+            final parser = THFileParser();
+            final writer = THFileWriter();
+            mpLocator.mpGeneralController.reset();
+            final String path = THTestAux.testPath(success['file']! as String);
+            final (parsedFile, isSuccessful, errors) = await parser.parse(
+              path,
+              forceNewController: true,
+            );
+            expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+            expect(parsedFile, isA<THFile>());
+            expect(parsedFile.encoding, (success['encoding'] as String));
+            expect(parsedFile.countElements(), success['length']);
+
+            final String asFile = writer.serialize(parsedFile);
+            expect(asFile, success['asFileOriginal']);
+            final TH2FileEditController controller = mpLocator
+                .mpGeneralController
+                .getTH2FileEditController(filename: path);
+
+            // Snapshot original state (deep clone via toMap/fromMap)
+            final THFile snapshotOriginal = THFile.fromMap(
+              controller.thFile.toMap(),
+            );
+
+            /// Execution: taken from TH2FileEditUserInteractionController.prepareRemoveAreaBorderTHID()
+
+            final int scrapMPID = parsedFile.scrapMPIDs.first;
+            final THScrap scrap = parsedFile.scrapByMPID(scrapMPID);
+            final THArea area = scrap.getAreas(parsedFile).first;
+            final int areaBorderMPID = area
+                .getAreaBorderTHIDMPIDs(parsedFile)
+                .first;
+            final MPCommand removeAreaBorderCommand =
+                MPRemoveAreaBorderTHIDCommand.fromExisting(
+                  existingAreaBorderTHIDMPID: areaBorderMPID,
+                  thFile: parsedFile,
+                );
+
+            controller.execute(removeAreaBorderCommand);
+
+            final String asFileChanged = writer.serialize(controller.thFile);
+            expect(asFileChanged, success['asFileChanged']);
+
+            // Undo the action
+            controller.undo();
+
+            final String asFileUndone = writer.serialize(controller.thFile);
+            expect(asFileUndone, success['asFileOriginal']);
+
+            // Assert: final state equals original by value but is not the same object
+            expect(identical(controller.thFile, snapshotOriginal), isFalse);
+            expect(controller.thFile == snapshotOriginal, isTrue);
+          } catch (e, st) {
+            fail('Unexpected exception: $e\n$st');
+          }
+        },
+      );
+    }
+  });
+
+  group('command: MPRemoveAreaBorderTHIDCommand with explicit empty lines', () {
+    setUp(() {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+      mpLocator.mpGeneralController.reset();
+    });
+
+    const successes = [
+      {
+        'file': '2025-10-14-001-area_with_2_lines.th2',
+        'length': 20,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
@@ -147,6 +267,5 @@ endscrap
         },
       );
     }
-    ;
   });
 }

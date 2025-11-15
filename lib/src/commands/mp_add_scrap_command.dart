@@ -52,7 +52,7 @@ class MPAddScrapCommand extends MPCommand {
             MPAddAreaCommand.fromExisting(
               existingArea: child,
               areaPositionInParent: mpAddChildAtEndOfParentChildrenList,
-              th2FileEditController: th2FileEditController,
+              thFile: thFile,
             ),
           );
         default:

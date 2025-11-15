@@ -120,7 +120,7 @@ endscrap
             final THArea area = controller.elementEditController.getNewArea();
             final MPCommand addAreaCommand = MPAddAreaCommand.fromExisting(
               existingArea: area,
-              th2FileEditController: controller,
+              thFile: controller.thFile,
             );
             final THLine line = parsedFile.getLines().first;
             final MPCommand addLineToAreaCommand =
@@ -163,6 +163,5 @@ endscrap
         },
       );
     }
-    ;
   });
 }

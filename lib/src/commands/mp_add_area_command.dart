@@ -1,8 +1,9 @@
 part of 'mp_command.dart';
 
-class MPAddAreaCommand extends MPCommand {
+class MPAddAreaCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THArea newArea;
-  final int areaPositionInParent;
+  late final int areaPositionInParent;
   final List<THElement> areaChildren;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addArea;
@@ -11,24 +12,31 @@ class MPAddAreaCommand extends MPCommand {
     required this.newArea,
     required this.areaPositionInParent,
     required this.areaChildren,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.posCommand = posCommand;
+  }
 
   MPAddAreaCommand.fromExisting({
     required THArea existingArea,
     int? areaPositionInParent,
-    required TH2FileEditController th2FileEditController,
+    required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newArea = existingArea,
-       areaPositionInParent =
-           areaPositionInParent ??
-           existingArea
-               .parent(th2FileEditController.thFile)
-               .getChildPosition(existingArea),
-       areaChildren = existingArea
-           .getChildren(th2FileEditController.thFile)
-           .toList(),
-       super();
+       areaChildren = existingArea.getChildren(thFile).toList(),
+       super() {
+    final THIsParentMixin parent = existingArea.parent(thFile);
+
+    this.areaPositionInParent =
+        areaPositionInParent ?? parent.getChildPosition(existingArea);
+    posCommand = getAddEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: this.areaPositionInParent,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.addArea;
@@ -59,6 +67,9 @@ class MPAddAreaCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPRemoveAreaCommand(
       areaMPID: newArea.mpID,
+      preCommand: posCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       descriptionType: descriptionType,
     );
 
@@ -73,12 +84,15 @@ class MPAddAreaCommand extends MPCommand {
     THArea? newArea,
     int? areaPositionInParent,
     List<THElement>? areaChildren,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddAreaCommand.forCWJM(
       newArea: newArea ?? this.newArea,
       areaPositionInParent: areaPositionInParent ?? this.areaPositionInParent,
       areaChildren: areaChildren ?? this.areaChildren,
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -90,6 +104,9 @@ class MPAddAreaCommand extends MPCommand {
       areaChildren: List<THElement>.from(
         map['areaChildren'].map((x) => THElement.fromMap(x)),
       ),
+      posCommand: (map.containsKey('posCommand') && (map['posCommand'] != null))
+          ? MPCommand.fromMap(map['posCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -108,6 +125,7 @@ class MPAddAreaCommand extends MPCommand {
       'newArea': newArea.toMap(),
       'areaPositionInParent': areaPositionInParent,
       'areaChildren': areaChildren.map((e) => e.toMap()).toList(),
+      'posCommand': posCommand?.toMap(),
     });
 
     return map;
@@ -121,7 +139,11 @@ class MPAddAreaCommand extends MPCommand {
     return other is MPAddAreaCommand &&
         other.newArea == newArea &&
         other.areaPositionInParent == areaPositionInParent &&
-        const DeepCollectionEquality().equals(other.areaChildren, areaChildren);
+        const DeepCollectionEquality().equals(
+          other.areaChildren,
+          areaChildren,
+        ) &&
+        other.posCommand == posCommand;
   }
 
   @override
@@ -130,5 +152,6 @@ class MPAddAreaCommand extends MPCommand {
     newArea,
     areaPositionInParent,
     DeepCollectionEquality().hash(areaChildren),
+    posCommand?.hashCode ?? 0,
   );
 }

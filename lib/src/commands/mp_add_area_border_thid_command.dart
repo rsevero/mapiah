@@ -35,13 +35,13 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
        super() {
     final THIsParentMixin parent = existingAreaBorderTHID.parent(thFile);
 
-    areaBorderTHIDPositionInParent =
+    this.areaBorderTHIDPositionInParent =
         areaBorderTHIDPositionInParent ??
         parent.getChildPosition(existingAreaBorderTHID);
     posCommand = getAddEmptyLinesAfterCommand(
       thFile: thFile,
       parent: parent,
-      positionInParent: areaBorderTHIDPositionInParent,
+      positionInParent: this.areaBorderTHIDPositionInParent,
       descriptionType: descriptionType,
     );
   }
@@ -149,6 +149,6 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
     super.hashCode,
     newAreaBorderTHID,
     areaBorderTHIDPositionInParent,
-    posCommand,
+    posCommand?.hashCode ?? 0,
   );
 }

@@ -1,19 +1,39 @@
 part of "mp_command.dart";
 
-class MPRemoveAreaCommand extends MPCommand {
+class MPRemoveAreaCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int areaMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeArea;
 
   MPRemoveAreaCommand.forCWJM({
     required this.areaMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveAreaCommand({
     required this.areaMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
+
+  MPRemoveAreaCommand.fromExisting({
+    required int existingAreaMPID,
+    required THFile thFile,
+    super.descriptionType = _defaultDescriptionType,
+  }) : areaMPID = existingAreaMPID,
+       super() {
+    preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingAreaMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.removeArea;
@@ -55,6 +75,9 @@ class MPRemoveAreaCommand extends MPCommand {
       newArea: _undoRedoInfo!['removedArea'],
       areaChildren: _undoRedoInfo!['removedAreaChildren'],
       areaPositionInParent: _undoRedoInfo!['removedAreaPositionInParent'],
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       descriptionType: descriptionType,
     );
 
@@ -67,10 +90,13 @@ class MPRemoveAreaCommand extends MPCommand {
   @override
   MPRemoveAreaCommand copyWith({
     int? areaMPID,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveAreaCommand.forCWJM(
       areaMPID: areaMPID ?? this.areaMPID,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -78,6 +104,9 @@ class MPRemoveAreaCommand extends MPCommand {
   factory MPRemoveAreaCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveAreaCommand.forCWJM(
       areaMPID: map['areaMPID'],
+      preCommand: (map.containsKey('preCommand') && (map['preCommand'] != null))
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -92,7 +121,7 @@ class MPRemoveAreaCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'areaMPID': areaMPID});
+    map.addAll({'areaMPID': areaMPID, 'preCommand': preCommand?.toMap()});
 
     return map;
   }
@@ -102,9 +131,12 @@ class MPRemoveAreaCommand extends MPCommand {
     if (identical(this, other)) return true;
     if (!super.equalsBase(other)) return false;
 
-    return other is MPRemoveAreaCommand && other.areaMPID == areaMPID;
+    return other is MPRemoveAreaCommand &&
+        other.areaMPID == areaMPID &&
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode => super.hashCode ^ areaMPID.hashCode;
+  int get hashCode =>
+      super.hashCode ^ areaMPID.hashCode ^ (preCommand?.hashCode ?? 0);
 }

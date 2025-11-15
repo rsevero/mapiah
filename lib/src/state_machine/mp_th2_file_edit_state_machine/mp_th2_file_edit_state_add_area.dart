@@ -38,7 +38,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
     final MPCommand addAreaCommand = MPAddAreaCommand.fromExisting(
       existingArea: area,
-      th2FileEditController: th2FileEditController,
+      thFile: th2FileEditController.thFile,
     );
     final List<MPCommand> commands = [addAreaCommand, addLineToAreaCommand];
     final MPCommand addAreaWithLineCommand = MPMultipleElementsCommand.forCWJM(

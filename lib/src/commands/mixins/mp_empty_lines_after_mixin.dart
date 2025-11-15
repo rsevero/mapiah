@@ -26,15 +26,16 @@ mixin MPEmptyLinesAfterMixin on MPCommand {
   }
 
   MPCommand? getRemoveEmptyLinesAfterCommand({
+    required int elementMPID,
     required THFile thFile,
-    required THIsParentMixin parent,
-    required int positionInParent,
     required MPCommandDescriptionType descriptionType,
   }) {
+    final THElement element = thFile.elementByMPID(elementMPID);
+    final THIsParentMixin parent = element.parent(thFile);
     final List<int> emptyLinesAfter = getEmptyLinesAfter(
       thFile: thFile,
       parent: parent,
-      positionInParent: positionInParent,
+      positionInParent: parent.getChildPosition(element),
     );
 
     if (emptyLinesAfter.isEmpty) {

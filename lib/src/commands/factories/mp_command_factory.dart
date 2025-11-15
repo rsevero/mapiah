@@ -401,7 +401,11 @@ class MPCommandFactory {
 
       switch (thFile.getElementTypeByMPID(mpID)) {
         case THElementType.area:
-          removeCommand = MPRemoveAreaCommand(areaMPID: mpID);
+          removeCommand = MPRemoveAreaCommand.fromExisting(
+            existingAreaMPID: mpID,
+            thFile: thFile,
+            descriptionType: descriptionType,
+          );
         case THElementType.areaBorderTHID:
           removeCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
             existingAreaBorderTHIDMPID: mpID,

@@ -31,7 +31,9 @@ void main() {
     const successes = [
       {
         'file': '2025-10-07-001-area_with_line.th2',
-        'length': 11,
+        'length': 16,
+
+        /// There are 5 empty lines that are not shown on the sanitized output.
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
@@ -61,7 +63,7 @@ endscrap
       },
       {
         'file': '2025-10-07-001-area_with_line.th2',
-        'length': 11,
+        'length': 16,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
@@ -158,6 +160,5 @@ endscrap
         },
       );
     }
-    ;
   });
 }

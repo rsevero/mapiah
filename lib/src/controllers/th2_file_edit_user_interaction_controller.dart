@@ -504,7 +504,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final THArea area = _thFile.areaByMPID(areaMPID);
     final MPCommand removeAreaBorderTHIDCommand =
         (area.getAreaBorderTHIDMPIDs(_thFile).length == 1)
-        ? MPRemoveAreaCommand(areaMPID: areaMPID)
+        ? MPRemoveAreaCommand.fromExisting(
+            existingAreaMPID: areaMPID,
+            thFile: _thFile,
+          )
         : MPRemoveAreaBorderTHIDCommand.fromExisting(
             existingAreaBorderTHIDMPID: areaBorderTHIDMPID,
             thFile: _thFile,

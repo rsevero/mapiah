@@ -2,7 +2,9 @@
 
 ## 0.2.23 - not yet released
 * New features:
-  * AreaBorderTHID add/remove commmands removing empty lines after.
+  * Add/remove commmands removing empty lines after element selected for deletion:
+    * AreaBorderTHID;
+    * Area.
   * Created MP[Add|Remove]ElementCommand.
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.
