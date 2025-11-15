@@ -5,6 +5,7 @@
   * AreaBorderTHID add/remove commmands removing empty lines after.
   * Created MP[Add|Remove]ElementCommand.
 * Fixed bugs:
+  * MPCommandFactory.removeElements() does not use provided description type.
 * Infrastructure maintenance:
 
 ## 0.2.22 - 2025-11-13 - The line simplification release

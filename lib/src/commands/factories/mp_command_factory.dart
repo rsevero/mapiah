@@ -406,23 +406,32 @@ class MPCommandFactory {
           removeCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
             existingAreaBorderTHIDMPID: mpID,
             thFile: thFile,
+            descriptionType: descriptionType,
           );
         case THElementType.line:
           removeCommand = MPRemoveLineCommand.fromExisting(
             existingLineMPID: mpID,
             isInteractiveLineCreation: false,
             thFile: thFile,
+            descriptionType: descriptionType,
           );
         case THElementType.point:
-          removeCommand = MPRemovePointCommand(pointMPID: mpID);
+          removeCommand = MPRemovePointCommand(
+            pointMPID: mpID,
+            descriptionType: descriptionType,
+          );
         case THElementType.scrap:
           removeCommand = MPRemoveScrapCommand(scrapMPID: mpID);
         case THElementType.xTherionImageInsertConfig:
           removeCommand = MPRemoveXTherionImageInsertConfigCommand(
             xtherionImageInsertConfigMPID: mpID,
+            descriptionType: descriptionType,
           );
         default:
-          removeCommand = MPRemoveElementCommand(elementMPID: mpID);
+          removeCommand = MPRemoveElementCommand(
+            elementMPID: mpID,
+            descriptionType: descriptionType,
+          );
       }
 
       commandsList.add(removeCommand);
