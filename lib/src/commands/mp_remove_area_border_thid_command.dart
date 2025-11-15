@@ -71,10 +71,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
-    elementEditController.applyRemoveElementByMPID(areaBorderTHIDMPID);
+    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+      areaBorderTHIDMPID,
+    );
   }
 
   @override

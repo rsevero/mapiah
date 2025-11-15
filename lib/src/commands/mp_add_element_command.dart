@@ -41,11 +41,14 @@ class MPAddElementCommand extends MPCommand {
     TH2FileEditController th2FileEditController, {
     required bool keepOriginalLineTH2File,
   }) {
-    th2FileEditController.elementEditController.applyAddElement(
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
+    elementEditController.applyAddElement(
       newElement: newElement,
       childPositionInParent: elementPositionInParent,
     );
-    th2FileEditController.elementEditController.afterAddElement(newElement);
+    elementEditController.afterAddElement(newElement);
   }
 
   @override

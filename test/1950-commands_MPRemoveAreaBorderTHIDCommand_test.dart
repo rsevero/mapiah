@@ -30,13 +30,13 @@ void main() {
     const successes = [
       {
         'file': '2025-10-14-001-area_with_2_lines.th2',
-        'length': 19,
+        'length': 20,
         'encoding': 'UTF-8',
-        'lineID': 'blaus',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
   area clay
     l85-3732--20
+
     blaus
   endarea
   line border -close on -id l85-3732--20 -visibility off
@@ -93,7 +93,10 @@ endscrap
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
-            final asFile = writer.serialize(parsedFile);
+            final String asFile = writer.serialize(
+              parsedFile,
+              includeEmptyLines: true,
+            );
             expect(asFile, success['asFileOriginal']);
             final TH2FileEditController controller = mpLocator
                 .mpGeneralController
@@ -120,13 +123,19 @@ endscrap
 
             controller.execute(removeAreaBorderCommand);
 
-            final String asFileChanged = writer.serialize(controller.thFile);
+            final String asFileChanged = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
             expect(asFileChanged, success['asFileChanged']);
 
             // Undo the action
             controller.undo();
 
-            final String asFileUndone = writer.serialize(controller.thFile);
+            final String asFileUndone = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object

@@ -2,6 +2,7 @@ encoding UTF-8
 scrap test
 	area clay
 	l85-3732--20
+	
 	blaus
 	endarea
 	line border -close on -id l85-3732--20 -visibility off
