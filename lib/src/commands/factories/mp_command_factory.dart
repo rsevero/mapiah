@@ -412,6 +412,8 @@ class MPCommandFactory {
             thFile: thFile,
             descriptionType: descriptionType,
           );
+        case THElementType.emptyLine:
+          removeCommand = MPRemoveEmptyLineCommand(emptyLineMPID: mpID);
         case THElementType.line:
           removeCommand = MPRemoveLineCommand.fromExisting(
             existingLineMPID: mpID,
@@ -432,8 +434,9 @@ class MPCommandFactory {
             descriptionType: descriptionType,
           );
         default:
-          removeCommand = MPRemoveElementCommand(
-            elementMPID: mpID,
+          removeCommand = MPRemoveElementCommand.fromExisting(
+            existingElementMPID: mpID,
+            thFile: thFile,
             descriptionType: descriptionType,
           );
       }

@@ -632,6 +632,22 @@ class THFile
     return element;
   }
 
+  THEmptyLine emptyLineByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THEmptyLine) {
+      throw THCustomException(
+        "Element with MPID '$mpID' is not an empty line in THFile.emptyLineByMPID.",
+      );
+    }
+
+    return element;
+  }
+
   THScrap scrapByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);

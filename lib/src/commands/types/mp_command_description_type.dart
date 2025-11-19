@@ -3,6 +3,7 @@ enum MPCommandDescriptionType {
   addAreaBorderTHID,
   addElement,
   addElements,
+  addEmptyLine,
   addLine,
   addLineSegment,
   addPoint,
@@ -32,6 +33,7 @@ enum MPCommandDescriptionType {
   removeAreaBorderTHID,
   removeElement,
   removeElements,
+  removeEmptyLine,
   removeLine,
   removeLineSegment,
   removeLineSegments,
@@ -61,6 +63,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeElement;
       case MPCommandDescriptionType.addElements:
         return MPCommandDescriptionType.removeElements;
+      case MPCommandDescriptionType.addEmptyLine:
+        return MPCommandDescriptionType.removeEmptyLine;
       case MPCommandDescriptionType.addLine:
         return MPCommandDescriptionType.removeLine;
       case MPCommandDescriptionType.addLineSegment:
@@ -77,6 +81,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.addElement;
       case MPCommandDescriptionType.removeElements:
         return MPCommandDescriptionType.addElements;
+      case MPCommandDescriptionType.removeEmptyLine:
+        return MPCommandDescriptionType.addEmptyLine;
       case MPCommandDescriptionType.removeLine:
         return MPCommandDescriptionType.addLine;
       case MPCommandDescriptionType.removeLineSegment:

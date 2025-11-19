@@ -1,22 +1,29 @@
 part of 'mp_command.dart';
 
-class MPAddElementCommand extends MPCommand {
+class MPAddElementCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THElement newElement;
-  final int elementPositionInParent;
+  late final int elementPositionInParent;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addElement;
 
   MPAddElementCommand.forCWJM({
     required this.newElement,
     required this.elementPositionInParent,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.posCommand = posCommand;
+  }
 
   MPAddElementCommand({
     required this.newElement,
     this.elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.posCommand = posCommand;
+  }
 
   MPAddElementCommand.fromExisting({
     required THElement existingElement,
@@ -24,10 +31,19 @@ class MPAddElementCommand extends MPCommand {
     required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newElement = existingElement,
-       elementPositionInParent =
-           elementPositionInParent ??
-           existingElement.parent(thFile).getChildPosition(existingElement),
-       super();
+
+       super() {
+    final THIsParentMixin parent = existingElement.parent(thFile);
+
+    elementPositionInParent =
+        elementPositionInParent ?? parent.getChildPosition(existingElement);
+    posCommand = getAddEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: elementPositionInParent,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.addElement;
@@ -57,6 +73,9 @@ class MPAddElementCommand extends MPCommand {
   ) {
     final MPCommand oppositeCommand = MPRemoveElementCommand(
       elementMPID: newElement.mpID,
+      preCommand: posCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       descriptionType: descriptionType,
     );
 
@@ -70,12 +89,15 @@ class MPAddElementCommand extends MPCommand {
   MPAddElementCommand copyWith({
     THElement? newElement,
     int? elementPositionInParent,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddElementCommand.forCWJM(
       newElement: newElement ?? this.newElement,
       elementPositionInParent:
           elementPositionInParent ?? this.elementPositionInParent,
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -84,6 +106,9 @@ class MPAddElementCommand extends MPCommand {
     return MPAddElementCommand.forCWJM(
       newElement: THElement.fromMap(map['newElement']),
       elementPositionInParent: map['elementPositionInParent'],
+      posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
+          ? MPCommand.fromMap(map['posCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -101,6 +126,7 @@ class MPAddElementCommand extends MPCommand {
     map.addAll({
       'newElement': newElement.toMap(),
       'elementPositionInParent': elementPositionInParent,
+      'posCommand': posCommand?.toMap(),
     });
 
     return map;
@@ -113,10 +139,15 @@ class MPAddElementCommand extends MPCommand {
 
     return other is MPAddElementCommand &&
         other.newElement == newElement &&
-        other.elementPositionInParent == elementPositionInParent;
+        other.elementPositionInParent == elementPositionInParent &&
+        other.posCommand == posCommand;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, newElement, elementPositionInParent);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newElement,
+    elementPositionInParent,
+    posCommand ?? 0,
+  );
 }

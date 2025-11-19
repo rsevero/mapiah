@@ -398,6 +398,12 @@ abstract class AppLocalizations {
   /// **'Add elements'**
   String get mpCommandDescriptionAddElements;
 
+  /// The description for the add empty line command
+  ///
+  /// In en, this message translates to:
+  /// **'Add empty line'**
+  String get mpCommandDescriptionAddEmptyLine;
+
   /// The description for the add line command
   ///
   /// In en, this message translates to:
@@ -571,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove elements'**
   String get mpCommandDescriptionRemoveElements;
+
+  /// The description for the remove empty line command
+  ///
+  /// In en, this message translates to:
+  /// **'Remove empty line'**
+  String get mpCommandDescriptionRemoveEmptyLine;
 
   /// The description for the remove line command
   ///

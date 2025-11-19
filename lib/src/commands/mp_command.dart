@@ -26,6 +26,7 @@ part 'mixins/mp_pre_command_mixin.dart';
 part 'mp_add_area_border_thid_command.dart';
 part 'mp_add_area_command.dart';
 part 'mp_add_element_command.dart';
+part 'mp_add_empty_line_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
@@ -45,6 +46,7 @@ part 'mp_remove_area_border_thid_command.dart';
 part 'mp_remove_area_command.dart';
 part 'mp_remove_attr_option_from_element_command.dart';
 part 'mp_remove_element_command.dart';
+part 'mp_remove_empty_line_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
@@ -172,6 +174,8 @@ abstract class MPCommand {
         return MPAddAreaBorderTHIDCommand.fromMap(map);
       case MPCommandType.addElement:
         return MPAddElementCommand.fromMap(map);
+      case MPCommandType.addEmptyLine:
+        return MPAddEmptyLineCommand.fromMap(map);
       case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
@@ -210,6 +214,8 @@ abstract class MPCommand {
         return MPRemoveAreaBorderTHIDCommand.fromMap(map);
       case MPCommandType.removeElement:
         return MPRemoveElementCommand.fromMap(map);
+      case MPCommandType.removeEmptyLine:
+        return MPRemoveEmptyLineCommand.fromMap(map);
       case MPCommandType.removeLine:
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:

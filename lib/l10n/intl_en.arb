@@ -256,6 +256,11 @@
     "description": "The description for the add elements command",
     "type": "text"
   },
+  "mpCommandDescriptionAddEmptyLine":  "Add empty line",
+  "@mpCommandDescriptionAddEmptyLine": {
+    "description": "The description for the add empty line command",
+    "type": "text"
+  },
   "mpCommandDescriptionAddLine": "Add line",
   "@mpCommandDescriptionAddLine": {
     "description": "The description for the add line command",
@@ -399,6 +404,11 @@
   "mpCommandDescriptionRemoveElements": "Remove elements",
   "@mpCommandDescriptionRemoveElements": {
     "description": "The description for the remove elements command",
+    "type": "text"
+  },
+  "mpCommandDescriptionRemoveEmptyLine": "Remove empty line",
+  "@mpCommandDescriptionRemoveEmptyLine": {
+    "description": "The description for the remove empty line command",
     "type": "text"
   },
   "mpCommandDescriptionRemoveLine": "Remove line",

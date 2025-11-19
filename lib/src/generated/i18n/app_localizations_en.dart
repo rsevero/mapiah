@@ -172,6 +172,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddElements => 'Add elements';
 
   @override
+  String get mpCommandDescriptionAddEmptyLine => 'Add empty line';
+
+  @override
   String get mpCommandDescriptionAddLine => 'Add line';
 
   @override
@@ -262,6 +265,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemoveElements => 'Remove elements';
+
+  @override
+  String get mpCommandDescriptionRemoveEmptyLine => 'Remove empty line';
 
   @override
   String get mpCommandDescriptionRemoveLine => 'Remove line';

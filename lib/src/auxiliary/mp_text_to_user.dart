@@ -337,6 +337,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddElement;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addElements] =
         localizations.mpCommandDescriptionAddElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addEmptyLine] =
+        localizations.mpCommandDescriptionAddEmptyLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLine] =
         localizations.mpCommandDescriptionAddLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLineSegment] =
@@ -401,6 +403,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemoveElement;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeElements] =
         localizations.mpCommandDescriptionRemoveElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removeEmptyLine] =
+        localizations.mpCommandDescriptionRemoveEmptyLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
         localizations.mpCommandDescriptionRemoveLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
