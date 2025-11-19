@@ -9,6 +9,8 @@
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.
 * Infrastructure maintenance:
+  * Flutter upgraded to 3.38.2.
+  * flutter pub upgrade --major-versions
 
 ## 0.2.22 - 2025-11-13 - The line simplification release
 * New features:
