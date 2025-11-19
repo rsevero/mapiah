@@ -31,7 +31,9 @@ void main() {
     const successes = [
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 8,
+
+        /// This file has 2 empty lines that are not shown in this sanitized output.
+        'length': 10,
         'originalLineSegmentsMap': 3,
         'deltaOnCanvas': Offset(2.8, 3.7),
         'encoding': 'UTF-8',

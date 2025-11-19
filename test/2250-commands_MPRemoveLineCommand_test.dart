@@ -21,7 +21,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPRemoveLineCommand', () {
+  group('command: MPRemoveLineCommand with sanitized output', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -30,7 +30,9 @@ void main() {
     const successes = [
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 8,
+        'length': 10,
+
+        /// File has 2 empty lines that aren't shown in sanitized output.
         'encoding': 'UTF-8',
         'lineID': 'blaus',
         'asFileOriginal': r'''encoding UTF-8
@@ -95,6 +97,104 @@ endscrap
             controller.undo();
 
             final String asFileUndone = writer.serialize(controller.thFile);
+            expect(asFileUndone, success['asFileOriginal']);
+
+            // Assert: final state equals original by value but is not the same object
+            expect(identical(controller.thFile, snapshotOriginal), isFalse);
+            expect(controller.thFile == snapshotOriginal, isTrue);
+          } catch (e, st) {
+            fail('Unexpected exception: $e\n$st');
+          }
+        },
+      );
+    }
+  });
+
+  group('command: MPRemoveLineCommand with unsanitized output', () {
+    setUp(() {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+      mpLocator.mpGeneralController.reset();
+    });
+
+    const successes = [
+      {
+        'file': '2025-10-05-001-line.th2',
+        'length': 10,
+        'encoding': 'UTF-8',
+        'lineID': 'blaus',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  line contour -id blaus
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+
+
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(
+        'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
+        () async {
+          try {
+            final parser = THFileParser();
+            final writer = THFileWriter();
+            mpLocator.mpGeneralController.reset();
+            final String path = THTestAux.testPath(success['file']! as String);
+            final (parsedFile, isSuccessful, errors) = await parser.parse(
+              path,
+              forceNewController: true,
+            );
+            expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+            expect(parsedFile, isA<THFile>());
+            expect(parsedFile.encoding, (success['encoding'] as String));
+            expect(parsedFile.countElements(), success['length']);
+
+            final asFile = writer.serialize(
+              parsedFile,
+              includeEmptyLines: true,
+            );
+            expect(asFile, success['asFileOriginal']);
+            final TH2FileEditController controller = mpLocator
+                .mpGeneralController
+                .getTH2FileEditController(filename: path);
+
+            // Snapshot original state (deep clone via toMap/fromMap)
+            final THFile snapshotOriginal = THFile.fromMap(
+              controller.thFile.toMap(),
+            );
+
+            /// Execution: taken from MPCommandFactory.removeElements()
+
+            final int lineMPID = parsedFile.linesMPIDs.first;
+            final MPCommand setCommand = MPCommandFactory.removeElements(
+              mpIDs: [lineMPID],
+              thFile: parsedFile,
+            );
+
+            controller.execute(setCommand);
+
+            final String asFileChanged = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
+            expect(asFileChanged, success['asFileChanged']);
+
+            // Undo the action
+            controller.undo();
+
+            final String asFileUndone = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object

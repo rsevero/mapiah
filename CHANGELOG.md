@@ -4,7 +4,9 @@
 * New features:
   * Add/remove commmands removing empty lines after element selected for deletion:
     * AreaBorderTHID;
-    * Area.
+    * Area;
+    * Element;
+    * Line.
   * Created MP[Add|Remove]ElementCommand.
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.

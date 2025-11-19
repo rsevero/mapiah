@@ -31,7 +31,9 @@ void main() {
     const successes = [
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 8,
+
+        /// This file has 2 empty lines that are not shown in this sanitized output.
+        'length': 10,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
@@ -55,7 +57,9 @@ endscrap
       },
       {
         'file': '2025-10-05-001-line.th2',
-        'length': 8,
+
+        /// This file has 2 empty lines that are not shown in this sanitized output.
+        'length': 10,
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
 scrap test

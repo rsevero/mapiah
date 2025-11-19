@@ -1,8 +1,9 @@
 part of 'mp_command.dart';
 
-class MPAddLineCommand extends MPCommand {
+class MPAddLineCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THLine newLine;
-  final int linePositionInParent;
+  late final int linePositionInParent;
   final List<THElement> lineChildren;
   final Offset? lineStartScreenPosition;
   late final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
@@ -15,8 +16,11 @@ class MPAddLineCommand extends MPCommand {
     required this.lineChildren,
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.posCommand = posCommand;
+  }
 
   MPAddLineCommand({
     required this.newLine,
@@ -24,8 +28,11 @@ class MPAddLineCommand extends MPCommand {
     required this.lineChildren,
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.posCommand = posCommand;
+  }
 
   MPAddLineCommand.fromExisting({
     required THLine existingLine,
@@ -34,14 +41,14 @@ class MPAddLineCommand extends MPCommand {
     required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newLine = existingLine,
-       linePositionInParent =
-           linePositionInParent ??
-           existingLine.parent(thFile).getChildPosition(existingLine),
        lineChildren = existingLine.getChildren(thFile).toList(),
        super() {
     final int existingLineMPID = existingLine.mpID;
     final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
+    final THIsParentMixin parent = existingLine.parent(thFile);
 
+    this.linePositionInParent =
+        linePositionInParent ?? parent.getChildPosition(existingLine);
     if (areaMPID == null) {
       addAreaTHIDCommand = null;
     } else {
@@ -61,6 +68,13 @@ class MPAddLineCommand extends MPCommand {
         );
       }
     }
+
+    posCommand = getAddEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: this.linePositionInParent,
+      descriptionType: descriptionType,
+    );
   }
 
   @override
@@ -97,9 +111,10 @@ class MPAddLineCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPRemoveLineCommand(
-      lineMPID: newLine.mpID,
+    final MPCommand oppositeCommand = MPRemoveLineCommand.fromExisting(
+      existingLineMPID: newLine.mpID,
       isInteractiveLineCreation: lineStartScreenPosition != null,
+      thFile: th2FileEditController.thFile,
       descriptionType: descriptionType,
     );
 
@@ -118,6 +133,8 @@ class MPAddLineCommand extends MPCommand {
     bool makeLineStartScreenPositionNull = false,
     MPAddAreaBorderTHIDCommand? addAreaTHIDCommand,
     bool makeAddAreaTHIDCommandNull = false,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineCommand.forCWJM(
@@ -130,6 +147,7 @@ class MPAddLineCommand extends MPCommand {
       addAreaTHIDCommand: makeAddAreaTHIDCommandNull
           ? null
           : (addAreaTHIDCommand ?? this.addAreaTHIDCommand),
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -149,6 +167,9 @@ class MPAddLineCommand extends MPCommand {
           : null,
       addAreaTHIDCommand: map.containsKey('addAreaTHIDCommand')
           ? MPAddAreaBorderTHIDCommand.fromMap(map['addAreaTHIDCommand'])
+          : null,
+      posCommand: (map.containsKey('posCommand') && (map['posCommand'] != null))
+          ? MPCommand.fromMap(map['posCommand'])
           : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
@@ -170,6 +191,7 @@ class MPAddLineCommand extends MPCommand {
       'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
       if (addAreaTHIDCommand != null)
         'addAreaTHIDCommand': addAreaTHIDCommand!.toMap(),
+      'posCommand': posCommand?.toMap(),
     });
 
     if (lineStartScreenPosition != null) {
@@ -194,6 +216,7 @@ class MPAddLineCommand extends MPCommand {
         other.linePositionInParent == linePositionInParent &&
         other.lineStartScreenPosition == lineStartScreenPosition &&
         other.addAreaTHIDCommand == addAreaTHIDCommand &&
+        other.posCommand == posCommand &&
         const DeepCollectionEquality().equals(other.lineChildren, lineChildren);
   }
 
@@ -203,7 +226,8 @@ class MPAddLineCommand extends MPCommand {
     newLine,
     linePositionInParent,
     lineStartScreenPosition,
-    addAreaTHIDCommand,
+    addAreaTHIDCommand ?? 0,
+    posCommand ?? 0,
     DeepCollectionEquality().hash(lineChildren),
   );
 }

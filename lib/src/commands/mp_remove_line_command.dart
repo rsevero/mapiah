@@ -1,6 +1,7 @@
 part of "mp_command.dart";
 
-class MPRemoveLineCommand extends MPCommand {
+class MPRemoveLineCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int lineMPID;
   final bool isInteractiveLineCreation;
   static const MPCommandDescriptionType _defaultDescriptionType =
@@ -9,14 +10,20 @@ class MPRemoveLineCommand extends MPCommand {
   MPRemoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveLineCommand({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveLineCommand.fromExisting({
     required int existingLineMPID,
@@ -42,6 +49,12 @@ class MPRemoveLineCommand extends MPCommand {
         // );
       }
     }
+
+    preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingLineMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
   }
 
   @override
@@ -54,13 +67,16 @@ class MPRemoveLineCommand extends MPCommand {
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
-    final THLine originalLine = thFile.lineByMPID(lineMPID);
-    final MPCommand addLineCommand = MPAddLineCommand.fromExisting(
-      existingLine: originalLine,
-      thFile: thFile,
-    );
+    final THLine line = thFile.lineByMPID(lineMPID);
+    final List<THElement> lineChildren = line.getChildren(thFile).toList();
+    final THIsParentMixin lineParent = line.parent(thFile);
+    final int linePositionInParent = lineParent.getChildPosition(line);
 
-    _undoRedoInfo = {'addLineCommand': addLineCommand};
+    _undoRedoInfo = {
+      'removedLine': line,
+      'removedLineChildren': lineChildren,
+      'removedLinePositionInParent': linePositionInParent,
+    };
   }
 
   @override
@@ -100,8 +116,16 @@ class MPRemoveLineCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand =
-        _undoRedoInfo!['addLineCommand'] as MPCommand;
+    final MPCommand oppositeCommand = MPAddLineCommand.forCWJM(
+      newLine: _undoRedoInfo!['removedLine'] as THLine,
+      linePositionInParent:
+          _undoRedoInfo!['removedLinePositionInParent'] as int,
+      lineChildren: _undoRedoInfo!['removedLineChildren'] as List<THElement>,
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
+      descriptionType: descriptionType,
+    );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
@@ -113,12 +137,15 @@ class MPRemoveLineCommand extends MPCommand {
   MPRemoveLineCommand copyWith({
     int? lineMPID,
     bool? isInteractiveLineCreation,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveLineCommand.forCWJM(
       lineMPID: lineMPID ?? this.lineMPID,
       isInteractiveLineCreation:
           isInteractiveLineCreation ?? this.isInteractiveLineCreation,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -127,6 +154,9 @@ class MPRemoveLineCommand extends MPCommand {
     return MPRemoveLineCommand.forCWJM(
       lineMPID: map['lineMPID'],
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
+      preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -144,6 +174,7 @@ class MPRemoveLineCommand extends MPCommand {
     map.addAll({
       'lineMPID': lineMPID,
       'isInteractiveLineCreation': isInteractiveLineCreation,
+      'preCommand': preCommand?.toMap(),
     });
 
     return map;
@@ -156,10 +187,15 @@ class MPRemoveLineCommand extends MPCommand {
 
     return other is MPRemoveLineCommand &&
         other.lineMPID == lineMPID &&
-        other.isInteractiveLineCreation == isInteractiveLineCreation;
+        other.isInteractiveLineCreation == isInteractiveLineCreation &&
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, lineMPID, isInteractiveLineCreation);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    lineMPID,
+    isInteractiveLineCreation,
+    preCommand ?? 0,
+  );
 }

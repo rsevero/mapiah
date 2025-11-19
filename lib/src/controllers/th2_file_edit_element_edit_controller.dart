@@ -653,6 +653,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           newLine: _newLine!,
           lineChildren: lineChildren,
           lineStartScreenPosition: _lineStartScreenPosition,
+          posCommand: null,
         );
 
         _th2FileEditController.execute(command);
