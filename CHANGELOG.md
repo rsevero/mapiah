@@ -8,10 +8,11 @@
     * Element;
     * Line.
   * Created MP[Add|Remove]ElementCommand.
+  * Created MP[Add|Remove]EmptyLineCommand.
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.
 * Infrastructure maintenance:
-  * Flutter upgraded to 3.38.2.
+  * Flutter upgraded to 3.38.3.
   * flutter pub upgrade --major-versions
 
 ## 0.2.22 - 2025-11-13 - The line simplification release

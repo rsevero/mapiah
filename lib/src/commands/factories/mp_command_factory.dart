@@ -463,9 +463,11 @@ class MPCommandFactory {
   }) {
     final List<MPCommand> commandsList = [];
 
-    final MPCommand removeLineSegmentCommand = MPRemoveLineSegmentCommand(
-      lineSegment: thFile.lineSegmentByMPID(lineSegmentMPID),
-    );
+    final MPCommand removeLineSegmentCommand =
+        MPRemoveLineSegmentCommand.fromExisting(
+          existingLineSegmentMPID: lineSegmentMPID,
+          thFile: thFile,
+        );
     final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
       originalLineSegment: thFile.lineSegmentByMPID(
         lineSegmentSubstitution.mpID,

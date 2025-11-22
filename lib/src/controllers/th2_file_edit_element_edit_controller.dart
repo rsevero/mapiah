@@ -666,6 +666,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
       final MPAddLineSegmentCommand command = MPAddLineSegmentCommand(
         newLineSegment: newLineSegment,
+        posCommand: null,
       );
 
       _th2FileEditController.execute(command);
@@ -995,7 +996,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
-      return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
+      return MPRemoveLineSegmentCommand.fromExisting(
+        existingLineSegmentMPID: lineSegmentMPID,
+        thFile: _th2FileEditController.thFile,
+      );
     } else {
       final bool deletedLineSegmentIsStraight =
           lineSegment is THStraightLineSegment;
@@ -1004,7 +1008,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           nextLineSegment is THStraightLineSegment;
 
       if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
-        return MPRemoveLineSegmentCommand(lineSegment: lineSegment);
+        return MPRemoveLineSegmentCommand.fromExisting(
+          existingLineSegmentMPID: lineSegmentMPID,
+          thFile: _th2FileEditController.thFile,
+        );
       } else {
         final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
           lineSegment,
@@ -1127,6 +1134,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             MPAddLineSegmentCommand(
               newLineSegment: newLineSegment,
               lineSegmentPositionInParent: lineSegmentPositionInParent,
+              posCommand: null,
             ),
           );
         } else {
@@ -1146,6 +1154,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             MPAddLineSegmentCommand(
               newLineSegment: newLineSegments[0],
               lineSegmentPositionInParent: lineSegmentPositionInParent,
+              posCommand: null,
             ),
           );
           addLineSegmentsCommands.add(

@@ -1,0 +1,14 @@
+encoding UTF-8
+scrap test
+  line contour -id blaus
+    2736.2 -808.5
+
+
+    2894.3 -202.7
+
+    2264.5 -205.7
+
+
+    
+endline
+endscrap

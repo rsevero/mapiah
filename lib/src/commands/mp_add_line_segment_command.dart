@@ -1,14 +1,16 @@
 part of 'mp_command.dart';
 
-class MPAddLineSegmentCommand extends MPCommand {
+class MPAddLineSegmentCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   late final THLineSegment newLineSegment;
-  final int lineSegmentPositionInParent;
+  late final int lineSegmentPositionInParent;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLineSegment;
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,
     required this.lineSegmentPositionInParent,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM();
 
@@ -16,6 +18,7 @@ class MPAddLineSegmentCommand extends MPCommand {
     required this.newLineSegment,
     this.lineSegmentPositionInParent =
         mpAddChildAtEndMinusOneOfParentChildrenList,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super();
 
@@ -25,12 +28,19 @@ class MPAddLineSegmentCommand extends MPCommand {
     required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newLineSegment = existingLineSegment,
-       lineSegmentPositionInParent =
-           lineSegmentPositionInParent ??
-           existingLineSegment
-               .parent(thFile)
-               .getChildPosition(existingLineSegment),
-       super();
+       super() {
+    final THIsParentMixin parent = existingLineSegment.parent(thFile);
+
+    this.lineSegmentPositionInParent =
+        lineSegmentPositionInParent ??
+        parent.getChildPosition(existingLineSegment);
+    posCommand = getAddEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: this.lineSegmentPositionInParent,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.addLineSegment;
@@ -58,8 +68,9 @@ class MPAddLineSegmentCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPRemoveLineSegmentCommand(
-      lineSegment: newLineSegment,
+    final MPCommand oppositeCommand = MPRemoveLineSegmentCommand.fromExisting(
+      existingLineSegmentMPID: newLineSegment.mpID,
+      thFile: th2FileEditController.thFile,
       descriptionType: descriptionType,
     );
 
@@ -73,12 +84,15 @@ class MPAddLineSegmentCommand extends MPCommand {
   MPAddLineSegmentCommand copyWith({
     THLineSegment? newLineSegment,
     int? lineSegmentPositionInParent,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: newLineSegment ?? this.newLineSegment,
       lineSegmentPositionInParent:
           lineSegmentPositionInParent ?? this.lineSegmentPositionInParent,
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -87,6 +101,9 @@ class MPAddLineSegmentCommand extends MPCommand {
     return MPAddLineSegmentCommand.forCWJM(
       newLineSegment: THLineSegment.fromMap(map['newLineSegment']),
       lineSegmentPositionInParent: map['lineSegmentPositionInParent'],
+      posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
+          ? MPCommand.fromMap(map['posCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -104,6 +121,7 @@ class MPAddLineSegmentCommand extends MPCommand {
     map.addAll({
       'newLineSegment': newLineSegment.toMap(),
       'lineSegmentPositionInParent': lineSegmentPositionInParent,
+      'posCommand': posCommand?.toMap(),
     });
 
     return map;
@@ -116,10 +134,15 @@ class MPAddLineSegmentCommand extends MPCommand {
 
     return other is MPAddLineSegmentCommand &&
         other.newLineSegment == newLineSegment &&
-        other.lineSegmentPositionInParent == lineSegmentPositionInParent;
+        other.lineSegmentPositionInParent == lineSegmentPositionInParent &&
+        other.posCommand == posCommand;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, newLineSegment, lineSegmentPositionInParent);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newLineSegment,
+    lineSegmentPositionInParent,
+    posCommand ?? 0,
+  );
 }
