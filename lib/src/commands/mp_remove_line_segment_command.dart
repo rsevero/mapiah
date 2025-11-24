@@ -10,13 +10,17 @@ class MPRemoveLineSegmentCommand extends MPCommand
     required this.lineSegmentMPID,
     required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveLineSegmentCommand({
     required this.lineSegmentMPID,
     required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveLineSegmentCommand.fromExisting({
     required int existingLineSegmentMPID,

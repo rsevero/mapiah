@@ -12,7 +12,9 @@ class MPAddLineSegmentCommand extends MPCommand
     required this.lineSegmentPositionInParent,
     required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.posCommand = posCommand;
+  }
 
   MPAddLineSegmentCommand({
     required this.newLineSegment,
@@ -20,7 +22,9 @@ class MPAddLineSegmentCommand extends MPCommand
         mpAddChildAtEndMinusOneOfParentChildrenList,
     required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.posCommand = posCommand;
+  }
 
   MPAddLineSegmentCommand.fromExisting({
     required THLineSegment existingLineSegment,
