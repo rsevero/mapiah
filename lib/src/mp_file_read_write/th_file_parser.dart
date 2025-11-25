@@ -263,10 +263,9 @@ class THFileParser {
   }
 
   void _injectMultiLineCommentContent(List<dynamic> element) {
-    final content = (element.isEmpty) ? '' : element[1].toString();
     _currentElement = THMultilineCommentContent(
       parentMPID: _currentParentMPID,
-      content: content,
+      content: element[1].toString(),
       originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.applyAddElement(
@@ -277,7 +276,10 @@ class THFileParser {
   }
 
   void _injectEndMultiLineComment() {
-    _currentElement = THEndcomment(parentMPID: _currentParentMPID);
+    _currentElement = THEndcomment(
+      parentMPID: _currentParentMPID,
+      originalLineInTH2File: _currentOriginalLine,
+    );
     _th2FileElementEditController.applyAddElement(
       newElement: _currentElement,
       parent: _currentParent,
@@ -985,6 +987,7 @@ class THFileParser {
 
   void _injectComment() {
     final List<dynamic>? element = _commentContentToParse;
+
     if (element == null) {
       return;
     }
@@ -1023,7 +1026,6 @@ class THFileParser {
           parent: _currentParent,
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
         );
-        break;
       case 'samelinecomment':
         if ((_currentElement.sameLineComment == null) ||
             _currentElement.sameLineComment!.isEmpty) {
@@ -1032,7 +1034,6 @@ class THFileParser {
           _currentElement.sameLineComment =
               '${_currentElement.sameLineComment!} | ${element[1]}';
         }
-        break;
       default:
         final THElement newElement = THUnrecognizedCommand(
           parentMPID: _currentParentMPID,
@@ -1072,7 +1073,10 @@ class THFileParser {
 
         final String errorMessage =
             "Unrecognized command option '$optionType'. This should never happen.";
-        if (kDebugMode) assert(false, errorMessage);
+
+        if (kDebugMode) {
+          assert(false, errorMessage);
+        }
         throw UnsupportedError(errorMessage);
       } catch (e, s) {
         _addError(
@@ -2645,7 +2649,6 @@ class THFileParser {
         );
         newContentOriginal += currentContentOriginal;
         if (_continuationDelimiter == '\\') {
-          newContentToParse = newContentToParse.trimRight();
           newContentToParse = newContentToParse.substring(
             0,
             newContentToParse.length - 1,

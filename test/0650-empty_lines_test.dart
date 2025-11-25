@@ -17,38 +17,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('multilinecomment', () {
+  group('empty lines', () {
     const successes = [
       {
-        'file': 'th_file_parser-00110-comment_block.th2',
-        'length': 5,
+        'file': '2025-11-25-001-empty_lines.th2',
+        'length': 18,
         'encoding': 'UTF-8',
-        'asFile': '''encoding UTF-8
-comment
-The scrap below is really complex.
-   Take care!!
-endcomment
-''',
-      },
-      {
-        'file': 'th_file_parser-00111-comment_block_complex.th2',
-        'length': 14,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-comment
-The scrap below is really complex.
-Take care!!
-endcomment
-scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
-  comment
-
-Another comment block.
-
-But this one is inside a scrap!
-
-  endcomment
-endscrap
-''',
+        'asFile':
+            'encoding utf-8\ncomment\nThe scrap below is really complex.\nTake care!!\nendcomment\n\nscrap poco_surubim_SCP01 -scale [-164.0 -2396.0 3308.0 -2396.0 0.0 0.0 88.1888 0.0 m]\n\tpoint 42.1 -5448.8 guano -visibility off -id P1\n\t\n\tcomment\n\t\n\tAnother comment block.\n\t\n\tBut this one is inside a scrap!\n\tendcomment\n\t\n\tpoint 322.4 431.7 station -name A1\nendscrap\n',
       },
     ];
 
@@ -65,7 +41,11 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final String asFile = writer.serialize(file);
+        final String asFile = writer.serialize(
+          file,
+          includeEmptyLines: true,
+          useOriginalRepresentation: true,
+        );
         expect(asFile, success['asFile']);
       });
     }

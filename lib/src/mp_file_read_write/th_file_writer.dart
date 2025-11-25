@@ -91,7 +91,7 @@ class THFileWriter {
         asString += _serializeXTherionImageInsertConfig(thElement);
       } else {
         throw THCustomException(
-          "At THFileWriter._serializeAllXTherionConfigs: thelement with MPID '$xtherionSettingMPID' is not a Therion config.",
+          "At THFileWriter._serializeAllXTherionConfigs: thElement with MPID '$xtherionSettingMPID' is not a Therion config.",
         );
       }
     }
@@ -122,14 +122,22 @@ class THFileWriter {
   }
 
   String _serializeEmptyLine(THElement thElement) {
-    return (_includeEmptyLines || _insideMultiLineComment) ? _lineEnding : '';
+    return (_includeEmptyLines || _insideMultiLineComment)
+        ? (_useOriginalRepresentation
+              ? thElement.originalLineInTH2File
+              : _lineEnding)
+        : '';
   }
 
   String _serializeMultiLineCommmentContent(THElement thElement) {
-    final String newLine =
-        '${(thElement as THMultilineCommentContent).content}$_lineEnding';
+    String asString = _elementOriginalLineRepresentation(thElement);
 
-    return newLine;
+    if (asString.isEmpty) {
+      asString =
+          "${(thElement as THMultilineCommentContent).content}$_lineEnding";
+    }
+
+    return asString;
   }
 
   String _serializeScrap(THElement thElement) {
@@ -183,8 +191,9 @@ class THFileWriter {
   }
 
   String serializeElement(THElement thElement) {
-    String asString = '';
     final THElementType type = thElement.elementType;
+
+    String asString = '';
 
     switch (type) {
       case THElementType.area:

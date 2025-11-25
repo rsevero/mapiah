@@ -12,6 +12,7 @@
   * Created MP[Add|Remove]EmptyLineCommand.
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.
+  * Empty lines not being properly represented as original version.
 * Infrastructure maintenance:
   * Flutter upgraded to 3.38.3.
   * flutter pub upgrade --major-versions
