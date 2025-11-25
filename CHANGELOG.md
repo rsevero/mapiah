@@ -6,7 +6,8 @@
     * AreaBorderTHID;
     * Area;
     * Element;
-    * Line.
+    * Line;
+    * Line segment.
   * Created MP[Add|Remove]ElementCommand.
   * Created MP[Add|Remove]EmptyLineCommand.
 * Fixed bugs:

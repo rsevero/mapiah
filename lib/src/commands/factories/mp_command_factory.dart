@@ -110,7 +110,10 @@ class MPCommandFactory {
         decimalPositions: th2FileEditController.currentDecimalPositions,
       ),
     );
-    final MPAddPointCommand command = MPAddPointCommand(newPoint: newPoint);
+    final MPAddPointCommand command = MPAddPointCommand(
+      newPoint: newPoint,
+      posCommand: null,
+    );
 
     return command;
   }
@@ -422,8 +425,9 @@ class MPCommandFactory {
             descriptionType: descriptionType,
           );
         case THElementType.point:
-          removeCommand = MPRemovePointCommand(
-            pointMPID: mpID,
+          removeCommand = MPRemovePointCommand.fromExisting(
+            existingPointMPID: mpID,
+            thFile: thFile,
             descriptionType: descriptionType,
           );
         case THElementType.scrap:

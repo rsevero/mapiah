@@ -1,19 +1,39 @@
 part of 'mp_command.dart';
 
-class MPRemovePointCommand extends MPCommand {
+class MPRemovePointCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int pointMPID;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removePoint;
 
   MPRemovePointCommand.forCWJM({
     required this.pointMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemovePointCommand({
     required this.pointMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
+
+  MPRemovePointCommand.fromExisting({
+    required int existingPointMPID,
+    required THFile thFile,
+    super.descriptionType = _defaultDescriptionType,
+  }) : pointMPID = existingPointMPID,
+       super() {
+    preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingPointMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.removePoint;
@@ -26,13 +46,15 @@ class MPRemovePointCommand extends MPCommand {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THPoint originalPoint = thFile.pointByMPID(pointMPID);
-    final MPCommand addPointCommand = MPAddPointCommand.fromExisting(
-      existingPoint: originalPoint,
-      thFile: thFile,
-      descriptionType: descriptionType,
+    final THIsParentMixin pointParent = originalPoint.parent(thFile);
+    final int pointPositionInParent = pointParent.getChildPosition(
+      originalPoint,
     );
 
-    _undoRedoInfo = {'addPointCommand': addPointCommand};
+    _undoRedoInfo = {
+      'removedPoint': originalPoint,
+      'removedPointPositionInParent': pointPositionInParent,
+    };
   }
 
   @override
@@ -49,8 +71,15 @@ class MPRemovePointCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand =
-        _undoRedoInfo!['addPointCommand'] as MPCommand;
+    final MPCommand oppositeCommand = MPAddPointCommand.forCWJM(
+      newPoint: _undoRedoInfo!['removedPoint'] as THPoint,
+      pointPositionInParent:
+          _undoRedoInfo!['removedPointPositionInParent'] as int,
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
+      descriptionType: descriptionType,
+    );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
@@ -61,10 +90,13 @@ class MPRemovePointCommand extends MPCommand {
   @override
   MPRemovePointCommand copyWith({
     int? pointMPID,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemovePointCommand.forCWJM(
       pointMPID: pointMPID ?? this.pointMPID,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -72,6 +104,9 @@ class MPRemovePointCommand extends MPCommand {
   factory MPRemovePointCommand.fromMap(Map<String, dynamic> map) {
     return MPRemovePointCommand.forCWJM(
       pointMPID: map['pointMPID'],
+      preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -86,7 +121,7 @@ class MPRemovePointCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'pointMPID': pointMPID});
+    map.addAll({'pointMPID': pointMPID, 'preCommand': preCommand?.toMap()});
 
     return map;
   }
@@ -96,9 +131,11 @@ class MPRemovePointCommand extends MPCommand {
     if (identical(this, other)) return true;
     if (!super.equalsBase(other)) return false;
 
-    return other is MPRemovePointCommand && other.pointMPID == pointMPID;
+    return other is MPRemovePointCommand &&
+        other.pointMPID == pointMPID &&
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode => super.hashCode ^ pointMPID.hashCode;
+  int get hashCode => Object.hash(super.hashCode, pointMPID, preCommand ?? 0);
 }

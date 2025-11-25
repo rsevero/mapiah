@@ -1,22 +1,29 @@
 part of 'mp_command.dart';
 
-class MPAddPointCommand extends MPCommand {
+class MPAddPointCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THPoint newPoint;
-  final int pointPositionInParent;
+  late final int pointPositionInParent;
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addPoint;
 
   MPAddPointCommand.forCWJM({
     required this.newPoint,
     required this.pointPositionInParent,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.posCommand = posCommand;
+  }
 
   MPAddPointCommand({
     required this.newPoint,
     this.pointPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    required MPCommand? posCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.posCommand = posCommand;
+  }
 
   MPAddPointCommand.fromExisting({
     required THPoint existingPoint,
@@ -24,10 +31,18 @@ class MPAddPointCommand extends MPCommand {
     required THFile thFile,
     super.descriptionType = _defaultDescriptionType,
   }) : newPoint = existingPoint,
-       pointPositionInParent =
-           pointPositionInParent ??
-           existingPoint.parent(thFile).getChildPosition(existingPoint),
-       super();
+       super() {
+    final THIsParentMixin parent = existingPoint.parent(thFile);
+
+    this.pointPositionInParent =
+        pointPositionInParent ?? parent.getChildPosition(existingPoint);
+    posCommand = getAddEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: this.pointPositionInParent,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.addPoint;
@@ -52,8 +67,9 @@ class MPAddPointCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPRemovePointCommand(
-      pointMPID: newPoint.mpID,
+    final MPCommand oppositeCommand = MPRemovePointCommand.fromExisting(
+      existingPointMPID: newPoint.mpID,
+      thFile: th2FileEditController.thFile,
       descriptionType: descriptionType,
     );
 
@@ -67,12 +83,15 @@ class MPAddPointCommand extends MPCommand {
   MPAddPointCommand copyWith({
     THPoint? newPoint,
     int? pointPositionInParent,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPAddPointCommand.forCWJM(
       newPoint: newPoint ?? this.newPoint,
       pointPositionInParent:
           pointPositionInParent ?? this.pointPositionInParent,
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -81,6 +100,9 @@ class MPAddPointCommand extends MPCommand {
     return MPAddPointCommand.forCWJM(
       newPoint: THPoint.fromMap(map['newPoint']),
       pointPositionInParent: map['pointPositionInParent'],
+      posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
+          ? MPCommand.fromMap(map['posCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -97,6 +119,7 @@ class MPAddPointCommand extends MPCommand {
 
     map.addAll({
       'newPoint': newPoint.toMap(),
+      'posCommand': posCommand?.toMap(),
       'pointPositionInParent': pointPositionInParent,
     });
 
@@ -110,10 +133,15 @@ class MPAddPointCommand extends MPCommand {
 
     return other is MPAddPointCommand &&
         other.newPoint == newPoint &&
-        other.pointPositionInParent == pointPositionInParent;
+        other.pointPositionInParent == pointPositionInParent &&
+        other.posCommand == posCommand;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(super.hashCode, newPoint, pointPositionInParent);
+  int get hashCode => Object.hash(
+    super.hashCode,
+    newPoint,
+    pointPositionInParent,
+    posCommand ?? 0,
+  );
 }
