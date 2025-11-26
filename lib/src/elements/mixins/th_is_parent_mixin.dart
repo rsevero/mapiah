@@ -13,10 +13,11 @@ mixin THIsParentMixin {
   /// The elementPositionInParent parameter determines the position at which the
   /// new element will be inserted in the parent's children list:
   /// >= 0 => indicates the specific position in the list;
-  /// = -1 => indicates the element should be added to the last minus 1 position
-  ///         at the end of the list so it gets just before the
-  ///         THEnd[line|area|scrap] element;
-  /// = -2 => indicates the element should be added to the end of the list;
+  /// mpAddChildAtEndMinusOneOfParentChildrenList => indicates the element
+  ///         should be added to the last minus 1 position at the end of the
+  ///         list so it gets just before the THEnd[line|area|scrap] element;
+  /// mpAddChildAtEndOfParentChildrenList => indicates the element should be
+  ///         added to the end of the list;
   void addElementToParent(
     THElement element, {
     int elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
@@ -32,7 +33,15 @@ mixin THIsParentMixin {
     } else if (elementPositionInParent ==
         mpAddChildAtEndMinusOneOfParentChildrenList) {
       if (element.parentMPID > 0) {
-        childrenMPIDs.insert(childrenMPIDs.length - 1, elementMPID);
+        if (childrenMPIDs.isEmpty) {
+          throw THCustomException(
+            "At THIsParentMixin.addElementToParent cannot add at end minus one position when there are no children.",
+          );
+        }
+
+        final int endElementIndex = childrenMPIDs.length - 1;
+
+        childrenMPIDs.insert(endElementIndex, elementMPID);
       } else {
         childrenMPIDs.add(elementMPID);
       }

@@ -1,0 +1,14 @@
+encoding UTF-8
+scrap test
+	point 0 0 stalactite
+	line wall
+		-10 -10
+		10 -10
+	endline
+	
+endscrap
+
+scrap test2
+endscrap
+
+

@@ -1,13 +1,15 @@
 # Changelog
 
-## 0.2.23 - not yet released
+## 0.2.23 - not yet released - The Peruaçu release
 * New features:
   * Add/remove commmands removing empty lines after element selected for deletion:
     * AreaBorderTHID;
     * Area;
     * Element;
     * Line;
-    * Line segment.
+    * Line segment;
+    * Point;
+    * Scrap.
   * Created MP[Add|Remove]ElementCommand.
   * Created MP[Add|Remove]EmptyLineCommand.
 * Fixed bugs:

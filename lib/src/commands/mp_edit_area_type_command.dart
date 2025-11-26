@@ -45,18 +45,13 @@ class MPEditAreaTypeCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final THArea newArea = th2FileEditController.thFile
         .areaByMPID(areaMPID)
         .copyWith(
           areaType: newAreaType,
           unknownPLAType: unknownPLAType,
-          originalLineInTH2File: keepOriginalLineTH2File
-              ? originalLineInTH2File
-              : '',
+          originalLineInTH2File: originalLineInTH2File,
         );
 
     th2FileEditController.elementEditController.substituteElement(newArea);

@@ -36,10 +36,7 @@ class MPRemoveEmptyLineCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
       emptyLineMPID,
     );

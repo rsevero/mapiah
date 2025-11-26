@@ -50,10 +50,7 @@ class MPMovePointCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
       pointMPID,
     );

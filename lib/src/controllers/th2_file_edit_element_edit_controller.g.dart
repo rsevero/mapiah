@@ -471,8 +471,7 @@ mixin _$TH2FileEditElementEditController
   @override
   void applyAddScrap({
     required THScrap newScrap,
-    required List<Object> scrapChildren,
-    int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    required int scrapPositionAtParent,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -481,7 +480,6 @@ mixin _$TH2FileEditElementEditController
     try {
       return super.applyAddScrap(
         newScrap: newScrap,
-        scrapChildren: scrapChildren,
         scrapPositionAtParent: scrapPositionAtParent,
       );
     } finally {

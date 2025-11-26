@@ -54,10 +54,7 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController.applyAddElement(
       newElement: newAreaBorderTHID,
       childPositionInParent: areaBorderTHIDPositionInParent,

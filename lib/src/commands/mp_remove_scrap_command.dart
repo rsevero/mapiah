@@ -1,6 +1,7 @@
 part of "mp_command.dart";
 
-class MPRemoveScrapCommand extends MPCommand {
+class MPRemoveScrapCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin, MPScrapChildrenMixin {
   final int scrapMPID;
 
   static const MPCommandDescriptionType _defaultDescriptionType =
@@ -8,16 +9,34 @@ class MPRemoveScrapCommand extends MPCommand {
 
   MPRemoveScrapCommand.forCWJM({
     required this.scrapMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super.forCWJM() {
     assert(scrapMPID > 0);
+    this.preCommand = preCommand;
   }
 
   MPRemoveScrapCommand({
     required this.scrapMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
   }) : super() {
     assert(scrapMPID > 0);
+    this.preCommand = preCommand;
+  }
+
+  MPRemoveScrapCommand.fromExisting({
+    required int existingScrapMPID,
+    required THFile thFile,
+    super.descriptionType = _defaultDescriptionType,
+  }) : scrapMPID = existingScrapMPID,
+       super() {
+    assert(existingScrapMPID > 0);
+    preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingScrapMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
   }
 
   @override
@@ -31,20 +50,24 @@ class MPRemoveScrapCommand extends MPCommand {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
-    final MPCommand addScrapCommand = MPAddScrapCommand.fromExisting(
-      existingScrap: originalScrap,
-      th2FileEditController: th2FileEditController,
-      descriptionType: descriptionType,
+    final THIsParentMixin scrapParent = originalScrap.parent(thFile);
+    final int scrapPositionInParent = scrapParent.getChildPosition(
+      originalScrap,
+    );
+    final MPCommand addScrapChildrenCommand = getAddScrapChildrenCommand(
+      scrap: originalScrap,
+      thFile: thFile,
     );
 
-    _undoRedoInfo = {'addScrapCommand': addScrapCommand};
+    _undoRedoInfo = {
+      'removedScrap': originalScrap,
+      'removedScrapPositionInParent': scrapPositionInParent,
+      'removedScrapAddScrapChildrenCommand': addScrapChildrenCommand,
+    };
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
     th2FileEditController.elementEditController.applyRemoveElementByMPID(
       scrapMPID,
@@ -56,8 +79,17 @@ class MPRemoveScrapCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand =
-        _undoRedoInfo!['addScrapCommand'] as MPCommand;
+    final MPCommand oppositeCommand = MPAddScrapCommand.forCWJM(
+      newScrap: _undoRedoInfo!['removedScrap'] as THScrap,
+      scrapPositionInParent:
+          _undoRedoInfo!['removedScrapPositionInParent'] as int,
+      addScrapChildrenCommand:
+          _undoRedoInfo!['removedScrapAddScrapChildrenCommand'] as MPCommand,
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
+      descriptionType: descriptionType,
+    );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
@@ -68,10 +100,13 @@ class MPRemoveScrapCommand extends MPCommand {
   @override
   MPRemoveScrapCommand copyWith({
     int? scrapMPID,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveScrapCommand.forCWJM(
       scrapMPID: scrapMPID ?? this.scrapMPID,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -79,6 +114,9 @@ class MPRemoveScrapCommand extends MPCommand {
   factory MPRemoveScrapCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveScrapCommand.forCWJM(
       scrapMPID: map['scrapMPID'],
+      preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -93,7 +131,7 @@ class MPRemoveScrapCommand extends MPCommand {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'scrapMPID': scrapMPID});
+    map.addAll({'scrapMPID': scrapMPID, 'preCommand': preCommand?.toMap()});
 
     return map;
   }
@@ -103,9 +141,11 @@ class MPRemoveScrapCommand extends MPCommand {
     if (identical(this, other)) return true;
     if (!super.equalsBase(other)) return false;
 
-    return other is MPRemoveScrapCommand && other.scrapMPID == scrapMPID;
+    return other is MPRemoveScrapCommand &&
+        other.scrapMPID == scrapMPID &&
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode => super.hashCode ^ scrapMPID.hashCode;
+  int get hashCode => Object.hash(super.hashCode, scrapMPID, preCommand ?? 0);
 }

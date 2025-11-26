@@ -45,18 +45,13 @@ class MPEditPointTypeCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final THPoint newPoint = th2FileEditController.thFile
         .pointByMPID(pointMPID)
         .copyWith(
           pointType: newPointType,
           unknownPLAType: unknownPLAType,
-          originalLineInTH2File: keepOriginalLineTH2File
-              ? originalLineInTH2File
-              : '',
+          originalLineInTH2File: originalLineInTH2File,
         );
 
     th2FileEditController.elementEditController.substituteElement(newPoint);

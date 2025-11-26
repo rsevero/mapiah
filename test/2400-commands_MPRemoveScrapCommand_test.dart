@@ -20,7 +20,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPRemoveScrapCommand', () {
+  group('command: MPRemoveScrapCommand without includeEmptyLines', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -59,7 +59,7 @@ endscrap
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
-            final asFile = writer.serialize(parsedFile);
+            final String asFile = writer.serialize(parsedFile);
             expect(asFile, success['asFileOriginal']);
             final TH2FileEditController controller = mpLocator
                 .mpGeneralController
@@ -73,8 +73,9 @@ endscrap
             /// Execution: taken from TH2FileEditElementEditController.removeScrap()
 
             final int scrapMPID = parsedFile.scrapMPIDs.first;
-            final MPCommand setCommand = MPRemoveScrapCommand(
-              scrapMPID: scrapMPID,
+            final MPCommand setCommand = MPRemoveScrapCommand.fromExisting(
+              existingScrapMPID: scrapMPID,
+              thFile: controller.thFile,
             );
 
             controller.execute(setCommand);
@@ -86,6 +87,110 @@ endscrap
             controller.undo();
 
             final String asFileUndone = writer.serialize(controller.thFile);
+            expect(asFileUndone, success['asFileOriginal']);
+
+            // Assert: final state equals original by value but is not the same object
+            expect(identical(controller.thFile, snapshotOriginal), isFalse);
+            expect(controller.thFile == snapshotOriginal, isTrue);
+          } catch (e, st) {
+            fail('Unexpected exception: $e\n$st');
+          }
+        },
+      );
+    }
+  });
+
+  group('command: MPRemoveScrapCommand with includeEmptyLines', () {
+    setUp(() {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+      mpLocator.mpGeneralController.reset();
+    });
+
+    const successes = [
+      {
+        'file': '2025-11-26-001-two_scraps_with_empty_lines.th2',
+        'length': 14,
+        'encoding': 'UTF-8',
+        'lineID': 'blaus',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  point 0 0 stalactite
+  line wall
+    -10 -10
+    10 -10
+  endline
+
+endscrap
+
+scrap test2
+endscrap
+
+
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test2
+endscrap
+
+
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(
+        'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
+        () async {
+          try {
+            final parser = THFileParser();
+            final writer = THFileWriter();
+            mpLocator.mpGeneralController.reset();
+            final String path = THTestAux.testPath(success['file']! as String);
+            final (parsedFile, isSuccessful, errors) = await parser.parse(
+              path,
+              forceNewController: true,
+            );
+            expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+            expect(parsedFile, isA<THFile>());
+            expect(parsedFile.encoding, (success['encoding'] as String));
+            expect(parsedFile.countElements(), success['length']);
+
+            final String asFile = writer.serialize(
+              parsedFile,
+              includeEmptyLines: true,
+            );
+            expect(asFile, success['asFileOriginal']);
+            final TH2FileEditController controller = mpLocator
+                .mpGeneralController
+                .getTH2FileEditController(filename: path);
+
+            // Snapshot original state (deep clone via toMap/fromMap)
+            final THFile snapshotOriginal = THFile.fromMap(
+              controller.thFile.toMap(),
+            );
+
+            /// Execution: taken from TH2FileEditElementEditController.removeScrap()
+
+            final int scrapMPID = parsedFile.scrapMPIDs.first;
+            final MPCommand setCommand = MPRemoveScrapCommand.fromExisting(
+              existingScrapMPID: scrapMPID,
+              thFile: controller.thFile,
+            );
+
+            controller.execute(setCommand);
+
+            final String asFileChanged = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
+            expect(asFileChanged, success['asFileChanged']);
+
+            // Undo the action
+            controller.undo();
+
+            final String asFileUndone = writer.serialize(
+              controller.thFile,
+              includeEmptyLines: true,
+            );
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object

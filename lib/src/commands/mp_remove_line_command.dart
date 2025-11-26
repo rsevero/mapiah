@@ -80,10 +80,7 @@ class MPRemoveLineCommand extends MPCommand
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
 
@@ -102,10 +99,7 @@ class MPRemoveLineCommand extends MPCommand
               descriptionType: descriptionType,
             );
 
-        removeAreaTHIDCommand.execute(
-          th2FileEditController,
-          keepOriginalLineTH2File: keepOriginalLineTH2File,
-        );
+        removeAreaTHIDCommand.execute(th2FileEditController);
       }
     }
 

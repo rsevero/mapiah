@@ -154,6 +154,8 @@ class MPCommandFactory {
     final MPCommand addScrapCommandForNewScrap = MPAddScrapCommand(
       newScrap: newScrap,
       scrapChildren: scrapChildren,
+      thFile: thFile,
+      posCommand: null,
     );
 
     return addScrapCommandForNewScrap;
@@ -391,6 +393,68 @@ class MPCommandFactory {
           );
   }
 
+  static MPCommand addElements({
+    required List<THElement> elements,
+    required THFile thFile,
+    int positionInParent = mpAddChildAtEndOfParentChildrenList,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.addElements,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final THElement element in elements) {
+      final MPCommand addCommand;
+
+      switch (element) {
+        case THArea _:
+          addCommand = MPAddAreaCommand.forCWJM(
+            newArea: element,
+            areaChildren: element.getChildren(thFile).toList(),
+            areaPositionInParent: positionInParent,
+            posCommand: null,
+            descriptionType: descriptionType,
+          );
+        case THLine _:
+          addCommand = MPAddLineCommand.forCWJM(
+            newLine: element,
+            linePositionInParent: positionInParent,
+            lineChildren: element.getChildren(thFile).toList(),
+            posCommand: null,
+          );
+        case THPoint _:
+          addCommand = MPAddPointCommand.forCWJM(
+            newPoint: element,
+            pointPositionInParent: positionInParent,
+            posCommand: null,
+          );
+        case THScrap _:
+          addCommand = MPAddScrapCommand(
+            newScrap: element,
+            scrapPositionInParent: positionInParent,
+            scrapChildren: element.getChildren(thFile).toList(),
+            thFile: thFile,
+            posCommand: null,
+          );
+        default:
+          addCommand = MPAddElementCommand.forCWJM(
+            newElement: element,
+            elementPositionInParent: positionInParent,
+            posCommand: null,
+          );
+      }
+
+      commandsList.add(addCommand);
+    }
+
+    return (commandsList.length == 1)
+        ? commandsList.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commandsList,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+          );
+  }
+
   static MPCommand removeElements({
     required List<int> mpIDs,
     required THFile thFile,
@@ -431,7 +495,10 @@ class MPCommandFactory {
             descriptionType: descriptionType,
           );
         case THElementType.scrap:
-          removeCommand = MPRemoveScrapCommand(scrapMPID: mpID);
+          removeCommand = MPRemoveScrapCommand.fromExisting(
+            existingScrapMPID: mpID,
+            thFile: thFile,
+          );
         case THElementType.xTherionImageInsertConfig:
           removeCommand = MPRemoveXTherionImageInsertConfigCommand(
             xtherionImageInsertConfigMPID: mpID,

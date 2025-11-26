@@ -23,6 +23,7 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 part 'mixins/mp_empty_lines_after_mixin.dart';
 part 'mixins/mp_pos_command_mixin.dart';
 part 'mixins/mp_pre_command_mixin.dart';
+part 'mixins/mp_scrap_children_mixin.dart';
 part 'mp_add_area_border_thid_command.dart';
 part 'mp_add_area_command.dart';
 part 'mp_add_element_command.dart';
@@ -92,16 +93,10 @@ abstract class MPCommand {
     return _undoRedoCommand!;
   }
 
-  void execute(
-    TH2FileEditController th2FileEditController, {
-    bool keepOriginalLineTH2File = false,
-  }) {
+  void execute(TH2FileEditController th2FileEditController) {
     _prePrepareUndoRedoInfo(th2FileEditController);
     _prepareUndoRedoInfo(th2FileEditController);
-    _actualExecute(
-      th2FileEditController,
-      keepOriginalLineTH2File: keepOriginalLineTH2File,
-    );
+    _actualExecute(th2FileEditController);
 
     if ((_undoRedoCommand == null) &&
         _needsUndoRedoInfo &&
@@ -122,10 +117,7 @@ abstract class MPCommand {
     _needsUndoRedoInfo = false;
   }
 
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  });
+  void _actualExecute(TH2FileEditController th2FileEditController);
 
   /// The description for the undo/redo command should be the description of
   /// the original command so the message on undo and redo are the same even

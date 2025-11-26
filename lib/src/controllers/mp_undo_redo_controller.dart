@@ -97,7 +97,7 @@ abstract class MPUndoRedoControllerBase with Store {
     final MPUndoRedoCommand lastUndo = _undos.removeLast();
     final MPCommand undoCommand = lastUndo.undoCommand;
 
-    undoCommand.execute(_th2FileEditController, keepOriginalLineTH2File: true);
+    undoCommand.execute(_th2FileEditController);
     command.execute(_th2FileEditController);
 
     add(command);
@@ -120,7 +120,7 @@ abstract class MPUndoRedoControllerBase with Store {
       mapRedo: lastUndo.mapUndo,
     );
 
-    command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
+    command.execute(_th2FileEditController);
 
     _redos.add(redo);
     _th2FileEditController.triggerAllElementsRedraw();
@@ -138,7 +138,7 @@ abstract class MPUndoRedoControllerBase with Store {
       mapRedo: lastRedo.mapUndo,
     );
 
-    command.execute(_th2FileEditController, keepOriginalLineTH2File: true);
+    command.execute(_th2FileEditController);
 
     _th2FileEditController.triggerAllElementsRedraw();
     _undos.add(undo);

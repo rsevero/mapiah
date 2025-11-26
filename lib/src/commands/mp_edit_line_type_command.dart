@@ -45,18 +45,13 @@ class MPEditLineTypeCommand extends MPCommand {
   }
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final THLine newLine = th2FileEditController.thFile
         .lineByMPID(lineMPID)
         .copyWith(
           lineType: newLineType,
           unknownPLAType: unknownPLAType,
-          originalLineInTH2File: keepOriginalLineTH2File
-              ? originalLineInTH2File
-              : '',
+          originalLineInTH2File: originalLineInTH2File,
         );
 
     th2FileEditController.elementEditController.substituteElement(newLine);

@@ -38,10 +38,7 @@ class MPAddEmptyLineCommand extends MPCommand {
       _defaultDescriptionType;
 
   @override
-  void _actualExecute(
-    TH2FileEditController th2FileEditController, {
-    required bool keepOriginalLineTH2File,
-  }) {
+  void _actualExecute(TH2FileEditController th2FileEditController) {
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 

@@ -678,31 +678,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void applyAddScrap({
     required THScrap newScrap,
-    required List<Object> scrapChildren,
-    int scrapPositionAtParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    required int scrapPositionAtParent,
   }) {
-    /// The childrenMPIDs list of the scrap will be the one resultant of
-    /// scrapChildren.
     newScrap.childrenMPIDs.clear();
     applyAddElement(
       newElement: newScrap,
       childPositionInParent: scrapPositionAtParent,
     );
-
-    for (final Object child in scrapChildren) {
-      if (child is THElement) {
-        applyAddElement(
-          newElement: child,
-          childPositionInParent: mpAddChildAtEndOfParentChildrenList,
-        );
-      } else if (child is MPCommand) {
-        child.execute(_th2FileEditController);
-      } else {
-        throw Exception(
-          'At TH2FileEditElementEditController.applyAddScrap: invalid scrap child type: ${child.runtimeType}',
-        );
-      }
-    }
   }
 
   void afterAddScrap(THScrap newScrap) {
@@ -1248,9 +1230,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void removeScrap(int scrapMPID) {
-    final MPRemoveScrapCommand removeScrapCommand = MPRemoveScrapCommand(
-      scrapMPID: scrapMPID,
-    );
+    final MPRemoveScrapCommand removeScrapCommand =
+        MPRemoveScrapCommand.fromExisting(
+          existingScrapMPID: scrapMPID,
+          thFile: _th2FileEditController.thFile,
+        );
 
     _th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
     _th2FileEditController.execute(removeScrapCommand);
