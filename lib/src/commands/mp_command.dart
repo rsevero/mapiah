@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mixins/mp_empty_lines_after_mixin.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -20,7 +21,6 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 
-part 'mixins/mp_empty_lines_after_mixin.dart';
 part 'mixins/mp_pos_command_mixin.dart';
 part 'mixins/mp_pre_command_mixin.dart';
 part 'mixins/mp_scrap_children_mixin.dart';

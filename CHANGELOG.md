@@ -13,6 +13,7 @@
     * XTherionImageInsertConfig.
   * Created MP[Add|Remove]ElementCommand.
   * Created MP[Add|Remove]EmptyLineCommand.
+  * Removing last area border THID from area removes the area also.
 * Fixed bugs:
   * MPCommandFactory.removeElements() does not use provided description type.
   * Empty lines not being properly represented as original version.

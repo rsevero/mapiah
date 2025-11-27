@@ -72,7 +72,7 @@ class MPRemoveLineCommand extends MPCommand
 
       if (areaTHID != null) {
         final MPCommand removeAreaTHIDCommand =
-            MPRemoveAreaBorderTHIDCommand.fromExisting(
+            MPCommandFactory.removeAreaBorderTHIDFromExisting(
               existingAreaBorderTHIDMPID: areaTHID.mpID,
               thFile: thFile,
               descriptionType: descriptionType,

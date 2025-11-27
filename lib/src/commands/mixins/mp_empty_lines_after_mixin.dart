@@ -1,7 +1,12 @@
-part of '../mp_command.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
+import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 
-mixin MPEmptyLinesAfterMixin on MPCommand {
-  List<int> getEmptyLinesAfter({
+mixin MPEmptyLinesAfterMixin {
+  static List<int> getEmptyLinesAfter({
     required THFile thFile,
     required THIsParentMixin parent,
     required int positionInParent,
@@ -30,20 +35,8 @@ mixin MPEmptyLinesAfterMixin on MPCommand {
     required THFile thFile,
     required MPCommandDescriptionType descriptionType,
   }) {
-    final THElement element = thFile.elementByMPID(elementMPID);
-    final THIsParentMixin parent = element.parent(thFile);
-    final List<int> emptyLinesAfter = getEmptyLinesAfter(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: parent.getChildPosition(element),
-    );
-
-    if (emptyLinesAfter.isEmpty) {
-      return null;
-    }
-
-    return MPCommandFactory.removeElements(
-      mpIDs: emptyLinesAfter,
+    return MPCommandFactory.removeEmptyLinesAfterCommand(
+      elementMPID: elementMPID,
       thFile: thFile,
       descriptionType: descriptionType,
     );

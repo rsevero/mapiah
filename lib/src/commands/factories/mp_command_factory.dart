@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/commands/mixins/mp_empty_lines_after_mixin.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -8,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -18,7 +20,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:path/path.dart' as p;
 
-class MPCommandFactory {
+class MPCommandFactory with MPEmptyLinesAfterMixin {
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,
@@ -776,6 +778,45 @@ class MPCommandFactory {
     );
   }
 
+  static MPCommand removeAreaBorderTHIDFromExisting({
+    required int existingAreaBorderTHIDMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveAreaBorderTHIDCommand.defaultDescriptionType,
+  }) {
+    final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
+      existingAreaBorderTHIDMPID,
+    );
+    final THArea parentArea = thFile.areaByMPID(areaBorderTHID.parentMPID);
+    final int areaBorderSiblingsCount = parentArea
+        .getAreaBorderTHIDMPIDs(thFile)
+        .length;
+
+    if (areaBorderSiblingsCount == 1) {
+      return MPRemoveAreaCommand.fromExisting(
+        existingAreaMPID: parentArea.mpID,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+    } else if (areaBorderSiblingsCount > 1) {
+      final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+        elementMPID: existingAreaBorderTHIDMPID,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+
+      return MPRemoveAreaBorderTHIDCommand(
+        areaBorderTHIDMPID: existingAreaBorderTHIDMPID,
+        preCommand: preCommand,
+        descriptionType: descriptionType,
+      );
+    } else {
+      throw StateError(
+        'AreaBorderTHID with MPID $existingAreaBorderTHIDMPID parent area has no areaBorderTHIDs.',
+      );
+    }
+  }
+
   static MPCommand removeAttrOptionFromElements({
     required String attrName,
     required List<int> parentMPIDs,
@@ -825,7 +866,7 @@ class MPCommandFactory {
             descriptionType: descriptionType,
           );
         case THElementType.areaBorderTHID:
-          removeCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
+          removeCommand = MPCommandFactory.removeAreaBorderTHIDFromExisting(
             existingAreaBorderTHIDMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
@@ -878,6 +919,30 @@ class MPCommandFactory {
       descriptionType: descriptionType,
       completionType:
           MPMultipleElementsCommandCompletionType.elementsListChanged,
+    );
+  }
+
+  static MPCommand? removeEmptyLinesAfterCommand({
+    required int elementMPID,
+    required THFile thFile,
+    required MPCommandDescriptionType descriptionType,
+  }) {
+    final THElement element = thFile.elementByMPID(elementMPID);
+    final THIsParentMixin parent = element.parent(thFile);
+    final List<int> emptyLinesAfter = MPEmptyLinesAfterMixin.getEmptyLinesAfter(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: parent.getChildPosition(element),
+    );
+
+    if (emptyLinesAfter.isEmpty) {
+      return null;
+    }
+
+    return MPCommandFactory.removeElements(
+      mpIDs: emptyLinesAfter,
+      thFile: thFile,
+      descriptionType: descriptionType,
     );
   }
 

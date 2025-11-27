@@ -23,19 +23,6 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveAreaBorderTHIDCommand.fromExisting({
-    required int existingAreaBorderTHIDMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : areaBorderTHIDMPID = existingAreaBorderTHIDMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingAreaBorderTHIDMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeAreaBorderTHID;
 
