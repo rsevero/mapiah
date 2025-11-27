@@ -139,5 +139,5 @@ class MPRemoveLineSegmentCommand extends MPCommand
 
   @override
   int get hashCode =>
-      Object.hash(super.hashCode, lineSegmentMPID, preCommand ?? 0);
+      Object.hash(super.hashCode, lineSegmentMPID, preCommand?.hashCode ?? 0);
 }

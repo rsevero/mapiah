@@ -144,6 +144,6 @@ class MPAddLineSegmentCommand extends MPCommand
     super.hashCode,
     newLineSegment,
     lineSegmentPositionInParent,
-    posCommand ?? 0,
+    posCommand?.hashCode ?? 0,
   );
 }

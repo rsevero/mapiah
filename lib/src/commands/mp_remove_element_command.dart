@@ -131,5 +131,6 @@ class MPRemoveElementCommand extends MPCommand
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, elementMPID, preCommand ?? 0);
+  int get hashCode =>
+      Object.hash(super.hashCode, elementMPID, preCommand?.hashCode ?? 0);
 }

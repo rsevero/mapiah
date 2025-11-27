@@ -168,6 +168,6 @@ class MPAddScrapCommand extends MPCommand
     newScrap,
     scrapPositionInParent,
     addScrapChildrenCommand,
-    posCommand ?? 0,
+    posCommand?.hashCode ?? 0,
   );
 }

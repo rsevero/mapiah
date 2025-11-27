@@ -190,6 +190,6 @@ class MPRemoveLineCommand extends MPCommand
     super.hashCode,
     lineMPID,
     isInteractiveLineCreation,
-    preCommand ?? 0,
+    preCommand?.hashCode ?? 0,
   );
 }

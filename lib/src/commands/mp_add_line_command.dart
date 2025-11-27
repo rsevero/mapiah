@@ -221,7 +221,7 @@ class MPAddLineCommand extends MPCommand
     linePositionInParent,
     lineStartScreenPosition,
     addAreaTHIDCommand ?? 0,
-    posCommand ?? 0,
+    posCommand?.hashCode ?? 0,
     DeepCollectionEquality().hash(lineChildren),
   );
 }

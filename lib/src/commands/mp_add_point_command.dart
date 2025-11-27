@@ -139,6 +139,6 @@ class MPAddPointCommand extends MPCommand
     super.hashCode,
     newPoint,
     pointPositionInParent,
-    posCommand ?? 0,
+    posCommand?.hashCode ?? 0,
   );
 }

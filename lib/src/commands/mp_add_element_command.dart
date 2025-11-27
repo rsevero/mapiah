@@ -145,6 +145,6 @@ class MPAddElementCommand extends MPCommand
     super.hashCode,
     newElement,
     elementPositionInParent,
-    posCommand ?? 0,
+    posCommand?.hashCode ?? 0,
   );
 }

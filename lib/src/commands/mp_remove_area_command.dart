@@ -135,5 +135,5 @@ class MPRemoveAreaCommand extends MPCommand
 
   @override
   int get hashCode =>
-      super.hashCode ^ areaMPID.hashCode ^ (preCommand?.hashCode ?? 0);
+      Object.hash(super.hashCode, areaMPID, preCommand?.hashCode ?? 0);
 }

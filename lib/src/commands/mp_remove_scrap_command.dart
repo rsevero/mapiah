@@ -147,5 +147,6 @@ class MPRemoveScrapCommand extends MPCommand
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, scrapMPID, preCommand ?? 0);
+  int get hashCode =>
+      Object.hash(super.hashCode, scrapMPID, preCommand?.hashCode ?? 0);
 }

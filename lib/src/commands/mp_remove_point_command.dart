@@ -134,5 +134,6 @@ class MPRemovePointCommand extends MPCommand
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, pointMPID, preCommand ?? 0);
+  int get hashCode =>
+      Object.hash(super.hashCode, pointMPID, preCommand?.hashCode ?? 0);
 }
