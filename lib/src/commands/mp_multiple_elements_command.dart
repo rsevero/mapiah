@@ -10,7 +10,8 @@ class MPMultipleElementsCommand extends MPCommand {
     required this.commandsList,
     required this.completionType,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : assert(commandsList.length > 1),
+       super.forCWJM();
 
   @override
   MPCommandType get type => MPCommandType.multipleElements;
