@@ -728,6 +728,22 @@ class THFile
     return element;
   }
 
+  THXTherionImageInsertConfig xtherionImageInsertConfigByMPID(int mpID) {
+    if (!_elementByMPID.containsKey(mpID)) {
+      throw THNoElementByMPIDException(filename, mpID);
+    }
+
+    final THElement element = _elementByMPID[mpID]!;
+
+    if (element is! THXTherionImageInsertConfig) {
+      throw THCustomException(
+        "Element with MPID '$mpID' is not an THXTherionImageInsertConfig in THFile.xtherionImageInsertConfigByMPID.",
+      );
+    }
+
+    return element;
+  }
+
   THElement elementByPosition(int position) {
     return _elementByMPID.values.elementAt(position);
   }

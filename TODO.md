@@ -1,6 +1,6 @@
 # TODO
 
-Version 0.2
+## Version 0.2
 [X] - Make output identical to original except on changed lines
 [X] - Deal with click on more than one object at a time
 [X] - Line edit
@@ -38,7 +38,7 @@ Version 0.2
 [X] - BUG: add area not working
 [X] - BUG: clicking on selected control point over end point not moving the control point
 
-Version 0.3
+## Version 0.3
 [X] - Release creation Windows
 [X] - Release creation MacOS
 [X] - Release for Web
@@ -85,7 +85,7 @@ Version 0.3
 [ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 
-Version 0.4
+##Version 0.4
 [ ] - Open multiple files simultaneously
 [ ] - Allow copy/paste between scraps
 [ ] - Allow copy/paste between files
@@ -116,5 +116,5 @@ Version 0.4
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
 
-Version 0.5
+##Version 0.5
 [ ] - Raster images tracing

@@ -195,6 +195,7 @@ class MPCommandFactory {
           newImageInsertConfig: newImage,
           xTherionImageInsertConfigPositionInParent:
               mpAddChildAtEndOfParentChildrenList,
+          posCommand: null,
         );
 
     return addImageCommand;
@@ -500,8 +501,9 @@ class MPCommandFactory {
             thFile: thFile,
           );
         case THElementType.xTherionImageInsertConfig:
-          removeCommand = MPRemoveXTherionImageInsertConfigCommand(
-            xtherionImageInsertConfigMPID: mpID,
+          removeCommand = MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+            existingXTherionImageInsertConfigMPID: mpID,
+            thFile: thFile,
             descriptionType: descriptionType,
           );
         default:

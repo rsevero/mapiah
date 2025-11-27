@@ -96,7 +96,6 @@ void main() {
 
             expect(asFileChanged, success['asFileChanged']);
 
-            // Undo line create
             controller.undo();
 
             final String asFileUndone = writer.serialize(controller.thFile);

@@ -73,8 +73,9 @@ void main() {
 
             final int imageMPID = parsedFile.imageMPIDs.first;
             final MPCommand setCommand =
-                MPRemoveXTherionImageInsertConfigCommand(
-                  xtherionImageInsertConfigMPID: imageMPID,
+                MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+                  existingXTherionImageInsertConfigMPID: imageMPID,
+                  thFile: parsedFile,
                 );
 
             controller.execute(setCommand);

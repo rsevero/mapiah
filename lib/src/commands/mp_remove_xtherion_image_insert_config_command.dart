@@ -1,6 +1,7 @@
 part of 'mp_command.dart';
 
-class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
+class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
+    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int xtherionImageInsertConfigMPID;
 
   static const MPCommandDescriptionType _defaultDescriptionType =
@@ -8,13 +9,32 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
 
   MPRemoveXTherionImageInsertConfigCommand.forCWJM({
     required this.xtherionImageInsertConfigMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super.forCWJM();
+  }) : super.forCWJM() {
+    this.preCommand = preCommand;
+  }
 
   MPRemoveXTherionImageInsertConfigCommand({
     required this.xtherionImageInsertConfigMPID,
+    required MPCommand? preCommand,
     super.descriptionType = _defaultDescriptionType,
-  }) : super();
+  }) : super() {
+    this.preCommand = preCommand;
+  }
+
+  MPRemoveXTherionImageInsertConfigCommand.fromExisting({
+    required int existingXTherionImageInsertConfigMPID,
+    required THFile thFile,
+    super.descriptionType = _defaultDescriptionType,
+  }) : xtherionImageInsertConfigMPID = existingXTherionImageInsertConfigMPID,
+       super() {
+    preCommand = getRemoveEmptyLinesAfterCommand(
+      elementMPID: existingXTherionImageInsertConfigMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+  }
 
   @override
   MPCommandType get type => MPCommandType.removeXTherionImageInsertConfig;
@@ -25,18 +45,19 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THXTherionImageInsertConfig originalElement = th2FileEditController
-        .thFile
-        .imageByMPID(xtherionImageInsertConfigMPID);
-    final MPCommand addXTherionImageInsertCommand =
-        MPAddXTherionImageInsertConfigCommand.fromExisting(
-          existingImageInsertConfig: originalElement,
-          th2FileEditController: th2FileEditController,
-          descriptionType: descriptionType,
-        );
+    final THFile thFile = th2FileEditController.thFile;
+    final THXTherionImageInsertConfig originalImageInsert = thFile
+        .xtherionImageInsertConfigByMPID(xtherionImageInsertConfigMPID);
+    final THIsParentMixin imageInsertParent = originalImageInsert.parent(
+      thFile,
+    );
+    final int imageInsertPositionInParent = imageInsertParent.getChildPosition(
+      originalImageInsert,
+    );
 
     _undoRedoInfo = {
-      'addXTherionImageInsertConfigCommand': addXTherionImageInsertCommand,
+      'removedImageInsert': originalImageInsert,
+      'removedImageInsertPositionInParent': imageInsertPositionInParent,
     };
   }
 
@@ -52,8 +73,17 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
     TH2FileEditController th2FileEditController,
   ) {
     final MPCommand oppositeCommand =
-        _undoRedoInfo!['addXTherionImageInsertConfigCommand']
-            as MPAddXTherionImageInsertConfigCommand;
+        MPAddXTherionImageInsertConfigCommand.forCWJM(
+          newImageInsertConfig:
+              _undoRedoInfo!['removedImageInsert']
+                  as THXTherionImageInsertConfig,
+          xTherionImageInsertConfigPositionInParent:
+              _undoRedoInfo!['removedImageInsertPositionInParent'] as int,
+          posCommand: preCommand
+              ?.getUndoRedoCommand(th2FileEditController)
+              .undoCommand,
+          descriptionType: descriptionType,
+        );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
@@ -64,11 +94,14 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   @override
   MPRemoveXTherionImageInsertConfigCommand copyWith({
     int? xtherionImageInsertConfigMPID,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
       xtherionImageInsertConfigMPID:
           xtherionImageInsertConfigMPID ?? this.xtherionImageInsertConfigMPID,
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -78,6 +111,9 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
   ) {
     return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
       xtherionImageInsertConfigMPID: map['xtherionImageInsertConfigMPID'],
+      preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)
+          ? MPCommand.fromMap(map['preCommand'])
+          : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
       ),
@@ -94,6 +130,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
 
     map.addAll({
       'xtherionImageInsertConfigMPID': xtherionImageInsertConfigMPID,
+      'preCommand': preCommand?.toMap(),
     });
 
     return map;
@@ -105,9 +142,14 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand {
     if (!super.equalsBase(other)) return false;
 
     return other is MPRemoveXTherionImageInsertConfigCommand &&
-        other.xtherionImageInsertConfigMPID == xtherionImageInsertConfigMPID;
+        other.xtherionImageInsertConfigMPID == xtherionImageInsertConfigMPID &&
+        other.preCommand == preCommand;
   }
 
   @override
-  int get hashCode => super.hashCode ^ xtherionImageInsertConfigMPID.hashCode;
+  int get hashCode => Object.hash(
+    super.hashCode,
+    xtherionImageInsertConfigMPID,
+    preCommand?.hashCode ?? 0,
+  );
 }

@@ -1220,8 +1220,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   void removeImage(int mpID) {
     final MPRemoveXTherionImageInsertConfigCommand removeImageCommand =
-        MPRemoveXTherionImageInsertConfigCommand(
-          xtherionImageInsertConfigMPID: mpID,
+        MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+          existingXTherionImageInsertConfigMPID: mpID,
+          thFile: _th2FileEditController.thFile,
         );
 
     _th2FileEditController.execute(removeImageCommand);
