@@ -935,18 +935,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (selectedLineSegmentMPIDs.isEmpty) {
       return;
     } else if (selectedLineSegmentMPIDs.length == 1) {
-      final MPCommand removeCommand = getRemoveLineSegmentCommand(
-        selectedLineSegmentMPIDs.first,
-      );
+      final MPCommand removeCommand =
+          MPCommandFactory.removeLineSegmentFromExisting(
+            existingLineSegmentMPID: selectedLineSegmentMPIDs.first,
+            thFile: _thFile,
+          );
 
       _th2FileEditController.execute(removeCommand);
     } else {
       final List<MPCommand> removeLineSegmentCommands = [];
 
       for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
-        final MPCommand removeLineSegmentCommand = getRemoveLineSegmentCommand(
-          lineSegmentMPID,
-        );
+        final MPCommand removeLineSegmentCommand =
+            MPCommandFactory.removeLineSegmentFromExisting(
+              existingLineSegmentMPID: lineSegmentMPID,
+              thFile: _thFile,
+            );
 
         removeLineSegmentCommand.execute(_th2FileEditController);
         removeLineSegmentCommands.add(removeLineSegmentCommand);
@@ -966,83 +970,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
-  }
-
-  MPCommand getRemoveLineSegmentCommand(int lineSegmentMPID) {
-    final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
-      lineSegmentMPID,
-    );
-    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
-    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
-    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
-
-    if ((lineSegmentIndex == 0) ||
-        (lineSegmentIndex == lineSegments.length - 1)) {
-      return MPRemoveLineSegmentCommand.fromExisting(
-        existingLineSegmentMPID: lineSegmentMPID,
-        thFile: _th2FileEditController.thFile,
-      );
-    } else {
-      final bool deletedLineSegmentIsStraight =
-          lineSegment is THStraightLineSegment;
-      final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
-      final bool nextLineSegmentIsStraight =
-          nextLineSegment is THStraightLineSegment;
-
-      if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
-        return MPRemoveLineSegmentCommand.fromExisting(
-          existingLineSegmentMPID: lineSegmentMPID,
-          thFile: _th2FileEditController.thFile,
-        );
-      } else {
-        final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
-          lineSegment,
-          _thFile,
-        );
-
-        if (previousLineSegment == null) {
-          throw Exception(
-            'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
-          );
-        }
-
-        final THBezierCurveLineSegment deletedLineSegmentBezier =
-            deletedLineSegmentIsStraight
-            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-                start: previousLineSegment.endPoint.coordinates,
-                straightLineSegment: lineSegment,
-                decimalPositions:
-                    _th2FileEditController.currentDecimalPositions,
-              )
-            : lineSegment as THBezierCurveLineSegment;
-        final THBezierCurveLineSegment nextLineSegmentBezier =
-            nextLineSegmentIsStraight
-            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-                start: lineSegment.endPoint.coordinates,
-                straightLineSegment: nextLineSegment,
-                decimalPositions:
-                    _th2FileEditController.currentDecimalPositions,
-              )
-            : nextLineSegment as THBezierCurveLineSegment;
-        final THBezierCurveLineSegment lineSegmentSubstitution =
-            THBezierCurveLineSegment.forCWJM(
-              mpID: nextLineSegmentBezier.mpID,
-              parentMPID: nextLineSegmentBezier.parentMPID,
-              controlPoint1: deletedLineSegmentBezier.controlPoint1,
-              controlPoint2: nextLineSegmentBezier.controlPoint2,
-              endPoint: nextLineSegmentBezier.endPoint,
-              optionsMap: nextLineSegmentBezier.optionsMap,
-              attrOptionsMap: nextLineSegmentBezier.attrOptionsMap,
-              originalLineInTH2File: '',
-            );
-
-        return MPCommandFactory.removeLineSegmentWithSubstitution(
-          lineSegmentMPID: lineSegmentMPID,
-          lineSegmentSubstitution: lineSegmentSubstitution,
-          thFile: _th2FileEditController.thFile,
-        );
-      }
-    }
   }
 
   @action

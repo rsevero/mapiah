@@ -66,11 +66,12 @@ class MPAddLineSegmentCommand extends MPCommand
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPRemoveLineSegmentCommand.fromExisting(
-      existingLineSegmentMPID: newLineSegment.mpID,
-      thFile: th2FileEditController.thFile,
-      descriptionType: descriptionType,
-    );
+    final MPCommand oppositeCommand =
+        MPCommandFactory.removeLineSegmentFromExisting(
+          existingLineSegmentMPID: newLineSegment.mpID,
+          thFile: th2FileEditController.thFile,
+          descriptionType: descriptionType,
+        );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),

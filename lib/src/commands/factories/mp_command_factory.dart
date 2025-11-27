@@ -6,7 +6,6 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -21,6 +20,40 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:path/path.dart' as p;
 
 class MPCommandFactory with MPEmptyLinesAfterMixin {
+  static MPCommand _actualRemoveLineSegmentFromExisting({
+    required int existingLineSegmentMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeLineSegment,
+  }) {
+    final THLine parentLine = thFile.lineByMPID(
+      thFile.lineSegmentByMPID(existingLineSegmentMPID).parentMPID,
+    );
+    final int lineSegmentsCountInParentLine = parentLine
+        .getLineSegmentMPIDs(thFile)
+        .length;
+
+    if (lineSegmentsCountInParentLine < 3) {
+      return MPRemoveLineCommand.fromExisting(
+        existingLineMPID: parentLine.mpID,
+        isInteractiveLineCreation: false,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+    } else {
+      final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+        elementMPID: existingLineSegmentMPID,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+
+      return MPRemoveLineSegmentCommand(
+        lineSegmentMPID: existingLineSegmentMPID,
+        preCommand: preCommand,
+      );
+    }
+  }
+
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,
@@ -533,74 +566,6 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
-  static MPCommand moveLinesFromDeltaOnCanvas({
-    required Iterable<MPSelectedLine> lines,
-    required Offset deltaOnCanvas,
-    int? decimalPositions,
-    MPCommandDescriptionType descriptionType =
-        MPCommandDescriptionType.moveLines,
-  }) {
-    final List<MPCommand> commandsList = [];
-
-    for (final MPSelectedLine line in lines) {
-      final MPCommand moveLineCommand = MPMoveLineCommand.fromDeltaOnCanvas(
-        lineMPID: line.mpID,
-        fromLineSegmentsMap: line.originalLineSegmentsMapClone,
-        deltaOnCanvas: deltaOnCanvas,
-        decimalPositions: decimalPositions,
-        descriptionType: descriptionType,
-      );
-
-      commandsList.add(moveLineCommand);
-    }
-
-    return multipleCommandsFromList(
-      commandsList: commandsList,
-      descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
-    );
-  }
-
-  static MPCommand moveLinesFromLineSegmentExactPosition({
-    required Iterable<MPSelectedLine> lines,
-    required THLineSegment referenceLineSegment,
-    required THPositionPart referenceLineSegmentFinalPosition,
-    MPCommandDescriptionType descriptionType =
-        MPCommandDescriptionType.moveLines,
-  }) {
-    final List<MPCommand> commandsList = [];
-    final int referenceLineMPID = referenceLineSegment.parentMPID;
-    final Offset deltaOnCanvas =
-        referenceLineSegmentFinalPosition.coordinates -
-        referenceLineSegment.endPoint.coordinates;
-
-    for (final MPSelectedLine line in lines) {
-      final MPCommand moveLineCommand = (line.mpID == referenceLineMPID)
-          ? MPMoveLineCommand.fromLineSegmentExactPosition(
-              lineMPID: referenceLineMPID,
-              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
-              referenceLineSegment: referenceLineSegment,
-              referenceLineSegmentFinalPosition:
-                  referenceLineSegmentFinalPosition,
-              descriptionType: descriptionType,
-            )
-          : MPMoveLineCommand.fromDeltaOnCanvas(
-              lineMPID: line.mpID,
-              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
-              deltaOnCanvas: deltaOnCanvas,
-              descriptionType: descriptionType,
-            );
-
-      commandsList.add(moveLineCommand);
-    }
-
-    return multipleCommandsFromList(
-      commandsList: commandsList,
-      descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
-    );
-  }
-
   static MPCommand moveLineSegments({
     required Map<int, THLineSegment> fromLineSegmentsMap,
     required Map<int, THLineSegment> toLineSegmentsMap,
@@ -778,6 +743,94 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPCommand moveLinesFromDeltaOnCanvas({
+    required Iterable<MPSelectedLine> lines,
+    required Offset deltaOnCanvas,
+    int? decimalPositions,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveLines,
+  }) {
+    final List<MPCommand> commandsList = [];
+
+    for (final MPSelectedLine line in lines) {
+      final MPCommand moveLineCommand = MPMoveLineCommand.fromDeltaOnCanvas(
+        lineMPID: line.mpID,
+        fromLineSegmentsMap: line.originalLineSegmentsMapClone,
+        deltaOnCanvas: deltaOnCanvas,
+        decimalPositions: decimalPositions,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(moveLineCommand);
+    }
+
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
+  static MPCommand moveLinesFromLineSegmentExactPosition({
+    required Iterable<MPSelectedLine> lines,
+    required THLineSegment referenceLineSegment,
+    required THPositionPart referenceLineSegmentFinalPosition,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveLines,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final int referenceLineMPID = referenceLineSegment.parentMPID;
+    final Offset deltaOnCanvas =
+        referenceLineSegmentFinalPosition.coordinates -
+        referenceLineSegment.endPoint.coordinates;
+
+    for (final MPSelectedLine line in lines) {
+      final MPCommand moveLineCommand = (line.mpID == referenceLineMPID)
+          ? MPMoveLineCommand.fromLineSegmentExactPosition(
+              lineMPID: referenceLineMPID,
+              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
+              referenceLineSegment: referenceLineSegment,
+              referenceLineSegmentFinalPosition:
+                  referenceLineSegmentFinalPosition,
+              descriptionType: descriptionType,
+            )
+          : MPMoveLineCommand.fromDeltaOnCanvas(
+              lineMPID: line.mpID,
+              fromLineSegmentsMap: line.originalLineSegmentsMapClone,
+              deltaOnCanvas: deltaOnCanvas,
+              descriptionType: descriptionType,
+            );
+
+      commandsList.add(moveLineCommand);
+    }
+
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
+  static MPCommand multipleCommandsFromList({
+    required List<MPCommand> commandsList,
+    required MPCommandDescriptionType descriptionType,
+    required MPMultipleElementsCommandCompletionType completionType,
+  }) {
+    if (commandsList.isEmpty) {
+      throw ArgumentError(
+        'commandsList cannot be empty in MPCommandFactory.multipleCommandsFromList',
+      );
+    }
+
+    return (commandsList.length == 1)
+        ? commandsList.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: commandsList,
+            completionType: completionType,
+            descriptionType: descriptionType,
+          );
+  }
+
   static MPCommand removeAreaBorderTHIDFromExisting({
     required int existingAreaBorderTHIDMPID,
     required THFile thFile,
@@ -881,7 +934,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             descriptionType: descriptionType,
           );
         case THElementType.lineSegment:
-          removeCommand = MPRemoveLineSegmentCommand.fromExisting(
+          removeCommand = removeLineSegmentFromExisting(
             existingLineSegmentMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
@@ -946,49 +999,128 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPCommand removeLineSegmentFromExisting({
+    required int existingLineSegmentMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeLineSegment,
+  }) {
+    final THLineSegment lineSegment = thFile.lineSegmentByMPID(
+      existingLineSegmentMPID,
+    );
+    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
+    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
+
+    if ((lineSegmentIndex == 0) ||
+        (lineSegmentIndex == lineSegments.length - 1)) {
+      return _actualRemoveLineSegmentFromExisting(
+        existingLineSegmentMPID: existingLineSegmentMPID,
+        thFile: thFile,
+      );
+    } else {
+      final bool deletedLineSegmentIsStraight =
+          lineSegment is THStraightLineSegment;
+      final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
+      final bool nextLineSegmentIsStraight =
+          nextLineSegment is THStraightLineSegment;
+
+      if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
+        return _actualRemoveLineSegmentFromExisting(
+          existingLineSegmentMPID: existingLineSegmentMPID,
+          thFile: thFile,
+        );
+      } else {
+        final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
+          lineSegment,
+          thFile,
+        );
+
+        if (previousLineSegment == null) {
+          throw Exception(
+            'Error: previousLineSegment is null at TH2FileEditElementEditController.getRemoveLineSegmentCommand().',
+          );
+        }
+
+        final THBezierCurveLineSegment deletedLineSegmentBezier =
+            deletedLineSegmentIsStraight
+            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+                start: previousLineSegment.endPoint.coordinates,
+                straightLineSegment: lineSegment,
+              )
+            : lineSegment as THBezierCurveLineSegment;
+        final THBezierCurveLineSegment nextLineSegmentBezier =
+            nextLineSegmentIsStraight
+            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+                start: lineSegment.endPoint.coordinates,
+                straightLineSegment: nextLineSegment,
+              )
+            : nextLineSegment as THBezierCurveLineSegment;
+        final THBezierCurveLineSegment lineSegmentSubstitution =
+            THBezierCurveLineSegment.forCWJM(
+              mpID: nextLineSegmentBezier.mpID,
+              parentMPID: nextLineSegmentBezier.parentMPID,
+              controlPoint1: deletedLineSegmentBezier.controlPoint1,
+              controlPoint2: nextLineSegmentBezier.controlPoint2,
+              endPoint: nextLineSegmentBezier.endPoint,
+              optionsMap: nextLineSegmentBezier.optionsMap,
+              attrOptionsMap: nextLineSegmentBezier.attrOptionsMap,
+              originalLineInTH2File: '',
+            );
+
+        return MPCommandFactory.removeLineSegmentWithSubstitution(
+          lineSegmentMPID: existingLineSegmentMPID,
+          lineSegmentSubstitution: lineSegmentSubstitution,
+          thFile: thFile,
+        );
+      }
+    }
+  }
+
   static MPCommand removeLineSegments({
     required Iterable<int> lineSegmentMPIDs,
-    required TH2FileEditController th2FileEditController,
+    required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegments,
   }) {
     assert(lineSegmentMPIDs.isNotEmpty);
 
-    final List<MPCommand> commandsList = [];
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
-    for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final MPCommand removeLineSegmentCommand = elementEditController
-          .getRemoveLineSegmentCommand(lineSegmentMPID);
-
-      commandsList.add(removeLineSegmentCommand);
-    }
-    return multipleCommandsFromList(
-      commandsList: commandsList,
-      descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    final THLine parentLine = thFile.lineByMPID(
+      thFile.lineSegmentByMPID(lineSegmentMPIDs.first).parentMPID,
     );
-  }
+    final int lineSegmentsCountInParentLine = parentLine
+        .getLineSegmentMPIDs(thFile)
+        .length;
+    final int remainingLineSegmentsCount =
+        lineSegmentsCountInParentLine - lineSegmentMPIDs.length;
 
-  static MPCommand multipleCommandsFromList({
-    required List<MPCommand> commandsList,
-    required MPCommandDescriptionType descriptionType,
-    required MPMultipleElementsCommandCompletionType completionType,
-  }) {
-    if (commandsList.isEmpty) {
-      throw ArgumentError(
-        'commandsList cannot be empty in MPCommandFactory.multipleCommandsFromList',
+    if (remainingLineSegmentsCount < 2) {
+      return MPRemoveLineCommand.fromExisting(
+        existingLineMPID: parentLine.mpID,
+        isInteractiveLineCreation: false,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+    } else {
+      final List<MPCommand> commandsList = [];
+
+      for (final int lineSegmentMPID in lineSegmentMPIDs) {
+        final MPCommand removeLineSegmentCommand =
+            removeLineSegmentFromExisting(
+              existingLineSegmentMPID: lineSegmentMPID,
+              thFile: thFile,
+              descriptionType: descriptionType,
+            );
+
+        commandsList.add(removeLineSegmentCommand);
+      }
+
+      return multipleCommandsFromList(
+        commandsList: commandsList,
+        descriptionType: descriptionType,
+        completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
       );
     }
-
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType: completionType,
-            descriptionType: descriptionType,
-          );
   }
 
   static MPCommand removeLineSegmentWithSubstitution({
@@ -1001,9 +1133,10 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     final List<MPCommand> commandsList = [];
 
     final MPCommand removeLineSegmentCommand =
-        MPRemoveLineSegmentCommand.fromExisting(
+        _actualRemoveLineSegmentFromExisting(
           existingLineSegmentMPID: lineSegmentMPID,
           thFile: thFile,
+          descriptionType: descriptionType,
         );
     final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
       originalLineSegment: thFile.lineSegmentByMPID(

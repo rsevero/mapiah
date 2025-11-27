@@ -23,19 +23,6 @@ class MPRemoveLineSegmentCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveLineSegmentCommand.fromExisting({
-    required int existingLineSegmentMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : lineSegmentMPID = existingLineSegmentMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingLineSegmentMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeLineSegment;
 
