@@ -285,7 +285,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyReplaceLineLineSegments(
+  void executeReplaceLineLineSegments(
     int lineMPID,
     List<({int lineSegmentPosition, THLineSegment lineSegment})>
     newLineSegments,
@@ -325,11 +325,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddLineSegment({
+  void executeAddLineSegment({
     required THLineSegment newLineSegment,
     required int lineSegmentPositionInParent,
   }) {
-    applyAddElement(
+    executeAddElement(
       newElement: newLineSegment,
       childPositionInParent: lineSegmentPositionInParent,
     );
@@ -347,7 +347,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddElement({
+  void executeAddElement({
     required THElement newElement,
     THIsParentMixin? parent,
     int childPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
@@ -430,7 +430,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  void applyRemoveElementByMPID(int mpID, {bool setState = false}) {
+  void executeRemoveElementByMPID(int mpID, {bool setState = false}) {
     final THElement element = _thFile.elementByMPID(mpID);
 
     removeElement(element, setState: setState);
@@ -439,7 +439,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void applyRemoveElements(List<int> mpIDs) {
     for (final int mpID in mpIDs) {
-      applyRemoveElementByMPID(mpID);
+      executeRemoveElementByMPID(mpID);
     }
   }
 
@@ -505,7 +505,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
-    applyAddArea(newArea: newArea, areaChildren: [endarea]);
+    executeAddArea(newArea: newArea, areaChildren: [endarea]);
 
     return newArea;
   }
@@ -676,12 +676,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddScrap({
+  void executeAddScrap({
     required THScrap newScrap,
     required int scrapPositionAtParent,
   }) {
     newScrap.childrenMPIDs.clear();
-    applyAddElement(
+    executeAddElement(
       newElement: newScrap,
       childPositionInParent: scrapPositionAtParent,
     );
@@ -695,7 +695,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddLine({
+  void executeAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
     int linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
@@ -704,19 +704,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     /// The childrenMPIDs list of the line will be the one resultant of
     /// lineChildren.
     newLine.childrenMPIDs.clear();
-    applyAddElement(
+    executeAddElement(
       newElement: newLine,
       childPositionInParent: linePositionInParent,
     );
 
     for (final THElement child in lineChildren) {
       if (child is THLineSegment) {
-        applyAddLineSegment(
+        executeAddLineSegment(
           newLineSegment: child,
           lineSegmentPositionInParent: mpAddChildAtEndOfParentChildrenList,
         );
       } else {
-        applyAddElement(
+        executeAddElement(
           newElement: child,
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
         );
@@ -736,7 +736,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyAddArea({
+  void executeAddArea({
     required THArea newArea,
     required List<THElement> areaChildren,
     int areaPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
@@ -744,12 +744,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     /// The childrenMPIDs list of the area will be the one resultant of
     /// areaChildren.
     newArea.childrenMPIDs.clear();
-    applyAddElement(
+    executeAddElement(
       newElement: newArea,
       childPositionInParent: areaPositionInParent,
     );
     for (final THElement child in areaChildren) {
-      applyAddElement(
+      executeAddElement(
         newElement: child,
         childPositionInParent: mpAddChildAtEndOfParentChildrenList,
       );
@@ -764,15 +764,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void applyRemoveArea(int areaMPID) {
-    applyRemoveElementByMPID(areaMPID);
+    executeRemoveElementByMPID(areaMPID);
   }
 
   @action
-  void applyRemoveLine(int lineMPID) {
+  void executeRemoveLine(int lineMPID) {
     if ((_newLine != null) && (_newLine!.mpID == lineMPID)) {
       clearNewLine();
     }
-    applyRemoveElementByMPID(lineMPID);
+    executeRemoveElementByMPID(lineMPID);
   }
 
   @action
@@ -829,7 +829,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetOptionToElement({
+  void executeSetOptionToElement({
     required THCommandOption option,
     String plaOriginalLineInTH2File = '',
   }) {
@@ -851,7 +851,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyRemoveOptionFromElement({
+  void executeRemoveOptionFromElement({
     required THCommandOptionType optionType,
     required int parentMPID,
     required String newOriginalLineInTH2File,
@@ -871,7 +871,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetAttrOptionToElement({
+  void executeSetAttrOptionToElement({
     required THAttrCommandOption attrOption,
     required String plaOriginalLineInTH2File,
   }) {
@@ -903,7 +903,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applyRemoveAttrOptionFromElement({
+  void executeRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
     required String plaOriginalLineInTH2File,

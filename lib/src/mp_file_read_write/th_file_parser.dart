@@ -255,7 +255,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -268,7 +268,7 @@ class THFileParser {
       content: element[1].toString(),
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -280,7 +280,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -294,7 +294,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -316,7 +316,7 @@ class THFileParser {
       encoding: element[1],
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -345,7 +345,7 @@ class THFileParser {
       originalLineInTH2File: _currentOriginalLine,
     );
 
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -562,7 +562,7 @@ class THFileParser {
       originalLineInTH2File: _currentOriginalLine,
     );
 
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -596,7 +596,7 @@ class THFileParser {
         pointTypeString: element[2][0],
         originalLineInTH2File: _currentOriginalLine,
       );
-      _th2FileElementEditController.applyAddElement(
+      _th2FileElementEditController.executeAddElement(
         newElement: newPoint,
         parent: _currentParent,
         childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -666,7 +666,7 @@ class THFileParser {
       endPoint: endPoint,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newBezierCurveLineSegment,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -701,7 +701,7 @@ class THFileParser {
       originalLineInTH2File: _currentOriginalLine,
     );
 
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -732,7 +732,7 @@ class THFileParser {
           pointDataList: endPoint,
           originalLineInTH2File: _currentOriginalLine,
         );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newStraightLineSegment,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -757,7 +757,7 @@ class THFileParser {
       thID: element[1],
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newScrap,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -776,7 +776,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -848,7 +848,7 @@ class THFileParser {
         areaTypeString: element[1][0],
         originalLineInTH2File: _currentOriginalLine,
       );
-      _th2FileElementEditController.applyAddElement(
+      _th2FileElementEditController.executeAddElement(
         newElement: newArea,
         parent: _currentParent,
         childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -899,7 +899,7 @@ class THFileParser {
         lineTypeString: element[1][0],
         originalLineInTH2File: _currentOriginalLine,
       );
-      _th2FileElementEditController.applyAddElement(
+      _th2FileElementEditController.executeAddElement(
         newElement: newLine,
         parent: _currentParent,
         childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -940,7 +940,7 @@ class THFileParser {
       parentMPID: _currentParentMPID,
       originalLineInTH2File: _currentOriginalLine,
     );
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: _currentElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -974,7 +974,7 @@ class THFileParser {
         parentMPID: _currentParentMPID,
         originalLineInTH2File: _currentOriginalLine,
       );
-      _th2FileElementEditController.applyAddElement(
+      _th2FileElementEditController.executeAddElement(
         newElement: _currentElement,
         parent: _currentParent,
         childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -1021,7 +1021,7 @@ class THFileParser {
           content: element[1],
           originalLineInTH2File: _currentOriginalLine,
         );
-        _th2FileElementEditController.applyAddElement(
+        _th2FileElementEditController.executeAddElement(
           newElement: newElement,
           parent: _currentParent,
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -1039,7 +1039,7 @@ class THFileParser {
           parentMPID: _currentParentMPID,
           value: element,
         );
-        _th2FileElementEditController.applyAddElement(
+        _th2FileElementEditController.executeAddElement(
           newElement: newElement,
           parent: _currentParent,
           childPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -2366,7 +2366,7 @@ class THFileParser {
       originalLineInTH2File: _currentOriginalLine,
     );
 
-    _th2FileElementEditController.applyAddElement(
+    _th2FileElementEditController.executeAddElement(
       newElement: newElement,
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,

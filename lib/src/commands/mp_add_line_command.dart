@@ -86,7 +86,7 @@ class MPAddLineCommand extends MPCommand
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddLine(
+    elementEditController.executeAddLine(
       newLine: newLine,
       linePositionInParent: linePositionInParent,
       lineChildren: lineChildren,

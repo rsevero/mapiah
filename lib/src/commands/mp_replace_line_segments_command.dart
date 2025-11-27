@@ -55,7 +55,7 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.applyReplaceLineLineSegments(
+    th2FileEditController.elementEditController.executeReplaceLineLineSegments(
       lineMPID,
       newLineSegments,
     );

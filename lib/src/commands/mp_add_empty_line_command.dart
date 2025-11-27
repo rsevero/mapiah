@@ -39,7 +39,7 @@ class MPAddEmptyLineCommand extends MPCommand {
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddElement(
+    elementEditController.executeAddElement(
       newElement: newEmptyLine,
       childPositionInParent: emptyLinePositionInParent,
     );

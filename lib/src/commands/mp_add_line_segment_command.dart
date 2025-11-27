@@ -55,7 +55,7 @@ class MPAddLineSegmentCommand extends MPCommand
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddLineSegment(
+    elementEditController.executeAddLineSegment(
       newLineSegment: newLineSegment,
       lineSegmentPositionInParent: lineSegmentPositionInParent,
     );

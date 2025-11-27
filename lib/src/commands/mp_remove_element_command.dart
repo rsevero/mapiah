@@ -54,7 +54,7 @@ class MPRemoveElementCommand extends MPCommand
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+    th2FileEditController.elementEditController.executeRemoveElementByMPID(
       elementMPID,
     );
   }

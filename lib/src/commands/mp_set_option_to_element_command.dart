@@ -49,7 +49,7 @@ class MPSetOptionToElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.applySetOptionToElement(
+    th2FileEditController.elementEditController.executeSetOptionToElement(
       option: toOption,
       plaOriginalLineInTH2File: toPLAOriginalLineInTH2File,
     );

@@ -65,7 +65,7 @@ class MPRemoveScrapCommand extends MPCommand
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
-    th2FileEditController.elementEditController.applyRemoveElementByMPID(
+    th2FileEditController.elementEditController.executeRemoveElementByMPID(
       scrapMPID,
     );
     th2FileEditController.triggerAllElementsRedraw();

@@ -69,7 +69,7 @@ class MPAddScrapCommand extends MPCommand
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddScrap(
+    elementEditController.executeAddScrap(
       newScrap: newScrap,
       scrapPositionAtParent: scrapPositionInParent,
     );

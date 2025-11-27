@@ -54,7 +54,7 @@ class MPAddElementCommand extends MPCommand
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddElement(
+    elementEditController.executeAddElement(
       newElement: newElement,
       childPositionInParent: elementPositionInParent,
     );

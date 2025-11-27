@@ -1212,7 +1212,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void applyMPCommandList(
+  void executeMPCommandList(
     List<MPCommand> commandList,
     MPMultipleElementsCommandCompletionType completionType,
   ) {

@@ -31,7 +31,7 @@ class MPMultipleElementsCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.applyMPCommandList(commandsList, completionType);
+    th2FileEditController.executeMPCommandList(commandsList, completionType);
   }
 
   @override

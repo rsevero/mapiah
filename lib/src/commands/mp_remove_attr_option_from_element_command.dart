@@ -48,7 +48,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController
-        .applyRemoveAttrOptionFromElement(
+        .executeRemoveAttrOptionFromElement(
           parentMPID: parentMPID,
           attrName: attrName,
           plaOriginalLineInTH2File: plaOriginalTH2FileLine,

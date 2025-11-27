@@ -47,7 +47,7 @@ class MPAddAreaCommand extends MPCommand
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
 
-    elementEditController.applyAddArea(
+    elementEditController.executeAddArea(
       newArea: newArea,
       areaChildren: areaChildren,
       areaPositionInParent: areaPositionInParent,

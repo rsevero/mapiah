@@ -82,7 +82,7 @@ class MPRemoveLineCommand extends MPCommand
       }
     }
 
-    th2FileEditController.elementEditController.applyRemoveLine(lineMPID);
+    th2FileEditController.elementEditController.executeRemoveLine(lineMPID);
   }
 
   @override
