@@ -4,16 +4,13 @@ class MPRemoveScrapCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin, MPScrapChildrenMixin {
   final int scrapMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeScrap;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveScrapCommand.forCWJM({
     required this.scrapMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     assert(scrapMPID > 0);
     this.preCommand = preCommand;
@@ -22,7 +19,7 @@ class MPRemoveScrapCommand extends MPCommand
   MPRemoveScrapCommand({
     required this.scrapMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     assert(scrapMPID > 0);
     this.preCommand = preCommand;
@@ -31,7 +28,7 @@ class MPRemoveScrapCommand extends MPCommand
   MPRemoveScrapCommand.fromExisting({
     required int existingScrapMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : scrapMPID = existingScrapMPID,
        super() {
     assert(existingScrapMPID > 0);
@@ -44,10 +41,6 @@ class MPRemoveScrapCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeScrap;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

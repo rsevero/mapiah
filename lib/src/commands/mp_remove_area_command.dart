@@ -4,16 +4,13 @@ class MPRemoveAreaCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int areaMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeArea;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveAreaCommand.forCWJM({
     required this.areaMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -21,7 +18,7 @@ class MPRemoveAreaCommand extends MPCommand
   MPRemoveAreaCommand({
     required this.areaMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -29,7 +26,7 @@ class MPRemoveAreaCommand extends MPCommand
   MPRemoveAreaCommand.fromExisting({
     required int existingAreaMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : areaMPID = existingAreaMPID,
        super() {
     preCommand = getRemoveEmptyLinesAfterCommand(
@@ -41,10 +38,6 @@ class MPRemoveAreaCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeArea;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

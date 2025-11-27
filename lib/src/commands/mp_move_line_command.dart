@@ -4,23 +4,20 @@ class MPMoveLineCommand extends MPCommand {
   final int lineMPID;
   late final MPCommand lineSegmentsMoveCommand;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.moveLine;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.lineSegmentsMoveCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveLineCommand({
     required this.lineMPID,
     required Map<int, THLineSegment> fromLineSegmentsMap,
     required Map<int, THLineSegment> toLineSegmentsMap,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand = MPCommandFactory.moveLineSegments(
       fromLineSegmentsMap: fromLineSegmentsMap,
@@ -34,7 +31,7 @@ class MPMoveLineCommand extends MPCommand {
     required LinkedHashMap<int, THLineSegment> fromLineSegmentsMap,
     required Offset deltaOnCanvas,
     int? decimalPositions,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromDeltaOnCanvas(
@@ -50,7 +47,7 @@ class MPMoveLineCommand extends MPCommand {
     required LinkedHashMap<int, THLineSegment> fromLineSegmentsMap,
     required THLineSegment referenceLineSegment,
     required THPositionPart referenceLineSegmentFinalPosition,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     lineSegmentsMoveCommand =
         MPCommandFactory.moveLineSegmentsFromLineSegmentExactPosition(
@@ -63,10 +60,6 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveLine;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

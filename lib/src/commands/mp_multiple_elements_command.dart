@@ -4,16 +4,13 @@ class MPMultipleElementsCommand extends MPCommand {
   late final List<MPCommand> commandsList;
   final MPMultipleElementsCommandCompletionType completionType;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.multipleElements;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMultipleElementsCommand.forCWJM({
     required this.commandsList,
     required this.completionType,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     if (commandsList.length < 2) {
       throw ArgumentError('commandsList must contain at least two commands.');
@@ -22,10 +19,6 @@ class MPMultipleElementsCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.multipleElements;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

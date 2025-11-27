@@ -5,17 +5,14 @@ class MPAddPointCommand extends MPCommand
   final THPoint newPoint;
   late final int pointPositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addPoint;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddPointCommand.forCWJM({
     required this.newPoint,
     required this.pointPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -24,7 +21,7 @@ class MPAddPointCommand extends MPCommand
     required this.newPoint,
     this.pointPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
   }
@@ -33,7 +30,7 @@ class MPAddPointCommand extends MPCommand
     required THPoint existingPoint,
     int? pointPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newPoint = existingPoint,
        super() {
     final THIsParentMixin parent = existingPoint.parent(thFile);
@@ -50,10 +47,6 @@ class MPAddPointCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addPoint;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

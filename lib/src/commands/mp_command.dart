@@ -76,8 +76,6 @@ abstract class MPCommand {
 
   MPCommandType get type;
 
-  MPCommandDescriptionType get defaultDescriptionType;
-
   MPUndoRedoCommand getUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {

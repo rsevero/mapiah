@@ -4,16 +4,13 @@ class MPRemovePointCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int pointMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removePoint;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemovePointCommand.forCWJM({
     required this.pointMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -21,7 +18,7 @@ class MPRemovePointCommand extends MPCommand
   MPRemovePointCommand({
     required this.pointMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -29,7 +26,7 @@ class MPRemovePointCommand extends MPCommand
   MPRemovePointCommand.fromExisting({
     required int existingPointMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : pointMPID = existingPointMPID,
        super() {
     preCommand = getRemoveEmptyLinesAfterCommand(
@@ -41,10 +38,6 @@ class MPRemovePointCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removePoint;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

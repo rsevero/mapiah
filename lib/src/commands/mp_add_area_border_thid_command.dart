@@ -5,17 +5,14 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
   final THAreaBorderTHID newAreaBorderTHID;
   late final int areaBorderTHIDPositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addAreaBorderTHID;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddAreaBorderTHIDCommand.forCWJM({
     required this.newAreaBorderTHID,
     required this.areaBorderTHIDPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -25,7 +22,7 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
     this.areaBorderTHIDPositionInParent =
         mpAddChildAtEndMinusOneOfParentChildrenList,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -34,7 +31,7 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
     required THAreaBorderTHID existingAreaBorderTHID,
     int? areaBorderTHIDPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newAreaBorderTHID = existingAreaBorderTHID,
        super() {
     final THIsParentMixin parent = existingAreaBorderTHID.parent(thFile);
@@ -52,10 +49,6 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addAreaBorderTHID;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

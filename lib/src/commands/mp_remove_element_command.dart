@@ -4,16 +4,13 @@ class MPRemoveElementCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int elementMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeElement;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveElementCommand.forCWJM({
     required this.elementMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -21,7 +18,7 @@ class MPRemoveElementCommand extends MPCommand
   MPRemoveElementCommand({
     required this.elementMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -29,7 +26,7 @@ class MPRemoveElementCommand extends MPCommand
   MPRemoveElementCommand.fromExisting({
     required int existingElementMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : elementMPID = existingElementMPID,
        super() {
     preCommand = getRemoveEmptyLinesAfterCommand(
@@ -41,10 +38,6 @@ class MPRemoveElementCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeElement;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

@@ -6,18 +6,15 @@ class MPEditLineTypeCommand extends MPCommand {
   final String unknownPLAType;
   final String originalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.editLineType;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,
     required this.newLineType,
     required this.unknownPLAType,
     required this.originalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPEditLineTypeCommand({
@@ -25,15 +22,11 @@ class MPEditLineTypeCommand extends MPCommand {
     required this.newLineType,
     required this.unknownPLAType,
     this.originalLineInTH2File = '',
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editLineType;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

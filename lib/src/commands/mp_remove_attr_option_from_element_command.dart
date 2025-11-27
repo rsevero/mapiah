@@ -5,32 +5,25 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final String attrName;
   final String plaOriginalTH2FileLine;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveAttrOptionFromElementCommand.forCWJM({
     required this.parentMPID,
     required this.attrName,
     required this.plaOriginalTH2FileLine,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPRemoveAttrOptionFromElementCommand({
     required this.parentMPID,
     required this.attrName,
     required this.plaOriginalTH2FileLine,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.removeAttrOptionFromElement;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

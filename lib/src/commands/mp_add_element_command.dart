@@ -5,17 +5,14 @@ class MPAddElementCommand extends MPCommand
   final THElement newElement;
   late final int elementPositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addElement;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddElementCommand.forCWJM({
     required this.newElement,
     required this.elementPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -24,7 +21,7 @@ class MPAddElementCommand extends MPCommand
     required this.newElement,
     this.elementPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
   }
@@ -33,7 +30,7 @@ class MPAddElementCommand extends MPCommand
     required THElement existingElement,
     int? elementPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newElement = existingElement,
 
        super() {
@@ -51,10 +48,6 @@ class MPAddElementCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addElement;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

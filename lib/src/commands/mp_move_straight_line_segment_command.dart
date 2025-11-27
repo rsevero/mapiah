@@ -7,11 +7,8 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
@@ -19,7 +16,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.toEndPointPosition,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveStraightLineSegmentCommand({
@@ -28,7 +25,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required this.toEndPointPosition,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   MPMoveStraightLineSegmentCommand.fromDeltaOnCanvas({
@@ -37,7 +34,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     required Offset deltaOnCanvas,
     int? decimalPositions,
     required this.fromOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : toEndPointPosition = THPositionPart(
          coordinates: fromEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
@@ -47,10 +44,6 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveStraightLineSegment;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

@@ -5,17 +5,14 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
   final THXTherionImageInsertConfig newImageInsertConfig;
   late final int xTherionImageInsertConfigPositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addXTherionImageInsertConfig;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddXTherionImageInsertConfigCommand.forCWJM({
     required this.newImageInsertConfig,
     required this.xTherionImageInsertConfigPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -24,7 +21,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     required this.newImageInsertConfig,
     required this.xTherionImageInsertConfigPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
   }
@@ -33,7 +30,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     required THXTherionImageInsertConfig existingImageInsertConfig,
     required THFile thFile,
     int? xTherionImageInsertConfigPositionInParent,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newImageInsertConfig = existingImageInsertConfig,
        super() {
     final THIsParentMixin parent = existingImageInsertConfig.parent(thFile);
@@ -51,10 +48,6 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addXTherionImageInsertConfig;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

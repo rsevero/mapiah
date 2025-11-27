@@ -5,32 +5,25 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   final THCommandOptionType optionType;
   final String plaOriginalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveOptionFromElementCommand.forCWJM({
     required this.optionType,
     required this.parentMPID,
     required this.plaOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPRemoveOptionFromElementCommand({
     required this.optionType,
     required this.parentMPID,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
     this.plaOriginalLineInTH2File = '',
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.removeOptionFromElement;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

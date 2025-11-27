@@ -4,16 +4,13 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int xtherionImageInsertConfigMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeXTherionImageInsertConfig;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveXTherionImageInsertConfigCommand.forCWJM({
     required this.xtherionImageInsertConfigMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -21,7 +18,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
   MPRemoveXTherionImageInsertConfigCommand({
     required this.xtherionImageInsertConfigMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -29,7 +26,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
   MPRemoveXTherionImageInsertConfigCommand.fromExisting({
     required int existingXTherionImageInsertConfigMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : xtherionImageInsertConfigMPID = existingXTherionImageInsertConfigMPID,
        super() {
     preCommand = getRemoveEmptyLinesAfterCommand(
@@ -41,10 +38,6 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeXTherionImageInsertConfig;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

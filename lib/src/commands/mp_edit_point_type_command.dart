@@ -6,18 +6,15 @@ class MPEditPointTypeCommand extends MPCommand {
   final String unknownPLAType;
   final String originalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.editPointType;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,
     required this.newPointType,
     required this.unknownPLAType,
     required this.originalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPEditPointTypeCommand({
@@ -25,15 +22,11 @@ class MPEditPointTypeCommand extends MPCommand {
     required this.newPointType,
     required this.unknownPLAType,
     this.originalLineInTH2File = '',
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editPointType;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

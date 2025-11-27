@@ -5,17 +5,14 @@ class MPAddLineSegmentCommand extends MPCommand
   late final THLineSegment newLineSegment;
   late final int lineSegmentPositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addLineSegment;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,
     required this.lineSegmentPositionInParent,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -25,7 +22,7 @@ class MPAddLineSegmentCommand extends MPCommand
     this.lineSegmentPositionInParent =
         mpAddChildAtEndMinusOneOfParentChildrenList,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
   }
@@ -34,7 +31,7 @@ class MPAddLineSegmentCommand extends MPCommand
     required THLineSegment existingLineSegment,
     int? lineSegmentPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newLineSegment = existingLineSegment,
        super() {
     final THIsParentMixin parent = existingLineSegment.parent(thFile);
@@ -52,10 +49,6 @@ class MPAddLineSegmentCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addLineSegment;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

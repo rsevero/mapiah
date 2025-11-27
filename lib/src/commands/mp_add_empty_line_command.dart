@@ -4,30 +4,27 @@ class MPAddEmptyLineCommand extends MPCommand {
   final THEmptyLine newEmptyLine;
   final int emptyLinePositionInParent;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addEmptyLine;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddEmptyLineCommand.forCWJM({
     required this.newEmptyLine,
     required this.emptyLinePositionInParent,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPAddEmptyLineCommand({
     required this.newEmptyLine,
     this.emptyLinePositionInParent =
         mpAddChildAtEndMinusOneOfParentChildrenList,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   MPAddEmptyLineCommand.fromExisting({
     required THEmptyLine existingEmptyLine,
     int? emptyLinePositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newEmptyLine = existingEmptyLine,
        emptyLinePositionInParent =
            emptyLinePositionInParent ??
@@ -36,10 +33,6 @@ class MPAddEmptyLineCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.addEmptyLine;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

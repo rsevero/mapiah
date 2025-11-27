@@ -7,31 +7,28 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
   final List<({int lineSegmentPosition, THLineSegment lineSegment})>
   newLineSegments;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.replaceLineSegments;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPReplaceLineSegmentsCommand.forCWJM({
     required this.lineMPID,
     required this.originalLineSegments,
     required this.newLineSegments,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPReplaceLineSegmentsCommand({
     required this.lineMPID,
     required this.originalLineSegments,
     required this.newLineSegments,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   MPReplaceLineSegmentsCommand.fromExisting({
     required this.lineMPID,
     required this.newLineSegments,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : originalLineSegments = thFile
            .lineByMPID(lineMPID)
            .getLineSegmentsPositionList(thFile),
@@ -39,10 +36,6 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.replaceLineSegments;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

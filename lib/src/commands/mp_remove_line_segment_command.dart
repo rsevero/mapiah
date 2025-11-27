@@ -4,16 +4,13 @@ class MPRemoveLineSegmentCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int lineSegmentMPID;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeLineSegment;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -21,7 +18,7 @@ class MPRemoveLineSegmentCommand extends MPCommand
   MPRemoveLineSegmentCommand({
     required this.lineSegmentMPID,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -29,7 +26,7 @@ class MPRemoveLineSegmentCommand extends MPCommand
   MPRemoveLineSegmentCommand.fromExisting({
     required int existingLineSegmentMPID,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : lineSegmentMPID = existingLineSegmentMPID,
        super() {
     preCommand = getRemoveEmptyLinesAfterCommand(
@@ -41,10 +38,6 @@ class MPRemoveLineSegmentCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeLineSegment;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

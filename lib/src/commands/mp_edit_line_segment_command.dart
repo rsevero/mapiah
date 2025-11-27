@@ -5,32 +5,29 @@ class MPEditLineSegmentCommand extends MPCommand {
   final THLineSegment newLineSegment;
   final String originalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.editLineSegment;
 
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
+
 
   MPEditLineSegmentCommand.forCWJM({
     required this.originalLineSegment,
     required this.newLineSegment,
     required this.originalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPEditLineSegmentCommand({
     required this.originalLineSegment,
     required this.newLineSegment,
     this.originalLineInTH2File = '',
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.editLineSegment;
 
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
+
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

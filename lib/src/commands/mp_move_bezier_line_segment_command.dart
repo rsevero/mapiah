@@ -11,11 +11,8 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.moveBezierLineSegment;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
@@ -27,7 +24,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.toControlPoint2Position,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveBezierLineSegmentCommand({
@@ -40,13 +37,13 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required this.toControlPoint2Position,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   MPMoveBezierLineSegmentCommand.fromLineSegments({
     required THBezierCurveLineSegment fromLineSegment,
     required THBezierCurveLineSegment toLineSegment,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : lineSegmentMPID = fromLineSegment.mpID,
        fromEndPointPosition = fromLineSegment.endPoint,
        toEndPointPosition = toLineSegment.endPoint,
@@ -66,7 +63,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required Offset deltaOnCanvas,
     int? decimalPositions,
     required this.fromOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : toEndPointPosition = THPositionPart(
          coordinates: fromEndPointPosition.coordinates + deltaOnCanvas,
          decimalPositions: decimalPositions,
@@ -90,7 +87,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     required THPositionPart lineSegmentFinalPosition,
     int? decimalPositions,
     required this.fromOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : toOriginalLineInTH2File = '',
        super() {
     final Offset deltaOnCanvas =
@@ -109,10 +106,6 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveBezierLineSegment;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

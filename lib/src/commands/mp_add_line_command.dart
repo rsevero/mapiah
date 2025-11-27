@@ -8,11 +8,8 @@ class MPAddLineCommand extends MPCommand
   final Offset? lineStartScreenPosition;
   late final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addLine;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddLineCommand.forCWJM({
     required this.newLine,
@@ -21,7 +18,7 @@ class MPAddLineCommand extends MPCommand
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -33,7 +30,7 @@ class MPAddLineCommand extends MPCommand
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
   }
@@ -43,7 +40,7 @@ class MPAddLineCommand extends MPCommand
     int? linePositionInParent,
     this.lineStartScreenPosition,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newLine = existingLine,
        lineChildren = existingLine.getChildren(thFile).toList(),
        super() {
@@ -83,10 +80,6 @@ class MPAddLineCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addLine;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

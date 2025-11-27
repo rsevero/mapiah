@@ -4,30 +4,23 @@ class MPSetOptionToElementCommand extends MPCommand {
   final THCommandOption toOption;
   final String toPLAOriginalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPSetOptionToElementCommand.forCWJM({
     required this.toOption,
     required this.toPLAOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPSetOptionToElementCommand({
     required this.toOption,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
     this.toPLAOriginalLineInTH2File = '',
   }) : super();
 
   @override
   MPCommandType get type => MPCommandType.setOptionToElement;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

@@ -9,18 +9,15 @@ class MPAddScrapCommand extends MPCommand
   /// child added.
   late final MPCommand addScrapChildrenCommand;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addScrap;
-
-        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddScrapCommand.forCWJM({
     required this.newScrap,
     required this.scrapPositionInParent,
     required this.addScrapChildrenCommand,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -31,7 +28,7 @@ class MPAddScrapCommand extends MPCommand
     required List<THElement> scrapChildren,
     required THFile thFile,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.posCommand = posCommand;
 
@@ -45,7 +42,7 @@ class MPAddScrapCommand extends MPCommand
     required THScrap existingScrap,
     int? scrapPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newScrap = existingScrap,
        super() {
     final THIsParentMixin parent = existingScrap.parent(thFile);
@@ -66,10 +63,6 @@ class MPAddScrapCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addScrap;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

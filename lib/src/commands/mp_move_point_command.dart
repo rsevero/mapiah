@@ -7,11 +7,8 @@ class MPMovePointCommand extends MPCommand {
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMovePointCommand.forCWJM({
     required this.pointMPID,
@@ -19,7 +16,7 @@ class MPMovePointCommand extends MPCommand {
     required this.toPosition,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMovePointCommand({
@@ -28,7 +25,7 @@ class MPMovePointCommand extends MPCommand {
     required this.toPosition,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super();
 
   MPMovePointCommand.fromDeltaOnCanvas({
@@ -37,7 +34,7 @@ class MPMovePointCommand extends MPCommand {
     required Offset deltaOnCanvas,
     int? decimalPositions,
     required this.fromOriginalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : toOriginalLineInTH2File = '',
        super() {
     toPosition = THPositionPart(
@@ -48,10 +45,6 @@ class MPMovePointCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.movePoint;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

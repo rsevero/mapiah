@@ -6,18 +6,15 @@ class MPAddAreaCommand extends MPCommand
   late final int areaPositionInParent;
   final List<THElement> areaChildren;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addArea;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPAddAreaCommand.forCWJM({
     required this.newArea,
     required this.areaPositionInParent,
     required this.areaChildren,
     required MPCommand? posCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.posCommand = posCommand;
   }
@@ -26,7 +23,7 @@ class MPAddAreaCommand extends MPCommand
     required THArea existingArea,
     int? areaPositionInParent,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : newArea = existingArea,
        areaChildren = existingArea.getChildren(thFile).toList(),
        super() {
@@ -44,10 +41,6 @@ class MPAddAreaCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.addArea;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {

@@ -5,17 +5,14 @@ class MPMoveAreaCommand extends MPCommand {
   late final MPCommand linesMoveCommand;
   final String originalLineInTH2File;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.moveArea;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPMoveAreaCommand.forCWJM({
     required this.areaMPID,
     required this.linesMoveCommand,
     required this.originalLineInTH2File,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM();
 
   MPMoveAreaCommand.fromDeltaOnCanvas({
@@ -24,7 +21,7 @@ class MPMoveAreaCommand extends MPCommand {
     required Offset deltaOnCanvas,
     int? decimalPositions,
     this.originalLineInTH2File = '',
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromDeltaOnCanvas(
       lines: originalLines,
@@ -40,7 +37,7 @@ class MPMoveAreaCommand extends MPCommand {
     required THLineSegment referenceLineSegment,
     required THPositionPart referenceLineSegmentFinalPosition,
     this.originalLineInTH2File = '',
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     linesMoveCommand = MPCommandFactory.moveLinesFromLineSegmentExactPosition(
       lines: originalLines,
@@ -52,10 +49,6 @@ class MPMoveAreaCommand extends MPCommand {
 
   @override
   MPCommandType get type => MPCommandType.moveArea;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {

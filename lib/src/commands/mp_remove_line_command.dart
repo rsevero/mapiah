@@ -5,17 +5,14 @@ class MPRemoveLineCommand extends MPCommand
   final int lineMPID;
   final bool isInteractiveLineCreation;
 
-  static const MPCommandDescriptionType _defaultDescriptionType =
+  static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.removeLine;
-
-  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
-      _defaultDescriptionType;
 
   MPRemoveLineCommand.forCWJM({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
   }
@@ -24,7 +21,7 @@ class MPRemoveLineCommand extends MPCommand
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     required MPCommand? preCommand,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
   }
@@ -33,27 +30,9 @@ class MPRemoveLineCommand extends MPCommand
     required int existingLineMPID,
     required this.isInteractiveLineCreation,
     required THFile thFile,
-    super.descriptionType = _defaultDescriptionType,
+    super.descriptionType = defaultDescriptionType,
   }) : lineMPID = existingLineMPID,
        super() {
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
-
-    if (areaMPID != null) {
-      final THArea area = thFile.areaByMPID(areaMPID);
-      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
-        lineMPID,
-        thFile,
-      );
-
-      if (areaTHID != null) {
-        // removeAreaTHIDCommand = MPRemoveAreaBorderTHIDCommand.fromExisting(
-        //   existingAreaBorderTHIDMPID: areaTHID.mpID,
-        //   thFile: thFile,
-        //   descriptionType: descriptionType,
-        // );
-      }
-    }
-
     preCommand = getRemoveEmptyLinesAfterCommand(
       elementMPID: existingLineMPID,
       thFile: thFile,
@@ -63,10 +42,6 @@ class MPRemoveLineCommand extends MPCommand
 
   @override
   MPCommandType get type => MPCommandType.removeLine;
-
-  @override
-  MPCommandDescriptionType get defaultDescriptionType =>
-      _defaultDescriptionType;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
