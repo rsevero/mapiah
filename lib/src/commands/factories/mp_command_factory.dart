@@ -95,13 +95,12 @@ class MPCommandFactory {
       commandsList.add(addCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
+    );
   }
 
   static MPCommand addLineToArea({
@@ -111,7 +110,7 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.addAreaBorderTHID,
   }) {
-    final List<MPCommand> commands = [];
+    final List<MPCommand> commandsList = [];
     final String lineTHID;
 
     if (line.hasOption(THCommandOptionType.id)) {
@@ -137,7 +136,7 @@ class MPCommandFactory {
           toOption: areaTHIDOption,
         );
 
-        commands.add(addAreaTHIDCommand);
+        commandsList.add(addAreaTHIDCommand);
         areaTHID = newAreaTHID;
       }
 
@@ -155,7 +154,7 @@ class MPCommandFactory {
         toOption: lineTHIDOption,
       );
 
-      commands.add(addLineTHIDCommand);
+      commandsList.add(addLineTHIDCommand);
       lineTHID = newLineTHID;
     }
 
@@ -168,17 +167,13 @@ class MPCommandFactory {
       posCommand: null,
     );
 
-    commands.add(addAreaBorderTHIDCommand);
+    commandsList.add(addAreaBorderTHIDCommand);
 
-    final MPCommand command = (commands.length == 1)
-        ? commands.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commands,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-          );
-
-    return command;
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand addPoint({
@@ -306,14 +301,11 @@ class MPCommandFactory {
       commandsList.add(editAreaTypeCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand editLinesSegmentType({
@@ -334,14 +326,11 @@ class MPCommandFactory {
       commandsList.add(setLineSegmentTypeCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand editLinesType({
@@ -364,14 +353,11 @@ class MPCommandFactory {
       commandsList.add(editLineTypeCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand editPointsType({
@@ -394,14 +380,11 @@ class MPCommandFactory {
       commandsList.add(editPointTypeCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand moveElementsFromDeltaOnCanvas({
@@ -443,14 +426,11 @@ class MPCommandFactory {
       commandsList.add(moveCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveElementsFromReferenceElementExactPosition({
@@ -544,14 +524,11 @@ class MPCommandFactory {
       commandsList.add(moveCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveLinesFromDeltaOnCanvas({
@@ -575,14 +552,11 @@ class MPCommandFactory {
       commandsList.add(moveLineCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveLinesFromLineSegmentExactPosition({
@@ -618,14 +592,11 @@ class MPCommandFactory {
       commandsList.add(moveLineCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveLineSegments({
@@ -673,14 +644,11 @@ class MPCommandFactory {
       commandsList.add(moveLineSegmentCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveLineSegmentsFromDeltaOnCanvas({
@@ -727,14 +695,11 @@ class MPCommandFactory {
       commandsList.add(moveLineSegmentCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand moveLineSegmentsFromLineSegmentExactPosition({
@@ -804,14 +769,11 @@ class MPCommandFactory {
       commandsList.add(moveLineSegmentCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
   }
 
   static MPCommand removeAttrOptionFromElements({
@@ -837,14 +799,11 @@ class MPCommandFactory {
       commandsList.add(removeAttrOptionFromElementCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand removeElements({
@@ -914,14 +873,12 @@ class MPCommandFactory {
       commandsList.add(removeCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
+    );
   }
 
   static MPCommand removeLineSegments({
@@ -942,18 +899,34 @@ class MPCommandFactory {
 
       commandsList.add(removeLineSegmentCommand);
     }
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
+  static MPCommand multipleCommandsFromList({
+    required List<MPCommand> commandsList,
+    required MPCommandDescriptionType descriptionType,
+    required MPMultipleElementsCommandCompletionType completionType,
+  }) {
+    if (commandsList.isEmpty) {
+      throw ArgumentError(
+        'commandsList cannot be empty in MPCommandFactory.multipleCommandsFromList',
+      );
+    }
 
     return (commandsList.length == 1)
         ? commandsList.first
         : MPMultipleElementsCommand.forCWJM(
             commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
+            completionType: completionType,
             descriptionType: descriptionType,
           );
   }
 
-  static MPMultipleElementsCommand removeLineSegmentWithSubstitution({
+  static MPCommand removeLineSegmentWithSubstitution({
     required int lineSegmentMPID,
     required THLineSegment lineSegmentSubstitution,
     required THFile thFile,
@@ -977,10 +950,10 @@ class MPCommandFactory {
     commandsList.add(removeLineSegmentCommand);
     commandsList.add(editLineSegmentCommand);
 
-    return MPMultipleElementsCommand.forCWJM(
+    return multipleCommandsFromList(
       commandsList: commandsList,
-      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
       descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
     );
   }
 
@@ -1004,14 +977,11 @@ class MPCommandFactory {
       commandsList.add(removeOptionFromElementCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand setAttrOptionOnElements({
@@ -1039,14 +1009,11 @@ class MPCommandFactory {
       commandsList.add(setOptionToElementCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 
   static MPCommand setLineSegmentsType({
@@ -1134,13 +1101,10 @@ class MPCommandFactory {
       commandsList.add(setOptionToElementCommand);
     }
 
-    return (commandsList.length == 1)
-        ? commandsList.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: commandsList,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: descriptionType,
-          );
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
   }
 }

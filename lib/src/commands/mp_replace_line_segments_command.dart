@@ -108,8 +108,8 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
     final List<({int lineSegmentPosition, THLineSegment lineSegment})>
     originalLineSegments = (map['originalLineSegments'] as List)
         .map<({int lineSegmentPosition, THLineSegment lineSegment})>((raw) {
-          final r = raw as Map;
-          final posRaw = r['lineSegmentPosition'];
+          final Map<dynamic, dynamic> r = raw as Map;
+          final dynamic posRaw = r['lineSegmentPosition'];
           final int pos = posRaw is int ? posRaw : int.parse(posRaw.toString());
           return (
             lineSegmentPosition: pos,
@@ -121,8 +121,8 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
     final List<({int lineSegmentPosition, THLineSegment lineSegment})>
     newLineSegments = (map['newLineSegments'] as List)
         .map<({int lineSegmentPosition, THLineSegment lineSegment})>((raw) {
-          final r = raw as Map;
-          final posRaw = r['lineSegmentPosition'];
+          final Map<dynamic, dynamic> r = raw as Map;
+          final dynamic posRaw = r['lineSegmentPosition'];
           final int pos = posRaw is int ? posRaw : int.parse(posRaw.toString());
           return (
             lineSegmentPosition: pos,
