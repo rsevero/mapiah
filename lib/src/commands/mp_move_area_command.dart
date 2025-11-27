@@ -4,8 +4,12 @@ class MPMoveAreaCommand extends MPCommand {
   final int areaMPID;
   late final MPCommand linesMoveCommand;
   final String originalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveArea;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMoveAreaCommand.forCWJM({
     required this.areaMPID,

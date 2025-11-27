@@ -10,8 +10,12 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
   late final THPositionPart toControlPoint2Position;
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveBezierLineSegment;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMoveBezierLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,

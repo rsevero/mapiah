@@ -4,8 +4,12 @@ class MPAddLineSegmentCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   late final THLineSegment newLineSegment;
   late final int lineSegmentPositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLineSegment;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddLineSegmentCommand.forCWJM({
     required this.newLineSegment,

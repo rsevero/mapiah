@@ -3,8 +3,12 @@ part of "mp_command.dart";
 class MPRemoveAreaCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int areaMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeArea;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveAreaCommand.forCWJM({
     required this.areaMPID,

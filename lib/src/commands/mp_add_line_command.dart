@@ -7,8 +7,12 @@ class MPAddLineCommand extends MPCommand
   final List<THElement> lineChildren;
   final Offset? lineStartScreenPosition;
   late final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addLine;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddLineCommand.forCWJM({
     required this.newLine,

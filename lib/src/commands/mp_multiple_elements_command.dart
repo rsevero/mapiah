@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPMultipleElementsCommand extends MPCommand {
   late final List<MPCommand> commandsList;
   final MPMultipleElementsCommandCompletionType completionType;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.multipleElements;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMultipleElementsCommand.forCWJM({
     required this.commandsList,

@@ -7,6 +7,9 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeAreaBorderTHID;
 
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
+
   MPRemoveAreaBorderTHIDCommand.forCWJM({
     required this.areaBorderTHIDMPID,
     required MPCommand? preCommand,

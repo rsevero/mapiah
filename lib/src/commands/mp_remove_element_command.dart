@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPRemoveElementCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int elementMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeElement;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveElementCommand.forCWJM({
     required this.elementMPID,

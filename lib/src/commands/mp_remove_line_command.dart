@@ -4,8 +4,12 @@ class MPRemoveLineCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int lineMPID;
   final bool isInteractiveLineCreation;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeLine;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveLineCommand.forCWJM({
     required this.lineMPID,

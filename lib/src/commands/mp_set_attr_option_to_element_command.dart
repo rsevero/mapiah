@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPSetAttrOptionToElementCommand extends MPCommand {
   final THAttrCommandOption toOption;
   final String toPLAOriginalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.setOptionToElement;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPSetAttrOptionToElementCommand.forCWJM({
     required this.toOption,

@@ -6,8 +6,12 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
   originalLineSegments;
   final List<({int lineSegmentPosition, THLineSegment lineSegment})>
   newLineSegments;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.replaceLineSegments;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPReplaceLineSegmentsCommand.forCWJM({
     required this.lineMPID,

@@ -7,6 +7,9 @@ class MPRemoveScrapCommand extends MPCommand
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeScrap;
 
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
+
   MPRemoveScrapCommand.forCWJM({
     required this.scrapMPID,
     required MPCommand? preCommand,

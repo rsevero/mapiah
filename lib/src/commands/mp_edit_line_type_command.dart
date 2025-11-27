@@ -5,8 +5,12 @@ class MPEditLineTypeCommand extends MPCommand {
   final THLineType newLineType;
   final String unknownPLAType;
   final String originalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineType;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPEditLineTypeCommand.forCWJM({
     required this.lineMPID,

@@ -4,8 +4,12 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
   final int parentMPID;
   final String attrName;
   final String plaOriginalTH2FileLine;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveAttrOptionFromElementCommand.forCWJM({
     required this.parentMPID,

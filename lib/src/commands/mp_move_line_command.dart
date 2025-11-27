@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPMoveLineCommand extends MPCommand {
   final int lineMPID;
   late final MPCommand lineSegmentsMoveCommand;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveLine;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMoveLineCommand.forCWJM({
     required this.lineMPID,

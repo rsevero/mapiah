@@ -4,8 +4,12 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THXTherionImageInsertConfig newImageInsertConfig;
   late final int xTherionImageInsertConfigPositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addXTherionImageInsertConfig;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddXTherionImageInsertConfigCommand.forCWJM({
     required this.newImageInsertConfig,

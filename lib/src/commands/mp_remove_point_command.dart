@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPRemovePointCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int pointMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removePoint;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemovePointCommand.forCWJM({
     required this.pointMPID,

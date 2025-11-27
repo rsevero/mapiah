@@ -4,8 +4,12 @@ class MPAddPointCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THPoint newPoint;
   late final int pointPositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addPoint;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddPointCommand.forCWJM({
     required this.newPoint,

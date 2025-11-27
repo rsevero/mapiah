@@ -6,8 +6,12 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
   late final THPositionPart toEndPointPosition;
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.moveStraightLineSegment;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMoveStraightLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,

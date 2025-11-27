@@ -5,8 +5,12 @@ class MPEditAreaTypeCommand extends MPCommand {
   final THAreaType newAreaType;
   final String unknownPLAType;
   late final String originalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editAreaType;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPEditAreaTypeCommand.forCWJM({
     required this.areaMPID,

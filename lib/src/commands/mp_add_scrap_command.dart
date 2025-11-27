@@ -8,8 +8,12 @@ class MPAddScrapCommand extends MPCommand
   /// The addScrapChildrenCommand should have a THEndScrap element as the last
   /// child added.
   late final MPCommand addScrapChildrenCommand;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addScrap;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddScrapCommand.forCWJM({
     required this.newScrap,

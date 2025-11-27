@@ -4,8 +4,12 @@ class MPEditLineSegmentCommand extends MPCommand {
   final THLineSegment originalLineSegment;
   final THLineSegment newLineSegment;
   final String originalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editLineSegment;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPEditLineSegmentCommand.forCWJM({
     required this.originalLineSegment,

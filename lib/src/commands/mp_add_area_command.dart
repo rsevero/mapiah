@@ -5,8 +5,12 @@ class MPAddAreaCommand extends MPCommand
   final THArea newArea;
   late final int areaPositionInParent;
   final List<THElement> areaChildren;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addArea;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddAreaCommand.forCWJM({
     required this.newArea,

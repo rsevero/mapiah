@@ -4,8 +4,12 @@ class MPRemoveOptionFromElementCommand extends MPCommand {
   final int parentMPID;
   final THCommandOptionType optionType;
   final String plaOriginalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeOptionFromElement;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveOptionFromElementCommand.forCWJM({
     required this.optionType,

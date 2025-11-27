@@ -5,8 +5,12 @@ class MPEditPointTypeCommand extends MPCommand {
   final THPointType newPointType;
   final String unknownPLAType;
   final String originalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.editPointType;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPEditPointTypeCommand.forCWJM({
     required this.pointMPID,

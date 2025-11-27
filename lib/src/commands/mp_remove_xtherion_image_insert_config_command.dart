@@ -7,6 +7,9 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeXTherionImageInsertConfig;
 
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
+
   MPRemoveXTherionImageInsertConfigCommand.forCWJM({
     required this.xtherionImageInsertConfigMPID,
     required MPCommand? preCommand,

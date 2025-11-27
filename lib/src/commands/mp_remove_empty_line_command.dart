@@ -2,8 +2,12 @@ part of 'mp_command.dart';
 
 class MPRemoveEmptyLineCommand extends MPCommand {
   final int emptyLineMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeEmptyLine;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveEmptyLineCommand.forCWJM({
     required this.emptyLineMPID,

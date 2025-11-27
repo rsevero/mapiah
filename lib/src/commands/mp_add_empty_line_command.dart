@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPAddEmptyLineCommand extends MPCommand {
   final THEmptyLine newEmptyLine;
   final int emptyLinePositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addEmptyLine;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddEmptyLineCommand.forCWJM({
     required this.newEmptyLine,

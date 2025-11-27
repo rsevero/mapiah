@@ -6,8 +6,12 @@ class MPMovePointCommand extends MPCommand {
   late final THPositionPart toPosition;
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.movePoint;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPMovePointCommand.forCWJM({
     required this.pointMPID,

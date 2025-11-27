@@ -4,8 +4,12 @@ class MPAddElementCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THElement newElement;
   late final int elementPositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addElement;
+
+        static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddElementCommand.forCWJM({
     required this.newElement,

@@ -4,8 +4,12 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPosCommandMixin {
   final THAreaBorderTHID newAreaBorderTHID;
   late final int areaBorderTHIDPositionInParent;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.addAreaBorderTHID;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPAddAreaBorderTHIDCommand.forCWJM({
     required this.newAreaBorderTHID,

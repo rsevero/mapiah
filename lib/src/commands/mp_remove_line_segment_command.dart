@@ -3,8 +3,12 @@ part of 'mp_command.dart';
 class MPRemoveLineSegmentCommand extends MPCommand
     with MPEmptyLinesAfterMixin, MPPreCommandMixin {
   final int lineSegmentMPID;
+
   static const MPCommandDescriptionType _defaultDescriptionType =
       MPCommandDescriptionType.removeLineSegment;
+
+  static MPCommandDescriptionType get defaultDescriptionTypeStatic =>
+      _defaultDescriptionType;
 
   MPRemoveLineSegmentCommand.forCWJM({
     required this.lineSegmentMPID,
