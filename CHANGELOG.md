@@ -19,6 +19,7 @@
 * Infrastructure maintenance:
   * Flutter upgraded to 3.38.3.
   * flutter pub upgrade --major-versions
+  * MPCommandFactory.[add/remove]elements() using all specific add/remove commands.
 
 ## 0.2.22 - 2025-11-13 - The line simplification release
 * New features:

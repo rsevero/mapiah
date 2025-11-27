@@ -415,11 +415,28 @@ class MPCommandFactory {
             posCommand: null,
             descriptionType: descriptionType,
           );
+        case THAreaBorderTHID _:
+          addCommand = MPAddAreaBorderTHIDCommand.forCWJM(
+            newAreaBorderTHID: element,
+            areaBorderTHIDPositionInParent: positionInParent,
+            posCommand: null,
+          );
+        case THEmptyLine _:
+          addCommand = MPAddEmptyLineCommand.forCWJM(
+            newEmptyLine: element,
+            emptyLinePositionInParent: positionInParent,
+          );
         case THLine _:
           addCommand = MPAddLineCommand.forCWJM(
             newLine: element,
             linePositionInParent: positionInParent,
             lineChildren: element.getChildren(thFile).toList(),
+            posCommand: null,
+          );
+        case THLineSegment _:
+          addCommand = MPAddLineSegmentCommand.forCWJM(
+            newLineSegment: element,
+            lineSegmentPositionInParent: positionInParent,
             posCommand: null,
           );
         case THPoint _:
@@ -434,6 +451,12 @@ class MPCommandFactory {
             scrapPositionInParent: positionInParent,
             scrapChildren: element.getChildren(thFile).toList(),
             thFile: thFile,
+            posCommand: null,
+          );
+        case THXTherionImageInsertConfig _:
+          addCommand = MPAddXTherionImageInsertConfigCommand.forCWJM(
+            newImageInsertConfig: element,
+            xTherionImageInsertConfigPositionInParent: positionInParent,
             posCommand: null,
           );
         default:
@@ -486,6 +509,12 @@ class MPCommandFactory {
           removeCommand = MPRemoveLineCommand.fromExisting(
             existingLineMPID: mpID,
             isInteractiveLineCreation: false,
+            thFile: thFile,
+            descriptionType: descriptionType,
+          );
+        case THElementType.lineSegment:
+          removeCommand = MPRemoveLineSegmentCommand.fromExisting(
+            existingLineSegmentMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
           );
