@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.23 - not yet released - The Peruaçu release
+## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:
   * Add/remove commmands removing empty lines after element selected for deletion:
     * AreaBorderTHID;

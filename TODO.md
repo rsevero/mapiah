@@ -81,9 +81,10 @@
 [X] - Add a small unit test for the fitter to assert the first command is always a moveTo before any curveTo, ensuring regressions don’t return.
 [X] - On an empty file, the select button should be disabled.
 [X] - BUG: when several elements are selected and one is deselected, the status bar message is not updated.
-[ ] - When an element is deleted, the empty lines after it should also be deleted.
+[X] - When an element is deleted, the empty lines after it should also be deleted.
 [ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
+[ ] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
