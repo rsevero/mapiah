@@ -10,8 +10,11 @@ class MPMultipleElementsCommand extends MPCommand {
     required this.commandsList,
     required this.completionType,
     super.descriptionType = _defaultDescriptionType,
-  }) : assert(commandsList.length > 1),
-       super.forCWJM();
+  }) : super.forCWJM() {
+    if (commandsList.length < 2) {
+      throw ArgumentError('commandsList must contain at least two commands.');
+    }
+  }
 
   @override
   MPCommandType get type => MPCommandType.multipleElements;
