@@ -85,6 +85,7 @@
 [ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 [ ] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
+[ ] - On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

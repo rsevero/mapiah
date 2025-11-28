@@ -39,7 +39,7 @@ enum THLineType {
   u,
   unknown,
   viaFerrata,
-  walkWay,
+  walkway,
   wall,
   waterFlow;
 

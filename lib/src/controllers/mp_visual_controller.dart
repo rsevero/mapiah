@@ -723,7 +723,7 @@ abstract class MPVisualControllerBase with Store {
       primaryPaint: THPaint.thPaint2,
       type: MPLinePaintType.medium2Dots,
     ),
-    THLineType.walkWay: THLinePaint(
+    THLineType.walkway: THLinePaint(
       primaryPaint: THPaint.thPaint2,
       type: MPLinePaintType.medium,
     ),

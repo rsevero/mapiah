@@ -4,6 +4,7 @@
 * New features:
 * Fixed bugs:
   * Lines and points with unknown types would throw when being drawn.
+  * Walkway line type not recognized.
 * Infrastructure maintenance:
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release

@@ -764,7 +764,7 @@ class MPTextToUser {
     _lineTypeAsString[THLineType.u] = localizations.thLineU;
     _lineTypeAsString[THLineType.unknown] = localizations.thLineUnknown;
     _lineTypeAsString[THLineType.viaFerrata] = localizations.thLineViaFerrata;
-    _lineTypeAsString[THLineType.walkWay] = localizations.thLineWalkWay;
+    _lineTypeAsString[THLineType.walkway] = localizations.thLineWalkWay;
     _lineTypeAsString[THLineType.wall] = localizations.thLineWall;
     _lineTypeAsString[THLineType.waterFlow] = localizations.thLineWaterFlow;
   }
