@@ -1,0 +1,17 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -1205.0 -212.2 971.6 2028.0
+##XTHERION## xth_me_area_zoom_to 25
+
+# 2025.11.28 created by TopoDroid v. 6.3.61
+
+scrap Bonita-1R1-1p -projection plan -scale [0 0 39.3701 0 0 0 1 0 m]
+
+line floor-step
+  -196.45 1239.12
+    -200.201547 1246.955861 -206.325429 1265.956658 -213.97 1273.29
+    -223.014409 1281.966189 -236.468104 1286.274913 -246.55 1293.31
+    -258.614265 1301.728373 -270.260336 1311.751294 -283.12 1319.48
+endline
+
+endscrap
+

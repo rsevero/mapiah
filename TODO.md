@@ -86,6 +86,10 @@
 [ ] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 [ ] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
 [ ] - On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
+[ ] - On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
+[ ] - BUG: when on 'single line edit' mode, if the user clicks on another element, it is presents the 'Multiple elements clicked' dialog box instead of just selecting the new element.
+[ ] - BUG: when simplifying a line, line segment options are being lost.
+[ ] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
@@ -117,6 +121,9 @@
 [ ] - Join 2 lines.
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
+[ ] - When a single element is selected, show its properties ib the status bar.
 
 ##Version 0.5
 [ ] - Raster images tracing
+[ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
+
