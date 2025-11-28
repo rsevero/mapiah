@@ -1114,6 +1114,12 @@ abstract class MPVisualControllerBase with Store {
           pointPaint =
               stationSubtypesPaints[pointSubtype] ??
               stationSubtypesPaints[mpNoSubtypeID]!;
+        case THPointType.unknown:
+          pointPaint = THPointPaint(
+            type: MPPointShapeType.exclamation,
+            border: THPaint.thPaint0,
+            fill: THPaint.thPaint1000,
+          );
         case THPointType.waterFlow:
           pointPaint =
               waterFlowPointSubtypesPaints[pointSubtype] ??
@@ -1159,6 +1165,11 @@ abstract class MPVisualControllerBase with Store {
           linePaint =
               surveySubtypesPaints[lineSubtype] ??
               surveySubtypesPaints[mpNoSubtypeID]!;
+        case THLineType.unknown:
+          linePaint = THLinePaint(
+            primaryPaint: THPaint.thPaint0,
+            type: MPLinePaintType.continuous,
+          );
         case THLineType.wall:
           linePaint =
               wallSubtypesPaints[lineSubtype] ??

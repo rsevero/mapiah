@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.24 - not yet released
+* New features:
+* Fixed bugs:
+  * Lines and points with unknown types would throw when being drawn.
+* Infrastructure maintenance:
+
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:
   * Add/remove commmands removing empty lines after element selected for deletion:
@@ -11,8 +17,6 @@
     * Point;
     * Scrap;
     * XTherionImageInsertConfig.
-  * Created MP[Add|Remove]ElementCommand.
-  * Created MP[Add|Remove]EmptyLineCommand.
   * Removing last area border THID from area removes the area.
   * Removing all or all but one line segments from line removes the line.
 * Fixed bugs:
@@ -22,6 +26,8 @@
   * Flutter upgraded to 3.38.3.
   * flutter pub upgrade --major-versions
   * MPCommandFactory.[add/remove]elements() using all specific add/remove commands.
+  * Created MP[Add|Remove]ElementCommand.
+  * Created MP[Add|Remove]EmptyLineCommand.
 
 ## 0.2.22 - 2025-11-13 - The line simplification release
 * New features:
