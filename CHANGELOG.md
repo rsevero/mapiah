@@ -3,6 +3,7 @@
 ## 0.2.24 - not yet released
 * New features:
   * When a single element is selected, show its properties in the status bar.
+  * Simplification calculated values should use "current decimals".
 * Fixed bugs:
   * Lines and points with unknown types would throw when being drawn.
   * Walkway line type not recognized.

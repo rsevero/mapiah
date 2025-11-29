@@ -153,6 +153,7 @@ List<Point> resampleCubics(
 List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
   required List<THLineSegment> originalStraightLineSegmentsList,
   required double accuracy,
+  required int decimalPositions,
 }) {
   final List<Point> points = originalStraightLineSegmentsList
       .map(
@@ -179,6 +180,7 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: cubicBezs,
         originalLineSegmentsList: originalStraightLineSegmentsList,
+        decimalPositions: decimalPositions,
       );
 
   return lineSegmentsList;

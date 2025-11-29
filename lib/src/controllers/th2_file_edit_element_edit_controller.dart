@@ -1465,6 +1465,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             .selectionController
             .mpSelectedElementsLogical
             .values;
+    final int currentDecimalPositions =
+        _th2FileEditController.currentDecimalPositions;
 
     int lineCount = 0;
 
@@ -1501,6 +1503,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   convertToStraightRefTolerance:
                       getLineSimplifyEpsilonOnCanvasIncrease(),
                   accuracy: _lineSimplifyEpsilonOnCanvas,
+                  decimalPositions: currentDecimalPositions,
                 );
           } else {
             simplifyCommand =
@@ -1509,6 +1512,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   originalLine: originalLine,
                   originalLineSegmentsList: originalLineSegmentsList,
                   accuracy: _lineSimplifyEpsilonOnCanvas,
+                  decimalPositions: currentDecimalPositions,
                 );
           }
 
@@ -1524,6 +1528,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   originalLine: originalLine,
                   originalLineSegmentsList: originalLineSegmentsList,
                   accuracy: _lineSimplifyEpsilonOnCanvas,
+                  decimalPositions: currentDecimalPositions,
                 );
 
             if (simplifyCommand != null) {
@@ -1580,6 +1585,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                         convertToStraightRefTolerance:
                             getLineSimplifyEpsilonOnCanvasIncrease(),
                         accuracy: _lineSimplifyEpsilonOnCanvas,
+                        decimalPositions: currentDecimalPositions,
                       );
 
                   /// When forcing straight lines, it's exptected to have a
@@ -1591,6 +1597,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                       mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
                         originalPerTypeLineSegmentsList,
                         accuracy: _lineSimplifyEpsilonOnCanvas,
+                        decimalPositions: currentDecimalPositions,
                       );
                 }
               case THElementType.straightLineSegment:
@@ -1601,6 +1608,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                         originalStraightLineSegmentsList:
                             originalPerTypeLineSegmentsList,
                         accuracy: _lineSimplifyEpsilonOnCanvas,
+                        decimalPositions: currentDecimalPositions,
                       );
                 } else {
                   simplifiedLineSegmentsList =
@@ -1663,6 +1671,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.executeSubstitutingLastUndo(simplifyCommand);
       }
     }
+
+    _th2FileEditController.stateController.state.setStatusBarMessage();
   }
 
   MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(

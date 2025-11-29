@@ -217,6 +217,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       );
     }
 
-    return selectedElements.first.originalElementClone;
+    final THElement selectedElement = thFile.elementByMPID(
+      selectedElements.first.mpID,
+    );
+
+    return selectedElement;
   }
 }

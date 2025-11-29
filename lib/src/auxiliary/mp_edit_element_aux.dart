@@ -348,11 +348,13 @@ class MPEditElementAux {
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
     required double accuracy,
+    required int decimalPositions,
   }) {
     final List<THLineSegment> simplifiedLineSegmentsList =
         mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
           originalLineSegmentsList,
           accuracy: accuracy,
+          decimalPositions: decimalPositions,
         );
 
     // print(
@@ -421,11 +423,13 @@ class MPEditElementAux {
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
     required double accuracy,
+    required int decimalPositions,
   }) {
     final List<THLineSegment> bezierLineSegments =
         convertTHStraightLinesToTHBezierCurveLineSegments(
           originalStraightLineSegmentsList: originalLineSegmentsList,
           accuracy: accuracy,
+          decimalPositions: decimalPositions,
         );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     newLineSegments =
@@ -450,6 +454,7 @@ class MPEditElementAux {
     required List<THLineSegment> originalLineSegmentsList,
     required double convertToStraightRefTolerance,
     required double accuracy,
+    required int decimalPositions,
   }) {
     if (originalLineSegmentsList.length <= 1) {
       return originalLineSegmentsList;
@@ -499,11 +504,14 @@ class MPEditElementAux {
           p3,
           toleranceSquared,
         );
-        for (final Offset pt in endPoints) {
+        for (final Offset endPoint in endPoints) {
           straightSegments.add(
             THStraightLineSegment(
               parentMPID: seg.parentMPID,
-              endPoint: THPositionPart(coordinates: pt),
+              endPoint: THPositionPart(
+                coordinates: endPoint,
+                decimalPositions: decimalPositions,
+              ),
             ),
           );
         }
@@ -531,6 +539,7 @@ class MPEditElementAux {
     required List<THLineSegment> originalLineSegmentsList,
     required double convertToStraightRefTolerance,
     required double accuracy,
+    required int decimalPositions,
   }) {
     final List<THLineSegment> simplifiedStraightSegments =
         mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
@@ -539,6 +548,7 @@ class MPEditElementAux {
           originalLineSegmentsList: originalLineSegmentsList,
           convertToStraightRefTolerance: convertToStraightRefTolerance,
           accuracy: accuracy,
+          decimalPositions: decimalPositions,
         );
     final MPCommand replaceCommand = getReplaceLineSegmentsCommand(
       originalLine: originalLine,

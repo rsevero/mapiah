@@ -24,6 +24,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     selectionController.updateSelectableEndAndControlPoints();
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.triggerEditLineRedraw();
+    setStatusBarMessage();
+  }
+
+  @override
+  void setStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(
       getStatusBarMessageForSingleSelectedElement(),
     );

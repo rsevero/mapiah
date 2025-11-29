@@ -213,6 +213,7 @@ List<THLineSegment>
 mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
   double accuracy = mpLineSimplifyEpsilonOnScreen,
+  required int decimalPositions,
 }) {
   final List<CubicBez> asCubicBez = mpConvertTHBeziersToCubicsBez(
     originalLineSegmentsList,
@@ -246,6 +247,7 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: fittedCubics,
         originalLineSegmentsList: originalLineSegmentsList,
+        decimalPositions: decimalPositions,
       );
 
   return simplifiedLineSegmentsList;
@@ -254,6 +256,7 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
 List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
   required List<CubicBez> cubicBezs,
   required List<THLineSegment> originalLineSegmentsList,
+  required int decimalPositions,
 }) {
   final List<THLineSegment> lineSegmentsList = [];
   final THLineSegment firstOriginalLineSegment = originalLineSegmentsList.first;
@@ -271,9 +274,18 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
   for (final CubicBez fittedCubic in cubicBezs) {
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
       parentMPID: parentMPID,
-      controlPoint1: THPositionPart(coordinates: fittedCubic.p1.toOffset()),
-      controlPoint2: THPositionPart(coordinates: fittedCubic.p2.toOffset()),
-      endPoint: THPositionPart(coordinates: fittedCubic.p3.toOffset()),
+      controlPoint1: THPositionPart(
+        coordinates: fittedCubic.p1.toOffset(),
+        decimalPositions: decimalPositions,
+      ),
+      controlPoint2: THPositionPart(
+        coordinates: fittedCubic.p2.toOffset(),
+        decimalPositions: decimalPositions,
+      ),
+      endPoint: THPositionPart(
+        coordinates: fittedCubic.p3.toOffset(),
+        decimalPositions: decimalPositions,
+      ),
     );
 
     lineSegmentsList.add(fittedLineSegment);
