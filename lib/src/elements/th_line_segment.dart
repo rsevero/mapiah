@@ -23,14 +23,32 @@ abstract class THLineSegment extends THElement
     required super.parentMPID,
     super.sameLineComment,
     required this.endPoint,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
-  }) : super.getMPID();
+  }) : super.getMPID() {
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
+  }
 
   THLineSegment.withoutEndPoint({
     required super.parentMPID,
     super.sameLineComment,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
-  }) : super.getMPID();
+  }) : super.getMPID() {
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
+  }
 
   @override
   THElementType get elementType => THElementType.lineSegment;

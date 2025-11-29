@@ -34,20 +34,36 @@ class THLine extends THElement
     required this.lineType,
     required String unknownPLAType,
     super.sameLineComment,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.getMPID() {
     _unknownPLAType = unknownPLAType;
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   THLine.fromString({
     required super.parentMPID,
     required String lineTypeString,
     super.sameLineComment,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : lineType = THLineType.fromString(lineTypeString),
 
        super.getMPID() {
     _unknownPLAType = THLineType.unknownPLATypeFromString(lineTypeString);
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   @override

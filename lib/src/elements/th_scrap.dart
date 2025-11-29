@@ -56,9 +56,17 @@ class THScrap extends THElement
   THScrap({
     required super.parentMPID,
     required String thID,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.getMPID() {
     _thID = thID;
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   @override

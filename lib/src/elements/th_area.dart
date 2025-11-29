@@ -31,18 +31,34 @@ class THArea extends THElement
     required super.parentMPID,
     required this.areaType,
     required String unknownPLAType,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.getMPID() {
     _unknownPLAType = unknownPLAType;
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   THArea.fromString({
     required super.parentMPID,
     required String areaTypeString,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : areaType = THAreaType.fromString(areaTypeString),
        super.getMPID() {
     _unknownPLAType = THAreaType.unknownPLATypeFromString(areaTypeString);
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   @override

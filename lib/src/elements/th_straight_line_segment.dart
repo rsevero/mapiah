@@ -16,6 +16,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     required super.parentMPID,
     super.sameLineComment,
     required super.endPoint,
+    super.optionsMap,
+    super.attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.withEndPoint();
 
@@ -26,6 +28,8 @@ class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
     required super.parentMPID,
     super.sameLineComment,
     required List<dynamic> pointDataList,
+    super.optionsMap,
+    super.attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.withoutEndPoint() {
     endPoint = THPositionPart.fromStringList(list: pointDataList);

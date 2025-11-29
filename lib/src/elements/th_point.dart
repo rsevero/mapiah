@@ -56,9 +56,17 @@ class THPoint extends THElement
     required this.position,
     required this.pointType,
     required String unknownPLAType,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : super.getMPID() {
     _unknownPLAType = unknownPLAType;
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   @override
@@ -69,23 +77,39 @@ class THPoint extends THElement
     super.sameLineComment,
     required List<dynamic> pointDataList,
     required String pointTypeString,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : position = THPositionPart.fromStringList(list: pointDataList),
        pointType = THPointType.fromString(pointTypeString),
        super.getMPID() {
     _unknownPLAType = THPointType.unknownPLATypeFromString(pointTypeString);
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
   THPoint.pointTypeFromString({
     required super.parentMPID,
     super.sameLineComment,
     required this.position,
     required String pointTypeString,
+    SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap,
+    SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap,
     super.originalLineInTH2File = '',
   }) : pointType = THPointType.fromString(pointTypeString),
        super.getMPID() {
     _unknownPLAType = THPointType.hasPointType(pointTypeString)
         ? ''
         : pointTypeString;
+    if (optionsMap != null) {
+      addOptionsMap(optionsMap);
+    }
+    if (attrOptionsMap != null) {
+      addUpdateAttrOptionsMap(attrOptionsMap);
+    }
   }
 
   @override

@@ -12,6 +12,7 @@
 * Infrastructure maintenance:
   * Creating TH2FileEditElementEditController._lineSegmentsWithOptionsToPreserveSimplification set to keep track of line segments that have options to preserve during simplification.
   * MPEditElementAux.separateLineSegmentsPerType() moved to TH2FileEditElementEditController.groupLineSegmentsForSimplification().
+  * THHasOptionsMixin constructors now receive optionsMap and attrOptionsMap parameters to initialize the element with existing options maps.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:
