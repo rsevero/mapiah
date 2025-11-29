@@ -77,6 +77,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   THFile? _originalFileForLineSimplification;
 
+  final Set<int> _lineSegmentsWithOptionsToPreserveSimplification = {};
+
   bool _isFirstLineSimplification = true;
 
   @readonly
@@ -1483,170 +1485,122 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           .lineByMPID(mpSelectedElement.mpID);
       final List<THLineSegment> originalLineSegmentsList = originalLine
           .getLineSegments(_originalFileForLineSimplification!);
-      final MPLineTypePerLineSegmentType lineTypePerLineSegmentType =
-          getLineTypePerLineSegmentType(
-            originalLine,
+
+      _lineSegmentsWithOptionsToPreserveSimplification.clear();
+
+      /// Forcing the first and last line segments to be preserved to avoid so
+      /// their original decimal positions settings are preserved.
+      _lineSegmentsWithOptionsToPreserveSimplification.add(
+        originalLineSegmentsList.first.mpID,
+      );
+      _lineSegmentsWithOptionsToPreserveSimplification.add(
+        originalLineSegmentsList.last.mpID,
+      );
+      for (final THLineSegment lineSegment in originalLineSegmentsList) {
+        if (lineSegment.optionsMap.isNotEmpty ||
+            lineSegment.attrOptionsMap.isNotEmpty) {
+          _lineSegmentsWithOptionsToPreserveSimplification.add(
+            lineSegment.mpID,
+          );
+        }
+      }
+
+      final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
+          groupLineSegmentsForSimplification(
+            line: originalLine,
             thFile: _originalFileForLineSimplification!,
           );
+      final THLineSegment firstLineSegment =
+          perTypeLineSegments.first.lineSegments.first;
+      final List<THLineSegment> simplifiedLineSegmentsCompleteList = [
+        firstLineSegment is THStraightLineSegment
+            ? firstLineSegment
+            : THStraightLineSegment(
+                parentMPID: firstLineSegment.parentMPID,
+                endPoint: firstLineSegment.endPoint,
+              ),
+      ];
 
-      switch (lineTypePerLineSegmentType) {
-        case MPLineTypePerLineSegmentType.bezierCurve:
-          final MPCommand? simplifyCommand;
+      for (final MPSingleTypeLineSegmentList typeLineSegments
+          in perTypeLineSegments) {
+        final List<THLineSegment> simplifiedLineSegmentsList;
+        final List<THLineSegment> originalPerTypeLineSegmentsList =
+            typeLineSegments.lineSegments;
 
-          if (_lineSimplificationMethod ==
-              MPLineSimplificationMethod.forceStraight) {
-            simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  convertToStraightRefTolerance:
-                      getLineSimplifyEpsilonOnCanvasIncrease(),
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                );
-          } else {
-            simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForBezierCurveLineSegments(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                );
-          }
+        bool onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = true;
 
-          if (simplifyCommand != null) {
-            simplifyCommands.add(simplifyCommand);
-          }
-        case MPLineTypePerLineSegmentType.straight:
-          if (_lineSimplificationMethod ==
-              MPLineSimplificationMethod.forceBezier) {
-            final MPCommand? simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                );
+        switch (typeLineSegments.type) {
+          case THElementType.bezierCurveLineSegment:
+            if (_lineSimplificationMethod ==
+                MPLineSimplificationMethod.forceStraight) {
+              simplifiedLineSegmentsList =
+                  MPEditElementAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
+                    thFile: _originalFileForLineSimplification!,
+                    originalLine: originalLine,
+                    originalLineSegmentsList: originalPerTypeLineSegmentsList,
+                    convertToStraightRefTolerance:
+                        getLineSimplifyEpsilonOnCanvasIncrease(),
+                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    decimalPositions: currentDecimalPositions,
+                  );
 
-            if (simplifyCommand != null) {
-              simplifyCommands.add(simplifyCommand);
+              /// When forcing straight lines, it's expected to have a higher
+              /// amount of line segments after conversion + simplification.
+              onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
+            } else {
+              simplifiedLineSegmentsList =
+                  mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+                    originalPerTypeLineSegmentsList,
+                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    decimalPositions: currentDecimalPositions,
+                  );
             }
-          } else {
-            final MPCommand? simplifyCommand =
-                MPEditElementAux.getSimplifyCommandForStraightLineSegments(
-                  thFile: _originalFileForLineSimplification!,
-                  originalLine: originalLine,
-                  originalLineSegmentsList: originalLineSegmentsList,
-                  accuracy: _lineSimplifyEpsilonOnCanvas,
-                );
-
-            if (simplifyCommand != null) {
-              simplifyCommands.add(simplifyCommand);
-            }
-          }
-        case MPLineTypePerLineSegmentType.mixed:
-          final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
-              MPEditElementAux.separateLineSegmentsPerType(
-                line: originalLine,
-                thFile: _originalFileForLineSimplification!,
-              );
-          final THLineSegment firstLineSegment =
-              perTypeLineSegments.first.lineSegments.first;
-          final List<THLineSegment> simplifiedLineSegmentsCompleteList = [
-            firstLineSegment is THStraightLineSegment
-                ? firstLineSegment
-                : THStraightLineSegment(
-                    parentMPID: firstLineSegment.parentMPID,
-                    endPoint: firstLineSegment.endPoint,
-                  ),
-          ];
-
-          for (final MPSingleTypeLineSegmentList typeLineSegments
-              in perTypeLineSegments) {
-            final List<THLineSegment> simplifiedLineSegmentsList;
-            final List<THLineSegment> originalPerTypeLineSegmentsList =
-                typeLineSegments.lineSegments;
-
-            bool onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = true;
-
-            switch (typeLineSegments.type) {
-              case THElementType.bezierCurveLineSegment:
-                if (_lineSimplificationMethod ==
-                    MPLineSimplificationMethod.forceStraight) {
-                  simplifiedLineSegmentsList =
-                      MPEditElementAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
-                        thFile: _originalFileForLineSimplification!,
-                        originalLine: originalLine,
-                        originalLineSegmentsList:
-                            originalPerTypeLineSegmentsList,
-                        convertToStraightRefTolerance:
-                            getLineSimplifyEpsilonOnCanvasIncrease(),
-                        accuracy: _lineSimplifyEpsilonOnCanvas,
-                        decimalPositions: currentDecimalPositions,
-                      );
-
-                  /// When forcing straight lines, it's exptected to have a
-                  /// higher amount of line segments after convertion +
-                  /// simplification.
-                  onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
-                } else {
-                  simplifiedLineSegmentsList =
-                      mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+          case THElementType.straightLineSegment:
+            if (_lineSimplificationMethod ==
+                MPLineSimplificationMethod.forceBezier) {
+              simplifiedLineSegmentsList =
+                  convertTHStraightLinesToTHBezierCurveLineSegments(
+                    originalStraightLineSegmentsList:
                         originalPerTypeLineSegmentsList,
-                        accuracy: _lineSimplifyEpsilonOnCanvas,
-                        decimalPositions: currentDecimalPositions,
-                      );
-                }
-              case THElementType.straightLineSegment:
-                if (_lineSimplificationMethod ==
-                    MPLineSimplificationMethod.forceBezier) {
-                  simplifiedLineSegmentsList =
-                      convertTHStraightLinesToTHBezierCurveLineSegments(
-                        originalStraightLineSegmentsList:
-                            originalPerTypeLineSegmentsList,
-                        accuracy: _lineSimplifyEpsilonOnCanvas,
-                        decimalPositions: currentDecimalPositions,
-                      );
-                } else {
-                  simplifiedLineSegmentsList =
-                      MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
-                        originalStraightLineSegments:
-                            originalPerTypeLineSegmentsList,
-                        accuracy: _lineSimplifyEpsilonOnCanvas,
-                      );
-                }
-              default:
-                throw Exception(
-                  'Error: Unsupported line segment type in mixed line at TH2FileEditElementEditController.simplifySelectedLines(). Type: ${typeLineSegments.type}',
-                );
+                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    decimalPositions: currentDecimalPositions,
+                  );
+            } else {
+              simplifiedLineSegmentsList =
+                  MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
+                    originalStraightLineSegments:
+                        originalPerTypeLineSegmentsList,
+                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                  );
             }
-
-            final List<THLineSegment> simplifiedLineSegmentsToAdd =
-                (onlyUseSimplifiedSegmentsIfReducedAmountOfSegments &&
-                    (simplifiedLineSegmentsList.length >=
-                        originalPerTypeLineSegmentsList.length))
-                ? originalPerTypeLineSegmentsList
-                : simplifiedLineSegmentsList;
-
-            simplifiedLineSegmentsCompleteList.addAll(
-              simplifiedLineSegmentsToAdd.skip(1).toList(),
+          default:
+            throw Exception(
+              'Error: Unsupported line segment type in mixed line at TH2FileEditElementEditController.simplifySelectedLines(). Type: ${typeLineSegments.type}',
             );
-          }
+        }
 
-          if (simplifiedLineSegmentsCompleteList.length <
-              originalLineSegmentsList.length) {
-            final MPCommand simplifyCommand =
-                MPEditElementAux.getReplaceLineSegmentsCommand(
-                  originalLine: originalLine,
-                  thFile: _originalFileForLineSimplification!,
-                  newLineSegmentsList: simplifiedLineSegmentsCompleteList,
-                );
+        final List<THLineSegment> simplifiedLineSegmentsToAdd =
+            (onlyUseSimplifiedSegmentsIfReducedAmountOfSegments &&
+                (simplifiedLineSegmentsList.length >=
+                    originalPerTypeLineSegmentsList.length))
+            ? originalPerTypeLineSegmentsList
+            : simplifiedLineSegmentsList;
 
-            simplifyCommands.add(simplifyCommand);
-          }
+        simplifiedLineSegmentsCompleteList.addAll(
+          simplifiedLineSegmentsToAdd.skip(1).toList(),
+        );
+
+        if (simplifiedLineSegmentsCompleteList.length <
+            originalLineSegmentsList.length) {
+          final MPCommand simplifyCommand =
+              MPEditElementAux.getReplaceLineSegmentsCommand(
+                originalLine: originalLine,
+                thFile: _originalFileForLineSimplification!,
+                newLineSegmentsList: simplifiedLineSegmentsCompleteList,
+              );
+
+          simplifyCommands.add(simplifyCommand);
+        }
       }
     }
 
@@ -1675,45 +1629,57 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.stateController.state.setStatusBarMessage();
   }
 
-  MPLineTypePerLineSegmentType getLineTypePerLineSegmentType(
-    THLine line, {
-    THFile? thFile,
+  List<MPSingleTypeLineSegmentList> groupLineSegmentsForSimplification({
+    required THLine line,
+    required THFile thFile,
   }) {
-    thFile ??= _thFile;
+    final List<MPSingleTypeLineSegmentList> segmentsByType = [];
+    final List<THLineSegment> lineSegmentsComplete = line.getLineSegments(
+      thFile,
+    );
 
-    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
-
-    if (lineSegments.length < 2) {
-      throw Exception(
-        'Error: line has less than 2 line segments at TH2FileEditElementEditController.getLineTypePerLineSegmentType(). Length: ${lineSegments.length}',
-      );
+    if (lineSegmentsComplete.length <= 2) {
+      return segmentsByType;
     }
 
-    bool hasBezierCurve = false;
-    bool hasStraight = false;
+    final Iterable<THLineSegment> lineSegmentsSkipFirst = lineSegmentsComplete
+        .skip(1);
 
-    /// Skipping the first line segment because the first one only provides the
-    /// starting point of the line. It doesn't matter if it's straight or
-    /// bezier curve.
-    for (final THLineSegment lineSegment in lineSegments.skip(1)) {
-      if (lineSegment is THBezierCurveLineSegment) {
-        hasBezierCurve = true;
-      } else if (lineSegment is THStraightLineSegment) {
-        hasStraight = true;
+    THLineSegment lastLineSegment = lineSegmentsComplete.first;
+    List<THLineSegment> currentTypeSegments = [lastLineSegment];
+    THElementType currentType = lineSegmentsSkipFirst.first.elementType;
+
+    for (final THLineSegment segment in lineSegmentsSkipFirst) {
+      final THElementType segmentType = segment.elementType;
+
+      if (_lineSegmentsWithOptionsToPreserveSimplification.contains(
+            segment.mpID,
+          ) ||
+          (segmentType != currentType)) {
+        segmentsByType.add(
+          MPSingleTypeLineSegmentList(
+            type: currentType,
+            lineSegments: currentTypeSegments,
+          ),
+        );
+        currentTypeSegments = [lastLineSegment];
+        currentType = segmentType;
       }
+
+      currentTypeSegments.add(segment);
+      lastLineSegment = segment;
     }
 
-    if (hasBezierCurve && hasStraight) {
-      return MPLineTypePerLineSegmentType.mixed;
-    } else if (hasBezierCurve) {
-      return MPLineTypePerLineSegmentType.bezierCurve;
-    } else if (hasStraight) {
-      return MPLineTypePerLineSegmentType.straight;
-    } else {
-      throw Exception(
-        'Error: line has no line segments at TH2FileEditElementEditController.getLineTypePerLineSegmentType().',
+    if (currentTypeSegments.isNotEmpty) {
+      segmentsByType.add(
+        MPSingleTypeLineSegmentList(
+          type: currentType,
+          lineSegments: currentTypeSegments,
+        ),
       );
     }
+
+    return segmentsByType;
   }
 
   void resetOriginalFileForLineSimplification() {

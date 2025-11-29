@@ -166,12 +166,6 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
     return [];
   }
 
-  // final List<CubicBez> cubicBezs = mpFitPolylineToCubics(
-  //   points,
-  //   accuracy: 0.5,
-  //   breakAtJoints: false,
-  //   nearOptimal: false,
-  // );
   final List<CubicBez> cubicBezs = fitCubicSchneider(
     points,
     errorSquared: accuracy * accuracy,

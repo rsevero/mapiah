@@ -10,6 +10,8 @@
   * Floor-step (and all hyphenated) line types not recognized.
   * 'UI: simplify line through Ctrl+L' test fails with widget width overflow.
 * Infrastructure maintenance:
+  * Creating TH2FileEditElementEditController._lineSegmentsWithOptionsToPreserveSimplification set to keep track of line segments that have options to preserve during simplification.
+  * MPEditElementAux.separateLineSegmentsPerType() moved to TH2FileEditElementEditController.groupLineSegmentsForSimplification().
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:

@@ -273,56 +273,6 @@ class MPEditElementAux {
     }
   }
 
-  static List<MPSingleTypeLineSegmentList> separateLineSegmentsPerType({
-    required THLine line,
-    required THFile thFile,
-  }) {
-    final List<MPSingleTypeLineSegmentList> segmentsByType = [];
-    final List<THLineSegment> lineSegmentsComplete = line.getLineSegments(
-      thFile,
-    );
-
-    if (lineSegmentsComplete.length <= 2) {
-      return segmentsByType;
-    }
-
-    final Iterable<THLineSegment> lineSegmentsSkipFirst = lineSegmentsComplete
-        .skip(1);
-
-    THLineSegment lastLineSegment = lineSegmentsComplete.first;
-    List<THLineSegment> currentTypeSegments = [lastLineSegment];
-    THElementType currentType = lineSegmentsSkipFirst.first.elementType;
-
-    for (final THLineSegment segment in lineSegmentsSkipFirst) {
-      final THElementType segmentType = segment.elementType;
-
-      if (segmentType != currentType) {
-        segmentsByType.add(
-          MPSingleTypeLineSegmentList(
-            type: currentType,
-            lineSegments: currentTypeSegments,
-          ),
-        );
-        currentTypeSegments = [lastLineSegment];
-        currentType = segmentType;
-      }
-
-      currentTypeSegments.add(segment);
-      lastLineSegment = segment;
-    }
-
-    if (currentTypeSegments.isNotEmpty) {
-      segmentsByType.add(
-        MPSingleTypeLineSegmentList(
-          type: currentType,
-          lineSegments: currentTypeSegments,
-        ),
-      );
-    }
-
-    return segmentsByType;
-  }
-
   static MPCommand getReplaceLineSegmentsCommand({
     required THLine originalLine,
     required THFile thFile,
