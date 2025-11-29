@@ -219,19 +219,37 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     );
 
                     return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          th2FileEditController.filenameAndScrap,
-                          style: statusBarInfoStyle,
+                        Expanded(
+                          child: Text(
+                            th2FileEditController.filenameAndScrap,
+                            style: statusBarInfoStyle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        Text(
-                          th2FileEditController.statusBarMessage,
-                          style: statusBarTextStyle,
+                        const SizedBox(width: mpButtonMargin),
+                        Expanded(
+                          child: Text(
+                            th2FileEditController.statusBarMessage,
+                            style: statusBarTextStyle,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        Text(
-                          "🔍 ${th2FileEditController.canvasScaleAsPercentageText}",
-                          style: statusBarInfoStyle,
+                        const SizedBox(width: mpButtonMargin),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "🔍 ${th2FileEditController.canvasScaleAsPercentageText}",
+                              style: statusBarInfoStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ),
                       ],
                     );

@@ -8,6 +8,7 @@
   * Lines and points with unknown types would throw when being drawn.
   * Walkway line type not recognized.
   * Floor-step (and all hyphenated) line types not recognized.
+  * 'UI: simplify line through Ctrl+L' test fails with widget width overflow.
 * Infrastructure maintenance:
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
