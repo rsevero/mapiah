@@ -193,7 +193,7 @@ class _MPOptionsEditOverlayWindowWidgetState
               lineTypeAsString = null;
             } else {
               if (THLineType.hasLineType(selectedLinePLAType)) {
-                final THLineType lineType = THLineType.values.byName(
+                final THLineType lineType = THLineType.fromString(
                   selectedLinePLAType,
                 );
 

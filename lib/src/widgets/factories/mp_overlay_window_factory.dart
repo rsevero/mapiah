@@ -59,6 +59,7 @@ class MPOverlayWindowFactory {
         th2FileEditController.overlayWindowController;
     final TH2FileEditSelectionController selectionController =
         th2FileEditController.selectionController;
+
     Widget overlayWindowWidget;
 
     switch (type) {
