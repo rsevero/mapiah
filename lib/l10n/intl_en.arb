@@ -256,7 +256,7 @@
     "description": "The description for the add elements command",
     "type": "text"
   },
-  "mpCommandDescriptionAddEmptyLine":  "Add empty line",
+  "mpCommandDescriptionAddEmptyLine": "Add empty line",
   "@mpCommandDescriptionAddEmptyLine": {
     "description": "The description for the add empty line command",
     "type": "text"
@@ -1346,6 +1346,83 @@
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",
     "type": "text"
+  },
+  "mpStatusBarMessageSingleSelectedAreaAreaBordersList": " - {areaBordersCount} area border(s): {areaBordersList}",
+  "@mpStatusBarMessageSingleSelectedAreaAreaBordersList": {
+    "description": "The status bar message when a single area is selected showing its area borders list",
+    "type": "text",
+    "placeholders": {
+      "areaBordersCount": {},
+      "areaBordersList": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedAreaNoAreaBorders": " - no area borders",
+  "@mpStatusBarMessageSingleSelectedAreaNoAreaBorders": {
+    "description": "The status bar message when a single area is selected with no area borders",
+    "type": "text"
+  },
+  "mpStatusBarMessageSingleSelectedAreaType": "Area {areaType}",
+  "@mpStatusBarMessageSingleSelectedAreaType": {
+    "description": "The status bar message when a single area is selected",
+    "type": "text",
+    "placeholders": {
+      "areaType": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedElementID": ", ID: {elementID}",
+  "@mpStatusBarMessageSingleSelectedElementID": {
+    "description": "The status bar message when a single element is selected showing its ID",
+    "type": "text",
+    "placeholders": {
+      "elementID": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedElementSubtype": ", subtype {subtype}",
+  "@mpStatusBarMessageSingleSelectedElementSubtype": {
+    "description": "The status bar message when a single element with subtype is selected",
+    "type": "text",
+    "placeholders": {
+      "subtype": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedLineLineSegmentsCount": " - {lineSegmentsCount} line segments ({straightLineSegmentsCount} straight, {bezierLineSegmentsCount} Bézier)",
+  "@mpStatusBarMessageSingleSelectedLineLineSegmentsCount": {
+    "description": "The status bar message when a single line is selected showing its line segments count",
+    "type": "text",
+    "placeholders": {
+      "lineSegmentsCount": {},
+      "straightLineSegmentsCount": {},
+      "bezierLineSegmentsCount": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedLineNoLineSegments": " - no line segments",
+  "@mpStatusBarMessageSingleSelectedLineNoLineSegments": {
+    "description": "The status bar message when a single line is selected with no line segments",
+    "type": "text"
+  },
+  "mpStatusBarMessageSingleSelectedLineParentArea": " - border of {parentArea}",
+  "@mpStatusBarMessageSingleSelectedLineParentArea": {
+    "description": "The status bar message when a single line is selected showing its parent area",
+    "type": "text",
+    "placeholders": {
+      "parentArea": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedLineType": "Line {lineType}",
+  "@mpStatusBarMessageSingleSelectedLineType": {
+    "description": "The status bar message when a single line is selected",
+    "type": "text",
+    "placeholders": {
+      "lineType": {}
+    }
+  },
+  "mpStatusBarMessageSingleSelectedPointType": "Point {pointType}",
+  "@mpStatusBarMessageSingleSelectedPointType": {
+    "description": "The status bar message when a single point is selected",
+    "type": "text",
+    "placeholders": {
+      "pointType": {}
+    }
   },
   "mpSubtypeEmpty": "Subtype empty",
   "@mpSubtypeEmpty": {

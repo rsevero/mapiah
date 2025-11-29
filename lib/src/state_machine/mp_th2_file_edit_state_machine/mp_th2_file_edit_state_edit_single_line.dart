@@ -3,6 +3,7 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     with
         MPTH2FileEditPageSimplifyLineMixin,
+        MPTH2FileEditPageSingleElementSelectedMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateLineSegmentOptionsEditMixin,
@@ -24,7 +25,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.triggerEditLineRedraw();
     th2FileEditController.setStatusBarMessage(
-      mpLocator.appLocalizations.mpEditSingleLineStateStatusBarMessage,
+      getStatusBarMessageForSingleSelectedElement(),
     );
   }
 

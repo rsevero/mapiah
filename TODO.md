@@ -90,6 +90,7 @@
 [ ] - BUG: when on 'single line edit' mode, if the user clicks on another element, it is presents the 'Multiple elements clicked' dialog box instead of just selecting the new element.
 [ ] - BUG: when simplifying a line, line segment options are being lost.
 [ ] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
+[ ] - Simplification calculated values should use "current decimals".
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
@@ -121,7 +122,7 @@
 [ ] - Join 2 lines.
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
-[ ] - When a single element is selected, show its properties ib the status bar.
+[X] - When a single element is selected, show its properties in the status bar.
 
 ##Version 0.5
 [ ] - Raster images tracing

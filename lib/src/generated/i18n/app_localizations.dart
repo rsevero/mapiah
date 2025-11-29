@@ -1696,6 +1696,73 @@ abstract class AppLocalizations {
   /// **'Station not set'**
   String get mpStationTypeOptionWarning;
 
+  /// The status bar message when a single area is selected showing its area borders list
+  ///
+  /// In en, this message translates to:
+  /// **' - {areaBordersCount} area border(s): {areaBordersList}'**
+  String mpStatusBarMessageSingleSelectedAreaAreaBordersList(
+    Object areaBordersCount,
+    Object areaBordersList,
+  );
+
+  /// The status bar message when a single area is selected with no area borders
+  ///
+  /// In en, this message translates to:
+  /// **' - no area borders'**
+  String get mpStatusBarMessageSingleSelectedAreaNoAreaBorders;
+
+  /// The status bar message when a single area is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Area {areaType}'**
+  String mpStatusBarMessageSingleSelectedAreaType(Object areaType);
+
+  /// The status bar message when a single element is selected showing its ID
+  ///
+  /// In en, this message translates to:
+  /// **', ID: {elementID}'**
+  String mpStatusBarMessageSingleSelectedElementID(Object elementID);
+
+  /// The status bar message when a single element with subtype is selected
+  ///
+  /// In en, this message translates to:
+  /// **', subtype {subtype}'**
+  String mpStatusBarMessageSingleSelectedElementSubtype(Object subtype);
+
+  /// The status bar message when a single line is selected showing its line segments count
+  ///
+  /// In en, this message translates to:
+  /// **' - {lineSegmentsCount} line segments ({straightLineSegmentsCount} straight, {bezierLineSegmentsCount} Bézier)'**
+  String mpStatusBarMessageSingleSelectedLineLineSegmentsCount(
+    Object lineSegmentsCount,
+    Object straightLineSegmentsCount,
+    Object bezierLineSegmentsCount,
+  );
+
+  /// The status bar message when a single line is selected with no line segments
+  ///
+  /// In en, this message translates to:
+  /// **' - no line segments'**
+  String get mpStatusBarMessageSingleSelectedLineNoLineSegments;
+
+  /// The status bar message when a single line is selected showing its parent area
+  ///
+  /// In en, this message translates to:
+  /// **' - border of {parentArea}'**
+  String mpStatusBarMessageSingleSelectedLineParentArea(Object parentArea);
+
+  /// The status bar message when a single line is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Line {lineType}'**
+  String mpStatusBarMessageSingleSelectedLineType(Object lineType);
+
+  /// The status bar message when a single point is selected
+  ///
+  /// In en, this message translates to:
+  /// **'Point {pointType}'**
+  String mpStatusBarMessageSingleSelectedPointType(Object pointType);
+
   /// The error message for empty subtype
   ///
   /// In en, this message translates to:

@@ -3,6 +3,7 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     with
         MPTH2FileEditPageSimplifyLineMixin,
+        MPTH2FileEditPageSingleElementSelectedMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
@@ -234,15 +235,24 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void setStatusBarMessage() {
-    final List<int> selectedElementsCount = getSelectedElementsCount();
-    final String statusBarMessage = mpLocator.appLocalizations
-        .mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
-          selectedElementsCount[0],
-          selectedElementsCount[1],
-          selectedElementsCount[2],
-        );
+    final int selectedElementsCount =
+        selectionController.mpSelectedElementsLogical.length;
+    final String message;
 
-    th2FileEditController.setStatusBarMessage(statusBarMessage);
+    if (selectedElementsCount == 1) {
+      message = getStatusBarMessageForSingleSelectedElement();
+    } else {
+      final List<int> selectedElementsCounts = getSelectedElementsCount();
+
+      message = mpLocator.appLocalizations
+          .mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
+            selectedElementsCounts[0],
+            selectedElementsCounts[1],
+            selectedElementsCounts[2],
+          );
+    }
+
+    th2FileEditController.setStatusBarMessage(message);
   }
 
   @override

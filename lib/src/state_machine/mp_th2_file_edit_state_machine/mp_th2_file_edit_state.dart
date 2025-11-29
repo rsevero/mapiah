@@ -19,14 +19,17 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_simplify_line_mixin.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 
+part 'mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart';
 part 'mixins/mp_th2_file_edit_page_state_add_line_to_area_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
@@ -37,13 +40,13 @@ part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
+part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
 part 'mp_th2_file_edit_state_options_edit.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
-part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {

@@ -861,6 +861,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override
+  String mpStatusBarMessageSingleSelectedAreaAreaBordersList(
+    Object areaBordersCount,
+    Object areaBordersList,
+  ) {
+    return ' - $areaBordersCount area border(s): $areaBordersList';
+  }
+
+  @override
+  String get mpStatusBarMessageSingleSelectedAreaNoAreaBorders =>
+      ' - no area borders';
+
+  @override
+  String mpStatusBarMessageSingleSelectedAreaType(Object areaType) {
+    return 'Area $areaType';
+  }
+
+  @override
+  String mpStatusBarMessageSingleSelectedElementID(Object elementID) {
+    return ', ID: $elementID';
+  }
+
+  @override
+  String mpStatusBarMessageSingleSelectedElementSubtype(Object subtype) {
+    return ', subtype $subtype';
+  }
+
+  @override
+  String mpStatusBarMessageSingleSelectedLineLineSegmentsCount(
+    Object lineSegmentsCount,
+    Object straightLineSegmentsCount,
+    Object bezierLineSegmentsCount,
+  ) {
+    return ' - $lineSegmentsCount line segments ($straightLineSegmentsCount straight, $bezierLineSegmentsCount Bézier)';
+  }
+
+  @override
+  String get mpStatusBarMessageSingleSelectedLineNoLineSegments =>
+      ' - no line segments';
+
+  @override
+  String mpStatusBarMessageSingleSelectedLineParentArea(Object parentArea) {
+    return ' - border of $parentArea';
+  }
+
+  @override
+  String mpStatusBarMessageSingleSelectedLineType(Object lineType) {
+    return 'Line $lineType';
+  }
+
+  @override
+  String mpStatusBarMessageSingleSelectedPointType(Object pointType) {
+    return 'Point $pointType';
+  }
+
+  @override
   String get mpSubtypeEmpty => 'Subtype empty';
 
   @override
