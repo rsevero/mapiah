@@ -1488,14 +1488,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       _lineSegmentsWithOptionsToPreserveSimplification.clear();
 
-      /// Forcing the first and last line segments to be preserved to avoid so
-      /// their original decimal positions settings are preserved.
-      _lineSegmentsWithOptionsToPreserveSimplification.add(
-        originalLineSegmentsList.first.mpID,
-      );
-      _lineSegmentsWithOptionsToPreserveSimplification.add(
-        originalLineSegmentsList.last.mpID,
-      );
       for (final THLineSegment lineSegment in originalLineSegmentsList) {
         if (lineSegment.optionsMap.isNotEmpty ||
             lineSegment.attrOptionsMap.isNotEmpty) {
