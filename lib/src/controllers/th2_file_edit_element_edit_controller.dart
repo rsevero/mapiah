@@ -1488,6 +1488,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       _lineSegmentsWithOptionsToPreserveSimplification.clear();
 
+      /// Forcing the first and last line segments to be preserved to avoid so
+      /// their original decimal positions settings are preserved.
+      _lineSegmentsWithOptionsToPreserveSimplification.add(
+        originalLineSegmentsList.first.mpID,
+      );
+      _lineSegmentsWithOptionsToPreserveSimplification.add(
+        originalLineSegmentsList.last.mpID,
+      );
+
       for (final THLineSegment lineSegment in originalLineSegmentsList) {
         if (lineSegment.optionsMap.isNotEmpty ||
             lineSegment.attrOptionsMap.isNotEmpty) {
@@ -1639,15 +1648,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     THLineSegment lastLineSegment = lineSegmentsComplete.first;
     List<THLineSegment> currentTypeSegments = [lastLineSegment];
-    THElementType currentType = lineSegmentsSkipFirst.first.elementType;
+    THElementType? currentType = lineSegmentsSkipFirst.first.elementType;
 
     for (final THLineSegment segment in lineSegmentsSkipFirst) {
       final THElementType segmentType = segment.elementType;
 
-      if (_lineSegmentsWithOptionsToPreserveSimplification.contains(
-            segment.mpID,
-          ) ||
-          (segmentType != currentType)) {
+      currentType ??= segmentType;
+
+      if (segmentType != currentType) {
         segmentsByType.add(
           MPSingleTypeLineSegmentList(
             type: currentType,
@@ -1656,16 +1664,28 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
         currentTypeSegments = [lastLineSegment];
         currentType = segmentType;
+      } else if (_lineSegmentsWithOptionsToPreserveSimplification.contains(
+        segment.mpID,
+      )) {
+        currentTypeSegments.add(segment);
+        segmentsByType.add(
+          MPSingleTypeLineSegmentList(
+            type: currentType,
+            lineSegments: currentTypeSegments,
+          ),
+        );
+        currentTypeSegments = [];
+        currentType = null;
       }
 
       currentTypeSegments.add(segment);
       lastLineSegment = segment;
     }
 
-    if (currentTypeSegments.isNotEmpty) {
+    if (currentTypeSegments.length > 1) {
       segmentsByType.add(
         MPSingleTypeLineSegmentList(
-          type: currentType,
+          type: currentType!,
           lineSegments: currentTypeSegments,
         ),
       );
