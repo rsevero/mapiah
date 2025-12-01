@@ -142,9 +142,6 @@ class MPSimplificationCubicChainSource
   }
 }
 
-// Helper: turn a BezPath back into a list of CubicBez
-List<MPSimplificationCubicBez> bezPathToCubics(BezPath path) => path.toCubics();
-
 List<MPSimplificationCubicBez> mpSimplifyCubicChain(
   List<MPSimplificationCubicBez> chain, {
   double accuracy = mpLineSimplifyEpsilonOnScreen,

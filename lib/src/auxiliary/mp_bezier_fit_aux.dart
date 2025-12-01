@@ -557,13 +557,8 @@ void _fitToBezPathRec(
   final MPSimplificationPoint endP = source.samplePtTangent(range.end, -1.0).p;
 
   if (startP.distanceSquared(endP) <= accuracy * accuracy) {
-    final (MPSimplificationCubicBez, double)? line = _tryFitLine(
-      source,
-      accuracy,
-      range,
-      startP,
-      endP,
-    );
+    final (MPSimplificationCubicBez, double)? line =
+        _mpSimplificationTryFitLine(source, accuracy, range, startP, endP);
 
     if (line != null) {
       final (MPSimplificationCubicBez c, _) = line;
@@ -622,7 +617,7 @@ void _fitToBezPathRec(
   _fitToBezPathRec(source, MPSimplificationRange(t, end), accuracy, path);
 }
 
-(MPSimplificationCubicBez, double)? _tryFitLine(
+(MPSimplificationCubicBez, double)? _mpSimplificationTryFitLine(
   MPSimplificationParamCurveFit source,
   double accuracy,
   MPSimplificationRange range,
@@ -680,7 +675,7 @@ void _fitToBezPathRec(
   final double acc2 = accuracy * accuracy;
 
   if (chord2 <= acc2) {
-    return _tryFitLine(source, accuracy, range, start.p, end.p);
+    return _mpSimplificationTryFitLine(source, accuracy, range, start.p, end.p);
   }
 
   double mod2pi(double th) {
@@ -725,12 +720,8 @@ void _fitToBezPathRec(
   MPSimplificationCubicBez? bestC;
   double? bestErr2;
 
-  for (final (MPSimplificationCubicBez cand, double d0, double d1) in _cubicFit(
-    th0,
-    th1,
-    unitArea,
-    mx,
-  )) {
+  for (final (MPSimplificationCubicBez cand, double d0, double d1)
+      in _mpSimplificationCubicFit(th0, th1, unitArea, mx)) {
     final MPSimplificationCubicBez c = cand.transform(aff);
     final double? err2 = curveDist.evalDist(source, c, acc2);
 
@@ -757,7 +748,7 @@ void _fitToBezPathRec(
   return null;
 }
 
-Iterable<(MPSimplificationCubicBez, double, double)> _cubicFit(
+Iterable<(MPSimplificationCubicBez, double, double)> _mpSimplificationCubicFit(
   double th0,
   double th1,
   double area,
@@ -1017,13 +1008,14 @@ double? _fitToBezPathOptInner(
       // Fallback: try a straight-line cubic segment if a precise fit fails.
       final MPSimplificationPoint startP = source.samplePtTangent(t0, 1.0).p;
       final MPSimplificationPoint endP = source.samplePtTangent(tNext, -1.0).p;
-      final (MPSimplificationCubicBez, double)? line = _tryFitLine(
-        source,
-        accuracy,
-        MPSimplificationRange(t0, tNext),
-        startP,
-        endP,
-      );
+      final (MPSimplificationCubicBez, double)? line =
+          _mpSimplificationTryFitLine(
+            source,
+            accuracy,
+            MPSimplificationRange(t0, tNext),
+            startP,
+            endP,
+          );
 
       if (line != null) {
         seg = line.$1;
