@@ -88,7 +88,7 @@
 [ ] - On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
 [ ] - On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
 [ ] - BUG: when on 'single line edit' mode, if the user clicks on another element, it is presents the 'Multiple elements clicked' dialog box instead of just selecting the new element.
-[ ] - BUG: when simplifying a line, line segment options are being lost.
+[X] - BUG: when simplifying a line, line segment options are being lost.
 [ ] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
 [X] - Simplification calculated values should use "current decimals".
 
