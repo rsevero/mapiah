@@ -987,7 +987,7 @@ endscrap
 ''',
         },
         {
-          'file': '2025-11-09-001-complex_line.th2',
+          'file': '2025-12-01-002-complex_line_with_options.th2',
           'length': 38,
           'scale': 0.1,
           'encoding': 'UTF-8',
@@ -997,10 +997,12 @@ scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
   line wall -id balaus
     597 -2427
     597 -2427 582 -2399 587 -2383
+      l-size 13
     592 -2367 593 -2308 604 -2286
     615 -2264 619 -2229 642 -2197
     689 -2118
     719 -2002
+      orientation 192
     748 -1927
     764 -1851
     775 -1781
@@ -1035,8 +1037,13 @@ endscrap
 scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
   line wall -id balaus
     597 -2427
-    597 -2427 545.6211 -2331.0923 642 -2197
-    748 -1927
+    597 -2427 582 -2399 587 -2383
+      l-size 13
+    592 -2367 593 -2308 604 -2286
+    615 -2264 619 -2229 642 -2197
+    719 -2002
+      orientation 192
+    764 -1851
     777 -1693
     782 -1665 797 -1611 817 -1581
     847.4 -1535.4 965 -1261 965 -1261
@@ -1077,7 +1084,7 @@ endscrap
               expect(parsedFile.encoding, (success['encoding'] as String));
               expect(parsedFile.countElements(), success['length']);
 
-              final asFile = writer.serialize(parsedFile);
+              final String asFile = writer.serialize(parsedFile);
               expect(asFile, success['asFileOriginal']);
               final TH2FileEditController controller = mpLocator
                   .mpGeneralController

@@ -13,8 +13,10 @@ class MPStraightLineSimplificationAux {
     final int numberOfStraightLineSegmentsLength =
         originalStraightLineSegments.length;
 
-    if (numberOfStraightLineSegmentsLength <= 2) {
-      return result;
+    if (numberOfStraightLineSegmentsLength < 2) {
+      throw Exception(
+        'At least two line segments are required for simplification at MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative().',
+      );
     }
 
     final double accuracySq = accuracy * accuracy;
@@ -71,6 +73,8 @@ class MPStraightLineSimplificationAux {
         : THStraightLineSegment(
             parentMPID: originalStraightLineSegments[0].parentMPID,
             endPoint: originalStraightLineSegments[0].endPoint,
+            optionsMap: originalStraightLineSegments[0].optionsMap,
+            attrOptionsMap: originalStraightLineSegments[0].attrOptionsMap,
           );
 
     result.add(firstSegment);
