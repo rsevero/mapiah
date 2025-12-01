@@ -1,23 +1,29 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 
-class _LineSource extends ParamCurveFit {
+class _LineSource extends MPSimplificationParamCurveFit {
   // Parametric straight line from (0,0) to (1,0)
   @override
-  CurveFitSample samplePtTangent(double t, double sign) {
-    final Point p = Point(t.clamp(0.0, 1.0), 0.0);
-    final Vec2 tan = const Vec2(1.0, 0.0);
-    return CurveFitSample(p, tan);
+  MPSimplificationCurveFitSample samplePtTangent(double t, double sign) {
+    final MPSimplificationPoint p = MPSimplificationPoint(
+      t.clamp(0.0, 1.0),
+      0.0,
+    );
+    final MPSimplificationVec2 tan = const MPSimplificationVec2(1.0, 0.0);
+    return MPSimplificationCurveFitSample(p, tan);
   }
 
   @override
-  (Point, Vec2) samplePtDeriv(double t) {
+  (MPSimplificationPoint, MPSimplificationVec2) samplePtDeriv(double t) {
     final double tc = t.clamp(0.0, 1.0);
-    return (Point(tc, 0.0), const Vec2(1.0, 0.0));
+    return (
+      MPSimplificationPoint(tc, 0.0),
+      const MPSimplificationVec2(1.0, 0.0),
+    );
   }
 
   @override
-  double? breakCusp(Range range) => null;
+  double? breakCusp(MPSimplificationRange range) => null;
 }
 
 void main() {

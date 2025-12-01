@@ -16,60 +16,86 @@ import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 /// - errorSquared: maximum allowed squared distance from points to the fitted
 ///   curve before the segment is split and refit. Typical values are small,
 ///   e.g. 0.25 (i.e., 0.5 units error).
-List<CubicBez> fitCubicSchneider(
-  List<Point> points, {
+List<MPSimplificationCubicBez> mpSimplificationFitCubicSchneider(
+  List<MPSimplificationPoint> points, {
   double errorSquared = 0.25,
 }) {
   if (points.length < 2) {
-    return const <CubicBez>[];
+    return const <MPSimplificationCubicBez>[];
   }
 
   // Deduplicate exact duplicates to avoid zero-length segments.
-  final List<Point> d = _dedup(points);
+  final List<MPSimplificationPoint> d = _mpSimplificationDedup(points);
 
   if (d.length < 2) {
-    return const <CubicBez>[];
+    return const <MPSimplificationCubicBez>[];
   }
 
-  final Vec2 tHat1 = _computeLeftTangent(d, 0);
-  final Vec2 tHat2 = _computeRightTangent(d, d.length - 1);
-  final List<CubicBez> out = <CubicBez>[];
+  final MPSimplificationVec2 tHat1 = _mpSimplificationComputeLeftTangent(d, 0);
+  final MPSimplificationVec2 tHat2 = _mpSimplificationComputeRightTangent(
+    d,
+    d.length - 1,
+  );
+  final List<MPSimplificationCubicBez> out = <MPSimplificationCubicBez>[];
 
-  _fitCubic(d, 0, d.length - 1, tHat1, tHat2, errorSquared, out);
+  _mpSimplificationFitCubic(
+    d,
+    0,
+    d.length - 1,
+    tHat1,
+    tHat2,
+    errorSquared,
+    out,
+  );
 
   return out;
 }
 
 // --- Core algorithm ---------------------------------------------------------
 
-void _fitCubic(
-  List<Point> d,
+void _mpSimplificationFitCubic(
+  List<MPSimplificationPoint> d,
   int first,
   int last,
-  Vec2 tHat1,
-  Vec2 tHat2,
+  MPSimplificationVec2 tHat1,
+  MPSimplificationVec2 tHat2,
   double errorSquared,
-  List<CubicBez> out,
+  List<MPSimplificationCubicBez> out,
 ) {
   final int nPts = last - first + 1;
 
   // Heuristic for two points: place inner controls at 1/3 along the tangents.
   if (nPts == 2) {
-    final Vec2 seg = d[last] - d[first];
+    final MPSimplificationVec2 seg = d[last] - d[first];
     final double dist = seg.hypot() / 3.0;
-    final Point p0 = d[first];
-    final Point p3 = d[last];
-    final Point p1 = p0 + (tHat1 * dist);
-    final Point p2 = p3 + (tHat2 * dist);
+    final MPSimplificationPoint p0 = d[first];
+    final MPSimplificationPoint p3 = d[last];
+    final MPSimplificationPoint p1 = p0 + (tHat1 * dist);
+    final MPSimplificationPoint p2 = p3 + (tHat2 * dist);
 
-    out.add(CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment));
+    out.add(
+      MPSimplificationCubicBez(
+        p0,
+        p1,
+        p2,
+        p3,
+        lineSegment: d[last].lineSegment,
+      ),
+    );
 
     return;
   }
 
   // Initial parameterization using chord-length.
   List<double> u = _chordLengthParameterize(d, first, last);
-  CubicBez bez = _generateBezier(d, first, last, u, tHat1, tHat2);
+  MPSimplificationCubicBez bez = _generateBezier(
+    d,
+    first,
+    last,
+    u,
+    tHat1,
+    tHat2,
+  );
 
   // Find max deviation of points to fitted curve.
   int splitPoint = 0;
@@ -116,15 +142,35 @@ void _fitCubic(
   }
 
   // Split and recurse.
-  final Vec2 tCenter = _computeCenterTangent(d, splitPoint);
+  final MPSimplificationVec2 tCenter = _computeCenterTangent(d, splitPoint);
 
-  _fitCubic(d, first, splitPoint, tHat1, tCenter, errorSquared, out);
-  _fitCubic(d, splitPoint, last, -tCenter, tHat2, errorSquared, out);
+  _mpSimplificationFitCubic(
+    d,
+    first,
+    splitPoint,
+    tHat1,
+    tCenter,
+    errorSquared,
+    out,
+  );
+  _mpSimplificationFitCubic(
+    d,
+    splitPoint,
+    last,
+    -tCenter,
+    tHat2,
+    errorSquared,
+    out,
+  );
 }
 
 // --- Parameterization -------------------------------------------------------
 
-List<double> _chordLengthParameterize(List<Point> d, int first, int last) {
+List<double> _chordLengthParameterize(
+  List<MPSimplificationPoint> d,
+  int first,
+  int last,
+) {
   final int n = last - first + 1;
   final List<double> u = List<double>.filled(n, 0);
 
@@ -143,11 +189,11 @@ List<double> _chordLengthParameterize(List<Point> d, int first, int last) {
 }
 
 List<double> _reparameterize(
-  List<Point> d,
+  List<MPSimplificationPoint> d,
   int first,
   int last,
   List<double> u,
-  CubicBez bez,
+  MPSimplificationCubicBez bez,
 ) {
   final int n = last - first + 1;
   final List<double> uPrime = List<double>.filled(n, 0);
@@ -159,11 +205,16 @@ List<double> _reparameterize(
   return uPrime;
 }
 
-double _newtonRaphson(CubicBez c, Point p, double u) {
-  final Point q = c.eval(u); // Q(u)
-  final Vec2 q1 = c.deriv(u); // Q'(u)
-  final Vec2 q2 = _secondDeriv(c, u); // Q''(u)
-  final Vec2 diff = q - p; // vector from point on curve to data point
+double _newtonRaphson(
+  MPSimplificationCubicBez c,
+  MPSimplificationPoint p,
+  double u,
+) {
+  final MPSimplificationPoint q = c.eval(u); // Q(u)
+  final MPSimplificationVec2 q1 = c.deriv(u); // Q'(u)
+  final MPSimplificationVec2 q2 = _secondDeriv(c, u); // Q''(u)
+  final MPSimplificationVec2 diff =
+      q - p; // vector from point on curve to data point
   final double numerator = diff.dot(q1);
   final double denominator = q1.dot(q1) + diff.dot(q2);
 
@@ -177,29 +228,37 @@ double _newtonRaphson(CubicBez c, Point p, double u) {
   return up.isNaN ? u : up.clamp(0.0, 1.0);
 }
 
-Vec2 _secondDeriv(CubicBez c, double t) {
+MPSimplificationVec2 _secondDeriv(MPSimplificationCubicBez c, double t) {
   // d^2/dt^2 of cubic Bezier: 6*((1-t)*(p2 - 2p1 + p0) + t*(p3 - 2p2 + p1))
-  final Vec2 a = (c.p2 - c.p1) * 2.0 - (c.p1 - c.p0) * 2.0; // (p2 - 2p1 + p0)
-  final Vec2 b = (c.p3 - c.p2) * 2.0 - (c.p2 - c.p1) * 2.0; // (p3 - 2p2 + p1)
+  final MPSimplificationVec2 a =
+      (c.p2 - c.p1) * 2.0 - (c.p1 - c.p0) * 2.0; // (p2 - 2p1 + p0)
+  final MPSimplificationVec2 b =
+      (c.p3 - c.p2) * 2.0 - (c.p2 - c.p1) * 2.0; // (p3 - 2p2 + p1)
 
   return (a * (1 - t) + b * t) * 6.0;
 }
 
 // --- Bezier generation (least squares for alphas) ---------------------------
 
-CubicBez _generateBezier(
-  List<Point> d,
+MPSimplificationCubicBez _generateBezier(
+  List<MPSimplificationPoint> d,
   int first,
   int last,
   List<double> u,
-  Vec2 tHat1,
-  Vec2 tHat2,
+  MPSimplificationVec2 tHat1,
+  MPSimplificationVec2 tHat2,
 ) {
   final int nPts = last - first + 1;
 
   // Precompute the A vectors: A[i][0] = tHat1 * B1(u[i]), A[i][1] = tHat2 * B2(u[i])
-  final List<Vec2> a0 = List<Vec2>.filled(nPts, const Vec2(0, 0));
-  final List<Vec2> a1 = List<Vec2>.filled(nPts, const Vec2(0, 0));
+  final List<MPSimplificationVec2> a0 = List<MPSimplificationVec2>.filled(
+    nPts,
+    const MPSimplificationVec2(0, 0),
+  );
+  final List<MPSimplificationVec2> a1 = List<MPSimplificationVec2>.filled(
+    nPts,
+    const MPSimplificationVec2(0, 0),
+  );
 
   for (int i = 0; i < nPts; i++) {
     final double ui = u[i];
@@ -212,8 +271,8 @@ CubicBez _generateBezier(
   double c00 = 0.0, c01 = 0.0, c11 = 0.0;
   double x0 = 0.0, x1 = 0.0;
 
-  final Point p0 = d[first];
-  final Point p3 = d[last];
+  final MPSimplificationPoint p0 = d[first];
+  final MPSimplificationPoint p3 = d[last];
 
   for (int i = 0; i < nPts; i++) {
     c00 += a0[i].dot(a0[i]);
@@ -225,8 +284,8 @@ CubicBez _generateBezier(
     final double s1 = _b2(ui) + _b3(ui);
     final double sx = p0.x * s0 + p3.x * s1;
     final double sy = p0.y * s0 + p3.y * s1;
-    final Point tmp = Point(sx, sy);
-    final Vec2 r = d[first + i] - tmp; // residual vector
+    final MPSimplificationPoint tmp = MPSimplificationPoint(sx, sy);
+    final MPSimplificationVec2 r = d[first + i] - tmp; // residual vector
 
     x0 += a0[i].dot(r);
     x1 += a1[i].dot(r);
@@ -244,23 +303,35 @@ CubicBez _generateBezier(
 
   if (alphaL < epsilon || alphaR < epsilon) {
     final double dist = segLen / 3.0;
-    final Point p1 = p0 + tHat1 * dist;
-    final Point p2 = p3 + tHat2 * dist;
+    final MPSimplificationPoint p1 = p0 + tHat1 * dist;
+    final MPSimplificationPoint p2 = p3 + tHat2 * dist;
 
-    return CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
+    return MPSimplificationCubicBez(
+      p0,
+      p1,
+      p2,
+      p3,
+      lineSegment: d[last].lineSegment,
+    );
   }
 
-  final Point p1 = p0 + tHat1 * alphaL;
-  final Point p2 = p3 + tHat2 * alphaR;
+  final MPSimplificationPoint p1 = p0 + tHat1 * alphaL;
+  final MPSimplificationPoint p2 = p3 + tHat2 * alphaR;
 
-  return CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
+  return MPSimplificationCubicBez(
+    p0,
+    p1,
+    p2,
+    p3,
+    lineSegment: d[last].lineSegment,
+  );
 }
 
 double _computeMaxError(
-  List<Point> d,
+  List<MPSimplificationPoint> d,
   int first,
   int last,
-  CubicBez c,
+  MPSimplificationCubicBez c,
   List<double> u,
   void Function(int) setSplit,
 ) {
@@ -268,8 +339,8 @@ double _computeMaxError(
   int split = (last - first + 1) ~/ 2;
 
   for (int i = first + 1; i < last; i++) {
-    final Point q = c.eval(u[i - first]);
-    final Vec2 v = q - d[i];
+    final MPSimplificationPoint q = c.eval(u[i - first]);
+    final MPSimplificationVec2 v = q - d[i];
     final double dist2 = v.hypot2();
 
     if (dist2 >= maxDist2) {
@@ -284,29 +355,40 @@ double _computeMaxError(
 
 // --- Tangents ---------------------------------------------------------------
 
-Vec2 _computeLeftTangent(List<Point> d, int end) {
-  final Vec2 v = d[end + 1] - d[end];
+MPSimplificationVec2 _mpSimplificationComputeLeftTangent(
+  List<MPSimplificationPoint> d,
+  int end,
+) {
+  final MPSimplificationVec2 v = d[end + 1] - d[end];
 
-  return _normalize(v);
+  return _mpSimplificationNormalize(v);
 }
 
-Vec2 _computeRightTangent(List<Point> d, int end) {
-  final Vec2 v = d[end - 1] - d[end];
+MPSimplificationVec2 _mpSimplificationComputeRightTangent(
+  List<MPSimplificationPoint> d,
+  int end,
+) {
+  final MPSimplificationVec2 v = d[end - 1] - d[end];
 
-  return _normalize(v);
+  return _mpSimplificationNormalize(v);
 }
 
-Vec2 _computeCenterTangent(List<Point> d, int center) {
-  final Vec2 v1 = d[center - 1] - d[center];
-  final Vec2 v2 = d[center] - d[center + 1];
+MPSimplificationVec2 _computeCenterTangent(
+  List<MPSimplificationPoint> d,
+  int center,
+) {
+  final MPSimplificationVec2 v1 = d[center - 1] - d[center];
+  final MPSimplificationVec2 v2 = d[center] - d[center + 1];
 
-  return _normalize(Vec2((v1.x + v2.x) / 2.0, (v1.y + v2.y) / 2.0));
+  return _mpSimplificationNormalize(
+    MPSimplificationVec2((v1.x + v2.x) / 2.0, (v1.y + v2.y) / 2.0),
+  );
 }
 
-Vec2 _normalize(Vec2 v) {
+MPSimplificationVec2 _mpSimplificationNormalize(MPSimplificationVec2 v) {
   final double h = v.hypot();
 
-  return h == 0 ? const Vec2(0, 0) : (v / h);
+  return h == 0 ? const MPSimplificationVec2(0, 0) : (v / h);
 }
 
 // --- Basis functions --------------------------------------------------------
@@ -333,16 +415,18 @@ double _b3(double u) => u * u * u;
 
 // --- Utilities --------------------------------------------------------------
 
-List<Point> _dedup(List<Point> pts) {
+List<MPSimplificationPoint> _mpSimplificationDedup(
+  List<MPSimplificationPoint> pts,
+) {
   if (pts.isEmpty) {
     return pts;
   }
 
-  final List<Point> out = <Point>[];
+  final List<MPSimplificationPoint> out = <MPSimplificationPoint>[];
 
-  Point? last;
+  MPSimplificationPoint? last;
 
-  for (final Point p in pts) {
+  for (final MPSimplificationPoint p in pts) {
     if (last == null || (p - last).hypot2() > 1e-24) {
       out.add(p);
       last = p;

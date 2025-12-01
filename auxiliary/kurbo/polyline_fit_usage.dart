@@ -9,9 +9,11 @@ import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 
 /// Minimal ParamCurveFit adapter for a polyline (piecewise linear curve).
 /// Each segment shares the global parameter uniformly.
-class _PolylineSource implements ParamCurveFit {
-  _PolylineSource(List<Point> points, {this.breakAtJoints = true})
-    : _pts = _dedup(points) {
+class _PolylineSource implements MPSimplificationParamCurveFit {
+  _PolylineSource(
+    List<MPSimplificationPoint> points, {
+    this.breakAtJoints = true,
+  }) : _pts = _dedup(points) {
     if (_pts.length < 2) {
       throw ArgumentError('Polyline must have at least 2 distinct points');
     }
@@ -20,8 +22,8 @@ class _PolylineSource implements ParamCurveFit {
     }
   }
 
-  final List<Point> _pts;
-  final List<Vec2> _segments = [];
+  final List<MPSimplificationPoint> _pts;
+  final List<MPSimplificationVec2> _segments = [];
   final bool breakAtJoints;
 
   int get _n => math.max(1, _segments.length);
@@ -35,7 +37,7 @@ class _PolylineSource implements ParamCurveFit {
   }
 
   @override
-  (Point, Vec2) samplePtDeriv(double t) {
+  (MPSimplificationPoint, MPSimplificationVec2) samplePtDeriv(double t) {
     final (i, u) = _segForT(t);
     final p0 = _pts[i];
     final p1 = _pts[i + 1];
@@ -45,7 +47,7 @@ class _PolylineSource implements ParamCurveFit {
   }
 
   @override
-  CurveFitSample samplePtTangent(double t, double sign) {
+  MPSimplificationCurveFitSample samplePtTangent(double t, double sign) {
     final (p, d0) = samplePtDeriv(t);
     var d = d0;
     // If derivative is (near) zero, sample slightly forward/backward.
@@ -54,11 +56,11 @@ class _PolylineSource implements ParamCurveFit {
       final tp = (t + eps).clamp(0.0, 1.0);
       d = samplePtDeriv(tp).$2;
     }
-    return CurveFitSample(p, d);
+    return MPSimplificationCurveFitSample(p, d);
   }
 
   @override
-  double? breakCusp(Range range) {
+  double? breakCusp(MPSimplificationRange range) {
     if (!breakAtJoints) return null;
     for (var i = 1; i < _pts.length - 1; i++) {
       final b = i / _n; // uniform parameter per segment
@@ -68,7 +70,7 @@ class _PolylineSource implements ParamCurveFit {
   }
 
   @override
-  (double, double, double) momentIntegrals(Range range) {
+  (double, double, double) momentIntegrals(MPSimplificationRange range) {
     final t0 = 0.5 * (range.start + range.end);
     final dt = 0.5 * (range.end - range.start);
     double a = 0, x = 0, y = 0;
@@ -83,10 +85,10 @@ class _PolylineSource implements ParamCurveFit {
     return (a * dt, x * dt, y * dt);
   }
 
-  static List<Point> _dedup(List<Point> pts) {
+  static List<MPSimplificationPoint> _dedup(List<MPSimplificationPoint> pts) {
     if (pts.isEmpty) return pts;
-    final out = <Point>[];
-    Point? last;
+    final out = <MPSimplificationPoint>[];
+    MPSimplificationPoint? last;
     for (final p in pts) {
       if (last == null || (p - last).hypot2() > 1e-24) {
         out.add(p);
@@ -98,8 +100,8 @@ class _PolylineSource implements ParamCurveFit {
 }
 
 /// Fit a polyline to cubic Bezier segments and return the fitted cubics.
-List<CubicBez> mpFitPolylineToCubics(
-  List<Point> points, {
+List<MPSimplificationCubicBez> mpFitPolylineToCubics(
+  List<MPSimplificationPoint> points, {
   double accuracy = 0.5,
   bool breakAtJoints = true,
   bool nearOptimal = false,
@@ -112,11 +114,11 @@ List<CubicBez> mpFitPolylineToCubics(
 }
 
 /// Resample a list of cubic Beziers back to a polyline by uniform sampling.
-List<Point> resampleCubics(
-  List<CubicBez> cubics, {
+List<MPSimplificationPoint> resampleCubics(
+  List<MPSimplificationCubicBez> cubics, {
   int samplesPerSegment = 12,
 }) {
-  final out = <Point>[];
+  final out = <MPSimplificationPoint>[];
   for (final c in cubics) {
     for (var i = 0; i <= samplesPerSegment; i++) {
       final t = i / samplesPerSegment;
@@ -128,14 +130,15 @@ List<Point> resampleCubics(
 
 /// Quick demo function: build a simple polyline, fit it, and resample back.
 /// Returns both the fitted cubics and a polyline approximation from resampling.
-(List<CubicBez>, List<Point>) demoPolylineFit() {
+(List<MPSimplificationCubicBez>, List<MPSimplificationPoint>)
+demoPolylineFit() {
   // A simple polyline (a rough arc)
-  final points = <Point>[
-    Point(0, 0),
-    Point(1, 0.2),
-    Point(2, 0.8),
-    Point(3, 2.0),
-    Point(4, 4.0),
+  final points = <MPSimplificationPoint>[
+    MPSimplificationPoint(0, 0),
+    MPSimplificationPoint(1, 0.2),
+    MPSimplificationPoint(2, 0.8),
+    MPSimplificationPoint(3, 2.0),
+    MPSimplificationPoint(4, 4.0),
   ];
 
   final cubics = mpFitPolylineToCubics(points, accuracy: 0.25);

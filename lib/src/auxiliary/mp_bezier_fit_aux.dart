@@ -14,44 +14,50 @@ import 'package:mapiah/src/elements/th_element.dart';
 // Math/Geometry primitives
 // -----------------------------
 
-class Range {
+class MPSimplificationRange {
   double start, end;
 
-  Range(this.start, this.end);
-  Range copy() => Range(start, end);
+  MPSimplificationRange(this.start, this.end);
+  MPSimplificationRange copy() => MPSimplificationRange(start, end);
 }
 
-class Vec2 {
+class MPSimplificationVec2 {
   final double x, y;
-  const Vec2(this.x, this.y);
+  const MPSimplificationVec2(this.x, this.y);
 
-  Vec2 operator +(Vec2 o) => Vec2(x + o.x, y + o.y);
-  Vec2 operator -(Vec2 o) => Vec2(x - o.x, y - o.y);
-  Vec2 operator *(double s) => Vec2(x * s, y * s);
-  Vec2 operator /(double s) => Vec2(x / s, y / s);
+  MPSimplificationVec2 operator +(MPSimplificationVec2 o) =>
+      MPSimplificationVec2(x + o.x, y + o.y);
+  MPSimplificationVec2 operator -(MPSimplificationVec2 o) =>
+      MPSimplificationVec2(x - o.x, y - o.y);
+  MPSimplificationVec2 operator *(double s) =>
+      MPSimplificationVec2(x * s, y * s);
+  MPSimplificationVec2 operator /(double s) =>
+      MPSimplificationVec2(x / s, y / s);
 
-  Vec2 operator -() => Vec2(-x, -y);
+  MPSimplificationVec2 operator -() => MPSimplificationVec2(-x, -y);
 
-  double dot(Vec2 o) => x * o.x + y * o.y;
-  double cross(Vec2 o) => x * o.y - y * o.x;
+  double dot(MPSimplificationVec2 o) => x * o.x + y * o.y;
+  double cross(MPSimplificationVec2 o) => x * o.y - y * o.x;
   double hypot() => math.sqrt(x * x + y * y);
   double hypot2() => x * x + y * y;
   double angle() => math.atan2(y, x);
 }
 
-class Point {
+class MPSimplificationPoint {
   final double x, y;
   final THLineSegment? lineSegment;
 
-  const Point(this.x, this.y, {this.lineSegment});
+  const MPSimplificationPoint(this.x, this.y, {this.lineSegment});
 
-  Point operator +(Vec2 v) => Point(x + v.x, y + v.y);
-  Vec2 operator -(Point p) => Vec2(x - p.x, y - p.y);
-  Point lerp(Point other, double t) =>
-      Point(x + (other.x - x) * t, y + (other.y - y) * t);
-  Vec2 toVec2() => Vec2(x, y);
+  MPSimplificationPoint operator +(MPSimplificationVec2 v) =>
+      MPSimplificationPoint(x + v.x, y + v.y);
+  MPSimplificationVec2 operator -(MPSimplificationPoint p) =>
+      MPSimplificationVec2(x - p.x, y - p.y);
+  MPSimplificationPoint lerp(MPSimplificationPoint other, double t) =>
+      MPSimplificationPoint(x + (other.x - x) * t, y + (other.y - y) * t);
+  MPSimplificationVec2 toVec2() => MPSimplificationVec2(x, y);
 
-  double distanceSquared(Point p) {
+  double distanceSquared(MPSimplificationPoint p) {
     final double dx = x - p.x, dy = y - p.y;
 
     return dx * dx + dy * dy;
@@ -60,25 +66,27 @@ class Point {
   Offset toOffset() => Offset(x, y);
 }
 
-class Affine {
+class MPSimplificationAffine {
   // 2x3 matrix:
   // [ a c e ]
   // [ b d f ]
   final double a, b, c, d, e, f;
-  const Affine(this.a, this.b, this.c, this.d, this.e, this.f);
+  const MPSimplificationAffine(this.a, this.b, this.c, this.d, this.e, this.f);
 
-  static const identity = Affine(1, 0, 0, 1, 0, 0);
+  static const identity = MPSimplificationAffine(1, 0, 0, 1, 0, 0);
 
-  static Affine translate(Vec2 v) => Affine(1, 0, 0, 1, v.x, v.y);
-  static Affine scale(double s) => Affine(s, 0, 0, s, 0, 0);
-  static Affine rotate(double th) {
+  static MPSimplificationAffine translate(MPSimplificationVec2 v) =>
+      MPSimplificationAffine(1, 0, 0, 1, v.x, v.y);
+  static MPSimplificationAffine scale(double s) =>
+      MPSimplificationAffine(s, 0, 0, s, 0, 0);
+  static MPSimplificationAffine rotate(double th) {
     final ct = math.cos(th), st = math.sin(th);
-    return Affine(ct, st, -st, ct, 0, 0);
+    return MPSimplificationAffine(ct, st, -st, ct, 0, 0);
   }
 
-  Affine then(Affine o) {
+  MPSimplificationAffine then(MPSimplificationAffine o) {
     // this * o (apply o then this)
-    return Affine(
+    return MPSimplificationAffine(
       a * o.a + c * o.b, // a'
       b * o.a + d * o.b, // b'
       a * o.c + c * o.d, // c'
@@ -88,18 +96,18 @@ class Affine {
     );
   }
 
-  Point applyToPoint(Point p) =>
-      Point(a * p.x + c * p.y + e, b * p.x + d * p.y + f);
+  MPSimplificationPoint applyToPoint(MPSimplificationPoint p) =>
+      MPSimplificationPoint(a * p.x + c * p.y + e, b * p.x + d * p.y + f);
 }
 
 class Line {
-  final Point p0, p1;
+  final MPSimplificationPoint p0, p1;
 
   Line(this.p0, this.p1);
 
-  double nearestDistanceSq(Point p) {
-    final Vec2 v = p1 - p0;
-    final Vec2 w = p - p0;
+  double nearestDistanceSq(MPSimplificationPoint p) {
+    final MPSimplificationVec2 v = p1 - p0;
+    final MPSimplificationVec2 w = p - p0;
     final double c1 = w.dot(v);
 
     if (c1 <= 0) {
@@ -113,7 +121,10 @@ class Line {
     }
 
     final double t = c1 / c2;
-    final Point proj = Point(p0.x + v.x * t, p0.y + v.y * t);
+    final MPSimplificationPoint proj = MPSimplificationPoint(
+      p0.x + v.x * t,
+      p0.y + v.y * t,
+    );
 
     return p.distanceSquared(proj);
   }
@@ -124,12 +135,12 @@ class Line {
 /// p1: first control point
 /// p2: second control point
 /// p3: end point
-class CubicBez {
-  final Point p0, p1, p2, p3;
+class MPSimplificationCubicBez {
+  final MPSimplificationPoint p0, p1, p2, p3;
   final THLineSegment? lineSegment;
   final bool isCalculated;
 
-  CubicBez(
+  MPSimplificationCubicBez(
     this.p0,
     this.p1,
     this.p2,
@@ -138,16 +149,16 @@ class CubicBez {
     this.isCalculated = true,
   });
 
-  CubicBez copyWith({
-    Point? p0,
-    Point? p1,
-    Point? p2,
-    Point? p3,
+  MPSimplificationCubicBez copyWith({
+    MPSimplificationPoint? p0,
+    MPSimplificationPoint? p1,
+    MPSimplificationPoint? p2,
+    MPSimplificationPoint? p3,
     THLineSegment? lineSegment,
     bool makeLineSegmentNull = false,
     bool? isCalculated,
   }) {
-    return CubicBez(
+    return MPSimplificationCubicBez(
       p0 ?? this.p0,
       p1 ?? this.p1,
       p2 ?? this.p2,
@@ -159,7 +170,7 @@ class CubicBez {
     );
   }
 
-  Point eval(double t) {
+  MPSimplificationPoint eval(double t) {
     final double u = 1 - t;
     final double tt = t * t;
     final double uu = u * u;
@@ -170,10 +181,10 @@ class CubicBez {
     final double y =
         uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y;
 
-    return Point(x, y);
+    return MPSimplificationPoint(x, y);
   }
 
-  Vec2 deriv(double t) {
+  MPSimplificationVec2 deriv(double t) {
     // derivative of cubic Bezier
     final double u = 1 - t;
     final double x =
@@ -185,7 +196,7 @@ class CubicBez {
         6 * u * t * (p2.y - p1.y) +
         3 * t * t * (p3.y - p2.y);
 
-    return Vec2(x, y);
+    return MPSimplificationVec2(x, y);
   }
 
   double arclen(double eps) {
@@ -252,12 +263,13 @@ class CubicBez {
     return dt * sum;
   }
 
-  CubicBez transform(Affine a) => CubicBez(
-    a.applyToPoint(p0),
-    a.applyToPoint(p1),
-    a.applyToPoint(p2),
-    a.applyToPoint(p3),
-  );
+  MPSimplificationCubicBez transform(MPSimplificationAffine a) =>
+      MPSimplificationCubicBez(
+        a.applyToPoint(p0),
+        a.applyToPoint(p1),
+        a.applyToPoint(p2),
+        a.applyToPoint(p3),
+      );
 }
 
 class BezPath {
@@ -266,19 +278,22 @@ class BezPath {
   bool isEmpty() => _elements.isEmpty;
   List<Object> elements() => _elements;
 
-  void moveTo(Point p) => _elements.add(_MoveTo(p));
+  void moveTo(MPSimplificationPoint p) => _elements.add(_MoveTo(p));
 
-  void curveTo(Point p1, Point p2, Point p3) =>
-      _elements.add(_CurveTo(p1, p2, p3));
+  void curveTo(
+    MPSimplificationPoint p1,
+    MPSimplificationPoint p2,
+    MPSimplificationPoint p3,
+  ) => _elements.add(_CurveTo(p1, p2, p3));
 
   void truncate(int n) => _elements.length = math.min(n, _elements.length);
 
   // Convert the path to a list of cubic Bezier segments.
   // This avoids exposing the private command types to callers.
-  List<CubicBez> toCubics() {
-    final List<CubicBez> out = <CubicBez>[];
+  List<MPSimplificationCubicBez> toCubics() {
+    final List<MPSimplificationCubicBez> out = <MPSimplificationCubicBez>[];
 
-    Point? current;
+    MPSimplificationPoint? current;
 
     for (final _Cmd e in _elements) {
       if (e is _MoveTo) {
@@ -288,7 +303,7 @@ class BezPath {
           throw StateError('Curve before moveTo');
         }
 
-        out.add(CubicBez(current, e.p1, e.p2, e.p3));
+        out.add(MPSimplificationCubicBez(current, e.p1, e.p2, e.p3));
         current = e.p3;
       }
     }
@@ -300,13 +315,13 @@ class BezPath {
 abstract class _Cmd {}
 
 class _MoveTo extends _Cmd {
-  final Point p;
+  final MPSimplificationPoint p;
 
   _MoveTo(this.p);
 }
 
 class _CurveTo extends _Cmd {
-  final Point p1, p2, p3;
+  final MPSimplificationPoint p1, p2, p3;
 
   _CurveTo(this.p1, this.p2, this.p3);
 }
@@ -315,18 +330,18 @@ class _CurveTo extends _Cmd {
 // ParamCurveFit API
 // -----------------------------
 
-class CurveFitSample {
-  final Point p;
-  final Vec2 tangent;
+class MPSimplificationCurveFitSample {
+  final MPSimplificationPoint p;
+  final MPSimplificationVec2 tangent;
 
-  CurveFitSample(this.p, this.tangent);
+  MPSimplificationCurveFitSample(this.p, this.tangent);
 
-  List<double> intersect(CubicBez c) {
+  List<double> intersect(MPSimplificationCubicBez c) {
     // Solve dot(c(t) - p, tangent) == 0 for t in [0, 1]
-    final Vec2 p1 = (c.p1 - c.p0) * 3.0;
-    final Vec2 p2 =
+    final MPSimplificationVec2 p1 = (c.p1 - c.p0) * 3.0;
+    final MPSimplificationVec2 p2 =
         (c.p2.toVec2() * 3.0) - (c.p1.toVec2() * 6.0) + (c.p0.toVec2() * 3.0);
-    final Vec2 p3 = (c.p3 - c.p0) - (c.p2 - c.p1) * 3.0;
+    final MPSimplificationVec2 p3 = (c.p3 - c.p0) - (c.p2 - c.p1) * 3.0;
     final double c0 = (c.p0 - p).dot(tangent);
     final double c1 = p1.dot(tangent);
     final double c2 = p2.dot(tangent);
@@ -337,20 +352,22 @@ class CurveFitSample {
   }
 }
 
-abstract class ParamCurveFit {
-  CurveFitSample samplePtTangent(double t, double sign);
-  (Point, Vec2) samplePtDeriv(double t);
-  double? breakCusp(Range range);
+abstract class MPSimplificationParamCurveFit {
+  MPSimplificationCurveFitSample samplePtTangent(double t, double sign);
+  (MPSimplificationPoint, MPSimplificationVec2) samplePtDeriv(double t);
+  double? breakCusp(MPSimplificationRange range);
 
   // Default moment integrals via quadrature and Green's theorem
-  (double, double, double) momentIntegrals(Range range) {
+  (double, double, double) momentIntegrals(MPSimplificationRange range) {
     final double t0 = 0.5 * (range.start + range.end);
     final double dt = 0.5 * (range.end - range.start);
 
     double a = 0, x = 0, y = 0;
     for (final (double w, double xi) in gaussLegendre16) {
       final double t = t0 + xi * dt;
-      final (Point p, Vec2 d) = samplePtDeriv(t);
+      final (MPSimplificationPoint p, MPSimplificationVec2 d) = samplePtDeriv(
+        t,
+      );
       final double ai = w * d.x * p.y;
 
       a += ai;
@@ -370,27 +387,36 @@ const int nSample = 20;
 const double dPenaltyElbow = 0.65;
 const double dPenaltySlope = 2.0;
 
-class CurveDist {
-  final List<CurveFitSample> samples;
+class MPSimplificationCurveDist {
+  final List<MPSimplificationCurveFitSample> samples;
   final List<double> arcparams;
-  final Range range;
+  final MPSimplificationRange range;
   final bool spicy;
 
-  CurveDist._(this.samples, this.arcparams, this.range, this.spicy);
+  MPSimplificationCurveDist._(
+    this.samples,
+    this.arcparams,
+    this.range,
+    this.spicy,
+  );
 
-  factory CurveDist.fromCurve(ParamCurveFit source, Range range) {
+  factory MPSimplificationCurveDist.fromCurve(
+    MPSimplificationParamCurveFit source,
+    MPSimplificationRange range,
+  ) {
     final double step = (range.end - range.start) * (1.0 / (nSample + 1));
 
-    Vec2? lastTan;
+    MPSimplificationVec2? lastTan;
 
     bool spicy = false;
 
     const double spicyThresh = 0.2;
 
-    final List<CurveFitSample> samples = <CurveFitSample>[];
+    final List<MPSimplificationCurveFitSample> samples =
+        <MPSimplificationCurveFitSample>[];
 
     for (int i = 0; i < nSample + 2; i++) {
-      final CurveFitSample s = source.samplePtTangent(
+      final MPSimplificationCurveFitSample s = source.samplePtTangent(
         range.start + i * step,
         1.0,
       );
@@ -409,10 +435,10 @@ class CurveDist {
       }
     }
 
-    return CurveDist._(samples, <double>[], range, spicy);
+    return MPSimplificationCurveDist._(samples, <double>[], range, spicy);
   }
 
-  void computeArcParams(ParamCurveFit source) {
+  void computeArcParams(MPSimplificationParamCurveFit source) {
     const int nSubsample = 10;
     final double start = range.start, end = range.end;
     final double dt = (end - start) * (1.0 / ((nSample + 1) * nSubsample));
@@ -422,7 +448,7 @@ class CurveDist {
     for (int i = 0; i < nSample + 1; i++) {
       for (int j = 0; j < nSubsample; j++) {
         final double t = start + dt * ((i * nSubsample + j) + 0.5);
-        final Vec2 deriv = source.samplePtDeriv(t).$2;
+        final MPSimplificationVec2 deriv = source.samplePtDeriv(t).$2;
 
         arclen += deriv.hypot();
       }
@@ -438,10 +464,10 @@ class CurveDist {
     }
   }
 
-  double? evalRay(CubicBez c, double acc2) {
+  double? evalRay(MPSimplificationCubicBez c, double acc2) {
     double maxErr2 = 0.0;
 
-    for (final CurveFitSample s in samples) {
+    for (final MPSimplificationCurveFitSample s in samples) {
       double best = acc2 + 1.0;
 
       for (final double t in s.intersect(c)) {
@@ -462,7 +488,11 @@ class CurveDist {
     return maxErr2;
   }
 
-  double? evalArc(ParamCurveFit source, CubicBez c, double acc2) {
+  double? evalArc(
+    MPSimplificationParamCurveFit source,
+    MPSimplificationCubicBez c,
+    double acc2,
+  ) {
     const double eps = 1e-9;
 
     final double cLen = c.arclen(eps);
@@ -470,7 +500,7 @@ class CurveDist {
     double maxErr2 = 0.0;
 
     for (int i = 0; i < samples.length; i++) {
-      final CurveFitSample s = samples[i];
+      final MPSimplificationCurveFitSample s = samples[i];
       final double t = c.invArclen(cLen * arcparams[i], eps);
       final double err = s.p.distanceSquared(c.eval(t));
 
@@ -485,7 +515,11 @@ class CurveDist {
     return maxErr2;
   }
 
-  double? evalDist(ParamCurveFit source, CubicBez c, double acc2) {
+  double? evalDist(
+    MPSimplificationParamCurveFit source,
+    MPSimplificationCubicBez c,
+    double acc2,
+  ) {
     final double? ray = evalRay(c, acc2);
 
     if (ray == null) {
@@ -502,26 +536,28 @@ class CurveDist {
   }
 }
 
-BezPath fitToBezPath(ParamCurveFit source, double accuracy) {
+BezPath fitToBezPath(MPSimplificationParamCurveFit source, double accuracy) {
   final BezPath path = BezPath();
 
-  _fitToBezPathRec(source, Range(0, 1), accuracy, path);
+  _fitToBezPathRec(source, MPSimplificationRange(0, 1), accuracy, path);
 
   return path;
 }
 
 void _fitToBezPathRec(
-  ParamCurveFit source,
-  Range range,
+  MPSimplificationParamCurveFit source,
+  MPSimplificationRange range,
   double accuracy,
   BezPath path,
 ) {
   final double start = range.start, end = range.end;
-  final Point startP = source.samplePtTangent(range.start, 1.0).p;
-  final Point endP = source.samplePtTangent(range.end, -1.0).p;
+  final MPSimplificationPoint startP = source
+      .samplePtTangent(range.start, 1.0)
+      .p;
+  final MPSimplificationPoint endP = source.samplePtTangent(range.end, -1.0).p;
 
   if (startP.distanceSquared(endP) <= accuracy * accuracy) {
-    final (CubicBez, double)? line = _tryFitLine(
+    final (MPSimplificationCubicBez, double)? line = _tryFitLine(
       source,
       accuracy,
       range,
@@ -530,7 +566,7 @@ void _fitToBezPathRec(
     );
 
     if (line != null) {
-      final (CubicBez c, _) = line;
+      final (MPSimplificationCubicBez c, _) = line;
 
       if (path.isEmpty()) {
         path.moveTo(c.p0);
@@ -541,20 +577,20 @@ void _fitToBezPathRec(
     }
   }
   final double t = (() {
-    final double? cusp = source.breakCusp(Range(start, end));
+    final double? cusp = source.breakCusp(MPSimplificationRange(start, end));
 
     if (cusp != null) {
       return cusp;
     }
 
-    final (CubicBez, double)? fit = fitToCubic(
+    final (MPSimplificationCubicBez, double)? fit = mpSimplificationFitToCubic(
       source,
-      Range(start, end),
+      MPSimplificationRange(start, end),
       accuracy,
     );
 
     if (fit != null) {
-      final (CubicBez c, _) = fit;
+      final (MPSimplificationCubicBez c, _) = fit;
 
       if (path.isEmpty()) {
         path.moveTo(c.p0);
@@ -572,8 +608,8 @@ void _fitToBezPathRec(
   }
 
   if (t == start || t == end) {
-    final Point p1 = startP.lerp(endP, 1.0 / 3.0);
-    final Point p2 = endP.lerp(startP, 1.0 / 3.0);
+    final MPSimplificationPoint p1 = startP.lerp(endP, 1.0 / 3.0);
+    final MPSimplificationPoint p2 = endP.lerp(startP, 1.0 / 3.0);
 
     if (path.isEmpty()) {
       path.moveTo(startP);
@@ -582,16 +618,16 @@ void _fitToBezPathRec(
 
     return;
   }
-  _fitToBezPathRec(source, Range(start, t), accuracy, path);
-  _fitToBezPathRec(source, Range(t, end), accuracy, path);
+  _fitToBezPathRec(source, MPSimplificationRange(start, t), accuracy, path);
+  _fitToBezPathRec(source, MPSimplificationRange(t, end), accuracy, path);
 }
 
-(CubicBez, double)? _tryFitLine(
-  ParamCurveFit source,
+(MPSimplificationCubicBez, double)? _tryFitLine(
+  MPSimplificationParamCurveFit source,
   double accuracy,
-  Range range,
-  Point start,
-  Point end,
+  MPSimplificationRange range,
+  MPSimplificationPoint start,
+  MPSimplificationPoint end,
 ) {
   final double acc2 = accuracy * accuracy;
   final Line chordL = Line(start, end);
@@ -604,7 +640,7 @@ void _fitToBezPathRec(
 
   for (int i = 0; i < shortN; i++) {
     final double t = range.start + (i + 1) * dt;
-    final Point p = source.samplePtDeriv(t).$1;
+    final MPSimplificationPoint p = source.samplePtDeriv(t).$1;
     final double err2 = chordL.nearestDistanceSq(p);
 
     if (err2 > acc2) {
@@ -614,21 +650,32 @@ void _fitToBezPathRec(
       maxErr2 = err2;
     }
   }
-  final Point p1 = start.lerp(end, 1.0 / 3.0);
-  final Point p2 = end.lerp(start, 1.0 / 3.0);
-  final CubicBez c = CubicBez(start, p1, p2, end);
+  final MPSimplificationPoint p1 = start.lerp(end, 1.0 / 3.0);
+  final MPSimplificationPoint p2 = end.lerp(start, 1.0 / 3.0);
+  final MPSimplificationCubicBez c = MPSimplificationCubicBez(
+    start,
+    p1,
+    p2,
+    end,
+  );
 
   return (c, maxErr2);
 }
 
-(CubicBez, double)? fitToCubic(
-  ParamCurveFit source,
-  Range range,
+(MPSimplificationCubicBez, double)? mpSimplificationFitToCubic(
+  MPSimplificationParamCurveFit source,
+  MPSimplificationRange range,
   double accuracy,
 ) {
-  final CurveFitSample start = source.samplePtTangent(range.start, 1.0);
-  final CurveFitSample end = source.samplePtTangent(range.end, -1.0);
-  final Vec2 d = end.p - start.p;
+  final MPSimplificationCurveFitSample start = source.samplePtTangent(
+    range.start,
+    1.0,
+  );
+  final MPSimplificationCurveFitSample end = source.samplePtTangent(
+    range.end,
+    -1.0,
+  );
+  final MPSimplificationVec2 d = end.p - start.p;
   final double chord2 = d.hypot2();
   final double acc2 = accuracy * accuracy;
 
@@ -668,21 +715,23 @@ void _fitToBezPathRec(
   final double mx = moment * math.pow(chord2Inv, 2);
 
   final double chord = math.sqrt(chord2);
-  final Affine aff = Affine.translate(
-    start.p.toVec2(),
-  ).then(Affine.rotate(th)).then(Affine.scale(chord));
-  final CurveDist curveDist = CurveDist.fromCurve(source, range.copy());
+  final MPSimplificationAffine aff =
+      MPSimplificationAffine.translate(start.p.toVec2())
+          .then(MPSimplificationAffine.rotate(th))
+          .then(MPSimplificationAffine.scale(chord));
+  final MPSimplificationCurveDist curveDist =
+      MPSimplificationCurveDist.fromCurve(source, range.copy());
 
-  CubicBez? bestC;
+  MPSimplificationCubicBez? bestC;
   double? bestErr2;
 
-  for (final (CubicBez cand, double d0, double d1) in _cubicFit(
+  for (final (MPSimplificationCubicBez cand, double d0, double d1) in _cubicFit(
     th0,
     th1,
     unitArea,
     mx,
   )) {
-    final CubicBez c = cand.transform(aff);
+    final MPSimplificationCubicBez c = cand.transform(aff);
     final double? err2 = curveDist.evalDist(source, c, acc2);
 
     if (err2 == null) {
@@ -708,7 +757,7 @@ void _fitToBezPathRec(
   return null;
 }
 
-Iterable<(CubicBez, double, double)> _cubicFit(
+Iterable<(MPSimplificationCubicBez, double, double)> _cubicFit(
   double th0,
   double th1,
   double area,
@@ -761,7 +810,12 @@ Iterable<(CubicBez, double, double)> _cubicFit(
     roots = solveQuadratic(a0, a1, a2);
   } else {
     yield (
-      CubicBez(Point(0, 0), Point(1 / 3, 0), Point(2 / 3, 0), Point(1, 0)),
+      MPSimplificationCubicBez(
+        MPSimplificationPoint(0, 0),
+        MPSimplificationPoint(1 / 3, 0),
+        MPSimplificationPoint(2 / 3, 0),
+        MPSimplificationPoint(1, 0),
+      ),
       1.0 / 3.0,
       1.0 / 3.0,
     );
@@ -787,11 +841,11 @@ Iterable<(CubicBez, double, double)> _cubicFit(
     }
     if (d0 >= 0 && d1 >= 0) {
       yield (
-        CubicBez(
-          Point(0, 0),
-          Point(d0 * c0, d0 * s0),
-          Point(1.0 - d1 * c1, d1 * s1),
-          Point(1, 0),
+        MPSimplificationCubicBez(
+          MPSimplificationPoint(0, 0),
+          MPSimplificationPoint(d0 * c0, d0 * s0),
+          MPSimplificationPoint(1.0 - d1 * c1, d1 * s1),
+          MPSimplificationPoint(1, 0),
         ),
         d0,
         d1,
@@ -804,7 +858,7 @@ Iterable<(CubicBez, double, double)> _cubicFit(
 // Optimized multi-segment fitter (optional)
 // -----------------------------
 
-BezPath fitToBezPathOpt(ParamCurveFit source, double accuracy) {
+BezPath fitToBezPathOpt(MPSimplificationParamCurveFit source, double accuracy) {
   final List<double> cusps = <double>[];
   final BezPath path = BezPath();
 
@@ -815,7 +869,7 @@ BezPath fitToBezPathOpt(ParamCurveFit source, double accuracy) {
     final double? cusp = _fitToBezPathOptInner(
       source,
       accuracy,
-      Range(t0, t1),
+      MPSimplificationRange(t0, t1),
       path,
     );
     if (cusp != null) {
@@ -833,9 +887,9 @@ BezPath fitToBezPathOpt(ParamCurveFit source, double accuracy) {
 }
 
 double? _fitToBezPathOptInner(
-  ParamCurveFit source,
+  MPSimplificationParamCurveFit source,
   double accuracy,
-  Range range,
+  MPSimplificationRange range,
   BezPath path,
 ) {
   final double? cusp = source.breakCusp(range.copy());
@@ -846,10 +900,14 @@ double? _fitToBezPathOptInner(
 
   double err;
 
-  final (CubicBez, double)? fit = fitToCubic(source, range.copy(), accuracy);
+  final (MPSimplificationCubicBez, double)? fit = mpSimplificationFitToCubic(
+    source,
+    range.copy(),
+    accuracy,
+  );
 
   if (fit != null) {
-    final (CubicBez c, double err2) = fit;
+    final (MPSimplificationCubicBez c, double err2) = fit;
 
     err = math.sqrt(err2);
     if (err < accuracy) {
@@ -874,7 +932,11 @@ double? _fitToBezPathOptInner(
 
   while (true) {
     n += 1;
-    final _FitResult r = _fitOptSegment(source, accuracy, Range(t0, t1));
+    final _FitResult r = _fitOptSegment(
+      source,
+      accuracy,
+      MPSimplificationRange(t0, t1),
+    );
     if (r is _ParamVal) {
       t0 = r.t;
     } else if (r is _SegmentError) {
@@ -892,7 +954,13 @@ double? _fitToBezPathOptInner(
   const double eps = 1e-9;
 
   double f(double x) {
-    final _ErrDelta r = _fitOptErrDelta(source, accuracy, x, Range(t0, t1), n);
+    final _ErrDelta r = _fitOptErrDelta(
+      source,
+      accuracy,
+      x,
+      MPSimplificationRange(t0, t1),
+      n,
+    );
 
     if (r is _ErrCusp) {
       throw _CuspException(r.t);
@@ -919,7 +987,11 @@ double? _fitToBezPathOptInner(
   for (int i = 0; i < n; i++) {
     final double tNext = (i < n - 1)
         ? (() {
-            final r = _fitOptSegment(source, x, Range(t0, range.end));
+            final r = _fitOptSegment(
+              source,
+              x,
+              MPSimplificationRange(t0, range.end),
+            );
             if (r is _ParamVal) return r.t;
             if (r is _SegmentError) return range.end;
             if (r is _CuspFound) {
@@ -930,24 +1002,25 @@ double? _fitToBezPathOptInner(
           })()
         : range.end;
 
-    final (CubicBez, double)? fitSeg = fitToCubic(
-      source,
-      Range(t0, tNext),
-      accuracy,
-    );
+    final (MPSimplificationCubicBez, double)? fitSeg =
+        mpSimplificationFitToCubic(
+          source,
+          MPSimplificationRange(t0, tNext),
+          accuracy,
+        );
 
-    CubicBez seg;
+    MPSimplificationCubicBez seg;
 
     if (fitSeg != null) {
       seg = fitSeg.$1;
     } else {
       // Fallback: try a straight-line cubic segment if a precise fit fails.
-      final Point startP = source.samplePtTangent(t0, 1.0).p;
-      final Point endP = source.samplePtTangent(tNext, -1.0).p;
-      final (CubicBez, double)? line = _tryFitLine(
+      final MPSimplificationPoint startP = source.samplePtTangent(t0, 1.0).p;
+      final MPSimplificationPoint endP = source.samplePtTangent(tNext, -1.0).p;
+      final (MPSimplificationCubicBez, double)? line = _tryFitLine(
         source,
         accuracy,
-        Range(t0, tNext),
+        MPSimplificationRange(t0, tNext),
         startP,
         endP,
       );
@@ -956,10 +1029,10 @@ double? _fitToBezPathOptInner(
         seg = line.$1;
       } else {
         // Last-resort: degenerate cubic along the chord.
-        final Point p1 = startP.lerp(endP, 1.0 / 3.0);
-        final Point p2 = endP.lerp(startP, 1.0 / 3.0);
+        final MPSimplificationPoint p1 = startP.lerp(endP, 1.0 / 3.0);
+        final MPSimplificationPoint p2 = endP.lerp(startP, 1.0 / 3.0);
 
-        seg = CubicBez(startP, p1, p2, endP);
+        seg = MPSimplificationCubicBez(startP, p1, p2, endP);
       }
     }
     if (path.isEmpty()) {
@@ -975,8 +1048,16 @@ double? _fitToBezPathOptInner(
   return null;
 }
 
-double? _measureOneSeg(ParamCurveFit source, Range range, double limit) {
-  final (CubicBez, double)? r = fitToCubic(source, range, limit);
+double? _measureOneSeg(
+  MPSimplificationParamCurveFit source,
+  MPSimplificationRange range,
+  double limit,
+) {
+  final (MPSimplificationCubicBez, double)? r = mpSimplificationFitToCubic(
+    source,
+    range,
+    limit,
+  );
 
   return r == null ? null : math.sqrt(r.$2);
 }
@@ -998,7 +1079,11 @@ class _CuspFound extends _FitResult {
   _CuspFound(this.t);
 }
 
-_FitResult _fitOptSegment(ParamCurveFit source, double accuracy, Range range) {
+_FitResult _fitOptSegment(
+  MPSimplificationParamCurveFit source,
+  double accuracy,
+  MPSimplificationRange range,
+) {
   final double? cusp = source.breakCusp(range.copy());
 
   if (cusp != null) {
@@ -1023,7 +1108,8 @@ _FitResult _fitOptSegment(ParamCurveFit source, double accuracy, Range range) {
     }
 
     final double e =
-        _measureOneSeg(source, Range(t0, x), accuracy) ?? missingErr;
+        _measureOneSeg(source, MPSimplificationRange(t0, x), accuracy) ??
+        missingErr;
 
     return e - accuracy;
   }
@@ -1065,10 +1151,10 @@ class _CuspException implements Exception {
 }
 
 _ErrDelta _fitOptErrDelta(
-  ParamCurveFit source,
+  MPSimplificationParamCurveFit source,
   double accuracy,
   double limit,
-  Range range,
+  MPSimplificationRange range,
   int n,
 ) {
   double t0 = range.start;
@@ -1076,7 +1162,11 @@ _ErrDelta _fitOptErrDelta(
   final double t1 = range.end;
 
   for (int i = 0; i < n - 1; i++) {
-    final _FitResult r = _fitOptSegment(source, accuracy, Range(t0, t1));
+    final _FitResult r = _fitOptSegment(
+      source,
+      accuracy,
+      MPSimplificationRange(t0, t1),
+    );
 
     if (r is _ParamVal) {
       t0 = r.t;
@@ -1087,7 +1177,8 @@ _ErrDelta _fitOptErrDelta(
     }
   }
   final double err =
-      _measureOneSeg(source, Range(t0, t1), limit) ?? accuracy * 2.0;
+      _measureOneSeg(source, MPSimplificationRange(t0, t1), limit) ??
+      accuracy * 2.0;
 
   return _Delta(accuracy - err);
 }
@@ -1339,8 +1430,10 @@ double solveItp(
   return x;
 }
 
-List<CubicBez> mpConvertTHBeziersToCubicsBez(List<THLineSegment> segs) {
-  final List<CubicBez> cubics = <CubicBez>[];
+List<MPSimplificationCubicBez> mpConvertTHBeziersToCubicsBez(
+  List<THLineSegment> segs,
+) {
+  final List<MPSimplificationCubicBez> cubics = <MPSimplificationCubicBez>[];
 
   THLineSegment startSegment = segs.first;
 
@@ -1354,26 +1447,39 @@ List<CubicBez> mpConvertTHBeziersToCubicsBez(List<THLineSegment> segs) {
     final Offset endPoint = seg.endPoint.coordinates;
     final Offset controlPoint1 = seg.controlPoint1.coordinates;
     final Offset controlPoint2 = seg.controlPoint2.coordinates;
-    final Point p0 = Point(
+    final MPSimplificationPoint p0 = MPSimplificationPoint(
       startSegment.endPoint.coordinates.dx,
       startSegment.endPoint.coordinates.dy,
       lineSegment: startSegment,
     );
     // Standard cubic Bezier ordering: (start, control1, control2, end)
-    final Point p1 = Point(
+    final MPSimplificationPoint p1 = MPSimplificationPoint(
       controlPoint1.dx,
       controlPoint1.dy,
       lineSegment: seg,
     );
-    final Point p2 = Point(
+    final MPSimplificationPoint p2 = MPSimplificationPoint(
       controlPoint2.dx,
       controlPoint2.dy,
       lineSegment: seg,
     );
-    final Point p3 = Point(endPoint.dx, endPoint.dy, lineSegment: seg);
+    final MPSimplificationPoint p3 = MPSimplificationPoint(
+      endPoint.dx,
+      endPoint.dy,
+      lineSegment: seg,
+    );
 
     startSegment = seg;
-    cubics.add(CubicBez(p0, p1, p2, p3, lineSegment: seg, isCalculated: false));
+    cubics.add(
+      MPSimplificationCubicBez(
+        p0,
+        p1,
+        p2,
+        p3,
+        lineSegment: seg,
+        isCalculated: false,
+      ),
+    );
   }
 
   return cubics;

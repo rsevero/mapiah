@@ -5,8 +5,8 @@ import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 /// Build a list of connected cubics and call:
 /// final result = simplifyCubicChain(myCubics, accuracy: 0.5);
 /// Or, if you prefer the near-optimal approach, swap the call inside the function to fitToBezPathOpt.
-class CubicChainSource implements ParamCurveFit {
-  final List<CubicBez> curves;
+class CubicChainSource implements MPSimplificationParamCurveFit {
+  final List<MPSimplificationCubicBez> curves;
   CubicChainSource(this.curves) {
     if (curves.isEmpty) {
       throw ArgumentError('curves must not be empty');
@@ -25,7 +25,7 @@ class CubicChainSource implements ParamCurveFit {
   }
 
   @override
-  (Point, Vec2) samplePtDeriv(double t) {
+  (MPSimplificationPoint, MPSimplificationVec2) samplePtDeriv(double t) {
     final (i, u) = _segForT(t);
     final c = curves[i];
     final p = c.eval(u);
@@ -35,7 +35,7 @@ class CubicChainSource implements ParamCurveFit {
   }
 
   @override
-  CurveFitSample samplePtTangent(double t, double sign) {
+  MPSimplificationCurveFitSample samplePtTangent(double t, double sign) {
     final (p, d0) = samplePtDeriv(t);
     var d = d0;
     // If near a cusp or join, peek slightly to the chosen side
@@ -44,11 +44,11 @@ class CubicChainSource implements ParamCurveFit {
       final tp = (t + eps).clamp(0.0, 1.0);
       d = samplePtDeriv(tp).$2;
     }
-    return CurveFitSample(p, d);
+    return MPSimplificationCurveFitSample(p, d);
   }
 
   @override
-  double? breakCusp(Range range) {
+  double? breakCusp(MPSimplificationRange range) {
     // Treat joins between segments as “cusps” so we don’t fit across them.
     for (var i = 1; i < _n; i++) {
       final b = i / _n;
@@ -60,7 +60,7 @@ class CubicChainSource implements ParamCurveFit {
   // Provide moment integrals (area and first moments) using quadrature,
   // matching the default in ParamCurveFit.
   @override
-  (double, double, double) momentIntegrals(Range range) {
+  (double, double, double) momentIntegrals(MPSimplificationRange range) {
     final t0 = 0.5 * (range.start + range.end);
     final dt = 0.5 * (range.end - range.start);
     double a = 0, x = 0, y = 0;
@@ -77,11 +77,11 @@ class CubicChainSource implements ParamCurveFit {
 }
 
 // Helper: turn a BezPath back into a list of CubicBez
-List<CubicBez> bezPathToCubics(BezPath path) => path.toCubics();
+List<MPSimplificationCubicBez> bezPathToCubics(BezPath path) => path.toCubics();
 
 // Example usage: returns the simplified chain as cubics
-List<CubicBez> mpSimplifyCubicChain(
-  List<CubicBez> chain, {
+List<MPSimplificationCubicBez> mpSimplifyCubicChain(
+  List<MPSimplificationCubicBez> chain, {
   double accuracy = 0.5, // tolerance in your coordinate units
 }) {
   final source = CubicChainSource(chain);
