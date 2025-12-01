@@ -197,6 +197,23 @@ scrap Bonita-1R1-1p
 endscrap
 ''',
       },
+      {
+        'file':
+            '2025-12-01-003-line_with_line_segment_option_at_last_line_segment.th2',
+        'length': 9,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  line slope -id option_at_last_segment
+    -46.89 31.54
+    -36.66 36.61
+    -29.52 41
+    -19.68 45.42
+      l-size 20
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

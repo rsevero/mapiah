@@ -224,6 +224,34 @@ scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
 endscrap
 ''',
       },
+      {
+        'file':
+            '2025-12-01-003-line_with_line_segment_option_at_last_line_segment.th2',
+        'length': 9,
+        'encoding': 'UTF-8',
+        'scale': 0.01,
+        'lineID': 'option_at_last_segment',
+        'asFileOriginal': r'''encoding UTF-8
+scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  line slope -id option_at_last_segment
+    -46.89 31.54
+    -36.66 36.61
+    -29.52 41
+    -19.68 45.42
+      l-size 20
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  line slope -id option_at_last_segment
+    -46.89 31.54
+    -19.68 45.42
+      l-size 20
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -244,7 +272,7 @@ endscrap
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
-            final asFile = writer.serialize(parsedFile);
+            final String asFile = writer.serialize(parsedFile);
             expect(asFile, success['asFileOriginal']);
             final TH2FileEditController controller = mpLocator
                 .mpGeneralController
@@ -538,6 +566,34 @@ scrap Trianglinho-1R1-2p
     188.7228 -141.6988 188.7832 -146.2101 189.64 -150.59
     190.5695 -155.3418 190.0139 -161.0329 193.21 -164.67
     196.72 -168.6643 202.91 -169.03 207.76 -171.21
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-12-01-003-line_with_line_segment_option_at_last_line_segment.th2',
+        'length': 9,
+        'encoding': 'UTF-8',
+        'scale': 0.1,
+        'lineID': 'option_at_last_segment',
+        'asFileOriginal': r'''encoding UTF-8
+scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  line slope -id option_at_last_segment
+    -46.89 31.54
+    -36.66 36.61
+    -29.52 41
+    -19.68 45.42
+      l-size 20
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
+  line slope -id option_at_last_segment
+    -46.89 31.54
+    -37.6661 36.1114 -29.0697 41.2023 -19.68 45.42
+      l-size 20
   endline
 endscrap
 ''',
