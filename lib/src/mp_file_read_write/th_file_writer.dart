@@ -511,6 +511,8 @@ class THFileWriter {
         newLine = "${option.typeToFile()} ";
         newLine += option.specToFile().trim();
         asString += "$_prefix${newLine.trim()}$_lineEnding";
+      } else {
+        asString += newLine;
       }
     }
 

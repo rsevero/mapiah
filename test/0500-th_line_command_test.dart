@@ -229,7 +229,226 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('line original representation', () {
+    const successes = [
+      {
+        'file': 'th_file_parser-00080-line_only.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+endscrap''',
+      },
+      {
+        'file': 'th_file_parser-00081-line_with_last_line_with_spaces_only.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap test
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-02373-line_with_only_straight_line_segments.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding  utf-8
+scrap scrap1
+line wall
+  355.0 1065.0
+  291.0 499.0
+  450.0 600.0
+endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02372-line_with_segment_and_bezier_curve.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding  utf-8
+scrap scrap1 -scale [0 0 1600 0 0.0 0.0 40.64 0.0 m]
+line wall
+  355.0 1065.0
+  291.0 499.0
+450.0 600.0 589.72 521.11 650.0 600.0
+endline
+endscrap
+''',
+      },
+      {
+        'file': 'th_file_parser-02370-line_with_segments_and_bezier_curves.th2',
+        'length': 32,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding  utf-8\n'
+            'scrap scrap1 -scale [0 0 1600 0 0.0 0.0 40.64 0.0 m]\n'
+            'line wall\n'
+            '  355.0 1065.0\n'
+            '  291.0 499.0\n'
+            '  1124.0 503.0\n'
+            '  1139.0 1079.0\n'
+            '  355.0 1065.0\n'
+            'endline\n'
+            'point 1050.0 900.0 station -name a2\n'
+            'point 450.0 900.0 station -name a1\n'
+            'line chimney\n'
+            '  450.0 900.0\n'
+            '  450.0 600.0\n'
+            '  450.0 600.0 589.72 521.11 650.0 600.0\n'
+            '  731.0 706.0 649.0 898.0 649.0 898.0\n'
+            '  649.0 898.0 751.0 930.0 850.0 900.0\n'
+            '  774.0 854.0 850.0 600.0 850.0 600.0\n'
+            '  1050.0 600.0\n'
+            '  1050.0 900.0\n'
+            'endline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file': 'th_file_parser-02374-line_with_comment_in_data_line.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding  utf-8\n'
+            'scrap scrap1\n'
+            'line wall\n'
+            '  355.0 1065.0 # Comment on data line\n'
+            '  450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line\n'
+            '291.0 499.0\n'
+            'endline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file':
+            'th_file_parser-02375-line_with_comment_in_line_option_in_line_data.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding  utf-8\n'
+            'scrap scrap1\n'
+            'line slope\n'
+            '  355.0 1065.0 # Comment on data line\n'
+            '  450.0 600.0 589.72 521.11 650.0 600.0\n'
+            '291.0 499.0\n'
+            'endline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file':
+            'th_file_parser-02376-line_with_comment_in_line_option_in_line_data_to_join.th2',
+        'length': 8,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding  utf-8\n'
+            'scrap scrap1\n'
+            'line slope\n'
+            '  355.0 1065.0 # Comment on data line\n'
+            '  450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line\n'
+            '291.0 499.0\n'
+            'endline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file':
+            'th_file_parser-00083-line_with_valid_straight_line_segment_as_first_line_segment.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding UTF-8\n'
+            'scrap test\n'
+            '\tline floor-step\n'
+            '  650.0 900.0\n'
+            '  650.0 900.0 827.81 933.28 850.0 900.0\n'
+            '\tendline\n'
+            'endscrap',
+      },
+      {
+        'file':
+            'th_file_parser-00085-line_with_valid_bezier_curve_as_first_line_segment.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding UTF-8\n'
+            'scrap test\n'
+            '\tline floor-step\n'
+            '  650.0 900.0 827.81 933.28 850.0 900.0\n'
+            '  650.0 900.0\n'
+            '\tendline\n'
+            'endscrap',
+      },
+      {
+        'file': '2025-11-28-001-line_walkway_type.th2',
+        'length': 18,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding utf-8\n'
+            'scrap Bonita-1R1-1p\n'
+            '\tline walkway\n'
+            '\t\t111.95 -11.92\n'
+            '\t\t104.54 -8.07\n'
+            '\t\t98.77 -0.55\n'
+            '\t\t93.29 6.60\n'
+            '\t\t84.33 10.41\n'
+            '\t\t78.40 15.76\n'
+            '\t\t69.99 19.88\n'
+            '\t\t61.64 26.23\n'
+            '\t\t55.24 31.43\n'
+            '\t\t47.76 37.91\n'
+            '\t\t41.35 44.56\n'
+            '\t\t35.24 50.04\n'
+            '\t\t29.86 58.14\n'
+            '\tendline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file':
+            '2025-12-01-003-line_with_line_segment_option_at_last_line_segment.th2',
+        'length': 9,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding utf-8\n'
+            'scrap Bonita-1R1-1p -projection plan -scale [0 0 39.3701 0 0 0 1 0 m]\n'
+            '\tline slope -id option_at_last_segment\n'
+            '\t\t-46.89 31.54\n'
+            '\t\t-36.66 36.61\n'
+            '\t\t-29.52 41.00\n'
+            '\t\t-19.68 45.42\n'
+            '\t\tl-size 20\n'
+            '\tendline\n'
+            'endscrap\n'
+            '',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
+        final (file, isSuccessful, _) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final String asFile = writer.serialize(
+          file,
+          useOriginalRepresentation: true,
+        );
         expect(asFile, success['asFile']);
       });
     }
