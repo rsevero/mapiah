@@ -432,6 +432,8 @@ class MPEditElementAux {
           : THStraightLineSegment(
               parentMPID: firstSeg.parentMPID,
               endPoint: firstSeg.endPoint,
+              optionsMap: firstSeg.optionsMap,
+              attrOptionsMap: firstSeg.attrOptionsMap,
             ),
     );
 
@@ -454,6 +456,7 @@ class MPEditElementAux {
           p3,
           toleranceSquared,
         );
+        endPoints.removeLast();
         for (final Offset endPoint in endPoints) {
           straightSegments.add(
             THStraightLineSegment(
@@ -465,6 +468,14 @@ class MPEditElementAux {
             ),
           );
         }
+        straightSegments.add(
+          THStraightLineSegment(
+            parentMPID: seg.parentMPID,
+            endPoint: seg.endPoint,
+            optionsMap: seg.optionsMap,
+            attrOptionsMap: seg.attrOptionsMap,
+          ),
+        );
         start = p3;
       } else {
         throw Exception(

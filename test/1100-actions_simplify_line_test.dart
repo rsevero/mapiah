@@ -495,6 +495,53 @@ scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
 endscrap
 ''',
       },
+      {
+        'file': '2025-11-30-001-simplify_straight_line_with_options.th2',
+        'length': 23,
+        'scale': 5.0,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap Trianglinho-1R1-2p
+  line wall
+    64.21 -61.41
+    72.46 -61.74
+    80.37 -62.39
+      l-size 20
+    94.52 -63.03
+    108.76 -65.62
+    122.36 -69.18
+    136.13 -72.61
+    149.51 -75.33
+    163.77 -75.33
+    176.39 -81.51
+    181.55 -94.76
+    182.36 -109.48
+    184.3 -123.49
+    187.86 -137.32
+    189.64 -150.59
+    193.21 -164.67
+    207.76 -171.21
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap Trianglinho-1R1-2p
+  line wall
+    64.21 -61.41
+    75.1034 -61.8457 69.717 -61.5146 80.37 -62.39
+      l-size 20
+    95.2342 -63.0623 94.0697 -62.3748 108.76 -65.62
+    121.7774 -68.4956 136.3127 -74.0313 149.51 -75.33
+    159.9339 -76.3558 167.8968 -72.2287 176.39 -81.51
+    183.0911 -88.833 181.5406 -100.92 182.36 -109.48
+    184.435 -131.1579 183.6477 -115.943 187.86 -137.32
+    188.7228 -141.6988 188.7832 -146.2101 189.64 -150.59
+    190.5695 -155.3418 190.0139 -161.0329 193.21 -164.67
+    196.72 -168.6643 202.91 -169.03 207.76 -171.21
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -699,9 +746,9 @@ scrap test
   line contour -id blaus
     2736.2 -808.5
     2789.2 -472
-    2861.9598 -348.9819
+    2861.959832 -348.981931
     2886.6 -215.5
-    2749.1342 -199.0817
+    2749.134226 -199.081695
     2601.7 -251.9
     2264.5 -205.7
   endline
@@ -775,6 +822,43 @@ scrap U20-U23 -projection plan -scale [ -128 -2644 3414 -2644 0 0 89.9668 0 m ]
 endscrap
 ''',
       },
+      {
+        'file': '2025-12-01-001-bezier_line_with_line_segment_options.th2',
+        'length': 14,
+        'scale': 0.1,
+        'encoding': 'UTF-8',
+        'lineID': 'blaus',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  line contour -id blaus
+    2736.2 -808.5
+    2750.782742 -763.207098 2753.753042 -701.893597 2758.628372 -639.551633
+    2763.257801 -580.354048 2769.604935 -520.22913 2789.2 -472
+    2809.032418 -423.426792 2838.554614 -384.357056 2861.959832 -348.981931
+    2892.706019 -302.511515 2912.896336 -262.41677 2886.6 -215.5
+    2855.709105 -160.405969 2808.046183 -173.796362 2749.134226 -199.081695
+    2705.425227 -217.841836 2655.523955 -243.149803 2601.7 -251.9
+      smooth on
+    2547.483456 -260.696578 2488.777976 -248.14154 2432.707201 -233.731693
+    2370.020304 -217.621543 2310.626565 -199.193039 2264.5 -205.7
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+  line contour -id blaus
+    2736.2 -808.5
+    2789.2 -472
+    2861.959832 -348.981931
+    2886.6 -215.5
+    2749.134226 -199.081695
+    2601.7 -251.9
+      smooth on
+    2264.5 -205.7
+  endline
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -841,7 +925,7 @@ endscrap
   });
 
   group(
-    'actions: simplify lines keeping line segment type (Ctrl+L) with line segmetns with options',
+    'actions: simplify lines keeping line segment type (Ctrl+L) with line segments with options',
     () {
       setUp(() {
         mpLocator.appLocalizations = AppLocalizationsEn();
