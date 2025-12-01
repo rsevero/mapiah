@@ -127,8 +127,37 @@ class Line {
 class CubicBez {
   final Point p0, p1, p2, p3;
   final THLineSegment? lineSegment;
+  final bool isCalculated;
 
-  CubicBez(this.p0, this.p1, this.p2, this.p3, {this.lineSegment});
+  CubicBez(
+    this.p0,
+    this.p1,
+    this.p2,
+    this.p3, {
+    this.lineSegment,
+    this.isCalculated = true,
+  });
+
+  CubicBez copyWith({
+    Point? p0,
+    Point? p1,
+    Point? p2,
+    Point? p3,
+    THLineSegment? lineSegment,
+    bool makeLineSegmentNull = false,
+    bool? isCalculated,
+  }) {
+    return CubicBez(
+      p0 ?? this.p0,
+      p1 ?? this.p1,
+      p2 ?? this.p2,
+      p3 ?? this.p3,
+      lineSegment: makeLineSegmentNull
+          ? null
+          : (lineSegment ?? this.lineSegment),
+      isCalculated: isCalculated ?? this.isCalculated,
+    );
+  }
 
   Point eval(double t) {
     final double u = 1 - t;
@@ -667,12 +696,12 @@ void _fitToBezPathRec(
         math.pow(math.max(scaleF(d0), scaleF(d1)), 2) as double;
     final double adjErr2 = err2 * scale;
 
-    if (adjErr2 < acc2 && (bestErr2 == null || adjErr2 < bestErr2)) {
+    if ((adjErr2 < acc2) && (bestErr2 == null || adjErr2 < bestErr2)) {
       bestC = c;
       bestErr2 = adjErr2;
     }
   }
-  if (bestC != null && bestErr2 != null) {
+  if ((bestC != null) && (bestErr2 != null)) {
     return (bestC, bestErr2);
   }
 
@@ -1313,7 +1342,7 @@ double solveItp(
 List<CubicBez> mpConvertTHBeziersToCubicsBez(List<THLineSegment> segs) {
   final List<CubicBez> cubics = <CubicBez>[];
 
-  Offset startPoint = segs.first.endPoint.coordinates;
+  THLineSegment startSegment = segs.first;
 
   for (final THLineSegment seg in segs.skip(1)) {
     if (seg is! THBezierCurveLineSegment) {
@@ -1325,15 +1354,26 @@ List<CubicBez> mpConvertTHBeziersToCubicsBez(List<THLineSegment> segs) {
     final Offset endPoint = seg.endPoint.coordinates;
     final Offset controlPoint1 = seg.controlPoint1.coordinates;
     final Offset controlPoint2 = seg.controlPoint2.coordinates;
-    final Point p0 = Point(startPoint.dx, startPoint.dy);
+    final Point p0 = Point(
+      startSegment.endPoint.coordinates.dx,
+      startSegment.endPoint.coordinates.dy,
+      lineSegment: startSegment,
+    );
     // Standard cubic Bezier ordering: (start, control1, control2, end)
-    final Point p1 = Point(controlPoint1.dx, controlPoint1.dy);
-    final Point p2 = Point(controlPoint2.dx, controlPoint2.dy);
-    final Point p3 = Point(endPoint.dx, endPoint.dy);
+    final Point p1 = Point(
+      controlPoint1.dx,
+      controlPoint1.dy,
+      lineSegment: seg,
+    );
+    final Point p2 = Point(
+      controlPoint2.dx,
+      controlPoint2.dy,
+      lineSegment: seg,
+    );
+    final Point p3 = Point(endPoint.dx, endPoint.dy, lineSegment: seg);
 
-    startPoint = endPoint;
-
-    cubics.add(CubicBez(p0, p1, p2, p3));
+    startSegment = seg;
+    cubics.add(CubicBez(p0, p1, p2, p3, lineSegment: seg, isCalculated: false));
   }
 
   return cubics;

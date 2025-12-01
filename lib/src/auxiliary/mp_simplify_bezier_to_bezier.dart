@@ -56,6 +56,7 @@ class CubicChainSource implements ParamCurveFit {
     if (d.x * d.x + d.y * d.y < 1e-18) {
       final double eps = (sign >= 0 ? 1 : -1) * (1e-5 / _n);
       final double tp = (t + eps).clamp(0.0, 1.0);
+
       d = samplePtDeriv(tp).$2;
     }
 
@@ -84,6 +85,7 @@ class CubicChainSource implements ParamCurveFit {
   bool _isCuspAtJoin(int i) {
     final CubicBez prev = curves[i - 1];
     final CubicBez next = curves[i];
+
     // Tangents at the boundary
     Vec2 t1 = prev.deriv(1.0);
     Vec2 t2 = next.deriv(0.0);
@@ -99,7 +101,8 @@ class CubicChainSource implements ParamCurveFit {
 
     final double n1 = t1.hypot();
     final double n2 = t2.hypot();
-    if (n1 < eps || n2 < eps) {
+
+    if ((n1 < eps) || (n2 < eps)) {
       return false; // can't classify, assume no cusp
     }
 
@@ -181,6 +184,7 @@ List<CubicBez> mpSimplifyCubicChain(
     // This remains merge-only (never splits) and improves reduction odds vs. early break.
     CubicBez? merged;
     int nextI = i + 1; // default advance if no merge found
+
     for (int j = hardEnd; j >= i + 2; j--) {
       final double t0 = i / n;
       final double t1 = j / n;
@@ -189,8 +193,9 @@ List<CubicBez> mpSimplifyCubicChain(
         Range(t0, t1),
         accuracy,
       );
+
       if (fit != null) {
-        merged = fit.$1;
+        merged = fit.$1.copyWith(lineSegment: chain[j - 1].lineSegment);
         nextI = j; // consume [i, j)
         break; // take the longest successful span
       }
@@ -276,9 +281,39 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
   lineSegmentsList.add(firstFittedLineSegment);
 
   for (final CubicBez fittedCubic in cubicBezs) {
+    final THPositionPart controlPoint1;
+    final THPositionPart controlPoint2;
     final THPositionPart endPoint;
     final SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap;
     final SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap;
+
+    if (fittedCubic.isCalculated ||
+        (fittedCubic.p1.lineSegment == null) ||
+        (fittedCubic.p1.lineSegment! is! THBezierCurveLineSegment)) {
+      controlPoint1 = THPositionPart(
+        coordinates: fittedCubic.p1.toOffset(),
+        decimalPositions: decimalPositionsForCalculatedValues,
+      );
+    } else {
+      final THBezierCurveLineSegment originalLineSegment =
+          fittedCubic.p1.lineSegment! as THBezierCurveLineSegment;
+
+      controlPoint1 = originalLineSegment.controlPoint1;
+    }
+
+    if (fittedCubic.isCalculated ||
+        (fittedCubic.p2.lineSegment == null) ||
+        (fittedCubic.p2.lineSegment! is! THBezierCurveLineSegment)) {
+      controlPoint2 = THPositionPart(
+        coordinates: fittedCubic.p2.toOffset(),
+        decimalPositions: decimalPositionsForCalculatedValues,
+      );
+    } else {
+      final THBezierCurveLineSegment originalLineSegment =
+          fittedCubic.p2.lineSegment! as THBezierCurveLineSegment;
+
+      controlPoint2 = originalLineSegment.controlPoint2;
+    }
 
     if (fittedCubic.lineSegment == null) {
       endPoint = THPositionPart(
@@ -297,14 +332,8 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
 
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
       parentMPID: parentMPID,
-      controlPoint1: THPositionPart(
-        coordinates: fittedCubic.p1.toOffset(),
-        decimalPositions: decimalPositionsForCalculatedValues,
-      ),
-      controlPoint2: THPositionPart(
-        coordinates: fittedCubic.p2.toOffset(),
-        decimalPositions: decimalPositionsForCalculatedValues,
-      ),
+      controlPoint1: controlPoint1,
+      controlPoint2: controlPoint2,
       endPoint: endPoint,
       optionsMap: optionsMap,
       attrOptionsMap: attrOptionsMap,
