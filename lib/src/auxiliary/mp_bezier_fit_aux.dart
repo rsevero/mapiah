@@ -41,7 +41,9 @@ class Vec2 {
 
 class Point {
   final double x, y;
-  const Point(this.x, this.y);
+  final THLineSegment? lineSegment;
+
+  const Point(this.x, this.y, {this.lineSegment});
 
   Point operator +(Vec2 v) => Point(x + v.x, y + v.y);
   Vec2 operator -(Point p) => Vec2(x - p.x, y - p.y);
@@ -124,8 +126,9 @@ class Line {
 /// p3: end point
 class CubicBez {
   final Point p0, p1, p2, p3;
+  final THLineSegment? lineSegment;
 
-  CubicBez(this.p0, this.p1, this.p2, this.p3);
+  CubicBez(this.p0, this.p1, this.p2, this.p3, {this.lineSegment});
 
   Point eval(double t) {
     final double u = 1 - t;

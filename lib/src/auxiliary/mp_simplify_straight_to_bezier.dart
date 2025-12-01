@@ -157,8 +157,11 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
 }) {
   final List<Point> points = originalStraightLineSegmentsList
       .map(
-        (seg) =>
-            Point(seg.endPoint.coordinates.dx, seg.endPoint.coordinates.dy),
+        (seg) => Point(
+          seg.endPoint.coordinates.dx,
+          seg.endPoint.coordinates.dy,
+          lineSegment: seg,
+        ),
       )
       .toList();
 
@@ -174,7 +177,7 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: cubicBezs,
         originalLineSegmentsList: originalStraightLineSegmentsList,
-        decimalPositions: decimalPositions,
+        decimalPositionsForCalculatedValues: decimalPositions,
       );
 
   return lineSegmentsList;

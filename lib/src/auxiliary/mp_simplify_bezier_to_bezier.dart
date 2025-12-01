@@ -1,7 +1,9 @@
 // Adapter: a source curve made of consecutive cubic Beziers
+import 'dart:collection';
 import 'dart:math' as math;
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
@@ -247,7 +249,7 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: fittedCubics,
         originalLineSegmentsList: originalLineSegmentsList,
-        decimalPositions: decimalPositions,
+        decimalPositionsForCalculatedValues: decimalPositions,
       );
 
   return simplifiedLineSegmentsList;
@@ -256,7 +258,7 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
 List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
   required List<CubicBez> cubicBezs,
   required List<THLineSegment> originalLineSegmentsList,
-  required int decimalPositions,
+  required int decimalPositionsForCalculatedValues,
 }) {
   final List<THLineSegment> lineSegmentsList = [];
   final THLineSegment firstOriginalLineSegment = originalLineSegmentsList.first;
@@ -267,25 +269,45 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
       : THStraightLineSegment(
           parentMPID: parentMPID,
           endPoint: firstOriginalLineSegment.endPoint,
+          optionsMap: firstOriginalLineSegment.optionsMap,
+          attrOptionsMap: firstOriginalLineSegment.attrOptionsMap,
         );
 
   lineSegmentsList.add(firstFittedLineSegment);
 
   for (final CubicBez fittedCubic in cubicBezs) {
+    final THPositionPart endPoint;
+    final SplayTreeMap<THCommandOptionType, THCommandOption>? optionsMap;
+    final SplayTreeMap<String, THAttrCommandOption>? attrOptionsMap;
+
+    if (fittedCubic.lineSegment == null) {
+      endPoint = THPositionPart(
+        coordinates: fittedCubic.p3.toOffset(),
+        decimalPositions: decimalPositionsForCalculatedValues,
+      );
+      optionsMap = null;
+      attrOptionsMap = null;
+    } else {
+      final THLineSegment originalLineSegment = fittedCubic.lineSegment!;
+
+      endPoint = originalLineSegment.endPoint;
+      optionsMap = originalLineSegment.optionsMap;
+      attrOptionsMap = originalLineSegment.attrOptionsMap;
+    }
+
     final THBezierCurveLineSegment fittedLineSegment = THBezierCurveLineSegment(
       parentMPID: parentMPID,
       controlPoint1: THPositionPart(
         coordinates: fittedCubic.p1.toOffset(),
-        decimalPositions: decimalPositions,
+        decimalPositions: decimalPositionsForCalculatedValues,
       ),
       controlPoint2: THPositionPart(
         coordinates: fittedCubic.p2.toOffset(),
-        decimalPositions: decimalPositions,
+        decimalPositions: decimalPositionsForCalculatedValues,
       ),
-      endPoint: THPositionPart(
-        coordinates: fittedCubic.p3.toOffset(),
-        decimalPositions: decimalPositions,
-      ),
+      endPoint: endPoint,
+      optionsMap: optionsMap,
+      attrOptionsMap: attrOptionsMap,
     );
 
     lineSegmentsList.add(fittedLineSegment);

@@ -20,7 +20,10 @@ List<CubicBez> fitCubicSchneider(
   List<Point> points, {
   double errorSquared = 0.25,
 }) {
-  if (points.length < 2) return const <CubicBez>[];
+  if (points.length < 2) {
+    return const <CubicBez>[];
+  }
+
   // Deduplicate exact duplicates to avoid zero-length segments.
   final List<Point> d = _dedup(points);
 
@@ -29,9 +32,11 @@ List<CubicBez> fitCubicSchneider(
   }
 
   final Vec2 tHat1 = _computeLeftTangent(d, 0);
-  final tHat2 = _computeRightTangent(d, d.length - 1);
-  final out = <CubicBez>[];
+  final Vec2 tHat2 = _computeRightTangent(d, d.length - 1);
+  final List<CubicBez> out = <CubicBez>[];
+
   _fitCubic(d, 0, d.length - 1, tHat1, tHat2, errorSquared, out);
+
   return out;
 }
 
@@ -46,7 +51,7 @@ void _fitCubic(
   double errorSquared,
   List<CubicBez> out,
 ) {
-  final nPts = last - first + 1;
+  final int nPts = last - first + 1;
 
   // Heuristic for two points: place inner controls at 1/3 along the tangents.
   if (nPts == 2) {
@@ -57,7 +62,7 @@ void _fitCubic(
     final Point p1 = p0 + (tHat1 * dist);
     final Point p2 = p3 + (tHat2 * dist);
 
-    out.add(CubicBez(p0, p1, p2, p3));
+    out.add(CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment));
 
     return;
   }
@@ -242,13 +247,13 @@ CubicBez _generateBezier(
     final Point p1 = p0 + tHat1 * dist;
     final Point p2 = p3 + tHat2 * dist;
 
-    return CubicBez(p0, p1, p2, p3);
+    return CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
   }
 
   final Point p1 = p0 + tHat1 * alphaL;
   final Point p2 = p3 + tHat2 * alphaR;
 
-  return CubicBez(p0, p1, p2, p3);
+  return CubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
 }
 
 double _computeMaxError(
@@ -345,27 +350,4 @@ List<Point> _dedup(List<Point> pts) {
   }
 
   return out;
-}
-
-// Small demo helper (not used by library code)
-// Returns a pair: (cubics, resampled polyline for quick visualization)
-(List<CubicBez>, List<Point>) demoFitCubicSchneider() {
-  final pts = <Point>[
-    const Point(0, 0),
-    const Point(0, 0.5),
-    const Point(1.1, 1.4),
-    const Point(2.1, 1.6),
-    const Point(3.2, 1.1),
-    const Point(4.0, 0.2),
-    const Point(4.0, 0.0),
-  ];
-  final List<CubicBez> cubics = fitCubicSchneider(pts, errorSquared: 4.0);
-  // Simple resample for debug/preview
-  final List<Point> back = <Point>[];
-  for (final CubicBez c in cubics) {
-    for (int i = 0; i <= 10; i++) {
-      back.add(c.eval(i / 10));
-    }
-  }
-  return (cubics, back);
 }
