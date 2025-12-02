@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPAddScrapCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin, MPScrapChildrenMixin {
+    with MPPosCommandMixin, MPScrapChildrenMixin {
   final THScrap newScrap;
   late final int scrapPositionInParent;
 

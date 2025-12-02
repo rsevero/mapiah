@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPAddElementCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+class MPAddElementCommand extends MPCommand with MPPosCommandMixin {
   final THElement newElement;
   late final int elementPositionInParent;
 

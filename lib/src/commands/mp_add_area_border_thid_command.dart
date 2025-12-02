@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPAddAreaBorderTHIDCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+class MPAddAreaBorderTHIDCommand extends MPCommand with MPPosCommandMixin {
   final THAreaBorderTHID newAreaBorderTHID;
   late final int areaBorderTHIDPositionInParent;
 

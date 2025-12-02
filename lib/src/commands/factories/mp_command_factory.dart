@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
-import 'package:mapiah/src/commands/mixins/mp_empty_lines_after_mixin.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -19,7 +18,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:path/path.dart' as p;
 
-class MPCommandFactory with MPEmptyLinesAfterMixin {
+class MPCommandFactory {
   static MPCommand _actualRemoveLineSegmentFromExisting({
     required int existingLineSegmentMPID,
     required THFile thFile,
@@ -1352,7 +1351,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
   }) {
     final THElement element = thFile.elementByMPID(elementMPID);
     final THIsParentMixin parent = element.parent(thFile);
-    final List<int> emptyLinesAfter = MPEmptyLinesAfterMixin.getEmptyLinesAfter(
+    final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
       thFile: thFile,
       parent: parent,
       positionInParent: parent.getChildPosition(element),

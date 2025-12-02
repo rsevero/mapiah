@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
+    with MPPreCommandMixin {
   final int xtherionImageInsertConfigMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =

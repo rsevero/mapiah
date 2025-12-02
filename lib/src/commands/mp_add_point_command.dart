@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPAddPointCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+class MPAddPointCommand extends MPCommand with MPPosCommandMixin {
   final THPoint newPoint;
   late final int pointPositionInParent;
 

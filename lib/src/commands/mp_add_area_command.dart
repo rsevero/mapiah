@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPAddAreaCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+class MPAddAreaCommand extends MPCommand with MPPosCommandMixin {
   final THArea newArea;
   late final int areaPositionInParent;
   final List<THElement> areaChildren;

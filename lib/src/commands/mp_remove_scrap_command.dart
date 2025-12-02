@@ -1,7 +1,7 @@
 part of "mp_command.dart";
 
 class MPRemoveScrapCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin, MPScrapChildrenMixin {
+    with MPPreCommandMixin, MPScrapChildrenMixin {
   final int scrapMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =

@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPAddXTherionImageInsertConfigCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+    with MPPosCommandMixin {
   final THXTherionImageInsertConfig newImageInsertConfig;
   late final int xTherionImageInsertConfigPositionInParent;
 

@@ -1,7 +1,7 @@
 part of 'mp_command.dart';
 
 class MPRemoveElementCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
+    with MPPreCommandMixin {
   final int elementMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =

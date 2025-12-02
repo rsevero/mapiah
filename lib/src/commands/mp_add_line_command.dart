@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPAddLineCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPosCommandMixin {
+class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
   final THLine newLine;
   late final int linePositionInParent;
   final List<THElement> lineChildren;

@@ -1,7 +1,6 @@
 part of "mp_command.dart";
 
-class MPRemoveLineCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
+class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
   final int lineMPID;
   final bool isInteractiveLineCreation;
 

@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPRemovePointCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
+class MPRemovePointCommand extends MPCommand with MPPreCommandMixin {
   final int pointMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =

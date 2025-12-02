@@ -1,7 +1,6 @@
 part of "mp_command.dart";
 
-class MPRemoveAreaBorderTHIDCommand extends MPCommand
-    with MPEmptyLinesAfterMixin, MPPreCommandMixin {
+class MPRemoveAreaBorderTHIDCommand extends MPCommand with MPPreCommandMixin {
   final int areaBorderTHIDMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =
