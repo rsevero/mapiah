@@ -62,11 +62,12 @@ mixin MPEmptyLinesAfterMixin {
 
     for (final int emptyLineMPID in emptyLinesAfter) {
       final THEmptyLine emptyLine = thFile.emptyLineByMPID(emptyLineMPID);
-      final MPCommand addEmptyLineCommand = MPAddEmptyLineCommand.fromExisting(
-        existingEmptyLine: emptyLine,
-        thFile: thFile,
-        descriptionType: descriptionType,
-      );
+      final MPCommand addEmptyLineCommand =
+          MPCommandFactory.addEmptyLineFromExisting(
+            existingEmptyLine: emptyLine,
+            thFile: thFile,
+            descriptionType: descriptionType,
+          );
       addEmptyLinesAfterCommands.add(addEmptyLineCommand);
     }
 

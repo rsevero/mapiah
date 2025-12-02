@@ -244,7 +244,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
 
     for (final int emptyLineMPID in emptyLinesAfter) {
       final THEmptyLine emptyLine = thFile.emptyLineByMPID(emptyLineMPID);
-      final MPCommand addEmptyLineCommand = MPAddEmptyLineCommand.fromExisting(
+      final MPCommand addEmptyLineCommand = addEmptyLineFromExisting(
         existingEmptyLine: emptyLine,
         thFile: thFile,
         descriptionType: descriptionType,
@@ -260,6 +260,24 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             completionType:
                 MPMultipleElementsCommandCompletionType.elementsListChanged,
           );
+  }
+
+  static MPAddEmptyLineCommand addEmptyLineFromExisting({
+    required THEmptyLine existingEmptyLine,
+    int? emptyLinePositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddEmptyLineCommand.defaultDescriptionType,
+  }) {
+    emptyLinePositionInParent =
+        emptyLinePositionInParent ??
+        existingEmptyLine.parent(thFile).getChildPosition(existingEmptyLine);
+
+    return MPAddEmptyLineCommand.forCWJM(
+      newEmptyLine: existingEmptyLine,
+      emptyLinePositionInParent: emptyLinePositionInParent,
+      descriptionType: descriptionType,
+    );
   }
 
   static MPCommand addLineToArea({

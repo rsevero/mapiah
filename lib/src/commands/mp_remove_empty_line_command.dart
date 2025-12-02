@@ -23,11 +23,12 @@ class MPRemoveEmptyLineCommand extends MPCommand {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THEmptyLine originalEmptyLine = thFile.emptyLineByMPID(emptyLineMPID);
-    final MPCommand addEmptyLineCommand = MPAddEmptyLineCommand.fromExisting(
-      existingEmptyLine: originalEmptyLine,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
+    final MPCommand addEmptyLineCommand =
+        MPCommandFactory.addEmptyLineFromExisting(
+          existingEmptyLine: originalEmptyLine,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
 
     _undoRedoInfo = {'addEmptyLineCommand': addEmptyLineCommand};
   }

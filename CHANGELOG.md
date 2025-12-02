@@ -20,7 +20,8 @@
   * Moved fromExisting constructors from individual MPCommand classes to MPCommandFactory:
     * area;
     * areaBorderTHID;
-    * element.
+    * element;
+    * empty line.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:

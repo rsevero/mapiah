@@ -20,17 +20,6 @@ class MPAddEmptyLineCommand extends MPCommand {
     super.descriptionType = defaultDescriptionType,
   }) : super();
 
-  MPAddEmptyLineCommand.fromExisting({
-    required THEmptyLine existingEmptyLine,
-    int? emptyLinePositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newEmptyLine = existingEmptyLine,
-       emptyLinePositionInParent =
-           emptyLinePositionInParent ??
-           existingEmptyLine.parent(thFile).getChildPosition(existingEmptyLine),
-       super();
-
   @override
   MPCommandType get type => MPCommandType.addEmptyLine;
 
