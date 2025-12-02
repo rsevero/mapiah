@@ -460,6 +460,33 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     return command;
   }
 
+  static MPAddPointCommand addPointFromExisting({
+    required THPoint existingPoint,
+    int? pointPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddPointCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingPoint.parent(thFile);
+
+    pointPositionInParent =
+        pointPositionInParent ?? parent.getChildPosition(existingPoint);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: pointPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddPointCommand.forCWJM(
+      newPoint: existingPoint,
+      pointPositionInParent: pointPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addScrap({
     required String thID,
     required THFile thFile,

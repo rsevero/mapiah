@@ -26,25 +26,6 @@ class MPAddPointCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddPointCommand.fromExisting({
-    required THPoint existingPoint,
-    int? pointPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newPoint = existingPoint,
-       super() {
-    final THIsParentMixin parent = existingPoint.parent(thFile);
-
-    this.pointPositionInParent =
-        pointPositionInParent ?? parent.getChildPosition(existingPoint);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.pointPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addPoint;
 
