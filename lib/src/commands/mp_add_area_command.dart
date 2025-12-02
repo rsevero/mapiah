@@ -19,26 +19,6 @@ class MPAddAreaCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddAreaCommand.fromExisting({
-    required THArea existingArea,
-    int? areaPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newArea = existingArea,
-       areaChildren = existingArea.getChildren(thFile).toList(),
-       super() {
-    final THIsParentMixin parent = existingArea.parent(thFile);
-
-    this.areaPositionInParent =
-        areaPositionInParent ?? parent.getChildPosition(existingArea);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.areaPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addArea;
 

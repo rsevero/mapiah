@@ -36,7 +36,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       return Future.value();
     }
 
-    final MPCommand addAreaCommand = MPAddAreaCommand.fromExisting(
+    final MPCommand addAreaCommand = MPCommandFactory.addAreaFromExisting(
       existingArea: area,
       thFile: th2FileEditController.thFile,
     );

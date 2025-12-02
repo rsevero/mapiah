@@ -82,6 +82,37 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPAddAreaCommand addAreaFromExisting({
+    required THArea existingArea,
+    int? areaPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddAreaCommand.defaultDescriptionType,
+  }) {
+    final List<THElement> areaChildren = existingArea
+        .getChildren(thFile)
+        .toList();
+    final THIsParentMixin parent = existingArea.parent(thFile);
+
+    areaPositionInParent =
+        areaPositionInParent ?? parent.getChildPosition(existingArea);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: areaPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddAreaCommand.forCWJM(
+      newArea: existingArea,
+      areaChildren: areaChildren,
+      areaPositionInParent: areaPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,

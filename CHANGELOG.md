@@ -18,6 +18,7 @@
   * THHasOptionsMixin constructors now receive optionsMap and attrOptionsMap parameters to initialize the element with existing options maps.
   * Identifying methods and classes actually used in line simplification with a 'MPSimplification' prefix in their names.
   * Moved fromExisting constructors from individual MPCommand classes to MPCommandFactory:
+    * area;
     * areaBorderTHID.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
