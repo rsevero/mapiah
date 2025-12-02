@@ -34,7 +34,6 @@ void main() {
 
         /// File has 2 empty lines that aren't shown in sanitized output.
         'encoding': 'UTF-8',
-        'lineID': 'blaus',
         'asFileOriginal': r'''encoding UTF-8
 scrap test
   line contour -id blaus
@@ -46,6 +45,39 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
+endscrap
+''',
+      },
+      {
+        'file': '2025-10-04-001-area_and_line.th2',
+        'length': 20,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+scrap test
+  area clay
+    l85-3732--20
+  endarea
+  line border -close on -id l85-3732--20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
+endscrap
+''',
+        'asFileChanged': r'''encoding UTF-8
+scrap test
+  line contour -close on -id blaus -visibility off
+    2736.2 -808.5
+    2894.3 -202.7
+    2264.5 -205.7
+  endline
 endscrap
 ''',
       },
@@ -69,7 +101,7 @@ endscrap
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
-            final asFile = writer.serialize(parsedFile);
+            final String asFile = writer.serialize(parsedFile);
             expect(asFile, success['asFileOriginal']);
             final TH2FileEditController controller = mpLocator
                 .mpGeneralController
@@ -83,12 +115,12 @@ endscrap
             /// Execution: taken from MPCommandFactory.removeElements()
 
             final int lineMPID = parsedFile.linesMPIDs.first;
-            final MPCommand setCommand = MPCommandFactory.removeElements(
+            final MPCommand removeCommand = MPCommandFactory.removeElements(
               mpIDs: [lineMPID],
               thFile: parsedFile,
             );
 
-            controller.execute(setCommand);
+            controller.execute(removeCommand);
 
             final String asFileChanged = writer.serialize(controller.thFile);
             expect(asFileChanged, success['asFileChanged']);

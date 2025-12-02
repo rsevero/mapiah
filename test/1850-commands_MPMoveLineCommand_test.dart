@@ -88,7 +88,7 @@ endscrap
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
-            final asFile = writer.serialize(parsedFile);
+            final String asFile = writer.serialize(parsedFile);
             expect(asFile, success['asFileOriginal']);
             final TH2FileEditController controller = mpLocator
                 .mpGeneralController
