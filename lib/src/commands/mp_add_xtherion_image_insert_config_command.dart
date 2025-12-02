@@ -26,26 +26,6 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddXTherionImageInsertConfigCommand.fromExisting({
-    required THXTherionImageInsertConfig existingImageInsertConfig,
-    required THFile thFile,
-    int? xTherionImageInsertConfigPositionInParent,
-    super.descriptionType = defaultDescriptionType,
-  }) : newImageInsertConfig = existingImageInsertConfig,
-       super() {
-    final THIsParentMixin parent = existingImageInsertConfig.parent(thFile);
-
-    this.xTherionImageInsertConfigPositionInParent =
-        xTherionImageInsertConfigPositionInParent ??
-        parent.getChildPosition(existingImageInsertConfig);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.xTherionImageInsertConfigPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addXTherionImageInsertConfig;
 

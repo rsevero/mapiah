@@ -618,6 +618,36 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     return addImageCommand;
   }
 
+  static MPAddXTherionImageInsertConfigCommand
+  addXTherionImageInsertConfigFromExisting({
+    required THXTherionImageInsertConfig existingImageInsertConfig,
+    required THFile thFile,
+    int? xTherionImageInsertConfigPositionInParent,
+    MPCommandDescriptionType descriptionType =
+        MPAddXTherionImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingImageInsertConfig.parent(thFile);
+
+    xTherionImageInsertConfigPositionInParent =
+        xTherionImageInsertConfigPositionInParent ??
+        parent.getChildPosition(existingImageInsertConfig);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: xTherionImageInsertConfigPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddXTherionImageInsertConfigCommand.forCWJM(
+      newImageInsertConfig: existingImageInsertConfig,
+      xTherionImageInsertConfigPositionInParent:
+          xTherionImageInsertConfigPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand editAreasType({
     required List<int> areaMPIDs,
     required THAreaType newAreaType,
