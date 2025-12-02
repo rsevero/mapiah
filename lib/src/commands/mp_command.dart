@@ -22,7 +22,6 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 
 part 'mixins/mp_pos_command_mixin.dart';
 part 'mixins/mp_pre_command_mixin.dart';
-part 'mixins/mp_scrap_children_mixin.dart';
 part 'mp_add_area_border_thid_command.dart';
 part 'mp_add_area_command.dart';
 part 'mp_add_element_command.dart';

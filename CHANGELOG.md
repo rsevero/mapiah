@@ -35,7 +35,9 @@
       * point;
       * scrap;
       * XTherionImageInsertConfig.
-  * Removed MPEmptyLinesAfterMixin.
+  * Removed:
+    *  MPEmptyLinesAfterMixin;
+    *  MPScrapChildrenMixin.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:

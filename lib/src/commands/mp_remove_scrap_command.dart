@@ -1,7 +1,6 @@
 part of "mp_command.dart";
 
-class MPRemoveScrapCommand extends MPCommand
-    with MPPreCommandMixin, MPScrapChildrenMixin {
+class MPRemoveScrapCommand extends MPCommand with MPPreCommandMixin {
   final int scrapMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =
@@ -36,7 +35,7 @@ class MPRemoveScrapCommand extends MPCommand
     final int scrapPositionInParent = scrapParent.getChildPosition(
       originalScrap,
     );
-    final MPCommand addScrapChildrenCommand = getAddScrapChildrenCommand(
+    final MPCommand addScrapChildrenCommand = MPCommandFactory.addScrapChildren(
       scrap: originalScrap,
       thFile: thFile,
     );
