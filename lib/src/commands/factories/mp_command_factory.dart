@@ -1251,6 +1251,25 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPRemoveElementCommand removeElementFromExisting({
+    required int existingElementMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveElementCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingElementMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveElementCommand.forCWJM(
+      elementMPID: existingElementMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand removeElements({
     required List<int> mpIDs,
     required THFile thFile,
@@ -1308,7 +1327,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             descriptionType: descriptionType,
           );
         default:
-          removeCommand = MPRemoveElementCommand.fromExisting(
+          removeCommand = removeElementFromExisting(
             existingElementMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,

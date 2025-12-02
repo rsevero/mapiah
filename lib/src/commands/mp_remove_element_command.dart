@@ -23,19 +23,6 @@ class MPRemoveElementCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveElementCommand.fromExisting({
-    required int existingElementMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : elementMPID = existingElementMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingElementMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeElement;
 
