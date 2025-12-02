@@ -23,19 +23,6 @@ class MPRemovePointCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemovePointCommand.fromExisting({
-    required int existingPointMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : pointMPID = existingPointMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingPointMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removePoint;
 

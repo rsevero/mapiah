@@ -1310,7 +1310,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             descriptionType: descriptionType,
           );
         case THElementType.point:
-          removeCommand = MPRemovePointCommand.fromExisting(
+          removeCommand = removePointFromExisting(
             existingPointMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
@@ -1570,6 +1570,25 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
       commandsList: commandsList,
       descriptionType: descriptionType,
       completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+    );
+  }
+
+  static MPRemovePointCommand removePointFromExisting({
+    required int existingPointMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemovePointCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingPointMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemovePointCommand.forCWJM(
+      pointMPID: existingPointMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
     );
   }
 
