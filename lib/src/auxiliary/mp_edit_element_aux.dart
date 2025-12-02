@@ -10,6 +10,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -254,6 +255,30 @@ class MPEditElementAux {
     normalized = normalized.replaceAll(RegExp(r'[^a-zA-Z0-9_\-]'), '_');
 
     return normalized;
+  }
+
+  static List<int> getEmptyLinesAfter({
+    required THFile thFile,
+    required THIsParentMixin parent,
+    required int positionInParent,
+  }) {
+    final List<int> emptyLinesAfter = [];
+    final List<int> siblingsMPIDs = parent.childrenMPIDs;
+
+    for (int i = positionInParent + 1; i < siblingsMPIDs.length; i++) {
+      final int siblingMPID = siblingsMPIDs[i];
+      final THElementType siblingElementType = thFile.getElementTypeByMPID(
+        siblingMPID,
+      );
+
+      if (siblingElementType == THElementType.emptyLine) {
+        emptyLinesAfter.add(siblingMPID);
+      } else {
+        break;
+      }
+    }
+
+    return emptyLinesAfter;
   }
 
   static String getFilenameFromPath(String path) {

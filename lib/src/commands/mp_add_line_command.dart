@@ -62,7 +62,7 @@ class MPAddLineCommand extends MPCommand
       if (areaTHID == null) {
         addAreaTHIDCommand = null;
       } else {
-        addAreaTHIDCommand = MPAddAreaBorderTHIDCommand.fromExisting(
+        addAreaTHIDCommand = MPCommandFactory.addAreaBorderTHIDFromExisting(
           existingAreaBorderTHID: areaTHID,
           thFile: thFile,
           descriptionType: descriptionType,

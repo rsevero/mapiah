@@ -27,26 +27,6 @@ class MPAddAreaBorderTHIDCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddAreaBorderTHIDCommand.fromExisting({
-    required THAreaBorderTHID existingAreaBorderTHID,
-    int? areaBorderTHIDPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newAreaBorderTHID = existingAreaBorderTHID,
-       super() {
-    final THIsParentMixin parent = existingAreaBorderTHID.parent(thFile);
-
-    this.areaBorderTHIDPositionInParent =
-        areaBorderTHIDPositionInParent ??
-        parent.getChildPosition(existingAreaBorderTHID);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.areaBorderTHIDPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addAreaBorderTHID;
 

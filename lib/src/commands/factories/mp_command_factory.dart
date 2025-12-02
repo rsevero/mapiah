@@ -54,6 +54,34 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     }
   }
 
+  static MPAddAreaBorderTHIDCommand addAreaBorderTHIDFromExisting({
+    required THAreaBorderTHID existingAreaBorderTHID,
+    int? areaBorderTHIDPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddAreaBorderTHIDCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingAreaBorderTHID.parent(thFile);
+
+    areaBorderTHIDPositionInParent =
+        areaBorderTHIDPositionInParent ??
+        parent.getChildPosition(existingAreaBorderTHID);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: areaBorderTHIDPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddAreaBorderTHIDCommand(
+      newAreaBorderTHID: existingAreaBorderTHID,
+      areaBorderTHIDPositionInParent: areaBorderTHIDPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,
@@ -136,6 +164,44 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
       completionType:
           MPMultipleElementsCommandCompletionType.elementsListChanged,
     );
+  }
+
+  static MPCommand? addEmptyLinesAfterCommand({
+    required THFile thFile,
+    required THIsParentMixin parent,
+    required int positionInParent,
+    required MPCommandDescriptionType descriptionType,
+  }) {
+    final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: positionInParent,
+    );
+
+    if (emptyLinesAfter.isEmpty) {
+      return null;
+    }
+
+    final List<MPCommand> addEmptyLinesAfterCommands = [];
+
+    for (final int emptyLineMPID in emptyLinesAfter) {
+      final THEmptyLine emptyLine = thFile.emptyLineByMPID(emptyLineMPID);
+      final MPCommand addEmptyLineCommand = MPAddEmptyLineCommand.fromExisting(
+        existingEmptyLine: emptyLine,
+        thFile: thFile,
+        descriptionType: descriptionType,
+      );
+      addEmptyLinesAfterCommands.add(addEmptyLineCommand);
+    }
+
+    return (addEmptyLinesAfterCommands.length == 1)
+        ? addEmptyLinesAfterCommands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: addEmptyLinesAfterCommands,
+            descriptionType: descriptionType,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          );
   }
 
   static MPCommand addLineToArea({
