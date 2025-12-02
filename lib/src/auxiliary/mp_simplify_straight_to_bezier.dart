@@ -172,11 +172,12 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
     return [];
   }
 
-  final List<MPSimplificationCubicBez> cubicBezs =
-      mpSimplificationFitCubicSchneider(
-        points,
-        errorSquared: accuracy * accuracy,
-      );
+  List<MPSimplificationCubicBez> cubicBezs = mpSimplificationFitCubicSchneider(
+    points,
+    errorSquared: accuracy * accuracy,
+  );
+
+  cubicBezs = _mpClampStraightToBezierTangents(cubicBezs);
   final List<THLineSegment> lineSegmentsList =
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: cubicBezs,
@@ -185,4 +186,123 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
       );
 
   return lineSegmentsList;
+}
+
+List<MPSimplificationCubicBez> _mpClampStraightToBezierTangents(
+  List<MPSimplificationCubicBez> cubics, {
+  double tension = 0.5,
+  double maxHandleFactor = 0.75,
+  double maxPerpendicularRatio = 0.5,
+}) {
+  if (cubics.length <= 1) {
+    return cubics;
+  }
+
+  final List<MPSimplificationPoint> anchors = <MPSimplificationPoint>[
+    cubics.first.p0,
+    ...cubics.map((c) => c.p3),
+  ];
+
+  final List<MPSimplificationVec2> tangents = List.generate(
+    anchors.length,
+    (int i) => _catmullRomTangent(anchors, i, tension),
+  );
+
+  final List<MPSimplificationCubicBez> adjusted = <MPSimplificationCubicBez>[];
+
+  for (int i = 0; i < cubics.length; i++) {
+    final MPSimplificationCubicBez cubic = cubics[i];
+    final MPSimplificationPoint p0 = cubic.p0;
+    final MPSimplificationPoint p3 = cubic.p3;
+    final MPSimplificationVec2 chord = p3 - p0;
+    final double chordLen = chord.hypot();
+
+    if (chordLen <= 0) {
+      adjusted.add(cubic);
+      continue;
+    }
+
+    final MPSimplificationVec2 chordDir = chord / chordLen;
+    final MPSimplificationVec2 startTan = _clampTangentToChord(
+      tangents[i],
+      chordDir,
+      chordLen,
+      maxHandleFactor,
+      maxPerpendicularRatio,
+    );
+    final MPSimplificationVec2 endForward = _clampTangentToChord(
+      tangents[i + 1],
+      chordDir,
+      chordLen,
+      maxHandleFactor,
+      maxPerpendicularRatio,
+    );
+    final MPSimplificationVec2 endTan = -endForward;
+
+    final MPSimplificationPoint cp1 = p0 + (startTan / 3.0);
+    final MPSimplificationPoint cp2 = p3 + (endTan / 3.0);
+
+    adjusted.add(cubic.copyWith(p1: cp1, p2: cp2, isCalculated: true));
+  }
+
+  return adjusted;
+}
+
+MPSimplificationVec2 _catmullRomTangent(
+  List<MPSimplificationPoint> anchors,
+  int index,
+  double tension,
+) {
+  final int last = anchors.length - 1;
+
+  if (anchors.length <= 1) {
+    return const MPSimplificationVec2(0, 0);
+  }
+
+  if (index == 0) {
+    return (anchors[1] - anchors[0]) * tension;
+  }
+
+  if (index == last) {
+    return (anchors[last] - anchors[last - 1]) * tension;
+  }
+
+  final MPSimplificationVec2 forward = anchors[index + 1] - anchors[index - 1];
+
+  return forward * 0.5 * tension;
+}
+
+MPSimplificationVec2 _clampTangentToChord(
+  MPSimplificationVec2 tangent,
+  MPSimplificationVec2 chordDir,
+  double chordLen,
+  double maxHandleFactor,
+  double maxPerpendicularRatio,
+) {
+  if (chordLen <= 0 || tangent.hypot2() == 0 || chordDir.hypot2() == 0) {
+    return const MPSimplificationVec2(0, 0);
+  }
+
+  final double along = tangent.dot(chordDir);
+
+  if (along <= 0) {
+    return const MPSimplificationVec2(0, 0);
+  }
+
+  final double maxAlong = chordLen * maxHandleFactor;
+  final double clampedAlong = math.min(along, maxAlong);
+  final MPSimplificationVec2 alongVec = chordDir * clampedAlong;
+
+  final MPSimplificationVec2 perpVec = tangent - (chordDir * along);
+  final double perpLen = perpVec.hypot();
+  final double maxPerp = clampedAlong * maxPerpendicularRatio;
+
+  MPSimplificationVec2 finalPerp = const MPSimplificationVec2(0, 0);
+
+  if ((perpLen > 1e-9) && (maxPerp > 0)) {
+    final double scale = math.min(1.0, maxPerp / perpLen);
+    finalPerp = perpVec * scale;
+  }
+
+  return alongVec + finalPerp;
 }

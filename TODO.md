@@ -91,6 +91,8 @@
 [X] - BUG: when simplifying a line, line segment options are being lost.
 [X] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
 [X] - Simplification calculated values should use "current decimals".
+[ ] - BUG: when deleting several line points near an extremity, the extremity, changed position.
+[ ] - BUG: after deleting several line points, the line is not click-selectable at its new line segments.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
