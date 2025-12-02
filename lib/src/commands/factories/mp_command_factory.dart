@@ -1178,7 +1178,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
         .length;
 
     if (areaBorderSiblingsCount == 1) {
-      return MPRemoveAreaCommand.fromExisting(
+      return removeAreaFromExisting(
         existingAreaMPID: parentArea.mpID,
         thFile: thFile,
         descriptionType: descriptionType,
@@ -1200,6 +1200,25 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
         'AreaBorderTHID with MPID $existingAreaBorderTHIDMPID parent area has no areaBorderTHIDs.',
       );
     }
+  }
+
+  static MPRemoveAreaCommand removeAreaFromExisting({
+    required int existingAreaMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveAreaCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingAreaMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveAreaCommand.forCWJM(
+      areaMPID: existingAreaMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
+    );
   }
 
   static MPCommand removeAttrOptionFromElements({
@@ -1245,7 +1264,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
 
       switch (thFile.getElementTypeByMPID(mpID)) {
         case THElementType.area:
-          removeCommand = MPRemoveAreaCommand.fromExisting(
+          removeCommand = removeAreaFromExisting(
             existingAreaMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,

@@ -27,7 +27,9 @@
       * line segment;
       * point;
       * scrap;
-      * XTherionImageInsertConfig.
+      * XTherionImageInsertConfig;
+    * remove:
+      * area.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:

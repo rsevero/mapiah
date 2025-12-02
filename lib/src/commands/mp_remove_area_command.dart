@@ -23,19 +23,6 @@ class MPRemoveAreaCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveAreaCommand.fromExisting({
-    required int existingAreaMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : areaMPID = existingAreaMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingAreaMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeArea;
 
