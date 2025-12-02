@@ -178,6 +178,7 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
   );
 
   cubicBezs = _mpClampStraightToBezierTangents(cubicBezs);
+
   final List<THLineSegment> lineSegmentsList =
       mpConvertCubicBezsToTHBezierCurveLineSegments(
         cubicBezs: cubicBezs,
@@ -188,9 +189,29 @@ List<THLineSegment> convertTHStraightLinesToTHBezierCurveLineSegments({
   return lineSegmentsList;
 }
 
+/// Adjust control handles for a chain of cubic Beziers derived from a
+/// polyline so that the resulting Béziers follow the polyline without
+/// introducing large, misaligned handles that create spurious S-shaped
+/// curvature.
+///
+/// Behaviour summary:
+/// - Keeps all anchor points (each cubic's `p0` and `p3`) unchanged.
+/// - Recomputes each cubic's interior control points (`p1` and `p2`) from a
+///   stabilized tangent field estimated at the anchors (Catmull–Rom style).
+/// - Clamps the tangent projection along the chord and limits perpendicular
+///   magnitude to avoid overshoot.
+///
+/// Parameters:
+/// - `cubics`: input list of cubic segments (must share anchors end-to-end).
+/// - `tension`: Catmull–Rom tension factor (0..1) used when estimating
+///   tangents from neighbouring anchors.
+/// - `maxHandleFactor`: maximum allowed handle length as a fraction of the
+///   chord length (e.g. 0.75 means handle ≤ 0.75 * chordLen).
+/// - `maxPerpendicularRatio`: fraction of the along-chord handle allowed for
+///   the perpendicular component (keeps handles aligned with the chord).
 List<MPSimplificationCubicBez> _mpClampStraightToBezierTangents(
   List<MPSimplificationCubicBez> cubics, {
-  double tension = 0.5,
+  double tension = 0.75,
   double maxHandleFactor = 0.75,
   double maxPerpendicularRatio = 0.5,
 }) {
@@ -248,6 +269,12 @@ List<MPSimplificationCubicBez> _mpClampStraightToBezierTangents(
   return adjusted;
 }
 
+/// Compute a Catmull–Rom-style tangent vector for the anchor at `index`.
+///
+/// For interior anchors we use the symmetric difference
+///   0.5 * (anchors[i+1] - anchors[i-1]) * tension
+/// For the first/last anchor we use a one-sided difference scaled by
+/// `tension`. Returns a vector in world units (same units as anchors).
 MPSimplificationVec2 _catmullRomTangent(
   List<MPSimplificationPoint> anchors,
   int index,
@@ -272,6 +299,13 @@ MPSimplificationVec2 _catmullRomTangent(
   return forward * 0.5 * tension;
 }
 
+/// Clamp a tangent vector to the local chord basis to avoid overshoot.
+///
+/// The function projects `tangent` onto `chordDir` and clamps the along-chord
+/// magnitude to at most `chordLen * maxHandleFactor`. The perpendicular
+/// component is limited to `clampedAlong * maxPerpendicularRatio` so handles
+/// remain reasonably aligned with the chord. If the along-chord projection is
+/// non-positive the result is the zero vector (prevents handle reversal).
 MPSimplificationVec2 _clampTangentToChord(
   MPSimplificationVec2 tangent,
   MPSimplificationVec2 chordDir,

@@ -1714,10 +1714,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     } else {
       _lineSimplifyEpsilonOnCanvas += lineSimplifyEpsilonOnCanvasIncrease;
     }
-
-    // print(
-    //   'Line simplification epsilon on canvas: $_lineSimplifyEpsilonOnCanvas',
-    // );
   }
 
   void setLineSimplificationMethod(MPLineSimplificationMethod newMethod) {
@@ -1732,6 +1728,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
 class MPTypeUsed {
   final String type;
+
   int count = 1;
   DateTime lastUsed = DateTime.now();
 
