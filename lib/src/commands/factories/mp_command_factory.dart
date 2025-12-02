@@ -34,7 +34,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
         .length;
 
     if (lineSegmentsCountInParentLine < 3) {
-      return MPRemoveLineCommand.fromExisting(
+      return removeLineFromExisting(
         existingLineMPID: parentLine.mpID,
         isInteractiveLineCreation: false,
         thFile: thFile,
@@ -1297,7 +1297,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
         case THElementType.emptyLine:
           removeCommand = MPRemoveEmptyLineCommand(emptyLineMPID: mpID);
         case THElementType.line:
-          removeCommand = MPRemoveLineCommand.fromExisting(
+          removeCommand = removeLineFromExisting(
             existingLineMPID: mpID,
             isInteractiveLineCreation: false,
             thFile: thFile,
@@ -1365,6 +1365,27 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     return MPCommandFactory.removeElements(
       mpIDs: emptyLinesAfter,
       thFile: thFile,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPRemoveLineCommand removeLineFromExisting({
+    required int existingLineMPID,
+    required bool isInteractiveLineCreation,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveLineCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingLineMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveLineCommand.forCWJM(
+      lineMPID: existingLineMPID,
+      isInteractiveLineCreation: isInteractiveLineCreation,
+      preCommand: preCommand,
       descriptionType: descriptionType,
     );
   }
@@ -1465,7 +1486,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
         lineSegmentsCountInParentLine - lineSegmentMPIDs.length;
 
     if (remainingLineSegmentsCount < 2) {
-      return MPRemoveLineCommand.fromExisting(
+      return removeLineFromExisting(
         existingLineMPID: parentLine.mpID,
         isInteractiveLineCreation: false,
         thFile: thFile,

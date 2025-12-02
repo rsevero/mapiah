@@ -26,20 +26,6 @@ class MPRemoveLineCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveLineCommand.fromExisting({
-    required int existingLineMPID,
-    required this.isInteractiveLineCreation,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : lineMPID = existingLineMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingLineMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeLine;
 

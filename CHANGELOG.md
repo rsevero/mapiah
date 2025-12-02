@@ -30,7 +30,8 @@
       * XTherionImageInsertConfig;
     * remove:
       * area;
-      * element.
+      * element;
+      * line.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:
