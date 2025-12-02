@@ -530,6 +530,54 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     return addScrapCommandForNewScrap;
   }
 
+  static MPCommand addScrapChildren({
+    required THScrap scrap,
+    required THFile thFile,
+  }) {
+    final List<THElement> scrapChildrenAsElements = scrap
+        .getChildren(thFile)
+        .toList();
+    final MPCommand scrapChildrenCommand = MPCommandFactory.addElements(
+      elements: scrapChildrenAsElements,
+      thFile: thFile,
+      positionInParent: mpAddChildAtEndOfParentChildrenList,
+    );
+
+    return scrapChildrenCommand;
+  }
+
+  static MPAddScrapCommand addSScrapFromExisting({
+    required THScrap existingScrap,
+    int? scrapPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddScrapCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingScrap.parent(thFile);
+
+    scrapPositionInParent =
+        scrapPositionInParent ?? parent.getChildPosition(existingScrap);
+
+    final MPCommand addScrapChildrenCommand = addScrapChildren(
+      scrap: existingScrap,
+      thFile: thFile,
+    );
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: scrapPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddScrapCommand.forCWJM(
+      newScrap: existingScrap,
+      scrapPositionInParent: scrapPositionInParent,
+      addScrapChildrenCommand: addScrapChildrenCommand,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addXTherionInsertImageConfig({
     required String imageFilename,
     required TH2FileEditController th2FileEditController,

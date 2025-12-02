@@ -38,29 +38,6 @@ class MPAddScrapCommand extends MPCommand
     );
   }
 
-  MPAddScrapCommand.fromExisting({
-    required THScrap existingScrap,
-    int? scrapPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newScrap = existingScrap,
-       super() {
-    final THIsParentMixin parent = existingScrap.parent(thFile);
-
-    this.scrapPositionInParent =
-        scrapPositionInParent ?? parent.getChildPosition(existingScrap);
-    addScrapChildrenCommand = getAddScrapChildrenCommand(
-      scrap: existingScrap,
-      thFile: thFile,
-    );
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.scrapPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addScrap;
 
