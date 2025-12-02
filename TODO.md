@@ -58,7 +58,7 @@
 [X] - MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
 [X] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible
-[ ] - When deleting the second to last line segment of a line, the whole line should be deleted.
+[X] - When deleting the second to last line segment of a line, the whole line should be deleted.
 [X] - When opening files, delete empty lines.
 [X] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
 [X] - Implement Ctrl+O (open file) keyboard shortcut
@@ -82,7 +82,7 @@
 [X] - On an empty file, the select button should be disabled.
 [X] - BUG: when several elements are selected and one is deselected, the status bar message is not updated.
 [X] - When an element is deleted, the empty lines after it should also be deleted.
-[ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
+[X] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [X] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 [X] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
 [ ] - On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
@@ -91,8 +91,17 @@
 [X] - BUG: when simplifying a line, line segment options are being lost.
 [X] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
 [X] - Simplification calculated values should use "current decimals".
-[ ] - BUG: when deleting several line points near an extremity, the extremity, changed position.
+[ ] - BUG: when deleting several line points near an extremity, the extremity changed position.
 [ ] - BUG: after deleting several line points, the line is not click-selectable at its new line segments.
+[ ] - BUG: line types "Floor Step" and "floor-step" being presented.
+[ ] - When there is some snap option enabled, the "snap" button should be visually different.
+[ ] - On 'single line edit' mode, when a endpoint is selected, clicking on a control point and dragging should work.
+[ ] - BUG: on 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.
+[ ] - BUG: when clicking the 'Ok' button to set an option, the overlay window of the option being set is not closed.
+[ ] - BUG: when selecting a multiple option option, the overlay window of the option being set is not closed.
+[ ] - Make THID the first option when writing to file.
+[ ] - List of elements that should not be movable: Point station.
+[ ] - List of elements that should not be selectable: Line u:splay.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
@@ -125,6 +134,7 @@
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
+[ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
 
 ##Version 0.5
 [ ] - Raster images tracing
