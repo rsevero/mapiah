@@ -337,6 +337,34 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPAddLineSegmentCommand addLineSegmentFromExisting({
+    required THLineSegment existingLineSegment,
+    int? lineSegmentPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddLineSegmentCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingLineSegment.parent(thFile);
+
+    lineSegmentPositionInParent =
+        lineSegmentPositionInParent ??
+        parent.getChildPosition(existingLineSegment);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: lineSegmentPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddLineSegmentCommand.forCWJM(
+      newLineSegment: existingLineSegment,
+      lineSegmentPositionInParent: lineSegmentPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addLineToArea({
     required THArea area,
     required THLine line,

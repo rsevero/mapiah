@@ -27,26 +27,6 @@ class MPAddLineSegmentCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddLineSegmentCommand.fromExisting({
-    required THLineSegment existingLineSegment,
-    int? lineSegmentPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newLineSegment = existingLineSegment,
-       super() {
-    final THIsParentMixin parent = existingLineSegment.parent(thFile);
-
-    this.lineSegmentPositionInParent =
-        lineSegmentPositionInParent ??
-        parent.getChildPosition(existingLineSegment);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.lineSegmentPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addLineSegment;
 
