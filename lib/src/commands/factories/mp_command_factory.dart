@@ -113,6 +113,33 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPAddElementCommand addElementFromExisting({
+    required THElement existingElement,
+    int? elementPositionInParent,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddElementCommand.defaultDescriptionType,
+  }) {
+    final THIsParentMixin parent = existingElement.parent(thFile);
+
+    elementPositionInParent =
+        elementPositionInParent ?? parent.getChildPosition(existingElement);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: elementPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddElementCommand.forCWJM(
+      newElement: existingElement,
+      elementPositionInParent: elementPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,

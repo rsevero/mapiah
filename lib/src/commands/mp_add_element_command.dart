@@ -26,26 +26,6 @@ class MPAddElementCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddElementCommand.fromExisting({
-    required THElement existingElement,
-    int? elementPositionInParent,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newElement = existingElement,
-
-       super() {
-    final THIsParentMixin parent = existingElement.parent(thFile);
-
-    elementPositionInParent =
-        elementPositionInParent ?? parent.getChildPosition(existingElement);
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: elementPositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addElement;
 
