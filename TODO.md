@@ -84,7 +84,7 @@
 [X] - When an element is deleted, the empty lines after it should also be deleted.
 [ ] - BUG: when several elements are deleted, resulting empty areas (because all its lines have been deleted) are not deleted.
 [X] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
-[ ] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
+[X] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
 [ ] - On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
 [ ] - On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
 [ ] - BUG: when on 'single line edit' mode, if the user clicks on another element, it is presents the 'Multiple elements clicked' dialog box instead of just selecting the new element.

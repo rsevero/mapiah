@@ -4,6 +4,7 @@
 * New features:
   * When a single element is selected, show its properties in the status bar.
   * Simplification calculated values should use "current decimals".
+  * When a line is deleted, if it's the last line of an area, the area should also be deleted.
 * Fixed bugs:
   * Lines and points with unknown types would throw when being drawn.
   * Walkway line type not recognized.

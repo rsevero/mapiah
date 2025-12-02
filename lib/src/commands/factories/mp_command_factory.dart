@@ -176,6 +176,7 @@ class MPCommandFactory {
             newLine: element,
             linePositionInParent: positionInParent,
             lineChildren: element.getChildren(thFile).toList(),
+            preCommand: null,
             posCommand: null,
           );
         case THLineSegment _:
@@ -331,6 +332,7 @@ class MPCommandFactory {
       lineChildren: lineChildren,
       lineStartScreenPosition: lineStartScreenPosition,
       addAreaTHIDCommand: addAreaTHIDCommand,
+      preCommand: null,
       posCommand: posCommand,
       descriptionType: descriptionType,
     );
@@ -1380,11 +1382,36 @@ class MPCommandFactory {
       thFile: thFile,
       descriptionType: descriptionType,
     );
+    final MPCommand? posCommand;
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
+
+    if (areaMPID == null) {
+      posCommand = null;
+    } else {
+      final THArea area = thFile.areaByMPID(areaMPID);
+      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
+        existingLineMPID,
+        thFile,
+      );
+
+      if (areaTHID == null) {
+        throw StateError(
+          'Line with MPID $existingLineMPID is part of area with MPID $areaMPID but no areaBorderTHID found for it at MPCommandFactory.removeLineFromExisting().',
+        );
+      } else {
+        posCommand = MPCommandFactory.removeAreaBorderTHIDFromExisting(
+          existingAreaBorderTHIDMPID: areaTHID.mpID,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
+      }
+    }
 
     return MPRemoveLineCommand.forCWJM(
       lineMPID: existingLineMPID,
       isInteractiveLineCreation: isInteractiveLineCreation,
       preCommand: preCommand,
+      posCommand: posCommand,
       descriptionType: descriptionType,
     );
   }

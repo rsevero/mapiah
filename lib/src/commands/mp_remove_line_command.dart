@@ -1,6 +1,7 @@
 part of "mp_command.dart";
 
-class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
+class MPRemoveLineCommand extends MPCommand
+    with MPPreCommandMixin, MPPosCommandMixin {
   final int lineMPID;
   final bool isInteractiveLineCreation;
 
@@ -11,18 +12,22 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     required MPCommand? preCommand,
+    required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     this.preCommand = preCommand;
+    this.posCommand = posCommand;
   }
 
   MPRemoveLineCommand({
     required this.lineMPID,
     required this.isInteractiveLineCreation,
     required MPCommand? preCommand,
+    required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {
     this.preCommand = preCommand;
+    this.posCommand = posCommand;
   }
 
   @override
@@ -45,28 +50,6 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
-
-    if (areaMPID != null) {
-      final THArea area = thFile.areaByMPID(areaMPID);
-      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
-        lineMPID,
-        thFile,
-      );
-
-      if (areaTHID != null) {
-        final MPCommand removeAreaTHIDCommand =
-            MPCommandFactory.removeAreaBorderTHIDFromExisting(
-              existingAreaBorderTHIDMPID: areaTHID.mpID,
-              thFile: thFile,
-              descriptionType: descriptionType,
-            );
-
-        removeAreaTHIDCommand.execute(th2FileEditController);
-      }
-    }
-
     th2FileEditController.elementEditController.executeRemoveLine(lineMPID);
   }
 
@@ -79,6 +62,9 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
       linePositionInParent:
           _undoRedoInfo!['removedLinePositionInParent'] as int,
       lineChildren: _undoRedoInfo!['removedLineChildren'] as List<THElement>,
+      preCommand: posCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
       posCommand: preCommand
           ?.getUndoRedoCommand(th2FileEditController)
           .undoCommand,
@@ -97,6 +83,8 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
     bool? isInteractiveLineCreation,
     MPCommand? preCommand,
     bool makePreCommandNull = false,
+    MPCommand? posCommand,
+    bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPRemoveLineCommand.forCWJM(
@@ -104,6 +92,7 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
       isInteractiveLineCreation:
           isInteractiveLineCreation ?? this.isInteractiveLineCreation,
       preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
+      posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
@@ -114,6 +103,9 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
       isInteractiveLineCreation: map['isInteractiveLineCreation'],
       preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)
           ? MPCommand.fromMap(map['preCommand'])
+          : null,
+      posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
+          ? MPCommand.fromMap(map['posCommand'])
           : null,
       descriptionType: MPCommandDescriptionType.values.byName(
         map['descriptionType'],
@@ -133,6 +125,7 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
       'lineMPID': lineMPID,
       'isInteractiveLineCreation': isInteractiveLineCreation,
       'preCommand': preCommand?.toMap(),
+      'posCommand': posCommand?.toMap(),
     });
 
     return map;
@@ -146,7 +139,8 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
     return other is MPRemoveLineCommand &&
         other.lineMPID == lineMPID &&
         other.isInteractiveLineCreation == isInteractiveLineCreation &&
-        other.preCommand == preCommand;
+        other.preCommand == preCommand &&
+        other.posCommand == posCommand;
   }
 
   @override
@@ -155,5 +149,6 @@ class MPRemoveLineCommand extends MPCommand with MPPreCommandMixin {
     lineMPID,
     isInteractiveLineCreation,
     preCommand?.hashCode ?? 0,
+    posCommand?.hashCode ?? 0,
   );
 }

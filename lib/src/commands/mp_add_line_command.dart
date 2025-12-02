@@ -1,6 +1,7 @@
 part of 'mp_command.dart';
 
-class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
+class MPAddLineCommand extends MPCommand
+    with MPPreCommandMixin, MPPosCommandMixin {
   final THLine newLine;
   late final int linePositionInParent;
   final List<THElement> lineChildren;
@@ -16,9 +17,11 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
     required this.lineChildren,
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
+    required MPCommand? preCommand,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
+    this.preCommand = preCommand;
     this.posCommand = posCommand;
   }
 
@@ -28,9 +31,11 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
     required this.lineChildren,
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
+    required MPCommand? preCommand,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {
+    this.preCommand = preCommand;
     this.posCommand = posCommand;
   }
 
@@ -80,6 +85,8 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
     bool makeLineStartScreenPositionNull = false,
     MPAddAreaBorderTHIDCommand? addAreaTHIDCommand,
     bool makeAddAreaTHIDCommandNull = false,
+    MPCommand? preCommand,
+    bool makePreCommandNull = false,
     MPCommand? posCommand,
     bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
@@ -94,6 +101,7 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
       addAreaTHIDCommand: makeAddAreaTHIDCommandNull
           ? null
           : (addAreaTHIDCommand ?? this.addAreaTHIDCommand),
+      preCommand: makePreCommandNull ? null : (preCommand ?? this.preCommand),
       posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
@@ -114,6 +122,9 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
           : null,
       addAreaTHIDCommand: map.containsKey('addAreaTHIDCommand')
           ? MPAddAreaBorderTHIDCommand.fromMap(map['addAreaTHIDCommand'])
+          : null,
+      preCommand: (map.containsKey('preCommand') && (map['preCommand'] != null))
+          ? MPCommand.fromMap(map['preCommand'])
           : null,
       posCommand: (map.containsKey('posCommand') && (map['posCommand'] != null))
           ? MPCommand.fromMap(map['posCommand'])
@@ -138,6 +149,7 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
       'lineChildren': lineChildren.map((x) => x.toMap()).toList(),
       if (addAreaTHIDCommand != null)
         'addAreaTHIDCommand': addAreaTHIDCommand!.toMap(),
+      'preCommand': preCommand?.toMap(),
       'posCommand': posCommand?.toMap(),
     });
 
@@ -163,6 +175,7 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
         other.linePositionInParent == linePositionInParent &&
         other.lineStartScreenPosition == lineStartScreenPosition &&
         other.addAreaTHIDCommand == addAreaTHIDCommand &&
+        other.preCommand == preCommand &&
         other.posCommand == posCommand &&
         const DeepCollectionEquality().equals(other.lineChildren, lineChildren);
   }
@@ -174,6 +187,7 @@ class MPAddLineCommand extends MPCommand with MPPosCommandMixin {
     linePositionInParent,
     lineStartScreenPosition,
     addAreaTHIDCommand ?? 0,
+    preCommand?.hashCode ?? 0,
     posCommand?.hashCode ?? 0,
     DeepCollectionEquality().hash(lineChildren),
   );
