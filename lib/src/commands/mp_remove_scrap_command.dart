@@ -25,20 +25,6 @@ class MPRemoveScrapCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveScrapCommand.fromExisting({
-    required int existingScrapMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : scrapMPID = existingScrapMPID,
-       super() {
-    assert(existingScrapMPID > 0);
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingScrapMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeScrap;
 

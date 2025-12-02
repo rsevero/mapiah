@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -73,10 +74,11 @@ endscrap
             /// Execution: taken from TH2FileEditElementEditController.removeScrap()
 
             final int scrapMPID = parsedFile.scrapMPIDs.first;
-            final MPCommand setCommand = MPRemoveScrapCommand.fromExisting(
-              existingScrapMPID: scrapMPID,
-              thFile: controller.thFile,
-            );
+            final MPCommand setCommand =
+                MPCommandFactory.removeScrapFromExisting(
+                  existingScrapMPID: scrapMPID,
+                  thFile: controller.thFile,
+                );
 
             controller.execute(setCommand);
 
@@ -171,10 +173,11 @@ endscrap
             /// Execution: taken from TH2FileEditElementEditController.removeScrap()
 
             final int scrapMPID = parsedFile.scrapMPIDs.first;
-            final MPCommand setCommand = MPRemoveScrapCommand.fromExisting(
-              existingScrapMPID: scrapMPID,
-              thFile: controller.thFile,
-            );
+            final MPCommand setCommand =
+                MPCommandFactory.removeScrapFromExisting(
+                  existingScrapMPID: scrapMPID,
+                  thFile: controller.thFile,
+                );
 
             controller.execute(setCommand);
 

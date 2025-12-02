@@ -1316,7 +1316,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             descriptionType: descriptionType,
           );
         case THElementType.scrap:
-          removeCommand = MPRemoveScrapCommand.fromExisting(
+          removeCommand = removeScrapFromExisting(
             existingScrapMPID: mpID,
             thFile: thFile,
           );
@@ -1587,6 +1587,27 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
 
     return MPRemovePointCommand.forCWJM(
       pointMPID: existingPointMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPRemoveScrapCommand removeScrapFromExisting({
+    required int existingScrapMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveScrapCommand.defaultDescriptionType,
+  }) {
+    assert(existingScrapMPID > 0);
+
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingScrapMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveScrapCommand.forCWJM(
+      scrapMPID: existingScrapMPID,
       preCommand: preCommand,
       descriptionType: descriptionType,
     );

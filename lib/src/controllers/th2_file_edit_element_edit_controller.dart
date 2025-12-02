@@ -1161,7 +1161,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void removeScrap(int scrapMPID) {
     final MPRemoveScrapCommand removeScrapCommand =
-        MPRemoveScrapCommand.fromExisting(
+        MPCommandFactory.removeScrapFromExisting(
           existingScrapMPID: scrapMPID,
           thFile: _th2FileEditController.thFile,
         );

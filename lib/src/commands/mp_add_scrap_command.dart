@@ -58,7 +58,7 @@ class MPAddScrapCommand extends MPCommand
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = MPRemoveScrapCommand.fromExisting(
+    final MPCommand oppositeCommand = MPCommandFactory.removeScrapFromExisting(
       existingScrapMPID: newScrap.mpID,
       thFile: th2FileEditController.thFile,
       descriptionType: descriptionType,
