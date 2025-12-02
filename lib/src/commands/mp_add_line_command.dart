@@ -35,49 +35,6 @@ class MPAddLineCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddLineCommand.fromExisting({
-    required THLine existingLine,
-    int? linePositionInParent,
-    this.lineStartScreenPosition,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : newLine = existingLine,
-       lineChildren = existingLine.getChildren(thFile).toList(),
-       super() {
-    final int existingLineMPID = existingLine.mpID;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
-    final THIsParentMixin parent = existingLine.parent(thFile);
-
-    this.linePositionInParent =
-        linePositionInParent ?? parent.getChildPosition(existingLine);
-    if (areaMPID == null) {
-      addAreaTHIDCommand = null;
-    } else {
-      final THArea area = thFile.areaByMPID(areaMPID);
-      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
-        existingLineMPID,
-        thFile,
-      );
-
-      if (areaTHID == null) {
-        addAreaTHIDCommand = null;
-      } else {
-        addAreaTHIDCommand = MPCommandFactory.addAreaBorderTHIDFromExisting(
-          existingAreaBorderTHID: areaTHID,
-          thFile: thFile,
-          descriptionType: descriptionType,
-        );
-      }
-    }
-
-    posCommand = getAddEmptyLinesAfterCommand(
-      thFile: thFile,
-      parent: parent,
-      positionInParent: this.linePositionInParent,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.addLine;
 

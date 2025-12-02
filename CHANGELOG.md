@@ -21,7 +21,8 @@
     * area;
     * areaBorderTHID;
     * element;
-    * empty line.
+    * empty line;
+    * line.
 
 ## 0.2.23 - 2025-11-27 - The Peruaçu release
 * New features:

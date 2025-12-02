@@ -280,6 +280,63 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
     );
   }
 
+  static MPAddLineCommand addLineFromExisting({
+    required THLine existingLine,
+    int? linePositionInParent,
+    Offset? lineStartScreenPosition,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPAddLineCommand.defaultDescriptionType,
+  }) {
+    final List<THElement> lineChildren = existingLine
+        .getChildren(thFile)
+        .toList();
+    final int existingLineMPID = existingLine.mpID;
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
+    final THIsParentMixin parent = existingLine.parent(thFile);
+    final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
+
+    linePositionInParent =
+        linePositionInParent ?? parent.getChildPosition(existingLine);
+
+    if (areaMPID == null) {
+      addAreaTHIDCommand = null;
+    } else {
+      final THArea area = thFile.areaByMPID(areaMPID);
+      final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
+        existingLineMPID,
+        thFile,
+      );
+
+      if (areaTHID == null) {
+        addAreaTHIDCommand = null;
+      } else {
+        addAreaTHIDCommand = MPCommandFactory.addAreaBorderTHIDFromExisting(
+          existingAreaBorderTHID: areaTHID,
+          thFile: thFile,
+          descriptionType: descriptionType,
+        );
+      }
+    }
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      thFile: thFile,
+      parent: parent,
+      positionInParent: linePositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddLineCommand.forCWJM(
+      newLine: existingLine,
+      linePositionInParent: linePositionInParent,
+      lineChildren: lineChildren,
+      lineStartScreenPosition: lineStartScreenPosition,
+      addAreaTHIDCommand: addAreaTHIDCommand,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand addLineToArea({
     required THArea area,
     required THLine line,
