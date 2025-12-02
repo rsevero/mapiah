@@ -23,19 +23,6 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
     this.preCommand = preCommand;
   }
 
-  MPRemoveXTherionImageInsertConfigCommand.fromExisting({
-    required int existingXTherionImageInsertConfigMPID,
-    required THFile thFile,
-    super.descriptionType = defaultDescriptionType,
-  }) : xtherionImageInsertConfigMPID = existingXTherionImageInsertConfigMPID,
-       super() {
-    preCommand = getRemoveEmptyLinesAfterCommand(
-      elementMPID: existingXTherionImageInsertConfigMPID,
-      thFile: thFile,
-      descriptionType: descriptionType,
-    );
-  }
-
   @override
   MPCommandType get type => MPCommandType.removeXTherionImageInsertConfig;
 

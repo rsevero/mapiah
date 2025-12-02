@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -73,7 +74,7 @@ void main() {
 
             final int imageMPID = parsedFile.imageMPIDs.first;
             final MPCommand setCommand =
-                MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+                MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
                   existingXTherionImageInsertConfigMPID: imageMPID,
                   thFile: parsedFile,
                 );
@@ -159,7 +160,7 @@ void main() {
 
             final int imageMPID = parsedFile.imageMPIDs.first;
             final MPCommand setCommand =
-                MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+                MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
                   existingXTherionImageInsertConfigMPID: imageMPID,
                   thFile: parsedFile,
                 );

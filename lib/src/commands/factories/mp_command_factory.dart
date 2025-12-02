@@ -1321,7 +1321,7 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
             thFile: thFile,
           );
         case THElementType.xTherionImageInsertConfig:
-          removeCommand = MPRemoveXTherionImageInsertConfigCommand.fromExisting(
+          removeCommand = removeXTherionImageInsertConfigFromExisting(
             existingXTherionImageInsertConfigMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
@@ -1608,6 +1608,26 @@ class MPCommandFactory with MPEmptyLinesAfterMixin {
 
     return MPRemoveScrapCommand.forCWJM(
       scrapMPID: existingScrapMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPRemoveXTherionImageInsertConfigCommand
+  removeXTherionImageInsertConfigFromExisting({
+    required int existingXTherionImageInsertConfigMPID,
+    required THFile thFile,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveXTherionImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingXTherionImageInsertConfigMPID,
+      thFile: thFile,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
+      xtherionImageInsertConfigMPID: existingXTherionImageInsertConfigMPID,
       preCommand: preCommand,
       descriptionType: descriptionType,
     );
