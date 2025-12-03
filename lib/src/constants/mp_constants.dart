@@ -73,7 +73,7 @@ const int mpMaximumInt = 2 ^ 53 - 1;
 const double thLogN10 = math.ln10;
 const double th45Degrees = math.pi / 4;
 
-const double mpLineSimplifyEpsilonOnScreen = 1.5;
+const double mpLineSimplifyEpsilonOnScreen = 1.0;
 
 const double thMinimumSizeForDrawing = 10.0;
 
