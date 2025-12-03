@@ -3,10 +3,10 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -302,6 +302,8 @@ class MPEditElementAux {
     required THLine originalLine,
     required THFile thFile,
     required List<THLineSegment> newLineSegmentsList,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.replaceLineSegments,
   }) {
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     originalLineSegments = originalLine.getLineSegmentsPositionList(thFile);
@@ -313,66 +315,10 @@ class MPEditElementAux {
       lineMPID: originalLine.mpID,
       originalLineSegments: originalLineSegments,
       newLineSegments: newLineSegments,
+      descriptionType: descriptionType,
     );
 
     return replaceCommand;
-  }
-
-  static MPCommand? getSimplifyCommandForBezierCurveLineSegments({
-    required THFile thFile,
-    required THLine originalLine,
-    required List<THLineSegment> originalLineSegmentsList,
-    required double accuracy,
-    required int decimalPositions,
-  }) {
-    final List<THLineSegment> simplifiedLineSegmentsList =
-        mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
-          originalLineSegmentsList,
-          accuracy: accuracy,
-          decimalPositions: decimalPositions,
-        );
-
-    // print(
-    //   'Original line segments count: ${originalLineSegmentsList.length}, simplified line segments count: ${simplifiedLineSegmentsList.length}',
-    // );
-
-    if (simplifiedLineSegmentsList.length >= originalLineSegmentsList.length) {
-      // No simplification was possible.
-      return null;
-    }
-
-    final MPCommand simplifyCommand = getReplaceLineSegmentsCommand(
-      originalLine: originalLine,
-      thFile: thFile,
-      newLineSegmentsList: simplifiedLineSegmentsList,
-    );
-
-    return simplifyCommand;
-  }
-
-  static MPCommand? getSimplifyCommandForStraightLineSegments({
-    required THFile thFile,
-    required THLine originalLine,
-    required List<THLineSegment> originalLineSegmentsList,
-    required double accuracy,
-  }) {
-    final List<THLineSegment> simplifiedLineSegmentsList =
-        MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
-          originalStraightLineSegments: originalLineSegmentsList,
-          accuracy: accuracy,
-        );
-
-    if (simplifiedLineSegmentsList.length >= originalLineSegmentsList.length) {
-      return null;
-    }
-
-    final MPCommand simplifyCommand = getReplaceLineSegmentsCommand(
-      originalLine: originalLine,
-      thFile: thFile,
-      newLineSegmentsList: simplifiedLineSegmentsList,
-    );
-
-    return simplifyCommand;
   }
 
   static List<({THLineSegment lineSegment, int lineSegmentPosition})>
@@ -516,33 +462,6 @@ class MPEditElementAux {
         );
 
     return simplifiedLineSegments;
-  }
-
-  static MPCommand
-  getSimplifyCommandForBezierCurveLineSegmentsToStraightLineSegments({
-    required THFile thFile,
-    required THLine originalLine,
-    required List<THLineSegment> originalLineSegmentsList,
-    required double convertToStraightRefTolerance,
-    required double accuracy,
-    required int decimalPositions,
-  }) {
-    final List<THLineSegment> simplifiedStraightSegments =
-        mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
-          thFile: thFile,
-          originalLine: originalLine,
-          originalLineSegmentsList: originalLineSegmentsList,
-          convertToStraightRefTolerance: convertToStraightRefTolerance,
-          accuracy: accuracy,
-          decimalPositions: decimalPositions,
-        );
-    final MPCommand replaceCommand = getReplaceLineSegmentsCommand(
-      originalLine: originalLine,
-      thFile: thFile,
-      newLineSegmentsList: simplifiedStraightSegments,
-    );
-
-    return replaceCommand;
   }
 }
 

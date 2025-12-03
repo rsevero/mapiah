@@ -18,6 +18,7 @@
   * On certain occasions, when simplifying straight lines to Bézier, there were Ss created on the resulting lines.
   * Line types "Floor Step" and "floor-step" being presented.
   * On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
+  * On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
 * Infrastructure maintenance:
   * Creating TH2FileEditElementEditController._lineSegmentsWithOptionsToPreserveSimplification set to keep track of line segments that have options to preserve during simplification.
   * MPEditElementAux.separateLineSegmentsPerType() moved to TH2FileEditElementEditController.groupLineSegmentsForSimplification().

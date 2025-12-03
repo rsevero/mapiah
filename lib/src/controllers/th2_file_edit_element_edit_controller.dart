@@ -1598,6 +1598,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 originalLine: originalLine,
                 thFile: _originalFileForLineSimplification!,
                 newLineSegmentsList: simplifiedLineSegmentsCompleteList,
+                descriptionType: (lineCount == 1)
+                    ? MPCommandDescriptionType.simplifyLine
+                    : MPCommandDescriptionType.simplifyLines,
               );
 
           simplifyCommands.add(simplifyCommand);

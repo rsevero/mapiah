@@ -86,7 +86,7 @@
 [X] - BUG: when simplifying a line being node edited, the visual editing points are not immediatly updated.
 [X] - When a line is deleted, if it's the last line of an area, the area should also be deleted.
 [X] - BUG: On 'single line edit' mode, if the direction of the line is inverted, the screen does not show it.
-[ ] - BUG: On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
+[X] - BUG: On 'simplify line forcing to Bézier' the undo description says a generic 'substitute line segments'.
 [ ] - BUG: when on 'single line edit' mode, if the user clicks on another element, it is presents the 'Multiple elements clicked' dialog box instead of just selecting the new element.
 [X] - BUG: when simplifying a line, line segment options are being lost.
 [X] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
