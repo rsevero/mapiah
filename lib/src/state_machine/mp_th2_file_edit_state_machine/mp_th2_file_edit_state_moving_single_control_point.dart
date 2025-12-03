@@ -45,14 +45,11 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine selected =
-        selectionController.mpSelectedElementsLogical.values.first
-            as MPSelectedLine;
-    final THLine selectedLine = selected.originalElementClone as THLine;
+    final MPSelectedLine mpSelectedLine = selectionController
+        .getMPSelectedLine();
+    final THLine selectedLine = selectionController.getSelectedLine();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
-        selected.originalLineSegmentsMapClone;
-    // final List<int> lineLineSegmentsMPIDs =
-    //     originalLineSegmentsMapClone.keys.toList();
+        mpSelectedLine.originalLineSegmentsMapClone;
     final Iterable<int> selectedControlPointLineSegmentMPIDs =
         selectionController.selectedEndControlPoints.keys;
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =

@@ -112,7 +112,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       final THLineSegment clickedEndControlPointLineSegment =
           clickedEndControlPoint.element as THLineSegment;
       final bool clickedEndControlPointAlreadySelected = selectionController
-          .isEndControlPointSelected(clickedEndControlPointLineSegment.mpID);
+          .isEndControlPointSelected(clickedEndControlPoint);
 
       if (shiftPressed) {
         if (clickedEndControlPointAlreadySelected) {
@@ -121,6 +121,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           ]);
         } else {
           selectionController.addSelectedEndControlPoint(
+            clickedEndControlPoint,
+          );
+        }
+      } else {
+        if (!clickedEndControlPointAlreadySelected) {
+          selectionController.setSelectedEndControlPoint(
             clickedEndControlPoint,
           );
         }
@@ -241,32 +247,35 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     _dragShouldMovePoints = false;
 
-    if (!shiftPressed) {
-      for (final MPSelectableEndControlPoint clickedEndControlPoint
-          in clickedEndControlPoints) {
-        if (selectionController.isEndControlPointSelected(
-          clickedEndControlPoint.lineSegment.mpID,
-        )) {
-          _dragShouldMovePoints = true;
-          break;
-        }
-      }
-    }
-
     if (clickedEndControlPoints.length == 1) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
 
       if (!shiftPressed) {
+        _dragShouldMovePoints = true;
         if (!selectionController.isEndControlPointSelected(
-          clickedEndControlPoint.lineSegment.mpID,
+          clickedEndControlPoint,
         )) {
           selectionController.setSelectedEndControlPoint(
             clickedEndControlPoint,
           );
         }
       }
+    } else if (clickedEndControlPoints.length > 1) {
+      if (!shiftPressed) {
+        for (final MPSelectableEndControlPoint clickedEndControlPoint
+            in clickedEndControlPoints) {
+          if (selectionController.isEndControlPointSelected(
+            clickedEndControlPoint,
+          )) {
+            _dragShouldMovePoints = true;
+            break;
+          }
+        }
+      }
     }
+
+    th2FileEditController.triggerEditLineRedraw();
   }
 
   @override
@@ -285,7 +294,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
             MPTH2FileEditStateType.movingEndControlPoints,
           );
         default:
-          throw UnimplementedError();
+          throw StateError(
+            'Error: Unknown MPSelectedEndControlPointPointType at MPTH2FileEditStateEditSingleLine.onPrimaryButtonDragUpdate().',
+          );
       }
     } else {
       selectionController.setSelectionWindowScreenEndCoordinates(

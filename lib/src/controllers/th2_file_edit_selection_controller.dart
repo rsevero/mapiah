@@ -1519,6 +1519,17 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
+  MPSelectedLine getMPSelectedLine() {
+    if ((_mpSelectedElementsLogical.length != 1) ||
+        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
+      throw Exception(
+        'At TH2FileEditSelectionController.getMPSelectedLine: there is not exactly one selected line',
+      );
+    }
+
+    return _mpSelectedElementsLogical.values.first as MPSelectedLine;
+  }
+
   THLine getSelectedLine() {
     if ((_mpSelectedElementsLogical.length != 1) ||
         (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
@@ -1611,8 +1622,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return _mpSelectedElementsLogical.containsKey(mpID);
   }
 
-  bool isEndControlPointSelected(int mpID) {
-    return _selectedEndControlPoints.containsKey(mpID);
+  bool isEndControlPointSelected(MPSelectableEndControlPoint endControlPoint) {
+    final int mpID = endControlPoint.element.mpID;
+
+    if (!_selectedEndControlPoints.containsKey(mpID)) {
+      return false;
+    }
+
+    return _selectedEndControlPoints[mpID]!.type == endControlPoint.type;
   }
 
   @action

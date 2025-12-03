@@ -38,12 +38,12 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void setStatusBarMessage() {
-    final List<int> lineLineSegmentsMPIDs = selectionController
-        .getSelectedLineLineSegmentsMPIDs();
+    final int selectedEndControlPointsCount =
+        selectionController.selectedEndControlPoints.length;
 
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.mpMovingEndControlPointsStateBarMessage(
-        lineLineSegmentsMPIDs.length,
+        selectedEndControlPointsCount,
       ),
     );
   }
@@ -76,10 +76,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine mpSelectedLine =
-        selectionController.mpSelectedElementsLogical.values.first
-            as MPSelectedLine;
-    final THLine selectedLine = mpSelectedLine.originalElementClone as THLine;
+    final MPSelectedLine mpSelectedLine = selectionController
+        .getMPSelectedLine();
+    final THLine selectedLine = selectionController.getSelectedLine();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
         mpSelectedLine.originalLineSegmentsMapClone;
     final List<int> lineLineSegmentsMPIDs = selectionController
