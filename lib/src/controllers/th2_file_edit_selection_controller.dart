@@ -701,6 +701,54 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return clickedElementsMap;
   }
 
+  Future<Map<int, THElement>> getSelectableLineSegmentsOfLineClickedWithDialog({
+    required Offset screenCoordinates,
+    required int referenceLineMPID,
+    required bool canBeMultiple,
+    required bool presentMultipleElementsClickedWidget,
+  }) async {
+    final Map<int, THElement> clicked = _getSelectableElementsClicked(
+      screenCoordinates: screenCoordinates,
+      selectionType: THSelectionType.lineSegment,
+    );
+
+    clickedElements.clear();
+
+    for (final THElement element in clicked.values) {
+      if (element is! THLineSegment) {
+        throw Exception(
+          'At TH2FileEditSelectionController.getSelectableLineSegmentsOfLineOrLineClickedWithDialog: clicked element is not a THLineSegment',
+        );
+      }
+
+      if (element.parentMPID == referenceLineMPID) {
+        clickedElements[element.mpID] = element;
+      }
+    }
+
+    if (presentMultipleElementsClickedWidget && (clickedElements.length > 1)) {
+      selectionCanBeMultiple = canBeMultiple;
+      _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+        MPWindowType.multipleElementsClicked,
+        true,
+      );
+
+      multipleClickedSemaphore = Completer<void>();
+      await multipleClickedSemaphore.future;
+
+      if (_multipleElementsClickedChoice > 0) {
+        clickedElements.clear();
+        clickedElements[_multipleElementsClickedChoice] = _thFile.elementByMPID(
+          _multipleElementsClickedChoice,
+        );
+      } else if (_multipleElementsClickedChoice < 0) {
+        clickedElements.clear();
+      }
+    }
+
+    return clickedElements;
+  }
+
   Future<Map<int, THElement>> getSelectableElementsClickedWithDialog({
     required Offset screenCoordinates,
     required THSelectionType selectionType,
@@ -774,8 +822,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }) async {
     final Offset canvasCoordinates = _th2FileEditController
         .offsetScreenToCanvas(screenCoordinates);
-    clickedEndControlPoints.clear();
     final List<MPSelectableEndControlPoint> clickedControlPoints = [];
+
+    clickedEndControlPoints.clear();
 
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
@@ -1470,17 +1519,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
+  THLine getSelectedLine() {
+    if ((_mpSelectedElementsLogical.length != 1) ||
+        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
+      throw Exception(
+        'At TH2FileEditSelectionController.getSelectedLine: there is not exactly one selected line',
+      );
+    }
+
+    return (_mpSelectedElementsLogical.values.first as MPSelectedLine)
+        .originalLineClone;
+  }
+
   List<int> getSelectedLineLineSegmentsMPIDs() {
-    _selectedLineLineSegmentsMPIDs ??=
-        ((_mpSelectedElementsLogical[_mpSelectedElementsLogical.keys.first]
-                        as MPSelectedLine)
-                    .originalElementClone
-                as THLine)
-            .childrenMPIDs
-            .where((childMPID) {
-              return _thFile.elementByMPID(childMPID) is THLineSegment;
-            })
-            .toList();
+    _selectedLineLineSegmentsMPIDs ??= getSelectedLine().childrenMPIDs.where((
+      childMPID,
+    ) {
+      return _thFile.elementByMPID(childMPID) is THLineSegment;
+    }).toList();
 
     return _selectedLineLineSegmentsMPIDs!;
   }
