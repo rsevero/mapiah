@@ -1447,17 +1447,16 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final MPCommand toggleAllCommand = (toggleCommands.length == 1)
-        ? toggleCommands.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: toggleCommands,
-            completionType:
-                MPMultipleElementsCommandCompletionType.optionsEdited,
-            descriptionType: MPCommandDescriptionType.toggleReverseOption,
-          );
+    final MPCommand toggleAllCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: toggleCommands,
+          completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+          descriptionType: MPCommandDescriptionType.toggleReverseOption,
+        );
 
     _th2FileEditController.execute(toggleAllCommand);
     _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
   }
 
   @action
