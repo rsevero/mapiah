@@ -91,7 +91,7 @@
 [X] - BUG: when simplifying a line, line segment options are being lost.
 [X] - BUG: when saving a file with lines with line segments that have 'l-size' options, the 'l-size' options are being lost.
 [X] - Simplification calculated values should use "current decimals".
-[ ] - BUG: when deleting several line points near an extremity, the extremity changed position.
+[X] - BUG: when deleting several line points near an extremity, the extremity changed position.
 [ ] - BUG: after deleting several line points, the line is not click-selectable at its new line segments.
 [X] - BUG: line types "Floor Step" and "floor-step" being presented.
 [ ] - When there is some snap option enabled, the "snap" button should be visually different.
@@ -103,6 +103,8 @@
 [ ] - List of elements that should not be movable: Point station.
 [ ] - List of elements that should not be selectable: Line u:splay.
 [ ] - Snap should have "points" and line points" on as default.
+[ ] - Saving should close overlay windows like "options".
+[ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

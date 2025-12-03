@@ -5,8 +5,6 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   final TH2FileEditSnapController snapController;
-  THElement? _clickedElementAtPointerDown;
-  bool _searchedForClickedElementAtPointerDown = false;
 
   MPTH2FileEditStateMovingEndControlPoints({
     required super.th2FileEditController,
@@ -56,17 +54,6 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     final Offset snapedCanvasOffset = snapController
         .getCanvasSnapedOffsetFromCanvasOffset(canvasOffset);
 
-    if (!_searchedForClickedElementAtPointerDown) {
-      _searchedForClickedElementAtPointerDown = true;
-      _clickedElementAtPointerDown = snapController
-          .getNearerSelectedLineSegment(canvasOffset);
-      if (_clickedElementAtPointerDown != null) {
-        selectionController.setDragStartCoordinatesFromCanvasCoordinates(
-          (_clickedElementAtPointerDown as THLineSegment).endPoint.coordinates,
-        );
-      }
-    }
-
     setStatusBarMessage();
 
     selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
@@ -91,7 +78,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         LinkedHashMap<int, THLineSegment>();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
-    final int referenceLineSegmentMPID = _clickedElementAtPointerDown!.mpID;
+    final int referenceLineSegmentMPID =
+        selectionController.clickedElementAtSingleLineEditPointerDown!.mpID;
     final THPositionPart snapedPosition =
         snapController.getCanvasSnapedPositionFromScreenOffset(
           event.localPosition,

@@ -20,6 +20,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    setClickedElementAtPointerDown(null);
     selectionController.resetSelectedLineLineSegmentsMPIDs();
     selectionController.updateSelectableEndAndControlPoints();
     elementEditController.resetOriginalFileForLineSimplification();
@@ -229,6 +230,17 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return;
   }
 
+  void setClickedElementAtPointerDown(THElement? clickedElement) {
+    selectionController.clickedElementAtSingleLineEditPointerDown =
+        clickedElement;
+
+    if (clickedElement != null) {
+      selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+        (clickedElement as THLineSegment).endPoint.coordinates,
+      );
+    }
+  }
+
   @override
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
@@ -250,6 +262,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (clickedEndControlPoints.length == 1) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
+
+      setClickedElementAtPointerDown(clickedEndControlPoint.element);
 
       if (!shiftPressed) {
         _dragShouldMovePoints = true;
@@ -273,6 +287,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           }
         }
       }
+      setClickedElementAtPointerDown(clickedEndControlPoints.first.element);
     }
 
     th2FileEditController.triggerEditLineRedraw();
@@ -328,6 +343,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         );
       }
     }
+
+    setClickedElementAtPointerDown(null);
     selectionController.updateSelectableEndAndControlPoints();
     th2FileEditController.triggerEditLineRedraw();
   }

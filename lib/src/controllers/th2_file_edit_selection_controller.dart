@@ -90,6 +90,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
 
+  THElement? clickedElementAtSingleLineEditPointerDown;
+
   List<int>? _selectedLineLineSegmentsMPIDs;
 
   Map<MPSelectionHandleType, Offset>? _selectionHandleCenters;
