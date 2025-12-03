@@ -102,6 +102,7 @@
 [ ] - Make THID the first option when writing to file.
 [ ] - List of elements that should not be movable: Point station.
 [ ] - List of elements that should not be selectable: Line u:splay.
+[ ] - Snap should have "points" and line points" on as default.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

@@ -951,7 +951,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         removeLineSegmentCommands.add(removeLineSegmentCommand);
       }
 
-      final MPCommand removeCommand = MPMultipleElementsCommand.forCWJM(
+      final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
         commandsList: removeLineSegmentCommands,
         completionType:
             MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
