@@ -1322,7 +1322,7 @@ class MPTextToUser {
   }) {
     final Map<String, String> choices = {};
 
-    for (final choiceType in THAreaType.values) {
+    for (final THAreaType choiceType in THAreaType.values) {
       choices[choiceType.name] = getAreaType(choiceType);
     }
 
@@ -1347,7 +1347,7 @@ class MPTextToUser {
   }) {
     final Map<String, String> choices = {};
 
-    for (final choiceType in THLineType.values) {
+    for (final THLineType choiceType in THLineType.values) {
       choices[choiceType.name] = getLineType(choiceType);
     }
 

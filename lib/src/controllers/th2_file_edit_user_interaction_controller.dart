@@ -421,7 +421,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     switch (elementType) {
       case THElementType.area:
-        for (final mpSelectedElement in mpSelectedElements) {
+        for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
           if ((mpSelectedElement.originalElementClone is! THArea) ||
               (mpSelectedElement.originalElementClone as THArea)
                       .areaType

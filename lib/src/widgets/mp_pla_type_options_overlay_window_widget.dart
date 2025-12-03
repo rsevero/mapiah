@@ -14,6 +14,9 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
+/// A widget representing an overlay window for selecting PLA types for
+/// elements. It shows all available PLA types, as well as last used and most
+/// used types, and allows the user to enter a custom type.
 class MPPLATypeOptionsOverlayWindowWidget extends StatefulWidget {
   final THElementType elementType;
   final TH2FileEditController th2FileEditController;
@@ -74,7 +77,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         widget.th2FileEditController.elementEditController;
     late Map<String, String> choices;
     late List<String> lastUsedChoices;
-    late List<String> lastUsedChoicesReduced = [];
+    final List<String> lastUsedChoicesReduced = [];
     late List<String> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
@@ -264,6 +267,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                     children: [
                       ...choices.entries.map((MapEntry<String, String> entry) {
                         final bool isUnknown = entry.key == mpUnknownPLAType;
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

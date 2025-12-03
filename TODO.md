@@ -93,7 +93,7 @@
 [X] - Simplification calculated values should use "current decimals".
 [ ] - BUG: when deleting several line points near an extremity, the extremity changed position.
 [ ] - BUG: after deleting several line points, the line is not click-selectable at its new line segments.
-[ ] - BUG: line types "Floor Step" and "floor-step" being presented.
+[X] - BUG: line types "Floor Step" and "floor-step" being presented.
 [ ] - When there is some snap option enabled, the "snap" button should be visually different.
 [ ] - On 'single line edit' mode, when a endpoint is selected, clicking on a control point and dragging should work.
 [ ] - BUG: on 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.

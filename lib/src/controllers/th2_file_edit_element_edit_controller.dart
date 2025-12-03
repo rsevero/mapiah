@@ -49,11 +49,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     for (final THElement element in elements) {
       switch (element) {
         case THArea _:
-          _setMostUsedAreaType(element.plaType);
+          _setMostUsedAreaType(element.areaType.name);
         case THLine _:
-          _setMostUsedLineType(element.plaType);
+          _setMostUsedLineType(element.lineType.name);
         case THPoint _:
-          _setMostUsedPointType(element.plaType);
+          _setMostUsedPointType(element.pointType.name);
         default:
       }
     }

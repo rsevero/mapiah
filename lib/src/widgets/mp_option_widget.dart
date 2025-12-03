@@ -6,6 +6,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 
+/// A widget representing a single option in a list of command options.
 class MPOptionWidget extends StatelessWidget {
   final MPOptionInfo optionInfo;
   final TH2FileEditController th2FileEditController;

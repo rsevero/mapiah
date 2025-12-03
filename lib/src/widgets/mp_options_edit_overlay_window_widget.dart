@@ -23,6 +23,8 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
+/// A widget representing an overlay window for editing options of selected
+/// elements.
 class MPOptionsEditOverlayWindowWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Offset outerAnchorPosition;
@@ -73,7 +75,7 @@ class _MPOptionsEditOverlayWindowWidgetState
         int countAreas = 0;
         THArea? singleSelectedArea;
 
-        for (final mpSelectedElement in mpSelectedElements) {
+        for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
           switch (mpSelectedElement) {
             case MPSelectedArea _:
               if (mpSelectedElement.originalAreaClone.plaType !=
