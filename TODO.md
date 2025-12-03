@@ -96,7 +96,7 @@
 [X] - BUG: line types "Floor Step" and "floor-step" being presented.
 [ ] - When there is some snap option enabled, the "snap" button should be visually different.
 [X] - On 'single line edit' mode, when a endpoint is selected, clicking on a control point and dragging should work.
-[ ] - BUG: on 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.
+[X] - BUG: on 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.
 [ ] - BUG: when clicking the 'Ok' button to set an option, the overlay window of the option being set is not closed.
 [ ] - BUG: when selecting a multiple option option, the overlay window of the option being set is not closed.
 [ ] - Make THID the first option when writing to file.

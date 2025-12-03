@@ -937,14 +937,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (selectedLineSegmentMPIDs.isEmpty) {
       return;
-    } else if (selectedLineSegmentMPIDs.length == 1) {
-      final MPCommand removeCommand =
-          MPCommandFactory.removeLineSegmentFromExisting(
-            existingLineSegmentMPID: selectedLineSegmentMPIDs.first,
-            thFile: _thFile,
-          );
-
-      _th2FileEditController.execute(removeCommand);
     } else {
       final List<MPCommand> removeLineSegmentCommands = [];
 
@@ -965,6 +957,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
         descriptionType: MPCommandDescriptionType.removeLineSegment,
       );
+
+      if (removeCommand is MPMultipleElementsCommand) {
+        removeCommand.prepareUndoRedoInfo(_th2FileEditController);
+      }
 
       _th2FileEditController.undoRedoController.add(removeCommand);
     }

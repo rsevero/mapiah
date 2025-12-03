@@ -60,6 +60,14 @@ class MPMultipleElementsCommand extends MPCommand {
     );
   }
 
+  /// If the subcommands have already been executed, it is necessary to call
+  /// manually the multiple command prepareUndoRedoInfo method to prepare
+  /// its own the undo/redo information. The subcommands prepareUndoRedoInfo
+  /// method has already been called.
+  void prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    _undoRedoInfo = {};
+  }
+
   @override
   MPMultipleElementsCommand copyWith({
     List<MPCommand>? commandsList,

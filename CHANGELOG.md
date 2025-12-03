@@ -8,6 +8,7 @@
   * When deleting the second to last line segment of a line, the whole line should be deleted.
   * When the last area border THID of an area is deleted, the area itself is deleted.
   * On 'single line edit' mode, when a endpoint is selected, clicking on a control point and dragging should work.
+  * On 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.
 * Fixed bugs:
   * Lines and points with unknown types would throw when being drawn.
   * Walkway line type not recognized.
