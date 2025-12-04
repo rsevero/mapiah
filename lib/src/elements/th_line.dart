@@ -431,7 +431,6 @@ class THLine extends THElement
     }
 
     resetLineSegmentsLists();
-    clearBoundingBox();
   }
 
   LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THFile thFile) {

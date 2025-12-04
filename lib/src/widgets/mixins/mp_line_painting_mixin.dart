@@ -65,8 +65,6 @@ mixin MPLinePaintingMixin {
             x: lineSegment.x,
             y: lineSegment.y,
           );
-        default:
-          continue;
       }
     }
 

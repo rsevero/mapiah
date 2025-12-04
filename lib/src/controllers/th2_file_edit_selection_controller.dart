@@ -1411,6 +1411,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       modifiedLineSegments,
     );
     updateSelectableEndAndControlPoints();
+    _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }
 
@@ -1548,6 +1549,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       modifiedLineSegments,
     );
     updateSelectableEndAndControlPoints();
+    _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }
 

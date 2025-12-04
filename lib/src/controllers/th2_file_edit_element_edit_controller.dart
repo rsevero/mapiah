@@ -293,7 +293,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       modifiedLineSegmentsMap.values.first.parentMPID,
     );
 
-    line.clearBoundingBox();
     line.resetLineSegmentsLists();
   }
 
@@ -357,7 +356,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     selectionController.updateSelectedElementClone(newLineSegment.mpID);
     selectionController.updateSelectedElementClone(newLineSegment.parentMPID);
     selectionController.resetSelectableElements();
-    line.clearBoundingBox();
     line.resetLineSegmentsLists();
   }
 
