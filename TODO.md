@@ -105,6 +105,7 @@
 [ ] - Snap should have "points" and line points" on as default.
 [ ] - Saving should close overlay windows like "options".
 [ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
+[ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

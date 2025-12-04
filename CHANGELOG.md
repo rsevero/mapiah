@@ -9,6 +9,7 @@
   * When the last area border THID of an area is deleted, the area itself is deleted.
   * On 'single line edit' mode:
     * when a endpoint is selected, clicking on a control point and dragging should work.
+  * On single element selected status bar, include the name of the unknown PLA type when the element type is unknown.
 * Fixed bugs:
   * Lines and points with unknown types would throw when being drawn.
   * Walkway line type not recognized.

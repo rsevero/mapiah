@@ -12,16 +12,21 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       case THArea _:
         return getStatusBarMessageForSingleSelectedArea(element);
       default:
-        return 'Unsupported element type';
+        return 'Unsupported element type at MPTH2FileEditPageSingleElementSelectedMixin.getStatusBarMessageForSingleSelectedElement().';
     }
   }
 
   String getStatusBarMessageForSingleSelectedPoint(THPoint point) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final String pointType = appLocalizations
+
+    String pointType = appLocalizations
         .mpStatusBarMessageSingleSelectedPointType(
           MPTextToUser.getPointType(point.pointType),
         );
+
+    if (point.pointType == THPointType.unknown) {
+      pointType += ' (${point.unknownPLAType})';
+    }
 
     String message = getStatusBarMainMessage(
       elementType: pointType,
@@ -35,10 +40,14 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
   String getStatusBarMessageForSingleSelectedLine(THLine line) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final String lineType = appLocalizations
-        .mpStatusBarMessageSingleSelectedLineType(
-          MPTextToUser.getLineType(line.lineType),
-        );
+
+    String lineType = appLocalizations.mpStatusBarMessageSingleSelectedLineType(
+      MPTextToUser.getLineType(line.lineType),
+    );
+
+    if (line.lineType == THLineType.unknown) {
+      lineType += ' (${line.unknownPLAType})';
+    }
 
     String message = getStatusBarMainMessage(
       elementType: lineType,
@@ -105,10 +114,14 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
     /// Example output:
     /// Area type TYPE [no subtype|subtype SUBTYPE] - XX lines: line THIDs list - [no options|options: OPTION1=VALUE1, OPTION2=VALUE2, ...]
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final String areaType = appLocalizations
-        .mpStatusBarMessageSingleSelectedAreaType(
-          MPTextToUser.getAreaType(area.areaType),
-        );
+
+    String areaType = appLocalizations.mpStatusBarMessageSingleSelectedAreaType(
+      MPTextToUser.getAreaType(area.areaType),
+    );
+
+    if (area.areaType == THAreaType.unknown) {
+      areaType += ' (${area.unknownPLAType})';
+    }
 
     String message = getStatusBarMainMessage(
       elementType: areaType,

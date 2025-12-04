@@ -1640,16 +1640,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (simplifyCommands.isEmpty) {
       return;
     } else {
-      final MPCommand simplifyCommand = (simplifyCommands.length == 1)
-          ? simplifyCommands.first
-          : MPMultipleElementsCommand.forCWJM(
-              commandsList: simplifyCommands,
-              completionType:
-                  MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-              descriptionType: lineCount == 1
-                  ? MPCommandDescriptionType.simplifyLine
-                  : MPCommandDescriptionType.simplifyLines,
-            );
+      final MPCommand simplifyCommand =
+          MPCommandFactory.multipleCommandsFromList(
+            commandsList: simplifyCommands,
+            descriptionType: lineCount == 1
+                ? MPCommandDescriptionType.simplifyLine
+                : MPCommandDescriptionType.simplifyLines,
+            completionType:
+                MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+          );
 
       if (_isFirstLineSimplification) {
         _th2FileEditController.execute(simplifyCommand);
