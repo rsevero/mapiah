@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.24 - not yet released
+## 0.2.24 - 2025-12-04 - The Peruaçu data processing release
 * New features:
   * When a single element is selected, show its properties in the status bar.
   * Simplification calculated values should use "current decimals".
