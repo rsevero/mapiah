@@ -56,26 +56,32 @@ scrap Trianglinho-1R1-2p
   endline
 endscrap
 ''',
-        'asFileChanged': r'''encoding UTF-8
-scrap Trianglinho-1R1-2p
-  line wall
-    64.21 -61.41
-    94.52 -63.03
-    149.51 -75.33
-    163.77 -75.33
-    176.39 -81.51
-    181.55 -94.76
-    184.3 -123.49
-    193.21 -164.67
-    207.76 -171.21
-  endline
-endscrap
-''',
+        'asFileChanged':
+            'encoding UTF-8\n'
+            'scrap Trianglinho-1R1-2p\n'
+            '  line wall\n'
+            '    64.21 -61.41\n'
+            '    94.52 -63.03\n'
+            '    108.76 -65.62\n'
+            '    136.13 -72.61\n'
+            '    149.51 -75.33\n'
+            '    163.77 -75.33\n'
+            '    176.39 -81.51\n'
+            '    181.55 -94.76\n'
+            '    182.36 -109.48\n'
+            '    184.3 -123.49\n'
+            '    187.86 -137.32\n'
+            '    189.64 -150.59\n'
+            '    193.21 -164.67\n'
+            '    207.76 -171.21\n'
+            '  endline\n'
+            'endscrap\n'
+            '',
       },
       {
         'file': '2025-10-27-002-bezier_line.th2',
         'length': 14,
-        'scale': 1.0,
+        'scale': 0.1,
         'repetitions': 8,
         'encoding': 'UTF-8',
         'lineID': 'blaus',
