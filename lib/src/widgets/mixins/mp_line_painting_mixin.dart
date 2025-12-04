@@ -21,12 +21,20 @@ mixin MPLinePaintingMixin {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final LinkedHashMap<int, THLineSegment> lineEndpointsMap =
         LinkedHashMap<int, THLineSegment>();
-    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
+
+    /// We need to get childrenMPIDs and filter for line segments later. Using
+    /// line.getLineSegments(thFile) here messes with the updating of the
+    /// line segments during interactive editing.
+    final List<int> lineChildrenMPIDs = line.childrenMPIDs;
 
     bool isFirst = true;
 
-    for (THLineSegment lineSegment in lineSegments) {
-      final int lineSegmentMPID = lineSegment.mpID;
+    for (int lineSegmentMPID in lineChildrenMPIDs) {
+      final THElement lineSegment = thFile.elementByMPID(lineSegmentMPID);
+
+      if (lineSegment is! THLineSegment) {
+        continue;
+      }
 
       if (returnLineSegments) {
         lineEndpointsMap[lineSegmentMPID] = lineSegment;

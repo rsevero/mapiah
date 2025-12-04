@@ -17,14 +17,22 @@ class MPSelectedLine extends MPSelectedElement {
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
-    final Iterable<int> lineSegmentMPIDs = originalLine.getLineSegmentMPIDs(
-      thFile,
-    );
+
+    /// We need to use the childrenMPIDs directly from the line, because
+    /// using originalLine.getLineSegments(thFile) or
+    /// originalLine.getLineSegmentMPIDs(thFile,) here messes with the updating
+    /// of the control points during interactive editing.
+    final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPIDs;
 
     originalLineSegmentsMapClone.clear();
 
     for (final int mpID in lineSegmentMPIDs) {
-      final THLineSegment lineSegment = thFile.lineSegmentByMPID(mpID);
+      final THElement lineSegment = thFile.elementByMPID(mpID);
+
+      if (lineSegment is! THLineSegment) {
+        continue;
+      }
+
       final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap =
           SplayTreeMap<THCommandOptionType, THCommandOption>();
       final SplayTreeMap<String, THAttrCommandOption> attrOptionsMap =
