@@ -1228,7 +1228,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
 
-    for (final lineSegmentEntry
+    for (final MapEntry<int, THLineSegment> lineSegmentEntry
         in selectedLine.originalLineSegmentsMapClone.entries) {
       final THElement lineChild = lineSegmentEntry.value;
 

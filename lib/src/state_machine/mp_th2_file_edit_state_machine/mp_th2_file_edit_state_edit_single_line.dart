@@ -20,7 +20,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    setClickedElementAtPointerDown(null);
+    setClickedElementAtSingleLineEditPointerDown(null);
     selectionController.updateSelectedElementsClones();
     selectionController.resetSelectedLineLineSegmentsMPIDs();
     selectionController.updateSelectableEndAndControlPoints();
@@ -114,7 +114,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         );
 
     _dragShouldMovePoints = false;
-    setClickedElementAtPointerDown(null);
+    setClickedElementAtSingleLineEditPointerDown(null);
 
     if (clickedEndControlPoints.isNotEmpty) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
@@ -239,7 +239,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return;
   }
 
-  void setClickedElementAtPointerDown(THElement? clickedElement) {
+  void setClickedElementAtSingleLineEditPointerDown(THElement? clickedElement) {
     selectionController.clickedElementAtSingleLineEditPointerDown =
         clickedElement;
 
@@ -272,7 +272,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
 
-      setClickedElementAtPointerDown(clickedEndControlPoint.element);
+      setClickedElementAtSingleLineEditPointerDown(
+        clickedEndControlPoint.element,
+      );
 
       if (!shiftPressed) {
         _dragShouldMovePoints = true;
@@ -296,7 +298,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           }
         }
       }
-      setClickedElementAtPointerDown(clickedEndControlPoints.first.element);
+      setClickedElementAtSingleLineEditPointerDown(
+        clickedEndControlPoints.first.element,
+      );
     }
 
     th2FileEditController.triggerEditLineRedraw();
@@ -353,7 +357,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       }
     }
 
-    setClickedElementAtPointerDown(null);
+    setClickedElementAtSingleLineEditPointerDown(null);
     selectionController.updateSelectableEndAndControlPoints();
     th2FileEditController.triggerEditLineRedraw();
   }

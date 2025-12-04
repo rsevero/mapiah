@@ -271,7 +271,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
     _thFile.substituteElement(modifiedElement);
+    selectionController.updateSelectedElementClone(modifiedElement.mpID);
+    if (modifiedElement is THLineSegment) {
+      selectionController.updateSelectedLineSegment(modifiedElement);
+      (modifiedElement.parent(_thFile) as THLine).resetLineSegmentsLists();
+    }
   }
 
   void substituteLineSegments(
@@ -284,7 +292,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLine line = _thFile.lineByMPID(
       modifiedLineSegmentsMap.values.first.parentMPID,
     );
+
     line.clearBoundingBox();
+    line.resetLineSegmentsLists();
   }
 
   @action
