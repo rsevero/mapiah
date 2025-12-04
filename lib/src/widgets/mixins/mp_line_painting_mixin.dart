@@ -21,46 +21,42 @@ mixin MPLinePaintingMixin {
         LinkedHashMap<int, THLinePainterLineSegment>();
     final LinkedHashMap<int, THLineSegment> lineEndpointsMap =
         LinkedHashMap<int, THLineSegment>();
-    final List<int> lineChildrenMPIDs = line.childrenMPIDs;
+    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
+
     bool isFirst = true;
 
-    for (int lineChildMPID in lineChildrenMPIDs) {
-      final THElement lineChild = thFile.elementByMPID(lineChildMPID);
-
-      if (lineChild is! THLineSegment) {
-        continue;
-      }
+    for (THLineSegment lineSegment in lineSegments) {
+      final int lineSegmentMPID = lineSegment.mpID;
 
       if (returnLineSegments) {
-        lineEndpointsMap[lineChildMPID] = lineChild;
+        lineEndpointsMap[lineSegmentMPID] = lineSegment;
       }
 
       if (isFirst) {
-        lineSegmentsMap[lineChildMPID] = THLinePainterStraightLineSegment(
-          x: lineChild.x,
-          y: lineChild.y,
+        lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
+          x: lineSegment.x,
+          y: lineSegment.y,
         );
         isFirst = false;
         continue;
       }
 
-      switch (lineChild) {
+      switch (lineSegment) {
         case THBezierCurveLineSegment _:
-          lineSegmentsMap[lineChildMPID] = THLinePainterBezierCurveLineSegment(
-            x: lineChild.x,
-            y: lineChild.y,
-            controlPoint1X: lineChild.controlPoint1X,
-            controlPoint1Y: lineChild.controlPoint1Y,
-            controlPoint2X: lineChild.controlPoint2X,
-            controlPoint2Y: lineChild.controlPoint2Y,
-          );
-          break;
+          lineSegmentsMap[lineSegmentMPID] =
+              THLinePainterBezierCurveLineSegment(
+                x: lineSegment.x,
+                y: lineSegment.y,
+                controlPoint1X: lineSegment.controlPoint1X,
+                controlPoint1Y: lineSegment.controlPoint1Y,
+                controlPoint2X: lineSegment.controlPoint2X,
+                controlPoint2Y: lineSegment.controlPoint2Y,
+              );
         case THStraightLineSegment _:
-          lineSegmentsMap[lineChildMPID] = THLinePainterStraightLineSegment(
-            x: lineChild.x,
-            y: lineChild.y,
+          lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
+            x: lineSegment.x,
+            y: lineSegment.y,
           );
-          break;
         default:
           continue;
       }

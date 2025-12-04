@@ -929,8 +929,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void applyRemoveSelectedLineSegments() {
-    final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
-        .selectionController
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<int> selectedLineSegmentMPIDs = selectionController
         .selectedEndControlPoints
         .keys
         .toList();
@@ -966,8 +967,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.updateUndoRedoStatus();
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
+    selectionController.updateSelectedElementsClones();
+    selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }
 
