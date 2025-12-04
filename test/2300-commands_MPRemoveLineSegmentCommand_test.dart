@@ -91,7 +91,7 @@ endscrap
             final int lineSegmentMPID = line.getLineSegmentMPIDs(parsedFile)[1];
             final MPCommand setCommand =
                 MPCommandFactory.removeLineSegmentFromExisting(
-                  existingLineSegmentMPID: lineSegmentMPID,
+                  toRemoveLineSegmentMPID: lineSegmentMPID,
                   thFile: parsedFile,
                 );
 
@@ -198,7 +198,7 @@ endscrap
             final int lineSegmentMPID = line.getLineSegmentMPIDs(parsedFile)[1];
             final MPCommand setCommand =
                 MPCommandFactory.removeLineSegmentFromExisting(
-                  existingLineSegmentMPID: lineSegmentMPID,
+                  toRemoveLineSegmentMPID: lineSegmentMPID,
                   thFile: parsedFile,
                 );
 

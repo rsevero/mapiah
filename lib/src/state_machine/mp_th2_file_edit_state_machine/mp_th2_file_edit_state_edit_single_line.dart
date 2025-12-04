@@ -77,6 +77,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         keyProcessed = onKeyLDownEvent(event);
     }
 
+    if (keyProcessed) {
+      return;
+    }
+
     /// The slash character can be produced with keyboard combinations
     /// (AltRght + Q) on one of my keyboards.
     switch (event.character) {
@@ -91,9 +95,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         }
     }
 
-    if (!keyProcessed) {
-      _onKeyDownEvent(event);
+    if (keyProcessed) {
+      return;
     }
+
+    _onKeyDownEvent(event);
   }
 
   @override
@@ -108,6 +114,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         );
 
     _dragShouldMovePoints = false;
+    setClickedElementAtPointerDown(null);
+
     if (clickedEndControlPoints.isNotEmpty) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;

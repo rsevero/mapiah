@@ -218,6 +218,16 @@ class THLine extends THElement
     );
   }
 
+  void clearLineAndLineSegmentsBoundingBoxes(THFile thFile) {
+    final List<THLineSegment> lineSegments = getLineSegments(thFile);
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      lineSegment.clearBoundingBox();
+    }
+
+    clearBoundingBox();
+  }
+
   int? getNextLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
     final int indexLineSegmentMPID = getLineSegmentIndexByMPID(
       lineSegmentMPID,

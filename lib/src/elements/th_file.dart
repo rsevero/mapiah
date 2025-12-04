@@ -321,26 +321,11 @@ class THFile
     return hasElementByTHID(thID) ? _mpIDByTHID[thID]! : null;
   }
 
-  void _clearTHFileAndParentBoundingBoxes(THElement element) {
-    clearBoundingBox();
-
-    final int parentMPID = element.parentMPID;
-
-    if (parentMPID > 0) {
-      final THElement parentElement = elementByMPID(parentMPID);
-
-      if (parentElement is THScrap) {
-        parentElement.clearBoundingBox();
-      }
-    }
-  }
-
   void substituteElement(THElement newElement) {
     final int mpID = newElement.mpID;
     final THElement oldElement = elementByMPID(mpID);
 
     _elementByMPID[mpID] = newElement;
-    _clearTHFileAndParentBoundingBoxes(newElement);
 
     if (newElement is THHasTHID) {
       final String oldTHID = (oldElement as THHasTHID).thID;
@@ -357,6 +342,12 @@ class THFile
 
       _mpIDByTHID[newTHID] = mpID;
       _thIDByMPID[mpID] = newTHID;
+    }
+
+    if ((newElement is THPoint) ||
+        (newElement is THLine) ||
+        (newElement is THLineSegment)) {
+      _clearOwnAndAncestryBoundingBoxes(newElement);
     }
   }
 
@@ -388,9 +379,13 @@ class THFile
       case THPoint _:
         _pointsMPIDs.add(element.mpID);
         _drawableElementMPIDs.add(element.mpID);
+        _clearOwnAndAncestryBoundingBoxes(element);
       case THLine _:
         _linesMPIDs.add(element.mpID);
         _drawableElementMPIDs.add(element.mpID);
+        _clearOwnAndAncestryBoundingBoxes(element);
+      case THLineSegment _:
+        _clearOwnAndAncestryBoundingBoxes(element);
       case THArea _:
         _areasMPIDs.add(element.mpID);
       case THAreaBorderTHID _:
@@ -465,9 +460,13 @@ class THFile
       case THLine _:
         _linesMPIDs.remove(elementMPID);
         _drawableElementMPIDs.remove(elementMPID);
+        _clearOwnAndAncestryBoundingBoxes(element);
+      case THLineSegment _:
+        _clearOwnAndAncestryBoundingBoxes(element);
       case THPoint _:
         _pointsMPIDs.remove(elementMPID);
         _drawableElementMPIDs.remove(elementMPID);
+        _clearOwnAndAncestryBoundingBoxes(element);
       case THScrap _:
         if ((_scrapMPIDs != null) && _scrapMPIDs!.contains(elementMPID)) {
           _scrapMPIDs!.remove(elementMPID);
@@ -502,6 +501,22 @@ class THFile
 
     parent.removeElementFromParent(this, element);
     _elementByMPID.remove(elementMPID);
+  }
+
+  void _clearOwnAndAncestryBoundingBoxes(THElement element) {
+    if (element is MPBoundingBox) {
+      (element as MPBoundingBox).clearBoundingBox();
+    } else if (element is THLineSegment) {
+      element.clearBoundingBox();
+    }
+
+    final THIsParentMixin parent = element.parent(this);
+
+    if (parent is THElement) {
+      _clearOwnAndAncestryBoundingBoxes(parent as THElement);
+    } else if (parent is THFile) {
+      parent.clearBoundingBox();
+    }
   }
 
   bool hasElementByMPID(int mpID) {

@@ -546,6 +546,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         _addPointSelectableElement(element);
       case THLine _:
         _addLineSelectableElement(element);
+      case THLineSegment _:
+        _addLineSegmentSelectableElement(element);
       case THArea _:
         _addAreaSelectableElement(element);
     }
@@ -604,29 +606,57 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         continue;
       }
 
-      final MPSelectableLineSegment selectableLineSegment;
-
-      switch (lineSegment) {
-        case THStraightLineSegment _:
-          selectableLineSegment = MPSelectableStraightLineSegment(
-            straightLineSegment: lineSegment,
-            startPoint: startPoint,
-            th2fileEditController: _th2FileEditController,
-          );
-        case THBezierCurveLineSegment _:
-          selectableLineSegment = MPSelectableBezierCurveLineSegment(
-            bezierCurveLineSegment: lineSegment,
-            startPoint: startPoint,
-            th2fileEditController: _th2FileEditController,
-          );
-        default:
-          throw Exception(
-            'THLineSegment type not supported: ${lineSegment.elementType}',
-          );
-      }
+      final MPSelectableLineSegment selectableLineSegment =
+          _getLineSegmentSelectableElement(lineSegment, startPoint);
 
       _mpSelectableElements![lineSegment.mpID] = selectableLineSegment;
       startPoint = lineSegment.endPoint.coordinates;
+    }
+  }
+
+  void _addLineSegmentSelectableElement(THLineSegment lineSegment) {
+    if (_mpSelectableElements == null) {
+      throw Exception(
+        'At TH2FileEditSelectionController._addLineSegmentSelectableElement: selectable elements map is not initialized',
+      );
+    }
+
+    final THLine parentLine = _thFile.lineByMPID(lineSegment.parentMPID);
+    final THLineSegment? previousLineSegment = parentLine
+        .getPreviousLineSegment(lineSegment, _thFile);
+
+    if (previousLineSegment == null) {
+      return;
+    }
+
+    final Offset startPoint = previousLineSegment.endPoint.coordinates;
+    final MPSelectableLineSegment selectableLineSegment =
+        _getLineSegmentSelectableElement(lineSegment, startPoint);
+
+    _mpSelectableElements![lineSegment.mpID] = selectableLineSegment;
+  }
+
+  MPSelectableLineSegment _getLineSegmentSelectableElement(
+    THLineSegment lineSegment,
+    Offset startPoint,
+  ) {
+    switch (lineSegment) {
+      case THStraightLineSegment _:
+        return MPSelectableStraightLineSegment(
+          straightLineSegment: lineSegment,
+          startPoint: startPoint,
+          th2fileEditController: _th2FileEditController,
+        );
+      case THBezierCurveLineSegment _:
+        return MPSelectableBezierCurveLineSegment(
+          bezierCurveLineSegment: lineSegment,
+          startPoint: startPoint,
+          th2fileEditController: _th2FileEditController,
+        );
+      default:
+        throw Exception(
+          'THLineSegment type not supported at TH2FileEditSelectionController._getLineSegmentSelectableElement(): ${lineSegment.elementType}',
+        );
     }
   }
 

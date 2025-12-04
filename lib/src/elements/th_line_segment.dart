@@ -2,7 +2,7 @@ part of 'th_element.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 abstract class THLineSegment extends THElement
-    implements THPointInterface, THHasOptionsMixin {
+    implements THHasOptionsMixin, THPointInterface {
   late final THPositionPart endPoint;
   Rect? _boundingBox;
 
@@ -135,6 +135,10 @@ abstract class THLineSegment extends THElement
         DeepCollectionEquality().hash(optionsMap),
         DeepCollectionEquality().hash(attrOptionsMap),
       );
+
+  void clearBoundingBox() {
+    _boundingBox = null;
+  }
 
   Rect getBoundingBox(Offset startPoint) {
     _boundingBox ??= _calculateBoundingBox(startPoint);

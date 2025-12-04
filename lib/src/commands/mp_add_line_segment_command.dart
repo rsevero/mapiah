@@ -47,7 +47,7 @@ class MPAddLineSegmentCommand extends MPCommand with MPPosCommandMixin {
   ) {
     final MPCommand oppositeCommand =
         MPCommandFactory.removeLineSegmentFromExisting(
-          existingLineSegmentMPID: newLineSegment.mpID,
+          toRemoveLineSegmentMPID: newLineSegment.mpID,
           thFile: th2FileEditController.thFile,
           descriptionType: descriptionType,
         );

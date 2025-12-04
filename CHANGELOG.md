@@ -25,6 +25,7 @@
     * if the user clicks on another element, the 'Multiple elements clicked' dialog box is presented instead of just selecting the new element;
     * when end points are deleted, they remain visually shown as part of the line;
     * when dragging several end points, the clicked at button down end point isn't positioned exactly at the end position of the mouse.
+    * after deleting line points, the shape of the line would be different at the 'single line edit' view and the normal view.
 * Infrastructure maintenance:
   * Creating TH2FileEditElementEditController._lineSegmentsWithOptionsToPreserveSimplification set to keep track of line segments that have options to preserve during simplification.
   * MPEditElementAux.separateLineSegmentsPerType() moved to TH2FileEditElementEditController.groupLineSegmentsForSimplification().

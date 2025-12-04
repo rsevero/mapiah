@@ -266,6 +266,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     selectionController.updateSelectedElementClone(modifiedElement.mpID);
     if (modifiedElement is THLineSegment) {
       selectionController.updateSelectedLineSegment(modifiedElement);
+      (modifiedElement.parent(_thFile) as THLine).resetLineSegmentsLists();
     }
   }
 
@@ -341,11 +342,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void afterAddLineSegment(THLineSegment newLineSegment) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
+    final THLine line = (newLineSegment.parent(_thFile) as THLine);
 
     selectionController.updateSelectedElementClone(newLineSegment.mpID);
     selectionController.updateSelectedElementClone(newLineSegment.parentMPID);
     selectionController.resetSelectableElements();
-    (newLineSegment.parent(_thFile) as THLine).clearBoundingBox();
+    line.clearBoundingBox();
+    line.resetLineSegmentsLists();
   }
 
   @action
@@ -411,14 +414,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     selectionController.removeElementFromSelectable(element.mpID);
     selectionController.removeElementFromSelected(element, setState: setState);
 
-    if (element is THLineSegment) {
-      selectionController.removeSelectedLineSegment(element);
-    } else if (element is THScrap) {
-      _th2FileEditController.updateHasMultipleScraps();
-    } else if (element is THArea) {
-      if ((_newArea != null) && (_newArea!.mpID == element.mpID)) {
-        clearNewArea();
-      }
+    switch (element) {
+      case THLineSegment _:
+        selectionController.removeSelectedLineSegment(element);
+      case THScrap _:
+        _th2FileEditController.updateHasMultipleScraps();
+      case THArea _:
+        if ((_newArea != null) && (_newArea!.mpID == element.mpID)) {
+          clearNewArea();
+        }
     }
 
     final int parentMPID = element.parentMPID;
@@ -428,6 +432,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       if (parent is THElement) {
         selectionController.updateSelectedElementClone(parentMPID);
+      }
+
+      if (element is THLineSegment) {
+        (parent as THLine).resetLineSegmentsLists();
       }
     }
   }
@@ -938,36 +946,50 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (selectedLineSegmentMPIDs.isEmpty) {
       return;
-    } else {
-      final List<MPCommand> removeLineSegmentCommands = [];
-
-      for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
-        final MPCommand removeLineSegmentCommand =
-            MPCommandFactory.removeLineSegmentFromExisting(
-              existingLineSegmentMPID: lineSegmentMPID,
-              thFile: _thFile,
-            );
-
-        removeLineSegmentCommand.execute(_th2FileEditController);
-        removeLineSegmentCommands.add(removeLineSegmentCommand);
-      }
-
-      final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
-        commandsList: removeLineSegmentCommands,
-        completionType:
-            MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
-        descriptionType: MPCommandDescriptionType.removeLineSegment,
-      );
-
-      if (removeCommand is MPMultipleElementsCommand) {
-        removeCommand.prepareUndoRedoInfo(_th2FileEditController);
-      }
-
-      _th2FileEditController.undoRedoController.add(removeCommand);
     }
+
+    final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
+      selectedLineSegmentMPIDs.first,
+    );
+    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
+    final List<MPCommand> removeLineSegmentCommands = [];
+
+    for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
+      final MPCommand removeLineSegmentCommand =
+          MPCommandFactory.removeLineSegmentFromExisting(
+            toRemoveLineSegmentMPID: lineSegmentMPID,
+            thFile: _thFile,
+          );
+
+      removeLineSegmentCommand.execute(_th2FileEditController);
+      removeLineSegmentCommands.add(removeLineSegmentCommand);
+    }
+
+    final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
+      commandsList: removeLineSegmentCommands,
+      completionType:
+          MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+      descriptionType: MPCommandDescriptionType.removeLineSegment,
+    );
+
+    /// Checking if there is more than one command in removeLineSegmentCommands
+    /// and not directly checking if removeCommand is MPMultipleElementsCommand
+    /// because the latter may not be true if there is only one line segment to
+    /// remove and the single remove command is a MPMultipleElementsCommand
+    /// itself.
+    if (removeLineSegmentCommands.length > 1) {
+      (removeCommand as MPMultipleElementsCommand).prepareUndoRedoInfo(
+        _th2FileEditController,
+      );
+    }
+
+    _th2FileEditController.undoRedoController.add(removeCommand);
+
+    line.clearLineAndLineSegmentsBoundingBoxes(_thFile);
 
     _th2FileEditController.updateUndoRedoStatus();
     selectionController.updateSelectedElementsClones();
+
     selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }

@@ -20,13 +20,13 @@ import 'package:path/path.dart' as p;
 
 class MPCommandFactory {
   static MPCommand _actualRemoveLineSegmentFromExisting({
-    required int existingLineSegmentMPID,
+    required int toRemoveLineSegmentMPID,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
   }) {
     final THLine parentLine = thFile.lineByMPID(
-      thFile.lineSegmentByMPID(existingLineSegmentMPID).parentMPID,
+      thFile.lineSegmentByMPID(toRemoveLineSegmentMPID).parentMPID,
     );
     final int lineSegmentsCountInParentLine = parentLine
         .getLineSegmentMPIDs(thFile)
@@ -41,13 +41,13 @@ class MPCommandFactory {
       );
     } else {
       final MPCommand? preCommand = removeEmptyLinesAfterCommand(
-        elementMPID: existingLineSegmentMPID,
+        elementMPID: toRemoveLineSegmentMPID,
         thFile: thFile,
         descriptionType: descriptionType,
       );
 
       return MPRemoveLineSegmentCommand(
-        lineSegmentMPID: existingLineSegmentMPID,
+        lineSegmentMPID: toRemoveLineSegmentMPID,
         preCommand: preCommand,
       );
     }
@@ -1306,7 +1306,7 @@ class MPCommandFactory {
           );
         case THElementType.lineSegment:
           removeCommand = removeLineSegmentFromExisting(
-            existingLineSegmentMPID: mpID,
+            toRemoveLineSegmentMPID: mpID,
             thFile: thFile,
             descriptionType: descriptionType,
           );
@@ -1417,39 +1417,39 @@ class MPCommandFactory {
   }
 
   static MPCommand removeLineSegmentFromExisting({
-    required int existingLineSegmentMPID,
+    required int toRemoveLineSegmentMPID,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
   }) {
-    final THLineSegment lineSegment = thFile.lineSegmentByMPID(
-      existingLineSegmentMPID,
+    final THLineSegment toRemoveLineSegment = thFile.lineSegmentByMPID(
+      toRemoveLineSegmentMPID,
     );
-    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+    final THLine line = thFile.lineByMPID(toRemoveLineSegment.parentMPID);
     final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
-    final int lineSegmentIndex = lineSegments.indexOf(lineSegment);
+    final int lineSegmentIndex = lineSegments.indexOf(toRemoveLineSegment);
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
       return _actualRemoveLineSegmentFromExisting(
-        existingLineSegmentMPID: existingLineSegmentMPID,
+        toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
         thFile: thFile,
       );
     } else {
-      final bool deletedLineSegmentIsStraight =
-          lineSegment is THStraightLineSegment;
+      final bool toRemoveLineSegmentIsStraight =
+          toRemoveLineSegment is THStraightLineSegment;
       final THLineSegment nextLineSegment = lineSegments[lineSegmentIndex + 1];
       final bool nextLineSegmentIsStraight =
           nextLineSegment is THStraightLineSegment;
 
-      if (deletedLineSegmentIsStraight && nextLineSegmentIsStraight) {
+      if (toRemoveLineSegmentIsStraight && nextLineSegmentIsStraight) {
         return _actualRemoveLineSegmentFromExisting(
-          existingLineSegmentMPID: existingLineSegmentMPID,
+          toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
           thFile: thFile,
         );
       } else {
         final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
-          lineSegment,
+          toRemoveLineSegment,
           thFile,
         );
 
@@ -1459,25 +1459,25 @@ class MPCommandFactory {
           );
         }
 
-        final THBezierCurveLineSegment deletedLineSegmentBezier =
-            deletedLineSegmentIsStraight
+        final THBezierCurveLineSegment toRemoveLineSegmentAsBezier =
+            toRemoveLineSegmentIsStraight
             ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: previousLineSegment.endPoint.coordinates,
-                straightLineSegment: lineSegment,
+                straightLineSegment: toRemoveLineSegment,
               )
-            : lineSegment as THBezierCurveLineSegment;
+            : toRemoveLineSegment as THBezierCurveLineSegment;
         final THBezierCurveLineSegment nextLineSegmentBezier =
             nextLineSegmentIsStraight
             ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
-                start: lineSegment.endPoint.coordinates,
+                start: toRemoveLineSegment.endPoint.coordinates,
                 straightLineSegment: nextLineSegment,
               )
             : nextLineSegment as THBezierCurveLineSegment;
-        final THBezierCurveLineSegment lineSegmentSubstitution =
+        final THBezierCurveLineSegment lineSegmentSubstitute =
             THBezierCurveLineSegment.forCWJM(
               mpID: nextLineSegmentBezier.mpID,
               parentMPID: nextLineSegmentBezier.parentMPID,
-              controlPoint1: deletedLineSegmentBezier.controlPoint1,
+              controlPoint1: toRemoveLineSegmentAsBezier.controlPoint1,
               controlPoint2: nextLineSegmentBezier.controlPoint2,
               endPoint: nextLineSegmentBezier.endPoint,
               optionsMap: nextLineSegmentBezier.optionsMap,
@@ -1486,8 +1486,8 @@ class MPCommandFactory {
             );
 
         return MPCommandFactory.removeLineSegmentWithSubstitution(
-          lineSegmentMPID: existingLineSegmentMPID,
-          lineSegmentSubstitution: lineSegmentSubstitution,
+          toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
+          lineSegmentSubstitute: lineSegmentSubstitute,
           thFile: thFile,
         );
       }
@@ -1524,7 +1524,7 @@ class MPCommandFactory {
       for (final int lineSegmentMPID in lineSegmentMPIDs) {
         final MPCommand removeLineSegmentCommand =
             removeLineSegmentFromExisting(
-              existingLineSegmentMPID: lineSegmentMPID,
+              toRemoveLineSegmentMPID: lineSegmentMPID,
               thFile: thFile,
               descriptionType: descriptionType,
             );
@@ -1541,8 +1541,8 @@ class MPCommandFactory {
   }
 
   static MPCommand removeLineSegmentWithSubstitution({
-    required int lineSegmentMPID,
-    required THLineSegment lineSegmentSubstitution,
+    required int toRemoveLineSegmentMPID,
+    required THLineSegment lineSegmentSubstitute,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
@@ -1551,15 +1551,13 @@ class MPCommandFactory {
 
     final MPCommand removeLineSegmentCommand =
         _actualRemoveLineSegmentFromExisting(
-          existingLineSegmentMPID: lineSegmentMPID,
+          toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
           thFile: thFile,
           descriptionType: descriptionType,
         );
     final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
-      originalLineSegment: thFile.lineSegmentByMPID(
-        lineSegmentSubstitution.mpID,
-      ),
-      newLineSegment: lineSegmentSubstitution,
+      originalLineSegment: thFile.lineSegmentByMPID(lineSegmentSubstitute.mpID),
+      newLineSegment: lineSegmentSubstitute,
     );
 
     commandsList.add(removeLineSegmentCommand);

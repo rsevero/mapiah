@@ -159,6 +159,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             logicalKeyPressed = null;
             widget.actuator.onKeyUpEvent(event);
           }
+
           return KeyEventResult.handled;
         },
         child: widget.child,

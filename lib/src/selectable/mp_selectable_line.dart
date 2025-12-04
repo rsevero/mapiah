@@ -64,6 +64,7 @@ class MPSelectableLine extends MPSelectableElement {
     }
 
     _selectedElements.clear();
+
     bool isPointOnLine = false;
 
     for (final MPSelectableLineSegment selectableLineSegment
