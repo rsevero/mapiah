@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.2.25 - 2025-12-04 - The runaway point regression release
+## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
-  * REGRESSION: when moving points, they would change position exponetially in relation to mouse movement.
+  * REGRESSION: when moving points, they would change position exponentially in relation to mouse movement.
 
 ## 0.2.24 - 2025-12-04 - The Peruaçu data processing release
 * New features:

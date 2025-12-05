@@ -107,6 +107,13 @@
 [ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 [ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 [ ] - u:splay lines should not show direction tick.
+[ ] - Keyboard shorcut to toogle smooth between "on/unset".
+[ ] - On 'single line edit' mode, after setting a line point option, clicking outside the overlay window should only close the overlay window but not but the user back in the 'empty selection' mode.
+[ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
+[ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
+[ ] - Simplification of several lines at once is not working at all.
+[ ] - On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
+[ ] - On 'single line edit' mode, after changing line point positions, the lione bounding box is not being updated (selection handles still on the old position).
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
