@@ -1,0 +1,13 @@
+encoding utf-8
+scrap Janelao_3R1-1p
+	# This file has a line with repeated points that should be automatically removed by the parser.
+	# This line is the sole border of an area which should also be removed by the parser.
+	# After parsed, this file should produce an empty scrap with these comments.
+	line border -id areaBorder
+		-63.02 12.58
+		-63.02 12.58
+	endline
+	area water
+	areaBorder
+	endarea
+endscrap

@@ -214,6 +214,44 @@ scrap Bonita-1R1-1p -projection plan -scale [ 0 0 39.3701 0 0 0 1 0 m ]
 endscrap
 ''',
       },
+      {
+        'file': '2025-11-28-001-line_walkway_type.th2',
+        'length': 18,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap Bonita-1R1-1p
+  line walkway
+    111.95 -11.92
+    104.54 -8.07
+    98.77 -0.55
+    93.29 6.6
+    84.33 10.41
+    78.4 15.76
+    69.99 19.88
+    61.64 26.23
+    55.24 31.43
+    47.76 37.91
+    41.35 44.56
+    35.24 50.04
+    29.86 58.14
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-05-001-line_with_repeated_points.th2',
+        'length': 6,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap Janelao_3R1-1p
+  # This file has a line with repeated points that should be automatically \
+      removed by the parser.
+  # This line is the sole border of an area which should also be removed by the \
+      parser.
+  # After parsed, this file should produce an empty scrap with these comments.
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

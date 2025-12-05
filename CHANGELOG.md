@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.26 - not yet released
+* New features:
+* Fixed bugs:
+  * Lines with duplicated subsequent line points would block the drawing of further elements.
+* Infrastructure maintenance:
+
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
   * REGRESSION: when moving points, they would change position exponentially in relation to mouse movement.

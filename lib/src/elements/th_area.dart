@@ -288,6 +288,15 @@ class THArea extends THElement
   }
 
   @override
+  void removeElementFromParent(THFile thFile, THElement element) {
+    super.removeElementFromParent(thFile, element);
+
+    if (element is THAreaBorderTHID) {
+      clearAreaXLineInfo();
+    }
+  }
+
+  @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final List<int> lineMPIDs = getLineMPIDs(thFile);

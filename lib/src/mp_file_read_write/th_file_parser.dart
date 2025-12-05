@@ -961,26 +961,16 @@ class THFileParser {
       return;
     }
 
-    final List<int> lineSegmentMPIDs = (_currentParent as THLine)
-        .getLineSegmentMPIDs(_parsedTHFile);
-
-    if (lineSegmentMPIDs.length < 2) {
-      final THLine lineToRemove = _currentParent as THLine;
-
-      setCurrentParent((lineToRemove).parent(_parsedTHFile));
-      _th2FileElementEditController.removeElement(lineToRemove);
-    } else {
-      _currentElement = THEndline(
-        parentMPID: _currentParentMPID,
-        originalLineInTH2File: _currentOriginalLine,
-      );
-      _th2FileElementEditController.executeAddElement(
-        newElement: _currentElement,
-        parent: _currentParent,
-        childPositionInParent: mpAddChildAtEndOfParentChildrenList,
-      );
-      setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
-    }
+    _currentElement = THEndline(
+      parentMPID: _currentParentMPID,
+      originalLineInTH2File: _currentOriginalLine,
+    );
+    _th2FileElementEditController.executeAddElement(
+      newElement: _currentElement,
+      parent: _currentParent,
+      childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+    );
+    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
 
     _returnToParentParser();
   }
@@ -2515,7 +2505,8 @@ class THFileParser {
     }
 
     _injectContents();
-    _cleanEmptyAreas(_parsedTHFile);
+    _linesCleanUp();
+    _areasCleanUp();
 
     if (!(_parsedTHFile).isSameClass(_currentParent) ||
         (_currentParent != _parsedTHFile)) {
@@ -2549,37 +2540,114 @@ class THFileParser {
     return (-1, 0);
   }
 
-  void _cleanEmptyAreas(THIsParentMixin parent) {
-    final List<THElement> children = parent.getChildren(_parsedTHFile).toList();
+  void _linesCleanUp() {
+    final List<THElement> elements = _parsedTHFile.elements.values.toList();
 
-    for (final THElement child in children) {
-      if (child is THArea) {
-        final List<int> areaChildrenMPIDs = child.childrenMPIDs.toList();
+    for (final THElement line in elements) {
+      if (line is! THLine) {
+        continue;
+      }
 
-        int validBorders = 0;
+      final List<int> lineChildrenMPIDs = line.childrenMPIDs.toList();
 
-        for (final int areaChildMPID in areaChildrenMPIDs) {
-          final THElement areaChild = _parsedTHFile.elementByMPID(
-            areaChildMPID,
+      THLineSegment? previousLineSegment;
+
+      for (final int lineSegmentMPID in lineChildrenMPIDs) {
+        final THElement lineSegment = _parsedTHFile.elementByMPID(
+          lineSegmentMPID,
+        );
+
+        if (lineSegment is! THLineSegment) {
+          continue;
+        }
+
+        if (previousLineSegment == null) {
+          previousLineSegment = lineSegment;
+          continue;
+        }
+
+        if ((previousLineSegment.endPoint.coordinates ==
+                lineSegment.endPoint.coordinates) &&
+            (previousLineSegment.elementType == lineSegment.elementType) &&
+            ((previousLineSegment.elementType ==
+                    THElementType.straightLineSegment) ||
+                (((previousLineSegment as THBezierCurveLineSegment)
+                            .controlPoint1
+                            .coordinates ==
+                        (lineSegment as THBezierCurveLineSegment)
+                            .controlPoint1
+                            .coordinates) &&
+                    (previousLineSegment.controlPoint2.coordinates ==
+                        lineSegment.controlPoint2.coordinates)))) {
+          if (lineSegment.optionsMap.isEmpty &&
+              lineSegment.attrOptionsMap.isEmpty) {
+            _parsedTHFile.removeElement(lineSegment);
+          } else if (previousLineSegment.optionsMap.isEmpty &&
+              previousLineSegment.attrOptionsMap.isEmpty) {
+            _parsedTHFile.removeElement(previousLineSegment);
+            previousLineSegment = lineSegment;
+          }
+        } else {
+          previousLineSegment = lineSegment;
+        }
+      }
+
+      if (line.getLineSegmentMPIDs(_parsedTHFile).length < 2) {
+        final int? areaMPID = _parsedTHFile.getAreaMPIDByLineMPID(line.mpID);
+
+        if (areaMPID != null) {
+          final THArea area = _parsedTHFile.areaByMPID(areaMPID);
+          final THAreaBorderTHID? areaBorder = area.areaBorderByLineMPID(
+            line.mpID,
+            _parsedTHFile,
           );
 
-          if (areaChild is! THAreaBorderTHID) {
-            continue;
+          if (areaBorder == null) {
+            throw THCustomException(
+              "Inconsistent THFile data: line '${line.mpID}' is linked to area '${area.mpID}' but the area has no border for it at THFileParser._cleanDuplicateLinePoints().",
+            );
           }
 
-          if (_parsedTHFile.hasElementByTHID(areaChild.thID) &&
-              (_parsedTHFile.elementByTHID(areaChild.thID) is THLine)) {
-            validBorders++;
-          } else {
-            _th2FileElementEditController.removeElement(areaChild);
-          }
+          _parsedTHFile.removeElement(areaBorder);
         }
 
-        if (validBorders == 0) {
-          _th2FileElementEditController.removeElement(child);
+        _parsedTHFile.removeElement(line);
+      }
+    }
+  }
+
+  void _areasCleanUp() {
+    final List<THElement> elements = _parsedTHFile.elements.values.toList();
+
+    for (final THElement area in elements) {
+      if (area is! THArea) {
+        continue;
+      }
+
+      final List<int> childrenMPIDs = area.childrenMPIDs.toList();
+
+      for (final int childMPID in childrenMPIDs) {
+        final THElement border = _parsedTHFile.elementByMPID(childMPID);
+
+        if (border is! THAreaBorderTHID) {
+          continue;
         }
-      } else if (child is THIsParentMixin) {
-        _cleanEmptyAreas(child as THIsParentMixin);
+
+        if (!_parsedTHFile.hasElementByTHID(border.thID)) {
+          _parsedTHFile.removeElement(border);
+
+          continue;
+        }
+
+        final THElement line = _parsedTHFile.elementByTHID(border.thID);
+
+        if (line is! THLine) {
+          _parsedTHFile.removeElement(border);
+        }
+      }
+
+      if (area.getAreaBorderTHIDMPIDs(_parsedTHFile).isEmpty) {
+        _parsedTHFile.removeElement(area);
       }
     }
   }
