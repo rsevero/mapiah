@@ -79,25 +79,21 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   @action
-  void setSnapPointAndLinePointTargetTypes({
-    required MPSnapPointTarget pointTarget,
-    required MPSnapLinePointTarget linePointTarget,
+  void setSnapTargets({
+    MPSnapPointTarget pointTarget = MPSnapPointTarget.none,
+    Iterable<String> pointPLATypes = const [],
+    MPSnapLinePointTarget linePointTarget = MPSnapLinePointTarget.none,
+    Iterable<String> linePointPLATypes = const [],
+    Iterable<MPSnapXVIFileTarget> xviTargets = const [],
   }) {
-    bool changed = false;
-
-    if (pointTarget != _snapPointTargetType) {
-      _snapPointTargetType = pointTarget;
-      changed = true;
-    }
-    if (linePointTarget != _snapLinePointTargetType) {
-      _snapLinePointTargetType = linePointTarget;
-      changed = true;
-    }
-    if (!changed) {
-      return;
-    }
+    _snapPointTargetType = pointTarget;
+    _pointTargetPLATypes = pointPLATypes.toSet();
+    _snapLinePointTargetType = linePointTarget;
+    _linePointTargetPLATypes = linePointPLATypes.toSet();
+    _snapXVIFileTargets = xviTargets.toSet();
 
     updateSnapTargets();
+
     _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
 
@@ -221,7 +217,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
         final double xx = imageInsertConfig.xviRootedXX;
         final double yy = imageInsertConfig.xviRootedYY;
         final Offset imageBaseOffset = Offset(xx, yy);
-        // Understaing xTherion variables:
+        // Understanding xTherion variables:
         // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
         // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
         // These original xTherion variables are used to calculate imageGridOffset.
