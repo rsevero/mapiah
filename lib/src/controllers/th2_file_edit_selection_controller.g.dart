@@ -476,7 +476,6 @@ mixin _$TH2FileEditSelectionController
   bool removeElementFromSelected(
     THElement element, {
     bool setState = false,
-    bool updateSnapTargets = true,
     bool updateStatusBarMessage = true,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
@@ -487,7 +486,6 @@ mixin _$TH2FileEditSelectionController
       return super.removeElementFromSelected(
         element,
         setState: setState,
-        updateSnapTargets: updateSnapTargets,
         updateStatusBarMessage: updateStatusBarMessage,
       );
     } finally {

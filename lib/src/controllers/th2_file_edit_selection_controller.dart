@@ -365,7 +365,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       }
     }
 
-    _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
@@ -385,7 +384,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       }
     }
 
-    _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.stateController.updateStatusBarMessage();
 
     if (setState) {
@@ -399,7 +397,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   bool removeElementFromSelected(
     THElement element, {
     bool setState = false,
-    bool updateSnapTargets = true,
     bool updateStatusBarMessage = true,
   }) {
     final int elementMPID = element.mpID;
@@ -417,9 +414,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     _isSelected.remove(elementMPID);
-    if (updateSnapTargets) {
-      _th2FileEditController.snapController.updateSnapTargets();
-    }
     if (updateStatusBarMessage) {
       _th2FileEditController.stateController.updateStatusBarMessage();
     }
@@ -435,11 +429,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElements(List<THElement> elements) {
     for (THElement element in elements) {
-      removeElementFromSelected(
-        element,
-        updateSnapTargets: false,
-        updateStatusBarMessage: false,
-      );
+      removeElementFromSelected(element, updateStatusBarMessage: false);
     }
     _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.stateController.updateStatusBarMessage();
@@ -1674,8 +1664,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void clearSelectedElements() {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
-
-    _th2FileEditController.snapController.updateSnapTargets();
   }
 
   void clearIsSelected() {

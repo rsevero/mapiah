@@ -948,10 +948,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
-      selectedLineSegmentMPIDs.first,
-    );
-    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
     final List<MPCommand> removeLineSegmentCommands = [];
 
     for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
@@ -984,12 +980,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.undoRedoController.add(removeCommand);
-
-    line.clearLineAndLineSegmentsBoundingBoxes(_thFile);
-
     _th2FileEditController.updateUndoRedoStatus();
-    selectionController.updateSelectedElementsClones();
 
+    _th2FileEditController.snapController.updateSnapTargets();
     selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }

@@ -6,6 +6,7 @@
   * Snap should snap to own object points and line points.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
+  * On 'single line edit' mode, further editing a line after removing its first line segment would throw.
 * Infrastructure maintenance:
   * Speeding up file opening with faster _findLineBreak() implementation.
   * flutter upgrade 3.38.4.
