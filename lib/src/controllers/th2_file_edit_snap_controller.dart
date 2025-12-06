@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_snap_grid_cell.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -168,14 +167,8 @@ abstract class TH2FileEditSnapControllerBase with Store {
     final List<int> elementMPIDs = _thFile
         .scrapByMPID(_th2FileEditController.activeScrapID)
         .childrenMPIDs;
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
 
     for (final int elementMPID in elementMPIDs) {
-      if (selectionController.isElementSelectedByMPID(elementMPID)) {
-        continue;
-      }
-
       final THElement element = _thFile.elementByMPID(elementMPID);
 
       if (element is THPoint) {

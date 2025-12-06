@@ -3,10 +3,12 @@
 ## 0.2.26 - not yet released
 * New features:
   * Snap should have "points" and "line points" on as default.
+  * Snap should snap to own object points and line points.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
 * Infrastructure maintenance:
   * Speeding up file opening with faster _findLineBreak() implementation.
+  * flutter upgrade 3.38.4.
 
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
