@@ -2,6 +2,7 @@
 
 ## 0.2.26 - not yet released
 * New features:
+  * Snap should have "points" and line points" on as default.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
 * Infrastructure maintenance:

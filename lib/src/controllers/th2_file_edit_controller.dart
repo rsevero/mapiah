@@ -489,6 +489,9 @@ abstract class TH2FileEditControllerBase with Store {
 
     elementEditController.initializeMostUsedTypes();
 
+    snapController.setSnapPointTargetType(MPSnapPointTarget.point);
+    snapController.setSnapLinePointTargetType(MPSnapLinePointTarget.linePoint);
+
     setFilename(_thFile.filename);
 
     _isLoading = false;

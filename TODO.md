@@ -102,7 +102,7 @@
 [ ] - Make THID the first option when writing to file.
 [ ] - List of elements that should not be movable: Point station.
 [ ] - List of elements that should not be selectable: Line u:splay.
-[ ] - Snap should have "points" and line points" on as default.
+[X] - Snap should have "points" and line points" on as default.
 [ ] - Saving should close overlay windows like "options".
 [ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 [ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
@@ -114,6 +114,8 @@
 [ ] - Simplification of several lines at once is not working at all.
 [ ] - On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
 [ ] - On 'single line edit' mode, after changing line point positions, the lione bounding box is not being updated (selection handles still on the old position).
+[ ] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
+[ ] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
