@@ -2524,20 +2524,22 @@ class THFileParser {
     );
   }
 
-  (int index, int length) _findLineBreak(String content) {
-    final int windowsResult = content.indexOf(thWindowsLineBreak);
+  /// Returns the index and length of the next line break starting at `start`.
+  /// Uses a single pass via `indexOf` and avoids re-scanning from the beginning
+  /// of the string, which is much faster for large files.
+  (int index, int length) _findLineBreak(String content, [int start = 0]) {
+    final int unixPos = content.indexOf(thUnixLineBreak, start);
 
-    if (windowsResult != -1) {
-      return (windowsResult, 2);
+    if (unixPos == -1) {
+      return (-1, 0);
     }
 
-    final int unixResult = content.indexOf(thUnixLineBreak);
-
-    if (unixResult != -1) {
-      return (unixResult, 1);
+    // Detect CRLF by checking if the char right before '\n' is '\r'.
+    if ((unixPos > start) && (content.codeUnitAt(unixPos - 1) == 13)) {
+      return (unixPos - 1, 2);
     }
 
-    return (-1, 0);
+    return (unixPos, 1);
   }
 
   void _linesCleanUp(THIsParentMixin parent) {
@@ -2660,22 +2662,23 @@ class THFileParser {
     _splittedContents.clear();
     _continuationDelimiter = '';
 
-    while (contents.isNotEmpty) {
-      var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
+    int offset = 0;
+
+    while (offset < contents.length) {
+      var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
 
       if (lineBreakIndex == -1) {
+        final String tail = contents.substring(offset);
         _splittedContents.add(
-          MPParseableLine(toParse: contents, originalContent: contents),
+          MPParseableLine(toParse: tail, originalContent: tail),
         );
-
-        contents = '';
 
         break;
       }
 
-      String currentLine = contents.substring(0, lineBreakIndex);
+      String currentLine = contents.substring(offset, lineBreakIndex);
       String newContentOriginal = contents.substring(
-        0,
+        offset,
         lineBreakIndex + lineBreakLength,
       );
       updateContinuationDelimiter(currentLine);
@@ -2689,7 +2692,7 @@ class THFileParser {
           ? newContentOriginal
           : currentLine;
 
-      contents = contents.substring(lineBreakIndex + lineBreakLength);
+      offset = lineBreakIndex + lineBreakLength;
       if (currentLine.isEmpty) {
         _splittedContents.add(
           MPParseableLine(
@@ -2703,20 +2706,22 @@ class THFileParser {
 
       /// Joining lines that didn´t end, i.e., that have an open double quote or
       /// square bracket or that ends with a backslash.
-      while (_continuationDelimiter.isNotEmpty && contents.isNotEmpty) {
-        (lineBreakIndex, lineBreakLength) = _findLineBreak(contents);
+      while (_continuationDelimiter.isNotEmpty && (offset < contents.length)) {
+        (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
 
         if (lineBreakIndex == -1) {
-          newContentOriginal += contents;
-          newContentToParse += contents;
-          contents = '';
+          final String tail = contents.substring(offset);
+          newContentOriginal += tail;
+          newContentToParse += tail;
+          offset = contents.length;
 
           break;
         }
 
-        currentLine = contents.substring(0, lineBreakIndex);
+        currentLine = contents.substring(offset, lineBreakIndex);
+
         String currentContentOriginal = contents.substring(
-          0,
+          offset,
           lineBreakIndex + lineBreakLength,
         );
         newContentOriginal += currentContentOriginal;
@@ -2727,7 +2732,7 @@ class THFileParser {
           );
         }
 
-        contents = contents.substring(lineBreakIndex + lineBreakLength);
+        offset = lineBreakIndex + lineBreakLength;
         if (currentLine.isEmpty) {
           if (_continuationDelimiter == '\\') {
             break;

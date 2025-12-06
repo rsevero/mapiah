@@ -6,6 +6,7 @@
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
 * Infrastructure maintenance:
+  * Speeding up file opening with faster _findLineBreak() implementation.
 
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
