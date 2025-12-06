@@ -918,8 +918,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void updateSelectableEndAndControlPoints() {
     _selectableEndControlPoints.clear();
 
-    if ((_mpSelectedElementsLogical.length != 1) ||
-        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
+    if (!isSingleLineSelected()) {
       return;
     }
 
@@ -1549,8 +1548,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   MPSelectedLine getMPSelectedLine() {
-    if ((_mpSelectedElementsLogical.length != 1) ||
-        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
+    if (!isSingleLineSelected()) {
       throw Exception(
         'At TH2FileEditSelectionController.getMPSelectedLine: there is not exactly one selected line',
       );
@@ -1559,9 +1557,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return _mpSelectedElementsLogical.values.first as MPSelectedLine;
   }
 
+  bool isSingleLineSelected() {
+    return (_mpSelectedElementsLogical.length == 1) &&
+        (_mpSelectedElementsLogical.values.first is MPSelectedLine);
+  }
+
   THLine getSelectedLine() {
-    if ((_mpSelectedElementsLogical.length != 1) ||
-        (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
+    if (!isSingleLineSelected()) {
       throw Exception(
         'At TH2FileEditSelectionController.getSelectedLine(): there is not exactly one selected line',
       );

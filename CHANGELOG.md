@@ -7,7 +7,9 @@
   * Non selected lines not showing direction line ticks.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
-  * On 'single line edit' mode, further editing a line after removing its first line segment would throw.
+  * On 'single line edit' mode:
+    * further editing a line after removing its first line segment would throw;
+    * clicking on empty space to dismiss a 'multiple elements selected' dialog box because the user clicked on an area throws.
 * Infrastructure maintenance:
   * Speeding up file opening with faster _findLineBreak() implementation.
   * flutter upgrade 3.38.4.
