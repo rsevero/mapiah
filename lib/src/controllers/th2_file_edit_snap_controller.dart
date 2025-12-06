@@ -80,6 +80,29 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   @action
+  void setSnapPointAndLinePointTargetTypes({
+    required MPSnapPointTarget pointTarget,
+    required MPSnapLinePointTarget linePointTarget,
+  }) {
+    bool changed = false;
+
+    if (pointTarget != _snapPointTargetType) {
+      _snapPointTargetType = pointTarget;
+      changed = true;
+    }
+    if (linePointTarget != _snapLinePointTargetType) {
+      _snapLinePointTargetType = linePointTarget;
+      changed = true;
+    }
+    if (!changed) {
+      return;
+    }
+
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  @action
   void setPointTargetPLATypes(Iterable<String> types) {
     _pointTargetPLATypes = types.toSet();
     updateSnapTargets();

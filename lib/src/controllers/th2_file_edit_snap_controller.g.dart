@@ -294,6 +294,26 @@ mixin _$TH2FileEditSnapController on TH2FileEditSnapControllerBase, Store {
   }
 
   @override
+  void setSnapPointAndLinePointTargetTypes({
+    required MPSnapPointTarget pointTarget,
+    required MPSnapLinePointTarget linePointTarget,
+  }) {
+    final _$actionInfo = _$TH2FileEditSnapControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditSnapControllerBase.setSnapPointAndLinePointTargetTypes',
+        );
+    try {
+      return super.setSnapPointAndLinePointTargetTypes(
+        pointTarget: pointTarget,
+        linePointTarget: linePointTarget,
+      );
+    } finally {
+      _$TH2FileEditSnapControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setPointTargetPLATypes(Iterable<String> types) {
     final _$actionInfo = _$TH2FileEditSnapControllerBaseActionController
         .startAction(
