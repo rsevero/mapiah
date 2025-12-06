@@ -113,9 +113,10 @@
 [ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
 [ ] - Simplification of several lines at once is not working at all.
 [ ] - On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
-[ ] - On 'single line edit' mode, after changing line point positions, the lione bounding box is not being updated (selection handles still on the old position).
+[ ] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).
 [ ] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
 [ ] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
+[ ] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
@@ -142,13 +143,14 @@
 [ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...)
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
-[ ] - When deleting an element, all imediate empty lines before it should also be deleted.
+[X] - When deleting an element, all imediate empty lines after it should also be deleted.
 [ ] - Split one line in two.
 [ ] - Join 2 lines.
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
 [ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
+[ ] - Allow the user to choose if the grid of a XVI file should be visible or not.
 
 ##Version 0.5
 [ ] - Raster images tracing

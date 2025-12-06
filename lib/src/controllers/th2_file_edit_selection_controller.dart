@@ -594,8 +594,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _mpSelectableElements![lineMPID] = selectableLine;
     _isSelected.remove(lineMPID);
 
-    /// Adding line segments as selectable elements so on 'single line edit
-    /// mode' its possible to select end point clicking on line segments.
+    /// Adding line segments as selectable elements so on 'single line edit'
+    /// mode its possible to select end point clicking on line segments.
     final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
 
     Offset? startPoint;
@@ -691,42 +691,47 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Map<int, THElement> clickedElementsMap = {};
 
     for (final MPSelectable selectableElement in selectableElements) {
-      if (selectableElement.contains(canvasCoordinates)) {
-        if (selectableElement is MPSelectableElement) {
-          final THElement element = selectableElement.element;
+      if (!selectableElement.contains(canvasCoordinates) ||
+          (selectableElement is! MPSelectableElement)) {
+        continue;
+      }
 
-          switch (selectionType) {
-            case THSelectionType.line:
-              if (selectableElement is! MPSelectableLine) {
-                continue;
-              }
-              clickedElementsMap[element.mpID] = element;
-            case THSelectionType.lineSegment:
-              if (selectableElement is! MPSelectableLineSegment) {
-                continue;
-              }
-              clickedElementsMap[element.mpID] = element;
-            case THSelectionType.pla:
-              switch (element) {
-                case THPoint _:
-                  clickedElementsMap[element.mpID] = element;
-                case THLine _:
-                  final int? areaMPID = _thFile.getAreaMPIDByLineMPID(
-                    element.mpID,
-                  );
+      final THElement element = selectableElement.element;
 
-                  if (areaMPID != null) {
-                    clickedElementsMap[areaMPID] = _thFile.elementByMPID(
-                      areaMPID,
-                    );
-                  }
-                  clickedElementsMap[element.mpID] = element;
-                case THLineSegment _:
-                  clickedElementsMap[element.parentMPID] = _thFile
-                      .elementByMPID(element.parentMPID);
-              }
+      switch (selectionType) {
+        case THSelectionType.line:
+          if (selectableElement is! MPSelectableLine) {
+            continue;
           }
-        }
+          clickedElementsMap[element.mpID] = element;
+        case THSelectionType.lineSegment:
+          if (selectableElement is! MPSelectableLineSegment) {
+            continue;
+          }
+          clickedElementsMap[element.mpID] = element;
+        case THSelectionType.pla:
+          switch (element) {
+            case THPoint _:
+              clickedElementsMap[element.mpID] = element;
+            case THLine _:
+              final int? areaMPID = _thFile.getAreaMPIDByLineMPID(element.mpID);
+
+              if (areaMPID != null) {
+                clickedElementsMap[areaMPID] = _thFile.elementByMPID(areaMPID);
+              }
+              clickedElementsMap[element.mpID] = element;
+            case THLineSegment _:
+              final int parentMPID = element.parentMPID;
+              final int? areaMPID = _thFile.getAreaMPIDByLineMPID(parentMPID);
+
+              if (areaMPID != null) {
+                clickedElementsMap[areaMPID] = _thFile.elementByMPID(areaMPID);
+              }
+
+              clickedElementsMap[element.parentMPID] = _thFile.elementByMPID(
+                parentMPID,
+              );
+          }
       }
     }
 
@@ -1568,7 +1573,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if ((_mpSelectedElementsLogical.length != 1) ||
         (_mpSelectedElementsLogical.values.first is! MPSelectedLine)) {
       throw Exception(
-        'At TH2FileEditSelectionController.getSelectedLine: there is not exactly one selected line',
+        'At TH2FileEditSelectionController.getSelectedLine(): there is not exactly one selected line',
       );
     }
 
