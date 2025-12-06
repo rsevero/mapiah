@@ -9,7 +9,8 @@
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:
     * further editing a line after removing its first line segment would throw;
-    * clicking on empty space to dismiss a 'multiple elements selected' dialog box because the user clicked on an area throws.
+    * clicking on empty space to dismiss a 'multiple elements selected' dialog box because the user clicked on an area throws;
+    * after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 * Infrastructure maintenance:
   * Speeding up file opening with faster _findLineBreak() implementation.
   * flutter upgrade 3.38.4.

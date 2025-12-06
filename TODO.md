@@ -116,7 +116,7 @@
 [ ] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).
 [ ] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
-[ ] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
+[X] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

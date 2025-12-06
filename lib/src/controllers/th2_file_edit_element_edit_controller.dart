@@ -320,6 +320,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
+    line.resetLineSegmentsLists();
+    selectionController.addSelectableElement(line);
     selectionController.updateSelectedElementsClones();
     selectionController.updateSelectableEndAndControlPoints();
     selectionController.clearSelectedEndControlPoints();

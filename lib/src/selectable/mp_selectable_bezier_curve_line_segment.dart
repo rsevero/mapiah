@@ -44,18 +44,14 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
     return _controlPointsOnCanvas!;
   }
 
-  bool _isPointNearBezierCurveAdaptative({required Offset point}) {
+  @override
+  bool _isPointOnLine(Offset point) {
     return MPNumericAux.isPointNearBezierCurve(
       point: point,
       controlPoints: controlPointsOnCanvas,
       toleranceSquared: th2fileEditController.selectionToleranceSquaredOnCanvas,
       numOfSegmentsToCreate: numOfSegmentsToCreate,
     );
-  }
-
-  @override
-  bool _isPointOnLine(Offset point) {
-    return _isPointNearBezierCurveAdaptative(point: point);
   }
 
   @override
