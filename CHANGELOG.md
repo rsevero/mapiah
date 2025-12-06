@@ -4,6 +4,7 @@
 * New features:
   * Snap to "points", "line points" and "XVI shots" on as default.
   * Snap should snap to own object points and line points.
+  * Non selected lines not showing direction line ticks.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode, further editing a line after removing its first line segment would throw.

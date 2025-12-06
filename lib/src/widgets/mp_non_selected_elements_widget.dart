@@ -77,7 +77,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 getLinePainter(
                   line: element,
                   linePaint: linePaint,
-                  showLineDirectionTicks: !isArea,
+                  showLineDirectionTicks: false,
                   th2FileEditController: th2FileEditController,
                 ),
               );
