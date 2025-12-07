@@ -473,18 +473,19 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  bool removeElementFromSelected(
-    THElement element, {
+  bool removeElementFromSelectedLogicalAndDrawable(
+    int elementMPID, {
     bool setState = false,
     bool updateStatusBarMessage = true,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
-          name: 'TH2FileEditSelectionControllerBase.removeElementFromSelected',
+          name:
+              'TH2FileEditSelectionControllerBase.removeElementFromSelectedLogicalAndDrawable',
         );
     try {
-      return super.removeElementFromSelected(
-        element,
+      return super.removeElementFromSelectedLogicalAndDrawable(
+        elementMPID,
         setState: setState,
         updateStatusBarMessage: updateStatusBarMessage,
       );
@@ -496,13 +497,14 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void removeSelectedElements(List<THElement> elements) {
+  void removeSelectedElementsByMPIDs(List<int> elementMPIDs) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
-          name: 'TH2FileEditSelectionControllerBase.removeSelectedElements',
+          name:
+              'TH2FileEditSelectionControllerBase.removeSelectedElementsByMPIDs',
         );
     try {
-      return super.removeSelectedElements(elements);
+      return super.removeSelectedElementsByMPIDs(elementMPIDs);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

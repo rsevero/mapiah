@@ -15,6 +15,7 @@
   * Speeding up file opening with faster _findLineBreak() implementation.
   * flutter upgrade 3.38.4.
   * Improved 'single line edit' mode processing of clicks outside selected line by changing to 'non empty selected' mode and letting it deal with the clicks after that.
+  * Major refactoring of line and line segment edit/add/remove changes propagation to all controllers.
 
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:

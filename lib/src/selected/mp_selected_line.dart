@@ -13,7 +13,7 @@ class MPSelectedLine extends MPSelectedElement {
   }
 
   void _createClone(
-    THLine originalLine,
+    THLine currentLine,
     TH2FileEditController th2FileEditController,
   ) {
     final THFile thFile = th2FileEditController.thFile;
@@ -22,7 +22,7 @@ class MPSelectedLine extends MPSelectedElement {
     /// using originalLine.getLineSegments(thFile) or
     /// originalLine.getLineSegmentMPIDs(thFile,) here messes with the updating
     /// of the control points during interactive editing.
-    final Iterable<int> lineSegmentMPIDs = originalLine.childrenMPIDs;
+    final Iterable<int> lineSegmentMPIDs = currentLine.childrenMPIDs;
 
     originalLineSegmentsMapClone.clear();
 
@@ -51,20 +51,20 @@ class MPSelectedLine extends MPSelectedElement {
       );
     }
 
-    final List<int> childrenMPIDsClone = originalLine.childrenMPIDs.toList();
+    final List<int> childrenMPIDsClone = currentLine.childrenMPIDs.toList();
     final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
         SplayTreeMap<THCommandOptionType, THCommandOption>();
     final SplayTreeMap<String, THAttrCommandOption> attrOptionsMapClone =
         SplayTreeMap<String, THAttrCommandOption>();
 
-    originalLine.optionsMap.forEach((key, value) {
+    currentLine.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();
     });
-    originalLine.attrOptionsMap.forEach((key, value) {
+    currentLine.attrOptionsMap.forEach((key, value) {
       attrOptionsMapClone[key] = value.copyWith();
     });
 
-    originalLineClone = originalLine.copyWith(
+    originalLineClone = currentLine.copyWith(
       childrenMPIDs: childrenMPIDsClone,
       optionsMap: optionsMapClone,
       attrOptionsMap: attrOptionsMapClone,

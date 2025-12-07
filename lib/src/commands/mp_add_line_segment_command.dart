@@ -38,7 +38,6 @@ class MPAddLineSegmentCommand extends MPCommand with MPPosCommandMixin {
       newLineSegment: newLineSegment,
       lineSegmentPositionInParent: lineSegmentPositionInParent,
     );
-    elementEditController.afterAddLineSegment(newLineSegment);
   }
 
   @override

@@ -152,6 +152,7 @@
 [X] - When a single element is selected, show its properties in the status bar.
 [ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [ ] - Allow the user to choose if the grid of a XVI file should be visible or not.
+[ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 
 ##Version 0.5
 [ ] - Raster images tracing

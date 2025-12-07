@@ -69,12 +69,14 @@ class MPMoveLineCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
+
     lineSegmentsMoveCommand.execute(th2FileEditController);
-    th2FileEditController.elementEditController.substituteElement(
+    elementEditController.substituteElement(
       th2FileEditController.thFile.elementByMPID(lineMPID),
     );
-    th2FileEditController.triggerNewLineRedraw();
-    th2FileEditController.triggerSelectedElementsRedraw();
+    elementEditController.addChangedLineMPID(lineMPID);
   }
 
   @override

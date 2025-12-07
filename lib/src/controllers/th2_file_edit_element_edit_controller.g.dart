@@ -235,21 +235,6 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void afterAddLineSegment(THLineSegment newLineSegment) {
-    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditElementEditControllerBase.afterAddLineSegment',
-        );
-    try {
-      return super.afterAddLineSegment(newLineSegment);
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
   void executeAddElement({
     required THElement newElement,
     THIsParentMixin? parent,
@@ -711,6 +696,38 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.applyRemoveSelectedLineSegments();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void updateControllersAfterLineSegmentChangesPerLine() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.updateControllersAfterLineSegmentChangesPerLine',
+        );
+    try {
+      return super.updateControllersAfterLineSegmentChangesPerLine();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void updateControllersAfterElementChanges() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.updateControllersAfterElementChanges',
+        );
+    try {
+      return super.updateControllersAfterElementChanges();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

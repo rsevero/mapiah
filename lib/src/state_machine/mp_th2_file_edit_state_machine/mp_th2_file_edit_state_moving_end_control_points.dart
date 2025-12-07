@@ -134,10 +134,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
       toLineSegmentsMap: modifiedLineSegmentsMap,
       descriptionType: MPCommandDescriptionType.editLine,
     );
-
     th2FileEditController.execute(lineEditCommand);
-    selectionController.updateSelectedElementClone(selectedLine.mpID);
-    th2FileEditController.triggerEditLineRedraw();
+    elementEditController.updateControllersAfterLineSegmentChangesPerLine();
+    elementEditController.updateControllersAfterElementChanges();
     th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.editSingleLine,
     );

@@ -66,7 +66,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          selectionController.removeSelectedElements(clickedElements);
+          selectionController.removeSelectedElementsByElements(clickedElements);
         }
 
         return Future.value();

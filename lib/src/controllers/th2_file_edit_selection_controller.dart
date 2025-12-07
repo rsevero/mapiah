@@ -242,10 +242,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     _th2FileEditController.execute(mpCommand);
     clearSelectedElements();
-    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementChanges();
   }
 
-  void updateSelectedElementClone(int mpID) {
+  void updateSelectedElementLogicalClone(int mpID) {
     if (_mpSelectedElementsLogical.containsKey(mpID)) {
       _mpSelectedElementsLogical[mpID]!.updateClone(_th2FileEditController);
     }
@@ -271,7 +272,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void updateAfterAddElement(THElement element) {
     addSelectableElement(element);
-    updateSelectedElementClone(element.parentMPID);
+    updateSelectedElementLogicalClone(element.parentMPID);
   }
 
   @action
@@ -394,17 +395,19 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool removeElementFromSelected(
-    THElement element, {
+  bool removeElementFromSelectedLogicalAndDrawable(
+    int elementMPID, {
     bool setState = false,
     bool updateStatusBarMessage = true,
   }) {
-    final int elementMPID = element.mpID;
+    final THElementType elementType = _thFile.getElementTypeByMPID(elementMPID);
 
     _mpSelectedElementsLogical.remove(elementMPID);
 
-    if (element is THArea) {
-      final List<int> lineMPIDs = element.getLineMPIDs(_thFile);
+    if (elementType == THElementType.area) {
+      final List<int> lineMPIDs = _thFile
+          .areaByMPID(elementMPID)
+          .getLineMPIDs(_thFile);
 
       for (final int lineMPID in lineMPIDs) {
         _selectedElementsDrawable.remove(lineMPID);
@@ -427,12 +430,21 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  void removeSelectedElements(List<THElement> elements) {
-    for (THElement element in elements) {
-      removeElementFromSelected(element, updateStatusBarMessage: false);
+  void removeSelectedElementsByMPIDs(List<int> elementMPIDs) {
+    for (int elementMPID in elementMPIDs) {
+      removeElementFromSelectedLogicalAndDrawable(
+        elementMPID,
+        updateStatusBarMessage: false,
+      );
     }
     _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.stateController.updateStatusBarMessage();
+  }
+
+  void removeSelectedElementsByElements(List<THElement> elements) {
+    final List<int> elementMPIDs = elements.map((e) => e.mpID).toList();
+
+    removeSelectedElementsByMPIDs(elementMPIDs);
   }
 
   void setSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
@@ -582,7 +594,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final int lineMPID = line.mpID;
 
     _mpSelectableElements![lineMPID] = selectableLine;
-    _isSelected.remove(lineMPID);
 
     /// Adding line segments as selectable elements so on 'single line edit'
     /// mode its possible to select end point clicking on line segments.
@@ -1079,8 +1090,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
-  void removeSelectedLineSegment(THLineSegment lineSegment) {
-    _selectedEndControlPoints.remove(lineSegment.mpID);
+  void removeSelectedLineSegment(int lineSegmentMPID) {
+    _selectedEndControlPoints.remove(lineSegmentMPID);
   }
 
   void removeSelectedEndControlPoints(List<THLineSegment> lineSegments) {

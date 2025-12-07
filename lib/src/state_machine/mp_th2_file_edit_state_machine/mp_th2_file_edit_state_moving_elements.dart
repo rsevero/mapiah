@@ -75,7 +75,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
-          selectionController.removeSelectedElements(clickedElements);
+          selectionController.removeSelectedElementsByElements(clickedElements);
         }
 
         return;
@@ -198,7 +198,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       }
 
       th2FileEditController.execute(moveCommand);
-      selectionController.updateSelectedElementClone(selectedElement.mpID);
+      selectionController.updateSelectedElementLogicalClone(
+        selectedElement.mpID,
+      );
     } else if (selectedCount > 1) {
       moveCommand =
           MPCommandFactory.moveElementsFromReferenceElementExactPosition(
