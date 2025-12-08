@@ -5,6 +5,7 @@
   * Snap to "points", "line points" and "XVI shots" on as default.
   * Snap should snap to own object points and line points.
   * Non selected lines not showing direction line ticks.
+  * Support reading files with ID and NAME values with invalid chars like spaces. The invalid chars are converted to underline.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:

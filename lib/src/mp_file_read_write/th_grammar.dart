@@ -136,7 +136,7 @@ class THGrammar extends GrammarDefinition {
   /// reference
   Parser referenceNonStartChar() => (extKeywordNonStartChar() | char('@'));
   Parser reference() =>
-      // idFreeString() |
+      nameFreeString() |
       (keywordStartChar() & referenceNonStartChar().star()).flatten().trim();
 
   /// date
@@ -289,7 +289,7 @@ class THGrammar extends GrammarDefinition {
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() =>
-      stringIgnoreCase('scrap') & (extKeyword() /* | idFreeString() */ );
+      stringIgnoreCase('scrap') & (extKeyword() | idFreeString());
   Parser scrapOptions() =>
       (attrOption() |
               authorOption() |
@@ -536,12 +536,32 @@ class THGrammar extends GrammarDefinition {
   Parser idOption() => stringIgnoreCase('id') & idOptions();
   Parser idCommandLikeOption() => idOption();
   Parser idOptions() =>
-      // idFreeString().map((value) => [value]) |
+      idFreeString().map((value) => [value]) |
       extKeyword().trim().map((value) => [value]);
 
   /// ID value that may contain spaces until the next option marker (" -XX")
   /// or end-of-line. Keeps interior spaces, trims the ends.
   Parser idFreeString() {
+    final Parser optionMarkerLookahead =
+        (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
+
+    return any()
+        .starLazy(optionMarkerLookahead | endOfInput())
+        .flatten()
+        .trim()
+        .where(
+          (value) =>
+              value.isNotEmpty &&
+              !value.startsWith('-') &&
+              !value.startsWith('"'),
+          message: 'Value cannot be empty or start with -',
+        )
+        .map((value) => value.replaceAll(RegExp(r'[^A-Za-z0-9/-]'), '_'));
+  }
+
+  /// Name value that may contain spaces until the next option marker (" -XX")
+  /// or end-of-line. Keeps interior spaces, trims the ends.
+  Parser nameFreeString() {
     final Parser optionMarkerLookahead =
         (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
 
