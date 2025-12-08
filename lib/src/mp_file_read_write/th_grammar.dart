@@ -4,6 +4,9 @@ import 'package:petitparser/petitparser.dart';
 
 /// .th file grammar.
 class THGrammar extends GrammarDefinition {
+  /// Indicates whether the last normalization step altered the original value.
+  bool changedValue = false;
+
   @override
   Parser start() => thFileStart().star();
 
@@ -289,7 +292,8 @@ class THGrammar extends GrammarDefinition {
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() =>
-      stringIgnoreCase('scrap') & (extKeyword() | idFreeString());
+      stringIgnoreCase('scrap') &
+      (extKeyword().map((value) => [value, false]) | idFreeString());
   Parser scrapOptions() =>
       (attrOption() |
               authorOption() |
@@ -536,12 +540,13 @@ class THGrammar extends GrammarDefinition {
   Parser idOption() => stringIgnoreCase('id') & idOptions();
   Parser idCommandLikeOption() => idOption();
   Parser idOptions() =>
-      idFreeString().map((value) => [value]) |
-      extKeyword().trim().map((value) => [value]);
+      idFreeString() | extKeyword().trim().map((value) => [value, false]);
 
   /// ID value that may contain spaces until the next option marker (" -XX")
   /// or end-of-line. Keeps interior spaces, trims the ends.
-  Parser idFreeString() {
+  Parser idFreeString() => _idFreeStringTemplate().map((value) => value);
+
+  Parser _idFreeStringTemplate() {
     final Parser optionMarkerLookahead =
         (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
 
@@ -554,9 +559,21 @@ class THGrammar extends GrammarDefinition {
               value.isNotEmpty &&
               !value.startsWith('-') &&
               !value.startsWith('"'),
-          message: 'Value cannot be empty or start with -',
+          message: 'Value cannot be empty or start with - or "',
         )
-        .map((value) => value.replaceAll(RegExp(r'[^A-Za-z0-9/-]'), '_'));
+        .map((value) {
+          final String normalized = value.replaceAll(
+            RegExp(r'[^A-Za-z0-9/-]'),
+            '_',
+          );
+          final bool wasChanged = normalized != value;
+
+          if (wasChanged) {
+            changedValue = true;
+          }
+
+          return wasChanged ? [normalized, wasChanged] : [normalized];
+        });
   }
 
   /// Name value that may contain spaces until the next option marker (" -XX")
@@ -574,9 +591,21 @@ class THGrammar extends GrammarDefinition {
               value.isNotEmpty &&
               !value.startsWith('-') &&
               !value.startsWith('"'),
-          message: 'Value cannot be empty or start with -',
+          message: 'Value cannot be empty or start with - or "',
         )
-        .map((value) => value.replaceAll(RegExp(r'[^A-Za-z0-9./@-]'), '_'));
+        .map((value) {
+          final String normalized = value.replaceAll(
+            RegExp(r'[^A-Za-z0-9./@-]'),
+            '_',
+          );
+          final bool wasChanged = normalized != value;
+
+          if (wasChanged) {
+            changedValue = true;
+          }
+
+          return wasChanged ? [normalized, wasChanged] : normalized;
+        });
   }
 
   /// point -from

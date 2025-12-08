@@ -327,9 +327,24 @@ class THFile
 
     _elementByMPID[mpID] = newElement;
 
-    if (newElement is THHasTHID) {
-      final String oldTHID = (oldElement as THHasTHID).thID;
-      final String newTHID = (newElement as THHasTHID).thID;
+    if ((newElement is THHasTHID) ||
+        ((newElement is THHasOptionsMixin) &&
+            (newElement.hasOption(THCommandOptionType.id)))) {
+      final bool newElementHasTHID = (newElement is THHasTHID);
+      final String oldTHID = newElementHasTHID
+          ? (oldElement as THHasTHID).thID
+          : ((oldElement as THHasOptionsMixin).getOption(
+                      THCommandOptionType.id,
+                    )!
+                    as THIDCommandOption)
+                .thID;
+      final String newTHID = newElementHasTHID
+          ? (newElement as THHasTHID).thID
+          : ((newElement as THHasOptionsMixin).getOption(
+                      THCommandOptionType.id,
+                    )!
+                    as THIDCommandOption)
+                .thID;
 
       if (_mpIDByTHID.containsKey(oldTHID)) {
         _mpIDByTHID.remove(oldTHID);

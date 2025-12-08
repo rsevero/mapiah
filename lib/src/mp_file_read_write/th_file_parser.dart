@@ -60,6 +60,8 @@ class THFileParser {
 
   final List<String> _parseErrors = [];
 
+  final Set<int> _mpIDsToCleanOriginalLine = {};
+
   final RegExp _doubleQuoteRegex = RegExp(thDoubleQuotePair);
   final RegExp _encodingRegex = RegExp(
     r'^\s*encoding\s+([a-zA-Z0-9-]+)',
@@ -689,17 +691,24 @@ class THFileParser {
       assert(elementSize == 2);
     }
 
-    final areaBorderID = element[1];
-
-    if (kDebugMode) {
-      assert(areaBorderID is String);
-    }
+    final String areaBorderID =
+        (element[1] is List ? element[1][0] : element[1]) as String;
+    final bool changedFromOriginalInFile =
+        (element[1] is List) &&
+            (element[1].length > 1) &&
+            (element[1][1] is bool)
+        ? element[1][1] as bool
+        : false;
 
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMPID: _currentParentMPID,
       thID: areaBorderID,
       originalLineInTH2File: _currentOriginalLine,
     );
+
+    if (changedFromOriginalInFile) {
+      _addToMPIDsToCleanOriginalLine(newElement.mpID);
+    }
 
     _th2FileElementEditController.executeAddElement(
       newElement: newElement,
@@ -752,9 +761,14 @@ class THFileParser {
 
     if (kDebugMode) assert(elementSize >= 2);
 
+    final dynamic scrapIdSpec = element[1];
+    final String scrapId = (scrapIdSpec is List && scrapIdSpec.isNotEmpty)
+        ? scrapIdSpec[0]
+        : scrapIdSpec;
+
     final THScrap newScrap = THScrap(
       parentMPID: _currentParentMPID,
-      thID: element[1],
+      thID: scrapId,
       originalLineInTH2File: _currentOriginalLine,
     );
     _th2FileElementEditController.executeAddElement(
@@ -801,7 +815,7 @@ class THFileParser {
   /// All line options (the ones that should be on the "line" line in the .th2
   /// file) can also appear as linepoint options (the ones that appear
   /// intermixed with line segments between the "line" and "endline" lines).
-  /// Here we deall with them all, registering the line options that appeared as
+  /// Here we deal with them all, registering the line options that appeared as
   /// linepoint options in the line options list and keeping the linepoint
   /// options registered with the appropriate line segment.
   void _injectLineCommandLikeOption(List<dynamic> element) {
@@ -1295,6 +1309,7 @@ class THFileParser {
       _optionParentAsTHLineSegment();
     } else {
       _optionParentAsCurrentElement();
+      _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
     }
 
     switch (optionType) {
@@ -1629,19 +1644,38 @@ class THFileParser {
       );
     }
 
+    final String station = (_currentSpec[0] == null)
+        ? ''
+        : (((_currentSpec[0] is List) &&
+                  (_currentSpec[0].length > 1) &&
+                  (_currentSpec[0][0] is String))
+              ? _currentSpec[0][0]
+              : _currentSpec[0]);
+    final String originalLine = station.isEmpty ? '' : _currentOriginalLine;
+    final bool changedOriginalLine =
+        ((_currentSpec[0] is List) &&
+            (_currentSpec[0].length > 1) &&
+            (_currentSpec[0][1] is bool))
+        ? _currentSpec[0][1] as bool
+        : false;
+    final THExtendCommandOption newOption = THExtendCommandOption(
+      parentMPID: _currentHasOptions.mpID,
+      station: station,
+      originalLineInTH2File: originalLine,
+    );
+
     MPEditElementAux.addOptionToElement(
-      option: _currentSpec[0] == null
-          ? THExtendCommandOption(
-              parentMPID: _currentHasOptions.mpID,
-              station: '',
-            )
-          : THExtendCommandOption(
-              parentMPID: _currentHasOptions.mpID,
-              station: _currentSpec[0],
-              originalLineInTH2File: _currentOriginalLine,
-            ),
+      option: newOption,
       element: _currentHasOptions,
     );
+
+    if (changedOriginalLine) {
+      _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
+    }
+  }
+
+  void _addToMPIDsToCleanOriginalLine(int mpID) {
+    _mpIDsToCleanOriginalLine.add(mpID);
   }
 
   void _injectIDCommandOption() {
@@ -1651,16 +1685,29 @@ class THFileParser {
       );
     }
 
+    final String thID = (_currentSpec[0] is String)
+        ? _currentSpec[0] as String
+        : _currentSpec[0].toString();
+    final bool changedFromOriginalInFile = _currentSpec.length > 1
+        ? (_currentSpec[1] is bool
+              ? _currentSpec[1] as bool
+              : (_currentSpec[1].toString().toLowerCase() == 'true'))
+        : false;
+
+    if (changedFromOriginalInFile) {
+      _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
+    }
+
     MPEditElementAux.addOptionToElement(
       option: THIDCommandOption(
         parentMPID: _currentHasOptions.mpID,
-        thID: _currentSpec[0],
+        thID: thID,
       ),
       element: _currentHasOptions,
     );
     _th2FileElementEditController.registerElementWithTHID(
       _currentHasOptions,
-      _currentSpec[0],
+      thID,
     );
   }
 
@@ -1671,14 +1718,27 @@ class THFileParser {
       );
     }
 
+    final String reference = (_currentSpec[0] is String)
+        ? _currentSpec[0] as String
+        : _currentSpec[0].toString();
+    final bool changedFromOriginalInFile = _currentSpec.length > 1
+        ? (_currentSpec[1] is bool
+              ? _currentSpec[1] as bool
+              : (_currentSpec[1].toString().toLowerCase() == 'true'))
+        : false;
+
     MPEditElementAux.addOptionToElement(
       option: THNameCommandOption(
         parentMPID: _currentHasOptions.mpID,
-        reference: _currentSpec[0],
+        reference: reference,
         originalLineInTH2File: _currentOriginalLine,
       ),
       element: _currentHasOptions,
     );
+
+    if (changedFromOriginalInFile) {
+      _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
+    }
   }
 
   void _injectSketchCommandOption() {
@@ -2505,6 +2565,7 @@ class THFileParser {
     }
 
     _injectContents();
+    _cleanOriginalLinesInFile();
     _linesCleanUp(_parsedTHFile);
     _areasCleanUp(_parsedTHFile);
 
@@ -2540,6 +2601,17 @@ class THFileParser {
     }
 
     return (unixPos, 1);
+  }
+
+  void _cleanOriginalLinesInFile() {
+    for (final int mpID in _mpIDsToCleanOriginalLine) {
+      final THElement element = _parsedTHFile.elementByMPID(mpID);
+      final THElement elementWithoutOriginalLine = element.copyWith(
+        originalLineInTH2File: '',
+      );
+      _parsedTHFile.substituteElement(elementWithoutOriginalLine);
+    }
+    _mpIDsToCleanOriginalLine.clear();
   }
 
   void _linesCleanUp(THIsParentMixin parent) {
