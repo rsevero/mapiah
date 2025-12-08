@@ -1047,14 +1047,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void updateControllersAfterElementChanges() {
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-
-    selectionController.resetSelectableElements();
-    selectionController.updateSelectableEndAndControlPoints();
+    _th2FileEditController.selectionController
+        .updateSelectableEndAndControlPoints();
 
     _th2FileEditController.snapController.updateSnapTargets();
 
+    _th2FileEditController.updateEnableSelectButton();
     _th2FileEditController.triggerEditLineRedraw();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();

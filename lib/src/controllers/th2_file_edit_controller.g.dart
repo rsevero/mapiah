@@ -1798,11 +1798,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void setEnableSelectButton(bool enable) {
+  void updateEnableSelectButton() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.setEnableSelectButton');
+        .startAction(
+          name: 'TH2FileEditControllerBase.updateEnableSelectButton',
+        );
     try {
-      return super.setEnableSelectButton(enable);
+      return super.updateEnableSelectButton();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

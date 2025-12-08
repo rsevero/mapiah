@@ -1252,8 +1252,16 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void setEnableSelectButton(bool enable) {
-    _enableSelectButton = enable;
+  void updateEnableSelectButton() {
+    final bool newEnableSelectButton = selectionController
+        .getMPSelectableElements()
+        .isNotEmpty;
+
+    if (newEnableSelectButton == _enableSelectButton) {
+      return;
+    }
+
+    _enableSelectButton = newEnableSelectButton;
   }
 }
 

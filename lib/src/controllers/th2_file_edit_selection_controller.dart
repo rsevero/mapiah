@@ -142,13 +142,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   Map<int, MPSelectable> getMPSelectableElements() {
     if (_mpSelectableElements == null) {
-      _updateMPSelectableElements();
+      updateMPSelectableElements();
     }
 
     return _mpSelectableElements!;
   }
 
-  void _updateMPSelectableElements() {
+  void updateMPSelectableElements() {
     _mpSelectableElements = {};
 
     if (_th2FileEditController.activeScrapID <= 0) {
@@ -164,10 +164,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       addSelectableElement(element);
     }
-
-    _th2FileEditController.setEnableSelectButton(
-      _mpSelectableElements!.isNotEmpty,
-    );
   }
 
   Rect _getElementsListBoundingBoxOnCanvas(Iterable<THElement> elements) {
@@ -539,7 +535,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void addSelectableElement(THElement element) {
     if (_mpSelectableElements == null) {
-      _updateMPSelectableElements();
+      updateMPSelectableElements();
+      _th2FileEditController.updateEnableSelectButton();
       return;
     }
 

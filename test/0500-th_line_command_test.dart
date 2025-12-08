@@ -1547,7 +1547,6 @@ endscrap
       test(failure, () async {
         final (_, isSuccessful, error) = await parser.parse(
           THTestAux.testPath(failure),
-          trace: true,
         );
         expect(isSuccessful, false);
       });

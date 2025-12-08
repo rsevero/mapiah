@@ -188,7 +188,6 @@ endscrap
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         print(errors);
         expect(isSuccessful, true);
