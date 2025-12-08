@@ -141,6 +141,44 @@ scrap test
 endscrap
 ''',
       },
+      //       {
+      //         'file': '2025-12-07-001-area_border_th_id_with_spaces.th2',
+      //         'length': 13,
+      //         'encoding': 'UTF-8',
+      //         'asFile': r'''encoding UTF-8
+      // scrap test
+      //   area clay
+      //     l85_3732__20
+      //   endarea
+      //   line border -close on -id l85_3732__20 -visibility off
+      //     3592 208
+      //     3539.45 249.03 3447.39 245.1 3392 208
+      //     3233.22 101.65 3066.45 -131.93 3204 -332
+      //     3266.87 -423.45 3365.54 -513.28 3476 -524
+      //     3929.86 -568.03 3743.42 89.77 3592 208
+      //   endline
+      // endscrap
+      // ''',
+      //       },
+      //       {
+      //         'file': '2025-12-07-002-area_border_th_id_with_spaces_as_last.th2',
+      //         'length': 13,
+      //         'encoding': 'UTF-8',
+      //         'asFile': r'''encoding UTF-8
+      // scrap test
+      //   area clay
+      //     l85_3732__20
+      //   endarea
+      //   line border -close on -id l85_3732__20 -visibility off
+      //     3592 208
+      //     3539.45 249.03 3447.39 245.1 3392 208
+      //     3233.22 101.65 3066.45 -131.93 3204 -332
+      //     3266.87 -423.45 3365.54 -513.28 3476 -524
+      //     3929.86 -568.03 3743.42 89.77 3592 208
+      //   endline
+      // endscrap
+      // ''',
+      //       },
     ];
 
     for (var success in successes) {
@@ -148,9 +186,11 @@ endscrap
         final parser = THFileParser();
         final writer = THFileWriter();
         mpLocator.mpGeneralController.reset();
-        final (file, isSuccessful, _) = await parser.parse(
+        final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
+          // trace: true,
         );
+        print(errors);
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
         expect(file.encoding, (success['encoding'] as String));

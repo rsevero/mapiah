@@ -91,7 +91,7 @@ class THGrammar extends GrammarDefinition {
               digit().plus() &
               (char('.') & digit().plus()).optional())
           .flatten();
-  Parser numberWithSuffix(something) =>
+  Parser numberWithSuffix(Parser something) =>
       (pattern('-+').optional() &
               digit().plus() &
               (char('.') & digit().plus()).optional() &
@@ -114,10 +114,10 @@ class THGrammar extends GrammarDefinition {
       .map((value) => value.elements);
 
   /// comment
-  Parser commentTemplate(commentType) => ((char(thCommentChar) & any().star())
-      .flatten()
-      .trim()
-      .map((value) => [commentType, value.trim()]));
+  Parser commentTemplate(String commentType) =>
+      ((char(thCommentChar) & any().star()).flatten().trim().map(
+        (value) => [commentType, value.trim()],
+      ));
   Parser fullLineComment() =>
       commentTemplate('fulllinecomment').map((value) => [value]);
   Parser endLineComment() => commentTemplate('samelinecomment');
@@ -136,6 +136,7 @@ class THGrammar extends GrammarDefinition {
   /// reference
   Parser referenceNonStartChar() => (extKeywordNonStartChar() | char('@'));
   Parser reference() =>
+      // idFreeString() |
       (keywordStartChar() & referenceNonStartChar().star()).flatten().trim();
 
   /// date
@@ -253,7 +254,7 @@ class THGrammar extends GrammarDefinition {
       stringIgnoreCase('none');
 
   /// Command template
-  Parser commandTemplate(command) =>
+  Parser commandTemplate(Parser Function() command) =>
       ref0(command).trim() & endLineComment().optional();
 
   /// multiline comment
@@ -287,7 +288,8 @@ class THGrammar extends GrammarDefinition {
   /// scrap
   Parser scrap() => ref1(commandTemplate, scrapCommand);
   Parser scrapCommand() => scrapRequired() & scrapOptions();
-  Parser scrapRequired() => stringIgnoreCase('scrap') & extKeyword();
+  Parser scrapRequired() =>
+      stringIgnoreCase('scrap') & (extKeyword() /* | idFreeString() */ );
   Parser scrapOptions() =>
       (attrOption() |
               authorOption() |
@@ -533,7 +535,29 @@ class THGrammar extends GrammarDefinition {
   /// point/line -id
   Parser idOption() => stringIgnoreCase('id') & idOptions();
   Parser idCommandLikeOption() => idOption();
-  Parser idOptions() => extKeyword().trim().map((value) => [value]);
+  Parser idOptions() =>
+      // idFreeString().map((value) => [value]) |
+      extKeyword().trim().map((value) => [value]);
+
+  /// ID value that may contain spaces until the next option marker (" -XX")
+  /// or end-of-line. Keeps interior spaces, trims the ends.
+  Parser idFreeString() {
+    final Parser optionMarkerLookahead =
+        (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
+
+    return any()
+        .starLazy(optionMarkerLookahead | endOfInput())
+        .flatten()
+        .trim()
+        .where(
+          (value) =>
+              value.isNotEmpty &&
+              !value.startsWith('-') &&
+              !value.startsWith('"'),
+          message: 'Value cannot be empty or start with -',
+        )
+        .map((value) => value.replaceAll(RegExp(r'[^A-Za-z0-9./@-]'), '_'));
+  }
 
   /// point -from
   Parser fromOption() => stringIgnoreCase('from') & fromOptions();
@@ -542,8 +566,8 @@ class THGrammar extends GrammarDefinition {
   /// point -name
   Parser nameOption() => stringIgnoreCase('name') & nameOptions();
   Parser nameOptions() =>
-      reference().trim().map((value) => [value]) |
-      quotedString().trim().map((value) => [value]);
+      quotedString().trim().map((value) => [value]) |
+      reference().trim().map((value) => [value]);
 
   /// point -orientation
   Parser orientationOption() =>

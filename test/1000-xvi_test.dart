@@ -48,10 +48,7 @@ void main() {
     for (final fileName in fileNames) {
       test('XVIGrammar parses $fileName', () {
         final XVIFileParser parser = XVIFileParser();
-        final (file, isSuccessful, _) = parser.parse(
-          _getFilePath(fileName),
-          // runTraceParser: true,
-        );
+        final (file, isSuccessful, _) = parser.parse(_getFilePath(fileName));
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
@@ -72,10 +69,7 @@ void main() {
     for (final fileName in fileNames) {
       test('XVIGrammar parses $fileName', () {
         final XVIFileParser parser = XVIFileParser();
-        final (file, isSuccessful, _) = parser.parse(
-          _getFilePath(fileName),
-          // runTraceParser: true,
-        );
+        final (file, isSuccessful, _) = parser.parse(_getFilePath(fileName));
 
         expect(isSuccessful, true);
         expect(file, isA<XVIFile>());
@@ -126,7 +120,6 @@ void main() {
         final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(testFile['file']),
-          // runTraceParser: true,
         );
 
         expect(isSuccessful, true);
@@ -176,7 +169,6 @@ void main() {
         final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(testFile['file']),
-          // runTraceParser: true,
         );
 
         expect(isSuccessful, true);
@@ -287,7 +279,6 @@ void main() {
       test('XVIGrammar parses ${testFile['file']}', () {
         final (file, isSuccessful, _) = parser.parse(
           _getFilePath(testFile['file']),
-          // runTraceParser: true,
         );
 
         expect(isSuccessful, true);
@@ -324,10 +315,7 @@ void main() {
 
     test('XVIGrammar parses $fileName', () {
       final XVIFileParser parser = XVIFileParser();
-      final (file, isSuccessful, _) = parser.parse(
-        _getFilePath(fileName),
-        // runTraceParser: true,
-      );
+      final (file, isSuccessful, _) = parser.parse(_getFilePath(fileName));
 
       expect(isSuccessful, true);
       expect(file, isA<XVIFile>());
@@ -421,10 +409,7 @@ void main() {
 
     test('XVIGrammar parses complete file $fileName', () {
       final XVIFileParser parser = XVIFileParser();
-      final (file, isSuccessful, _) = parser.parse(
-        _getFilePath(fileName),
-        // runTraceParser: true,
-      );
+      final (file, isSuccessful, _) = parser.parse(_getFilePath(fileName));
 
       expect(isSuccessful, true);
       expect(file, isA<XVIFile>());
@@ -493,7 +478,6 @@ void main() {
         final XVIFileParser parser = XVIFileParser();
         final (file, isSuccessful, errors) = parser.parse(
           _getFilePath(testFile['file']),
-          // runTraceParser: true,
         );
 
         expect(isSuccessful, true, reason: 'Errors: $errors');

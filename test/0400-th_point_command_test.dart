@@ -317,7 +317,6 @@ endscrap
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1323,7 +1322,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1405,7 +1403,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1591,7 +1588,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
@@ -1699,7 +1695,6 @@ endscrap
       test(success, () async {
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
-          // trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());

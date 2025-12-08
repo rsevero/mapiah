@@ -157,7 +157,7 @@ class THFileParser {
         _addError(
           'petitparser returned a "Failure"',
           '_injectContents()',
-          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine": {$_parsedContents}',
         );
 
         continue;

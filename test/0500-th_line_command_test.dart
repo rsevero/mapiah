@@ -1489,23 +1489,6 @@ endscrap
     }
   });
 
-  group('line -height failures', () {
-    final parser = THFileParser();
-
-    const failures = [
-      // 'th_file_parser-03182-line_with_height_option_on_invalid_line_type-failure.th2',
-    ];
-
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(
-          THTestAux.testPath(failure),
-        );
-        expect(isSuccessful, false);
-      });
-    }
-  });
-
   group('line -id', () {
     final parser = THFileParser();
     final writer = THFileWriter();
@@ -1564,6 +1547,7 @@ endscrap
       test(failure, () async {
         final (_, isSuccessful, error) = await parser.parse(
           THTestAux.testPath(failure),
+          trace: true,
         );
         expect(isSuccessful, false);
       });
