@@ -139,7 +139,7 @@ class THGrammar extends GrammarDefinition {
   /// reference
   Parser referenceNonStartChar() => (extKeywordNonStartChar() | char('@'));
   Parser reference() =>
-      nameFreeString() |
+      referenceFreeString() |
       (keywordStartChar() & referenceNonStartChar().star()).flatten().trim();
 
   /// date
@@ -274,6 +274,72 @@ class THGrammar extends GrammarDefinition {
   Parser endMultiLineCommentCommand() =>
       stringIgnoreCase('endcomment').map((value) => ['endmultilinecomment']);
 
+  final Parser endWithTrailingSpaces = (whitespace().star() & endOfInput())
+      .and();
+
+  final Parser optionMarkerLookahead =
+      (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
+
+  /// ID value that may contain spaces until the next option marker (" -XX")
+  /// or end-of-line. Keeps interior spaces, trims the ends.
+  Parser idFreeString() => _idFreeStringTemplate().map((value) => value);
+
+  Parser _idFreeStringTemplate() {
+    return any()
+        .starLazy(optionMarkerLookahead | endWithTrailingSpaces)
+        .flatten()
+        .trim()
+        .where(
+          (value) =>
+              value.isNotEmpty &&
+              !value.startsWith('-') &&
+              !value.startsWith('"'),
+          message: 'Value cannot be empty or start with - or "',
+        )
+        .map((value) {
+          final String normalized = value.replaceAll(
+            RegExp(r'[^A-Za-z0-9/-]'),
+            '_',
+          );
+          final bool wasChanged = normalized != value;
+
+          if (wasChanged) {
+            changedValue = true;
+          }
+
+          return wasChanged ? [normalized, wasChanged] : [normalized];
+        });
+  }
+
+  /// Reference value that may contain spaces until the next option marker
+  /// (" -XX") or end-of-line. Keeps interior spaces, trims the ends.
+  Parser referenceFreeString() {
+    return any()
+        .starLazy(optionMarkerLookahead | endWithTrailingSpaces)
+        .flatten()
+        .trim()
+        .where(
+          (value) =>
+              value.isNotEmpty &&
+              !value.startsWith('-') &&
+              !value.startsWith('"'),
+          message: 'Value cannot be empty or start with - or "',
+        )
+        .map((value) {
+          final String normalized = value.replaceAll(
+            RegExp(r'[^A-Za-z0-9./@-]'),
+            '_',
+          );
+          final bool wasChanged = normalized != value;
+
+          if (wasChanged) {
+            changedValue = true;
+          }
+
+          return wasChanged ? [normalized, wasChanged] : normalized;
+        });
+  }
+
   /// encoding
   Parser encodingStartChar() => pattern('A-Za-z');
   Parser encodingNonStartChar() => (keywordStartChar() | pattern('0-9-'));
@@ -293,7 +359,7 @@ class THGrammar extends GrammarDefinition {
   Parser scrapCommand() => scrapRequired() & scrapOptions();
   Parser scrapRequired() =>
       stringIgnoreCase('scrap') &
-      (extKeyword().map((value) => [value, false]) | idFreeString());
+      (reference() | extKeyword().map((value) => [value, false]));
   Parser scrapOptions() =>
       (attrOption() |
               authorOption() |
@@ -541,72 +607,6 @@ class THGrammar extends GrammarDefinition {
   Parser idCommandLikeOption() => idOption();
   Parser idOptions() =>
       idFreeString() | extKeyword().trim().map((value) => [value, false]);
-
-  /// ID value that may contain spaces until the next option marker (" -XX")
-  /// or end-of-line. Keeps interior spaces, trims the ends.
-  Parser idFreeString() => _idFreeStringTemplate().map((value) => value);
-
-  Parser _idFreeStringTemplate() {
-    final Parser optionMarkerLookahead =
-        (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
-
-    return any()
-        .starLazy(optionMarkerLookahead | endOfInput())
-        .flatten()
-        .trim()
-        .where(
-          (value) =>
-              value.isNotEmpty &&
-              !value.startsWith('-') &&
-              !value.startsWith('"'),
-          message: 'Value cannot be empty or start with - or "',
-        )
-        .map((value) {
-          final String normalized = value.replaceAll(
-            RegExp(r'[^A-Za-z0-9/-]'),
-            '_',
-          );
-          final bool wasChanged = normalized != value;
-
-          if (wasChanged) {
-            changedValue = true;
-          }
-
-          return wasChanged ? [normalized, wasChanged] : [normalized];
-        });
-  }
-
-  /// Name value that may contain spaces until the next option marker (" -XX")
-  /// or end-of-line. Keeps interior spaces, trims the ends.
-  Parser nameFreeString() {
-    final Parser optionMarkerLookahead =
-        (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
-
-    return any()
-        .starLazy(optionMarkerLookahead | endOfInput())
-        .flatten()
-        .trim()
-        .where(
-          (value) =>
-              value.isNotEmpty &&
-              !value.startsWith('-') &&
-              !value.startsWith('"'),
-          message: 'Value cannot be empty or start with - or "',
-        )
-        .map((value) {
-          final String normalized = value.replaceAll(
-            RegExp(r'[^A-Za-z0-9./@-]'),
-            '_',
-          );
-          final bool wasChanged = normalized != value;
-
-          if (wasChanged) {
-            changedValue = true;
-          }
-
-          return wasChanged ? [normalized, wasChanged] : normalized;
-        });
-  }
 
   /// point -from
   Parser fromOption() => stringIgnoreCase('from') & fromOptions();
