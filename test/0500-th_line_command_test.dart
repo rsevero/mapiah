@@ -373,7 +373,7 @@ endscrap
         'asFile':
             'encoding  utf-8\n'
             'scrap scrap1\n'
-            'line slope\n'
+            '  line slope -border on\n'
             '  355.0 1065.0 # Comment on data line\n'
             '  450.0 600.0 589.72 521.11 650.0 600.0\n'
             '291.0 499.0\n'
@@ -389,7 +389,7 @@ endscrap
         'asFile':
             'encoding  utf-8\n'
             'scrap scrap1\n'
-            'line slope\n'
+            '  line slope -border on\n'
             '  355.0 1065.0 # Comment on data line\n'
             '  450.0 600.0 589.72 521.11 650.0 600.0 # Comment on another data line\n'
             '291.0 499.0\n'
@@ -467,6 +467,19 @@ endscrap
             '\tendline\n'
             'endscrap\n'
             '',
+      },
+      {
+        'file': '2025-12-09-005-line_with_anchors_option_as_line_data.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap test
+  line rope -anchors on
+1758 -1030
+2147.74 -1120.48
+endline
+endscrap
+''',
       },
     ];
 
@@ -710,22 +723,6 @@ endscrap
     }
   });
 
-  // group('linepoint -altitude failures', () {
-  //   final parser = THFileParser();
-
-  //   const failures = [
-  //     'th_file_parser-03132-linepoint_with_altitude_option_with_invalid_line_type-failure.th2',
-  //   ];
-
-  //   for (var failure in failures) {
-  //     test(failure, () async {
-  //       final (_, isSuccessful, error) =
-  //           await parser.parse(THTestAux.testPath(failure));
-  //       expect(isSuccessful, false);
-  //     });
-  //   }
-  // });
-
   group('line -anchors', () {
     final parser = THFileParser();
     final writer = THFileWriter();
@@ -733,6 +730,19 @@ endscrap
     const successes = [
       {
         'file': 'th_file_parser-02393-line_with_anchors_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  line rope -anchors on
+    1758 -1030
+    2147.74 -1120.48
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-09-005-line_with_anchors_option_as_line_data.th2',
         'length': 7,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
@@ -766,7 +776,6 @@ endscrap
     final parser = THFileParser();
 
     const failures = [
-      // 'th_file_parser-02394-line_with_anchors_option_invalid_line_type-failure.th2',
       'th_file_parser-02395-line_with_invalid_anchors_option-failure.th2',
     ];
 
