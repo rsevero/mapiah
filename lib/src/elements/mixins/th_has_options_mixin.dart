@@ -84,11 +84,15 @@ mixin THHasOptionsMixin on THElement {
   String optionsAsString() {
     final Iterable<THCommandOptionType> optionTypeList = _optionsMap.keys;
     final List<String> optionsList = [];
+    final THCommandOption? idOption = hasOption(THCommandOptionType.id)
+        ? getOption(THCommandOptionType.id)
+        : null;
 
     for (THCommandOptionType type in optionTypeList) {
       /// subtype option is serialized in the ':subtype' format, not in the
       /// -subtype <subtype> format.
-      if (type == THCommandOptionType.subtype) {
+      if ((type == THCommandOptionType.subtype) ||
+          (type == THCommandOptionType.id)) {
         continue;
       }
 
@@ -107,6 +111,13 @@ mixin THHasOptionsMixin on THElement {
     }
 
     optionsList.sort();
+
+    if (idOption != null) {
+      final String idTypeToFile = idOption.typeToFile();
+      final String idSpec = idOption.specToFile();
+
+      optionsList.insert(0, "-$idTypeToFile $idSpec");
+    }
 
     final String asString = optionsList.join(' ').trim();
 

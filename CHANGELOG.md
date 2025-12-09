@@ -8,6 +8,7 @@
   * Support reading files with ID and NAME values with invalid chars like spaces. The invalid chars are converted to underline.
   * Clarification of situations were Mapiah does not preserve the original file format included in help page.
   * When there is some snap option enabled, the "snap" button should be visually different.
+  * ID written as the first PLA option on file.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:

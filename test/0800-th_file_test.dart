@@ -345,7 +345,7 @@ scrap test
   area clay
     l85_3732__20
   endarea
-  line border -close on -id l85_3732__20 -visibility off
+  line border -id l85_3732__20 -close on -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -364,7 +364,7 @@ scrap test
   area clay
     l85_3732__20
   endarea
-  line border -close on -id l85_3732__20 -visibility off
+  line border -id l85_3732__20 -close on -visibility off
     3592 208
     3539.45 249.03 3447.39 245.1 3392 208
     3233.22 101.65 3066.45 -131.93 3204 -332
@@ -446,7 +446,7 @@ endscrap
             '\tarea clay\n'
             '    l85_3732__20\n'
             '\tendarea\n'
-            '  line border -close on -id l85_3732__20 -visibility off\n'
+            '  line border -id l85_3732__20 -close on -visibility off\n'
             '\t\t3592 208\n'
             '\t\t3539.45 249.03 3447.39 245.1 3392 208\n'
             '\t\t3233.22 101.65 3066.45 -131.93 3204 -332\n'
@@ -466,7 +466,7 @@ endscrap
             '\tarea clay\n'
             '    l85_3732__20\n'
             '\tendarea\n'
-            '  line border -close on -id l85_3732__20 -visibility off\n'
+            '  line border -id l85_3732__20 -close on -visibility off\n'
             '\t\t3592 208\n'
             '\t\t3539.45 249.03 3447.39 245.1 3392 208\n'
             '\t\t3233.22 101.65 3066.45 -131.93 3204 -332\n'

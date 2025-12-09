@@ -48,7 +48,7 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  line contour -attr custom "attribute" -id blaus
+  line contour -id blaus -attr custom "attribute"
     2736.2 -808.5
     2894.3 -202.7
     2264.5 -205.7
