@@ -820,12 +820,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     optionEditController.clearCurrentOptionType();
     _th2FileEditController.selectionController.updateSelectedElementsClones();
 
-    if (attrOptionEdited) {
-      overlayWindowController.setShowOverlayWindow(
-        MPWindowType.optionChoices,
-        false,
-      );
-    }
+    overlayWindowController.setShowOverlayWindow(
+      MPWindowType.optionChoices,
+      false,
+    );
 
     switch (optionEditController.currentOptionElementsType) {
       case MPOptionElementType.lineSegment:

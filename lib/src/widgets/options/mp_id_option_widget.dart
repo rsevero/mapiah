@@ -99,10 +99,6 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
       final String thID = _thIDController.text.trim();
 
       if (thID.isNotEmpty) {
-        /// The THFileMPID is used only as a placeholder for the actual
-        /// parentMPID of the option(s) to be set. THFile isn't even a
-        /// THHasOptionsMixin so it can't actually be the parent of an option,
-        /// i.e., is has no options at all.
         newOption = THIDCommandOption.fromStringWithParentMPID(
           parentMPID: mpParentMPIDPlaceholder,
           thID: thID,
@@ -113,6 +109,7 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget> {
             content: Text(appLocalizations.mpIDInvalidValueErrorMessage),
           ),
         );
+
         return;
       }
     }

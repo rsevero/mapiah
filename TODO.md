@@ -97,16 +97,13 @@
 [X] - When there is some snap option enabled, the "snap" button should be visually different.
 [X] - On 'single line edit' mode, when a endpoint is selected, clicking on a control point and dragging should work.
 [X] - BUG: on 'single line edit' mode, when end points are deleted, they remain visually shown as part of the line.
-[ ] - BUG: when clicking the 'Ok' button to set an option, the overlay window of the option being set is not closed.
-[ ] - BUG: when selecting a multiple option option, the overlay window of the option being set is not closed.
+[X] - BUG: when clicking the 'Ok' button to set an option, the overlay window of the option being set is not closed.
+[X] - BUG: when selecting a multiple option option, the overlay window of the option being set is not closed.
 [ ] - Make THID the first option when writing to file.
-[ ] - List of elements that should not be movable: Point station.
-[ ] - List of elements that should not be selectable: Line u:splay.
 [X] - Snap should have "points" and line points" on as default.
 [ ] - Saving should close overlay windows like "options".
 [ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 [ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
-[ ] - u:splay lines should not show direction tick.
 [ ] - Keyboard shorcut to toogle smooth between "on/unset".
 [ ] - On 'single line edit' mode, after setting a line point option, clicking outside the overlay window should only close the overlay window but not but the user back in the 'empty selection' mode.
 [ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
