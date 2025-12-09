@@ -762,9 +762,15 @@ class THFileParser {
     if (kDebugMode) assert(elementSize >= 2);
 
     final dynamic scrapIdSpec = element[1];
-    final String scrapId = (scrapIdSpec is List && scrapIdSpec.isNotEmpty)
+    final String scrapId = ((scrapIdSpec is List) && scrapIdSpec.isNotEmpty)
         ? scrapIdSpec[0]
         : scrapIdSpec;
+    final bool changedFromOriginalInFile =
+        (scrapIdSpec is List) &&
+            (scrapIdSpec.length > 1) &&
+            (scrapIdSpec[1] is bool)
+        ? scrapIdSpec[1] as bool
+        : false;
 
     final THScrap newScrap = THScrap(
       parentMPID: _currentParentMPID,
@@ -776,6 +782,10 @@ class THFileParser {
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
+
+    if (changedFromOriginalInFile) {
+      _addToMPIDsToCleanOriginalLine(newScrap.mpID);
+    }
 
     _currentElement = newScrap;
     setCurrentParent(newScrap);

@@ -329,8 +329,213 @@ endscrap
       expect(file, isA<THFile>());
       expect(file.countElements(), success['countElements']);
 
-      var asFile = writer.serialize(file, includeEmptyLines: true);
+      final String asFile = writer.serialize(file, includeEmptyLines: true);
       expect(asFile, success['asFile']);
     });
+  });
+
+  group('IDs and references with spaces: Mapiah format output', () {
+    var successes = {
+      {
+        'file': '2025-12-07-001-area_border_th_id_with_spaces.th2',
+        'length': 13,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  area clay
+    l85_3732__20
+  endarea
+  line border -close on -id l85_3732__20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-07-002-area_border_th_id_with_spaces_as_last.th2',
+        'length': 13,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  area clay
+    l85_3732__20
+  endarea
+  line border -close on -id l85_3732__20 -visibility off
+    3592 208
+    3539.45 249.03 3447.39 245.1 3392 208
+    3233.22 101.65 3066.45 -131.93 3204 -332
+    3266.87 -423.45 3365.54 -513.28 3476 -524
+    3929.86 -568.03 3743.42 89.77 3592 208
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-09-001-scrap_with_name_with_spaces.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras5_2022
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-12-09-002-scrap_with_name_with_spaces_and_flip_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras5_2022 -flip vertical
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-09-003-scrap_with_name_with_spaces_and_hyphen.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras-5_2022
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-12-09-004-scrap_with_name_with_spaces_and_hyphen_and_flip_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap araras-5_2022 -flip vertical
+endscrap
+''',
+      },
+    };
+
+    for (var success in successes) {
+      test("$success with Mapiah format output", () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
+        final (file, isSuccessful, errors) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
+        print(errors);
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final String asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('IDs and references with spaces: original format output', () {
+    var successes = {
+      {
+        'file': '2025-12-07-001-area_border_th_id_with_spaces.th2',
+        'length': 13,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding utf-8\n'
+            'scrap test\n'
+            '\tarea clay\n'
+            '    l85_3732__20\n'
+            '\tendarea\n'
+            '  line border -close on -id l85_3732__20 -visibility off\n'
+            '\t\t3592 208\n'
+            '\t\t3539.45 249.03 3447.39 245.1 3392 208\n'
+            '\t\t3233.22 101.65 3066.45 -131.93 3204 -332\n'
+            '\t\t3266.87 -423.45 3365.54 -513.28 3476 -524\n'
+            '\t\t3929.86 -568.03 3743.42 89.77 3592 208\n'
+            '\tendline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file': '2025-12-07-002-area_border_th_id_with_spaces_as_last.th2',
+        'length': 13,
+        'encoding': 'UTF-8',
+        'asFile':
+            'encoding utf-8\n'
+            'scrap test\n'
+            '\tarea clay\n'
+            '    l85_3732__20\n'
+            '\tendarea\n'
+            '  line border -close on -id l85_3732__20 -visibility off\n'
+            '\t\t3592 208\n'
+            '\t\t3539.45 249.03 3447.39 245.1 3392 208\n'
+            '\t\t3233.22 101.65 3066.45 -131.93 3204 -332\n'
+            '\t\t3266.87 -423.45 3365.54 -513.28 3476 -524\n'
+            '\t\t3929.86 -568.03 3743.42 89.77 3592 208\n'
+            '\tendline\n'
+            'endscrap\n'
+            '',
+      },
+      {
+        'file': '2025-12-09-001-scrap_with_name_with_spaces.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap araras5_2022
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-12-09-002-scrap_with_name_with_spaces_and_flip_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap araras5_2022 -flip vertical
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-09-003-scrap_with_name_with_spaces_and_hyphen.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap araras-5_2022
+endscrap
+''',
+      },
+      {
+        'file':
+            '2025-12-09-004-scrap_with_name_with_spaces_and_hyphen_and_flip_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap araras-5_2022 -flip vertical
+endscrap
+''',
+      },
+    };
+
+    for (var success in successes) {
+      test("$success with original format output", () async {
+        final parser = THFileParser();
+        final writer = THFileWriter();
+        mpLocator.mpGeneralController.reset();
+        final (file, isSuccessful, errors) = await parser.parse(
+          THTestAux.testPath(success['file'] as String),
+        );
+        print(errors);
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final String asFile = writer.serialize(
+          file,
+          useOriginalRepresentation: true,
+        );
+        expect(asFile, success['asFile']);
+      });
+    }
   });
 }

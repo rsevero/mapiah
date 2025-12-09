@@ -6,7 +6,7 @@
   * Snap should snap to own object points and line points.
   * Non selected lines not showing direction line ticks.
   * Support reading files with ID and NAME values with invalid chars like spaces. The invalid chars are converted to underline.
-  * Clarification of situations were Mapiah does not preserve the original file included in help page.
+  * Clarification of situations were Mapiah does not preserve the original file format included in help page.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:
@@ -18,6 +18,7 @@
   * flutter upgrade 3.38.4.
   * Improved 'single line edit' mode processing of clicks outside selected line by changing to 'non empty selected' mode and letting it deal with the clicks after that.
   * Major refactoring of line and line segment edit/add/remove changes propagation to all controllers.
+  * Add tests to check IDs and references with invalid chars like spaces are properly read and written.
 
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
