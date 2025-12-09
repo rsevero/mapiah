@@ -102,8 +102,8 @@
 [X] - Make THID the first option when writing to file.
 [X] - Snap should have "points" and line points" on as default.
 [X] - Saving should close overlay windows like "options".
-[ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
-[ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
+[X] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
+[X] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 [ ] - Keyboard shorcut to toogle smooth between "on/unset".
 [ ] - On 'single line edit' mode, after setting a line point option, clicking outside the overlay window should only close the overlay window but not but the user back in the 'empty selection' mode.
 [ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.

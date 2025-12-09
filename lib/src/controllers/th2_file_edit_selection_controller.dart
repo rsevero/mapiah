@@ -357,9 +357,19 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final int elementMPID in elementMPIDs) {
       final THElement element = _thFile.elementByMPID(elementMPID);
 
-      if (element is THPoint || element is THLine) {
+      if ((element is THPoint) || (element is THLine)) {
         addSelectedElement(element);
       }
+    }
+
+    if (_mpSelectedElementsLogical.isEmpty) {
+      _th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
+    } else {
+      _th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectNonEmptySelection,
+      );
     }
 
     _th2FileEditController.stateController.updateStatusBarMessage();
@@ -550,6 +560,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       case THArea _:
         _addAreaSelectableElement(element);
     }
+
+    _th2FileEditController.updateEnableSelectButton();
   }
 
   void _addAreaSelectableElement(THArea area) {

@@ -18,6 +18,7 @@
     * after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
   * Line options included in [LINE DATA] area would not be preserved in save.
   * When setting an option, its overlay window is not closing.
+  * On 'Ctrl+A', status bar remains 'empty selection'.
 * Infrastructure maintenance:
   * Speeding up file opening with faster _findLineBreak() implementation.
   * flutter upgrade 3.38.4.
