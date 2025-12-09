@@ -6,6 +6,7 @@
   * Snap should snap to own object points and line points.
   * Non selected lines not showing direction line ticks.
   * Support reading files with ID and NAME values with invalid chars like spaces. The invalid chars are converted to underline.
+  * Clarification of situations were Mapiah does not preserve the original file included in help page.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:

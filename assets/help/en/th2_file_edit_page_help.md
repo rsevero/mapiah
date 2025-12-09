@@ -8,6 +8,9 @@ This is where all TH2 file editing is done.
   - [Bottom right corner](#bottom-right-corner)
 - [Drawing lines](#drawing-lines)
 - [Element options](#element-options)
+- [Save](#save)
+  - [Original file format](#original-file-format)
+  - [Web releases](#web-releases)
 - [Simplify lines](#simplify-lines)
   - [Simplification methods](#simplification-methods)
   - [Bézier curve line segments](#bézier-curve-line-segments)
@@ -15,8 +18,6 @@ This is where all TH2 file editing is done.
   - [Straight line segments](#straight-line-segments)
 - [Snap](#snap)
 - [Zoom and panning](#zoom-and-panning)
-- [Web releases](#web-releases)
-  - [Save](#save)
 
 ## Top bar
 * On the left:
@@ -55,7 +56,6 @@ In case there are available redoes when a new edit operation is performed, the r
   * ![Zoom out button](assets/help/images/buttonZoomOut.png "Zoom out")  _Zoom out_: zooms out the TH2 file view. (-)
 
 ## Drawing lines
-
 When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated as the position of the single control point of a quadratic Bézier Curve.
 
 Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
@@ -69,6 +69,19 @@ The options available depend on the type of element selected.
 To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
+
+## Save
+
+### Original file format
+Mapiah preserves the original file formatting as much as possible when saving. However, some changes are made on file parsing that are reflected in the saved version even if the user did no editing at all:
+* Consecutive line points with identical end points are merged into a single line point.
+* Lines with zero or one line points are removed.
+* Non existing area border references are removed, i.e., the area mentions an area border ID but there is no line with the same ID on the file.
+* Areas with no border references are removed.
+* Line options defined in [LINE DATA] area are moved to the line definition. Not to be confunded with line point options that are defined in [LINE DATA] area and are preserved there.
+
+### Web releases
+Saving on web releases are actually download requests. In case you have your browser set to automatically download to a default download folder, please check there for the updated file after saving.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.
@@ -110,9 +123,3 @@ There are several snap options available that can be controled on the window pre
 The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.
 The view can also be panned by right clicking and dragging the mouse.
 _Ctrl+mouse wheel_ pans vertically, _Shift+mouse wheel_ pans horizontally.
-
-## Web releases
-
-### Save
-
-Saving on web releases are actually download requests. In case you have your browser set to automatically download to a default download folder, please check there for the updated file after save.
