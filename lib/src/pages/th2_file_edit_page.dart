@@ -592,9 +592,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
         final bool hasRedo = th2FileEditController.hasRedo;
         final bool enableRemoveButton =
             th2FileEditController.enableRemoveButton;
-        final bool isSnapTargetsButtonPressed = th2FileEditController
-            .overlayWindowController
-            .getIsOverlayWindowShown(MPWindowType.snapTargets);
+        final bool isSomeSnapTargetActive =
+            th2FileEditController.snapController.isSomeSnapTargetActive;
 
         th2FileEditController.redrawSnapTargetsWindow;
 
@@ -617,18 +616,18 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       .toggleOverlayWindow(MPWindowType.snapTargets);
                   th2FileEditController.triggerSnapTargetsWindowRedraw();
                 },
-                backgroundColor: isSnapTargetsButtonPressed
+                backgroundColor: isSomeSnapTargetActive
                     ? null
                     : colorScheme.surfaceContainerLowest,
-                foregroundColor: isSnapTargetsButtonPressed
+                foregroundColor: isSomeSnapTargetActive
                     ? null
                     : colorScheme.surfaceContainerHighest,
-                elevation: isSnapTargetsButtonPressed ? 6.0 : 3.0,
+                elevation: isSomeSnapTargetActive ? 6.0 : 3.0,
                 child: Image.asset(
                   'assets/icons/snap-tool.png',
                   width: mpFloatingStateActionZoomIconSize,
                   height: mpFloatingStateActionZoomIconSize,
-                  color: isSnapTargetsButtonPressed
+                  color: isSomeSnapTargetActive
                       ? null
                       : colorScheme.surfaceContainerHighest,
                 ),

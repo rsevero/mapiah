@@ -56,6 +56,11 @@ abstract class TH2FileEditSnapControllerBase with Store {
   Map<MPSnapGridCell, List<({Offset start, Offset end})>> _snapLineTargetsGrid =
       {};
 
+  bool get isSomeSnapTargetActive =>
+      (_snapPointTargetType != MPSnapPointTarget.none) ||
+      (_snapLinePointTargetType != MPSnapLinePointTarget.none) ||
+      _snapXVIFileTargets.isNotEmpty;
+
   @action
   void setSnapPointTargetType(MPSnapPointTarget target) {
     if (target == _snapPointTargetType) {

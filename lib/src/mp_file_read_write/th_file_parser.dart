@@ -1218,7 +1218,7 @@ class THFileParser {
 
     /// If a regular line option has been identified in the [LINE DATA] area,
     /// the original representation this line had in the file can't be used as
-    /// it must now include this option.
+    /// it must now include this just identified line option.
     if (optionIdentified) {
       _addToMPIDsToCleanOriginalLine(_currentParentMPID);
     }
