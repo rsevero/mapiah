@@ -1106,6 +1106,8 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _thFile.isNewFile = false;
+
+    overlayWindowController.closeAutoDismissOverlayWindows();
   }
 
   Future<void> saveAsTH2File() async {
@@ -1146,6 +1148,8 @@ abstract class TH2FileEditControllerBase with Store {
 
       _thFile.isNewFile = false;
       setFilename(_thFile.filename);
+
+      overlayWindowController.closeAutoDismissOverlayWindows();
     }
   }
 

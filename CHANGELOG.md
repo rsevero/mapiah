@@ -9,6 +9,7 @@
   * Clarification of situations were Mapiah does not preserve the original file format included in help page.
   * When there is some snap option enabled, the "snap" button should be visually different.
   * ID written as the first PLA option on file.
+  * Saving the file closes auto dismissable overlay windows.
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:

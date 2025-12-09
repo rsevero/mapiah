@@ -101,7 +101,7 @@
 [X] - BUG: when selecting a multiple option option, the overlay window of the option being set is not closed.
 [X] - Make THID the first option when writing to file.
 [X] - Snap should have "points" and line points" on as default.
-[ ] - Saving should close overlay windows like "options".
+[X] - Saving should close overlay windows like "options".
 [ ] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 [ ] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 [ ] - Keyboard shorcut to toogle smooth between "on/unset".
