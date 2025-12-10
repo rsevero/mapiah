@@ -36,6 +36,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isShiftPressed) {
           selectionController.setSelectionState();
         }
+      case LogicalKeyboardKey.keyK:
+        if (!isCtrlPressed && !isMetaPressed && !isShiftPressed) {
+          if (isAltPressed) {
+            th2FileEditController.toggleToNextAvailableScrap();
+          } else {
+            th2FileEditController.elementEditController.addScrap();
+          }
+        }
       case LogicalKeyboardKey.keyI:
         if (!isShiftPressed && !isCtrlPressed && !isMetaPressed) {
           if (isAltPressed) {
@@ -111,12 +119,12 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
               th2FileEditController.saveTH2File();
             }
           }
-        } else if (!isCtrlPressed && !isMetaPressed && !isShiftPressed) {
-          if (isAltPressed) {
-            th2FileEditController.toggleToNextAvailableScrap();
-          } else {
-            th2FileEditController.elementEditController.addScrap();
-          }
+        } else if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedLinePointsSmoothOption();
         }
       case LogicalKeyboardKey.keyY:
         if ((isCtrlPressed || isMetaPressed) &&

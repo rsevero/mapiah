@@ -7,7 +7,7 @@
 | Create area                                     | A                            |
 | Create line                                     | L                            |
 | Create point                                    | P                            |
-| Create scrap                                    | S                            |
+| Create scrap                                    | K                            |
 | Delete point, line, area or line segment        | Del or Backspace             |
 | Force option setting on non-supporting types    | Ctrl+click on option setting |
 | Help                                            | F1                           |
@@ -24,6 +24,7 @@
 | Simplify line                                   | Ctrl+L                       |
 | Simplify line - to Bézier curve line segments   | Ctrl+Alt+L                   |
 | Simplify line - to straight line segments       | Ctrl+Shift+L                 |
+| Smooth line point                               | S                            |
 | Undo                                            | Ctrl+Z                       |
 | Zoom 1:1                                        | 1                            |
 | Zoom file                                       | 3                            |

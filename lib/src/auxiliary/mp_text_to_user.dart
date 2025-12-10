@@ -451,6 +451,9 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleReverseOption] =
         localizations.mpCommandDescriptionToggleReverseOption;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .toggleSmoothOption] =
+        localizations.mpCommandDescriptionToggleSmoothOption;
   }
 
   static String getCommandDescription(

@@ -330,6 +330,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionToggleReverseOption => 'Toggle reverse option';
 
   @override
+  String get mpCommandDescriptionToggleSmoothOption => 'Toggle smooth option';
+
+  @override
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override
@@ -1077,7 +1080,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get th2FileEditPageAddScrapButton => 'Add scrap (S)';
+  String get th2FileEditPageAddScrapButton => 'Add scrap (K)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTool =>

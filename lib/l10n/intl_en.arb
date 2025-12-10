@@ -501,6 +501,11 @@
     "description": "The description for the toggle reverse option command",
     "type": "text"
   },
+  "mpCommandDescriptionToggleSmoothOption": "Toggle smooth option",
+  "@mpCommandDescriptionToggleSmoothOption": {
+    "description": "The description for the toggle smooth option command",
+    "type": "text"
+  },
   "mpContextInvalidValueErrorMessage": "Both fields are mandatory",
   "@mpContextInvalidValueErrorMessage": {
     "description": "The error message for invalid context value",
@@ -1691,7 +1696,7 @@
       "type": {}
     }
   },
-  "th2FileEditPageAddScrapButton": "Add scrap (S)",
+  "th2FileEditPageAddScrapButton": "Add scrap (K)",
   "@th2FileEditPageAddScrapButton": {
     "description": "The label for the add scrap button",
     "type": "text"

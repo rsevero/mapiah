@@ -135,7 +135,6 @@ class MPMultipleElementsCommand extends MPCommand {
 enum MPMultipleElementsCommandCompletionType {
   elementsEdited,
   elementsListChanged,
-  lineSegmentsAdded,
-  lineSegmentsRemoved,
+  lineSegmentsEdited,
   optionsEdited,
 }

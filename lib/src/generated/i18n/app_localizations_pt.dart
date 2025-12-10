@@ -334,6 +334,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Alternar opção de reversão de linha';
 
   @override
+  String get mpCommandDescriptionToggleSmoothOption =>
+      'Alternar opção de suavização de linha';
+
+  @override
   String get mpContextInvalidValueErrorMessage =>
       'Ambos os campos são obrigatórios';
 
@@ -1086,7 +1090,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get th2FileEditPageAddScrapButton => 'Adicionar croqui (S)';
+  String get th2FileEditPageAddScrapButton => 'Adicionar croqui (K)';
 
   @override
   String get th2FileEditPageChangeActiveScrapTool =>

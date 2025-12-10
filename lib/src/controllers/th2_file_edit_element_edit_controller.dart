@@ -961,7 +961,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
       commandsList: removeLineSegmentCommands,
       completionType:
-          MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+          MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
       descriptionType: MPCommandDescriptionType.removeLineSegment,
     );
 
@@ -1168,7 +1168,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         : MPMultipleElementsCommand.forCWJM(
             commandsList: addLineSegmentsCommands.reversed.toList(),
             completionType:
-                MPMultipleElementsCommandCompletionType.lineSegmentsAdded,
+                MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
           );
 
     return addLineSegmentsCommand;
@@ -1503,17 +1503,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       }
       final THLine originalLine =
           selectedElement.originalElementClone as THLine;
+      final int lineMPID = originalLine.mpID;
       final THReverseCommandOption? reverseOption =
           MPCommandOptionAux.isReverse(originalLine)
           ? null
           : THReverseCommandOption(
-              parentMPID: originalLine.mpID,
+              parentMPID: lineMPID,
               choice: THOptionChoicesOnOffType.on,
             );
       final MPCommand toggleCommand = (reverseOption == null)
           ? MPRemoveOptionFromElementCommand(
               optionType: THCommandOptionType.reverse,
-              parentMPID: originalLine.mpID,
+              parentMPID: lineMPID,
               descriptionType: MPCommandDescriptionType.toggleReverseOption,
             )
           : MPSetOptionToElementCommand(
@@ -1538,6 +1539,75 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.execute(toggleAllCommand);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
+  void toggleSelectedLinePointsSmoothOption() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<int> selectedLineSegmentMPIDs = selectionController
+        .selectedEndControlPoints
+        .keys
+        .toList();
+
+    if (selectedLineSegmentMPIDs.isEmpty) {
+      return;
+    }
+
+    final List<MPCommand> toggleCommands = [];
+
+    for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
+      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
+        selectedLineSegmentMPID,
+      );
+      final THSmoothCommandOption? smoothOption =
+          MPCommandOptionAux.isSmooth(lineSegment)
+          ? null
+          : THSmoothCommandOption(
+              parentMPID: selectedLineSegmentMPID,
+              choice: THOptionChoicesOnOffAutoType.on,
+            );
+      final MPCommand smoothOptionCommand = (smoothOption == null)
+          ? MPRemoveOptionFromElementCommand(
+              optionType: THCommandOptionType.smooth,
+              parentMPID: selectedLineSegmentMPID,
+              descriptionType: MPCommandDescriptionType.toggleSmoothOption,
+            )
+          : MPSetOptionToElementCommand(
+              toOption: smoothOption,
+              descriptionType: MPCommandDescriptionType.toggleSmoothOption,
+            );
+
+      toggleCommands.add(smoothOptionCommand);
+
+      if (smoothOption != null) {
+        final MPCommand? smoothLineSegmentsCommand = _th2FileEditController
+            .elementEditController
+            .getSmoothLineSegmentsCommand(lineSegment);
+
+        if (smoothLineSegmentsCommand != null) {
+          toggleCommands.add(smoothLineSegmentsCommand);
+        }
+      }
+
+      addChangedLineSegmentMPID(selectedLineSegmentMPID);
+    }
+
+    if (toggleCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand toggleAllCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: toggleCommands,
+          completionType:
+              MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+          descriptionType: MPCommandDescriptionType.toggleSmoothOption,
+        );
+
+    _th2FileEditController.execute(toggleAllCommand);
+    updateControllersAfterLineSegmentChangesPerLine();
+    updateControllersAfterElementChanges();
   }
 
   @action
@@ -1703,7 +1773,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 ? MPCommandDescriptionType.simplifyLine
                 : MPCommandDescriptionType.simplifyLines,
             completionType:
-                MPMultipleElementsCommandCompletionType.lineSegmentsRemoved,
+                MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
           );
 
       if (_isFirstLineSimplification) {

@@ -1235,8 +1235,7 @@ abstract class TH2FileEditControllerBase with Store {
       case MPMultipleElementsCommandCompletionType.elementsListChanged:
       case MPMultipleElementsCommandCompletionType.optionsEdited:
         elementEditController.updateOptionEdited();
-      case MPMultipleElementsCommandCompletionType.lineSegmentsAdded:
-      case MPMultipleElementsCommandCompletionType.lineSegmentsRemoved:
+      case MPMultipleElementsCommandCompletionType.lineSegmentsEdited:
         elementEditController.updateControllersAfterLineSegmentChangesPerLine();
         elementEditController.updateOptionEdited();
     }

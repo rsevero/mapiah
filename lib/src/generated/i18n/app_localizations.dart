@@ -692,6 +692,12 @@ abstract class AppLocalizations {
   /// **'Toggle reverse option'**
   String get mpCommandDescriptionToggleReverseOption;
 
+  /// The description for the toggle smooth option command
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle smooth option'**
+  String get mpCommandDescriptionToggleSmoothOption;
+
   /// The error message for invalid context value
   ///
   /// In en, this message translates to:
@@ -2072,7 +2078,7 @@ abstract class AppLocalizations {
   /// The label for the add scrap button
   ///
   /// In en, this message translates to:
-  /// **'Add scrap (S)'**
+  /// **'Add scrap (K)'**
   String get th2FileEditPageAddScrapButton;
 
   /// The label for the change active scrap tool button

@@ -6,7 +6,7 @@
 | Alterar imagens                                               | Alt+I                                |
 | Atalhos de teclado                                            | Ctrl+K                               |
 | Criar área                                                    | A                                    |
-| Criar croqui                                                  | S                                    |
+| Criar croqui                                                  | K                                    |
 | Criar linha                                                   | L                                    |
 | Criar ponto                                                   | P                                    |
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
@@ -25,6 +25,7 @@
 | Simplificar linha                                             | Ctrl+L                               |
 | Simplificar linha - para segmentos de linha curva de Bézier   | Ctrl+Alt+L                           |
 | Simplificar linha - para segmentos de linha reta              | Ctrl+Shift+L                         |
+| Suavizar ponto da linha                                       | S                                    |
 | Zoom 1:1                                                      | 1                                    |
 | Zoom arquivo                                                  | 3                                    |
 | Zoom croqui                                                   | 4                                    |

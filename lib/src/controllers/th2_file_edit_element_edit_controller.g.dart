@@ -781,6 +781,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleSelectedLinePointsSmoothOption() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleSelectedLinePointsSmoothOption',
+        );
+    try {
+      return super.toggleSelectedLinePointsSmoothOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void simplifySelectedLines() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
