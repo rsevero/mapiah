@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.26 - not yet released
+## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:
   * Snap to "points", "line points" and "XVI shots" on as default.
   * Snap should snap to own object points and line points.
@@ -10,6 +10,7 @@
   * When there is some snap option enabled, the "snap" button should be visually different.
   * ID written as the first PLA option on file.
   * Saving the file closes auto dismissable overlay windows.
+  * Keyboard shorcut to toogle smooth between "on/unset".
 * Fixed bugs:
   * Lines with duplicated subsequent line points would block the drawing of further elements.
   * On 'single line edit' mode:

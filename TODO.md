@@ -57,7 +57,6 @@
 [X] - Change MPCommand execute/creteUndoRedoCommand logic to: on execute, each command saves any pre execute info it might need to create its undo version but only after actual execute the undo command is actually created. This new method is important so MPMultipleCommandsCommand can properly create its undo command.
 [X] - MPMultipleCommandsCommand undo will be created after execute (as all MPCommands will do) by creating the reverse list of each of its own subcommands for their undo command.
 [X] - Simplifying lines: https://raphlinus.github.io/curves/2023/04/18/bezpath-simplify.html
-[ ] - When deleting line points, adjust control points so curve is changed as little as possible
 [X] - When deleting the second to last line segment of a line, the whole line should be deleted.
 [X] - When opening files, delete empty lines.
 [X] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
@@ -68,8 +67,6 @@
 [ ] - Properly present lines with partial subtypes
 [ ] - Show (and edit) orientation and lsize on the line points during edit
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
-[ ] - Manually edit position of points
-[ ] - Manually edit position of end and control points in line segments
 [X] - Snap to grid lines.
 [X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
 [X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
@@ -104,14 +101,14 @@
 [X] - Saving should close overlay windows like "options".
 [X] - BUG: on some situations, when on 'single edit line' mode, the Mapiah ends in no mode.
 [X] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
-[ ] - Keyboard shorcut to toogle smooth between "on/unset".
+[X] - Keyboard shorcut to toogle smooth between "on/unset".
 [ ] - On 'single line edit' mode, after setting a line point option, clicking outside the overlay window should only close the overlay window but not but the user back in the 'empty selection' mode.
 [ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
 [ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
 [ ] - Simplification of several lines at once is not working at all.
 [ ] - On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
-[ ] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).
-[ ] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
+[X] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).
+[X] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
 [X] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 [ ] - When clicking on an area, create some sort of short cut that would enable the user to automatically selected either the line or the area without being presented with a 'multiple elements clicked' dialog box.
@@ -152,6 +149,9 @@
 [ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [ ] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
+[ ] - When deleting line points, adjust control points so curve is changed as little as possible.
+[ ] - Manually edit position of points.
+[ ] - Manually edit position of end and control points in line segments.
 
 ##Version 0.5
 [ ] - Raster images tracing
