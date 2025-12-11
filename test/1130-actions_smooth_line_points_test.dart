@@ -1,12 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
 
@@ -30,7 +31,7 @@ void main() {
     const successes = [
       {
         'file': '2025-12-10-001-line.th2',
-        'length': 23,
+        'length': 22,
         'smoothedChildIndexes': [7, 8, 9, 10],
         'encoding': 'UTF-8',
         'asFileOriginal': r'''encoding UTF-8
@@ -118,27 +119,53 @@ endscrap
             /// Execution: taken from MPTH2FileEditPageSimplifyLineMixin.onKeyLDownEvent()
 
             // Select the single line in the file
+            controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+
             final THLine line = controller.thFile.getLines().first;
-            final int lineMPID = line.mpID;
 
             controller.selectionController.addSelectedElement(line);
-            controller.setCanvasScale(success['scale'] as double);
-            controller.elementEditController.setLineSimplificationMethod(
-              MPLineSimplificationMethod.keepOriginalTypes,
+            controller.stateController.setState(
+              MPTH2FileEditStateType.editSingleLine,
             );
-            controller.elementEditController.simplifySelectedLines();
 
-            expect(
-              controller.thFile
-                      .lineByMPID(lineMPID)
-                      .getLineSegmentMPIDs(controller.thFile)
-                      .length <
-                  snapshotOriginal
-                      .lineByMPID(lineMPID)
-                      .getLineSegmentMPIDs(snapshotOriginal)
-                      .length,
-              isTrue,
+            controller.selectionController
+                .updateSelectableEndAndControlPoints();
+
+            final List<int> childrenMPIDs = line.getLineSegmentMPIDs(
+              controller.thFile,
             );
+            final List<int> smoothedChildIndexes =
+                success['smoothedChildIndexes'] as List<int>;
+            final Set<int> smoothedChildMPIDs = {};
+
+            for (final int index in smoothedChildIndexes) {
+              smoothedChildMPIDs.add(childrenMPIDs[index]);
+            }
+
+            final Iterable<MPSelectable> mpSelectableElements = controller
+                .selectionController
+                .getMPSelectableEndControlPoints();
+
+            for (final MPSelectable mpSelectableElement
+                in mpSelectableElements) {
+              if (mpSelectableElement is! MPSelectableEndControlPoint) {
+                continue;
+              }
+
+              if (smoothedChildMPIDs.contains(
+                mpSelectableElement.element.mpID,
+              )) {
+                controller.selectionController.addSelectedEndControlPoint(
+                  mpSelectableElement,
+                );
+              }
+            }
+
+            controller.selectionController
+                .updateSelectableEndAndControlPoints();
+
+            controller.elementEditController
+                .toggleSelectedLinePointsSmoothOption();
 
             final String asFileChanged = writer.serialize(controller.thFile);
 

@@ -148,6 +148,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return _mpSelectableElements!;
   }
 
+  Set<MPSelectableEndControlPoint> getMPSelectableEndControlPoints() {
+    return _selectableEndControlPoints;
+  }
+
   void updateMPSelectableElements() {
     _mpSelectableElements = {};
 
