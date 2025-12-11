@@ -25,6 +25,7 @@
   * Improved 'single line edit' mode processing of clicks outside selected line by changing to 'non empty selected' mode and letting it deal with the clicks after that.
   * Major refactoring of line and line segment edit/add/remove changes propagation to all controllers.
   * Add tests to check IDs and references with invalid chars like spaces are properly read and written.
+  * Seting 'empty selection' mode after undo/redo of commands.
 
 ## 0.2.25 - 2025-12-05 - The runaway point regression release
 * Fixed bugs:
