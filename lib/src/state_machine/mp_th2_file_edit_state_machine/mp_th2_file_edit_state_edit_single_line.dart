@@ -101,6 +101,15 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
+      case LogicalKeyboardKey.keyR:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedLinesReverseOption();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyS:
         if (!isCtrlPressed &&
             !isMetaPressed &&
