@@ -5,6 +5,7 @@
   * Implemented select all and deselect all line points on 'single line edit' mode.
   * Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 * Fixed bugs:
+  * On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
   * Created onDeselectAll() and onSelectAll() state and actuator methods.

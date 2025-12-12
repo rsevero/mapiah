@@ -105,8 +105,8 @@
 [ ] - On 'single line edit' mode, after setting a line point option, clicking outside the overlay window should only close the overlay window but not but the user back in the 'empty selection' mode.
 [ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
 [ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
-[ ] - Simplification of several lines at once is not working at all.
-[ ] - On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
+[X] - BUG: Simplification of several lines at once is not working at all.
+[X] - BUG: On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
 [X] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).
 [X] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
