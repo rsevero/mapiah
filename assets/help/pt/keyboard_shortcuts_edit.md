@@ -11,6 +11,7 @@
 | Criar ponto                                                   | P                                    |
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
 | Desfazer                                                      | Ctrl+Z                               |
+| Desselecionar tudo                                            | Escape                               |
 | Editar nó de linha                                            | N                                    |
 | Editar opções                                                 | O                                    |
 | Excluir ponto, linha, área ou segmento de linha               | Del ou Backspace                     |

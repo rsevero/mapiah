@@ -74,6 +74,13 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           elementEditController.applyRemoveSelectedLineSegments();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyA:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          onSelectAll();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
     }

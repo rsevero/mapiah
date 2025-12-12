@@ -20,11 +20,10 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
-        if ((isCtrlPressed || isMetaPressed) &&
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
             !isAltPressed &&
             !isShiftPressed) {
-          selectionController.selectAllElements();
-        } else if (!isAltPressed && !isShiftPressed) {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addArea,
           );

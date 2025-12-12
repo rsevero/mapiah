@@ -11,6 +11,11 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   });
 
   @override
+  void onSelectAll() {
+    selectionController.selectAllElements();
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.clearSelectedElements();
     selectionController.clearSelectedEndControlPoints();
@@ -29,6 +34,32 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage,
     );
+  }
+
+  @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    bool keyProcessed = false;
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.keyA:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          onSelectAll();
+          keyProcessed = true;
+        }
+    }
+
+    if (keyProcessed) {
+      return;
+    }
+
+    _onKeyDownEvent(event);
   }
 
   /// 1. Clicked on an object?

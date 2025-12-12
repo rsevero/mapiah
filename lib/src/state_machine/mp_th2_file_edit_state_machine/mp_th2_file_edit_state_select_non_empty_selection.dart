@@ -13,6 +13,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   });
 
   @override
+  void onSelectAll() {
+    selectionController.selectAllElements();
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     selectionController.clearSelectedEndControlPoints();
     selectionController.clearSelectedLineSegments();
@@ -256,10 +261,38 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   }
 
   @override
+  void onDeselectAll() {
+    th2FileEditController.stateController.setState(
+      MPTH2FileEditStateType.selectEmptySelection,
+    );
+  }
+
+  @override
   void onKeyDownEvent(KeyDownEvent event) {
-    if (!onKeyLDownEvent(event)) {
-      _onKeyDownEvent(event);
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    bool keyProcessed = false;
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.keyA:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          onSelectAll();
+          keyProcessed = true;
+        }
+      case LogicalKeyboardKey.keyL:
+        keyProcessed = onKeyLDownEvent(event);
     }
+
+    if (keyProcessed) {
+      return;
+    }
+
+    _onKeyDownEvent(event);
   }
 
   @override

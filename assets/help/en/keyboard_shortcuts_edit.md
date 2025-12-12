@@ -9,6 +9,7 @@
 | Create point                                    | P                            |
 | Create scrap                                    | K                            |
 | Delete point, line, area or line segment        | Del or Backspace             |
+| Deselect all                                    | Escape                       |
 | Force option setting on non-supporting types    | Ctrl+click on option setting |
 | Help                                            | F1                           |
 | Keyboard shortcuts                              | Ctrl+K                       |
