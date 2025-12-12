@@ -29,9 +29,13 @@ abstract interface class MPActuatorInterface {
 
   void onSecondaryButtonClick(PointerUpEvent event);
 
+  void onSelectAll();
+
   void onTertiaryButtonClick(PointerUpEvent event);
 
   void onTertiaryButtonScroll(PointerScrollEvent event);
+
+  void onDeselectAll();
 
   void onKeyDownEvent(KeyDownEvent event);
 

@@ -148,11 +148,15 @@ abstract class MPTH2FileEditState {
 
   void onTertiaryButtonScroll(PointerScrollEvent event) {}
 
+  void onDeselectAll() {}
+
   void onKeyDownEvent(KeyDownEvent event) {}
 
   void onKeyRepeatEvent(KeyRepeatEvent event) {}
 
   void onKeyUpEvent(KeyUpEvent event) {}
+
+  void onSelectAll() {}
 
   void onStateEnter(MPTH2FileEditState previousState) {}
 

@@ -5,6 +5,7 @@
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
+  * Created onDeselectAll() and onSelectAll() state and actuator methods.
 
 ## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:

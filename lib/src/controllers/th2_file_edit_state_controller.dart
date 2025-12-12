@@ -110,6 +110,11 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
+  void onSelectAll() {
+    _state.onSelectAll();
+  }
+
+  @override
   void onTertiaryButtonClick(PointerUpEvent event) {
     _state.onTertiaryButtonClick(event);
   }
@@ -117,6 +122,11 @@ abstract class TH2FileEditStateControllerBase
   @override
   void onTertiaryButtonScroll(PointerScrollEvent event) {
     _state.onTertiaryButtonScroll(event);
+  }
+
+  @override
+  void onDeselectAll() {
+    _state.onDeselectAll();
   }
 
   @override
