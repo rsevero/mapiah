@@ -440,6 +440,21 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void deselectAllEndPoints() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.deselectAllEndPoints',
+        );
+    try {
+      return super.deselectAllEndPoints();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void selectAllElements() {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
@@ -447,6 +462,21 @@ mixin _$TH2FileEditSelectionController
         );
     try {
       return super.selectAllElements();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void selectAllEndPoints() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.selectAllEndPoints',
+        );
+    try {
+      return super.selectAllEndPoints();
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

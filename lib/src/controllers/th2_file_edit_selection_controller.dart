@@ -348,6 +348,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
+  void deselectAllEndPoints() {
+    clearSelectedEndControlPoints();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
   void selectAllElements() {
     if (_th2FileEditController.activeScrapID <= 0) {
       return;
@@ -377,6 +383,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     _th2FileEditController.stateController.updateStatusBarMessage();
+  }
+
+  @action
+  void selectAllEndPoints() {
+    final THLine selectedLine = getSelectedLine();
+
+    setSelectedEndPoints(selectedLine.getLineSegments(_thFile));
+    _th2FileEditController.triggerEditLineRedraw();
   }
 
   @action
@@ -471,7 +485,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void clearSelectedEndControlPoints() {
-    _selectedEndControlPoints.clear;
+    _selectedEndControlPoints.clear();
     _th2FileEditController.stateController.updateStatusBarMessage();
   }
 

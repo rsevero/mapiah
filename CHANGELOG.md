@@ -2,6 +2,7 @@
 
 ## 0.2.27 - not yet released
 * New features:
+  * Implemented select all and deselect all line points on 'single line edit' mode.
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.

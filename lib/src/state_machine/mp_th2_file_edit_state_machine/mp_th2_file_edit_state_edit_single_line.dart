@@ -19,6 +19,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   MPTH2FileEditStateEditSingleLine({required super.th2FileEditController});
 
   @override
+  void onSelectAll() {
+    selectionController.selectAllEndPoints();
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     setClickedElementAtSingleLineEditPointerDown(null);
     selectionController.updateSelectedElementsClones();
@@ -56,6 +61,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
+  void onDeselectAll() {
+    selectionController.deselectAllEndPoints();
+  }
+
+  @override
   void onKeyDownEvent(KeyDownEvent event) {
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
@@ -72,6 +82,14 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
             !isAltPressed &&
             !isShiftPressed) {
           elementEditController.applyRemoveSelectedLineSegments();
+          keyProcessed = true;
+        }
+      case LogicalKeyboardKey.escape:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          onDeselectAll();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyA:
