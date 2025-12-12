@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.27 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * flutter pub upgrade --major-versions.
+
 ## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:
   * Snap to "points", "line points" and "XVI shots" on as default.
