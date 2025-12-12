@@ -781,6 +781,37 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleSelectedLinesSmoothOption() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleSelectedLinesSmoothOption',
+        );
+    try {
+      return super.toggleSelectedLinesSmoothOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  bool getNextToggleOn() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.getNextToggleOn',
+        );
+    try {
+      return super.getNextToggleOn();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleSelectedLinePointsSmoothOption() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -789,6 +820,28 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.toggleSelectedLinePointsSmoothOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  MPCommand? getToggleSelectedLinePointsSmoothOptionCommand(
+    bool toggleOn,
+    Iterable<int> selectedLineSegmentMPIDs,
+  ) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.getToggleSelectedLinePointsSmoothOptionCommand',
+        );
+    try {
+      return super.getToggleSelectedLinePointsSmoothOptionCommand(
+        toggleOn,
+        selectedLineSegmentMPIDs,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

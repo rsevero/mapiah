@@ -118,12 +118,6 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
               th2FileEditController.saveTH2File();
             }
           }
-        } else if (!isCtrlPressed &&
-            !isMetaPressed &&
-            !isAltPressed &&
-            !isShiftPressed) {
-          th2FileEditController.elementEditController
-              .toggleSelectedLinePointsSmoothOption();
         }
       case LogicalKeyboardKey.keyY:
         if ((isCtrlPressed || isMetaPressed) &&

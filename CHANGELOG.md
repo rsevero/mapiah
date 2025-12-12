@@ -3,6 +3,7 @@
 ## 0.2.27 - not yet released
 * New features:
   * Implemented select all and deselect all line points on 'single line edit' mode.
+  * Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.

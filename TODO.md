@@ -112,9 +112,9 @@
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
 [X] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 [ ] - When clicking on an area, create some sort of short cut that would enable the user to automatically selected either the line or the area without being presented with a 'multiple elements clicked' dialog box.
-[ ] - Create state 'select all/deseselct all' methods.
+[X] - Create state 'select all/deseselct all' methods.
 [ ] - Move kerboard shortcut R (reverse line) to states that actually deal with selected lines and S (smooth line points) to 'single line edit' mode.
-[ ] - Make 'smooth line' work when in 'non empty selection' mode acting only on selected lines.
+[X] - Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

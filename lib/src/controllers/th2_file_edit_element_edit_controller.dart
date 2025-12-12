@@ -102,6 +102,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Map<String, MPTypeUsed> _mostUsedLineTypes = {};
   final Map<String, MPTypeUsed> _mostUsedPointTypes = {};
 
+  bool _lastLinePointSmoothOption = false;
+
   List<String> get lastUsedAreaTypes => _lastUsedAreaTypes;
 
   List<String> get lastUsedLineTypes => _lastUsedLineTypes;
@@ -1542,10 +1544,58 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void toggleSelectedLinePointsSmoothOption() {
+  void toggleSelectedLinesSmoothOption() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<int> selectedLineSegmentMPIDs = selectionController
+    final List<MPCommand> toggleCommands = [];
+    final bool toggleOn = getNextToggleOn();
+
+    for (final MPSelectedElement selectedElement
+        in selectionController.mpSelectedElementsLogical.values) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+
+      final MPCommand? toggleCommand =
+          getToggleSelectedLinePointsSmoothOptionCommand(
+            toggleOn,
+            selectedElement.originalLineSegmentsMapClone.keys,
+          );
+
+      if (toggleCommand != null) {
+        toggleCommands.add(toggleCommand);
+      }
+    }
+
+    if (toggleCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand toggleAllCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: toggleCommands,
+          completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+          descriptionType: MPCommandDescriptionType.toggleSmoothOption,
+        );
+
+    _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
+  bool getNextToggleOn() {
+    final bool toggleOn = !_lastLinePointSmoothOption;
+
+    _lastLinePointSmoothOption = toggleOn;
+
+    return toggleOn;
+  }
+
+  @action
+  void toggleSelectedLinePointsSmoothOption() {
+    final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
+        .selectionController
         .selectedEndControlPoints
         .keys
         .toList();
@@ -1554,31 +1604,58 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
+    final bool toggleOn = getNextToggleOn();
+    final MPCommand? toggleCommand =
+        getToggleSelectedLinePointsSmoothOptionCommand(
+          toggleOn,
+          selectedLineSegmentMPIDs,
+        );
+
+    if (toggleCommand == null) {
+      return;
+    }
+
+    _th2FileEditController.execute(toggleCommand);
+    updateControllersAfterLineSegmentChangesPerLine();
+    updateControllersAfterElementChanges();
+  }
+
+  @action
+  MPCommand? getToggleSelectedLinePointsSmoothOptionCommand(
+    bool toggleOn,
+    Iterable<int> selectedLineSegmentMPIDs,
+  ) {
     final List<MPCommand> toggleCommands = [];
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
         selectedLineSegmentMPID,
       );
-      final THSmoothCommandOption? smoothOption =
-          MPCommandOptionAux.isSmooth(lineSegment)
-          ? null
-          : THSmoothCommandOption(
+      final bool isSmooth = MPCommandOptionAux.isSmooth(lineSegment);
+      final THSmoothCommandOption? smoothOption = (toggleOn && !isSmooth)
+          ? THSmoothCommandOption(
               parentMPID: selectedLineSegmentMPID,
               choice: THOptionChoicesOnOffAutoType.on,
-            );
-      final MPCommand smoothOptionCommand = (smoothOption == null)
-          ? MPRemoveOptionFromElementCommand(
-              optionType: THCommandOptionType.smooth,
-              parentMPID: selectedLineSegmentMPID,
-              descriptionType: MPCommandDescriptionType.toggleSmoothOption,
             )
-          : MPSetOptionToElementCommand(
-              toOption: smoothOption,
-              descriptionType: MPCommandDescriptionType.toggleSmoothOption,
-            );
+          : null;
+      final MPCommand? smoothOptionCommand = (toggleOn == isSmooth)
+          ? null
+          : ((smoothOption == null)
+                ? MPRemoveOptionFromElementCommand(
+                    optionType: THCommandOptionType.smooth,
+                    parentMPID: selectedLineSegmentMPID,
+                    descriptionType:
+                        MPCommandDescriptionType.toggleSmoothOption,
+                  )
+                : MPSetOptionToElementCommand(
+                    toOption: smoothOption,
+                    descriptionType:
+                        MPCommandDescriptionType.toggleSmoothOption,
+                  ));
 
-      toggleCommands.add(smoothOptionCommand);
+      if (smoothOptionCommand != null) {
+        toggleCommands.add(smoothOptionCommand);
+      }
 
       if (smoothOption != null) {
         final MPCommand? smoothLineSegmentsCommand = _th2FileEditController
@@ -1594,7 +1671,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     if (toggleCommands.isEmpty) {
-      return;
+      return null;
     }
 
     final MPCommand toggleAllCommand =
@@ -1605,9 +1682,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           descriptionType: MPCommandDescriptionType.toggleSmoothOption,
         );
 
-    _th2FileEditController.execute(toggleAllCommand);
-    updateControllersAfterLineSegmentChangesPerLine();
-    updateControllersAfterElementChanges();
+    return toggleAllCommand;
   }
 
   @action
