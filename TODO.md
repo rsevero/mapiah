@@ -64,7 +64,6 @@
 [X] - Implement F1 shortcut to help page
 [X] - Support XVI images
 [X] - Support xth_me_image_insert additional formats
-[ ] - Properly present lines with partial subtypes
 [ ] - Show (and edit) orientation and lsize on the line points during edit
 [ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
 [X] - Snap to grid lines.
@@ -153,6 +152,7 @@
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
+[ ] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
 
 ##Version 0.5
 [ ] - Raster images tracing
