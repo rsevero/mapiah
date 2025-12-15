@@ -661,13 +661,14 @@ class THFileParser {
     _checkParsedListAsPoint(controlPoint2);
     _checkParsedListAsPoint(endPoint);
 
-    final newBezierCurveLineSegment = THBezierCurveLineSegment.fromString(
-      parentMPID: _currentParentMPID,
-      controlPoint1: controlPoint1,
-      controlPoint2: controlPoint2,
-      endPoint: endPoint,
-      originalLineInTH2File: _currentOriginalLine,
-    );
+    final THBezierCurveLineSegment newBezierCurveLineSegment =
+        THBezierCurveLineSegment.fromString(
+          parentMPID: _currentParentMPID,
+          controlPoint1: controlPoint1,
+          controlPoint2: controlPoint2,
+          endPoint: endPoint,
+          originalLineInTH2File: _currentOriginalLine,
+        );
     _th2FileElementEditController.executeAddElement(
       newElement: newBezierCurveLineSegment,
       parent: _currentParent,
@@ -1138,6 +1139,8 @@ class THFileParser {
         _injectEndArea();
       case 'id':
         _injectIDCommandOption();
+      case 'subtype':
+        _injectSubtypeCommandOption();
       default:
         optionIdentified = false;
     }
@@ -1204,7 +1207,14 @@ class THFileParser {
         _optionParentAsTHLineSegment();
         _injectOrientationCommandOption();
       case 'subtype':
-        _optionParentAsTHLineSegment();
+        if ((_currentHasOptions as THLine)
+                .getLineSegmentMPIDs(_parsedTHFile)
+                .length <
+            2) {
+          _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
+        } else {
+          _optionParentAsTHLineSegment();
+        }
         _injectSubtypeCommandOption();
       default:
         optionIdentified = false;
@@ -1893,12 +1903,14 @@ class THFileParser {
       );
     }
 
+    final THSubtypeCommandOption newOption = THSubtypeCommandOption(
+      parentMPID: _currentHasOptions.mpID,
+      subtype: _currentSpec[0],
+      originalLineInTH2File: _currentOriginalLine,
+    );
+
     MPEditElementAux.addOptionToElement(
-      option: THSubtypeCommandOption(
-        parentMPID: _currentHasOptions.mpID,
-        subtype: _currentSpec[0],
-        originalLineInTH2File: _currentOriginalLine,
-      ),
+      option: newOption,
       element: _currentHasOptions,
     );
   }

@@ -2131,9 +2131,8 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  line water-flow
+  line water-flow:conjectural
     1758 -1030
-      subtype conjectural
     2147.74 -1120.48
   endline
 endscrap
@@ -2212,28 +2211,140 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
   });
 
-  group('linepoint -subtype failures', () {
+  group('linepoint -subtype with original output', () {
     final parser = THFileParser();
+    final writer = THFileWriter();
 
-    const failures = [
-      // 'th_file_parser-03102-linepoint_with_subtype_option_for_unsupported_type-failure.th2',
-      // 'th_file_parser-03101-line_with_subtype_option_unsupported_type-failure.th2',
-      'th_file_parser-03104-linepoint_with_subtype_option_as_first_line_data.th2',
-      // 'th_file_parser-03103-line_with_subtype_option_unsupported_type-failure.th2',
+    const successes = [
+      {
+        'file': '2025-12-14-001-multiple_line_subtypes.th2',
+        'length': 16,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap multiple_line_subtypes
+  line wall:flowstone
+    2453.75 130.25
+    2453.53 132.37 2465.37 139.16 2467.28 140.67
+    2469.53 142.45 2474.14 144.17 2477.56 147.45
+    2479.19 149.01 2490.51 153.21 2495.08 157.43
+      subtype blocks
+    2497.43 159.62 2514.29 170.72 2517.54 172.57
+    2521.01 174.55 2522.25 179.49 2531.62 182.14
+    2536.21 183.43 2546.87 192.05 2554.51 192.60
+    2561.82 193.14 2558.26 194.70 2565.80 191.48
+      subtype presumed
+    2567.18 190.89 2579.90 193.34 2583.76 193.34
+    2593.01 193.34 2596.27 195.59 2604.14 195.59
+    2605.40 195.59 2612.47 195.25 2615.00 195.25
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-15-001-multiple_subtypes_after_first_line_point.th2',
+        'length': 16,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap multiple_line_subtypes
+  line wall:presumed
+    2453.75 130.25
+    2453.53 132.37 2465.37 139.16 2467.28 140.67
+    subtype debris
+    2469.53 142.45 2474.14 144.17 2477.56 147.45
+    2479.19 149.01 2490.51 153.21 2495.08 157.43
+    2497.43 159.62 2514.29 170.72 2517.54 172.57
+    2521.01 174.55 2522.25 179.49 2531.62 182.14
+    2536.21 183.43 2546.87 192.05 2554.51 192.60
+    2561.82 193.14 2558.26 194.70 2565.80 191.48
+    2567.18 190.89 2579.90 193.34 2583.76 193.34
+    2593.01 193.34 2596.27 195.59 2604.14 195.59
+    2605.40 195.59 2612.47 195.25 2615.00 195.25
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-15-002-multiple_subtypes_before_first_line_point.th2',
+        'length': 16,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap multiple_line_subtypes
+  line wall:blocks
+    2453.75 130.25
+    2453.53 132.37 2465.37 139.16 2467.28 140.67
+    subtype debris
+    2469.53 142.45 2474.14 144.17 2477.56 147.45
+    2479.19 149.01 2490.51 153.21 2495.08 157.43
+    2497.43 159.62 2514.29 170.72 2517.54 172.57
+    2521.01 174.55 2522.25 179.49 2531.62 182.14
+    2536.21 183.43 2546.87 192.05 2554.51 192.60
+    2561.82 193.14 2558.26 194.70 2565.80 191.48
+    2567.18 190.89 2579.90 193.34 2583.76 193.34
+    2593.01 193.34 2596.27 195.59 2604.14 195.59
+    2605.40 195.59 2612.47 195.25 2615.00 195.25
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2025-12-15-003-multiple_subtypes_no_first_line_point.th2',
+        'length': 16,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap multiple_line_subtypes
+  line wall:flowstone
+    2453.75 130.25
+    2453.53 132.37 2465.37 139.16 2467.28 140.67
+    subtype debris
+    2469.53 142.45 2474.14 144.17 2477.56 147.45
+    2479.19 149.01 2490.51 153.21 2495.08 157.43
+    2497.43 159.62 2514.29 170.72 2517.54 172.57
+    2521.01 174.55 2522.25 179.49 2531.62 182.14
+    2536.21 183.43 2546.87 192.05 2554.51 192.60
+    2561.82 193.14 2558.26 194.70 2565.80 191.48
+    2567.18 190.89 2579.90 193.34 2583.76 193.34
+    2593.01 193.34 2596.27 195.59 2604.14 195.59
+    2605.40 195.59 2612.47 195.25 2615.00 195.25
+  endline
+endscrap
+''',
+      },
+      {
+        'file':
+            'th_file_parser-03104-linepoint_with_subtype_option_as_first_line_data.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding utf-8
+scrap test
+  line water-flow:conjectural
+    1758 -1030
+    2147.74 -1120.48
+endline
+endscrap''',
+      },
     ];
 
-    for (var failure in failures) {
-      test(failure, () async {
-        final (_, isSuccessful, error) = await parser.parse(
-          THTestAux.testPath(failure),
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
         );
-        expect(isSuccessful, false);
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final String asFile = writer.serialize(
+          file,
+          useOriginalRepresentation: true,
+        );
+        expect(asFile, success['asFile']);
       });
     }
   });
