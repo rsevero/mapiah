@@ -12,6 +12,7 @@
   * Created onDeselectAll() and onSelectAll() state and actuator methods.
   * Migrate select and desselect all elements to use onDeselectAll() and onSelectAll().
   * Move kerboard shortcuts R (reverse line) and S (smooth line points) to states that actually deal with selected lines.
+  * Line paint structure support for multiple subtype lines.
 
 ## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:

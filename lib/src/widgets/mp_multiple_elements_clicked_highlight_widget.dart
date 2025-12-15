@@ -91,13 +91,17 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     .getMultipleElementsClickedHighlightedBorderPaint(
                       highlightedElement,
                     );
+                final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
+                  line: highlightedElement,
+                  showLineDirectionTicks: true,
+                  th2FileEditController: th2FileEditController,
+                );
 
                 painters.add(
                   THLinePainter(
-                    line: highlightedElement,
+                    lineInfo: lineInfo,
                     lineSegmentsMap: segmentsMap,
                     linePaint: linePaint,
-                    showLineDirectionTicks: true,
                     th2FileEditController: th2FileEditController,
                   ),
                 );
@@ -116,11 +120,15 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                     thFile: thFile,
                     returnLineSegments: false,
                   );
-                  final THLinePainter linePainter = THLinePainter(
+                  final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
                     line: highlightedElement,
+                    showLineDirectionTicks: false,
+                    th2FileEditController: th2FileEditController,
+                  );
+                  final THLinePainter linePainter = THLinePainter(
+                    lineInfo: lineInfo,
                     lineSegmentsMap: segmentsMap,
                     linePaint: areaPaint,
-                    showLineDirectionTicks: false,
                     th2FileEditController: th2FileEditController,
                   );
 

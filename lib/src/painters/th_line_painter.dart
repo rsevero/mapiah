@@ -3,28 +3,25 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
+import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class THLinePainter extends CustomPainter {
-  final THLine line;
+  final THLinePainterLineInfo lineInfo;
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
-  final bool showLineDirectionTicks;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
     super.repaint,
-    required this.line,
+    required this.lineInfo,
     required this.lineSegmentsMap,
     required this.linePaint,
-    required this.showLineDirectionTicks,
     required this.th2FileEditController,
   });
 
@@ -59,13 +56,9 @@ class THLinePainter extends CustomPainter {
       return;
     }
 
-    final bool addLineDirectionTicks =
-        showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
     final bool addIntermediateLineDirectionTicks =
-        addLineDirectionTicks &&
+        lineInfo.addLineDirectionTicks &&
         (lineSegmentsCount > mpLineSegmentsPerDirectionTick * 2);
-    late final THLinePaint lineDirectionTicksPaint;
-    late final bool reverse;
     final List<Offset> points = [];
     final List<double> distances = [];
     final Path lineDirectionTicksPath = Path();
@@ -80,7 +73,7 @@ class THLinePainter extends CustomPainter {
       if (isFirst) {
         path.moveTo(lineSegment.x, lineSegment.y);
         isFirst = false;
-        if (addLineDirectionTicks) {
+        if (lineInfo.addLineDirectionTicks) {
           points.add(Offset(lineSegment.x, lineSegment.y));
           distances.add(0.0);
         }
@@ -109,7 +102,7 @@ class THLinePainter extends CustomPainter {
       }
     }
 
-    if (addLineDirectionTicks) {
+    if (lineInfo.addLineDirectionTicks) {
       final List<PathMetric> metrics = path.computeMetrics().toList();
 
       if (metrics.isNotEmpty) {
@@ -117,14 +110,10 @@ class THLinePainter extends CustomPainter {
         final double metricLength = metric.length;
         final double tickLength =
             th2FileEditController.selectionController.isSelected.contains(
-              line.mpID,
+              lineInfo.mpID,
             )
             ? th2FileEditController.lineDirectionTickLengthOnCanvas * 1.5
             : th2FileEditController.lineDirectionTickLengthOnCanvas;
-
-        reverse = MPCommandOptionAux.isReverse(line);
-        lineDirectionTicksPaint = th2FileEditController.visualController
-            .getLineDirectionTickPaint(line: line, reverse: reverse);
 
         for (int i = 0; i < points.length; i++) {
           final Offset point = points[i];
@@ -187,7 +176,7 @@ class THLinePainter extends CustomPainter {
 
           // Draw the tick
           final Offset normal = Offset(-tangentAtPoint.dy, tangentAtPoint.dx);
-          final Offset tickEnd = reverse
+          final Offset tickEnd = lineInfo.isReverse
               ? point - (normal * (i == 0 ? tickLength * 1.5 : tickLength))
               : point + (normal * (i == 0 ? tickLength * 1.5 : tickLength));
 
@@ -211,10 +200,10 @@ class THLinePainter extends CustomPainter {
       _drawDashedPath(canvas, path);
     }
 
-    if (addLineDirectionTicks) {
+    if (lineInfo.addLineDirectionTicks) {
       canvas.drawPath(
         lineDirectionTicksPath,
-        lineDirectionTicksPaint.primaryPaint!,
+        lineInfo.lineDirectionTicksPaint.primaryPaint!,
       );
     }
   }
