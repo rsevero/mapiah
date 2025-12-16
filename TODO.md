@@ -155,6 +155,7 @@
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
+[ ] - Convert multiline comment into a single element.
 
 ##Version 0.5
 [ ] - Raster images tracing

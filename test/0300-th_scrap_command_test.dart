@@ -584,6 +584,17 @@ scrap s8-1p -author 2016.05.29 "Adolpho Milhommen" -projection plan -scale [ 0 0
 endscrap
 ''',
       },
+      {
+        'file': '2025-12-16-001-scrap_with_broken_line.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap s8-1p -author 2016.05.29 "Adolpho Milhommen" -projection plan -scale [ 0 0 \
+    96 0 0 0 200 0 in ]
+  point 1705.3152 344.59 station -name 47@39.2002-08
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
@@ -593,6 +604,7 @@ endscrap
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
+          trace: true,
         );
         expect(isSuccessful, true);
         expect(file, isA<THFile>());
