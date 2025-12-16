@@ -338,7 +338,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -394,7 +394,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -426,7 +426,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -458,7 +458,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -490,7 +490,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -522,7 +522,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -554,7 +554,7 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -586,7 +586,7 @@ endscrap
       },
       {
         'file': '2025-12-16-001-scrap_with_broken_line.th2',
-        'length': 3,
+        'length': 4,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap s8-1p -author 2016.05.29 "Adolpho Milhommen" -projection plan -scale [ 0 0 \
@@ -611,7 +611,7 @@ endscrap
         expect(file.encoding, success['encoding']);
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(file);
         expect(asFile, success['asFile']);
       });
     }
@@ -653,6 +653,7 @@ endscrap
     const failures = [
       'th_file_parser-00062-scrap_with_encoding_inside-failure.th2',
       'th_file_parser-00063-scrap_with_another_scrap_inside-failure.th2',
+      '2025-12-16-002-scrap_with_broken_line_no_slash.th2',
     ];
 
     for (var failure in failures) {

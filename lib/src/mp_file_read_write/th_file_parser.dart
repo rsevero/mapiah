@@ -42,6 +42,7 @@ class THFileParser {
   String _currentOriginalLine = '';
   String _currentParseableLine = '';
   String _continuationDelimiter = '';
+  bool _slashJoinLine = false;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
   late THIsParentMixin _currentParent;
@@ -2591,6 +2592,7 @@ class THFileParser {
       _splitContents(contents);
     } catch (e) {
       mpLocator.mpLog.e('Failed to read file', error: e);
+      _addError('Failed to read file: $e', 'pre injectContents()', '');
     }
 
     _injectContents();
@@ -2770,6 +2772,7 @@ class THFileParser {
 
       if (lineBreakIndex == -1) {
         final String tail = contents.substring(offset);
+
         _splittedContents.add(
           MPParseableLine(toParse: tail, originalContent: tail),
         );
@@ -2782,14 +2785,18 @@ class THFileParser {
         offset,
         lineBreakIndex + lineBreakLength,
       );
+
       updateContinuationDelimiter(currentLine);
+
+      if (_slashJoinLine) {
+        currentLine = currentLine.substring(0, currentLine.length - 1);
+      }
 
       /// If the line is ending with an open double qoute (") or square bracket
       /// (]) the line break should be kept as part of the delimited content.
       /// Otherwise, the line break shouldn't be included in the content to
       /// parse.
-      String newContentToParse =
-          (_continuationDelimiter == '"' || _continuationDelimiter == ']')
+      String newContentToParse = (_continuationDelimiter == '"')
           ? newContentOriginal
           : currentLine;
 
@@ -2801,17 +2808,20 @@ class THFileParser {
             originalContent: newContentOriginal,
           ),
         );
+        _slashJoinLine = false;
 
         continue;
       }
 
       /// Joining lines that didn´t end, i.e., that have an open double quote or
       /// square bracket or that ends with a backslash.
-      while (_continuationDelimiter.isNotEmpty && (offset < contents.length)) {
+      while ((_continuationDelimiter.isNotEmpty || _slashJoinLine) &&
+          (offset < contents.length)) {
         (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
 
         if (lineBreakIndex == -1) {
           final String tail = contents.substring(offset);
+
           newContentOriginal += tail;
           newContentToParse += tail;
           offset = contents.length;
@@ -2825,26 +2835,26 @@ class THFileParser {
           offset,
           lineBreakIndex + lineBreakLength,
         );
-        newContentOriginal += currentContentOriginal;
-        if (_continuationDelimiter == '\\') {
-          newContentToParse = newContentToParse.substring(
-            0,
-            newContentToParse.length - 1,
-          );
-        }
 
+        newContentOriginal += currentContentOriginal;
         offset = lineBreakIndex + lineBreakLength;
         if (currentLine.isEmpty) {
-          if (_continuationDelimiter == '\\') {
-            break;
-          }
+          if (_slashJoinLine) {
+            _slashJoinLine = false;
 
-          continue;
+            break;
+          } else {
+            continue;
+          }
         }
 
         updateContinuationDelimiter(currentLine);
-        newContentToParse +=
-            (_continuationDelimiter == '"' || _continuationDelimiter == ']')
+
+        if (_slashJoinLine) {
+          currentLine = currentLine.substring(0, currentLine.length - 1);
+        }
+
+        newContentToParse += (_continuationDelimiter == '"')
             ? currentContentOriginal
             : currentLine;
       }
@@ -2855,6 +2865,7 @@ class THFileParser {
           originalContent: newContentOriginal,
         ),
       );
+      _slashJoinLine = false;
     }
   }
 
@@ -2864,11 +2875,8 @@ class THFileParser {
   /// * \ for backslash.
   ///
   /// Returns an empty string if the line does not continue.
-  String updateContinuationDelimiter(String text) {
-    if (_continuationDelimiter == '\\') {
-      _continuationDelimiter = '';
-    }
-
+  void updateContinuationDelimiter(String text) {
+    _slashJoinLine = false;
     for (int i = 0; i < text.length; i++) {
       final String currentChar = text[i];
 
@@ -2878,9 +2886,9 @@ class THFileParser {
         } else if (currentChar == '[') {
           _continuationDelimiter = ']';
         } else if (currentChar == '\\') {
-          if (i == text.trimRight().length - 1) {
-            _continuationDelimiter = '\\';
+          _slashJoinLine = (i == text.trimRight().length - 1);
 
+          if (_slashJoinLine) {
             break;
           }
         }
@@ -2896,12 +2904,22 @@ class THFileParser {
         } else if (_continuationDelimiter == ']') {
           if (currentChar == ']') {
             _continuationDelimiter = '';
+          } else if (currentChar == '\\') {
+            _slashJoinLine = (i == text.trimRight().length - 1);
+
+            if (_slashJoinLine) {
+              break;
+            }
           }
         }
       }
     }
 
-    return _continuationDelimiter;
+    if ((_continuationDelimiter == ']') && !_slashJoinLine) {
+      throw THCustomException(
+        "Multiline square bracket delimited content not closed on line '$text' at THFileParser._splitContents().",
+      );
+    }
   }
 }
 

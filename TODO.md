@@ -115,7 +115,7 @@
 [X] - Move kerboard shortcuts R (reverse line) and S (smooth line points) to states that actually deal with selected lines.
 [X] - Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 [ ] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
-[ ] - Create 'O' shotcut to open options overlay window.
+[ ] - BUG: 'O' shortcut to open options overlay window not working.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
