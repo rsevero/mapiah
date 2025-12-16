@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -73,7 +74,7 @@ mixin MPLinePaintingMixin {
 
   THLinePainter getLinePainter({
     required THLine line,
-    required THLinePaint linePaint,
+    required bool isLineSelected,
     required bool showLineDirectionTicks,
     required TH2FileEditController th2FileEditController,
   }) {
@@ -90,6 +91,15 @@ mixin MPLinePaintingMixin {
       showLineDirectionTicks: showLineDirectionTicks,
       th2FileEditController: th2FileEditController,
     );
+    final MPVisualController visualController =
+        th2FileEditController.visualController;
+    final THLinePaint linePaint = isLineSelected
+        ? ((lineInfo.parentArea == null)
+              ? visualController.getSelectedLinePaint(line)
+              : visualController.getSelectedAreaPaint(lineInfo.parentArea!))
+        : ((lineInfo.parentArea == null)
+              ? visualController.getUnselectedLinePaint(line)
+              : visualController.getUnselectedAreaPaint(lineInfo.parentArea!));
 
     return THLinePainter(
       lineInfo: lineInfo,
@@ -105,6 +115,7 @@ class THLinePainterLineInfo {
   late final THLinePaint lineDirectionTicksPaint;
   late final bool addLineDirectionTicks;
   late final bool isReverse;
+  late final THArea? parentArea;
 
   THLinePainterLineInfo({
     required THLine line,
@@ -117,5 +128,10 @@ class THLinePainterLineInfo {
         .getLineDirectionTickPaint(line: line, reverse: isReverse);
     addLineDirectionTicks =
         showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
+
+    final THFile thFile = th2FileEditController.thFile;
+    final int? areaMPID = thFile.getAreaMPIDByLineMPID(mpID);
+
+    parentArea = (areaMPID == null) ? null : thFile.areaByMPID(areaMPID);
   }
 }

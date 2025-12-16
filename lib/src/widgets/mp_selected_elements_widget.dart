@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -55,21 +54,16 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              final THLinePaint linePaint = visualController
-                  .getSelectedLinePaint(element);
-
               painters.add(
                 getLinePainter(
                   line: element,
-                  linePaint: linePaint,
+                  isLineSelected: true,
                   showLineDirectionTicks: true,
                   th2FileEditController: th2FileEditController,
                 ),
               );
             case THArea _:
               final List<int> areaLineMPIDs = element.getLineMPIDs(thFile);
-              final THLinePaint areaPaint = visualController
-                  .getSelectedAreaPaint(element);
 
               for (final int areaLineMPID in areaLineMPIDs) {
                 final THLine line = thFile.lineByMPID(areaLineMPID);
@@ -77,7 +71,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 painters.add(
                   getLinePainter(
                     line: line,
-                    linePaint: areaPaint,
+                    isLineSelected: true,
                     showLineDirectionTicks: false,
                     th2FileEditController: th2FileEditController,
                   ),

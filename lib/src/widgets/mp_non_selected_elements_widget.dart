@@ -1,6 +1,5 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -57,26 +56,10 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              final int? areaMPID = thFile.getAreaMPIDByLineMPID(element.mpID);
-              late final THLinePaint linePaint;
-              final bool isArea = areaMPID != null;
-
-              if (isArea) {
-                if (selectionController.isElementSelectedByMPID(areaMPID)) {
-                  continue;
-                }
-
-                final THArea area = thFile.areaByMPID(areaMPID);
-
-                linePaint = visualController.getUnselectedAreaPaint(area);
-              } else {
-                linePaint = visualController.getUnselectedLinePaint(element);
-              }
-
               painters.add(
                 getLinePainter(
                   line: element,
-                  linePaint: linePaint,
+                  isLineSelected: false,
                   showLineDirectionTicks: false,
                   th2FileEditController: th2FileEditController,
                 ),
