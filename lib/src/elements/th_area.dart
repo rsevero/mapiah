@@ -1,7 +1,11 @@
 part of 'th_element.dart';
 
 class THArea extends THElement
-    with THHasOptionsMixin, THIsParentMixin, MPBoundingBox, THHasPLATypeMixin {
+    with
+        THHasOptionsMixin,
+        THIsParentMixin,
+        MPBoundingBoxMixin,
+        THHasPLATypeMixin {
   final THAreaType areaType;
 
   Set<String>? _lineTHIDs;

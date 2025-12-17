@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 
 /// The only really obscure data is XVIgrid. XVIgrid has 8 Values, e.g.
@@ -21,7 +21,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 /// * gyy: Y increment for moving one step along the grid's Y direction
 /// * ngx: number of grid elements in x direction
 /// * ngy: number of grid elements in y direction
-class XVIGrid with MPBoundingBox {
+class XVIGrid with MPBoundingBoxMixin {
   THDoublePart gx;
   THDoublePart gy;
   THDoublePart gxx;

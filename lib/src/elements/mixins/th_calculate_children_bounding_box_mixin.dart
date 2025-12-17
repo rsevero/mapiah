@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -26,7 +26,7 @@ mixin THCalculateChildrenBoundingBoxMixin {
         case THPoint _:
         case THScrap _:
         case THXTherionImageInsertConfig _:
-          childBoundingBox = (child as MPBoundingBox).getBoundingBox(
+          childBoundingBox = (child as MPBoundingBoxMixin).getBoundingBox(
             th2FileEditController,
           );
         default:

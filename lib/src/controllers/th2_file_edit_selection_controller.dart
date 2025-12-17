@@ -9,7 +9,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -178,7 +178,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         case THPoint _:
         case THLine _:
         case THArea _:
-          final Rect newElementBoundingBox = (element as MPBoundingBox)
+          final Rect newElementBoundingBox = (element as MPBoundingBoxMixin)
               .getBoundingBox(_th2FileEditController);
 
           boundingBox =
@@ -866,7 +866,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         final THElement element = selectableElement.element;
 
         if (MPNumericAux.isRect1InsideRect2(
-          rect1: (element as MPBoundingBox).getBoundingBox(
+          rect1: (element as MPBoundingBoxMixin).getBoundingBox(
             _th2FileEditController,
           ),
           rect2: canvasSelectionWindow,

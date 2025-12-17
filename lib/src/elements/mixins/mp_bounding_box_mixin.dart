@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
-mixin MPBoundingBox {
+mixin MPBoundingBoxMixin {
   Rect? _boundingBox;
 
   Rect getBoundingBox(TH2FileEditController th2FileEditController) {

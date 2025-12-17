@@ -8,7 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -26,7 +26,7 @@ class THFile
         MPTHFileReferenceMixin,
         THIsParentMixin,
         THCalculateChildrenBoundingBoxMixin,
-        MPBoundingBox {
+        MPBoundingBoxMixin {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -527,8 +527,8 @@ class THFile
   }
 
   void _clearOwnAndAncestryBoundingBoxes(THElement element) {
-    if (element is MPBoundingBox) {
-      (element as MPBoundingBox).clearBoundingBox();
+    if (element is MPBoundingBoxMixin) {
+      (element as MPBoundingBoxMixin).clearBoundingBox();
     } else if (element is THLineSegment) {
       element.clearBoundingBox();
     }

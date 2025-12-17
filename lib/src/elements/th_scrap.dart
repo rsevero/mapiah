@@ -24,7 +24,7 @@ class THScrap extends THElement
         THHasOptionsMixin,
         THIsParentMixin,
         THCalculateChildrenBoundingBoxMixin,
-        MPBoundingBox
+        MPBoundingBoxMixin
     implements THHasTHID {
   late String _thID;
 

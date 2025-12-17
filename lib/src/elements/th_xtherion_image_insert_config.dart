@@ -6,7 +6,7 @@ part of 'th_element.dart';
 /// * GIF
 /// * PNM/PPM
 /// * XVI
-class THXTherionImageInsertConfig extends THElement with MPBoundingBox {
+class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file

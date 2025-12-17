@@ -17,6 +17,7 @@
   * flutter upgraded to 3.38.5.
   * flutter pub upgrade major-versions.
   * Including reference to THFile in THElement.
+  * Renaming MPBoundingBox to MPBoundingBoxMixin.
 
 ## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:
