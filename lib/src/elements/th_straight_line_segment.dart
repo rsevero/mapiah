@@ -1,7 +1,7 @@
 part of 'th_element.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
-class THStraightLineSegment extends THLineSegment with THHasOptionsMixin {
+class THStraightLineSegment extends THLineSegment {
   THStraightLineSegment.forCWJM({
     required super.mpID,
     required super.parentMPID,

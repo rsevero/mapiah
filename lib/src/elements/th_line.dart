@@ -13,6 +13,9 @@ class THLine extends THElement
         THHasPLATypeMixin {
   final THLineType lineType;
 
+  final SplayTreeMap<int, int> _subtypeLineSegmentMPIDsByLineSegmentIndex =
+      SplayTreeMap();
+
   List<int>? _lineSegmentMPIDs;
   List<THLineSegment>? _lineSegments;
 
@@ -481,5 +484,31 @@ class THLine extends THElement
 
     setTHFileToOptions(thFile);
     setTHFileToChildren(thFile);
+
+    updateSubtypeLineSegmentMPIDs();
+  }
+
+  SplayTreeMap<int, int> get subtypeLineSegmentMPIDsByLineSegmentIndex =>
+      _subtypeLineSegmentMPIDsByLineSegmentIndex;
+
+  void updateSubtypeLineSegmentMPIDs() {
+    if (thFile == null) {
+      throw THCustomException(
+        "At THLine.updateSubtypeLineSegmentMPIDs: THFile is null.",
+      );
+    }
+
+    int lineSegmentIndex = 0;
+
+    _subtypeLineSegmentMPIDsByLineSegmentIndex.clear();
+
+    for (final THLineSegment lineSegment in getLineSegments(thFile!)) {
+      if (lineSegment.hasOption(THCommandOptionType.subtype)) {
+        _subtypeLineSegmentMPIDsByLineSegmentIndex[lineSegmentIndex] =
+            lineSegment.mpID;
+      }
+
+      lineSegmentIndex++;
+    }
   }
 }

@@ -2,7 +2,7 @@ part of 'th_element.dart';
 
 // [[LINE DATA] specify the coordinates of a Bézier curve arc:
 // <c1x> <c1y> <c2x> <c2y> <x> <y>, where c indicates the control point.
-class THBezierCurveLineSegment extends THLineSegment with THHasOptionsMixin {
+class THBezierCurveLineSegment extends THLineSegment {
   late final THPositionPart controlPoint1;
   late final THPositionPart controlPoint2;
 

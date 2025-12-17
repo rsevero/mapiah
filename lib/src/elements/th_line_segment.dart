@@ -2,7 +2,8 @@ part of 'th_element.dart';
 
 // [LINE DATA] specify the coordinates of a line segment <x> <y>.
 abstract class THLineSegment extends THElement
-    implements THHasOptionsMixin, THPointInterface {
+    with THHasOptionsMixin
+    implements THPointInterface {
   late final THPositionPart endPoint;
   Rect? _boundingBox;
 
@@ -147,4 +148,34 @@ abstract class THLineSegment extends THElement
   }
 
   Rect _calculateBoundingBox(Offset startPoint);
+
+  @override
+  bool addUpdateOption(THCommandOption option) {
+    final bool changed = super.addUpdateOption(option);
+
+    if (option.type == THCommandOptionType.subtype) {
+      if (thFile != null) {
+        final THLine parentLine = thFile!.elementByMPID(parentMPID) as THLine;
+
+        parentLine.updateSubtypeLineSegmentMPIDs();
+      }
+    }
+
+    return changed;
+  }
+
+  @override
+  bool removeOption(THCommandOptionType type) {
+    final bool removed = super.removeOption(type);
+
+    if (type == THCommandOptionType.subtype) {
+      if (thFile != null) {
+        final THLine parentLine = thFile!.elementByMPID(parentMPID) as THLine;
+
+        parentLine.updateSubtypeLineSegmentMPIDs();
+      }
+    }
+
+    return removed;
+  }
 }
