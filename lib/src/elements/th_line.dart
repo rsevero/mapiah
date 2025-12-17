@@ -480,6 +480,10 @@ class THLine extends THElement
 
   @override
   void setTHFile(THFile thFile) {
+    if (this.thFile == thFile) {
+      return;
+    }
+
     super.setTHFile(thFile);
 
     setTHFileToOptions(thFile);
@@ -504,8 +508,22 @@ class THLine extends THElement
 
     for (final THLineSegment lineSegment in getLineSegments(thFile!)) {
       if (lineSegment.hasOption(THCommandOptionType.subtype)) {
-        _subtypeLineSegmentMPIDsByLineSegmentIndex[lineSegmentIndex] =
-            lineSegment.mpID;
+        if (lineSegmentIndex == 0) {
+          /// Moving subtype option to line level, as first line segment subtype
+          /// is in fact the line subtype.
+          final THCommandOption subtypeOption = lineSegment.getOption(
+            THCommandOptionType.subtype,
+          )!;
+
+          addUpdateOption(subtypeOption);
+          lineSegment.removeOption(
+            THCommandOptionType.subtype,
+            callUpdateSubtypeLineSegmentMPIDs: false,
+          );
+        } else {
+          _subtypeLineSegmentMPIDsByLineSegmentIndex[lineSegmentIndex] =
+              lineSegment.mpID;
+        }
       }
 
       lineSegmentIndex++;

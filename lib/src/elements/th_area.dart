@@ -321,6 +321,10 @@ class THArea extends THElement
 
   @override
   void setTHFile(THFile thFile) {
+    if (this.thFile == thFile) {
+      return;
+    }
+
     super.setTHFile(thFile);
 
     setTHFileToOptions(thFile);

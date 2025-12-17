@@ -155,7 +155,7 @@ abstract class THLineSegment extends THElement
 
     if (option.type == THCommandOptionType.subtype) {
       if (thFile != null) {
-        final THLine parentLine = thFile!.elementByMPID(parentMPID) as THLine;
+        final THLine parentLine = thFile!.lineByMPID(parentMPID);
 
         parentLine.updateSubtypeLineSegmentMPIDs();
       }
@@ -165,12 +165,15 @@ abstract class THLineSegment extends THElement
   }
 
   @override
-  bool removeOption(THCommandOptionType type) {
+  bool removeOption(
+    THCommandOptionType type, {
+    bool callUpdateSubtypeLineSegmentMPIDs = true,
+  }) {
     final bool removed = super.removeOption(type);
 
     if (type == THCommandOptionType.subtype) {
-      if (thFile != null) {
-        final THLine parentLine = thFile!.elementByMPID(parentMPID) as THLine;
+      if ((thFile != null) && callUpdateSubtypeLineSegmentMPIDs) {
+        final THLine parentLine = thFile!.lineByMPID(parentMPID);
 
         parentLine.updateSubtypeLineSegmentMPIDs();
       }
