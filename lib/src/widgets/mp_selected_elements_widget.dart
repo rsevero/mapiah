@@ -54,8 +54,8 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              painters.add(
-                getLinePainter(
+              painters.addAll(
+                getLinePainters(
                   line: element,
                   isLineSelected: true,
                   showLineDirectionTicks: true,
@@ -68,8 +68,8 @@ class MPSelectedElementsWidget extends StatelessWidget
               for (final int areaLineMPID in areaLineMPIDs) {
                 final THLine line = thFile.lineByMPID(areaLineMPID);
 
-                painters.add(
-                  getLinePainter(
+                painters.addAll(
+                  getLinePainters(
                     line: line,
                     isLineSelected: true,
                     showLineDirectionTicks: false,

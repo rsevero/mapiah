@@ -726,6 +726,10 @@ abstract class TH2FileEditControllerBase with Store {
     return element.parentMPID == _activeScrapID;
   }
 
+  bool isFromActiveScrapByParentMPID(int parentMPID) {
+    return parentMPID == _activeScrapID;
+  }
+
   @action
   void setActiveScrap(int scrapMPID) {
     if (scrapMPID == _activeScrapID) {

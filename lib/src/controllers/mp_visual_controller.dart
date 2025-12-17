@@ -994,8 +994,14 @@ abstract class MPVisualControllerBase with Store {
     return pointPaint;
   }
 
-  THLinePaint getSelectedLinePaint(THLine line) {
-    final THLinePaint linePaint = getDefaultLinePaint(line);
+  THLinePaint getSelectedLinePaint({
+    required THLineType lineType,
+    String? subtype,
+  }) {
+    final THLinePaint linePaint = getDefaultLinePaintByTypeSubtype(
+      lineType: lineType,
+      subtype: subtype,
+    );
 
     return linePaint.copyWith(
       primaryPaint: THPaint.thPaint1
@@ -1145,16 +1151,26 @@ abstract class MPVisualControllerBase with Store {
 
   THLinePaint getDefaultLinePaint(THLine line) {
     final THLineType lineType = line.lineType;
+    final String? lineSubtype =
+        (line.getOption(THCommandOptionType.subtype) as THSubtypeCommandOption?)
+            ?.subtype;
+
+    return getDefaultLinePaintByTypeSubtype(
+      lineType: lineType,
+      subtype: lineSubtype,
+    );
+  }
+
+  THLinePaint getDefaultLinePaintByTypeSubtype({
+    required THLineType lineType,
+    String? subtype,
+  }) {
     final THLinePaint linePaint;
 
     if (lineTypePaints.containsKey(lineType)) {
       linePaint = lineTypePaints[lineType]!;
     } else {
-      final String lineSubtype = line.hasOption(THCommandOptionType.subtype)
-          ? (line.getOption(THCommandOptionType.subtype)
-                    as THSubtypeCommandOption)
-                .subtype
-          : mpNoSubtypeID;
+      final String lineSubtype = subtype ?? mpNoSubtypeID;
 
       switch (lineType) {
         case THLineType.border:
@@ -1213,10 +1229,17 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THLinePaint getUnselectedLinePaint(THLine line) {
-    final THLinePaint linePaint = getDefaultLinePaint(line);
+  THLinePaint getUnselectedLinePaint({
+    required THLineType lineType,
+    String? subtype,
+    required int lineParentMPID,
+  }) {
+    final THLinePaint linePaint = getDefaultLinePaintByTypeSubtype(
+      lineType: lineType,
+      subtype: subtype,
+    );
 
-    if (_th2FileEditController.isFromActiveScrap(line)) {
+    if (_th2FileEditController.isFromActiveScrapByParentMPID(lineParentMPID)) {
       return linePaint.copyWith(
         primaryPaint: linePaint.primaryPaint == null
             ? null

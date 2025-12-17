@@ -56,8 +56,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THLine _:
-              painters.add(
-                getLinePainter(
+              painters.addAll(
+                getLinePainters(
                   line: element,
                   isLineSelected: false,
                   showLineDirectionTicks: false,

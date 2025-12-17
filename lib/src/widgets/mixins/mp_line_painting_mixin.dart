@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 
@@ -72,20 +73,22 @@ mixin MPLinePaintingMixin {
     return (lineSegmentsMap, lineEndpointsMap);
   }
 
-  THLinePainter getLinePainter({
+  List<THLinePainter> getLinePainters({
     required THLine line,
     required bool isLineSelected,
     required bool showLineDirectionTicks,
     required TH2FileEditController th2FileEditController,
   }) {
+    final THFile thFile = th2FileEditController.thFile;
     final (
       LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
       _,
     ) = getLineSegmentsAndEndpointsMaps(
       line: line,
-      thFile: th2FileEditController.thFile,
+      thFile: thFile,
       returnLineSegments: false,
     );
+    final int segmentsMapMaxIndex = segmentsMap.length - 1;
     final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
       line: line,
       showLineDirectionTicks: showLineDirectionTicks,
@@ -93,20 +96,65 @@ mixin MPLinePaintingMixin {
     );
     final MPVisualController visualController =
         th2FileEditController.visualController;
-    final THLinePaint linePaint = isLineSelected
-        ? ((lineInfo.parentArea == null)
-              ? visualController.getSelectedLinePaint(line)
-              : visualController.getSelectedAreaPaint(lineInfo.parentArea!))
-        : ((lineInfo.parentArea == null)
-              ? visualController.getUnselectedLinePaint(line)
-              : visualController.getUnselectedAreaPaint(lineInfo.parentArea!));
+    final LinkedHashMap<int, int> subtypeLineSegmentsMap =
+        line.subtypeLineSegmentMPIDsByLineSegmentIndex;
+    final int subtypeLineSegmentsCount = subtypeLineSegmentsMap.length;
+    final THLineType lineType = line.lineType;
+    final int lineParentMPID = line.parentMPID;
+    final List<THLinePainter> painters = [];
 
-    return THLinePainter(
-      lineInfo: lineInfo,
-      lineSegmentsMap: segmentsMap,
-      linePaint: linePaint,
-      th2FileEditController: th2FileEditController,
-    );
+    int startIndex = 0;
+
+    for (int i = 0; i <= subtypeLineSegmentsCount; i++) {
+      final int endIndex = (i < subtypeLineSegmentsCount)
+          ? subtypeLineSegmentsMap.keys.elementAt(i)
+          : segmentsMapMaxIndex;
+      final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentSubsetMap =
+          ((startIndex == 0) && (endIndex == segmentsMapMaxIndex))
+          ? segmentsMap
+          : LinkedHashMap<int, THLinePainterLineSegment>.fromEntries(
+              segmentsMap.entries.toList().sublist(startIndex, endIndex + 1),
+            );
+      final THLinePaint linePaint;
+
+      if (lineInfo.parentArea == null) {
+        final String? subtype = MPCommandOptionAux.getSubtype(
+          (i == 0)
+              ? line
+              : thFile.elementByMPID(
+                  subtypeLineSegmentsMap.values.elementAt(i - 1),
+                ),
+        );
+
+        linePaint = isLineSelected
+            ? visualController.getSelectedLinePaint(
+                lineType: lineType,
+                subtype: subtype,
+              )
+            : visualController.getUnselectedLinePaint(
+                lineType: lineType,
+                subtype: subtype,
+                lineParentMPID: lineParentMPID,
+              );
+      } else {
+        linePaint = isLineSelected
+            ? visualController.getSelectedAreaPaint(lineInfo.parentArea!)
+            : visualController.getUnselectedAreaPaint(lineInfo.parentArea!);
+      }
+
+      painters.add(
+        THLinePainter(
+          lineInfo: lineInfo,
+          lineSegmentsMap: lineSegmentSubsetMap,
+          linePaint: linePaint,
+          th2FileEditController: th2FileEditController,
+        ),
+      );
+
+      startIndex = endIndex;
+    }
+
+    return painters;
   }
 }
 
