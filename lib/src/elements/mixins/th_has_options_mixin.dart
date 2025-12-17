@@ -1,6 +1,6 @@
 part of '../th_element.dart';
 
-mixin THHasOptionsMixin on THElement {
+mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
   final SplayTreeMap<THCommandOptionType, THCommandOption> _optionsMap =
       SplayTreeMap<THCommandOptionType, THCommandOption>();
   final SplayTreeMap<String, THAttrCommandOption> _attrOptionsMap =
@@ -12,6 +12,10 @@ mixin THHasOptionsMixin on THElement {
   bool addUpdateOption(THCommandOption option) {
     if (option.parentMPID != mpID) {
       option = option.copyWith(parentMPID: mpID);
+    }
+
+    if (thFile != null) {
+      option.setTHFile(thFile!);
     }
 
     bool changedValue = false;
@@ -33,6 +37,16 @@ mixin THHasOptionsMixin on THElement {
     }
 
     return changedValue;
+  }
+
+  void setTHFileToOptions(THFile thFile) {
+    for (final THCommandOption option in _optionsMap.values) {
+      option.setTHFile(thFile);
+    }
+
+    for (final THAttrCommandOption attrOption in _attrOptionsMap.values) {
+      attrOption.setTHFile(thFile);
+    }
   }
 
   bool hasOption(THCommandOptionType type) {

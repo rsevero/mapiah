@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_type_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_cs_part.dart';
 import 'package:mapiah/src/elements/parts/th_datetime_part.dart';
@@ -90,7 +91,7 @@ part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_outline_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
-abstract class THCommandOption {
+abstract class THCommandOption with MPTHFileReferenceMixin {
   final int parentMPID;
   final String originalLineInTH2File;
 

@@ -1,4 +1,5 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
@@ -6,7 +7,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// Parent elements.
 ///
 /// Mixin that provides parenting capabilities.
-mixin THIsParentMixin {
+mixin THIsParentMixin on MPTHFileReferenceMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMPIDs = [];
 
@@ -58,6 +59,16 @@ mixin THIsParentMixin {
         "At THIsParentMixin.addElementToParent unsupported 'childPositionInParent' value : '$elementPositionInParent'.",
       );
     }
+
+    if (thFile != null) {
+      element.setTHFile(thFile!);
+    }
+  }
+
+  void setTHFileToChildren(THFile thFile) {
+    for (final THElement child in getChildren(thFile)) {
+      child.setTHFile(thFile);
+    }
   }
 
   int getChildPosition(THElement element) {
@@ -72,13 +83,19 @@ mixin THIsParentMixin {
     return index;
   }
 
-  void removeElementFromParent(THFile thFile, THElement element) {
+  void removeElementFromParent(THElement element) {
     if (!childrenMPIDs.remove(element.mpID)) {
       throw THCustomException("'$element' not found.");
     }
 
-    if (thFile.hasTHIDByElement(element)) {
-      thFile.unregisterElementTHIDByElement(element);
+    if (thFile == null) {
+      throw THCustomException(
+        "At THIsParentMixin.removeElementFromParent: THFile is null.",
+      );
+    }
+
+    if (thFile!.hasTHIDByElement(element)) {
+      thFile!.unregisterElementTHIDByElement(element);
     }
   }
 

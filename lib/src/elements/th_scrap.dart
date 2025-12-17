@@ -304,8 +304,8 @@ class THScrap extends THElement
   }
 
   @override
-  void removeElementFromParent(THFile thFile, THElement element) {
-    super.removeElementFromParent(thFile, element);
+  void removeElementFromParent(THElement element) {
+    super.removeElementFromParent(element);
 
     switch (element) {
       case THArea a:
@@ -315,5 +315,13 @@ class THScrap extends THElement
       case THPoint p:
         _pointsMPIDs?.remove(p.mpID);
     }
+  }
+
+  @override
+  void setTHFile(THFile thFile) {
+    super.setTHFile(thFile);
+
+    setTHFileToOptions(thFile);
+    setTHFileToChildren(thFile);
   }
 }

@@ -17,6 +17,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/interfaces/th_point_interface.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -79,7 +80,7 @@ enum THElementType {
 }
 
 /// Base class for all elements that form a THFile, including THFile itself.
-abstract class THElement {
+abstract class THElement with MPTHFileReferenceMixin {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
   final int _mpID;

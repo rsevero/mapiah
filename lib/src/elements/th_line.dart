@@ -393,8 +393,8 @@ class THLine extends THElement
   }
 
   @override
-  void removeElementFromParent(THFile thFile, THElement element) {
-    super.removeElementFromParent(thFile, element);
+  void removeElementFromParent(THElement element) {
+    super.removeElementFromParent(element);
 
     if (element is THLineSegment) {
       resetLineSegmentsLists();
@@ -469,5 +469,13 @@ class THLine extends THElement
     }
 
     return originalLineSegments;
+  }
+
+  @override
+  void setTHFile(THFile thFile) {
+    super.setTHFile(thFile);
+
+    setTHFileToOptions(thFile);
+    setTHFileToChildren(thFile);
   }
 }

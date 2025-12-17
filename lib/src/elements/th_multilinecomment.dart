@@ -82,4 +82,11 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   bool isSameClass(Object object) {
     return object is THMultiLineComment;
   }
+
+  @override
+  void setTHFile(THFile thFile) {
+    super.setTHFile(thFile);
+
+    setTHFileToChildren(thFile);
+  }
 }

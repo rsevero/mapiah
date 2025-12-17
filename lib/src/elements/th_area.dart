@@ -288,8 +288,8 @@ class THArea extends THElement
   }
 
   @override
-  void removeElementFromParent(THFile thFile, THElement element) {
-    super.removeElementFromParent(thFile, element);
+  void removeElementFromParent(THElement element) {
+    super.removeElementFromParent(element);
 
     if (element is THAreaBorderTHID) {
       clearAreaXLineInfo();
@@ -313,5 +313,13 @@ class THArea extends THElement
     }
 
     return boundingBox ?? Rect.zero;
+  }
+
+  @override
+  void setTHFile(THFile thFile) {
+    super.setTHFile(thFile);
+
+    setTHFileToOptions(thFile);
+    setTHFileToChildren(thFile);
   }
 }

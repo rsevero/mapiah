@@ -9,6 +9,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box.dart';
+import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -21,7 +22,11 @@ import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart'
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
 class THFile
-    with THIsParentMixin, THCalculateChildrenBoundingBoxMixin, MPBoundingBox {
+    with
+        MPTHFileReferenceMixin,
+        THIsParentMixin,
+        THCalculateChildrenBoundingBoxMixin,
+        MPBoundingBox {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -364,6 +369,8 @@ class THFile
         (newElement is THLineSegment)) {
       _clearOwnAndAncestryBoundingBoxes(newElement);
     }
+
+    newElement.setTHFile(this);
   }
 
   bool hasOption(THElement element, THCommandOptionType optionType) {
@@ -374,6 +381,7 @@ class THFile
 
   void addElement(THElement element) {
     _elementByMPID[element.mpID] = element;
+    element.setTHFile(this);
 
     _updateSupportMaps(element);
   }
@@ -514,7 +522,7 @@ class THFile
 
     final THIsParentMixin parent = element.parent(this);
 
-    parent.removeElementFromParent(this, element);
+    parent.removeElementFromParent(element);
     _elementByMPID.remove(elementMPID);
   }
 
@@ -948,4 +956,12 @@ class THFile
 
   @override
   int get mpID => _mpID;
+
+  @override
+  THFile get thFile => this;
+
+  @override
+  void setTHFile(THFile thFile) {
+    /// Nothing to do here, as THFile is the top-level element.
+  }
 }
