@@ -1,18 +1,17 @@
 import 'dart:collection';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
+import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
