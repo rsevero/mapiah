@@ -223,13 +223,27 @@ class MPCommandOptionAux {
             THOptionChoicesOnOffAutoType.on;
   }
 
-  static bool isReverse(THElement element) {
+  static bool isReversed(THElement element) {
     return (element is THHasOptionsMixin) &&
         element.hasOption(THCommandOptionType.reverse) &&
         (element.getOption(THCommandOptionType.reverse)
                     as THReverseCommandOption)
                 .choice ==
             THOptionChoicesOnOffType.on;
+  }
+
+  static bool isTHVisible(THElement element) {
+    return (element is THHasOptionsMixin) &&
+        (!element.hasOption(THCommandOptionType.visibility) ||
+            (element.getOption(THCommandOptionType.visibility)
+                        as THVisibilityCommandOption)
+                    .choice !=
+                THOptionChoicesOnOffType.off);
+  }
+
+  static bool hasID(THElement element) {
+    return (element is THHasOptionsMixin) &&
+        element.hasOption(THCommandOptionType.id);
   }
 
   static String? getSubtype(THElement element) {

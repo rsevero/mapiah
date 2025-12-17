@@ -194,7 +194,7 @@ class THLinePainterLineInfo {
   late final int mpID;
   late final THLinePaint lineDirectionTicksPaint;
   late final bool addLineDirectionTicks;
-  late final bool isReverse;
+  late final bool isReversed;
   late final THArea? parentArea;
 
   THLinePainterLineInfo({
@@ -203,9 +203,9 @@ class THLinePainterLineInfo {
     required TH2FileEditController th2FileEditController,
   }) {
     mpID = line.mpID;
-    isReverse = MPCommandOptionAux.isReverse(line);
+    isReversed = MPCommandOptionAux.isReversed(line);
     lineDirectionTicksPaint = th2FileEditController.visualController
-        .getLineDirectionTickPaint(line: line, reverse: isReverse);
+        .getLineDirectionTickPaint(line: line, reverse: isReversed);
     addLineDirectionTicks =
         showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
 

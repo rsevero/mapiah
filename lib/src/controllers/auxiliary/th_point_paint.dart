@@ -7,12 +7,14 @@ class THPointPaint {
   final MPPointShapeType type;
   final Paint? border;
   final Paint? fill;
+  final List<Paint> highlightBorders;
 
   THPointPaint({
     this.radius = thDefaultPointRadius,
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,
+    this.highlightBorders = const [],
   }) : assert(radius > 0, "Radius must be greater than 0"),
        assert(
          (border != null) || (fill != null),
@@ -23,15 +25,17 @@ class THPointPaint {
     double? radius,
     MPPointShapeType? type,
     Paint? border,
-    Paint? fill,
     bool makeBorderPaintNull = false,
+    Paint? fill,
     bool makeFillPaintNull = false,
+    List<Paint>? highlightBorders,
   }) {
     return THPointPaint(
       radius: radius ?? this.radius,
       type: type ?? this.type,
       border: makeBorderPaintNull ? null : (border ?? this.border),
       fill: makeFillPaintNull ? null : (fill ?? this.fill),
+      highlightBorders: highlightBorders ?? this.highlightBorders,
     );
   }
 }

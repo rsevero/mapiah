@@ -424,6 +424,24 @@ class MPInteractionAux {
     required THPointPaint pointPaint,
     required void Function(Canvas, Offset, double, Paint) customDrawMethod,
   }) {
+    if (pointPaint.highlightBorders.isNotEmpty) {
+      int highlightBorderCount = pointPaint.highlightBorders.length;
+
+      for (final Paint highlightBorder
+          in pointPaint.highlightBorders.reversed) {
+        customDrawMethod(
+          canvas,
+          position,
+          pointPaint.radius,
+          highlightBorder
+            ..strokeWidth =
+                highlightBorder.strokeWidth * ((highlightBorderCount * 2) + 1),
+        );
+
+        highlightBorderCount--;
+      }
+    }
+
     if (pointPaint.fill != null) {
       customDrawMethod(canvas, position, pointPaint.radius, pointPaint.fill!);
     }

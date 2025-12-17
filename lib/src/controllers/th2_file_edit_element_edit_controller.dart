@@ -1507,7 +1507,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           selectedElement.originalElementClone as THLine;
       final int lineMPID = originalLine.mpID;
       final THReverseCommandOption? reverseOption =
-          MPCommandOptionAux.isReverse(originalLine)
+          MPCommandOptionAux.isReversed(originalLine)
           ? null
           : THReverseCommandOption(
               parentMPID: lineMPID,

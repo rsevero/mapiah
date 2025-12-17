@@ -5,6 +5,7 @@
   * Implemented select all and deselect all line points on 'single line edit' mode.
   * Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
   * Properly support lines with partial subtypes.
+  * Point with highlight borders indicating invisible and with ID points.
 * Fixed bugs:
   * On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
   * Properly parsing lines with partial subtypes.

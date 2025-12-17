@@ -175,7 +175,7 @@ class THLinePainter extends CustomPainter {
 
           // Draw the tick
           final Offset normal = Offset(-tangentAtPoint.dy, tangentAtPoint.dx);
-          final Offset tickEnd = lineInfo.isReverse
+          final Offset tickEnd = lineInfo.isReversed
               ? point - (normal * (i == 0 ? tickLength * 1.5 : tickLength))
               : point + (normal * (i == 0 ? tickLength * 1.5 : tickLength));
 

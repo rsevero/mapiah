@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/constants/tk_color_map.dart';
@@ -1053,7 +1054,30 @@ abstract class MPVisualControllerBase with Store {
       point,
     ).copyWith(radius: _th2FileEditController.pointRadiusOnCanvas);
 
-    if (!_th2FileEditController.isFromActiveScrap(point)) {
+    if (_th2FileEditController.isFromActiveScrap(point)) {
+      final bool pointIsTHInvisible = !MPCommandOptionAux.isTHVisible(point);
+      final bool pointHasID = MPCommandOptionAux.hasID(point);
+
+      if (pointIsTHInvisible || pointHasID) {
+        final List<Paint> highlightBorders = [];
+
+        if (pointIsTHInvisible) {
+          highlightBorders.add(
+            THPaint.thPaint17
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          );
+        }
+
+        if (pointHasID) {
+          highlightBorders.add(
+            THPaint.thPaint16
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          );
+        }
+
+        pointPaint = pointPaint.copyWith(highlightBorders: highlightBorders);
+      }
+    } else {
       if (pointPaint.border != null) {
         pointPaint = pointPaint.copyWith(
           border: THPaint.thPaint15
