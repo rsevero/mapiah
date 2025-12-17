@@ -286,6 +286,8 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
+      case LogicalKeyboardKey.keyO:
+        keyProcessed = onKeyODownEvent(event);
       case LogicalKeyboardKey.keyS:
         if (!isCtrlPressed &&
             !isMetaPressed &&

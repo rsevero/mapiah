@@ -116,9 +116,6 @@ abstract class TH2FileEditControllerBase with Store {
   bool _enableNodeEditButton = false;
 
   @readonly
-  bool _isOptionEditMode = false;
-
-  @readonly
   bool _isSelectMode = false;
 
   @readonly
@@ -246,10 +243,6 @@ abstract class TH2FileEditControllerBase with Store {
           .multipleEndControlPointsClickedHighlightedChoice
           .type !=
       MPMultipleEndControlPointsClickedType.none;
-
-  @computed
-  bool get showOptionsEdit =>
-      stateController.state is MPTH2FileEditStateOptionEdit;
 
   @computed
   bool get showRemoveButton {
@@ -580,13 +573,6 @@ abstract class TH2FileEditControllerBase with Store {
                     .keys
                     .first]
                 is MPSelectedLine);
-      }),
-    );
-
-    _disposers.add(
-      autorun((_) {
-        _isOptionEditMode =
-            stateController.state is MPTH2FileEditStateOptionEdit;
       }),
     );
 

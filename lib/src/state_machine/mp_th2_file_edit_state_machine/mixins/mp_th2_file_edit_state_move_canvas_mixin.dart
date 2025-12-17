@@ -83,15 +83,6 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             MPTH2FileEditStateType.editSingleLine,
           );
         }
-      case LogicalKeyboardKey.keyO:
-        if (!isAltPressed &&
-            !isCtrlPressed &&
-            !isMetaPressed &&
-            !isShiftPressed) {
-          th2FileEditController.stateController.setState(
-            MPTH2FileEditStateType.optionsEdit,
-          );
-        }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed &&
             !isCtrlPressed &&

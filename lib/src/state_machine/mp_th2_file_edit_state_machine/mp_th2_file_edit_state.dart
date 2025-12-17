@@ -47,7 +47,6 @@ part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
-part 'mp_th2_file_edit_state_options_edit.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
@@ -99,10 +98,6 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.movingSingleControlPoint:
         return MPTH2FileEditStateMovingSingleControlPoint(
-          th2FileEditController: th2FileEditController,
-        );
-      case MPTH2FileEditStateType.optionsEdit:
-        return MPTH2FileEditStateOptionEdit(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.selectEmptySelection:
@@ -196,11 +191,6 @@ abstract class MPTH2FileEditState {
       case MPButtonType.nodeEdit:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.editSingleLine,
-        );
-        return true;
-      case MPButtonType.optionsEdit:
-        th2FileEditController.stateController.setState(
-          MPTH2FileEditStateType.optionsEdit,
         );
         return true;
       case MPButtonType.redo:

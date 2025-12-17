@@ -53,6 +53,15 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
           onSelectAll();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyO:
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
+          /// TODO: set default options.
+          // openOptionEditOverlayWindow();
+          keyProcessed = true;
+        }
     }
 
     if (keyProcessed) {

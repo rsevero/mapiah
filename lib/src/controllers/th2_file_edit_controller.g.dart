@@ -82,13 +82,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         name:
             'TH2FileEditControllerBase.showMultipleEndControlPointsClickedHighlight',
       )).value;
-  Computed<bool>? _$showOptionsEditComputed;
-
-  @override
-  bool get showOptionsEdit => (_$showOptionsEditComputed ??= Computed<bool>(
-    () => super.showOptionsEdit,
-    name: 'TH2FileEditControllerBase.showOptionsEdit',
-  )).value;
   Computed<bool>? _$showRemoveButtonComputed;
 
   @override
@@ -547,26 +540,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         super._enableNodeEditButton = value;
       },
     );
-  }
-
-  late final _$_isOptionEditModeAtom = Atom(
-    name: 'TH2FileEditControllerBase._isOptionEditMode',
-    context: context,
-  );
-
-  bool get isOptionEditMode {
-    _$_isOptionEditModeAtom.reportRead();
-    return super._isOptionEditMode;
-  }
-
-  @override
-  bool get _isOptionEditMode => isOptionEditMode;
-
-  @override
-  set _isOptionEditMode(bool value) {
-    _$_isOptionEditModeAtom.reportWrite(value, super._isOptionEditMode, () {
-      super._isOptionEditMode = value;
-    });
   }
 
   late final _$_isSelectModeAtom = Atom(
@@ -1822,7 +1795,6 @@ showAddLine: ${showAddLine},
 showEditLineSegment: ${showEditLineSegment},
 showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
 showMultipleEndControlPointsClickedHighlight: ${showMultipleEndControlPointsClickedHighlight},
-showOptionsEdit: ${showOptionsEdit},
 showRemoveButton: ${showRemoveButton},
 showScrapScale: ${showScrapScale},
 showSelectedElements: ${showSelectedElements},

@@ -7,7 +7,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateLineSegmentOptionsEditMixin,
-        MPTH2FileEditStateMoveCanvasMixin {
+        MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateOptionsEditMixin {
   bool _dragShouldMovePoints = false;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
@@ -101,6 +102,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
+      case LogicalKeyboardKey.keyO:
+        keyProcessed = onKeyODownEvent(event);
       case LogicalKeyboardKey.keyR:
         if (!isCtrlPressed &&
             !isMetaPressed &&
