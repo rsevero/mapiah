@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -2345,6 +2348,114 @@ endscrap''',
           useOriginalRepresentation: true,
         );
         expect(asFile, success['asFile']);
+      });
+    }
+  });
+
+  group('linepoint -subtype manipulation', () {
+    final parser = THFileParser();
+    final writer = THFileWriter();
+
+    const successes = [
+      {
+        'file': '2025-06-21-line_point_subtype.th2',
+        'length': 25,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap 141c-TradePlan-s1 -projection plan
+  line wall
+    5903 1247
+    5898.5 1232 5895.5 1221.5 5894.5 1206.5
+    5893.5 1191.5 5894.5 1188 5890 1179
+    5885.5 1170 5881.5 1169 5883 1161
+    5884.5 1153 5885.5 1149 5892 1137
+    5898.5 1125 5905.5 1131.5 5903.5 1117
+    5901.5 1102.5 5895.5 1094 5900.5 1081.5
+    5905.5 1069 5908.5 1058.5 5907 1052
+    5905.5 1045.5 5905.5 1049.5 5904.5 1035
+    5903.5 1020.5 5906 1017 5905.5 1008.5
+      subtype unsurveyed
+    5904.41 990.02 5893.5 964.5 5912.5 962
+    5931.5 959.5 5928 959.5 5933 969.5
+    5938 979.5 5939.5 994 5938 1007
+      subtype bedrock
+    5936.5 1020 5934.5 1030 5935.5 1045.5
+      altitude NaN
+    5936.5 1061 5936.5 1063.5 5938 1078.5
+    5939.5 1093.5 5941 1108 5937 1119
+    5933 1130 5928.5 1129.5 5924.5 1140.5
+    5920.5 1151.5 5909 1155 5917.5 1165
+    5926 1175 5921.5 1171.5 5931 1182.5
+    5940.5 1193.5 5951.5 1211 5953 1213.5
+      smooth off
+  endline
+endscrap
+''',
+      },
+    ];
+
+    for (var success in successes) {
+      test(success, () async {
+        final (file, isSuccessful, _) = await parser.parse(
+          (THTestAux.testPath(success['file'] as String)),
+        );
+        expect(isSuccessful, true);
+        expect(file, isA<THFile>());
+        expect(file.encoding, (success['encoding'] as String));
+        expect(file.countElements(), success['length']);
+
+        final String asFile = writer.serialize(file);
+        expect(asFile, success['asFile']);
+
+        final THLine line = file.getScraps().first.getLines(file).first;
+
+        expect(MPCommandOptionAux.getSubtype(line), isNull);
+        expect(line.subtypeLineSegmentMPIDsByLineSegmentIndex.length, 2);
+
+        final THSubtypeCommandOption option1 = THSubtypeCommandOption(
+          parentMPID: line.mpID,
+          subtype: 'presumed',
+          originalLineInTH2File: '',
+        );
+
+        line.addUpdateOption(option1);
+        expect(MPCommandOptionAux.getSubtype(line), 'presumed');
+        expect(line.subtypeLineSegmentMPIDsByLineSegmentIndex.length, 2);
+
+        final THLineSegment lineSegment0 = line.getLineSegments(file).first;
+        final THSubtypeCommandOption option2 = THSubtypeCommandOption(
+          parentMPID: lineSegment0.mpID,
+          subtype: 'sand',
+          originalLineInTH2File: '',
+        );
+
+        lineSegment0.addUpdateOption(option2);
+        expect(MPCommandOptionAux.getSubtype(line), 'sand');
+        expect(MPCommandOptionAux.getSubtype(lineSegment0), isNull);
+        expect(line.subtypeLineSegmentMPIDsByLineSegmentIndex.length, 2);
+
+        final THLineSegment lineSegment4 = line.getLineSegments(file)[4];
+        final THSubtypeCommandOption option3 = THSubtypeCommandOption(
+          parentMPID: lineSegment4.mpID,
+          subtype: 'blocks',
+          originalLineInTH2File: '',
+        );
+
+        lineSegment4.addUpdateOption(option3);
+        expect(MPCommandOptionAux.getSubtype(line), 'sand');
+        expect(MPCommandOptionAux.getSubtype(lineSegment4), 'blocks');
+        expect(line.subtypeLineSegmentMPIDsByLineSegmentIndex.length, 3);
+
+        final entries = line.subtypeLineSegmentMPIDsByLineSegmentIndex.entries
+            .toList();
+
+        for (final entry in entries) {
+          final THLineSegment lineSegment = file.lineSegmentByMPID(entry.value);
+
+          lineSegment.removeOption(THCommandOptionType.subtype);
+        }
+        expect(MPCommandOptionAux.getSubtype(line), 'sand');
+        expect(line.subtypeLineSegmentMPIDsByLineSegmentIndex.length, 0);
       });
     }
   });

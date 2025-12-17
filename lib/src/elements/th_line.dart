@@ -13,8 +13,8 @@ class THLine extends THElement
         THHasPLATypeMixin {
   final THLineType lineType;
 
-  final SplayTreeMap<int, int> _subtypeLineSegmentMPIDsByLineSegmentIndex =
-      SplayTreeMap();
+  final LinkedHashMap<int, int> _subtypeLineSegmentMPIDsByLineSegmentIndex =
+      LinkedHashMap();
 
   List<int>? _lineSegmentMPIDs;
   List<THLineSegment>? _lineSegments;
@@ -492,7 +492,7 @@ class THLine extends THElement
     updateSubtypeLineSegmentMPIDs();
   }
 
-  SplayTreeMap<int, int> get subtypeLineSegmentMPIDsByLineSegmentIndex =>
+  LinkedHashMap<int, int> get subtypeLineSegmentMPIDsByLineSegmentIndex =>
       _subtypeLineSegmentMPIDsByLineSegmentIndex;
 
   void updateSubtypeLineSegmentMPIDs() {
