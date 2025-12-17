@@ -116,6 +116,7 @@
 [X] - Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 [ ] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
 [ ] - BUG: 'O' shortcut to open options overlay window not working.
+[X] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously
@@ -154,7 +155,6 @@
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
-[ ] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
 [ ] - Convert multiline comment into a single element.
 
 ##Version 0.5

@@ -29,6 +29,7 @@ class MPCommandOptionAux {
     THCommandOptionType.mark,
     THCommandOptionType.orientation,
     THCommandOptionType.smooth,
+    THCommandOptionType.subtype,
   ];
 
   static const List<THCommandOptionType> _supportLineOptionsForAll = [

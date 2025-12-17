@@ -114,7 +114,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
           MPCommandOptionAux.getSupportedOptionsForElements(selectedElements);
 
       /// Defining the state of each shared option.
-      for (final optionType in optionTypesList) {
+      for (final THCommandOptionType optionType in optionTypesList) {
         if (optionType == THCommandOptionType.attr) {
           continue;
         }
