@@ -80,6 +80,8 @@ mixin MPLinePaintingMixin {
     required TH2FileEditController th2FileEditController,
   }) {
     final THFile thFile = th2FileEditController.thFile;
+    final MPVisualController visualController =
+        th2FileEditController.visualController;
     final (
       LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
       _,
@@ -88,43 +90,18 @@ mixin MPLinePaintingMixin {
       thFile: thFile,
       returnLineSegments: false,
     );
-    final int segmentsMapMaxIndex = segmentsMap.length - 1;
     final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
       line: line,
       showLineDirectionTicks: showLineDirectionTicks,
       th2FileEditController: th2FileEditController,
     );
-    final MPVisualController visualController =
-        th2FileEditController.visualController;
-    final LinkedHashMap<int, int> subtypeLineSegmentsMap =
-        line.subtypeLineSegmentMPIDsByLineSegmentIndex;
-    final int subtypeLineSegmentsCount = subtypeLineSegmentsMap.length;
     final THLineType lineType = line.lineType;
-    final int lineParentMPID = line.parentMPID;
-    final List<THLinePainter> painters = [];
 
-    int startIndex = 0;
-
-    for (int i = 0; i <= subtypeLineSegmentsCount; i++) {
-      final int endIndex = (i < subtypeLineSegmentsCount)
-          ? subtypeLineSegmentsMap.keys.elementAt(i)
-          : segmentsMapMaxIndex;
-      final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentSubsetMap =
-          ((startIndex == 0) && (endIndex == segmentsMapMaxIndex))
-          ? segmentsMap
-          : LinkedHashMap<int, THLinePainterLineSegment>.fromEntries(
-              segmentsMap.entries.toList().sublist(startIndex, endIndex + 1),
-            );
+    if (line.subtypeLineSegmentMPIDsByLineSegmentIndex.isEmpty) {
       final THLinePaint linePaint;
 
       if (lineInfo.parentArea == null) {
-        final String? subtype = MPCommandOptionAux.getSubtype(
-          (i == 0)
-              ? line
-              : thFile.elementByMPID(
-                  subtypeLineSegmentsMap.values.elementAt(i - 1),
-                ),
-        );
+        final String? subtype = MPCommandOptionAux.getSubtype(line);
 
         linePaint = isLineSelected
             ? visualController.getSelectedLinePaint(
@@ -134,7 +111,7 @@ mixin MPLinePaintingMixin {
             : visualController.getUnselectedLinePaint(
                 lineType: lineType,
                 subtype: subtype,
-                lineParentMPID: lineParentMPID,
+                lineParentMPID: line.parentMPID,
               );
       } else {
         linePaint = isLineSelected
@@ -142,19 +119,74 @@ mixin MPLinePaintingMixin {
             : visualController.getUnselectedAreaPaint(lineInfo.parentArea!);
       }
 
-      painters.add(
-        THLinePainter(
-          lineInfo: lineInfo,
-          lineSegmentsMap: lineSegmentSubsetMap,
-          linePaint: linePaint,
-          th2FileEditController: th2FileEditController,
-        ),
+      final THLinePainter painter = THLinePainter(
+        lineInfo: lineInfo,
+        lineSegmentsMap: segmentsMap,
+        linePaint: linePaint,
+        th2FileEditController: th2FileEditController,
       );
 
-      startIndex = endIndex;
-    }
+      return [painter];
+    } else {
+      final List<THLinePainter> painters = [];
+      final LinkedHashMap<int, int> subtypeLineSegmentsMap =
+          line.subtypeLineSegmentMPIDsByLineSegmentIndex;
+      final int subtypeLineSegmentsCount = subtypeLineSegmentsMap.length;
+      final int segmentsMapMaxIndex = segmentsMap.length - 1;
+      final int lineParentMPID = line.parentMPID;
 
-    return painters;
+      int startIndex = 0;
+
+      for (int i = 0; i <= subtypeLineSegmentsCount; i++) {
+        final int endIndex = (i < subtypeLineSegmentsCount)
+            ? subtypeLineSegmentsMap.keys.elementAt(i)
+            : segmentsMapMaxIndex;
+        final LinkedHashMap<int, THLinePainterLineSegment>
+        lineSegmentSubsetMap =
+            LinkedHashMap<int, THLinePainterLineSegment>.fromEntries(
+              segmentsMap.entries.toList().sublist(startIndex, endIndex + 1),
+            );
+        final THLinePaint linePaint;
+
+        if (lineInfo.parentArea == null) {
+          final String? subtype = MPCommandOptionAux.getSubtype(
+            (i == 0)
+                ? line
+                : thFile.elementByMPID(
+                    subtypeLineSegmentsMap.values.elementAt(i - 1),
+                  ),
+          );
+
+          linePaint = isLineSelected
+              ? visualController.getSelectedLinePaint(
+                  lineType: lineType,
+                  subtype: subtype,
+                )
+              : visualController.getUnselectedLinePaint(
+                  lineType: lineType,
+                  subtype: subtype,
+                  lineParentMPID: lineParentMPID,
+                );
+        } else {
+          linePaint = isLineSelected
+              ? visualController.getSelectedAreaPaint(lineInfo.parentArea!)
+              : visualController.getUnselectedAreaPaint(lineInfo.parentArea!);
+        }
+
+        painters.add(
+          THLinePainter(
+            lineInfo: lineInfo,
+            lineSegmentsMap: lineSegmentSubsetMap,
+            linePaint: linePaint,
+            th2FileEditController: th2FileEditController,
+          ),
+        );
+
+        startIndex = endIndex;
+      }
+
+      return painters;
+    }
   }
 }
 
