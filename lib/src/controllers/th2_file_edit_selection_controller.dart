@@ -1092,6 +1092,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
           originalLineSegment: endControlPoint.lineSegment,
           type: endControlPoint.type,
         );
+    _th2FileEditController.optionEditController.setOptionElementsType(
+      MPOptionElementType.lineSegment,
+    );
     _th2FileEditController.stateController.updateStatusBarMessage();
   }
 

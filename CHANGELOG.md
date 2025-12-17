@@ -9,6 +9,8 @@
   * On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
   * Properly parsing lines with partial subtypes.
   * Lines with slashes inside bracketed content weren´t properly parsed.
+  * 'O' shortcut to open options overlay window not working.
+  * Options overlay window not working for line segments.
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
   * Created onDeselectAll() and onSelectAll() state and actuator methods.

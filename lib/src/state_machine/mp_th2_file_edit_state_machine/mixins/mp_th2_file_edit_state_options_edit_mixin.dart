@@ -7,16 +7,23 @@ mixin MPTH2FileEditStateOptionsEditMixin on MPTH2FileEditState {
   }
 
   void openOptionEditOverlayWindowOnSelected() {
-    if (th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .isNotEmpty) {
-      openOptionEditOverlayWindow();
+    if (th2FileEditController.optionEditController.currentOptionElementsType ==
+        MPOptionElementType.lineSegment) {
+      openLineSegmentOptionsOverlayWindow();
+    } else {
+      if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+        openOptionEditOverlayWindow();
+      }
     }
   }
 
   void openOptionEditOverlayWindow() {
     th2FileEditController.optionEditController.showOptionsOverlayWindow();
+  }
+
+  void openLineSegmentOptionsOverlayWindow() {
+    th2FileEditController.overlayWindowController
+        .perfomToggleLineSegmentOptionsOverlayWindow();
   }
 
   bool onKeyODownEvent(KeyDownEvent event) {
