@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.27 - not yet released
+## 0.2.27 - 2025-12-18 - The Passinho Foda release
 * New features:
   * Implemented select all and deselect all line points on 'single line edit' mode.
   * Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
