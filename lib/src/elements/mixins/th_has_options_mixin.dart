@@ -10,10 +10,6 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
   /// 1. the were no option with the same name and it was added; or
   /// 2. there was an option with the same name but with a different value.
   bool addUpdateOption(THCommandOption option) {
-    if (option.parentMPID != mpID) {
-      option = option.copyWith(parentMPID: mpID);
-    }
-
     if (thFile != null) {
       option.setTHFile(thFile!);
     }

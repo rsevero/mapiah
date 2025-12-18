@@ -841,18 +841,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOption option,
     String plaOriginalLineInTH2File = '',
   }) {
-    option.optionParent(_thFile).addUpdateOption(option);
+    final THElement parentElement = _thFile
+        .elementByMPID(option.parentMPID)
+        .copyWith(originalLineInTH2File: plaOriginalLineInTH2File);
 
-    if (option is THIDCommandOption) {
-      _thFile.registerMPIDWithTHID(option.parentMPID, option.thID);
+    if (parentElement is! THHasOptionsMixin) {
+      throw Exception(
+        'Error: parentElement is not THHasOptionsMixin at TH2FileEditElementEditController.executeSetOptionToElement().',
+      );
     }
 
-    if (option.parentMPID >= 0) {
-      final THElement parentElement = _thFile.elementByMPID(option.parentMPID);
+    parentElement.addUpdateOption(option);
 
-      _thFile.substituteElement(
-        parentElement.copyWith(originalLineInTH2File: plaOriginalLineInTH2File),
-      );
+    if (option.parentMPID >= 0) {
+      _thFile.substituteElement(parentElement);
     }
 
     updateOptionEdited(attrOptionEdited: false);

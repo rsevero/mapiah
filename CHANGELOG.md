@@ -11,6 +11,7 @@
   * Lines with slashes inside bracketed content weren´t properly parsed.
   * 'O' shortcut to open options overlay window not working.
   * Options overlay window not working for line segments.
+  * Options should be added to copy of original element.
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
   * Created onDeselectAll() and onSelectAll() state and actuator methods.
