@@ -33,14 +33,14 @@ class MPSetOptionToElementCommand extends MPCommand {
 
     if (fromOption == null) {
       _undoRedoInfo = {
-        'alreadyHasAttrOption': false,
+        'alreadyHasOption': false,
         'parentMPID': parentMPID,
         'optionType': optionType,
         'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
       };
     } else {
       _undoRedoInfo = {
-        'alreadyHasAttrOption': true,
+        'alreadyHasOption': true,
         'fromOption': fromOption,
         'fromPLAOriginalLineInTH2File': parentElement.originalLineInTH2File,
       };
@@ -59,7 +59,7 @@ class MPSetOptionToElementCommand extends MPCommand {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand = _undoRedoInfo!['alreadyHasAttrOption']
+    final MPCommand oppositeCommand = _undoRedoInfo!['alreadyHasOption']
         ? MPSetOptionToElementCommand.forCWJM(
             toOption: _undoRedoInfo!['fromOption'],
             toPLAOriginalLineInTH2File:
