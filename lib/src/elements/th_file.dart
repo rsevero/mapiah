@@ -335,15 +335,21 @@ class THFile
     if ((newElement is THHasTHID) ||
         ((newElement is THHasOptionsMixin) &&
             (newElement.hasOption(THCommandOptionType.id)))) {
-      final bool newElementHasTHID = (newElement is THHasTHID);
-      final String oldTHID = newElementHasTHID
-          ? (oldElement as THHasTHID).thID
-          : ((oldElement as THHasOptionsMixin).getOption(
-                      THCommandOptionType.id,
-                    )!
-                    as THIDCommandOption)
-                .thID;
-      final String newTHID = newElementHasTHID
+      final bool newElementIsHasTHID = (newElement is THHasTHID);
+      final String? oldTHID;
+
+      if (oldElement is THHasTHID) {
+        oldTHID = (oldElement as THHasTHID).thID;
+      } else {
+        final THCommandOption? idOption = (oldElement as THHasOptionsMixin)
+            .getOption(THCommandOptionType.id);
+
+        oldTHID = (idOption == null)
+            ? null
+            : (idOption as THIDCommandOption).thID;
+      }
+
+      final String newTHID = newElementIsHasTHID
           ? (newElement as THHasTHID).thID
           : ((newElement as THHasOptionsMixin).getOption(
                       THCommandOptionType.id,
@@ -351,7 +357,7 @@ class THFile
                     as THIDCommandOption)
                 .thID;
 
-      if (_mpIDByTHID.containsKey(oldTHID)) {
+      if ((oldTHID != null) && _mpIDByTHID.containsKey(oldTHID)) {
         _mpIDByTHID.remove(oldTHID);
       }
       if (_mpIDByTHID.containsKey(newTHID)) {
