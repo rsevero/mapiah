@@ -79,6 +79,7 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 * Non existing area border references are removed, i.e., the area mentions an area border ID but there is no line with the same ID on the file.
 * Areas with no border references are removed.
 * Line options defined in [LINE DATA] area are moved to the line definition. Not to be confunded with line point options that are defined in [LINE DATA] area and are preserved there.
+* Subtype options defined before the first line point or on the first one are transformed to line subtype.
 
 ### Web releases
 Saving on web releases are actually download requests. In case you have your browser set to automatically download to a default download folder, please check there for the updated file after saving.
