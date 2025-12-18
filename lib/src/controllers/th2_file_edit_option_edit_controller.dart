@@ -184,6 +184,13 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
         }
       }
 
+      /// Removing ID option if more than one element is selected as there is
+      /// no reason to set the same ID for more than one element.
+      if ((selectedElements.length > 1) &&
+          optionsInfo.containsKey(THCommandOptionType.id)) {
+        optionsInfo.remove(THCommandOptionType.id);
+      }
+
       /// Looking for attr options.
       final Set<String> selectedElementsAttrNames = getSetAttrNames(
         selectedElements,

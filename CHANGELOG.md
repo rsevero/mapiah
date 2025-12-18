@@ -16,6 +16,7 @@
   * THPoint and THLineSegment not updating option THFile reference on setTHFile().
   * MPSelectedArea, MPSelectedPoint and MPSelectedScrap not cloning attr options on _createClone().
   * Option setting not shown on element re-editing.
+  * ID option shown with more than one element selected.
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
   * Created onDeselectAll() and onSelectAll() state and actuator methods.
