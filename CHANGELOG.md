@@ -13,6 +13,7 @@
   * Options overlay window not working for line segments.
   * Options should be added to copy of original element.
   * ID option update failing.
+  * THPoint and THLineSegment not updating option THFile reference on setTHFile().
 * Infrastructure maintenance:
   * flutter pub upgrade --major-versions.
   * Created onDeselectAll() and onSelectAll() state and actuator methods.

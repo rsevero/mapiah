@@ -233,4 +233,15 @@ class THPoint extends THElement
   int get decimalPositions {
     return position.decimalPositions;
   }
+
+  @override
+  void setTHFile(THFile thFile) {
+    if (this.thFile == thFile) {
+      return;
+    }
+
+    super.setTHFile(thFile);
+
+    setTHFileToOptions(thFile);
+  }
 }

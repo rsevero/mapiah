@@ -181,4 +181,15 @@ abstract class THLineSegment extends THElement
 
     return removed;
   }
+
+  @override
+  void setTHFile(THFile thFile) {
+    if (this.thFile == thFile) {
+      return;
+    }
+
+    super.setTHFile(thFile);
+
+    setTHFileToOptions(thFile);
+  }
 }
