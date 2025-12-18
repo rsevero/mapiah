@@ -166,7 +166,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final int elementMPID in scrap.childrenMPIDs) {
       final THElement element = _thFile.elementByMPID(elementMPID);
 
-      addSelectableElement(element);
+      addUpdateSelectableElement(element);
     }
   }
 
@@ -271,7 +271,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void updateAfterAddElement(THElement element) {
-    addSelectableElement(element);
+    addUpdateSelectableElement(element);
     updateSelectedElementLogicalClone(element.parentMPID);
   }
 
@@ -561,7 +561,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _mpSelectableElements = null;
   }
 
-  void addSelectableElement(THElement element) {
+  void addUpdateSelectableElement(THElement element) {
     if (_mpSelectableElements == null) {
       updateMPSelectableElements();
       _th2FileEditController.updateEnableSelectButton();
@@ -570,25 +570,25 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     switch (element) {
       case THPoint _:
-        _addPointSelectableElement(element);
+        _addUpdatePointSelectableElement(element);
       case THLine _:
-        _addLineSelectableElement(element);
+        _addUpdateLineSelectableElement(element);
       case THLineSegment _:
-        _addLineSegmentSelectableElement(element);
+        _addUpdateLineSegmentSelectableElement(element);
       case THArea _:
-        _addAreaSelectableElement(element);
+        _addUpdateAreaSelectableElement(element);
     }
 
     _th2FileEditController.updateEnableSelectButton();
   }
 
-  void _addAreaSelectableElement(THArea area) {
+  void _addUpdateAreaSelectableElement(THArea area) {
     final int areaMPID = area.mpID;
 
     _isSelected.remove(areaMPID);
   }
 
-  void _addPointSelectableElement(THPoint point) {
+  void _addUpdatePointSelectableElement(THPoint point) {
     if (_mpSelectableElements == null) {
       throw Exception(
         'At TH2FileEditSelectionController._addPointSelectableElement: selectable elements map is not initialized',
@@ -607,7 +607,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _isSelected.remove(pointMPID);
   }
 
-  void _addLineSelectableElement(THLine line) {
+  void _addUpdateLineSelectableElement(THLine line) {
     if (_mpSelectableElements == null) {
       throw Exception(
         'At TH2FileEditSelectionController._addLineSelectableElement: selectable elements map is not initialized',
@@ -642,7 +642,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void _addLineSegmentSelectableElement(THLineSegment lineSegment) {
+  void _addUpdateLineSegmentSelectableElement(THLineSegment lineSegment) {
     if (_mpSelectableElements == null) {
       throw Exception(
         'At TH2FileEditSelectionController._addLineSegmentSelectableElement: selectable elements map is not initialized',

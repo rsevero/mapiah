@@ -13,7 +13,6 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
@@ -267,7 +266,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     _thFile.substituteElement(modifiedElement);
-    selectionController.addSelectableElement(modifiedElement);
+    selectionController.addUpdateSelectableElement(modifiedElement);
     selectionController.updateSelectedElementLogicalClone(modifiedElement.mpID);
     if (modifiedElement is THLineSegment) {
       selectionController.updateSelectedLineSegment(modifiedElement);
@@ -282,8 +281,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void substituteLineSegments(
     LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap,
   ) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+
     for (final THLineSegment lineSegment in modifiedLineSegmentsMap.values) {
       _thFile.substituteElement(lineSegment);
+      selectionController.addUpdateSelectableElement(lineSegment);
     }
 
     final THLine line = _thFile.lineByMPID(
@@ -326,7 +329,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     line.resetLineSegmentsLists();
-    selectionController.addSelectableElement(line);
+    selectionController.addUpdateSelectableElement(line);
     selectionController.updateSelectedElementsClones();
     selectionController.updateSelectableEndAndControlPoints();
     selectionController.clearSelectedEndControlPoints();
@@ -380,7 +383,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     _th2FileEditController.setActiveScrapByChildElement(newPoint);
-    selectionController.addSelectableElement(newPoint);
+    selectionController.addUpdateSelectableElement(newPoint);
     selectionController.updateSelectedElementLogicalClone(newPoint.mpID);
     _th2FileEditController.triggerAllElementsRedraw();
   }
@@ -805,7 +808,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final TH2FileEditSelectionController selectionController =
           _th2FileEditController.selectionController;
 
-      selectionController.addSelectableElement(_newArea!);
+      selectionController.addUpdateSelectableElement(_newArea!);
     }
 
     clearNewArea();
@@ -813,16 +816,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.updateUndoRedoStatus();
   }
 
-  void updateOptionEdited({bool attrOptionEdited = true}) {
+  void updateOptionEdited() {
     final TH2FileEditOptionEditController optionEditController =
         _th2FileEditController.optionEditController;
-    final TH2FileEditOverlayWindowController overlayWindowController =
-        _th2FileEditController.overlayWindowController;
 
     optionEditController.clearCurrentOptionType();
+
     _th2FileEditController.selectionController.updateSelectedElementsClones();
 
-    overlayWindowController.setShowOverlayWindow(
+    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
@@ -839,7 +841,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void executeSetOptionToElement({
     required THCommandOption option,
-    String plaOriginalLineInTH2File = '',
+    required String plaOriginalLineInTH2File,
   }) {
     final THElement parentElement = _thFile
         .elementByMPID(option.parentMPID)
@@ -857,7 +859,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _thFile.substituteElement(parentElement);
     }
 
-    updateOptionEdited(attrOptionEdited: false);
+    _th2FileEditController.selectionController.addUpdateSelectableElement(
+      parentElement,
+    );
+
+    updateOptionEdited();
   }
 
   @action
@@ -873,65 +879,37 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _thFile.unregisterElementTHIDByMPID(parentMPID);
     }
 
-    parentElement.removeOption(optionType);
-    _thFile.substituteElement(
-      parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File),
+    final THHasOptionsMixin newParentElement =
+        parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
+            as THHasOptionsMixin;
+
+    newParentElement.removeOption(optionType);
+    _thFile.substituteElement(newParentElement);
+    _th2FileEditController.selectionController.addUpdateSelectableElement(
+      newParentElement,
     );
     updateOptionEdited();
-  }
-
-  @action
-  void executeSetAttrOptionToElement({
-    required THAttrCommandOption attrOption,
-    required String plaOriginalLineInTH2File,
-  }) {
-    final int parentMPID = attrOption.parentMPID;
-
-    if (parentMPID <= 0) {
-      throw Exception(
-        'Error: parentMPID is not valid at TH2FileEditElementEditController.applySetAttrOptionToElement().',
-      );
-    }
-
-    final THHasOptionsMixin parentElement = _thFile.hasOptionByMPID(parentMPID);
-
-    MPEditElementAux.addOptionToElement(
-      option: attrOption,
-      element: parentElement,
-    );
-
-    final THElement newElement =
-        parentElement.originalLineInTH2File == plaOriginalLineInTH2File
-        ? parentElement
-        : parentElement.copyWith(
-            originalLineInTH2File: plaOriginalLineInTH2File,
-          );
-
-    _thFile.substituteElement(newElement);
-
-    updateOptionEdited(attrOptionEdited: true);
   }
 
   @action
   void executeRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
-    required String plaOriginalLineInTH2File,
+    required String newOriginalLineInTH2File,
   }) {
     final THHasOptionsMixin parentElement = _th2FileEditController.thFile
         .hasOptionByMPID(parentMPID);
 
-    parentElement.removeAttrOption(attrName);
+    final THHasOptionsMixin newParentElement =
+        parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
+            as THHasOptionsMixin;
 
-    final THElement newElement =
-        parentElement.originalLineInTH2File == plaOriginalLineInTH2File
-        ? parentElement
-        : parentElement.copyWith(
-            originalLineInTH2File: plaOriginalLineInTH2File,
-          );
-
-    _thFile.substituteElement(newElement);
-    updateOptionEdited(attrOptionEdited: false);
+    newParentElement.removeAttrOption(attrName);
+    _thFile.substituteElement(newParentElement);
+    _th2FileEditController.selectionController.addUpdateSelectableElement(
+      newParentElement,
+    );
+    updateOptionEdited();
   }
 
   @action
@@ -1019,7 +997,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
         line.resetLineSegmentsLists();
 
-        selectionController.addSelectableElement(line);
+        selectionController.addUpdateSelectableElement(line);
         selectionController.updateSelectedElementLogicalClone(lineMPID);
       } else {
         selectionController.removeElementFromSelectable(lineMPID);
@@ -1035,7 +1013,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           lineSegmentMPID,
         );
 
-        selectionController.addSelectableElement(lineSegment);
+        selectionController.addUpdateSelectableElement(lineSegment);
         selectionController.updateSelectedElementLogicalClone(lineSegmentMPID);
         selectionController.updateSelectedLineSegment(lineSegment);
       } else {

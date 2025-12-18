@@ -153,7 +153,7 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
         }
 
-        if ((countAreas > 0) || (countLines > 0) || (countPoints > 0)) {
+        if ((countPoints > 0) || (countLines > 0) || (countAreas > 0)) {
           final List<Widget> plaTypeWidgets = [];
 
           if (countPoints > 0) {

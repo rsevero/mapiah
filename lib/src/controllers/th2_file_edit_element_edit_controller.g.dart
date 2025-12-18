@@ -598,7 +598,7 @@ mixin _$TH2FileEditElementEditController
   @override
   void executeSetOptionToElement({
     required THCommandOption option,
-    String plaOriginalLineInTH2File = '',
+    required String plaOriginalLineInTH2File,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -642,32 +642,10 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void executeSetAttrOptionToElement({
-    required THAttrCommandOption attrOption,
-    required String plaOriginalLineInTH2File,
-  }) {
-    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditElementEditControllerBase.executeSetAttrOptionToElement',
-        );
-    try {
-      return super.executeSetAttrOptionToElement(
-        attrOption: attrOption,
-        plaOriginalLineInTH2File: plaOriginalLineInTH2File,
-      );
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
   void executeRemoveAttrOptionFromElement({
     required String attrName,
     required int parentMPID,
-    required String plaOriginalLineInTH2File,
+    required String newOriginalLineInTH2File,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -678,7 +656,7 @@ mixin _$TH2FileEditElementEditController
       return super.executeRemoveAttrOptionFromElement(
         attrName: attrName,
         parentMPID: parentMPID,
-        plaOriginalLineInTH2File: plaOriginalLineInTH2File,
+        newOriginalLineInTH2File: newOriginalLineInTH2File,
       );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(

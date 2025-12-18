@@ -51,7 +51,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
         .executeRemoveAttrOptionFromElement(
           parentMPID: parentMPID,
           attrName: attrName,
-          plaOriginalLineInTH2File: plaOriginalTH2FileLine,
+          newOriginalLineInTH2File: plaOriginalTH2FileLine,
         );
   }
 

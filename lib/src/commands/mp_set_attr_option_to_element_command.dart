@@ -51,8 +51,8 @@ class MPSetAttrOptionToElementCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    th2FileEditController.elementEditController.executeSetAttrOptionToElement(
-      attrOption: toOption,
+    th2FileEditController.elementEditController.executeSetOptionToElement(
+      option: toOption,
       plaOriginalLineInTH2File: toPLAOriginalLineInTH2File,
     );
   }
