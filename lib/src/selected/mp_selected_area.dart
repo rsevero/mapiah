@@ -17,12 +17,20 @@ class MPSelectedArea extends MPSelectedElement {
   ) {
     final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
         SplayTreeMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<String, THAttrCommandOption> attrOptionsMapClone =
+        SplayTreeMap<String, THAttrCommandOption>();
 
     originalArea.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();
     });
+    originalArea.attrOptionsMap.forEach((key, value) {
+      attrOptionsMapClone[key] = value.copyWith();
+    });
 
-    originalAreaClone = originalArea.copyWith(optionsMap: optionsMapClone);
+    originalAreaClone = originalArea.copyWith(
+      optionsMap: optionsMapClone,
+      attrOptionsMap: attrOptionsMapClone,
+    );
 
     final List<int> lineMPIDs = originalArea.getLineMPIDs(
       th2FileEditController.thFile,

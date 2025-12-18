@@ -10,12 +10,20 @@ class MPSelectedScrap extends MPSelectedElement {
   void _createClone(THScrap originalScrap) {
     final SplayTreeMap<THCommandOptionType, THCommandOption> optionsMapClone =
         SplayTreeMap<THCommandOptionType, THCommandOption>();
+    final SplayTreeMap<String, THAttrCommandOption> attrOptionsMapClone =
+        SplayTreeMap<String, THAttrCommandOption>();
 
     originalScrap.optionsMap.forEach((key, value) {
       optionsMapClone[key] = value.copyWith();
     });
+    originalScrap.attrOptionsMap.forEach((key, value) {
+      attrOptionsMapClone[key] = value.copyWith();
+    });
 
-    originalScrapClone = originalScrap.copyWith(optionsMap: optionsMapClone);
+    originalScrapClone = originalScrap.copyWith(
+      optionsMap: optionsMapClone,
+      attrOptionsMap: attrOptionsMapClone,
+    );
   }
 
   @override
