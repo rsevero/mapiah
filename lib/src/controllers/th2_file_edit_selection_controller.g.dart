@@ -99,31 +99,6 @@ mixin _$TH2FileEditSelectionController
     );
   }
 
-  late final _$_selectedElementsDrawableAtom = Atom(
-    name: 'TH2FileEditSelectionControllerBase._selectedElementsDrawable',
-    context: context,
-  );
-
-  ObservableMap<int, THElement> get selectedElementsDrawable {
-    _$_selectedElementsDrawableAtom.reportRead();
-    return super._selectedElementsDrawable;
-  }
-
-  @override
-  ObservableMap<int, THElement> get _selectedElementsDrawable =>
-      selectedElementsDrawable;
-
-  @override
-  set _selectedElementsDrawable(ObservableMap<int, THElement> value) {
-    _$_selectedElementsDrawableAtom.reportWrite(
-      value,
-      super._selectedElementsDrawable,
-      () {
-        super._selectedElementsDrawable = value;
-      },
-    );
-  }
-
   late final _$_clickedElementsAtPointerDownAtom = Atom(
     name: 'TH2FileEditSelectionControllerBase._clickedElementsAtPointerDown',
     context: context,
@@ -503,7 +478,7 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  bool removeElementFromSelectedLogicalAndDrawable(
+  bool removeElementFromSelectedLogical(
     int elementMPID, {
     bool setState = false,
     bool updateStatusBarMessage = true,
@@ -511,10 +486,10 @@ mixin _$TH2FileEditSelectionController
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditSelectionControllerBase.removeElementFromSelectedLogicalAndDrawable',
+              'TH2FileEditSelectionControllerBase.removeElementFromSelectedLogical',
         );
     try {
-      return super.removeElementFromSelectedLogicalAndDrawable(
+      return super.removeElementFromSelectedLogical(
         elementMPID,
         setState: setState,
         updateStatusBarMessage: updateStatusBarMessage,

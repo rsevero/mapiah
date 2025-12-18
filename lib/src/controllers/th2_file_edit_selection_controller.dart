@@ -45,10 +45,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       ObservableMap<int, MPSelectedElement>();
 
   @readonly
-  ObservableMap<int, THElement> _selectedElementsDrawable =
-      ObservableMap<int, THElement>();
-
-  @readonly
   Iterable<THElement> _clickedElementsAtPointerDown = {};
 
   List<MPSelectableEndControlPoint> clickedEndControlPoints = [];
@@ -205,7 +201,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void substituteSelectedElementsByClickedElements() {
     _mpSelectedElementsLogical.clear();
-    _selectedElementsDrawable.clear();
     for (final THElement clickedElement in _clickedElementsAtPointerDown) {
       addSelectedElement(clickedElement, updateStatusBarMessage: false);
     }
@@ -286,26 +281,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         _mpSelectedElementsLogical[element.mpID] = MPSelectedPoint(
           originalPoint: element,
         );
-        _selectedElementsDrawable[element.mpID] = element;
       case THLine _:
         _mpSelectedElementsLogical[element.mpID] = MPSelectedLine(
           originalLine: element,
           th2FileEditController: _th2FileEditController,
         );
-        _selectedElementsDrawable[element.mpID] = element;
       case THArea _:
         _mpSelectedElementsLogical[element.mpID] = MPSelectedArea(
           originalArea: element,
           th2FileEditController: _th2FileEditController,
         );
-
-        final List<int> lineMPIDs = element.getLineMPIDs(_thFile);
-
-        for (final int lineMPID in lineMPIDs) {
-          final THLine line = _thFile.lineByMPID(lineMPID);
-
-          _selectedElementsDrawable[lineMPID] = line;
-        }
     }
 
     _isSelected.add(element.mpID);
@@ -419,27 +404,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  bool removeElementFromSelectedLogicalAndDrawable(
+  bool removeElementFromSelectedLogical(
     int elementMPID, {
     bool setState = false,
     bool updateStatusBarMessage = true,
   }) {
-    final THElementType elementType = _thFile.getElementTypeByMPID(elementMPID);
-
     _mpSelectedElementsLogical.remove(elementMPID);
-
-    if (elementType == THElementType.area) {
-      final List<int> lineMPIDs = _thFile
-          .areaByMPID(elementMPID)
-          .getLineMPIDs(_thFile);
-
-      for (final int lineMPID in lineMPIDs) {
-        _selectedElementsDrawable.remove(lineMPID);
-      }
-    } else {
-      _selectedElementsDrawable.remove(elementMPID);
-    }
-
     _isSelected.remove(elementMPID);
     if (updateStatusBarMessage) {
       _th2FileEditController.stateController.updateStatusBarMessage();
@@ -456,7 +426,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElementsByMPIDs(List<int> elementMPIDs) {
     for (int elementMPID in elementMPIDs) {
-      removeElementFromSelectedLogicalAndDrawable(
+      removeElementFromSelectedLogical(
         elementMPID,
         updateStatusBarMessage: false,
       );
@@ -1723,7 +1693,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void _clearSelectedElementsWithoutResettingRedrawTriggers() {
     _mpSelectedElementsLogical.clear();
-    _selectedElementsDrawable.clear();
     _isSelected.clear();
     clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
   }

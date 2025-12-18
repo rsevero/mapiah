@@ -411,7 +411,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     selectionController.removeElementFromSelectable(elementMPID);
-    selectionController.removeElementFromSelectedLogicalAndDrawable(
+    selectionController.removeElementFromSelectedLogical(
       elementMPID,
       setState: setState,
     );
@@ -1001,9 +1001,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         selectionController.updateSelectedElementLogicalClone(lineMPID);
       } else {
         selectionController.removeElementFromSelectable(lineMPID);
-        selectionController.removeElementFromSelectedLogicalAndDrawable(
-          lineMPID,
-        );
+        selectionController.removeElementFromSelectedLogical(lineMPID);
       }
     }
 

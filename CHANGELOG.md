@@ -27,6 +27,7 @@
   * Including reference to THFile in THElement.
   * Renaming MPBoundingBox to MPBoundingBoxMixin.
   * Implementing subtypeLineSegmentMPIDsByLineSegmentIndex map in THLine to keep track of which line segments have subtype options.
+  * Removed unused _selectedElementsDrawable from TH2FileEditSelectionController.
 
 ## 0.2.26 - 2025-12-11 - The São Paulo release
 * New features:
