@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.28 - not yet released
+## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:
   * Inverted zoom shortcuts 3 and 4 (show scrap and show file respectively) to match user expectations.
 * Fixed bugs:
