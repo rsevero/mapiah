@@ -116,6 +116,7 @@
 [X] - BUG: 'O' shortcut to open options overlay window not working.
 [X] - Properly support lines with partial subtypes: subtype can be either a line or a line point option. If its a line option, it sets the start of the line. If a subtype appears as a line point option, it changes the line from that point on.
 [X] - BUG: ID option shown with more than one element selected.
+[ ] - BUG: web release not opening files with XVI images.
 
 ##Version 0.4
 [ ] - Open multiple files simultaneously

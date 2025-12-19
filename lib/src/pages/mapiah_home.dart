@@ -61,6 +61,20 @@ class _MapiahHomeState extends State<MapiahHome> {
         elevation: 4,
         title: Text(appLocalizations.appTitle),
         actions: <Widget>[
+          if (kIsWeb)
+            Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Center(
+                child: Text(
+                  kIsWasm ? 'WASM web version' : 'Javascript web version',
+                  style: TextStyle(
+                    color: colorScheme.onSecondaryContainer,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           IconButton(
             key: ValueKey('MapiahHomeNewFileButton'),
             icon: Icon(Icons.insert_drive_file_outlined),
