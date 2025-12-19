@@ -12,11 +12,10 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
-import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -87,8 +86,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPLineSimplificationMethod _lineSimplificationMethod =
       MPLineSimplificationMethod.keepOriginalTypes;
 
-  final Set<int> _lineMPIDsAffectedByLineSegmentChanges = {};
-  final Set<int> _changedLineSegmentMPIDs = {};
+  final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
+  final Set<int> _mpIDsOutdatedLineSegmentClones = {};
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
@@ -302,6 +301,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     List<({int lineSegmentPosition, THLineSegment lineSegment})>
     newLineSegments,
   ) {
+    final TH2FileEditElementEditController elementEditController =
+        _th2FileEditController.elementEditController;
     final THLine line = _thFile.lineByMPID(lineMPID);
     final List<int> originalLineSegmentMPIDs = line
         .getLineSegmentMPIDs(_thFile)
@@ -313,25 +314,27 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
 
       _thFile.removeElement(originalLineSegment);
+      elementEditController.addOutdatedCloneMPID(originalLineSegmentMPID);
     }
 
     for (final ({int lineSegmentPosition, THLineSegment lineSegment})
         newLineSegment
         in newLineSegments) {
-      _thFile.addElement(newLineSegment.lineSegment);
+      final THLineSegment lineSegment = newLineSegment.lineSegment;
+
+      _thFile.addElement(lineSegment);
       line.addElementToParent(
-        newLineSegment.lineSegment,
+        lineSegment,
         elementPositionInParent: newLineSegment.lineSegmentPosition,
       );
+      elementEditController.addOutdatedCloneMPID(lineSegment.mpID);
     }
 
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
-    line.resetLineSegmentsLists();
-    selectionController.addUpdateSelectableElement(line);
-    selectionController.updateSelectedElementClone(line.mpID);
     selectionController.updateSelectableEndAndControlPoints();
+    elementEditController.updateControllersAfterElementEditPartial();
     selectionController.clearSelectedEndControlPoints();
     _th2FileEditController.triggerNewLineRedraw();
     _th2FileEditController.triggerEditLineRedraw();
@@ -347,7 +350,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newElement: newLineSegment,
       childPositionInParent: lineSegmentPositionInParent,
     );
-    addChangedLineSegmentMPID(newLineSegment.mpID);
+    addOutdatedCloneMPID(newLineSegment.mpID);
   }
 
   @action
@@ -792,12 +795,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void finalizeNewLineCreation() {
     if (_newLine != null) {
-      addChangedLineMPID(_newLine!.mpID);
-      updateControllersAfterLineSegmentChangesPerLine();
+      addOutdatedCloneMPID(_newLine!.mpID);
     }
 
     clearNewLine();
-    updateControllersAfterElementChanges();
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
 
     _th2FileEditController.updateUndoRedoStatus();
   }
@@ -805,38 +808,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void finalizeNewAreaCreation() {
     if (_newArea != null) {
-      final TH2FileEditSelectionController selectionController =
-          _th2FileEditController.selectionController;
-
-      selectionController.addUpdateSelectableElement(_newArea!);
+      addOutdatedCloneMPID(_newArea!.mpID);
     }
 
     clearNewArea();
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
     _th2FileEditController.triggerAllElementsRedraw();
     _th2FileEditController.updateUndoRedoStatus();
-  }
-
-  void updateOptionEdited() {
-    final TH2FileEditOptionEditController optionEditController =
-        _th2FileEditController.optionEditController;
-
-    optionEditController.clearCurrentOptionType();
-
-    _th2FileEditController.selectionController
-        .updateAllSelectedElementsClones();
-
-    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-      MPWindowType.optionChoices,
-      false,
-    );
-
-    switch (optionEditController.currentOptionElementsType) {
-      case MPOptionElementType.lineSegment:
-        optionEditController.updateElementOptionMapForLineSegments();
-      case MPOptionElementType.pla:
-      case MPOptionElementType.scrap:
-        optionEditController.updateOptionStateMap();
-    }
   }
 
   @action
@@ -844,8 +823,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOption option,
     required String plaOriginalLineInTH2File,
   }) {
+    final int parentMPID = option.parentMPID;
     final THElement parentElement = _thFile
-        .elementByMPID(option.parentMPID)
+        .elementByMPID(parentMPID)
         .copyWith(originalLineInTH2File: plaOriginalLineInTH2File);
 
     if (parentElement is! THHasOptionsMixin) {
@@ -856,15 +836,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     parentElement.addUpdateOption(option);
 
-    if (option.parentMPID >= 0) {
+    if (parentMPID >= 0) {
       _thFile.substituteElement(parentElement);
     }
 
-    _th2FileEditController.selectionController.addUpdateSelectableElement(
-      parentElement,
+    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+      parentMPID,
     );
-
-    updateOptionEdited();
   }
 
   @action
@@ -873,8 +851,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required int parentMPID,
     required String newOriginalLineInTH2File,
   }) {
-    final THHasOptionsMixin parentElement = _th2FileEditController.thFile
-        .hasOptionByMPID(parentMPID);
+    final THHasOptionsMixin parentElement = _thFile.hasOptionByMPID(parentMPID);
 
     if (optionType == THCommandOptionType.id) {
       _thFile.unregisterElementTHIDByMPID(parentMPID);
@@ -886,10 +863,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeOption(optionType);
     _thFile.substituteElement(newParentElement);
-    _th2FileEditController.selectionController.addUpdateSelectableElement(
-      newParentElement,
+    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+      parentMPID,
     );
-    updateOptionEdited();
   }
 
   @action
@@ -907,10 +883,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeAttrOption(attrName);
     _thFile.substituteElement(newParentElement);
-    _th2FileEditController.selectionController.addUpdateSelectableElement(
-      newParentElement,
+    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+      parentMPID,
     );
-    updateOptionEdited();
   }
 
   @action
@@ -929,7 +904,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> removeLineSegmentCommands = [];
 
     for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
-      addChangedLineSegmentMPID(lineSegmentMPID);
+      addOutdatedCloneMPID(lineSegmentMPID);
 
       final MPCommand removeLineSegmentCommand =
           MPCommandFactory.removeLineSegmentFromExisting(
@@ -960,57 +935,77 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.undoRedoController.add(removeCommand);
-    updateControllersAfterLineSegmentChangesPerLine();
-    updateControllersAfterElementChanges();
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
     _th2FileEditController.updateUndoRedoStatus();
   }
 
-  void clearMPIDsAffectedByLineSegmentChanges() {
-    _lineMPIDsAffectedByLineSegmentChanges.clear();
-    _changedLineSegmentMPIDs.clear();
+  void clearMPIDsOutdatedClones() {
+    _mpIDsOutdatedNonLineSegmentClones.clear();
+    _mpIDsOutdatedLineSegmentClones.clear();
   }
 
-  void addChangedLineSegmentMPID(int lineSegmentMPID) {
-    _changedLineSegmentMPIDs.add(lineSegmentMPID);
+  void addOutdatedCloneMPID(int mpID) {
+    _mpIDsOutdatedNonLineSegmentClones.add(mpID);
 
-    _lineMPIDsAffectedByLineSegmentChanges.add(
-      _thFile.elementByMPID(lineSegmentMPID).parentMPID,
-    );
+    final THElement element = _thFile.elementByMPID(mpID);
+
+    if ((element is THLineSegment) || (element is THAreaBorderTHID)) {
+      _mpIDsOutdatedNonLineSegmentClones.add(element.parentMPID);
+    }
   }
 
-  void addChangedLineMPID(int lineMPID) {
-    _lineMPIDsAffectedByLineSegmentChanges.add(lineMPID);
-  }
+  Set<int> get mpIDsOutdatedNonLineSegmentClones =>
+      _mpIDsOutdatedNonLineSegmentClones;
 
-  Set<int> get lineMPIDsAffectedByLineSegmentChanges =>
-      _lineMPIDsAffectedByLineSegmentChanges;
-
-  Set<int> get changedLineSegmentMPIDs => _changedLineSegmentMPIDs;
+  Set<int> get mpIDsOutdatedLineSegmentClones =>
+      _mpIDsOutdatedLineSegmentClones;
 
   @action
-  void updateControllersAfterLineSegmentChangesPerLine() {
+  /// Updates the selection and selectable elements in the controllers
+  /// after an element has been edited. It only updates the elements that
+  /// have been marked as having outdated clones, i.e., that have been modified.
+  /// This method can be called several times during some action (e.g., during
+  /// a drag) because it only affects the elements that have been marked as
+  /// outdated.
+  /// The updateControllersAfterElementEditFinal() should be
+  /// called only once at the end of the action to finalize the updates as it
+  /// affects objects related to all elements (e.g., snap targets).
+  void updateControllersAfterElementEditPartial() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
-    for (final int lineMPID in lineMPIDsAffectedByLineSegmentChanges) {
-      if (_thFile.hasElementByMPID(lineMPID)) {
-        final THLine line = _thFile.lineByMPID(lineMPID);
+    for (final int nonLineSegmentMPID in mpIDsOutdatedNonLineSegmentClones) {
+      if (_thFile.hasElementByMPID(nonLineSegmentMPID)) {
+        final THElement element = _thFile.elementByMPID(nonLineSegmentMPID);
 
-        line.resetLineSegmentsLists();
+        if (element is THLine) {
+          element.resetLineSegmentsLists();
+        }
 
-        selectionController.addUpdateSelectableElement(line);
-        selectionController.updateSelectedElementLogicalClone(lineMPID);
+        if (element is MPBoundingBoxMixin) {
+          (element as MPBoundingBoxMixin).clearBoundingBox();
+        }
+
+        selectionController.addUpdateSelectableElement(element);
+        selectionController.updateSelectedElementLogicalClone(
+          nonLineSegmentMPID,
+        );
       } else {
-        selectionController.removeElementFromSelectable(lineMPID);
-        selectionController.removeElementFromSelectedLogical(lineMPID);
+        selectionController.removeElementFromSelectable(nonLineSegmentMPID);
+        selectionController.removeElementFromSelectedLogical(
+          nonLineSegmentMPID,
+        );
       }
     }
 
-    for (final int lineSegmentMPID in changedLineSegmentMPIDs) {
+    for (final int lineSegmentMPID in mpIDsOutdatedLineSegmentClones) {
       if (_thFile.hasElementByMPID(lineSegmentMPID)) {
         final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
           lineSegmentMPID,
         );
+
+        lineSegment.clearBoundingBox();
 
         selectionController.addUpdateSelectableElement(lineSegment);
         selectionController.updateSelectedElementLogicalClone(lineSegmentMPID);
@@ -1021,11 +1016,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       }
     }
 
-    clearMPIDsAffectedByLineSegmentChanges();
+    clearMPIDsOutdatedClones();
   }
 
   @action
-  void updateControllersAfterElementChanges() {
+  /// Finalizes the updates in the controllers after elements have been
+  /// edited. This method should be called only once at the end of the action
+  /// that modified the elements (e.g., at the end of a drag) as it affects
+  /// objects related to all elements (e.g., snap targets).
+  void updateControllersAfterElementEditFinal() {
     _th2FileEditController.selectionController
         .updateSelectableEndAndControlPoints();
 
@@ -1595,8 +1594,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.execute(toggleCommand);
-    updateControllersAfterLineSegmentChangesPerLine();
-    updateControllersAfterElementChanges();
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
   }
 
   @action
@@ -1646,7 +1645,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         }
       }
 
-      addChangedLineSegmentMPID(selectedLineSegmentMPID);
+      addOutdatedCloneMPID(selectedLineSegmentMPID);
     }
 
     if (toggleCommands.isEmpty) {
@@ -1816,7 +1815,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         }
       }
 
-      addChangedLineMPID(originalLine.mpID);
+      addOutdatedCloneMPID(originalLine.mpID);
     }
 
     if (simplifyCommands.isNotEmpty) {
@@ -1838,8 +1837,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       }
     }
 
-    updateControllersAfterLineSegmentChangesPerLine();
-    updateControllersAfterElementChanges();
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
 
     _th2FileEditController.stateController.state.setStatusBarMessage();
   }

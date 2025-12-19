@@ -109,6 +109,8 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
     final THBezierCurveLineSegment originalLineSegment = th2FileEditController
         .thFile
         .bezierCurveLineSegmentByMPID(lineSegmentMPID);
@@ -120,8 +122,10 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
           originalLineInTH2File: toOriginalLineInTH2File,
         );
 
-    th2FileEditController.elementEditController
-        .substituteElementWithoutAddSelectableElement(newLineSegment);
+    elementEditController.substituteElementWithoutAddSelectableElement(
+      newLineSegment,
+    );
+    elementEditController.addOutdatedCloneMPID(lineSegmentMPID);
     th2FileEditController.triggerSelectedElementsRedraw();
     th2FileEditController.triggerNewLineRedraw();
   }

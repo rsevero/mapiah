@@ -58,8 +58,11 @@ class MPMoveAreaCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
     linesMoveCommand.execute(th2FileEditController);
-    th2FileEditController.thFile.areaByMPID(areaMPID).clearBoundingBox();
+    elementEditController.addOutdatedCloneMPID(areaMPID);
+    elementEditController.updateControllersAfterElementEditPartial();
     th2FileEditController.triggerNewLineRedraw();
     th2FileEditController.triggerSelectedElementsRedraw();
   }

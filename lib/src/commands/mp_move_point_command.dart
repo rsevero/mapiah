@@ -48,6 +48,8 @@ class MPMovePointCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
+    final TH2FileEditElementEditController elementEditController =
+        th2FileEditController.elementEditController;
     final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
       pointMPID,
     );
@@ -56,9 +58,9 @@ class MPMovePointCommand extends MPCommand {
       originalLineInTH2File: toOriginalLineInTH2File,
     );
 
-    th2FileEditController.elementEditController.substituteElement(
-      modifiedPoint,
-    );
+    elementEditController.substituteElement(modifiedPoint);
+    elementEditController.addOutdatedCloneMPID(pointMPID);
+    elementEditController.updateControllersAfterElementEditPartial();
     th2FileEditController.triggerSelectedElementsRedraw();
   }
 

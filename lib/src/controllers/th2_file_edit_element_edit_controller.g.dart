@@ -682,14 +682,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void updateControllersAfterLineSegmentChangesPerLine() {
+  void updateControllersAfterElementEditPartial() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditElementEditControllerBase.updateControllersAfterLineSegmentChangesPerLine',
+              'TH2FileEditElementEditControllerBase.updateControllersAfterElementEditPartial',
         );
     try {
-      return super.updateControllersAfterLineSegmentChangesPerLine();
+      return super.updateControllersAfterElementEditPartial();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -698,14 +698,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void updateControllersAfterElementChanges() {
+  void updateControllersAfterElementEditFinal() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditElementEditControllerBase.updateControllersAfterElementChanges',
+              'TH2FileEditElementEditControllerBase.updateControllersAfterElementEditFinal',
         );
     try {
-      return super.updateControllersAfterElementChanges();
+      return super.updateControllersAfterElementEditFinal();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

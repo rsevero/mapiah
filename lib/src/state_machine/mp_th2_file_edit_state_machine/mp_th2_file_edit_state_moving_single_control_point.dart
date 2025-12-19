@@ -89,8 +89,8 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     );
 
     th2FileEditController.execute(lineEditCommand);
-    elementEditController.updateControllersAfterLineSegmentChangesPerLine();
-    elementEditController.updateControllersAfterElementChanges();
+    elementEditController.updateControllersAfterElementEditPartial();
+    elementEditController.updateControllersAfterElementEditFinal();
     th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.editSingleLine,
     );

@@ -1166,6 +1166,8 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void execute(MPCommand command) {
     undoRedoController.execute(command);
+    elementEditController.updateControllersAfterElementEditPartial();
+    elementEditController.updateControllersAfterElementEditFinal();
     updateUndoRedoStatus();
   }
 
@@ -1224,10 +1226,8 @@ abstract class TH2FileEditControllerBase with Store {
       case MPMultipleElementsCommandCompletionType.elementsEdited:
       case MPMultipleElementsCommandCompletionType.elementsListChanged:
       case MPMultipleElementsCommandCompletionType.optionsEdited:
-        elementEditController.updateOptionEdited();
       case MPMultipleElementsCommandCompletionType.lineSegmentsEdited:
-        elementEditController.updateControllersAfterLineSegmentChangesPerLine();
-        elementEditController.updateOptionEdited();
+        elementEditController.updateControllersAfterElementEditPartial();
     }
   }
 

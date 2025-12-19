@@ -238,7 +238,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.execute(mpCommand);
     clearSelectedElements();
     _th2FileEditController.elementEditController
-        .updateControllersAfterElementChanges();
+        .updateControllersAfterElementEditFinal();
   }
 
   void updateSelectedElementLogicalClone(int mpID) {
