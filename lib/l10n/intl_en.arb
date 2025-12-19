@@ -1840,12 +1840,12 @@
     "description": "The label for the zoom out button",
     "type": "text"
   },
-  "th2FileEditPageZoomOutFile": "Show file (3)",
+  "th2FileEditPageZoomOutFile": "Show file (4)",
   "@th2FileEditPageZoomOutFile": {
     "description": "The label for the show file zoom button",
     "type": "text"
   },
-  "th2FileEditPageZoomOutScrap": "Show scrap (4)",
+  "th2FileEditPageZoomOutScrap": "Show scrap (3)",
   "@th2FileEditPageZoomOutScrap": {
     "description": "The label for the show scrap zoom button",
     "type": "text"

@@ -2240,13 +2240,13 @@ abstract class AppLocalizations {
   /// The label for the show file zoom button
   ///
   /// In en, this message translates to:
-  /// **'Show file (3)'**
+  /// **'Show file (4)'**
   String get th2FileEditPageZoomOutFile;
 
   /// The label for the show scrap zoom button
   ///
   /// In en, this message translates to:
-  /// **'Show scrap (4)'**
+  /// **'Show scrap (3)'**
   String get th2FileEditPageZoomOutScrap;
 
   /// The label for the zoom to selection button

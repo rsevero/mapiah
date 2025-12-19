@@ -768,19 +768,6 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
-                      heroTag: 'zoom_out_file',
-                      onPressed: zoomAllFilePressed,
-                      tooltip:
-                          mpLocator.appLocalizations.th2FileEditPageZoomOutFile,
-                      child: Icon(
-                        Icons.zoom_out_map,
-                        size: mpFloatingActionIconSize,
-                        color: colorScheme.onSecondaryContainer,
-                      ),
-                      backgroundColor: colorScheme.secondaryContainer,
-                    ),
-                    SizedBox(width: mpButtonSpace),
-                    FloatingActionButton(
                       heroTag: 'zoom_out_scrap',
                       onPressed: th2FileEditController.hasMultipleScraps
                           ? zoomAllScrapPressed
@@ -795,6 +782,19 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: th2FileEditController.hasMultipleScraps
                             ? colorScheme.onSecondaryContainer
                             : Colors.grey,
+                      ),
+                      backgroundColor: colorScheme.secondaryContainer,
+                    ),
+                    SizedBox(width: mpButtonSpace),
+                    FloatingActionButton(
+                      heroTag: 'zoom_out_file',
+                      onPressed: zoomAllFilePressed,
+                      tooltip:
+                          mpLocator.appLocalizations.th2FileEditPageZoomOutFile,
+                      child: Icon(
+                        Icons.zoom_out_map,
+                        size: mpFloatingActionIconSize,
+                        color: colorScheme.onSecondaryContainer,
                       ),
                       backgroundColor: colorScheme.secondaryContainer,
                     ),

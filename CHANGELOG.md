@@ -2,6 +2,7 @@
 
 ## 0.2.28 - not yet released
 * New features:
+  * Inverted zoom shortcuts 3 and 4 (show scrap and show file respectively) to match user expectations.
 * Fixed bugs:
   * After moving a lot (more than 1.000) of elements at once, finishing the move (by clicking in empty space) takes forever to complete.
   * Not showing files with raster images on web version.

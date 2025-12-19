@@ -28,8 +28,8 @@
 | Smooth line point                               | S                            |
 | Undo                                            | Ctrl+Z                       |
 | Zoom 1:1                                        | 1                            |
-| Zoom file                                       | 3                            |
+| Zoom file                                       | 4                            |
 | Zoom in                                         | +                            |
 | Zoom out                                        | -                            |
-| Zoom scrap                                      | 4                            |
+| Zoom scrap                                      | 3                            |
 | Zoom selection                                  | 2                            |

@@ -28,8 +28,8 @@
 | Simplificar linha - para segmentos de linha reta              | Ctrl+Shift+L                         |
 | Suavizar ponto da linha                                       | S                                    |
 | Zoom 1:1                                                      | 1                                    |
-| Zoom arquivo                                                  | 3                                    |
-| Zoom croqui                                                   | 4                                    |
+| Zoom arquivo                                                  | 4                                    |
+| Zoom croqui                                                   | 3                                    |
 | Zoom mais distante                                            | -                                    |
 | Zoom mais próximo                                             | +                                    |
 | Zoom seleção                                                  | 2                                    |

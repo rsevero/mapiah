@@ -1179,10 +1179,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomOut => 'Afastar (-)';
 
   @override
-  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (3)';
+  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (4)';
 
   @override
-  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui (4)';
+  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui (3)';
 
   @override
   String get th2FileEditPageZoomToSelection => 'Mostrar seleção (2)';
