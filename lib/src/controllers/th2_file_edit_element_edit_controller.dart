@@ -330,7 +330,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     line.resetLineSegmentsLists();
     selectionController.addUpdateSelectableElement(line);
-    selectionController.updateSelectedElementsClones();
+    selectionController.updateSelectedElementClone(line.mpID);
     selectionController.updateSelectableEndAndControlPoints();
     selectionController.clearSelectedEndControlPoints();
     _th2FileEditController.triggerNewLineRedraw();
@@ -822,7 +822,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     optionEditController.clearCurrentOptionType();
 
-    _th2FileEditController.selectionController.updateSelectedElementsClones();
+    _th2FileEditController.selectionController
+        .updateAllSelectedElementsClones();
 
     _th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,

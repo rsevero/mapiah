@@ -153,8 +153,8 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
       _optionsMap;
 
   void addOptionsMap(Map<THCommandOptionType, THCommandOption> optionsMap) {
-    for (final THCommandOptionType type in optionsMap.keys) {
-      addUpdateOption(optionsMap[type]!);
+    for (final THCommandOption option in optionsMap.values) {
+      addUpdateOption(option);
     }
   }
 
@@ -174,8 +174,8 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
   void addUpdateAttrOptionsMap(
     Map<String, THAttrCommandOption> attrOptionsMap,
   ) {
-    for (final String name in attrOptionsMap.keys) {
-      addUpdateOption(attrOptionsMap[name]!);
+    for (final THAttrCommandOption option in attrOptionsMap.values) {
+      addUpdateOption(option);
     }
   }
 }

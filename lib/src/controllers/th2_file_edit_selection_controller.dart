@@ -258,10 +258,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void updateSelectedElementsClones() {
+  void updateAllSelectedElementsClones() {
     for (final MPSelectedElement selectedElement
         in _mpSelectedElementsLogical.values) {
       selectedElement.updateClone(_th2FileEditController);
+    }
+  }
+
+  void updateSelectedElementsClones(Iterable<int> mpIDs) {
+    for (final int mpID in mpIDs) {
+      if (_mpSelectedElementsLogical.containsKey(mpID)) {
+        _mpSelectedElementsLogical[mpID]!.updateClone(_th2FileEditController);
+      }
+    }
+  }
+
+  void updateSelectedElementClone(int mpID) {
+    if (_mpSelectedElementsLogical.containsKey(mpID)) {
+      _mpSelectedElementsLogical[mpID]!.updateClone(_th2FileEditController);
     }
   }
 

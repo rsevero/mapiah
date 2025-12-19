@@ -211,7 +211,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
           );
 
       th2FileEditController.execute(moveCommand);
-      selectionController.updateSelectedElementsClones();
+      selectionController.updateAllSelectedElementsClones();
     }
 
     th2FileEditController.triggerSelectedElementsRedraw(setState: true);
