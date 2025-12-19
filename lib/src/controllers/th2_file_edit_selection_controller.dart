@@ -175,7 +175,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         case THLine _:
         case THArea _:
           final Rect newElementBoundingBox = (element as MPBoundingBoxMixin)
-              .getBoundingBox(_th2FileEditController);
+              .getBoundingBox(_th2FileEditController)!;
 
           boundingBox =
               boundingBox?.expandToInclude(newElementBoundingBox) ??
@@ -852,7 +852,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         if (MPNumericAux.isRect1InsideRect2(
           rect1: (element as MPBoundingBoxMixin).getBoundingBox(
             _th2FileEditController,
-          ),
+          )!,
           rect2: canvasSelectionWindow,
         )) {
           insideWindowElements[element.mpID] = element;

@@ -49,7 +49,7 @@ class MPSelectableLine extends MPSelectableElement {
   Rect _calculateBoundingBox() {
     final Rect lineBoundingBox = (element as THLine).getBoundingBox(
       th2fileEditController,
-    );
+    )!;
 
     return MPNumericAux.orderedRectExpandedByDelta(
       rect: lineBoundingBox,

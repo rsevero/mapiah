@@ -594,7 +594,7 @@ class MPCommandFactory {
             rawRelativeImagePath.startsWith('../'))
         ? rawRelativeImagePath
         : './$rawRelativeImagePath';
-    final Rect fileBoundingBox = thFile.getBoundingBox(th2FileEditController);
+    final Rect fileBoundingBox = thFile.getBoundingBox(th2FileEditController)!;
     final THXTherionImageInsertConfig
     newImage = THXTherionImageInsertConfig.adjustPosition(
       parentMPID: thFile.mpID,

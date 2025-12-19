@@ -311,9 +311,9 @@ class THArea extends THElement
 
       boundingBox =
           boundingBox?.expandToInclude(
-            line.getBoundingBox(th2FileEditController),
+            line.getBoundingBox(th2FileEditController)!,
           ) ??
-          line.getBoundingBox(th2FileEditController);
+          line.getBoundingBox(th2FileEditController)!;
     }
 
     return boundingBox ?? Rect.zero;

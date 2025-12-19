@@ -295,9 +295,9 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
           return null;
         }
-      }
 
-      _fixXVIRoot();
+        _fixXVIRoot();
+      }
     }
 
     return _xviFile;
@@ -345,15 +345,19 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   }
 
   @override
-  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
     return isXVI
         ? _calculateXVIBoundingBox(th2FileEditController)
         : _calculateRasterImageBoundingBox(th2FileEditController);
   }
 
-  Rect _calculateRasterImageBoundingBox(
+  Rect? _calculateRasterImageBoundingBox(
     TH2FileEditController th2FileEditController,
   ) {
+    if (kIsWeb) {
+      return null;
+    }
+
     // Ensure loading has been triggered (will cache when done)
     getRasterImageFrameInfo(th2FileEditController);
 
@@ -371,14 +375,14 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
           );
   }
 
-  Rect _calculateXVIBoundingBox(TH2FileEditController th2FileEditController) {
+  Rect? _calculateXVIBoundingBox(TH2FileEditController th2FileEditController) {
     final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
     if (xviFile == null) {
-      return MPNumericAux.orderedRectSmallestAroundPoint(center: Offset.zero);
+      return null;
     }
 
-    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController);
+    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController)!;
     final Offset xviOffset =
         Offset(xviRootedXX, xviRootedYY) -
         Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);

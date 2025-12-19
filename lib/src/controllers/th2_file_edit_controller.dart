@@ -1039,13 +1039,13 @@ abstract class TH2FileEditControllerBase with Store {
   Rect _getZoomToFitBoundingBox({required MPZoomToFitType zoomFitToType}) {
     switch (zoomFitToType) {
       case MPZoomToFitType.file:
-        return _thFile.getBoundingBox(this as TH2FileEditController);
+        return _thFile.getBoundingBox(this as TH2FileEditController)!;
       case MPZoomToFitType.scrap:
         return (_activeScrapID > 0)
             ? (_thFile.scrapByMPID(
                 _activeScrapID,
-              )).getBoundingBox(this as TH2FileEditController)
-            : _thFile.getBoundingBox(this as TH2FileEditController);
+              )).getBoundingBox(this as TH2FileEditController)!
+            : _thFile.getBoundingBox(this as TH2FileEditController)!;
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBoxOnCanvas();
     }

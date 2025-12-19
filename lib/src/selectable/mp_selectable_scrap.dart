@@ -10,7 +10,7 @@ class MPSelectableScrap extends MPSelectableElement {
   Rect _calculateBoundingBox() {
     final Rect scrapBoundingBox = (element as THScrap).getBoundingBox(
       th2fileEditController,
-    );
+    )!;
 
     return MPNumericAux.orderedRectExpandedByDelta(
       rect: scrapBoundingBox,

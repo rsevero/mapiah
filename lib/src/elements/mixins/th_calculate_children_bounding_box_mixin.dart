@@ -25,10 +25,18 @@ mixin THCalculateChildrenBoundingBoxMixin {
         case THLine _:
         case THPoint _:
         case THScrap _:
-        case THXTherionImageInsertConfig _:
           childBoundingBox = (child as MPBoundingBoxMixin).getBoundingBox(
             th2FileEditController,
-          );
+          )!;
+        case THXTherionImageInsertConfig _:
+          final Rect? nullableChildBoundingBox = (child as MPBoundingBoxMixin)
+              .getBoundingBox(th2FileEditController);
+
+          if (nullableChildBoundingBox == null) {
+            continue;
+          } else {
+            childBoundingBox = nullableChildBoundingBox;
+          }
         default:
           continue;
       }
