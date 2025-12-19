@@ -49,8 +49,8 @@ const double thCanvasMovementFactor = 0.1;
 const double thCanvasRoundFactor = 25.0;
 
 const double mpDoubleNextEpsilon = 2.220446049250313e-16;
-const double mpDoublePositiveNextEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
-const double mpDoubleNegativeNextEpsilonFactor = 1.0 - mpDoubleNextEpsilon;
+const double mpDoubleUpEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
+const double mpDoubleDownEpsilonFactor = 1.0 - mpDoubleNextEpsilon;
 const double mpDoubleComparisonEpsilon = 1e-9;
 
 /// Smallest *normalized* positive double (DBL_MIN). Note this is different

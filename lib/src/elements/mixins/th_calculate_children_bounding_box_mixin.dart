@@ -22,8 +22,8 @@ mixin THCalculateChildrenBoundingBoxMixin {
       final THElement child = thFile.elementByMPID(mpID);
 
       switch (child) {
-        case THLine _:
         case THPoint _:
+        case THLine _:
         case THScrap _:
           childBoundingBox = (child as MPBoundingBoxMixin).getBoundingBox(
             th2FileEditController,

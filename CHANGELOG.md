@@ -5,7 +5,8 @@
 * Fixed bugs:
   * After moving a lot (more than 1.000) of elements at once, finishing the move (by clicking in empty space) takes forever to complete.
   * Not showing files with raster images on web version.
-  * Unfound XVI or raster images include point 0,0 in bounding box calculation.
+  * Unfound XVI or raster images includes point 0,0 in bounding box calculation.
+  * nextUp() of 2.0 was wrong causing bounding box calculation errors.
 * Infrastructure maintenance:
   * Centralizing controller update after element edit.
 
