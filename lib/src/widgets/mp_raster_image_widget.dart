@@ -1,5 +1,6 @@
 import 'dart:io' show File;
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,8 +33,8 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
     th2FileEditController = widget.th2FileEditController;
 
-    if (!widget.image.isXVI && widget.image.isVisible) {
-      loadUiImage(widget.image.filename).then((img) {
+    if (!widget.image.isXVI && widget.image.isVisible && !kIsWeb) {
+      loadUIImage(widget.image.filename).then((img) {
         setState(() => _image = img);
       });
     }
@@ -41,7 +42,7 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.image.isXVI || !widget.image.isVisible) {
+    if (widget.image.isXVI || !widget.image.isVisible || kIsWeb) {
       return SizedBox.shrink();
     }
 
@@ -73,7 +74,7 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
     );
   }
 
-  Future<ui.Image> loadUiImage(String imagePath) async {
+  Future<ui.Image> loadUIImage(String imagePath) async {
     final String resolvedPath = MPDirectoryAux.getResolvedPath(
       th2FileEditController.thFile.filename,
       imagePath,

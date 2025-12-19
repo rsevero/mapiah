@@ -4,6 +4,7 @@
 * New features:
 * Fixed bugs:
   * After moving a lot (more than 1.000) elements at once, finishing the move (by clicking in empty space) takes forever to complete.
+  * Not showing files with raster images on web version.
 * Infrastructure maintenance:
   * Centralizing controller update after element edit.
 
