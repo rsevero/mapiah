@@ -3,7 +3,9 @@
 ## 0.2.28 - not yet released
 * New features:
 * Fixed bugs:
+  * After moving a lot (more than 1.000) elements at once, finishing the move (by clicking in empty space) takes forever to complete.
 * Infrastructure maintenance:
+  * Centralizing controller update after element edit.
 
 ## 0.2.27 - 2025-12-18 - The Passinho Foda release
 * New features:

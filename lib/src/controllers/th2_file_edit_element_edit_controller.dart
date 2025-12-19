@@ -948,9 +948,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void addOutdatedCloneMPID(int mpID) {
     _mpIDsOutdatedNonLineSegmentClones.add(mpID);
 
-    final THElement element = _thFile.elementByMPID(mpID);
+    final THElement? element = _thFile.tryElementByMPID(mpID);
 
-    if ((element is THLineSegment) || (element is THAreaBorderTHID)) {
+    if ((element != null) &&
+        ((element is THLineSegment) || (element is THAreaBorderTHID))) {
       _mpIDsOutdatedNonLineSegmentClones.add(element.parentMPID);
     }
   }
@@ -976,9 +977,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     for (final int nonLineSegmentMPID in mpIDsOutdatedNonLineSegmentClones) {
-      if (_thFile.hasElementByMPID(nonLineSegmentMPID)) {
-        final THElement element = _thFile.elementByMPID(nonLineSegmentMPID);
+      final THElement? element = _thFile.tryElementByMPID(nonLineSegmentMPID);
 
+      if (element == null) {
+        selectionController.removeElementFromSelectable(nonLineSegmentMPID);
+        selectionController.removeElementFromSelectedLogical(
+          nonLineSegmentMPID,
+        );
+      } else {
         if (element is THLine) {
           element.resetLineSegmentsLists();
         }
@@ -991,28 +997,27 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         selectionController.updateSelectedElementLogicalClone(
           nonLineSegmentMPID,
         );
-      } else {
-        selectionController.removeElementFromSelectable(nonLineSegmentMPID);
-        selectionController.removeElementFromSelectedLogical(
-          nonLineSegmentMPID,
-        );
       }
     }
 
     for (final int lineSegmentMPID in mpIDsOutdatedLineSegmentClones) {
-      if (_thFile.hasElementByMPID(lineSegmentMPID)) {
-        final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
-          lineSegmentMPID,
-        );
+      final THElement? lineSegment = _thFile.tryElementByMPID(lineSegmentMPID);
+
+      if (lineSegment == null) {
+        selectionController.removeElementFromSelectable(lineSegmentMPID);
+        selectionController.removeSelectedLineSegment(lineSegmentMPID);
+      } else {
+        if (lineSegment is! THLineSegment) {
+          throw Exception(
+            'Error: lineSegment is not THLineSegment at TH2FileEditElementEditController.updateControllersAfterElementEditPartial().',
+          );
+        }
 
         lineSegment.clearBoundingBox();
 
         selectionController.addUpdateSelectableElement(lineSegment);
         selectionController.updateSelectedElementLogicalClone(lineSegmentMPID);
         selectionController.updateSelectedLineSegment(lineSegment);
-      } else {
-        selectionController.removeElementFromSelectable(lineSegmentMPID);
-        selectionController.removeSelectedLineSegment(lineSegmentMPID);
       }
     }
 

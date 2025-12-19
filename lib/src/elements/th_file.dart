@@ -564,6 +564,10 @@ class THFile
     return _elementByMPID[mpID]!;
   }
 
+  THElement? tryElementByMPID(int mpID) {
+    return _elementByMPID[mpID];
+  }
+
   THHasOptionsMixin hasOptionByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);
