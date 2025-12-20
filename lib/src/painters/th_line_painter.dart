@@ -62,8 +62,8 @@ class THLinePainter extends CustomPainter {
     final List<double> distances = [];
     final Path lineDirectionTicksPath = Path();
     final Path path = Path();
-    bool isFirst = true;
 
+    bool isFirst = true;
     int i = 0;
 
     for (THLinePainterLineSegment lineSegment in lineSegments) {
@@ -176,8 +176,8 @@ class THLinePainter extends CustomPainter {
           // Draw the tick
           final Offset normal = Offset(-tangentAtPoint.dy, tangentAtPoint.dx);
           final Offset tickEnd = lineInfo.isReversed
-              ? point - (normal * (i == 0 ? tickLength * 1.5 : tickLength))
-              : point + (normal * (i == 0 ? tickLength * 1.5 : tickLength));
+              ? point - (normal * ((i == 0) ? tickLength * 1.5 : tickLength))
+              : point + (normal * ((i == 0) ? tickLength * 1.5 : tickLength));
 
           lineDirectionTicksPath.moveTo(point.dx, point.dy);
           lineDirectionTicksPath.lineTo(tickEnd.dx, tickEnd.dy);
@@ -190,6 +190,22 @@ class THLinePainter extends CustomPainter {
     }
 
     if (linePaint.type == MPLinePaintType.continuous) {
+      if (linePaint.highlightBorders.isNotEmpty) {
+        int highlightBorderCount = linePaint.highlightBorders.length;
+
+        for (final Paint highlightBorder
+            in linePaint.highlightBorders.reversed) {
+          canvas.drawPath(
+            path,
+            highlightBorder
+              ..strokeWidth =
+                  highlightBorder.strokeWidth *
+                  ((highlightBorderCount * 2) + 1),
+          );
+
+          highlightBorderCount--;
+        }
+      }
       if (linePaint.primaryPaint != null) {
         canvas.drawPath(path, linePaint.primaryPaint!);
       } else if (linePaint.secondaryPaint != null) {

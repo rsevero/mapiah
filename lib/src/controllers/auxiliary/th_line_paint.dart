@@ -5,23 +5,26 @@ class THLinePaint {
   final Paint? primaryPaint;
   final Paint? secondaryPaint;
   final Paint? fillPaint;
+  final List<Paint> highlightBorders;
   final MPLinePaintType type;
 
   THLinePaint({
     this.primaryPaint,
     this.secondaryPaint,
     this.fillPaint,
+    this.highlightBorders = const [],
     this.type = MPLinePaintType.continuous,
   });
 
   THLinePaint copyWith({
     Paint? primaryPaint,
-    Paint? secondaryPaint,
-    Paint? fillPaint,
-    MPLinePaintType? type,
     bool makePrimaryPaintNull = false,
+    Paint? secondaryPaint,
     bool makeSecondaryPaintNull = false,
+    Paint? fillPaint,
     bool makeFillPaintNull = false,
+    List<Paint>? highlightBorders,
+    MPLinePaintType? type,
   }) {
     return THLinePaint(
       primaryPaint: makePrimaryPaintNull
@@ -31,6 +34,7 @@ class THLinePaint {
           ? null
           : (secondaryPaint ?? this.secondaryPaint),
       fillPaint: makeFillPaintNull ? null : (fillPaint ?? this.fillPaint),
+      highlightBorders: highlightBorders ?? this.highlightBorders,
       type: type ?? this.type,
     );
   }

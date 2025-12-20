@@ -1063,14 +1063,14 @@ abstract class MPVisualControllerBase with Store {
 
         if (pointIsTHInvisible) {
           highlightBorders.add(
-            THPaint.thPaint17
+            THPaint.thPaint16
               ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           );
         }
 
         if (pointHasID) {
           highlightBorders.add(
-            THPaint.thPaint16
+            THPaint.thPaint17
               ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
           );
         }
@@ -1257,25 +1257,48 @@ abstract class MPVisualControllerBase with Store {
     required THLineType lineType,
     String? subtype,
     required int lineParentMPID,
+    bool lineIsTHInvisible = false,
+    bool lineHasID = false,
   }) {
-    final THLinePaint linePaint = getDefaultLinePaintByTypeSubtype(
+    final THLinePaint linePaintDefault = getDefaultLinePaintByTypeSubtype(
       lineType: lineType,
       subtype: subtype,
     );
 
     if (_th2FileEditController.isFromActiveScrapByParentMPID(lineParentMPID)) {
-      return linePaint.copyWith(
-        primaryPaint: linePaint.primaryPaint == null
+      final List<Paint> highlightBorders = [];
+
+      if (lineIsTHInvisible || lineHasID) {
+        if (lineIsTHInvisible) {
+          highlightBorders.add(
+            THPaint.thPaint16
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          );
+        }
+
+        if (lineHasID) {
+          highlightBorders.add(
+            THPaint.thPaint17
+              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          );
+        }
+      }
+
+      final THLinePaint linePaintCopy = linePaintDefault.copyWith(
+        primaryPaint: linePaintDefault.primaryPaint == null
             ? null
-            : (linePaint.primaryPaint!
+            : (linePaintDefault.primaryPaint!
                 ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
-        secondaryPaint: linePaint.secondaryPaint == null
+        secondaryPaint: linePaintDefault.secondaryPaint == null
             ? null
-            : (linePaint.secondaryPaint!
+            : (linePaintDefault.secondaryPaint!
                 ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas),
+        highlightBorders: highlightBorders,
       );
+
+      return linePaintCopy;
     } else {
-      return linePaint.copyWith(
+      return linePaintDefault.copyWith(
         primaryPaint: THPaint.thPaint15
           ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
         makeSecondaryPaintNull: true,

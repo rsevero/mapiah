@@ -96,6 +96,12 @@ mixin MPLinePaintingMixin {
       th2FileEditController: th2FileEditController,
     );
     final THLineType lineType = line.lineType;
+    final bool lineIsTHInvisible = isLineSelected
+        ? false
+        : !MPCommandOptionAux.isTHVisible(line);
+    final bool lineHasID = isLineSelected
+        ? false
+        : MPCommandOptionAux.hasID(line);
 
     if (line.subtypeLineSegmentMPIDsByLineSegmentIndex.isEmpty) {
       final THLinePaint linePaint;
@@ -112,6 +118,8 @@ mixin MPLinePaintingMixin {
                 lineType: lineType,
                 subtype: subtype,
                 lineParentMPID: line.parentMPID,
+                lineIsTHInvisible: lineIsTHInvisible,
+                lineHasID: lineHasID,
               );
       } else {
         linePaint = isLineSelected
@@ -166,6 +174,8 @@ mixin MPLinePaintingMixin {
                   lineType: lineType,
                   subtype: subtype,
                   lineParentMPID: lineParentMPID,
+                  lineIsTHInvisible: lineIsTHInvisible,
+                  lineHasID: lineHasID,
                 );
         } else {
           linePaint = isLineSelected
