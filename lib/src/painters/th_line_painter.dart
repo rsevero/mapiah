@@ -248,6 +248,29 @@ class THLinePainter extends CustomPainter {
       );
     }
 
+    final MPDashedPathProperties dashedPathProperties = MPDashedPathProperties(
+      dashLengths: dashLengthsOnCanvas,
+    );
+    final Path dashedPath = _getDashedPath(path, dashedPathProperties);
+
+    if (linePaint.highlightBorders.isNotEmpty) {
+      int highlightBorderCount = linePaint.highlightBorders.length;
+
+      for (final Paint highlightBorder in linePaint.highlightBorders.reversed) {
+        final double highlightBorderStrokeFactor =
+            ((highlightBorderCount * 2) + 1);
+
+        canvas.drawPath(
+          dashedPath,
+          highlightBorder
+            ..strokeWidth =
+                highlightBorder.strokeWidth * highlightBorderStrokeFactor,
+        );
+
+        highlightBorderCount--;
+      }
+    }
+
     if (linePaint.secondaryPaint != null) {
       final MPDashedPathProperties dashedPathProperties =
           MPDashedPathProperties(
@@ -260,10 +283,6 @@ class THLinePainter extends CustomPainter {
     }
 
     if (linePaint.primaryPaint != null) {
-      final MPDashedPathProperties dashedPathProperties =
-          MPDashedPathProperties(dashLengths: dashLengthsOnCanvas);
-      final Path dashedPath = _getDashedPath(path, dashedPathProperties);
-
       canvas.drawPath(dashedPath, linePaint.primaryPaint!);
     }
   }

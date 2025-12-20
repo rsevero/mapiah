@@ -1063,15 +1063,19 @@ abstract class MPVisualControllerBase with Store {
 
         if (pointIsTHInvisible) {
           highlightBorders.add(
-            THPaint.thPaint16
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            Paint.from(
+              THPaint.thPaint16
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            ),
           );
         }
 
         if (pointHasID) {
           highlightBorders.add(
-            THPaint.thPaint17
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            Paint.from(
+              THPaint.thPaint17
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            ),
           );
         }
 
@@ -1271,15 +1275,19 @@ abstract class MPVisualControllerBase with Store {
       if (lineIsTHInvisible || lineHasID) {
         if (lineIsTHInvisible) {
           highlightBorders.add(
-            THPaint.thPaint16
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            Paint.from(
+              THPaint.thPaint16
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            ),
           );
         }
 
         if (lineHasID) {
           highlightBorders.add(
-            THPaint.thPaint17
-              ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            Paint.from(
+              THPaint.thPaint17
+                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+            ),
           );
         }
       }
