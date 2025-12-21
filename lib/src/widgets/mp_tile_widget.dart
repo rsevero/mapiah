@@ -53,7 +53,7 @@ class _MPTileWidgetState extends State<MPTileWidget> {
       child: InkWell(
         onTap: widget.onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 20),
           color: isHovered ? hoverColor : widget.backgroundColor,
           padding: widget.contentPadding,
           child: Column(
