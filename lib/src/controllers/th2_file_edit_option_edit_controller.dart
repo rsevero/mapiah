@@ -38,11 +38,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   MPOptionElementType _currentOptionElementsType = MPOptionElementType.pla;
 
-  final Set<THCommandOptionType> optionsThatTriggerRedraw = {
-    THCommandOptionType.reverse,
-    THCommandOptionType.smooth,
-  };
-
   @action
   void updateOptionStateMap() {
     final Iterable<MPSelectedElement> mpSelectedElements =

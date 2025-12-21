@@ -8,6 +8,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -46,6 +47,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       _prepareSetOption(option);
     }
+
+    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPWindowType.optionChoices,
+      false,
+    );
   }
 
   void _prepareSetOption(THCommandOption option) {
@@ -205,13 +211,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       _prepareSetMultipleOptionChoice(optionType, choice);
     }
 
-    if (_th2FileEditController.optionEditController.optionsThatTriggerRedraw
-        .contains(optionType)) {
-      _th2FileEditController.selectionController
-          .updateSelectableEndAndControlPoints();
-      _th2FileEditController.triggerSelectedElementsRedraw();
-      _th2FileEditController.triggerEditLineRedraw();
-    }
+    // _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    //   MPWindowType.optionChoices,
+    //   false,
+    // );
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementEditPartial();
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
   }
 
   void _prepareSetMultipleOptionChoice(
