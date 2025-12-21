@@ -4,6 +4,7 @@
 * New features:
   * Line with highlight borders indicating invisible and "with ID" lines.
 * Fixed bugs:
+  * REGRESSION: option overlay windows not closing after setting option value.
 * Infrastructure maintenance:
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release

@@ -211,10 +211,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       _prepareSetMultipleOptionChoice(optionType, choice);
     }
 
-    // _th2FileEditController.overlayWindowController.setShowOverlayWindow(
-    //   MPWindowType.optionChoices,
-    //   false,
-    // );
+    _th2FileEditController.overlayWindowController.setShowOverlayWindow(
+      MPWindowType.optionChoices,
+      false,
+    );
     _th2FileEditController.elementEditController
         .updateControllersAfterElementEditPartial();
     _th2FileEditController.triggerSelectedElementsRedraw();
