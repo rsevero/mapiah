@@ -56,18 +56,11 @@ class THFileWidget extends StatelessWidget {
             child: Stack(
               key: ValueKey("THFileWidgetStack|$thFileMPID"),
               children: [
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showImages) {
-                      return MPImagesWidget(
-                        key: ValueKey("MPImagesWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
+                if (th2FileEditController.showImages)
+                  MPImagesWidget(
+                    key: ValueKey("MPImagesWidget|$thFileMPID"),
+                    th2FileEditController: th2FileEditController,
+                  ),
                 MPNonSelectedElementsWidget(
                   key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
                   th2FileEditController: th2FileEditController,
