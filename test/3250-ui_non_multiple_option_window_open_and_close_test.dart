@@ -15,7 +15,6 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_f
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_id_option_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_multiple_choices_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -31,7 +30,7 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: option window open and close', () {
+  group('UI: non multiple option window open and close', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       MPTextToUser.initialize();
@@ -39,7 +38,7 @@ void main() {
     });
 
     testWidgets(
-      'open a file, select a line open options window, edit a option, see the edit option window close after edit',
+      'open a file, select a line open options window, edit a non multiple option, see the edit option window close after edit',
       (tester) async {
         // Increase test surface to avoid BottomAppBar Row overflow in small test window
         tester.view.physicalSize = const Size(1280, 720);
@@ -186,59 +185,6 @@ void main() {
 
         // Verify the MPIDOptionWidget is gone after pressing Ok
         expect(find.byType(MPIDOptionWidget), findsNothing);
-
-        final Finder mpTileWidgetWithVisibilityFinder = find.descendant(
-          of: editWidgetFinder,
-          matching: find.ancestor(
-            of: find.text('Visibility'),
-            matching: find.byType(MPTileWidget),
-          ),
-        );
-
-        expect(mpTileWidgetWithVisibilityFinder, findsOneWidget);
-
-        // check MPTileWidget background color equals
-        // theme.colorScheme.surfaceContainer, i.e., is unset.
-        final MPTileWidget mpTileWidgetVisibility = tester.widget<MPTileWidget>(
-          mpTileWidgetWithVisibilityFinder,
-        );
-
-        expect(mpTileWidgetVisibility.backgroundColor, unsetExpectedColor);
-
-        // tap the MPTileWidget and verify MPMultipleOptionWidget opens
-        await tester.tap(mpTileWidgetWithVisibilityFinder);
-        await tester.pumpAndSettle();
-
-        final Finder mpVisibilityOptionFinder = find.byType(
-          MPMultipleChoicesWidget,
-        );
-
-        expect(mpVisibilityOptionFinder, findsOneWidget);
-
-        // Click the RadioListTile to select the SET option
-        final Finder offRadioFinder = find.byKey(
-          const ValueKey(
-            'MPMultipleChoicesWidget|visibility|RadioListTile|off',
-          ),
-        );
-
-        expect(offRadioFinder, findsOneWidget);
-        await tester.ensureVisible(offRadioFinder);
-        await tester.pumpAndSettle();
-        await tester.tap(offRadioFinder);
-        await tester.pumpAndSettle();
-
-        // /// TODO
-        // // check MPTileWidget background color equals
-        // // theme.colorScheme.tertiaryFixed, i.e., is set.
-        // // final Color setExpectedColor = Theme.of(
-        // //   tester.element(editWidgetFinder),
-        // // ).colorScheme.tertiaryFixed;
-
-        // // expect(mpTileWidgetID.backgroundColor, setExpectedColor);
-
-        // Verify the MPMultipleChoicesWidget is gone after pressing Ok
-        expect(find.byType(MPMultipleChoicesWidget), findsNothing);
       },
     );
   });
