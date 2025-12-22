@@ -11,6 +11,7 @@
   * Changing "is from active scrap" detection logic to use per-scrap info.
   * Creating getDrawableChildrenMPIDs() method in THIsParentMixin and using it to draw non selected elements.
   * Created MPNonSelectedScrapsWidget to draw non selected scraps and their elements at a separate RepaintBoundary().
+  * Triggering redraw at active scrap change by activeScrapID observable.
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:

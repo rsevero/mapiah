@@ -34,6 +34,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
       builder: (_) {
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
+        th2FileEditController.activeScrapID;
 
         final List<CustomPainter> painters = [];
 

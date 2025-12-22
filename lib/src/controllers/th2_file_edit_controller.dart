@@ -726,7 +726,6 @@ abstract class TH2FileEditControllerBase with Store {
     _activeScrapID = scrapMPID;
     selectionController.resetSelectableElements();
     selectionController.clearSelectedElements();
-    triggerAllElementsRedraw();
   }
 
   void setActiveScrapByChildElement(THElement element) {
