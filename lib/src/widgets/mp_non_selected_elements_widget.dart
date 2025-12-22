@@ -36,11 +36,15 @@ class MPNonSelectedElementsWidget extends StatelessWidget
 
         final List<CustomPainter> painters = [];
 
-        addChildrenPainters(parent: thFile, painters: painters);
+        addChildrenPainters(
+          parent: thFile,
+          painters: painters,
+          isFromActiveScrap: false,
+        );
         addChildrenPainters(
           parent: thFile.scrapByMPID(activeScrapMPID),
           painters: painters,
-          isFromSelectedScrap: true,
+          isFromActiveScrap: true,
         );
 
         return RepaintBoundary(
@@ -59,12 +63,12 @@ class MPNonSelectedElementsWidget extends StatelessWidget
   void addChildrenPainters({
     required THIsParentMixin parent,
     required List<CustomPainter> painters,
-    bool isFromSelectedScrap = false,
+    required bool isFromActiveScrap,
   }) {
     final Iterable<int> childrenMPIDs = parent.childrenMPIDs;
 
     for (final int childMPID in childrenMPIDs) {
-      if (isFromSelectedScrap &&
+      if (isFromActiveScrap &&
           selectionController.isElementSelectedByMPID(childMPID)) {
         continue;
       }
@@ -74,7 +78,10 @@ class MPNonSelectedElementsWidget extends StatelessWidget
       switch (childElement) {
         case THPoint point:
           final THPointPaint pointPaint = visualController
-              .getUnselectedPointPaint(point);
+              .getUnselectedPointPaint(
+                point: point,
+                isFromActiveScrap: isFromActiveScrap,
+              );
 
           painters.add(
             THPointPainter(
@@ -89,6 +96,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               line: line,
               isLineSelected: false,
               showLineDirectionTicks: false,
+              isFromActiveScrap: isFromActiveScrap,
               th2FileEditController: th2FileEditController,
             ),
           );
@@ -97,7 +105,11 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             continue;
           }
 
-          addChildrenPainters(parent: scrap, painters: painters);
+          addChildrenPainters(
+            parent: scrap,
+            painters: painters,
+            isFromActiveScrap: false,
+          );
       }
     }
   }

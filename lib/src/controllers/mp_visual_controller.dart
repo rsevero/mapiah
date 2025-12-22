@@ -1077,12 +1077,15 @@ abstract class MPVisualControllerBase with Store {
     return highlightBorders;
   }
 
-  THPointPaint getUnselectedPointPaint(THPoint point) {
+  THPointPaint getUnselectedPointPaint({
+    required THPoint point,
+    required bool isFromActiveScrap,
+  }) {
     THPointPaint pointPaint = getDefaultPointPaint(
       point,
     ).copyWith(radius: _th2FileEditController.pointRadiusOnCanvas);
 
-    if (_th2FileEditController.isFromActiveScrap(point)) {
+    if (isFromActiveScrap) {
       final bool pointIsTHInvisible = !MPCommandOptionAux.isTHVisible(point);
       final bool pointHasID = MPCommandOptionAux.hasID(point);
 
@@ -1124,13 +1127,13 @@ abstract class MPVisualControllerBase with Store {
   THLinePaint getUnselectedAreaPaint({
     required THAreaType areaType,
     String? subtype,
-    required int areaParentMPID,
     bool areaIsTHInvisible = false,
     bool areaHasID = false,
+    required bool isFromActiveScrap,
   }) {
     THLinePaint areaPaint = getDefaultAreaPaint(areaType: areaType);
 
-    if (_th2FileEditController.isFromActiveScrapByParentMPID(areaParentMPID)) {
+    if (isFromActiveScrap) {
       final List<Paint> highlightBorders = (areaIsTHInvisible || areaHasID)
           ? getHighlightBorders(
               isTHInvisible: areaIsTHInvisible,
@@ -1289,16 +1292,16 @@ abstract class MPVisualControllerBase with Store {
   THLinePaint getUnselectedLinePaint({
     required THLineType lineType,
     String? subtype,
-    required int lineParentMPID,
     bool lineIsTHInvisible = false,
     bool lineHasID = false,
+    required bool isFromActiveScrap,
   }) {
     final THLinePaint linePaintDefault = getDefaultLinePaintByTypeSubtype(
       lineType: lineType,
       subtype: subtype,
     );
 
-    if (_th2FileEditController.isFromActiveScrapByParentMPID(lineParentMPID)) {
+    if (isFromActiveScrap) {
       final List<Paint> highlightBorders = (lineIsTHInvisible || lineHasID)
           ? getHighlightBorders(
               isTHInvisible: lineIsTHInvisible,

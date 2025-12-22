@@ -60,6 +60,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                   isLineSelected: true,
                   showLineDirectionTicks: true,
                   th2FileEditController: th2FileEditController,
+                  isFromActiveScrap: true,
                 ),
               );
             case THArea _:
@@ -74,6 +75,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                     isLineSelected: true,
                     showLineDirectionTicks: false,
                     th2FileEditController: th2FileEditController,
+                    isFromActiveScrap: true,
                   ),
                 );
               }

@@ -77,6 +77,7 @@ mixin MPLinePaintingMixin {
     required THLine line,
     required bool isLineSelected,
     required bool showLineDirectionTicks,
+    required bool isFromActiveScrap,
     required TH2FileEditController th2FileEditController,
   }) {
     final THFile thFile = th2FileEditController.thFile;
@@ -117,8 +118,8 @@ mixin MPLinePaintingMixin {
             : visualController.getUnselectedLinePaint(
                 lineType: lineType,
                 subtype: subtype,
-                lineParentMPID: line.parentMPID,
                 lineIsTHInvisible: lineIsTHInvisible,
+                isFromActiveScrap: isFromActiveScrap,
                 lineHasID: lineHasID,
               );
       } else {
@@ -129,9 +130,9 @@ mixin MPLinePaintingMixin {
             : visualController.getUnselectedAreaPaint(
                 areaType: lineArea.areaType,
                 subtype: MPCommandOptionAux.getSubtype(lineArea),
-                areaParentMPID: lineArea.parentMPID,
                 areaHasID: MPCommandOptionAux.hasID(lineArea),
                 areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(lineArea),
+                isFromActiveScrap: isFromActiveScrap,
               );
       }
 
@@ -149,7 +150,6 @@ mixin MPLinePaintingMixin {
           line.subtypeLineSegmentMPIDsByLineSegmentIndex;
       final int subtypeLineSegmentsCount = subtypeLineSegmentsMap.length;
       final int segmentsMapMaxIndex = segmentsMap.length - 1;
-      final int lineParentMPID = line.parentMPID;
 
       int startIndex = 0;
 
@@ -181,9 +181,9 @@ mixin MPLinePaintingMixin {
               : visualController.getUnselectedLinePaint(
                   lineType: lineType,
                   subtype: subtype,
-                  lineParentMPID: lineParentMPID,
                   lineIsTHInvisible: lineIsTHInvisible,
                   lineHasID: lineHasID,
+                  isFromActiveScrap: isFromActiveScrap,
                 );
         } else {
           final THArea area = lineInfo.parentArea!;
@@ -193,9 +193,9 @@ mixin MPLinePaintingMixin {
               : visualController.getUnselectedAreaPaint(
                   areaType: area.areaType,
                   subtype: MPCommandOptionAux.getSubtype(area),
-                  areaParentMPID: area.parentMPID,
                   areaHasID: MPCommandOptionAux.hasID(area),
                   areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(area),
+                  isFromActiveScrap: isFromActiveScrap,
                 );
         }
 

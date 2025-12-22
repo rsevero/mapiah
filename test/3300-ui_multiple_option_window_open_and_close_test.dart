@@ -147,14 +147,13 @@ void main() {
         await tester.tap(offRadioFinder);
         await tester.pumpAndSettle();
 
-        // /// TODO
         // // check MPTileWidget background color equals
         // // theme.colorScheme.tertiaryFixed, i.e., is set.
-        // // final Color setExpectedColor = Theme.of(
-        // //   tester.element(editWidgetFinder),
-        // // ).colorScheme.tertiaryFixed;
+        final Color setExpectedColor = Theme.of(
+          tester.element(editWidgetFinder),
+        ).colorScheme.tertiaryFixed;
 
-        // // expect(mpTileWidgetID.backgroundColor, setExpectedColor);
+        expect(mpTileWidgetVisibility.backgroundColor, setExpectedColor);
 
         // Verify the MPMultipleChoicesWidget is gone after pressing Ok
         expect(find.byType(MPMultipleChoicesWidget), findsNothing);
