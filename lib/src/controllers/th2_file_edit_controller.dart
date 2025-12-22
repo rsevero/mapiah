@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -962,9 +963,9 @@ abstract class TH2FileEditControllerBase with Store {
     _getFileDrawingSize(zoomToFitType: zoomFitToType);
 
     final double scaleWidth =
-        (screenWidth * (1.0 - thCanvasVisibleMargin)) / _dataWidth;
+        (screenWidth * (1.0 - mpCanvasVisibleMargin)) / _dataWidth;
     final double scaleHeight =
-        (screenHeight * (1.0 - thCanvasVisibleMargin)) / _dataHeight;
+        (screenHeight * (1.0 - mpCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
     setCanvasScale(
@@ -1255,6 +1256,19 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _enableSelectButton = newEnableSelectButton;
+  }
+
+  double getScrapBackgroundPaddingOnCanvas() {
+    final Rect fileBoundingBox = _thFile.getBoundingBox(
+      this as TH2FileEditController,
+    )!;
+    final double largerDimension = max(
+      fileBoundingBox.width,
+      fileBoundingBox.height,
+    );
+    final double canvasPadding = largerDimension * mpScrapBackgroundPadding;
+
+    return canvasPadding;
   }
 }
 

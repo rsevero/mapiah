@@ -6,6 +6,7 @@ import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
@@ -584,5 +585,17 @@ class MPInteractionAux {
   ) {
     _drawPlusPoint(canvas, position, radius, paint);
     _drawXPoint(canvas, position, radius, paint);
+  }
+
+  static Rect getScrapBackgroundRect({
+    required THScrap scrap,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final Rect boundingBox = scrap.getBoundingBox(th2FileEditController)!;
+
+    return MPNumericAux.orderedRectExpandedByDelta(
+      rect: boundingBox,
+      delta: th2FileEditController.getScrapBackgroundPaddingOnCanvas(),
+    );
   }
 }

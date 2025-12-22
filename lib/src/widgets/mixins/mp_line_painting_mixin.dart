@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -78,6 +79,7 @@ mixin MPLinePaintingMixin {
     required bool isLineSelected,
     required bool showLineDirectionTicks,
     required bool isFromActiveScrap,
+    THScrapPaint? parentScrapPaint,
     required TH2FileEditController th2FileEditController,
   }) {
     final THFile thFile = th2FileEditController.thFile;
@@ -121,6 +123,7 @@ mixin MPLinePaintingMixin {
                 lineIsTHInvisible: lineIsTHInvisible,
                 isFromActiveScrap: isFromActiveScrap,
                 lineHasID: lineHasID,
+                parentScrapPaint: parentScrapPaint,
               );
       } else {
         final THArea lineArea = lineInfo.parentArea!;
@@ -133,6 +136,7 @@ mixin MPLinePaintingMixin {
                 areaHasID: MPCommandOptionAux.hasID(lineArea),
                 areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(lineArea),
                 isFromActiveScrap: isFromActiveScrap,
+                parentScrapPaint: parentScrapPaint,
               );
       }
 
@@ -184,6 +188,7 @@ mixin MPLinePaintingMixin {
                   lineIsTHInvisible: lineIsTHInvisible,
                   lineHasID: lineHasID,
                   isFromActiveScrap: isFromActiveScrap,
+                  parentScrapPaint: parentScrapPaint,
                 );
         } else {
           final THArea area = lineInfo.parentArea!;
@@ -196,6 +201,7 @@ mixin MPLinePaintingMixin {
                   areaHasID: MPCommandOptionAux.hasID(area),
                   areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(area),
                   isFromActiveScrap: isFromActiveScrap,
+                  parentScrapPaint: parentScrapPaint,
                 );
         }
 

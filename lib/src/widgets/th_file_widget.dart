@@ -13,6 +13,7 @@ import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_highlight_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_highlight_widget.dart';
 import 'package:mapiah/src/widgets/mp_non_selected_elements_widget.dart';
+import 'package:mapiah/src/widgets/mp_non_selected_scraps_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
@@ -61,6 +62,10 @@ class THFileWidget extends StatelessWidget {
                     key: ValueKey("MPImagesWidget|$thFileMPID"),
                     th2FileEditController: th2FileEditController,
                   ),
+                MPNonSelectedScrapsWidget(
+                  key: ValueKey("MPNonSelectedScrapsWidget|$thFileMPID"),
+                  th2FileEditController: th2FileEditController,
+                ),
                 MPNonSelectedElementsWidget(
                   key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
                   th2FileEditController: th2FileEditController,

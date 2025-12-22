@@ -14,14 +14,14 @@ import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/painters/th_scrap_background_painter.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
-class MPNonSelectedElementsWidget extends StatelessWidget
+class MPNonSelectedScrapsWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
   final MPVisualController visualController;
   final THFile thFile;
 
-  MPNonSelectedElementsWidget({
+  MPNonSelectedScrapsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : selectionController = th2FileEditController.selectionController,
@@ -38,20 +38,22 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         final List<CustomPainter> painters = [];
 
         addChildrenPainters(
-          parent: thFile.scrapByMPID(th2FileEditController.activeScrapID),
+          parent: thFile,
           painters: painters,
-          isFromActiveScrap: true,
+          isFromActiveScrap: false,
         );
 
-        return RepaintBoundary(
-          child: CustomPaint(
-            painter: THElementsPainter(
-              painters: painters,
-              th2FileEditController: th2FileEditController,
-            ),
-            size: th2FileEditController.screenSize,
-          ),
-        );
+        return (painters.isEmpty)
+            ? SizedBox.shrink()
+            : RepaintBoundary(
+                child: CustomPaint(
+                  painter: THElementsPainter(
+                    painters: painters,
+                    th2FileEditController: th2FileEditController,
+                  ),
+                  size: th2FileEditController.screenSize,
+                ),
+              );
       },
     );
   }
@@ -60,6 +62,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     required THIsParentMixin parent,
     required List<CustomPainter> painters,
     required bool isFromActiveScrap,
+    THScrapPaint? parentScrapPaint,
   }) {
     final Iterable<int> drawableChildrenMPIDs = parent
         .getDrawableChildrenMPIDs();
@@ -78,6 +81,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               .getUnselectedPointPaint(
                 point: point,
                 isFromActiveScrap: isFromActiveScrap,
+                parentScrapPaint: parentScrapPaint,
               );
 
           painters.add(
@@ -94,6 +98,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
               isLineSelected: false,
               showLineDirectionTicks: false,
               isFromActiveScrap: isFromActiveScrap,
+              parentScrapPaint: parentScrapPaint,
               th2FileEditController: th2FileEditController,
             ),
           );
@@ -119,6 +124,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             parent: scrap,
             painters: painters,
             isFromActiveScrap: false,
+            parentScrapPaint: scrapPaint,
           );
       }
     }

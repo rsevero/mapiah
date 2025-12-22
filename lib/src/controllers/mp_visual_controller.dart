@@ -5,6 +5,7 @@ import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/constants/tk_color_map.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -973,6 +974,42 @@ abstract class MPVisualControllerBase with Store {
     ),
   };
 
+  static final Map<THProjectionModeType, THScrapPaint>
+  scrapProjectionModePaints = {
+    THProjectionModeType.elevation: THScrapPaint(
+      border: THPaint.thPaint6,
+      fill: THPaint.thPaint3006,
+      backgroundFill: Paint.from(THPaint.thPaint3006)
+        ..color = THPaint.thPaint3006.color.withAlpha(
+          mpScrapBackgroundFillTransparency,
+        ),
+    ),
+    THProjectionModeType.extended: THScrapPaint(
+      border: THPaint.thPaint4,
+      fill: THPaint.thPaint3004,
+      backgroundFill: Paint.from(THPaint.thPaint3004)
+        ..color = THPaint.thPaint3004.color.withAlpha(
+          mpScrapBackgroundFillTransparency,
+        ),
+    ),
+    THProjectionModeType.none: THScrapPaint(
+      border: THPaint.thPaint3,
+      fill: THPaint.thPaint3003,
+      backgroundFill: Paint.from(THPaint.thPaint3003)
+        ..color = THPaint.thPaint3003.color.withAlpha(
+          mpScrapBackgroundFillTransparency,
+        ),
+    ),
+    THProjectionModeType.plan: THScrapPaint(
+      border: THPaint.thPaint15,
+      fill: THPaint.thPaint3015,
+      backgroundFill: Paint.from(THPaint.thPaint3015)
+        ..color = THPaint.thPaint3015.color.withAlpha(
+          mpScrapBackgroundFillTransparency,
+        ),
+    ),
+  };
+
   Paint getControlLinePaint() {
     return THPaint.thPaintBlackBorder
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
@@ -993,6 +1030,23 @@ abstract class MPVisualControllerBase with Store {
       pointPaint = pointPaint.copyWith(fill: THPaint.thPaint1001);
     }
     return pointPaint;
+  }
+
+  THScrapPaint getScrapPaint(THScrap scrap) {
+    final THProjectionModeType scrapProjectionMode =
+        MPCommandOptionAux.getScrapProjectionMode(scrap);
+    final THScrapPaint scrapPaint =
+        scrapProjectionModePaints[scrapProjectionMode] ??
+        THScrapPaint(
+          border: THPaint.thPaint0,
+          fill: THPaint.thPaint3000,
+          backgroundFill: Paint.from(THPaint.thPaint3000)
+            ..color = THPaint.thPaint3000.color.withAlpha(
+              mpScrapBackgroundFillTransparency,
+            ),
+        );
+
+    return scrapPaint;
   }
 
   THLinePaint getSelectedLinePaint({
@@ -1080,6 +1134,7 @@ abstract class MPVisualControllerBase with Store {
   THPointPaint getUnselectedPointPaint({
     required THPoint point,
     required bool isFromActiveScrap,
+    THScrapPaint? parentScrapPaint,
   }) {
     THPointPaint pointPaint = getDefaultPointPaint(
       point,
@@ -1102,13 +1157,20 @@ abstract class MPVisualControllerBase with Store {
     } else {
       if (pointPaint.border != null) {
         pointPaint = pointPaint.copyWith(
-          border: THPaint.thPaint15
-            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          border: Paint.from(
+            (parentScrapPaint == null)
+                ? THPaint.thPaint15
+                : parentScrapPaint.border,
+          )..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
         );
       }
 
       if (pointPaint.fill != null) {
-        pointPaint = pointPaint.copyWith(fill: THPaint.thPaint1015);
+        pointPaint = pointPaint.copyWith(
+          fill: (parentScrapPaint == null)
+              ? THPaint.thPaint1015
+              : parentScrapPaint.fill,
+        );
       }
     }
 
@@ -1130,6 +1192,7 @@ abstract class MPVisualControllerBase with Store {
     bool areaIsTHInvisible = false,
     bool areaHasID = false,
     required bool isFromActiveScrap,
+    THScrapPaint? parentScrapPaint,
   }) {
     THLinePaint areaPaint = getDefaultAreaPaint(areaType: areaType);
 
@@ -1148,9 +1211,14 @@ abstract class MPVisualControllerBase with Store {
       );
     } else {
       areaPaint = areaPaint.copyWith(
-        primaryPaint: THPaint.thPaint15
-          ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-        fillPaint: THPaint.thPaint3015,
+        primaryPaint: Paint.from(
+          (parentScrapPaint == null)
+              ? THPaint.thPaint15
+              : parentScrapPaint.border,
+        )..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        fillPaint: (parentScrapPaint == null)
+            ? THPaint.thPaint3015
+            : parentScrapPaint.fill,
       );
     }
 
@@ -1295,6 +1363,7 @@ abstract class MPVisualControllerBase with Store {
     bool lineIsTHInvisible = false,
     bool lineHasID = false,
     required bool isFromActiveScrap,
+    THScrapPaint? parentScrapPaint,
   }) {
     final THLinePaint linePaintDefault = getDefaultLinePaintByTypeSubtype(
       lineType: lineType,
@@ -1323,8 +1392,11 @@ abstract class MPVisualControllerBase with Store {
       return linePaintCopy;
     } else {
       return linePaintDefault.copyWith(
-        primaryPaint: THPaint.thPaint15
-          ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
+        primaryPaint: Paint.from(
+          (parentScrapPaint == null)
+              ? THPaint.thPaint15
+              : parentScrapPaint.border,
+        )..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
         makeSecondaryPaintNull: true,
       );
     }

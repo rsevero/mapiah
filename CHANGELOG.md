@@ -3,12 +3,14 @@
 ## 0.2.29 - not yet released
 * New features:
   * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
+  * Non selected scraps and its elements drawn with scrap per projection type color.
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
 * Infrastructure maintenance:
   * Changing non selected elements draw logic to support per scrap colors and element ordered drawing.
   * Changing "is from active scrap" detection logic to use per-scrap info.
   * Creating getDrawableChildrenMPIDs() method in THIsParentMixin and using it to draw non selected elements.
+  * Created MPNonSelectedScrapsWidget to draw non selected scraps and their elements at a separate RepaintBoundary().
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:

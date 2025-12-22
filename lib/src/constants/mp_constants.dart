@@ -39,8 +39,9 @@ const String mpDefaultEncoding = 'UTF-8';
 
 const String thNullValueAsString = '!!! property has null value !!!';
 
-const double thCanvasVisibleMargin = 0.1;
-const double thCanvasOutOfSightMargin = 2.0;
+const double mpCanvasVisibleMargin = 0.1;
+const double mpCanvasOutOfSightMargin = 2.0;
+const double mpScrapBackgroundPadding = 0.02;
 
 const double thRegularZoomFactor = math.sqrt2;
 const double thRoundToFactor = thRegularZoomFactor - 1;
@@ -173,6 +174,7 @@ const double thWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;
 const double mpDiamondLongerDiagonalRatio = math.sqrt2;
 const int mpAreaFillTransparency = 30;
+const int mpScrapBackgroundFillTransparency = 15;
 
 const double mpLineDirectionTickLength = 10.0;
 const double mpAverageTangentDelta = 0.1;

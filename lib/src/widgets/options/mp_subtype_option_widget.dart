@@ -192,7 +192,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget> {
         return _buildTextFieldInput();
       } else {
         final Map<String, Object> allowedSubtypesInfo = MPCommandOptionAux
-            .allowedSubtypes[elementTypeAsString]![plaTypeTypeAsString]!;
+            .supportedSubtypes[elementTypeAsString]![plaTypeTypeAsString]!;
         final Set<String> allowedSubtypes =
             allowedSubtypesInfo['subtypes'] as Set<String>;
         final Map<String, String> options = {};
