@@ -4,6 +4,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
@@ -14,13 +15,17 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
+  final MPVisualController visualController;
   final THFile thFile;
+  final int activeScrapMPID;
 
   MPNonSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : selectionController = th2FileEditController.selectionController,
-       thFile = th2FileEditController.thFile;
+       visualController = th2FileEditController.visualController,
+       thFile = th2FileEditController.thFile,
+       activeScrapMPID = th2FileEditController.activeScrapID;
 
   @override
   Widget build(BuildContext context) {
@@ -29,43 +34,14 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
 
-        final MPVisualController visualController =
-            th2FileEditController.visualController;
         final List<CustomPainter> painters = [];
-        final Set<int> drawableElementMPIDs = thFile.drawableElementMPIDs;
 
-        for (final int drawableElementMPID in drawableElementMPIDs) {
-          if (selectionController.isElementSelectedByMPID(
-            drawableElementMPID,
-          )) {
-            continue;
-          }
-
-          final THElement element = thFile.elementByMPID(drawableElementMPID);
-
-          switch (element) {
-            case THPoint _:
-              final THPointPaint pointPaint = visualController
-                  .getUnselectedPointPaint(element);
-
-              painters.add(
-                THPointPainter(
-                  position: element.position.coordinates,
-                  pointPaint: pointPaint,
-                  th2FileEditController: th2FileEditController,
-                ),
-              );
-            case THLine _:
-              painters.addAll(
-                getLinePainters(
-                  line: element,
-                  isLineSelected: false,
-                  showLineDirectionTicks: false,
-                  th2FileEditController: th2FileEditController,
-                ),
-              );
-          }
-        }
+        addChildrenPainters(parent: thFile, painters: painters);
+        addChildrenPainters(
+          parent: thFile.scrapByMPID(activeScrapMPID),
+          painters: painters,
+          isFromSelectedScrap: true,
+        );
 
         return RepaintBoundary(
           child: CustomPaint(
@@ -78,5 +54,51 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         );
       },
     );
+  }
+
+  void addChildrenPainters({
+    required THIsParentMixin parent,
+    required List<CustomPainter> painters,
+    bool isFromSelectedScrap = false,
+  }) {
+    final Iterable<int> childrenMPIDs = parent.childrenMPIDs;
+
+    for (final int childMPID in childrenMPIDs) {
+      if (isFromSelectedScrap &&
+          selectionController.isElementSelectedByMPID(childMPID)) {
+        continue;
+      }
+
+      final THElement childElement = thFile.elementByMPID(childMPID);
+
+      switch (childElement) {
+        case THPoint point:
+          final THPointPaint pointPaint = visualController
+              .getUnselectedPointPaint(point);
+
+          painters.add(
+            THPointPainter(
+              position: childElement.position.coordinates,
+              pointPaint: pointPaint,
+              th2FileEditController: th2FileEditController,
+            ),
+          );
+        case THLine line:
+          painters.addAll(
+            getLinePainters(
+              line: line,
+              isLineSelected: false,
+              showLineDirectionTicks: false,
+              th2FileEditController: th2FileEditController,
+            ),
+          );
+        case THScrap scrap:
+          if (scrap.mpID == activeScrapMPID) {
+            continue;
+          }
+
+          addChildrenPainters(parent: scrap, painters: painters);
+      }
+    }
   }
 }

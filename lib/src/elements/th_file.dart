@@ -43,8 +43,6 @@ class THFile
 
   late final int _mpID;
 
-  final Set<int> _drawableElementMPIDs = {};
-
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
   /// doesn´t deals with surveys yet, it will guarantee that thIDs are unique
@@ -193,10 +191,6 @@ class THFile
 
   int countElements() {
     return _elementByMPID.length;
-  }
-
-  Set<int> get drawableElementMPIDs {
-    return _drawableElementMPIDs;
   }
 
   String thidByElement(THElement element) {
@@ -407,11 +401,9 @@ class THFile
     switch (element) {
       case THPoint _:
         _pointsMPIDs.add(element.mpID);
-        _drawableElementMPIDs.add(element.mpID);
         _clearOwnAndAncestryBoundingBoxes(element);
       case THLine _:
         _linesMPIDs.add(element.mpID);
-        _drawableElementMPIDs.add(element.mpID);
         _clearOwnAndAncestryBoundingBoxes(element);
       case THLineSegment _:
         _clearOwnAndAncestryBoundingBoxes(element);
@@ -488,13 +480,11 @@ class THFile
         _clearAreaXLineInfo(element);
       case THLine _:
         _linesMPIDs.remove(elementMPID);
-        _drawableElementMPIDs.remove(elementMPID);
         _clearOwnAndAncestryBoundingBoxes(element);
       case THLineSegment _:
         _clearOwnAndAncestryBoundingBoxes(element);
       case THPoint _:
         _pointsMPIDs.remove(elementMPID);
-        _drawableElementMPIDs.remove(elementMPID);
         _clearOwnAndAncestryBoundingBoxes(element);
       case THScrap _:
         if ((_scrapMPIDs != null) && _scrapMPIDs!.contains(elementMPID)) {
@@ -810,7 +800,6 @@ class THFile
     mpLocator.mpGeneralController
         .getTH2FileEditControllerIfExists(filename)
         ?.resetShowImages();
-    _drawableElementMPIDs.clear();
     _areaMPIDByLineMPID = null;
     _areaMPIDByLineTHID = null;
     filename = '';

@@ -6,6 +6,7 @@
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
 * Infrastructure maintenance:
+  * Changing non selected elements draw logic to support per scrap colors and element ordered drawing.
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:

@@ -156,6 +156,7 @@
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Convert multiline comment into a single element.
+[ ] - Mark visually slope lines without any l-size point.
 
 ##Version 1.0
 [ ] - Raster images tracing
