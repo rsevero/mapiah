@@ -2,7 +2,7 @@
 
 ## 0.2.29 - not yet released
 * New features:
-  * Line with highlight borders indicating invisible and "with ID" lines.
+  * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
 * Infrastructure maintenance:

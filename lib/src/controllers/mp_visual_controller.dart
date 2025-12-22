@@ -1012,11 +1012,12 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getSelectedAreaPaint(THArea area) {
-    final THLinePaint areaPaint = getDefaultAreaPaint(area).copyWith(
-      primaryPaint: THPaint.thPaint1
-        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-      fillPaint: THPaint.thPaint3001,
-    );
+    final THLinePaint areaPaint = getDefaultAreaPaint(areaType: area.areaType)
+        .copyWith(
+          primaryPaint: THPaint.thPaint1
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+          fillPaint: THPaint.thPaint3001,
+        );
 
     return areaPaint;
   }
@@ -1049,6 +1050,33 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
+  List<Paint> getHighlightBorders({
+    required bool isTHInvisible,
+    required bool hasID,
+  }) {
+    final List<Paint> highlightBorders = [];
+
+    if (isTHInvisible) {
+      highlightBorders.add(
+        Paint.from(
+          THPaint.thPaint16
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        ),
+      );
+    }
+
+    if (hasID) {
+      highlightBorders.add(
+        Paint.from(
+          THPaint.thPaint17
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        ),
+      );
+    }
+
+    return highlightBorders;
+  }
+
   THPointPaint getUnselectedPointPaint(THPoint point) {
     THPointPaint pointPaint = getDefaultPointPaint(
       point,
@@ -1059,25 +1087,12 @@ abstract class MPVisualControllerBase with Store {
       final bool pointHasID = MPCommandOptionAux.hasID(point);
 
       if (pointIsTHInvisible || pointHasID) {
-        final List<Paint> highlightBorders = [];
-
-        if (pointIsTHInvisible) {
-          highlightBorders.add(
-            Paint.from(
-              THPaint.thPaint16
-                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-            ),
-          );
-        }
-
-        if (pointHasID) {
-          highlightBorders.add(
-            Paint.from(
-              THPaint.thPaint17
-                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-            ),
-          );
-        }
+        final List<Paint> highlightBorders = (pointIsTHInvisible || pointHasID)
+            ? getHighlightBorders(
+                isTHInvisible: pointIsTHInvisible,
+                hasID: pointHasID,
+              )
+            : const [];
 
         pointPaint = pointPaint.copyWith(highlightBorders: highlightBorders);
       }
@@ -1097,8 +1112,8 @@ abstract class MPVisualControllerBase with Store {
     return pointPaint;
   }
 
-  THLinePaint getDefaultAreaPaint(THArea area) {
-    return areaTypePaints[area.areaType] ??
+  THLinePaint getDefaultAreaPaint({required THAreaType areaType}) {
+    return areaTypePaints[areaType] ??
         THLinePaint(
           primaryPaint: THPaint.thPaint0,
           fillPaint: THPaint.thPaint3001,
@@ -1106,13 +1121,27 @@ abstract class MPVisualControllerBase with Store {
         );
   }
 
-  THLinePaint getUnselectedAreaPaint(THArea area) {
-    THLinePaint areaPaint = getDefaultAreaPaint(area);
+  THLinePaint getUnselectedAreaPaint({
+    required THAreaType areaType,
+    String? subtype,
+    required int areaParentMPID,
+    bool areaIsTHInvisible = false,
+    bool areaHasID = false,
+  }) {
+    THLinePaint areaPaint = getDefaultAreaPaint(areaType: areaType);
 
-    if (_th2FileEditController.isFromActiveScrap(area)) {
+    if (_th2FileEditController.isFromActiveScrapByParentMPID(areaParentMPID)) {
+      final List<Paint> highlightBorders = (areaIsTHInvisible || areaHasID)
+          ? getHighlightBorders(
+              isTHInvisible: areaIsTHInvisible,
+              hasID: areaHasID,
+            )
+          : const [];
+
       areaPaint = areaPaint.copyWith(
         primaryPaint: areaPaint.primaryPaint!
           ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        highlightBorders: highlightBorders,
       );
     } else {
       areaPaint = areaPaint.copyWith(
@@ -1270,28 +1299,12 @@ abstract class MPVisualControllerBase with Store {
     );
 
     if (_th2FileEditController.isFromActiveScrapByParentMPID(lineParentMPID)) {
-      final List<Paint> highlightBorders = [];
-
-      if (lineIsTHInvisible || lineHasID) {
-        if (lineIsTHInvisible) {
-          highlightBorders.add(
-            Paint.from(
-              THPaint.thPaint16
-                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-            ),
-          );
-        }
-
-        if (lineHasID) {
-          highlightBorders.add(
-            Paint.from(
-              THPaint.thPaint17
-                ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-            ),
-          );
-        }
-      }
-
+      final List<Paint> highlightBorders = (lineIsTHInvisible || lineHasID)
+          ? getHighlightBorders(
+              isTHInvisible: lineIsTHInvisible,
+              hasID: lineHasID,
+            )
+          : const [];
       final THLinePaint linePaintCopy = linePaintDefault.copyWith(
         primaryPaint: linePaintDefault.primaryPaint == null
             ? null

@@ -122,9 +122,17 @@ mixin MPLinePaintingMixin {
                 lineHasID: lineHasID,
               );
       } else {
+        final THArea lineArea = lineInfo.parentArea!;
+
         linePaint = isLineSelected
-            ? visualController.getSelectedAreaPaint(lineInfo.parentArea!)
-            : visualController.getUnselectedAreaPaint(lineInfo.parentArea!);
+            ? visualController.getSelectedAreaPaint(lineArea)
+            : visualController.getUnselectedAreaPaint(
+                areaType: lineArea.areaType,
+                subtype: MPCommandOptionAux.getSubtype(lineArea),
+                areaParentMPID: lineArea.parentMPID,
+                areaHasID: MPCommandOptionAux.hasID(lineArea),
+                areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(lineArea),
+              );
       }
 
       final THLinePainter painter = THLinePainter(
@@ -178,9 +186,17 @@ mixin MPLinePaintingMixin {
                   lineHasID: lineHasID,
                 );
         } else {
+          final THArea area = lineInfo.parentArea!;
+
           linePaint = isLineSelected
-              ? visualController.getSelectedAreaPaint(lineInfo.parentArea!)
-              : visualController.getUnselectedAreaPaint(lineInfo.parentArea!);
+              ? visualController.getSelectedAreaPaint(area)
+              : visualController.getUnselectedAreaPaint(
+                  areaType: area.areaType,
+                  subtype: MPCommandOptionAux.getSubtype(area),
+                  areaParentMPID: area.parentMPID,
+                  areaHasID: MPCommandOptionAux.hasID(area),
+                  areaIsTHInvisible: !MPCommandOptionAux.isTHVisible(area),
+                );
         }
 
         painters.add(

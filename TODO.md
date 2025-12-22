@@ -38,7 +38,7 @@
 [X] - BUG: add area not working
 [X] - BUG: clicking on selected control point over end point not moving the control point
 
-## Version 0.3
+## Version 0.3 - Real editing
 [X] - Release creation Windows
 [X] - Release creation MacOS
 [X] - Release for Web
@@ -157,7 +157,11 @@
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Convert multiline comment into a single element.
 
-##Version 0.5
+##Version 1.0
 [ ] - Raster images tracing
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 
+## Version 2.0
+[ ] - Open/edit/save thconfig files.
+[ ] - Run Therion using the openned thconfig file.
+[ ] - show Therion output log while running Therion from Mapiah.
