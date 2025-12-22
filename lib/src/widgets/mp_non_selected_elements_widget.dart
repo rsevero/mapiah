@@ -17,15 +17,13 @@ class MPNonSelectedElementsWidget extends StatelessWidget
   final TH2FileEditSelectionController selectionController;
   final MPVisualController visualController;
   final THFile thFile;
-  final int activeScrapMPID;
 
   MPNonSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : selectionController = th2FileEditController.selectionController,
        visualController = th2FileEditController.visualController,
-       thFile = th2FileEditController.thFile,
-       activeScrapMPID = th2FileEditController.activeScrapID;
+       thFile = th2FileEditController.thFile;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
           isFromActiveScrap: false,
         );
         addChildrenPainters(
-          parent: thFile.scrapByMPID(activeScrapMPID),
+          parent: thFile.scrapByMPID(th2FileEditController.activeScrapID),
           painters: painters,
           isFromActiveScrap: true,
         );
@@ -65,15 +63,16 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     required List<CustomPainter> painters,
     required bool isFromActiveScrap,
   }) {
-    final Iterable<int> childrenMPIDs = parent.childrenMPIDs;
+    final Iterable<int> drawableChildrenMPIDs = parent
+        .getDrawableChildrenMPIDs();
 
-    for (final int childMPID in childrenMPIDs) {
+    for (final int drawableChildMPID in drawableChildrenMPIDs) {
       if (isFromActiveScrap &&
-          selectionController.isElementSelectedByMPID(childMPID)) {
+          selectionController.isElementSelectedByMPID(drawableChildMPID)) {
         continue;
       }
 
-      final THElement childElement = thFile.elementByMPID(childMPID);
+      final THElement childElement = thFile.elementByMPID(drawableChildMPID);
 
       switch (childElement) {
         case THPoint point:
@@ -101,7 +100,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             ),
           );
         case THScrap scrap:
-          if (scrap.mpID == activeScrapMPID) {
+          if (scrap.mpID == th2FileEditController.activeScrapID) {
             continue;
           }
 

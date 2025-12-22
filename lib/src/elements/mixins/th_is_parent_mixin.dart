@@ -11,6 +11,14 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMPIDs = [];
 
+  List<int>? _drawableChildrenMPIDs;
+
+  static const Set<THElementType> drawableChildElementTypes = {
+    THElementType.line,
+    THElementType.point,
+    THElementType.scrap,
+  };
+
   /// The elementPositionInParent parameter determines the position at which the
   /// new element will be inserted in the parent's children list:
   /// >= 0 => indicates the specific position in the list;
@@ -63,6 +71,10 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     if (thFile != null) {
       element.setTHFile(thFile!);
     }
+
+    if (drawableChildElementTypes.contains(element.elementType)) {
+      _drawableChildrenMPIDs = null;
+    }
   }
 
   void setTHFileToChildren(THFile thFile) {
@@ -97,6 +109,10 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     if (thFile!.hasTHIDByElement(element)) {
       thFile!.unregisterElementTHIDByElement(element);
     }
+
+    if (drawableChildElementTypes.contains(element.elementType)) {
+      _drawableChildrenMPIDs = null;
+    }
   }
 
   Iterable<THElement> getChildren(THFile thFile) {
@@ -104,4 +120,26 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
   }
 
   int get mpID;
+
+  List<int> getDrawableChildrenMPIDs() {
+    _drawableChildrenMPIDs ??= _getDrawableChildrenMPIDs();
+
+    return _drawableChildrenMPIDs!;
+  }
+
+  List<int> _getDrawableChildrenMPIDs() {
+    final List<int> drawableChildrenMPIDs = [];
+
+    for (final int childMPID in childrenMPIDs) {
+      final THElementType childElementType = thFile!.getElementTypeByMPID(
+        childMPID,
+      );
+
+      if (drawableChildElementTypes.contains(childElementType)) {
+        drawableChildrenMPIDs.add(childMPID);
+      }
+    }
+
+    return drawableChildrenMPIDs;
+  }
 }

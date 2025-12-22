@@ -8,6 +8,7 @@
 * Infrastructure maintenance:
   * Changing non selected elements draw logic to support per scrap colors and element ordered drawing.
   * Changing "is from active scrap" detection logic to use per-scrap info.
+  * Creating getDrawableChildrenMPIDs() method in THIsParentMixin and using it to draw non selected elements.
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:
