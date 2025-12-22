@@ -102,6 +102,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               );
 
         _th2FileEditController.execute(addOptionCommand);
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
       }
     }
   }
@@ -140,6 +142,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             );
 
         _th2FileEditController.execute(removeOptionCommand);
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
       }
     }
   }
@@ -192,6 +196,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             );
 
         _th2FileEditController.execute(removeOptionCommand);
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
       }
     }
   }
@@ -303,6 +309,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               );
 
         _th2FileEditController.execute(addOptionFinalCommand);
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
       }
     }
   }
@@ -354,6 +362,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             );
 
         _th2FileEditController.execute(removeOptionCommand);
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
       }
     }
   }

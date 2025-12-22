@@ -6,6 +6,7 @@
   * Non selected scraps and its elements drawn with scrap per projection type color.
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
+  * REGRESSION: after adding/removing options to/from elements, option state map not updated.
 * Infrastructure maintenance:
   * Changing non selected elements draw logic to support per scrap colors and element ordered drawing.
   * Changing "is from active scrap" detection logic to use per-scrap info.

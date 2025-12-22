@@ -115,7 +115,7 @@ void main() {
 
         // check MPTileWidget background color equals
         // theme.colorScheme.surfaceContainer, i.e., is unset.
-        final MPTileWidget mpTileWidgetID = tester.widget<MPTileWidget>(
+        final MPTileWidget mpTileWidgetIDPre = tester.widget<MPTileWidget>(
           mpTileWidgetWithIdFinder,
         );
 
@@ -123,7 +123,7 @@ void main() {
           tester.element(editWidgetFinder),
         ).colorScheme.surfaceContainer;
 
-        expect(mpTileWidgetID.backgroundColor, unsetExpectedColor);
+        expect(mpTileWidgetIDPre.backgroundColor, unsetExpectedColor);
 
         // tap the MPTileWidget and verify MPIDOptionWidget opens
         await tester.tap(mpTileWidgetWithIdFinder);
@@ -176,11 +176,15 @@ void main() {
 
         // check MPTileWidget background color equals
         // theme.colorScheme.tertiaryFixed, i.e., is set.
+        final MPTileWidget mpTileWidgetIDPos = tester.widget<MPTileWidget>(
+          mpTileWidgetWithIdFinder,
+        );
+
         final Color setExpectedColor = Theme.of(
           tester.element(editWidgetFinder),
         ).colorScheme.tertiaryFixed;
 
-        expect(mpTileWidgetID.backgroundColor, setExpectedColor);
+        expect(mpTileWidgetIDPos.backgroundColor, setExpectedColor);
 
         // Verify the MPIDOptionWidget is gone after pressing Ok
         expect(find.byType(MPIDOptionWidget), findsNothing);

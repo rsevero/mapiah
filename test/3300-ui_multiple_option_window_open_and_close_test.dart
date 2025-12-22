@@ -114,15 +114,14 @@ void main() {
 
         // check MPTileWidget background color equals
         // theme.colorScheme.surfaceContainer, i.e., is unset.
-        final MPTileWidget mpTileWidgetVisibility = tester.widget<MPTileWidget>(
-          mpTileWidgetWithVisibilityFinder,
-        );
+        final MPTileWidget mpTileWidgetVisibilityPre = tester
+            .widget<MPTileWidget>(mpTileWidgetWithVisibilityFinder);
 
         final Color unsetExpectedColor = Theme.of(
           tester.element(editWidgetFinder),
         ).colorScheme.surfaceContainer;
 
-        expect(mpTileWidgetVisibility.backgroundColor, unsetExpectedColor);
+        expect(mpTileWidgetVisibilityPre.backgroundColor, unsetExpectedColor);
 
         // tap the MPTileWidget and verify MPMultipleOptionWidget opens
         await tester.tap(mpTileWidgetWithVisibilityFinder);
@@ -149,11 +148,14 @@ void main() {
 
         // // check MPTileWidget background color equals
         // // theme.colorScheme.tertiaryFixed, i.e., is set.
+        final MPTileWidget mpTileWidgetVisibilityPos = tester
+            .widget<MPTileWidget>(mpTileWidgetWithVisibilityFinder);
+
         final Color setExpectedColor = Theme.of(
           tester.element(editWidgetFinder),
         ).colorScheme.tertiaryFixed;
 
-        expect(mpTileWidgetVisibility.backgroundColor, setExpectedColor);
+        expect(mpTileWidgetVisibilityPos.backgroundColor, setExpectedColor);
 
         // Verify the MPMultipleChoicesWidget is gone after pressing Ok
         expect(find.byType(MPMultipleChoicesWidget), findsNothing);
