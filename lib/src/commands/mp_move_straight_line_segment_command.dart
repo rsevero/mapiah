@@ -60,7 +60,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     elementEditController.substituteElementWithoutAddSelectableElement(
       newLineSegment,
     );
-    elementEditController.addOutdatedCloneMPID(lineSegmentMPID);
+    elementEditController.addOutdatedLineSegmentCloneMPID(lineSegmentMPID);
     th2FileEditController.triggerNewLineRedraw();
     th2FileEditController.triggerSelectedElementsRedraw();
   }

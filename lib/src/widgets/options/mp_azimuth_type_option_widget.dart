@@ -210,7 +210,13 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
             ),
 
             // Additional Inputs for "Set" Option
-            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+            if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+                (widget
+                        .th2FileEditController
+                        .selectionController
+                        .selectedEndControlPoints
+                        .length !=
+                    1)) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,

@@ -315,7 +315,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
 
       _thFile.removeElement(originalLineSegment);
-      elementEditController.addOutdatedCloneMPID(originalLineSegmentMPID);
+      elementEditController.addOutdatedLineSegmentCloneMPID(
+        originalLineSegmentMPID,
+      );
     }
 
     for (final ({int lineSegmentPosition, THLineSegment lineSegment})
@@ -328,7 +330,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         lineSegment,
         elementPositionInParent: newLineSegment.lineSegmentPosition,
       );
-      elementEditController.addOutdatedCloneMPID(lineSegment.mpID);
+      elementEditController.addOutdatedLineSegmentCloneMPID(lineSegment.mpID);
     }
 
     final TH2FileEditSelectionController selectionController =
@@ -351,7 +353,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newElement: newLineSegment,
       childPositionInParent: lineSegmentPositionInParent,
     );
-    addOutdatedCloneMPID(newLineSegment.mpID);
+    addOutdatedLineSegmentCloneMPID(newLineSegment.mpID);
   }
 
   @action
@@ -841,9 +843,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       _thFile.substituteElement(parentElement);
     }
 
-    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
-      parentMPID,
-    );
+    if (parentElement is THLineSegment) {
+      _th2FileEditController.elementEditController
+          .addOutdatedLineSegmentCloneMPID(parentMPID);
+    } else {
+      _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+        parentMPID,
+      );
+    }
   }
 
   @action
@@ -864,9 +871,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeOption(optionType);
     _thFile.substituteElement(newParentElement);
-    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
-      parentMPID,
-    );
+
+    if (parentElement is THLineSegment) {
+      _th2FileEditController.elementEditController
+          .addOutdatedLineSegmentCloneMPID(parentMPID);
+    } else {
+      _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+        parentMPID,
+      );
+    }
   }
 
   @action
@@ -884,9 +897,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeAttrOption(attrName);
     _thFile.substituteElement(newParentElement);
-    _th2FileEditController.elementEditController.addOutdatedCloneMPID(
-      parentMPID,
-    );
+    if (parentElement is THLineSegment) {
+      _th2FileEditController.elementEditController
+          .addOutdatedLineSegmentCloneMPID(parentMPID);
+    } else {
+      _th2FileEditController.elementEditController.addOutdatedCloneMPID(
+        parentMPID,
+      );
+    }
   }
 
   @action
@@ -905,7 +923,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> removeLineSegmentCommands = [];
 
     for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
-      addOutdatedCloneMPID(lineSegmentMPID);
+      addOutdatedLineSegmentCloneMPID(lineSegmentMPID);
 
       final MPCommand removeLineSegmentCommand =
           MPCommandFactory.removeLineSegmentFromExisting(
@@ -951,9 +969,30 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     final THElement? element = _thFile.tryElementByMPID(mpID);
 
-    if ((element != null) &&
-        ((element is THLineSegment) || (element is THAreaBorderTHID))) {
-      _mpIDsOutdatedNonLineSegmentClones.add(element.parentMPID);
+    if (element != null) {
+      if (element is THAreaBorderTHID) {
+        _mpIDsOutdatedNonLineSegmentClones.add(element.parentMPID);
+      } else if (element is THLineSegment) {
+        throw Exception(
+          'Error: element is THLineSegment at TH2FileEditElementEditController.addOutdatedCloneMPID().',
+        );
+      }
+    }
+  }
+
+  void addOutdatedLineSegmentCloneMPID(int mpID) {
+    _mpIDsOutdatedLineSegmentClones.add(mpID);
+
+    final THElement? element = _thFile.tryElementByMPID(mpID);
+
+    if (element != null) {
+      if (element is THLineSegment) {
+        _mpIDsOutdatedNonLineSegmentClones.add(element.parentMPID);
+      } else {
+        throw Exception(
+          'Error: element is not THLineSegment at TH2FileEditElementEditController.addOutdatedLineSegmentCloneMPID().',
+        );
+      }
     }
   }
 
@@ -1651,7 +1690,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         }
       }
 
-      addOutdatedCloneMPID(selectedLineSegmentMPID);
+      addOutdatedLineSegmentCloneMPID(selectedLineSegmentMPID);
     }
 
     if (toggleCommands.isEmpty) {
