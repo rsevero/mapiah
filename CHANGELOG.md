@@ -8,6 +8,7 @@
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
   * REGRESSION: after adding/removing options to/from elements, option state map not updated.
+  * REGRESSION: setting line segment options throwing for the lack of setted thFile in line segment.
 * Infrastructure maintenance:
   * Changing non selected elements draw logic to support per scrap colors and element ordered drawing.
   * Changing "is from active scrap" detection logic to use per-scrap info.

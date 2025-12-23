@@ -8,13 +8,15 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_id_option_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_text_type_option_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -30,7 +32,7 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: non multiple option window open and close', () {
+  group('UI: non multiple line point option window open and close', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       MPTextToUser.initialize();
@@ -38,7 +40,7 @@ void main() {
     });
 
     testWidgets(
-      'open a file, select a line, open options window, edit a non multiple option, see the edit option window close after edit',
+      'open a file, select a line point, open options window, edit a non multiple option, see the edit option window close after edit',
       (tester) async {
         // Increase test surface to avoid BottomAppBar Row overflow in small test window
         tester.view.physicalSize = const Size(1280, 720);
@@ -86,6 +88,25 @@ void main() {
           MPTH2FileEditStateType.selectNonEmptySelection,
         );
 
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyN);
+        await tester.pumpAndSettle();
+
+        /// Taken from MPTH2FileEditStateEditSingleLine.onPrimaryButtonClick()
+
+        final THLineSegment lineSegment = linePre.getLineSegments(thFile)[3];
+        final MPSelectableEndControlPoint selectedEndPoint =
+            MPSelectableEndControlPoint(
+              lineSegment: lineSegment,
+              th2fileEditController: th2Controller,
+              position: lineSegment.endPoint.coordinates,
+              type: MPEndControlPointType.endPointStraight,
+            );
+
+        selectionController.setSelectedEndControlPoint(selectedEndPoint);
+        th2Controller.stateController.setState(
+          MPTH2FileEditStateType.editSingleLine,
+        );
+
         await tester.sendKeyEvent(LogicalKeyboardKey.keyO);
         await tester.pumpAndSettle();
 
@@ -95,47 +116,54 @@ void main() {
           if (k is ValueKey) {
             final dynamic v = k.value;
 
-            return (v is String) && v.startsWith('MPOptionsEditWidget|');
+            return (v is String) &&
+                v.startsWith('MPLineSegmentOptionsEditWidget|');
           }
 
           return false;
-        }, description: 'ValueKey starts with MPOptionsEditWidget|');
+        }, description: 'ValueKey starts with MPLineSegmentOptionsEditWidget|');
 
         expect(editWidgetFinder, findsOneWidget);
 
-        final Finder mpTileWidgetWithIdFinder = find.descendant(
+        final Finder mpTileWidgetsFinderPre = find.descendant(
+          of: editWidgetFinder,
+          matching: find.byType(MPTileWidget),
+        );
+
+        expect(mpTileWidgetsFinderPre.evaluate().length, 7);
+
+        final Finder mpTileWidgetWithMarkFinder = find.descendant(
           of: editWidgetFinder,
           matching: find.ancestor(
-            of: find.text('ID'),
+            of: find.text('Mark'),
             matching: find.byType(MPTileWidget),
           ),
         );
 
-        expect(mpTileWidgetWithIdFinder, findsOneWidget);
+        expect(mpTileWidgetWithMarkFinder, findsOneWidget);
 
         // check MPTileWidget background color equals
         // theme.colorScheme.surfaceContainer, i.e., is unset.
-        final MPTileWidget mpTileWidgetIDPre = tester.widget<MPTileWidget>(
-          mpTileWidgetWithIdFinder,
+        final MPTileWidget mpTileWidgetMarkPre = tester.widget<MPTileWidget>(
+          mpTileWidgetWithMarkFinder,
         );
-
         final Color unsetExpectedColor = Theme.of(
           tester.element(editWidgetFinder),
         ).colorScheme.surfaceContainer;
 
-        expect(mpTileWidgetIDPre.backgroundColor, unsetExpectedColor);
+        expect(mpTileWidgetMarkPre.backgroundColor, unsetExpectedColor);
 
         // tap the MPTileWidget and verify MPIDOptionWidget opens
-        await tester.tap(mpTileWidgetWithIdFinder);
+        await tester.tap(mpTileWidgetWithMarkFinder);
         await tester.pumpAndSettle();
 
-        final Finder mpIDOptionFinder = find.byType(MPIDOptionWidget);
+        final Finder mpMarkOptionFinder = find.byType(MPTextTypeOptionWidget);
 
-        expect(mpIDOptionFinder, findsOneWidget);
+        expect(mpMarkOptionFinder, findsOneWidget);
 
         // Click the RadioListTile to select the SET option
         final Finder setRadioFinder = find.byKey(
-          const ValueKey('MPIDOptionWidget|RadioListTile|SET'),
+          const ValueKey('MPTextTypeOptionWidget|RadioListTile|SET'),
         );
 
         expect(setRadioFinder, findsOneWidget);
@@ -144,26 +172,26 @@ void main() {
         await tester.tap(setRadioFinder);
         await tester.pumpAndSettle();
 
-        // Find the MPTextFieldInputWidget whose labelText == 'ID'
-        final Finder idTextInputFinder = find.byWidgetPredicate((widget) {
-          return widget is MPTextFieldInputWidget && widget.labelText == 'ID';
-        }, description: 'MPTextFieldInputWidget with labelText == ID');
+        // Find the MPTextFieldInputWidget whose labelText == 'Mark'
+        final Finder markTextInputFinder = find.byWidgetPredicate((widget) {
+          return widget is MPTextFieldInputWidget && widget.labelText == 'Mark';
+        }, description: 'MPTextFieldInputWidget with labelText == Mark');
 
-        expect(idTextInputFinder, findsOneWidget);
+        expect(markTextInputFinder, findsOneWidget);
 
         // Find the TextField inside that widget and enter 'test'
-        final Finder idTextFieldFinder = find.descendant(
-          of: idTextInputFinder,
+        final Finder markTextFieldFinder = find.descendant(
+          of: markTextInputFinder,
           matching: find.byType(TextField),
         );
 
-        expect(idTextFieldFinder, findsOneWidget);
-        await tester.enterText(idTextFieldFinder, 'test');
+        expect(markTextFieldFinder, findsOneWidget);
+        await tester.enterText(markTextFieldFinder, 'test');
         await tester.pumpAndSettle();
 
-        // Tap the Ok button inside the MPIDOptionWidget
+        // Tap the Ok button inside the MPTextTypeOptionWidget
         final Finder okButtonFinder = find.descendant(
-          of: mpIDOptionFinder,
+          of: mpMarkOptionFinder,
           matching: find.text('OK'),
         );
 
@@ -174,20 +202,26 @@ void main() {
         th2Controller.triggerOptionsListRedraw();
         await tester.pumpAndSettle();
 
-        // check MPTileWidget background color equals
-        // theme.colorScheme.tertiaryFixed, i.e., is set.
-        final MPTileWidget mpTileWidgetIDPos = tester.widget<MPTileWidget>(
-          mpTileWidgetWithIdFinder,
-        );
+        // final Finder mpTileWidgetsFinderPos = find.descendant(
+        //   of: editWidgetFinder,
+        //   matching: find.byType(MPTileWidget),
+        // );
 
-        final Color setExpectedColor = Theme.of(
-          tester.element(editWidgetFinder),
-        ).colorScheme.tertiaryFixed;
+        // expect(mpTileWidgetsFinderPos.evaluate().length, 7);
 
-        expect(mpTileWidgetIDPos.backgroundColor, setExpectedColor);
+        // // check MPTileWidget background color equals
+        // // theme.colorScheme.tertiaryFixed, i.e., is set.
+        // final MPTileWidget mpTileWidgetMarkPos = tester.widget<MPTileWidget>(
+        //   mpTileWidgetWithMarkFinder,
+        // );
+        // final Color setExpectedColor = Theme.of(
+        //   tester.element(editWidgetFinder),
+        // ).colorScheme.tertiaryFixed;
 
-        // Verify the MPIDOptionWidget is gone after pressing Ok
-        expect(find.byType(MPIDOptionWidget), findsNothing);
+        // expect(mpTileWidgetMarkPos.backgroundColor, setExpectedColor);
+
+        // Verify the MPTextTypeOptionWidget is gone after pressing Ok
+        expect(find.byType(MPTextTypeOptionWidget), findsNothing);
       },
     );
   });

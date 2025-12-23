@@ -74,7 +74,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       final List<THElement> actualElementsForNewOption = [];
 
+      option.setTHFile(_thFile);
+
       for (final THElement element in candidateElementsForNewOption) {
+        element.setTHFile(_thFile);
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(
