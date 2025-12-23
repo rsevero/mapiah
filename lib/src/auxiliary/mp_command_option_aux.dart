@@ -130,6 +130,63 @@ class MPCommandOptionAux {
     THCommandOptionType.walls,
   ];
 
+  static const Map<String, Map<String, Map<String, Object>>> supportedSubtypes =
+      {
+        'point': {
+          'air-draught': {
+            'default': 'undefined',
+            'subtypes': <String>{'winter', 'summer', 'undefined'},
+          },
+          'station': {
+            'default': 'temporary',
+            'subtypes': <String>{'temporary', 'painted', 'natural', 'fixed'},
+          },
+          'water-flow': {
+            'default': 'permanent',
+            'subtypes': <String>{'permanent', 'intermittent', 'paleo'},
+          },
+        },
+        'line': {
+          'border': {
+            'default': 'visible',
+            'subtypes': <String>{
+              'invisible',
+              'presumed',
+              'temporary',
+              'visible',
+            },
+          },
+          'survey': {
+            'default': 'cave',
+            'subtypes': <String>{'cave', 'surface'},
+          },
+          'wall': {
+            'default': 'bedrock',
+            'subtypes': <String>{
+              'bedrock',
+              'blocks',
+              'clay',
+              'debris',
+              'flowstone',
+              'ice',
+              'invisible',
+              'moonmilk',
+              'overlying',
+              'pebbles',
+              'pit',
+              'presumed',
+              'sand',
+              'underlying',
+              'unsurveyed',
+            },
+          },
+          'water-flow': {
+            'default': 'permanent',
+            'subtypes': <String>{'permanent', 'conjectural', 'intermittent'},
+          },
+        },
+      };
+
   static List<THCommandOptionType> getSupportedOptionsForArea(
     THAreaType areaType,
   ) {
@@ -289,61 +346,4 @@ class MPCommandOptionAux {
         ? getSupportedOptionsForElement(element).contains(optionType)
         : false;
   }
-
-  static final Map<String, Map<String, Map<String, Object>>> supportedSubtypes =
-      {
-        'point': {
-          'air-draught': {
-            'default': 'undefined',
-            'subtypes': <String>{'winter', 'summer', 'undefined'},
-          },
-          'station': {
-            'default': 'temporary',
-            'subtypes': <String>{'temporary', 'painted', 'natural', 'fixed'},
-          },
-          'water-flow': {
-            'default': 'permanent',
-            'subtypes': <String>{'permanent', 'intermittent', 'paleo'},
-          },
-        },
-        'line': {
-          'border': {
-            'default': 'visible',
-            'subtypes': <String>{
-              'invisible',
-              'presumed',
-              'temporary',
-              'visible',
-            },
-          },
-          'survey': {
-            'default': 'cave',
-            'subtypes': <String>{'cave', 'surface'},
-          },
-          'wall': {
-            'default': 'bedrock',
-            'subtypes': <String>{
-              'bedrock',
-              'blocks',
-              'clay',
-              'debris',
-              'flowstone',
-              'ice',
-              'invisible',
-              'moonmilk',
-              'overlying',
-              'pebbles',
-              'pit',
-              'presumed',
-              'sand',
-              'underlying',
-              'unsurveyed',
-            },
-          },
-          'water-flow': {
-            'default': 'permanent',
-            'subtypes': <String>{'permanent', 'conjectural', 'intermittent'},
-          },
-        },
-      };
 }
