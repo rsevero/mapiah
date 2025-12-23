@@ -166,15 +166,13 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (clickedEndControlPoints.isNotEmpty) {
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
-      final THLineSegment clickedEndControlPointLineSegment =
-          clickedEndControlPoint.element as THLineSegment;
       final bool clickedEndControlPointAlreadySelected = selectionController
           .isEndControlPointSelected(clickedEndControlPoint);
 
       if (shiftPressed) {
         if (clickedEndControlPointAlreadySelected) {
-          selectionController.removeSelectedEndControlPoints([
-            clickedEndControlPointLineSegment,
+          selectionController.removeSelectedEndControlPointsByMPID([
+            clickedEndControlPoint.lineSegment.mpID,
           ]);
         } else {
           selectionController.addSelectedEndControlPoint(
@@ -243,9 +241,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         th2FileEditController.triggerEditLineRedraw();
       } else {
         if (shiftPressed) {
-          selectionController.removeSelectedEndControlPoints([
-            previousLineSegment,
-            clickedLineSegment,
+          selectionController.removeSelectedEndControlPointsByMPID([
+            previousLineSegment.mpID,
+            clickedLineSegment.mpID,
           ]);
         } else {
           selectionController.setSelectedEndPoints([

@@ -1108,9 +1108,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _selectedEndControlPoints.remove(lineSegmentMPID);
   }
 
-  void removeSelectedEndControlPoints(List<THLineSegment> lineSegments) {
-    for (final THLineSegment lineSegment in lineSegments) {
-      _selectedEndControlPoints.remove(lineSegment.mpID);
+  void removeSelectedEndControlPointsByMPID(List<int> lineSegmentMPIDs) {
+    for (final int lineSegmentMPID in lineSegmentMPIDs) {
+      _selectedEndControlPoints.remove(lineSegmentMPID);
     }
   }
 
