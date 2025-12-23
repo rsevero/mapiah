@@ -92,6 +92,7 @@ const THLengthUnitType thDefaultLengthUnit = THLengthUnitType.meter;
 final String thDefaultLengthUnitAsString = thDefaultLengthUnit.name;
 const THAngleUnitType thDefaultAngleUnit = THAngleUnitType.degree;
 final String thDefaultAngleUnitAsString = thDefaultAngleUnit.name;
+const double mpAzimuthConstraintAngle = 15.0;
 
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
 final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');

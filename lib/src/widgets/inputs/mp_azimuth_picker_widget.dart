@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPAzimuthPickerWidget extends StatefulWidget {
@@ -73,7 +74,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
     }
   }
 
-  double _calculateAngle(Offset center, Offset position) {
+  double _calculateAngle({required Offset center, required Offset position}) {
     final Offset delta = position - center;
     // Convert cartesian to polar coordinates (with y inverted)
     final double angle = math.atan2(delta.dx, -delta.dy) * 180 / math.pi;
@@ -91,58 +92,10 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
         // Compass circle with arrow
         GestureDetector(
           onPanUpdate: (details) {
-            final renderBox = context.findRenderObject() as RenderBox;
-            final localPosition = renderBox.globalToLocal(
-              details.globalPosition,
-            );
-            final angle = _calculateAngle(
-              Offset(compassSize / 2, compassSize / 2),
-              localPosition,
-            );
-            final bool isCtrlPressed =
-                HardwareKeyboard.instance.logicalKeysPressed.contains(
-                  LogicalKeyboardKey.controlLeft,
-                ) ||
-                HardwareKeyboard.instance.logicalKeysPressed.contains(
-                  LogicalKeyboardKey.controlRight,
-                );
-
-            double adjustedAngle = angle;
-
-            if (isCtrlPressed) {
-              // Snap to the nearest multiple of 15 degrees
-              adjustedAngle = (angle / 15).round() * 15.0;
-            }
-
-            _updateAzimuth(adjustedAngle, updateTextField: true);
+            _updateAzimuthOnTap(details.globalPosition, compassSize);
           },
           onTapDown: (details) {
-            final renderBox = context.findRenderObject() as RenderBox;
-            final localPosition = renderBox.globalToLocal(
-              details.globalPosition,
-            );
-            final angle = _calculateAngle(
-              Offset(compassSize / 2, compassSize / 2),
-              localPosition,
-            );
-
-            // Check if the Ctrl key is pressed
-            final bool isCtrlPressed =
-                HardwareKeyboard.instance.logicalKeysPressed.contains(
-                  LogicalKeyboardKey.controlLeft,
-                ) ||
-                HardwareKeyboard.instance.logicalKeysPressed.contains(
-                  LogicalKeyboardKey.controlRight,
-                );
-
-            double adjustedAngle = angle;
-
-            if (isCtrlPressed) {
-              // Snap to the nearest multiple of 15 degrees
-              adjustedAngle = (angle / 15).round() * 15.0;
-            }
-
-            _updateAzimuth(adjustedAngle, updateTextField: true);
+            _updateAzimuthOnTap(details.globalPosition, compassSize);
           },
           child: SizedBox(
             width: compassSize,
@@ -182,6 +135,26 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
         ),
       ],
     );
+  }
+
+  void _updateAzimuthOnTap(Offset globalPosition, double compassSize) {
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final Offset localPosition = renderBox.globalToLocal(globalPosition);
+    final double compassRadius = compassSize / 2;
+    final double angle = _calculateAngle(
+      center: Offset(compassRadius, compassRadius),
+      position: localPosition,
+    );
+    final Set<LogicalKeyboardKey> logicalKeysPressed =
+        HardwareKeyboard.instance.logicalKeysPressed;
+    final bool isCtrlPressed =
+        logicalKeysPressed.contains(LogicalKeyboardKey.controlLeft) ||
+        logicalKeysPressed.contains(LogicalKeyboardKey.controlRight);
+    final double adjustedAngle = isCtrlPressed
+        ? (angle / mpAzimuthConstraintAngle).round() * mpAzimuthConstraintAngle
+        : angle;
+
+    _updateAzimuth(adjustedAngle, updateTextField: true);
   }
 }
 
