@@ -202,23 +202,23 @@ void main() {
         th2Controller.triggerOptionsListRedraw();
         await tester.pumpAndSettle();
 
-        // final Finder mpTileWidgetsFinderPos = find.descendant(
-        //   of: editWidgetFinder,
-        //   matching: find.byType(MPTileWidget),
-        // );
+        final Finder mpTileWidgetsFinderPos = find.descendant(
+          of: editWidgetFinder,
+          matching: find.byType(MPTileWidget),
+        );
 
-        // expect(mpTileWidgetsFinderPos.evaluate().length, 7);
+        expect(mpTileWidgetsFinderPos.evaluate().length, 7);
 
-        // // check MPTileWidget background color equals
-        // // theme.colorScheme.tertiaryFixed, i.e., is set.
-        // final MPTileWidget mpTileWidgetMarkPos = tester.widget<MPTileWidget>(
-        //   mpTileWidgetWithMarkFinder,
-        // );
-        // final Color setExpectedColor = Theme.of(
-        //   tester.element(editWidgetFinder),
-        // ).colorScheme.tertiaryFixed;
+        // check MPTileWidget background color equals
+        // theme.colorScheme.tertiaryFixed, i.e., is set.
+        final MPTileWidget mpTileWidgetMarkPos = tester.widget<MPTileWidget>(
+          mpTileWidgetWithMarkFinder,
+        );
+        final Color setExpectedColor = Theme.of(
+          tester.element(editWidgetFinder),
+        ).colorScheme.tertiaryFixed;
 
-        // expect(mpTileWidgetMarkPos.backgroundColor, setExpectedColor);
+        expect(mpTileWidgetMarkPos.backgroundColor, setExpectedColor);
 
         // Verify the MPTextTypeOptionWidget is gone after pressing Ok
         expect(find.byType(MPTextTypeOptionWidget), findsNothing);

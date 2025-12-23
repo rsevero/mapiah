@@ -59,9 +59,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final List<THElement> candidateElementsForNewOption = [];
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<MPSelectedElement> selectedElements =
+    final bool isLineSegmentOption =
         _th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment
+        MPOptionElementType.lineSegment;
+    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
@@ -106,7 +107,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(addOptionCommand);
 
-        _th2FileEditController.optionEditController.updateOptionStateMap();
+        if (isLineSegmentOption) {
+          _th2FileEditController.optionEditController
+              .updateElementOptionMapForLineSegments();
+        } else {
+          _th2FileEditController.optionEditController.updateOptionStateMap();
+        }
       }
     }
   }
