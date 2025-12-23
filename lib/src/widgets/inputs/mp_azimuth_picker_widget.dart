@@ -167,27 +167,29 @@ class _CompassPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2;
+    final Offset center = Offset(size.width, size.height) / 2;
+    final double radius = size.width / 2;
 
     // Draw compass circle
-    final circlePaint = Paint()
+    final Paint circlePaint = Paint()
       ..color = Colors.grey[200]!
       ..style = PaintingStyle.fill;
+
     canvas.drawCircle(center, radius, circlePaint);
 
     // Draw border
-    final borderPaint = Paint()
+    final Paint borderPaint = Paint()
       ..color = Colors.grey
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
+
     canvas.drawCircle(center, radius, borderPaint);
 
     // Draw background lines
     _drawBackgroundLines(canvas, center, radius);
 
     // Draw cardinal directions
-    final textPainter = TextPainter(
+    final TextPainter textPainter = TextPainter(
       textAlign: TextAlign.center,
       textDirection: TextDirection.ltr,
     );
@@ -198,11 +200,12 @@ class _CompassPainter extends CustomPainter {
       appLocalizations.mpAzimuthSouthAbbreviation,
       appLocalizations.mpAzimuthWestAbbreviation,
     ];
-    const List<double> angles = [0.0, 90.0, 180.0, 270.0];
+
+    const List<double> rightAngles = [0.0, 90.0, 180.0, 270.0];
 
     for (int i = 0; i < directions.length; i++) {
-      final angleRad = angles[i] * math.pi / 180;
-      final textOffset = Offset(
+      final double angleRad = rightAngles[i] * math.pi / 180;
+      final Offset textOffset = Offset(
         center.dx + math.sin(angleRad) * radius * 0.83,
         center.dy - math.cos(angleRad) * radius * 0.83,
       );
@@ -232,26 +235,29 @@ class _CompassPainter extends CustomPainter {
     canvas.rotate(azimuth * math.pi / 180);
 
     // Draw the arrow body
-    final arrowBodyPaint = Paint()
+    final Paint arrowBodyPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
     final double arrowLength = radius * 0.6;
+    final Offset arrowTipBase = Offset(0, -arrowLength * 0.9);
 
-    final arrowTipBase = Offset(0, -arrowLength * 0.9);
     canvas.drawLine(Offset.zero, arrowTipBase, arrowBodyPaint);
 
     // Draw the arrowhead
-    final arrowPaint = Paint()
+    final Paint arrowPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
 
-    final arrowTip = Offset(0, -arrowLength);
-    final arrowSide1 = Offset(-markerSize * 0.4, -arrowLength * 0.78);
-    final arrowSide2 = Offset(markerSize * 0.4, -arrowLength * 0.78);
+    final Offset arrowTip = Offset(0, -arrowLength);
+    final double arrowSide = markerSize * 0.4;
+    final double arrowBaseLength = -arrowLength * 0.78;
+    final Offset arrowSide1 = Offset(-arrowSide, arrowBaseLength);
+    final Offset arrowSide2 = Offset(arrowSide, arrowBaseLength);
 
-    final path = Path();
+    final Path path = Path();
+
     path.moveTo(arrowTip.dx, arrowTip.dy);
     path.lineTo(arrowSide1.dx, arrowSide1.dy);
     path.lineTo(arrowTipBase.dx, arrowTipBase.dy);
@@ -269,34 +275,39 @@ class _CompassPainter extends CustomPainter {
 
   void _drawBackgroundLines(Canvas canvas, Offset center, double radius) {
     // Paint for the lines
-    final rightAnglePaint = Paint()
+    final Paint rightAnglePaint = Paint()
       ..color = Colors.grey.shade700
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
-
-    final fortyFiveDegreePaint = Paint()
+    final Paint fortyFiveDegreePaint = Paint()
       ..color = Colors.grey
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    // Draw right angle lines (0°, 90°, 180°, 270°)
-    for (int i = 0; i < 4; i++) {
-      final angleRad = i * math.pi / 2;
-      final lineEnd = Offset(
-        center.dx + math.cos(angleRad) * radius * 0.68,
-        center.dy + math.sin(angleRad) * radius * 0.68,
-      );
-      canvas.drawLine(center, lineEnd, rightAnglePaint);
-    }
+    /// radius90 is smaller than radius45 to make right angle lines longer so
+    /// there is space to write the cardinal direction letters.
+    final double radius90 = radius * 0.68;
+    final double radius45 = radius * 0.87;
 
-    // Draw 45° lines (45°, 135°, 225°, 315°)
     for (int i = 0; i < 4; i++) {
-      final angleRad = (i * math.pi / 2) + (math.pi / 4);
-      final lineEnd = Offset(
-        center.dx + math.cos(angleRad) * radius * 0.87,
-        center.dy + math.sin(angleRad) * radius * 0.87,
+      final double angleRad90 = i * math.pi / 2;
+      final double angleRad45 = angleRad90 + (math.pi / 4);
+
+      // Draw right angle lines (0°, 90°, 180°, 270°)
+      final Offset lineEnd90 = Offset(
+        center.dx + math.cos(angleRad90) * radius90,
+        center.dy + math.sin(angleRad90) * radius90,
       );
-      canvas.drawLine(center, lineEnd, fortyFiveDegreePaint);
+
+      canvas.drawLine(center, lineEnd90, rightAnglePaint);
+
+      // Draw 45° lines (45°, 135°, 225°, 315°)
+      final Offset lineEnd45 = Offset(
+        center.dx + math.cos(angleRad45) * radius45,
+        center.dy + math.sin(angleRad45) * radius45,
+      );
+
+      canvas.drawLine(center, lineEnd45, fortyFiveDegreePaint);
     }
   }
 

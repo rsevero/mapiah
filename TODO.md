@@ -118,7 +118,7 @@
 [X] - BUG: ID option shown with more than one element selected.
 [X] - BUG: web release not opening files with XVI images.
 
-##Version 0.4
+## Version 0.4
 [ ] - Open multiple files simultaneously
 [ ] - Allow copy/paste between scraps
 [ ] - Allow copy/paste between files
@@ -130,7 +130,7 @@
 [ ] - Hide elements by type
 [ ] - Copy/Paste
 [ ] - Show status message listing what's selected in 'single line edit' mode
-[ ] - Highlight slope lines without at least one line point with orientation
+[ ] - Highlight slope lines without at least one line point with l-size
 [X] - Create shortcut to reverse line
 [ ] - Migrate away from Github
 [ ] - Include options and point/line count in multiple elements clicked dialog box
@@ -156,9 +156,8 @@
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Convert multiline comment into a single element.
-[ ] - Mark visually slope lines without any l-size point.
 
-##Version 1.0
+## Version 1.0
 [ ] - Raster images tracing
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 
