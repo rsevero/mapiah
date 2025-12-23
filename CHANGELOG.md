@@ -4,6 +4,7 @@
 * New features:
   * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
   * Non selected scraps and its elements drawn with scrap per projection type color.
+  * Line point options presented only for line points of the correct line types.
 * Fixed bugs:
   * REGRESSION: option overlay windows not closing after setting option value.
   * REGRESSION: after adding/removing options to/from elements, option state map not updated.

@@ -22,15 +22,26 @@ class MPCommandOptionAux {
 
   static const List<THCommandOptionType> _supportLineSegmentsOptionsForAll = [
     THCommandOptionType.adjust,
-    THCommandOptionType.altitude,
-    THCommandOptionType.linePointGradient,
-    THCommandOptionType.linePointDirection,
-    THCommandOptionType.lSize,
     THCommandOptionType.mark,
-    THCommandOptionType.orientation,
     THCommandOptionType.smooth,
-    THCommandOptionType.subtype,
   ];
+
+  static const Map<THLineType, List<THCommandOptionType>>
+  _supportLineSegmentsOptions = {
+    THLineType.border: [THCommandOptionType.subtype],
+    THLineType.contour: [THCommandOptionType.linePointGradient],
+    THLineType.slope: [
+      THCommandOptionType.lSize,
+      THCommandOptionType.orientation,
+    ],
+    THLineType.section: [THCommandOptionType.linePointDirection],
+    THLineType.survey: [THCommandOptionType.subtype],
+    THLineType.wall: [
+      THCommandOptionType.altitude,
+      THCommandOptionType.subtype,
+    ],
+    THLineType.waterFlow: [THCommandOptionType.subtype],
+  };
 
   static const List<THCommandOptionType> _supportLineOptionsForAll = [
     THCommandOptionType.attr,
@@ -135,8 +146,13 @@ class MPCommandOptionAux {
         : _supportLineOptionsForAll;
   }
 
-  static List<THCommandOptionType> getSupportedOptionsForLineSegment() {
-    return _supportLineSegmentsOptionsForAll;
+  static List<THCommandOptionType> getSupportedOptionsForLineSegment(
+    THLineType lineType,
+  ) {
+    return _supportLineSegmentsOptions.containsKey(lineType)
+        ? _supportLineSegmentsOptionsForAll +
+              _supportLineSegmentsOptions[lineType]!
+        : _supportLineSegmentsOptionsForAll;
   }
 
   static List<THCommandOptionType> getSupportedOptionsForPointType(
@@ -160,7 +176,9 @@ class MPCommandOptionAux {
       case THLine _:
         return getSupportedOptionsForLineType(element.lineType);
       case THLineSegment _:
-        return getSupportedOptionsForLineSegment();
+        return getSupportedOptionsForLineSegment(
+          (element.parent() as THLine).lineType,
+        );
       case THPoint _:
         return getSupportedOptionsForPointType(element.pointType);
       case THScrap _:
