@@ -14,6 +14,7 @@
   * Created MPNonSelectedScrapsWidget to draw non selected scraps and their elements at a separate RepaintBoundary().
   * Triggering redraw at active scrap change by activeScrapID observable.
   * Removing duplicated code at MPAzimuthPickerWidget.
+  * Changing THElement.parent() so thFile parameter is optional.
 
 ## 0.2.28 - 2025-12-19 - The Kichute and Conga release
 * New features:

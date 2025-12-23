@@ -1,7 +1,6 @@
 part of 'mp_command.dart';
 
-class MPRemoveElementCommand extends MPCommand
-    with MPPreCommandMixin {
+class MPRemoveElementCommand extends MPCommand with MPPreCommandMixin {
   final int elementMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =
@@ -30,7 +29,7 @@ class MPRemoveElementCommand extends MPCommand
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THElement element = thFile.elementByMPID(elementMPID);
-    final THIsParentMixin elementParent = element.parent(thFile);
+    final THIsParentMixin elementParent = element.parent(thFile: thFile);
     final int elementPositionInParent = elementParent.getChildPosition(element);
 
     _undoRedoInfo = {

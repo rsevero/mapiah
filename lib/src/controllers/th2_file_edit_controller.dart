@@ -731,7 +731,7 @@ abstract class TH2FileEditControllerBase with Store {
   void setActiveScrapByChildElement(THElement element) {
     THIsParentMixin parent = (element is THIsParentMixin)
         ? element as THIsParentMixin
-        : element.parent(_thFile);
+        : element.parent(thFile: _thFile);
 
     while (parent is THElement) {
       if (parent is THScrap) {
@@ -739,7 +739,7 @@ abstract class TH2FileEditControllerBase with Store {
         return;
       }
 
-      parent = (parent as THElement).parent(_thFile);
+      parent = (parent as THElement).parent(thFile: _thFile);
     }
   }
 

@@ -31,7 +31,7 @@ class MPRemoveScrapCommand extends MPCommand with MPPreCommandMixin {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
-    final THIsParentMixin scrapParent = originalScrap.parent(thFile);
+    final THIsParentMixin scrapParent = originalScrap.parent(thFile: thFile);
     final int scrapPositionInParent = scrapParent.getChildPosition(
       originalScrap,
     );

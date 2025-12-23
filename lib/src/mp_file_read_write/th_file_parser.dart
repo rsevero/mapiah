@@ -288,7 +288,9 @@ class THFileParser {
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
-    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+    setCurrentParent(
+      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+    );
     _returnToParentParser();
   }
 
@@ -683,7 +685,7 @@ class THFileParser {
     _currentElement = newBezierCurveLineSegment;
     _injectComment();
     _currentElement =
-        newBezierCurveLineSegment.parent(_parsedTHFile) as THElement;
+        newBezierCurveLineSegment.parent(thFile: _parsedTHFile) as THElement;
   }
 
   void _injectAreaBorderTHID(List<dynamic> element) {
@@ -755,7 +757,8 @@ class THFileParser {
     /// in the line command that includes this line segment.
     _currentElement = newStraightLineSegment;
     _injectComment();
-    _currentElement = newStraightLineSegment.parent(_parsedTHFile) as THElement;
+    _currentElement =
+        newStraightLineSegment.parent(thFile: _parsedTHFile) as THElement;
   }
 
   void _injectScrap(List<dynamic> element) {
@@ -807,7 +810,9 @@ class THFileParser {
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
-    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+    setCurrentParent(
+      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+    );
     _returnToParentParser();
   }
 
@@ -851,7 +856,8 @@ class THFileParser {
     }
     _injectComment();
     if (_lastLineSegment != null) {
-      _currentElement = _lastLineSegment!.parent(_parsedTHFile) as THElement;
+      _currentElement =
+          _lastLineSegment!.parent(thFile: _parsedTHFile) as THElement;
     }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
@@ -971,7 +977,9 @@ class THFileParser {
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
-    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+    setCurrentParent(
+      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+    );
     _returnToParentParser();
   }
 
@@ -982,7 +990,9 @@ class THFileParser {
         '_injectEndLine',
         'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
       );
-      setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+      setCurrentParent(
+        (_currentParent as THElement).parent(thFile: _parsedTHFile),
+      );
 
       return;
     }
@@ -996,7 +1006,9 @@ class THFileParser {
       parent: _currentParent,
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
-    setCurrentParent((_currentParent as THElement).parent(_parsedTHFile));
+    setCurrentParent(
+      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+    );
 
     _returnToParentParser();
   }

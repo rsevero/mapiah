@@ -60,7 +60,9 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddAreaBorderTHIDCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingAreaBorderTHID.parent(thFile);
+    final THIsParentMixin parent = existingAreaBorderTHID.parent(
+      thFile: thFile,
+    );
 
     areaBorderTHIDPositionInParent =
         areaBorderTHIDPositionInParent ??
@@ -91,7 +93,7 @@ class MPCommandFactory {
     final List<THElement> areaChildren = existingArea
         .getChildren(thFile)
         .toList();
-    final THIsParentMixin parent = existingArea.parent(thFile);
+    final THIsParentMixin parent = existingArea.parent(thFile: thFile);
 
     areaPositionInParent =
         areaPositionInParent ?? parent.getChildPosition(existingArea);
@@ -119,7 +121,7 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddElementCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingElement.parent(thFile);
+    final THIsParentMixin parent = existingElement.parent(thFile: thFile);
 
     elementPositionInParent =
         elementPositionInParent ?? parent.getChildPosition(existingElement);
@@ -271,7 +273,9 @@ class MPCommandFactory {
   }) {
     emptyLinePositionInParent =
         emptyLinePositionInParent ??
-        existingEmptyLine.parent(thFile).getChildPosition(existingEmptyLine);
+        existingEmptyLine
+            .parent(thFile: thFile)
+            .getChildPosition(existingEmptyLine);
 
     return MPAddEmptyLineCommand.forCWJM(
       newEmptyLine: existingEmptyLine,
@@ -293,7 +297,7 @@ class MPCommandFactory {
         .toList();
     final int existingLineMPID = existingLine.mpID;
     final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
-    final THIsParentMixin parent = existingLine.parent(thFile);
+    final THIsParentMixin parent = existingLine.parent(thFile: thFile);
     final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
 
     linePositionInParent =
@@ -345,7 +349,7 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddLineSegmentCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingLineSegment.parent(thFile);
+    final THIsParentMixin parent = existingLineSegment.parent(thFile: thFile);
 
     lineSegmentPositionInParent =
         lineSegmentPositionInParent ??
@@ -468,7 +472,7 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddPointCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingPoint.parent(thFile);
+    final THIsParentMixin parent = existingPoint.parent(thFile: thFile);
 
     pointPositionInParent =
         pointPositionInParent ?? parent.getChildPosition(existingPoint);
@@ -554,7 +558,7 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddScrapCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingScrap.parent(thFile);
+    final THIsParentMixin parent = existingScrap.parent(thFile: thFile);
 
     scrapPositionInParent =
         scrapPositionInParent ?? parent.getChildPosition(existingScrap);
@@ -627,7 +631,9 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddXTherionImageInsertConfigCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingImageInsertConfig.parent(thFile);
+    final THIsParentMixin parent = existingImageInsertConfig.parent(
+      thFile: thFile,
+    );
 
     xTherionImageInsertConfigPositionInParent =
         xTherionImageInsertConfigPositionInParent ??
@@ -1352,7 +1358,7 @@ class MPCommandFactory {
     required MPCommandDescriptionType descriptionType,
   }) {
     final THElement element = thFile.elementByMPID(elementMPID);
-    final THIsParentMixin parent = element.parent(thFile);
+    final THIsParentMixin parent = element.parent(thFile: thFile);
     final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
       thFile: thFile,
       parent: parent,

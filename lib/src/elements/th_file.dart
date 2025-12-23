@@ -516,7 +516,7 @@ class THFile
             ?.resetShowImages();
     }
 
-    final THIsParentMixin parent = element.parent(this);
+    final THIsParentMixin parent = element.parent(thFile: this);
 
     parent.removeElementFromParent(element);
     _elementByMPID.remove(elementMPID);
@@ -529,7 +529,7 @@ class THFile
       element.clearBoundingBox();
     }
 
-    final THIsParentMixin parent = element.parent(this);
+    final THIsParentMixin parent = element.parent(thFile: this);
 
     if (parent is THElement) {
       _clearOwnAndAncestryBoundingBoxes(parent as THElement);

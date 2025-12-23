@@ -32,7 +32,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
     final THXTherionImageInsertConfig originalImageInsert = thFile
         .xtherionImageInsertConfigByMPID(xtherionImageInsertConfigMPID);
     final THIsParentMixin imageInsertParent = originalImageInsert.parent(
-      thFile,
+      thFile: thFile,
     );
     final int imageInsertPositionInParent = imageInsertParent.getChildPosition(
       originalImageInsert,

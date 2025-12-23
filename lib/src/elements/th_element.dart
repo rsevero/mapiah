@@ -111,7 +111,13 @@ abstract class THElement with MPTHFileReferenceMixin {
     this.originalLineInTH2File = '',
   }) : _mpID = mpLocator.mpGeneralController.nextMPIDForElements();
 
-  THIsParentMixin parent(THFile thFile) {
+  THIsParentMixin parent({THFile? thFile}) {
+    if ((thFile == null) && (this.thFile == null)) {
+      throw ArgumentError('No thFile provided at THElement.parent()');
+    }
+
+    thFile ??= this.thFile!;
+
     return (parentMPID < 0)
         ? thFile
         : thFile.elementByMPID(parentMPID) as THIsParentMixin;

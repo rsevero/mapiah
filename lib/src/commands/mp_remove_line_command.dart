@@ -38,7 +38,7 @@ class MPRemoveLineCommand extends MPCommand
     final THFile thFile = th2FileEditController.thFile;
     final THLine line = thFile.lineByMPID(lineMPID);
     final List<THElement> lineChildren = line.getChildren(thFile).toList();
-    final THIsParentMixin lineParent = line.parent(thFile);
+    final THIsParentMixin lineParent = line.parent(thFile: thFile);
     final int linePositionInParent = lineParent.getChildPosition(line);
 
     _undoRedoInfo = {

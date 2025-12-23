@@ -29,7 +29,7 @@ class MPRemovePointCommand extends MPCommand with MPPreCommandMixin {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
     final THPoint originalPoint = thFile.pointByMPID(pointMPID);
-    final THIsParentMixin pointParent = originalPoint.parent(thFile);
+    final THIsParentMixin pointParent = originalPoint.parent(thFile: thFile);
     final int pointPositionInParent = pointParent.getChildPosition(
       originalPoint,
     );
