@@ -118,6 +118,7 @@
 [X] - BUG: ID option shown with more than one element selected.
 [X] - BUG: web release not opening files with XVI images.
 [X] - BUG: after editing line point option, the general line point overlay window is presented, not line type specific.
+[ ] - Disable web version.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously

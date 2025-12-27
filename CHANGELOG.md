@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.30 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.29 - 2025-12-27 - The Bom Jesus da Lapa release
 * New features:
   * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
