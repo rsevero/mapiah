@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.29 - not yet released
+## 0.2.29 - 2025-12-27 - The Bom Jesus da Lapa release
 * New features:
   * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
   * Non selected scraps and its elements drawn with scrap per projection type color.
