@@ -2,6 +2,7 @@
 
 ## 0.2.30 - not yet released
 * New features:
+  * Center on selected elements on zoom in, zoom out and zoom one to one.
 * Fixed bugs:
 * Infrastructure maintenance:
 

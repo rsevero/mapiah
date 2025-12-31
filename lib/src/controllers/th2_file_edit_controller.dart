@@ -929,6 +929,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void zoomIn({bool fineZoom = false}) {
+    if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+      _setCanvasCenterOnZoom(zoomToFitType: MPZoomToFitType.selection);
+    }
     setCanvasScale(
       MPNumericAux.calculateNextZoomLevel(
         scale: _canvasScale,
@@ -940,6 +943,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void zoomOut({bool fineZoom = false}) {
+    if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+      _setCanvasCenterOnZoom(zoomToFitType: MPZoomToFitType.selection);
+    }
     setCanvasScale(
       MPNumericAux.calculateNextZoomLevel(
         scale: _canvasScale,
@@ -951,6 +957,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void zoomOneToOne() {
+    if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+      _setCanvasCenterOnZoom(zoomToFitType: MPZoomToFitType.selection);
+    }
     setCanvasScale(1);
   }
 
@@ -966,7 +975,7 @@ abstract class TH2FileEditControllerBase with Store {
     final double scaleHeight =
         (screenHeight * (1.0 - mpCanvasVisibleMargin)) / _dataHeight;
 
-    _setCanvasCenterToDrawingCenter(zoomToFitType: zoomFitToType);
+    _setCanvasCenterOnZoom(zoomToFitType: zoomFitToType);
     setCanvasScale(
       MPNumericAux.roundScale(
         (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
@@ -1051,16 +1060,15 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
-  void _setCanvasCenterToDrawingCenter({
-    required MPZoomToFitType zoomToFitType,
-  }) {
+  void _setCanvasCenterOnZoom({required MPZoomToFitType zoomToFitType}) {
     final Rect dataBoundingBox = _getZoomToFitBoundingBox(
       zoomFitToType: zoomToFitType,
     );
+    final Offset dataBoundingBoxCenter = dataBoundingBox.center;
 
     // mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
-    _canvasCenterX = (dataBoundingBox.left + dataBoundingBox.right) / 2.0;
-    _canvasCenterY = (dataBoundingBox.top + dataBoundingBox.bottom) / 2.0;
+    _canvasCenterX = dataBoundingBoxCenter.dx;
+    _canvasCenterY = dataBoundingBoxCenter.dy;
     // mpLocator.mpLog.finer(
     //   "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY",
     // );

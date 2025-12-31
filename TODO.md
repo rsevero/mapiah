@@ -119,6 +119,11 @@
 [X] - BUG: web release not opening files with XVI images.
 [X] - BUG: after editing line point option, the general line point overlay window is presented, not line type specific.
 [ ] - Disable web version.
+[X] - On zoom out/in, center the canvas on the selected elements if any.
+[ ] - Verify is new lines (specially long bezier ones) are clickable right after being created.
+[ ] - Create shortcut to toggle all images visibility.
+[ ] - Bézier created from straight lines are too tight.
+[ ] - After unseting an option, it is still shown as yellow (set).
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
