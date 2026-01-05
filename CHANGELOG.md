@@ -8,6 +8,7 @@
   * failure parsing demo file with "Plus number must be positive" parse error.
   * parsing/writing '+?' and '-?' values failure for point height -value options.
 * Infrastructure maintenance:
+  * Creation of portuguese version of install page.
 
 ## 0.2.29 - 2025-12-27 - The Bom Jesus da Lapa release
 * New features:

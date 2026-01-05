@@ -125,6 +125,9 @@
 [ ] - Bézier created from straight lines are too tight.
 [ ] - BUG: After unseting an option, it is still shown as yellow (set).
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
+[ ] - BUG: changing a point type label to type pasage-height throws.
+[ ] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
+[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php 
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
