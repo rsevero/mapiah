@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.30 - not yet released
+## 0.2.30 - 2026-01-05 - The [Serra Grande](https://pt.wikipedia.org/wiki/Serra_Grande_(Uru%C3%A7uca)) release
 * New features:
   * Center on selected elements on zoom in, zoom out and zoom one to one.
   * Point height value presumed plus/minus edit support.
@@ -10,7 +10,7 @@
 * Infrastructure maintenance:
   * Creation of portuguese version of install page.
 
-## 0.2.29 - 2025-12-27 - The Bom Jesus da Lapa release
+## 0.2.29 - 2025-12-27 - The [Bom Jesus da Lapa](https://santuariodobomjesusdalapa.com/grutas-do-santuario/conheca-a-gruta-do-bom-jesus-da-lapa/) release
 * New features:
   * Line and area with highlight borders indicating invisible and "with ID" lines/areas.
   * Non selected scraps and its elements drawn with scrap per projection type color.
@@ -30,7 +30,7 @@
   * Changing THElement.parent() so thFile parameter is optional.
   * Implemented TH2FileEditElementEditController.addOutdatedLineSegmentCloneMPID().
 
-## 0.2.28 - 2025-12-19 - The Kichute and Conga release
+## 0.2.28 - 2025-12-19 - The [Kichute](https://www.youtube.com/watch?v=5Q3R8w7DrUI) and [Conga](https://www.youtube.com/watch?v=6iRpR-OpmPg) release
 * New features:
   * Inverted zoom shortcuts 3 and 4 (show scrap and show file respectively) to match user expectations.
 * Fixed bugs:
@@ -41,7 +41,7 @@
 * Infrastructure maintenance:
   * Centralizing controller update after element edit.
 
-## 0.2.27 - 2025-12-18 - The Passinho Foda release
+## 0.2.27 - 2025-12-18 - The [Passinho Foda](https://www.youtube.com/watch?v=S-gjytnMvZ8) release
 * New features:
   * Implemented select all and deselect all line points on 'single line edit' mode.
   * Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
@@ -71,7 +71,7 @@
   * Implementing subtypeLineSegmentMPIDsByLineSegmentIndex map in THLine to keep track of which line segments have subtype options.
   * Removed unused _selectedElementsDrawable from TH2FileEditSelectionController.
 
-## 0.2.26 - 2025-12-11 - The São Paulo release
+## 0.2.26 - 2025-12-11 - The [São Paulo](https://bienal.org.br/) release
 * New features:
   * Snap to "points", "line points" and "XVI shots" on as default.
   * Snap should snap to own object points and line points.
@@ -103,7 +103,7 @@
 * Fixed bugs:
   * REGRESSION: when moving points, they would change position exponentially in relation to mouse movement.
 
-## 0.2.24 - 2025-12-04 - The Peruaçu data processing release
+## 0.2.24 - 2025-12-04 - The [Peruaçu](https://agenciabrasil.ebc.com.br/geral/noticia/2025-07/parque-cavernas-do-peruacu-e-reconhecido-como-patrimonio-da-unesco) data processing release
 * New features:
   * When a single element is selected, show its properties in the status bar.
   * Simplification calculated values should use "current decimals".
@@ -159,7 +159,7 @@
     *  MPEmptyLinesAfterMixin;
     *  MPScrapChildrenMixin.
 
-## 0.2.23 - 2025-11-27 - The Peruaçu release
+## 0.2.23 - 2025-11-27 - The [Peruaçu](https://oeco.org.br/fotografia/em-fotos-parque-nacional-cavernas-do-peruacu-e-novo-patrimonio-natural-da-humanidade/) release
 * New features:
   * Add/remove commmands removing empty lines after element selected for deletion:
     * AreaBorderTHID;
