@@ -1515,7 +1515,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -2885 604 height -value [ 40 ]
+  point -2885 604 height -value 40
 endscrap
 ''',
       },
@@ -1525,7 +1525,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -42 3 height -value [ +13 ]
+  point -42 3 height -value +13
 endscrap
 ''',
       },
@@ -1535,7 +1535,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -42 3 height -value [ -7.3 ]
+  point -42 3 height -value -7.3
 endscrap
 ''',
       },
@@ -1556,7 +1556,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -42 3 height -value [ 11? ]
+  point -42 3 height -value 11?
 endscrap
 ''',
       },
@@ -1567,7 +1567,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point -42 3 height -value [ -7.3? ]
+  point -42 3 height -value -7.3?
 endscrap
 ''',
       },
@@ -1579,6 +1579,28 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap test
   point -42 3 height -value [ +13? ft ]
+endscrap
+''',
+      },
+      {
+        'file':
+            '2026-01-05-004-height-point_with_presumed_no_number_positive_value.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ -28 416 728 416 0 0 19.2024 0 m ]
+  point 300 603 height -value +?
+endscrap
+''',
+      },
+      {
+        'file':
+            '2026-01-05-005-height-point_with_presumed_no_number_negative_value.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ -28 416 728 416 0 0 19.2024 0 m ]
+  point 300 603 height -value -?
 endscrap
 ''',
       },
@@ -1606,6 +1628,8 @@ endscrap
     const failures = [
       'th_file_parser-02351-height_point_with_invalid_value_option-failure.th2',
       'th_file_parser-02352-passage-height_point_with_invalid_value_option-failure.th2',
+      '2026-01-05-006-height-point_with_presumed_no_number_no_sign_value-failure.th2',
+      '2026-01-05-007-height-point_with_batatinha_value-failure.th2',
     ];
 
     for (var failure in failures) {

@@ -2306,6 +2306,28 @@ class THFileParser {
         ),
         element: _currentHasOptions,
       );
+    } else if (specs == thPointHeightValuePresumedPlus) {
+      MPEditElementAux.addOptionToElement(
+        option: THPointHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          height: thPointHeightValuePresumedPlus,
+          isPresumed: false,
+          unit: null,
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
+      );
+    } else if (specs == thPointHeightValuePresumedMinus) {
+      MPEditElementAux.addOptionToElement(
+        option: THPointHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          height: thPointHeightValuePresumedMinus,
+          isPresumed: false,
+          unit: null,
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
+      );
     } else {
       throw THCustomException(
         "Unsuported parse specs '$specs' in '_injectHeightValueCommandOption'.",

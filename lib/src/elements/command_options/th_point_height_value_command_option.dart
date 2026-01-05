@@ -33,11 +33,21 @@ class THPointHeightValueCommandOption extends THCommandOption
     height = height.trim();
     switch (height[0]) {
       case '+':
-        mode = THPointHeightValueMode.chimney;
-        height = height.substring(1);
+        if (height == thPointHeightValuePresumedPlus) {
+          mode = THPointHeightValueMode.presumedPlus;
+          height = "0";
+        } else {
+          mode = THPointHeightValueMode.chimney;
+          height = height.substring(1);
+        }
       case '-':
-        mode = THPointHeightValueMode.pit;
-        height = height.substring(1);
+        if (height == thPointHeightValuePresumedMinus) {
+          mode = THPointHeightValueMode.presumedMinus;
+          height = "0";
+        } else {
+          mode = THPointHeightValueMode.pit;
+          height = height.substring(1);
+        }
       default:
         mode = THPointHeightValueMode.step;
     }
@@ -141,10 +151,14 @@ class THPointHeightValueCommandOption extends THCommandOption
     String asString = length.toString();
 
     switch (mode) {
-      case THPointHeightValueMode.pit:
-        asString = '-$asString';
+      case THPointHeightValueMode.presumedMinus:
+        asString = '-?';
+      case THPointHeightValueMode.presumedPlus:
+        asString = '+?';
       case THPointHeightValueMode.chimney:
         asString = '+$asString';
+      case THPointHeightValueMode.pit:
+        asString = '-$asString';
       case THPointHeightValueMode.step:
         break;
     }
@@ -157,8 +171,8 @@ class THPointHeightValueCommandOption extends THCommandOption
       asString += " $unit";
     }
 
-    return "[ $asString ]";
+    return asString.contains(' ') ? "[ $asString ]" : asString;
   }
 }
 
-enum THPointHeightValueMode { chimney, pit, step }
+enum THPointHeightValueMode { chimney, pit, presumedMinus, presumedPlus, step }

@@ -268,6 +268,9 @@ const String mpUnsetOptionID = 'UNSET';
 const String mpUnrecognizedOptionID = 'UNRECOGNIZED';
 const String mpNonMultipleChoiceSetID = 'SET';
 
+const String thPointHeightValuePresumedPlus = '+?';
+const String thPointHeightValuePresumedMinus = '-?';
+
 const String mpScrapFromFileTHID = 'FROM_FILE';
 const String mpScrapFreeTextTHID = 'FREE_TEXT';
 
