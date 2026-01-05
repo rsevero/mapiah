@@ -4,6 +4,7 @@
 * New features:
   * Center on selected elements on zoom in, zoom out and zoom one to one.
 * Fixed bugs:
+  * failure parsing demo file with "Plus number must be positive" parse error.
 * Infrastructure maintenance:
 
 ## 0.2.29 - 2025-12-27 - The Bom Jesus da Lapa release

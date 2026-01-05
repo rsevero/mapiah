@@ -1689,6 +1689,36 @@ scrap U20-U23 -projection plan
 endscrap
 ''',
       },
+      {
+        'file': '2026-01-05-001-passage-height-point_with_negative_value.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ -28 416 728 416 0 0 19.2024 0 m ]
+  point 389.5 1033 passage-height -value [ -4 m ]
+endscrap
+''',
+      },
+      {
+        'file': '2026-01-05-002-passage-height-point_with_positive_value.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ -28 416 728 416 0 0 19.2024 0 m ]
+  point 389.5 1033 passage-height -value [ +4 m ]
+endscrap
+''',
+      },
+      {
+        'file': '2026-01-05-003-passage-height-point_with_no_sign_value.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap scrap1 -scale [ -28 416 728 416 0 0 19.2024 0 m ]
+  point 389.5 1033 passage-height -value [ 4 m ]
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

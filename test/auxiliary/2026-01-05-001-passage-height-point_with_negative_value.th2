@@ -1,0 +1,4 @@
+encoding  utf-8
+scrap scrap1 -scale [-28 416 728 416 0.0 0.0 19.2024 0.0 m]
+point 389.5 1033.0 passage-height -value -4
+endscrap

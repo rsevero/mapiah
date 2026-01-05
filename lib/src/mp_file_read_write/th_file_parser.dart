@@ -98,6 +98,10 @@ class THFileParser {
     r'^([+-]?)(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
     caseSensitive: false,
   );
+  final RegExp minusNumberWithOptionalUnitRegex = RegExp(
+    r'^(\-)(\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
+    caseSensitive: false,
+  );
   final RegExp plusMinusNumbersWithOptionalUnitRegex = RegExp(
     r'^(\+\d+(?:\.\d+)?)\s+(-\d+(?:\.\d+)?)(?:\s*(meters?|centimeters?|inch(?:es)?|feets?|yards?|m|cm|in|ft|yd))?$',
     caseSensitive: false,
@@ -2312,7 +2316,23 @@ class THFileParser {
   void _injectPassageHeightValueCommandOption() {
     final String specs = _currentSpec[0].toString().trim();
 
-    if (signedNumberWithOptionalUnitRegex.hasMatch(specs)) {
+    if (minusNumberWithOptionalUnitRegex.hasMatch(specs)) {
+      final RegExpMatch match = minusNumberWithOptionalUnitRegex.firstMatch(
+        specs,
+      )!;
+      final String number = "${match.group(1)!}${match.group(2)!}";
+
+      MPEditElementAux.addOptionToElement(
+        option: THPassageHeightValueCommandOption.fromString(
+          parentMPID: _currentHasOptions.mpID,
+          plusNumber: '',
+          minusNumber: number,
+          unit: match.group(3),
+          originalLineInTH2File: _currentOriginalLine,
+        ),
+        element: _currentHasOptions,
+      );
+    } else if (signedNumberWithOptionalUnitRegex.hasMatch(specs)) {
       final RegExpMatch match = signedNumberWithOptionalUnitRegex.firstMatch(
         specs,
       )!;

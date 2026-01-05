@@ -123,7 +123,8 @@
 [ ] - Verify is new lines (specially long bezier ones) are clickable right after being created.
 [ ] - Create shortcut to toggle all images visibility.
 [ ] - Bézier created from straight lines are too tight.
-[ ] - After unseting an option, it is still shown as yellow (set).
+[ ] - BUG: After unseting an option, it is still shown as yellow (set).
+[X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
