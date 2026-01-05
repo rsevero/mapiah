@@ -667,6 +667,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpPointHeightLengthWarning => 'Invalid length';
 
   @override
+  String get mpPointHeightPresumedMinus => 'Minus presumed (-?)';
+
+  @override
+  String get mpPointHeightPresumedPlus => 'Plus presumed (+?)';
+
+  @override
   String get mpPointHeightPit => 'Pit';
 
   @override

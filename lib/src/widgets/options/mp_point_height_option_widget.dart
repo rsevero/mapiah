@@ -110,6 +110,9 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
         _lengthWarningMessage = _isValid
             ? null
             : appLocalizations.mpPointHeightLengthWarning;
+      case 'presumedMinus':
+      case 'presumedPlus':
+        _isValid = true;
       default:
         throw Exception(
           'Invalid choice "$_selectedChoice" at MPPointHeightOptionWidget._updateIsValid()',
@@ -160,6 +163,9 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
       case 'chimney':
         observation = appLocalizations.mpPointHeightValueChimneyObservation;
         labelText = appLocalizations.mpPointHeightValueChimneyLabel;
+      case 'presumedMinus':
+      case 'presumedPlus':
+        return SizedBox.shrink();
       case 'pit':
         observation = appLocalizations.mpPointHeightValuePitObservation;
         labelText = appLocalizations.mpPointHeightValuePitLabel;
@@ -216,6 +222,22 @@ class _MPPointHeightOptionWidgetState extends State<MPPointHeightOptionWidget> {
           isPresumed: _isPresumed,
           length: _lengthController.text,
           mode: THPointHeightValueMode.values.byName(_selectedChoice),
+          unit: _selectedUnit,
+        );
+      case 'presumedMinus':
+        newOption = THPointHeightValueCommandOption.fromStringWithParentMPID(
+          parentMPID: mpParentMPIDPlaceholder,
+          isPresumed: false,
+          length: '0',
+          mode: THPointHeightValueMode.presumedMinus,
+          unit: _selectedUnit,
+        );
+      case 'presumedPlus':
+        newOption = THPointHeightValueCommandOption.fromStringWithParentMPID(
+          parentMPID: mpParentMPIDPlaceholder,
+          isPresumed: false,
+          length: '0',
+          mode: THPointHeightValueMode.presumedPlus,
           unit: _selectedUnit,
         );
     }

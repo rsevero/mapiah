@@ -672,6 +672,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPointHeightLengthWarning => 'Medida inválida';
 
   @override
+  String get mpPointHeightPresumedMinus => 'Presumido negativo (-?)';
+
+  @override
+  String get mpPointHeightPresumedPlus => 'Presumido positivo (+?)';
+
+  @override
   String get mpPointHeightPit => 'Poço';
 
   @override

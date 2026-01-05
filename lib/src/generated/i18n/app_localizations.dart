@@ -1318,6 +1318,18 @@ abstract class AppLocalizations {
   /// **'Invalid length'**
   String get mpPointHeightLengthWarning;
 
+  /// The label for the presumed minus type
+  ///
+  /// In en, this message translates to:
+  /// **'Minus presumed (-?)'**
+  String get mpPointHeightPresumedMinus;
+
+  /// The label for the presumed plus type
+  ///
+  /// In en, this message translates to:
+  /// **'Plus presumed (+?)'**
+  String get mpPointHeightPresumedPlus;
+
   /// The label for the pit type
   ///
   /// In en, this message translates to:

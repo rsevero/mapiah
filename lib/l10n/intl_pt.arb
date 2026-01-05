@@ -203,6 +203,8 @@
   "mpPLScaleNumericLabel": "Tamanho",
   "mpPointHeightChimney": "Chaminé",
   "mpPointHeightLengthWarning": "Medida inválida",
+  "mpPointHeightPresumedMinus": "Presumido negativo (-?)",
+  "mpPointHeightPresumedPlus": "Presumido positivo (+?)",
   "mpPointHeightPit": "Poço",
   "mpPointHeightStep": "Degrau",
   "mpPointHeightValueChimneyLabel": "Altura",

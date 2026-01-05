@@ -167,7 +167,9 @@ class THPointHeightValueCommandOption extends THCommandOption
       asString += '?';
     }
 
-    if (unitSet) {
+    if (unitSet &&
+        (mode != THPointHeightValueMode.presumedMinus) &&
+        (mode != THPointHeightValueMode.presumedPlus)) {
       asString += " $unit";
     }
 

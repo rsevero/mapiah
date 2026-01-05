@@ -1032,6 +1032,16 @@
     "description": "The warning message for invalid length",
     "type": "text"
   },
+  "mpPointHeightPresumedMinus": "Minus presumed (-?)",
+  "@mpPointHeightPresumedMinus": {
+    "description": "The label for the presumed minus type",
+    "type": "text"
+  },
+  "mpPointHeightPresumedPlus": "Plus presumed (+?)",
+  "@mpPointHeightPresumedPlus": {
+    "description": "The label for the presumed plus type",
+    "type": "text"
+  },
   "mpPointHeightPit": "Pit",
   "@mpPointHeightPit": {
     "description": "The label for the pit type",

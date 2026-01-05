@@ -3,6 +3,7 @@
 ## 0.2.30 - not yet released
 * New features:
   * Center on selected elements on zoom in, zoom out and zoom one to one.
+  * Point height value presumed plus/minus edit support.
 * Fixed bugs:
   * failure parsing demo file with "Plus number must be positive" parse error.
   * parsing/writing '+?' and '-?' values failure for point height -value options.

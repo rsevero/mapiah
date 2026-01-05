@@ -251,6 +251,10 @@ class MPTextToUser {
 
     _pointHeightValueModeAsString[THPointHeightValueMode.chimney] =
         localizations.mpPointHeightChimney;
+    _pointHeightValueModeAsString[THPointHeightValueMode.presumedMinus] =
+        localizations.mpPointHeightPresumedMinus;
+    _pointHeightValueModeAsString[THPointHeightValueMode.presumedPlus] =
+        localizations.mpPointHeightPresumedPlus;
     _pointHeightValueModeAsString[THPointHeightValueMode.pit] =
         localizations.mpPointHeightPit;
     _pointHeightValueModeAsString[THPointHeightValueMode.step] =
