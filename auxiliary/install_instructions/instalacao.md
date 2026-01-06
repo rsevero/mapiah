@@ -30,11 +30,11 @@ Após a instalação do Therion, teste a instalação conforme descrito na seç�
 2. Baixe o arquivo `.AppImage` correspondente.
 3. Torne o arquivo baixado executável, por exemplo, usando o comando:
    ```bash
-   chmod +x mapiah-<versão>.AppImage
+   chmod +x Mapiah-<versão>.AppImage
    ```
 4. Execute o Mapiah com o comando:
    ```bash
-    ./mapiah-<versão>-linux-x86_64.AppImage
+    ./Mapiah-<versão>-linux-x86_64.AppImage
     ```
 5. Abra no Mapiah o arquivo `cave.th2` dos dados de exemplo do Therion (veja seção "Primeira execução do Therion (teste)" abaixo).
 

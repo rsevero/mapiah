@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.31 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.30 - 2026-01-05 - The [Serra Grande](https://pt.wikipedia.org/wiki/Serra_Grande_(Uru%C3%A7uca)) release
 * New features:
   * Center on selected elements on zoom in, zoom out and zoom one to one.
