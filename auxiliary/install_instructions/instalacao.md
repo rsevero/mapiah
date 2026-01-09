@@ -66,6 +66,6 @@ Baixe o instalador do Therion para Windows na página de [downloads do Therion](
 Após instalar o Therion, você pode testá-lo com os [dados de exemplo](https://therion.speleo.sk/downloads/demo.zip) disponíveis na página web do Therion:  
 1. Baixe os dados de exemplo da página web do Therion e descompacte-os em algum lugar no disco rígido do seu computador.  
 2. Execute o XTherion (no Unix e MacOS X, digitando 'xtherion' na linha de comando; no Windows, há um atalho no menu Iniciar).  
-3. Abra o arquivo 'thconfig' do diretório de dados de exemplo na janela 'Compiler' do XTherion.  
+3. Abra o arquivo 'thconfig' do diretório de dados de exemplo.  
 4. Pressione 'F9' ou clique em 'compile' no menu para executar o Therion nos dados — você verá algumas mensagens do Therion, MetaPost e TeX.  
-5. Mapas em PDF e um modelo 3D serão criados no diretório de dados.  
+5. Mapas em PDF e um modelo 3D serão criados no diretório de dados de exemplo.  
