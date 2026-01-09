@@ -17,7 +17,7 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -40,6 +40,9 @@ jobs:
       with:
         channel: stable
         flutter-version: 3.38.5
+
+    # - name: Setup upterm session
+    #   uses: owenthereal/action-upterm@v1
 
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
@@ -102,11 +105,6 @@ jobs:
         sudo flatpak install --system --noninteractive org.freedesktop.Sdk/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19
-
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
 
     - name: Build Mapiah flatpak
       run: |
@@ -190,40 +188,3 @@ jobs:
         gh release upload "$TAG" \
             --clobber \
             "$INSTALLER_APPIMAGE"
-
-    - name: Build Flutter web app
-      run: |
-        set -e
-        set -x
-        WEB_ROOT="webapp"
-        echo "WEB_ROOT=$WEB_ROOT" >> $GITHUB_ENV
-        flutter --version
-        flutter config --enable-web
-        flutter build web --release  --base-href "/$WEB_ROOT/"
-
-    - name: Prepare web package
-      run: |
-        set -e
-        set -x
-        BUILD_ROOT="$HOME/work/mapiah/mapiah"
-        WEB_PACKAGE="mapiah-web-release.tar.bz2"
-        echo "BUILD_ROOT=$BUILD_ROOT" >> $GITHUB_ENV
-        echo "WEB_PACKAGE=$WEB_PACKAGE" >> $GITHUB_ENV
-        cd "$BUILD_ROOT/build/web/"
-        tar -cjf "../$WEB_PACKAGE" *
-
-
-    - name: Deploy web code to Server
-      env:
-        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_ACTION }}
-      run: |
-        set -e
-        set -x
-        cd "$BUILD_ROOT"
-        echo $SSH_KEY | base64 -d > ssh-key
-        chmod 0400 ssh-key
-        sftp -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -o Port=65002 nupp7462@mapiah.org <<EOF
-        rm mapiah-web-release.tar.bz2
-        put build/mapiah-web-release.tar.bz2 mapiah-web-release.tar.bz2
-        EOF
-        ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "rm -rf mapiah_release_temp; mkdir mapiah_release_temp; tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; mv mapiah.org/webapp mapiah.org/webapp.temp; mv mapiah_release_temp mapiah.org/webapp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp.temp"
