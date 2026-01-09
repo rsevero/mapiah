@@ -42,9 +42,7 @@ jobs:
         flutter-version: 3.38.5
 
     - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
-      with:
-        limit-access-to-actor: true
+      uses: owenthereal/action-upterm@v1
 
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
