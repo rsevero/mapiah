@@ -86,7 +86,5 @@ jobs:
         EOF
         ssh -i "$BUILD_ROOT/ssh-key" -o StrictHostKeyChecking=no -p 65002 nupp7462@mapiah.org "tar xf mapiah-web-release.tar.bz2 -C mapiah_release_temp; rm -f mapiah-web-release.tar.bz2; rm -rf mapiah.org/webapp; mv mapiah_release_temp mapiah.org/webapp"
 
-    # - name: Setup upterm session
-    #   uses: lhotari/action-upterm@v1
-    #   with:
-    #     limit-access-to-actor: true
+   # - name: Setup upterm session
+   #   uses: owenthereal/action-upterm@v1
