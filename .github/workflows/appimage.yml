@@ -41,8 +41,8 @@ jobs:
         channel: stable
         flutter-version: 3.38.5
 
-    - name: Setup upterm session
-      uses: owenthereal/action-upterm@v1
+    # - name: Setup upterm session
+    #   uses: owenthereal/action-upterm@v1
 
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
