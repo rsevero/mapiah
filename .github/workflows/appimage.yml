@@ -17,7 +17,7 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
+        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa libglib2.0-bin
         version: 1.0
 
     - name: Build flutter app

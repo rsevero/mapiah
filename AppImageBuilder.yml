@@ -5,6 +5,31 @@ script: |
   set -x
   rm -rf AppDir || true
   cp -r build/linux/x64/release/bundle AppDir
+
+  # Ship a minimal GSettings schema for compatibility with older GTK3 builds.
+  # Some desktops (e.g. Ubuntu 24.04) may not provide the legacy xsettings keys
+  # that GTK queries, which can lead to a fatal GLib-GIO error.
+  mkdir -p AppDir/usr/share/glib-2.0/schemas
+  cp packaging/linux/appimage/schemas/org.gnome.settings-daemon.plugins.xsettings.gschema.xml \
+    AppDir/usr/share/glib-2.0/schemas/
+  glib-compile-schemas AppDir/usr/share/glib-2.0/schemas
+
+  # Provide our own AppRun to ensure the AppImage's schema directory is in the
+  # GLib search path (while keeping system schemas available).
+  cat > AppDir/AppRun <<'APP_RUN_EOF'
+  #!/bin/sh
+  set -eu
+
+  APPDIR="$(dirname "$(readlink -f "$0")")"
+  export APPDIR
+
+  # Ensure GLib can find schemas shipped in the AppImage.
+  # Prepend to preserve host schemas and only override when needed.
+  export XDG_DATA_DIRS="$APPDIR/usr/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+
+  exec "$APPDIR/usr/bin/mapiah" "$@"
+  APP_RUN_EOF
+  chmod +x AppDir/AppRun
   mkdir -p AppDir/usr/share/icons/hicolor/512x512/apps
   mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
   mkdir -p AppDir/usr/share/icons/hicolor/128x128/apps
@@ -25,7 +50,7 @@ AppDir:
   app_info:
     id: org.mapiah.mapiah
     name: Mapiah
-    version: 0.2.5
+    version: 0.2.30
     exec: mapiah
     exec_args: $@
   apt:

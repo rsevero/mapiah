@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <!--
+    Minimal compatibility schema shipped with the AppImage.
+
+    Some GTK builds (notably older GTK3) unconditionally query the
+    'org.gnome.settings-daemon.plugins.xsettings' schema for font
+    rendering keys like 'antialiasing'. On some modern desktops this
+    schema/key may be absent, which can cause a fatal GLib-GIO error.
+
+    We ship a minimal schema so the lookup never aborts. Values will be
+    read from dconf when present; otherwise the defaults below apply.
+  -->
+  <schema id="org.gnome.settings-daemon.plugins.xsettings" path="/org/gnome/settings-daemon/plugins/xsettings/">
+    <key name="antialiasing" type="s">
+      <default>'rgba'</default>
+      <summary>Font antialiasing mode</summary>
+      <description>Compatibility key used by some GTK versions to determine font antialiasing.</description>
+    </key>
+    <key name="hinting" type="s">
+      <default>'hintslight'</default>
+      <summary>Font hinting mode</summary>
+      <description>Compatibility key used by some GTK versions to determine font hinting.</description>
+    </key>
+    <key name="rgba-order" type="s">
+      <default>'rgb'</default>
+      <summary>Subpixel order</summary>
+      <description>Compatibility key used by some GTK versions to determine subpixel order.</description>
+    </key>
+  </schema>
+</schemalist>
