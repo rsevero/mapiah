@@ -47,7 +47,7 @@ jobs:
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa libglib2.0-bin
+        packages: appstream appstream-compose appstream-util clang cmake libappstream-glib8 libfuse2 libglib2.0-bin libglu1-mesa libgtk-3-dev ninja-build pkg-config
         version: 1.0
 
     - name: Build flutter app
