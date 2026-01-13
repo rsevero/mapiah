@@ -56,6 +56,26 @@ workflows:
       - name: Create DMG
         script: |
           set -e
+
+          # appdmg expects an .icns for the DMG/volume icon (PNG won't work reliably in Finder).
+          ICONSET_DIR="build/dmg_icon.iconset"
+          ICNS_PATH="build/dmg_icon.icns"
+          rm -rf "$ICONSET_DIR" "$ICNS_PATH"
+          mkdir -p "$ICONSET_DIR"
+
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-16x16.png "$ICONSET_DIR/icon_16x16.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-32x32.png "$ICONSET_DIR/icon_16x16@2x.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-32x32.png "$ICONSET_DIR/icon_32x32.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-64x64.png "$ICONSET_DIR/icon_32x32@2x.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-128x128.png "$ICONSET_DIR/icon_128x128.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-256x256.png "$ICONSET_DIR/icon_128x128@2x.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-256x256.png "$ICONSET_DIR/icon_256x256.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png "$ICONSET_DIR/icon_256x256@2x.png"
+          cp macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png "$ICONSET_DIR/icon_512x512.png"
+          sips -z 1024 1024 macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png --out "$ICONSET_DIR/icon_512x512@2x.png" >/dev/null
+
+          iconutil -c icns "$ICONSET_DIR" -o "$ICNS_PATH"
+
           brew install node
           npm install -g appdmg
           appdmg appdmg.json "$INSTALLER"
