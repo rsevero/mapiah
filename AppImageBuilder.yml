@@ -27,6 +27,9 @@ script: |
   # Prepend to preserve host schemas and only override when needed.
   export XDG_DATA_DIRS="$APPDIR/usr/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 
+  # Ensure gdk-pixbuf can find bundled loaders (fixes missing pixbuf loaders).
+  export GDK_PIXBUF_MODULE_FILE="$APPDIR/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+
   exec "$APPDIR/usr/bin/mapiah" "$@"
   APP_RUN_EOF
   chmod +x AppDir/AppRun
@@ -62,12 +65,23 @@ AppDir:
     - sourceline: deb http://archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse
     - sourceline: deb http://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse
     include:
+    - adwaita-icon-theme
+    - gdk-pixbuf2.0-0
+    - gdk-pixbuf2.0-common
+    - hicolor-icon-theme
     - libgtk-3-0
+    - librsvg2-2
+    - librsvg2-common
+    - shared-mime-info
     exclude:
     - humanity-icon-theme
-    - hicolor-icon-theme
-    - adwaita-icon-theme
     - ubuntu-mono
+  after_bundle: |
+    set -e
+    # rebuild loaders cache inside AppDir
+    mkdir -p "$APPDIR/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0"
+    gdk-pixbuf-query-loaders > "$APPDIR/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+
   files:
     include:
     - lib64/ld-linux-x86-64.so.2
