@@ -78,9 +78,13 @@ AppDir:
     - ubuntu-mono
   after_bundle: |
     set -e
+    # Avoid collision with the appimage-builder's own APPDIR env var (its mount
+    # point is read-only). Point explicitly to the AppDir we just staged.
+    APPDIR_PATH="$(pwd)/AppDir"
+
     # rebuild loaders cache inside AppDir
-    mkdir -p "$APPDIR/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0"
-    gdk-pixbuf-query-loaders > "$APPDIR/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    mkdir -p "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0"
+    gdk-pixbuf-query-loaders > "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
   files:
     include:
