@@ -85,8 +85,16 @@ AppDir:
 
     # rebuild loaders cache inside AppDir
     mkdir -p "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0"
+
+    # Locate the bundled gdk-pixbuf-query-loaders (path varies by distro layout).
+    query_loader_bin=$(find "$APPDIR_PATH" -type f -name gdk-pixbuf-query-loaders | head -n1)
+    if [ -z "$query_loader_bin" ]; then
+      echo "gdk-pixbuf-query-loaders not found in AppDir" >&2
+      exit 1
+    fi
+
     LD_LIBRARY_PATH="$APPDIR_PATH/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" \
-      "$APPDIR_PATH/usr/bin/gdk-pixbuf-query-loaders" \
+      "$query_loader_bin" \
       > "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
   files:
