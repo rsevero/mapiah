@@ -67,6 +67,7 @@ AppDir:
     include:
     - adwaita-icon-theme
     - gdk-pixbuf2.0-0
+    - gdk-pixbuf2.0-bin
     - gdk-pixbuf2.0-common
     - hicolor-icon-theme
     - libgtk-3-0
@@ -84,7 +85,9 @@ AppDir:
 
     # rebuild loaders cache inside AppDir
     mkdir -p "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0"
-    gdk-pixbuf-query-loaders > "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+    LD_LIBRARY_PATH="$APPDIR_PATH/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH" \
+      "$APPDIR_PATH/usr/bin/gdk-pixbuf-query-loaders" \
+      > "$APPDIR_PATH/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
   files:
     include:
