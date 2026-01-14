@@ -8,7 +8,7 @@ workflows:
       groups:
         - mapiah_github_token
       vars:
-        MAPIAH_TAG_PARAM: "v0.2.5"
+        MAPIAH_TAG_PARAM: "v0.2.31-test4"
 
     triggering:
       events:
