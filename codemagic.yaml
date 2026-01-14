@@ -37,6 +37,12 @@ workflows:
           echo "INSTALLER=$INSTALLER" >> $CM_ENV
           echo "Defined INSTALLER as: $INSTALLER"
 
+      - name: Enable MacOS build
+        script: |
+          set -e
+          flutter config --enable-macos-desktop
+          defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+
       - name: Get ´flutter pub´ dependencies
         script: |
           set -e
@@ -45,16 +51,11 @@ workflows:
       - name: Clean CocoaPods (avoid stale plugin binaries)
         script: |
           set -e
-          rm -rf macos/Pods macos/Podfile.lock macos/Flutter/ephemeral
+          # Do NOT delete macos/Flutter/ephemeral here: Podfile requires Flutter-Generated.xcconfig.
+          rm -rf macos/Pods macos/Podfile.lock
           cd macos
           pod install --repo-update
           cd ..
-
-      - name: Enable MacOS build
-        script: |
-          set -e
-          flutter config --enable-macos-desktop
-          defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
 
       - name: Build MacOS release
         script: |
