@@ -9,6 +9,8 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
 
 mixin MPLinePaintingMixin {
   (
@@ -96,6 +98,10 @@ mixin MPLinePaintingMixin {
     final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
       line: line,
       showLineDirectionTicks: showLineDirectionTicks,
+      showMarksOnLineSegments: true,
+      showSizeOrientationOnLineSegments:
+          th2FileEditController.stateController.state
+              is MPTH2FileEditStateEditSingleLine,
       th2FileEditController: th2FileEditController,
     );
     final THLineType lineType = line.lineType;
@@ -219,31 +225,5 @@ mixin MPLinePaintingMixin {
 
       return painters;
     }
-  }
-}
-
-class THLinePainterLineInfo {
-  late final int mpID;
-  late final THLinePaint lineDirectionTicksPaint;
-  late final bool addLineDirectionTicks;
-  late final bool isReversed;
-  late final THArea? parentArea;
-
-  THLinePainterLineInfo({
-    required THLine line,
-    required bool showLineDirectionTicks,
-    required TH2FileEditController th2FileEditController,
-  }) {
-    mpID = line.mpID;
-    isReversed = MPCommandOptionAux.isReversed(line);
-    lineDirectionTicksPaint = th2FileEditController.visualController
-        .getLineDirectionTickPaint(line: line, reverse: isReversed);
-    addLineDirectionTicks =
-        showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
-
-    final THFile thFile = th2FileEditController.thFile;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(mpID);
-
-    parentArea = (areaMPID == null) ? null : thFile.areaByMPID(areaMPID);
   }
 }

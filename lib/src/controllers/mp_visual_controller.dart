@@ -1277,6 +1277,16 @@ abstract class MPVisualControllerBase with Store {
     return pointPaint;
   }
 
+  THPointPaint getLineSegmentMarkPointPaint() {
+    return THPointPaint(
+      radius: _th2FileEditController.pointRadiusOnCanvas,
+      border: THPaint.thPaint1
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      type: MPPointShapeType.x,
+      fill: THPaint.thPaint1001,
+    );
+  }
+
   THLinePaint getDefaultLinePaint(THLine line) {
     final THLineType lineType = line.lineType;
     final String? lineSubtype =

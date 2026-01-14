@@ -18,8 +18,8 @@ class THLine extends THElement
 
   List<int>? _lineSegmentMPIDs;
   List<THLineSegment>? _lineSegments;
-  Set<int>? _lineSegmentWithSizeOrientationMPIDs;
-  Set<int>? _lineSegmentWithMarkMPIDs;
+  Map<int, MPLineSegmentSizeOrientationInfo>? _lineSegmentsWithSizeOrientation;
+  Map<int, MPLineSegmentMarkInfo>? _lineSegmentsWithMark;
 
   THLine.forCWJM({
     required super.mpID,
@@ -532,86 +532,89 @@ class THLine extends THElement
     }
   }
 
-  @override
-  bool addUpdateOption(THCommandOption option) {
-    _invalidateCache(option.type);
-
-    return super.addUpdateOption(option);
+  void clearLineSegmentsWithSizeOrientationCache() {
+    _lineSegmentsWithSizeOrientation = null;
   }
 
-  @override
-  bool removeOption(THCommandOptionType type) {
-    _invalidateCache(type);
+  Map<int, MPLineSegmentSizeOrientationInfo>
+  get lineSegmentsWithSizeOrientation {
+    _lineSegmentsWithSizeOrientation ??=
+        _generateLineSegmentsWithSizeOrientation();
 
-    return super.removeOption(type);
+    return _lineSegmentsWithSizeOrientation!;
   }
 
-  void _invalidateCache(THCommandOptionType type) {
-    if ((type == THCommandOptionType.lSize) ||
-        (type == THCommandOptionType.orientation)) {
-      clearLineSegmentWithSizeOrientationMPIDsCache();
-    } else if (type == THCommandOptionType.mark) {
-      clearLineSegmentWithMarkMPIDsCache();
-    }
-  }
-
-  void clearLineSegmentWithSizeOrientationMPIDsCache() {
-    _lineSegmentWithSizeOrientationMPIDs = null;
-  }
-
-  Set<int> get lineSegmentWithSizeOrientationMPIDs {
-    _lineSegmentWithSizeOrientationMPIDs ??=
-        _generateLineSegmentWithSizeOrientationMPIDs();
-
-    return _lineSegmentWithSizeOrientationMPIDs!;
-  }
-
-  Set<int> _generateLineSegmentWithSizeOrientationMPIDs() {
+  Map<int, MPLineSegmentSizeOrientationInfo>
+  _generateLineSegmentsWithSizeOrientation() {
     if (thFile == null) {
       throw THCustomException(
-        "At THLine._generateLineSegmentWithSizeOrientationMPIDs: THFile is null.",
+        "At THLine._generateLineSegmentsWithSizeOrientation: THFile is null.",
       );
     }
 
-    final Set<int> lineSegmentWithSizeOrientationMPIDs = {};
+    final Map<int, MPLineSegmentSizeOrientationInfo>
+    lineSegmentWithSizeOrientation = {};
     final List<THLineSegment> lineSegments = getLineSegments(thFile!);
 
     for (final THLineSegment lineSegment in lineSegments) {
       if (lineSegment.hasOption(THCommandOptionType.lSize) ||
           lineSegment.hasOption(THCommandOptionType.orientation)) {
-        lineSegmentWithSizeOrientationMPIDs.add(lineSegment.mpID);
+        lineSegmentWithSizeOrientation[lineSegment
+            .mpID] = MPLineSegmentSizeOrientationInfo(
+          mpID: lineSegment.mpID,
+          canvasPosition: lineSegment.endPoint.coordinates,
+          size: lineSegment.hasOption(THCommandOptionType.lSize)
+              ? (lineSegment.getOption(THCommandOptionType.lSize)!
+                        as THLSizeCommandOption)
+                    .number
+                    .value
+              : null,
+          orientation: lineSegment.hasOption(THCommandOptionType.orientation)
+              ? (lineSegment.getOption(THCommandOptionType.orientation)!
+                        as THOrientationCommandOption)
+                    .azimuth
+                    .value
+              : null,
+        );
       }
     }
 
-    return lineSegmentWithSizeOrientationMPIDs;
+    return lineSegmentWithSizeOrientation;
   }
 
-  void clearLineSegmentWithMarkMPIDsCache() {
-    _lineSegmentWithMarkMPIDs = null;
+  void clearLineSegmentsWithMarkCache() {
+    _lineSegmentsWithMark = null;
   }
 
-  Set<int> get lineSegmentWithMarkMPIDs {
-    _lineSegmentWithMarkMPIDs ??= _generateLineSegmentWithMarkMPIDs();
+  Map<int, MPLineSegmentMarkInfo> get lineSegmentsWithMark {
+    _lineSegmentsWithMark ??= _generateLineSegmentsWithMark();
 
-    return _lineSegmentWithMarkMPIDs!;
+    return _lineSegmentsWithMark!;
   }
 
-  Set<int> _generateLineSegmentWithMarkMPIDs() {
+  Map<int, MPLineSegmentMarkInfo> _generateLineSegmentsWithMark() {
     if (thFile == null) {
       throw THCustomException(
-        "At THLine._generateLineSegmentWithMarkMPIDs: THFile is null.",
+        "At THLine._generateLineSegmentsWithMark: THFile is null.",
       );
     }
 
-    final Set<int> lineSegmentWithMarkMPIDs = {};
+    final Map<int, MPLineSegmentMarkInfo> lineSegmentsWithMark = {};
     final List<THLineSegment> lineSegments = getLineSegments(thFile!);
 
     for (final THLineSegment lineSegment in lineSegments) {
       if (lineSegment.hasOption(THCommandOptionType.mark)) {
-        lineSegmentWithMarkMPIDs.add(lineSegment.mpID);
+        lineSegmentsWithMark[lineSegment.mpID] = MPLineSegmentMarkInfo(
+          mpID: lineSegment.mpID,
+          canvasPosition: lineSegment.endPoint.coordinates,
+          mark:
+              (lineSegment.getOption(THCommandOptionType.mark)!
+                      as THMarkCommandOption)
+                  .mark,
+        );
       }
     }
 
-    return lineSegmentWithMarkMPIDs;
+    return lineSegmentsWithMark;
   }
 }

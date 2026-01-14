@@ -827,9 +827,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String plaOriginalLineInTH2File,
   }) {
     final int parentMPID = option.parentMPID;
-    final THElement parentElement = _thFile
-        .elementByMPID(parentMPID)
-        .copyWith(originalLineInTH2File: plaOriginalLineInTH2File);
+    final THElement parentElement =
+        _thFile
+            .elementByMPID(parentMPID)
+            .copyWith(originalLineInTH2File: plaOriginalLineInTH2File)
+          ..setTHFile(_thFile);
 
     if (parentElement is! THHasOptionsMixin) {
       throw Exception(
@@ -866,8 +868,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final THHasOptionsMixin newParentElement =
-        parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
-            as THHasOptionsMixin;
+        (parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
+              as THHasOptionsMixin)
+          ..setTHFile(_thFile);
 
     newParentElement.removeOption(optionType);
     _thFile.substituteElement(newParentElement);

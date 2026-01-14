@@ -16,6 +16,7 @@ import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
@@ -73,7 +74,8 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
 
         final List<CustomPainter> painters = [];
         final THLine line =
-            logicalSelectedElements.first.originalElementClone as THLine;
+            (logicalSelectedElements.first.originalElementClone as THLine)
+              ..setTHFile(th2FileEditController.thFile);
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,
@@ -85,6 +87,8 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
           line: line,
           showLineDirectionTicks: true,
+          showMarksOnLineSegments: true,
+          showSizeOrientationOnLineSegments: true,
           th2FileEditController: th2FileEditController,
         );
 

@@ -12,6 +12,7 @@ import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
@@ -78,6 +79,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                 final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
                   line: highlightedElement,
                   showLineDirectionTicks: true,
+                  showMarksOnLineSegments: true,
+                  showSizeOrientationOnLineSegments: false,
                   th2FileEditController: th2FileEditController,
                 );
 
@@ -107,6 +110,8 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
                     line: highlightedElement,
                     showLineDirectionTicks: false,
+                    showMarksOnLineSegments: true,
+                    showSizeOrientationOnLineSegments: false,
                     th2FileEditController: th2FileEditController,
                   );
                   final THLinePainter linePainter = THLinePainter(

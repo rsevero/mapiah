@@ -18,6 +18,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
+    bool handled = false;
+
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
         if (!isCtrlPressed &&
@@ -27,6 +29,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addArea,
           );
+          handled = true;
         }
       case LogicalKeyboardKey.keyC:
         if (!isAltPressed &&
@@ -34,6 +37,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isMetaPressed &&
             !isShiftPressed) {
           selectionController.setSelectionState();
+          handled = true;
         }
       case LogicalKeyboardKey.keyK:
         if (!isCtrlPressed && !isMetaPressed && !isShiftPressed) {
@@ -42,6 +46,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           } else {
             th2FileEditController.elementEditController.addScrap();
           }
+          handled = true;
         }
       case LogicalKeyboardKey.keyI:
         if (!isShiftPressed && !isCtrlPressed && !isMetaPressed) {
@@ -52,6 +57,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           } else {
             th2FileEditController.elementEditController.addImage();
           }
+          handled = true;
         }
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed &&
@@ -61,6 +67,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addLine,
           );
+          handled = true;
         }
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed &&
@@ -82,6 +89,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.editSingleLine,
           );
+          handled = true;
         }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed &&
@@ -91,6 +99,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addPoint,
           );
+          handled = true;
         }
       case LogicalKeyboardKey.keyS:
         if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
@@ -100,6 +109,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             } else {
               th2FileEditController.saveTH2File();
             }
+            handled = true;
           }
         }
       case LogicalKeyboardKey.keyY:
@@ -108,6 +118,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isShiftPressed &&
             th2FileEditController.hasRedo) {
           th2FileEditController.redo();
+          handled = true;
         }
       case LogicalKeyboardKey.keyZ:
         if ((isCtrlPressed || isMetaPressed) &&
@@ -115,34 +126,39 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isShiftPressed &&
             th2FileEditController.hasUndo) {
           th2FileEditController.undo();
+          handled = true;
         }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
         selectionController.removeSelected();
+        handled = true;
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.selectEmptySelection,
         );
+        handled = true;
     }
 
-    switch (event.character) {
-      case '1':
-        th2FileEditController.zoomOneToOne();
-      case '2':
-        if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
-          th2FileEditController.zoomToFit(
-            zoomFitToType: MPZoomToFitType.selection,
-          );
-        }
-      case '3':
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
-      case '4':
-        th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
-      case '+':
-        th2FileEditController.zoomIn(fineZoom: false);
-      case '-':
-        th2FileEditController.zoomOut(fineZoom: false);
+    if (!handled) {
+      switch (event.character) {
+        case '1':
+          th2FileEditController.zoomOneToOne();
+        case '2':
+          if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+            th2FileEditController.zoomToFit(
+              zoomFitToType: MPZoomToFitType.selection,
+            );
+          }
+        case '3':
+          th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
+        case '4':
+          th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        case '+':
+          th2FileEditController.zoomIn(fineZoom: false);
+        case '-':
+          th2FileEditController.zoomOut(fineZoom: false);
+      }
     }
   }
 

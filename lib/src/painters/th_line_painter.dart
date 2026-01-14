@@ -2,13 +2,16 @@ import 'dart:collection';
 import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
-import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
 
 class THLinePainter extends CustomPainter {
   final THLinePainterLineInfo lineInfo;
@@ -98,6 +101,27 @@ class THLinePainter extends CustomPainter {
           (i == lineSegmentsCount)) {
         points.add(Offset(lineSegment.x, lineSegment.y));
         distances.add(path.computeMetrics().first.length);
+      }
+    }
+
+    if (lineInfo.showSizeOrientationOnLineSegments &&
+        lineInfo.lineSegmentsWithSizeOrientation.isNotEmpty) {}
+
+    if (lineInfo.showMarksOnLineSegments &&
+        lineInfo.lineSegmentsWithMark.isNotEmpty) {
+      final THPointPaint markPointPaint = th2FileEditController.visualController
+          .getLineSegmentMarkPointPaint();
+
+      for (final MapEntry<int, MPLineSegmentMarkInfo> lineSegmentWithMarkEntry
+          in lineInfo.lineSegmentsWithMark.entries) {
+        final MPLineSegmentMarkInfo lineSegmentWithMark =
+            lineSegmentWithMarkEntry.value;
+
+        MPInteractionAux.drawPoint(
+          canvas: canvas,
+          position: lineSegmentWithMark.canvasPosition,
+          pointPaint: markPointPaint,
+        );
       }
     }
 

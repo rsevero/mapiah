@@ -161,6 +161,8 @@ abstract class THLineSegment extends THElement
       }
     }
 
+    _invalidateCache(option.type);
+
     return changed;
   }
 
@@ -179,6 +181,8 @@ abstract class THLineSegment extends THElement
       }
     }
 
+    _invalidateCache(type);
+
     return removed;
   }
 
@@ -191,5 +195,18 @@ abstract class THLineSegment extends THElement
     super.setTHFile(thFile);
 
     setTHFileToOptions(thFile);
+  }
+
+  void _invalidateCache(THCommandOptionType type) {
+    if ((type == THCommandOptionType.lSize) ||
+        (type == THCommandOptionType.orientation)) {
+      if (thFile != null) {
+        (parent() as THLine).clearLineSegmentsWithSizeOrientationCache();
+      }
+    } else if (type == THCommandOptionType.mark) {
+      if (thFile != null) {
+        (parent() as THLine).clearLineSegmentsWithMarkCache();
+      }
+    }
   }
 }

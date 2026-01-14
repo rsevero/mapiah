@@ -60,15 +60,15 @@
 [X] - When deleting the second to last line segment of a line, the whole line should be deleted.
 [X] - When opening files, delete empty lines.
 [X] - When opening files, delete empty areas. An area might get empty if all its line TH IDs are pointing to non-existent lines.
-[X] - Implement Ctrl+O (open file) keyboard shortcut
-[X] - Implement F1 shortcut to help page
-[X] - Support XVI images
-[X] - Support xth_me_image_insert additional formats
-[ ] - Show (and edit) orientation and lsize on the line points during edit
-[ ] - Set borders on points (and lines and areas?) to show the state of some key options like: mark for line points, visibility for points, lines and areas
+[X] - Implement Ctrl+O (open file) keyboard shortcut.
+[X] - Implement F1 shortcut to help page.
+[X] - Support XVI images.
+[X] - Support xth_me_image_insert additional formats.
+[ ] - Show (and edit) orientation and lsize on the line points during edit.
+[X] - Set borders on points (and lines and areas) to show the state of some key options like: mark for line points, visibility for points, lines and areas.
 [X] - Snap to grid lines.
-[X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah
-[X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception
+[X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah.
+[X] - BUG: opening a TH2 file that calls for an non existent raster image should not raise an exception.
 [X] - BUG: Mapiah throws if line referred by area does not exist.
 [X] - BUG: lines added to areas not getting IDs associated to them.
 [X] - BUG: empty lines produce overflow as its bounding box is infinite.
@@ -127,7 +127,7 @@
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
 [ ] - BUG: changing a point type label to type pasage-height throws.
 [ ] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
-[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php 
+[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
