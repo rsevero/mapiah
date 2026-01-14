@@ -18,6 +18,8 @@ class THLine extends THElement
 
   List<int>? _lineSegmentMPIDs;
   List<THLineSegment>? _lineSegments;
+  Set<int>? _lineSegmentWithSizeOrientationMPIDs;
+  Set<int>? _lineSegmentWithMarkMPIDs;
 
   THLine.forCWJM({
     required super.mpID,
@@ -528,5 +530,88 @@ class THLine extends THElement
 
       lineSegmentIndex++;
     }
+  }
+
+  @override
+  bool addUpdateOption(THCommandOption option) {
+    _invalidateCache(option.type);
+
+    return super.addUpdateOption(option);
+  }
+
+  @override
+  bool removeOption(THCommandOptionType type) {
+    _invalidateCache(type);
+
+    return super.removeOption(type);
+  }
+
+  void _invalidateCache(THCommandOptionType type) {
+    if ((type == THCommandOptionType.lSize) ||
+        (type == THCommandOptionType.orientation)) {
+      clearLineSegmentWithSizeOrientationMPIDsCache();
+    } else if (type == THCommandOptionType.mark) {
+      clearLineSegmentWithMarkMPIDsCache();
+    }
+  }
+
+  void clearLineSegmentWithSizeOrientationMPIDsCache() {
+    _lineSegmentWithSizeOrientationMPIDs = null;
+  }
+
+  Set<int> get lineSegmentWithSizeOrientationMPIDs {
+    _lineSegmentWithSizeOrientationMPIDs ??=
+        _generateLineSegmentWithSizeOrientationMPIDs();
+
+    return _lineSegmentWithSizeOrientationMPIDs!;
+  }
+
+  Set<int> _generateLineSegmentWithSizeOrientationMPIDs() {
+    if (thFile == null) {
+      throw THCustomException(
+        "At THLine._generateLineSegmentWithSizeOrientationMPIDs: THFile is null.",
+      );
+    }
+
+    final Set<int> lineSegmentWithSizeOrientationMPIDs = {};
+    final List<THLineSegment> lineSegments = getLineSegments(thFile!);
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (lineSegment.hasOption(THCommandOptionType.lSize) ||
+          lineSegment.hasOption(THCommandOptionType.orientation)) {
+        lineSegmentWithSizeOrientationMPIDs.add(lineSegment.mpID);
+      }
+    }
+
+    return lineSegmentWithSizeOrientationMPIDs;
+  }
+
+  void clearLineSegmentWithMarkMPIDsCache() {
+    _lineSegmentWithMarkMPIDs = null;
+  }
+
+  Set<int> get lineSegmentWithMarkMPIDs {
+    _lineSegmentWithMarkMPIDs ??= _generateLineSegmentWithMarkMPIDs();
+
+    return _lineSegmentWithMarkMPIDs!;
+  }
+
+  Set<int> _generateLineSegmentWithMarkMPIDs() {
+    if (thFile == null) {
+      throw THCustomException(
+        "At THLine._generateLineSegmentWithMarkMPIDs: THFile is null.",
+      );
+    }
+
+    final Set<int> lineSegmentWithMarkMPIDs = {};
+    final List<THLineSegment> lineSegments = getLineSegments(thFile!);
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (lineSegment.hasOption(THCommandOptionType.mark)) {
+        lineSegmentWithMarkMPIDs.add(lineSegment.mpID);
+      }
+    }
+
+    return lineSegmentWithMarkMPIDs;
   }
 }

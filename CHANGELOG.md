@@ -3,7 +3,10 @@
 ## 0.2.31 - not yet released
 * New features:
 * Fixed bugs:
+  * AppImage lacking settings and icon need for Ubuntu 24.04.
+  * MacOS dmg file lacking icon.
 * Infrastructure maintenance:
+  * Created THLine._lineSegmentWithSizeOrientationMPIDs and THLine._lineSegmentWithMarkMPIDs to keep track of which line segments have size/orientation and mark options set.
 
 ## 0.2.30 - 2026-01-05 - The [Serra Grande](https://pt.wikipedia.org/wiki/Serra_Grande_(Uru%C3%A7uca)) release
 * New features:
