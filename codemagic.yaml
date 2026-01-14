@@ -66,6 +66,18 @@ workflows:
         script: |
           set -e
 
+          APP_PATH="build/macos/Build/Products/Release/mapiah.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Expected app not found at $APP_PATH; searching for *.app in build output..."
+            APP_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -name '*.app' -print -quit)"
+          fi
+          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
+            echo "ERROR: Could not find built .app in build/macos/Build/Products/Release"
+            ls -la build/macos/Build/Products/Release || true
+            exit 1
+          fi
+          echo "Using app bundle: $APP_PATH"
+
           # appdmg expects an .icns for the DMG/volume icon (PNG won't work reliably in Finder).
           ICONSET_DIR="build/dmg_icon.iconset"
           ICNS_PATH="build/dmg_icon.icns"
@@ -84,6 +96,12 @@ workflows:
           sips -z 1024 1024 macos/Runner/Assets.xcassets/AppIcon.appiconset/m-512x512.png --out "$ICONSET_DIR/icon_512x512@2x.png" >/dev/null
 
           iconutil -c icns "$ICONSET_DIR" -o "$ICNS_PATH"
+
+          # Ensure the app bundle has a concrete icon file (some environments miss Assets.car in release builds).
+          mkdir -p "$APP_PATH/Contents/Resources"
+          cp "$ICNS_PATH" "$APP_PATH/Contents/Resources/AppIcon.icns"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile AppIcon" "$APP_PATH/Contents/Info.plist" 2>/dev/null \
+            || /usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string AppIcon" "$APP_PATH/Contents/Info.plist"
 
           brew install node
           npm install -g appdmg

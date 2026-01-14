@@ -32,10 +32,14 @@ EXE="$(defaults read "${APP}/Contents/Info" CFBundleExecutable)"
 echo "CFBundleIdentifier=${BID}"
 echo "CFBundleExecutable=${EXE}"
 
-echo "== Check app icon resources (.icns) exist inside the app bundle =="
-if ! ls "${APP}/Contents/Resources/"*.icns >/dev/null 2>&1; then
-  echo "ERROR: No .icns found in ${APP}/Contents/Resources (app icon likely missing in the .app)."
-  ls -la "${APP}/Contents/Resources" || true
+echo "== Bundle structure (diagnostic) =="
+ls -la "${APP}/Contents" || true
+ls -la "${APP}/Contents/Resources" || true
+
+echo "== Check app icon resources exist inside the app bundle =="
+# On macOS, apps may use either an .icns (CFBundleIconFile) or an asset catalog (Assets.car).
+if ! ls "${APP}/Contents/Resources/"*.icns >/dev/null 2>&1 && [[ ! -f "${APP}/Contents/Resources/Assets.car" ]]; then
+  echo "ERROR: No icon resources found in ${APP}/Contents/Resources (expected *.icns or Assets.car)."
   exit 1
 fi
 
