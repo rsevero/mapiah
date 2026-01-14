@@ -42,6 +42,14 @@ workflows:
           set -e
           flutter pub get
 
+      - name: Clean CocoaPods (avoid stale plugin binaries)
+        script: |
+          set -e
+          rm -rf macos/Pods macos/Podfile.lock macos/Flutter/ephemeral
+          cd macos
+          pod install --repo-update
+          cd ..
+
       - name: Enable MacOS build
         script: |
           set -e
@@ -80,8 +88,23 @@ workflows:
           npm install -g appdmg
           appdmg appdmg.json "$INSTALLER"
 
-    # artifacts:
-    #   - build/macos/Mapiah.dmg
+      - name: Verify DMG (mount + checks + smoke)
+        script: |
+          set -e
+          chmod +x scripts/verify_dmg.sh
+          scripts/verify_dmg.sh "$INSTALLER"
+
+      - name: Collect macOS unified logs (last 5 minutes)
+        script: |
+          set -e
+          mkdir -p build/macos/test-logs
+          log show --last 5m --style compact \
+            --predicate 'process == "mapiah" OR process == "Mapiah"' \
+            > build/macos/test-logs/unified.log || true
+
+    artifacts:
+      - build/macos/Mapiah-*-macOS-universal.dmg
+      - build/macos/test-logs/*
 
     publishing:
       scripts:

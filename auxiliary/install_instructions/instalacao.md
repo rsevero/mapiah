@@ -6,6 +6,7 @@
   - [Linux](#linux)
     - [Instalação do Therion no Linux](#instalação-do-therion-no-linux)
     - [Instalação do Mapiah no Linux](#instalação-do-mapiah-no-linux)
+      - [Opção 1: Instalação do Mapiah via AppImage](#opção-1-instalação-do-mapiah-via-appimage)
   - [MacOS](#macos)
     - [Instalação do Therion no MacOS](#instalação-do-therion-no-macos)
     - [Instalação do Mapiah no MacOS](#instalação-do-mapiah-no-macos)
@@ -26,6 +27,9 @@ Pacotes Therion para diversas distribuições Linux: [Debian GNU/Linux](http://p
 Após a instalação do Therion, teste a instalação conforme descrito na seção "Primeira execução do Therion (teste)" abaixo.
 
 ### Instalação do Mapiah no Linux
+Para o Linux há duas versões disponíveis do Mapiah: um arquivo AppImage e um arquivo flatpak. Ambos tem a mesma funcionalidade, mas o AppImage é mais simples de usar, enquanto o flatpak exige downloads menores para atualizações futuras.
+
+#### Opção 1: Instalação do Mapiah via AppImage
 1. Identifique a versão mais recente disponível do Mapiah na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
 2. Baixe o arquivo `.AppImage` correspondente.
 3. Torne o arquivo baixado executável, por exemplo, usando o comando:
@@ -39,6 +43,14 @@ Após a instalação do Therion, teste a instalação conforme descrito na seç�
 5. Abra no Mapiah o arquivo `cave.th2` dos dados de exemplo do Therion (veja seção "Primeira execução do Therion (teste)" abaixo).
 
     _Obs.:_ se sua instalação do Linux não suportar arquivos `.AppImage`, verifique na web como instalar o suporte a esses arquivos em sua distribuição específica.
+
+#### Opção 2: Instalação do Mapiah via Flatpak
+1. Instale o Flatpak em seu sistema, se ainda não estiver disponível em sua máquina. Instruções estão disponíveis em: https://flatpak.org/setup/
+2. Baixe o arquivo `.flatpakref` da versão desejada do Mapiah na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
+3. Instale o Mapiah com o comando:
+   ```bash
+   flatpak install --user --from Mapiah-<versão>.flatpakref
+   ```
 
 ## MacOS
 ### Instalação do Therion no MacOS
@@ -63,9 +75,9 @@ Baixe o instalador do Therion para Windows na página de [downloads do Therion](
 5. Abra no Mapiah o arquivo `cave.th2` dos dados de exemplo do Therion (veja seção "Primeira execução do Therion (teste)" abaixo).
 
 ## Primeira execução do Therion (teste)
-Após instalar o Therion, você pode testá-lo com os [dados de exemplo](https://therion.speleo.sk/downloads/demo.zip) disponíveis na página web do Therion:  
-1. Baixe os dados de exemplo da página web do Therion e descompacte-os em algum lugar no disco rígido do seu computador.  
-2. Execute o XTherion (no Unix e MacOS X, digitando 'xtherion' na linha de comando; no Windows, há um atalho no menu Iniciar).  
-3. Abra o arquivo 'thconfig' do diretório de dados de exemplo.  
-4. Pressione 'F9' ou clique em 'compile' no menu para executar o Therion nos dados — você verá algumas mensagens do Therion, MetaPost e TeX.  
-5. Mapas em PDF e um modelo 3D serão criados no diretório de dados de exemplo.  
+Após instalar o Therion, você pode testá-lo com os [dados de exemplo](https://therion.speleo.sk/downloads/demo.zip) disponíveis na página web do Therion:
+1. Baixe os dados de exemplo da página web do Therion e descompacte-os em algum lugar no disco rígido do seu computador.
+2. Execute o XTherion (no Unix e MacOS X, digitando 'xtherion' na linha de comando; no Windows, há um atalho no menu Iniciar).
+3. Abra o arquivo 'thconfig' do diretório de dados de exemplo.
+4. Pressione 'F9' ou clique em 'compile' no menu para executar o Therion nos dados — você verá algumas mensagens do Therion, MetaPost e TeX.
+5. Mapas em PDF e um modelo 3D serão criados no diretório de dados de exemplo.
