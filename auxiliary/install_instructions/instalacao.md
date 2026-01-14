@@ -54,7 +54,37 @@ Para o Linux há duas versões disponíveis do Mapiah: um arquivo AppImage e um 
 
 ## MacOS
 ### Instalação do Therion no MacOS
-Para instalar o Therion no MacOS, siga as instruções disponíveis na página do repositório [homebrew-therion](https://github.com/ladislavb/homebrew-therion).
+Para instalar o Therion no MacOS, siga as instruções abaixo (adaptadas das disponíveis na página do repositório [homebrew-therion](https://github.com/ladislavb/homebrew-therion)).
+
+Por favor abra o aplicativo Terminal e siga as instruções:
+1. Instale as ferramentas de linha de comando
+> xcode-select --install
+2. Instale o Homebrew - http://brew.sh/
+> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+>
+Teste a instalação com:
+> brew update
+> brew doctor
+3. Instale o XQuartz
+Se o seu macOS não contiver o servidor X11 (10.12 Sierra+), instale-o com o seguinte comando:
+> brew install --cask xquartz
+4. Instale o MacTeX
+> brew install --cask mactex
+5. Instale o tcl-tk e o bwidget
+> brew install tcl-tk bwidget
+6. Instale o Therion
+> brew tap ladislavb/homebrew-therion
+> brew install therion
+7. Copiando Loch para /Applications
+O Loch é instalado em <prefix>/opt/therion/loch.app/. Se você tiver uma versão mais antiga do Loch instalada em suas Aplicações, remova-a e copie a nova versão com:
+> cp -R <prefix>/opt/therion/loch.app /Applications/loch.app
+>
+Substitua <prefix> por /usr/local para macOS Intel ou /opt/homebrew para Apple Silicon.
+Após a instalação bem-sucedida, você deve ser capaz de:
+
+    iniciar o XTherion digitando o comando xtherion na janela do Terminal
+    executar o compilador Therion digitando o comando therion na janela do Terminal
+    iniciar o visualizador Loch a partir do Launchpad
 
 ### Instalação do Mapiah no MacOS
 1. Identifique a versão mais recente disponível do Mapiah na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
