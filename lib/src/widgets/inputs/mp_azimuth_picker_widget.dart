@@ -10,6 +10,7 @@ class MPAzimuthPickerWidget extends StatefulWidget {
   final ValueChanged<double> onChanged;
   final double size;
   final String azimuthLabel;
+  final TextEditingController azimuthTextController;
   final FocusNode? focusNode;
 
   const MPAzimuthPickerWidget({
@@ -17,6 +18,7 @@ class MPAzimuthPickerWidget extends StatefulWidget {
     required this.initialAzimuth,
     required this.onChanged,
     required this.azimuthLabel,
+    required this.azimuthTextController,
     this.focusNode,
     this.size = 200,
   }) : super();
@@ -27,20 +29,13 @@ class MPAzimuthPickerWidget extends StatefulWidget {
 
 class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
   late double _azimuth;
-  late TextEditingController _controller;
   final double _markerSize = 20;
 
   @override
   void initState() {
     super.initState();
     _azimuth = MPNumericAux.normalizeAngle(widget.initialAzimuth);
-    _controller = TextEditingController(text: _azimuth.toStringAsFixed(1));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
   }
 
   void _updateAzimuth(double newAzimuth, {bool updateTextField = false}) {
@@ -49,14 +44,14 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
     setState(() {
       _azimuth = newAzimuth;
       if (updateTextField) {
-        _controller.text = newAzimuth.toStringAsFixed(1);
+        widget.azimuthTextController.text = newAzimuth.toStringAsFixed(1);
       }
     });
     widget.onChanged(newAzimuth);
   }
 
   void _handleTextInput() {
-    final String text = _controller.text;
+    final String text = widget.azimuthTextController.text;
 
     if (text.isEmpty) {
       return;
@@ -68,7 +63,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
       _updateAzimuth(value);
     } else {
       // Revert to previous value if input is invalid
-      _controller.text = _azimuth.toStringAsFixed(1);
+      widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
     }
   }
 
@@ -112,7 +107,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
         SizedBox(
           width: compassBoxSize * 0.6,
           child: TextField(
-            controller: _controller,
+            controller: widget.azimuthTextController,
             focusNode: widget.focusNode,
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,

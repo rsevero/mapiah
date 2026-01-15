@@ -7,6 +7,7 @@
 * Fixed bugs:
   * AppImage lacking settings and icon need for Ubuntu 24.04.
   * MacOS dmg file lacking icon.
+  * Orientation option not being updated when changed from previously set value.
 * Infrastructure maintenance:
   * Created THLine._lineSegmentWithSizeOrientationMPIDs and THLine._lineSegmentWithMarkMPIDs to keep track of which line segments have size/orientation and mark options set.
 

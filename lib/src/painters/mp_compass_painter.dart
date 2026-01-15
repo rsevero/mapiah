@@ -121,6 +121,7 @@ class MPCompassPainter extends CustomPainter {
       ..color = Colors.red
       ..style = PaintingStyle.stroke
       ..strokeWidth = arrowBodyWidthOnScreen;
+
     canvas.drawLine(Offset.zero, arrowTipBase, arrowBodyPaint);
 
     // Draw the arrowhead

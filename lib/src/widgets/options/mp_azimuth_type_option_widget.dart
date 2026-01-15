@@ -227,6 +227,7 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
                     initialAzimuth: double.tryParse(_initialAzimuth) ?? 0.0,
                     azimuthLabel: azimuthLabel,
                     focusNode: _azimuthTextFieldFocusNode,
+                    azimuthTextController: _azimuthController,
                     onChanged: (lengthLabel) {
                       _currentAzimuth = lengthLabel;
                       _updateOkButtonEnabled();
