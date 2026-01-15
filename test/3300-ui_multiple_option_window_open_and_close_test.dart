@@ -29,7 +29,7 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: multiple option window open and close', () {
+  group('UI: multiple option window open and close, set and unset option', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       MPTextToUser.initialize();
@@ -133,7 +133,7 @@ void main() {
 
         expect(mpVisibilityOptionFinder, findsOneWidget);
 
-        // Click the RadioListTile to select the SET option
+        // Click the RadioListTile to select the OFF option
         final Finder offRadioFinder = find.byKey(
           const ValueKey(
             'MPMultipleChoicesWidget|visibility|RadioListTile|off',
@@ -157,7 +157,39 @@ void main() {
 
         expect(mpTileWidgetVisibilityPos.backgroundColor, setExpectedColor);
 
-        // Verify the MPMultipleChoicesWidget is gone after pressing Ok
+        // Verify the MPMultipleChoicesWidget is gone after selecting an option
+        expect(find.byType(MPMultipleChoicesWidget), findsNothing);
+
+        // tap the MPTileWidget and verify MPMultipleOptionWidget opens
+        await tester.tap(mpTileWidgetWithVisibilityFinder);
+        await tester.pumpAndSettle();
+
+        expect(mpVisibilityOptionFinder, findsOneWidget);
+
+        // Click the RadioListTile to select the UNSET option
+        final Finder unsetRadioFinder = find.byKey(
+          const ValueKey(
+            'MPMultipleChoicesWidget|visibility|RadioListTile|UNSET',
+          ),
+        );
+
+        expect(unsetRadioFinder, findsOneWidget);
+        await tester.ensureVisible(unsetRadioFinder);
+        await tester.pumpAndSettle();
+        await tester.tap(unsetRadioFinder);
+        await tester.pumpAndSettle();
+
+        // check MPTileWidget background color equals
+        // theme.colorScheme.surfaceContainer, i.e., is unset.
+        final MPTileWidget mpTileWidgetVisibilityPosUnset = tester
+            .widget<MPTileWidget>(mpTileWidgetWithVisibilityFinder);
+
+        expect(
+          mpTileWidgetVisibilityPosUnset.backgroundColor,
+          unsetExpectedColor,
+        );
+
+        // Verify the MPMultipleChoicesWidget is gone after selecting an option
         expect(find.byType(MPMultipleChoicesWidget), findsNothing);
       },
     );

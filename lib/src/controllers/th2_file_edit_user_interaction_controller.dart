@@ -173,20 +173,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     if (candidateElementsForNewOption.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (candidateElementsForNewOption.length == 1) {
-      final THElement selectedElement = candidateElementsForNewOption.first;
-
-      if ((selectedElement is! THHasOptionsMixin) ||
-          (!selectedElement.hasOption(optionType))) {
-        return;
-      }
-
-      final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
-        optionType: optionType,
-        parentMPID: selectedElement.mpID,
-      );
-
-      _th2FileEditController.execute(removeOptionCommand);
     } else {
       final List<int> parentMPIDs = [];
 
@@ -335,22 +321,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     if (mpSelectedElements.isEmpty) {
       /// TODO: set per session option default values.
-    } else if (mpSelectedElements.length == 1) {
-      final THElement selectedElement =
-          mpSelectedElements.first.originalElementClone;
-
-      if (selectedElement is! THHasOptionsMixin) {
-        return;
-      }
-
-      if (selectedElement.hasOption(optionType)) {
-        final MPCommand removeOptionCommand = MPRemoveOptionFromElementCommand(
-          optionType: optionType,
-          parentMPID: selectedElement.mpID,
-        );
-
-        _th2FileEditController.execute(removeOptionCommand);
-      }
     } else {
       final List<int> parentMPIDs = [];
 
