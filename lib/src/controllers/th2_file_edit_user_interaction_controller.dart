@@ -121,9 +121,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final List<THElement> candidateElementsForNewOption = [];
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<MPSelectedElement> selectedElements =
+    final bool isLineSegmentOption =
         _th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment
+        MPOptionElementType.lineSegment;
+    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
@@ -152,7 +153,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(removeOptionCommand);
 
-        _th2FileEditController.optionEditController.updateOptionStateMap();
+        if (isLineSegmentOption) {
+          _th2FileEditController.optionEditController
+              .updateElementOptionMapForLineSegments();
+        } else {
+          _th2FileEditController.optionEditController.updateOptionStateMap();
+        }
       }
     }
   }
@@ -161,9 +167,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final List<THElement> candidateElementsForNewOption = [];
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<MPSelectedElement> selectedElements =
+    final bool isLineSegmentOption =
         _th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment
+        MPOptionElementType.lineSegment;
+    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
@@ -192,7 +199,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(removeOptionCommand);
 
-        _th2FileEditController.optionEditController.updateOptionStateMap();
+        if (isLineSegmentOption) {
+          _th2FileEditController.optionEditController
+              .updateElementOptionMapForLineSegments();
+        } else {
+          _th2FileEditController.optionEditController.updateOptionStateMap();
+        }
       }
     }
   }
@@ -229,20 +241,21 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<MPSelectedElement> mpSelectedElements =
+    final bool isLineSegmentOption =
         _th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment
+        MPOptionElementType.lineSegment;
+    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
     List<MPCommand> addOptionCommands = [];
 
-    if (mpSelectedElements.isEmpty) {
+    if (selectedElements.isEmpty) {
       /// TODO: set per session option default values.
     } else {
       final List<THElement> elements = [];
 
-      for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
+      for (final MPSelectedElement mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
         if ((element is THHasOptionsMixin) &&
@@ -305,7 +318,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(addOptionFinalCommand);
 
-        _th2FileEditController.optionEditController.updateOptionStateMap();
+        if (isLineSegmentOption) {
+          _th2FileEditController.optionEditController
+              .updateElementOptionMapForLineSegments();
+        } else {
+          _th2FileEditController.optionEditController.updateOptionStateMap();
+        }
       }
     }
   }
@@ -313,18 +331,19 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   void _prepareUnsetMultipleOptionChoice(THCommandOptionType optionType) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final Iterable<MPSelectedElement> mpSelectedElements =
+    final bool isLineSegmentOption =
         _th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment
+        MPOptionElementType.lineSegment;
+    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
         ? selectionController.selectedEndControlPoints.values
         : selectionController.mpSelectedElementsLogical.values;
 
-    if (mpSelectedElements.isEmpty) {
+    if (selectedElements.isEmpty) {
       /// TODO: set per session option default values.
     } else {
       final List<int> parentMPIDs = [];
 
-      for (final mpSelectedElement in mpSelectedElements) {
+      for (final mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
         if ((element is THHasOptionsMixin) && element.hasOption(optionType)) {
@@ -342,7 +361,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
         _th2FileEditController.execute(removeOptionCommand);
 
-        _th2FileEditController.optionEditController.updateOptionStateMap();
+        if (isLineSegmentOption) {
+          _th2FileEditController.optionEditController
+              .updateElementOptionMapForLineSegments();
+        } else {
+          _th2FileEditController.optionEditController.updateOptionStateMap();
+        }
       }
     }
   }

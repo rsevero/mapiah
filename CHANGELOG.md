@@ -10,6 +10,7 @@
   * Orientation option not being updated when changed from previously set value.
   * Changing a PLA type to a hyphenated type throws.
   * After unseting an option, it is still shown as yellow (set).
+  * After unseting a line point option, the line point options window would show options as if there were no line point selected.
 * Infrastructure maintenance:
   * Created THLine._lineSegmentWithSizeOrientationMPIDs and THLine._lineSegmentWithMarkMPIDs to keep track of which line segments have size/orientation and mark options set.
 

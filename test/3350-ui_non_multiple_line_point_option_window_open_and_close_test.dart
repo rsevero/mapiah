@@ -32,197 +32,255 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: non multiple line point option window open and close', () {
-    setUp(() {
-      mpLocator.appLocalizations = AppLocalizationsEn();
-      MPTextToUser.initialize();
-      mpLocator.mpGeneralController.reset();
-    });
+  group(
+    'UI: non multiple line point option window open and close, set and unset option',
+    () {
+      setUp(() {
+        mpLocator.appLocalizations = AppLocalizationsEn();
+        MPTextToUser.initialize();
+        mpLocator.mpGeneralController.reset();
+      });
 
-    testWidgets(
-      'open a file, select a line point, open options window, edit a non multiple option, see the edit option window close after edit',
-      (tester) async {
-        // Increase test surface to avoid BottomAppBar Row overflow in small test window
-        tester.view.physicalSize = const Size(1280, 720);
-        tester.view.devicePixelRatio = 1.0;
-        addTearDown(() {
-          tester.view.resetPhysicalSize();
-          tester.view.resetDevicePixelRatio();
-        });
+      testWidgets(
+        'open a file, select a line point, open options window, edit a non multiple option, see the edit option window close after edit',
+        (tester) async {
+          // Increase test surface to avoid BottomAppBar Row overflow in small test window
+          tester.view.physicalSize = const Size(1280, 720);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
 
-        final String testFilename =
-            './test/auxiliary/2025-10-27-001-straight_line.th2';
-        final TH2FileEditController th2Controller = mpLocator
-            .mpGeneralController
-            .getTH2FileEditController(filename: testFilename);
+          final String testFilename =
+              './test/auxiliary/2025-10-27-001-straight_line.th2';
+          final TH2FileEditController th2Controller = mpLocator
+              .mpGeneralController
+              .getTH2FileEditController(filename: testFilename);
 
-        await tester.runAsync(() async {
-          await th2Controller.load();
-        });
+          await tester.runAsync(() async {
+            await th2Controller.load();
+          });
 
-        final TH2FileEditSelectionController selectionController =
-            th2Controller.selectionController;
-        final THFile thFile = th2Controller.thFile;
+          final TH2FileEditSelectionController selectionController =
+              th2Controller.selectionController;
+          final THFile thFile = th2Controller.thFile;
 
-        await tester.pumpWidget(
-          MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('en'),
-            home: TH2FileEditPage(
-              filename: testFilename,
-              th2FileEditController: th2Controller,
+          await tester.pumpWidget(
+            MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: const Locale('en'),
+              home: TH2FileEditPage(
+                filename: testFilename,
+                th2FileEditController: th2Controller,
+              ),
             ),
-          ),
-        );
-        await tester.pump();
+          );
+          await tester.pump();
 
-        th2Controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+          th2Controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
 
-        final THLine linePre = thFile.getLines().first;
+          final THLine linePre = thFile.getLines().first;
 
-        expect(linePre.getLineSegmentMPIDs(thFile).length == 17, isTrue);
+          expect(linePre.getLineSegmentMPIDs(thFile).length == 17, isTrue);
 
-        selectionController.setSelectedElements([linePre]);
-        th2Controller.stateController.setState(
-          MPTH2FileEditStateType.selectNonEmptySelection,
-        );
+          selectionController.setSelectedElements([linePre]);
+          th2Controller.stateController.setState(
+            MPTH2FileEditStateType.selectNonEmptySelection,
+          );
 
-        await tester.sendKeyEvent(LogicalKeyboardKey.keyN);
-        await tester.pumpAndSettle();
+          await tester.sendKeyEvent(LogicalKeyboardKey.keyN);
+          await tester.pumpAndSettle();
 
-        /// Taken from MPTH2FileEditStateEditSingleLine.onPrimaryButtonClick()
+          /// Taken from MPTH2FileEditStateEditSingleLine.onPrimaryButtonClick()
 
-        final THLineSegment lineSegment = linePre.getLineSegments(thFile)[3];
-        final MPSelectableEndControlPoint selectedEndPoint =
-            MPSelectableEndControlPoint(
-              lineSegment: lineSegment,
-              th2fileEditController: th2Controller,
-              position: lineSegment.endPoint.coordinates,
-              type: MPEndControlPointType.endPointStraight,
-            );
+          final THLineSegment lineSegment = linePre.getLineSegments(thFile)[3];
+          final MPSelectableEndControlPoint selectedEndPoint =
+              MPSelectableEndControlPoint(
+                lineSegment: lineSegment,
+                th2fileEditController: th2Controller,
+                position: lineSegment.endPoint.coordinates,
+                type: MPEndControlPointType.endPointStraight,
+              );
 
-        selectionController.setSelectedEndControlPoint(selectedEndPoint);
-        th2Controller.stateController.setState(
-          MPTH2FileEditStateType.editSingleLine,
-        );
+          selectionController.setSelectedEndControlPoint(selectedEndPoint);
+          th2Controller.stateController.setState(
+            MPTH2FileEditStateType.editSingleLine,
+          );
 
-        await tester.sendKeyEvent(LogicalKeyboardKey.keyO);
-        await tester.pumpAndSettle();
+          await tester.sendKeyEvent(LogicalKeyboardKey.keyO);
+          await tester.pumpAndSettle();
 
-        final Finder editWidgetFinder = find.byWidgetPredicate((widget) {
-          final Key? k = widget.key;
+          final Finder editWidgetFinder = find.byWidgetPredicate(
+            (widget) {
+              final Key? k = widget.key;
 
-          if (k is ValueKey) {
-            final dynamic v = k.value;
+              if (k is ValueKey) {
+                final dynamic v = k.value;
 
-            return (v is String) &&
-                v.startsWith('MPLineSegmentOptionsEditWidget|');
-          }
+                return (v is String) &&
+                    v.startsWith('MPLineSegmentOptionsEditWidget|');
+              }
 
-          return false;
-        }, description: 'ValueKey starts with MPLineSegmentOptionsEditWidget|');
+              return false;
+            },
+            description: 'ValueKey starts with MPLineSegmentOptionsEditWidget|',
+          );
 
-        expect(editWidgetFinder, findsOneWidget);
+          expect(editWidgetFinder, findsOneWidget);
 
-        final Finder mpTileWidgetsFinderPre = find.descendant(
-          of: editWidgetFinder,
-          matching: find.byType(MPTileWidget),
-        );
-
-        expect(mpTileWidgetsFinderPre.evaluate().length, 7);
-
-        final Finder mpTileWidgetWithMarkFinder = find.descendant(
-          of: editWidgetFinder,
-          matching: find.ancestor(
-            of: find.text('Mark'),
+          final Finder mpTileWidgetsFinderPre = find.descendant(
+            of: editWidgetFinder,
             matching: find.byType(MPTileWidget),
-          ),
-        );
+          );
 
-        expect(mpTileWidgetWithMarkFinder, findsOneWidget);
+          expect(mpTileWidgetsFinderPre.evaluate().length, 7);
 
-        // check MPTileWidget background color equals
-        // theme.colorScheme.surfaceContainer, i.e., is unset.
-        final MPTileWidget mpTileWidgetMarkPre = tester.widget<MPTileWidget>(
-          mpTileWidgetWithMarkFinder,
-        );
-        final Color unsetExpectedColor = Theme.of(
-          tester.element(editWidgetFinder),
-        ).colorScheme.surfaceContainer;
+          final Finder mpTileWidgetWithMarkFinder = find.descendant(
+            of: editWidgetFinder,
+            matching: find.ancestor(
+              of: find.text('Mark'),
+              matching: find.byType(MPTileWidget),
+            ),
+          );
 
-        expect(mpTileWidgetMarkPre.backgroundColor, unsetExpectedColor);
+          expect(mpTileWidgetWithMarkFinder, findsOneWidget);
 
-        // tap the MPTileWidget and verify MPTextTypeOptionWidget opens
-        await tester.tap(mpTileWidgetWithMarkFinder);
-        await tester.pumpAndSettle();
+          // check MPTileWidget background color equals
+          // theme.colorScheme.surfaceContainer, i.e., is unset.
+          final MPTileWidget mpTileWidgetMarkPre = tester.widget<MPTileWidget>(
+            mpTileWidgetWithMarkFinder,
+          );
+          final Color unsetExpectedColor = Theme.of(
+            tester.element(editWidgetFinder),
+          ).colorScheme.surfaceContainer;
 
-        final Finder mpMarkOptionFinder = find.byType(MPTextTypeOptionWidget);
+          expect(mpTileWidgetMarkPre.backgroundColor, unsetExpectedColor);
 
-        expect(mpMarkOptionFinder, findsOneWidget);
+          // tap the MPTileWidget and verify MPTextTypeOptionWidget opens
+          await tester.tap(mpTileWidgetWithMarkFinder);
+          await tester.pumpAndSettle();
 
-        // Click the RadioListTile to select the SET option
-        final Finder setRadioFinder = find.byKey(
-          const ValueKey('MPTextTypeOptionWidget|RadioListTile|SET'),
-        );
+          final Finder mpMarkOptionFinder = find.byType(MPTextTypeOptionWidget);
 
-        expect(setRadioFinder, findsOneWidget);
-        await tester.ensureVisible(setRadioFinder);
-        await tester.pumpAndSettle();
-        await tester.tap(setRadioFinder);
-        await tester.pumpAndSettle();
+          expect(mpMarkOptionFinder, findsOneWidget);
 
-        // Find the MPTextFieldInputWidget whose labelText == 'Mark'
-        final Finder markTextInputFinder = find.byWidgetPredicate((widget) {
-          return widget is MPTextFieldInputWidget && widget.labelText == 'Mark';
-        }, description: 'MPTextFieldInputWidget with labelText == Mark');
+          // Click the RadioListTile to select the SET option
+          final Finder setRadioFinder = find.byKey(
+            const ValueKey('MPTextTypeOptionWidget|RadioListTile|SET'),
+          );
 
-        expect(markTextInputFinder, findsOneWidget);
+          expect(setRadioFinder, findsOneWidget);
+          await tester.ensureVisible(setRadioFinder);
+          await tester.pumpAndSettle();
+          await tester.tap(setRadioFinder);
+          await tester.pumpAndSettle();
 
-        // Find the TextField inside that widget and enter 'test'
-        final Finder markTextFieldFinder = find.descendant(
-          of: markTextInputFinder,
-          matching: find.byType(TextField),
-        );
+          // Find the MPTextFieldInputWidget whose labelText == 'Mark'
+          final Finder markTextInputFinder = find.byWidgetPredicate((widget) {
+            return widget is MPTextFieldInputWidget &&
+                widget.labelText == 'Mark';
+          }, description: 'MPTextFieldInputWidget with labelText == Mark');
 
-        expect(markTextFieldFinder, findsOneWidget);
-        await tester.enterText(markTextFieldFinder, 'test');
-        await tester.pumpAndSettle();
+          expect(markTextInputFinder, findsOneWidget);
 
-        // Tap the Ok button inside the MPTextTypeOptionWidget
-        final Finder okButtonFinder = find.descendant(
-          of: mpMarkOptionFinder,
-          matching: find.text('OK'),
-        );
+          // Find the TextField inside that widget and enter 'test'
+          final Finder markTextFieldFinder = find.descendant(
+            of: markTextInputFinder,
+            matching: find.byType(TextField),
+          );
 
-        expect(okButtonFinder, findsOneWidget);
-        await tester.ensureVisible(okButtonFinder);
-        await tester.pumpAndSettle();
-        await tester.tap(okButtonFinder);
-        th2Controller.triggerOptionsListRedraw();
-        await tester.pumpAndSettle();
+          expect(markTextFieldFinder, findsOneWidget);
+          await tester.enterText(markTextFieldFinder, 'test');
+          await tester.pumpAndSettle();
 
-        final Finder mpTileWidgetsFinderPos = find.descendant(
-          of: editWidgetFinder,
-          matching: find.byType(MPTileWidget),
-        );
+          // Tap the Ok button inside the MPTextTypeOptionWidget
+          final Finder okButtonFinder = find.descendant(
+            of: mpMarkOptionFinder,
+            matching: find.text('OK'),
+          );
 
-        expect(mpTileWidgetsFinderPos.evaluate().length, 7);
+          expect(okButtonFinder, findsOneWidget);
+          await tester.ensureVisible(okButtonFinder);
+          await tester.pumpAndSettle();
+          await tester.tap(okButtonFinder);
+          th2Controller.triggerOptionsListRedraw();
+          await tester.pumpAndSettle();
 
-        // check MPTileWidget background color equals
-        // theme.colorScheme.tertiaryFixed, i.e., is set.
-        final MPTileWidget mpTileWidgetMarkPos = tester.widget<MPTileWidget>(
-          mpTileWidgetWithMarkFinder,
-        );
-        final Color setExpectedColor = Theme.of(
-          tester.element(editWidgetFinder),
-        ).colorScheme.tertiaryFixed;
+          final Finder mpTileWidgetsFinderPos = find.descendant(
+            of: editWidgetFinder,
+            matching: find.byType(MPTileWidget),
+          );
 
-        expect(mpTileWidgetMarkPos.backgroundColor, setExpectedColor);
+          expect(mpTileWidgetsFinderPos.evaluate().length, 7);
 
-        // Verify the MPTextTypeOptionWidget is gone after pressing Ok
-        expect(find.byType(MPTextTypeOptionWidget), findsNothing);
-      },
-    );
-  });
+          // check MPTileWidget background color equals
+          // theme.colorScheme.tertiaryFixed, i.e., is set.
+          final MPTileWidget mpTileWidgetMarkPos = tester.widget<MPTileWidget>(
+            mpTileWidgetWithMarkFinder,
+          );
+          final Color setExpectedColor = Theme.of(
+            tester.element(editWidgetFinder),
+          ).colorScheme.tertiaryFixed;
+
+          expect(mpTileWidgetMarkPos.backgroundColor, setExpectedColor);
+
+          // Verify the MPTextTypeOptionWidget is gone after pressing Ok
+          expect(find.byType(MPTextTypeOptionWidget), findsNothing);
+
+          // tap the MPTileWidget and verify MPTextTypeOptionWidget opens
+          await tester.tap(mpTileWidgetWithMarkFinder);
+          await tester.pumpAndSettle();
+
+          final Finder mpMarkOptionPosFinder = find.byType(
+            MPTextTypeOptionWidget,
+          );
+
+          expect(mpMarkOptionPosFinder, findsOneWidget);
+
+          // Click the RadioListTile to select the SET option
+          final Finder unsetRadioFinder = find.byKey(
+            const ValueKey('MPTextTypeOptionWidget|RadioListTile|UNSET'),
+          );
+
+          expect(unsetRadioFinder, findsOneWidget);
+          await tester.ensureVisible(unsetRadioFinder);
+          await tester.pumpAndSettle();
+          await tester.tap(unsetRadioFinder);
+          await tester.pumpAndSettle();
+
+          // Tap the Ok button inside the MPTextTypeOptionWidget
+          final Finder okButtonPosFinder = find.descendant(
+            of: mpMarkOptionPosFinder,
+            matching: find.text('OK'),
+          );
+
+          expect(okButtonPosFinder, findsOneWidget);
+          await tester.ensureVisible(okButtonPosFinder);
+          await tester.pumpAndSettle();
+          await tester.tap(okButtonPosFinder);
+          th2Controller.triggerOptionsListRedraw();
+          await tester.pumpAndSettle();
+
+          final Finder mpTileWidgetsFinderPosUnset = find.descendant(
+            of: editWidgetFinder,
+            matching: find.byType(MPTileWidget),
+          );
+
+          expect(mpTileWidgetsFinderPosUnset.evaluate().length, 7);
+
+          // check MPTileWidget background color equals
+          // theme.colorScheme.tertiaryFixed, i.e., is set.
+          final MPTileWidget mpTileWidgetMarkPosUnset = tester
+              .widget<MPTileWidget>(mpTileWidgetWithMarkFinder);
+
+          expect(mpTileWidgetMarkPosUnset.backgroundColor, unsetExpectedColor);
+
+          // Verify the MPTextTypeOptionWidget is gone after pressing Ok
+          expect(find.byType(MPTextTypeOptionWidget), findsNothing);
+        },
+      );
+    },
+  );
 }
