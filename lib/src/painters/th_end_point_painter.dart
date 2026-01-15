@@ -35,7 +35,7 @@ class THEndPointPainter extends CustomPainter {
     if (!isSmooth) {
       canvas.save();
       canvas.translate(position.dx, position.dy);
-      canvas.rotate(th45Degrees);
+      canvas.rotate(mp45DegreesInRad);
       canvas.translate(-position.dx, -position.dy);
     }
 

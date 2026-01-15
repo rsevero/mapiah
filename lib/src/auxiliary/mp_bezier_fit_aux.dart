@@ -8,6 +8,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 // -----------------------------
@@ -679,7 +680,7 @@ void _fitToBezPathRec(
   }
 
   double mod2pi(double th) {
-    final double thScaled = th * (1 / math.pi) * 0.5;
+    final double thScaled = th * mp1OverPi * 0.5;
 
     return math.pi * 2.0 * (thScaled - thScaled.round());
   }

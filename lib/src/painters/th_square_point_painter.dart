@@ -29,7 +29,7 @@ class THSquarePointPainter extends CustomPainter {
     if (rotate) {
       canvas.save();
       canvas.translate(position.dx, position.dy);
-      canvas.rotate(th45Degrees);
+      canvas.rotate(mp45DegreesInRad);
       canvas.translate(-position.dx, -position.dy);
     }
 

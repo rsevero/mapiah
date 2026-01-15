@@ -306,7 +306,9 @@ class MPEditElementAux {
         MPCommandDescriptionType.replaceLineSegments,
   }) {
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-    originalLineSegments = originalLine.getLineSegmentsPositionList(thFile);
+    originalLineSegments = originalLine.getLineSegmentsChildPositionList(
+      thFile,
+    );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     newLineSegments = convertTHLineSegmentListToLineSegmentWithPositionList(
       newLineSegmentsList,
@@ -358,7 +360,9 @@ class MPEditElementAux {
           bezierLineSegments,
         );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-    originalLineSegments = originalLine.getLineSegmentsPositionList(thFile);
+    originalLineSegments = originalLine.getLineSegmentsChildPositionList(
+      thFile,
+    );
     final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
       lineMPID: originalLine.mpID,
       originalLineSegments: originalLineSegments,

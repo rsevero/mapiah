@@ -1,11 +1,15 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
 import 'package:mapiah/src/auxiliary/mp_nextafter.dart';
+import 'package:mapiah/src/auxiliary/mp_segment.dart';
+import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
 class MPNumericAux {
@@ -298,7 +302,7 @@ class MPNumericAux {
 
   /// Base 10 logarithm of x.
   static double log10(double x) {
-    return math.log(x) / thLogN10;
+    return math.log(x) / mpLogN10;
   }
 
   static double roundScale(double scale) {
@@ -655,6 +659,17 @@ class MPNumericAux {
     return angle;
   }
 
+  static double directionOffsetToDegrees(Offset direction) {
+    if (direction == Offset.zero) {
+      return 0.0;
+    }
+
+    final double radians = math.atan2(direction.dx, -direction.dy);
+    final double degrees = radians * mp1Radian;
+
+    return normalizeAngle(degrees);
+  }
+
   static double bezierArcLength(
     List<Offset> controlPoints,
     double t, {
@@ -803,6 +818,159 @@ class MPNumericAux {
     final List<Offset> right = [s, r1, q2, p3];
 
     return (left, right);
+  }
+
+  static Offset bezierCurveTangent(
+    MPBezierCurve curve,
+    MPExtremityType extremityType,
+  ) {
+    final Offset raw = switch (extremityType) {
+      MPExtremityType.start => curve.c1 - curve.start,
+      MPExtremityType.end => curve.end - curve.c2,
+    };
+    final double length = raw.distance;
+
+    if (length == 0.0) {
+      return Offset.zero;
+    }
+
+    return raw / length;
+  }
+
+  static Offset straightTangent(MPStraightSegment segment) {
+    final Offset raw = segment.end - segment.start;
+    final double length = raw.distance;
+
+    if (length == 0.0) {
+      return Offset.zero;
+    }
+
+    return raw / length;
+  }
+
+  static Offset anyTypeSegmentTangent(
+    MPSegment segment,
+    MPExtremityType extremityType,
+  ) {
+    if (segment is MPBezierCurve) {
+      return bezierCurveTangent(segment as MPBezierCurve, extremityType);
+    } else {
+      return straightTangent(segment as MPStraightSegment);
+    }
+  }
+
+  static Offset averageTangent(MPSegment first, MPSegment second) {
+    final Offset firstTangent = (first is MPBezierCurve)
+        ? bezierCurveTangent(first as MPBezierCurve, MPExtremityType.end)
+        : straightTangent(first as MPStraightSegment);
+    final Offset secondTangent = (second is MPBezierCurve)
+        ? bezierCurveTangent(second as MPBezierCurve, MPExtremityType.start)
+        : straightTangent(second as MPStraightSegment);
+    final Offset average = firstTangent + secondTangent;
+    final double length = average.distance;
+
+    if (length == 0.0) {
+      return Offset.zero;
+    }
+
+    return average / length;
+  }
+
+  static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {
+    final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
+    final THLine line = lineSegment.parent(thFile: thFile) as THLine;
+    final Map<int, int> lineSegmentsPositionList = line
+        .getLineSegmentPositionsByLineSegmentMPID(thFile);
+    final int position = lineSegmentsPositionList[lineSegmentMPID]!;
+
+    if (position == 0) {
+      final THLineSegment nextLineSegment = line.getNextLineSegment(
+        lineSegment,
+        thFile,
+      )!;
+      final MPSegment segment = (nextLineSegment is THBezierCurveLineSegment)
+          ? MPCubicBezierCurve(
+              start: lineSegment.endPoint.coordinates,
+              c1: nextLineSegment.controlPoint1.coordinates,
+              c2: nextLineSegment.controlPoint2.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            )
+          : MPStraightSegment(
+              start: lineSegment.endPoint.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            );
+
+      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.start);
+    } else if (position == lineSegmentsPositionList.length - 1) {
+      final THLineSegment previousLineSegment = line.getPreviousLineSegment(
+        lineSegment,
+        thFile,
+      )!;
+      final MPSegment segment = (lineSegment is THBezierCurveLineSegment)
+          ? MPCubicBezierCurve(
+              start: previousLineSegment.endPoint.coordinates,
+              c1: lineSegment.controlPoint1.coordinates,
+              c2: lineSegment.controlPoint2.coordinates,
+              end: lineSegment.endPoint.coordinates,
+            )
+          : MPStraightSegment(
+              start: previousLineSegment.endPoint.coordinates,
+              end: lineSegment.endPoint.coordinates,
+            );
+
+      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.end);
+    } else {
+      final THLineSegment previousLineSegment = line.getPreviousLineSegment(
+        lineSegment,
+        thFile,
+      )!;
+      final THLineSegment nextLineSegment = line.getNextLineSegment(
+        lineSegment,
+        thFile,
+      )!;
+      final MPSegment segment = (lineSegment is THBezierCurveLineSegment)
+          ? MPCubicBezierCurve(
+              start: previousLineSegment.endPoint.coordinates,
+              c1: lineSegment.controlPoint1.coordinates,
+              c2: lineSegment.controlPoint2.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            )
+          : MPStraightSegment(
+              start: previousLineSegment.endPoint.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            );
+      final MPSegment nextSegment =
+          (nextLineSegment is THBezierCurveLineSegment)
+          ? MPCubicBezierCurve(
+              start: lineSegment.endPoint.coordinates,
+              c1: nextLineSegment.controlPoint1.coordinates,
+              c2: nextLineSegment.controlPoint2.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            )
+          : MPStraightSegment(
+              start: lineSegment.endPoint.coordinates,
+              end: nextLineSegment.endPoint.coordinates,
+            );
+
+      return MPNumericAux.averageTangent(segment, nextSegment);
+    }
+  }
+
+  static Offset normalFromTangent(Offset tangent, {bool clockwise = false}) {
+    if (tangent == Offset.zero) {
+      return Offset.zero;
+    }
+
+    final Offset rawNormal = clockwise
+        ? Offset(tangent.dy, tangent.dx) // rotate +90°
+        : Offset(-tangent.dy, -tangent.dx); // rotate -90°
+    final double length = rawNormal.distance;
+
+    if (length == 0.0) {
+      return Offset.zero;
+    }
+
+    return rawNormal / length;
   }
 
   static Rect boundingBoxFromOffsets(List<Offset> points) {

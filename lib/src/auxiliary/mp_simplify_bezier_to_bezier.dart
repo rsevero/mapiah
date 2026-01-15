@@ -112,7 +112,7 @@ class MPSimplificationCubicChainSource
     final double angle = math.acos(clamped);
 
     // Threshold: treat as cusp when turn exceeds 60 degrees.
-    const double cuspAngleThreshold = math.pi / 3.0; // 60°
+    const double cuspAngleThreshold = mp60DegreeInRad;
 
     return angle > cuspAngleThreshold;
   }

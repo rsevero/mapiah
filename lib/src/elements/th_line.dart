@@ -458,7 +458,7 @@ class THLine extends THElement
   }
 
   List<({int lineSegmentPosition, THLineSegment lineSegment})>
-  getLineSegmentsPositionList(THFile thFile) {
+  getLineSegmentsChildPositionList(THFile thFile) {
     final List<({int lineSegmentPosition, THLineSegment lineSegment})>
     originalLineSegments = [];
     final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
@@ -478,6 +478,20 @@ class THLine extends THElement
     }
 
     return originalLineSegments;
+  }
+
+  Map<int, int> getLineSegmentPositionsByLineSegmentMPID(THFile thFile) {
+    final Map<int, int> lineSegmentPositionsByLineSegmentMPID = {};
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+
+    int position = 0;
+
+    for (final int lineSegmentMPID in lineSegmentMPIDs) {
+      lineSegmentPositionsByLineSegmentMPID[lineSegmentMPID] = position;
+      position++;
+    }
+
+    return lineSegmentPositionsByLineSegmentMPID;
   }
 
   @override
@@ -575,6 +589,7 @@ class THLine extends THElement
                     .azimuth
                     .value
               : null,
+          thFile: thFile!,
         );
       }
     }

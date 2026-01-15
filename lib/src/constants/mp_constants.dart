@@ -71,8 +71,14 @@ const double mpConvertBezierToStraightFactor = 10.0;
 const int mpMinimumInt = -2 ^ 53 + 1;
 const int mpMaximumInt = 2 ^ 53 - 1;
 
-const double thLogN10 = math.ln10;
-const double th45Degrees = math.pi / 4;
+const double mpLogN10 = math.ln10;
+const double mp45DegreesInRad = math.pi / 4;
+const double mp60DegreeInRad = math.pi / 3;
+const double mp90DegreeInRad = math.pi / 2;
+const double mp180DegreeInRad = math.pi;
+const double mp1DegreeInRad = math.pi / 180;
+const double mp1Radian = 180 / math.pi;
+const double mp1OverPi = 1 / math.pi;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
 
@@ -199,6 +205,21 @@ final Paint thSelectionWindowBorderPaint = Paint()
   ..color = Colors.blue
   ..style = PaintingStyle.stroke;
 const double thSelectionWindowBorderPaintStrokeWidth = 2;
+
+const double mpCompass45DegreeLineFactor = 0.87;
+const double mpCompass90DegreeLineFactor = 0.68;
+const double mpCompassArrowBaseLengthFactor = 0.78;
+const double mpCompassArrowBodyWidthFactor = 2.0;
+const double mpCompassArrowFixedLengthScreenFactor = 2.78;
+const double mpCompassArrowScreenBodyWidth = 3.0;
+const double mpCompassArrowSideFactor = 0.2;
+const double mpCompassArrowTipBaseFactor = 0.85;
+const double mpCompassArrowVariableLengthScreenFactor = 5.0;
+const double mpCompassBoxSizeFactor = 0.8;
+const double mpCompassCardinalDirectionsFontSizeFactor = 0.1;
+const double mpCompassCardinalDirectionsTextOffsetFactor = 0.83;
+const double mpCompassCentralCircleFactor = 0.3;
+const double mpSlopeLinePointDefaultLSize = 20.0;
 
 const double thCentimeterToMeter = 0.01;
 const double thMeterToCentimeter = 100.0;

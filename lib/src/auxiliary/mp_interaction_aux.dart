@@ -563,7 +563,7 @@ class MPInteractionAux {
     double radius,
     Paint paint,
   ) {
-    final double radius45Degrees = radius * th45Degrees;
+    final double radius45Degrees = radius * mp45DegreesInRad;
 
     canvas.drawLine(
       Offset(position.dx - radius45Degrees, position.dy - radius45Degrees),

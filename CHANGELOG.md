@@ -3,6 +3,7 @@
 ## 0.2.31 - not yet released
 * New features:
   * Set borders on points (and lines and areas) to show the state of some key options like: mark for line points, visibility for points, lines and areas.
+  * Presenting orientation and lsize line segment options as arrow at the line point.
 * Fixed bugs:
   * AppImage lacking settings and icon need for Ubuntu 24.04.
   * MacOS dmg file lacking icon.
