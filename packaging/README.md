@@ -4,7 +4,7 @@
 2. Update `CHANGELOG.md` with the new version and changes.
 3. Update `TODO.md` with changes.
 4. Update Flutter version in:
-   1. .github/workflows/linux_and_web.yml
+   1. .github/workflows/linux.yml
    2. .github/workflows/windows.yml
    3. codemagic.yaml
 5. Commit the previous changes with a comment like 'v0.2.22'

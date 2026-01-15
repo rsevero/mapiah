@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.31 - not yet released
+## 0.2.31 - 2026-01-15 - The [EGB](https://www.egb.org.br) release
 * New features:
   * Set borders on points (and lines and areas) to show the state of some key options like: mark for line points, visibility for points, lines and areas.
   * Presenting orientation and lsize line segment options as arrow at the line point.
@@ -12,6 +12,7 @@
   * After unseting an option, it is still shown as yellow (set).
   * After unseting a line point option, the line point options window would show options as if there were no line point selected.
 * Infrastructure maintenance:
+  * Removed web version.
   * Created THLine._lineSegmentWithSizeOrientationMPIDs and THLine._lineSegmentWithMarkMPIDs to keep track of which line segments have size/orientation and mark options set.
   * flutter upgraded to 3.38.7.
   * flutter pub upgrade --major-versions.
