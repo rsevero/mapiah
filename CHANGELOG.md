@@ -13,6 +13,8 @@
   * After unseting a line point option, the line point options window would show options as if there were no line point selected.
 * Infrastructure maintenance:
   * Created THLine._lineSegmentWithSizeOrientationMPIDs and THLine._lineSegmentWithMarkMPIDs to keep track of which line segments have size/orientation and mark options set.
+  * flutter upgraded to 3.38.7.
+  * flutter pub upgrade --major-versions.
 
 ## 0.2.30 - 2026-01-05 - The [Serra Grande](https://pt.wikipedia.org/wiki/Serra_Grande_(Uru%C3%A7uca)) release
 * New features:
