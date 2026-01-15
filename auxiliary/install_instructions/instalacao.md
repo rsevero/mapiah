@@ -7,6 +7,7 @@
     - [Instalação do Therion no Linux](#instalação-do-therion-no-linux)
     - [Instalação do Mapiah no Linux](#instalação-do-mapiah-no-linux)
       - [Opção 1: Instalação do Mapiah via AppImage](#opção-1-instalação-do-mapiah-via-appimage)
+      - [Opção 2: Instalação do Mapiah via Flatpak](#opção-2-instalação-do-mapiah-via-flatpak)
   - [MacOS](#macos)
     - [Instalação do Therion no MacOS](#instalação-do-therion-no-macos)
     - [Instalação do Mapiah no MacOS](#instalação-do-mapiah-no-macos)
