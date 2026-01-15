@@ -43,7 +43,13 @@ class MPPLATypeWidget extends StatelessWidget {
         return SizedBox.shrink();
     }
 
-    return MPTileWidget(title: title, onTap: () => _onPLATypeTap(context));
+    final Key key = ValueKey('MPPLATypeWidget|$elementType|$selectedPLAType');
+
+    return MPTileWidget(
+      key: key,
+      title: title,
+      onTap: () => _onPLATypeTap(context),
+    );
   }
 
   void _onPLATypeTap(BuildContext context) {

@@ -153,7 +153,7 @@ void main() {
 
         expect(mpTileWidgetMarkPre.backgroundColor, unsetExpectedColor);
 
-        // tap the MPTileWidget and verify MPIDOptionWidget opens
+        // tap the MPTileWidget and verify MPTextTypeOptionWidget opens
         await tester.tap(mpTileWidgetWithMarkFinder);
         await tester.pumpAndSettle();
 

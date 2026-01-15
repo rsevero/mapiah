@@ -285,7 +285,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                   child: Column(
                     children: [
                       ...choices.entries.map((MapEntry<String, String> entry) {
-                        final bool isUnknown = entry.key == mpUnknownPLAType;
+                        final bool isUnknown = (entry.key == mpUnknownPLAType);
 
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

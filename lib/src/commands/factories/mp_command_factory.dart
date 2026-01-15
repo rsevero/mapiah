@@ -678,11 +678,11 @@ class MPCommandFactory {
     return multipleCommandsFromList(
       commandsList: commandsList,
       descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
     );
   }
 
-  static MPCommand editLinesSegmentType({
+  static MPCommand editLineSegmentsType({
     required List<THLineSegment> changedLineSegments,
     required THFile thFile,
     MPCommandDescriptionType descriptionType =
@@ -703,7 +703,7 @@ class MPCommandFactory {
     return multipleCommandsFromList(
       commandsList: commandsList,
       descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
     );
   }
 
@@ -730,7 +730,7 @@ class MPCommandFactory {
     return multipleCommandsFromList(
       commandsList: commandsList,
       descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
     );
   }
 
@@ -757,7 +757,7 @@ class MPCommandFactory {
     return multipleCommandsFromList(
       commandsList: commandsList,
       descriptionType: descriptionType,
-      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
     );
   }
 
@@ -1746,7 +1746,7 @@ class MPCommandFactory {
     }
 
     final MPCommand setLineSegmentTypeCommand =
-        MPCommandFactory.editLinesSegmentType(
+        MPCommandFactory.editLineSegmentsType(
           thFile: thFile,
           changedLineSegments: changedLineSegments,
         );

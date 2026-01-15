@@ -78,11 +78,11 @@ class _MPOptionsEditOverlayWindowWidgetState
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
           switch (mpSelectedElement) {
             case MPSelectedArea _:
-              if (mpSelectedElement.originalAreaClone.plaType !=
+              if (mpSelectedElement.originalAreaClone.areaType.name !=
                   selectedAreaPLAType) {
                 if ((selectedAreaPLAType == null) && (countAreas == 0)) {
                   selectedAreaPLAType =
-                      mpSelectedElement.originalAreaClone.plaType;
+                      mpSelectedElement.originalAreaClone.areaType.name;
                 } else {
                   selectedAreaPLAType = null;
                 }
@@ -102,11 +102,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
               countAreas++;
             case MPSelectedLine _:
-              if (mpSelectedElement.originalLineClone.plaType !=
+              if (mpSelectedElement.originalLineClone.lineType.name !=
                   selectedLinePLAType) {
                 if ((selectedLinePLAType == null) && (countLines == 0)) {
                   selectedLinePLAType =
-                      mpSelectedElement.originalLineClone.plaType;
+                      mpSelectedElement.originalLineClone.lineType.name;
                 } else {
                   selectedLinePLAType = null;
                 }
@@ -124,11 +124,11 @@ class _MPOptionsEditOverlayWindowWidgetState
 
               countLines++;
             case MPSelectedPoint _:
-              if (mpSelectedElement.originalPointClone.plaType !=
+              if (mpSelectedElement.originalPointClone.pointType.name !=
                   selectedPointPLAType) {
                 if ((selectedPointPLAType == null) && (countPoints == 0)) {
                   selectedPointPLAType =
-                      mpSelectedElement.originalPointClone.plaType;
+                      mpSelectedElement.originalPointClone.pointType.name;
                 } else {
                   selectedPointPLAType = null;
                   break;
