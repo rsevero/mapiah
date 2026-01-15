@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.32 - not yet released
+* New features:
+  * Portuguese install instructions mentioning update procedure.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.31 - 2026-01-15 - The [EGB](https://www.egb.org.br) release
 * New features:
   * Set borders on points (and lines and areas) to show the state of some key options like: mark for line points, visibility for points, lines and areas.

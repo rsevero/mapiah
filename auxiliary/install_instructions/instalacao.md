@@ -14,6 +14,7 @@
     - [Instalação do Therion no Windows](#instalação-do-therion-no-windows)
     - [Instalação do Mapiah no Windows](#instalação-do-mapiah-no-windows)
   - [Primeira execução do Therion (teste)](#primeira-execução-do-therion-teste)
+  - [Atualização do Mapiah](#atualização-do-mapiah)
 
 ## Introdução
 Este documento fornece instruções detalhadas para a instalação do Mapiah nos 3 diferentes sistemas operacionais suportados: Linux, MacOS e Windows.
@@ -111,3 +112,6 @@ Após instalar o Therion, você pode testá-lo com os [dados de exemplo](https:/
 3. Abra o arquivo 'thconfig' do diretório de dados de exemplo.
 4. Pressione 'F9' ou clique em 'compile' no menu para executar o Therion nos dados — você verá algumas mensagens do Therion, MetaPost e TeX.
 5. Mapas em PDF e um modelo 3D serão criados no diretório de dados de exemplo.
+
+## Atualização do Mapiah
+Para atualizar o Mapiah, siga as mesmas instruções de instalação correspondentes ao seu sistema operacional, baixando a versão mais recente disponível na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
