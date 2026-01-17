@@ -16,20 +16,24 @@ class MPSelectionWindowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: Observer(
-        builder: (_) => CustomPaint(
-          painter: MPSelectionWindowPainter(
-            th2FileEditController: th2FileEditController,
-            selectionWindowPosition: th2FileEditController
-                .selectionController
-                .selectionWindowCanvasCoordinates
-                .value,
-            fillPaint: th2FileEditController.selectionWindowFillPaint,
-            borderPaint:
-                th2FileEditController.selectionWindowBorderPaintComplete,
-            dashInterval: th2FileEditController
-                .selectionWindowBorderPaintDashIntervalOnCanvas,
-          ),
-        ),
+        builder: (_) {
+          th2FileEditController.redrawTriggerAllElements;
+
+          return CustomPaint(
+            painter: MPSelectionWindowPainter(
+              th2FileEditController: th2FileEditController,
+              selectionWindowPosition: th2FileEditController
+                  .selectionController
+                  .selectionWindowCanvasCoordinates
+                  .value,
+              fillPaint: th2FileEditController.selectionWindowFillPaint,
+              borderPaint:
+                  th2FileEditController.selectionWindowBorderPaintComplete,
+              dashInterval: th2FileEditController
+                  .selectionWindowBorderPaintDashIntervalOnCanvas,
+            ),
+          );
+        },
       ),
     );
   }

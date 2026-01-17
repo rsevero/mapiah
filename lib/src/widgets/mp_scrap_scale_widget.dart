@@ -29,6 +29,8 @@ class MPScrapScaleWidget extends StatelessWidget {
         );
         final String scaleText = "$scaleLength $scaleUnit";
 
+        th2FileEditController.redrawTriggerAllElements;
+
         return CustomPaint(
           painter: MPScrapScalePainter(
             lengthUnits: graphicalScaleLengthUnitsLength,

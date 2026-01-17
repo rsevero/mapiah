@@ -183,6 +183,8 @@ class THFileWidget extends StatelessWidget {
                         final Offset canvasPosition = th2FileEditController
                             .offsetScreenToCanvas(screenPosition);
 
+                        th2FileEditController.redrawTriggerAllElements;
+
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

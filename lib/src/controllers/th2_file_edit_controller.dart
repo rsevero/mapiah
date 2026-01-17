@@ -350,6 +350,9 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerNonSelectedElements = mpMinimumInt;
 
   @readonly
+  int _redrawTriggerAllElements = mpMinimumInt;
+
+  @readonly
   int _redrawTriggerImages = mpMinimumInt;
 
   @readonly
@@ -857,10 +860,7 @@ abstract class TH2FileEditControllerBase with Store {
   void triggerAllElementsRedraw() {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
-    _redrawTriggerSelectedElements++;
-    _redrawTriggerNonSelectedElements++;
-    _redrawTriggerNewLine++;
-    _redrawTriggerEditLine++;
+    _redrawTriggerAllElements++;
   }
 
   @action

@@ -129,7 +129,7 @@
 [X] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
 [X] - Test all Therion sample data available at https://therion.speleo.sk/download.php.
 [X] - Create english install instructions.
-[ ] - When dragging (right click) sketch, unselected sketchs are not dragged.
+[X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously

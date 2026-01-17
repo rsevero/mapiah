@@ -30,6 +30,7 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerEditLine;
 
         final Iterable<MPSelectedElement> logicalSelectedElements =

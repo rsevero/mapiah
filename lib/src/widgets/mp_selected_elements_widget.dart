@@ -26,6 +26,7 @@ class MPSelectedElementsWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
 

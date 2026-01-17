@@ -22,6 +22,7 @@ class MPSelectionHandlesWidget extends StatelessWidget {
     return RepaintBoundary(
       child: Observer(
         builder: (_) {
+          th2FileEditController.redrawTriggerAllElements;
           th2FileEditController.redrawTriggerSelectedElements;
           th2FileEditController.redrawTriggerSelectedElementsListChanged;
 

@@ -6,6 +6,7 @@
   * English install instructions.
 * Fixed bugs:
   * When hidden one of the background images in cave.th2 (demo.zip) the other image moves.
+  * When dragging (right click) sketch, unselected sketchs are not dragged.
 * Infrastructure maintenance:
 
 ## 0.2.31 - 2026-01-15 - The [EGB](https://www.egb.org.br) release

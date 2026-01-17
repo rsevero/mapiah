@@ -14,7 +14,7 @@ class MPImagesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        th2FileEditController.redrawTriggerNonSelectedElements;
+        th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerImages;
 
         final List<Widget> widgets = [];

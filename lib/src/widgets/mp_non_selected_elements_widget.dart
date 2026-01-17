@@ -32,6 +32,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
         th2FileEditController.activeScrapID;

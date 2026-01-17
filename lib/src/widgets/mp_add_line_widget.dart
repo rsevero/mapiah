@@ -26,6 +26,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
+        th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerNewLine;
 
         final THPointPaint pointPaint = th2FileEditController.visualController

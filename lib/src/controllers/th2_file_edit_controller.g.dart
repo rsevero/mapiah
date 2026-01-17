@@ -1197,6 +1197,30 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_redrawTriggerAllElementsAtom = Atom(
+    name: 'TH2FileEditControllerBase._redrawTriggerAllElements',
+    context: context,
+  );
+
+  int get redrawTriggerAllElements {
+    _$_redrawTriggerAllElementsAtom.reportRead();
+    return super._redrawTriggerAllElements;
+  }
+
+  @override
+  int get _redrawTriggerAllElements => redrawTriggerAllElements;
+
+  @override
+  set _redrawTriggerAllElements(int value) {
+    _$_redrawTriggerAllElementsAtom.reportWrite(
+      value,
+      super._redrawTriggerAllElements,
+      () {
+        super._redrawTriggerAllElements = value;
+      },
+    );
+  }
+
   late final _$_redrawTriggerImagesAtom = Atom(
     name: 'TH2FileEditControllerBase._redrawTriggerImages',
     context: context,

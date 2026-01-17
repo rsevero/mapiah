@@ -33,6 +33,7 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
     return Observer(
       builder: (_) {
         th2FileEditController.activeScrapID;
+        th2FileEditController.redrawTriggerAllElements;
 
         final List<CustomPainter> painters = [];
 
