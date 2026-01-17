@@ -19,10 +19,13 @@ class MPRasterImagePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+
     /// Removing the inversion of canvas orientation so images aren´t presented
     /// upside down.
     th2FileEditController.transformCanvas(canvas, invert: false);
     canvas.drawImage(uiImage, offset, Paint());
+    canvas.restore();
   }
 
   @override

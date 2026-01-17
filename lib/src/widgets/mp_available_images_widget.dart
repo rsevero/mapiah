@@ -83,6 +83,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 Checkbox(
                                   value: isVisible,
                                   onChanged: (bool? value) {
+                                    if (value == null) {
+                                      return;
+                                    }
                                     _imageVisibilityChanged(image.mpID, value);
                                   },
                                   checkColor: colorScheme.onSurface,
@@ -169,10 +172,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     th2FileEditController.triggerImagesRedraw();
   }
 
-  void _imageVisibilityChanged(int imageMPID, bool? newVisibility) {
+  void _imageVisibilityChanged(int imageMPID, bool newVisibility) {
     th2FileEditController.selectionController.setImageVisibility(
       imageMPID,
-      newVisibility ?? true,
+      newVisibility,
     );
   }
 

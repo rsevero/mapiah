@@ -110,7 +110,7 @@
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
 [X] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
 [ ] - When clicking on an area, create some sort of short cut that would enable the user to automatically selected either the line or the area without being presented with a 'multiple elements clicked' dialog box.
-[X] - Create state 'select all/deseselct all' methods.
+[X] - Create state 'select all/deselect all' methods.
 [X] - Move kerboard shortcuts R (reverse line) and S (smooth line points) to states that actually deal with selected lines.
 [X] - Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
 [X] - BUG: 'O' shortcut to open options overlay window not working.
@@ -126,9 +126,10 @@
 [X] - BUG: After unseting an option, it is still shown as yellow (set).
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
 [X] - BUG: changing a point type label to type passage-height throws.
-[ ] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
-[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php.
-[ ] - Create english install instructions.
+[X] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
+[X] - Test all Therion sample data available at https://therion.speleo.sk/download.php.
+[X] - Create english install instructions.
+[ ] - When dragging (right click) sketch, unselected sketchs are not dragged.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
@@ -168,6 +169,7 @@
 [ ] - Manually edit position of points.
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Convert multiline comment into a single element.
+[ ] - Reorder images.
 
 ## Version 1.0
 [ ] - Raster images tracing

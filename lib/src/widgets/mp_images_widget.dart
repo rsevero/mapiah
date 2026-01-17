@@ -22,15 +22,19 @@ class MPImagesWidget extends StatelessWidget {
             th2FileEditController.thFile.getImages();
 
         for (final THXTherionImageInsertConfig image in images) {
-          if (!image.isVisible) continue;
+          if (!image.isVisible) {
+            continue;
+          }
 
           widgets.add(
             image.isXVI
                 ? MPXVIImageWidget(
+                    key: ValueKey('xvi_image_${image.mpID}'),
                     th2FileEditController: th2FileEditController,
                     image: image,
                   )
                 : MPRasterImageWidget(
+                    key: ValueKey('raster_image_${image.mpID}'),
                     th2FileEditController: th2FileEditController,
                     image: image,
                   ),
