@@ -3,6 +3,7 @@
 ## 0.2.32 - not yet released
 * New features:
   * Portuguese install instructions mentioning update procedure.
+  * English install instructions.
 * Fixed bugs:
 * Infrastructure maintenance:
 

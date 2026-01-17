@@ -127,7 +127,8 @@
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
 [X] - BUG: changing a point type label to type passage-height throws.
 [ ] - BUG: when hidden one of the background images in cave.th2 (demo.zip) the other image moves.
-[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php
+[ ] - Test all Therion sample data available at https://therion.speleo.sk/download.php.
+[ ] - Create english install instructions.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously
