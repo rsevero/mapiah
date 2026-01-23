@@ -118,9 +118,9 @@
 [X] - BUG: ID option shown with more than one element selected.
 [X] - BUG: web release not opening files with XVI images.
 [X] - BUG: after editing line point option, the general line point overlay window is presented, not line type specific.
-[ ] - Disable web version.
+[X] - Disable web version.
 [X] - On zoom out/in, center the canvas on the selected elements if any.
-[ ] - Verify is new lines (specially long bezier ones) are clickable right after being created.
+[ ] - Verify if new lines (specially long bezier ones) are clickable right after being created.
 [ ] - Create shortcut to toggle all images visibility.
 [ ] - Bézier created from straight lines are too tight.
 [X] - BUG: After unseting an option, it is still shown as yellow (set).
@@ -132,29 +132,29 @@
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 
 ## Version 0.4
-[ ] - Open multiple files simultaneously
-[ ] - Allow copy/paste between scraps
-[ ] - Allow copy/paste between files
-[ ] - Search/select elements by characteristics
-[ ] - Change cursors to show current status
-[ ] - Config page
-[ ] - Drag overlay windows
+[ ] - Open multiple files simultaneously.
+[ ] - Allow copy/paste between scraps.
+[ ] - Allow copy/paste between files.
+[ ] - Search/select elements by characteristics.
+[ ] - Change cursors to show current status.
+[ ] - Config page.
+[X] - Drag overlay windows.
 [ ] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]
-[ ] - Hide elements by type
-[ ] - Copy/Paste
-[ ] - Show status message listing what's selected in 'single line edit' mode
-[ ] - Highlight slope lines without at least one line point with l-size
-[X] - Create shortcut to reverse line
-[ ] - Migrate away from Github
-[ ] - Include options and point/line count in multiple elements clicked dialog box
-[ ] - Implement default option values
-[ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style
-[ ] - Control which scraps are visible in Mapiah (that is not a Therion setting)
+[ ] - Hide elements by type.
+[ ] - Copy/Paste.
+[ ] - Show status message listing what's selected in 'single line edit' mode.
+[ ] - Highlight slope lines without at least one line point with l-size.
+[X] - Create shortcut to reverse line.
+[ ] - Migrate away from Github.
+[ ] - Include options and point/line count in multiple elements clicked dialog box.
+[ ] - Implement default option values.
+[ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
+[ ] - Control which scraps are visible in Mapiah (that is not a Therion setting).
 [ ] - Show points, lines and areas using therion symbology [requested by Marco Corvi]
-[ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line [requested by Marco Corvi]
-[ ] - Easily turn on/off the direction ticks [requested by Marco Corvi]
-[ ] - Open file dialog on web should only show accepted file extensions [requested by Marco Corvi]
-[ ] - Edit file properties (encoding and?...)
+[ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
+[ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
+[ ] - Open file dialog on web should only show accepted file extensions. [requested by Marco Corvi]
+[ ] - Edit file properties (encoding and?...).
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.
 [ ] - Split one line in two.
@@ -172,7 +172,7 @@
 [ ] - Reorder images.
 
 ## Version 1.0
-[ ] - Raster images tracing
+[ ] - Raster images tracing.
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 
 ## Version 2.0

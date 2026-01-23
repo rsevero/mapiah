@@ -63,7 +63,7 @@ Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 contr
 Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
 
 ## Element options
-Right clicking on a selected element presents an overlay window with the options available for the currently selected elements.
+Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be openned by using the 'O' keyboard shortcut when there is at least one element selected.
 The options available depend on the type of element selected.
 
 To edit scrap options, right click on:

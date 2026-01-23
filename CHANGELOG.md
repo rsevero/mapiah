@@ -4,6 +4,7 @@
 * New features:
   * Portuguese install instructions mentioning update procedure.
   * English install instructions.
+  * Right click overlay windows dragging support.
 * Fixed bugs:
   * When hidden one of the background images in cave.th2 (demo.zip) the other image moves.
   * When dragging (right click) sketch, unselected sketchs are not dragged.
