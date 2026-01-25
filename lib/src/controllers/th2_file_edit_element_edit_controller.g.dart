@@ -187,6 +187,50 @@ mixin _$TH2FileEditElementEditController
     );
   }
 
+  late final _$_linePointOrientationAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._linePointOrientation',
+    context: context,
+  );
+
+  double? get linePointOrientation {
+    _$_linePointOrientationAtom.reportRead();
+    return super._linePointOrientation;
+  }
+
+  @override
+  double? get _linePointOrientation => linePointOrientation;
+
+  @override
+  set _linePointOrientation(double? value) {
+    _$_linePointOrientationAtom.reportWrite(
+      value,
+      super._linePointOrientation,
+      () {
+        super._linePointOrientation = value;
+      },
+    );
+  }
+
+  late final _$_linePointLSizeAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._linePointLSize',
+    context: context,
+  );
+
+  double? get linePointLSize {
+    _$_linePointLSizeAtom.reportRead();
+    return super._linePointLSize;
+  }
+
+  @override
+  double? get _linePointLSize => linePointLSize;
+
+  @override
+  set _linePointLSize(double? value) {
+    _$_linePointLSizeAtom.reportWrite(value, super._linePointLSize, () {
+      super._linePointLSize = value;
+    });
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
@@ -835,6 +879,53 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.simplifySelectedLines();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void applySetLinePointOrientationLSize() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.applySetLinePointOrientationLSize',
+        );
+    try {
+      return super.applySetLinePointOrientationLSize();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void setLinePointOrientationValue(double? orientation) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.setLinePointOrientationValue',
+        );
+    try {
+      return super.setLinePointOrientationValue(orientation);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void setLinePointLSizeValue(double? lsize) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.setLinePointLSizeValue',
+        );
+    try {
+      return super.setLinePointLSizeValue(lsize);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

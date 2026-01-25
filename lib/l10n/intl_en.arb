@@ -226,6 +226,11 @@
     "description": "The label for the OK button",
     "type": "text"
   },
+  "mpChoiceMultipleValues": "multiple values",
+  "@mpChoiceMultipleValues": {
+    "description": "The label for the multiple values choice type",
+    "type": "text"
+  },
   "mpChoiceSet": "Set",
   "@mpChoiceSet": {
     "description": "The label for the set choice type",
@@ -1360,6 +1365,22 @@
   "mpStationTypeOptionWarning": "Station not set",
   "@mpStationTypeOptionWarning": {
     "description": "The warning message for the station type option",
+    "type": "text"
+  },
+  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}",
+  "@mpStatusBarMessageEditLinePointOrientationLSize": {
+    "description": "The status bar message when editing a line point showing its orientation and length",
+    "type": "text",
+    "placeholders": {
+      "orientation": {},
+      "forcedOrientation": {},
+      "lsize": {},
+      "forcedLSize": {}
+    }
+  },
+  "mpStatusBarMessageEditLinePointOrientationLSizeForced": " (forced)",
+  "@mpStatusBarMessageEditLinePointOrientationLSizeForced": {
+    "description": "The forced label for the status bar message when editing a line point",
     "type": "text"
   },
   "mpStatusBarMessageSingleSelectedAreaAreaBordersList": " - {areaBordersCount} area border(s): {areaBordersList}",

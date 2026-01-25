@@ -316,6 +316,25 @@ class MPCommandOptionAux {
                 THOptionChoicesOnOffType.off);
   }
 
+  static double? getLSize(THElement element) {
+    return ((element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.lSize))
+        ? (element.getOption(THCommandOptionType.lSize) as THLSizeCommandOption)
+              .number
+              .value
+        : null;
+  }
+
+  static double? getOrientation(THElement element) {
+    return ((element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.orientation))
+        ? (element.getOption(THCommandOptionType.orientation)
+                  as THOrientationCommandOption)
+              .azimuth
+              .value
+        : null;
+  }
+
   static bool hasID(THElement element) {
     return (element is THHasOptionsMixin) &&
         element.hasOption(THCommandOptionType.id);

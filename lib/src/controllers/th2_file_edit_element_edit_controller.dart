@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -85,6 +86,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   MPLineSimplificationMethod _lineSimplificationMethod =
       MPLineSimplificationMethod.keepOriginalTypes;
+
+  @readonly
+  double? _linePointOrientation;
+
+  @readonly
+  double? _linePointLSize;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
@@ -1983,6 +1990,89 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _lineSimplificationMethod = newMethod;
     resetOriginalFileForLineSimplification();
+  }
+
+  @action
+  void applySetLinePointOrientationLSize() {
+    /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
+    final bool forceOrientation =
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool forceLSize = MPInteractionAux.isAltPressed();
+    final List<MPCommand> setCommands = [];
+    final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
+        _th2FileEditController
+            .selectionController
+            .selectedEndControlPoints
+            .values;
+
+    for (final MPSelectedEndControlPoint selectedEndPoint
+        in selectedEndPoints) {
+      final THLineSegment lineSegment = selectedEndPoint.originalElementClone;
+      final int lineSegmentMPID = lineSegment.mpID;
+
+      if (forceOrientation ||
+          (lineSegment.hasOption(THCommandOptionType.orientation) &&
+              !MPNumericAux.nearlyEqual(
+                (lineSegment.getOption(THCommandOptionType.orientation)
+                        as THOrientationCommandOption)
+                    .azimuth
+                    .value,
+                _linePointOrientation!,
+              ))) {
+        final THOrientationCommandOption orientationOption =
+            THOrientationCommandOption.fromString(
+              parentMPID: lineSegmentMPID,
+              azimuth: _linePointOrientation!.toStringAsFixed(1),
+            );
+
+        setCommands.add(
+          MPSetOptionToElementCommand(toOption: orientationOption),
+        );
+      }
+
+      if (forceLSize ||
+          (lineSegment.hasOption(THCommandOptionType.lSize) &&
+              !MPNumericAux.nearlyEqual(
+                (lineSegment.getOption(THCommandOptionType.lSize)
+                        as THLSizeCommandOption)
+                    .number
+                    .value,
+                _linePointLSize!,
+              ))) {
+        final THLSizeCommandOption lsizeOption =
+            THLSizeCommandOption.fromString(
+              parentMPID: lineSegmentMPID,
+              number: _linePointLSize!.toStringAsFixed(1),
+            );
+
+        setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
+      }
+    }
+
+    if (setCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand setAllCommand = MPCommandFactory.multipleCommandsFromList(
+      commandsList: setCommands,
+      completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+      descriptionType: MPCommandDescriptionType.setOptionToElements,
+    );
+
+    _th2FileEditController.execute(setAllCommand);
+    updateControllersAfterElementEditPartial();
+    updateControllersAfterElementEditFinal();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
+  void setLinePointOrientationValue(double? orientation) {
+    _linePointOrientation = orientation;
+  }
+
+  @action
+  void setLinePointLSizeValue(double? lsize) {
+    _linePointLSize = lsize;
   }
 }
 

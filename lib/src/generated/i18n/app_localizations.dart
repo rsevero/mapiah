@@ -362,6 +362,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mpButtonOK;
 
+  /// The label for the multiple values choice type
+  ///
+  /// In en, this message translates to:
+  /// **'multiple values'**
+  String get mpChoiceMultipleValues;
+
   /// The label for the set choice type
   ///
   /// In en, this message translates to:
@@ -1713,6 +1719,23 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Station not set'**
   String get mpStationTypeOptionWarning;
+
+  /// The status bar message when editing a line point showing its orientation and length
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}'**
+  String mpStatusBarMessageEditLinePointOrientationLSize(
+    Object orientation,
+    Object forcedOrientation,
+    Object lsize,
+    Object forcedLSize,
+  );
+
+  /// The forced label for the status bar message when editing a line point
+  ///
+  /// In en, this message translates to:
+  /// **' (forced)'**
+  String get mpStatusBarMessageEditLinePointOrientationLSizeForced;
 
   /// The status bar message when a single area is selected showing its area borders list
   ///

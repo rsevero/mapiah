@@ -13,9 +13,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   bool _dragShouldMovePoints = false;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
+    MPTH2FileEditStateType.editLinePointOrientationLSize,
     MPTH2FileEditStateType.editSingleLine,
-    MPTH2FileEditStateType.movingSingleControlPoint,
     MPTH2FileEditStateType.movingEndControlPoints,
+    MPTH2FileEditStateType.movingSingleControlPoint,
   };
 
   MPTH2FileEditStateEditSingleLine({required super.th2FileEditController});
