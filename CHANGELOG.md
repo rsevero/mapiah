@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.33 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Flutter pub upgrade --major-versions.
+
 ## 0.2.32 - 2026-01-25 - The [UK Cave Survey Group meeting](https://ukcaving.com/board/index.php?threads/cave-survey-group-intermediate-meet-up-23rd-25th-jan.33981/) release
 * New features:
   * Portuguese install instructions mentioning update procedure.
@@ -11,7 +17,6 @@
 * Fixed bugs:
   * When hidden one of the background images in cave.th2 (demo.zip) the other image moves.
   * When dragging (right click) sketch, unselected sketchs are not dragged.
-* Infrastructure maintenance:
 
 ## 0.2.31 - 2026-01-15 - The [EGB](https://www.egb.org.br) release
 * New features:
