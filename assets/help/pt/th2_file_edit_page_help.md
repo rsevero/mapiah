@@ -3,10 +3,11 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 ## Índice <a id="index"></a>
 - [Índice ](#índice-)
 - [Barra superior ](#barra-superior-)
+- [Croquis](#croquis)
+- [Desenhando linhas ](#desenhando-linhas-)
 - [Janela de edição ](#janela-de-edição-)
   - [Canto superior direito ](#canto-superior-direito-)
   - [Canto inferior direito ](#canto-inferior-direito-)
-- [Desenhando linhas ](#desenhando-linhas-)
 - [Opções do elemento ](#opções-do-elemento-)
 - [Salvar ](#salvar-)
   - [Formato original do arquivo ](#formato-original-do-arquivo-)
@@ -27,6 +28,18 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   * ![Ícone salvar como](assets/help/images/iconSaveAs.png "Salvar como")  _Salvar como_: salva as alterações em um novo arquivo. (Shift+Ctrl+S)
   * ![Ícone ajuda](assets/help/images/iconHelp.png "Ajuda") _Ajuda_: mostra esta caixa de diálogo.
   * ![Ícone fechar](assets/help/images/iconClose.png "Fechar") _Fechar_: fecha a janela de edição do arquivo TH2 sem salvar alterações.
+
+## Croquis
+Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
+
+Você também pode _Alt+clicar_ em um croqui inativo para torná-lo o croqui atual.
+
+## Desenhando linhas <a id="drawing-lines"></a>
+Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
+
+Curvas Bézier no Therion (e no Mapiah) são curvas cúbicas, isto é, têm 2 pontos de controle para cada segmento. Apenas durante a criação do segmento, o Mapiah finge que a curva Bézier sendo criada é uma Bézier quadrática (com apenas um ponto de controle) para dar flexibilidade ao usuário na criação do segmento.
+
+Observe que, apesar de o Mapiah simular a existência de apenas um ponto de controle, uma curva Bézier cúbica real é criada com dois pontos de controle, como esperado.
 
 ## Janela de edição <a id="edit-window"></a>
 
@@ -54,13 +67,6 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
   * ![Botão zoom no arquivo](assets/help/images/buttonZoomFile.png "Zoom no arquivo")  _Zoom no arquivo_: ajusta a visualização para mostrar todos os elementos do arquivo. (3)
   * ![Botão zoom no scrap](assets/help/images/buttonZoomScrap.png "Zoom no scrap")  _Zoom no scrap_: ajusta a visualização para mostrar o scrap atualmente selecionado. (4)
   * ![Botão zoom out](assets/help/images/buttonZoomOut.png "Afastar")  _Afastar_: dá zoom out na visualização do arquivo TH2. (-)
-
-## Desenhando linhas <a id="drawing-lines"></a>
-Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
-
-Curvas Bézier no Therion (e no Mapiah) são curvas cúbicas, isto é, têm 2 pontos de controle para cada segmento. Apenas durante a criação do segmento, o Mapiah finge que a curva Bézier sendo criada é uma Bézier quadrática (com apenas um ponto de controle) para dar flexibilidade ao usuário na criação do segmento.
-
-Observe que, apesar de o Mapiah simular a existência de apenas um ponto de controle, uma curva Bézier cúbica real é criada com dois pontos de controle, como esperado.
 
 ## Opções do elemento <a id="element-options"></a>
 Clicar com o botão direito em um elemento selecionado apresenta uma janela (overlay) com as opções disponíveis para os elementos selecionados. A janela de opções do elemento também pode ser aberta usando o atalho de teclado 'O' quando houver pelo menos um elemento selecionado.
