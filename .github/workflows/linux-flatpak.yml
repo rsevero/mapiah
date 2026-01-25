@@ -47,14 +47,6 @@ jobs:
         packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
         version: 1.0
 
-    - name: Build Flutter Linux app
-      run: |
-        set -e
-        set -x
-        flutter --version
-        flutter config --enable-linux-desktop
-        flutter build linux --release
-
     - name: Install flatpak and flatpak-builder latest versions
       run: |
         set -e
@@ -73,6 +65,11 @@ jobs:
         sudo flatpak install --system --noninteractive org.freedesktop.Sdk/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/x86_64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19
+
+    - name: Clean host build artifacts
+      run: |
+        set -e
+        rm -rf build
 
     - name: Build Mapiah flatpak
       run: |
