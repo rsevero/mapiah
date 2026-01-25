@@ -36,39 +36,36 @@ class MPInteractionAux {
   };
 
   static bool isAltPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.altLeft,
-        ) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.altRight,
-        );
+    final Set<LogicalKeyboardKey> pressed =
+        HardwareKeyboard.instance.logicalKeysPressed;
+
+    return pressed.contains(LogicalKeyboardKey.altLeft) ||
+        pressed.contains(LogicalKeyboardKey.altRight) ||
+        pressed.contains(LogicalKeyboardKey.altGraph);
   }
 
   static bool isCtrlPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.controlLeft,
-        ) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.controlRight,
-        );
+    final Set<LogicalKeyboardKey> pressed =
+        HardwareKeyboard.instance.logicalKeysPressed;
+
+    return pressed.contains(LogicalKeyboardKey.controlLeft) ||
+        pressed.contains(LogicalKeyboardKey.controlRight);
   }
 
   static bool isMetaPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.metaLeft,
-        ) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.metaRight,
-        );
+    final Set<LogicalKeyboardKey> pressed =
+        HardwareKeyboard.instance.logicalKeysPressed;
+
+    return pressed.contains(LogicalKeyboardKey.metaLeft) ||
+        pressed.contains(LogicalKeyboardKey.metaRight);
   }
 
   static bool isShiftPressed() {
-    return HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.shiftLeft,
-        ) ||
-        HardwareKeyboard.instance.logicalKeysPressed.contains(
-          LogicalKeyboardKey.shiftRight,
-        );
+    final Set<LogicalKeyboardKey> pressed =
+        HardwareKeyboard.instance.logicalKeysPressed;
+
+    return pressed.contains(LogicalKeyboardKey.shiftLeft) ||
+        pressed.contains(LogicalKeyboardKey.shiftRight);
   }
 
   static Rect? getWidgetRectFromGlobalKey({

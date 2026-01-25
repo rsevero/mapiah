@@ -130,6 +130,7 @@
 [X] - Test all Therion sample data available at https://therion.speleo.sk/download.php.
 [X] - Create english install instructions.
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
+[X] - Create an way to click on a non active scrap to select it.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

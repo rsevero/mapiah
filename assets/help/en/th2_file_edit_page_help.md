@@ -11,6 +11,7 @@ This is where all TH2 file editing is done.
 - [Save](#save)
   - [Original file format](#original-file-format)
   - [Web releases](#web-releases)
+- [Scraps](#scraps)
 - [Simplify lines](#simplify-lines)
   - [Simplification methods](#simplification-methods)
   - [Bézier curve line segments](#bézier-curve-line-segments)
@@ -83,6 +84,11 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 
 ### Web releases
 Saving on web releases are actually download requests. In case you have your browser set to automatically download to a default download folder, please check there for the updated file after saving.
+
+## Scraps
+It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.
+
+You can also _Alt+click_ on a non active scrap to make it the current scrap.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.

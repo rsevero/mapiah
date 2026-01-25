@@ -2,6 +2,7 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     with
+        MPTH2FileEditPageAltClickMixin,
         MPTH2FileEditPageStateAddLineToAreaMixin,
         MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateAddArea({required super.th2FileEditController});
@@ -23,6 +24,10 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    if (onAltPrimaryButtonClick(event)) {
+      return Future.value();
+    }
+
     final THArea area = elementEditController.getNewArea();
     final MPCommand? addLineToAreaCommand = await getAddLineToAreaCommand(
       event: event,

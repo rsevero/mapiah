@@ -30,9 +30,10 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
-import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_simplify_line_mixin.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 
+part 'mixins/mp_th2_file_edit_page_alt_click_mixin.dart';
+part 'mixins/mp_th2_file_edit_page_simplify_line_mixin.dart';
 part 'mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart';
 part 'mixins/mp_th2_file_edit_page_state_add_line_to_area_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';

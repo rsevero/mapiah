@@ -164,8 +164,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
   @override
   void onTertiaryButtonScroll(PointerScrollEvent event) {
-    bool isShiftPressed = MPInteractionAux.isShiftPressed();
-    bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
 
     if (isShiftPressed && isCtrlPressed) {
       return;

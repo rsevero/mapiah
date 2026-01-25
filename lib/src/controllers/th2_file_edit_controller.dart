@@ -850,6 +850,39 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
+  void onAltClickSelectScrap(PointerUpEvent event) {
+    final List<int> scrapMPIDs = _thFile.scrapMPIDs;
+
+    if (scrapMPIDs.length <= 2) {
+      return;
+    }
+
+    for (final int scrapMPID in scrapMPIDs) {
+      if (scrapMPID == _activeScrapID) {
+        continue;
+      }
+
+      final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
+      final Rect? scrapBoundingBox = scrap.getBoundingBox(
+        this as TH2FileEditController,
+      );
+
+      if (scrapBoundingBox == null) {
+        continue;
+      }
+
+      if (scrapBoundingBox.contains(
+        offsetScreenToCanvas(event.localPosition),
+      )) {
+        setActiveScrap(scrapMPID);
+        stateController.setState(MPTH2FileEditStateType.selectEmptySelection);
+
+        return;
+      }
+    }
+  }
+
+  @action
   void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     _canvasTranslation += (event.delta / _canvasScale);
     _setCanvasCenterFromCurrent();

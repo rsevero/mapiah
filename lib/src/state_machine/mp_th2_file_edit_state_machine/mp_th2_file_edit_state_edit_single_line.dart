@@ -2,6 +2,7 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     with
+        MPTH2FileEditPageAltClickMixin,
         MPTH2FileEditPageSimplifyLineMixin,
         MPTH2FileEditPageSingleElementSelectedMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
@@ -151,6 +152,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    if (onAltPrimaryButtonClick(event)) {
+      return Future.value();
+    }
+
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         await selectionController.selectableEndControlPointsClicked(

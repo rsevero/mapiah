@@ -2,8 +2,9 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     with
-        MPTH2FileEditStateGetSelectedElementsMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin {
+        MPTH2FileEditPageAltClickMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin,
+        MPTH2FileEditStateGetSelectedElementsMixin {
   final TH2FileEditSnapController snapController;
   THElement? _clickedElementAtPointerDown;
   bool _searchedForClickedElementAtPointerDown = false;
@@ -52,6 +53,10 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    if (onAltPrimaryButtonClick(event)) {
+      return Future.value();
+    }
+
     final List<THElement> clickedElements =
         (await selectionController.getSelectableElementsClickedWithDialog(
           screenCoordinates: event.localPosition,

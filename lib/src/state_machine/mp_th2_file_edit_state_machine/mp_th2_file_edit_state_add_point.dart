@@ -1,7 +1,7 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
-    with MPTH2FileEditStateMoveCanvasMixin {
+    with MPTH2FileEditPageAltClickMixin, MPTH2FileEditStateMoveCanvasMixin {
   MPTH2FileEditStateAddPoint({required super.th2FileEditController});
 
   @override
@@ -20,6 +20,10 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) {
+    if (onAltPrimaryButtonClick(event)) {
+      return Future.value();
+    }
+
     final MPCommand command = MPCommandFactory.addPoint(
       screenPosition: event.localPosition,
       pointTypeString: elementEditController.lastUsedPointType,

@@ -1490,6 +1490,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void onAltClickSelectScrap(PointerUpEvent event) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.onAltClickSelectScrap');
+    try {
+      return super.onAltClickSelectScrap(event);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void onPointerMoveUpdateMoveCanvasMode(PointerMoveEvent event) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(

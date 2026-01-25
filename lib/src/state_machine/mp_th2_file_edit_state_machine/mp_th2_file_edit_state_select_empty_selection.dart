@@ -2,9 +2,10 @@ part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
     with
+        MPTH2FileEditPageAltClickMixin,
+        MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateOptionsEditMixin {
   MPTH2FileEditStateSelectEmptySelection({
     required super.th2FileEditController,
@@ -76,6 +77,10 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   /// 1.2. If no, do nothing.
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    if (onAltPrimaryButtonClick(event)) {
+      return Future.value();
+    }
+
     final Map<int, THElement> clickedElements = await selectionController
         .getSelectableElementsClickedWithDialog(
           screenCoordinates: event.localPosition,
