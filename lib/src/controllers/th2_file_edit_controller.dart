@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_web_file_saver.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -863,13 +864,10 @@ abstract class TH2FileEditControllerBase with Store {
       }
 
       final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
-      final Rect? scrapBoundingBox = scrap.getBoundingBox(
-        this as TH2FileEditController,
+      final Rect scrapBoundingBox = MPInteractionAux.getScrapBackgroundRect(
+        scrap: scrap,
+        th2FileEditController: this as TH2FileEditController,
       );
-
-      if (scrapBoundingBox == null) {
-        continue;
-      }
 
       if (scrapBoundingBox.contains(
         offsetScreenToCanvas(event.localPosition),
