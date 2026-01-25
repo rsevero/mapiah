@@ -41,12 +41,6 @@ jobs:
         channel: stable
         flutter-version: 3.38.7
 
-    - name: Install dependencies
-      uses: awalsh128/cache-apt-pkgs-action@latest
-      with:
-        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
-        version: 1.0
-
     - name: Install flatpak and flatpak-builder latest versions
       run: |
         set -e
