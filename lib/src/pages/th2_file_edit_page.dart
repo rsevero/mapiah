@@ -196,6 +196,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                               },
                             );
                           });
+
                           return Container();
                         }
                       } else {

@@ -131,6 +131,7 @@
 [X] - Create english install instructions.
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 [X] - Create an way to click on a non active scrap to select it.
+[X] - Error text on alert dialog boxes should be selecteable. [Wookey request]
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

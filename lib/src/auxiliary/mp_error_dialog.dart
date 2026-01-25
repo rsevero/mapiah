@@ -9,12 +9,22 @@ class MPErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).parsingErrors),
       content: SingleChildScrollView(
-        child: ListBody(
-          children: errorMessages
-              .map((message) => SelectableText(message))
-              .toList(),
+        child: SelectableText.rich(
+          TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: '${AppLocalizations.of(context).parsingErrors}\n\n',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              ...errorMessages.map(
+                (message) => TextSpan(
+                  text: '$message\n',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
