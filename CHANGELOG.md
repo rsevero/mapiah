@@ -5,6 +5,7 @@
 * Fixed bugs:
 * Infrastructure maintenance:
   * Flutter pub upgrade --major-versions.
+  * Separating Appimage and flatpak build workflows.
 
 ## 0.2.32 - 2026-01-25 - The [UK Cave Survey Group meeting](https://ukcaving.com/board/index.php?threads/cave-survey-group-intermediate-meet-up-23rd-25th-jan.33981/) release
 * New features:

@@ -1,4 +1,4 @@
-name: Mapiah Linux (appimage and flatpak)
+name: Mapiah Linux Flatpak
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    name: Build
+    name: Build Flatpak
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout code
@@ -41,9 +41,6 @@ jobs:
         channel: stable
         flutter-version: 3.38.7
 
-    # - name: Setup upterm session
-    #   uses: owenthereal/action-upterm@v1
-
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
@@ -57,35 +54,6 @@ jobs:
         flutter --version
         flutter config --enable-linux-desktop
         flutter build linux --release
-
-    - name: Prepare Flatpak package
-      run: |
-        set -e
-        set -x
-        projectName=Mapiah
-        projectId=org.mapiah.mapiah
-        executableName=mapiah
-        APP_DIR="app"
-
-        mkdir -p "$APP_DIR/$projectName"
-        cp -r build/linux/x64/release/bundle/* "$APP_DIR/$projectName/"
-        chmod +x "$APP_DIR/$projectName/$executableName"
-        mkdir -p "$APP_DIR/bin"
-        ln -s "$APP_DIR/$projectName/$executableName" "$APP_DIR/bin/$executableName"
-
-        iconDir="$APP_DIR/share/icons/hicolor/scalable/apps"
-        mkdir -p "$iconDir"
-        cp -r assets/icons/m-*.png "$iconDir/"
-
-        desktopFileDir="$APP_DIR/share/applications"
-        mkdir -p "$desktopFileDir"
-        cp -r packaging/linux/flatpak/$projectId.desktop "$desktopFileDir/"
-
-        metadataDir="$APP_DIR/share/metainfo"
-        mkdir -p "$metadataDir"
-        cp -r packaging/linux/$projectId.metainfo.xml "$metadataDir/"
-
-        cp "packaging/linux/flatpak/built-locally/$projectId.yml" .
 
     - name: Install flatpak and flatpak-builder latest versions
       run: |
@@ -116,43 +84,8 @@ jobs:
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
         echo "FLATPAK_INSTALLER=$FLATPAK_INSTALLER" >> $GITHUB_ENV
-        flatpak-builder --force-clean --repo=repo build-dir org.mapiah.mapiah.yml
+        flatpak-builder --force-clean --repo=repo build-dir packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
         flatpak build-bundle repo "$FLATPAK_INSTALLER" org.mapiah.mapiah
-
-    - name: Install appimage dependencies (incompatible with Flatpak)
-      run: |
-        set -e
-        set -x
-        sudo apt-get install -y fuse
-
-    - name: Update Mapiah version in AppImageBuilder.yml
-      shell: bash
-      run: |
-        set -e
-        set -x
-        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
-        TAG_NUMBER="${TAG#v}"
-        echo "TAG=$TAG" >> $GITHUB_ENV
-        echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
-        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
-
-    - name: Set up appimage
-      run: |
-        set -e
-        set -x
-        curl -L -o appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.1.0/appimage-builder-1.1.0-x86_64.AppImage
-        chmod +x appimage-builder-x86_64.AppImage
-        sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
-
-    - name: Build appimage
-      run: |
-        set -e
-        set -x
-        appimage-builder --recipe AppImageBuilder.yml --skip-test
-        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
-        INSTALLER_APPIMAGE="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
-        echo "INSTALLER_APPIMAGE=$INSTALLER_APPIMAGE" >> $GITHUB_ENV
-        mv "$ORIGINAL_APPIMAGE" "$INSTALLER_APPIMAGE"
 
     - name: Publish Release
       env:
@@ -161,30 +94,23 @@ jobs:
       run: |
         set -e
         set -x
+        TAG="$TAG"
         TITLE="Mapiah $TAG"
 
-        # Store token in a different variable and unset GITHUB_TOKEN
         GH_TOKEN=$GITHUB_TOKEN
         unset GITHUB_TOKEN
 
-        # Authenticate using the stored token
         gh auth login --with-token <<< "$GH_TOKEN"
 
-        # Check if release exists and create if needed
         if ! gh release view "$TAG" 2>/dev/null; then
-          echo "Creating new release with flatpak..."
-          gh release create "$TAG" \
+          if ! gh release create "$TAG" \
             --title "$TITLE" \
             --notes "Release $TAG" \
-            "$FLATPAK_INSTALLER"
-        else
-          echo "Release exists - uploading flatpak..."
-          gh release upload "$TAG" \
-            --clobber \
-            "$FLATPAK_INSTALLER"
+            "$FLATPAK_INSTALLER"; then
+            echo "Release creation failed (likely already exists); continuing to upload."
+          fi
         fi
 
-        echo "Uploading AppImage..."
         gh release upload "$TAG" \
             --clobber \
-            "$INSTALLER_APPIMAGE"
+            "$FLATPAK_INSTALLER"

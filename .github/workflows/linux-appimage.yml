@@ -1,0 +1,119 @@
+name: Mapiah Linux AppImage
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      test_tag:
+        description: 'Simulated tag for testing'
+        required: false
+        default: 'v1.0.0-test'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build AppImage
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Validate tag (automatic runs only)
+      if: github.event_name == 'push'
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG=${GITHUB_REF#refs/tags/}
+        if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
+          exit 1
+        fi
+        echo "Validated tag: $TAG"
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+        flutter-version: 3.38.7
+
+    - name: Install dependencies
+      uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
+        version: 1.0
+
+    - name: Build Flutter Linux app
+      run: |
+        set -e
+        set -x
+        flutter --version
+        flutter config --enable-linux-desktop
+        flutter build linux --release
+
+    - name: Install appimage dependencies (incompatible with Flatpak)
+      run: |
+        set -e
+        set -x
+        sudo apt-get install -y fuse
+
+    - name: Update Mapiah version in AppImageBuilder.yml
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+        TAG_NUMBER="${TAG#v}"
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
+        sed -i "/^AppDir:/,/^[^ ]/s/^\( *version: *\).*/\1$TAG_NUMBER/" AppImageBuilder.yml
+
+    - name: Set up appimage
+      run: |
+        set -e
+        set -x
+        curl -L -o appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/v1.1.0/appimage-builder-1.1.0-x86_64.AppImage
+        chmod +x appimage-builder-x86_64.AppImage
+        sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
+
+    - name: Build appimage
+      run: |
+        set -e
+        set -x
+        appimage-builder --recipe AppImageBuilder.yml --skip-test
+        ORIGINAL_APPIMAGE="Mapiah-$TAG_NUMBER-x86_64.AppImage"
+        INSTALLER_APPIMAGE="Mapiah-$TAG_NUMBER-linux-x86_64.AppImage"
+        echo "INSTALLER_APPIMAGE=$INSTALLER_APPIMAGE" >> $GITHUB_ENV
+        mv "$ORIGINAL_APPIMAGE" "$INSTALLER_APPIMAGE"
+
+    - name: Publish Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+        set -e
+        set -x
+        TAG="$TAG"
+        TITLE="Mapiah $TAG"
+
+        GH_TOKEN=$GITHUB_TOKEN
+        unset GITHUB_TOKEN
+
+        gh auth login --with-token <<< "$GH_TOKEN"
+
+        if ! gh release view "$TAG" 2>/dev/null; then
+          if ! gh release create "$TAG" \
+            --title "$TITLE" \
+            --notes "Release $TAG" \
+            "$INSTALLER_APPIMAGE"; then
+            echo "Release creation failed (likely already exists); continuing to upload."
+          fi
+        fi
+
+        gh release upload "$TAG" \
+            --clobber \
+            "$INSTALLER_APPIMAGE"

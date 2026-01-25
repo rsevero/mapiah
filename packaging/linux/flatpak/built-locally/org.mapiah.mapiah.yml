@@ -27,7 +27,13 @@ modules:
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
         PUB_CACHE: /run/build/mapiah/.pub-cache
+      build-args:
+        - --share=network
     build-commands:
+      - flutter --version
+      - flutter config --enable-linux-desktop
+      - flutter pub get
+      - flutter build linux --release
       - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
@@ -41,4 +47,8 @@ modules:
       - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/org.mapiah.mapiah.png
     sources:
       - type: dir
-        path: .
+        path: ../../../..
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        tag: 3.38.7
+        dest: flutter
