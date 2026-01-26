@@ -76,7 +76,7 @@ jobs:
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
         echo "FLATPAK_INSTALLER=$FLATPAK_INSTALLER" >> $GITHUB_ENV
-        flatpak-builder --force-clean --arch=aarch64 --repo=repo build-dir packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
+        flatpak-builder --force-clean --arch=aarch64 --repo=repo --install-deps-from=flathub build-dir packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
         flatpak build-bundle repo "$FLATPAK_INSTALLER" org.mapiah.mapiah --arch=aarch64
 
     - name: Publish Release
