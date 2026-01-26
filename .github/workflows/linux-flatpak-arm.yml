@@ -59,7 +59,7 @@ jobs:
         sudo flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         sudo flatpak install --system --noninteractive org.freedesktop.Sdk/aarch64/24.08
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/aarch64/24.08
-        sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19
+        sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19/aarch64/24.08
 
     - name: Clean host build artifacts
       run: |
@@ -76,7 +76,7 @@ jobs:
         echo "TAG=$TAG" >> $GITHUB_ENV
         echo "TAG_NUMBER=$TAG_NUMBER" >> $GITHUB_ENV
         echo "FLATPAK_INSTALLER=$FLATPAK_INSTALLER" >> $GITHUB_ENV
-        flatpak-builder --force-clean --arch=aarch64 --repo=repo --install-deps-from=flathub build-dir packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
+        sudo flatpak-builder --force-clean --arch=aarch64 --repo=repo --install-deps-from=flathub build-dir packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
         flatpak build-bundle repo "$FLATPAK_INSTALLER" org.mapiah.mapiah --arch=aarch64
 
     - name: Publish Release
