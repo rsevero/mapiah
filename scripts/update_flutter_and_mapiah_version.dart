@@ -12,21 +12,30 @@ import 'dart:io';
 
 final List<String> targetFiles = [
   '.github/workflows/linux-appimage.yml',
-  '.github/workflows/linux-flatpak.yml',
+  'packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml',
   '.github/workflows/windows.yml',
   'codemagic.yaml',
+  'packaging/linux/io.github.rsevero.mapiah.metainfo.xml',
 ];
 
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
+  final String? mapiahVersion = await getMapiahVersion();
+  final String today = DateTime.now().toIso8601String().split('T').first;
 
   if (version == null) {
     stderr.writeln('Could not determine Flutter version.');
 
     return 2;
   }
+  if (mapiahVersion == null) {
+    stderr.writeln('Could not determine Mapiah version from pubspec.yaml.');
+
+    return 2;
+  }
 
   stdout.writeln('Detected Flutter framework version: $version');
+  stdout.writeln('Detected Mapiah version: $mapiahVersion');
 
   List<String> changedFiles = <String>[];
 
@@ -36,6 +45,24 @@ Future<int> main(List<String> args) async {
   );
   final RegExp flutterSimpleRegex = RegExp(
     r"""(^\s*flutter:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
+    multiLine: true,
+  );
+  final RegExp flutterFlatpakTagRegex = RegExp(
+    r"""(url:\s*https://github.com/flutter/flutter\.git\s*\n(?:.*?\n)*?\s*tag:\s*)([^\n]+)""",
+    multiLine: true,
+    dotAll: true,
+  );
+  final RegExp mapiahFlatpakTagRegex = RegExp(
+    r"""(url:\s*https://github.com/rsevero/mapiah\.git\s*\n(?:.*?\n)*?\s*tag:\s*)([^\n]+)""",
+    multiLine: true,
+    dotAll: true,
+  );
+  final RegExp flatpakCommitRegex = RegExp(
+    r"""^\s*commit:\s*.*\n""",
+    multiLine: true,
+  );
+  final RegExp releasesBlockRegex = RegExp(
+    r"""(<releases>\s*\n)""",
     multiLine: true,
   );
 
@@ -49,14 +76,40 @@ Future<int> main(List<String> args) async {
     String content = await file.readAsString();
     String newContent = content;
 
-    newContent = newContent.replaceAllMapped(
-      flutterVersionRegex,
-      (m) => '${m[1]}$version',
-    );
-    newContent = newContent.replaceAllMapped(
-      flutterSimpleRegex,
-      (m) => '${m[1]}$version',
-    );
+    if (path.endsWith('flatpak-flutter.yml')) {
+      newContent = newContent.replaceAllMapped(
+        flutterFlatpakTagRegex,
+        (m) => '${m[1]}$version',
+      );
+      final String mapiahTag = 'v${mapiahVersion.split('+').first}';
+      newContent = newContent.replaceAllMapped(
+        mapiahFlatpakTagRegex,
+        (m) => '${m[1]}$mapiahTag',
+      );
+      newContent = newContent.replaceAll(flatpakCommitRegex, '');
+    } else if (path.endsWith('io.github.rsevero.mapiah.metainfo.xml')) {
+      final String releaseEntry =
+          '    <release version="$mapiahVersion" date="$today">\n'
+          '      <description>\n'
+          '        <p>Release description</p>\n'
+          '      </description>\n'
+          '    </release>\n';
+      if (releasesBlockRegex.hasMatch(newContent)) {
+        newContent = newContent.replaceFirstMapped(
+          releasesBlockRegex,
+          (m) => '${m[1]}$releaseEntry',
+        );
+      }
+    } else {
+      newContent = newContent.replaceAllMapped(
+        flutterVersionRegex,
+        (m) => '${m[1]}$version',
+      );
+      newContent = newContent.replaceAllMapped(
+        flutterSimpleRegex,
+        (m) => '${m[1]}$version',
+      );
+    }
 
     if (newContent != content) {
       await file.writeAsString(newContent);
@@ -69,10 +122,27 @@ Future<int> main(List<String> args) async {
 
   stdout.writeln('\nSummary:');
   stdout.writeln('Flutter version: $version');
+  stdout.writeln('Mapiah version: $mapiahVersion');
   stdout.writeln(
     'Files updated: ${changedFiles.isEmpty ? 'none' : changedFiles.join(', ')}',
   );
   return 0;
+}
+
+Future<String?> getMapiahVersion() async {
+  final File pubspec = File('pubspec.yaml');
+
+  if (!await pubspec.exists()) {
+    return null;
+  }
+
+  final String content = await pubspec.readAsString();
+  final RegExpMatch? match = RegExp(
+    r'^version:\s*([^\s]+)\s*$',
+    multiLine: true,
+  ).firstMatch(content);
+
+  return match?.group(1);
 }
 
 /// Attempts to get the Flutter framework version. Prefer machine-readable

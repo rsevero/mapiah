@@ -40,11 +40,9 @@ modules:
   - type: git
     url: https://github.com/rsevero/mapiah.git
     tag: v0.2.32
-    commit: b2702c038ca0b67af555acf85f258b2f65dc30f8
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
     url: https://github.com/flutter/flutter.git
     tag: 3.38.7
     dest: flutter
-    commit: 3b62efc2a3da49882f43c372e0bc53daef7295a6
