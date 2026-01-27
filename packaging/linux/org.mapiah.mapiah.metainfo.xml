@@ -9,6 +9,8 @@
     <name>Mapiah developers</name>
   </developer>
   <url type="homepage">https://github.com/rsevero/mapiah</url>
+  <url type="bugtracker">https://github.com/rsevero/mapiah/issues</url>
+  <url type="vcs-browser">https://github.com/rsevero/mapiah</url>
 
   <metadata_license>MIT</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>

@@ -32,7 +32,7 @@ Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 #### Flatpak
 Mapiah Flatpak version moved from Flathub to direct download from [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
-This changed was necessary to automate the release process, which I still didn´t managed to do with Flathub.
+This changed was necessary to automate the release process, which I still didn´t manage to do with Flathub.
 
 #### Other formats
 If someone is interested in creating Linux packages in other formats like arch, deb, rpm, snap or other package and is interested in my help, please contact me at rsev AT pm.me.
