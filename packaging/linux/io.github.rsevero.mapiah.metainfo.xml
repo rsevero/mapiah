@@ -3,21 +3,26 @@
   <id>io.github.rsevero.mapiah</id>
 
   <name>Mapiah</name>
+
   <summary>User friendly multiplatform Therion map editor</summary>
 
   <developer id="io.github.rsevero">
     <name>Mapiah developers</name>
   </developer>
+
+  <url type="vcs-browser">https://github.com/rsevero/mapiah</url>
   <url type="homepage">https://github.com/rsevero/mapiah</url>
+  <url type="bugtracker">https://github.com/rsevero/mapiah/issues</url>
 
   <metadata_license>MIT</metadata_license>
+
   <project_license>GPL-3.0-or-later</project_license>
 
-  <content_rating type="oars-1.0" />
+  <content_rating type="oars-1.0"></content_rating>
 
   <description>
     <p>
-      User-friendly multiplatform interface to the powerful Therion mapping software.
+      User-friendly multiplatform interface to the powerful Therion cave mapping software.
     </p>
     <p>
       As an intended side effect, it aims to completely replace xTherion, the venerable but ostensibly ancient Therion graphical interface.
@@ -33,21 +38,47 @@
   </branding>
 
   <launchable type="desktop-id">io.github.rsevero.mapiah.desktop</launchable>
+
   <screenshots>
     <screenshot type="default">
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-initial.png</image>
       <caption>Initial window</caption>
     </screenshot>
+
     <screenshot>
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-single_scrap.png</image>
       <caption>Editing a single scrap TH2 file</caption>
     </screenshot>
+
     <screenshot>
       <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-options.png</image>
       <caption>Options dialog</caption>
     </screenshot>
   </screenshots>
-    <releases>
+
+  <releases>
+    <release version="0.2.32" date="2026-01-27">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.32</url>
+      <description>
+        <p>0.2.32 - 2026-01-25 - The UK Cave Survey Group meeting release</p>
+        <p>New features:</p>
+        <ul>
+          <li>Portuguese install instructions mentioning update procedure.</li>
+          <li>English install instructions.</li>
+          <li>Right click overlay windows dragging support.</li>
+          <li>Portuguese help pages.</li>
+          <li>Alt+click to select non active scrap.</li>
+          <li>Error text on alert dialog boxes should be selectable. [Wookey request]</li>
+        </ul>
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>When hidden one of the background images in cave.th2 (demo.zip) the other image moves.</li>
+          <li>When dragging (right click) sketch, unselected sketchs are not dragged.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.2.5" date="2025-06-21" />
   </releases>
+
 </component>

@@ -18,6 +18,11 @@ appimage-build/***
 .flutter-plugins-dependencies
 **-Linux-Portable.tar.gz
 .flatpak-builder
+generated/**
+io.github.rsevero.mapiah.yml
+
+# Flatpak build files
+.tools/**
 
 build/**
 
