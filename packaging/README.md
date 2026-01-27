@@ -3,10 +3,8 @@
 1. Update Mapiah version in `pubspec.yaml`.
 2. Update `CHANGELOG.md` with the new version and changes.
 3. Update `TODO.md` with changes.
-4. Update Flutter version in:
-   1. .github/workflows/linux.yml
-   2. .github/workflows/windows.yml
-   3. codemagic.yaml
+4. Update Flutter version in the action/workflow files with:
+   1. dart run ./scripts/update_flutter_version.dart
 5. Commit the previous changes with a comment like 'v0.2.22'
 6. Push the previous changes
 7. Create a new tag with the new version:
