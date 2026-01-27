@@ -30,9 +30,20 @@ Also create a thriving community of users and developers to make it as powerful 
 Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
 #### Flatpak
-Mapiah Flatpak version moved from Flathub to direct download from [Mapiah releases](https://github.com/rsevero/mapiah/releases).
+Mapiah Flatpak version moved back to Flathub.
 
-This changed was necessary to automate the release process, which I still didn´t manage to do with Flathub.
+If you have previously installed a Flatpak package directly downloaded from [Mapiah releases](https://github.com/rsevero/mapiah/releases), please uninstall it and install the Flathub version instead. You will need Flathub installed in your system first: [Flathub setup instructions](https://flatpak.org/setup/).
+
+```bash
+flatpak remove org.mapiah.mapiah
+flatpak install io.github.rsevero.mapiah
+```
+
+If you have already installed the Flathub version, you can update it with:
+
+```bash
+flatpak update io.github.rsevero.mapiah
+```
 
 #### Other formats
 If someone is interested in creating Linux packages in other formats like arch, deb, rpm, snap or other package and is interested in my help, please contact me at rsev AT pm.me.

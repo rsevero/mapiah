@@ -7,7 +7,6 @@
     - [Instalação do Therion no Linux](#instalação-do-therion-no-linux)
     - [Instalação do Mapiah no Linux](#instalação-do-mapiah-no-linux)
       - [Opção 1: Instalação do Mapiah via AppImage](#opção-1-instalação-do-mapiah-via-appimage)
-      - [Opção 2: Instalação do Mapiah via Flatpak](#opção-2-instalação-do-mapiah-via-flatpak)
   - [MacOS](#macos)
     - [Instalação do Therion no MacOS](#instalação-do-therion-no-macos)
     - [Instalação do Mapiah no MacOS](#instalação-do-mapiah-no-macos)
@@ -47,12 +46,19 @@ Para o Linux há duas versões disponíveis do Mapiah: um arquivo AppImage e um 
     _Obs.:_ se sua instalação do Linux não suportar arquivos `.AppImage`, verifique na web como instalar o suporte a esses arquivos em sua distribuição específica.
 
 #### Opção 2: Instalação do Mapiah via Flatpak
-1. Instale o Flatpak em seu sistema, se ainda não estiver disponível em sua máquina. Instruções estão disponíveis em: https://flatpak.org/setup/
-2. Baixe o arquivo `.flatpakref` da versão desejada do Mapiah na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
-3. Instale o Mapiah com o comando:
-   ```bash
-   flatpak install --user --from Mapiah-<versão>.flatpakref
-   ```
+1. A versão Flatpak do Mapiah voltou para o Flathub. Se você instalou previamente um pacote Flatpak baixado diretamente da página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases), desinstale-o e instale a versão do Flathub em seu lugar:
+  ```bash
+  flatpak remove org.mapiah.mapiah
+  ```
+2. Instale o Flatpak no seu sistema se ainda não estiver disponível. Instruções estão disponíveis em: https://flatpak.org/setup/
+3. Instale o Mapiah a partir do Flathub:
+  ```bash
+  flatpak install io.github.rsevero.mapiah
+  ```
+4. Se você já instalou a versão do Flathub, você pode atualizá‑la com:
+  ```bash
+  flatpak update io.github.rsevero.mapiah
+  ```
 
 ## MacOS
 ### Instalação do Therion no MacOS
