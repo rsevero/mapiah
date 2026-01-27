@@ -3,6 +3,7 @@
 ## 0.2.33 - not yet released
 * New features:
 * Fixed bugs:
+  * URLs at "About" dialog box should be clickable.
 * Infrastructure maintenance:
   * Flutter pub upgrade --major-versions.
   * Separating Appimage and flatpak build workflows.
