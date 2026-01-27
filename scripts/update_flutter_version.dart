@@ -18,7 +18,7 @@ final List<String> targetFiles = [
 ];
 
 Future<int> main(List<String> args) async {
-  final version = await getFlutterVersion();
+  final String? version = await getFlutterVersion();
 
   if (version == null) {
     stderr.writeln('Could not determine Flutter version.');
@@ -28,25 +28,26 @@ Future<int> main(List<String> args) async {
 
   stdout.writeln('Detected Flutter framework version: $version');
 
-  var changedFiles = <String>[];
+  List<String> changedFiles = <String>[];
 
-  final flutterVersionRegex = RegExp(
+  final RegExp flutterVersionRegex = RegExp(
     r"""(^\s*flutter-version:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
     multiLine: true,
   );
-  final flutterSimpleRegex = RegExp(
+  final RegExp flutterSimpleRegex = RegExp(
     r"""(^\s*flutter:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
     multiLine: true,
   );
 
   for (final path in targetFiles) {
-    final file = File(path);
+    final File file = File(path);
 
     if (!await file.exists()) {
       continue;
     }
-    var content = await file.readAsString();
-    var newContent = content;
+
+    String content = await file.readAsString();
+    String newContent = content;
 
     newContent = newContent.replaceAllMapped(
       flutterVersionRegex,
@@ -78,11 +79,14 @@ Future<int> main(List<String> args) async {
 /// output, fallback to parsing human output.
 Future<String?> getFlutterVersion() async {
   try {
-    final result = await Process.run('flutter', ['--version', '--machine']);
+    final ProcessResult result = await Process.run('flutter', [
+      '--version',
+      '--machine',
+    ]);
 
     if (result.exitCode == 0) {
-      final out = result.stdout.toString();
-      final map = json.decode(out);
+      final String out = result.stdout.toString();
+      final dynamic map = json.decode(out);
 
       if (map is Map && map['frameworkVersion'] is String) {
         return (map['frameworkVersion'] as String).trim();
@@ -94,14 +98,14 @@ Future<String?> getFlutterVersion() async {
 
   // Fallback: parse `flutter --version` first line like "Flutter 3.38.7 • channel stable"
   try {
-    final result = await Process.run('flutter', ['--version']);
+    final ProcessResult result = await Process.run('flutter', ['--version']);
 
     if (result.exitCode == 0) {
-      final firstLine = result.stdout
+      final String firstLine = result.stdout
           .toString()
           .split('\n')
           .firstWhere((_) => true, orElse: () => '');
-      final match = RegExp(
+      final RegExpMatch? match = RegExp(
         r"""Flutter\s+([0-9]+(?:\.[0-9]+)+)""",
       ).firstMatch(firstLine);
 
