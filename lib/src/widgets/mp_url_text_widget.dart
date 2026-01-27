@@ -9,19 +9,39 @@ class MPURLTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final Uri uri = Uri.parse(url);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () async {
+          final Uri? uri = Uri.tryParse(url);
 
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri);
-        }
-      },
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.blue,
-          decoration: TextDecoration.underline,
+          if (uri == null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Invalid URL: $url')));
+            return;
+          }
+
+          try {
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+            } else {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Cannot open URL: $url')));
+            }
+          } catch (_) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Failed to open URL: $url')));
+          }
+        },
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.blue,
+            decoration: TextDecoration.underline,
+          ),
         ),
       ),
     );
