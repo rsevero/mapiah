@@ -119,14 +119,14 @@ class MPMoveAreaCommand extends MPCommand {
   MPMoveAreaCommand copyWith({
     int? areaMPID,
     MPMultipleElementsCommand? linesMoveCommand,
-    String? fromOriginalLineInTH2File,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPMoveAreaCommand.forCWJM(
       areaMPID: areaMPID ?? this.areaMPID,
       linesMoveCommand: linesMoveCommand ?? this.linesMoveCommand,
       originalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }

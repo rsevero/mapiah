@@ -78,7 +78,7 @@ class MPEditLineTypeCommand extends MPCommand {
     int? lineMPID,
     THLineType? newLineType,
     String? unknownPLAType,
-    String? fromOriginalLineInTH2File,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditLineTypeCommand.forCWJM(
@@ -86,7 +86,7 @@ class MPEditLineTypeCommand extends MPCommand {
       newLineType: newLineType ?? this.newLineType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
       originalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
