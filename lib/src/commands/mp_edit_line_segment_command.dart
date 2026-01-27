@@ -58,14 +58,14 @@ class MPEditLineSegmentCommand extends MPCommand {
   MPEditLineSegmentCommand copyWith({
     THLineSegment? originalLineSegment,
     THLineSegment? newLineSegment,
-    String? fromOriginalLineInTH2File,
+    String? originalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
   }) {
     return MPEditLineSegmentCommand.forCWJM(
       originalLineSegment: originalLineSegment ?? this.originalLineSegment,
       newLineSegment: newLineSegment ?? this.newLineSegment,
       originalLineInTH2File:
-          fromOriginalLineInTH2File ?? this.originalLineInTH2File,
+          originalLineInTH2File ?? this.originalLineInTH2File,
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
