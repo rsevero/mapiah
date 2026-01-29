@@ -210,6 +210,7 @@ ls -l "$TARGET" | sed -n '1,200p'
 
 # Cleanup tools directory
 rm -rf "$TOOLS_DIR"
+
 # Cleanup generated directory
 rm -rf "$ROOT_DIR/generated"
 

@@ -154,6 +154,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpButtonOK => 'OK';
 
   @override
+  String get mpChoiceMultipleValues => 'multiple values';
+
+  @override
   String get mpChoiceSet => 'Set';
 
   @override
@@ -868,6 +871,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpStationTypeOptionWarning => 'Station not set';
+
+  @override
+  String mpStatusBarMessageEditLinePointOrientationLSize(
+    Object orientation,
+    Object forcedOrientation,
+    Object lsize,
+    Object forcedLSize,
+  ) {
+    return 'Orientation $orientation°$forcedOrientation, lsize $lsize$forcedLSize';
+  }
+
+  @override
+  String get mpStatusBarMessageEditLinePointOrientationLSizeForced =>
+      ' (forced)';
 
   @override
   String mpStatusBarMessageSingleSelectedAreaAreaBordersList(

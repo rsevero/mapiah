@@ -1,11 +1,13 @@
 library;
 
 import 'dart:collection';
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -13,6 +15,7 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -24,6 +27,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -45,6 +49,7 @@ part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
+part 'mp_th2_file_edit_state_edit_line_point_orientation_lsize.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
@@ -84,6 +89,10 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.addPoint:
         return MPTH2FileEditStateAddPoint(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.editLinePointOrientationLSize:
+        return MPTH2FileEditStateEditLinePointOrientationLSize(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:

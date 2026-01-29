@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/inputs/mp_azimuth_picker_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -15,13 +17,13 @@ import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPAzimuthTypeOptionWidget extends StatefulWidget {
+class MPOrientationOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPAzimuthTypeOptionWidget({
+  const MPOrientationOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -30,11 +32,12 @@ class MPAzimuthTypeOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPAzimuthTypeOptionWidget> createState() =>
-      _MPAzimuthTypeOptionWidgetState();
+  State<MPOrientationOptionWidget> createState() =>
+      _MPOrientationOptionWidgetState();
 }
 
-class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
+class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
+  late final TH2FileEditController th2FileEditController;
   late TextEditingController _azimuthController;
   late String _selectedChoice;
   final FocusNode _azimuthTextFieldFocusNode = FocusNode();
@@ -42,12 +45,34 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
   double? _currentAzimuth = 0;
   late final String _initialAzimuth;
   late final String _initialSelectedChoice;
+  late final bool _isSingleLineSegment;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isOkButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
+
+    th2FileEditController = widget.th2FileEditController;
+
+    _isSingleLineSegment =
+        (th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment) &&
+        (th2FileEditController
+                .selectionController
+                .selectedEndControlPoints
+                .length ==
+            1);
+
+    if (_isSingleLineSegment) {
+      th2FileEditController.elementEditController
+          .setLinePointOrientationLSizeSettingMode(
+            MPLinePointInteractiveOrientationLSizeSettingMode.orientation,
+          );
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.editLinePointOrientationLSize,
+      );
+    }
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -61,7 +86,7 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
             _selectedChoice = mpNonMultipleChoiceSetID;
           default:
             throw Exception(
-              'Unsupported option type: ${widget.optionInfo.type} in _MPAzimuthTypeOptionWidgetState.initState()',
+              'Unsupported option type: ${widget.optionInfo.type} in _MPOrientationOptionWidgetState.initState()',
             );
         }
       case MPOptionStateType.setMixed:
@@ -123,14 +148,14 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
       }
     }
 
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
+    th2FileEditController.userInteractionController.prepareSetOption(
       option: newOption,
       optionType: widget.optionInfo.type,
     );
   }
 
   void _cancelButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
@@ -151,25 +176,15 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final String title;
-    final String azimuthLabel;
-
-    switch (widget.optionInfo.type) {
-      case THCommandOptionType.orientation:
-        title = appLocalizations.thCommandOptionOrientation;
-        azimuthLabel = appLocalizations.mpAzimuthAzimuthLabel;
-      default:
-        throw Exception(
-          'Unsupported option type: ${widget.optionInfo.type} in _MPAzimuthTypeOptionWidgetState.build()',
-        );
-    }
+    final String title = appLocalizations.thCommandOptionOrientation;
+    final String azimuthLabel = appLocalizations.mpAzimuthAzimuthLabel;
 
     return MPOverlayWindowWidget(
       title: title,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+      th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
@@ -191,7 +206,7 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
                 children: [
                   RadioListTile<String>(
                     key: ValueKey(
-                      "MPAzimuthTypeOptionWidget|RadioListTile|$mpUnsetOptionID",
+                      "MPOrientationOptionWidget|RadioListTile|$mpUnsetOptionID",
                     ),
                     title: Text(appLocalizations.mpChoiceUnset),
                     value: mpUnsetOptionID,
@@ -199,7 +214,7 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
                   ),
                   RadioListTile<String>(
                     key: ValueKey(
-                      "MPAzimuthTypeOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                      "MPOrientationOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
                     ),
                     title: Text(appLocalizations.mpChoiceSet),
                     value: mpNonMultipleChoiceSetID,
@@ -210,14 +225,8 @@ class _MPAzimuthTypeOptionWidgetState extends State<MPAzimuthTypeOptionWidget> {
             ),
 
             // Additional Inputs for "Set" Option
-            // if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            //     (widget
-            //             .th2FileEditController
-            //             .selectionController
-            //             .selectedEndControlPoints
-            //             .length !=
-            //         1)) ...[
-            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+            if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+                !_isSingleLineSegment) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
