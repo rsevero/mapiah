@@ -841,22 +841,29 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         getMPSelectableElements().values;
 
     for (final MPSelectable selectableElement in selectableElements) {
-      if (selectableElement is MPSelectableElement) {
-        if ((selectableElement is! MPSelectablePoint) &&
-            (selectableElement is! MPSelectableLine)) {
-          continue;
-        }
+      if ((selectableElement is! MPSelectablePoint) &&
+          (selectableElement is! MPSelectableLine)) {
+        continue;
+      }
 
-        final THElement element = selectableElement.element;
+      final THElement element = selectableElement.element;
 
-        if (MPNumericAux.isRect1InsideRect2(
-          rect1: (element as MPBoundingBoxMixin).getBoundingBox(
-            _th2FileEditController,
-          )!,
-          rect2: canvasSelectionWindow,
-        )) {
-          insideWindowElements[element.mpID] = element;
-        }
+      if (element is! MPBoundingBoxMixin) {
+        continue;
+      }
+
+      final Rect? elementBoundingBox = (element as MPBoundingBoxMixin)
+          .getBoundingBox(_th2FileEditController);
+
+      if (elementBoundingBox == null) {
+        continue;
+      }
+
+      if (MPNumericAux.isRect1InsideRect2(
+        rect1: elementBoundingBox,
+        rect2: canvasSelectionWindow,
+      )) {
+        insideWindowElements[element.mpID] = element;
       }
     }
 
