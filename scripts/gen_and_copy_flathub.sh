@@ -212,3 +212,9 @@ ls -l "$TARGET" | sed -n '1,200p'
 rm -rf "$TOOLS_DIR"
 # Cleanup generated directory
 rm -rf "$ROOT_DIR/generated"
+
+# Cleanup flatpak-builder temp directory if present
+if [ -d "$ROOT_DIR/.flatpak-builder" ]; then
+  echo "Removing .flatpak-builder temp directory"
+  rm -rf "$ROOT_DIR/.flatpak-builder"
+fi
