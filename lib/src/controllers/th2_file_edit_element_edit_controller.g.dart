@@ -231,6 +231,36 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_linePointOrientationLSizeSettingModeAtom = Atom(
+    name:
+        'TH2FileEditElementEditControllerBase._linePointOrientationLSizeSettingMode',
+    context: context,
+  );
+
+  MPLinePointInteractiveOrientationLSizeSettingMode
+  get linePointOrientationLSizeSettingMode {
+    _$_linePointOrientationLSizeSettingModeAtom.reportRead();
+    return super._linePointOrientationLSizeSettingMode;
+  }
+
+  @override
+  MPLinePointInteractiveOrientationLSizeSettingMode
+  get _linePointOrientationLSizeSettingMode =>
+      linePointOrientationLSizeSettingMode;
+
+  @override
+  set _linePointOrientationLSizeSettingMode(
+    MPLinePointInteractiveOrientationLSizeSettingMode value,
+  ) {
+    _$_linePointOrientationLSizeSettingModeAtom.reportWrite(
+      value,
+      super._linePointOrientationLSizeSettingMode,
+      () {
+        super._linePointOrientationLSizeSettingMode = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
@@ -926,6 +956,24 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.setLinePointLSizeValue(lsize);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void setLinePointOrientationLSizeSettingMode(
+    MPLinePointInteractiveOrientationLSizeSettingMode value,
+  ) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.setLinePointOrientationLSizeSettingMode',
+        );
+    try {
+      return super.setLinePointOrientationLSizeSettingMode(value);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

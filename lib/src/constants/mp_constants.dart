@@ -220,6 +220,7 @@ const double mpCompassCardinalDirectionsFontSizeFactor = 0.1;
 const double mpCompassCardinalDirectionsTextOffsetFactor = 0.83;
 const double mpCompassCentralCircleFactor = 0.3;
 const double mpSlopeLinePointDefaultLSize = 20.0;
+const double mpLSizeCanvasSizeFactor = 0.05;
 
 const double thCentimeterToMeter = 0.01;
 const double thMeterToCentimeter = 100.0;

@@ -23,7 +23,7 @@ import 'package:mapiah/src/widgets/mp_snap_targets_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_attr_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_author_option_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_azimuth_type_option_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_orientation_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_context_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_copyright_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_cs_option_widget.dart';
@@ -340,7 +340,7 @@ class MPOverlayWindowFactory {
             innerAnchorType: MPWidgetPositionType.centerLeft,
           );
         case THCommandOptionType.orientation:
-          overlayWindowWidget = MPAzimuthTypeOptionWidget(
+          overlayWindowWidget = MPOrientationOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,

@@ -93,6 +93,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   double? _linePointLSize;
 
+  @readonly
+  MPLinePointInteractiveOrientationLSizeSettingMode
+  _linePointOrientationLSizeSettingMode =
+      MPLinePointInteractiveOrientationLSizeSettingMode.lsize;
+
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
 
@@ -1996,8 +2001,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applySetLinePointOrientationLSize() {
     /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
     final bool forceOrientation =
-        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool forceLSize = MPInteractionAux.isAltPressed();
+        (_linePointOrientationLSizeSettingMode ==
+            MPLinePointInteractiveOrientationLSizeSettingMode.orientation)
+        ? true
+        : MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool forceLSize =
+        (_linePointOrientationLSizeSettingMode ==
+            MPLinePointInteractiveOrientationLSizeSettingMode.lsize)
+        ? true
+        : MPInteractionAux.isAltPressed();
     final List<MPCommand> setCommands = [];
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         _th2FileEditController
@@ -2074,6 +2086,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void setLinePointLSizeValue(double? lsize) {
     _linePointLSize = lsize;
   }
+
+  @action
+  void setLinePointOrientationLSizeSettingMode(
+    MPLinePointInteractiveOrientationLSizeSettingMode value,
+  ) {
+    _linePointOrientationLSizeSettingMode = value;
+  }
 }
 
 class MPTypeUsed {
@@ -2097,3 +2116,5 @@ enum MPLineSimplificationMethod {
   forceBezier,
   keepOriginalTypes,
 }
+
+enum MPLinePointInteractiveOrientationLSizeSettingMode { lsize, orientation }

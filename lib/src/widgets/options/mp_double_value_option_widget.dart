@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -34,6 +36,7 @@ class MPDoubleValueOptionWidget extends StatefulWidget {
 }
 
 class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
+  late final TH2FileEditController th2FileEditController;
   late TextEditingController _doubleController;
   late String _selectedChoice;
   final FocusNode _doubleTextFieldFocusNode = FocusNode();
@@ -47,6 +50,25 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
   @override
   void initState() {
     super.initState();
+
+    th2FileEditController = widget.th2FileEditController;
+
+    if ((widget.optionInfo.type == THCommandOptionType.lSize) &&
+        (th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment) &&
+        (th2FileEditController
+                .selectionController
+                .selectedEndControlPoints
+                .length ==
+            1)) {
+      th2FileEditController.elementEditController
+          .setLinePointOrientationLSizeSettingMode(
+            MPLinePointInteractiveOrientationLSizeSettingMode.lsize,
+          );
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.editLinePointOrientationLSize,
+      );
+    }
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -135,14 +157,14 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
       }
     }
 
-    widget.th2FileEditController.userInteractionController.prepareSetOption(
+    th2FileEditController.userInteractionController.prepareSetOption(
       option: newOption,
       optionType: widget.optionInfo.type,
     );
   }
 
   void _cancelButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,
     );
@@ -187,7 +209,7 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+      th2FileEditController: th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
