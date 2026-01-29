@@ -16,7 +16,8 @@
    ```bash
    ./scripts/gen_and_copy_flathub.sh
    ```
-9. At the ~/devel/io.github.rsevero.mapiah repo:
+9. Update new release info with CHANGELOG info at ~/devel/io.github.rsevero.mapiah/io.github.rsevero.mapiah.metainfo.xml
+10. At the ~/devel/io.github.rsevero.mapiah repo:
    1.  Pull any changes from the remote main branch and create new branch:
       ```bash
       git pull
@@ -36,7 +37,7 @@
       git push
       ```
    4. Create a Pull Request in the Flathub repo and get it merged.
-10. After the new release has been created in GitHub:
+11. After the new release has been created in GitHub:
    1. update the release title to include the version number and the name of the release;
    2. update the release description including the changelog for the release.
 
