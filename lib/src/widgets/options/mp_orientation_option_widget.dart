@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/inputs/mp_azimuth_picker_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -45,7 +43,7 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
   double? _currentAzimuth = 0;
   late final String _initialAzimuth;
   late final String _initialSelectedChoice;
-  late final bool _isSingleLineSegment;
+  // late final bool _isSingleLineSegment;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isOkButtonEnabled = false;
 
@@ -55,24 +53,26 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
 
     th2FileEditController = widget.th2FileEditController;
 
-    _isSingleLineSegment =
-        (th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment) &&
-        (th2FileEditController
-                .selectionController
-                .selectedEndControlPoints
-                .length ==
-            1);
+    /// Temporarily disable interactive orientation/lsize setting for single
+    /// line segments until complete UI is implemented.
+    // _isSingleLineSegment =
+    //     (th2FileEditController.optionEditController.currentOptionElementsType ==
+    //         MPOptionElementType.lineSegment) &&
+    //     (th2FileEditController
+    //             .selectionController
+    //             .selectedEndControlPoints
+    //             .length ==
+    //         1);
 
-    if (_isSingleLineSegment) {
-      th2FileEditController.elementEditController
-          .setLinePointOrientationLSizeSettingMode(
-            MPLinePointInteractiveOrientationLSizeSettingMode.orientation,
-          );
-      th2FileEditController.stateController.setState(
-        MPTH2FileEditStateType.editLinePointOrientationLSize,
-      );
-    }
+    // if (_isSingleLineSegment) {
+    //   th2FileEditController.elementEditController
+    //       .setLinePointOrientationLSizeSettingMode(
+    //         MPLinePointInteractiveOrientationLSizeSettingMode.orientation,
+    //       );
+    //   th2FileEditController.stateController.setState(
+    //     MPTH2FileEditStateType.editLinePointOrientationLSize,
+    //   );
+    // }
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -225,8 +225,9 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
             ),
 
             // Additional Inputs for "Set" Option
-            if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-                !_isSingleLineSegment) ...[
+            // if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+            //     !_isSingleLineSegment) ...[
+            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
