@@ -58,28 +58,21 @@
 
   <releases>
     <release version="0.2.33" date="2026-01-30">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.33</url>
       <description>
         <p>0.2.33 - 2026-01-30 - The <em>o ano um</em> release</p>
+        <p>Fixed bugs:</p>
         <ul>
-          <li><strong>New features:</strong>
-            <ul>
-            </ul>
-          </li>
-          <li><strong>Fixed bugs:</strong>
-            <ul>
-              <li>URLs at &quot;About&quot; dialog box should be clickable.</li>
-            </ul>
-          </li>
-          <li><strong>Infrastructure maintenance:</strong>
-            <ul>
-              <li>Flutter pub upgrade --major-versions.</li>
-              <li>Separating Appimage and flatpak build workflows.</li>
-              <li>Moving flatpak build to Ubuntu 24.04 base system from previous 22.04.</li>
-              <li>Script to set flutter version on release build files.</li>
-              <li>Moved flatpak creation/publishing to Flathub build system (amd64 and aarch64).</li>
-              <li>Removing flatpak build from GitHub actions.</li>
-            </ul>
-          </li>
+          <li>URLs at &quot;About&quot; dialog box should be clickable.</li>
+        </ul>
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Flutter pub upgrade --major-versions.</li>
+          <li>Separating Appimage and flatpak build workflows.</li>
+          <li>Moving flatpak build to Ubuntu 24.04 base system from previous 22.04.</li>
+          <li>Script to set flutter version on release build files.</li>
+          <li>Moved flatpak creation/publishing to Flathub build system (amd64 and aarch64).</li>
+          <li>Removing flatpak build from GitHub actions.</li>
         </ul>
       </description>
     </release>
