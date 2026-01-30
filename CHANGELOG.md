@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.33 - not yet released
+## 0.2.33 - 2026-01-30 - The [_o ano um_](https://renataweber.art/trabalhos/o-ano-um/) release
 * New features:
 * Fixed bugs:
   * URLs at "About" dialog box should be clickable.
