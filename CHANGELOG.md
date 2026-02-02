@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.34 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * flutter upgrade to 3.38.9.
+  * flutter pub upgrade --major-versions
+
 ## 0.2.33 - 2026-01-30 - The [_o ano um_](https://renataweber.art/trabalhos/o-ano-um/) release
 * New features:
 * Fixed bugs:
