@@ -132,6 +132,16 @@
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 [X] - Create an way to click on a non active scrap to select it.
 [X] - Error text on alert dialog boxes should be selecteable. [Wookey request]
+[ ] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
+[ ] - Exceptions should be shown to the user as a AlertDialog box with copyable text.
+[ ] - flatpak version does not open URLs.
+[ ] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [Edvard]
+[ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [Edvard]
+[ ] - When zooming with mouse wheel and there is no element selected, use the curso position as zoom center. [Edvard]
+[ ] - Create zoom to selection window. [Edvard]
+[ ] - Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working. [Edvard]
+[ ] - Allow multiple "add line segment" operations in sucession. [Edvard]
+[ ] - BUG: portuguese edit window help page not being presented. [Edvard]
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
@@ -172,10 +182,14 @@
 [ ] - Manually edit position of end and control points in line segments.
 [ ] - Convert multiline comment into a single element.
 [ ] - Reorder images.
+[ ] - Create a easy way to find slope lines without lsize.
+[ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [Edvard]
 
 ## Version 1.0
 [ ] - Raster images tracing.
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
+[ ] - Freehand drawing tool. [Edvard]
+[ ] - Show shorcuts related to current state on status bar. [Edvard]
 
 ## Version 2.0
 [ ] - Open/edit/save thconfig files.
