@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 
 class MPURLTextWidget extends StatelessWidget {
   final String url;
@@ -23,9 +23,9 @@ class MPURLTextWidget extends StatelessWidget {
           }
 
           try {
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
-            } else {
+            final bool opened = await MPUrlLauncher.openUrl(uri);
+
+            if (!opened) {
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text('Cannot open URL: $url')));

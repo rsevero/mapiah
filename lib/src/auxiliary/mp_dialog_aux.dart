@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
+import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -20,7 +21,6 @@ import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
-import 'package:url_launcher/url_launcher.dart';
 
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
@@ -441,10 +441,7 @@ class MPDialogAux {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(
-                          Uri.parse(releaseUrl),
-                          mode: LaunchMode.externalApplication,
-                        );
+                        MPUrlLauncher.openUrl(Uri.parse(releaseUrl));
                       },
                   ),
                 TextSpan(text: afterUrl),
