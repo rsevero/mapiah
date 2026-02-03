@@ -6,12 +6,13 @@ sdk-extensions:
 - org.freedesktop.Sdk.Extension.llvm19
 command: mapiah
 finish-args:
-- --share=ipc
-- --socket=fallback-x11
-- --socket=wayland
 - --device=dri
 - --env=GIO_USE_PORTAL=1
 - --env=GTK_USE_PORTAL=1
+- --share=ipc
+- --share=network
+- --socket=fallback-x11
+- --socket=wayland
 modules:
 - name: mapiah
   buildsystem: simple
@@ -41,7 +42,7 @@ modules:
   sources:
   - type: git
     url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.34-test4
+    tag: v0.2.34-test5
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
