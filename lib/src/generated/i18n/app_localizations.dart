@@ -157,6 +157,36 @@ abstract class AppLocalizations {
   /// **'Open'**
   String get updateDialogOpenButton;
 
+  /// Title for the update check failure dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Update check failed'**
+  String get updateCheckFailedTitle;
+
+  /// Body text for the update check failure dialog when there is no response
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to check for updates because the server did not respond. Do you have an internet connection?'**
+  String get updateCheckFailedNoAnswerBody;
+
+  /// Body text for the update check failure dialog when a non-200 HTTP status is returned
+  ///
+  /// In en, this message translates to:
+  /// **'Update server returned HTTP {statusCode}.'**
+  String updateCheckFailedHttpStatusBody(Object statusCode);
+
+  /// Body text for the update check failure dialog when parsing fails
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to read the latest version from the update server.'**
+  String get updateCheckFailedParsingBody;
+
+  /// Body text for the update check failure dialog when parsing fails and a tag is available
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to parse the latest version tag: {tagName}'**
+  String updateCheckFailedParsingWithTagBody(Object tagName);
+
   /// The initial page presentation of the application
   ///
   /// In en, this message translates to:

@@ -11,6 +11,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
@@ -271,33 +272,67 @@ class MPDialogAux {
       final PackageInfo info = await PackageInfo.fromPlatform();
       final String currentVersion = info.version;
 
-      final Uri uri = Uri.parse(
-        'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1',
-      );
+      final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
 
-      final http.Response response = await http.get(
-        uri,
-        headers: const <String, String>{
-          'Accept': 'application/vnd.github+json',
-        },
-      );
+      http.Response response;
+
+      try {
+        response = await http.get(
+          uri,
+          headers: const <String, String>{
+            'Accept': mpMapiahReleasesAPIHeaderAccept,
+          },
+        );
+      } catch (_) {
+        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
+
+        return;
+      }
 
       if (response.statusCode != 200) {
+        _showUpdateCheckFailedDialog(
+          type: MPUpdateCheckFailureType.httpStatus,
+          httpStatusCode: response.statusCode,
+        );
+
         return;
       }
 
-      final List<dynamic> tags = jsonDecode(response.body) as List<dynamic>;
+      late final List<dynamic> tags;
+
+      try {
+        tags = jsonDecode(response.body) as List<dynamic>;
+      } catch (_) {
+        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+        return;
+      }
 
       if (tags.isEmpty) {
+        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
         return;
       }
 
-      final String tagName = (tags.first as Map<String, dynamic>)['name']
-          .toString();
+      final String tagName;
+
+      try {
+        tagName = (tags.first as Map<String, dynamic>)['name'].toString();
+      } catch (_) {
+        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+        return;
+      }
+
       final String? latestVersion = _extractVersion(tagName);
       final String? current = _extractVersion(currentVersion);
 
-      if (latestVersion == null || current == null) {
+      if (latestVersion == null) {
+        _showUpdateCheckFailedDialog(
+          type: MPUpdateCheckFailureType.parsing,
+          tagName: tagName,
+        );
+        return;
+      }
+
+      if (current == null) {
         return;
       }
 
@@ -312,6 +347,7 @@ class MPDialogAux {
       );
     } catch (e, st) {
       mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
+      _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
     } finally {
       _isUpdateCheckRunning = false;
     }
@@ -402,6 +438,49 @@ class MPDialogAux {
             child: Text(appLocalizations.buttonClose),
           ),
         ],
+      ),
+    ).whenComplete(() {
+      _isUpdateDialogOpen = false;
+    });
+  }
+
+  static void _showUpdateCheckFailedDialog({
+    required MPUpdateCheckFailureType type,
+    String? tagName,
+    int? httpStatusCode,
+  }) {
+    if (_isUpdateDialogOpen) {
+      return;
+    }
+
+    _isUpdateDialogOpen = true;
+
+    final BuildContext? ctx = mpLocator.mpNavigatorKey.currentContext;
+
+    if (ctx == null) {
+      _isUpdateDialogOpen = false;
+      return;
+    }
+
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String body = switch (type) {
+      MPUpdateCheckFailureType.noAnswer =>
+        appLocalizations.updateCheckFailedNoAnswerBody,
+      MPUpdateCheckFailureType.httpStatus =>
+        appLocalizations.updateCheckFailedHttpStatusBody(httpStatusCode ?? 0),
+      MPUpdateCheckFailureType.parsing =>
+        tagName == null
+            ? appLocalizations.updateCheckFailedParsingBody
+            : appLocalizations.updateCheckFailedParsingWithTagBody(tagName),
+    };
+
+    showDialog<void>(
+      context: ctx,
+      useRootNavigator: true,
+      barrierDismissible: true,
+      builder: (ctx2) => MPErrorDialog(
+        title: appLocalizations.updateCheckFailedTitle,
+        errorMessages: <String>[body],
       ),
     ).whenComplete(() {
       _isUpdateDialogOpen = false;
@@ -562,6 +641,8 @@ class MPDialogAux {
 }
 
 enum MPFilePickerType { image, th2 }
+
+enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 
 enum PickImageFileReturnType { empty, rasterImage, xviFile }
 

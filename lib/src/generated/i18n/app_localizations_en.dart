@@ -45,6 +45,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateDialogOpenButton => 'Open';
 
   @override
+  String get updateCheckFailedTitle => 'Update check failed';
+
+  @override
+  String get updateCheckFailedNoAnswerBody =>
+      'Unable to check for updates because the server did not respond. Do you have an internet connection?';
+
+  @override
+  String updateCheckFailedHttpStatusBody(Object statusCode) {
+    return 'Update server returned HTTP $statusCode.';
+  }
+
+  @override
+  String get updateCheckFailedParsingBody =>
+      'Unable to read the latest version from the update server.';
+
+  @override
+  String updateCheckFailedParsingWithTagBody(Object tagName) {
+    return 'Unable to parse the latest version tag: $tagName';
+  }
+
+  @override
   String get initialPagePresentation =>
       'Mapiah: an user-friendly graphical interface for cave mapping with Therion';
 

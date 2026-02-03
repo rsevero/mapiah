@@ -334,3 +334,7 @@ const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
 
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
+
+const String mpMapiahReleasesAPIURL =
+    'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1';
+const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
