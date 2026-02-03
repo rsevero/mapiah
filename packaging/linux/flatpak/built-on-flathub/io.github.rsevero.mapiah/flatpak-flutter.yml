@@ -44,5 +44,5 @@ modules:
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
     url: https://github.com/flutter/flutter.git
-    tag: 3.38.7
+    tag: 3.38.9
     dest: flutter
