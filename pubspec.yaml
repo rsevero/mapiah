@@ -19,6 +19,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_mobx: ^2.0.0
+  http: ^1.2.2
   intl: any
   intl_utils: ^2.8.7
   logger: ^2.5.0

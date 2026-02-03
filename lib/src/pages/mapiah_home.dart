@@ -36,6 +36,10 @@ class _MapiahHomeState extends State<MapiahHome> {
         mpLocator.mpLog.e('Invalid file extension: ${widget.mainFilePath}');
       }
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      MPDialogAux.checkForUpdates();
+    });
   }
 
   @override

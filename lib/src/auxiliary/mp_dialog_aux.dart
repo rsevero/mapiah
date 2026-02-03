@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -14,12 +16,16 @@ import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
 
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
   static bool _isXVIErrorDialogOpen = false;
   static bool _isUnhandledErrorDialogOpen = false;
+  static bool _isUpdateDialogOpen = false;
+  static bool _isUpdateCheckRunning = false;
 
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
@@ -253,6 +259,149 @@ class MPDialogAux {
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) => showNow());
     }
+  }
+
+  static Future<void> checkForUpdates() async {
+    if (_isUpdateCheckRunning) {
+      return;
+    }
+    _isUpdateCheckRunning = true;
+
+    try {
+      final PackageInfo info = await PackageInfo.fromPlatform();
+      final String currentVersion = info.version;
+
+      final Uri uri = Uri.parse(
+        'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1',
+      );
+
+      final http.Response response = await http.get(
+        uri,
+        headers: const <String, String>{
+          'Accept': 'application/vnd.github+json',
+        },
+      );
+
+      if (response.statusCode != 200) {
+        return;
+      }
+
+      final List<dynamic> tags = jsonDecode(response.body) as List<dynamic>;
+
+      if (tags.isEmpty) {
+        return;
+      }
+
+      final String tagName = (tags.first as Map<String, dynamic>)['name']
+          .toString();
+      final String? latestVersion = _extractVersion(tagName);
+      final String? current = _extractVersion(currentVersion);
+
+      if (latestVersion == null || current == null) {
+        return;
+      }
+
+      if (_compareVersions(latestVersion, current) <= 0) {
+        return;
+      }
+
+      _showUpdateDialog(
+        latestVersion: latestVersion,
+        currentVersion: currentVersion,
+        tagName: tagName,
+      );
+    } catch (e, st) {
+      mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
+    } finally {
+      _isUpdateCheckRunning = false;
+    }
+  }
+
+  static String? _extractVersion(String input) {
+    final RegExpMatch? match = RegExp(r'\d+(?:\.\d+)*').firstMatch(input);
+    return match?.group(0);
+  }
+
+  static int _compareVersions(String a, String b) {
+    final List<int> aParts = a
+        .split('.')
+        .map((part) => int.tryParse(part) ?? 0)
+        .toList();
+    final List<int> bParts = b
+        .split('.')
+        .map((part) => int.tryParse(part) ?? 0)
+        .toList();
+
+    final int maxLen = aParts.length > bParts.length
+        ? aParts.length
+        : bParts.length;
+
+    for (int i = 0; i < maxLen; i++) {
+      final int aVal = i < aParts.length ? aParts[i] : 0;
+      final int bVal = i < bParts.length ? bParts[i] : 0;
+      if (aVal != bVal) {
+        return aVal.compareTo(bVal);
+      }
+    }
+
+    return 0;
+  }
+
+  static void _showUpdateDialog({
+    required String latestVersion,
+    required String currentVersion,
+    required String tagName,
+  }) {
+    if (_isUpdateDialogOpen) {
+      return;
+    }
+
+    _isUpdateDialogOpen = true;
+
+    final BuildContext? ctx = mpLocator.mpNavigatorKey.currentContext;
+    if (ctx == null) {
+      _isUpdateDialogOpen = false;
+      return;
+    }
+
+    final String releaseUrl =
+        'https://github.com/rsevero/mapiah/releases/tag/$tagName';
+
+    showDialog<void>(
+      context: ctx,
+      useRootNavigator: true,
+      barrierDismissible: true,
+      builder: (ctx2) => AlertDialog(
+        title: const Text('Update available'),
+        content: SingleChildScrollView(
+          child: SelectableText(
+            'A newer version is available.\n\n'
+            'Current: $currentVersion\n'
+            'Latest: $latestVersion ($tagName)\n\n'
+            'Download: $releaseUrl',
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async {
+              final Uri uri = Uri.parse(releaseUrl);
+              try {
+                await launchUrl(uri, mode: LaunchMode.externalApplication);
+              } catch (_) {
+                // Ignore launch failures.
+              }
+            },
+            child: const Text('Open'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx2, rootNavigator: true).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    ).whenComplete(() {
+      _isUpdateDialogOpen = false;
+    });
   }
 
   static Future<void> showXVIParsingErrorsDialog(
