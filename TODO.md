@@ -140,7 +140,7 @@
 [ ] - Create zoom to selection window. [requested by Edvard]
 [ ] - Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working. [requested by Edvard]
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
-[ ] - BUG: portuguese edit window help page not being presented. [requested by Edvard]
+[X] - BUG: portuguese edit window help page not being presented. [requested by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
 
 ## Version 0.4

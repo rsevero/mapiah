@@ -5,6 +5,7 @@
   * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
   * Mapiah should check and present a notice when there is a new version available. [requested by Wal]
 * Fixed bugs:
+  * Portuguese edit window help page not being presented. [requested by Edvard]
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions
