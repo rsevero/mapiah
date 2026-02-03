@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
@@ -18,6 +19,7 @@ import 'package:path/path.dart' as p;
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
   static bool _isXVIErrorDialogOpen = false;
+  static bool _isUnhandledErrorDialogOpen = false;
 
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
@@ -197,6 +199,60 @@ class MPDialogAux {
     }
 
     return multicase;
+  }
+
+  static Future<void> showUnhandledErrorDialog(
+    Object error,
+    StackTrace? stackTrace, {
+    BuildContext? context,
+  }) async {
+    if (_isUnhandledErrorDialogOpen) {
+      return;
+    }
+
+    _isUnhandledErrorDialogOpen = true;
+
+    final List<String> errorMessages = <String>[
+      'Unhandled exception:',
+      error.toString(),
+    ];
+
+    if (stackTrace != null) {
+      final String stack = stackTrace.toString().trimRight();
+      if (stack.isNotEmpty) {
+        errorMessages.add('');
+        errorMessages.add('Stack trace:');
+        errorMessages.addAll(stack.split('\n'));
+      }
+    }
+
+    void showNow() {
+      final BuildContext? ctx =
+          mpLocator.mpNavigatorKey.currentContext ?? context;
+      if (ctx == null) {
+        _isUnhandledErrorDialogOpen = false;
+        return;
+      }
+
+      showDialog<void>(
+        context: ctx,
+        useRootNavigator: true,
+        barrierDismissible: true,
+        builder: (ctx2) => MPErrorDialog(
+          title: 'Unhandled error',
+          errorMessages: errorMessages,
+        ),
+      ).whenComplete(() {
+        _isUnhandledErrorDialogOpen = false;
+      });
+    }
+
+    final SchedulerPhase phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.idle) {
+      showNow();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) => showNow());
+    }
   }
 
   static Future<void> showXVIParsingErrorsDialog(

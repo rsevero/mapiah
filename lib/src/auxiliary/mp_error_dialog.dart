@@ -3,18 +3,22 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPErrorDialog extends StatelessWidget {
   final List<String> errorMessages;
+  final String? title;
 
-  MPErrorDialog({required this.errorMessages});
+  MPErrorDialog({required this.errorMessages, this.title});
 
   @override
   Widget build(BuildContext context) {
+    final String dialogTitle =
+        title ?? AppLocalizations.of(context).parsingErrors;
+
     return AlertDialog(
       content: SingleChildScrollView(
         child: SelectableText.rich(
           TextSpan(
             children: <TextSpan>[
               TextSpan(
-                text: '${AppLocalizations.of(context).parsingErrors}\n\n',
+                text: '$dialogTitle\n\n',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               ...errorMessages.map(

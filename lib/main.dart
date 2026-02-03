@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_context_menu_suppression.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -48,12 +51,33 @@ void main(List<String> arguments) {
   //   // }
   // });
 
-  // /// For layout debugging.
-  // debugPaintSizeEnabled = true;
-  if (kIsWeb) {
-    suppressContextMenu();
-  }
-  runApp(MapiahApp(fileToRead: fileToRead));
+  runZonedGuarded(
+    () {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      // /// For layout debugging.
+      // debugPaintSizeEnabled = true;
+      if (kIsWeb) {
+        suppressContextMenu();
+      }
+
+      FlutterError.onError = (FlutterErrorDetails details) {
+        FlutterError.presentError(details);
+        MPDialogAux.showUnhandledErrorDialog(details.exception, details.stack);
+      };
+
+      ui.PlatformDispatcher.instance.onError =
+          (Object error, StackTrace stack) {
+            MPDialogAux.showUnhandledErrorDialog(error, stack);
+            return true;
+          };
+
+      runApp(MapiahApp(fileToRead: fileToRead));
+    },
+    (Object error, StackTrace stack) {
+      MPDialogAux.showUnhandledErrorDialog(error, stack);
+    },
+  );
 }
 
 class MapiahApp extends StatelessWidget {

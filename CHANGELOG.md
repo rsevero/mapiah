@@ -2,6 +2,7 @@
 
 ## 0.2.34 - not yet released
 * New features:
+  * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
 * Fixed bugs:
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
