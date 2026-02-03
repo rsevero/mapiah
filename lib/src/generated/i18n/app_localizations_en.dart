@@ -29,6 +29,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonClose => 'Close';
 
   @override
+  String get updateAvailableTitle => 'Update available';
+
+  @override
+  String updateAvailableBody(
+    Object currentVersion,
+    Object latestVersion,
+    Object tagName,
+    Object releaseUrl,
+  ) {
+    return 'A newer version is available.\n\nCurrent: $currentVersion\nLatest: $latestVersion ($tagName)\n\nDownload: $releaseUrl';
+  }
+
+  @override
+  String get updateDialogOpenButton => 'Open';
+
+  @override
   String get initialPagePresentation =>
       'Mapiah: an user-friendly graphical interface for cave mapping with Therion';
 

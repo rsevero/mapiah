@@ -134,6 +134,29 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get buttonClose;
 
+  /// Title for the update available dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get updateAvailableTitle;
+
+  /// Body text for the update available dialog
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version is available.\n\nCurrent: {currentVersion}\nLatest: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}'**
+  String updateAvailableBody(
+    Object currentVersion,
+    Object latestVersion,
+    Object tagName,
+    Object releaseUrl,
+  );
+
+  /// Label for the open button in the update dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get updateDialogOpenButton;
+
   /// The initial page presentation of the application
   ///
   /// In en, this message translates to:

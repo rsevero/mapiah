@@ -29,6 +29,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get buttonClose => 'Fechar';
 
   @override
+  String get updateAvailableTitle => 'Atualização disponível';
+
+  @override
+  String updateAvailableBody(
+    Object currentVersion,
+    Object latestVersion,
+    Object tagName,
+    Object releaseUrl,
+  ) {
+    return 'Uma versão mais recente está disponível.\n\nAtual: $currentVersion\nMais recente: $latestVersion ($tagName)\n\nDownload: $releaseUrl';
+  }
+
+  @override
+  String get updateDialogOpenButton => 'Abrir';
+
+  @override
   String get initialPagePresentation =>
       'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
 

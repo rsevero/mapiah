@@ -33,6 +33,27 @@
     "description": "The label for the close button",
     "type": "text"
   },
+  "updateAvailableTitle": "Update available",
+  "@updateAvailableTitle": {
+    "description": "Title for the update available dialog",
+    "type": "text"
+  },
+  "updateAvailableBody": "A newer version is available.\n\nCurrent: {currentVersion}\nLatest: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}",
+  "@updateAvailableBody": {
+    "description": "Body text for the update available dialog",
+    "type": "text",
+    "placeholders": {
+      "currentVersion": {},
+      "latestVersion": {},
+      "tagName": {},
+      "releaseUrl": {}
+    }
+  },
+  "updateDialogOpenButton": "Open",
+  "@updateDialogOpenButton": {
+    "description": "Label for the open button in the update dialog",
+    "type": "text"
+  },
   "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
   "@initialPagePresentation": {
     "description": "The initial page presentation of the application",

@@ -364,6 +364,8 @@ class MPDialogAux {
       return;
     }
 
+    final appLocalizations = mpLocator.appLocalizations;
+
     final String releaseUrl =
         'https://github.com/rsevero/mapiah/releases/tag/$tagName';
 
@@ -372,13 +374,15 @@ class MPDialogAux {
       useRootNavigator: true,
       barrierDismissible: true,
       builder: (ctx2) => AlertDialog(
-        title: const Text('Update available'),
+        title: Text(appLocalizations.updateAvailableTitle),
         content: SingleChildScrollView(
           child: SelectableText(
-            'A newer version is available.\n\n'
-            'Current: $currentVersion\n'
-            'Latest: $latestVersion ($tagName)\n\n'
-            'Download: $releaseUrl',
+            appLocalizations.updateAvailableBody(
+              currentVersion,
+              latestVersion,
+              tagName,
+              releaseUrl,
+            ),
           ),
         ),
         actions: <Widget>[
@@ -391,11 +395,11 @@ class MPDialogAux {
                 // Ignore launch failures.
               }
             },
-            child: const Text('Open'),
+            child: Text(appLocalizations.updateDialogOpenButton),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx2, rootNavigator: true).pop(),
-            child: const Text('Close'),
+            child: Text(appLocalizations.buttonClose),
           ),
         ],
       ),
