@@ -8,7 +8,6 @@
   "buttonClose": "Fechar",
   "updateAvailableTitle": "Atualização disponível",
   "updateAvailableBody": "Uma versão mais recente está disponível.\n\nAtual: {currentVersion}\nMais recente: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}",
-  "updateDialogOpenButton": "Abrir",
   "updateCheckFailedTitle": "Falha ao verificar atualização",
   "updateCheckFailedNoAnswerBody": "Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.",
   "updateCheckFailedHttpStatusBody": "O servidor de atualizações retornou HTTP {statusCode}.",

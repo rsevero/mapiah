@@ -49,11 +49,6 @@
       "releaseUrl": {}
     }
   },
-  "updateDialogOpenButton": "Open",
-  "@updateDialogOpenButton": {
-    "description": "Label for the open button in the update dialog",
-    "type": "text"
-  },
   "updateCheckFailedTitle": "Update check failed",
   "@updateCheckFailedTitle": {
     "description": "Title for the update check failure dialog",

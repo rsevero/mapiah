@@ -42,9 +42,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get updateDialogOpenButton => 'Open';
-
-  @override
   String get updateCheckFailedTitle => 'Update check failed';
 
   @override

@@ -151,12 +151,6 @@ abstract class AppLocalizations {
     Object releaseUrl,
   );
 
-  /// Label for the open button in the update dialog
-  ///
-  /// In en, this message translates to:
-  /// **'Open'**
-  String get updateDialogOpenButton;
-
   /// Title for the update check failure dialog
   ///
   /// In en, this message translates to:

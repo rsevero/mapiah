@@ -42,9 +42,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get updateDialogOpenButton => 'Abrir';
-
-  @override
   String get updateCheckFailedTitle => 'Falha ao verificar atualização';
 
   @override

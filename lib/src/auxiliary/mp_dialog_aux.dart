@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
@@ -395,15 +396,29 @@ class MPDialogAux {
     _isUpdateDialogOpen = true;
 
     final BuildContext? ctx = mpLocator.mpNavigatorKey.currentContext;
+
     if (ctx == null) {
       _isUpdateDialogOpen = false;
+
       return;
     }
 
-    final appLocalizations = mpLocator.appLocalizations;
-
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final String releaseUrl =
         'https://github.com/rsevero/mapiah/releases/tag/$tagName';
+    final String updateBody = appLocalizations.updateAvailableBody(
+      currentVersion,
+      latestVersion,
+      tagName,
+      releaseUrl,
+    );
+    final int urlIndex = updateBody.indexOf(releaseUrl);
+    final String beforeUrl = urlIndex >= 0
+        ? updateBody.substring(0, urlIndex)
+        : updateBody;
+    final String afterUrl = urlIndex >= 0
+        ? updateBody.substring(urlIndex + releaseUrl.length)
+        : '';
 
     showDialog<void>(
       context: ctx,
@@ -412,27 +427,32 @@ class MPDialogAux {
       builder: (ctx2) => AlertDialog(
         title: Text(appLocalizations.updateAvailableTitle),
         content: SingleChildScrollView(
-          child: SelectableText(
-            appLocalizations.updateAvailableBody(
-              currentVersion,
-              latestVersion,
-              tagName,
-              releaseUrl,
+          child: SelectableText.rich(
+            TextSpan(
+              style: Theme.of(ctx2).textTheme.bodyLarge,
+              children: <TextSpan>[
+                TextSpan(text: beforeUrl),
+                if (urlIndex >= 0)
+                  TextSpan(
+                    text: releaseUrl,
+                    style: TextStyle(
+                      color: Theme.of(ctx2).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse(releaseUrl),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                  ),
+                TextSpan(text: afterUrl),
+              ],
             ),
           ),
         ),
         actions: <Widget>[
-          TextButton(
-            onPressed: () async {
-              final Uri uri = Uri.parse(releaseUrl);
-              try {
-                await launchUrl(uri, mode: LaunchMode.externalApplication);
-              } catch (_) {
-                // Ignore launch failures.
-              }
-            },
-            child: Text(appLocalizations.updateDialogOpenButton),
-          ),
           TextButton(
             onPressed: () => Navigator.of(ctx2, rootNavigator: true).pop(),
             child: Text(appLocalizations.buttonClose),
