@@ -7,6 +7,7 @@
 * Fixed bugs:
   * Portuguese edit window help page not being presented. [requested by Edvard]
   * Changelog URL not opening when user clicked on it at "About" dialog box.
+  * Linux/flatpak version does not open URLs for not using GIO portal and not having shared network permission.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

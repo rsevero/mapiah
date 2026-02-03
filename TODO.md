@@ -184,7 +184,7 @@
 [ ] - Reorder images.
 [ ] - Create a easy way to find slope lines without lsize.
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
-[ ] - BUG: flatpak version does not open URLs.
+[X] - BUG: flatpak version does not open URLs.
 
 ## Version 1.0
 [ ] - Raster images tracing.
