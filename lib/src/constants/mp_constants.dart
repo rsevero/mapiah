@@ -120,7 +120,7 @@ const String thConfigDirectory = 'Config';
 const String thMainDirectory = 'Mapiah';
 const String thProjectsDirectory = 'Projects';
 
-const String thMainConfigFilename = 'mapiah.toml';
+const String mpMainConfigFilename = 'mapiah.toml';
 const String thDefaultLocaleID = 'sys';
 const String thEnglishLocaleID = 'en';
 

@@ -4,6 +4,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path/path.dart' as p;
 import 'package:toml/toml.dart';
 
 part 'mp_settings_controller.g.dart';
@@ -42,10 +43,18 @@ abstract class MPSettingsControllerBase with Store {
       _readingConfigFile = true;
 
       final Directory configDirectory = await MPDirectoryAux.config();
-      final File file = File(configDirectory.path + thMainConfigFilename);
+      final File file = File(
+        p.join(configDirectory.path, mpMainConfigFilename),
+      );
+
+      if (!await file.exists()) {
+        _readingConfigFile = false;
+
+        return;
+      }
+
       final String contents = await file.readAsString();
       final Map<String, dynamic> config = TomlDocument.parse(contents).toMap();
-
       final Map<String, dynamic> mainConfig =
           config.containsKey(thMainConfigSection)
           ? config[thMainConfigSection] as Map<String, dynamic>
@@ -161,7 +170,9 @@ abstract class MPSettingsControllerBase with Store {
       final String contents = TomlDocument.fromMap(config).toString();
 
       final Directory configDirectory = await MPDirectoryAux.config();
-      final File file = File(configDirectory.path + thMainConfigFilename);
+      final File file = File(
+        p.join(configDirectory.path, mpMainConfigFilename),
+      );
 
       await file.writeAsString(contents);
     } catch (e) {
