@@ -3,6 +3,8 @@
    [Setup]
    AppName=Mapiah
    AppVersion={#AppVersion}
+   AppPublisher=Mapiah
+   AppPublisherURL=https://mapiah.org
    DefaultDirName={commonpf}\Mapiah
    DefaultGroupName=Mapiah
    OutputDir=C:\mapiah\build\windows-installer

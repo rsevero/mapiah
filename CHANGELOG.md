@@ -11,6 +11,7 @@
   * When creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
   * On windows, language selection is not kept after app restart. [reported by Edvard]
   * No app icon in Windows version.
+  * Add a publisher for Mapiah Windows installer.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

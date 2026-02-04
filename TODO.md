@@ -145,7 +145,7 @@
 [ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a "shaddow" red line segment behind.
 [X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [X] - BUG: No icon in Windows version.
-[ ] - Add a publisher for Mapiah Windows installer.
+[X] - Add a publisher for Mapiah Windows installer.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
