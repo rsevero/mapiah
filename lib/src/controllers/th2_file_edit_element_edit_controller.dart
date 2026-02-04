@@ -670,8 +670,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         /// parent.addToParent so the line created by the MPAddLineCommand
         /// below already includes initial line segments. Otherwise, to include
         /// these line segments, it would be necessary to add an empty line to
-        /// the file at before creating a strange undo/redo command that would
-        /// deal with an empty line which makes no sense for the user.
+        /// the file before creating a strange undo/redo command that would deal
+        /// with an empty line which makes no sense for the user.
         lineChildren.add(
           _createStraightLineSegment(_lineStartScreenPosition!, newLineMPID),
         );

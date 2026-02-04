@@ -198,6 +198,7 @@ class THLine extends THElement
       if (isFirst) {
         startPoint = child.endPoint.coordinates;
         isFirst = false;
+
         continue;
       }
 

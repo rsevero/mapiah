@@ -203,14 +203,26 @@ class THBezierCurveLineSegment extends THLineSegment {
       );
     }
 
-    // Function to solve quadratic equation for t values
+    // Function to solve quadratic equation for t values (robust for degenerates)
     List<double> solveQuadratic(double a, double b, double c) {
-      double discriminant = b * b - 4 * a * c;
+      if (a.abs() < mpDoubleComparisonEpsilon) {
+        if (b.abs() < mpDoubleComparisonEpsilon) {
+          return [];
+        }
 
-      if (discriminant < 0) return [];
-      if (discriminant == 0) return [-b / (2 * a)];
+        return [-c / b];
+      }
 
-      double sqrtDiscriminant = sqrt(discriminant);
+      final double discriminant = (b * b) - (4 * a * c);
+
+      if (discriminant < 0) {
+        return [];
+      }
+      if (discriminant.abs() < mpDoubleComparisonEpsilon) {
+        return [-b / (2 * a)];
+      }
+
+      final double sqrtDiscriminant = sqrt(discriminant);
 
       return [
         (-b + sqrtDiscriminant) / (2 * a),
@@ -257,26 +269,29 @@ class THBezierCurveLineSegment extends THLineSegment {
 
     List<double> yt = solveQuadratic(a, b, c);
 
+    void considerPoint(Offset p) {
+      if (p.dx < minX) {
+        minX = p.dx;
+      }
+      if (p.dx > maxX) {
+        maxX = p.dx;
+      }
+      if (p.dy < minY) {
+        minY = p.dy;
+      }
+      if (p.dy > maxY) {
+        maxY = p.dy;
+      }
+    }
+
     for (double t in xt) {
       if (t > 0 && t < 1) {
-        Offset p = bezierPoint(t);
-        if (p.dx < minX) {
-          minX = p.dx;
-        }
-        if (p.dx > maxX) {
-          maxX = p.dx;
-        }
+        considerPoint(bezierPoint(t));
       }
     }
     for (double t in yt) {
       if (t > 0 && t < 1) {
-        Offset p = bezierPoint(t);
-        if (p.dy < minY) {
-          minY = p.dy;
-        }
-        if (p.dy > maxY) {
-          maxY = p.dy;
-        }
+        considerPoint(bezierPoint(t));
       }
     }
 

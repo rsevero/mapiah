@@ -134,7 +134,7 @@
 [X] - Error text on alert dialog boxes should be selecteable. [Wookey request]
 [ ] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
 [X] - Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
-[ ] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
+[X] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
 [ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [requested by Edvard]
 [ ] - When zooming with mouse wheel and there is no element selected, use the curso position as zoom center. [requested by Edvard]
 [ ] - Create zoom to selection window. [requested by Edvard]
@@ -142,6 +142,7 @@
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
+[ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a "shaddow" red line segment behind.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
