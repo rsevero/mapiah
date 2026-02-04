@@ -39,6 +39,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.4.15
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
@@ -101,3 +102,9 @@ flutter:
     - assets/icons/zoom_selection.png
     - assets/icons/zoom-out-scrap.png
     - assets/images/image_not_found.png
+
+flutter_launcher_icons:
+  image_path: assets/icons/org.mapiah.mapiah.png
+  windows:
+    generate: true
+    icon_size: 256
