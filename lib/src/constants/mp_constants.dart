@@ -121,8 +121,8 @@ const String thMainDirectory = 'Mapiah';
 const String thProjectsDirectory = 'Projects';
 
 const String mpMainConfigFilename = 'mapiah.toml';
-const String thDefaultLocaleID = 'sys';
-const String thEnglishLocaleID = 'en';
+const String mpDefaultLocaleID = 'sys';
+const String mpEnglishLocaleID = 'en';
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;
@@ -191,12 +191,12 @@ const double mpXVILineThickness = 1.0;
 final double mpSqrt3 = math.sqrt(3);
 final double mpSqrt3Over2 = mpSqrt3 / 2;
 
-const String thMainConfigSection = 'Main';
-const String thMainConfigLocale = 'Locale';
-const String thFileEditConfigSection = 'FileEdit';
-const String thFileEditConfigSelectionTolerance = 'SelectionTolerance';
-const String thFileEditConfigPointRadius = 'PointRadius';
-const String thFileEditConfigLineThickness = 'LineThickness';
+const String mpMainConfigSection = 'Main';
+const String mpMainConfigLocale = 'Locale';
+const String mpFileEditConfigSection = 'FileEdit';
+const String mpFileEditConfigSelectionTolerance = 'SelectionTolerance';
+const String mpFileEditConfigPointRadius = 'PointRadius';
+const String mpFileEditConfigLineThickness = 'LineThickness';
 
 final Paint thSelectionWindowFillPaint = Paint()
   ..color = Colors.redAccent.withValues(alpha: 0.3)
