@@ -278,11 +278,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _thFile.substituteElement(modifiedElement);
     selectionController.addUpdateSelectableElement(modifiedElement);
-    selectionController.updateSelectedElementLogicalClone(modifiedElement.mpID);
+
     if (modifiedElement is THLineSegment) {
+      final THLine parentLine =
+          modifiedElement.parent(thFile: _thFile) as THLine;
+
+      selectionController.updateSelectedElementLogicalClone(
+        modifiedElement.parentMPID,
+      );
       selectionController.updateSelectedLineSegment(modifiedElement);
-      (modifiedElement.parent(thFile: _thFile) as THLine)
-          .resetLineSegmentsLists();
+      parentLine.resetLineSegmentsLists();
+    } else {
+      selectionController.updateSelectedElementLogicalClone(
+        modifiedElement.mpID,
+      );
     }
   }
 

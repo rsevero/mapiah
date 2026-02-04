@@ -405,16 +405,22 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
       final int lineSegmentMPID = selectedEndControlPoint.mpID;
+
+      if (!lineSegmentsPositionsByMPID.containsKey(lineSegmentMPID) ||
+          (lineSegmentsPositionsByMPID[lineSegmentMPID]! == 0)) {
+        continue;
+      }
+
       final THLineSegment lineSegment = thFile.lineSegmentByMPID(
         lineSegmentMPID,
       );
 
-      if ((lineSegment.elementType != elementType) &&
-          lineSegmentsPositionsByMPID.containsKey(lineSegmentMPID) &&
-          (lineSegmentsPositionsByMPID[lineSegmentMPID]! > 0) &&
-          !willChangeLineSegments.contains(lineSegment)) {
-        willChangeLineSegments.add(lineSegment);
+      if ((lineSegment.elementType == elementType) ||
+          willChangeLineSegments.contains(lineSegment)) {
+        continue;
       }
+
+      willChangeLineSegments.add(lineSegment);
     }
 
     if (willChangeLineSegments.isEmpty) {

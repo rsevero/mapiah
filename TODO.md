@@ -132,7 +132,7 @@
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 [X] - Create an way to click on a non active scrap to select it.
 [X] - Error text on alert dialog boxes should be selecteable. [Wookey request]
-[ ] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
+[X] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
 [X] - Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
 [X] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
 [ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [requested by Edvard]
