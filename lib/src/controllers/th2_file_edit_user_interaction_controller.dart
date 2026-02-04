@@ -380,12 +380,22 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
+    final THFile thFile = _th2FileEditController.thFile;
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
     final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
-        _th2FileEditController
-            .selectionController
-            .selectedEndControlPoints
-            .values;
-    final Set<THLineSegment> willChangeLineSegments = {};
+        selectionController.selectedEndControlPoints.values;
+
+    if (selectedEndControlPoints.isEmpty) {
+      return;
+    }
+
+    final THLine thLine = thFile.lineByMPID(
+      selectedEndControlPoints.first.originalElementClone.parentMPID,
+    );
+    final Map<int, int> lineSegmentsPositionsByMPID = thLine
+        .getLineSegmentPositionsByLineSegmentMPID(thFile);
+    final List<THLineSegment> willChangeLineSegments = [];
     final THElementType elementType =
         selectedLineSegmentType ==
             MPSelectedLineSegmentType.bezierCurveLineSegment
@@ -394,10 +404,15 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
-      final THLineSegment lineSegment = _th2FileEditController.thFile
-          .lineSegmentByMPID(selectedEndControlPoint.mpID);
+      final int lineSegmentMPID = selectedEndControlPoint.mpID;
+      final THLineSegment lineSegment = thFile.lineSegmentByMPID(
+        lineSegmentMPID,
+      );
 
-      if (lineSegment.elementType != elementType) {
+      if ((lineSegment.elementType != elementType) &&
+          lineSegmentsPositionsByMPID.containsKey(lineSegmentMPID) &&
+          (lineSegmentsPositionsByMPID[lineSegmentMPID]! > 0) &&
+          !willChangeLineSegments.contains(lineSegment)) {
         willChangeLineSegments.add(lineSegment);
       }
     }
@@ -409,16 +424,15 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final MPCommand setLineSegmentsTypeCommand =
         MPCommandFactory.setLineSegmentsType(
           selectedLineSegmentType: selectedLineSegmentType,
-          thFile: _th2FileEditController.thFile,
-          originalLineSegments: willChangeLineSegments.toList(),
+          thFile: thFile,
+          originalLineSegments: willChangeLineSegments,
         );
 
     _th2FileEditController.execute(setLineSegmentsTypeCommand);
-    _th2FileEditController.selectionController.setSelectedEndPointsByMPID(
+    selectionController.setSelectedEndPointsByMPID(
       willChangeLineSegments.map((e) => e.mpID),
     );
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
+    selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
     _th2FileEditController.triggerOptionsListRedraw();
   }

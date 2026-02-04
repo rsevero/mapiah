@@ -12,6 +12,7 @@
   * On windows, language selection is not kept after app restart. [reported by Edvard]
   * No app icon in Windows version.
   * Add a publisher for Mapiah Windows installer.
+  * Changing the line segment type of several line segments of different types wouldn't change any.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

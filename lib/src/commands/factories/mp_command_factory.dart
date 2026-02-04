@@ -1700,15 +1700,26 @@ class MPCommandFactory {
     required THFile thFile,
     required Iterable<THLineSegment> originalLineSegments,
   }) {
+    if (originalLineSegments.isEmpty) {
+      throw ArgumentError(
+        'originalLineSegments cannot be empty in MPCommandFactory.setLineSegmentType',
+      );
+    }
+
     final List<THLineSegment> changedLineSegments = [];
+    final THLine line = thFile.lineByMPID(
+      originalLineSegments.first.parentMPID,
+    );
 
     switch (selectedLineSegmentType) {
       case MPSelectedLineSegmentType.bezierCurveLineSegment:
-        final THLine line = thFile.lineByMPID(
-          originalLineSegments.first.parentMPID,
-        );
-
         for (final THLineSegment currentLineSegment in originalLineSegments) {
+          if (currentLineSegment is! THStraightLineSegment) {
+            throw ArgumentError(
+              'All originalLineSegments must be THStraightLineSegment to convert to THBezierCurveLineSegment in MPCommandFactory.setLineSegmentType: found line segment with MPID ${currentLineSegment.mpID} of type ${currentLineSegment.elementType.name}',
+            );
+          }
+
           final THLineSegment? previousLineSegment = line
               .getPreviousLineSegment(currentLineSegment, thFile);
 
@@ -1719,14 +1730,19 @@ class MPCommandFactory {
           final THBezierCurveLineSegment changedLineSegment =
               MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: previousLineSegment.endPoint.coordinates,
-                straightLineSegment:
-                    (currentLineSegment as THStraightLineSegment),
+                straightLineSegment: currentLineSegment,
               );
 
           changedLineSegments.add(changedLineSegment);
         }
       case MPSelectedLineSegmentType.straightLineSegment:
         for (final THLineSegment currentLineSegment in originalLineSegments) {
+          if (currentLineSegment is! THBezierCurveLineSegment) {
+            throw ArgumentError(
+              'All originalLineSegments must be THBezierCurveLineSegment to convert to THStraightLineSegment in MPCommandFactory.setLineSegmentType: found line segment with MPID ${currentLineSegment.mpID} of type ${currentLineSegment.elementType.name}',
+            );
+          }
+
           final THStraightLineSegment changedLineSegment =
               THStraightLineSegment.forCWJM(
                 mpID: currentLineSegment.mpID,

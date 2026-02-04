@@ -142,7 +142,7 @@
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
-[ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a "shaddow" red line segment behind.
+[ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a shadow red line segment behind.
 [X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [X] - BUG: No icon in Windows version.
 [X] - Add a publisher for Mapiah Windows installer.
