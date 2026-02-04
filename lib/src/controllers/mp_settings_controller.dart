@@ -16,10 +16,10 @@ abstract class MPSettingsControllerBase with Store {
   bool _readingConfigFile = false;
 
   @readonly
-  String _localeID = thDefaultLocaleID;
+  String _localeID = mpDefaultLocaleID;
 
   @readonly
-  Locale _locale = Locale(thEnglishLocaleID);
+  Locale _locale = Locale(mpEnglishLocaleID);
 
   @readonly
   double _selectionTolerance = thDefaultSelectionTolerance;
@@ -56,35 +56,35 @@ abstract class MPSettingsControllerBase with Store {
       final String contents = await file.readAsString();
       final Map<String, dynamic> config = TomlDocument.parse(contents).toMap();
       final Map<String, dynamic> mainConfig =
-          config.containsKey(thMainConfigSection)
-          ? config[thMainConfigSection] as Map<String, dynamic>
+          config.containsKey(mpMainConfigSection)
+          ? config[mpMainConfigSection] as Map<String, dynamic>
           : {};
       final Map<String, dynamic> fileEditConfig =
-          config.containsKey(thFileEditConfigSection)
-          ? config[thFileEditConfigSection] as Map<String, dynamic>
+          config.containsKey(mpFileEditConfigSection)
+          ? config[mpFileEditConfigSection] as Map<String, dynamic>
           : {};
 
-      String localeID = thDefaultLocaleID;
+      String localeID = mpDefaultLocaleID;
       double selectionTolerance = thDefaultSelectionTolerance;
       double pointRadius = thDefaultPointRadius;
       double lineThickness = thDefaultLineThickness;
 
       if (mainConfig.isNotEmpty) {
-        if (mainConfig.containsKey(thMainConfigLocale)) {
-          localeID = mainConfig[thMainConfigLocale];
+        if (mainConfig.containsKey(mpMainConfigLocale)) {
+          localeID = mainConfig[mpMainConfigLocale];
         }
       }
 
       if (fileEditConfig.isNotEmpty) {
-        if (fileEditConfig.containsKey(thFileEditConfigSelectionTolerance)) {
+        if (fileEditConfig.containsKey(mpFileEditConfigSelectionTolerance)) {
           selectionTolerance =
-              fileEditConfig[thFileEditConfigSelectionTolerance];
+              fileEditConfig[mpFileEditConfigSelectionTolerance];
         }
-        if (fileEditConfig.containsKey(thFileEditConfigPointRadius)) {
-          pointRadius = fileEditConfig[thFileEditConfigPointRadius];
+        if (fileEditConfig.containsKey(mpFileEditConfigPointRadius)) {
+          pointRadius = fileEditConfig[mpFileEditConfigPointRadius];
         }
-        if (fileEditConfig.containsKey(thFileEditConfigLineThickness)) {
-          lineThickness = fileEditConfig[thFileEditConfigLineThickness];
+        if (fileEditConfig.containsKey(mpFileEditConfigLineThickness)) {
+          lineThickness = fileEditConfig[mpFileEditConfigLineThickness];
         }
       }
 
@@ -107,10 +107,11 @@ abstract class MPSettingsControllerBase with Store {
 
   @action
   void setLocaleID(String localeID) {
-    final bool saveConfigFile = _localeID != localeID;
+    final bool saveConfigFile = (_localeID != localeID);
 
     _localeID = localeID;
-    if (localeID == thDefaultLocaleID) {
+
+    if (localeID == mpDefaultLocaleID) {
       localeID = _getSystemLocaleID();
     }
     _locale = Locale(localeID);
@@ -122,7 +123,7 @@ abstract class MPSettingsControllerBase with Store {
 
   @action
   void setSelectionTolerance(double selectionTolerance) {
-    final bool saveConfigFile = _selectionTolerance != selectionTolerance;
+    final bool saveConfigFile = (_selectionTolerance != selectionTolerance);
 
     _selectionTolerance = selectionTolerance;
 
@@ -153,22 +154,21 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  void _saveConfigFile() async {
+  Future<void> _saveConfigFile() async {
     if (_readingConfigFile) {
       return;
     }
 
     try {
       final Map<String, dynamic> config = {
-        thMainConfigSection: {thMainConfigLocale: _localeID},
-        thFileEditConfigSection: {
-          thFileEditConfigLineThickness: _lineThickness,
-          thFileEditConfigPointRadius: _pointRadius,
-          thFileEditConfigSelectionTolerance: _selectionTolerance,
+        mpMainConfigSection: {mpMainConfigLocale: _localeID},
+        mpFileEditConfigSection: {
+          mpFileEditConfigLineThickness: _lineThickness,
+          mpFileEditConfigPointRadius: _pointRadius,
+          mpFileEditConfigSelectionTolerance: _selectionTolerance,
         },
       };
       final String contents = TomlDocument.fromMap(config).toString();
-
       final Directory configDirectory = await MPDirectoryAux.config();
       final File file = File(
         p.join(configDirectory.path, mpMainConfigFilename),

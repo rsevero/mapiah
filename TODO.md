@@ -143,7 +143,7 @@
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
 [ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a "shaddow" red line segment behind.
-[ ] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
+[X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [ ] - BUG: No icon in Windows version.
 [ ] - Add a publisher for Mapiah Windows installer.
 
