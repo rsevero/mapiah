@@ -15,6 +15,7 @@
   * Add a publisher for Mapiah Windows installer.
   * Changing the line segment type of several line segments of different types wouldn't change any.
   * Trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
+  * Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

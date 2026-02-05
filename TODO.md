@@ -138,7 +138,7 @@
 [ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [requested by Edvard]
 [X] - When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
 [ ] - Create zoom to selection window. [requested by Edvard]
-[ ] - Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working. [requested by Edvard]
+[X] - BUG: Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
