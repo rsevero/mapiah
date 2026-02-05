@@ -120,7 +120,7 @@
 [X] - BUG: after editing line point option, the general line point overlay window is presented, not line type specific.
 [X] - Disable web version.
 [X] - On zoom out/in, center the canvas on the selected elements if any.
-[ ] - Verify if new lines (specially long bezier ones) are clickable right after being created.
+[X] - Verify if new lines (specially long bezier ones) are clickable right after being created.
 [ ] - Create shortcut to toggle all images visibility.
 [ ] - Bézier created from straight lines are too tight.
 [X] - BUG: After unseting an option, it is still shown as yellow (set).
@@ -142,10 +142,11 @@
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
-[X] - BUG: When creating a line, any line segment, if dragged to become a Bézier leaves a shadow red straight line segment behind during drag.
+[X] - BUG: When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
 [X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [X] - BUG: No icon in Windows version.
 [X] - Add a publisher for Mapiah Windows installer.
+[ ] - When editing a line, make straight and Bézier curve line segments visually different.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

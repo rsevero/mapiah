@@ -17,7 +17,7 @@
   * Trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
   * Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
   * During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
-  * When creating a line, any line segment, if dragged to become a Bézier leaves a shadow red straight line segment behind during drag.
+  * When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

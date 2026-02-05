@@ -42,8 +42,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
                 .offsetScreenToCanvas(
                   elementEditController.lineStartScreenPosition!,
                 );
-
-            final painter = THEndPointPainter(
+            final CustomPainter painter = THEndPointPainter(
               position: startPoint,
               pointPaint: pointPaint,
               isSmooth: false,
@@ -53,7 +52,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           }
         } else {
           final THLine newLine = elementEditController.getNewLine();
-
           final (
             LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
             LinkedHashMap<int, THLineSegment> lineSegments,
@@ -69,8 +67,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             showSizeOrientationOnLineSegments: false,
             th2FileEditController: th2FileEditController,
           );
-
-          CustomPainter painter = THLinePainter(
+          final CustomPainter painter = THLinePainter(
             lineInfo: lineInfo,
             lineSegmentsMap: segmentsMap,
             linePaint: linePaint,
@@ -80,7 +77,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           painters.add(painter);
 
           for (final THLineSegment lineSegment in lineSegments.values) {
-            painter = THEndPointPainter(
+            final CustomPainter painter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
