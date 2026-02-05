@@ -20,6 +20,7 @@
   * During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
   * When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
   * Orientation/LSize arrows presented on all lines when editing a line, not only on the line being edited. 
+  * Removing spurious &lt;a&gt;&lt;/a&gt; tags from help portuguese help page.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions
