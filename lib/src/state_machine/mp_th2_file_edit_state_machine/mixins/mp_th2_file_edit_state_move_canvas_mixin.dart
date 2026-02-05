@@ -64,7 +64,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
 
             MPDialogAux.showHelpDialog(
               context,
-              'keyboard_shortcuts_edit',
+              mpHelpPageKeyboardShortcutsEdit,
               appLocalizations.mapiahKeyboardShortcutsTitle,
             );
             keyProcessed = true;

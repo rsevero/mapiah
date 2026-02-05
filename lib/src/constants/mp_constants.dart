@@ -332,6 +332,12 @@ const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
 const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
 
+// Help page identifiers (match files under assets/help/<lang>/)
+const String mpHelpPageKeyboardShortcutsMain = 'keyboard_shortcuts_main';
+const String mpHelpPageKeyboardShortcutsEdit = 'keyboard_shortcuts_edit';
+const String mpHelpPageMapiahHome = 'mapiah_home_help';
+const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
+
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
 
