@@ -13,7 +13,7 @@ import 'package:mapiah/src/painters/mp_compass_painter.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
-import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 
 class THLinePainter extends CustomPainter {
   final THLinePainterLineInfo lineInfo;

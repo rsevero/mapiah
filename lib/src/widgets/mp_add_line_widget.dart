@@ -12,7 +12,7 @@ import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
