@@ -959,31 +959,45 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @action
-  void zoomIn({bool fineZoom = false}) {
+  void zoomIn({bool fineZoom = false, Offset? zoomCenter}) {
+    final double newScale = MPNumericAux.calculateNextZoomLevel(
+      scale: _canvasScale,
+      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      isIncrease: true,
+    );
+
     if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
       _setCanvasCenterOnZoom(zoomToFitType: MPZoomToFitType.selection);
+    } else if (zoomCenter != null) {
+      final Offset newCenter = _calculateCanvasCenterForZoom(
+        zoomCenterScreen: zoomCenter,
+        newScale: newScale,
+      );
+
+      _setCanvasCenter(newCenter);
     }
-    setCanvasScale(
-      MPNumericAux.calculateNextZoomLevel(
-        scale: _canvasScale,
-        factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
-        isIncrease: true,
-      ),
-    );
+    setCanvasScale(newScale);
   }
 
   @action
-  void zoomOut({bool fineZoom = false}) {
+  void zoomOut({bool fineZoom = false, Offset? zoomCenter}) {
+    final double newScale = MPNumericAux.calculateNextZoomLevel(
+      scale: _canvasScale,
+      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      isIncrease: false,
+    );
+
     if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
       _setCanvasCenterOnZoom(zoomToFitType: MPZoomToFitType.selection);
+    } else if (zoomCenter != null) {
+      final Offset newCenter = _calculateCanvasCenterForZoom(
+        zoomCenterScreen: zoomCenter,
+        newScale: newScale,
+      );
+
+      _setCanvasCenter(newCenter);
     }
-    setCanvasScale(
-      MPNumericAux.calculateNextZoomLevel(
-        scale: _canvasScale,
-        factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
-        isIncrease: false,
-      ),
-    );
+    setCanvasScale(newScale);
   }
 
   @action
@@ -1098,11 +1112,35 @@ abstract class TH2FileEditControllerBase with Store {
     final Offset dataBoundingBoxCenter = dataBoundingBox.center;
 
     // mpLocator.mpLog.finer("Current center: $_canvasCenterX, $_canvasCenterY");
-    _canvasCenterX = dataBoundingBoxCenter.dx;
-    _canvasCenterY = dataBoundingBoxCenter.dy;
+    _setCanvasCenter(dataBoundingBoxCenter);
     // mpLocator.mpLog.finer(
     //   "New center to center drawing in canvas: $_canvasCenterX, $_canvasCenterY",
     // );
+  }
+
+  void _setCanvasCenter(Offset center) {
+    _canvasCenterX = center.dx;
+    _canvasCenterY = center.dy;
+  }
+
+  Offset _calculateCanvasCenterForZoom({
+    required Offset zoomCenterScreen,
+    required double newScale,
+  }) {
+    final Offset zoomCenterCanvas = offsetScreenToCanvas(zoomCenterScreen);
+    final double halfScreenWidthOnCanvas = _screenSize.width / (2.0 * newScale);
+    final double halfScreenHeightOnCanvas =
+        _screenSize.height / (2.0 * newScale);
+    final double centerX =
+        zoomCenterCanvas.dx +
+        halfScreenWidthOnCanvas -
+        (zoomCenterScreen.dx / newScale);
+    final double centerY =
+        zoomCenterCanvas.dy +
+        (zoomCenterScreen.dy / newScale) -
+        halfScreenHeightOnCanvas;
+
+    return Offset(centerX, centerY);
   }
 
   void transformCanvas(Canvas canvas, {bool invert = true}) {
