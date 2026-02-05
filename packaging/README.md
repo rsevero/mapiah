@@ -5,7 +5,7 @@
 3. Update `TODO.md` with changes.
 4. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
-5. Update release info at _~/devel/io.github.rsevero.mapiah/io.github.rsevero.mapiah.metainfo.xml_ with _CHANGELOG_ info.
+5. Update release info at _./packaging/linux/io.github.rsevero.mapiah.metainfo.xml_ with _CHANGELOG_ info.
 6. Commit the previous changes with a comment like 'v0.2.22'
 7. Push the previous changes
 8. Create a new tag with the new version:

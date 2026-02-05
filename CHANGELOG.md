@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.34 - not yet released
+## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:
   * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
   * Mapiah should check and present a notice when there is a new version available. [requested by Wal]
@@ -20,7 +20,7 @@
   * During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
   * When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
   * Orientation/LSize arrows presented on all lines when editing a line, not only on the line being edited. 
-  * Removing spurious &lt;a&gt;&lt;/a&gt; tags from help portuguese help page.
+  * Removing spurious &lt;a&gt;&lt;/a&gt; tags from portuguese help page.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions
