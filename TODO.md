@@ -146,7 +146,7 @@
 [X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [X] - BUG: No icon in Windows version.
 [X] - Add a publisher for Mapiah Windows installer.
-[ ] - When editing a line, make straight and Bézier curve line segments visually different.
+[X] - When editing a line, make straight and Bézier curve line segments visually different.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

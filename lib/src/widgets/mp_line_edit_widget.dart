@@ -45,8 +45,10 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
             th2FileEditController.visualController;
         final THPointPaint selectedEndPointPaint = visualController
             .getSelectedEndPointPaint();
-        final THPointPaint unselectedEndPointPaint = visualController
-            .getUnselectedEndPointPaint();
+        final THPointPaint unselectedStraightEndPointPaint = visualController
+            .getUnselectedStraightEndPointPaint();
+        final THPointPaint unselectedBezierCurveEndPointPaint = visualController
+            .getUnselectedBezierCurveEndPointPaint();
         final THPointPaint unselectedControlPointPaint = visualController
             .getUnselectedControlPointPaint();
         final THPointPaint selectedControlPointPaint = visualController
@@ -116,11 +118,20 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
               /// End points should only be painted as selected when end points
               /// are being selected. If there is a control point selected, it
               /// takes precedence.
-              final THPointPaint pointPaint =
-                  ((selectedControlPoint == null) &&
-                      selectionController.getIsLineSegmentSelected(lineSegment))
-                  ? selectedEndPointPaint
-                  : unselectedEndPointPaint;
+              final THPointPaint pointPaint;
+              final bool noControlPointSelected =
+                  (selectedControlPoint == null);
+              final bool lineSegmentSelected = selectionController
+                  .getIsLineSegmentSelected(lineSegment);
+
+              if (noControlPointSelected && lineSegmentSelected) {
+                pointPaint = selectedEndPointPaint;
+              } else if (lineSegment is THStraightLineSegment) {
+                pointPaint = unselectedStraightEndPointPaint;
+              } else {
+                pointPaint = unselectedBezierCurveEndPointPaint;
+              }
+
               final THEndPointPainter endPointPainter = THEndPointPainter(
                 position: point.position,
                 pointPaint: pointPaint,

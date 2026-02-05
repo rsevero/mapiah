@@ -5,6 +5,7 @@
   * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
   * Mapiah should check and present a notice when there is a new version available. [requested by Wal]
   * When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
+  * When editing a line, make straight and Bézier curve line segments visually different.
 * Fixed bugs:
   * Portuguese edit window help page not being presented. [reported by Edvard]
   * Changelog URL not opening when user clicked on it at "About" dialog box.

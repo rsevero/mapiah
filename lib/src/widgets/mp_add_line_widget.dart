@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -28,12 +29,13 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerNewLine;
 
-        final THPointPaint pointPaint = th2FileEditController.visualController
-            .getNewLinePointPaint();
-
-        final THLinePaint linePaint = th2FileEditController.visualController
-            .getNewLinePaint();
-
+        final MPVisualController visualController =
+            th2FileEditController.visualController;
+        final THPointPaint straightPointPaint = visualController
+            .getUnselectedStraightEndPointPaint();
+        final THPointPaint bezierPointPaint = visualController
+            .getUnselectedBezierCurveEndPointPaint();
+        final THLinePaint linePaint = visualController.getNewLinePaint();
         final List<CustomPainter> painters = [];
 
         if (elementEditController.newLine == null) {
@@ -44,10 +46,11 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
                 );
             final CustomPainter painter = THEndPointPainter(
               position: startPoint,
-              pointPaint: pointPaint,
+              pointPaint: straightPointPaint,
               isSmooth: false,
               th2FileEditController: th2FileEditController,
             );
+
             painters.add(painter);
           }
         } else {
@@ -77,12 +80,17 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           painters.add(painter);
 
           for (final THLineSegment lineSegment in lineSegments.values) {
+            final THPointPaint pointPaint =
+                (lineSegment is THStraightLineSegment)
+                ? straightPointPaint
+                : bezierPointPaint;
             final CustomPainter painter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
             );
+
             painters.add(painter);
           }
         }

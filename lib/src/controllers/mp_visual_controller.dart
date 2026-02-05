@@ -1417,14 +1417,6 @@ abstract class MPVisualControllerBase with Store {
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
   }
 
-  THPointPaint getNewLinePointPaint() {
-    return THPointPaint(
-      radius: _th2FileEditController.pointRadiusOnCanvas,
-      border: THPaint.thPaintBlackBorder
-        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-    );
-  }
-
   THPointPaint getHighligthtedEndControlPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
@@ -1462,11 +1454,20 @@ abstract class MPVisualControllerBase with Store {
     );
   }
 
-  THPointPaint getUnselectedEndPointPaint() {
+  THPointPaint getUnselectedStraightEndPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       border: THPaint.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
+
+  THPointPaint getUnselectedBezierCurveEndPointPaint() {
+    return THPointPaint(
+      radius: _th2FileEditController.pointRadiusOnCanvas,
+      border: THPaint.thPaintBlackBorder
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      fill: THPaint.thPaint1015,
     );
   }
 
