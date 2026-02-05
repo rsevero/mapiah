@@ -48,7 +48,7 @@ class MPLineSegmentTypeWidget extends StatelessWidget {
   void _onLineSegmentTypeTap(BuildContext context) {
     Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
       widgetContext: context,
-      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+      ancestorGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
     );
 
     final Offset outerAnchorPosition = boundingBox == null

@@ -126,8 +126,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     _activeWindow = type;
 
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
+    BuildContext? context = _th2FileEditController
+        .getTHFileWidgetGlobalKey()
+        .currentContext;
 
     if (context == null) {
       throw StateError(
@@ -165,8 +166,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isOverlayWindowShown[overlayWindowType] = true;
     _secondLevelOptionOpenedOverlayWindow = overlayWindowType;
 
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
+    BuildContext? context = _th2FileEditController
+        .getTHFileWidgetGlobalKey()
+        .currentContext;
 
     if (context == null) {
       throw StateError(
@@ -341,8 +343,9 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isAutoDismissWindowOpen = true;
     _isOverlayWindowShown[overlayWindowType] = true;
 
-    BuildContext? context =
-        _th2FileEditController.thFileWidgetKey.currentContext;
+    BuildContext? context = _th2FileEditController
+        .getTHFileWidgetGlobalKey()
+        .currentContext;
 
     if (context == null) {
       throw StateError(

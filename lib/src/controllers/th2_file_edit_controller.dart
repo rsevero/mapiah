@@ -19,6 +19,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -102,8 +103,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   String _redoDescription = '';
-
-  final GlobalKey thFileWidgetKey = GlobalKey();
 
   @readonly
   String _filenameAndScrap = '';
@@ -1345,6 +1344,19 @@ abstract class TH2FileEditControllerBase with Store {
     final double canvasPadding = largerDimension * mpScrapBackgroundPadding;
 
     return canvasPadding;
+  }
+
+  GlobalKey<State<StatefulWidget>> getTHFileWidgetGlobalKey() {
+    if (!overlayWindowController.globalKeyWidgetKeyByType.containsKey(
+      MPGlobalKeyWidgetType.thFileWidget,
+    )) {
+      throw Exception(
+        'At TH2FileEditController.getTHFileWidgetGlobalKey(): THFileWidget global key not found in overlayWindowController.',
+      );
+    }
+
+    return overlayWindowController
+        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.thFileWidget]!;
   }
 }
 

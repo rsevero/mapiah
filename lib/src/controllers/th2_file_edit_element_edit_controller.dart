@@ -1224,8 +1224,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void addScrap() {
-    final BuildContext? currentContext =
-        _th2FileEditController.thFileWidgetKey.currentContext;
+    final BuildContext? currentContext = _th2FileEditController
+        .getTHFileWidgetGlobalKey()
+        .currentContext;
 
     if (currentContext == null) {
       return;
