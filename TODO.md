@@ -135,7 +135,7 @@
 [X] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
 [X] - Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
 [X] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
-[ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [requested by Edvard]
+[X] - BUG: During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
 [X] - When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
 [ ] - Create zoom to selection window. [requested by Edvard]
 [X] - BUG: Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]

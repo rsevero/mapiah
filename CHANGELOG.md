@@ -6,16 +6,17 @@
   * Mapiah should check and present a notice when there is a new version available. [requested by Wal]
   * When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
 * Fixed bugs:
-  * Portuguese edit window help page not being presented. [requested by Edvard]
+  * Portuguese edit window help page not being presented. [reported by Edvard]
   * Changelog URL not opening when user clicked on it at "About" dialog box.
   * Linux/flatpak version does not open URLs for not using GIO portal and not having shared network permission.
   * When creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
-  * On windows, language selection is not kept after app restart. [reported by Edvard]
+  * Windows: language selection is not kept after app restart. [reported by Edvard]
   * No app icon in Windows version.
   * Add a publisher for Mapiah Windows installer.
   * Changing the line segment type of several line segments of different types wouldn't change any.
   * Trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
   * Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
+  * During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions

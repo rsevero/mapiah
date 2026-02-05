@@ -7,7 +7,6 @@ import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
@@ -79,41 +78,6 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           );
 
           painters.add(painter);
-
-          final THLineSegment lastSegment = th2FileEditController.thFile
-              .lineSegmentByMPID(lineSegments.keys.last);
-
-          if ((lineSegments.length >= 2) &&
-              (lastSegment is THBezierCurveLineSegment)) {
-            final Paint controlLinePaint = th2FileEditController
-                .visualController
-                .getControlLinePaint();
-            final List<int> keys = lineSegments.keys.toList();
-            final Offset secondToLastSegmentPosition =
-                lineSegments[keys.elementAt(keys.length - 2)]!
-                    .endPoint
-                    .coordinates;
-
-            final THControlPointPainter controlPoint1Painter =
-                THControlPointPainter(
-                  controlPointPosition: lastSegment.controlPoint1.coordinates,
-                  endPointPosition: secondToLastSegmentPosition,
-                  pointPaint: pointPaint,
-                  controlLinePaint: controlLinePaint,
-                  th2FileEditController: th2FileEditController,
-                );
-            painters.add(controlPoint1Painter);
-
-            final THControlPointPainter controlPoint2Painter =
-                THControlPointPainter(
-                  controlPointPosition: lastSegment.controlPoint2.coordinates,
-                  endPointPosition: lastSegment.endPoint.coordinates,
-                  pointPaint: pointPaint,
-                  controlLinePaint: controlLinePaint,
-                  th2FileEditController: th2FileEditController,
-                );
-            painters.add(controlPoint2Painter);
-          }
 
           for (final THLineSegment lineSegment in lineSegments.values) {
             painter = THEndPointPainter(

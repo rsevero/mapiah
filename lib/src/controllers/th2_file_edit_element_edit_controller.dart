@@ -581,12 +581,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
       lineSegmentMPIDs.elementAt(lineSegmentMPIDs.length - 2),
     );
-
     final THPositionPart startPoint = secondToLastLineSegment.endPoint;
     final THPositionPart endPoint = lastLineSegment.endPoint;
     final Offset startPointCoordinates = startPoint.coordinates;
     final Offset endPointCoordinates = endPoint.coordinates;
-
     final Offset quadraticControlPointPositionCanvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(
           quadraticControlPointPositionScreenCoordinates,
