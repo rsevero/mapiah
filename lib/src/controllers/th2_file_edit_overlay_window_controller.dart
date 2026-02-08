@@ -384,6 +384,13 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   void perfomToggleLineSegmentOptionsOverlayWindow() {
+    if (_th2FileEditController
+        .selectionController
+        .selectedEndControlPoints
+        .isEmpty) {
+      return;
+    }
+
     final bool shouldShowLineSegmentOptions =
         !_isOverlayWindowShown[MPWindowType.lineSegmentOptions]!;
 

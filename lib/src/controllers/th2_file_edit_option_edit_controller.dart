@@ -323,6 +323,13 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void showOptionsOverlayWindow() {
+    if (_th2FileEditController
+        .selectionController
+        .mpSelectedElementsLogical
+        .isEmpty) {
+      return;
+    }
+
     updateOptionStateMap();
     _th2FileEditController.overlayWindowController.toggleOverlayWindow(
       MPWindowType.commandOptions,
