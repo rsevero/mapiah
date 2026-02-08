@@ -7,6 +7,7 @@
 * Fixed bugs:
   * Options window been shown when there is no element selected. [reported by dankez, issue [#12](https://github.com/rsevero/mapiah/issues/12)]
 * Infrastructure maintenance:
+  * Create issue template for bug reports.
 
 ## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:

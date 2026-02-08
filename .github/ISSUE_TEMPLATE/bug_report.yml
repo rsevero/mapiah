@@ -1,0 +1,76 @@
+name: Bug report
+description: Report a bug in Mapiah. Please check the CHANGELOG before opening.
+title: "[BUG] "
+labels: bug
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check the changelog first: [CHANGELOG.md](/CHANGELOG.md)
+        If the issue is already mentioned there, consider updating or commenting instead.
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: e.g. Ubuntu 24.04, Windows 11, macOS 14
+    validations:
+      required: true
+  - type: input
+    id: mapiah_version
+    attributes:
+      label: Mapiah version
+      description: e.g. 0.2.35 (Help → About)
+    validations:
+      required: true
+  - type: dropdown
+    id: reproducible
+    attributes:
+      label: Reproducible
+      options:
+        - Always
+        - Sometimes
+        - Once
+        - I don't know
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal, exact steps
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened
+      description: Paste error messages or describe observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What I expected to happen
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Error output (optional)
+  - type: textarea
+    id: files
+    attributes:
+      label: Files / sample (optional)
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional info (optional)
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+        - Blocker
