@@ -5,16 +5,11 @@ labels: bug
 assignees: []
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Please check the changelog first: [CHANGELOG.md](/CHANGELOG.md)
-        If the issue is already mentioned there, consider updating or commenting instead.
   - type: input
     id: os
     attributes:
       label: OS
-      description: e.g. Ubuntu 24.04, Windows 11, macOS 14
+      description: e.g. AppImage at Ubuntu 24.04, Flatpak at Fedora 43, Windows 11, macOS 14
     validations:
       required: true
   - type: input
