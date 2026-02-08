@@ -2,7 +2,8 @@
 
 ## 0.2.35 - not yet released
 * New features:
-  * Create zoom to selection window. [requested by Edvard]
+  * Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]
+  * Help dialogs closable by pressing Escape key.
 * Fixed bugs:
 * Infrastructure maintenance:
 
