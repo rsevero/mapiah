@@ -52,6 +52,7 @@ In case there are available redoes when a new edit operation is performed, the r
   * ![Zoom in button](assets/help/images/buttonZoomIn.png "Zoom in")  _Zoom in_: zooms in the TH2 file view. (+)
   * ![Zoom One to One button](assets/help/images/buttonZoomOneToOne.png "Zoom one to one")  _Zoom one to one_: zooms the TH2 file view to show the elements at their original size, i.e., each TH2 point corresponding to a screen pixel. (1)
   * ![Zoom to selection button](assets/help/images/buttonZoomSelection.png "Zoom to selection")  _Zoom to selection_: zooms the TH2 file view to show the currently selected elements. (2)
+  * ![Zoom to selection window button](assets/help/images/buttonZoomSelectionWindow.png "Zoom to selection window")  _Zoom to selection window_: zooms the TH2 file view to show the window selected by the user with a mouse drag. (5)
   * ![Zoom to file button](assets/help/images/buttonZoomFile.png "Zoom to file")  _Zoom to file_: zooms the TH2 file view to show all elements in the file. (3)
   * ![Zoom to scrap button](assets/help/images/buttonZoomScrap.png "Zoom to scrap")  _Zoom to scrap_: zooms the TH2 file view to show the currently selected scrap. (4)
   * ![Zoom out button](assets/help/images/buttonZoomOut.png "Zoom out")  _Zoom out_: zooms out the TH2 file view. (-)

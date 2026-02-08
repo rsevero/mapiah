@@ -268,7 +268,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showSelectionWindow =>
-      selectionController.selectionWindowCanvasCoordinates.value != Rect.zero;
+      selectionController.selectionWindowCanvasRect.value != Rect.zero;
 
   @computed
   bool get showUndoRedoButtons =>
@@ -1020,6 +1020,23 @@ abstract class TH2FileEditControllerBase with Store {
         (screenHeight * (1.0 - mpCanvasVisibleMargin)) / _dataHeight;
 
     _setCanvasCenterOnZoom(zoomToFitType: zoomFitToType);
+    setCanvasScale(
+      MPNumericAux.roundScale(
+        (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
+      ),
+    );
+  }
+
+  @action
+  void zoomToSelectionWindow(Rect selectionWindow) {
+    final double screenWidth = _screenSize.width;
+    final double screenHeight = _screenSize.height;
+    final double scaleWidth =
+        (screenWidth * (1.0 - mpCanvasVisibleMargin)) / selectionWindow.width;
+    final double scaleHeight =
+        (screenHeight * (1.0 - mpCanvasVisibleMargin)) / selectionWindow.height;
+
+    _setCanvasCenter(selectionWindow.center);
     setCanvasScale(
       MPNumericAux.roundScale(
         (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,

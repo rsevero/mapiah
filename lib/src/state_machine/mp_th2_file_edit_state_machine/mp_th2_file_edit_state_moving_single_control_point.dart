@@ -10,7 +10,10 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    th2FileEditController.elementEditController.updateControlPointSmoothInfo();
+    if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      th2FileEditController.elementEditController
+          .updateControlPointSmoothInfo();
+    }
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.mpMovingSingleControlPointStateBarMessage,
     );
@@ -22,18 +25,20 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
     th2FileEditController.setStatusBarMessage('');
 
-    if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
-        .contains(nextStateType)) {
-      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
-        nextStateType,
-      )) {
-        selectionController.clearSelectedLineSegments();
+    if (nextStateType != MPTH2FileEditStateType.selectionWindowZoom) {
+      if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
+          .contains(nextStateType)) {
+        if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+          nextStateType,
+        )) {
+          selectionController.clearSelectedLineSegments();
+        }
+        return;
+      } else {
+        clearAllSelections();
       }
-      return;
-    } else {
-      clearAllSelections();
+      selectionController.clearSelectedEndControlPoints();
     }
-    selectionController.clearSelectedEndControlPoints();
   }
 
   @override

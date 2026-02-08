@@ -2289,6 +2289,12 @@ abstract class AppLocalizations {
   /// **'Select (C)'**
   String get th2FileEditPageSelectTool;
 
+  /// The status bar message for the selection window zoom tool
+  ///
+  /// In en, this message translates to:
+  /// **'Select a zoom area'**
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage;
+
   /// The label for the undo shortcut
   ///
   /// In en, this message translates to:
@@ -2336,6 +2342,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zoom to selection (2)'**
   String get th2FileEditPageZoomToSelection;
+
+  /// The label for the zoom selection window button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom selection window (5)'**
+  String get th2FileEditPageZoomToSelectionWindow;
 
   /// The label for the image file selection dialog
   ///

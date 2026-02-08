@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.35 - not yet released
+* New features:
+  * Create zoom to selection window. [requested by Edvard]
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:
   * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]

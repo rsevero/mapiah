@@ -28,12 +28,14 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    setClickedElementAtSingleLineEditPointerDown(null);
-    selectionController.updateAllSelectedElementsClones();
-    selectionController.resetSelectedLineLineSegmentsMPIDs();
-    selectionController.updateSelectableEndAndControlPoints();
-    elementEditController.resetOriginalFileForLineSimplification();
-    th2FileEditController.triggerEditLineRedraw();
+    if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      setClickedElementAtSingleLineEditPointerDown(null);
+      selectionController.updateAllSelectedElementsClones();
+      selectionController.resetSelectedLineLineSegmentsMPIDs();
+      selectionController.updateSelectableEndAndControlPoints();
+      elementEditController.resetOriginalFileForLineSimplification();
+      th2FileEditController.triggerEditLineRedraw();
+    }
     setStatusBarMessage();
   }
 

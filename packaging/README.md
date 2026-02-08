@@ -32,13 +32,14 @@
       ```
    2. If everything is OK, push the changes to the Flathub repo:
       ```bash
+      git status
       git add -A
+      git status
       git commit -m "v0.2.22"
       git push --set-upstream origin v0.2.22
       ```
    3. Create a Pull Request in the Flathub repo and get it merged.
-   4. Prepare _io.github.rsevero.mapiah_ repo for future release:
-   5. Switch back to main branch:
+   4. Prepare _io.github.rsevero.mapiah_ repo for future release switching it back to main branch:
       ```bash
       git co main
       git pull

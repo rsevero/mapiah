@@ -57,6 +57,7 @@ part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
+part 'mp_th2_file_edit_state_selection_window_zoom.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
@@ -114,6 +115,10 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.selectEmptySelection:
         return MPTH2FileEditStateSelectEmptySelection(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.selectionWindowZoom:
+        return MPTH2FileEditStateSelectionWindowZoom(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.selectNonEmptySelection:
@@ -237,6 +242,11 @@ abstract class MPTH2FileEditState {
       case MPButtonType.zoomSelection:
         th2FileEditController.zoomToFit(
           zoomFitToType: MPZoomToFitType.selection,
+        );
+        return true;
+      case MPButtonType.zoomSelectionWindow:
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.selectionWindowZoom,
         );
         return true;
       default:

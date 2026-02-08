@@ -21,16 +21,18 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     th2FileEditController.setStatusBarMessage('');
 
-    if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
-        .contains(nextStateType)) {
-      if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
-        nextStateType,
-      )) {
-        selectionController.clearSelectedLineSegments();
+    if (nextStateType != MPTH2FileEditStateType.selectionWindowZoom) {
+      if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
+          .contains(nextStateType)) {
+        if (!MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+          nextStateType,
+        )) {
+          selectionController.clearSelectedLineSegments();
+        }
+        return;
+      } else {
+        clearAllSelections();
       }
-      return;
-    } else {
-      clearAllSelections();
     }
   }
 

@@ -30,6 +30,7 @@
 | Zoom 1:1                                                      | 1                                    |
 | Zoom arquivo                                                  | 4                                    |
 | Zoom croqui                                                   | 3                                    |
+| Zoom janela de seleção                                        | 5                                    |
 | Zoom mais distante                                            | -                                    |
 | Zoom mais próximo                                             | +                                    |
 | Zoom seleção                                                  | 2                                    |

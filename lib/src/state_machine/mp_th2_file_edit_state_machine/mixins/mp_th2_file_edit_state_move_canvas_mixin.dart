@@ -176,6 +176,10 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         case '4':
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        case '5':
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.selectionWindowZoom,
+          );
         case '+':
           th2FileEditController.zoomIn(fineZoom: false);
         case '-':

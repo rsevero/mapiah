@@ -771,6 +771,21 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
+                      heroTag: 'zoom_selection_window',
+                      onPressed: zoomSelectionWindow,
+                      tooltip: mpLocator
+                          .appLocalizations
+                          .th2FileEditPageZoomToSelectionWindow,
+                      child: Image.asset(
+                        'assets/icons/zoom_selection_window.png',
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
+                      backgroundColor: colorScheme.secondaryContainer,
+                    ),
+                    SizedBox(width: mpButtonSpace),
+                    FloatingActionButton(
                       heroTag: 'zoom_out_scrap',
                       onPressed: th2FileEditController.hasMultipleScraps
                           ? zoomAllScrapPressed
@@ -779,7 +794,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           .appLocalizations
                           .th2FileEditPageZoomOutScrap,
                       child: Image.asset(
-                        'assets/icons/zoom-out-scrap.png',
+                        'assets/icons/zoom_out_scrap.png',
                         width: mpFloatingActionZoomIconSize,
                         height: mpFloatingActionZoomIconSize,
                         color: th2FileEditController.hasMultipleScraps
@@ -865,6 +880,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void zoomSelection() {
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomSelection,
+    );
+  }
+
+  void zoomSelectionWindow() {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomSelection,
     );

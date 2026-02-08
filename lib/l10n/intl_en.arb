@@ -1890,6 +1890,11 @@
     "description": "The label for the select tool button",
     "type": "text"
   },
+  "th2FileEditPageSelectionWindowZoomStatusBarMessage": "Select a zoom area",
+  "@th2FileEditPageSelectionWindowZoomStatusBarMessage": {
+    "description": "The status bar message for the selection window zoom tool",
+    "type": "text"
+  },
   "th2FileEditPageUndo": "Undo '{undoDescription}' (Ctrl+Z)",
   "@th2FileEditPageUndo": {
     "description": "The label for the undo shortcut",
@@ -1931,6 +1936,11 @@
   "th2FileEditPageZoomToSelection": "Zoom to selection (2)",
   "@th2FileEditPageZoomToSelection": {
     "description": "The label for the zoom to selection button",
+    "type": "text"
+  },
+  "th2FileEditPageZoomToSelectionWindow": "Zoom selection window (5)",
+  "@th2FileEditPageZoomToSelectionWindow": {
+    "description": "The label for the zoom selection window button",
     "type": "text"
   },
   "th2FilePickSelectImageFile": "Select an image file",

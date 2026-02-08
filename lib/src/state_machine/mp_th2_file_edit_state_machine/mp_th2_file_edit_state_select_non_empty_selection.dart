@@ -20,16 +20,20 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    selectionController.clearSelectedEndControlPoints();
-    selectionController.clearSelectedLineSegments();
-    elementEditController.resetOriginalFileForLineSimplification();
+    if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      selectionController.clearSelectedEndControlPoints();
+      selectionController.clearSelectedLineSegments();
+      elementEditController.resetOriginalFileForLineSimplification();
+    }
     setStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    elementEditController.resetOriginalFileForLineSimplification();
-    onStateExitClearSelectionOnExit(nextState);
+    if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      elementEditController.resetOriginalFileForLineSimplification();
+      onStateExitClearSelectionOnExit(nextState);
+    }
     th2FileEditController.setStatusBarMessage('');
   }
 

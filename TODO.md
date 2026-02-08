@@ -137,7 +137,7 @@
 [X] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
 [X] - BUG: During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
 [X] - When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
-[ ] - Create zoom to selection window. [requested by Edvard]
+[X] - Create zoom to selection window. [requested by Edvard]
 [X] - BUG: Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
 [ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]

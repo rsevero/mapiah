@@ -15,7 +15,9 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    elementEditController.finalizeNewLineCreation();
+    if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      elementEditController.finalizeNewLineCreation();
+    }
     th2FileEditController.setStatusBarMessage('');
   }
 

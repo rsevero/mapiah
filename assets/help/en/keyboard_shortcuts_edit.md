@@ -33,3 +33,4 @@
 | Zoom out                                        | -                            |
 | Zoom scrap                                      | 3                            |
 | Zoom selection                                  | 2                            |
+| Zoom selection window                           | 5                            |

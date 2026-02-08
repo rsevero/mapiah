@@ -64,6 +64,7 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
   * ![Botão zoom in](assets/help/images/buttonZoomIn.png "Aproximar")  _Aproximar_: dá zoom in na visualização do arquivo TH2. (+)
   * ![Botão zoom 1:1](assets/help/images/buttonZoomOneToOne.png "Zoom 1:1")  _Zoom 1:1_: ajusta a visualização para mostrar os elementos no tamanho original, isto é, cada ponto TH2 corresponde a um pixel de tela. (1)
   * ![Botão zoom na seleção](assets/help/images/buttonZoomSelection.png "Zoom na seleção")  _Zoom na seleção_: ajusta a visualização para mostrar os elementos atualmente selecionados. (2)
+  * ![Botão zoom na janela de seleção](assets/help/images/buttonZoomSelectionWindow.png "Zoom na janela de seleção")  _Zoom na janela de seleção_: ajusta a visualização para mostrar a área selecionada pelo usuário com um arrasto do mouse. (5)
   * ![Botão zoom no arquivo](assets/help/images/buttonZoomFile.png "Zoom no arquivo")  _Zoom no arquivo_: ajusta a visualização para mostrar todos os elementos do arquivo. (3)
   * ![Botão zoom no scrap](assets/help/images/buttonZoomScrap.png "Zoom no scrap")  _Zoom no scrap_: ajusta a visualização para mostrar o scrap atualmente selecionado. (4)
   * ![Botão zoom out](assets/help/images/buttonZoomOut.png "Afastar")  _Afastar_: dá zoom out na visualização do arquivo TH2. (-)

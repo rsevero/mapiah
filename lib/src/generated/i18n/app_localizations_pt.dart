@@ -1219,6 +1219,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Selecionar (C)';
 
   @override
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage =>
+      'Clique e arraste para definir a área para zoom';
+
+  @override
   String th2FileEditPageUndo(Object undoDescription) {
     return 'Desfazer \'$undoDescription\' (Ctrl+Z)';
   }
@@ -1227,7 +1231,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomIn => 'Aproximar (+)';
 
   @override
-  String get th2FileEditPageZoomOneToOne => 'Mostrar 1:1 (1)';
+  String get th2FileEditPageZoomOneToOne => 'Zoom 1:1 (1)';
 
   @override
   String get th2FileEditPageZoomOptions => 'Opções de zoom';
@@ -1236,13 +1240,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomOut => 'Afastar (-)';
 
   @override
-  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (4)';
+  String get th2FileEditPageZoomOutFile => 'Zoom arquivo (4)';
 
   @override
-  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui (3)';
+  String get th2FileEditPageZoomOutScrap => 'Zoom croqui (3)';
 
   @override
-  String get th2FileEditPageZoomToSelection => 'Mostrar seleção (2)';
+  String get th2FileEditPageZoomToSelection => 'Zoom seleção (2)';
+
+  @override
+  String get th2FileEditPageZoomToSelectionWindow =>
+      'Zoom na área de seleção (5)';
 
   @override
   String get th2FilePickSelectImageFile => 'Selecione um arquivo de imagem';

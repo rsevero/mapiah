@@ -284,28 +284,26 @@ mixin _$TH2FileEditSelectionController
     );
   }
 
-  late final _$_selectionWindowCanvasCoordinatesAtom = Atom(
-    name:
-        'TH2FileEditSelectionControllerBase._selectionWindowCanvasCoordinates',
+  late final _$_selectionWindowCanvasRectAtom = Atom(
+    name: 'TH2FileEditSelectionControllerBase._selectionWindowCanvasRect',
     context: context,
   );
 
-  Observable<Rect> get selectionWindowCanvasCoordinates {
-    _$_selectionWindowCanvasCoordinatesAtom.reportRead();
-    return super._selectionWindowCanvasCoordinates;
+  Observable<Rect> get selectionWindowCanvasRect {
+    _$_selectionWindowCanvasRectAtom.reportRead();
+    return super._selectionWindowCanvasRect;
   }
 
   @override
-  Observable<Rect> get _selectionWindowCanvasCoordinates =>
-      selectionWindowCanvasCoordinates;
+  Observable<Rect> get _selectionWindowCanvasRect => selectionWindowCanvasRect;
 
   @override
-  set _selectionWindowCanvasCoordinates(Observable<Rect> value) {
-    _$_selectionWindowCanvasCoordinatesAtom.reportWrite(
+  set _selectionWindowCanvasRect(Observable<Rect> value) {
+    _$_selectionWindowCanvasRectAtom.reportWrite(
       value,
-      super._selectionWindowCanvasCoordinates,
+      super._selectionWindowCanvasRect,
       () {
-        super._selectionWindowCanvasCoordinates = value;
+        super._selectionWindowCanvasRect = value;
       },
     );
   }
@@ -578,20 +576,17 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void setSelectionWindowCanvasCoordinates({
+  void setSelectionWindowCanvasRect({
     required Offset point1,
     required Offset point2,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditSelectionControllerBase.setSelectionWindowCanvasCoordinates',
+              'TH2FileEditSelectionControllerBase.setSelectionWindowCanvasRect',
         );
     try {
-      return super.setSelectionWindowCanvasCoordinates(
-        point1: point1,
-        point2: point2,
-      );
+      return super.setSelectionWindowCanvasRect(point1: point1, point2: point2);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

@@ -1680,6 +1680,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void zoomToSelectionWindow(Rect selectionWindow) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.zoomToSelectionWindow');
+    try {
+      return super.zoomToSelectionWindow(selectionWindow);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _calculateCanvasOffset() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._calculateCanvasOffset');

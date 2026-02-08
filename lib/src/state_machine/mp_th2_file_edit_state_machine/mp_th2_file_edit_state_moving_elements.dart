@@ -19,7 +19,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    onStateExitClearSelectionOnExit(nextState);
+    if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      onStateExitClearSelectionOnExit(nextState);
+    }
     th2FileEditController.setStatusBarMessage('');
   }
 

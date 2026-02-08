@@ -84,7 +84,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   Set<MPSelectableEndControlPoint> _selectableEndControlPoints = {};
 
   @readonly
-  Observable<Rect> _selectionWindowCanvasCoordinates = Observable(Rect.zero);
+  Observable<Rect> _selectionWindowCanvasRect = Observable(Rect.zero);
 
   THElement? clickedElementAtSingleLineEditPointerDown;
 
@@ -1654,27 +1654,33 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  void setSelectionWindowCanvasCoordinates({
+  void setSelectionWindowCanvasRect({
     required Offset point1,
     required Offset point2,
   }) {
-    _selectionWindowCanvasCoordinates.value =
-        MPNumericAux.orderedRectFromPoints(point1: point1, point2: point2);
+    _selectionWindowCanvasRect.value = MPNumericAux.orderedRectFromPoints(
+      point1: point1,
+      point2: point2,
+    );
   }
 
   void setSelectionWindowScreenEndCoordinates(Offset screenEndCoordinates) {
     final Offset canvasEndCoordinates = _th2FileEditController
         .offsetScreenToCanvas(screenEndCoordinates);
 
-    setSelectionWindowCanvasCoordinates(
+    setSelectionWindowCanvasRect(
       point1: dragStartCanvasCoordinates,
       point2: canvasEndCoordinates,
     );
   }
 
+  Rect getSelectionWindowCanvasRect() {
+    return _selectionWindowCanvasRect.value;
+  }
+
   @action
   void clearSelectionWindow() {
-    _selectionWindowCanvasCoordinates.value = Rect.zero;
+    _selectionWindowCanvasRect.value = Rect.zero;
   }
 
   bool isElementSelected(THElement element) {

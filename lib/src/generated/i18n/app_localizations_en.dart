@@ -1208,6 +1208,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Select (C)';
 
   @override
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage =>
+      'Select a zoom area';
+
+  @override
   String th2FileEditPageUndo(Object undoDescription) {
     return 'Undo \'$undoDescription\' (Ctrl+Z)';
   }
@@ -1232,6 +1236,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageZoomToSelection => 'Zoom to selection (2)';
+
+  @override
+  String get th2FileEditPageZoomToSelectionWindow =>
+      'Zoom selection window (5)';
 
   @override
   String get th2FilePickSelectImageFile => 'Select an image file';

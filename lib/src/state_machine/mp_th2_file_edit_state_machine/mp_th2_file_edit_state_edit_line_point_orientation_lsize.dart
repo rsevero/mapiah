@@ -30,12 +30,14 @@ class MPTH2FileEditStateEditLinePointOrientationLSize extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    selectionController.updateAllSelectedElementsClones();
-    selectionController.resetSelectedLineLineSegmentsMPIDs();
-    selectionController.updateSelectableEndAndControlPoints();
-    elementEditController.resetOriginalFileForLineSimplification();
-    th2FileEditController.triggerEditLineRedraw();
-    initializeOrientationLSize();
+    if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      selectionController.updateAllSelectedElementsClones();
+      selectionController.resetSelectedLineLineSegmentsMPIDs();
+      selectionController.updateSelectableEndAndControlPoints();
+      elementEditController.resetOriginalFileForLineSimplification();
+      th2FileEditController.triggerEditLineRedraw();
+      initializeOrientationLSize();
+    }
     setStatusBarMessage();
   }
 

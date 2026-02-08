@@ -18,15 +18,19 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    selectionController.clearSelectedElements();
-    selectionController.clearSelectedEndControlPoints();
-    selectionController.clearSelectedLineSegments();
+    if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      selectionController.clearSelectedElements();
+      selectionController.clearSelectedEndControlPoints();
+      selectionController.clearSelectedLineSegments();
+    }
     setStatusBarMessage();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    onStateExitClearSelectionOnExit(nextState);
+    if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      onStateExitClearSelectionOnExit(nextState);
+    }
     th2FileEditController.setStatusBarMessage('');
   }
 
