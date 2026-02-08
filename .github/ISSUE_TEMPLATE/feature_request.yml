@@ -1,0 +1,54 @@
+name: Feature request
+description: Suggest a new feature or improvement for Mapiah.
+title: "[FEATURE] "
+labels: enhancement
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking time to suggest an improvement — clear, focused requests are easiest to evaluate.
+        Please provide usage context, motivation, and (if possible) a short mockup or screenshot.
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary
+      description: One-line summary of the request
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / user value
+      description: Why is this useful? Who benefits and how?
+    validations:
+      required: true
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: Example use cases
+      description: Practical examples showing how you'd use the feature
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed implementation (optional)
+      description: If you have ideas for how it could work, sketch them here
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+  - type: textarea
+    id: mockup
+    attributes:
+      label: Mockup / screenshots (optional)
+      description: Paste links or describe UI changes; you can attach images in the issue editor
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+        - Nice to have
