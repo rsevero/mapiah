@@ -8,7 +8,22 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
-const bool mpDebugMousePosition = false;
+const bool mpDebugMousePosition = bool.fromEnvironment(
+  'debugMousePosition',
+  defaultValue: false,
+);
+
+// Compile-time flag to indicate we built the app for Flathub (set with
+// `--dart-define=isFlathub=true` when building). Defaults to false.
+const bool mpIsFlathub = bool.fromEnvironment('isFlathub', defaultValue: false);
+
+// Debug compile-time flag to force showing Flathub version info dialog even
+// when the remote version is not newer. Set with
+// `--dart-define=debugAlwaysShowVersions=true` for debugging.
+const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
+  'debugAlwaysShowVersions',
+  defaultValue: false,
+);
 
 const String mpHelpPagePath = 'assets/help';
 
@@ -323,6 +338,9 @@ const String mpChangelogURL =
     'https://github.com/rsevero/mapiah/blob/main/CHANGELOG.md';
 const String mpLicenseURL =
     'https://github.com/rsevero/mapiah/blob/main/LICENSE.md';
+
+// Flathub/Flatpak application id used on Flathub
+const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';
 
 const String xTherionImageInsertConfigID = 'xth_me_image_insert';
 const String mpXVIExtension = '.xvi';

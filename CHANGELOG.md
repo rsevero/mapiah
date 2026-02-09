@@ -4,6 +4,7 @@
 * New features:
   * Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]
   * Help dialogs closable by pressing Escape key.
+  * Creating Flathub specific new release check.
 * Fixed bugs:
   * Options window been shown when there is no element selected. [reported by dankez, issue [#12](https://github.com/rsevero/mapiah/issues/12)]
 * Infrastructure maintenance:

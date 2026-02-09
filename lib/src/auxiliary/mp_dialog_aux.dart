@@ -273,79 +273,163 @@ class MPDialogAux {
       final PackageInfo info = await PackageInfo.fromPlatform();
       final String currentVersion = info.version;
 
-      final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
-
-      http.Response response;
-
-      try {
-        response = await http.get(
-          uri,
-          headers: const <String, String>{
-            'Accept': mpMapiahReleasesAPIHeaderAccept,
-          },
-        );
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
-
-        return;
-      }
-
-      if (response.statusCode != 200) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.httpStatus,
-          httpStatusCode: response.statusCode,
+      // If built for Flathub (compile-time), fetch Flathub HTML and parse
+      // the JSON-LD. Use `--dart-define=isFlathub=true` when building the
+      // Flatpak/Flathub bundle so this branch is used.
+      if (mpIsFlathub) {
+        final String flathubAppId = mpMapiahFlathubAppID;
+        final Uri uri = Uri.parse(
+          'https://flathub.org/apps/details/$flathubAppId',
         );
 
+        http.Response response;
+        try {
+          response = await http.get(uri);
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
+
+          return;
+        }
+
+        if (response.statusCode != 200) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.httpStatus,
+            httpStatusCode: response.statusCode,
+          );
+
+          return;
+        }
+
+        final RegExpMatch? match = RegExp(
+          r'<script[^>]*type="application/ld\\+json"[^>]*>([\\s\\S]*?)<\\/script>',
+        ).firstMatch(response.body);
+
+        if (match == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        dynamic data;
+        try {
+          data = jsonDecode(match.group(1)!);
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        final String? remoteVersion = (data is Map<String, dynamic>)
+            ? (data['softwareVersion'] ?? data['version'])?.toString()
+            : null;
+
+        if (remoteVersion == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        final String? latestVersion = _extractVersion(remoteVersion);
+        final String? current = _extractVersion(currentVersion);
+
+        if (latestVersion == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        if (current == null) {
+          return;
+        }
+
+        if (!mpDebugAlwaysShowVersions &&
+            (_compareVersions(latestVersion, current) <= 0)) {
+          return;
+        }
+
+        _showUpdateDialog(
+          latestVersion: latestVersion,
+          currentVersion: currentVersion,
+          tagName: 'flathub:$remoteVersion',
+        );
+
         return;
-      }
+      } else {
+        // Not Flatpak: fall back to GitHub releases API
+        final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
 
-      late final List<dynamic> tags;
+        http.Response response;
 
-      try {
-        tags = jsonDecode(response.body) as List<dynamic>;
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+        try {
+          response = await http.get(
+            uri,
+            headers: const <String, String>{
+              'Accept': mpMapiahReleasesAPIHeaderAccept,
+            },
+          );
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
 
-      if (tags.isEmpty) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+          return;
+        }
 
-      final String tagName;
+        if (response.statusCode != 200) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.httpStatus,
+            httpStatusCode: response.statusCode,
+          );
 
-      try {
-        tagName = (tags.first as Map<String, dynamic>)['name'].toString();
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+          return;
+        }
 
-      final String? latestVersion = _extractVersion(tagName);
-      final String? current = _extractVersion(currentVersion);
+        late final List<dynamic> tags;
 
-      if (latestVersion == null) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.parsing,
+        try {
+          tags = jsonDecode(response.body) as List<dynamic>;
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+        if (tags.isEmpty) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+
+        final String tagName;
+
+        try {
+          tagName = (tags.first as Map<String, dynamic>)['name'].toString();
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+
+        final String? latestVersion = _extractVersion(tagName);
+        final String? current = _extractVersion(currentVersion);
+
+        if (latestVersion == null) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.parsing,
+            tagName: tagName,
+          );
+          return;
+        }
+
+        if (current == null) {
+          return;
+        }
+
+        if (!mpDebugAlwaysShowVersions &&
+            (_compareVersions(latestVersion, current) <= 0)) {
+          return;
+        }
+
+        _showUpdateDialog(
+          latestVersion: latestVersion,
+          currentVersion: currentVersion,
           tagName: tagName,
         );
-        return;
       }
-
-      if (current == null) {
-        return;
-      }
-
-      if (_compareVersions(latestVersion, current) <= 0) {
-        return;
-      }
-
-      _showUpdateDialog(
-        latestVersion: latestVersion,
-        currentVersion: currentVersion,
-        tagName: tagName,
-      );
     } catch (e, st) {
       mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
       _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
