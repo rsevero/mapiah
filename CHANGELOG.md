@@ -11,6 +11,7 @@
   * Create issue template for bug reports.
   * Create issue template for feature requests.
   * Created internal settings storage with SharedPreferencesWithCache package.
+  * Replace application id com.example.mapiah -> io.github.rsevero.mapiah.
 
 ## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:
