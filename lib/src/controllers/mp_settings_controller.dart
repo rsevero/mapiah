@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_internal_settings_type.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toml/toml.dart';
 
 part 'mp_settings_controller.g.dart';
@@ -30,12 +32,25 @@ abstract class MPSettingsControllerBase with Store {
   @readonly
   double _lineThickness = thDefaultLineThickness;
 
+  late final SharedPreferencesWithCache prefs;
+  late final Future<void> initialized;
+
   MPSettingsControllerBase() {
-    _initialize();
+    initialized = _initialize();
   }
 
-  void _initialize() {
-    _readConfigFile();
+  Future<void> _initialize() async {
+    // wait for both async readers to complete. With Future.wait they run in
+    //parallel, which is more efficient.
+    await Future.wait([_readConfigFile(), _readInternalSettingsFile()]);
+  }
+
+  Future<void> _readInternalSettingsFile() async {
+    prefs = await SharedPreferencesWithCache.create(
+      cacheOptions: SharedPreferencesWithCacheOptions(
+        allowList: MPInternalSettingsType.values.map((e) => e.name).toSet(),
+      ),
+    );
   }
 
   Future<void> _readConfigFile() async {

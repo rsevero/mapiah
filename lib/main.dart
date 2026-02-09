@@ -52,8 +52,10 @@ void main(List<String> arguments) {
   // });
 
   runZonedGuarded(
-    () {
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
+      // Wait for settings initialization (reads config file and SharedPreferences)
+      await mpLocator.mpSettingsController.initialized;
 
       // /// For layout debugging.
       // debugPaintSizeEnabled = true;

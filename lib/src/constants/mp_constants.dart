@@ -366,3 +366,5 @@ const String mpMapiahGithubReleasesURL =
     'https://github.com/rsevero/mapiah/releases/tag/';
 const String mpMapiahVersionFlathubURLPrefix =
     'https://flathub.org/apps/details/';
+
+const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours

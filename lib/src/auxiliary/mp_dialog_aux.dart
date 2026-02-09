@@ -12,6 +12,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_internal_settings_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
@@ -21,6 +22,7 @@ import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
@@ -267,9 +269,34 @@ class MPDialogAux {
     if (_isUpdateCheckRunning) {
       return;
     }
+
     _isUpdateCheckRunning = true;
 
     try {
+      final SharedPreferencesWithCache prefs =
+          mpLocator.mpSettingsController.prefs;
+      final int lastNewVersionCheckMS =
+          prefs.getInt(MPInternalSettingsType.lastNewVersionCheckMS.name) ?? 0;
+      final DateTime lastNewVersionCheck = DateTime.fromMillisecondsSinceEpoch(
+        lastNewVersionCheckMS,
+        isUtc: true,
+      );
+      final DateTime now = DateTime.now().toUtc();
+      final Duration timeSinceLastCheck = now.difference(lastNewVersionCheck);
+
+      if (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks) {
+        mpLocator.mpLog.i(
+          'Update check skipped: last check was ${timeSinceLastCheck.inSeconds} seconds ago',
+        );
+
+        return;
+      }
+
+      prefs.setInt(
+        MPInternalSettingsType.lastNewVersionCheckMS.name,
+        now.millisecondsSinceEpoch,
+      );
+
       final PackageInfo info = await PackageInfo.fromPlatform();
       final String currentVersion = info.version;
 
@@ -479,6 +506,7 @@ class MPDialogAux {
 
   static String? _extractVersion(String input) {
     final RegExpMatch? match = RegExp(r'\d+(?:\.\d+)*').firstMatch(input);
+
     return match?.group(0);
   }
 
@@ -491,7 +519,6 @@ class MPDialogAux {
         .split('.')
         .map((part) => int.tryParse(part) ?? 0)
         .toList();
-
     final int maxLen = aParts.length > bParts.length
         ? aParts.length
         : bParts.length;
@@ -499,6 +526,7 @@ class MPDialogAux {
     for (int i = 0; i < maxLen; i++) {
       final int aVal = i < aParts.length ? aParts[i] : 0;
       final int bVal = i < bParts.length ? bParts[i] : 0;
+
       if (aVal != bVal) {
         return aVal.compareTo(bVal);
       }
