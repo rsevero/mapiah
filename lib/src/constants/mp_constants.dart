@@ -362,3 +362,7 @@ const int mpAddChildAtEndOfParentChildrenList = -2;
 const String mpMapiahReleasesAPIURL =
     'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1';
 const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
+const String mpMapiahGithubReleasesURL =
+    'https://github.com/rsevero/mapiah/releases/tag/';
+const String mpMapiahVersionFlathubURLPrefix =
+    'https://flathub.org/apps/details/';

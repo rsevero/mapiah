@@ -279,7 +279,7 @@ class MPDialogAux {
       if (mpIsFlathub) {
         final String flathubAppId = mpMapiahFlathubAppID;
         final Uri uri = Uri.parse(
-          'https://flathub.org/apps/details/$flathubAppId',
+          '$mpMapiahVersionFlathubURLPrefix$flathubAppId',
         );
 
         http.Response response;
@@ -301,7 +301,8 @@ class MPDialogAux {
         }
 
         final RegExpMatch? match = RegExp(
-          r'<script[^>]*type="application/ld\\+json"[^>]*>([\\s\\S]*?)<\\/script>',
+          r"""<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>([\s\S]*?)<\/script>""",
+          caseSensitive: false,
         ).firstMatch(response.body);
 
         if (match == null) {
@@ -319,9 +320,40 @@ class MPDialogAux {
           return;
         }
 
-        final String? remoteVersion = (data is Map<String, dynamic>)
-            ? (data['softwareVersion'] ?? data['version'])?.toString()
-            : null;
+        // Try to get version from JSON-LD first, then fall back to
+        // GitHub release tag link or the "Changes in version" heading.
+        String? remoteVersion;
+
+        if (data is Map<String, dynamic>) {
+          remoteVersion = (data['softwareVersion'] ?? data['version'])
+              ?.toString();
+        }
+
+        if (remoteVersion == null) {
+          // Look for GitHub release tag links like /releases/tag/v0.2.33
+          final RegExp ghTagRe = RegExp(
+            r'/releases/tag/v?(\d+(?:\.\d+)*)',
+            caseSensitive: false,
+          );
+          final RegExpMatch? ghMatch = ghTagRe.firstMatch(response.body);
+
+          if (ghMatch != null) {
+            remoteVersion = ghMatch.group(1);
+          }
+        }
+
+        if (remoteVersion == null) {
+          // Fallback: look for "Changes in version X.Y.Z" headings
+          final RegExp changesRe = RegExp(
+            r'Changes in version\s*([0-9]+(?:\.[0-9]+)*)',
+            caseSensitive: false,
+          );
+          final RegExpMatch? changesMatch = changesRe.firstMatch(response.body);
+
+          if (changesMatch != null) {
+            remoteVersion = changesMatch.group(1);
+          }
+        }
 
         if (remoteVersion == null) {
           _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
@@ -347,10 +379,14 @@ class MPDialogAux {
           return;
         }
 
+        final String releaseUrl =
+            '$mpMapiahVersionFlathubURLPrefix$flathubAppId';
+
         _showUpdateDialog(
           latestVersion: latestVersion,
           currentVersion: currentVersion,
           tagName: 'flathub:$remoteVersion',
+          releaseUrl: releaseUrl,
         );
 
         return;
@@ -424,10 +460,13 @@ class MPDialogAux {
           return;
         }
 
+        final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
+
         _showUpdateDialog(
           latestVersion: latestVersion,
           currentVersion: currentVersion,
           tagName: tagName,
+          releaseUrl: releaseUrl,
         );
       }
     } catch (e, st) {
@@ -472,6 +511,7 @@ class MPDialogAux {
     required String latestVersion,
     required String currentVersion,
     required String tagName,
+    required String releaseUrl,
   }) {
     if (_isUpdateDialogOpen) {
       return;
@@ -488,8 +528,6 @@ class MPDialogAux {
     }
 
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final String releaseUrl =
-        'https://github.com/rsevero/mapiah/releases/tag/$tagName';
     final String updateBody = appLocalizations.updateAvailableBody(
       currentVersion,
       latestVersion,
