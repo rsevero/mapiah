@@ -29,7 +29,7 @@ modules:
     env:
       PUB_CACHE: /run/build/mapiah/.pub-cache
   build-commands:
-  - flutter build linux --release --no-pub --dart-define=isFlathub=true --dart-define=debugAlwaysShowVersions=true
+  - flutter build linux --release --no-pub --dart-define=isFlathub=true
   - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
   - cp -r $BUNDLE_PATH/lib /app/bin/lib
   - cp -r $BUNDLE_PATH/data /app/bin/data
