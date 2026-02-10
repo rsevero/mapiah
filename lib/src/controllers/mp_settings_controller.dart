@@ -54,6 +54,10 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   Future<void> _readConfigFile() async {
+    if (_readingConfigFile) {
+      return;
+    }
+
     try {
       _readingConfigFile = true;
 
@@ -63,8 +67,6 @@ abstract class MPSettingsControllerBase with Store {
       );
 
       if (!await file.exists()) {
-        _readingConfigFile = false;
-
         return;
       }
 
@@ -107,16 +109,17 @@ abstract class MPSettingsControllerBase with Store {
       setSelectionTolerance(selectionTolerance);
       setPointRadius(pointRadius);
       setLineThickness(lineThickness);
-
-      _readingConfigFile = false;
     } catch (e) {
       mpLocator.mpLog.e('Error reading config file.', error: e);
+    } finally {
+      _readingConfigFile = false;
     }
   }
 
   String _getSystemLocaleID() {
     final Locale systemLocale =
         WidgetsBinding.instance.platformDispatcher.locale;
+
     return systemLocale.languageCode;
   }
 
