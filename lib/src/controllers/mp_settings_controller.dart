@@ -55,7 +55,8 @@ abstract class MPSettingsControllerBase with Store {
 
   Future<void> _readConfigFile() async {
     if (_readingConfigFile) {
-      return;
+      throw StateError('Reentrant call to _readConfigFile detected.');
+      // return;
     }
 
     try {
@@ -174,7 +175,8 @@ abstract class MPSettingsControllerBase with Store {
 
   Future<void> _saveConfigFile() async {
     if (_readingConfigFile) {
-      return;
+      throw StateError('_saveConfigFile called while reading config file.');
+      // return;
     }
 
     final Map<String, dynamic> config = {
