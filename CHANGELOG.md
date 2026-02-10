@@ -12,6 +12,7 @@
   * Create issue template for feature requests.
   * Created internal settings storage with SharedPreferencesWithCache package.
   * Replace application id com.example.mapiah -> io.github.rsevero.mapiah.
+  * Flatpak metainfo file not receiving duplicated &lt;release&gt; tags for same version.
 
 ## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:
