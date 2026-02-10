@@ -42,7 +42,7 @@ modules:
   sources:
   - type: git
     url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.34-test1
+    tag: v0.2.35-test2
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git

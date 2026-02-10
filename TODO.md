@@ -148,6 +148,7 @@
 [X] - Add a publisher for Mapiah Windows installer.
 [X] - When editing a line, make straight and Bézier curve line segments visually different.
 [ ] - BUG: flatpak release not saving users language choice. [reported by Daniel Bean]
+[ ] - BUG: element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
