@@ -177,24 +177,18 @@ abstract class MPSettingsControllerBase with Store {
       return;
     }
 
-    try {
-      final Map<String, dynamic> config = {
-        mpMainConfigSection: {mpMainConfigLocale: _localeID},
-        mpFileEditConfigSection: {
-          mpFileEditConfigLineThickness: _lineThickness,
-          mpFileEditConfigPointRadius: _pointRadius,
-          mpFileEditConfigSelectionTolerance: _selectionTolerance,
-        },
-      };
-      final String contents = TomlDocument.fromMap(config).toString();
-      final Directory configDirectory = await MPDirectoryAux.config();
-      final File file = File(
-        p.join(configDirectory.path, mpMainConfigFilename),
-      );
+    final Map<String, dynamic> config = {
+      mpMainConfigSection: {mpMainConfigLocale: _localeID},
+      mpFileEditConfigSection: {
+        mpFileEditConfigLineThickness: _lineThickness,
+        mpFileEditConfigPointRadius: _pointRadius,
+        mpFileEditConfigSelectionTolerance: _selectionTolerance,
+      },
+    };
+    final String contents = TomlDocument.fromMap(config).toString();
+    final Directory configDirectory = await MPDirectoryAux.config();
+    final File file = File(p.join(configDirectory.path, mpMainConfigFilename));
 
-      await file.writeAsString(contents);
-    } catch (e) {
-      mpLocator.mpLog.e('Error saving config file.', error: e);
-    }
+    await file.writeAsString(contents, flush: true);
   }
 }
