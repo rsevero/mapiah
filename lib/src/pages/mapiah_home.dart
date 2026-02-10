@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
@@ -133,7 +134,10 @@ class _MapiahHomeState extends State<MapiahHome> {
 
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
-            mpLocator.mpSettingsController.setLocaleID(newValue);
+            mpLocator.mpSettingsController.setString(
+              MPSettingsType.Main_LocaleID,
+              newValue,
+            );
           },
           itemBuilder: (BuildContext context) {
             return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
@@ -144,7 +148,9 @@ class _MapiahHomeState extends State<MapiahHome> {
                   child: Row(
                     children: [
                       if (localeID ==
-                          mpLocator.mpSettingsController.localeID) ...[
+                          mpLocator.mpSettingsController.getString(
+                            MPSettingsType.Main_LocaleID,
+                          )) ...[
                         Icon(Icons.check, color: colorScheme.primary),
                         const SizedBox(width: 8),
                       ] else

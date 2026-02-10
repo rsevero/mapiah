@@ -79,12 +79,9 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
-/// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
-/// web version. The higher limits
-/// [-0x7fffffffffffffff - 1,  0x7fffffffffffffff] are only supported by the
-/// desktop versions of Flutter apps.
-const int mpMinimumInt = -2 ^ 53 + 1;
-const int mpMaximumInt = 2 ^ 53 - 1;
+/// Limits compatible with Dart VM (used on Linux, MacOS and Windows).
+const int mpMinimumInt = -0x7fffffffffffffff - 1;
+const int mpMaximumInt = 0x7fffffffffffffff;
 
 const double mpLogN10 = math.ln10;
 const double mp45DegreesInRad = math.pi / 4;
@@ -368,3 +365,9 @@ const String mpMapiahVersionFlathubURLPrefix =
     'https://flathub.org/apps/details/';
 
 const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
+
+const bool mpDefaultDefaultBoolSetting = false;
+const double mpDefaultDefaultDoubleSetting = 0.0;
+const int mpDefaultDefaultIntSetting = 0;
+const String mpDefaultDefaultStringSetting = '';
+const List<String> mpDefaultDefaultStringListSetting = [];

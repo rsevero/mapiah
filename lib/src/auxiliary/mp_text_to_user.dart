@@ -66,6 +66,8 @@ class MPTextToUser {
   static Locale _locale = mpLocator.mpSettingsController.locale;
 
   static void initialize() {
+    _locale = mpLocator.mpSettingsController.locale;
+
     _initializeAngleUnitTypeAsString();
     _initializeAreaTypeAsString();
     _initializeCommandDescriptionTypeAsString();
@@ -329,8 +331,6 @@ class MPTextToUser {
 
   static void _initializeCommandDescriptionTypeAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
-
-    _locale = mpLocator.mpSettingsController.locale;
 
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addArea] =
         localizations.mpCommandDescriptionAddArea;

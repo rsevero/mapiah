@@ -9,46 +9,6 @@ part of 'mp_settings_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MPSettingsController on MPSettingsControllerBase, Store {
-  late final _$_localeIDAtom = Atom(
-    name: 'MPSettingsControllerBase._localeID',
-    context: context,
-  );
-
-  String get localeID {
-    _$_localeIDAtom.reportRead();
-    return super._localeID;
-  }
-
-  @override
-  String get _localeID => localeID;
-
-  @override
-  set _localeID(String value) {
-    _$_localeIDAtom.reportWrite(value, super._localeID, () {
-      super._localeID = value;
-    });
-  }
-
-  late final _$_localeAtom = Atom(
-    name: 'MPSettingsControllerBase._locale',
-    context: context,
-  );
-
-  Locale get locale {
-    _$_localeAtom.reportRead();
-    return super._locale;
-  }
-
-  @override
-  Locale get _locale => locale;
-
-  @override
-  set _locale(Locale value) {
-    _$_localeAtom.reportWrite(value, super._locale, () {
-      super._locale = value;
-    });
-  }
-
   late final _$_selectionToleranceAtom = Atom(
     name: 'MPSettingsControllerBase._selectionTolerance',
     context: context,
@@ -115,18 +75,6 @@ mixin _$MPSettingsController on MPSettingsControllerBase, Store {
   );
 
   @override
-  void setLocaleID(String localeID) {
-    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
-      name: 'MPSettingsControllerBase.setLocaleID',
-    );
-    try {
-      return super.setLocaleID(localeID);
-    } finally {
-      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setSelectionTolerance(double selectionTolerance) {
     final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
       name: 'MPSettingsControllerBase.setSelectionTolerance',
@@ -157,6 +105,18 @@ mixin _$MPSettingsController on MPSettingsControllerBase, Store {
     );
     try {
       return super.setLineThickness(lineThickness);
+    } finally {
+      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void trigger(MPSettingsType type) {
+    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
+      name: 'MPSettingsControllerBase.trigger',
+    );
+    try {
+      return super.trigger(type);
     } finally {
       _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }

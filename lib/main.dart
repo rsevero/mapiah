@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_context_menu_suppression.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 
@@ -90,33 +91,37 @@ class MapiahApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder: (context) => MaterialApp(
-        navigatorKey: mpLocator.mpNavigatorKey,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
-            dynamicSchemeVariant: DynamicSchemeVariant.content,
-          ),
-          iconButtonTheme: IconButtonThemeData(
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 0),
+      builder: (context) {
+        mpLocator.mpSettingsController.getTrigger(MPSettingsType.Main_LocaleID);
+
+        return MaterialApp(
+          navigatorKey: mpLocator.mpNavigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
+              dynamicSchemeVariant: DynamicSchemeVariant.content,
+            ),
+            iconButtonTheme: IconButtonThemeData(
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all<EdgeInsets>(
+                  EdgeInsets.symmetric(horizontal: 0),
+                ),
               ),
             ),
           ),
-        ),
-        // darkTheme: ThemeData(
-        //   useMaterial3: true,
-        //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
-        // ),
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        locale: mpLocator.mpSettingsController.locale,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: MapiahHome(mainFilePath: fileToRead),
-      ),
+          // darkTheme: ThemeData(
+          //   useMaterial3: true,
+          //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
+          // ),
+          onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          locale: mpLocator.mpSettingsController.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MapiahHome(mainFilePath: fileToRead),
+        );
+      },
     );
   }
 }

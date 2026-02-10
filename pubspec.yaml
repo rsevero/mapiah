@@ -33,7 +33,6 @@ dependencies:
   path_provider: ^2.0.0
   petitparser: ^7.0.1
   shared_preferences: ^2.5.4
-  toml: ^0.18.0
   url_launcher: ^6.3.1
   web: ^1.1.1
   window_size: ^0.1.0
