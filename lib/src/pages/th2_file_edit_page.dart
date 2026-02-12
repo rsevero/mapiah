@@ -61,6 +61,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
     colorScheme = Theme.of(context).colorScheme;
+
     return FutureBuilder<TH2FileEditControllerCreateResult>(
       future: th2FileEditControllerCreateResult,
       builder:

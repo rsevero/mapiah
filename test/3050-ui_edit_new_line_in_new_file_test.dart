@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -25,9 +26,10 @@ void main() {
   final MPLocator mpLocator = MPLocator();
 
   group('UI: edit new line in new file', () {
-    setUp(() {
+    setUp(() async {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
+      await mpLocator.mpSettingsController.initialized;
     });
 
     testWidgets('creates a new line after two clicks and a drag', (
@@ -47,6 +49,7 @@ void main() {
             scrapOptions: const [],
             encoding: 'utf-8',
           );
+      final THFile thFile = th2Controller.thFile;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -54,8 +57,8 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('en'),
           home: TH2FileEditPage(
-            key: ValueKey('TH2FileEditPage|${th2Controller.thFile.filename}'),
-            filename: th2Controller.thFile.filename,
+            key: ValueKey('TH2FileEditPage|${thFile.filename}'),
+            filename: thFile.filename,
             th2FileEditController: th2Controller,
           ),
         ),
@@ -86,7 +89,7 @@ void main() {
 
       // Target the listener surface to send mouse events
       final Finder listenerFinder = find.byKey(
-        ValueKey('MPListenerWidget|${th2Controller.thFileMPID}'),
+        ValueKey('MPListenerWidget|${thFile.mpID}'),
       );
       expect(listenerFinder, findsOneWidget);
 
@@ -135,11 +138,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert: one line exists in the THFile
-      final List<THLine> lines = th2Controller.thFile.getLines().toList();
+      final List<THLine> lines = thFile.getLines().toList();
       expect(lines.length, 1);
 
       final List<THLineSegment> lineSegments = lines.first.getLineSegments(
-        th2Controller.thFile,
+        thFile,
       );
       expect(lineSegments.length == 4, isTrue);
       expect(lineSegments[0], isA<THStraightLineSegment>());

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -226,6 +227,50 @@ void main() {
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(10, 0)),
         closeTo(90.0, maxDelta),
+      );
+    });
+  });
+
+  group('MPNumericAux.rectContainsPointInclusive', () {
+    final Rect rect = Rect.fromLTRB(-520.0, 62.0, -240.0, 192.0);
+
+    test('includes left and top edges', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-520.0, 62.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('includes right and bottom edges', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-240.0, 192.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('includes point on left-bottom corner', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-520.0, 192.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('excludes point outside rect', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-239.999, 192.0),
+        ),
+        isFalse,
       );
     });
   });

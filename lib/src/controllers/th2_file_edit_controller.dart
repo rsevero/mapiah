@@ -161,12 +161,16 @@ abstract class TH2FileEditControllerBase with Store {
   bool _hasMultipleScraps = false;
 
   @readonly
-  double _lineThicknessOnCanvas = mpLocator.mpSettingsController.lineThickness;
+  double _lineThicknessOnCanvas = mpLocator.mpSettingsController.getDouble(
+    MPSettingsType.TH2Edit_LineThickness,
+  );
 
   @readonly
   double _controlLineThicknessOnCanvas =
-      mpLocator.mpSettingsController.lineThickness *
-      thControlLineThicknessFactor;
+      mpLocator.mpSettingsController.getDouble(
+        MPSettingsType.TH2Edit_LineThickness,
+      ) *
+      mpControlLineThicknessFactor;
 
   @readonly
   double _xviLineThicknessOnCanvas = mpXVILineThickness;
@@ -175,7 +179,9 @@ abstract class TH2FileEditControllerBase with Store {
   double _lineDirectionTickLengthOnCanvas = mpLineDirectionTickLength;
 
   @readonly
-  double _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius;
+  double _pointRadiusOnCanvas = mpLocator.mpSettingsController.getDouble(
+    MPSettingsType.TH2Edit_PointRadius,
+  );
 
   @readonly
   double _selectionToleranceOnCanvas = mpLocator.mpSettingsController.getDouble(
@@ -207,27 +213,27 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   double _selectionWindowBorderPaintDashInterval =
-      thSelectionWindowBorderPaintDashInterval;
+      mpSelectionWindowBorderPaintDashInterval;
 
   @computed
   double get selectionWindowBorderPaintDashIntervalOnCanvas =>
       _selectionWindowBorderPaintDashInterval / _canvasScale;
 
   @readonly
-  double _selectionHandleSizeOnCanvas = thSelectionHandleSize;
+  double _selectionHandleSizeOnCanvas = mpSelectionHandleSize;
 
   @readonly
-  double _selectionHandleDistanceOnCanvas = thSelectionHandleDistance;
+  double _selectionHandleDistanceOnCanvas = mpSelectionHandleDistance;
 
   @readonly
-  double _selectionHandleLineThicknessOnCanvas = thSelectionHandleLineThickness;
+  double _selectionHandleLineThicknessOnCanvas = mpSelectionHandleLineThickness;
 
   @readonly
   bool _shouldShowImages = true;
 
   @computed
   Paint get selectionHandlePaint =>
-      thSelectionHandleFillPaint
+      mpSelectionHandleFillPaint
         ..strokeWidth = _selectionHandleLineThicknessOnCanvas;
 
   @computed
@@ -600,7 +606,9 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _lineThicknessOnCanvas =
-            mpLocator.mpSettingsController.lineThickness /
+            mpLocator.mpSettingsController.getDouble(
+              MPSettingsType.TH2Edit_LineThickness,
+            ) /
             (_canvasScale * devicePixelRatio);
         _lineDirectionTickLengthOnCanvas =
             mpLineDirectionTickLength / (_canvasScale * devicePixelRatio);
@@ -612,14 +620,16 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _controlLineThicknessOnCanvas =
-            _lineThicknessOnCanvas * thControlLineThicknessFactor;
+            _lineThicknessOnCanvas * mpControlLineThicknessFactor;
       }),
     );
 
     _disposers.add(
       autorun((_) {
         _pointRadiusOnCanvas =
-            mpLocator.mpSettingsController.pointRadius /
+            mpLocator.mpSettingsController.getDouble(
+              MPSettingsType.TH2Edit_PointRadius,
+            ) /
             (_canvasScale * devicePixelRatio);
       }),
     );
@@ -644,21 +654,21 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _selectionHandleSizeOnCanvas =
-            thSelectionHandleSize / (_canvasScale * devicePixelRatio);
+            mpSelectionHandleSize / (_canvasScale * devicePixelRatio);
       }),
     );
 
     _disposers.add(
       autorun((_) {
         _selectionHandleDistanceOnCanvas =
-            thSelectionHandleDistance / (_canvasScale * devicePixelRatio);
+            mpSelectionHandleDistance / (_canvasScale * devicePixelRatio);
       }),
     );
 
     _disposers.add(
       autorun((_) {
         _selectionHandleLineThicknessOnCanvas =
-            thSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
+            mpSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
       }),
     );
   }

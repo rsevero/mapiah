@@ -121,6 +121,18 @@ class MPNumericAux {
     return rect2.contains(rect1.topLeft) && rect2.contains(rect1.bottomRight);
   }
 
+  static bool rectContainsPointInclusive({
+    required Rect rect,
+    required Offset point,
+  }) {
+    final Rect orderedRect = orderedRectFromRect(rect);
+
+    return (point.dx >= orderedRect.left) &&
+        (point.dx <= orderedRect.right) &&
+        (point.dy >= orderedRect.top) &&
+        (point.dy <= orderedRect.bottom);
+  }
+
   /// In Flutter, the Rect.fromLTRB() method does not check if the left is
   /// greater than the right or if the top is greater than the bottom so I am
   /// providing this method to ensure that the Rect is ordered.

@@ -13,7 +13,9 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
 
-final MPLocator mpLocator = MPLocator();
+MPLocator? _mpLocator;
+
+MPLocator get mpLocator => _mpLocator ??= MPLocator();
 
 void main(List<String> arguments) {
   String? fileToRead;

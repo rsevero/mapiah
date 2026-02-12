@@ -34,10 +34,10 @@ class MPSelectionHandlesWidget extends StatelessWidget {
               selectionController.selectedElementsBoundingBox;
           double handleSize = th2FileEditController.selectionHandleSizeOnCanvas;
           final double handleSizeThreshold =
-              handleSize * thSelectionHandleThresholdMultiplier;
+              handleSize * mpSelectionHandleThresholdMultiplier;
           if ((boundingBox.width > handleSizeThreshold) &&
               (boundingBox.height > handleSizeThreshold)) {
-            handleSize = handleSize * thSelectionHandleSizeAmplifier;
+            handleSize = handleSize * mpSelectionHandleSizeAmplifier;
           }
 
           return CustomPaint(

@@ -81,7 +81,8 @@ class MPGeneralController {
   }) {
     final THFile thFile = THFile();
     final int thFileMPID = thFile.mpID;
-    final String filename = '${mpNewFilePrefix}_${thFile.mpID.abs()}';
+    final int filenameNumber = thFileMPID.abs();
+    final String filename = '${mpNewFilePrefix}_$filenameNumber';
     final THEncoding thEncoding = THEncoding(
       parentMPID: thFileMPID,
       encoding: encoding,

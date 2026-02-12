@@ -22,12 +22,6 @@ abstract class MPSettingsControllerBase with Store {
     return Locale(localeID);
   }
 
-  @readonly
-  double _pointRadius = thDefaultPointRadius;
-
-  @readonly
-  double _lineThickness = thDefaultLineThickness;
-
   final Map<MPSettingsType, bool> _boolSettings = {};
   final Map<MPSettingsType, double> _doubleSettings = {};
   final Map<MPSettingsType, int> _intSettings = {};
@@ -40,7 +34,10 @@ abstract class MPSettingsControllerBase with Store {
 
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingsType, double> _doubleDefaultSettings = {};
+  static const Map<MPSettingsType, double> _doubleDefaultSettings = {
+    MPSettingsType.TH2Edit_LineThickness: mpDefaultLineThickness,
+    MPSettingsType.TH2Edit_PointRadius: mpDefaultPointRadius,
+  };
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only
   /// settings that differ from that should be included here.
@@ -125,50 +122,6 @@ abstract class MPSettingsControllerBase with Store {
         WidgetsBinding.instance.platformDispatcher.locale;
 
     return systemLocale.languageCode;
-  }
-
-  @action
-  void setPointRadius(double pointRadius) {
-    final bool saveConfigFile = _pointRadius != pointRadius;
-
-    _pointRadius = pointRadius;
-
-    if (saveConfigFile) {
-      _saveConfigFile();
-    }
-  }
-
-  @action
-  void setLineThickness(double lineThickness) {
-    final bool saveConfigFile = _lineThickness != lineThickness;
-
-    _lineThickness = lineThickness;
-
-    if (saveConfigFile) {
-      _saveConfigFile();
-    }
-  }
-
-  Future<void> _saveConfigFile() async {
-    // if (_readingConfigFile) {
-    //   throw StateError(
-    //     '_saveConfigFile called while reading config file at MPSettingsController.',
-    //   );
-    // }
-
-    // final Map<String, dynamic> config = {
-    //   mpMainConfigSection: {mpMainConfigLocale: _localeID},
-    //   mpFileEditConfigSection: {
-    //     mpFileEditConfigLineThickness: _lineThickness,
-    //     mpFileEditConfigPointRadius: _pointRadius,
-    //     mpFileEditConfigSelectionTolerance: _selectionTolerance,
-    //   },
-    // };
-    // final String contents = TomlDocument.fromMap(config).toString();
-    // final Directory configDirectory = await MPDirectoryAux.config();
-    // final File file = File(p.join(configDirectory.path, mpMainConfigFilename));
-
-    // await file.writeAsString(contents, flush: true);
   }
 
   bool getBool(MPSettingsType type) {
