@@ -45,7 +45,9 @@ abstract class MPSettingsControllerBase with Store {
 
   /// The default default value for strings is mpDefaultDefaultStringSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingsType, String> _stringDefaultSettings = {};
+  static const Map<MPSettingsType, String> _stringDefaultSettings = {
+    MPSettingsType.Main_LocaleID: mpDefaultLocaleID,
+  };
 
   /// The default default value for string lists is
   /// mpDefaultDefaultStringListSetting. Only settings that differ from that
