@@ -9,26 +9,6 @@ part of 'mp_settings_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MPSettingsController on MPSettingsControllerBase, Store {
-  late final _$_selectionToleranceAtom = Atom(
-    name: 'MPSettingsControllerBase._selectionTolerance',
-    context: context,
-  );
-
-  double get selectionTolerance {
-    _$_selectionToleranceAtom.reportRead();
-    return super._selectionTolerance;
-  }
-
-  @override
-  double get _selectionTolerance => selectionTolerance;
-
-  @override
-  set _selectionTolerance(double value) {
-    _$_selectionToleranceAtom.reportWrite(value, super._selectionTolerance, () {
-      super._selectionTolerance = value;
-    });
-  }
-
   late final _$_pointRadiusAtom = Atom(
     name: 'MPSettingsControllerBase._pointRadius',
     context: context,
@@ -73,18 +53,6 @@ mixin _$MPSettingsController on MPSettingsControllerBase, Store {
     name: 'MPSettingsControllerBase',
     context: context,
   );
-
-  @override
-  void setSelectionTolerance(double selectionTolerance) {
-    final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
-      name: 'MPSettingsControllerBase.setSelectionTolerance',
-    );
-    try {
-      return super.setSelectionTolerance(selectionTolerance);
-    } finally {
-      _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   void setPointRadius(double pointRadius) {

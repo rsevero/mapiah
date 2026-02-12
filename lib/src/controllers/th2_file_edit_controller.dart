@@ -20,6 +20,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -177,13 +178,18 @@ abstract class TH2FileEditControllerBase with Store {
   double _pointRadiusOnCanvas = mpLocator.mpSettingsController.pointRadius;
 
   @readonly
-  double _selectionToleranceOnCanvas =
-      mpLocator.mpSettingsController.selectionTolerance;
+  double _selectionToleranceOnCanvas = mpLocator.mpSettingsController.getDouble(
+    MPSettingsType.TH2Edit_SelectionTolerance,
+  );
 
   @readonly
   double _selectionToleranceSquaredOnCanvas =
-      (mpLocator.mpSettingsController.selectionTolerance *
-      mpLocator.mpSettingsController.selectionTolerance);
+      (mpLocator.mpSettingsController.getDouble(
+        MPSettingsType.TH2Edit_SelectionTolerance,
+      ) *
+      mpLocator.mpSettingsController.getDouble(
+        MPSettingsType.TH2Edit_SelectionTolerance,
+      ));
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
@@ -621,7 +627,9 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _selectionToleranceOnCanvas =
-            mpLocator.mpSettingsController.selectionTolerance /
+            mpLocator.mpSettingsController.getDouble(
+              MPSettingsType.TH2Edit_SelectionTolerance,
+            ) /
             (_canvasScale * devicePixelRatio);
       }),
     );

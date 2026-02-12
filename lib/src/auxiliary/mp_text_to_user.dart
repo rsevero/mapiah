@@ -63,7 +63,7 @@ class MPTextToUser {
   static final Map<MPSnapXVIFileTarget, String> _snapXVIFileTargetAsString = {};
   static final Map<String, String> _subtypeAsString = {};
 
-  static Locale _locale = mpLocator.mpSettingsController.locale;
+  static Locale _locale = Locale(mpDefaultLocaleID);
 
   static void initialize() {
     _locale = mpLocator.mpSettingsController.locale;

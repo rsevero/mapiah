@@ -4,6 +4,8 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 part 'mp_settings_controller.g.dart';
 
@@ -19,9 +21,6 @@ abstract class MPSettingsControllerBase with Store {
 
     return Locale(localeID);
   }
-
-  @readonly
-  double _selectionTolerance = thDefaultSelectionTolerance;
 
   @readonly
   double _pointRadius = thDefaultPointRadius;
@@ -66,16 +65,20 @@ abstract class MPSettingsControllerBase with Store {
   late final Future<void> initialized;
 
   MPSettingsControllerBase() {
-    initialized = _initialize();
+    initialized = _initializeAsync();
   }
 
-  Future<void> _initialize() async {
+  Future<void> _initializeAsync() async {
     // wait for both async readers to complete. With Future.wait they run in
     //parallel, which is more efficient.
     await Future.wait([_readInternalSettingsFile()]);
   }
 
   Future<void> _readInternalSettingsFile() async {
+    if (SharedPreferencesAsyncPlatform.instance == null) {
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.empty();
+    }
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
         allowList: MPSettingsType.values.map((e) => e.name).toSet(),
@@ -122,17 +125,6 @@ abstract class MPSettingsControllerBase with Store {
         WidgetsBinding.instance.platformDispatcher.locale;
 
     return systemLocale.languageCode;
-  }
-
-  @action
-  void setSelectionTolerance(double selectionTolerance) {
-    final bool saveConfigFile = (_selectionTolerance != selectionTolerance);
-
-    _selectionTolerance = selectionTolerance;
-
-    if (saveConfigFile) {
-      _saveConfigFile();
-    }
   }
 
   @action
