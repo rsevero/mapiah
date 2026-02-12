@@ -37,6 +37,7 @@ abstract class MPSettingsControllerBase with Store {
   static const Map<MPSettingsType, double> _doubleDefaultSettings = {
     MPSettingsType.TH2Edit_LineThickness: mpDefaultLineThickness,
     MPSettingsType.TH2Edit_PointRadius: mpDefaultPointRadius,
+    MPSettingsType.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
   };
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only

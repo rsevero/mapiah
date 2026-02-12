@@ -173,7 +173,7 @@ const int mpUTMMax = 60;
 const double mpClickDragThreshold = 2.0;
 const double mpClickDragThresholdSquared =
     mpClickDragThreshold * mpClickDragThreshold;
-const double mp = 7.0;
+const double mpDefaultSelectionTolerance = 7.0;
 const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
 const double mpControlLineThicknessFactor = 0.5;
@@ -189,7 +189,7 @@ const double mpSelectionHandleLineThickness = 2.0;
 final Paint mpSelectionHandleFillPaint = Paint()
   ..color = Colors.black
   ..style = PaintingStyle.stroke;
-const double thWhiteBackgroundIncrease = 1.5;
+const double mpWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;
 const double mpDiamondLongerDiagonalRatio = math.sqrt2;
 const int mpAreaFillTransparency = 30;
