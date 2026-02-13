@@ -23,6 +23,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
@@ -942,7 +943,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
+    final int parentLineMPID = _thFile
+        .lineSegmentByMPID(selectedLineSegmentMPIDs.first)
+        .parentMPID;
     final List<MPCommand> removeLineSegmentCommands = [];
+
+    bool lineRemoved = false;
 
     for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
       addOutdatedLineSegmentCloneMPID(lineSegmentMPID);
@@ -955,6 +961,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       removeLineSegmentCommand.execute(_th2FileEditController);
       removeLineSegmentCommands.add(removeLineSegmentCommand);
+
+      if (!_thFile.hasElementByMPID(parentLineMPID)) {
+        lineRemoved = true;
+      }
     }
 
     final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
@@ -979,6 +989,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     updateControllersAfterElementEditPartial();
     updateControllersAfterElementEditFinal();
     _th2FileEditController.updateUndoRedoStatus();
+    if (lineRemoved) {
+      _th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
+    } else {
+      _th2FileEditController.stateController.updateStatusBarMessage();
+    }
   }
 
   void clearMPIDsOutdatedClones() {

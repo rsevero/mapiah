@@ -421,13 +421,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   bool removeElementFromSelectedLogical(
     int elementMPID, {
     bool setState = false,
-    bool updateStatusBarMessage = true,
   }) {
     _mpSelectedElementsLogical.remove(elementMPID);
     _isSelected.remove(elementMPID);
-    if (updateStatusBarMessage) {
-      _th2FileEditController.stateController.updateStatusBarMessage();
-    }
     _th2FileEditController.triggerSelectedListChanged();
 
     if (setState) {
@@ -440,10 +436,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void removeSelectedElementsByMPIDs(List<int> elementMPIDs) {
     for (int elementMPID in elementMPIDs) {
-      removeElementFromSelectedLogical(
-        elementMPID,
-        updateStatusBarMessage: false,
-      );
+      removeElementFromSelectedLogical(elementMPID);
     }
     _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.stateController.updateStatusBarMessage();

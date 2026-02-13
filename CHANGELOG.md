@@ -8,6 +8,7 @@
 * Fixed bugs:
   * Options window been shown when there is no element selected. [reported by dankez, issue [#12](https://github.com/rsevero/mapiah/issues/12)]
   * Flatpak version not saving users language choice. [reported by Daniel Bean]
+  * Deleting a line segment of a line with only one line segment would throw.
 * Infrastructure maintenance:
   * Create issue template for bug reports.
   * Create issue template for feature requests.

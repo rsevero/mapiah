@@ -76,10 +76,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+    final LogicalKeyboardKey logicalKey = event.logicalKey;
 
     bool keyProcessed = false;
 
-    switch (event.logicalKey) {
+    switch (logicalKey) {
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
         if (!isCtrlPressed &&

@@ -479,7 +479,6 @@ mixin _$TH2FileEditSelectionController
   bool removeElementFromSelectedLogical(
     int elementMPID, {
     bool setState = false,
-    bool updateStatusBarMessage = true,
   }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(
@@ -490,7 +489,6 @@ mixin _$TH2FileEditSelectionController
       return super.removeElementFromSelectedLogical(
         elementMPID,
         setState: setState,
-        updateStatusBarMessage: updateStatusBarMessage,
       );
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
