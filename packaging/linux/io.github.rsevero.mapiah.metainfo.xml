@@ -57,6 +57,37 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.35" date="2026-02-13">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.35</url>
+      <description>
+        <p>0.2.35 - 2026-02-13 - The <em>Chiquita Bacana&#39;s daughter</em> release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]</li>
+          <li>Help dialogs closable by pressing Escape key.</li>
+          <li>Creating Flathub specific new release check.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Options window been shown when there is no element selected. [reported by dankez, issue <a href="https://github.com/rsevero/mapiah/issues/12">#12</a>]</li>
+          <li>Flatpak version not saving users language choice. [reported by Daniel Bean]</li>
+          <li>Deleting a line segment of a line with only one line segment would throw.</li>
+          <li>Element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Create issue template for bug reports.</li>
+          <li>Create issue template for feature requests.</li>
+          <li>Created internal settings storage with SharedPreferencesWithCache package.</li>
+          <li>Replace application id com.example.mapiah -&gt; io.github.rsevero.mapiah.</li>
+          <li>Flatpak metainfo file not receiving duplicated &lt;release&gt; tags for same version.</li>
+          <li>Migrating all settings from TOML to SharedPreferencesWithCache.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.34" date="2026-02-05">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.34</url>
       <description>

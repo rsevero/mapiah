@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.35 - not yet released
+## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:
   * Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]
   * Help dialogs closable by pressing Escape key.

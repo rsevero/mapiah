@@ -25,4 +25,5 @@ class THTestAux {
 }
 
 // Initialize shared prefs for tests on import to avoid per-test boilerplate.
+// ignore: unused_element
 final bool _thTestAuxInit = THTestAux.ensureTestEnvironment();
