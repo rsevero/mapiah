@@ -43,26 +43,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   TH2FileEditElementEditControllerBase(this._th2FileEditController)
     : _thFile = _th2FileEditController.thFile;
 
-  void initializeMostUsedTypes() {
-    final Iterable<THElement> elements = _thFile.elements.values;
-
-    for (final THElement element in elements) {
-      switch (element) {
-        case THArea _:
-          _setMostUsedAreaType(element.areaType.name);
-        case THLine _:
-          _setMostUsedLineType(element.lineType.name);
-        case THPoint _:
-          _setMostUsedPointType(element.pointType.name);
-        default:
-      }
-    }
-
-    setUsedAreaType(thDefaultAreaType.name);
-    setUsedLineType(thDefaultLineType.name);
-    setUsedPointType(thDefaultPointType.name);
-  }
-
   @readonly
   Offset? _lineStartScreenPosition;
 
@@ -113,6 +93,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Map<String, MPTypeUsed> _mostUsedLineTypes = {};
   final Map<String, MPTypeUsed> _mostUsedPointTypes = {};
 
+  final Set<THLineSegment> _addedLineSegmentsToIncludeInSeleclectedEndPoints =
+      {};
+
   bool _lastLinePointSmoothOption = false;
 
   List<String> get lastUsedAreaTypes => _lastUsedAreaTypes;
@@ -131,6 +114,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   List<String> get mostUsedPointTypes {
     return _getMostUsedTypes(_mostUsedPointTypes);
+  }
+
+  void initializeMostUsedTypes() {
+    final Iterable<THElement> elements = _thFile.elements.values;
+
+    for (final THElement element in elements) {
+      switch (element) {
+        case THArea _:
+          _setMostUsedAreaType(element.areaType.name);
+        case THLine _:
+          _setMostUsedLineType(element.lineType.name);
+        case THPoint _:
+          _setMostUsedPointType(element.pointType.name);
+        default:
+      }
+    }
+
+    setUsedAreaType(thDefaultAreaType.name);
+    setUsedLineType(thDefaultLineType.name);
+    setUsedPointType(thDefaultPointType.name);
   }
 
   List<String> _getMostUsedTypes(Map<String, MPTypeUsed> mostUsedTypesMap) {
@@ -376,6 +379,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       childPositionInParent: lineSegmentPositionInParent,
     );
     addOutdatedLineSegmentCloneMPID(newLineSegment.mpID);
+    addLineSegmentToIncludeInSelectedEndPoints(newLineSegment);
   }
 
   @action
@@ -1120,10 +1124,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
+  void clearAddedLineSegmentsToIncludeInSelectedEndPoints() {
+    _addedLineSegmentsToIncludeInSeleclectedEndPoints.clear();
+  }
+
+  void addLineSegmentToIncludeInSelectedEndPoints(THLineSegment lineSegment) {
+    _addedLineSegmentsToIncludeInSeleclectedEndPoints.add(lineSegment);
+  }
+
   @action
   void applyAddLineSegmentsBetweenSelectedLineSegments() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
     final Map<int, MPSelectedEndControlPoint> selectedEndControlPoints =
-        _th2FileEditController.selectionController.selectedEndControlPoints;
+        selectionController.selectedEndControlPoints;
+
+    clearAddedLineSegmentsToIncludeInSelectedEndPoints();
 
     if (selectedEndControlPoints.length < 2) {
       return;
@@ -1142,8 +1158,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.execute(addLineSegmentsCommand);
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
+    selectionController.addSelectedEndPoints(
+      _addedLineSegmentsToIncludeInSeleclectedEndPoints,
+    );
+    clearAddedLineSegmentsToIncludeInSelectedEndPoints();
+    selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }
 
