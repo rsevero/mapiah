@@ -133,18 +133,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    /// The slash character can be produced with keyboard combinations
-    /// (AltRght + Q) on one of my keyboards.
+    /// The slash character can be produced with keyboard combinations, for
+    /// example (AltRght + Q) on one of my keyboards.
     switch (event.character) {
       case '/':
-        if (!isCtrlPressed &&
-            !isMetaPressed &&
-            !isAltPressed &&
-            !isShiftPressed) {
-          elementEditController
-              .applyAddLineSegmentsBetweenSelectedLineSegments();
-          keyProcessed = true;
-        }
+        elementEditController.applyAddLineSegmentsBetweenSelectedLineSegments();
+        keyProcessed = true;
     }
 
     if (keyProcessed) {

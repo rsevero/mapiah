@@ -1132,10 +1132,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLine line = _thFile.lineByMPID(
       selectedEndControlPoints.values.first.originalLineSegmentClone.parentMPID,
     );
-    final MPCommand addLineSegmentsCommand = getAddLineSegmentsCommand(
+    final MPCommand? addLineSegmentsCommand = getAddLineSegmentsCommand(
       line: line,
       selectedEndControlPoints: selectedEndControlPoints.values,
     );
+
+    if (addLineSegmentsCommand == null) {
+      return;
+    }
 
     _th2FileEditController.execute(addLineSegmentsCommand);
     _th2FileEditController.selectionController
@@ -1143,7 +1147,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
-  MPCommand getAddLineSegmentsCommand({
+  MPCommand? getAddLineSegmentsCommand({
     required THLine line,
     required Iterable<MPSelectedEndControlPoint> selectedEndControlPoints,
   }) {
@@ -1226,14 +1230,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       previousLineSegmentPos = lineSegmentPos;
     }
 
+    if (addLineSegmentsCommands.isEmpty) {
+      return null;
+    }
+
     final MPCommand addLineSegmentsCommand =
-        (addLineSegmentsCommands.length == 1)
-        ? addLineSegmentsCommands.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: addLineSegmentsCommands.reversed.toList(),
-            completionType:
-                MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
-          );
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: addLineSegmentsCommands,
+          descriptionType: MPCommandDescriptionType.addLineSegment,
+          completionType:
+              MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+        );
 
     return addLineSegmentsCommand;
   }
