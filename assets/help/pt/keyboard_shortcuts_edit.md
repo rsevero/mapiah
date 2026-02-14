@@ -18,6 +18,7 @@
 | Ferramenta de seleção                                         | C                                    |
 | Forçar definição de opção em tipos não suportados             | Ctrl+clique na configuração da opção |
 | Inverter linha                                                | R                                    |
+| Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Refazer                                                       | Ctrl+Y                               |
 | Salvar arquivo                                                | Ctrl+S                               |
 | Salvar arquivo como                                           | Ctrl+Shift+S                         |

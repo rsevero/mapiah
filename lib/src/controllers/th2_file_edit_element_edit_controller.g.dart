@@ -864,6 +864,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleAllImagesVisibility() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleAllImagesVisibility',
+        );
+    try {
+      return super.toggleAllImagesVisibility();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleSelectedLinePointsSmoothOption() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

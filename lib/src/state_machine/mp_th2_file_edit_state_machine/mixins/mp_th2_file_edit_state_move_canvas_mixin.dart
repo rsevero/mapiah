@@ -71,15 +71,23 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyI:
-        if (!isShiftPressed && !isCtrlPressed && !isMetaPressed) {
-          if (isAltPressed) {
-            th2FileEditController.overlayWindowController.toggleOverlayWindow(
-              MPWindowType.changeImage,
-            );
-          } else {
-            th2FileEditController.elementEditController.addImage();
+        if (isCtrlPressed || isMetaPressed) {
+          if (!isAltPressed && !isShiftPressed) {
+            th2FileEditController.elementEditController
+                .toggleAllImagesVisibility();
+            keyProcessed = true;
           }
-          keyProcessed = true;
+        } else {
+          if (!isShiftPressed) {
+            if (isAltPressed) {
+              th2FileEditController.overlayWindowController.toggleOverlayWindow(
+                MPWindowType.changeImage,
+              );
+            } else {
+              th2FileEditController.elementEditController.addImage();
+            }
+            keyProcessed = true;
+          }
         }
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed &&

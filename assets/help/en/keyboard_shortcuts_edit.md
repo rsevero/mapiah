@@ -26,6 +26,7 @@
 | Simplify line - to Bézier curve line segments   | Ctrl+Alt+L                   |
 | Simplify line - to straight line segments       | Ctrl+Shift+L                 |
 | Smooth line point                               | S                            |
+| Toggle all images visibility                    | Ctrl+I                       |
 | Undo                                            | Ctrl+Z                       |
 | Zoom 1:1                                        | 1                            |
 | Zoom file                                       | 4                            |

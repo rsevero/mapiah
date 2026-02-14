@@ -121,7 +121,7 @@
 [X] - Disable web version.
 [X] - On zoom out/in, center the canvas on the selected elements if any.
 [X] - Verify if new lines (specially long bezier ones) are clickable right after being created.
-[ ] - Create shortcut to toggle all images visibility.
+[X] - Create shortcut to toggle all images visibility.
 [ ] - Bézier created from straight lines are too tight.
 [X] - BUG: After unseting an option, it is still shown as yellow (set).
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.

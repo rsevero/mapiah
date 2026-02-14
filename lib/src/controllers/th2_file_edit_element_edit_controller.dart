@@ -82,6 +82,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
 
+  bool _allImagesVisibility = true;
+
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
   late MPMoveControlPointSmoothInfo moveControlPointSmoothInfo;
@@ -1682,6 +1684,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void toggleAllImagesVisibility() {
+    final bool newVisibilitySetting = !getCurrentAllImagesVisibility();
+    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+
+    for (final THXTherionImageInsertConfig image in allImages) {
+      image.isVisible = newVisibilitySetting;
+    }
+
+    _allImagesVisibility = newVisibilitySetting;
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
+  @action
   void toggleSelectedLinePointsSmoothOption() {
     final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
         .selectionController
@@ -2143,6 +2158,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     MPLinePointInteractiveOrientationLSizeSettingMode value,
   ) {
     _linePointOrientationLSizeSettingMode = value;
+  }
+
+  bool getCurrentAllImagesVisibility() {
+    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+
+    bool? currentVisibility;
+
+    for (final THXTherionImageInsertConfig image in allImages) {
+      if (currentVisibility == null) {
+        currentVisibility = image.isVisible;
+      } else if (image.isVisible != currentVisibility) {
+        return _allImagesVisibility;
+      }
+    }
+
+    return currentVisibility ?? _allImagesVisibility;
   }
 }
 
