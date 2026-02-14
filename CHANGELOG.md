@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.36 - not yet released
+* New features:
+* Fixed bugs:
+  * Main README.md file stills mentioning the web version of Mapiah, which was removed in 0.2.31. [reported by CaverBruce at issue #13]
+* Infrastructure maintenance:
+
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:
   * Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]

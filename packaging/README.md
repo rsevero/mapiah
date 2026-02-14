@@ -39,12 +39,6 @@
       git push --set-upstream origin v0.2.22
       ```
    3. Create a Pull Request in the Flathub repo and get it merged.
-   4. Prepare _io.github.rsevero.mapiah_ repo for future release switching it back to main branch:
-      ```bash
-      git co main
-      git pull
-      git br -d v0.2.22
-      ```
 12. After the new release has been created in GitHub:
    1. update the release title to include the version number and the name of the release;
    2. update the release description including the changelog for the release.

@@ -18,7 +18,7 @@ Also create a thriving community of users and developers to make it as powerful 
 * On save, original file lines are only changed if an actual edit modified them, which facilitates version control management.
 * Uses Therion as the source of truth regarding supported features; i.e., if Therion supports it, Mapiah should support it as well.
   * As a secondary effect, tries to update and detail the Therion Book so it better reflects Therion features.
-* Equivalent versions for Linux, Windows, MacOS, and web.
+* Equivalent versions for Linux, MacOS and Windows.
 * Unlimited undo/redo.
 * Redos available after some undos and new actions merged in the undo queue.
 
@@ -53,11 +53,6 @@ Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
 As Mapiah has no Apple compatible signing yet its necessary to allow special permission to run Mapiah in MacOS: [Open Any Way](https://support.apple.com/en-us/102445#openanyway)
 
-### Web
-There is a web version available at  [https://mapiah.org/webapp](https://mapiah.org/webapp).
-
-[Officially supported browsers](https://docs.flutter.dev/platform-integration/web/faq#which-web-browsers-are-supported-by-flutter) for Flutter web apps.
-
 ### Windows
 Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
@@ -67,7 +62,7 @@ If you want to be extra sure, you can check Mapiah's setup exe file with some on
 
 ## Reporting bugs
 
-As is probably the case in all Free Software projects, the developers of Mapiah aim to produce completely bug-free software. And as happens in all software, they fail.
+As is probably the case in all Free Software projects, the developers of Mapiah aim to produce completely bug-free software. As it happens in all software, they fail.
 
 Please register bugs and enhancement suggestions as a [Mapiah Issue](https://github.com/rsevero/mapiah/issues).
 

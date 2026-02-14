@@ -71,7 +71,7 @@
 
         <p>Fixed bugs:</p>
         <ul>
-          <li>Options window been shown when there is no element selected. [reported by dankez, issue <a href="https://github.com/rsevero/mapiah/issues/12">#12</a>]</li>
+          <li>Options window been shown when there is no element selected. [reported by dankez, issue #12]</li>
           <li>Flatpak version not saving users language choice. [reported by Daniel Bean]</li>
           <li>Deleting a line segment of a line with only one line segment would throw.</li>
           <li>Element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]</li>
