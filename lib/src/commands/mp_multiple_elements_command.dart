@@ -13,12 +13,21 @@ class MPMultipleElementsCommand extends MPCommand {
     super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
     if (commandsList.length < 2) {
-      throw ArgumentError('commandsList must contain at least two commands.');
+      throw ArgumentError(
+        'commandsList must contain at least two commands at MPMultipleElementsCommand.forCWJM().',
+      );
     }
   }
 
   @override
   MPCommandType get type => MPCommandType.multipleElements;
+
+  @override
+  void _prePrepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+    for (final MPCommand command in commandsList) {
+      command._prePrepareUndoRedoInfo(th2FileEditController);
+    }
+  }
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
@@ -32,6 +41,13 @@ class MPMultipleElementsCommand extends MPCommand {
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.executeMPCommandList(commandsList, completionType);
+  }
+
+  @override
+  void _posCreateUndoRedoCommand(TH2FileEditController th2FileEditController) {
+    for (final MPCommand command in commandsList) {
+      command._posCreateUndoRedoCommand(th2FileEditController);
+    }
   }
 
   @override
