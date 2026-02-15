@@ -31,5 +31,5 @@ class THBaseException implements Exception {
   }
 
   @override
-  String toString() => '$message\nStackTrace: $stackTrace';
+  String toString() => message;
 }
