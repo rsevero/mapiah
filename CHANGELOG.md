@@ -9,6 +9,7 @@
   * Slash produced by keyboard combinations (for example, AltRght + Q) is not processed as a shortcut to add line segments between selected line segments.
   * When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of just doing nothing. [reported by Edvard]
   * Parsing scrap scales with 8 numbers but no unit failed. [reported by CaverBruce as issue [#15](https://github.com/rsevero/mapiah/issues/15)]
+  * Undo of Bézier curve line segment addition with keyboard shortcut '/' not working.
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.

@@ -55,11 +55,10 @@ class MPAddLineSegmentCommand extends MPCommand with MPPosCommandMixin {
     if (_existingLineSegmentMPID != null) {
       final THFile thFile = th2FileEditController.thFile;
       final THLine line = thFile.lineByMPID(newLineSegment.parentMPID);
-      final int existingLineSegmentIndex = line.childrenMPIDs.indexOf(
+
+      lineSegmentPositionInParent = line.childrenMPIDs.indexOf(
         _existingLineSegmentMPID,
       );
-
-      lineSegmentPositionInParent = existingLineSegmentIndex;
     }
 
     elementEditController.executeAddLineSegment(
@@ -72,12 +71,10 @@ class MPAddLineSegmentCommand extends MPCommand with MPPosCommandMixin {
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand =
-        MPCommandFactory.removeLineSegmentFromExisting(
-          toRemoveLineSegmentMPID: newLineSegment.mpID,
-          thFile: th2FileEditController.thFile,
-          descriptionType: descriptionType,
-        );
+    final MPCommand oppositeCommand = MPRemoveLineSegmentCommand(
+      lineSegmentMPID: newLineSegment.mpID,
+      preCommand: posCommand,
+    );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
