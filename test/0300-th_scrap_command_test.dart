@@ -323,6 +323,26 @@ scrap araras14 -projection [ elevation:alternative 273 grad ]
 endscrap
 ''',
       },
+      {
+        'file':
+            '2026-02-15-004-scrap_with_projection_value_in_brackets_extended.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap 5-SummitTomoElevEXT-s1 -projection extended -scale [ 0 0 787.4 787.4 0 0 \
+    10 10 m ]
+endscrap
+''',
+      },
+      {
+        'file': '2026-02-15-005-scrap_projection_bracket_plan.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap projection_bracket_plan -projection plan
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {

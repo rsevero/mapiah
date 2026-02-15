@@ -10,6 +10,7 @@
   * When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of just doing nothing. [reported by Edvard]
   * Parsing scrap scales with 8 numbers but no unit failed. [reported by CaverBruce as issue [#15](https://github.com/rsevero/mapiah/issues/15)]
   * Undo of Bézier curve line segment addition with keyboard shortcut '/' not working.
+  * Parsing scrap projection value in brackets failing. [reported by CaverBruce as issue [#14](https://github.com/rsevero/mapiah/issues/14)]
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.

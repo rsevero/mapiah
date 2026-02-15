@@ -16,7 +16,7 @@ class THBaseException implements Exception {
   }
 
   void _reportUnhandled() {
-    final reporter = _unhandledReporter;
+    final Function(Object, StackTrace)? reporter = _unhandledReporter;
 
     if (reporter == null || _isReporting) {
       return;

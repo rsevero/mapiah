@@ -768,7 +768,9 @@ class THFileParser {
   void _injectScrap(List<dynamic> element) {
     final int elementSize = element.length;
 
-    if (kDebugMode) assert(elementSize >= 2);
+    if (kDebugMode) {
+      assert(elementSize >= 2);
+    }
 
     final dynamic scrapIdSpec = element[1];
     final String scrapId = ((scrapIdSpec is List) && scrapIdSpec.isNotEmpty)
@@ -799,7 +801,6 @@ class THFileParser {
     _currentElement = newScrap;
     setCurrentParent(newScrap);
 
-    // _parsedOptions.clear();
     _optionFromElement(element[2], _scrapRegularOptions);
     _addChildParser(_scrapContentParser);
   }

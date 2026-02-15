@@ -1,0 +1,3 @@
+encoding utf-8
+scrap projection_bracket_plan -projection [ plan ]
+endscrap
