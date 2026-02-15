@@ -95,8 +95,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Map<String, MPTypeUsed> _mostUsedLineTypes = {};
   final Map<String, MPTypeUsed> _mostUsedPointTypes = {};
 
-  final Set<THLineSegment> _addedLineSegmentsToIncludeInSeleclectedEndPoints =
-      {};
+  final Set<THLineSegment> _addedLineSegmentsToIncludeInSelectedEndPoints = {};
 
   bool _lastLinePointSmoothOption = false;
 
@@ -1127,11 +1126,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void clearAddedLineSegmentsToIncludeInSelectedEndPoints() {
-    _addedLineSegmentsToIncludeInSeleclectedEndPoints.clear();
+    _addedLineSegmentsToIncludeInSelectedEndPoints.clear();
   }
 
   void addLineSegmentToIncludeInSelectedEndPoints(THLineSegment lineSegment) {
-    _addedLineSegmentsToIncludeInSeleclectedEndPoints.add(lineSegment);
+    _addedLineSegmentsToIncludeInSelectedEndPoints.add(lineSegment);
   }
 
   @action
@@ -1161,7 +1160,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _th2FileEditController.execute(addLineSegmentsCommand);
     selectionController.addSelectedEndPoints(
-      _addedLineSegmentsToIncludeInSeleclectedEndPoints,
+      _addedLineSegmentsToIncludeInSelectedEndPoints,
     );
     clearAddedLineSegmentsToIncludeInSelectedEndPoints();
     selectionController.updateSelectableEndAndControlPoints();
@@ -1173,8 +1172,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required Iterable<MPSelectedEndControlPoint> selectedEndControlPoints,
   }) {
     final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(_thFile);
-    final SplayTreeMap<int, THLineSegment> selectedLineSegmentsPosMap =
-        SplayTreeMap();
+    final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
     final List<MPCommand> addLineSegmentsCommands = [];
 
     for (final MPSelectedEndControlPoint endControlPoint
@@ -1187,7 +1185,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final Iterable<int> selectedLineSegmentsPos =
-        selectedLineSegmentsPosMap.keys;
+        selectedLineSegmentsPosMap.keys.toList()..sort();
 
     int? previousLineSegmentPos;
 
@@ -1196,9 +1194,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           (lineSegmentPos == previousLineSegmentPos + 1)) {
         final THLineSegment lineSegment =
             selectedLineSegmentsPosMap[lineSegmentPos]!;
-        final int lineSegmentPositionInParent = line.getChildPosition(
-          lineSegment,
-        );
         final THLineSegment previousLineSegment =
             selectedLineSegmentsPosMap[previousLineSegmentPos]!;
 
@@ -1213,18 +1208,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
 
           addLineSegmentsCommands.add(
-            MPAddLineSegmentCommand(
+            MPAddLineSegmentCommand.atExistingLineSegmentPosition(
               newLineSegment: newLineSegment,
-              lineSegmentPositionInParent: lineSegmentPositionInParent,
+              existingLineSegmentMPID: lineSegment.mpID,
               posCommand: null,
             ),
           );
         } else {
-          final newLineSegments = MPNumericAux.splitBezierCurveAtPart(
-            startPoint: previousLineSegment.endPoint.coordinates,
-            lineSegment: lineSegment as THBezierCurveLineSegment,
-            part: mpHalfBezierArcPart,
-          );
+          final List<THBezierCurveLineSegment> newLineSegments =
+              MPNumericAux.splitBezierCurveAtPart(
+                startPoint: previousLineSegment.endPoint.coordinates,
+                lineSegment: lineSegment as THBezierCurveLineSegment,
+                part: mpHalfBezierArcPart,
+              );
 
           if (newLineSegments.length != 2) {
             throw Exception(
@@ -1233,9 +1229,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           }
 
           addLineSegmentsCommands.add(
-            MPAddLineSegmentCommand(
+            MPAddLineSegmentCommand.atExistingLineSegmentPosition(
               newLineSegment: newLineSegments[0],
-              lineSegmentPositionInParent: lineSegmentPositionInParent,
+              existingLineSegmentMPID: lineSegment.mpID,
               posCommand: null,
             ),
           );

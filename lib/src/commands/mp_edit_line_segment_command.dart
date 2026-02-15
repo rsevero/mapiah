@@ -8,8 +8,6 @@ class MPEditLineSegmentCommand extends MPCommand {
   static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.editLineSegment;
 
-
-
   MPEditLineSegmentCommand.forCWJM({
     required this.originalLineSegment,
     required this.newLineSegment,
@@ -27,14 +25,13 @@ class MPEditLineSegmentCommand extends MPCommand {
   @override
   MPCommandType get type => MPCommandType.editLineSegment;
 
-
-
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController.substituteElement(
       newLineSegment,
     );
     th2FileEditController.triggerNewLineRedraw();
+    th2FileEditController.triggerEditLineRedraw();
   }
 
   @override

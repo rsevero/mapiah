@@ -92,7 +92,9 @@ endscrap
           try {
             final parser = THFileParser();
             final writer = THFileWriter();
+
             mpLocator.mpGeneralController.reset();
+
             final String path = THTestAux.testPath(success['file']! as String);
             final (parsedFile, isSuccessful, errors) = await parser.parse(
               path,
@@ -127,19 +129,23 @@ endscrap
               selectedEndControlPoints.add(
                 MPSelectedEndControlPoint(
                   originalLineSegment: lineSegment,
-                  type: MPEndControlPointType.endPointStraight,
+                  type: lineSegment is THStraightLineSegment
+                      ? MPEndControlPointType.endPointStraight
+                      : MPEndControlPointType.endPointBezierCurve,
                 ),
               );
             }
 
-            final MPCommand addLineSegmentsCommand = controller
+            final MPCommand? addLineSegmentsCommand = controller
                 .elementEditController
                 .getAddLineSegmentsCommand(
                   line: line,
                   selectedEndControlPoints: selectedEndControlPoints,
                 );
 
-            controller.execute(addLineSegmentsCommand);
+            expect(addLineSegmentsCommand, isNotNull);
+
+            controller.execute(addLineSegmentsCommand!);
 
             final String asFileChanged = writer.serialize(controller.thFile);
 
