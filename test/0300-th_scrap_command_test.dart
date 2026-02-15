@@ -379,13 +379,26 @@ scrap poco_surubim_SCP01 -scale [ 231.27 m ]
 endscrap
 ''',
       },
+
+      {
+        'file': '2026-02-15-001-scrap_scale_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8
+scrap DELETE-ME-survey-legs-p -projection plan -scale [ 0 0 500 1000 0 0 150 300 \\
+    m ]
+endscrap
+''',
+      },
     ];
 
     for (var success in successes) {
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -417,7 +430,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -449,7 +464,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -481,7 +498,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -513,7 +532,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -601,7 +622,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -633,7 +656,9 @@ endscrap
       test(success, () async {
         final parser = THFileParser();
         final writer = THFileWriter();
+
         mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -658,7 +683,9 @@ endscrap
     for (var failure in failures) {
       test(failure, () async {
         final parser = THFileParser();
+
         mpLocator.mpGeneralController.reset();
+
         final (_, isSuccessful, error) = await parser.parse(
           THTestAux.testPath(failure),
         );

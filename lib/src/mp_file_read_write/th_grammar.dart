@@ -473,8 +473,6 @@ class THGrammar extends GrammarDefinition {
       number().trim().map((value) => [value]) |
       bracketStringTemplate(scrapScaleNumber()).trim();
   Parser scrapScaleNumber() =>
-      (number().trim() & lengthUnit()) |
-      (number().trim() & number().trim() & lengthUnit()) |
       (number().trim() &
           number().trim() &
           number().trim() &
@@ -483,7 +481,9 @@ class THGrammar extends GrammarDefinition {
           number().trim() &
           number().trim() &
           number().trim() &
-          lengthUnit().optional());
+          lengthUnit().optional()) |
+      (number().trim() & number().trim() & lengthUnit()) |
+      (number().trim() & lengthUnit().optional());
 
   /// scrap -sketch
   Parser sketchOption() => stringIgnoreCase('sketch') & sketchSpec();

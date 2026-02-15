@@ -2425,6 +2425,10 @@ class THFileParser {
     );
 
     for (final value in _currentSpec) {
+      if (value == null) {
+        continue;
+      }
+
       final double? newDouble = double.tryParse(value);
 
       if (newDouble == null) {
