@@ -4,7 +4,9 @@ mixin MPPreCommandMixin on MPCommand {
   late final MPCommand? preCommand;
 
   @override
-  void _prePrepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  void _execPrePrepareUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     preCommand?.execute(th2FileEditController);
   }
 }

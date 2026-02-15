@@ -12,6 +12,7 @@
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.
+  * Renaming _execPrePrepareUndoRedoInfo and _execPreCreateUndoRedoCommand at MPCommand.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:
