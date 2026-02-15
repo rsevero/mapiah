@@ -11,6 +11,7 @@
   * Parsing scrap scales with 8 numbers but no unit failed. [reported by CaverBruce as issue [#15](https://github.com/rsevero/mapiah/issues/15)]
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
+  * Custom exceptions should provide trace.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

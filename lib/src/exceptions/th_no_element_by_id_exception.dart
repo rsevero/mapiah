@@ -1,12 +1,8 @@
-class THNoElementByIDException implements Exception {
-  String id;
-  String elementType;
-  String filename;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THNoElementByIDException(this.elementType, this.id, this.filename);
-
-  @override
-  toString() {
-    return "No element of type '$elementType' with ID '$id' in file '$filename'";
-  }
+class THNoElementByIDException extends THBaseException {
+  THNoElementByIDException(String elementType, String id, String filename)
+    : super(
+        "No element of type '$elementType' with ID '$id' in file '$filename'",
+      );
 }

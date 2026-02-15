@@ -1,11 +1,6 @@
-class THNoElementByMPIDException implements Exception {
-  String filename;
-  int index;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THNoElementByMPIDException(this.filename, this.index);
-
-  @override
-  String toString() {
-    return "No element with index '$index' in file '$filename'.";
-  }
+class THNoElementByMPIDException extends THBaseException {
+  THNoElementByMPIDException(String filename, int index)
+    : super("No element with index '$index' in file '$filename'.");
 }
