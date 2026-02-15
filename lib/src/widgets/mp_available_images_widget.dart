@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -73,9 +71,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                         if (images.isNotEmpty)
                           ...images.map((image) {
                             final bool isVisible = image.isVisible;
-                            final bool isLoaded = image.isLoaded(
-                              th2FileEditController,
-                            );
                             final String name = p.basename(image.filename);
 
                             return Row(
@@ -98,18 +93,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                   ),
                                 ),
                                 Expanded(child: Text(name)),
-                                if (kIsWeb)
-                                  IconButton(
-                                    onPressed: () => _pickFile(image),
-                                    icon: Icon(
-                                      isLoaded
-                                          ? Icons.cloud_done_rounded
-                                          : Icons.cloud_upload_outlined,
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                    tooltip: appLocalizations
-                                        .th2FileEditPageLoadImageButton,
-                                  ),
                                 IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,
@@ -140,36 +123,6 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
         ),
       ],
     );
-  }
-
-  Future<void> _pickFile(THXTherionImageInsertConfig image) async {
-    String extension = p.extension(image.filename).toLowerCase();
-
-    if (extension.startsWith('.')) {
-      extension = extension.substring(1);
-    }
-
-    final List<String>? allowedExtensions = extension.isEmpty
-        ? null
-        : [extension];
-    final BuildContext buildContext = context;
-    final PickImageFileReturn imageResult = await MPDialogAux.pickImageFile(
-      buildContext,
-      allowedExtensions: allowedExtensions,
-    );
-
-    switch (imageResult.type) {
-      case PickImageFileReturnType.empty:
-        return;
-      case PickImageFileReturnType.rasterImage:
-        print("DEBUG: Setting raster image");
-        image.setRasterImage(imageResult.image!);
-      case PickImageFileReturnType.xviFile:
-        print("DEBUG: Setting XVI file");
-        image.setXVIFile(imageResult.xviFile!);
-    }
-
-    th2FileEditController.triggerImagesRedraw();
   }
 
   void _imageVisibilityChanged(int imageMPID, bool newVisibility) {

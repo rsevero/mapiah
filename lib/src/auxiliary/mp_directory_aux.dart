@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -50,9 +49,7 @@ class MPDirectoryAux {
   }
 
   static String getDefaultLineEnding() {
-    if (kIsWeb) {
-      return '\n'; // Web standard
-    } else if (Platform.isWindows) {
+    if (Platform.isWindows) {
       return '\r\n';
     } else {
       return '\n'; // Linux and macOS

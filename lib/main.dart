@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_context_menu_suppression.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
@@ -62,9 +60,6 @@ void main(List<String> arguments) {
 
       // /// For layout debugging.
       // debugPaintSizeEnabled = true;
-      if (kIsWeb) {
-        suppressContextMenu();
-      }
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);

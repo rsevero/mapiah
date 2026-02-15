@@ -48,17 +48,16 @@ class _MapiahHomeState extends State<MapiahHome> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    if (!kIsWeb) {
-      try {
-        setWindowTitle(appLocalizations.appTitle);
-      } on MissingPluginException {
-        // In widget tests, desktop plugins (like window_size) may not be
-        // registered. Ignore the missing plugin so tests can run headless.
-      } on PlatformException {
-        // Also ignore other platform exceptions in non-desktop environments
-        // during tests.
-      }
+    try {
+      setWindowTitle(appLocalizations.appTitle);
+    } on MissingPluginException {
+      // In widget tests, desktop plugins (like window_size) may not be
+      // registered. Ignore the missing plugin so tests can run headless.
+    } on PlatformException {
+      // Also ignore other platform exceptions in non-desktop environments
+      // during tests.
     }
+
     initializeMPCommandLocalizations(context);
 
     final Scaffold scaffold = Scaffold(
@@ -66,20 +65,6 @@ class _MapiahHomeState extends State<MapiahHome> {
         elevation: 4,
         title: Text(appLocalizations.appTitle),
         actions: <Widget>[
-          if (kIsWeb)
-            Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: Center(
-                child: Text(
-                  kIsWasm ? 'WASM web version' : 'Javascript web version',
-                  style: TextStyle(
-                    color: colorScheme.onSecondaryContainer,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
           IconButton(
             key: ValueKey('MapiahHomeNewFileButton'),
             icon: Icon(Icons.insert_drive_file_outlined),

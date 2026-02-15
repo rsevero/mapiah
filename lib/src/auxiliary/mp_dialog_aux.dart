@@ -105,18 +105,14 @@ class MPDialogAux {
       }
 
       final PlatformFile picked = result.files.single;
-      final String filename = kIsWeb
-          ? picked.name
-          : (picked.path ?? picked.name);
+      final String filename = picked.path ?? picked.name;
       final String lowerName = filename.toLowerCase();
 
       Uint8List? bytes = picked.bytes;
       String? pickedPath = picked.path;
 
-      if (!kIsWeb) {
-        if ((bytes == null) && (pickedPath != null)) {
-          bytes = await File(pickedPath).readAsBytes();
-        }
+      if ((bytes == null) && (pickedPath != null)) {
+        bytes = await File(pickedPath).readAsBytes();
       }
 
       if (pickedPath != null) {
@@ -743,44 +739,23 @@ class MPDialogAux {
       if (result != null) {
         String? pickedFilePath = result.files.single.path;
 
-        if (kIsWeb) {
-          // On web, we can't use file paths or File IO. Use bytes and filename.
-          final Uint8List? fileBytes = result.files.single.bytes;
-          final String filename = result.files.single.name;
-
-          if (fileBytes == null) {
-            return;
-          }
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$filename"),
-                filename: filename,
-                fileBytes: fileBytes,
-              ),
-            ),
-          );
-        } else {
-          if (pickedFilePath == null) {
-            return;
-          }
-
-          mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-            pickedFilePath,
-          );
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$pickedFilePath"),
-                filename: pickedFilePath,
-              ),
-            ),
-          );
+        if (pickedFilePath == null) {
+          return;
         }
+
+        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+          pickedFilePath,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TH2FileEditPage(
+              key: ValueKey("TH2FileEditPage|$pickedFilePath"),
+              filename: pickedFilePath,
+            ),
+          ),
+        );
       } else {
         mpLocator.mpLog.i('No file selected.');
       }

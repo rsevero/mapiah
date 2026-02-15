@@ -105,15 +105,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         tooltip: appLocalizations.th2FileEditPageSave,
                       ),
                     ),
-                    if (!kIsWeb)
-                      IconButton(
-                        icon: Icon(
-                          Icons.save_as_outlined,
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                        onPressed: () => th2FileEditController.saveAsTH2File(),
-                        tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    IconButton(
+                      icon: Icon(
+                        Icons.save_as_outlined,
+                        color: colorScheme.onSecondaryContainer,
                       ),
+                      onPressed: () => th2FileEditController.saveAsTH2File(),
+                      tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    ),
                   ],
                   MPHelpButtonWidget(
                     context,

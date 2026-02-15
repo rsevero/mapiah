@@ -162,11 +162,6 @@ class MPGeneralController {
   }
 
   Future<void> updateAvailableEncodingsList() async {
-    if (kIsWeb ||
-        (!Platform.isWindows && !Platform.isLinux && !Platform.isMacOS)) {
-      return;
-    }
-
     try {
       final String exe = Platform.isWindows ? 'therion.exe' : 'therion';
       final ProcessResult result = await Process.run(exe, const [

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_web_file_saver.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
@@ -291,7 +290,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
-  bool get enableSaveButton => (_hasUndo && !_thFile.isNewFile) || kIsWeb;
+  bool get enableSaveButton => _hasUndo && !_thFile.isNewFile;
 
   @readonly
   String _statusBarMessage = '';
@@ -1198,13 +1197,9 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void saveTH2File() {
-    if (kIsWeb) {
-      saveFileWeb(_encodedFileContents(), _thFile.filename);
-    } else {
-      final File file = _localFile();
+    final File file = _localFile();
 
-      _actualSave(file);
-    }
+    _actualSave(file);
 
     _thFile.isNewFile = false;
 

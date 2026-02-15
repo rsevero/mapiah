@@ -134,7 +134,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
       case LogicalKeyboardKey.keyS:
         if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
           if (th2FileEditController.enableSaveButton) {
-            if (isShiftPressed && !kIsWeb) {
+            if (isShiftPressed) {
               th2FileEditController.saveAsTH2File();
             } else {
               th2FileEditController.saveTH2File();
