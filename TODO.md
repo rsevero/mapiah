@@ -172,7 +172,6 @@
 [ ] - Show points, lines and areas using therion symbology [requested by Marco Corvi]
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
-[ ] - Open file dialog on web should only show accepted file extensions. [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...).
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.

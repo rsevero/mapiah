@@ -11,7 +11,6 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Opções do elemento](#opções-do-elemento)
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
-  - [Versões web](#versões-web)
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
@@ -87,9 +86,6 @@ O Mapiah preserva o máximo possível a formatação original do arquivo ao salv
 * Áreas sem referências de borda são removidas.
 * Opções de linha definidas na área [LINE DATA] são movidas para a definição da linha. Não confundir com opções de ponto de linha, que são definidas na área [LINE DATA] e são preservadas lá.
 * Opções de subtipo definidas antes do primeiro ponto de linha ou no primeiro ponto são transformadas em subtipo da linha.
-
-### Versões web
-Salvar em versões web é, na prática, uma solicitação de download. Caso seu navegador esteja configurado para baixar automaticamente para uma pasta padrão, verifique lá o arquivo atualizado após salvar.
 
 ## Simplificar linhas
 Curvas Bézier e segmentos de linha reta são simplificados de forma diferente. Para simplificar linhas, selecione-as primeiro. É possível ter outros tipos de elementos selecionados (pontos ou áreas) durante a simplificação; eles não serão alterados pelo processo.

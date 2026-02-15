@@ -1,7 +1,7 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
-import 'package:mapiah/src/auxiliary/mp_nextafter.dart';
 import 'package:mapiah/src/auxiliary/mp_segment.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -1019,4 +1019,121 @@ class MPNumericAux {
       bottom: maxY,
     );
   }
+
+  static double nextUpReal(double x) {
+    if ((x.isNaN) || (x == double.infinity)) {
+      return x;
+    }
+
+    if (x == double.negativeInfinity) {
+      return -double.maxFinite;
+    }
+
+    if ((x == 0.0) || (x == -0.0)) {
+      return double.minPositive;
+    }
+
+    if (x == -double.minPositive) {
+      return 0.0;
+    }
+
+    // final int bits = _doubleToBits(x);
+    // final int next = x > 0 ? bits + 1 : bits - 1;
+
+    // return _bitsToDouble(next);
+
+    return x + ulp(x);
+  }
+
+  static double nextDownReal(double x) {
+    if ((x.isNaN) || (x == double.negativeInfinity)) {
+      return x;
+    }
+
+    if (x == double.infinity) {
+      return double.maxFinite;
+    }
+
+    if ((x == 0.0) || (x == -0.0)) {
+      return -double.minPositive;
+    }
+
+    if (x == double.minPositive) {
+      return 0.0;
+    }
+
+    // final int bits = _doubleToBits(x);
+    // final int next = x > 0 ? bits - 1 : bits + 1;
+
+    // return _bitsToDouble(next);
+
+    return x - ulp(x);
+  }
+
+  static int _doubleToBits(double value) {
+    final ByteData b = ByteData(8);
+
+    b.setFloat64(0, value, Endian.big);
+
+    return b.getUint64(0, Endian.big);
+  }
+
+  static double _bitsToDouble(int bits) {
+    final ByteData b = ByteData(8);
+
+    b.setUint64(0, bits, Endian.big);
+
+    return b.getFloat64(0, Endian.big);
+  }
+
+  static double ulp(double d) {
+    final int exp = _getExponent(d);
+
+    // NaN or infinity
+    if (exp == _doubleMaxExponent + 1) {
+      return d.abs();
+    }
+
+    // zero or subnormal
+    if (exp == _doubleMinExponent - 1) {
+      return double.minPositive;
+    }
+
+    // normal numbers
+    int e = exp - (_doubleSignificandWidth - 1);
+
+    if (e >= _doubleMinExponent) {
+      // 2^(e)
+      return _powerOfTwo(e);
+    } else {
+      // subnormal result: shift the min subnormal left
+      final int shift =
+          e - (_doubleMinExponent - (_doubleSignificandWidth - 1));
+
+      return _bitsToDouble(1 << shift);
+    }
+  }
+
+  static const int _doubleSignificandWidth = 53; // includes implicit leading 1
+  static const int _doubleExponentBias = 1023;
+  static const int _doubleMaxExponent =
+      1023; // unbiased max exponent for normal doubles
+  static const int _doubleMinExponent =
+      -1022; // unbiased min exponent for normal doubles
+
+  static int _getExponent(double d) {
+    final int bits = _doubleToBits(d);
+    final int rawExp = (bits >> 52) & 0x7ff;
+
+    if (rawExp == 0x7ff) {
+      return _doubleMaxExponent + 1;
+    } // NaN or infinity
+    if (rawExp == 0) {
+      return _doubleMinExponent - 1;
+    } // zero or subnormal
+
+    return rawExp - _doubleExponentBias; // unbiased exponent
+  }
+
+  static double _powerOfTwo(int exp) => math.pow(2.0, exp).toDouble();
 }

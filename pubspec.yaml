@@ -34,7 +34,6 @@ dependencies:
   petitparser: ^7.0.1
   shared_preferences: ^2.5.4
   url_launcher: ^6.3.1
-  web: ^1.1.1
   window_size: ^0.1.0
 
 dev_dependencies:
