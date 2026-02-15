@@ -347,12 +347,6 @@ endscrap
   group('scrap -scale', () {
     const successes = [
       {
-        'file': 'th_file_parser-00012-encoding_with_trailing_comment.th2',
-        'length': 1,
-        'encoding': 'UTF-8',
-        'asFile': 'encoding UTF-8 # end of line comment\n',
-      },
-      {
         'file': 'th_file_parser-00061-scrap_and_endscrap.th2',
         'length': 2,
         'encoding': 'UTF-8',
@@ -379,14 +373,31 @@ scrap poco_surubim_SCP01 -scale [ 231.27 m ]
 endscrap
 ''',
       },
-
       {
-        'file': '2026-02-15-001-scrap_scale_option.th2',
+        'file': '2026-02-15-001-scrap_scale_option_8_numbers_without_unit.th2',
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
 scrap DELETE-ME-survey-legs-p -projection plan -scale [ 0 0 500 1000 0 0 150 300 \\
     m ]
+endscrap
+''',
+      },
+      {
+        'file': '2026-02-15-002-scrap_scale_option_1_number_without_unit.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8
+scrap DELETE-ME-survey-legs-p -projection plan -scale [ 1000 m ]
+endscrap
+''',
+      },
+      {
+        'file': '2026-02-15-003-scrap_scale_option_1_number_with_unit.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': '''encoding UTF-8
+scrap DELETE-ME-survey-legs-p -projection plan -scale [ 1000 ft ]
 endscrap
 ''',
       },
