@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 
@@ -58,24 +59,37 @@ void main(List<String> arguments) {
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
 
+      THBaseException.registerUnhandledReporter((error, stack) {
+        MPDialogAux.showUnhandledErrorDialog(error, stack);
+      });
+
       // /// For layout debugging.
       // debugPaintSizeEnabled = true;
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
-        MPDialogAux.showUnhandledErrorDialog(details.exception, details.stack);
+        if (details.exception is! THBaseException) {
+          MPDialogAux.showUnhandledErrorDialog(
+            details.exception,
+            details.stack,
+          );
+        }
       };
 
       ui.PlatformDispatcher.instance.onError =
           (Object error, StackTrace stack) {
-            MPDialogAux.showUnhandledErrorDialog(error, stack);
+            if (error is! THBaseException) {
+              MPDialogAux.showUnhandledErrorDialog(error, stack);
+            }
             return true;
           };
 
       runApp(MapiahApp(fileToRead: fileToRead));
     },
     (Object error, StackTrace stack) {
-      MPDialogAux.showUnhandledErrorDialog(error, stack);
+      if (error is! THBaseException) {
+        MPDialogAux.showUnhandledErrorDialog(error, stack);
+      }
     },
   );
 }
