@@ -1770,7 +1770,7 @@ abstract class AppLocalizations {
   /// The status bar message when editing a line point showing its orientation and length
   ///
   /// In en, this message translates to:
-  /// **'Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}'**
+  /// **'Orientation {orientation}°{forcedOrientation}, LSize {lsize}{forcedLSize}'**
   String mpStatusBarMessageEditLinePointOrientationLSize(
     Object orientation,
     Object forcedOrientation,

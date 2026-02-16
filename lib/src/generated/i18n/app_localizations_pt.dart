@@ -922,7 +922,7 @@ class AppLocalizationsPt extends AppLocalizations {
     Object lsize,
     Object forcedLSize,
   ) {
-    return 'Orientação: $orientation°$forcedOrientation, tamanho: $lsize$forcedLSize';
+    return 'Orientação: $orientation°$forcedOrientation, Tamanho: $lsize$forcedLSize';
   }
 
   @override

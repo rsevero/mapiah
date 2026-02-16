@@ -25,6 +25,7 @@
   * Created TH2FileEditElementEditController.optionTypeBeingEdited.
   * Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.
   * Created 3500-ui_change_line_type_test.
+  * Separating THLSizeOrientationPainter from THLinePainter.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

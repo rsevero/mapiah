@@ -935,13 +935,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void setLinePointLSizeValue(double? lsize) {
+  void setLinePointLSizeValue(double? lSize) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.setLinePointLSizeValue',
         );
     try {
-      return super.setLinePointLSizeValue(lsize);
+      return super.setLinePointLSizeValue(lSize);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

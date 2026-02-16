@@ -552,7 +552,7 @@ class THLine extends THElement
   }
 
   Map<int, MPLineSegmentSizeOrientationInfo>
-  get lineSegmentsWithSizeOrientation {
+  get lineSegmentsWithLSizeOrientation {
     _lineSegmentsWithSizeOrientation ??=
         _generateLineSegmentsWithSizeOrientation();
 

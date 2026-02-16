@@ -913,7 +913,7 @@ class AppLocalizationsEn extends AppLocalizations {
     Object lsize,
     Object forcedLSize,
   ) {
-    return 'Orientation $orientation°$forcedOrientation, lsize $lsize$forcedLSize';
+    return 'Orientation $orientation°$forcedOrientation, LSize $lsize$forcedLSize';
   }
 
   @override

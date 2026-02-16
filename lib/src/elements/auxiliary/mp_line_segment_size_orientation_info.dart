@@ -6,7 +6,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 class MPLineSegmentSizeOrientationInfo {
   final int mpID;
   final Offset canvasPosition;
-  late final double size;
+  late final double lSize;
   late final double orientation;
 
   MPLineSegmentSizeOrientationInfo({
@@ -16,7 +16,7 @@ class MPLineSegmentSizeOrientationInfo {
     required double? orientation,
     required THFile thFile,
   }) {
-    this.size = (size == null) ? mpSlopeLinePointDefaultLSize : size;
+    lSize = (size == null) ? mpSlopeLinePointDefaultLSize : size;
 
     if (orientation == null) {
       final Offset tangent = MPNumericAux.segmentTangent(mpID, thFile);

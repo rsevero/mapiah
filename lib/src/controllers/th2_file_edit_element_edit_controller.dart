@@ -2140,8 +2140,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void setLinePointLSizeValue(double? lsize) {
-    _linePointLSize = lsize;
+  void setLinePointLSizeValue(double? lSize) {
+    _linePointLSize = lSize;
   }
 
   void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {

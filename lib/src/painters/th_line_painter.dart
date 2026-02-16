@@ -8,8 +8,6 @@ import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
-import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
-import 'package:mapiah/src/painters/mp_compass_painter.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
@@ -103,38 +101,6 @@ class THLinePainter extends CustomPainter {
           (i == lineSegmentsCount)) {
         points.add(Offset(lineSegment.x, lineSegment.y));
         distances.add(path.computeMetrics().first.length);
-      }
-    }
-
-    if (lineInfo.showSizeOrientationOnLineSegments &&
-        lineInfo.lineSegmentsWithSizeOrientation.isNotEmpty) {
-      for (final entry in lineInfo.lineSegmentsWithSizeOrientation.entries) {
-        final MPLineSegmentSizeOrientationInfo sizeOrientationInfo =
-            entry.value;
-        final double markerScreenSize = sizeOrientationInfo.size;
-        final double markerCanvasSize = th2FileEditController
-            .scaleScreenToCanvas(markerScreenSize);
-        final double azimuth = sizeOrientationInfo.orientation;
-
-        // Keep the same proportion used by the azimuth picker (markerSize ~ 1/8 of diameter).
-        final double compassDiameter = markerCanvasSize * 8.0;
-        final MPCompassPainter compassPainter = MPCompassPainter(
-          azimuth: azimuth,
-          arrowLength: markerCanvasSize,
-          drawBackgroundLines: false,
-          th2FileEditController: th2FileEditController,
-        );
-
-        canvas.save();
-
-        final double translation = compassDiameter / 2.0;
-
-        canvas.translate(
-          sizeOrientationInfo.canvasPosition.dx - translation,
-          sizeOrientationInfo.canvasPosition.dy - translation,
-        );
-        compassPainter.paint(canvas, Size(compassDiameter, compassDiameter));
-        canvas.restore();
       }
     }
 

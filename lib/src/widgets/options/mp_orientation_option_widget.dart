@@ -168,6 +168,10 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_isSingleLineSegment) {
+      return SizedBox.shrink();
+    }
+
     final String title = appLocalizations.thCommandOptionOrientation;
     final String azimuthLabel = appLocalizations.mpAzimuthAzimuthLabel;
 

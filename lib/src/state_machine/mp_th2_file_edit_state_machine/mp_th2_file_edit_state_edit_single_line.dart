@@ -248,6 +248,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     } else if (_isLSizeOrientationEdit) {
       _setOrientationLSizeFromLocalPosition(event.localPosition);
 
+      _valuesSetByUser = true;
+
       return;
     }
 
@@ -481,6 +483,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (_isLSizeOrientationEdit) {
       _setOrientationLSizeFromLocalPosition(event.localPosition);
 
+      _valuesSetByUser = true;
+
       return;
     }
 
@@ -605,6 +609,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     }
 
     elementEditController.applySetLinePointOrientationLSize();
+
+    _valuesSetByUser = false;
   }
 
   void _setOrientationLSizeFromLocalPosition(Offset clickScreenCoordinates) {
@@ -641,11 +647,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     final double distanceFromCenter = math.sqrt(
       (deltaX * deltaX) + (deltaY * deltaY),
     );
-    final double lsize = distanceFromCenter * mpLSizeCanvasSizeFactor;
+    final double lSize = distanceFromCenter * mpLSizeCanvasSizeFactor;
 
-    elementEditController.setLinePointLSizeValue(lsize);
-
-    _valuesSetByUser = true;
+    elementEditController.setLinePointLSizeValue(lSize);
 
     setStatusBarMessage();
   }

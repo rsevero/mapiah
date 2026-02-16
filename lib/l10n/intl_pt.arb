@@ -276,7 +276,7 @@
   "mpStationsNameEmpty": "Nome vazio",
   "mpStationsNameLabel": "Base",
   "mpStationTypeOptionWarning": "Base não definida",
-  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientação: {orientation}°{forcedOrientation}, tamanho: {lsize}{forcedLSize}",
+  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientação: {orientation}°{forcedOrientation}, Tamanho: {lsize}{forcedLSize}",
   "mpStatusBarMessageEditLinePointOrientationLSizeForced": " (forçado)",
   "mpStatusBarMessageSingleSelectedAreaAreaBordersList": " - {areaBordersCount} borda(s): {areaBordersList}",
   "mpStatusBarMessageSingleSelectedAreaNoAreaBorders": "sem bordas definidas",

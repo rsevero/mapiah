@@ -1414,7 +1414,7 @@
     "description": "The warning message for the station type option",
     "type": "text"
   },
-  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}",
+  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientation {orientation}°{forcedOrientation}, LSize {lsize}{forcedLSize}",
   "@mpStatusBarMessageEditLinePointOrientationLSize": {
     "description": "The status bar message when editing a line point showing its orientation and length",
     "type": "text",
