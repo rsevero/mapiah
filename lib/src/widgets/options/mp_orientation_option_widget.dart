@@ -55,8 +55,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
 
     th2FileEditController = widget.th2FileEditController;
 
-    /// Temporarily disable interactive orientation/lsize setting for single
-    /// line segments until complete UI is implemented.
     _isSingleLineSegment =
         (th2FileEditController.optionEditController.currentOptionElementsType ==
             MPOptionElementType.lineSegment) &&

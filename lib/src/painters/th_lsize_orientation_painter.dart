@@ -25,7 +25,6 @@ class THLSizeOrientationPainter extends CustomPainter {
       azimuth: azimuth,
       arrowLength: markerCanvasSize,
       drawBackgroundLines: false,
-      th2FileEditController: th2FileEditController,
     );
 
     canvas.save();

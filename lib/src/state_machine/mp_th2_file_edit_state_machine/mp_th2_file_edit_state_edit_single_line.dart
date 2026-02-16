@@ -250,6 +250,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
       _valuesSetByUser = true;
 
+      _saveLSizeOrientation(
+        th2FileEditController
+            .elementEditController
+            .currentOptionTypeBeingEdited,
+      );
+
       return;
     }
 
@@ -484,6 +490,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       _setOrientationLSizeFromLocalPosition(event.localPosition);
 
       _valuesSetByUser = true;
+
+      _saveLSizeOrientation(
+        th2FileEditController
+            .elementEditController
+            .currentOptionTypeBeingEdited,
+      );
 
       return;
     }

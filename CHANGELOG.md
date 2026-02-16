@@ -3,7 +3,8 @@
 ## 0.2.36 - not yet released
 * New features:
   * Allow multiple "add line segment" operations in sucession. [requested by Edvard]
-  * Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I)
+  * Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).
+  * Show (and edit) orientation and lsize on the line points during edit.
 * Fixed bugs:
   * Main README.md file stills mentioning the web version of Mapiah, which was removed in 0.2.31 [reported by CaverBruce at issue [#13](https://github.com/rsevero/mapiah/issues/13)]
   * Slash produced by keyboard combinations (for example, AltRght + Q) is not processed as a shortcut to add line segments between selected line segments.

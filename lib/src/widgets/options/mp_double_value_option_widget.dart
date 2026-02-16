@@ -46,6 +46,7 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   String? _doubleWarningMessage;
   bool _isOkButtonEnabled = false;
+  bool _isSingleLineSegmentLSize = false;
 
   @override
   void initState() {
@@ -53,24 +54,15 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
 
     th2FileEditController = widget.th2FileEditController;
 
-    /// Temporarily disabling interactive orientation/lsize setting mode until
-    /// we have a complete UI for it.
-    // if ((widget.optionInfo.type == THCommandOptionType.lSize) &&
-    //     (th2FileEditController.optionEditController.currentOptionElementsType ==
-    //         MPOptionElementType.lineSegment) &&
-    //     (th2FileEditController
-    //             .selectionController
-    //             .selectedEndControlPoints
-    //             .length ==
-    //         1)) {
-    //   th2FileEditController.elementEditController
-    //       .setLinePointOrientationLSizeSettingMode(
-    //         MPLinePointInteractiveOrientationLSizeSettingMode.lsize,
-    //       );
-    //   th2FileEditController.stateController.setState(
-    //     MPTH2FileEditStateType.editLinePointOrientationLSize,
-    //   );
-    // }
+    _isSingleLineSegmentLSize =
+        ((widget.optionInfo.type == THCommandOptionType.lSize) &&
+        (th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment) &&
+        (th2FileEditController
+                .selectionController
+                .selectedEndControlPoints
+                .length ==
+            1));
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -190,6 +182,10 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (_isSingleLineSegmentLSize) {
+      return SizedBox.shrink();
+    }
+
     final String title;
     final String label;
 
