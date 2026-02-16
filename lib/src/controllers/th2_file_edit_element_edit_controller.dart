@@ -74,7 +74,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   double? _linePointLSize;
 
-  THCommandOptionType? _optionTypeBeingEdited;
+  THCommandOptionType? _currentOptionTypeBeingEdited;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
@@ -2060,11 +2060,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applySetLinePointOrientationLSize() {
     /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
     final bool forceOrientation =
-        (_optionTypeBeingEdited == THCommandOptionType.orientation)
+        (_currentOptionTypeBeingEdited == THCommandOptionType.orientation)
         ? true
         : MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final bool forceLSize =
-        (_optionTypeBeingEdited == THCommandOptionType.lSize)
+        (_currentOptionTypeBeingEdited == THCommandOptionType.lSize)
         ? true
         : MPInteractionAux.isAltPressed();
     final List<MPCommand> setCommands = [];
@@ -2145,7 +2145,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
-    _optionTypeBeingEdited = value;
+    if (_currentOptionTypeBeingEdited == value) {
+      return;
+    }
+
+    final THCommandOptionType? previousOptionType =
+        _currentOptionTypeBeingEdited;
+
+    _currentOptionTypeBeingEdited = value;
+
+    _th2FileEditController.stateController.state
+        .onChangeCommandOptionTypeEdited(
+          newOptionType: _currentOptionTypeBeingEdited,
+          previousOptionType: previousOptionType,
+        );
   }
 
   bool getCurrentAllImagesVisibility() {
@@ -2164,8 +2177,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return currentVisibility ?? _allImagesVisibility;
   }
 
-  THCommandOptionType? get optionTypeBeingEdited {
-    return _optionTypeBeingEdited;
+  THCommandOptionType? get currentOptionTypeBeingEdited {
+    return _currentOptionTypeBeingEdited;
   }
 }
 

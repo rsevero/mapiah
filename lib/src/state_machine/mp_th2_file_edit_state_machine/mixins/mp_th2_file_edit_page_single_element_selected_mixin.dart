@@ -1,7 +1,7 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
-  String getStatusBarMessageForSingleSelectedElement() {
+  String _getStatusBarMessageForSingleSelectedElement() {
     final THElement element = getSingleSelectedElement();
 
     switch (element) {

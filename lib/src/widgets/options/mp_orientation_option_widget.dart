@@ -45,7 +45,7 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
   double? _currentAzimuth = 0;
   late final String _initialAzimuth;
   late final String _initialSelectedChoice;
-  // late final bool _isSingleLineSegment;
+  late final bool _isSingleLineSegment;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isOkButtonEnabled = false;
 
@@ -57,24 +57,14 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
 
     /// Temporarily disable interactive orientation/lsize setting for single
     /// line segments until complete UI is implemented.
-    // _isSingleLineSegment =
-    //     (th2FileEditController.optionEditController.currentOptionElementsType ==
-    //         MPOptionElementType.lineSegment) &&
-    //     (th2FileEditController
-    //             .selectionController
-    //             .selectedEndControlPoints
-    //             .length ==
-    //         1);
-
-    // if (_isSingleLineSegment) {
-    //   th2FileEditController.elementEditController
-    //       .setLinePointOrientationLSizeSettingMode(
-    //         MPLinePointInteractiveOrientationLSizeSettingMode.orientation,
-    //       );
-    //   th2FileEditController.stateController.setState(
-    //     MPTH2FileEditStateType.editLinePointOrientationLSize,
-    //   );
-    // }
+    _isSingleLineSegment =
+        (th2FileEditController.optionEditController.currentOptionElementsType ==
+            MPOptionElementType.lineSegment) &&
+        (th2FileEditController
+                .selectionController
+                .selectedEndControlPoints
+                .length ==
+            1);
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -227,9 +217,9 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
             ),
 
             // Additional Inputs for "Set" Option
-            // if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            //     !_isSingleLineSegment) ...[
-            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+            if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
+                !_isSingleLineSegment) ...[
+              // if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,

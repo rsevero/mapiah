@@ -11,9 +11,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateOptionsEditMixin {
   bool _dragShouldMovePoints = false;
+  bool _hasDifferentOrientations = false;
+  bool _hasDifferentLSizes = false;
+  bool _valuesSetByUser = false;
+  bool _isLSizeOrientationEdit = false;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
-    MPTH2FileEditStateType.editLinePointOrientationLSize,
     MPTH2FileEditStateType.editSingleLine,
     MPTH2FileEditStateType.movingEndControlPoints,
     MPTH2FileEditStateType.movingSingleControlPoint,
@@ -42,13 +45,90 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   @override
   void setStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(
-      getStatusBarMessageForSingleSelectedElement(),
+      _isLSizeOrientationEdit
+          ? _getLSizeOrientationStatusBarMessage()
+          : _getStatusBarMessageForSingleSelectedElement(),
     );
+  }
+
+  String _getLSizeOrientationStatusBarMessage() {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
+    String getOptionValueString({
+      required bool hasDifferentValues,
+      required double? value,
+    }) {
+      if (hasDifferentValues) {
+        return appLocalizations.mpChoiceMultipleValues;
+      }
+
+      if (value == null) {
+        return appLocalizations.mpChoiceUnset;
+      }
+
+      return value.toStringAsFixed(1);
+    }
+
+    final String orientationString = getOptionValueString(
+      hasDifferentValues: _hasDifferentOrientations,
+      value: elementEditController.linePointOrientation,
+    );
+    final String lSizeString = getOptionValueString(
+      hasDifferentValues: _hasDifferentLSizes,
+      value: elementEditController.linePointLSize,
+    );
+
+    // Determine whether orientation/lSize should be "forced".
+    // If the current option being edited is the corresponding option,
+    // force it. Otherwise, if the user has already set values, use the
+    // modifier keys to decide.
+    final bool forceOrientation;
+
+    if (elementEditController.currentOptionTypeBeingEdited ==
+        THCommandOptionType.orientation) {
+      forceOrientation = true;
+    } else if (_valuesSetByUser) {
+      forceOrientation =
+          MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    } else {
+      forceOrientation = false;
+    }
+
+    final bool forceLSize;
+
+    if (elementEditController.currentOptionTypeBeingEdited ==
+        THCommandOptionType.lSize) {
+      forceLSize = true;
+    } else if (_valuesSetByUser) {
+      forceLSize = MPInteractionAux.isAltPressed();
+    } else {
+      forceLSize = false;
+    }
+
+    final String forcedOrientationString = forceOrientation
+        ? appLocalizations.mpStatusBarMessageEditLinePointOrientationLSizeForced
+        : '';
+    final String forcedLSizeString = forceLSize
+        ? appLocalizations.mpStatusBarMessageEditLinePointOrientationLSizeForced
+        : '';
+    final String message = appLocalizations
+        .mpStatusBarMessageEditLinePointOrientationLSize(
+          orientationString,
+          forcedOrientationString,
+          lSizeString,
+          forcedLSizeString,
+        );
+
+    return message;
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     final MPTH2FileEditStateType nextStateType = nextState.type;
+
+    _saveLSizeOrientation(
+      th2FileEditController.elementEditController.currentOptionTypeBeingEdited,
+    );
 
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.setStatusBarMessage('');
@@ -72,6 +152,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (_isLSizeOrientationEdit) {
+      setStatusBarMessage();
+    }
+
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
@@ -149,9 +233,22 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
+  void onKeyUpEvent(KeyUpEvent event) {
+    if (_isLSizeOrientationEdit) {
+      setStatusBarMessage();
+    }
+
+    super.onKeyUpEvent(event);
+  }
+
+  @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
     if (onAltPrimaryButtonClick(event)) {
-      return Future.value();
+      return;
+    } else if (_isLSizeOrientationEdit) {
+      _setOrientationLSizeFromLocalPosition(event.localPosition);
+
+      return;
     }
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
@@ -286,6 +383,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
+    if (_isLSizeOrientationEdit) {
+      _setOrientationLSizeFromLocalPosition(event.localPosition);
+
+      return;
+    }
+
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
@@ -342,6 +445,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
+    if (_isLSizeOrientationEdit) {
+      _setOrientationLSizeFromLocalPosition(event.localPosition);
+
+      return;
+    }
+
     if (_dragShouldMovePoints) {
       _dragShouldMovePoints = false;
 
@@ -369,6 +478,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
+    if (_isLSizeOrientationEdit) {
+      _setOrientationLSizeFromLocalPosition(event.localPosition);
+
+      return;
+    }
+
     final List<THLineSegment> endpointsInsideSelectionWindow =
         getEndPointsInsideSelectionWindow(event.localPosition);
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
@@ -413,6 +528,126 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         selectionController.selectableEndPointsInsideWindow(selectionWindow);
 
     return lineSegmentsInsideSelectionWindow;
+  }
+
+  void initializeLSizeOrientation() {
+    final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints.values;
+
+    bool isFirst = true;
+    double? orientationAll;
+    double? lSizeAll;
+
+    _hasDifferentOrientations = false;
+    _hasDifferentLSizes = false;
+    _valuesSetByUser = false;
+
+    for (MPSelectedEndControlPoint selectedEndPoint in selectedEndPoints) {
+      final THLineSegment lineSegment =
+          selectedEndPoint.originalLineSegmentClone;
+      final double? pointOrientation = MPCommandOptionAux.getOrientation(
+        lineSegment,
+      );
+      final double? pointLSize = MPCommandOptionAux.getLSize(lineSegment);
+
+      if (isFirst) {
+        orientationAll = pointOrientation;
+        lSizeAll = pointLSize;
+        isFirst = false;
+
+        continue;
+      }
+
+      if (orientationAll != pointOrientation) {
+        _hasDifferentOrientations = true;
+        orientationAll = null;
+      }
+
+      if (lSizeAll != pointLSize) {
+        _hasDifferentLSizes = true;
+        lSizeAll = null;
+      }
+    }
+
+    elementEditController.setLinePointOrientationValue(orientationAll);
+    elementEditController.setLinePointLSizeValue(lSizeAll);
+  }
+
+  @override
+  void onChangeCommandOptionTypeEdited({
+    required THCommandOptionType? previousOptionType,
+    required THCommandOptionType? newOptionType,
+  }) {
+    _saveLSizeOrientation(previousOptionType);
+
+    _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
+
+    if (_isLSizeOrientationEdit) {
+      initializeLSizeOrientation();
+    }
+  }
+
+  bool _isLSizeOrientation(THCommandOptionType? optionType) {
+    return (optionType == THCommandOptionType.orientation) ||
+        (optionType == THCommandOptionType.lSize);
+  }
+
+  void _saveLSizeOrientation(
+    THCommandOptionType? previousOptionTypeBeingEdited,
+  ) {
+    if (!_isLSizeOrientation(previousOptionTypeBeingEdited)) {
+      return;
+    }
+
+    if (!_valuesSetByUser ||
+        selectionController.selectedEndControlPoints.isEmpty) {
+      return;
+    }
+
+    elementEditController.applySetLinePointOrientationLSize();
+  }
+
+  void _setOrientationLSizeFromLocalPosition(Offset clickScreenCoordinates) {
+    if (selectionController.selectedEndControlPoints.length != 1) {
+      return;
+    }
+
+    final MPSelectedEndControlPoint mpSelectedEndControlPoint =
+        selectionController.selectedEndControlPoints.values.first;
+
+    if ((mpSelectedEndControlPoint.type !=
+            MPEndControlPointType.endPointBezierCurve) &&
+        (mpSelectedEndControlPoint.type !=
+            MPEndControlPointType.endPointStraight)) {
+      return;
+    }
+
+    final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
+      clickScreenCoordinates,
+    );
+    final THLineSegment selectedLineSegment =
+        mpSelectedEndControlPoint.originalLineSegmentClone;
+    final double centerX = selectedLineSegment.x;
+    final double centerY = selectedLineSegment.y;
+    final double deltaX = canvasPosition.dx - centerX;
+    final double deltaY = canvasPosition.dy - centerY;
+    final Offset directionOffset = Offset(deltaX, deltaY);
+    final double orientation = MPNumericAux.directionOffsetToDegrees(
+      directionOffset,
+    );
+
+    elementEditController.setLinePointOrientationValue(orientation);
+
+    final double distanceFromCenter = math.sqrt(
+      (deltaX * deltaX) + (deltaY * deltaY),
+    );
+    final double lsize = distanceFromCenter * mpLSizeCanvasSizeFactor;
+
+    elementEditController.setLinePointLSizeValue(lsize);
+
+    _valuesSetByUser = true;
+
+    setStatusBarMessage();
   }
 
   @override

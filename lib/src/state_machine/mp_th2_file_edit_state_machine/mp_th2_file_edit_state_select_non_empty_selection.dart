@@ -254,7 +254,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     final String message;
 
     if (selectedElementsCount == 1) {
-      message = getStatusBarMessageForSingleSelectedElement();
+      message = _getStatusBarMessageForSingleSelectedElement();
     } else {
       final List<int> selectedElementsCounts = getSelectedElementsCount();
 

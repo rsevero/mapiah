@@ -49,7 +49,6 @@ part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
-part 'mp_th2_file_edit_state_edit_line_point_orientation_lsize.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
@@ -90,10 +89,6 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.addPoint:
         return MPTH2FileEditStateAddPoint(
-          th2FileEditController: th2FileEditController,
-        );
-      case MPTH2FileEditStateType.editLinePointOrientationLSize:
-        return MPTH2FileEditStateEditLinePointOrientationLSize(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:
@@ -172,6 +167,11 @@ abstract class MPTH2FileEditState {
   void onStateEnter(MPTH2FileEditState previousState) {}
 
   void onStateExit(MPTH2FileEditState nextState) {}
+
+  void onChangeCommandOptionTypeEdited({
+    required THCommandOptionType? newOptionType,
+    required THCommandOptionType? previousOptionType,
+  }) {}
 
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
