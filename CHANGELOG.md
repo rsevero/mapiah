@@ -23,6 +23,7 @@
   * Flutter upgrade to 3.41.1
   * flutter pub upgrade --major-versions
   * Created TH2FileEditElementEditController.optionTypeBeingEdited.
+  * Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

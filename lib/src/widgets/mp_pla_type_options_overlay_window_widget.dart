@@ -174,7 +174,30 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
       }
     }
 
+    final String lastUsedChoicesReducedStringForKey = lastUsedChoicesReduced
+        .join(',');
+    final String mostUsedChoicesReducedStringForKey = mostUsedChoicesReduced
+        .join(',');
+    final String choicesStringForKey = choices.keys.join(',');
+
+    String currentPLATypeForKey = (widget.selectedPLAType == null)
+        ? mpUnsetOptionID
+        : widget.selectedPLAType!;
+
+    currentPLATypeForKey =
+        "MPPLATypeOptionsOverlayWindowWidget|$currentPLATypeForKey";
+
+    final String lastUsedChoicesReducedStringKey =
+        "$currentPLATypeForKey|lastUsedChoicesReduced|$lastUsedChoicesReducedStringForKey";
+    final String mostUsedChoicesReducedStringKey =
+        "$currentPLATypeForKey|mostUsedChoicesReduced|$mostUsedChoicesReducedStringForKey";
+    final String choicesStringKey =
+        "$currentPLATypeForKey|choices|$choicesStringForKey";
+    final String currentPLATypeKey =
+        "$currentPLATypeForKey|complete|$lastUsedChoicesReducedStringForKey|$mostUsedChoicesReducedStringForKey|$choicesStringForKey";
+
     return MPOverlayWindowWidget(
+      key: ValueKey(currentPLATypeKey),
       title: title,
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
@@ -204,6 +227,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                 padding: mpOverlayWindowBlockEdgeInsets,
                 children: [
                   RadioGroup(
+                    key: ValueKey(lastUsedChoicesReducedStringKey),
                     groupValue: widget.selectedPLAType,
                     onChanged: (String? newValue) {
                       if (newValue != null) {
@@ -234,6 +258,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                 padding: mpOverlayWindowBlockEdgeInsets,
                 children: [
                   RadioGroup(
+                    key: ValueKey(mostUsedChoicesReducedStringKey),
                     groupValue: widget.selectedPLAType,
                     onChanged: (String? newValue) {
                       if (newValue != null) {
@@ -263,6 +288,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
               padding: mpOverlayWindowBlockEdgeInsets,
               children: [
                 RadioGroup(
+                  key: ValueKey(choicesStringKey),
                   groupValue: _selectedPLATypeForRadioGroup,
                   onChanged: (String? newValue) {
                     if (newValue == null) return;
