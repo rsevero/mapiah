@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -33,7 +34,11 @@ class MPScrapScaleOptionOverlayWindowWidget extends StatefulWidget {
 }
 
 class _MPScrapScaleOptionOverlayWindowWidgetState
-    extends State<MPScrapScaleOptionOverlayWindowWidget> {
+    extends State<MPScrapScaleOptionOverlayWindowWidget>
+    with
+        MPOptionTypeBeingEditedTrackingMixin<
+          MPScrapScaleOptionOverlayWindowWidget
+        > {
   final GlobalKey<MPScrapScaleOptionWidgetState> _kernelKey = GlobalKey();
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 

@@ -10,6 +10,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
@@ -33,7 +34,8 @@ class MPScrapOptionWidget extends StatefulWidget {
   State<MPScrapOptionWidget> createState() => _MPScrapOptionWidgetState();
 }
 
-class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget> {
+class _MPScrapOptionWidgetState extends State<MPScrapOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPScrapOptionWidget> {
   String _selectedChoice = '';
   final TextEditingController _freeTextScrapIDController =
       TextEditingController();

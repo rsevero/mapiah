@@ -231,32 +231,26 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
-  late final _$_linePointOrientationLSizeSettingModeAtom = Atom(
-    name:
-        'TH2FileEditElementEditControllerBase._linePointOrientationLSizeSettingMode',
+  late final _$_optionTypeBeingEditedAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._optionTypeBeingEdited',
     context: context,
   );
 
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  get linePointOrientationLSizeSettingMode {
-    _$_linePointOrientationLSizeSettingModeAtom.reportRead();
-    return super._linePointOrientationLSizeSettingMode;
+  THCommandOptionType? get optionTypeBeingEdited {
+    _$_optionTypeBeingEditedAtom.reportRead();
+    return super._optionTypeBeingEdited;
   }
 
   @override
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  get _linePointOrientationLSizeSettingMode =>
-      linePointOrientationLSizeSettingMode;
+  THCommandOptionType? get _optionTypeBeingEdited => optionTypeBeingEdited;
 
   @override
-  set _linePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
-    _$_linePointOrientationLSizeSettingModeAtom.reportWrite(
+  set _optionTypeBeingEdited(THCommandOptionType? value) {
+    _$_optionTypeBeingEditedAtom.reportWrite(
       value,
-      super._linePointOrientationLSizeSettingMode,
+      super._optionTypeBeingEdited,
       () {
-        super._linePointOrientationLSizeSettingMode = value;
+        super._optionTypeBeingEdited = value;
       },
     );
   }
@@ -980,16 +974,14 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void setLinePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
+  void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditElementEditControllerBase.setLinePointOrientationLSizeSettingMode',
+              'TH2FileEditElementEditControllerBase.setCommandOptionTypeBeingEdited',
         );
     try {
-      return super.setLinePointOrientationLSizeSettingMode(value);
+      return super.setCommandOptionTypeBeingEdited(value);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

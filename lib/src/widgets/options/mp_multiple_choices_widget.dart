@@ -6,12 +6,13 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPMultipleChoicesWidget extends StatelessWidget {
+class MPMultipleChoicesWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Map<String, String> choices;
@@ -28,18 +29,26 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   });
 
   @override
+  State<MPMultipleChoicesWidget> createState() =>
+      _MPMultipleChoicesWidgetState();
+}
+
+class _MPMultipleChoicesWidgetState extends State<MPMultipleChoicesWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPMultipleChoicesWidget> {
+  @override
   Widget build(BuildContext context) {
-    final String selectedChoice = optionInfo.state == MPOptionStateType.unset
+    final String selectedChoice =
+        widget.optionInfo.state == MPOptionStateType.unset
         ? mpUnsetOptionID
-        : (optionInfo.currentChoice ?? '');
-    final THCommandOptionType optionInfoType = optionInfo.type;
+        : (widget.optionInfo.currentChoice ?? '');
+    final THCommandOptionType optionInfoType = widget.optionInfo.type;
 
     return MPOverlayWindowWidget(
       title: MPTextToUser.getCommandOptionType(optionInfoType),
       overlayWindowType: MPOverlayWindowType.secondary,
-      outerAnchorPosition: outerAnchorPosition,
-      innerAnchorType: innerAnchorType,
-      th2FileEditController: th2FileEditController,
+      outerAnchorPosition: widget.outerAnchorPosition,
+      innerAnchorType: widget.innerAnchorType,
+      th2FileEditController: widget.th2FileEditController,
       children: [
         const SizedBox(height: mpButtonSpace),
         MPOverlayWindowBlockWidget(
@@ -54,7 +63,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
                 }
               },
               child: Column(
-                children: choices.entries.map((entry) {
+                children: widget.choices.entries.map((entry) {
                   final String value = entry.key;
                   final String label = entry.value;
 
@@ -67,7 +76,7 @@ class MPMultipleChoicesWidget extends StatelessWidget {
                     title: Row(
                       children: [
                         Text(label),
-                        if (value == optionInfo.defaultChoice)
+                        if (value == widget.optionInfo.defaultChoice)
                           Padding(
                             padding: const EdgeInsets.only(left: mpButtonSpace),
                             child: Text(
@@ -91,9 +100,9 @@ class MPMultipleChoicesWidget extends StatelessWidget {
   }
 
   void _onChoiceSelected(BuildContext context, String newValue) {
-    th2FileEditController.userInteractionController
+    widget.th2FileEditController.userInteractionController
         .prepareSetMultipleOptionChoice(
-          optionType: optionInfo.type,
+          optionType: widget.optionInfo.type,
           choice: newValue,
         );
   }

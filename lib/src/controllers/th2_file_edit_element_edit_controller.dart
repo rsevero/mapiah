@@ -75,9 +75,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   double? _linePointLSize;
 
   @readonly
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  _linePointOrientationLSizeSettingMode =
-      MPLinePointInteractiveOrientationLSizeSettingMode.lsize;
+  THCommandOptionType? _optionTypeBeingEdited = null;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
@@ -2063,13 +2061,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void applySetLinePointOrientationLSize() {
     /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
     final bool forceOrientation =
-        (_linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.orientation)
+        (_optionTypeBeingEdited == THCommandOptionType.orientation)
         ? true
         : MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final bool forceLSize =
-        (_linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.lsize)
+        (_optionTypeBeingEdited == THCommandOptionType.lSize)
         ? true
         : MPInteractionAux.isAltPressed();
     final List<MPCommand> setCommands = [];
@@ -2150,10 +2146,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void setLinePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
-    _linePointOrientationLSizeSettingMode = value;
+  void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
+    _optionTypeBeingEdited = value;
   }
 
   bool getCurrentAllImagesVisibility() {
@@ -2194,5 +2188,3 @@ enum MPLineSimplificationMethod {
   forceBezier,
   keepOriginalTypes,
 }
-
-enum MPLinePointInteractiveOrientationLSizeSettingMode { lsize, orientation }

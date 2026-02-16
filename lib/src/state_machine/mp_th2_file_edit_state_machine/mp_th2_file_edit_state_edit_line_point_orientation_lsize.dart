@@ -55,18 +55,18 @@ class MPTH2FileEditStateEditLinePointOrientationLSize extends MPTH2FileEditState
               ? appLocalizations.mpChoiceUnset
               : elementEditController.linePointLSize!.toStringAsFixed(1));
 
-    /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
+    /// Ctrl/Meta forces orientation and Alt forces lSize to be set.
     final bool forceOrientation =
-        (elementEditController.linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.orientation)
+        (elementEditController.optionTypeBeingEdited ==
+            THCommandOptionType.orientation)
         ? true
         : (_valuesSetByUser
               ? (MPInteractionAux.isCtrlPressed() ||
                     MPInteractionAux.isMetaPressed())
               : false);
     final bool forceLSize =
-        (elementEditController.linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.lsize)
+        (elementEditController.optionTypeBeingEdited ==
+            THCommandOptionType.lSize)
         ? true
         : (_valuesSetByUser ? MPInteractionAux.isAltPressed() : false);
     final String forcedOrientationString = forceOrientation
