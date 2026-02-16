@@ -19,6 +19,7 @@
   * Removing all references to web version.
   * Making custom exceptions be presented by showUnhandledErrorDialog() at main.dart.
   * Remove stack trace from THBaseException as showUnhandledErrorDialog() at main.dart already presents the stack trace.
+  * Applying dart fix --apply to all code.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

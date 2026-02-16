@@ -75,10 +75,7 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   Future<void> _readInternalSettingsFile() async {
-    if (SharedPreferencesAsyncPlatform.instance == null) {
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
-    }
+    SharedPreferencesAsyncPlatform.instance ??= InMemorySharedPreferencesAsync.empty();
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
         allowList: MPSettingsType.values.map((e) => e.name).toSet(),
