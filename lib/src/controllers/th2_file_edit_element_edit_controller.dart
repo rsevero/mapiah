@@ -74,8 +74,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   double? _linePointLSize;
 
-  @readonly
-  THCommandOptionType? _optionTypeBeingEdited = null;
+  THCommandOptionType? _optionTypeBeingEdited;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
@@ -2145,7 +2144,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _linePointLSize = lsize;
   }
 
-  @action
   void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
     _optionTypeBeingEdited = value;
   }
@@ -2164,6 +2162,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     return currentVisibility ?? _allImagesVisibility;
+  }
+
+  THCommandOptionType? get optionTypeBeingEdited {
+    return _optionTypeBeingEdited;
   }
 }
 

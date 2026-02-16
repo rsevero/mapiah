@@ -231,30 +231,6 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
-  late final _$_optionTypeBeingEditedAtom = Atom(
-    name: 'TH2FileEditElementEditControllerBase._optionTypeBeingEdited',
-    context: context,
-  );
-
-  THCommandOptionType? get optionTypeBeingEdited {
-    _$_optionTypeBeingEditedAtom.reportRead();
-    return super._optionTypeBeingEdited;
-  }
-
-  @override
-  THCommandOptionType? get _optionTypeBeingEdited => optionTypeBeingEdited;
-
-  @override
-  set _optionTypeBeingEdited(THCommandOptionType? value) {
-    _$_optionTypeBeingEditedAtom.reportWrite(
-      value,
-      super._optionTypeBeingEdited,
-      () {
-        super._optionTypeBeingEdited = value;
-      },
-    );
-  }
-
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
@@ -966,22 +942,6 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.setLinePointLSizeValue(lsize);
-    } finally {
-      _$TH2FileEditElementEditControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
-  void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
-    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditElementEditControllerBase.setCommandOptionTypeBeingEdited',
-        );
-    try {
-      return super.setCommandOptionTypeBeingEdited(value);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
