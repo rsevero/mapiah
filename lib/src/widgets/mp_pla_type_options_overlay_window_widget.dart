@@ -291,7 +291,9 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                   key: ValueKey(choicesStringKey),
                   groupValue: _selectedPLATypeForRadioGroup,
                   onChanged: (String? newValue) {
-                    if (newValue == null) return;
+                    if (newValue == null) {
+                      return;
+                    }
                     if (newValue == mpUnknownPLAType) {
                       setState(() {
                         _selectedPLATypeForRadioGroup = mpUnknownPLAType;

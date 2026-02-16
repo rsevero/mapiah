@@ -40,7 +40,7 @@ void main() {
     testWidgets(
       'open a file, select a line, open options window, edit a non multiple option, see the edit option window close after edit',
       (tester) async {
-        // Increase test surface to avoid BottomAppBar Row overflow in small test window
+        /// Increase test surface to avoid BottomAppBar Row overflow in small test window
         tester.view.physicalSize = const Size(1280, 720);
         tester.view.devicePixelRatio = 1.0;
         addTearDown(() {
@@ -113,8 +113,8 @@ void main() {
 
         expect(mpTileWidgetWithIdFinder, findsOneWidget);
 
-        // check MPTileWidget background color equals
-        // theme.colorScheme.surfaceContainer, i.e., is unset.
+        /// check MPTileWidget background color equals
+        /// theme.colorScheme.surfaceContainer, i.e., is unset.
         final MPTileWidget mpTileWidgetIDPre = tester.widget<MPTileWidget>(
           mpTileWidgetWithIdFinder,
         );
@@ -125,7 +125,7 @@ void main() {
 
         expect(mpTileWidgetIDPre.backgroundColor, unsetExpectedColor);
 
-        // tap the MPTileWidget and verify MPIDOptionWidget opens
+        /// tap the MPTileWidget and verify MPIDOptionWidget opens
         await tester.tap(mpTileWidgetWithIdFinder);
         await tester.pumpAndSettle();
 
@@ -133,7 +133,7 @@ void main() {
 
         expect(mpIDOptionFinder, findsOneWidget);
 
-        // Click the RadioListTile to select the SET option
+        /// Click the RadioListTile to select the SET option
         final Finder setRadioFinder = find.byKey(
           const ValueKey('MPIDOptionWidget|RadioListTile|SET'),
         );
@@ -144,14 +144,14 @@ void main() {
         await tester.tap(setRadioFinder);
         await tester.pumpAndSettle();
 
-        // Find the MPTextFieldInputWidget whose labelText == 'ID'
+        /// Find the MPTextFieldInputWidget whose labelText == 'ID'
         final Finder idTextInputFinder = find.byWidgetPredicate((widget) {
           return widget is MPTextFieldInputWidget && widget.labelText == 'ID';
         }, description: 'MPTextFieldInputWidget with labelText == ID');
 
         expect(idTextInputFinder, findsOneWidget);
 
-        // Find the TextField inside that widget and enter 'test'
+        /// Find the TextField inside that widget and enter 'test'
         final Finder idTextFieldFinder = find.descendant(
           of: idTextInputFinder,
           matching: find.byType(TextField),
@@ -161,7 +161,7 @@ void main() {
         await tester.enterText(idTextFieldFinder, 'test');
         await tester.pumpAndSettle();
 
-        // Tap the Ok button inside the MPIDOptionWidget
+        /// Tap the Ok button inside the MPIDOptionWidget
         final Finder okButtonFinder = find.descendant(
           of: mpIDOptionFinder,
           matching: find.text('OK'),
@@ -174,8 +174,8 @@ void main() {
         th2Controller.triggerOptionsListRedraw();
         await tester.pumpAndSettle();
 
-        // check MPTileWidget background color equals
-        // theme.colorScheme.tertiaryFixed, i.e., is set.
+        /// check MPTileWidget background color equals
+        /// theme.colorScheme.tertiaryFixed, i.e., is set.
         final MPTileWidget mpTileWidgetIDPos = tester.widget<MPTileWidget>(
           mpTileWidgetWithIdFinder,
         );
@@ -186,7 +186,7 @@ void main() {
 
         expect(mpTileWidgetIDPos.backgroundColor, setExpectedColor);
 
-        // Verify the MPIDOptionWidget is gone after pressing Ok
+        /// Verify the MPIDOptionWidget is gone after pressing Ok
         expect(find.byType(MPIDOptionWidget), findsNothing);
       },
     );

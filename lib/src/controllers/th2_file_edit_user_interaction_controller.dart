@@ -462,14 +462,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     switch (elementType) {
       case THElementType.area:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THArea) ||
-              (mpSelectedElement.originalElementClone as THArea)
-                      .areaType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THArea) ||
+              (originalElementClone.areaType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedAreaType(newPLAType);
         }
 
@@ -485,14 +485,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       case THElementType.line:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THLine) ||
-              (mpSelectedElement.originalElementClone as THLine)
-                      .lineType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THLine) ||
+              (originalElementClone.lineType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedLineType(newPLAType);
         }
 
@@ -507,14 +507,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         );
       case THElementType.point:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THPoint) ||
-              (mpSelectedElement.originalElementClone as THPoint)
-                      .pointType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THPoint) ||
+              (originalElementClone.pointType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedPointType(newPLAType);
         }
 
@@ -532,6 +532,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     _th2FileEditController.execute(setPLATypeCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
   }
 

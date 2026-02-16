@@ -43,16 +43,16 @@ class MPEditLineTypeCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THLine newLine = th2FileEditController.thFile
-        .lineByMPID(lineMPID)
-        .copyWith(
-          lineType: newLineType,
-          unknownPLAType: unknownPLAType,
-          originalLineInTH2File: originalLineInTH2File,
-        );
+    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
+      lineMPID,
+    );
+    final THLine newLine = originalLine.copyWith(
+      lineType: newLineType,
+      unknownPLAType: unknownPLAType,
+      originalLineInTH2File: originalLineInTH2File,
+    );
 
     th2FileEditController.elementEditController.substituteElement(newLine);
-    th2FileEditController.optionEditController.updateOptionStateMap();
   }
 
   @override
