@@ -258,6 +258,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       for (final MPSelectedElement mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
+        element.setTHFile(_thFile);
+
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(

@@ -188,6 +188,18 @@ void main() {
       // Click the node-edit FAB (heroTag: 'node_edit_tool').
       await tester.tap(nodeEditFinder);
       await tester.pumpAndSettle();
+
+      // Selecting second line point.
+      await tester.sendEventToBinding(mouse.down(p2, buttons: kPrimaryButton));
+      await tester.pump();
+      await tester.sendEventToBinding(mouse.up());
+      await tester.pump();
+
+      // Make the second line point smooth.
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.keyS);
+      await tester.pump();
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.keyS);
+      await tester.pumpAndSettle();
     });
   });
 }
