@@ -950,6 +950,28 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void setLinePointLSizeAndOrientation({
+    required double? orientation,
+    required double? lSize,
+  }) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.setLinePointLSizeAndOrientation',
+        );
+    try {
+      return super.setLinePointLSizeAndOrientation(
+        orientation: orientation,
+        lSize: lSize,
+      );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

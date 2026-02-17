@@ -585,8 +585,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       }
     }
 
-    elementEditController.setLinePointOrientationValue(orientationAll);
-    elementEditController.setLinePointLSizeValue(lSizeAll);
+    elementEditController.setLinePointLSizeAndOrientation(
+      orientation: orientationAll,
+      lSize: lSizeAll,
+    );
   }
 
   @override
@@ -654,14 +656,15 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       directionOffset,
     );
 
-    elementEditController.setLinePointOrientationValue(orientation);
-
     final double distanceFromCenter = math.sqrt(
       (deltaX * deltaX) + (deltaY * deltaY),
     );
     final double lSize = distanceFromCenter * mpLSizeCanvasSizeFactor;
 
-    elementEditController.setLinePointLSizeValue(lSize);
+    elementEditController.setLinePointLSizeAndOrientation(
+      orientation: orientation,
+      lSize: lSize,
+    );
 
     setStatusBarMessage();
   }
