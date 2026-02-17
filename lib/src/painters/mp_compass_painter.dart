@@ -93,14 +93,6 @@ class MPCompassPainter extends CustomPainter {
     // Translate the canvas to the center of the compass
     canvas.translate(center.dx, center.dy);
 
-    // When painting in normal widget coordinates (Y down), flip the local
-    // coordinate system so the arrow math below always runs in a Y-up space.
-    // In the map canvas, the Y-up flip is already applied by
-    // TH2FileEditController.transformCanvas().
-    if (th2FileEditController == null) {
-      canvas.scale(1, -1);
-    }
-
     // Rotate the canvas based on the azimuth
     // In a Y-up space, positive rotation is counter-clockwise; azimuth is
     // defined clockwise, so negate it.
