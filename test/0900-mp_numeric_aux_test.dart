@@ -461,6 +461,26 @@ void main() {
     test('uses bezier end tangent when first is a cubic curve', () {
       const MPCubicBezierCurve s1 = MPCubicBezierCurve(
         start: Offset(0, 0),
+        c1: Offset(0.33, 0),
+        c2: Offset(0.66, 0),
+        end: Offset(1, 0),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 0),
+        end: Offset(1, 1),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      final double expected = math.sqrt(2) / 2;
+      expect(t.dx, closeTo(expected, maxDelta));
+      expect(t.dy, closeTo(expected, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('uses bezier end tangent when first is a cubic curve 2', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(0, 0),
         c1: Offset(1, 0),
         c2: Offset(2, 0),
         end: Offset(3, 0),
@@ -472,9 +492,11 @@ void main() {
 
       final Offset t = MPNumericAux.averageTangent(s1, s2);
 
-      final double expected = math.sqrt(2) / 2;
-      expect(t.dx, closeTo(expected, maxDelta));
-      expect(t.dy, closeTo(expected, maxDelta));
+      final double expectedY = math.sqrt(0.1);
+      final double expectedX = 3 * expectedY;
+
+      expect(t.dx, closeTo(expectedX, maxDelta));
+      expect(t.dy, closeTo(expectedY, maxDelta));
       expect(t.distance, closeTo(1.0, maxDelta));
     });
 

@@ -881,14 +881,24 @@ class MPNumericAux {
     final Offset secondTangent = (second is MPBezierCurve)
         ? bezierCurveTangent(second as MPBezierCurve, MPExtremityType.start)
         : straightTangent(second as MPStraightSegment);
-    final Offset average = firstTangent + secondTangent;
-    final double length = average.distance;
+    final double firstLength = first.length();
+    final double secondLength = second.length();
+    final double totalLength = firstLength + secondLength;
 
-    if (length == 0.0) {
+    if (totalLength == 0.0) {
       return Offset.zero;
     }
 
-    return average / length;
+    final Offset average =
+        ((firstTangent * firstLength) + (secondTangent * secondLength)) /
+        totalLength;
+    final double averageLength = average.distance;
+
+    if (averageLength == 0.0) {
+      return Offset.zero;
+    }
+
+    return average / averageLength;
   }
 
   static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {

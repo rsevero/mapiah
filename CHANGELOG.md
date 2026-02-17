@@ -28,6 +28,7 @@
   * Created 3500-ui_change_line_type_test.
   * Separating THLSizeOrientationPainter from THLinePainter.
   * Single action to set both LSize and Orientation values at TH2FileEditElementEditController.
+  * MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:
