@@ -204,12 +204,20 @@ void main() {
 
     test('diagonal directions map as expected', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, -1)),
+        MPNumericAux.directionOffsetToDegrees(const Offset(1, 1)),
         closeTo(45.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, -1)),
+        MPNumericAux.directionOffsetToDegrees(const Offset(-1, 1)),
         closeTo(315.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToDegrees(const Offset(-1, -1)),
+        closeTo(225.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToDegrees(const Offset(1, -1)),
+        closeTo(135.0, maxDelta),
       );
     });
 
@@ -223,7 +231,7 @@ void main() {
     test('magnitude does not matter', () {
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(0, -10)),
-        closeTo(0.0, maxDelta),
+        closeTo(180.0, maxDelta),
       );
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(10, 0)),
@@ -500,6 +508,27 @@ void main() {
       expect(t.distance, closeTo(1.0, maxDelta));
     });
 
+    test('uses bezier when both are cubic curves', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      expect(t.dx, closeTo(1.0, maxDelta));
+      expect(t.dy, closeTo(0.0, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
     test('degenerate first returns second start tangent', () {
       const MPStraightSegment s1 = MPStraightSegment(
         start: Offset(1, 1),
@@ -531,22 +560,39 @@ void main() {
   });
 
   group('MPNumericAux.normalFromTangent', () {
-    test('returns a unit normal (counterclockwise) from a unit tangent', () {
+    test('returns a unit normal from a unit tangent', () {
       final Offset n = MPNumericAux.normalFromTangent(const Offset(1, 0));
 
       expect(n.dx, closeTo(0.0, maxDelta));
+      expect(n.dy, closeTo(1.0, maxDelta));
+      expect(n.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('returns a unit normal from a unit tangent 2', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(-1, 0));
+
+      expect(n.dx, closeTo(0, maxDelta));
       expect(n.dy, closeTo(-1.0, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 
-    test('returns a unit normal (clockwise) from a unit tangent', () {
-      final Offset n = MPNumericAux.normalFromTangent(
-        const Offset(1, 0),
-        clockwise: true,
-      );
+    test('returns a unit normal from a non unit tangent', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(1, 1));
 
-      expect(n.dx, closeTo(0.0, maxDelta));
-      expect(n.dy, closeTo(1.0, maxDelta));
+      final double expected = math.sqrt(2) / 2;
+
+      expect(n.dx, closeTo(-expected, maxDelta));
+      expect(n.dy, closeTo(expected, maxDelta));
+      expect(n.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('returns a unit normal from a non unit tangent 2', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(-1, 1));
+
+      final double expected = math.sqrt(2) / 2;
+
+      expect(n.dx, closeTo(-expected, maxDelta));
+      expect(n.dy, closeTo(-expected, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 
@@ -554,7 +600,7 @@ void main() {
       final Offset n = MPNumericAux.normalFromTangent(const Offset(3, 4));
 
       expect(n.dx, closeTo(-0.8, maxDelta));
-      expect(n.dy, closeTo(-0.6, maxDelta));
+      expect(n.dy, closeTo(0.6, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 

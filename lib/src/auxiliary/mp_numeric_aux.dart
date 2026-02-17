@@ -677,7 +677,7 @@ class MPNumericAux {
       return 0.0;
     }
 
-    final double radians = math.atan2(direction.dx, -direction.dy);
+    final double radians = math.atan2(direction.dx, direction.dy);
     final double degrees = radians * mp1Radian;
 
     return normalizeAngle(degrees);
@@ -995,14 +995,12 @@ class MPNumericAux {
     return tangent;
   }
 
-  static Offset normalFromTangent(Offset tangent, {bool clockwise = false}) {
+  static Offset normalFromTangent(Offset tangent) {
     if (tangent == Offset.zero) {
       return Offset.zero;
     }
 
-    final Offset rawNormal = clockwise
-        ? Offset(tangent.dy, tangent.dx) // rotate +90°
-        : Offset(-tangent.dy, -tangent.dx); // rotate -90°
+    final Offset rawNormal = Offset(-tangent.dy, tangent.dx);
     final double length = rawNormal.distance;
 
     if (length == 0.0) {
