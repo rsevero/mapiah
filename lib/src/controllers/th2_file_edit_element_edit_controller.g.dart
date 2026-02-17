@@ -903,14 +903,20 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applySetLinePointOrientationLSize() {
+  void applySetLinePointOrientationLSize({
+    required double? orientation,
+    required double? lSize,
+  }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
               'TH2FileEditElementEditControllerBase.applySetLinePointOrientationLSize',
         );
     try {
-      return super.applySetLinePointOrientationLSize();
+      return super.applySetLinePointOrientationLSize(
+        orientation: orientation,
+        lSize: lSize,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

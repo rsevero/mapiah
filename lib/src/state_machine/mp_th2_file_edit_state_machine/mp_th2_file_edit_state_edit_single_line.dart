@@ -14,6 +14,8 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   bool _hasDifferentOrientations = false;
   bool _hasDifferentLSizes = false;
   bool _valuesSetByUser = false;
+  bool _useDefaultLSize = true;
+  bool _useDefaultOrientation = true;
   bool _isLSizeOrientationEdit = false;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
@@ -546,7 +548,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return lineSegmentsInsideSelectionWindow;
   }
 
-  void initializeLSizeOrientation() {
+  void _initializeLSizeOrientation() {
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         selectionController.selectedEndControlPoints.values;
 
@@ -585,6 +587,15 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       }
     }
 
+    _useDefaultLSize =
+        (lSizeAll == null) &&
+        (elementEditController.currentOptionTypeBeingEdited !=
+            THCommandOptionType.lSize);
+    _useDefaultOrientation =
+        (orientationAll == null) &&
+        (elementEditController.currentOptionTypeBeingEdited !=
+            THCommandOptionType.orientation);
+
     elementEditController.setLinePointLSizeAndOrientation(
       orientation: orientationAll,
       lSize: lSizeAll,
@@ -601,7 +612,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
 
     if (_isLSizeOrientationEdit) {
-      initializeLSizeOrientation();
+      _initializeLSizeOrientation();
     }
   }
 
@@ -622,7 +633,21 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return;
     }
 
-    elementEditController.applySetLinePointOrientationLSize();
+    final double? lSize =
+        (_useDefaultLSize && (!MPInteractionAux.isAltPressed()))
+        ? null
+        : elementEditController.linePointLSize;
+    final double? orientation =
+        (_useDefaultOrientation &&
+            !MPInteractionAux.isCtrlPressed() &&
+            !MPInteractionAux.isMetaPressed())
+        ? null
+        : elementEditController.linePointOrientation;
+
+    elementEditController.applySetLinePointOrientationLSize(
+      orientation: orientation,
+      lSize: lSize,
+    );
 
     _valuesSetByUser = false;
   }
@@ -651,15 +676,31 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     final double centerY = selectedLineSegment.y;
     final double deltaX = canvasPosition.dx - centerX;
     final double deltaY = canvasPosition.dy - centerY;
-    final Offset directionOffset = Offset(deltaX, deltaY);
-    final double orientation = MPNumericAux.directionOffsetToDegrees(
-      directionOffset,
-    );
+    final double lSize;
+    final double orientation;
 
-    final double distanceFromCenter = math.sqrt(
-      (deltaX * deltaX) + (deltaY * deltaY),
-    );
-    final double lSize = distanceFromCenter * mpLSizeCanvasSizeFactor;
+    if (_useDefaultLSize && (!MPInteractionAux.isAltPressed())) {
+      lSize = mpSlopeLinePointDefaultLSize;
+    } else {
+      final double distanceFromCenter = math.sqrt(
+        (deltaX * deltaX) + (deltaY * deltaY),
+      );
+
+      lSize = distanceFromCenter * mpLSizeCanvasSizeFactor;
+    }
+
+    if (_useDefaultOrientation &&
+        (!MPInteractionAux.isCtrlPressed() &&
+            !MPInteractionAux.isMetaPressed())) {
+      orientation = MPNumericAux.segmentNormal(
+        mpSelectedEndControlPoint.mpID,
+        th2FileEditController.thFile,
+      );
+    } else {
+      final Offset directionOffset = Offset(deltaX, deltaY);
+
+      orientation = MPNumericAux.directionOffsetToDegrees(directionOffset);
+    }
 
     elementEditController.setLinePointLSizeAndOrientation(
       orientation: orientation,

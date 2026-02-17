@@ -12,20 +12,11 @@ class MPLineSegmentSizeOrientationInfo {
   MPLineSegmentSizeOrientationInfo({
     required this.mpID,
     required this.canvasPosition,
-    required double? size,
+    required double? lSize,
     required double? orientation,
     required THFile thFile,
   }) {
-    lSize = (size == null) ? mpSlopeLinePointDefaultLSize : size;
-
-    if (orientation == null) {
-      final Offset tangent = MPNumericAux.segmentTangent(mpID, thFile);
-      final Offset normal = MPNumericAux.normalFromTangent(tangent);
-      final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
-
-      this.orientation = azimuth;
-    } else {
-      this.orientation = orientation;
-    }
+    this.lSize = lSize ?? mpSlopeLinePointDefaultLSize;
+    this.orientation = orientation ?? MPNumericAux.segmentNormal(mpID, thFile);
   }
 }

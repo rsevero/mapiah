@@ -578,7 +578,7 @@ class THLine extends THElement
             .mpID] = MPLineSegmentSizeOrientationInfo(
           mpID: lineSegment.mpID,
           canvasPosition: lineSegment.endPoint.coordinates,
-          size: lineSegment.hasOption(THCommandOptionType.lSize)
+          lSize: lineSegment.hasOption(THCommandOptionType.lSize)
               ? (lineSegment.getOption(THCommandOptionType.lSize)!
                         as THLSizeCommandOption)
                     .number

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_segment.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -890,10 +891,12 @@ class MPNumericAux {
 
   static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {
     final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
-    final THLine line = lineSegment.parent(thFile: thFile) as THLine;
+    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
     final Map<int, int> lineSegmentsPositionList = line
         .getLineSegmentPositionsByLineSegmentMPID(thFile);
     final int position = lineSegmentsPositionList[lineSegmentMPID]!;
+
+    Offset tangent;
 
     if (position == 0) {
       final THLineSegment nextLineSegment = line.getNextLineSegment(
@@ -912,8 +915,11 @@ class MPNumericAux {
               end: nextLineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.start);
-    } else if (position == lineSegmentsPositionList.length - 1) {
+      tangent = MPNumericAux.anyTypeSegmentTangent(
+        segment,
+        MPExtremityType.start,
+      );
+    } else if (position == (lineSegmentsPositionList.length - 1)) {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
         thFile,
@@ -930,7 +936,10 @@ class MPNumericAux {
               end: lineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.end);
+      tangent = MPNumericAux.anyTypeSegmentTangent(
+        segment,
+        MPExtremityType.end,
+      );
     } else {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
@@ -945,11 +954,11 @@ class MPNumericAux {
               start: previousLineSegment.endPoint.coordinates,
               c1: lineSegment.controlPoint1.coordinates,
               c2: lineSegment.controlPoint2.coordinates,
-              end: nextLineSegment.endPoint.coordinates,
+              end: lineSegment.endPoint.coordinates,
             )
           : MPStraightSegment(
               start: previousLineSegment.endPoint.coordinates,
-              end: nextLineSegment.endPoint.coordinates,
+              end: lineSegment.endPoint.coordinates,
             );
       final MPSegment nextSegment =
           (nextLineSegment is THBezierCurveLineSegment)
@@ -964,8 +973,14 @@ class MPNumericAux {
               end: nextLineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.averageTangent(segment, nextSegment);
+      tangent = MPNumericAux.averageTangent(segment, nextSegment);
     }
+
+    if (MPCommandOptionAux.isReversed(line)) {
+      tangent = -tangent;
+    }
+
+    return tangent;
   }
 
   static Offset normalFromTangent(Offset tangent, {bool clockwise = false}) {
@@ -983,6 +998,14 @@ class MPNumericAux {
     }
 
     return rawNormal / length;
+  }
+
+  static double segmentNormal(int lineSegmentMPID, THFile thFile) {
+    final Offset tangent = MPNumericAux.segmentTangent(lineSegmentMPID, thFile);
+    final Offset normal = MPNumericAux.normalFromTangent(tangent);
+    final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
+
+    return azimuth;
   }
 
   static Rect boundingBoxFromOffsets(List<Offset> points) {

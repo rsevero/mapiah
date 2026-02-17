@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -2057,16 +2056,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetLinePointOrientationLSize() {
-    /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
-    final bool forceOrientation =
-        (_currentOptionTypeBeingEdited == THCommandOptionType.orientation)
-        ? true
-        : MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool forceLSize =
-        (_currentOptionTypeBeingEdited == THCommandOptionType.lSize)
-        ? true
-        : MPInteractionAux.isAltPressed();
+  void applySetLinePointOrientationLSize({
+    required double? orientation,
+    required double? lSize,
+  }) {
     final List<MPCommand> setCommands = [];
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         _th2FileEditController
@@ -2079,42 +2072,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final THLineSegment lineSegment = selectedEndPoint.originalElementClone;
       final int lineSegmentMPID = lineSegment.mpID;
 
-      if (forceOrientation ||
-          (lineSegment.hasOption(THCommandOptionType.orientation) &&
-              !MPNumericAux.nearlyEqual(
-                (lineSegment.getOption(THCommandOptionType.orientation)
-                        as THOrientationCommandOption)
-                    .azimuth
-                    .value,
-                _linePointOrientation!,
-              ))) {
+      if (lSize != null) {
+        final THLSizeCommandOption lsizeOption =
+            THLSizeCommandOption.fromString(
+              parentMPID: lineSegmentMPID,
+              number: lSize.toStringAsFixed(1),
+            );
+
+        setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
+      }
+
+      if (orientation != null) {
         final THOrientationCommandOption orientationOption =
             THOrientationCommandOption.fromString(
               parentMPID: lineSegmentMPID,
-              azimuth: _linePointOrientation!.toStringAsFixed(1),
+              azimuth: orientation.toStringAsFixed(1),
             );
 
         setCommands.add(
           MPSetOptionToElementCommand(toOption: orientationOption),
         );
-      }
-
-      if (forceLSize ||
-          (lineSegment.hasOption(THCommandOptionType.lSize) &&
-              !MPNumericAux.nearlyEqual(
-                (lineSegment.getOption(THCommandOptionType.lSize)
-                        as THLSizeCommandOption)
-                    .number
-                    .value,
-                _linePointLSize!,
-              ))) {
-        final THLSizeCommandOption lsizeOption =
-            THLSizeCommandOption.fromString(
-              parentMPID: lineSegmentMPID,
-              number: _linePointLSize!.toStringAsFixed(1),
-            );
-
-        setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
       }
     }
 
