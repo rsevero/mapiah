@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_segment.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 
 const double maxDelta = 1e-12;
@@ -365,6 +366,35 @@ void main() {
       );
 
       expect(curve.length(), 0.0);
+    });
+  });
+
+  group('MPSegment.length / MPStraightSegment.length', () {
+    test('returns Euclidean distance for straight segment', () {
+      const MPStraightSegment segment = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(3, 4),
+      );
+
+      expect(segment.length(), closeTo(5.0, maxDelta));
+    });
+
+    test('returns zero for degenerate straight segment', () {
+      const MPStraightSegment segment = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(1, 1),
+      );
+
+      expect(segment.length(), 0.0);
+    });
+
+    test('works through MPSegment polymorphic reference', () {
+      const MPSegment segment = MPStraightSegment(
+        start: Offset(-1, -1),
+        end: Offset(2, 3),
+      );
+
+      expect(segment.length(), closeTo(5.0, maxDelta));
     });
   });
 
