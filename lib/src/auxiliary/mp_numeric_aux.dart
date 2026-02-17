@@ -690,12 +690,15 @@ class MPNumericAux {
   }) {
     double length = 0.0;
     Offset prev = controlPoints.first;
+
     for (int i = 1; i <= steps; i++) {
       double ti = t * i / steps;
       Offset pt = deCasteljau(controlPoints, ti);
+
       length += (pt - prev).distance;
       prev = pt;
     }
+
     return length;
   }
 
@@ -794,7 +797,6 @@ class MPNumericAux {
       lineSegment.endPoint.coordinates,
       t,
     );
-
     final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
       controlPoint1: THPositionPart(coordinates: left[1]),
@@ -892,9 +894,9 @@ class MPNumericAux {
   static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {
     final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
     final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
-    final Map<int, int> lineSegmentsPositionList = line
+    final Map<int, int> lineSegmentsPositionMap = line
         .getLineSegmentPositionsByLineSegmentMPID(thFile);
-    final int position = lineSegmentsPositionList[lineSegmentMPID]!;
+    final int position = lineSegmentsPositionMap[lineSegmentMPID]!;
 
     Offset tangent;
 
@@ -919,7 +921,7 @@ class MPNumericAux {
         segment,
         MPExtremityType.start,
       );
-    } else if (position == (lineSegmentsPositionList.length - 1)) {
+    } else if (position == (lineSegmentsPositionMap.length - 1)) {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
         thFile,

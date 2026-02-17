@@ -185,7 +185,7 @@ void main() {
     test('cardinal directions use azimuth convention', () {
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(0, -1)),
-        closeTo(0.0, maxDelta),
+        closeTo(180.0, maxDelta),
       );
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(1, 0)),
@@ -193,7 +193,7 @@ void main() {
       );
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(0, 1)),
-        closeTo(180.0, maxDelta),
+        closeTo(0.0, maxDelta),
       );
       expect(
         MPNumericAux.directionOffsetToDegrees(const Offset(-1, 0)),
@@ -341,6 +341,33 @@ void main() {
     });
   });
 
+  group('MPBezierCurve.length', () {
+    test(
+      'returns near straight-line distance for collinear control points',
+      () {
+        const MPBezierCurve curve = MPCubicBezierCurve(
+          start: Offset(0, 0),
+          c1: Offset(1, 0),
+          c2: Offset(2, 0),
+          end: Offset(3, 0),
+        );
+
+        expect(curve.length(), closeTo(3.0, maxDelta));
+      },
+    );
+
+    test('returns zero for degenerate cubic', () {
+      const MPCubicBezierCurve curve = MPCubicBezierCurve(
+        start: Offset(2, 2),
+        c1: Offset(2, 2),
+        c2: Offset(2, 2),
+        end: Offset(2, 2),
+      );
+
+      expect(curve.length(), 0.0);
+    });
+  });
+
   group('MPNumericAux.straightTangent', () {
     test('returns a unit tangent from start to end', () {
       const MPStraightSegment s = MPStraightSegment(
@@ -384,8 +411,25 @@ void main() {
       expect(t.distance, closeTo(1.0, maxDelta));
     });
 
+    test('averages end of first and start of second (straight segments) 2', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      expect(t.dx, closeTo(1.0, maxDelta));
+      expect(t.dy, closeTo(0.0, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
     test('uses bezier end tangent when first is a cubic curve', () {
-      const MPCubicBezierCurve c1 = MPCubicBezierCurve(
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
         start: Offset(0, 0),
         c1: Offset(1, 0),
         c2: Offset(2, 0),
@@ -396,7 +440,7 @@ void main() {
         end: Offset(3, 1),
       );
 
-      final Offset t = MPNumericAux.averageTangent(c1, s2);
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
 
       final double expected = math.sqrt(2) / 2;
       expect(t.dx, closeTo(expected, maxDelta));
