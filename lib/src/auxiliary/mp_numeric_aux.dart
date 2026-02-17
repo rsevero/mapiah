@@ -901,7 +901,7 @@ class MPNumericAux {
     return average / averageLength;
   }
 
-  static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {
+  static Offset segmentTangentFromTHFile(int lineSegmentMPID, THFile thFile) {
     final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
     final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
     final Map<int, int> lineSegmentsPositionMap = line
@@ -995,6 +995,20 @@ class MPNumericAux {
     return tangent;
   }
 
+  static Offset segmentTangentFromSegments({
+    required MPSegment firstSegment,
+    required MPSegment secondSegment,
+    required bool isReversed,
+  }) {
+    Offset tangent = MPNumericAux.averageTangent(firstSegment, secondSegment);
+
+    if (isReversed) {
+      tangent = -tangent;
+    }
+
+    return tangent;
+  }
+
   static Offset normalFromTangent(Offset tangent) {
     if (tangent == Offset.zero) {
       return Offset.zero;
@@ -1010,8 +1024,27 @@ class MPNumericAux {
     return rawNormal / length;
   }
 
-  static double segmentNormal(int lineSegmentMPID, THFile thFile) {
-    final Offset tangent = MPNumericAux.segmentTangent(lineSegmentMPID, thFile);
+  static double segmentNormalFromTHFile(int lineSegmentMPID, THFile thFile) {
+    final Offset tangent = MPNumericAux.segmentTangentFromTHFile(
+      lineSegmentMPID,
+      thFile,
+    );
+    final Offset normal = MPNumericAux.normalFromTangent(tangent);
+    final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
+
+    return azimuth;
+  }
+
+  static double segmentNormalFromSegments({
+    required MPSegment firstSegment,
+    required MPSegment secondSegment,
+    required bool isReversed,
+  }) {
+    final Offset tangent = MPNumericAux.segmentTangentFromSegments(
+      firstSegment: firstSegment,
+      secondSegment: secondSegment,
+      isReversed: isReversed,
+    );
     final Offset normal = MPNumericAux.normalFromTangent(tangent);
     final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
 

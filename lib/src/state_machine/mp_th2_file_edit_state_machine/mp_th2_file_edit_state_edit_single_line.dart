@@ -692,7 +692,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (_useDefaultOrientation &&
         (!MPInteractionAux.isCtrlPressed() &&
             !MPInteractionAux.isMetaPressed())) {
-      orientation = MPNumericAux.segmentNormal(
+      orientation = MPNumericAux.segmentNormalFromTHFile(
         mpSelectedEndControlPoint.mpID,
         th2FileEditController.thFile,
       );

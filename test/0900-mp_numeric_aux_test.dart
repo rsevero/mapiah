@@ -608,4 +608,86 @@ void main() {
       expect(MPNumericAux.normalFromTangent(Offset.zero), Offset.zero);
     });
   });
+
+  group('MPNumericAux.segmentNormal', () {
+    test('2 straight segments', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: false,
+      );
+      expect(normal, closeTo(0.0, maxDelta));
+    });
+
+    test('2 straight segments (reversed)', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: true,
+      );
+      expect(normal, closeTo(180.0, maxDelta));
+    });
+
+    test('2 Bézier curve segments', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: false,
+      );
+      expect(normal, closeTo(0.0, maxDelta));
+    });
+
+    test('2 Bézier curve segments (reversed)', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: true,
+      );
+      expect(normal, closeTo(180.0, maxDelta));
+    });
+  });
 }
