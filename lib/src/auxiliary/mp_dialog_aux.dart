@@ -281,10 +281,6 @@ class MPDialogAux {
       final Duration timeSinceLastCheck = now.difference(lastNewVersionCheck);
 
       if (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks) {
-        mpLocator.mpLog.i(
-          'Update check skipped: last check was ${timeSinceLastCheck.inSeconds} seconds ago',
-        );
-
         return;
       }
 

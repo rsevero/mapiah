@@ -31,6 +31,7 @@
   * Separating THLSizeOrientationPainter from THLinePainter.
   * Single action to set both LSize and Orientation values at TH2FileEditElementEditController.
   * MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.
+  * Using lsize and orientation behaviour inspired by xThreion original one.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

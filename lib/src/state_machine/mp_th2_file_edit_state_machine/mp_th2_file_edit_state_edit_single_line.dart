@@ -11,12 +11,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateOptionsEditMixin {
   bool _dragShouldMovePoints = false;
-  bool _hasDifferentOrientations = false;
-  bool _hasDifferentLSizes = false;
-  bool _valuesSetByUser = false;
-  bool _useDefaultLSize = true;
-  bool _useDefaultOrientation = true;
   bool _isLSizeOrientationEdit = false;
+  MPLSizeOrientationDragStartState? _lSizeOrientationDragStartState;
+  MPLSizeOrientationDragUpdateResult? _lastLSizeOrientationDragUpdateResult;
 
   static const Set<MPTH2FileEditStateType> singleLineEditModes = {
     MPTH2FileEditStateType.editSingleLine,
@@ -56,14 +53,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   String _getLSizeOrientationStatusBarMessage() {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
-    String getOptionValueString({
-      required bool hasDifferentValues,
-      required double? value,
-    }) {
-      if (hasDifferentValues) {
-        return appLocalizations.mpChoiceMultipleValues;
-      }
-
+    String getOptionValueString({required double? value}) {
       if (value == null) {
         return appLocalizations.mpChoiceUnset;
       }
@@ -72,11 +62,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     }
 
     final String orientationString = getOptionValueString(
-      hasDifferentValues: _hasDifferentOrientations,
       value: elementEditController.linePointOrientation,
     );
     final String lSizeString = getOptionValueString(
-      hasDifferentValues: _hasDifferentLSizes,
       value: elementEditController.linePointLSize,
     );
 
@@ -89,7 +77,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (elementEditController.currentOptionTypeBeingEdited ==
         THCommandOptionType.orientation) {
       forceOrientation = true;
-    } else if (_valuesSetByUser) {
+    } else if (_lastLSizeOrientationDragUpdateResult != null) {
       forceOrientation =
           MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     } else {
@@ -101,7 +89,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (elementEditController.currentOptionTypeBeingEdited ==
         THCommandOptionType.lSize) {
       forceLSize = true;
-    } else if (_valuesSetByUser) {
+    } else if (_lastLSizeOrientationDragUpdateResult != null) {
       forceLSize = MPInteractionAux.isAltPressed();
     } else {
       forceLSize = false;
@@ -249,9 +237,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return;
     } else if (_isLSizeOrientationEdit) {
       _setOrientationLSizeFromLocalPosition(event.localPosition);
-
-      _valuesSetByUser = true;
-
       _saveLSizeOrientation(
         th2FileEditController
             .elementEditController
@@ -393,15 +378,16 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) async {
+    selectionController.setDragStartCoordinatesFromScreenCoordinates(
+      event.localPosition,
+    );
+
     if (_isLSizeOrientationEdit) {
-      _setOrientationLSizeFromLocalPosition(event.localPosition);
+      _initializeLSizeOrientation(event.localPosition);
 
       return;
     }
 
-    selectionController.setDragStartCoordinatesFromScreenCoordinates(
-      event.localPosition,
-    );
     elementEditController.resetOriginalFileForLineSimplification();
 
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
@@ -490,9 +476,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     if (_isLSizeOrientationEdit) {
       _setOrientationLSizeFromLocalPosition(event.localPosition);
-
-      _valuesSetByUser = true;
-
       _saveLSizeOrientation(
         th2FileEditController
             .elementEditController
@@ -548,58 +531,30 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return lineSegmentsInsideSelectionWindow;
   }
 
-  void _initializeLSizeOrientation() {
+  void _initializeLSizeOrientation(Offset mouseScreen) {
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         selectionController.selectedEndControlPoints.values;
 
-    bool isFirst = true;
-    double? orientationAll;
-    double? lSizeAll;
-
-    _hasDifferentOrientations = false;
-    _hasDifferentLSizes = false;
-    _valuesSetByUser = false;
-
-    for (MPSelectedEndControlPoint selectedEndPoint in selectedEndPoints) {
-      final THLineSegment lineSegment =
-          selectedEndPoint.originalLineSegmentClone;
-      final double? pointOrientation = MPCommandOptionAux.getOrientation(
-        lineSegment,
-      );
-      final double? pointLSize = MPCommandOptionAux.getLSize(lineSegment);
-
-      if (isFirst) {
-        orientationAll = pointOrientation;
-        lSizeAll = pointLSize;
-        isFirst = false;
-
-        continue;
-      }
-
-      if (orientationAll != pointOrientation) {
-        _hasDifferentOrientations = true;
-        orientationAll = null;
-      }
-
-      if (lSizeAll != pointLSize) {
-        _hasDifferentLSizes = true;
-        lSizeAll = null;
-      }
+    if (selectedEndPoints.length != 1) {
+      return;
     }
 
-    _useDefaultLSize =
-        (lSizeAll == null) &&
-        (elementEditController.currentOptionTypeBeingEdited !=
-            THCommandOptionType.lSize);
-    _useDefaultOrientation =
-        (orientationAll == null) &&
-        (elementEditController.currentOptionTypeBeingEdited !=
-            THCommandOptionType.orientation);
-
-    elementEditController.setLinePointLSizeAndOrientation(
-      orientation: orientationAll,
-      lSize: lSizeAll,
+    final THLineSegment lineSegment =
+        selectedEndPoints.first.originalLineSegmentClone;
+    final double? pointLSize = MPCommandOptionAux.getLSize(lineSegment);
+    final double? pointOrientation = MPCommandOptionAux.getOrientation(
+      lineSegment,
     );
+
+    _lSizeOrientationDragStartState =
+        MPLSizeOrientationAux.startLinePointLSizeOrientationDrag(
+          pointCanvas: lineSegment.endPoint.coordinates,
+          mouseScreen: mouseScreen,
+          initialLSize: pointLSize,
+          initialOrientation: pointOrientation,
+          th2FileEditController: th2FileEditController,
+          lineSegmentMPID: lineSegment.mpID,
+        );
   }
 
   @override
@@ -610,10 +565,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _saveLSizeOrientation(previousOptionType);
 
     _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
-
-    if (_isLSizeOrientationEdit) {
-      _initializeLSizeOrientation();
-    }
   }
 
   bool _isLSizeOrientation(THCommandOptionType? optionType) {
@@ -624,83 +575,96 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   void _saveLSizeOrientation(
     THCommandOptionType? previousOptionTypeBeingEdited,
   ) {
-    if (!_isLSizeOrientation(previousOptionTypeBeingEdited)) {
+    if (!_isLSizeOrientation(previousOptionTypeBeingEdited) ||
+        (_lSizeOrientationDragStartState == null) ||
+        (_lastLSizeOrientationDragUpdateResult == null)) {
       return;
     }
 
-    if (!_valuesSetByUser ||
-        selectionController.selectedEndControlPoints.isEmpty) {
-      return;
-    }
+    final Map<int, MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints;
 
-    final double? lSize =
-        (_useDefaultLSize && (!MPInteractionAux.isAltPressed()))
-        ? null
-        : elementEditController.linePointLSize;
-    final double? orientation =
-        (_useDefaultOrientation &&
-            !MPInteractionAux.isCtrlPressed() &&
-            !MPInteractionAux.isMetaPressed())
-        ? null
-        : elementEditController.linePointOrientation;
-
-    elementEditController.applySetLinePointOrientationLSize(
-      orientation: orientation,
-      lSize: lSize,
-    );
-
-    _valuesSetByUser = false;
-  }
-
-  void _setOrientationLSizeFromLocalPosition(Offset clickScreenCoordinates) {
-    if (selectionController.selectedEndControlPoints.length != 1) {
-      return;
+    if (selectedEndPoints.length != 1) {
+      throw StateError(
+        'Error: selectedEndPoints length is different from 1 at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
+      );
     }
 
     final MPSelectedEndControlPoint mpSelectedEndControlPoint =
-        selectionController.selectedEndControlPoints.values.first;
+        selectedEndPoints.values.first;
 
     if ((mpSelectedEndControlPoint.type !=
             MPEndControlPointType.endPointBezierCurve) &&
         (mpSelectedEndControlPoint.type !=
             MPEndControlPointType.endPointStraight)) {
-      return;
+      throw StateError(
+        'Error: selectedEndControlPoint type is different from endPointBezierCurve and endPointStraight at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
+      );
     }
 
-    final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
-      clickScreenCoordinates,
+    elementEditController.applySetLinePointOrientationLSize(
+      lSize:
+          (_lSizeOrientationDragStartState!.lSizeEnabled ||
+              MPInteractionAux.isAltPressed())
+          ? _lastLSizeOrientationDragUpdateResult!.lSize
+          : null,
+      orientation:
+          (_lSizeOrientationDragStartState!.orientationEnabled ||
+              MPInteractionAux.isCtrlPressed() ||
+              MPInteractionAux.isMetaPressed())
+          ? _lastLSizeOrientationDragUpdateResult!.orientation
+          : null,
     );
-    final THLineSegment selectedLineSegment =
-        mpSelectedEndControlPoint.originalLineSegmentClone;
-    final double centerX = selectedLineSegment.x;
-    final double centerY = selectedLineSegment.y;
-    final double deltaX = canvasPosition.dx - centerX;
-    final double deltaY = canvasPosition.dy - centerY;
-    final double lSize;
-    final double orientation;
 
-    if (_useDefaultLSize && (!MPInteractionAux.isAltPressed())) {
-      lSize = mpSlopeLinePointDefaultLSize;
-    } else {
-      final double distanceFromCenter = math.sqrt(
-        (deltaX * deltaX) + (deltaY * deltaY),
+    _lSizeOrientationDragStartState = null;
+    _lastLSizeOrientationDragUpdateResult = null;
+  }
+
+  void _setOrientationLSizeFromLocalPosition(Offset clickScreenCoordinates) {
+    final Map<int, MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints;
+
+    if (selectedEndPoints.length != 1) {
+      throw StateError(
+        'Error: selectedEndPoints length is different from 1 at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
       );
-
-      lSize = distanceFromCenter * mpLSizeCanvasSizeFactor;
     }
 
-    if (_useDefaultOrientation &&
-        (!MPInteractionAux.isCtrlPressed() &&
-            !MPInteractionAux.isMetaPressed())) {
-      orientation = MPNumericAux.segmentNormalFromTHFile(
-        mpSelectedEndControlPoint.mpID,
-        th2FileEditController.thFile,
-      );
-    } else {
-      final Offset directionOffset = Offset(deltaX, deltaY);
+    final MPSelectedEndControlPoint mpSelectedEndControlPoint =
+        selectedEndPoints.values.first;
 
-      orientation = MPNumericAux.directionOffsetToDegrees(directionOffset);
+    if ((mpSelectedEndControlPoint.type !=
+            MPEndControlPointType.endPointBezierCurve) &&
+        (mpSelectedEndControlPoint.type !=
+            MPEndControlPointType.endPointStraight)) {
+      throw StateError(
+        'Error: selectedEndControlPoint type is different from endPointBezierCurve and endPointStraight at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
+      );
     }
+
+    if (_lSizeOrientationDragStartState == null) {
+      throw StateError(
+        'Error: _lSizeOrientationDragStartState is null at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
+      );
+    }
+
+    _lastLSizeOrientationDragUpdateResult =
+        MPLSizeOrientationAux.updateLinePointLSizeOrientationDrag(
+          drag: _lSizeOrientationDragStartState!,
+          pointCanvas: mpSelectedEndControlPoint
+              .originalLineSegmentClone
+              .endPoint
+              .coordinates,
+          mouseScreen: clickScreenCoordinates,
+          th2FileEditController: th2FileEditController,
+        );
+
+    final double lSize =
+        _lastLSizeOrientationDragUpdateResult!.lSize ??
+        _lSizeOrientationDragStartState!.originalLSize;
+    final double orientation =
+        _lastLSizeOrientationDragUpdateResult!.orientation ??
+        _lSizeOrientationDragStartState!.originalOrientation;
 
     elementEditController.setLinePointLSizeAndOrientation(
       orientation: orientation,

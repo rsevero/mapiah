@@ -103,12 +103,20 @@ class MPCompassPainter extends CustomPainter {
         : th2FileEditController!.scaleCanvasToScreen(
             arrowLength * mpCompassArrowVariableLengthScreenFactor,
           );
-    final Offset arrowTipBase = Offset(
-      0,
-      arrowLengthOnScreen * mpCompassArrowTipBaseFactor,
-    );
     final double arrowBodyWidthOnScreen =
         mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor;
+    final double arrowSide =
+        mpCompassArrowHeadReferenceLengthOnScreen * mpCompassArrowSideFactor;
+    final double arrowSideInsetFromTip =
+        mpCompassArrowHeadReferenceLengthOnScreen *
+        mpCompassArrowBaseLengthFactor;
+    final double arrowTipBaseInsetFromTip =
+        mpCompassArrowHeadReferenceLengthOnScreen * mpCompassArrowTipBaseFactor;
+    final Offset arrowTip = Offset(0, arrowLengthOnScreen);
+    final Offset arrowTipBase = Offset(
+      0,
+      arrowTip.dy - arrowTipBaseInsetFromTip,
+    );
     final Paint arrowBodyPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.stroke
@@ -120,12 +128,14 @@ class MPCompassPainter extends CustomPainter {
     final Paint arrowPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
-    final Offset arrowTip = Offset(0, arrowLengthOnScreen);
-    final double arrowSide = arrowLengthOnScreen * mpCompassArrowSideFactor;
-    final double arrowBaseLength =
-        arrowLengthOnScreen * mpCompassArrowBaseLengthFactor;
-    final Offset arrowSide1 = Offset(-arrowSide, arrowBaseLength);
-    final Offset arrowSide2 = Offset(arrowSide, arrowBaseLength);
+    final Offset arrowSide1 = Offset(
+      -arrowSide,
+      arrowTip.dy - arrowSideInsetFromTip,
+    );
+    final Offset arrowSide2 = Offset(
+      arrowSide,
+      arrowTip.dy - arrowSideInsetFromTip,
+    );
     final Path path = Path();
 
     path.moveTo(arrowTip.dx, arrowTip.dy);
@@ -135,13 +145,6 @@ class MPCompassPainter extends CustomPainter {
     path.close();
 
     canvas.drawPath(path, arrowPaint);
-
-    // Draw central circle
-    canvas.drawCircle(
-      Offset.zero,
-      arrowLength * mpCompassCentralCircleFactor,
-      arrowPaint,
-    );
 
     // Restore the canvas state
     canvas.restore();
