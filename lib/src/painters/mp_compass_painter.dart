@@ -145,21 +145,18 @@ class MPCompassPainter extends CustomPainter {
     );
     final Offset headPoint1 = rotateAndTranslate(arrowTip);
     final Offset headPoint2 = rotateAndTranslate(arrowSide1);
-    final Offset headPoint3 = rotateAndTranslate(arrowTipBase);
-    final Offset headPoint4 = rotateAndTranslate(arrowSide2);
+    final Offset headPoint3 = rotateAndTranslate(arrowSide2);
     final Paint arrowPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
     final Path compassPath = Path()
-      ..moveTo(bodyPoint1.dx, bodyPoint1.dy)
-      ..lineTo(bodyPoint2.dx, bodyPoint2.dy)
-      ..lineTo(bodyPoint3.dx, bodyPoint3.dy)
+      ..moveTo(bodyPoint2.dx, bodyPoint2.dy)
+      ..lineTo(bodyPoint1.dx, bodyPoint1.dy)
       ..lineTo(bodyPoint4.dx, bodyPoint4.dy)
-      ..close()
-      ..moveTo(headPoint1.dx, headPoint1.dy)
-      ..lineTo(headPoint2.dx, headPoint2.dy)
+      ..lineTo(bodyPoint3.dx, bodyPoint3.dy)
       ..lineTo(headPoint3.dx, headPoint3.dy)
-      ..lineTo(headPoint4.dx, headPoint4.dy)
+      ..lineTo(headPoint1.dx, headPoint1.dy)
+      ..lineTo(headPoint2.dx, headPoint2.dy)
       ..close();
 
     canvas.drawPath(compassPath, arrowPaint);
