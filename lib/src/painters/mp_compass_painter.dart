@@ -97,8 +97,8 @@ class MPCompassPainter extends CustomPainter {
         : th2FileEditController!.scaleCanvasToScreen(
             arrowLength * mpCompassArrowVariableLengthScreenFactor,
           );
-    final double arrowBodyWidthOnScreen =
-        mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor;
+    final double arrowBodyHalfWidthOnScreen =
+        (mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor) / 2;
     final double arrowSide =
         mpCompassArrowHeadReferenceLengthOnScreen * mpCompassArrowSideFactor;
     final double arrowSideInsetFromTip =
@@ -132,16 +132,16 @@ class MPCompassPainter extends CustomPainter {
     }
 
     final Offset bodyPoint1 = rotateAndTranslate(
-      Offset(-arrowBodyWidthOnScreen / 2, 0),
+      Offset(-arrowBodyHalfWidthOnScreen, 0),
     );
     final Offset bodyPoint2 = rotateAndTranslate(
-      Offset(-arrowBodyWidthOnScreen / 2, arrowTipBase.dy),
+      Offset(-arrowBodyHalfWidthOnScreen, arrowTipBase.dy),
     );
     final Offset bodyPoint3 = rotateAndTranslate(
-      Offset(arrowBodyWidthOnScreen / 2, arrowTipBase.dy),
+      Offset(arrowBodyHalfWidthOnScreen, arrowTipBase.dy),
     );
     final Offset bodyPoint4 = rotateAndTranslate(
-      Offset(arrowBodyWidthOnScreen / 2, 0),
+      Offset(arrowBodyHalfWidthOnScreen, 0),
     );
     final Offset headPoint1 = rotateAndTranslate(arrowTip);
     final Offset headPoint2 = rotateAndTranslate(arrowSide1);
