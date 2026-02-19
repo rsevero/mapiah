@@ -157,7 +157,24 @@ class MPCompassPainter extends CustomPainter {
       ..lineTo(headPoint2.dx, headPoint2.dy)
       ..close();
 
-    canvas.drawPath(compassPath, arrowPaint);
+    /// If drawing the compass arrow in a azimuth picker, we need to apply a
+    /// vertical flip to the arrow path to match the expected direction of
+    /// as the path is created considering the positive y axis as pointing
+    /// downwards (as in Flutter's coordinate system). Besides that, as we want
+    /// to use the created path to click on arrow checking in
+    /// MPTH2FileEditStateEditSingleLine we need to store the path in the user
+    /// interaction controller in canvas coordinates but the azimuth picker
+    /// has its own center. This is why we use the complicate translation below.
+    if (isAzimuthPickerMode) {
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.scale(1, -1);
+      canvas.translate(-center.dx, -center.dy);
+      canvas.drawPath(compassPath, arrowPaint);
+      canvas.restore();
+    } else {
+      canvas.drawPath(compassPath, arrowPaint);
+    }
 
     userInteractionController?.setCompassPath(compassPath.shift(canvasOffset));
   }

@@ -45,7 +45,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
   double? _currentAzimuth = 0;
   late final String _initialAzimuth;
   late final String _initialSelectedChoice;
-  late final bool _isSingleLineSegment;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isOkButtonEnabled = false;
 
@@ -54,15 +53,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
     super.initState();
 
     th2FileEditController = widget.th2FileEditController;
-
-    _isSingleLineSegment =
-        (th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment) &&
-        (th2FileEditController
-                .selectionController
-                .selectedEndControlPoints
-                .length ==
-            1);
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
