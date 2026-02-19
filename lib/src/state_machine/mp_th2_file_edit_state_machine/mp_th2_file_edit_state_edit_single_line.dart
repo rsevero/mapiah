@@ -122,7 +122,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.setStatusBarMessage('');
-    th2FileEditController.userInteractionController.clearCompassPath();
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {

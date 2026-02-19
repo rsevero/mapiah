@@ -166,10 +166,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (_isSingleLineSegment) {
-      return SizedBox.shrink();
-    }
-
     final String title = appLocalizations.thCommandOptionOrientation;
     final String azimuthLabel = appLocalizations.mpAzimuthAzimuthLabel;
 
@@ -218,10 +214,7 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
               ),
             ),
 
-            // Additional Inputs for "Set" Option
-            if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-                !_isSingleLineSegment) ...[
-              // if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,

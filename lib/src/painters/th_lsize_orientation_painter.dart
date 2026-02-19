@@ -39,7 +39,7 @@ class THLSizeOrientationPainter extends CustomPainter {
     final MPCompassPainter configuredCompassPainter = MPCompassPainter(
       azimuth: azimuth,
       arrowLength: markerCanvasSize,
-      drawBackgroundLines: false,
+      isAzimuthPickerMode: false,
       userInteractionController: storeCompassPath
           ? th2FileEditController.userInteractionController
           : null,

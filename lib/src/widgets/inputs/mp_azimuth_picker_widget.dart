@@ -97,7 +97,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
               painter: MPCompassPainter(
                 azimuth: _azimuth,
                 arrowLength: _markerSize,
-                drawBackgroundLines: true,
+                isAzimuthPickerMode: true,
               ),
             ),
           ),

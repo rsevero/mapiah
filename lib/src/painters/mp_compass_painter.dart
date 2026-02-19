@@ -9,15 +9,15 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 class MPCompassPainter extends CustomPainter {
   final double azimuth;
   final double arrowLength;
-  final bool drawBackgroundLines;
   final TH2FileEditController? th2FileEditController;
   final TH2FileEditUserInteractionController? userInteractionController;
   final Offset canvasOffset;
+  final bool isAzimuthPickerMode;
 
   MPCompassPainter({
     required this.azimuth,
     required this.arrowLength,
-    required this.drawBackgroundLines,
+    required this.isAzimuthPickerMode,
     this.th2FileEditController,
     this.userInteractionController,
     this.canvasOffset = Offset.zero,
@@ -29,7 +29,7 @@ class MPCompassPainter extends CustomPainter {
     final Offset center = Offset(size.width, size.height) / 2;
     final double radius = size.width / 2;
 
-    if (drawBackgroundLines) {
+    if (isAzimuthPickerMode) {
       // Draw compass circle
       final Paint circlePaint = Paint()
         ..color = Colors.grey[200]!
@@ -92,11 +92,9 @@ class MPCompassPainter extends CustomPainter {
       }
     }
 
-    final double arrowLengthOnScreen = (th2FileEditController == null)
-        ? arrowLength * mpCompassArrowFixedLengthScreenFactor
-        : th2FileEditController!.scaleCanvasToScreen(
-            arrowLength * mpCompassArrowVariableLengthScreenFactor,
-          );
+    final double arrowLengthOnScreen = isAzimuthPickerMode
+        ? radius * mpCompass90DegreeLineFactor
+        : arrowLength;
     final double arrowBodyHalfWidthOnScreen =
         (mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor) / 2;
     final double arrowSide =

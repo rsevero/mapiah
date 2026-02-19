@@ -222,7 +222,6 @@ const double mpCompass45DegreeLineFactor = 0.87;
 const double mpCompass90DegreeLineFactor = 0.68;
 const double mpCompassArrowBaseLengthFactor = 0.78;
 const double mpCompassArrowBodyWidthFactor = 2.0;
-const double mpCompassArrowFixedLengthScreenFactor = 1.0;
 const double mpCompassArrowScreenBodyWidth = 3.0;
 const double mpCompassArrowHeadReferenceLengthOnScreen = 18.0;
 const double mpCompassArrowSideFactor = 0.5;
