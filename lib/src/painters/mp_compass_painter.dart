@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPCompassPainter extends CustomPainter {
@@ -10,12 +11,16 @@ class MPCompassPainter extends CustomPainter {
   final double arrowLength;
   final bool drawBackgroundLines;
   final TH2FileEditController? th2FileEditController;
+  final TH2FileEditUserInteractionController? userInteractionController;
+  final Offset canvasOffset;
 
   MPCompassPainter({
     required this.azimuth,
     required this.arrowLength,
     required this.drawBackgroundLines,
     this.th2FileEditController,
+    this.userInteractionController,
+    this.canvasOffset = Offset.zero,
   });
 
   @override
@@ -87,17 +92,6 @@ class MPCompassPainter extends CustomPainter {
       }
     }
 
-    // Save the canvas state
-    canvas.save();
-
-    // Translate the canvas to the center of the compass
-    canvas.translate(center.dx, center.dy);
-
-    // Rotate the canvas based on the azimuth
-    // In a Y-up space, positive rotation is counter-clockwise; azimuth is
-    // defined clockwise, so negate it.
-    canvas.rotate(-azimuth * mp1DegreeInRad);
-
     final double arrowLengthOnScreen = (th2FileEditController == null)
         ? arrowLength * mpCompassArrowFixedLengthScreenFactor
         : th2FileEditController!.scaleCanvasToScreen(
@@ -117,17 +111,6 @@ class MPCompassPainter extends CustomPainter {
       0,
       arrowTip.dy - arrowTipBaseInsetFromTip,
     );
-    final Paint arrowBodyPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = arrowBodyWidthOnScreen;
-
-    canvas.drawLine(Offset.zero, arrowTipBase, arrowBodyPaint);
-
-    // Draw the arrowhead
-    final Paint arrowPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.fill;
     final Offset arrowSide1 = Offset(
       -arrowSide,
       arrowTip.dy - arrowSideInsetFromTip,
@@ -136,18 +119,52 @@ class MPCompassPainter extends CustomPainter {
       arrowSide,
       arrowTip.dy - arrowSideInsetFromTip,
     );
-    final Path path = Path();
+    final double azimuthRadians = azimuth * mp1DegreeInRad;
+    final double cosAzimuth = math.cos(azimuthRadians);
+    final double sinAzimuth = math.sin(azimuthRadians);
 
-    path.moveTo(arrowTip.dx, arrowTip.dy);
-    path.lineTo(arrowSide1.dx, arrowSide1.dy);
-    path.lineTo(arrowTipBase.dx, arrowTipBase.dy);
-    path.lineTo(arrowSide2.dx, arrowSide2.dy);
-    path.close();
+    Offset rotateAndTranslate(Offset point) {
+      final double rotatedX = (point.dx * cosAzimuth) + (point.dy * sinAzimuth);
+      final double rotatedY =
+          (-point.dx * sinAzimuth) + (point.dy * cosAzimuth);
 
-    canvas.drawPath(path, arrowPaint);
+      return Offset(rotatedX + center.dx, rotatedY + center.dy);
+    }
 
-    // Restore the canvas state
-    canvas.restore();
+    final Offset bodyPoint1 = rotateAndTranslate(
+      Offset(-arrowBodyWidthOnScreen / 2, 0),
+    );
+    final Offset bodyPoint2 = rotateAndTranslate(
+      Offset(-arrowBodyWidthOnScreen / 2, arrowTipBase.dy),
+    );
+    final Offset bodyPoint3 = rotateAndTranslate(
+      Offset(arrowBodyWidthOnScreen / 2, arrowTipBase.dy),
+    );
+    final Offset bodyPoint4 = rotateAndTranslate(
+      Offset(arrowBodyWidthOnScreen / 2, 0),
+    );
+    final Offset headPoint1 = rotateAndTranslate(arrowTip);
+    final Offset headPoint2 = rotateAndTranslate(arrowSide1);
+    final Offset headPoint3 = rotateAndTranslate(arrowTipBase);
+    final Offset headPoint4 = rotateAndTranslate(arrowSide2);
+    final Paint arrowPaint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+    final Path compassPath = Path()
+      ..moveTo(bodyPoint1.dx, bodyPoint1.dy)
+      ..lineTo(bodyPoint2.dx, bodyPoint2.dy)
+      ..lineTo(bodyPoint3.dx, bodyPoint3.dy)
+      ..lineTo(bodyPoint4.dx, bodyPoint4.dy)
+      ..close()
+      ..moveTo(headPoint1.dx, headPoint1.dy)
+      ..lineTo(headPoint2.dx, headPoint2.dy)
+      ..lineTo(headPoint3.dx, headPoint3.dy)
+      ..lineTo(headPoint4.dx, headPoint4.dy)
+      ..close();
+
+    canvas.drawPath(compassPath, arrowPaint);
+
+    userInteractionController?.setCompassPath(compassPath.shift(canvasOffset));
   }
 
   void _drawBackgroundLines(Canvas canvas, Offset center, double radius) {

@@ -33,6 +33,7 @@
   * MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.
   * Using lsize and orientation behaviour inspired by xThreion original one.
   * LSize and orientation interactive arrow should appear immediately when starting to set either of them.
+  * Reusing Path created to draw compass arrow to also to the click test at MPTH2FileEditStateEditSingleLine.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:

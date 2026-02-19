@@ -1,3 +1,4 @@
+import 'package:flutter/painting.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -36,6 +37,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   TH2FileEditUserInteractionControllerBase(this._th2FileEditController)
     : _thFile = _th2FileEditController.thFile;
+
+  Path _compassPath = Path();
+
+  void setCompassPath(Path path) {
+    _compassPath = path;
+  }
+
+  void clearCompassPath() {
+    _compassPath = Path();
+  }
+
+  Path get compassPath => _compassPath;
 
   @action
   void prepareSetOption({

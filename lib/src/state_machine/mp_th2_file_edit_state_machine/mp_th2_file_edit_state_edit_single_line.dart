@@ -122,6 +122,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     elementEditController.resetOriginalFileForLineSimplification();
     th2FileEditController.setStatusBarMessage('');
+    th2FileEditController.userInteractionController.clearCompassPath();
 
     if (MPTH2FileEditStateClearSelectionOnExitMixin.selectionStatesTypes
         .contains(nextStateType)) {
@@ -531,32 +532,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return lineSegmentsInsideSelectionWindow;
   }
 
-  void _lSizeOrientationStartDrag(Offset mouseScreen) {
-    final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
-        selectionController.selectedEndControlPoints.values;
-
-    if (selectedEndPoints.length != 1) {
-      return;
-    }
-
-    final THLineSegment lineSegment =
-        selectedEndPoints.first.originalLineSegmentClone;
-    final double? pointLSize = MPCommandOptionAux.getLSize(lineSegment);
-    final double? pointOrientation = MPCommandOptionAux.getOrientation(
-      lineSegment,
-    );
-
-    _lSizeOrientationDragStartState =
-        MPLSizeOrientationAux.startLinePointLSizeOrientationDrag(
-          pointCanvas: lineSegment.endPoint.coordinates,
-          mouseScreen: mouseScreen,
-          initialLSize: pointLSize,
-          initialOrientation: pointOrientation,
-          th2FileEditController: th2FileEditController,
-          lineSegmentMPID: lineSegment.mpID,
-        );
-  }
-
   @override
   void onChangeCommandOptionTypeEdited({
     required THCommandOptionType? previousOptionType,
@@ -565,6 +540,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _saveLSizeOrientation(previousOptionType);
 
     _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
+
+    if (!_isLSizeOrientationEdit) {
+      th2FileEditController.userInteractionController.clearCompassPath();
+    }
 
     _lSizeOrientationInitialization();
     setStatusBarMessage();
@@ -651,7 +630,43 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _lastLSizeOrientationDragUpdateResult = null;
   }
 
+  void _lSizeOrientationStartDrag(Offset mouseScreen) {
+    if (!_isOverInteractiveLSizeOrientationCompass(mouseScreen)) {
+      _lSizeOrientationDragStartState = null;
+      return;
+    }
+
+    final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints.values;
+
+    if (selectedEndPoints.length != 1) {
+      return;
+    }
+
+    final THLineSegment lineSegment =
+        selectedEndPoints.first.originalLineSegmentClone;
+    final double? pointLSize = MPCommandOptionAux.getLSize(lineSegment);
+    final double? pointOrientation = MPCommandOptionAux.getOrientation(
+      lineSegment,
+    );
+
+    _lSizeOrientationDragStartState =
+        MPLSizeOrientationAux.startLinePointLSizeOrientationDrag(
+          pointCanvas: lineSegment.endPoint.coordinates,
+          mouseScreen: mouseScreen,
+          initialLSize: pointLSize,
+          initialOrientation: pointOrientation,
+          th2FileEditController: th2FileEditController,
+          lineSegmentMPID: lineSegment.mpID,
+        );
+  }
+
   void _lSizeOrientationDragUpdate(Offset clickScreenCoordinates) {
+    if ((_lSizeOrientationDragStartState == null) ||
+        !_isOverInteractiveLSizeOrientationCompass(clickScreenCoordinates)) {
+      return;
+    }
+
     final Map<int, MPSelectedEndControlPoint> selectedEndPoints =
         selectionController.selectedEndControlPoints;
 
@@ -670,12 +685,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
             MPEndControlPointType.endPointStraight)) {
       throw StateError(
         'Error: selectedEndControlPoint type is different from endPointBezierCurve and endPointStraight at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
-      );
-    }
-
-    if (_lSizeOrientationDragStartState == null) {
-      throw StateError(
-        'Error: _lSizeOrientationDragStartState is null at MPTH2FileEditStateEditSingleLine._setOrientationLSizeFromLocalPosition().',
       );
     }
 
@@ -703,6 +712,45 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     );
 
     setStatusBarMessage();
+  }
+
+  bool _isOverInteractiveLSizeOrientationCompass(Offset mouseScreen) {
+    if (!_isLSizeOrientationEdit) {
+      return false;
+    }
+
+    if ((elementEditController.linePointLSize == null) ||
+        (elementEditController.linePointOrientation == null)) {
+      return false;
+    }
+
+    final Map<int, MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints;
+
+    if (selectedEndPoints.length != 1) {
+      return false;
+    }
+
+    final MPSelectedEndControlPoint selectedEndPoint =
+        selectedEndPoints.values.first;
+
+    if ((selectedEndPoint.type != MPEndControlPointType.endPointBezierCurve) &&
+        (selectedEndPoint.type != MPEndControlPointType.endPointStraight)) {
+      return false;
+    }
+
+    final Path compassPath =
+        th2FileEditController.userInteractionController.compassPath;
+
+    if (compassPath.getBounds().isEmpty) {
+      return false;
+    }
+
+    final Offset pointerCanvas = th2FileEditController.offsetScreenToCanvas(
+      mouseScreen,
+    );
+
+    return compassPath.contains(pointerCanvas);
   }
 
   @override

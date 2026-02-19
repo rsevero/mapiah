@@ -121,6 +121,10 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
             (lineInfo.showSizeOrientationOnLineSegments &&
                 lineSegmentsWithSizeOrientation.isNotEmpty);
 
+        if (!settingLSizeOrientation) {
+          th2FileEditController.userInteractionController.clearCompassPath();
+        }
+
         CustomPainter painter = THLinePainter(
           lineInfo: lineInfo,
           lineSegmentsMap: segmentsMap,
@@ -163,6 +167,7 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
                             elementEditController.linePointOrientation!,
                       ),
                       th2FileEditController: th2FileEditController,
+                      storeCompassPath: true,
                     ),
                   );
                 }
