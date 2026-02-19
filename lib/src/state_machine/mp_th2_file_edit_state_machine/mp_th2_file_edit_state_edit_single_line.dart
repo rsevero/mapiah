@@ -236,7 +236,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     if (onAltPrimaryButtonClick(event)) {
       return;
     } else if (_isLSizeOrientationEdit) {
-      _setOrientationLSizeFromLocalPosition(event.localPosition);
+      _lSizeOrientationDragUpdate(event.localPosition);
       _saveLSizeOrientation(
         th2FileEditController
             .elementEditController
@@ -383,7 +383,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     );
 
     if (_isLSizeOrientationEdit) {
-      _initializeLSizeOrientation(event.localPosition);
+      _lSizeOrientationStartDrag(event.localPosition);
 
       return;
     }
@@ -442,7 +442,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
     if (_isLSizeOrientationEdit) {
-      _setOrientationLSizeFromLocalPosition(event.localPosition);
+      _lSizeOrientationDragUpdate(event.localPosition);
 
       return;
     }
@@ -475,7 +475,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     if (_isLSizeOrientationEdit) {
-      _setOrientationLSizeFromLocalPosition(event.localPosition);
+      _lSizeOrientationDragUpdate(event.localPosition);
       _saveLSizeOrientation(
         th2FileEditController
             .elementEditController
@@ -531,7 +531,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     return lineSegmentsInsideSelectionWindow;
   }
 
-  void _initializeLSizeOrientation(Offset mouseScreen) {
+  void _lSizeOrientationStartDrag(Offset mouseScreen) {
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         selectionController.selectedEndControlPoints.values;
 
@@ -565,6 +565,37 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _saveLSizeOrientation(previousOptionType);
 
     _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
+
+    _lSizeOrientationInitialization();
+    setStatusBarMessage();
+  }
+
+  void _lSizeOrientationInitialization() {
+    if (!_isLSizeOrientationEdit) {
+      return;
+    }
+
+    final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
+        selectionController.selectedEndControlPoints.values;
+
+    if (selectedEndPoints.length != 1) {
+      _isLSizeOrientationEdit = false;
+      return;
+    }
+
+    final THLineSegment lineSegment =
+        selectedEndPoints.first.originalLineSegmentClone;
+    final double pointLSize =
+        MPCommandOptionAux.getLSize(lineSegment) ??
+        mpSlopeLinePointDefaultLSize;
+    final double pointOrientation =
+        MPCommandOptionAux.getOrientation(lineSegment) ??
+        MPNumericAux.segmentNormalFromTHFile(lineSegment.mpID, thFile);
+
+    elementEditController.setLinePointLSizeAndOrientation(
+      lSize: pointLSize,
+      orientation: pointOrientation,
+    );
   }
 
   bool _isLSizeOrientation(THCommandOptionType? optionType) {
@@ -620,7 +651,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _lastLSizeOrientationDragUpdateResult = null;
   }
 
-  void _setOrientationLSizeFromLocalPosition(Offset clickScreenCoordinates) {
+  void _lSizeOrientationDragUpdate(Offset clickScreenCoordinates) {
     final Map<int, MPSelectedEndControlPoint> selectedEndPoints =
         selectionController.selectedEndControlPoints;
 
