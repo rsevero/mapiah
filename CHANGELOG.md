@@ -14,6 +14,7 @@
   * Parsing scrap projection value in brackets failing. [reported by CaverBruce as issue [#14](https://github.com/rsevero/mapiah/issues/14)]
   * Creating a line and making one of its points smooth by overlay option window throws.
   * MPNumericAux directionOffsetToDegrees() and normalFromTangent() returning wrong values for some directions.
+  * Fixing popcorn point type translation. [reported by Daniel Bean]
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.

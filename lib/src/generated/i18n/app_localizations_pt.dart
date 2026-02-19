@@ -1962,7 +1962,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointPillarWithCurtains => 'Pilar com cortinas';
 
   @override
-  String get thPointPopcorn => 'Popcorn';
+  String get thPointPopcorn => 'Coralóide';
 
   @override
   String get thPointRaft => 'Balsa';
