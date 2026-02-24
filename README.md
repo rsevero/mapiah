@@ -22,6 +22,12 @@ Also create a thriving community of users and developers to make it as powerful 
 * Unlimited undo/redo.
 * Redos available after some undos and new actions merged in the undo queue.
 
+## Current status
+
+Mapiah is in fast development stage, but it is already usable for real mapping work. It is being used by the author and some other people to map real caves, and it is already being used in some caving courses.
+
+If you have TH2 files you want to edit and want to give Mapiah a try, please do. If you find any issue, please report it as a [Mapiah Issue](https://github.com/rsevero/mapiah/issues).
+
 ## Installation
 
 ### Linux
