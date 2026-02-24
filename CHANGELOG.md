@@ -18,6 +18,7 @@
   * LSize and Orientation arrows not presented when end point is selected.
   * Interactive Orientation arrow not moving with azimuth picker arrow is moved.
   * Azimuth picker arrow not moving when interactive orientation arrow is moved.
+  * LSize text value in lsize option window does not change when lsize is interactivelly changed.
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.

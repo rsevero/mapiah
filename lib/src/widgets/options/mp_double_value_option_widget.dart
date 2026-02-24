@@ -14,6 +14,7 @@ import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
+import 'package:mobx/mobx.dart';
 
 class MPDoubleValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -46,23 +47,13 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   String? _doubleWarningMessage;
   bool _isOkButtonEnabled = false;
-  bool _isSingleLineSegmentLSize = false;
+  ReactionDisposer? _linePointLSizeReactionDisposer;
 
   @override
   void initState() {
     super.initState();
 
     th2FileEditController = widget.th2FileEditController;
-
-    _isSingleLineSegmentLSize =
-        ((widget.optionInfo.type == THCommandOptionType.lSize) &&
-        (th2FileEditController.optionEditController.currentOptionElementsType ==
-            MPOptionElementType.lineSegment) &&
-        (th2FileEditController
-                .selectionController
-                .selectedEndControlPoints
-                .length ==
-            1));
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -76,6 +67,23 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
           case THLSizeCommandOption _:
             _doubleController = TextEditingController(
               text: currentOption.number.toString(),
+            );
+            _linePointLSizeReactionDisposer = reaction<double?>(
+              (_) => th2FileEditController.elementEditController.linePointLSize,
+              (double? newLSize) {
+                if (newLSize == null) {
+                  return;
+                }
+
+                final String newText = newLSize.toStringAsFixed(1);
+
+                if (_doubleController.text == newText) {
+                  return;
+                }
+
+                _doubleController.text = newText;
+                _updateOkButtonEnabled();
+              },
             );
           default:
             throw Exception(
@@ -105,6 +113,7 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
 
   @override
   void dispose() {
+    _linePointLSizeReactionDisposer?.call();
     _doubleController.dispose();
     _doubleTextFieldFocusNode.dispose();
     super.dispose();
@@ -182,10 +191,6 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (_isSingleLineSegmentLSize) {
-      return SizedBox.shrink();
-    }
-
     final String title;
     final String label;
 
