@@ -117,9 +117,8 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         lineSegmentsWithSizeOrientation =
             lineInfo.lineSegmentsWithLSizeOrientation;
         final bool lSizeOrientationExists =
-            settingLSizeOrientation ||
             (lineInfo.showSizeOrientationOnLineSegments &&
-                lineSegmentsWithSizeOrientation.isNotEmpty);
+            lineSegmentsWithSizeOrientation.isNotEmpty);
 
         CustomPainter painter = THLinePainter(
           lineInfo: lineInfo,
@@ -166,24 +165,29 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
                       storeCompassPath: true,
                     ),
                   );
+                } else if (lSizeOrientationExists &&
+                    lineSegmentsWithSizeOrientation.containsKey(
+                      lineSegment.mpID,
+                    )) {
+                  _addLSizeOrientationPainter(
+                    position: point.position,
+                    lineSegmentMPID: lineSegment.mpID,
+                    lineSegmentsWithSizeOrientation:
+                        lineSegmentsWithSizeOrientation,
+                    painters: painters,
+                  );
                 }
               } else {
                 if (lSizeOrientationExists &&
                     lineSegmentsWithSizeOrientation.containsKey(
                       lineSegment.mpID,
                     )) {
-                  final MPLineSegmentSizeOrientationInfo sizeOrientationInfo =
-                      lineSegmentsWithSizeOrientation[lineSegment.mpID]!;
-
-                  painters.add(
-                    THLSizeOrientationPainter(
-                      lSizeOrientationInfo: MPLSizeOrientationInfo(
-                        offset: point.position,
-                        lSize: sizeOrientationInfo.lSize,
-                        orientation: sizeOrientationInfo.orientation,
-                      ),
-                      th2FileEditController: th2FileEditController,
-                    ),
+                  _addLSizeOrientationPainter(
+                    position: point.position,
+                    lineSegmentMPID: lineSegment.mpID,
+                    lineSegmentsWithSizeOrientation:
+                        lineSegmentsWithSizeOrientation,
+                    painters: painters,
                   );
                 }
 
@@ -237,6 +241,28 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
           ),
         );
       },
+    );
+  }
+
+  void _addLSizeOrientationPainter({
+    required Offset position,
+    required int lineSegmentMPID,
+    required Map<int, MPLineSegmentSizeOrientationInfo>
+    lineSegmentsWithSizeOrientation,
+    required List<CustomPainter> painters,
+  }) {
+    final MPLineSegmentSizeOrientationInfo sizeOrientationInfo =
+        lineSegmentsWithSizeOrientation[lineSegmentMPID]!;
+
+    painters.add(
+      THLSizeOrientationPainter(
+        lSizeOrientationInfo: MPLSizeOrientationInfo(
+          offset: position,
+          lSize: sizeOrientationInfo.lSize,
+          orientation: sizeOrientationInfo.orientation,
+        ),
+        th2FileEditController: th2FileEditController,
+      ),
     );
   }
 }

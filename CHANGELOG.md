@@ -15,6 +15,7 @@
   * Creating a line and making one of its points smooth by overlay option window throws.
   * MPNumericAux directionOffsetToDegrees() and normalFromTangent() returning wrong values for some directions.
   * Fixing popcorn point type translation. [reported by Daniel Bean]
+  * LSize and Orientation arrows not presented when end point is selected.
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.
@@ -34,7 +35,7 @@
   * MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.
   * Using lsize and orientation behaviour inspired by xThreion original one.
   * LSize and orientation interactive arrow should appear immediately when starting to set either of them.
-  * Reusing Path created to draw compass arrow to also to the click test at MPTH2FileEditStateEditSingleLine.
+  * Reusing Path created to draw compass arrow to also fuel the click test at MPTH2FileEditStateEditSingleLine.
 
 ## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
 * New features:
