@@ -152,6 +152,12 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
     setState(() {
       _isOkButtonEnabled = isValidAzimuth && isChanged;
     });
+
+    if (_isOkButtonEnabled) {
+      th2FileEditController.elementEditController.setLinePointOrientationValue(
+        _currentAzimuth!,
+      );
+    }
   }
 
   @override
