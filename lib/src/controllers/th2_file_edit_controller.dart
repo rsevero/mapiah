@@ -436,12 +436,12 @@ abstract class TH2FileEditControllerBase with Store {
       this as TH2FileEditController,
     );
     snapController = TH2FileEditSnapController(this as TH2FileEditController);
-    stateController = TH2FileEditStateController(this as TH2FileEditController);
     undoRedoController = MPUndoRedoController(this as TH2FileEditController);
     visualController = MPVisualController(this as TH2FileEditController);
     userInteractionController = TH2FileEditUserInteractionController(
       this as TH2FileEditController,
     );
+    stateController = TH2FileEditStateController(this as TH2FileEditController);
     _thFileMPID = _thFile.mpID;
   }
 

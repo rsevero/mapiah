@@ -89,15 +89,8 @@ class MPLSizeOrientationAux {
             th2FileEditController.thFile,
           ),
       originalLSize: initialLSize ?? mpSlopeLinePointDefaultLSize,
-      initialMouseRadius: initialLSize == null
-          ? mpSlopeLinePointDefaultLSize
-          : math.sqrt(dx * dx + dy * dy),
-      initialMouseAngleInRad: initialOrientation == null
-          ? MPNumericAux.segmentNormalFromTHFile(
-              lineSegmentMPID,
-              th2FileEditController.thFile,
-            )
-          : math.atan2(dy, dx),
+      initialMouseRadius: math.sqrt((dx * dx) + (dy * dy)),
+      initialMouseAngleInRad: math.atan2(dy, dx),
     );
   }
 
@@ -119,7 +112,7 @@ class MPLSizeOrientationAux {
     if (drag.lSizeEnabled || MPInteractionAux.isAltPressed()) {
       final double currentRadius = math.sqrt(dx * dx + dy * dy);
 
-      double ns = drag.originalLSize - drag.initialMouseRadius + currentRadius;
+      double ns = drag.originalLSize + currentRadius - drag.initialMouseRadius;
 
       if (ns <= 0.0) {
         ns = 0.1;
@@ -133,15 +126,10 @@ class MPLSizeOrientationAux {
     if (drag.orientationEnabled ||
         MPInteractionAux.isCtrlPressed() ||
         MPInteractionAux.isMetaPressed()) {
-      final double currentAngleInRad = math.atan2(dy, dx);
+      final double currentAngleInRad = math.atan2(dx, dy);
+      final double rot = mp1RadInDegree * currentAngleInRad;
 
-      double rot =
-          drag.originalOrientation -
-          mp1RadInDegree * (currentAngleInRad - drag.initialMouseAngleInRad);
-
-      rot = MPNumericAux.normalizeAngle(rot);
-
-      newOrientation = rot;
+      newOrientation = MPNumericAux.normalizeAngle(rot);
     }
 
     return MPLSizeOrientationDragUpdateResult(

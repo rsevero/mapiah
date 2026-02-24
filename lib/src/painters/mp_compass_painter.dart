@@ -1,15 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_painter_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPCompassPainter extends CustomPainter {
   final double azimuth;
   final double arrowLength;
-  final TH2FileEditController? th2FileEditController;
   final TH2FileEditUserInteractionController? userInteractionController;
   final Offset canvasOffset;
   final bool isAzimuthPickerMode;
@@ -18,7 +17,6 @@ class MPCompassPainter extends CustomPainter {
     required this.azimuth,
     required this.arrowLength,
     required this.isAzimuthPickerMode,
-    this.th2FileEditController,
     this.userInteractionController,
     this.canvasOffset = Offset.zero,
   });
@@ -95,67 +93,14 @@ class MPCompassPainter extends CustomPainter {
     final double arrowLengthOnScreen = isAzimuthPickerMode
         ? radius * mpCompass90DegreeLineFactor
         : arrowLength;
-    final double arrowBodyHalfWidthOnScreen =
-        (mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor) / 2;
-    final double arrowSide =
-        mpCompassArrowHeadReferenceLengthOnScreen * mpCompassArrowSideFactor;
-    final double arrowSideInsetFromTip =
-        mpCompassArrowHeadReferenceLengthOnScreen *
-        mpCompassArrowBaseLengthFactor;
-    final double arrowTipBaseInsetFromTip =
-        mpCompassArrowHeadReferenceLengthOnScreen * mpCompassArrowTipBaseFactor;
-    final Offset arrowTip = Offset(0, arrowLengthOnScreen);
-    final Offset arrowTipBase = Offset(
-      0,
-      arrowTip.dy - arrowTipBaseInsetFromTip,
-    );
-    final Offset arrowSide1 = Offset(
-      -arrowSide,
-      arrowTip.dy - arrowSideInsetFromTip,
-    );
-    final Offset arrowSide2 = Offset(
-      arrowSide,
-      arrowTip.dy - arrowSideInsetFromTip,
-    );
-    final double azimuthRadians = azimuth * mp1DegreeInRad;
-    final double cosAzimuth = math.cos(azimuthRadians);
-    final double sinAzimuth = math.sin(azimuthRadians);
-
-    Offset rotateAndTranslate(Offset point) {
-      final double rotatedX = (point.dx * cosAzimuth) + (point.dy * sinAzimuth);
-      final double rotatedY =
-          (-point.dx * sinAzimuth) + (point.dy * cosAzimuth);
-
-      return Offset(rotatedX + center.dx, rotatedY + center.dy);
-    }
-
-    final Offset bodyPoint1 = rotateAndTranslate(
-      Offset(-arrowBodyHalfWidthOnScreen, 0),
-    );
-    final Offset bodyPoint2 = rotateAndTranslate(
-      Offset(-arrowBodyHalfWidthOnScreen, arrowTipBase.dy),
-    );
-    final Offset bodyPoint3 = rotateAndTranslate(
-      Offset(arrowBodyHalfWidthOnScreen, arrowTipBase.dy),
-    );
-    final Offset bodyPoint4 = rotateAndTranslate(
-      Offset(arrowBodyHalfWidthOnScreen, 0),
-    );
-    final Offset headPoint1 = rotateAndTranslate(arrowTip);
-    final Offset headPoint2 = rotateAndTranslate(arrowSide1);
-    final Offset headPoint3 = rotateAndTranslate(arrowSide2);
     final Paint arrowPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
-    final Path compassPath = Path()
-      ..moveTo(bodyPoint2.dx, bodyPoint2.dy)
-      ..lineTo(bodyPoint1.dx, bodyPoint1.dy)
-      ..lineTo(bodyPoint4.dx, bodyPoint4.dy)
-      ..lineTo(bodyPoint3.dx, bodyPoint3.dy)
-      ..lineTo(headPoint3.dx, headPoint3.dy)
-      ..lineTo(headPoint1.dx, headPoint1.dy)
-      ..lineTo(headPoint2.dx, headPoint2.dy)
-      ..close();
+    final Path compassPath = MPPainterAux.buildCompassPath(
+      center: center,
+      azimuth: azimuth,
+      arrowLength: arrowLengthOnScreen,
+    );
 
     /// If drawing the compass arrow in a azimuth picker, we need to apply a
     /// vertical flip to the arrow path to match the expected direction of
@@ -174,9 +119,10 @@ class MPCompassPainter extends CustomPainter {
       canvas.restore();
     } else {
       canvas.drawPath(compassPath, arrowPaint);
+      userInteractionController?.setCompassPath(
+        compassPath.shift(canvasOffset),
+      );
     }
-
-    userInteractionController?.setCompassPath(compassPath.shift(canvasOffset));
   }
 
   void _drawBackgroundLines(Canvas canvas, Offset center, double radius) {

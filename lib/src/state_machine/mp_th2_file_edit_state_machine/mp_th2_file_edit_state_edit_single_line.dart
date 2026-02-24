@@ -243,6 +243,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
             .currentOptionTypeBeingEdited,
       );
 
+      _lSizeOrientationDragStartState = null;
+      _lastLSizeOrientationDragUpdateResult = null;
+
       return;
     }
 
@@ -383,7 +386,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     );
 
     if (_isLSizeOrientationEdit) {
-      _lSizeOrientationStartDrag(event.localPosition);
+      _lSizeOrientationDragStart(event.localPosition);
 
       return;
     }
@@ -538,11 +541,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }) {
     _saveLSizeOrientation(previousOptionType);
 
-    _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
+    _lSizeOrientationDragStartState = null;
+    _lastLSizeOrientationDragUpdateResult = null;
 
-    if (!_isLSizeOrientationEdit) {
-      th2FileEditController.userInteractionController.clearCompassPath();
-    }
+    _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
 
     _lSizeOrientationInitialization();
     setStatusBarMessage();
@@ -624,14 +626,12 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           ? _lastLSizeOrientationDragUpdateResult!.orientation
           : null,
     );
-
-    _lSizeOrientationDragStartState = null;
-    _lastLSizeOrientationDragUpdateResult = null;
   }
 
-  void _lSizeOrientationStartDrag(Offset mouseScreen) {
+  void _lSizeOrientationDragStart(Offset mouseScreen) {
     if (!_isOverInteractiveLSizeOrientationCompass(mouseScreen)) {
       _lSizeOrientationDragStartState = null;
+
       return;
     }
 
@@ -661,8 +661,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   void _lSizeOrientationDragUpdate(Offset clickScreenCoordinates) {
-    if ((_lSizeOrientationDragStartState == null) ||
-        !_isOverInteractiveLSizeOrientationCompass(clickScreenCoordinates)) {
+    if ((_lSizeOrientationDragStartState == null)) {
       return;
     }
 
@@ -738,8 +737,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       return false;
     }
 
-    final Path compassPath =
-        th2FileEditController.userInteractionController.compassPath;
+    final Path compassPath = userInteractionController.compassPath;
 
     if (compassPath.getBounds().isEmpty) {
       return false;

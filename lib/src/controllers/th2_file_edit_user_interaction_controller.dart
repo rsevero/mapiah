@@ -44,10 +44,6 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _compassPath = path;
   }
 
-  void clearCompassPath() {
-    _compassPath = Path();
-  }
-
   Path get compassPath => _compassPath;
 
   @action

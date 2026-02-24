@@ -21,6 +21,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -62,12 +63,15 @@ abstract class MPTH2FileEditState {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditElementEditController elementEditController;
   final TH2FileEditSelectionController selectionController;
+  final TH2FileEditUserInteractionController userInteractionController;
   final THFile thFile;
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.th2FileEditController})
     : elementEditController = th2FileEditController.elementEditController,
       selectionController = th2FileEditController.selectionController,
+      userInteractionController =
+          th2FileEditController.userInteractionController,
       thFile = th2FileEditController.thFile;
 
   static MPTH2FileEditState getState({
