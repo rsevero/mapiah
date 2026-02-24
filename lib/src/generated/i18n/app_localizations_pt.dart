@@ -189,6 +189,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpButtonCancel => 'Cancelar';
 
   @override
+  String get mpButtonApply => 'Aplicar';
+
+  @override
+  String get mpButtonSaveAndClose => 'Salvar e fechar';
+
+  @override
   String get mpButtonCreate => 'Criar';
 
   @override
@@ -202,6 +208,34 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpChoiceUnset => 'Não definido';
+
+  @override
+  String get mpSettingsPageTitle => 'Configurações';
+
+  @override
+  String get mpSettingsSectionMain => 'Principal';
+
+  @override
+  String get mpSettingsSectionTH2Edit => 'Edição TH2';
+
+  @override
+  String get mpSettingsSettingMainLocaleID => 'Idioma';
+
+  @override
+  String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
+
+  @override
+  String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
+
+  @override
+  String get mpSettingsSettingTH2EditSelectionTolerance =>
+      'Tolerância de seleção';
+
+  @override
+  String get mpSettingsInvalidNumber => 'Número inválido';
+
+  @override
+  String get mpSettingsInvalidInteger => 'Inteiro inválido';
 
   @override
   String get mpCommandDescriptionAddArea => 'Adicionar área';

@@ -2,6 +2,7 @@
 
 ## 0.2.37 - not yet released
 * New features:
+  * Created Settings page.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]

@@ -6,6 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
@@ -103,6 +104,19 @@ class _MapiahHomeState extends State<MapiahHome> {
                     );
                   },
             tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+          ),
+          IconButton(
+            key: ValueKey('MapiahHomeSettingsButton'),
+            icon: Icon(Icons.settings_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const MPSettingsPage(),
+                ),
+              );
+            },
+            tooltip: appLocalizations.mpSettingsPageTitle,
           ),
           buildLanguageDropdown(context),
           MPHelpButtonWidget(

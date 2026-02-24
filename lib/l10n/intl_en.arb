@@ -273,6 +273,16 @@
     "description": "The label for the cancel button",
     "type": "text"
   },
+  "mpButtonApply": "Apply",
+  "@mpButtonApply": {
+    "description": "The label for the apply button",
+    "type": "text"
+  },
+  "mpButtonSaveAndClose": "Save & Close",
+  "@mpButtonSaveAndClose": {
+    "description": "The label for the save and close button",
+    "type": "text"
+  },
   "mpButtonCreate": "Create",
   "@mpButtonCreate": {
     "description": "The label for the create button",
@@ -296,6 +306,51 @@
   "mpChoiceUnset": "Unset",
   "@mpChoiceUnset": {
     "description": "The label for the unset choice type",
+    "type": "text"
+  },
+  "mpSettingsPageTitle": "Settings",
+  "@mpSettingsPageTitle": {
+    "description": "The title for the settings page",
+    "type": "text"
+  },
+  "mpSettingsSectionMain": "Main",
+  "@mpSettingsSectionMain": {
+    "description": "Section title for main settings",
+    "type": "text"
+  },
+  "mpSettingsSectionTH2Edit": "TH2 edit",
+  "@mpSettingsSectionTH2Edit": {
+    "description": "Section title for TH2 edit settings",
+    "type": "text"
+  },
+  "mpSettingsSettingMainLocaleID": "Language",
+  "@mpSettingsSettingMainLocaleID": {
+    "description": "Label for locale setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditLineThickness": "Line thickness",
+  "@mpSettingsSettingTH2EditLineThickness": {
+    "description": "Label for TH2 line thickness setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditPointRadius": "Point radius",
+  "@mpSettingsSettingTH2EditPointRadius": {
+    "description": "Label for TH2 point radius setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditSelectionTolerance": "Selection tolerance",
+  "@mpSettingsSettingTH2EditSelectionTolerance": {
+    "description": "Label for TH2 selection tolerance setting",
+    "type": "text"
+  },
+  "mpSettingsInvalidNumber": "Invalid number",
+  "@mpSettingsInvalidNumber": {
+    "description": "Validation message for invalid double values in settings",
+    "type": "text"
+  },
+  "mpSettingsInvalidInteger": "Invalid integer",
+  "@mpSettingsInvalidInteger": {
+    "description": "Validation message for invalid integer values in settings",
     "type": "text"
   },
   "mpCommandDescriptionAddArea": "Add area",

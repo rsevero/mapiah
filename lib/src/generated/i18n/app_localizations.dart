@@ -409,6 +409,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get mpButtonCancel;
 
+  /// The label for the apply button
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get mpButtonApply;
+
+  /// The label for the save and close button
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Close'**
+  String get mpButtonSaveAndClose;
+
   /// The label for the create button
   ///
   /// In en, this message translates to:
@@ -438,6 +450,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unset'**
   String get mpChoiceUnset;
+
+  /// The title for the settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get mpSettingsPageTitle;
+
+  /// Section title for main settings
+  ///
+  /// In en, this message translates to:
+  /// **'Main'**
+  String get mpSettingsSectionMain;
+
+  /// Section title for TH2 edit settings
+  ///
+  /// In en, this message translates to:
+  /// **'TH2 edit'**
+  String get mpSettingsSectionTH2Edit;
+
+  /// Label for locale setting
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get mpSettingsSettingMainLocaleID;
+
+  /// Label for TH2 line thickness setting
+  ///
+  /// In en, this message translates to:
+  /// **'Line thickness'**
+  String get mpSettingsSettingTH2EditLineThickness;
+
+  /// Label for TH2 point radius setting
+  ///
+  /// In en, this message translates to:
+  /// **'Point radius'**
+  String get mpSettingsSettingTH2EditPointRadius;
+
+  /// Label for TH2 selection tolerance setting
+  ///
+  /// In en, this message translates to:
+  /// **'Selection tolerance'**
+  String get mpSettingsSettingTH2EditSelectionTolerance;
+
+  /// Validation message for invalid double values in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number'**
+  String get mpSettingsInvalidNumber;
+
+  /// Validation message for invalid integer values in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid integer'**
+  String get mpSettingsInvalidInteger;
 
   /// The description for the add area command
   ///
