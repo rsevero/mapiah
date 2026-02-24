@@ -24,7 +24,7 @@
   * Making custom exceptions be presented by showUnhandledErrorDialog() at main.dart.
   * Remove stack trace from THBaseException as showUnhandledErrorDialog() at main.dart already presents the stack trace.
   * Applying dart fix --apply to all code.
-  * Flutter upgrade to 3.41.1
+  * Flutter upgrade to 3.41.2
   * flutter pub upgrade --major-versions
   * Created TH2FileEditElementEditController.optionTypeBeingEdited.
   * Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.
