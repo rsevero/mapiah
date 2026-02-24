@@ -161,6 +161,11 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   right: mpOverlayWindowBlockPadding,
 );
 const double mpOverlayWindowMinWidth = 180;
+const double mpSettingsPageOuterPadding = 16;
+const double mpSettingsPageSectionSpacing = 12;
+const double mpSettingsPageCardPadding = 12;
+const double mpSettingsPageFieldSpacing = 8;
+const double mpSettingsPageButtonSpacing = 8;
 const double mpSettingsEditableFieldMinWidth = 320;
 const int mpDefaultMinDigitsForTextFields = 6;
 const int mpDefaultMinCharsForTextFields = 10;

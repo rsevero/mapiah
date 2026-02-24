@@ -29,28 +29,28 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     return Scaffold(
       appBar: AppBar(title: Text(appLocalizations.mpSettingsPageTitle)),
       body: ListView(
-        padding: const EdgeInsets.all(mpOverlayWindowPadding),
+        padding: const EdgeInsets.all(mpSettingsPageOuterPadding),
         children: [
           for (final String section in sections) ...[
             _buildSectionCard(
               appLocalizations: appLocalizations,
               section: section,
             ),
-            const SizedBox(height: mpOverlayWindowBlockPadding),
+            const SizedBox(height: mpSettingsPageSectionSpacing),
           ],
-          const SizedBox(height: mpOverlayWindowBlockPadding),
+          const SizedBox(height: mpSettingsPageSectionSpacing),
           Row(
             children: [
               ElevatedButton(
                 onPressed: _closeAndSave,
                 child: Text(appLocalizations.mpButtonSaveAndClose),
               ),
-              const SizedBox(width: mpButtonSpace),
+              const SizedBox(width: mpSettingsPageButtonSpacing),
               ElevatedButton(
                 onPressed: _applyChanges,
                 child: Text(appLocalizations.mpButtonApply),
               ),
-              const SizedBox(width: mpButtonSpace),
+              const SizedBox(width: mpSettingsPageButtonSpacing),
               ElevatedButton(
                 onPressed: _cancelChanges,
                 child: Text(appLocalizations.mpButtonCancel),
@@ -73,7 +73,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(mpOverlayWindowBlockPadding),
+        padding: const EdgeInsets.all(mpSettingsPageCardPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,10 +81,10 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               _localizedSectionName(appLocalizations, section),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: mpButtonSpace),
+            const SizedBox(height: mpSettingsPageFieldSpacing),
             for (final MPSettingsType type in types) ...[
               _buildSettingField(appLocalizations, type),
-              const SizedBox(height: mpButtonSpace),
+              const SizedBox(height: mpSettingsPageFieldSpacing),
             ],
           ],
         ),
