@@ -88,6 +88,7 @@ const double mp45DegreesInRad = math.pi / 4;
 const double mp60DegreeInRad = math.pi / 3;
 const double mp90DegreeInRad = math.pi / 2;
 const double mp180DegreeInRad = math.pi;
+const double mp360DegreeInRad = 2 * math.pi;
 const double mp1DegreeInRad = math.pi / 180;
 const double mp1RadInDegree = 180 / math.pi;
 const double mp1OverPi = 1 / math.pi;

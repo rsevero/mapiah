@@ -682,7 +682,7 @@ void _fitToBezPathRec(
   double mod2pi(double th) {
     final double thScaled = th * mp1OverPi * 0.5;
 
-    return math.pi * 2.0 * (thScaled - thScaled.round());
+    return mp360DegreeInRad * (thScaled - thScaled.round());
   }
 
   final double th = d.angle();
@@ -1268,8 +1268,8 @@ List<double> solveCubic(double c0, double c1, double c2, double c3) {
     final double phi = math.acos(-q / (2.0 * r));
     final double t = 2.0 * math.pow(r, 1 / 3.0);
     final double y1 = t * math.cos(phi / 3.0);
-    final double y2 = t * math.cos((phi + 2 * math.pi) / 3.0);
-    final double y3 = t * math.cos((phi + 4 * math.pi) / 3.0);
+    final double y2 = t * math.cos((phi + mp360DegreeInRad) / 3.0);
+    final double y3 = t * math.cos((phi + (2 * mp360DegreeInRad)) / 3.0);
 
     roots.addAll([y1 - b3, y2 - b3, y3 - b3]);
   }
