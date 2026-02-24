@@ -14,8 +14,10 @@ class MPGeneralController {
   int _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
 
   String _lastAccessedDirectory = '';
+  String _thConfigFilePath = '';
 
   String get lastAccessedDirectory => _lastAccessedDirectory;
+  String get thConfigFilePath => _thConfigFilePath;
 
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
@@ -33,6 +35,10 @@ class MPGeneralController {
     _lastAccessedDirectory = value;
   }
 
+  set thConfigFilePath(String value) {
+    _thConfigFilePath = value.trim();
+  }
+
   int nextMPIDForElements() {
     return _nextMPIDForElements++;
   }
@@ -47,6 +53,7 @@ class MPGeneralController {
     _nextMPIDForElements = thFirstMPIDForElements;
     _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
     _t2hFileEditControllers.clear();
+    _thConfigFilePath = '';
   }
 
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {

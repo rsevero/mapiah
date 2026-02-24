@@ -2,6 +2,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -114,6 +115,39 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       tooltip: appLocalizations.th2FileEditPageSaveAs,
                     ),
                   ],
+                  IconButton(
+                    key: ValueKey(
+                      'TH2FileEditPageOpenTHConfigAndRunTherionButton',
+                    ),
+                    icon: Icon(
+                      Icons.playlist_add_check_outlined,
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+                    onPressed: () async {
+                      await MPDialogAux.pickTHConfigFile(context);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    },
+                    tooltip: appLocalizations
+                        .mapiahOpenTHConfigAndRunTherionButtonTooltip,
+                  ),
+                  IconButton(
+                    key: ValueKey('TH2FileEditPageRunTherionButton'),
+                    icon: Icon(
+                      Icons.play_arrow_outlined,
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+                    onPressed:
+                        mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                        ? null
+                        : () {
+                            mpLocator.mpLog.i(
+                              'Run Therion requested (not implemented yet).',
+                            );
+                          },
+                    tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+                  ),
                   MPHelpButtonWidget(
                     context,
                     mpHelpPageKeyboardShortcutsEdit,

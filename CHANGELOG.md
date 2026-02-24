@@ -5,6 +5,7 @@
 * Fixed bugs:
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
+  * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:
@@ -12,7 +13,7 @@
   * Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).
   * Show (and edit) orientation and lsize on the line points during edit.
 * Fixed bugs:
-  * Main README.md file stills mentioning the web version of Mapiah, which was removed in 0.2.31 [reported by CaverBruce at issue [#13](https://github.com/rsevero/mapiah/issues/13)]
+  * Main README.md file stills mentioning the web version of Mapiah, which was removed in version 0.2.31 [reported by CaverBruce at issue [#13](https://github.com/rsevero/mapiah/issues/13)]
   * Slash produced by keyboard combinations (for example, AltRght + Q) is not processed as a shortcut to add line segments between selected line segments.
   * When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of just doing nothing. [reported by Edvard]
   * Parsing scrap scales with 8 numbers but no unit failed. [reported by CaverBruce as issue [#15](https://github.com/rsevero/mapiah/issues/15)]

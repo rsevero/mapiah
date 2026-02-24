@@ -133,6 +133,16 @@
     "description": "The tooltip for the new file button on the main page",
     "type": "text"
   },
+  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Open THConfig file and run Therion",
+  "@mapiahOpenTHConfigAndRunTherionButtonTooltip": {
+    "description": "The tooltip for the button that opens a THConfig file and runs Therion",
+    "type": "text"
+  },
+  "mapiahRunTherionButtonTooltip": "Run Therion",
+  "@mapiahRunTherionButtonTooltip": {
+    "description": "The tooltip for the Run Therion button",
+    "type": "text"
+  },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
     "description": "The title for the keyboard shortcuts help dialog",

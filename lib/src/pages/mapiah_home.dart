@@ -78,6 +78,32 @@ class _MapiahHomeState extends State<MapiahHome> {
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.mapiahHomeOpenFile,
           ),
+          IconButton(
+            key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
+            icon: Icon(Icons.playlist_add_check_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () async {
+              await MPDialogAux.pickTHConfigFile(context);
+              if (mounted) {
+                setState(() {});
+              }
+            },
+            tooltip:
+                appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
+          ),
+          IconButton(
+            key: ValueKey('MapiahHomeRunTherionButton'),
+            icon: Icon(Icons.play_arrow_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                ? null
+                : () {
+                    mpLocator.mpLog.i(
+                      'Run Therion requested (not implemented yet).',
+                    );
+                  },
+            tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+          ),
           buildLanguageDropdown(context),
           MPHelpButtonWidget(
             context,

@@ -762,6 +762,46 @@ class MPDialogAux {
     }
   }
 
+  static Future<void> pickTHConfigFile(BuildContext context) async {
+    if (_isFilePickerOpen[MPFilePickerType.thconfig] == true) {
+      return;
+    }
+
+    _isFilePickerOpen[MPFilePickerType.thconfig] = true;
+
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: 'Select THConfig file',
+        type: FileType.custom,
+        allowedExtensions: ['thconfig', 'THCONFIG'],
+        lockParentWindow: true,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (result != null) {
+        final String? pickedFilePath = result.files.single.path;
+
+        if (pickedFilePath == null) {
+          return;
+        }
+
+        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+          pickedFilePath,
+        );
+        mpLocator.mpGeneralController.thConfigFilePath = pickedFilePath;
+      } else {
+        mpLocator.mpLog.i('No THConfig file selected.');
+      }
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking THConfig file', error: e);
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.thconfig] = false;
+    }
+  }
+
   static void showHelpDialog(
     BuildContext context,
     String helpPage,
@@ -778,7 +818,7 @@ class MPDialogAux {
   }
 }
 
-enum MPFilePickerType { image, th2 }
+enum MPFilePickerType { image, th2, thconfig }
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 

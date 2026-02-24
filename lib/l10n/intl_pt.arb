@@ -23,6 +23,8 @@
   "mapiahHomeLanguage": "Idioma",
   "mapiahHomeNewFileButtonTooltip": "Novo arquivo (Ctrl+N ou Ctrl+Shift+N)",
   "mapiahHomeOpenFile": "Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)",
+  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Abrir arquivo THConfig e executar Therion",
+  "mapiahRunTherionButtonTooltip": "Executar Therion",
   "mapiahKeyboardShortcutsTitle": "Atalhos de teclado",
   "mapiahKeyboardShortcutsTooltip": "Atalhos de teclado (Ctrl+K)",
   "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",

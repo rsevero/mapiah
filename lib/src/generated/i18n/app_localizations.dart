@@ -241,6 +241,18 @@ abstract class AppLocalizations {
   /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
   String get mapiahHomeNewFileButtonTooltip;
 
+  /// The tooltip for the button that opens a THConfig file and runs Therion
+  ///
+  /// In en, this message translates to:
+  /// **'Open THConfig file and run Therion'**
+  String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
+
+  /// The tooltip for the Run Therion button
+  ///
+  /// In en, this message translates to:
+  /// **'Run Therion'**
+  String get mapiahRunTherionButtonTooltip;
+
   /// The title for the keyboard shortcuts help dialog
   ///
   /// In en, this message translates to:

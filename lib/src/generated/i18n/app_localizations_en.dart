@@ -103,6 +103,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'New file (Ctrl+N or Ctrl+Shift+N)';
 
   @override
+  String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
+      'Open THConfig file and run Therion';
+
+  @override
+  String get mapiahRunTherionButtonTooltip => 'Run Therion';
+
+  @override
   String get mapiahKeyboardShortcutsTitle => 'Keyboard Shortcuts';
 
   @override
