@@ -178,6 +178,13 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
   void _updateOkButtonEnabled() {
     final String doubleText = _doubleController.text.trim();
     final bool isValid = (double.tryParse(doubleText) != null);
+
+    if ((widget.optionInfo.option is THLSizeCommandOption) && isValid) {
+      th2FileEditController.elementEditController.setLinePointLSizeValue(
+        double.parse(doubleText),
+      );
+    }
+
     final bool isChanged =
         ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&

@@ -2115,11 +2115,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void setLinePointOrientationValue(double? orientation) {
+    if ((_linePointOrientation != null) &&
+        (orientation != null) &&
+        MPNumericAux.nearlyEqual(_linePointOrientation!, orientation)) {
+      return;
+    }
+
     _linePointOrientation = orientation;
   }
 
   @action
   void setLinePointLSizeValue(double? lSize) {
+    if ((_linePointLSize != null) &&
+        (lSize != null) &&
+        MPNumericAux.nearlyEqual(_linePointLSize!, lSize)) {
+      return;
+    }
+
     _linePointLSize = lSize;
   }
 
@@ -2128,6 +2140,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required double? orientation,
     required double? lSize,
   }) {
+    if ((_linePointLSize != null) &&
+        (lSize != null) &&
+        MPNumericAux.nearlyEqual(_linePointLSize!, lSize) &&
+        (_linePointOrientation != null) &&
+        (orientation != null) &&
+        MPNumericAux.nearlyEqual(_linePointOrientation!, orientation)) {
+      return;
+    }
+
     _linePointOrientation = orientation;
     _linePointLSize = lSize;
   }
