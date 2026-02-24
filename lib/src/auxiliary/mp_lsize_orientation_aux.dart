@@ -126,10 +126,7 @@ class MPLSizeOrientationAux {
     if (drag.orientationEnabled ||
         MPInteractionAux.isCtrlPressed() ||
         MPInteractionAux.isMetaPressed()) {
-      final double currentAngleInRad = math.atan2(dx, dy);
-      final double rot = mp1RadInDegree * currentAngleInRad;
-
-      newOrientation = MPNumericAux.normalizeAngle(rot);
+      newOrientation = MPNumericAux.azimuthFromXY(dx, dy);
     }
 
     return MPLSizeOrientationDragUpdateResult(

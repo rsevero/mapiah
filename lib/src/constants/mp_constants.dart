@@ -91,6 +91,7 @@ const double mp180DegreeInRad = math.pi;
 const double mp1DegreeInRad = math.pi / 180;
 const double mp1RadInDegree = 180 / math.pi;
 const double mp1OverPi = 1 / math.pi;
+const double mpDegreesInCircle = 360.0;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
 

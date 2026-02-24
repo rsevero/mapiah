@@ -663,24 +663,32 @@ class MPNumericAux {
   static double nextDown(double x) => nextDownReal(x);
 
   static double normalizeAngle(double angle) {
-    angle = angle % 360;
+    angle = angle % mpDegreesInCircle;
 
     if (angle < 0) {
-      angle += 360;
+      angle += mpDegreesInCircle;
     }
 
     return angle;
   }
 
-  static double directionOffsetToDegrees(Offset direction) {
+  static double azimuthFromXY(double x, double y) {
+    if ((x == 0) && (y == 0)) {
+      return 0.0;
+    }
+
+    final double radians = math.atan2(x, y);
+    final double degrees = radians * mp1RadInDegree;
+
+    return normalizeAngle(degrees);
+  }
+
+  static double directionOffsetToAzimuth(Offset direction) {
     if (direction == Offset.zero) {
       return 0.0;
     }
 
-    final double radians = math.atan2(direction.dx, direction.dy);
-    final double degrees = radians * mp1RadInDegree;
-
-    return normalizeAngle(degrees);
+    return azimuthFromXY(direction.dx, direction.dy);
   }
 
   static double bezierArcLength(
@@ -1030,7 +1038,7 @@ class MPNumericAux {
       thFile,
     );
     final Offset normal = MPNumericAux.normalFromTangent(tangent);
-    final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
+    final double azimuth = MPNumericAux.directionOffsetToAzimuth(normal);
 
     return azimuth;
   }
@@ -1046,7 +1054,7 @@ class MPNumericAux {
       isReversed: isReversed,
     );
     final Offset normal = MPNumericAux.normalFromTangent(tangent);
-    final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
+    final double azimuth = MPNumericAux.directionOffsetToAzimuth(normal);
 
     return azimuth;
   }

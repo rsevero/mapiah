@@ -185,56 +185,56 @@ void main() {
   group('MPNumericAux.directionOffsetToDegrees', () {
     test('cardinal directions use azimuth convention', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, -1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, -1)),
         closeTo(180.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, 0)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, 0)),
         closeTo(90.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, 1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, 1)),
         closeTo(0.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, 0)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, 0)),
         closeTo(270.0, maxDelta),
       );
     });
 
     test('diagonal directions map as expected', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, 1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, 1)),
         closeTo(45.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, 1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, 1)),
         closeTo(315.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, -1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, -1)),
         closeTo(225.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, -1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, -1)),
         closeTo(135.0, maxDelta),
       );
     });
 
     test('zero direction returns 0.0', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(Offset.zero),
+        MPNumericAux.directionOffsetToAzimuth(Offset.zero),
         closeTo(0.0, maxDelta),
       );
     });
 
     test('magnitude does not matter', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, -10)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, -10)),
         closeTo(180.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(10, 0)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(10, 0)),
         closeTo(90.0, maxDelta),
       );
     });
