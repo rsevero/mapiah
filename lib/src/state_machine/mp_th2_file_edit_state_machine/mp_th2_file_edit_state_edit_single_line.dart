@@ -626,6 +626,13 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           ? _lastLSizeOrientationDragUpdateResult!.orientation
           : null,
     );
+
+    elementEditController.setLinePointLSizeAndOrientation(
+      orientation: null,
+      lSize: null,
+    );
+    _lSizeOrientationDragStartState = null;
+    _lastLSizeOrientationDragUpdateResult = null;
   }
 
   void _lSizeOrientationDragStart(Offset mouseScreen) {

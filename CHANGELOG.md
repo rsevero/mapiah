@@ -17,6 +17,7 @@
   * Fixing popcorn point type translation. [reported by Daniel Bean]
   * LSize and Orientation arrows not presented when end point is selected.
   * Interactive Orientation arrow not moving with azimuth picker arrow is moved.
+  * Azimuth picker arrow not moving when interactive orientation arrow is moved.
 * Infrastructure maintenance:
   * Testing all possible variations of scrap scale option parsing.
   * Custom exceptions should provide trace.

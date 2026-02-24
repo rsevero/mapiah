@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -216,14 +217,24 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MPAzimuthPickerWidget(
-                    initialAzimuth: double.tryParse(_initialAzimuth) ?? 0.0,
-                    azimuthLabel: azimuthLabel,
-                    focusNode: _azimuthTextFieldFocusNode,
-                    azimuthTextController: _azimuthController,
-                    onChanged: (lengthLabel) {
-                      _currentAzimuth = lengthLabel;
-                      _updateOkButtonEnabled();
+                  Observer(
+                    builder: (_) {
+                      final double? linePointOrientation = th2FileEditController
+                          .elementEditController
+                          .linePointOrientation;
+
+                      return MPAzimuthPickerWidget(
+                        initialAzimuth:
+                            linePointOrientation ??
+                            (double.tryParse(_initialAzimuth) ?? 0.0),
+                        azimuthLabel: azimuthLabel,
+                        focusNode: _azimuthTextFieldFocusNode,
+                        azimuthTextController: _azimuthController,
+                        onChanged: (lengthLabel) {
+                          _currentAzimuth = lengthLabel;
+                          _updateOkButtonEnabled();
+                        },
+                      );
                     },
                   ),
                 ],
