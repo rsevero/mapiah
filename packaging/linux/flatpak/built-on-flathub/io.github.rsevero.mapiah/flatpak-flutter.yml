@@ -42,10 +42,10 @@ modules:
   sources:
   - type: git
     url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.35
+    tag: v0.2.36
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
     url: https://github.com/flutter/flutter.git
-    tag: 3.38.9
+    tag: 3.41.2
     dest: flutter

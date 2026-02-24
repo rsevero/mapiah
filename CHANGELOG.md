@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.36 - not yet released
+## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:
   * Allow multiple "add line segment" operations in sucession. [requested by Edvard]
   * Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).

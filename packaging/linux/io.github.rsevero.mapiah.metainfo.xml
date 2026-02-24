@@ -57,6 +57,62 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.36" date="2026-02-24">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.36</url>
+      <description>
+        <p>0.2.36 - 2026-02-24 - The Danaids release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Allow multiple "add line segment" operations in succession. (requested by Edvard)</li>
+          <li>Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).</li>
+          <li>Show (and edit) orientation and lsize on the line points during edit.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Main README.md still mentioning the web version of Mapiah, which was removed in 0.2.31 (reported by CaverBruce at issue #13: https://github.com/rsevero/mapiah/issues/13).</li>
+          <li>Slash produced by keyboard combinations (for example, AltRight + Q) is not processed as a shortcut to add line segments between selected line segments.</li>
+          <li>When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of doing nothing. (reported by Edvard)</li>
+          <li>Parsing scrap scales with 8 numbers but no unit failed. (reported by CaverBruce as issue #15: https://github.com/rsevero/mapiah/issues/15)</li>
+          <li>Undo of Bézier curve line segment addition with keyboard shortcut '/' not working.</li>
+          <li>Parsing scrap projection value in brackets failing. (reported by CaverBruce as issue #14: https://github.com/rsevero/mapiah/issues/14)</li>
+          <li>Creating a line and making one of its points smooth by overlay option window throws.</li>
+          <li>MPNumericAux directionOffsetToDegrees() and normalFromTangent() returning wrong values for some directions.</li>
+          <li>Fixing popcorn point type translation. (reported by Daniel Bean)</li>
+          <li>LSize and Orientation arrows not presented when end point is selected.</li>
+          <li>Interactive Orientation arrow not moving with azimuth picker arrow is moved.</li>
+          <li>Azimuth picker arrow not moving when interactive orientation arrow is moved.</li>
+          <li>LSize text value in lsize option window does not change when lsize is interactively changed.</li>
+          <li>LSize interactive arrow size does not change when LSize text value in lsize option window changes.</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Testing all possible variations of scrap scale option parsing.</li>
+          <li>Custom exceptions should provide trace.</li>
+          <li>Renaming _execPrePrepareUndoRedoInfo and _execPreCreateUndoRedoCommand at MPCommand.</li>
+          <li>Creating MPAddLineSegmentCommand.atExistingLineSegmentPosition().</li>
+          <li>Removing all references to web version.</li>
+          <li>Making custom exceptions be presented by showUnhandledErrorDialog() at main.dart.</li>
+          <li>Remove stack trace from THBaseException as showUnhandledErrorDialog() at main.dart already presents the stack trace.</li>
+          <li>Applying dart fix --apply to all code.</li>
+          <li>Flutter upgrade to 3.41.2.</li>
+          <li>flutter pub upgrade --major-versions.</li>
+          <li>Created TH2FileEditElementEditController.optionTypeBeingEdited.</li>
+          <li>Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.</li>
+          <li>Created 3500-ui_change_line_type_test.</li>
+          <li>Separating THLSizeOrientationPainter from THLinePainter.</li>
+          <li>Single action to set both LSize and Orientation values at TH2FileEditElementEditController.</li>
+          <li>MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.</li>
+          <li>Using lsize and orientation behaviour inspired by xThreion original one.</li>
+          <li>LSize and orientation interactive arrow should appear immediately when starting to set either of them.</li>
+          <li>Reusing Path created to draw compass arrow to also fuel the click test at MPTH2FileEditStateEditSingleLine.</li>
+          <li>Decimal places for double to string conversion of LSize and Orientation options as constants.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.2.35" date="2026-02-13">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.35</url>
       <description>
@@ -88,6 +144,7 @@
         </ul>
       </description>
     </release>
+
     <release version="0.2.34" date="2026-02-05">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.34</url>
       <description>
@@ -126,6 +183,7 @@
         </ul>
       </description>
     </release>
+
     <release version="0.2.33" date="2026-01-30">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.33</url>
       <description>
@@ -145,6 +203,7 @@
         </ul>
       </description>
     </release>
+
     <release version="0.2.32" date="2026-01-27">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.32</url>
       <description>
