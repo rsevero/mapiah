@@ -75,7 +75,9 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
                   return;
                 }
 
-                final String newText = newLSize.toStringAsFixed(1);
+                final String newText = newLSize.toStringAsFixed(
+                  mpLSizeOptionDecimalPlaces,
+                );
 
                 if (_doubleController.text == newText) {
                   return;

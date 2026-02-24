@@ -2076,7 +2076,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         final THLSizeCommandOption lsizeOption =
             THLSizeCommandOption.fromString(
               parentMPID: lineSegmentMPID,
-              number: lSize.toStringAsFixed(1),
+              number: lSize.toStringAsFixed(mpLSizeOptionDecimalPlaces),
             );
 
         setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
@@ -2086,7 +2086,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         final THOrientationCommandOption orientationOption =
             THOrientationCommandOption.fromString(
               parentMPID: lineSegmentMPID,
-              azimuth: orientation.toStringAsFixed(1),
+              azimuth: orientation.toStringAsFixed(
+                mpOrientationOptionDecimalPlaces,
+              ),
             );
 
         setCommands.add(

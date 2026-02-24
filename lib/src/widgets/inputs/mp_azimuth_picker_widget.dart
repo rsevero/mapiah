@@ -36,7 +36,9 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
   void initState() {
     super.initState();
     _azimuth = MPNumericAux.normalizeAngle(widget.initialAzimuth);
-    widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
+    widget.azimuthTextController.text = _azimuth.toStringAsFixed(
+      mpOrientationOptionDecimalPlaces,
+    );
   }
 
   @override
@@ -88,7 +90,9 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
       _updateAzimuth(value);
     } else {
       // Revert to previous value if input is invalid
-      widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
+      widget.azimuthTextController.text = _azimuth.toStringAsFixed(
+        mpOrientationOptionDecimalPlaces,
+      );
     }
   }
 

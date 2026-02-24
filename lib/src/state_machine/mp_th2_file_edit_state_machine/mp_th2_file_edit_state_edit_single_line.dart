@@ -53,19 +53,24 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   String _getLSizeOrientationStatusBarMessage() {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
-    String getOptionValueString({required double? value}) {
+    String getOptionValueString({
+      required double? value,
+      required int decimalPlaces,
+    }) {
       if (value == null) {
         return appLocalizations.mpChoiceUnset;
       }
 
-      return value.toStringAsFixed(1);
+      return value.toStringAsFixed(decimalPlaces);
     }
 
     final String orientationString = getOptionValueString(
       value: elementEditController.linePointOrientation,
+      decimalPlaces: mpOrientationOptionDecimalPlaces,
     );
     final String lSizeString = getOptionValueString(
       value: elementEditController.linePointLSize,
+      decimalPlaces: mpLSizeOptionDecimalPlaces,
     );
 
     // Determine whether orientation/lSize should be "forced".
