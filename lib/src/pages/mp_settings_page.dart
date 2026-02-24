@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
@@ -28,28 +29,28 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     return Scaffold(
       appBar: AppBar(title: Text(appLocalizations.mpSettingsPageTitle)),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(mpOverlayWindowPadding),
         children: [
           for (final String section in sections) ...[
             _buildSectionCard(
               appLocalizations: appLocalizations,
               section: section,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: mpOverlayWindowBlockPadding),
           ],
-          const SizedBox(height: 12),
+          const SizedBox(height: mpOverlayWindowBlockPadding),
           Row(
             children: [
               ElevatedButton(
                 onPressed: _closeAndSave,
                 child: Text(appLocalizations.mpButtonSaveAndClose),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: mpButtonSpace),
               ElevatedButton(
                 onPressed: _applyChanges,
                 child: Text(appLocalizations.mpButtonApply),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: mpButtonSpace),
               ElevatedButton(
                 onPressed: _cancelChanges,
                 child: Text(appLocalizations.mpButtonCancel),
@@ -72,7 +73,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(mpOverlayWindowBlockPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -80,10 +81,10 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               _localizedSectionName(appLocalizations, section),
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: mpButtonSpace),
             for (final MPSettingsType type in types) ...[
               _buildSettingField(appLocalizations, type),
-              const SizedBox(height: 8),
+              const SizedBox(height: mpButtonSpace),
             ],
           ],
         ),
@@ -99,15 +100,17 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
     switch (type.type()) {
       case MPSettingsTypeType.bool:
-        return SwitchListTile(
-          value: (_draftValues[type] as bool?) ?? false,
-          title: Text(settingLabel),
-          onChanged: (bool value) {
-            setState(() {
-              _draftValues[type] = value;
-            });
-          },
-          contentPadding: EdgeInsets.zero,
+        return _constrainedEditableField(
+          SwitchListTile(
+            value: (_draftValues[type] as bool?) ?? false,
+            title: Text(settingLabel),
+            onChanged: (bool value) {
+              setState(() {
+                _draftValues[type] = value;
+              });
+            },
+            contentPadding: EdgeInsets.zero,
+          ),
         );
       case MPSettingsTypeType.double:
       case MPSettingsTypeType.int:
@@ -123,47 +126,71 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
           final String currentValue = (_draftValues[type] as String?) ?? 'sys';
 
-          return DropdownButtonFormField<String>(
-            initialValue: localeIDs.contains(currentValue)
-                ? currentValue
-                : 'sys',
-            decoration: InputDecoration(labelText: settingLabel),
-            items: localeIDs
-                .map(
-                  (String localeID) => DropdownMenuItem<String>(
-                    value: localeID,
-                    child: Text(appLocalizations.languageName(localeID)),
-                  ),
-                )
-                .toList(),
-            onChanged: (String? value) {
-              if (value == null) {
-                return;
-              }
-              setState(() {
-                _draftValues[type] = value;
-                _errors[type] = null;
-              });
-            },
+          return _constrainedEditableField(
+            DropdownButtonFormField<String>(
+              initialValue: localeIDs.contains(currentValue)
+                  ? currentValue
+                  : 'sys',
+              decoration: InputDecoration(labelText: settingLabel),
+              items: localeIDs
+                  .map(
+                    (String localeID) => DropdownMenuItem<String>(
+                      value: localeID,
+                      child: Text(appLocalizations.languageName(localeID)),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (String? value) {
+                if (value == null) {
+                  return;
+                }
+                setState(() {
+                  _draftValues[type] = value;
+                  _errors[type] = null;
+                });
+              },
+            ),
           );
         }
 
-        return TextFormField(
-          initialValue: (_draftValues[type] as String?) ?? '',
-          decoration: InputDecoration(
-            labelText: settingLabel,
-            errorText: _errors[type],
+        return _constrainedEditableField(
+          TextFormField(
+            initialValue: (_draftValues[type] as String?) ?? '',
+            decoration: InputDecoration(
+              labelText: settingLabel,
+              errorText: _errors[type],
+            ),
+            onChanged: (String value) {
+              _draftValues[type] = value;
+              if (_errors[type] != null) {
+                setState(() {
+                  _errors[type] = null;
+                });
+              }
+            },
           ),
-          onChanged: (String value) {
-            _draftValues[type] = value;
-            if (_errors[type] != null) {
-              setState(() {
-                _errors[type] = null;
-              });
-            }
-          },
         );
     }
+  }
+
+  Widget _constrainedEditableField(Widget child) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double minWidth = mpSettingsEditableFieldMinWidth;
+        final double maxWidth = constraints.maxWidth;
+
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: minWidth <= maxWidth ? minWidth : maxWidth,
+              maxWidth: maxWidth,
+            ),
+            child: IntrinsicWidth(child: child),
+          ),
+        );
+      },
+    );
   }
 
   void _reloadDraftFromController() {
