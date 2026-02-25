@@ -170,7 +170,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                                 return Container(
                                   key: lineKey,
                                   alignment: Alignment.centerLeft,
-                                  child: SelectableText.rich(
+                                  child: Text.rich(
                                     TextSpan(
                                       style: theme.textTheme.bodyMedium,
                                       children: highlightedSpans,
