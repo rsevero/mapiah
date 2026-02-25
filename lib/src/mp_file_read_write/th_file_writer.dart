@@ -28,11 +28,12 @@ class THFileWriter {
     THFile thFile, {
     bool includeEmptyLines = false,
     bool useOriginalRepresentation = false,
+    String? lineEnding,
   }) {
     _thFile = thFile;
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
-    _lineEnding = _thFile.lineEnding;
+    _lineEnding = lineEnding ?? _thFile.lineEnding;
     _insideMultiLineComment = false;
     _xTherionConfigWritten = false;
 

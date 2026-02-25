@@ -275,7 +275,7 @@ class MPTherionRunner {
   void _parseOutput(String text) {
     final String normalizedText = _normalizeOutputLineBreaks(text);
     final String combinedText = '$_pendingLine$normalizedText';
-    final List<String> splitLines = combinedText.split(thUnixLineBreak);
+    final List<String> splitLines = combinedText.split(mpUnixLineBreak);
 
     _pendingLine = splitLines.removeLast();
 
@@ -286,12 +286,12 @@ class MPTherionRunner {
 
   String _normalizeOutputLineBreaks(String text) {
     final String normalizedWindowsLineBreakText = text.replaceAll(
-      thWindowsLineBreak,
-      thUnixLineBreak,
+      mpWindowsLineBreak,
+      mpUnixLineBreak,
     );
     final String normalizedText = normalizedWindowsLineBreakText.replaceAll(
-      thCarriageReturn,
-      thUnixLineBreak,
+      mpCarriageReturn,
+      mpUnixLineBreak,
     );
 
     return normalizedText;

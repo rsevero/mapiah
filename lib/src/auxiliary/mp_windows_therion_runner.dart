@@ -362,7 +362,7 @@ class MPWindowsTherionRunner {
       ...registrySearchLogLines,
     ];
 
-    return diagnosticsLines.join(thUnixLineBreak);
+    return diagnosticsLines.join(mpUnixLineBreak);
   }
 
   String _buildLocalizedErrorMessage({
@@ -374,7 +374,7 @@ class MPWindowsTherionRunner {
     }
 
     final String localizedErrorMessage =
-        '$localizedBaseErrorMessage$thUnixLineBreak$registryLookupDiagnosticsText';
+        '$localizedBaseErrorMessage$mpUnixLineBreak$registryLookupDiagnosticsText';
 
     return localizedErrorMessage;
   }

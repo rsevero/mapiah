@@ -30,9 +30,9 @@ const String mpHelpPagePath = 'assets/help';
 const String thCommentChar = '#';
 const String thDecimalSeparator = '.';
 const String thBackslash = '\\';
-const String thUnixLineBreak = '\n';
-const String thWindowsLineBreak = '\r\n';
-const String thCarriageReturn = '\r';
+const String mpUnixLineBreak = '\n';
+const String mpWindowsLineBreak = '\r\n';
+const String mpCarriageReturn = '\r';
 const String thDoubleQuote = '"';
 const String thDoubleQuotePair = r'""';
 

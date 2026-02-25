@@ -2588,13 +2588,13 @@ class THFileParser {
       return true;
     }
 
-    if ((priorChar + char) == thWindowsLineBreak) {
-      _parsedTHFile.lineEnding = thWindowsLineBreak;
+    if ((priorChar + char) == mpWindowsLineBreak) {
+      _parsedTHFile.lineEnding = mpWindowsLineBreak;
       return true;
     }
 
-    if (char == thUnixLineBreak) {
-      _parsedTHFile.lineEnding = thUnixLineBreak;
+    if (char == mpUnixLineBreak) {
+      _parsedTHFile.lineEnding = mpUnixLineBreak;
       return true;
     }
 
@@ -2679,7 +2679,7 @@ class THFileParser {
   /// Uses a single pass via `indexOf` and avoids re-scanning from the beginning
   /// of the string, which is much faster for large files.
   (int index, int length) _findLineBreak(String content, [int start = 0]) {
-    final int unixPos = content.indexOf(thUnixLineBreak, start);
+    final int unixPos = content.indexOf(mpUnixLineBreak, start);
 
     if (unixPos == -1) {
       return (-1, 0);

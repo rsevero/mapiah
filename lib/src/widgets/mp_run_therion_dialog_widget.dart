@@ -284,7 +284,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
       final bool isLastOutputLine = lineIndex == outputLineCount - 1;
       if (!isLastOutputLine) {
-        outputSpans.add(const TextSpan(text: thUnixLineBreak));
+        outputSpans.add(const TextSpan(text: mpUnixLineBreak));
       }
     }
 

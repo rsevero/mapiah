@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -93,7 +94,10 @@ endscrap
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
-        final asFile = writer.serialize(file);
+        final String asFile = writer.serialize(
+          file,
+          lineEnding: mpUnixLineBreak,
+        );
         expect(asFile, success['asFile']);
       });
     }
