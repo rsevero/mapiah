@@ -7,6 +7,11 @@ abstract class MPWindowsRegistryReader {
     required String registryPath,
     required String valueName,
   });
+
+  String? readString32Bit({
+    required String registryPath,
+    required String valueName,
+  });
 }
 
 abstract class MPWindowsShellProbe {
@@ -161,20 +166,29 @@ class MPWindowsTherionRunner {
   }
 
   String? _readInstallDirectory(String registryPath) {
-    final String? installDirectory = registryReader.readString64Bit(
+    final String? installDirectory64Bit = registryReader.readString64Bit(
       registryPath: registryPath,
       valueName: mpWindowsRegistryInstallDirValueName,
     );
 
-    if (installDirectory == null) {
+    if (installDirectory64Bit != null && installDirectory64Bit.isNotEmpty) {
+      return installDirectory64Bit;
+    }
+
+    final String? installDirectory32Bit = registryReader.readString32Bit(
+      registryPath: registryPath,
+      valueName: mpWindowsRegistryInstallDirValueName,
+    );
+
+    if (installDirectory32Bit == null) {
       return null;
     }
 
-    if (installDirectory.isEmpty) {
+    if (installDirectory32Bit.isEmpty) {
       return null;
     }
 
-    return installDirectory;
+    return installDirectory32Bit;
   }
 
   String _buildQuotedExecutableCommand(String installDirectory) {
