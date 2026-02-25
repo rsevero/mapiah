@@ -435,6 +435,7 @@ const String mpWindowsCmdExecutable = 'cmd.exe';
 const String mpWindowsCommandExecutable = 'command.com';
 const String mpWindowsShellExecuteFlag = '/c';
 const String mpWindowsRegistryQueryCommand = 'reg';
+const String mpWindowsRegistryQuerySubcommand = 'query';
 const String mpWindowsRegistryQueryValueSwitch = '/v';
 const String mpWindowsRegistryQuery64BitSwitch = '/reg:64';
 const String mpWindowsRegistryQuery32BitSwitch = '/reg:32';

@@ -398,6 +398,7 @@ class _MPTherionRunnerWindowsRegistryReader implements MPWindowsRegistryReader {
     required String registryViewSwitch,
   }) {
     final List<String> queryArguments = <String>[
+      mpWindowsRegistryQuerySubcommand,
       registryPath,
       mpWindowsRegistryQueryValueSwitch,
       valueName,
