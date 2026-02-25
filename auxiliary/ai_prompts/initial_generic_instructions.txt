@@ -1,0 +1,8 @@
+A few general instructions:
+
+1. appLocalizations should be get from mpLocator.appLocalizations.
+2. Magic numbers should not be used. Create appropriate constants at MPConstants file.
+
+Specific instructions:
+
+

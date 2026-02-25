@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
@@ -123,6 +124,27 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             ),
           ),
         );
+      case MPSettingsTypeType.filePickerExec:
+        return _buildSettingFieldWithReset(
+          appLocalizations: appLocalizations,
+          type: type,
+          field: _constrainedEditableField(
+            TextFormField(
+              key: ValueKey<int>(_fieldRebuildCounters[type] ?? 0),
+              initialValue: (_draftValues[type] as String?) ?? '',
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: settingLabel,
+                errorText: _errors[type],
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.folder_open),
+                  onPressed: () => _pickExecutableForSetting(type),
+                ),
+              ),
+              onTap: () => _pickExecutableForSetting(type),
+            ),
+          ),
+        );
       case MPSettingsTypeType.double:
       case MPSettingsTypeType.int:
       case MPSettingsTypeType.string:
@@ -197,6 +219,25 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     }
   }
 
+  Future<void> _pickExecutableForSetting(MPSettingsType type) async {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String dialogTitle = _localizedSettingName(appLocalizations, type);
+    final String? pickedPath = await MPDialogAux.pickExecutableFilePath(
+      context,
+      dialogTitle: dialogTitle,
+    );
+
+    if (!mounted || (pickedPath == null)) {
+      return;
+    }
+
+    setState(() {
+      _draftValues[type] = pickedPath;
+      _errors[type] = null;
+      _incrementFieldRebuildCounter(type);
+    });
+  }
+
   Widget _buildSettingFieldWithReset({
     required AppLocalizations appLocalizations,
     required MPSettingsType type,
@@ -235,6 +276,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
       case MPSettingsTypeType.bool:
       case MPSettingsTypeType.string:
       case MPSettingsTypeType.stringList:
+      case MPSettingsTypeType.filePickerExec:
         return null;
     }
   }
@@ -283,6 +325,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           _draftValues[type] = settingsController
               .getStringList(type)
               .join(mpSettingsStringListSeparator);
+        case MPSettingsTypeType.filePickerExec:
+          _draftValues[type] = settingsController.getString(type);
       }
 
       _incrementFieldRebuildCounter(type);
@@ -311,6 +355,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           _draftValues[type] = settingsController
               .getDefaultStringList(type)
               .join(mpSettingsStringListSeparator);
+        case MPSettingsTypeType.filePickerExec:
+          _draftValues[type] = settingsController.getDefaultString(type);
       }
 
       _errors[type] = null;
@@ -347,6 +393,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             _draftValues[type] = settingsController
                 .getDefaultStringList(type)
                 .join(mpSettingsStringListSeparator);
+          case MPSettingsTypeType.filePickerExec:
+            _draftValues[type] = settingsController.getDefaultString(type);
         }
 
         _incrementFieldRebuildCounter(type);
@@ -444,6 +492,11 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               .where((String entry) => entry.isNotEmpty)
               .toList();
           settingsController.setStringList(type, values);
+        case MPSettingsTypeType.filePickerExec:
+          settingsController.setString(
+            type,
+            (_draftValues[type] as String?) ?? '',
+          );
       }
     }
 
@@ -520,6 +573,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     switch (type) {
       case MPSettingsType.Main_LocaleID:
         return appLocalizations.mpSettingsSettingMainLocaleID;
+      case MPSettingsType.Main_TherionExecutablePath:
+        return _camelCaseToLabel(type.id());
       case MPSettingsType.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
       case MPSettingsType.TH2Edit_PointRadius:

@@ -137,6 +137,13 @@ const String thProjectsDirectory = 'Projects';
 const String mpMainConfigFilename = 'mapiah.toml';
 const String mpDefaultLocaleID = 'sys';
 const String mpEnglishLocaleID = 'en';
+const String mpPathEnvironmentVariableName = 'PATH';
+const String mpPathEnvironmentEntrySeparatorUnix = ':';
+const String mpPathEnvironmentEntrySeparatorMacOS =
+    mpPathEnvironmentEntrySeparatorUnix;
+const String mpPathEnvironmentEntrySeparatorWindows = ';';
+const String mpWindowsExecutableExtension = '.exe';
+const String mpTherionExecutableName = 'therion';
 const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';

@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'mp_settings_controller.g.dart';
 
@@ -75,7 +76,8 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   Future<void> _readInternalSettingsFile() async {
-    SharedPreferencesAsyncPlatform.instance ??= InMemorySharedPreferencesAsync.empty();
+    SharedPreferencesAsyncPlatform.instance ??=
+        InMemorySharedPreferencesAsync.empty();
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
         allowList: MPSettingsType.values.map((e) => e.name).toSet(),
@@ -113,8 +115,71 @@ abstract class MPSettingsControllerBase with Store {
           if (value != null) {
             setStringList(type, value);
           }
+        case MPSettingsTypeType.filePickerExec:
+          final String? value = prefs.getString(type.name);
+
+          if (value != null) {
+            setString(type, value);
+          }
       }
     }
+  }
+
+  bool _isStringBackedType(MPSettingsTypeType type) {
+    return ((type == MPSettingsTypeType.string) ||
+        (type == MPSettingsTypeType.filePickerExec));
+  }
+
+  String _pathEnvironmentEntrySeparator() {
+    if (Platform.isWindows) {
+      return mpPathEnvironmentEntrySeparatorWindows;
+    }
+
+    if (Platform.isMacOS) {
+      return mpPathEnvironmentEntrySeparatorMacOS;
+    }
+
+    return mpPathEnvironmentEntrySeparatorUnix;
+  }
+
+  String _normalizeExecutableNameForPlatform(String executableName) {
+    if (Platform.isWindows &&
+        !executableName.toLowerCase().endsWith(mpWindowsExecutableExtension)) {
+      return '$executableName$mpWindowsExecutableExtension';
+    }
+
+    return executableName;
+  }
+
+  String _searchExecutableInPath(String executableName) {
+    final String normalizedExecutableName = _normalizeExecutableNameForPlatform(
+      executableName,
+    );
+    final String pathValue =
+        Platform.environment[mpPathEnvironmentVariableName] ?? '';
+
+    if (pathValue.isEmpty) {
+      return mpDefaultDefaultStringSetting;
+    }
+
+    final String separator = _pathEnvironmentEntrySeparator();
+    final List<String> entries = pathValue
+        .split(separator)
+        .map((String entry) => entry.trim())
+        .where((String entry) => entry.isNotEmpty)
+        .toList();
+
+    for (final String directoryPath in entries) {
+      final String candidatePath =
+          '$directoryPath${Platform.pathSeparator}$normalizedExecutableName';
+      final File candidateFile = File(candidatePath);
+
+      if (candidateFile.existsSync()) {
+        return candidatePath;
+      }
+    }
+
+    return mpDefaultDefaultStringSetting;
   }
 
   String _getSystemLocaleID() {
@@ -209,9 +274,9 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   String getString(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.string) {
+    if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string at getString',
+        'MPSettingsType $type is not of type string/filePickerExec at getString',
       );
     }
 
@@ -223,10 +288,14 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   String getDefaultString(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.string) {
+    if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string at getDefaultString',
+        'MPSettingsType $type is not of type string/filePickerExec at getDefaultString',
       );
+    }
+
+    if (type.type() == MPSettingsTypeType.filePickerExec) {
+      return _searchExecutableInPath(type.filePickerExecName());
     }
 
     if (_stringDefaultSettings.containsKey(type)) {
@@ -392,9 +461,9 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   bool setString(MPSettingsType type, String value) {
-    if (type.type() != MPSettingsTypeType.string) {
+    if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string at setString',
+        'MPSettingsType $type is not of type string/filePickerExec at setString',
       );
     }
 
@@ -411,9 +480,9 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   bool isStringSet(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.string) {
+    if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string at isStringSet',
+        'MPSettingsType $type is not of type string/filePickerExec at isStringSet',
       );
     }
 
@@ -421,9 +490,9 @@ abstract class MPSettingsControllerBase with Store {
   }
 
   void resetString(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.string) {
+    if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string at resetString',
+        'MPSettingsType $type is not of type string/filePickerExec at resetString',
       );
     }
 

@@ -802,6 +802,53 @@ class MPDialogAux {
     }
   }
 
+  static Future<String?> pickExecutableFilePath(
+    BuildContext context, {
+    required String dialogTitle,
+  }) async {
+    if (_isFilePickerOpen[MPFilePickerType.executable] == true) {
+      return null;
+    }
+
+    _isFilePickerOpen[MPFilePickerType.executable] = true;
+
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: dialogTitle,
+        type: FileType.any,
+        lockParentWindow: true,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (result == null) {
+        mpLocator.mpLog.i('No executable selected.');
+
+        return null;
+      }
+
+      final String? pickedFilePath = result.files.single.path;
+
+      if (pickedFilePath == null) {
+        return null;
+      }
+
+      mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+        pickedFilePath,
+      );
+
+      return pickedFilePath;
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking executable file', error: e);
+
+      return null;
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.executable] = false;
+    }
+  }
+
   static void showHelpDialog(
     BuildContext context,
     String helpPage,
@@ -818,7 +865,7 @@ class MPDialogAux {
   }
 }
 
-enum MPFilePickerType { image, th2, thconfig }
+enum MPFilePickerType { image, th2, thconfig, executable }
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 
