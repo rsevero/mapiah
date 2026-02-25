@@ -145,6 +145,8 @@ const String mpPathEnvironmentEntrySeparatorMacOS =
 const String mpPathEnvironmentEntrySeparatorWindows = ';';
 const String mpWindowsExecutableExtension = '.exe';
 const String mpTherionExecutableName = 'therion';
+const String mpTherionWindowsExecutableName =
+    '$mpTherionExecutableName$mpWindowsExecutableExtension';
 const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
 const String mpTherionPrintEncodingsArgument = '--print-encodings';
 const String mpFlatpakSpawnExecutableName = 'flatpak-spawn';
@@ -429,7 +431,7 @@ const String mpWindowsRegistryTherionUserPath =
 const String mpWindowsRegistryInstallDirValueName = 'InstallDir';
 
 const String mpWindowsForwardSlash = '/';
-const String mpWindowsBackslashPair = r'\\';
+const String mpWindowsBackslashPair = '\\';
 
 const String mpWindowsCmdExecutable = 'cmd.exe';
 const String mpWindowsCommandExecutable = 'command.com';

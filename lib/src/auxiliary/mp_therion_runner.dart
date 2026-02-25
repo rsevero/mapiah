@@ -10,6 +10,22 @@ import 'package:path/path.dart' as p;
 typedef MPTherionRunnerErrorCallback =
     void Function(Object error, StackTrace stackTrace);
 
+List<String> buildWindowsRegistryQueryArguments({
+  required String registryPath,
+  required String valueName,
+  required String registryViewSwitch,
+}) {
+  final List<String> queryArguments = <String>[
+    mpWindowsRegistryQuerySubcommand,
+    registryPath,
+    mpWindowsRegistryQueryValueSwitch,
+    valueName,
+    registryViewSwitch,
+  ];
+
+  return queryArguments;
+}
+
 enum MPTherionRunStatus { running, ok, warning, error }
 
 enum MPTherionIssueKind { warning, error }
@@ -397,13 +413,11 @@ class _MPTherionRunnerWindowsRegistryReader implements MPWindowsRegistryReader {
     required String valueName,
     required String registryViewSwitch,
   }) {
-    final List<String> queryArguments = <String>[
-      mpWindowsRegistryQuerySubcommand,
-      registryPath,
-      mpWindowsRegistryQueryValueSwitch,
-      valueName,
-      registryViewSwitch,
-    ];
+    final List<String> queryArguments = buildWindowsRegistryQueryArguments(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: registryViewSwitch,
+    );
 
     final ProcessResult queryResult = Process.runSync(
       mpWindowsRegistryQueryCommand,
@@ -498,13 +512,17 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
   }) async {
     final StringBuffer standardOutputBuffer = StringBuffer();
     final StringBuffer standardErrorBuffer = StringBuffer();
+    final List<String> shellArguments = <String>[
+      mpWindowsShellExecuteFlag,
+      commandLine,
+    ];
 
     try {
       final Process process = await Process.start(
-        commandLine,
-        const <String>[],
+        mpWindowsCmdExecutable,
+        shellArguments,
         workingDirectory: workingDirectory,
-        runInShell: true,
+        runInShell: false,
       );
       onProcessStarted(process);
 

@@ -81,16 +81,7 @@ class MPWindowsTherionRunner {
 
   String buildCompilerCommand() {
     final String executableCommand = _resolveTherionExecutableCommand();
-    final bool cmdExecutableAvailable = shellProbe.isCmdExeAvailable();
-    final String selectedShellExecutable = cmdExecutableAvailable
-        ? mpWindowsCmdExecutable
-        : mpWindowsCommandExecutable;
-
-    final String compilerCommand = _joinNonEmptyParts(<String>[
-      selectedShellExecutable,
-      mpWindowsShellExecuteFlag,
-      executableCommand,
-    ]);
+    final String compilerCommand = executableCommand;
 
     return compilerCommand;
   }
@@ -196,7 +187,7 @@ class MPWindowsTherionRunner {
     registrySearchLogLines.add(mpTherionWindowsRegistryLookupFallbackMessage);
 
     return (
-      executableCommand: mpTherionExecutableName,
+      executableCommand: mpTherionWindowsExecutableName,
       registrySearchLogLines: registrySearchLogLines,
     );
   }
@@ -229,16 +220,7 @@ class MPWindowsTherionRunner {
   _buildCompilerCommandWithRegistryDiagnostics() {
     final ({String executableCommand, List<String> registrySearchLogLines})
     executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
-    final bool cmdExecutableAvailable = shellProbe.isCmdExeAvailable();
-    final String selectedShellExecutable = cmdExecutableAvailable
-        ? mpWindowsCmdExecutable
-        : mpWindowsCommandExecutable;
-
-    final String compilerCommand = _joinNonEmptyParts(<String>[
-      selectedShellExecutable,
-      mpWindowsShellExecuteFlag,
-      executableResolution.executableCommand,
-    ]);
+    final String compilerCommand = executableResolution.executableCommand;
 
     return (
       commandLine: compilerCommand,
@@ -345,7 +327,7 @@ class MPWindowsTherionRunner {
   String _buildQuotedExecutableCommand(String installDirectory) {
     final String executablePath = _joinWindowsPath(
       installDirectory,
-      mpTherionExecutableName,
+      mpTherionWindowsExecutableName,
     );
     final String normalizedExecutablePath = _normalizeToWindowsBackslashes(
       executablePath,
