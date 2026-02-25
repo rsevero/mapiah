@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
@@ -23,7 +24,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final List<String> sections = _sortedSections(appLocalizations);
 
     return Scaffold(
@@ -161,15 +162,40 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               errorText: _errors[type],
             ),
             onChanged: (String value) {
-              _draftValues[type] = value;
-              if (_errors[type] != null) {
-                setState(() {
-                  _errors[type] = null;
-                });
-              }
+              setState(() {
+                _draftValues[type] = value;
+                _errors[type] = _validateTextDraftValue(
+                  appLocalizations,
+                  type,
+                  value,
+                );
+              });
             },
           ),
         );
+    }
+  }
+
+  String? _validateTextDraftValue(
+    AppLocalizations appLocalizations,
+    MPSettingsType type,
+    String value,
+  ) {
+    final String raw = value.trim();
+
+    switch (type.type()) {
+      case MPSettingsTypeType.double:
+        return double.tryParse(raw) == null
+            ? appLocalizations.mpSettingsInvalidNumber
+            : null;
+      case MPSettingsTypeType.int:
+        return int.tryParse(raw) == null
+            ? appLocalizations.mpSettingsInvalidInteger
+            : null;
+      case MPSettingsTypeType.bool:
+      case MPSettingsTypeType.string:
+      case MPSettingsTypeType.stringList:
+        return null;
     }
   }
 
@@ -236,7 +262,9 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
   }
 
   bool _applyChanges() {
-    final settingsController = mpLocator.mpSettingsController;
+    final MPSettingsController settingsController =
+        mpLocator.mpSettingsController;
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final Map<MPSettingsType, String?> newErrors = {};
 
     for (final MPSettingsType type in MPSettingsType.values) {
@@ -252,24 +280,40 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           );
         case MPSettingsTypeType.double:
           final String raw = (_draftValues[type] as String?)?.trim() ?? '';
+          final String? error = _validateTextDraftValue(
+            appLocalizations,
+            type,
+            raw,
+          );
+
+          if (error != null) {
+            newErrors[type] = error;
+            continue;
+          }
+
           final double? value = double.tryParse(raw);
 
           if (value == null) {
-            newErrors[type] = AppLocalizations.of(
-              context,
-            ).mpSettingsInvalidNumber;
             continue;
           }
 
           settingsController.setDouble(type, value);
         case MPSettingsTypeType.int:
           final String raw = (_draftValues[type] as String?)?.trim() ?? '';
+          final String? error = _validateTextDraftValue(
+            appLocalizations,
+            type,
+            raw,
+          );
+
+          if (error != null) {
+            newErrors[type] = error;
+            continue;
+          }
+
           final int? value = int.tryParse(raw);
 
           if (value == null) {
-            newErrors[type] = AppLocalizations.of(
-              context,
-            ).mpSettingsInvalidInteger;
             continue;
           }
 
@@ -308,10 +352,10 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     final List<String> sections = sectionSet.toList();
 
     sections.sort((String a, String b) {
-      if (a == 'Main' && b != 'Main') {
+      if ((a == 'Main') && (b != 'Main')) {
         return -1;
       }
-      if (b == 'Main' && a != 'Main') {
+      if ((a != 'Main') && (b == 'Main')) {
         return 1;
       }
 
