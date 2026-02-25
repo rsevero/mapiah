@@ -113,13 +113,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunDialogTitle => 'Saída do Therion';
 
   @override
-  String get mapiahTherionRunStatusLabel => 'Status:';
+  String get mapiahTherionRunStatusLabel => 'Situação:';
 
   @override
-  String get mapiahTherionRunStatusRunning => 'running';
+  String get mapiahTherionRunStatusRunning => 'rodando';
 
   @override
   String get mapiahTherionRunStatusOk => 'ok';
+
+  @override
+  String get mapiahTherionRunStatusWarning => 'aviso';
+
+  @override
+  String get mapiahTherionRunStatusError => 'erro';
 
   @override
   String get mapiahTherionRunOutputLabel => 'Saída:';

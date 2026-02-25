@@ -122,6 +122,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionRunStatusOk => 'ok';
 
   @override
+  String get mapiahTherionRunStatusWarning => 'warning';
+
+  @override
+  String get mapiahTherionRunStatusError => 'error';
+
+  @override
   String get mapiahTherionRunOutputLabel => 'Output:';
 
   @override

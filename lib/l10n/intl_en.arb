@@ -163,6 +163,16 @@
     "description": "Status shown when Therion finishes",
     "type": "text"
   },
+  "mapiahTherionRunStatusWarning": "warning",
+  "@mapiahTherionRunStatusWarning": {
+    "description": "Status shown when Therion output has warnings",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusError": "error",
+  "@mapiahTherionRunStatusError": {
+    "description": "Status shown when Therion output has errors",
+    "type": "text"
+  },
   "mapiahTherionRunOutputLabel": "Output:",
   "@mapiahTherionRunOutputLabel": {
     "description": "Label for Therion output area",

@@ -277,6 +277,18 @@ abstract class AppLocalizations {
   /// **'ok'**
   String get mapiahTherionRunStatusOk;
 
+  /// Status shown when Therion output has warnings
+  ///
+  /// In en, this message translates to:
+  /// **'warning'**
+  String get mapiahTherionRunStatusWarning;
+
+  /// Status shown when Therion output has errors
+  ///
+  /// In en, this message translates to:
+  /// **'error'**
+  String get mapiahTherionRunStatusError;
+
   /// Label for Therion output area
   ///
   /// In en, this message translates to:

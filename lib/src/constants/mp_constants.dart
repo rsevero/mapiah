@@ -156,6 +156,23 @@ const double mpTherionRunDialogHeight = 600;
 const double mpTherionRunDialogSpacing = 12;
 const double mpTherionRunStatusBoxMinWidth = 120;
 const double mpTherionRunOutputBorderWidth = 1;
+const double mpTherionRunIssuesListHeight = 120;
+const Duration mpTherionRunScrollAnimationDuration = Duration(
+  milliseconds: 250,
+);
+
+const Color mpTherionRunStatusBackgroundRunningColor = Colors.yellow;
+const Color mpTherionRunStatusBackgroundOkColor = Colors.green;
+const Color mpTherionRunStatusBackgroundWarningColor = Colors.orange;
+const Color mpTherionRunStatusBackgroundErrorColor = Colors.red;
+
+const Color mpTherionRunOutputWarningColor =
+    mpTherionRunStatusBackgroundWarningColor;
+const Color mpTherionRunOutputErrorColor =
+    mpTherionRunStatusBackgroundErrorColor;
+
+const String mpTherionWarningWord = 'warning';
+const String mpTherionErrorWord = 'error';
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;

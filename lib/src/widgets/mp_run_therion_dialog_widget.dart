@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPRunTherionDialogWidget extends StatefulWidget {
   final String therionExecutablePath;
@@ -21,11 +22,10 @@ class MPRunTherionDialogWidget extends StatefulWidget {
 
 class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   final ScrollController _scrollController = ScrollController();
-  final StringBuffer _outputBuffer = StringBuffer();
+  final Map<int, GlobalKey> _lineKeys = <int, GlobalKey>{};
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
-  bool _isRunning = true;
 
   @override
   void initState() {
@@ -44,7 +44,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     );
 
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
-    _therionRunner.isRunningNotifier.addListener(_onRunningChanged);
 
     _therionRunner.start();
   }
@@ -52,36 +51,16 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   @override
   void dispose() {
     _outputSubscription?.cancel();
-    _therionRunner.isRunningNotifier.removeListener(_onRunningChanged);
     _therionRunner.dispose();
     _scrollController.dispose();
 
     super.dispose();
   }
 
-  void _onRunningChanged() {
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _isRunning = _therionRunner.isRunningNotifier.value;
-    });
-  }
-
   void _appendOutput(String text) {
-    if (text.isEmpty) {
+    if (text.isEmpty || !mounted) {
       return;
     }
-
-    if (!mounted) {
-      _outputBuffer.write(text);
-      return;
-    }
-
-    setState(() {
-      _outputBuffer.write(text);
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) {
@@ -94,11 +73,8 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final appLocalizations = mpLocator.appLocalizations;
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final ThemeData theme = Theme.of(context);
-    final String status = _isRunning
-        ? appLocalizations.mapiahTherionRunStatusRunning
-        : appLocalizations.mapiahTherionRunStatusOk;
 
     return AlertDialog(
       title: Text(appLocalizations.mapiahTherionRunDialogTitle),
@@ -108,28 +84,49 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(appLocalizations.mapiahTherionRunStatusLabel),
-                const SizedBox(width: mpTherionRunDialogSpacing),
-                Container(
-                  constraints: const BoxConstraints(
-                    minWidth: mpTherionRunStatusBoxMinWidth,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: mpSettingsPageFieldSpacing,
-                    horizontal: mpSettingsPageCardPadding,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: theme.colorScheme.outline,
-                      width: mpTherionRunOutputBorderWidth,
-                    ),
-                    borderRadius: BorderRadius.circular(mpDefaultButtonRadius),
-                  ),
-                  child: Text(status),
-                ),
-              ],
+            ValueListenableBuilder<MPTherionRunStatus>(
+              valueListenable: _therionRunner.statusNotifier,
+              builder:
+                  (
+                    BuildContext context,
+                    MPTherionRunStatus runStatus,
+                    Widget? child,
+                  ) {
+                    final String statusText = _statusText(
+                      appLocalizations,
+                      runStatus,
+                    );
+                    final Color statusBackgroundColor = _statusBackgroundColor(
+                      runStatus,
+                    );
+
+                    return Row(
+                      children: [
+                        Text(appLocalizations.mapiahTherionRunStatusLabel),
+                        const SizedBox(width: mpTherionRunDialogSpacing),
+                        Container(
+                          constraints: const BoxConstraints(
+                            minWidth: mpTherionRunStatusBoxMinWidth,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: mpSettingsPageFieldSpacing,
+                            horizontal: mpSettingsPageCardPadding,
+                          ),
+                          decoration: BoxDecoration(
+                            color: statusBackgroundColor,
+                            border: Border.all(
+                              color: theme.colorScheme.outline,
+                              width: mpTherionRunOutputBorderWidth,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              mpDefaultButtonRadius,
+                            ),
+                          ),
+                          child: Text(statusText),
+                        ),
+                      ],
+                    );
+                  },
             ),
             const SizedBox(height: mpTherionRunDialogSpacing),
             Text(appLocalizations.mapiahTherionRunOutputLabel),
@@ -145,14 +142,97 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                   ),
                   borderRadius: BorderRadius.circular(mpDefaultButtonRadius),
                 ),
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: SelectableText(
-                    _outputBuffer.toString(),
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                child: ValueListenableBuilder<List<String>>(
+                  valueListenable: _therionRunner.outputLinesNotifier,
+                  builder:
+                      (
+                        BuildContext context,
+                        List<String> outputLines,
+                        Widget? child,
+                      ) {
+                        return SingleChildScrollView(
+                          controller: _scrollController,
+                          child: SelectionArea(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: outputLines.asMap().entries.map((
+                                MapEntry<int, String> entry,
+                              ) {
+                                final int lineIndex = entry.key;
+                                final String lineText = entry.value;
+                                final GlobalKey lineKey = _lineKeys.putIfAbsent(
+                                  lineIndex,
+                                  () => GlobalKey(),
+                                );
+                                final List<TextSpan> highlightedSpans =
+                                    _buildHighlightedSpans(lineText);
+
+                                return Container(
+                                  key: lineKey,
+                                  alignment: Alignment.centerLeft,
+                                  child: SelectableText.rich(
+                                    TextSpan(
+                                      style: theme.textTheme.bodyMedium,
+                                      children: highlightedSpans,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        );
+                      },
                 ),
               ),
+            ),
+            const SizedBox(height: mpTherionRunDialogSpacing),
+            ValueListenableBuilder<List<MPTherionIssue>>(
+              valueListenable: _therionRunner.issuesNotifier,
+              builder:
+                  (
+                    BuildContext context,
+                    List<MPTherionIssue> issues,
+                    Widget? child,
+                  ) {
+                    if (issues.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return SizedBox(
+                      height: mpTherionRunIssuesListHeight,
+                      child: ListView.builder(
+                        itemCount: issues.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final MPTherionIssue issue = issues[index];
+                          final bool isError =
+                              issue.kind == MPTherionIssueKind.error;
+                          final String issuePrefix = isError
+                              ? appLocalizations.mapiahTherionRunStatusError
+                              : appLocalizations.mapiahTherionRunStatusWarning;
+                          final Color issueColor = isError
+                              ? mpTherionRunOutputErrorColor
+                              : mpTherionRunOutputWarningColor;
+
+                          return InkWell(
+                            onTap: () => _jumpToLine(issue.lineIndex),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: mpSettingsPageFieldSpacing,
+                              ),
+                              child: Text(
+                                '$issuePrefix: ${issue.lineText}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: issueColor,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
             ),
           ],
         ),
@@ -160,11 +240,100 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       actions: [
         TextButton(
           onPressed: () {
+            _therionRunner.stop();
             Navigator.of(context).pop();
           },
           child: Text(appLocalizations.buttonClose),
         ),
       ],
     );
+  }
+
+  void _jumpToLine(int lineIndex) {
+    final GlobalKey? lineKey = _lineKeys[lineIndex];
+
+    if (lineKey == null) {
+      return;
+    }
+
+    final BuildContext? lineContext = lineKey.currentContext;
+
+    if (lineContext == null) {
+      return;
+    }
+
+    Scrollable.ensureVisible(
+      lineContext,
+      duration: mpTherionRunScrollAnimationDuration,
+      alignment: 0.1,
+    );
+  }
+
+  String _statusText(
+    AppLocalizations appLocalizations,
+    MPTherionRunStatus status,
+  ) {
+    switch (status) {
+      case MPTherionRunStatus.running:
+        return appLocalizations.mapiahTherionRunStatusRunning;
+      case MPTherionRunStatus.ok:
+        return appLocalizations.mapiahTherionRunStatusOk;
+      case MPTherionRunStatus.warning:
+        return appLocalizations.mapiahTherionRunStatusWarning;
+      case MPTherionRunStatus.error:
+        return appLocalizations.mapiahTherionRunStatusError;
+    }
+  }
+
+  Color _statusBackgroundColor(MPTherionRunStatus status) {
+    switch (status) {
+      case MPTherionRunStatus.running:
+        return mpTherionRunStatusBackgroundRunningColor;
+      case MPTherionRunStatus.ok:
+        return mpTherionRunStatusBackgroundOkColor;
+      case MPTherionRunStatus.warning:
+        return mpTherionRunStatusBackgroundWarningColor;
+      case MPTherionRunStatus.error:
+        return mpTherionRunStatusBackgroundErrorColor;
+    }
+  }
+
+  List<TextSpan> _buildHighlightedSpans(String lineText) {
+    final RegExp keywordRegex = RegExp(
+      '($mpTherionWarningWord|$mpTherionErrorWord)',
+      caseSensitive: false,
+    );
+    final List<TextSpan> spans = <TextSpan>[];
+    int currentIndex = 0;
+
+    for (final RegExpMatch match in keywordRegex.allMatches(lineText)) {
+      if (match.start > currentIndex) {
+        final String plainChunk = lineText.substring(currentIndex, match.start);
+        spans.add(TextSpan(text: plainChunk));
+      }
+
+      final String matchedText = match.group(0) ?? '';
+      final String loweredText = matchedText.toLowerCase();
+      final bool isError = loweredText == mpTherionErrorWord;
+      final Color keywordColor = isError
+          ? mpTherionRunOutputErrorColor
+          : mpTherionRunOutputWarningColor;
+
+      spans.add(
+        TextSpan(
+          text: matchedText,
+          style: TextStyle(color: keywordColor, fontWeight: FontWeight.bold),
+        ),
+      );
+
+      currentIndex = match.end;
+    }
+
+    if (currentIndex < lineText.length) {
+      final String trailingChunk = lineText.substring(currentIndex);
+      spans.add(TextSpan(text: trailingChunk));
+    }
+
+    return spans;
   }
 }
