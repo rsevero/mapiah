@@ -589,9 +589,17 @@ class MPCommandFactory {
   }) {
     final THFile thFile = th2FileEditController.thFile;
     final String fromPath = p.dirname(thFile.filename);
-    final String rawRelativeImagePath = p.relative(
-      imageFilename,
-      from: fromPath,
+    final String normalizedImageFilename = imageFilename.replaceAll(
+      mpWindowsBackslashPair,
+      mpWindowsForwardSlash,
+    );
+    final String normalizedFromPath = fromPath.replaceAll(
+      mpWindowsBackslashPair,
+      mpWindowsForwardSlash,
+    );
+    final String rawRelativeImagePath = p.posix.relative(
+      normalizedImageFilename,
+      from: normalizedFromPath,
     );
     final String relativeImagePath =
         (rawRelativeImagePath.startsWith('./') ||

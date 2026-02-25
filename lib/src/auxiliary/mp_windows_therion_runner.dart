@@ -392,7 +392,10 @@ class MPWindowsTherionRunner {
   }
 
   String _joinWindowsPath(String baseDirectory, String fileName) {
-    final String normalizedBaseDirectory = baseDirectory.replaceAll('\\', '/');
+    final String normalizedBaseDirectory = baseDirectory.replaceAll(
+      mpWindowsBackslashPair,
+      mpWindowsForwardSlash,
+    );
 
     final bool hasTrailingSeparator = normalizedBaseDirectory.endsWith(
       mpWindowsForwardSlash,
