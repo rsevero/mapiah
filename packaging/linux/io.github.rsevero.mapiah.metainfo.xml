@@ -57,11 +57,6 @@
   </screenshots>
 
   <releases>
-    <release version="0.2.37-rc1" date="2026-02-25">
-      <description>
-        <p>Test release</p>
-      </description>
-    </release>
     <release version="0.2.36" date="2026-02-24">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.36</url>
       <description>
