@@ -301,6 +301,12 @@ abstract class AppLocalizations {
   /// **'Select THConfig file'**
   String get mapiahTherionSelectTHConfigDialogTitle;
 
+  /// Error message shown when Therion command execution fails
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot execute command: {commandLine}'**
+  String mpTherionCannotExecuteCommand(Object commandLine);
+
   /// The title for the keyboard shortcuts help dialog
   ///
   /// In en, this message translates to:

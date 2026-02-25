@@ -134,6 +134,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionSelectTHConfigDialogTitle => 'Select THConfig file';
 
   @override
+  String mpTherionCannotExecuteCommand(Object commandLine) {
+    return 'Cannot execute command: $commandLine';
+  }
+
+  @override
   String get mapiahKeyboardShortcutsTitle => 'Keyboard Shortcuts';
 
   @override

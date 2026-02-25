@@ -33,6 +33,7 @@
   "mapiahTherionRunStatusError": "erro",
   "mapiahTherionRunOutputLabel": "Saída:",
   "mapiahTherionSelectTHConfigDialogTitle": "Selecionar arquivo THConfig",
+  "mpTherionCannotExecuteCommand": "Não foi possível executar o comando: {commandLine}",
   "mapiahKeyboardShortcutsTitle": "Atalhos de teclado",
   "mapiahKeyboardShortcutsTooltip": "Atalhos de teclado (Ctrl+K)",
   "mpAltitudeInvalidValueErrorMessage": "Altitude inválida",

@@ -419,3 +419,31 @@ const int mpDefaultDefaultIntSetting = 0;
 const int mpProcessExitCodeSuccess = 0;
 const String mpDefaultDefaultStringSetting = '';
 const List<String> mpDefaultDefaultStringListSetting = [];
+
+const String mpWindowsRegistryTherionMachinePath =
+    r'HKEY_LOCAL_MACHINE\SOFTWARE\Therion';
+const String mpWindowsRegistryTherionUserPath =
+    r'HKEY_CURRENT_USER\SOFTWARE\Therion';
+const String mpWindowsRegistryInstallDirValueName = 'InstallDir';
+
+const String mpWindowsForwardSlash = '/';
+const String mpWindowsBackslashPair = r'\\';
+
+const String mpWindowsCmdExecutable = 'cmd.exe';
+const String mpWindowsCommandExecutable = 'command.com';
+const String mpWindowsShellExecuteFlag = '/c';
+const String mpWindowsRegistryQueryCommand = 'reg';
+const String mpWindowsRegistryQueryValueSwitch = '/v';
+const String mpWindowsRegistryQuery64BitSwitch = '/reg:64';
+const String mpWindowsSystemRootEnvironmentVariable = 'SystemRoot';
+const String mpWindowsSystem32Directory = 'System32';
+
+const int mpWindowsRegistryQueryValueStartTokenIndex = 2;
+const int mpWindowsRegistryQueryMinimumTokens =
+    mpWindowsRegistryQueryValueStartTokenIndex + 1;
+
+const String mpTherionCompileFlag = '-x';
+const String mpTherionBezierInterpolationFlag = '-b';
+
+const String mpCommandSeparatorSpace = ' ';
+const String mpEmptyString = '';

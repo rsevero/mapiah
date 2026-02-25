@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:path/path.dart' as p;
 
@@ -28,6 +30,10 @@ class MPTherionRunner {
   final String therionExecutablePath;
   final String thConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;
+  final MPLocator mpLocator;
+  final MPWindowsRegistryReader windowsRegistryReader;
+  final MPWindowsShellProbe windowsShellProbe;
+  final MPTherionProcessRunner? windowsProcessRunner;
 
   final StreamController<String> _outputController =
       StreamController<String>.broadcast();
@@ -58,67 +64,156 @@ class MPTherionRunner {
     required this.therionExecutablePath,
     required this.thConfigFilePath,
     this.onError,
-  });
+    MPLocator? mpLocator,
+    MPWindowsRegistryReader? windowsRegistryReader,
+    MPWindowsShellProbe? windowsShellProbe,
+    this.windowsProcessRunner,
+  }) : mpLocator = mpLocator ?? MPLocator(),
+       windowsRegistryReader =
+           windowsRegistryReader ?? _MPTherionRunnerWindowsRegistryReader(),
+       windowsShellProbe =
+           windowsShellProbe ?? _MPTherionRunnerWindowsShellProbe();
 
   Stream<String> get outputStream => _outputController.stream;
 
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
     int? therionExitCode;
-    final ({String executable, List<String> arguments}) executionConfig =
-        _buildExecutionConfig();
-    final String processExecutable = executionConfig.executable;
-    final List<String> processArguments = executionConfig.arguments;
+    bool hasExecutionFailure = false;
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
 
     try {
-      final Process process = await Process.start(
-        processExecutable,
-        processArguments,
-        workingDirectory: workingDirectory,
-        runInShell: true,
-      );
+      if (_shouldUseWindowsRunner()) {
+        final MPTherionExecutionResult windowsExecutionResult =
+            await _runUsingWindowsRunner(workingDirectory: workingDirectory);
 
-      _process = process;
+        hasExecutionFailure = !windowsExecutionResult.success;
 
-      _stdoutSubscription = utf8.decoder
-          .bind(process.stdout)
-          .listen(
-            _handleOutput,
-            onError: (Object error) {
-              _handleOutput('$error\n');
-            },
-          );
+        final String? localizedErrorMessage =
+            windowsExecutionResult.localizedErrorMessage;
+        final bool hasLocalizedErrorMessage =
+            localizedErrorMessage != null && localizedErrorMessage.isNotEmpty;
 
-      _stderrSubscription = utf8.decoder
-          .bind(process.stderr)
-          .listen(
-            _handleOutput,
-            onError: (Object error) {
-              _handleOutput('$error\n');
-            },
-          );
-
-      therionExitCode = await process.exitCode;
-    } catch (error, stackTrace) {
+        if (hasLocalizedErrorMessage) {
+          _handleOutput('$localizedErrorMessage\n');
+        }
+      } else {
+        therionExitCode = await _runUsingStandardProcess(
+          workingDirectory: workingDirectory,
+        );
+      }
+    } on Object catch (error, stackTrace) {
       onError?.call(error, stackTrace);
       _handleOutput('$error\n');
       _escalateStatus(MPTherionRunStatus.error);
+      hasExecutionFailure = true;
     } finally {
       _flushPendingLine();
       isRunningNotifier.value = false;
 
-      final bool hasExitCode = therionExitCode != null;
-      final bool hasSuccessfulExitCode =
-          hasExitCode && (therionExitCode == mpProcessExitCodeSuccess);
+      _finalizeRunStatus(
+        hasExecutionFailure: hasExecutionFailure,
+        therionExitCode: therionExitCode,
+      );
+    }
+  }
 
-      if (hasExitCode && !hasSuccessfulExitCode) {
-        statusNotifier.value = MPTherionRunStatus.error;
-      } else if (statusNotifier.value == MPTherionRunStatus.running) {
-        statusNotifier.value = MPTherionRunStatus.ok;
-      }
+  bool _shouldUseWindowsRunner() {
+    final bool isWindowsPlatform = Platform.isWindows;
+
+    return isWindowsPlatform;
+  }
+
+  Future<MPTherionExecutionResult> _runUsingWindowsRunner({
+    required String workingDirectory,
+  }) async {
+    final MPTherionProcessRunner processRunner =
+        windowsProcessRunner ??
+        _MPTherionRunnerWindowsProcessRunner(
+          onProcessStarted: (Process process) {
+            _process = process;
+          },
+          onOutput: _handleOutput,
+          onError: onError,
+        );
+
+    final MPWindowsTherionRunner windowsTherionRunner = MPWindowsTherionRunner(
+      mpLocator: mpLocator,
+      registryReader: windowsRegistryReader,
+      shellProbe: windowsShellProbe,
+      processRunner: processRunner,
+    );
+
+    final MPTherionExecutionResult windowsExecutionResult =
+        await windowsTherionRunner.runCompile(
+          therionOptions: mpEmptyString,
+          therionFileName: thConfigFilePath,
+          workingDirectory: workingDirectory,
+        );
+
+    return windowsExecutionResult;
+  }
+
+  Future<int> _runUsingStandardProcess({
+    required String workingDirectory,
+  }) async {
+    final ({String executable, List<String> arguments}) executionConfig =
+        _buildExecutionConfig();
+    final String processExecutable = executionConfig.executable;
+    final List<String> processArguments = executionConfig.arguments;
+
+    final Process process = await Process.start(
+      processExecutable,
+      processArguments,
+      workingDirectory: workingDirectory,
+      runInShell: true,
+    );
+
+    _process = process;
+
+    _stdoutSubscription = utf8.decoder
+        .bind(process.stdout)
+        .listen(
+          _handleOutput,
+          onError: (Object error) {
+            _handleOutput('$error\n');
+          },
+        );
+
+    _stderrSubscription = utf8.decoder
+        .bind(process.stderr)
+        .listen(
+          _handleOutput,
+          onError: (Object error) {
+            _handleOutput('$error\n');
+          },
+        );
+
+    final int therionExitCode = await process.exitCode;
+
+    return therionExitCode;
+  }
+
+  void _finalizeRunStatus({
+    required bool hasExecutionFailure,
+    required int? therionExitCode,
+  }) {
+    final bool hasExitCode = therionExitCode != null;
+    final bool hasSuccessfulExitCode =
+        hasExitCode && (therionExitCode == mpProcessExitCodeSuccess);
+    final bool hasFailedExitCode = hasExitCode && !hasSuccessfulExitCode;
+    final bool shouldSetErrorStatus = hasExecutionFailure || hasFailedExitCode;
+
+    if (shouldSetErrorStatus) {
+      statusNotifier.value = MPTherionRunStatus.error;
+
+      return;
+    }
+
+    if (statusNotifier.value == MPTherionRunStatus.running) {
+      statusNotifier.value = MPTherionRunStatus.ok;
     }
   }
 
@@ -256,5 +351,182 @@ class MPTherionRunner {
     }
 
     _outputController.add(text);
+  }
+}
+
+class _MPTherionRunnerWindowsRegistryReader implements MPWindowsRegistryReader {
+  @override
+  String? readString64Bit({
+    required String registryPath,
+    required String valueName,
+  }) {
+    final List<String> queryArguments = <String>[
+      registryPath,
+      mpWindowsRegistryQueryValueSwitch,
+      valueName,
+      mpWindowsRegistryQuery64BitSwitch,
+    ];
+
+    final ProcessResult queryResult = Process.runSync(
+      mpWindowsRegistryQueryCommand,
+      queryArguments,
+      runInShell: true,
+    );
+    final bool hasSuccessfulExitCode =
+        queryResult.exitCode == mpProcessExitCodeSuccess;
+
+    if (!hasSuccessfulExitCode) {
+      return null;
+    }
+
+    final Object? rawStandardOutput = queryResult.stdout;
+    if (rawStandardOutput is! String) {
+      return null;
+    }
+
+    final Iterable<String> outputLines = LineSplitter.split(rawStandardOutput);
+
+    for (final String outputLine in outputLines) {
+      final String trimmedLine = outputLine.trimLeft();
+      final bool containsRequestedValue = trimmedLine.startsWith(valueName);
+      if (!containsRequestedValue) {
+        continue;
+      }
+
+      final List<String> lineParts = trimmedLine.split(RegExp(r'\s+'));
+      final bool hasExpectedTokenCount =
+          lineParts.length >= mpWindowsRegistryQueryMinimumTokens;
+      if (!hasExpectedTokenCount) {
+        continue;
+      }
+
+      final String parsedValue = lineParts
+          .sublist(mpWindowsRegistryQueryValueStartTokenIndex)
+          .join(mpCommandSeparatorSpace)
+          .trim();
+
+      if (parsedValue.isEmpty) {
+        return null;
+      }
+
+      return parsedValue;
+    }
+
+    return null;
+  }
+}
+
+class _MPTherionRunnerWindowsShellProbe implements MPWindowsShellProbe {
+  @override
+  bool isCmdExeAvailable() {
+    final String? systemRootDirectory =
+        Platform.environment[mpWindowsSystemRootEnvironmentVariable];
+    if (systemRootDirectory == null) {
+      return false;
+    }
+
+    final String trimmedSystemRootDirectory = systemRootDirectory.trim();
+    if (trimmedSystemRootDirectory.isEmpty) {
+      return false;
+    }
+
+    final String cmdExecutablePath = p.join(
+      trimmedSystemRootDirectory,
+      mpWindowsSystem32Directory,
+      mpWindowsCmdExecutable,
+    );
+    final File cmdExecutable = File(cmdExecutablePath);
+    final bool cmdExecutableExists = cmdExecutable.existsSync();
+
+    return cmdExecutableExists;
+  }
+}
+
+class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
+  final void Function(Process process) onProcessStarted;
+  final void Function(String outputText) onOutput;
+  final MPTherionRunnerErrorCallback? onError;
+
+  const _MPTherionRunnerWindowsProcessRunner({
+    required this.onProcessStarted,
+    required this.onOutput,
+    required this.onError,
+  });
+
+  @override
+  Future<MPTherionExecutionResult> run({
+    required String commandLine,
+    required String workingDirectory,
+  }) async {
+    final StringBuffer standardOutputBuffer = StringBuffer();
+    final StringBuffer standardErrorBuffer = StringBuffer();
+
+    try {
+      final Process process = await Process.start(
+        commandLine,
+        const <String>[],
+        workingDirectory: workingDirectory,
+        runInShell: true,
+      );
+      onProcessStarted(process);
+
+      final StreamSubscription<String> stdoutSubscription = utf8.decoder
+          .bind(process.stdout)
+          .listen(
+            (String outputChunk) {
+              standardOutputBuffer.write(outputChunk);
+              onOutput(outputChunk);
+            },
+            onError: (Object error, StackTrace stackTrace) {
+              final String errorText = '$error';
+              standardErrorBuffer.write('$errorText\n');
+              onOutput('$errorText\n');
+              onError?.call(error, stackTrace);
+            },
+          );
+
+      final StreamSubscription<String> stderrSubscription = utf8.decoder
+          .bind(process.stderr)
+          .listen(
+            (String outputChunk) {
+              standardErrorBuffer.write(outputChunk);
+              onOutput(outputChunk);
+            },
+            onError: (Object error, StackTrace stackTrace) {
+              final String errorText = '$error';
+              standardErrorBuffer.write('$errorText\n');
+              onOutput('$errorText\n');
+              onError?.call(error, stackTrace);
+            },
+          );
+
+      final int processExitCode = await process.exitCode;
+
+      await stdoutSubscription.cancel();
+      await stderrSubscription.cancel();
+
+      final bool success = processExitCode == mpProcessExitCodeSuccess;
+
+      return MPTherionExecutionResult(
+        success: success,
+        commandLine: commandLine,
+        standardOutput: standardOutputBuffer.toString(),
+        standardError: standardErrorBuffer.toString(),
+        localizedErrorMessage: null,
+      );
+    } on Object catch (error, stackTrace) {
+      onError?.call(error, stackTrace);
+
+      final String errorText = '$error';
+      onOutput('$errorText\n');
+
+      return MPTherionExecutionResult(
+        success: false,
+        commandLine: commandLine,
+        standardOutput: standardOutputBuffer.toString(),
+        standardError: errorText,
+        localizedErrorMessage: null,
+      );
+    }
   }
 }

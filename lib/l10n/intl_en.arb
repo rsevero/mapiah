@@ -183,6 +183,14 @@
     "description": "Title for THConfig file picker dialog",
     "type": "text"
   },
+  "mpTherionCannotExecuteCommand": "Cannot execute command: {commandLine}",
+  "@mpTherionCannotExecuteCommand": {
+    "description": "Error message shown when Therion command execution fails",
+    "type": "text",
+    "placeholders": {
+      "commandLine": {}
+    }
+  },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
     "description": "The title for the keyboard shortcuts help dialog",
