@@ -71,7 +71,6 @@
       flatpak run --command=flathub-build org.flatpak.Builder --install io.github.rsevero.mapiah.yml
       flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest io.github.rsevero.mapiah.yml
       flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo
-      flatpak run io.github.rsevero.mapiah
       ```
    2. Test the test release with:
        ```bash
