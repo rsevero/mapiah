@@ -7,12 +7,14 @@ sdk-extensions:
 command: mapiah
 finish-args:
 - --device=dri
-- --env=GIO_USE_PORTAL=1
-- --env=GTK_USE_PORTAL=1
+- --env=GIO_USE_PORTAL=0
+- --env=GTK_USE_PORTAL=0
+- --filesystem=home
 - --share=ipc
 - --share=network
 - --socket=fallback-x11
 - --socket=wayland
+- --talk-name=org.freedesktop.Flatpak
 modules:
 - name: mapiah
   buildsystem: simple
