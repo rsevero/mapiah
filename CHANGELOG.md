@@ -17,6 +17,7 @@
   * Moving business logic of running therion from MPRunTherionDialogWidget to new MPTherionRunner.
   * Added MPTherionRunner ok < warning < error escalation test.
   * Added multi line selection + clickable warnings and errors test.
+  * MPTherionRunner checking exit code at end of therion run.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:

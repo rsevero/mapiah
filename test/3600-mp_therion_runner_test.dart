@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -131,6 +133,52 @@ void main(List<String> arguments) {
         await tempDirectory.delete(recursive: true);
       }
     });
+
+    test(
+      'overwrites final status to error when process exit code is non-zero',
+      () async {
+        final String scriptSource = '''
+import 'dart:io';
+
+void main(List<String> arguments) {
+  print('warning: only warning issue');
+  exitCode = 2;
+}
+''';
+
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_runner_test_',
+        );
+
+        try {
+          final String scriptPath = await _createScriptFile(
+            directory: tempDirectory,
+            filename: 'runner_non_zero_exit.dart',
+            source: scriptSource,
+          );
+
+          final MPTherionRunner runner = MPTherionRunner(
+            therionExecutablePath: _dartCommandForPlatform(),
+            thConfigFilePath: scriptPath,
+          );
+
+          try {
+            await runner.start();
+
+            final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+            final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+
+            expect(finalStatus, MPTherionRunStatus.error);
+            expect(issues.length, 1);
+            expect(issues[0].kind, MPTherionIssueKind.warning);
+          } finally {
+            runner.dispose();
+          }
+        } finally {
+          await tempDirectory.delete(recursive: true);
+        }
+      },
+    );
   });
 }
 

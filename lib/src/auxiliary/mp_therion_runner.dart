@@ -64,6 +64,7 @@ class MPTherionRunner {
 
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
+    int? therionExitCode;
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
@@ -96,7 +97,7 @@ class MPTherionRunner {
             },
           );
 
-      await process.exitCode;
+      therionExitCode = await process.exitCode;
     } catch (error, stackTrace) {
       onError?.call(error, stackTrace);
       _handleOutput('$error\n');
@@ -105,7 +106,13 @@ class MPTherionRunner {
       _flushPendingLine();
       isRunningNotifier.value = false;
 
-      if (statusNotifier.value == MPTherionRunStatus.running) {
+      final bool hasExitCode = therionExitCode != null;
+      final bool hasSuccessfulExitCode =
+          hasExitCode && (therionExitCode == mpProcessExitCodeSuccess);
+
+      if (hasExitCode && !hasSuccessfulExitCode) {
+        statusNotifier.value = MPTherionRunStatus.error;
+      } else if (statusNotifier.value == MPTherionRunStatus.running) {
         statusNotifier.value = MPTherionRunStatus.ok;
       }
     }

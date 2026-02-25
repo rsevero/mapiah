@@ -414,5 +414,6 @@ const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
 const bool mpDefaultDefaultBoolSetting = false;
 const double mpDefaultDefaultDoubleSetting = 0.0;
 const int mpDefaultDefaultIntSetting = 0;
+const int mpProcessExitCodeSuccess = 0;
 const String mpDefaultDefaultStringSetting = '';
 const List<String> mpDefaultDefaultStringListSetting = [];
