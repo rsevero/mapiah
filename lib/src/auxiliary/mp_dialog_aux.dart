@@ -20,6 +20,7 @@ import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
+import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -762,16 +763,17 @@ class MPDialogAux {
     }
   }
 
-  static Future<void> pickTHConfigFile(BuildContext context) async {
+  static Future<bool> pickTHConfigFile(BuildContext context) async {
     if (_isFilePickerOpen[MPFilePickerType.thconfig] == true) {
-      return;
+      return false;
     }
 
     _isFilePickerOpen[MPFilePickerType.thconfig] = true;
 
     try {
       final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        dialogTitle: 'Select THConfig file',
+        dialogTitle:
+            mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
         type: FileType.custom,
         allowedExtensions: ['thconfig', 'THCONFIG'],
         lockParentWindow: true,
@@ -785,21 +787,73 @@ class MPDialogAux {
         final String? pickedFilePath = result.files.single.path;
 
         if (pickedFilePath == null) {
-          return;
+          return false;
         }
 
         mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
           pickedFilePath,
         );
         mpLocator.mpGeneralController.thConfigFilePath = pickedFilePath;
+
+        return true;
       } else {
         mpLocator.mpLog.i('No THConfig file selected.');
+
+        return false;
       }
     } catch (e) {
       mpLocator.mpLog.e('Error picking THConfig file', error: e);
+
+      return false;
     } finally {
       _isFilePickerOpen[MPFilePickerType.thconfig] = false;
     }
+  }
+
+  static Future<void> pickTHConfigFileAndRunTherion(
+    BuildContext context,
+  ) async {
+    final bool isPicked = await pickTHConfigFile(context);
+
+    if (!isPicked) {
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
+    await runTherion(context);
+  }
+
+  static Future<void> runTherion(BuildContext context) async {
+    final String thConfigFilePath = mpLocator
+        .mpGeneralController
+        .thConfigFilePath
+        .trim();
+
+    if (thConfigFilePath.isEmpty) {
+      return;
+    }
+
+    final String configuredExecutablePath = mpLocator.mpSettingsController
+        .getString(MPSettingsType.Main_TherionExecutablePath)
+        .trim();
+    final String therionExecutablePath = configuredExecutablePath.isEmpty
+        ? mpTherionDefaultExecutableCommand
+        : configuredExecutablePath;
+
+    await showDialog<void>(
+      context: context,
+      useRootNavigator: true,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return MPRunTherionDialogWidget(
+          therionExecutablePath: therionExecutablePath,
+          thConfigFilePath: thConfigFilePath,
+        );
+      },
+    );
   }
 
   static Future<String?> pickExecutableFilePath(

@@ -143,6 +143,36 @@
     "description": "The tooltip for the Run Therion button",
     "type": "text"
   },
+  "mapiahTherionRunDialogTitle": "Therion output",
+  "@mapiahTherionRunDialogTitle": {
+    "description": "Title for the Therion output dialog",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusLabel": "Status:",
+  "@mapiahTherionRunStatusLabel": {
+    "description": "Label for Therion run status",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusRunning": "running",
+  "@mapiahTherionRunStatusRunning": {
+    "description": "Status while Therion is running",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusOk": "ok",
+  "@mapiahTherionRunStatusOk": {
+    "description": "Status shown when Therion finishes",
+    "type": "text"
+  },
+  "mapiahTherionRunOutputLabel": "Output:",
+  "@mapiahTherionRunOutputLabel": {
+    "description": "Label for Therion output area",
+    "type": "text"
+  },
+  "mapiahTherionSelectTHConfigDialogTitle": "Select THConfig file",
+  "@mapiahTherionSelectTHConfigDialogTitle": {
+    "description": "Title for THConfig file picker dialog",
+    "type": "text"
+  },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
     "description": "The title for the keyboard shortcuts help dialog",

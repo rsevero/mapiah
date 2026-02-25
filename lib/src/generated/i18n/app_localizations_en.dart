@@ -110,6 +110,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahRunTherionButtonTooltip => 'Run Therion';
 
   @override
+  String get mapiahTherionRunDialogTitle => 'Therion output';
+
+  @override
+  String get mapiahTherionRunStatusLabel => 'Status:';
+
+  @override
+  String get mapiahTherionRunStatusRunning => 'running';
+
+  @override
+  String get mapiahTherionRunStatusOk => 'ok';
+
+  @override
+  String get mapiahTherionRunOutputLabel => 'Output:';
+
+  @override
+  String get mapiahTherionSelectTHConfigDialogTitle => 'Select THConfig file';
+
+  @override
   String get mapiahKeyboardShortcutsTitle => 'Keyboard Shortcuts';
 
   @override

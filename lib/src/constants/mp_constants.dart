@@ -144,10 +144,18 @@ const String mpPathEnvironmentEntrySeparatorMacOS =
 const String mpPathEnvironmentEntrySeparatorWindows = ';';
 const String mpWindowsExecutableExtension = '.exe';
 const String mpTherionExecutableName = 'therion';
+const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
+const String mpTherionPrintEncodingsArgument = '--print-encodings';
 const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';
 const String mpSettingsStringListSeparator = ', ';
+
+const double mpTherionRunDialogWidth = 900;
+const double mpTherionRunDialogHeight = 600;
+const double mpTherionRunDialogSpacing = 12;
+const double mpTherionRunStatusBoxMinWidth = 120;
+const double mpTherionRunOutputBorderWidth = 1;
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;

@@ -84,7 +84,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             icon: Icon(Icons.playlist_add_check_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () async {
-              await MPDialogAux.pickTHConfigFile(context);
+              await MPDialogAux.pickTHConfigFileAndRunTherion(context);
               if (mounted) {
                 setState(() {});
               }
@@ -98,11 +98,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             color: colorScheme.onSecondaryContainer,
             onPressed: mpLocator.mpGeneralController.thConfigFilePath.isEmpty
                 ? null
-                : () {
-                    mpLocator.mpLog.i(
-                      'Run Therion requested (not implemented yet).',
-                    );
-                  },
+                : () => MPDialogAux.runTherion(context),
             tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
           ),
           IconButton(

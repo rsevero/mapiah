@@ -6,6 +6,7 @@
   * Settings page with real time per setting type validation.
   * Settings page with "reset" button for each setting and for all settings.
   * Created new settings type: FilePickerExecutable.
+  * Running Therion.
 * Fixed bugs:
   * 'Cancel' button on settings page not closing page.
 * Infrastructure maintenance:

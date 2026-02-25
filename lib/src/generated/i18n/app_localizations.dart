@@ -253,6 +253,42 @@ abstract class AppLocalizations {
   /// **'Run Therion'**
   String get mapiahRunTherionButtonTooltip;
 
+  /// Title for the Therion output dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Therion output'**
+  String get mapiahTherionRunDialogTitle;
+
+  /// Label for Therion run status
+  ///
+  /// In en, this message translates to:
+  /// **'Status:'**
+  String get mapiahTherionRunStatusLabel;
+
+  /// Status while Therion is running
+  ///
+  /// In en, this message translates to:
+  /// **'running'**
+  String get mapiahTherionRunStatusRunning;
+
+  /// Status shown when Therion finishes
+  ///
+  /// In en, this message translates to:
+  /// **'ok'**
+  String get mapiahTherionRunStatusOk;
+
+  /// Label for Therion output area
+  ///
+  /// In en, this message translates to:
+  /// **'Output:'**
+  String get mapiahTherionRunOutputLabel;
+
+  /// Title for THConfig file picker dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Select THConfig file'**
+  String get mapiahTherionSelectTHConfigDialogTitle;
+
   /// The title for the keyboard shortcuts help dialog
   ///
   /// In en, this message translates to:

@@ -170,9 +170,11 @@ class MPGeneralController {
 
   Future<void> updateAvailableEncodingsList() async {
     try {
-      final String exe = Platform.isWindows ? 'therion.exe' : 'therion';
+      final String exe = Platform.isWindows
+          ? '$mpTherionExecutableName$mpWindowsExecutableExtension'
+          : mpTherionExecutableName;
       final ProcessResult result = await Process.run(exe, const [
-        '--print-encodings',
+        mpTherionPrintEncodingsArgument,
       ]);
 
       if (result.exitCode != 0) {

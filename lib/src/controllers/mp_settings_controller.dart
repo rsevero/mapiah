@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -130,58 +129,6 @@ abstract class MPSettingsControllerBase with Store {
         (type == MPSettingsTypeType.filePickerExec));
   }
 
-  String _pathEnvironmentEntrySeparator() {
-    if (Platform.isWindows) {
-      return mpPathEnvironmentEntrySeparatorWindows;
-    }
-
-    if (Platform.isMacOS) {
-      return mpPathEnvironmentEntrySeparatorMacOS;
-    }
-
-    return mpPathEnvironmentEntrySeparatorUnix;
-  }
-
-  String _normalizeExecutableNameForPlatform(String executableName) {
-    if (Platform.isWindows &&
-        !executableName.toLowerCase().endsWith(mpWindowsExecutableExtension)) {
-      return '$executableName$mpWindowsExecutableExtension';
-    }
-
-    return executableName;
-  }
-
-  String _searchExecutableInPath(String executableName) {
-    final String normalizedExecutableName = _normalizeExecutableNameForPlatform(
-      executableName,
-    );
-    final String pathValue =
-        Platform.environment[mpPathEnvironmentVariableName] ?? '';
-
-    if (pathValue.isEmpty) {
-      return mpDefaultDefaultStringSetting;
-    }
-
-    final String separator = _pathEnvironmentEntrySeparator();
-    final List<String> entries = pathValue
-        .split(separator)
-        .map((String entry) => entry.trim())
-        .where((String entry) => entry.isNotEmpty)
-        .toList();
-
-    for (final String directoryPath in entries) {
-      final String candidatePath =
-          '$directoryPath${Platform.pathSeparator}$normalizedExecutableName';
-      final File candidateFile = File(candidatePath);
-
-      if (candidateFile.existsSync()) {
-        return candidatePath;
-      }
-    }
-
-    return mpDefaultDefaultStringSetting;
-  }
-
   String _getSystemLocaleID() {
     final Locale systemLocale =
         WidgetsBinding.instance.platformDispatcher.locale;
@@ -295,7 +242,7 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     if (type.type() == MPSettingsTypeType.filePickerExec) {
-      return _searchExecutableInPath(type.filePickerExecName());
+      return type.filePickerExecName();
     }
 
     if (_stringDefaultSettings.containsKey(type)) {

@@ -124,7 +124,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       color: colorScheme.onSecondaryContainer,
                     ),
                     onPressed: () async {
-                      await MPDialogAux.pickTHConfigFile(context);
+                      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
                       if (mounted) {
                         setState(() {});
                       }
@@ -141,11 +141,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     onPressed:
                         mpLocator.mpGeneralController.thConfigFilePath.isEmpty
                         ? null
-                        : () {
-                            mpLocator.mpLog.i(
-                              'Run Therion requested (not implemented yet).',
-                            );
-                          },
+                        : () => MPDialogAux.runTherion(context),
                     tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
                   ),
                   MPHelpButtonWidget(
