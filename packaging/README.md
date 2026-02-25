@@ -15,6 +15,7 @@
    ```
 9. At the _~/devel/io.github.rsevero.mapiah_ repo pull any changes from the remote main branch and create new branch:
       ```bash
+      git co master
       git pull
       git co -b v0.2.22
       ```
