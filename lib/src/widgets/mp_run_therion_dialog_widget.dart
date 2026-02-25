@@ -8,10 +8,12 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 class MPRunTherionDialogWidget extends StatefulWidget {
   final String therionExecutablePath;
   final String thConfigFilePath;
+  final MPTherionRunner? therionRunner;
 
   const MPRunTherionDialogWidget({
     required this.therionExecutablePath,
     required this.thConfigFilePath,
+    this.therionRunner,
     super.key,
   });
 
@@ -31,17 +33,23 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   void initState() {
     super.initState();
 
-    _therionRunner = MPTherionRunner(
-      therionExecutablePath: widget.therionExecutablePath,
-      thConfigFilePath: widget.thConfigFilePath,
-      onError: (error, stackTrace) {
-        mpLocator.mpLog.e(
-          'Failed to run Therion',
-          error: error,
-          stackTrace: stackTrace,
-        );
-      },
-    );
+    final MPTherionRunner? injectedRunner = widget.therionRunner;
+
+    if (injectedRunner != null) {
+      _therionRunner = injectedRunner;
+    } else {
+      _therionRunner = MPTherionRunner(
+        therionExecutablePath: widget.therionExecutablePath,
+        thConfigFilePath: widget.thConfigFilePath,
+        onError: (error, stackTrace) {
+          mpLocator.mpLog.e(
+            'Failed to run Therion',
+            error: error,
+            stackTrace: stackTrace,
+          );
+        },
+      );
+    }
 
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
 
