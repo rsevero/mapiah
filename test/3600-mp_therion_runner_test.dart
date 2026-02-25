@@ -6,6 +6,40 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 
 void main() {
+  group('Dart command resolver', () {
+    test('uses resolved executable when it already points to dart', () {
+      final String resolvedExecutablePath = r'C:\tools\dart-sdk\bin\dart.exe';
+
+      final String command = _resolveDartCommandForPlatform(
+        resolvedExecutablePath: resolvedExecutablePath,
+        isWindows: true,
+        flutterRootPath: null,
+        fileExists: (String _) {
+          return false;
+        },
+      );
+
+      expect(command, resolvedExecutablePath);
+    });
+
+    test('falls back to FLUTTER_ROOT dart executable when available', () {
+      final String flutterRootPath = r'D:\flutter';
+      final String expectedWindowsDartPath =
+          r'D:\flutter\bin\cache\dart-sdk\bin\dart.exe';
+
+      final String command = _resolveDartCommandForPlatform(
+        resolvedExecutablePath: r'C:\Windows\System32\cmd.exe',
+        isWindows: true,
+        flutterRootPath: flutterRootPath,
+        fileExists: (String path) {
+          return path == expectedWindowsDartPath;
+        },
+      );
+
+      expect(command, expectedWindowsDartPath);
+    });
+  });
+
   group('MPTherionRunner monitoring', () {
     test('escalates status from warning to error and records issues', () async {
       final String scriptSource = '''
@@ -235,7 +269,26 @@ Future<String> _createScriptFile({
 }
 
 String _dartCommandForPlatform() {
-  final String resolvedExecutablePath = Platform.resolvedExecutable;
+  final String? flutterRootPath = Platform.environment['FLUTTER_ROOT'];
+
+  return _resolveDartCommandForPlatform(
+    resolvedExecutablePath: Platform.resolvedExecutable,
+    isWindows: Platform.isWindows,
+    flutterRootPath: flutterRootPath,
+    fileExists: (String path) {
+      final File file = File(path);
+
+      return file.existsSync();
+    },
+  );
+}
+
+String _resolveDartCommandForPlatform({
+  required String resolvedExecutablePath,
+  required bool isWindows,
+  required String? flutterRootPath,
+  required bool Function(String path) fileExists,
+}) {
   final String normalizedResolvedExecutablePath = resolvedExecutablePath
       .toLowerCase();
   final bool resolvedExecutableIsDart =
@@ -246,17 +299,16 @@ String _dartCommandForPlatform() {
     return resolvedExecutablePath;
   }
 
-  final String? flutterRootPath = Platform.environment['FLUTTER_ROOT'];
   final bool hasFlutterRootPath =
       flutterRootPath != null && flutterRootPath.isNotEmpty;
 
   if (hasFlutterRootPath) {
-    final String flutterDartExecutablePath = Platform.isWindows
+    final String flutterDartExecutablePath = isWindows
         ? '$flutterRootPath\\bin\\cache\\dart-sdk\\bin\\dart.exe'
         : '$flutterRootPath/bin/cache/dart-sdk/bin/dart';
-    final File flutterDartExecutableFile = File(flutterDartExecutablePath);
-    final bool flutterDartExecutableExists = flutterDartExecutableFile
-        .existsSync();
+    final bool flutterDartExecutableExists = fileExists(
+      flutterDartExecutablePath,
+    );
 
     if (flutterDartExecutableExists) {
       return flutterDartExecutablePath;
