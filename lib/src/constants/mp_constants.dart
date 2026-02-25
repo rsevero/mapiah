@@ -435,6 +435,7 @@ const String mpWindowsShellExecuteFlag = '/c';
 const String mpWindowsRegistryQueryCommand = 'reg';
 const String mpWindowsRegistryQueryValueSwitch = '/v';
 const String mpWindowsRegistryQuery64BitSwitch = '/reg:64';
+const String mpWindowsRegistryQuery32BitSwitch = '/reg:32';
 const String mpWindowsSystemRootEnvironmentVariable = 'SystemRoot';
 const String mpWindowsSystem32Directory = 'System32';
 

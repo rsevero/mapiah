@@ -360,11 +360,35 @@ class _MPTherionRunnerWindowsRegistryReader implements MPWindowsRegistryReader {
     required String registryPath,
     required String valueName,
   }) {
+    return _readStringWithRegistryView(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: mpWindowsRegistryQuery64BitSwitch,
+    );
+  }
+
+  @override
+  String? readString32Bit({
+    required String registryPath,
+    required String valueName,
+  }) {
+    return _readStringWithRegistryView(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: mpWindowsRegistryQuery32BitSwitch,
+    );
+  }
+
+  String? _readStringWithRegistryView({
+    required String registryPath,
+    required String valueName,
+    required String registryViewSwitch,
+  }) {
     final List<String> queryArguments = <String>[
       registryPath,
       mpWindowsRegistryQueryValueSwitch,
       valueName,
-      mpWindowsRegistryQuery64BitSwitch,
+      registryViewSwitch,
     ];
 
     final ProcessResult queryResult = Process.runSync(
