@@ -22,6 +22,8 @@ abstract class MPTherionProcessRunner {
   Future<MPTherionExecutionResult> run({
     required String commandLine,
     required String workingDirectory,
+    String? executablePath,
+    List<String>? arguments,
   });
 }
 
@@ -108,7 +110,12 @@ class MPWindowsTherionRunner {
     required String therionFileName,
     required String workingDirectory,
   }) async {
-    final ({String commandLine, List<String> registrySearchLogLines})
+    final ({
+      String commandLine,
+      String executablePath,
+      List<String> processArguments,
+      List<String> registrySearchLogLines,
+    })
     compileInvocationWithDiagnostics =
         _buildCompileInvocationWithRegistryDiagnostics(
           therionOptions: therionOptions,
@@ -119,6 +126,8 @@ class MPWindowsTherionRunner {
     final MPTherionExecutionResult executionResult = await processRunner.run(
       commandLine: commandLine,
       workingDirectory: workingDirectory,
+      executablePath: compileInvocationWithDiagnostics.executablePath,
+      arguments: compileInvocationWithDiagnostics.processArguments,
     );
 
     if (executionResult.success) {
@@ -144,13 +153,21 @@ class MPWindowsTherionRunner {
   }
 
   String _resolveTherionExecutableCommand() {
-    final ({String executableCommand, List<String> registrySearchLogLines})
+    final ({
+      String executableCommand,
+      String executablePath,
+      List<String> registrySearchLogLines,
+    })
     executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
 
     return executableResolution.executableCommand;
   }
 
-  ({String executableCommand, List<String> registrySearchLogLines})
+  ({
+    String executableCommand,
+    String executablePath,
+    List<String> registrySearchLogLines,
+  })
   _resolveTherionExecutableCommandWithDiagnostics() {
     final List<String> registrySearchLogLines = <String>[];
 
@@ -159,12 +176,16 @@ class MPWindowsTherionRunner {
       registrySearchLogLines: registrySearchLogLines,
     );
     if (machineInstallDirectory != null) {
-      final String machineExecutableCommand = _buildQuotedExecutableCommand(
+      final String machineExecutablePath = _buildExecutablePath(
         machineInstallDirectory,
+      );
+      final String machineExecutableCommand = _quoteValue(
+        machineExecutablePath,
       );
 
       return (
         executableCommand: machineExecutableCommand,
+        executablePath: machineExecutablePath,
         registrySearchLogLines: registrySearchLogLines,
       );
     }
@@ -174,12 +195,14 @@ class MPWindowsTherionRunner {
       registrySearchLogLines: registrySearchLogLines,
     );
     if (userInstallDirectory != null) {
-      final String userExecutableCommand = _buildQuotedExecutableCommand(
+      final String userExecutablePath = _buildExecutablePath(
         userInstallDirectory,
       );
+      final String userExecutableCommand = _quoteValue(userExecutablePath);
 
       return (
         executableCommand: userExecutableCommand,
+        executablePath: userExecutablePath,
         registrySearchLogLines: registrySearchLogLines,
       );
     }
@@ -188,19 +211,40 @@ class MPWindowsTherionRunner {
 
     return (
       executableCommand: mpTherionWindowsExecutableName,
+      executablePath: mpTherionWindowsExecutableName,
       registrySearchLogLines: registrySearchLogLines,
     );
   }
 
-  ({String commandLine, List<String> registrySearchLogLines})
+  ({
+    String commandLine,
+    String executablePath,
+    List<String> processArguments,
+    List<String> registrySearchLogLines,
+  })
   _buildCompileInvocationWithRegistryDiagnostics({
     required String therionOptions,
     required String therionFileName,
   }) {
-    final ({String commandLine, List<String> registrySearchLogLines})
+    final ({
+      String commandLine,
+      String executablePath,
+      List<String> registrySearchLogLines,
+    })
     compilerCommandWithDiagnostics =
         _buildCompilerCommandWithRegistryDiagnostics();
     final String quotedFileName = _quoteValue(therionFileName);
+    final List<String> processArguments = <String>[];
+    final String trimmedTherionOptions = therionOptions.trim();
+    final bool hasTherionOptions = trimmedTherionOptions.isNotEmpty;
+
+    processArguments.add(mpTherionCompileFlag);
+
+    if (hasTherionOptions) {
+      processArguments.add(trimmedTherionOptions);
+    }
+
+    processArguments.add(therionFileName);
 
     final String compileInvocation = _joinNonEmptyParts(<String>[
       compilerCommandWithDiagnostics.commandLine,
@@ -211,19 +255,30 @@ class MPWindowsTherionRunner {
 
     return (
       commandLine: compileInvocation,
+      executablePath: compilerCommandWithDiagnostics.executablePath,
+      processArguments: processArguments,
       registrySearchLogLines:
           compilerCommandWithDiagnostics.registrySearchLogLines,
     );
   }
 
-  ({String commandLine, List<String> registrySearchLogLines})
+  ({
+    String commandLine,
+    String executablePath,
+    List<String> registrySearchLogLines,
+  })
   _buildCompilerCommandWithRegistryDiagnostics() {
-    final ({String executableCommand, List<String> registrySearchLogLines})
+    final ({
+      String executableCommand,
+      String executablePath,
+      List<String> registrySearchLogLines,
+    })
     executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
     final String compilerCommand = executableResolution.executableCommand;
 
     return (
       commandLine: compilerCommand,
+      executablePath: executableResolution.executablePath,
       registrySearchLogLines: executableResolution.registrySearchLogLines,
     );
   }
@@ -324,7 +379,7 @@ class MPWindowsTherionRunner {
     return localizedErrorMessage;
   }
 
-  String _buildQuotedExecutableCommand(String installDirectory) {
+  String _buildExecutablePath(String installDirectory) {
     final String executablePath = _joinWindowsPath(
       installDirectory,
       mpTherionWindowsExecutableName,
@@ -332,9 +387,8 @@ class MPWindowsTherionRunner {
     final String normalizedExecutablePath = _normalizeToWindowsBackslashes(
       executablePath,
     );
-    final String quotedExecutablePath = _quoteValue(normalizedExecutablePath);
 
-    return quotedExecutablePath;
+    return normalizedExecutablePath;
   }
 
   String _joinWindowsPath(String baseDirectory, String fileName) {

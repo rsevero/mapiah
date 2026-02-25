@@ -114,3 +114,5 @@ fabric.properties
 # https://github.com/flutter/flutter/pull/160260.
 android/app/.cxx/
 
+# xTherion temp data files
+.xtherion.dat

@@ -509,21 +509,40 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
   Future<MPTherionExecutionResult> run({
     required String commandLine,
     required String workingDirectory,
+    String? executablePath,
+    List<String>? arguments,
   }) async {
     final StringBuffer standardOutputBuffer = StringBuffer();
     final StringBuffer standardErrorBuffer = StringBuffer();
-    final List<String> shellArguments = <String>[
-      mpWindowsShellExecuteFlag,
-      commandLine,
-    ];
+    final String? trimmedExecutablePath = executablePath?.trim();
+    final bool hasExecutablePath =
+        trimmedExecutablePath != null && trimmedExecutablePath.isNotEmpty;
+    final List<String> processArguments = arguments ?? const <String>[];
 
     try {
-      final Process process = await Process.start(
-        mpWindowsCmdExecutable,
-        shellArguments,
-        workingDirectory: workingDirectory,
-        runInShell: false,
-      );
+      final Process process;
+
+      if (hasExecutablePath) {
+        process = await Process.start(
+          trimmedExecutablePath,
+          processArguments,
+          workingDirectory: workingDirectory,
+          runInShell: false,
+        );
+      } else {
+        final List<String> shellArguments = <String>[
+          mpWindowsShellExecuteFlag,
+          commandLine,
+        ];
+
+        process = await Process.start(
+          mpWindowsCmdExecutable,
+          shellArguments,
+          workingDirectory: workingDirectory,
+          runInShell: false,
+        );
+      }
+
       onProcessStarted(process);
 
       final StreamSubscription<String> stdoutSubscription = utf8.decoder

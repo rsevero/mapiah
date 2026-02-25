@@ -39,6 +39,8 @@ class _FakeTherionProcessRunner implements MPTherionProcessRunner {
   Future<MPTherionExecutionResult> run({
     required String commandLine,
     required String workingDirectory,
+    String? executablePath,
+    List<String>? arguments,
   }) async {
     return const MPTherionExecutionResult(
       success: true,
