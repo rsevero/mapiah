@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:path/path.dart' as p;
 
 class MPRunTherionDialogWidget extends StatefulWidget {
   final String therionExecutablePath;
@@ -25,76 +23,50 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   final ScrollController _scrollController = ScrollController();
   final StringBuffer _outputBuffer = StringBuffer();
 
-  Process? _process;
-  StreamSubscription<String>? _stdoutSubscription;
-  StreamSubscription<String>? _stderrSubscription;
+  late final MPTherionRunner _therionRunner;
+  StreamSubscription<String>? _outputSubscription;
   bool _isRunning = true;
 
   @override
   void initState() {
     super.initState();
-    _startTherion();
+
+    _therionRunner = MPTherionRunner(
+      therionExecutablePath: widget.therionExecutablePath,
+      thConfigFilePath: widget.thConfigFilePath,
+      onError: (error, stackTrace) {
+        mpLocator.mpLog.e(
+          'Failed to run Therion',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      },
+    );
+
+    _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
+    _therionRunner.isRunningNotifier.addListener(_onRunningChanged);
+
+    _therionRunner.start();
   }
 
   @override
   void dispose() {
-    _stdoutSubscription?.cancel();
-    _stderrSubscription?.cancel();
-
-    if (_isRunning) {
-      _process?.kill();
-    }
-
+    _outputSubscription?.cancel();
+    _therionRunner.isRunningNotifier.removeListener(_onRunningChanged);
+    _therionRunner.dispose();
     _scrollController.dispose();
+
     super.dispose();
   }
 
-  Future<void> _startTherion() async {
-    final String workingDirectory = p.dirname(widget.thConfigFilePath);
-
-    try {
-      final Process process = await Process.start(
-        widget.therionExecutablePath,
-        [widget.thConfigFilePath],
-        workingDirectory: workingDirectory,
-        runInShell: true,
-      );
-
-      _process = process;
-
-      _stdoutSubscription = utf8.decoder
-          .bind(process.stdout)
-          .listen(
-            _appendOutput,
-            onError: (Object error) {
-              _appendOutput('$error\n');
-            },
-          );
-
-      _stderrSubscription = utf8.decoder
-          .bind(process.stderr)
-          .listen(
-            _appendOutput,
-            onError: (Object error) {
-              _appendOutput('$error\n');
-            },
-          );
-
-      await process.exitCode;
-    } catch (error, stackTrace) {
-      mpLocator.mpLog.e(
-        'Failed to run Therion',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      _appendOutput('$error\n');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isRunning = false;
-        });
-      }
+  void _onRunningChanged() {
+    if (!mounted) {
+      return;
     }
+
+    setState(() {
+      _isRunning = _therionRunner.isRunningNotifier.value;
+    });
   }
 
   void _appendOutput(String text) {
