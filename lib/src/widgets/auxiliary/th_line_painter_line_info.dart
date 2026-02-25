@@ -13,7 +13,7 @@ class THLinePainterLineInfo {
   late final bool isReversed;
   late final THArea? parentArea;
   late final Map<int, MPLineSegmentSizeOrientationInfo>
-  lineSegmentsWithSizeOrientation;
+  lineSegmentsWithLSizeOrientation;
   late final Map<int, MPLineSegmentMarkInfo> lineSegmentsWithMark;
   final bool showMarksOnLineSegments;
   final bool showSizeOrientationOnLineSegments;
@@ -31,7 +31,7 @@ class THLinePainterLineInfo {
         .getLineDirectionTickPaint(line: line, reverse: isReversed);
     addLineDirectionTicks =
         showLineDirectionTicks && th2FileEditController.isFromActiveScrap(line);
-    lineSegmentsWithSizeOrientation = line.lineSegmentsWithSizeOrientation;
+    lineSegmentsWithLSizeOrientation = line.lineSegmentsWithLSizeOrientation;
     lineSegmentsWithMark = line.lineSegmentsWithMark;
 
     final THFile thFile = th2FileEditController.thFile;

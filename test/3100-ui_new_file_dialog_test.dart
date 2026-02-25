@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -17,12 +18,13 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = _FakePathProviderPlatform();
 
+  final MPLocator mpLocator = MPLocator();
+
   group('UI: New file dialog flow', () {
-    setUp(() {
-      // Ensure we have an English localization available for any direct string needs
+    setUp(() async {
       mpLocator.appLocalizations = AppLocalizationsEn();
-      // Reset controller state between tests
       mpLocator.mpGeneralController.reset();
+      await mpLocator.mpSettingsController.initialized;
     });
 
     testWidgets('tapping New file opens modal and OK navigates to editor', (

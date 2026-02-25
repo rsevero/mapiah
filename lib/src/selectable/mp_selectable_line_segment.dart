@@ -23,7 +23,10 @@ abstract class MPSelectableLineSegment extends MPSelectableElement {
 
   @override
   bool contains(Offset point) {
-    if (!boundingBox.contains(point)) {
+    if (!MPNumericAux.rectContainsPointInclusive(
+      rect: boundingBox,
+      point: point,
+    )) {
       return false;
     }
 

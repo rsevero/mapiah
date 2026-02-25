@@ -267,37 +267,33 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
     if ((_xviFile == null) && isXVI) {
-      if (kIsWeb) {
-        return null;
+      final XVIFileParser parser = XVIFileParser();
+      final XVIFile? xviFile;
+      final bool isSuccessful;
+      final List<String> errors;
+      final String resolvedPath = MPDirectoryAux.getResolvedPath(
+        th2FileEditController.thFile.filename,
+        filename,
+      );
+
+      (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
+
+      if (isSuccessful && (xviFile != null)) {
+        _xviFile = xviFile;
       } else {
-        final XVIFileParser parser = XVIFileParser();
-        final XVIFile? xviFile;
-        final bool isSuccessful;
-        final List<String> errors;
-        final String resolvedPath = MPDirectoryAux.getResolvedPath(
-          th2FileEditController.thFile.filename,
-          filename,
-        );
+        _xviFile = null;
 
-        (xviFile, isSuccessful, errors) = parser.parse(resolvedPath);
+        final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
 
-        if (isSuccessful && (xviFile != null)) {
-          _xviFile = xviFile;
-        } else {
-          _xviFile = null;
-
-          final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-          if ((context != null) && !_loadFailuredialogShown) {
-            _loadFailuredialogShown = true;
-            MPDialogAux.showXVIParsingErrorsDialog(context, errors);
-          }
-
-          return null;
+        if ((context != null) && !_loadFailuredialogShown) {
+          _loadFailuredialogShown = true;
+          MPDialogAux.showXVIParsingErrorsDialog(context, errors);
         }
 
-        _fixXVIRoot();
+        return null;
       }
+
+      _fixXVIRoot();
     }
 
     return _xviFile;
@@ -354,10 +350,6 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   Rect? _calculateRasterImageBoundingBox(
     TH2FileEditController th2FileEditController,
   ) {
-    if (kIsWeb) {
-      return null;
-    }
-
     // Ensure loading has been triggered (will cache when done)
     getRasterImageFrameInfo(th2FileEditController);
 

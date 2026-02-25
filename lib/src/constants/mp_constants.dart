@@ -8,7 +8,22 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
-const bool mpDebugMousePosition = false;
+const bool mpDebugMousePosition = bool.fromEnvironment(
+  'debugMousePosition',
+  defaultValue: false,
+);
+
+// Compile-time flag to indicate we built the app for Flathub (set with
+// `--dart-define=isFlathub=true` when building). Defaults to false.
+const bool mpIsFlathub = bool.fromEnvironment('isFlathub', defaultValue: false);
+
+// Debug compile-time flag to force showing Flathub version info dialog even
+// when the remote version is not newer. Set with
+// `--dart-define=debugAlwaysShowVersions=true` for debugging.
+const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
+  'debugAlwaysShowVersions',
+  defaultValue: false,
+);
 
 const String mpHelpPagePath = 'assets/help';
 
@@ -64,21 +79,20 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
-/// Using the lower limits [-2^53 + 1, 2^53 − 1] that are also supported by the
-/// web version. The higher limits
-/// [-0x7fffffffffffffff - 1,  0x7fffffffffffffff] are only supported by the
-/// desktop versions of Flutter apps.
-const int mpMinimumInt = -2 ^ 53 + 1;
-const int mpMaximumInt = 2 ^ 53 - 1;
+/// Limits compatible with Dart VM (used on Linux, MacOS and Windows).
+const int mpMinimumInt = -0x7fffffffffffffff - 1;
+const int mpMaximumInt = 0x7fffffffffffffff;
 
 const double mpLogN10 = math.ln10;
 const double mp45DegreesInRad = math.pi / 4;
 const double mp60DegreeInRad = math.pi / 3;
 const double mp90DegreeInRad = math.pi / 2;
 const double mp180DegreeInRad = math.pi;
+const double mp360DegreeInRad = 2 * math.pi;
 const double mp1DegreeInRad = math.pi / 180;
-const double mp1Radian = 180 / math.pi;
+const double mp1RadInDegree = 180 / math.pi;
 const double mp1OverPi = 1 / math.pi;
+const double mpDegreesInCircle = 360.0;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
 
@@ -123,6 +137,44 @@ const String thProjectsDirectory = 'Projects';
 const String mpMainConfigFilename = 'mapiah.toml';
 const String mpDefaultLocaleID = 'sys';
 const String mpEnglishLocaleID = 'en';
+const String mpPathEnvironmentVariableName = 'PATH';
+const String mpPathEnvironmentEntrySeparatorUnix = ':';
+const String mpPathEnvironmentEntrySeparatorMacOS =
+    mpPathEnvironmentEntrySeparatorUnix;
+const String mpPathEnvironmentEntrySeparatorWindows = ';';
+const String mpWindowsExecutableExtension = '.exe';
+const String mpTherionExecutableName = 'therion';
+const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
+const String mpTherionPrintEncodingsArgument = '--print-encodings';
+const String mpFlatpakSpawnExecutableName = 'flatpak-spawn';
+const String mpFlatpakSpawnHostArgument = '--host';
+const String mpSettingsMainSection = 'Main';
+const String mpSettingsTH2EditSection = 'TH2Edit';
+const String mpSettingsInternalSection = 'Internal';
+const String mpSettingsStringListSeparator = ', ';
+
+const double mpTherionRunDialogWidth = 900;
+const double mpTherionRunDialogHeight = 600;
+const double mpTherionRunDialogSpacing = 12;
+const double mpTherionRunStatusBoxMinWidth = 120;
+const double mpTherionRunOutputBorderWidth = 1;
+const double mpTherionRunIssuesListHeight = 120;
+const Duration mpTherionRunScrollAnimationDuration = Duration(
+  milliseconds: 250,
+);
+
+const Color mpTherionRunStatusBackgroundRunningColor = Colors.yellow;
+const Color mpTherionRunStatusBackgroundOkColor = Colors.green;
+const Color mpTherionRunStatusBackgroundWarningColor = Colors.orange;
+const Color mpTherionRunStatusBackgroundErrorColor = Colors.red;
+
+const Color mpTherionRunOutputWarningColor =
+    mpTherionRunStatusBackgroundWarningColor;
+const Color mpTherionRunOutputErrorColor =
+    mpTherionRunStatusBackgroundErrorColor;
+
+const String mpTherionWarningWord = 'warning';
+const String mpTherionErrorWord = 'error';
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;
@@ -147,6 +199,12 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   right: mpOverlayWindowBlockPadding,
 );
 const double mpOverlayWindowMinWidth = 180;
+const double mpSettingsPageOuterPadding = 16;
+const double mpSettingsPageSectionSpacing = 12;
+const double mpSettingsPageCardPadding = 12;
+const double mpSettingsPageFieldSpacing = 8;
+const double mpSettingsPageButtonSpacing = 8;
+const double mpSettingsEditableFieldMinWidth = 320;
 const int mpDefaultMinDigitsForTextFields = 6;
 const int mpDefaultMinCharsForTextFields = 10;
 const int mpDefaultMaxCharsForTextFields = 20;
@@ -158,26 +216,26 @@ const int mpEPSGESRIMax = 99999;
 const int mpUTMMin = 1;
 const int mpUTMMax = 60;
 
-const double thClickDragThreshold = 2.0;
-const double thClickDragThresholdSquared =
-    thClickDragThreshold * thClickDragThreshold;
-const double thDefaultSelectionTolerance = 7.0;
-const double thDefaultPointRadius = 7.0;
-const double thDefaultLineThickness = 2.0;
-const double thControlLineThicknessFactor = 0.5;
-const double thControlPointRadiusFactor = 1.5;
-const double thSelectedEndControlPointFactor = 1.25;
+const double mpClickDragThreshold = 2.0;
+const double mpClickDragThresholdSquared =
+    mpClickDragThreshold * mpClickDragThreshold;
+const double mpDefaultSelectionTolerance = 7.0;
+const double mpDefaultPointRadius = 7.0;
+const double mpDefaultLineThickness = 2.0;
+const double mpControlLineThicknessFactor = 0.5;
+const double mpControlPointRadiusFactor = 1.5;
+const double mpSelectedEndControlPointFactor = 1.25;
 const double xviPointFactor = 0.5;
-const double thSelectionWindowBorderPaintDashInterval = 5.0;
-const double thSelectionHandleSize = 7.0;
-const double thSelectionHandleThresholdMultiplier = 10.0;
-const double thSelectionHandleSizeAmplifier = 1.5;
-const double thSelectionHandleDistance = 10.0;
-const double thSelectionHandleLineThickness = 2.0;
-final Paint thSelectionHandleFillPaint = Paint()
+const double mpSelectionWindowBorderPaintDashInterval = 5.0;
+const double mpSelectionHandleSize = 7.0;
+const double mpSelectionHandleThresholdMultiplier = 10.0;
+const double mpSelectionHandleSizeAmplifier = 1.5;
+const double mpSelectionHandleDistance = 10.0;
+const double mpSelectionHandleLineThickness = 2.0;
+final Paint mpSelectionHandleFillPaint = Paint()
   ..color = Colors.black
   ..style = PaintingStyle.stroke;
-const double thWhiteBackgroundIncrease = 1.5;
+const double mpWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;
 const double mpDiamondLongerDiagonalRatio = math.sqrt2;
 const int mpAreaFillTransparency = 30;
@@ -210,17 +268,18 @@ const double mpCompass45DegreeLineFactor = 0.87;
 const double mpCompass90DegreeLineFactor = 0.68;
 const double mpCompassArrowBaseLengthFactor = 0.78;
 const double mpCompassArrowBodyWidthFactor = 2.0;
-const double mpCompassArrowFixedLengthScreenFactor = 2.78;
 const double mpCompassArrowScreenBodyWidth = 3.0;
-const double mpCompassArrowSideFactor = 0.2;
-const double mpCompassArrowTipBaseFactor = 0.85;
+const double mpCompassArrowHeadReferenceLengthOnScreen = 18.0;
+const double mpCompassArrowSideFactor = 0.5;
+const double mpCompassArrowTipBaseFactor = 0.5;
 const double mpCompassArrowVariableLengthScreenFactor = 5.0;
 const double mpCompassBoxSizeFactor = 0.8;
 const double mpCompassCardinalDirectionsFontSizeFactor = 0.1;
 const double mpCompassCardinalDirectionsTextOffsetFactor = 0.83;
 const double mpCompassCentralCircleFactor = 0.3;
-const double mpSlopeLinePointDefaultLSize = 20.0;
-const double mpLSizeCanvasSizeFactor = 0.05;
+const double mpSlopeLinePointDefaultLSize = 40.0;
+const int mpLSizeOptionDecimalPlaces = 1;
+const int mpOrientationOptionDecimalPlaces = 1;
 
 const double thCentimeterToMeter = 0.01;
 const double thMeterToCentimeter = 100.0;
@@ -324,6 +383,9 @@ const String mpChangelogURL =
 const String mpLicenseURL =
     'https://github.com/rsevero/mapiah/blob/main/LICENSE.md';
 
+// Flathub/Flatpak application id used on Flathub
+const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';
+
 const String xTherionImageInsertConfigID = 'xth_me_image_insert';
 const String mpXVIExtension = '.xvi';
 const String xTherionConfigID = '##XTHERION##';
@@ -332,9 +394,56 @@ const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
 const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
 
+// Help page identifiers (match files under assets/help/<lang>/)
+const String mpHelpPageKeyboardShortcutsMain = 'keyboard_shortcuts_main';
+const String mpHelpPageKeyboardShortcutsEdit = 'keyboard_shortcuts_edit';
+const String mpHelpPageMapiahHome = 'mapiah_home_help';
+const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
+
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
 
 const String mpMapiahReleasesAPIURL =
     'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1';
 const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
+const String mpMapiahGithubReleasesURL =
+    'https://github.com/rsevero/mapiah/releases/tag/';
+const String mpMapiahVersionFlathubURLPrefix =
+    'https://flathub.org/apps/details/';
+
+const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
+
+const bool mpDefaultDefaultBoolSetting = false;
+const double mpDefaultDefaultDoubleSetting = 0.0;
+const int mpDefaultDefaultIntSetting = 0;
+const int mpProcessExitCodeSuccess = 0;
+const String mpDefaultDefaultStringSetting = '';
+const List<String> mpDefaultDefaultStringListSetting = [];
+
+const String mpWindowsRegistryTherionMachinePath =
+    r'HKEY_LOCAL_MACHINE\SOFTWARE\Therion';
+const String mpWindowsRegistryTherionUserPath =
+    r'HKEY_CURRENT_USER\SOFTWARE\Therion';
+const String mpWindowsRegistryInstallDirValueName = 'InstallDir';
+
+const String mpWindowsForwardSlash = '/';
+const String mpWindowsBackslashPair = r'\\';
+
+const String mpWindowsCmdExecutable = 'cmd.exe';
+const String mpWindowsCommandExecutable = 'command.com';
+const String mpWindowsShellExecuteFlag = '/c';
+const String mpWindowsRegistryQueryCommand = 'reg';
+const String mpWindowsRegistryQueryValueSwitch = '/v';
+const String mpWindowsRegistryQuery64BitSwitch = '/reg:64';
+const String mpWindowsSystemRootEnvironmentVariable = 'SystemRoot';
+const String mpWindowsSystem32Directory = 'System32';
+
+const int mpWindowsRegistryQueryValueStartTokenIndex = 2;
+const int mpWindowsRegistryQueryMinimumTokens =
+    mpWindowsRegistryQueryValueStartTokenIndex + 1;
+
+const String mpTherionCompileFlag = '-x';
+const String mpTherionBezierInterpolationFlag = '-b';
+
+const String mpCommandSeparatorSpace = ' ';
+const String mpEmptyString = '';

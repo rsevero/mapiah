@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -55,17 +59,23 @@ class _MPMultipleElementsClickedWidgetState
   }
 
   String getLineName(THLine line) {
+    final String lineTypeName = (line.lineType == THLineType.unknown)
+        ? line.unknownPLAType
+        : MPTextToUser.getLineType(line.lineType);
     final String lineName = (line.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementLine} ${line.plaType} ${(line.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-        : "${appLocalizations.thElementLine} ${line.plaType}";
+        ? "${appLocalizations.thElementLine} $lineTypeName ${(line.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
+        : "${appLocalizations.thElementLine} $lineTypeName";
 
     return lineName;
   }
 
   String getAreaName(THArea area) {
+    final String areaTypeName = (area.areaType == THAreaType.unknown)
+        ? area.unknownPLAType
+        : MPTextToUser.getAreaType(area.areaType);
     final String areaName = (area.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementArea} ${area.plaType} ${(area.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-        : "${appLocalizations.thElementArea} ${area.plaType}";
+        ? "${appLocalizations.thElementArea} $areaTypeName ${(area.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
+        : "${appLocalizations.thElementArea} $areaTypeName";
 
     return areaName;
   }
@@ -84,9 +94,13 @@ class _MPMultipleElementsClickedWidgetState
     for (final THElement element in clickedElements) {
       switch (element) {
         case THPoint _:
+          final String pointTypeName =
+              (element.pointType == THPointType.unknown)
+              ? element.unknownPLAType
+              : MPTextToUser.getPointType(element.pointType);
           final String pointName = (element.hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementPoint} ${element.plaType} ${(element.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-              : "${appLocalizations.thElementPoint} ${element.plaType}";
+              ? "${appLocalizations.thElementPoint} $pointTypeName ${(element.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
+              : "${appLocalizations.thElementPoint} $pointTypeName";
           options[element.mpID] = pointName;
         case THBezierCurveLineSegment _:
         case THStraightLineSegment _:

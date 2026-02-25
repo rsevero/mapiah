@@ -76,7 +76,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
                           primaryButtonDragStartScreenCoordinates)
                       .distanceSquared;
 
-              if (distanceSquared > thClickDragThresholdSquared) {
+              if (distanceSquared > mpClickDragThresholdSquared) {
                 isPrimaryButtonDragging = true;
                 widget.actuator.onPrimaryButtonDragUpdate(event);
               }
@@ -90,7 +90,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
                           secondaryButtonDragStartScreenCoordinates)
                       .distanceSquared;
 
-              if (distanceSquared > thClickDragThresholdSquared) {
+              if (distanceSquared > mpClickDragThresholdSquared) {
                 isSecondaryButtonDragging = true;
                 widget.actuator.onSecondaryButtonDragUpdate(event);
               }
@@ -104,7 +104,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
                           tertiaryButtonDragStartScreenCoordinates)
                       .distanceSquared;
 
-              if (distanceSquared > thClickDragThresholdSquared) {
+              if (distanceSquared > mpClickDragThresholdSquared) {
                 isTertiaryButtonDragging = true;
                 widget.actuator.onTertiaryButtonDragUpdate(event);
               }

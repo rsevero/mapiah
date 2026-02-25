@@ -63,9 +63,11 @@ class MPTextToUser {
   static final Map<MPSnapXVIFileTarget, String> _snapXVIFileTargetAsString = {};
   static final Map<String, String> _subtypeAsString = {};
 
-  static Locale _locale = mpLocator.mpSettingsController.locale;
+  static Locale _locale = Locale(mpDefaultLocaleID);
 
   static void initialize() {
+    _locale = mpLocator.mpSettingsController.locale;
+
     _initializeAngleUnitTypeAsString();
     _initializeAreaTypeAsString();
     _initializeCommandDescriptionTypeAsString();
@@ -329,8 +331,6 @@ class MPTextToUser {
 
   static void _initializeCommandDescriptionTypeAsString() {
     final AppLocalizations localizations = mpLocator.appLocalizations;
-
-    _locale = mpLocator.mpSettingsController.locale;
 
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addArea] =
         localizations.mpCommandDescriptionAddArea;

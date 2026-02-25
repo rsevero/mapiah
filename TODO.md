@@ -64,7 +64,7 @@
 [X] - Implement F1 shortcut to help page.
 [X] - Support XVI images.
 [X] - Support xth_me_image_insert additional formats.
-[ ] - Show (and edit) orientation and lsize on the line points during edit.
+[X] - Show (and edit) orientation and lsize on the line points during edit.
 [X] - Set borders on points (and lines and areas) to show the state of some key options like: mark for line points, visibility for points, lines and areas.
 [X] - Snap to grid lines.
 [X] - BUG: opening a TH2 file that calls for a non existent XVI file should not hang Mapiah.
@@ -120,8 +120,8 @@
 [X] - BUG: after editing line point option, the general line point overlay window is presented, not line type specific.
 [X] - Disable web version.
 [X] - On zoom out/in, center the canvas on the selected elements if any.
-[ ] - Verify if new lines (specially long bezier ones) are clickable right after being created.
-[ ] - Create shortcut to toggle all images visibility.
+[X] - Verify if new lines (specially long bezier ones) are clickable right after being created.
+[X] - Create shortcut to toggle all images visibility.
 [ ] - Bézier created from straight lines are too tight.
 [X] - BUG: After unseting an option, it is still shown as yellow (set).
 [X] - BUG: failure parsing demo file with "Plus number must be positive" parse error.
@@ -132,20 +132,23 @@
 [X] - BUG: when dragging (right click) sketch, unselected sketchs are not dragged.
 [X] - Create an way to click on a non active scrap to select it.
 [X] - Error text on alert dialog boxes should be selecteable. [Wookey request]
-[ ] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
+[X] - BUG: trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
 [X] - Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
 [X] - BUG: when creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
-[ ] - During new line creation, on Bézier line segments, the control points should not be presented so the user won't be led to believe that the line can be edited at that time. The already created line segments are only editable after line creation completion. [requested by Edvard]
-[ ] - When zooming with mouse wheel and there is no element selected, use the curso position as zoom center. [requested by Edvard]
-[ ] - Create zoom to selection window. [requested by Edvard]
-[ ] - Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working. [requested by Edvard]
-[ ] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
+[X] - BUG: During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
+[X] - When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
+[X] - Create zoom to selection window. [requested by Edvard]
+[X] - BUG: Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
+[X] - Allow multiple "add line segment" operations in sucession. [requested by Edvard]
 [X] - BUG: portuguese edit window help page not being presented. [reported by Edvard]
 [X] - Mapiah should check and present a notice when there is a new version available. [requested by Wal]
-[ ] - BUG: when creating a line, the first segment, if dragged (to become a Bézier) leaves a "shaddow" red line segment behind.
+[X] - BUG: When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
 [X] - BUG: On windows, language selection is not kept after app restart. [reported by Edvard]
 [X] - BUG: No icon in Windows version.
-[ ] - Add a publisher for Mapiah Windows installer.
+[X] - Add a publisher for Mapiah Windows installer.
+[X] - When editing a line, make straight and Bézier curve line segments visually different.
+[X] - BUG: flatpak version not saving users language choice. [reported by Daniel Bean]
+[X] - BUG: element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
@@ -169,7 +172,6 @@
 [ ] - Show points, lines and areas using therion symbology [requested by Marco Corvi]
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
-[ ] - Open file dialog on web should only show accepted file extensions. [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...).
 [ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.

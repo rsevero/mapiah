@@ -9,6 +9,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/inputs/mp_pla_type_input_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
@@ -32,7 +33,8 @@ class MPContextOptionWidget extends StatefulWidget {
   State<MPContextOptionWidget> createState() => _MPContextOptionWidgetState();
 }
 
-class _MPContextOptionWidgetState extends State<MPContextOptionWidget> {
+class _MPContextOptionWidgetState extends State<MPContextOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPContextOptionWidget> {
   late String _elementType;
   late String _plaType;
   late String _selectedChoice;

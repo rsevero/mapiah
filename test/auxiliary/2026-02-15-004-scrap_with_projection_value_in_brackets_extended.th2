@@ -1,0 +1,3 @@
+encoding utf-8
+scrap 5-SummitTomoElevEXT-s1 -projection [extended] -scale [0 0 787.4 787.4 0 0 10 10 m]
+endscrap

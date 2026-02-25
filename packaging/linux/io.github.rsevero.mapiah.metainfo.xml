@@ -41,8 +41,8 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-initial.png</image>
-      <caption>Initial window</caption>
+      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-options.png</image>
+      <caption>Options dialog</caption>
     </screenshot>
 
     <screenshot>
@@ -51,12 +51,139 @@
     </screenshot>
 
     <screenshot>
-      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-options.png</image>
-      <caption>Options dialog</caption>
+      <image>https://github.com/rsevero/mapiah/raw/main/auxiliary/screenshots/mapiah-initial.png</image>
+      <caption>Initial window</caption>
     </screenshot>
   </screenshots>
 
   <releases>
+    <release version="0.2.36" date="2026-02-24">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.36</url>
+      <description>
+        <p>0.2.36 - 2026-02-24 - The Danaids release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Allow multiple "add line segment" operations in succession. (requested by Edvard)</li>
+          <li>Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).</li>
+          <li>Show (and edit) orientation and lsize on the line points during edit.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Main README.md still mentioning the web version of Mapiah, which was removed in 0.2.31 (reported by CaverBruce at issue #13: https://github.com/rsevero/mapiah/issues/13).</li>
+          <li>Slash produced by keyboard combinations (for example, AltRight + Q) is not processed as a shortcut to add line segments between selected line segments.</li>
+          <li>When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of doing nothing. (reported by Edvard)</li>
+          <li>Parsing scrap scales with 8 numbers but no unit failed. (reported by CaverBruce as issue #15: https://github.com/rsevero/mapiah/issues/15)</li>
+          <li>Undo of Bézier curve line segment addition with keyboard shortcut '/' not working.</li>
+          <li>Parsing scrap projection value in brackets failing. (reported by CaverBruce as issue #14: https://github.com/rsevero/mapiah/issues/14)</li>
+          <li>Creating a line and making one of its points smooth by overlay option window throws.</li>
+          <li>MPNumericAux directionOffsetToDegrees() and normalFromTangent() returning wrong values for some directions.</li>
+          <li>Fixing popcorn point type translation. (reported by Daniel Bean)</li>
+          <li>LSize and Orientation arrows not presented when end point is selected.</li>
+          <li>Interactive Orientation arrow not moving with azimuth picker arrow is moved.</li>
+          <li>Azimuth picker arrow not moving when interactive orientation arrow is moved.</li>
+          <li>LSize text value in lsize option window does not change when lsize is interactively changed.</li>
+          <li>LSize interactive arrow size does not change when LSize text value in lsize option window changes.</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Testing all possible variations of scrap scale option parsing.</li>
+          <li>Custom exceptions should provide trace.</li>
+          <li>Renaming _execPrePrepareUndoRedoInfo and _execPreCreateUndoRedoCommand at MPCommand.</li>
+          <li>Creating MPAddLineSegmentCommand.atExistingLineSegmentPosition().</li>
+          <li>Removing all references to web version.</li>
+          <li>Making custom exceptions be presented by showUnhandledErrorDialog() at main.dart.</li>
+          <li>Remove stack trace from THBaseException as showUnhandledErrorDialog() at main.dart already presents the stack trace.</li>
+          <li>Applying dart fix --apply to all code.</li>
+          <li>Flutter upgrade to 3.41.2.</li>
+          <li>flutter pub upgrade --major-versions.</li>
+          <li>Created TH2FileEditElementEditController.optionTypeBeingEdited.</li>
+          <li>Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.</li>
+          <li>Created 3500-ui_change_line_type_test.</li>
+          <li>Separating THLSizeOrientationPainter from THLinePainter.</li>
+          <li>Single action to set both LSize and Orientation values at TH2FileEditElementEditController.</li>
+          <li>MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.</li>
+          <li>Using lsize and orientation behaviour inspired by xThreion original one.</li>
+          <li>LSize and orientation interactive arrow should appear immediately when starting to set either of them.</li>
+          <li>Reusing Path created to draw compass arrow to also fuel the click test at MPTH2FileEditStateEditSingleLine.</li>
+          <li>Decimal places for double to string conversion of LSize and Orientation options as constants.</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="0.2.35" date="2026-02-13">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.35</url>
+      <description>
+        <p>0.2.35 - 2026-02-13 - The <em>Chiquita Bacana&#39;s daughter</em> release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]</li>
+          <li>Help dialogs closable by pressing Escape key.</li>
+          <li>Creating Flathub specific new release check.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Options window been shown when there is no element selected. [reported by dankez, issue #12]</li>
+          <li>Flatpak version not saving users language choice. [reported by Daniel Bean]</li>
+          <li>Deleting a line segment of a line with only one line segment would throw.</li>
+          <li>Element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Create issue template for bug reports.</li>
+          <li>Create issue template for feature requests.</li>
+          <li>Created internal settings storage with SharedPreferencesWithCache package.</li>
+          <li>Replace application id com.example.mapiah -&gt; io.github.rsevero.mapiah.</li>
+          <li>Flatpak metainfo file not receiving duplicated &lt;release&gt; tags for same version.</li>
+          <li>Migrating all settings from TOML to SharedPreferencesWithCache.</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="0.2.34" date="2026-02-05">
+      <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.34</url>
+      <description>
+        <p>0.2.34 - 2026-02-05 - The <em>Viola Caipira</em> release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Exceptions should be shown to the user as an AlertDialog box with copyable text. [requested by Nicolas]</li>
+          <li>Mapiah should check and present a notice when there is a new version available. [requested by Wal]</li>
+          <li>When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]</li>
+          <li>When editing a line, make straight and Bézier curve line segments visually different.</li>
+        </ul>
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Portuguese edit window help page not being presented. [reported by Edvard]</li>
+          <li>Changelog URL not opening when user clicked on it at "About" dialog box.</li>
+          <li>Linux/flatpak version does not open URLs for not using GIO portal and not having shared network permission.</li>
+          <li>When creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]</li>
+          <li>Windows: language selection is not kept after app restart. [reported by Edvard]</li>
+          <li>No app icon in Windows version.</li>
+          <li>Add a publisher for Mapiah Windows installer.</li>
+          <li>Changing the line segment type of several line segments of different types wouldn't change any.</li>
+          <li>Trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.</li>
+          <li>Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]</li>
+          <li>During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]</li>
+          <li>When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.</li>
+          <li>Orientation/LSize arrows presented on all lines when editing a line, not only on the line being edited.</li>
+          <li>Removing spurious &lt;a&gt;&lt;/a&gt; tags from portuguese help page.</li>
+        </ul>
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>flutter upgrade to 3.38.9.</li>
+          <li>flutter pub upgrade --major-versions</li>
+          <li>Migrated thFileWidgetKey to getTHFileWidgetGlobalKey() at TH2FileEditController.</li>
+          <li>Created constants to set the help page names.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.2.33" date="2026-01-30">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.33</url>
       <description>
@@ -76,6 +203,7 @@
         </ul>
       </description>
     </release>
+
     <release version="0.2.32" date="2026-01-27">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.32</url>
       <description>

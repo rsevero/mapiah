@@ -1,15 +1,15 @@
 library;
 
 import 'dart:collection';
-import 'dart:math' as math;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_lsize_orientation_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -21,6 +21,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -49,25 +50,28 @@ part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
-part 'mp_th2_file_edit_state_edit_line_point_orientation_lsize.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
 part 'mp_th2_file_edit_state_select_empty_selection.dart';
 part 'mp_th2_file_edit_state_select_non_empty_selection.dart';
+part 'mp_th2_file_edit_state_selection_window_zoom.dart';
 part 'types/mp_th2_file_edit_state_type.dart';
 
 abstract class MPTH2FileEditState {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditElementEditController elementEditController;
   final TH2FileEditSelectionController selectionController;
+  final TH2FileEditUserInteractionController userInteractionController;
   final THFile thFile;
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.th2FileEditController})
     : elementEditController = th2FileEditController.elementEditController,
       selectionController = th2FileEditController.selectionController,
+      userInteractionController =
+          th2FileEditController.userInteractionController,
       thFile = th2FileEditController.thFile;
 
   static MPTH2FileEditState getState({
@@ -91,10 +95,6 @@ abstract class MPTH2FileEditState {
         return MPTH2FileEditStateAddPoint(
           th2FileEditController: th2FileEditController,
         );
-      case MPTH2FileEditStateType.editLinePointOrientationLSize:
-        return MPTH2FileEditStateEditLinePointOrientationLSize(
-          th2FileEditController: th2FileEditController,
-        );
       case MPTH2FileEditStateType.editSingleLine:
         return MPTH2FileEditStateEditSingleLine(
           th2FileEditController: th2FileEditController,
@@ -113,6 +113,10 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.selectEmptySelection:
         return MPTH2FileEditStateSelectEmptySelection(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.selectionWindowZoom:
+        return MPTH2FileEditStateSelectionWindowZoom(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.selectNonEmptySelection:
@@ -167,6 +171,11 @@ abstract class MPTH2FileEditState {
   void onStateEnter(MPTH2FileEditState previousState) {}
 
   void onStateExit(MPTH2FileEditState nextState) {}
+
+  void onChangeCommandOptionTypeEdited({
+    required THCommandOptionType? newOptionType,
+    required THCommandOptionType? previousOptionType,
+  }) {}
 
   bool onButtonPressed(MPButtonType buttonType) {
     switch (buttonType) {
@@ -236,6 +245,11 @@ abstract class MPTH2FileEditState {
       case MPButtonType.zoomSelection:
         th2FileEditController.zoomToFit(
           zoomFitToType: MPZoomToFitType.selection,
+        );
+        return true;
+      case MPButtonType.zoomSelectionWindow:
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.selectionWindowZoom,
         );
         return true;
       default:

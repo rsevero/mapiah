@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
@@ -29,12 +29,13 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerNewLine;
 
-        final THPointPaint pointPaint = th2FileEditController.visualController
-            .getNewLinePointPaint();
-
-        final THLinePaint linePaint = th2FileEditController.visualController
-            .getNewLinePaint();
-
+        final MPVisualController visualController =
+            th2FileEditController.visualController;
+        final THPointPaint straightPointPaint = visualController
+            .getUnselectedStraightEndPointPaint();
+        final THPointPaint bezierPointPaint = visualController
+            .getUnselectedBezierCurveEndPointPaint();
+        final THLinePaint linePaint = visualController.getNewLinePaint();
         final List<CustomPainter> painters = [];
 
         if (elementEditController.newLine == null) {
@@ -43,18 +44,17 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
                 .offsetScreenToCanvas(
                   elementEditController.lineStartScreenPosition!,
                 );
-
-            final painter = THEndPointPainter(
+            final CustomPainter painter = THEndPointPainter(
               position: startPoint,
-              pointPaint: pointPaint,
+              pointPaint: straightPointPaint,
               isSmooth: false,
               th2FileEditController: th2FileEditController,
             );
+
             painters.add(painter);
           }
         } else {
           final THLine newLine = elementEditController.getNewLine();
-
           final (
             LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
             LinkedHashMap<int, THLineSegment> lineSegments,
@@ -70,8 +70,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             showSizeOrientationOnLineSegments: false,
             th2FileEditController: th2FileEditController,
           );
-
-          CustomPainter painter = THLinePainter(
+          final CustomPainter painter = THLinePainter(
             lineInfo: lineInfo,
             lineSegmentsMap: segmentsMap,
             linePaint: linePaint,
@@ -80,48 +79,18 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
           painters.add(painter);
 
-          final THLineSegment lastSegment = th2FileEditController.thFile
-              .lineSegmentByMPID(lineSegments.keys.last);
-
-          if ((lineSegments.length >= 2) &&
-              (lastSegment is THBezierCurveLineSegment)) {
-            final Paint controlLinePaint = th2FileEditController
-                .visualController
-                .getControlLinePaint();
-            final List<int> keys = lineSegments.keys.toList();
-            final Offset secondToLastSegmentPosition =
-                lineSegments[keys.elementAt(keys.length - 2)]!
-                    .endPoint
-                    .coordinates;
-
-            final THControlPointPainter controlPoint1Painter =
-                THControlPointPainter(
-                  controlPointPosition: lastSegment.controlPoint1.coordinates,
-                  endPointPosition: secondToLastSegmentPosition,
-                  pointPaint: pointPaint,
-                  controlLinePaint: controlLinePaint,
-                  th2FileEditController: th2FileEditController,
-                );
-            painters.add(controlPoint1Painter);
-
-            final THControlPointPainter controlPoint2Painter =
-                THControlPointPainter(
-                  controlPointPosition: lastSegment.controlPoint2.coordinates,
-                  endPointPosition: lastSegment.endPoint.coordinates,
-                  pointPaint: pointPaint,
-                  controlLinePaint: controlLinePaint,
-                  th2FileEditController: th2FileEditController,
-                );
-            painters.add(controlPoint2Painter);
-          }
-
           for (final THLineSegment lineSegment in lineSegments.values) {
-            painter = THEndPointPainter(
+            final THPointPaint pointPaint =
+                (lineSegment is THStraightLineSegment)
+                ? straightPointPaint
+                : bezierPointPaint;
+            final CustomPainter painter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
             );
+
             painters.add(painter);
           }
         }

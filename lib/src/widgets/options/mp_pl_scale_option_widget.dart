@@ -4,6 +4,7 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
@@ -34,7 +35,8 @@ class MPPLScaleOptionWidget extends StatefulWidget {
   State<MPPLScaleOptionWidget> createState() => _MPPLScaleOptionWidgetState();
 }
 
-class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget> {
+class _MPPLScaleOptionWidgetState extends State<MPPLScaleOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPPLScaleOptionWidget> {
   String _selectedChoice = '';
   String _sizeAsNamed = '';
   late final String _initialSizeAsNamed;

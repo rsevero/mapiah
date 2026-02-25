@@ -6,26 +6,18 @@ import 'package:mapiah/src/elements/th_file.dart';
 class MPLineSegmentSizeOrientationInfo {
   final int mpID;
   final Offset canvasPosition;
-  late final double size;
+  late final double lSize;
   late final double orientation;
 
   MPLineSegmentSizeOrientationInfo({
     required this.mpID,
     required this.canvasPosition,
-    required double? size,
+    required double? lSize,
     required double? orientation,
     required THFile thFile,
   }) {
-    this.size = (size == null) ? mpSlopeLinePointDefaultLSize : size;
-
-    if (orientation == null) {
-      final Offset tangent = MPNumericAux.segmentTangent(mpID, thFile);
-      final Offset normal = MPNumericAux.normalFromTangent(tangent);
-      final double azimuth = MPNumericAux.directionOffsetToDegrees(normal);
-
-      this.orientation = azimuth;
-    } else {
-      this.orientation = orientation;
-    }
+    this.lSize = lSize ?? mpSlopeLinePointDefaultLSize;
+    this.orientation =
+        orientation ?? MPNumericAux.segmentNormalFromTHFile(mpID, thFile);
   }
 }

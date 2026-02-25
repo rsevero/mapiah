@@ -99,7 +99,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
           }
 
           Rect? thFileBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
-            widgetGlobalKey: th2FileEditController.thFileWidgetKey,
+            widgetGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
           );
 
           thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
@@ -140,7 +140,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
   Rect _getBoundingBoxForClamping() {
     Rect? thFileBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
-      widgetGlobalKey: th2FileEditController.thFileWidgetKey,
+      widgetGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
     );
 
     thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
@@ -254,7 +254,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: getMaxHeightForOverlayWindows(
-                th2FileEditController.thFileWidgetKey,
+                th2FileEditController.getTHFileWidgetGlobalKey(),
               ),
               minWidth: mpOverlayWindowMinWidth,
             ),

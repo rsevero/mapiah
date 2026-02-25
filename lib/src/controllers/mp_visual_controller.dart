@@ -1417,14 +1417,6 @@ abstract class MPVisualControllerBase with Store {
       ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas;
   }
 
-  THPointPaint getNewLinePointPaint() {
-    return THPointPaint(
-      radius: _th2FileEditController.pointRadiusOnCanvas,
-      border: THPaint.thPaintBlackBorder
-        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
-    );
-  }
-
   THPointPaint getHighligthtedEndControlPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
@@ -1437,8 +1429,8 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius:
           _th2FileEditController.pointRadiusOnCanvas *
-          thControlPointRadiusFactor *
-          thSelectedEndControlPointFactor,
+          mpControlPointRadiusFactor *
+          mpSelectedEndControlPointFactor,
       border: THPaint.thPaintBlackBackground,
     );
   }
@@ -1447,7 +1439,7 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius:
           _th2FileEditController.pointRadiusOnCanvas *
-          thControlPointRadiusFactor,
+          mpControlPointRadiusFactor,
       border: THPaint.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.controlLineThicknessOnCanvas,
     );
@@ -1457,16 +1449,25 @@ abstract class MPVisualControllerBase with Store {
     return THPointPaint(
       radius:
           _th2FileEditController.pointRadiusOnCanvas *
-          thSelectedEndControlPointFactor,
+          mpSelectedEndControlPointFactor,
       border: THPaint.thPaintBlackBackground,
     );
   }
 
-  THPointPaint getUnselectedEndPointPaint() {
+  THPointPaint getUnselectedStraightEndPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
       border: THPaint.thPaintBlackBorder
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+    );
+  }
+
+  THPointPaint getUnselectedBezierCurveEndPointPaint() {
+    return THPointPaint(
+      radius: _th2FileEditController.pointRadiusOnCanvas,
+      border: THPaint.thPaintBlackBorder
+        ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+      fill: THPaint.thPaint1015,
     );
   }
 

@@ -1,0 +1,7 @@
+encoding utf-8
+scrap Trianglinho-1R1-2p -projection plan -scale [0 0 39.3701 0 0 0 1 0 m]
+	line wall
+		64 60
+		72 62
+	endline
+endscrap

@@ -3,6 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -13,6 +14,7 @@ import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
+import 'package:mobx/mobx.dart';
 
 class MPDoubleValueOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -33,7 +35,8 @@ class MPDoubleValueOptionWidget extends StatefulWidget {
       _MPDoubleValueOptionWidgetState();
 }
 
-class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
+class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPDoubleValueOptionWidget> {
   late final TH2FileEditController th2FileEditController;
   late TextEditingController _doubleController;
   late String _selectedChoice;
@@ -44,31 +47,13 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   String? _doubleWarningMessage;
   bool _isOkButtonEnabled = false;
+  ReactionDisposer? _linePointLSizeReactionDisposer;
 
   @override
   void initState() {
     super.initState();
 
     th2FileEditController = widget.th2FileEditController;
-
-    /// Temporarily disabling interactive orientation/lsize setting mode until
-    /// we have a complete UI for it.
-    // if ((widget.optionInfo.type == THCommandOptionType.lSize) &&
-    //     (th2FileEditController.optionEditController.currentOptionElementsType ==
-    //         MPOptionElementType.lineSegment) &&
-    //     (th2FileEditController
-    //             .selectionController
-    //             .selectedEndControlPoints
-    //             .length ==
-    //         1)) {
-    //   th2FileEditController.elementEditController
-    //       .setLinePointOrientationLSizeSettingMode(
-    //         MPLinePointInteractiveOrientationLSizeSettingMode.lsize,
-    //       );
-    //   th2FileEditController.stateController.setState(
-    //     MPTH2FileEditStateType.editLinePointOrientationLSize,
-    //   );
-    // }
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -82,6 +67,25 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
           case THLSizeCommandOption _:
             _doubleController = TextEditingController(
               text: currentOption.number.toString(),
+            );
+            _linePointLSizeReactionDisposer = reaction<double?>(
+              (_) => th2FileEditController.elementEditController.linePointLSize,
+              (double? newLSize) {
+                if (newLSize == null) {
+                  return;
+                }
+
+                final String newText = newLSize.toStringAsFixed(
+                  mpLSizeOptionDecimalPlaces,
+                );
+
+                if (_doubleController.text == newText) {
+                  return;
+                }
+
+                _doubleController.text = newText;
+                _updateOkButtonEnabled();
+              },
             );
           default:
             throw Exception(
@@ -111,6 +115,7 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
 
   @override
   void dispose() {
+    _linePointLSizeReactionDisposer?.call();
     _doubleController.dispose();
     _doubleTextFieldFocusNode.dispose();
     super.dispose();
@@ -173,6 +178,13 @@ class _MPDoubleValueOptionWidgetState extends State<MPDoubleValueOptionWidget> {
   void _updateOkButtonEnabled() {
     final String doubleText = _doubleController.text.trim();
     final bool isValid = (double.tryParse(doubleText) != null);
+
+    if ((widget.optionInfo.option is THLSizeCommandOption) && isValid) {
+      th2FileEditController.elementEditController.setLinePointLSizeValue(
+        double.parse(doubleText),
+      );
+    }
+
     final bool isChanged =
         ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&

@@ -1,7 +1,8 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
-import 'package:mapiah/src/auxiliary/mp_nextafter.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_segment.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -119,6 +120,18 @@ class MPNumericAux {
 
   static bool isRect1InsideRect2({required Rect rect1, required Rect rect2}) {
     return rect2.contains(rect1.topLeft) && rect2.contains(rect1.bottomRight);
+  }
+
+  static bool rectContainsPointInclusive({
+    required Rect rect,
+    required Offset point,
+  }) {
+    final Rect orderedRect = orderedRectFromRect(rect);
+
+    return (point.dx >= orderedRect.left) &&
+        (point.dx <= orderedRect.right) &&
+        (point.dy >= orderedRect.top) &&
+        (point.dy <= orderedRect.bottom);
   }
 
   /// In Flutter, the Rect.fromLTRB() method does not check if the left is
@@ -650,24 +663,32 @@ class MPNumericAux {
   static double nextDown(double x) => nextDownReal(x);
 
   static double normalizeAngle(double angle) {
-    angle = angle % 360;
+    angle = angle % mpDegreesInCircle;
 
     if (angle < 0) {
-      angle += 360;
+      angle += mpDegreesInCircle;
     }
 
     return angle;
   }
 
-  static double directionOffsetToDegrees(Offset direction) {
+  static double azimuthFromXY(double x, double y) {
+    if ((x == 0) && (y == 0)) {
+      return 0.0;
+    }
+
+    final double radians = math.atan2(x, y);
+    final double degrees = radians * mp1RadInDegree;
+
+    return normalizeAngle(degrees);
+  }
+
+  static double directionOffsetToAzimuth(Offset direction) {
     if (direction == Offset.zero) {
       return 0.0;
     }
 
-    final double radians = math.atan2(direction.dx, -direction.dy);
-    final double degrees = radians * mp1Radian;
-
-    return normalizeAngle(degrees);
+    return azimuthFromXY(direction.dx, direction.dy);
   }
 
   static double bezierArcLength(
@@ -677,12 +698,15 @@ class MPNumericAux {
   }) {
     double length = 0.0;
     Offset prev = controlPoints.first;
+
     for (int i = 1; i <= steps; i++) {
       double ti = t * i / steps;
       Offset pt = deCasteljau(controlPoints, ti);
+
       length += (pt - prev).distance;
       prev = pt;
     }
+
     return length;
   }
 
@@ -781,7 +805,6 @@ class MPNumericAux {
       lineSegment.endPoint.coordinates,
       t,
     );
-
     final THBezierCurveLineSegment firstSegment = THBezierCurveLineSegment(
       parentMPID: lineSegment.parentMPID,
       controlPoint1: THPositionPart(coordinates: left[1]),
@@ -866,22 +889,34 @@ class MPNumericAux {
     final Offset secondTangent = (second is MPBezierCurve)
         ? bezierCurveTangent(second as MPBezierCurve, MPExtremityType.start)
         : straightTangent(second as MPStraightSegment);
-    final Offset average = firstTangent + secondTangent;
-    final double length = average.distance;
+    final double firstLength = first.length();
+    final double secondLength = second.length();
+    final double totalLength = firstLength + secondLength;
 
-    if (length == 0.0) {
+    if (totalLength == 0.0) {
       return Offset.zero;
     }
 
-    return average / length;
+    final Offset average =
+        ((firstTangent * firstLength) + (secondTangent * secondLength)) /
+        totalLength;
+    final double averageLength = average.distance;
+
+    if (averageLength == 0.0) {
+      return Offset.zero;
+    }
+
+    return average / averageLength;
   }
 
-  static Offset segmentTangent(int lineSegmentMPID, THFile thFile) {
+  static Offset segmentTangentFromTHFile(int lineSegmentMPID, THFile thFile) {
     final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
-    final THLine line = lineSegment.parent(thFile: thFile) as THLine;
-    final Map<int, int> lineSegmentsPositionList = line
+    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+    final Map<int, int> lineSegmentsPositionMap = line
         .getLineSegmentPositionsByLineSegmentMPID(thFile);
-    final int position = lineSegmentsPositionList[lineSegmentMPID]!;
+    final int position = lineSegmentsPositionMap[lineSegmentMPID]!;
+
+    Offset tangent;
 
     if (position == 0) {
       final THLineSegment nextLineSegment = line.getNextLineSegment(
@@ -900,8 +935,11 @@ class MPNumericAux {
               end: nextLineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.start);
-    } else if (position == lineSegmentsPositionList.length - 1) {
+      tangent = MPNumericAux.anyTypeSegmentTangent(
+        segment,
+        MPExtremityType.start,
+      );
+    } else if (position == (lineSegmentsPositionMap.length - 1)) {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
         thFile,
@@ -918,7 +956,10 @@ class MPNumericAux {
               end: lineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.anyTypeSegmentTangent(segment, MPExtremityType.end);
+      tangent = MPNumericAux.anyTypeSegmentTangent(
+        segment,
+        MPExtremityType.end,
+      );
     } else {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
@@ -933,11 +974,11 @@ class MPNumericAux {
               start: previousLineSegment.endPoint.coordinates,
               c1: lineSegment.controlPoint1.coordinates,
               c2: lineSegment.controlPoint2.coordinates,
-              end: nextLineSegment.endPoint.coordinates,
+              end: lineSegment.endPoint.coordinates,
             )
           : MPStraightSegment(
               start: previousLineSegment.endPoint.coordinates,
-              end: nextLineSegment.endPoint.coordinates,
+              end: lineSegment.endPoint.coordinates,
             );
       final MPSegment nextSegment =
           (nextLineSegment is THBezierCurveLineSegment)
@@ -952,18 +993,36 @@ class MPNumericAux {
               end: nextLineSegment.endPoint.coordinates,
             );
 
-      return MPNumericAux.averageTangent(segment, nextSegment);
+      tangent = MPNumericAux.averageTangent(segment, nextSegment);
     }
+
+    if (MPCommandOptionAux.isReversed(line)) {
+      tangent = -tangent;
+    }
+
+    return tangent;
   }
 
-  static Offset normalFromTangent(Offset tangent, {bool clockwise = false}) {
+  static Offset segmentTangentFromSegments({
+    required MPSegment firstSegment,
+    required MPSegment secondSegment,
+    required bool isReversed,
+  }) {
+    Offset tangent = MPNumericAux.averageTangent(firstSegment, secondSegment);
+
+    if (isReversed) {
+      tangent = -tangent;
+    }
+
+    return tangent;
+  }
+
+  static Offset normalFromTangent(Offset tangent) {
     if (tangent == Offset.zero) {
       return Offset.zero;
     }
 
-    final Offset rawNormal = clockwise
-        ? Offset(tangent.dy, tangent.dx) // rotate +90°
-        : Offset(-tangent.dy, -tangent.dx); // rotate -90°
+    final Offset rawNormal = Offset(-tangent.dy, tangent.dx);
     final double length = rawNormal.distance;
 
     if (length == 0.0) {
@@ -971,6 +1030,33 @@ class MPNumericAux {
     }
 
     return rawNormal / length;
+  }
+
+  static double segmentNormalFromTHFile(int lineSegmentMPID, THFile thFile) {
+    final Offset tangent = MPNumericAux.segmentTangentFromTHFile(
+      lineSegmentMPID,
+      thFile,
+    );
+    final Offset normal = MPNumericAux.normalFromTangent(tangent);
+    final double azimuth = MPNumericAux.directionOffsetToAzimuth(normal);
+
+    return azimuth;
+  }
+
+  static double segmentNormalFromSegments({
+    required MPSegment firstSegment,
+    required MPSegment secondSegment,
+    required bool isReversed,
+  }) {
+    final Offset tangent = MPNumericAux.segmentTangentFromSegments(
+      firstSegment: firstSegment,
+      secondSegment: secondSegment,
+      isReversed: isReversed,
+    );
+    final Offset normal = MPNumericAux.normalFromTangent(tangent);
+    final double azimuth = MPNumericAux.directionOffsetToAzimuth(normal);
+
+    return azimuth;
   }
 
   static Rect boundingBoxFromOffsets(List<Offset> points) {
@@ -1007,4 +1093,121 @@ class MPNumericAux {
       bottom: maxY,
     );
   }
+
+  static double nextUpReal(double x) {
+    if ((x.isNaN) || (x == double.infinity)) {
+      return x;
+    }
+
+    if (x == double.negativeInfinity) {
+      return -double.maxFinite;
+    }
+
+    if ((x == 0.0) || (x == -0.0)) {
+      return double.minPositive;
+    }
+
+    if (x == -double.minPositive) {
+      return 0.0;
+    }
+
+    // final int bits = _doubleToBits(x);
+    // final int next = x > 0 ? bits + 1 : bits - 1;
+
+    // return _bitsToDouble(next);
+
+    return x + ulp(x);
+  }
+
+  static double nextDownReal(double x) {
+    if ((x.isNaN) || (x == double.negativeInfinity)) {
+      return x;
+    }
+
+    if (x == double.infinity) {
+      return double.maxFinite;
+    }
+
+    if ((x == 0.0) || (x == -0.0)) {
+      return -double.minPositive;
+    }
+
+    if (x == double.minPositive) {
+      return 0.0;
+    }
+
+    // final int bits = _doubleToBits(x);
+    // final int next = x > 0 ? bits - 1 : bits + 1;
+
+    // return _bitsToDouble(next);
+
+    return x - ulp(x);
+  }
+
+  static int _doubleToBits(double value) {
+    final ByteData b = ByteData(8);
+
+    b.setFloat64(0, value, Endian.big);
+
+    return b.getUint64(0, Endian.big);
+  }
+
+  static double _bitsToDouble(int bits) {
+    final ByteData b = ByteData(8);
+
+    b.setUint64(0, bits, Endian.big);
+
+    return b.getFloat64(0, Endian.big);
+  }
+
+  static double ulp(double d) {
+    final int exp = _getExponent(d);
+
+    // NaN or infinity
+    if (exp == _doubleMaxExponent + 1) {
+      return d.abs();
+    }
+
+    // zero or subnormal
+    if (exp == _doubleMinExponent - 1) {
+      return double.minPositive;
+    }
+
+    // normal numbers
+    int e = exp - (_doubleSignificandWidth - 1);
+
+    if (e >= _doubleMinExponent) {
+      // 2^(e)
+      return _powerOfTwo(e);
+    } else {
+      // subnormal result: shift the min subnormal left
+      final int shift =
+          e - (_doubleMinExponent - (_doubleSignificandWidth - 1));
+
+      return _bitsToDouble(1 << shift);
+    }
+  }
+
+  static const int _doubleSignificandWidth = 53; // includes implicit leading 1
+  static const int _doubleExponentBias = 1023;
+  static const int _doubleMaxExponent =
+      1023; // unbiased max exponent for normal doubles
+  static const int _doubleMinExponent =
+      -1022; // unbiased min exponent for normal doubles
+
+  static int _getExponent(double d) {
+    final int bits = _doubleToBits(d);
+    final int rawExp = (bits >> 52) & 0x7ff;
+
+    if (rawExp == 0x7ff) {
+      return _doubleMaxExponent + 1;
+    } // NaN or infinity
+    if (rawExp == 0) {
+      return _doubleMinExponent - 1;
+    } // zero or subnormal
+
+    return rawExp - _doubleExponentBias; // unbiased exponent
+  }
+
+  static double _powerOfTwo(int exp) => math.pow(2.0, exp).toDouble();
 }

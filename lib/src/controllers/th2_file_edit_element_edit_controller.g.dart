@@ -231,36 +231,6 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
-  late final _$_linePointOrientationLSizeSettingModeAtom = Atom(
-    name:
-        'TH2FileEditElementEditControllerBase._linePointOrientationLSizeSettingMode',
-    context: context,
-  );
-
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  get linePointOrientationLSizeSettingMode {
-    _$_linePointOrientationLSizeSettingModeAtom.reportRead();
-    return super._linePointOrientationLSizeSettingMode;
-  }
-
-  @override
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  get _linePointOrientationLSizeSettingMode =>
-      linePointOrientationLSizeSettingMode;
-
-  @override
-  set _linePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
-    _$_linePointOrientationLSizeSettingModeAtom.reportWrite(
-      value,
-      super._linePointOrientationLSizeSettingMode,
-      () {
-        super._linePointOrientationLSizeSettingMode = value;
-      },
-    );
-  }
-
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
@@ -864,6 +834,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleAllImagesVisibility() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleAllImagesVisibility',
+        );
+    try {
+      return super.toggleAllImagesVisibility();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleSelectedLinePointsSmoothOption() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -917,14 +903,20 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void applySetLinePointOrientationLSize() {
+  void applySetLinePointOrientationLSize({
+    required double? orientation,
+    required double? lSize,
+  }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
               'TH2FileEditElementEditControllerBase.applySetLinePointOrientationLSize',
         );
     try {
-      return super.applySetLinePointOrientationLSize();
+      return super.applySetLinePointOrientationLSize(
+        orientation: orientation,
+        lSize: lSize,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -949,13 +941,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void setLinePointLSizeValue(double? lsize) {
+  void setLinePointLSizeValue(double? lSize) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.setLinePointLSizeValue',
         );
     try {
-      return super.setLinePointLSizeValue(lsize);
+      return super.setLinePointLSizeValue(lSize);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,
@@ -964,16 +956,20 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void setLinePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
+  void setLinePointLSizeAndOrientation({
+    required double? orientation,
+    required double? lSize,
+  }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name:
-              'TH2FileEditElementEditControllerBase.setLinePointOrientationLSizeSettingMode',
+              'TH2FileEditElementEditControllerBase.setLinePointLSizeAndOrientation',
         );
     try {
-      return super.setLinePointOrientationLSizeSettingMode(value);
+      return super.setLinePointLSizeAndOrientation(
+        orientation: orientation,
+        lSize: lSize,
+      );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

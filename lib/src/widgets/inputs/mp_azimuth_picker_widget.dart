@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/mp_compass_painter.dart';
@@ -35,10 +36,33 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
   void initState() {
     super.initState();
     _azimuth = MPNumericAux.normalizeAngle(widget.initialAzimuth);
-    widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
+    widget.azimuthTextController.text = _azimuth.toStringAsFixed(
+      mpOrientationOptionDecimalPlaces,
+    );
   }
 
-  void _updateAzimuth(double newAzimuth, {bool updateTextField = false}) {
+  @override
+  void didUpdateWidget(covariant MPAzimuthPickerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final double normalizedInitialAzimuth = MPNumericAux.normalizeAngle(
+      widget.initialAzimuth,
+    );
+
+    if (!MPNumericAux.nearlyEqual(_azimuth, normalizedInitialAzimuth)) {
+      _updateAzimuth(
+        normalizedInitialAzimuth,
+        updateTextField: true,
+        notifyChange: false,
+      );
+    }
+  }
+
+  void _updateAzimuth(
+    double newAzimuth, {
+    bool updateTextField = false,
+    bool notifyChange = true,
+  }) {
     newAzimuth = MPNumericAux.normalizeAngle(newAzimuth);
 
     setState(() {
@@ -47,7 +71,10 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
         widget.azimuthTextController.text = newAzimuth.toStringAsFixed(1);
       }
     });
-    widget.onChanged(newAzimuth);
+
+    if (notifyChange) {
+      widget.onChanged(newAzimuth);
+    }
   }
 
   void _handleTextInput() {
@@ -63,14 +90,16 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
       _updateAzimuth(value);
     } else {
       // Revert to previous value if input is invalid
-      widget.azimuthTextController.text = _azimuth.toStringAsFixed(1);
+      widget.azimuthTextController.text = _azimuth.toStringAsFixed(
+        mpOrientationOptionDecimalPlaces,
+      );
     }
   }
 
   double _calculateAngle({required Offset center, required Offset position}) {
     final Offset delta = position - center;
     // Convert cartesian to polar coordinates (with y inverted)
-    final double angle = math.atan2(delta.dx, -delta.dy) * mp1Radian;
+    final double angle = math.atan2(delta.dx, -delta.dy) * mp1RadInDegree;
 
     return angle;
   }
@@ -97,7 +126,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
               painter: MPCompassPainter(
                 azimuth: _azimuth,
                 arrowLength: _markerSize,
-                drawBackgroundLines: true,
+                isAzimuthPickerMode: true,
               ),
             ),
           ),
@@ -139,11 +168,8 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
       center: Offset(compassRadius, compassRadius),
       position: localPosition,
     );
-    final Set<LogicalKeyboardKey> logicalKeysPressed =
-        HardwareKeyboard.instance.logicalKeysPressed;
     final bool isCtrlPressed =
-        logicalKeysPressed.contains(LogicalKeyboardKey.controlLeft) ||
-        logicalKeysPressed.contains(LogicalKeyboardKey.controlRight);
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final double adjustedAngle = isCtrlPressed
         ? (angle / mpAzimuthConstraintAngle).round() * mpAzimuthConstraintAngle
         : angle;

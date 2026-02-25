@@ -1,23 +1,26 @@
-class THConvertFromListException implements Exception {
-  String objectNameToCreate;
-  List<dynamic> originalList;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THConvertFromListException(this.objectNameToCreate, this.originalList);
+class THConvertFromListException extends THBaseException {
+  final String objectNameToCreate;
+  final List<dynamic> originalList;
 
-  @override
-  String toString() {
-    var stringList = '';
+  THConvertFromListException(this.objectNameToCreate, this.originalList)
+    : super(_buildMessage(objectNameToCreate, originalList));
 
-    for (final aString in originalList) {
+  static String _buildMessage(
+    String objectNameToCreate,
+    List<dynamic> originalList,
+  ) {
+    String stringList = '';
+
+    for (final String aString in originalList) {
       stringList += "-> '$aString'\n";
     }
 
-    stringList = '''Creation of a '$objectNameToCreate' from list below failed:
+    return '''Creation of a '$objectNameToCreate' from list below failed:
 
 $stringList
 
 ''';
-
-    return stringList;
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -34,7 +36,8 @@ class MPOrientationOptionWidget extends StatefulWidget {
       _MPOrientationOptionWidgetState();
 }
 
-class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
+class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPOrientationOptionWidget> {
   late final TH2FileEditController th2FileEditController;
   late TextEditingController _azimuthController;
   late String _selectedChoice;
@@ -43,7 +46,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
   double? _currentAzimuth = 0;
   late final String _initialAzimuth;
   late final String _initialSelectedChoice;
-  // late final bool _isSingleLineSegment;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isOkButtonEnabled = false;
 
@@ -52,27 +54,6 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
     super.initState();
 
     th2FileEditController = widget.th2FileEditController;
-
-    /// Temporarily disable interactive orientation/lsize setting for single
-    /// line segments until complete UI is implemented.
-    // _isSingleLineSegment =
-    //     (th2FileEditController.optionEditController.currentOptionElementsType ==
-    //         MPOptionElementType.lineSegment) &&
-    //     (th2FileEditController
-    //             .selectionController
-    //             .selectedEndControlPoints
-    //             .length ==
-    //         1);
-
-    // if (_isSingleLineSegment) {
-    //   th2FileEditController.elementEditController
-    //       .setLinePointOrientationLSizeSettingMode(
-    //         MPLinePointInteractiveOrientationLSizeSettingMode.orientation,
-    //       );
-    //   th2FileEditController.stateController.setState(
-    //     MPTH2FileEditStateType.editLinePointOrientationLSize,
-    //   );
-    // }
 
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
@@ -172,6 +153,12 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
     setState(() {
       _isOkButtonEnabled = isValidAzimuth && isChanged;
     });
+
+    if (_isOkButtonEnabled) {
+      th2FileEditController.elementEditController.setLinePointOrientationValue(
+        _currentAzimuth!,
+      );
+    }
   }
 
   @override
@@ -224,23 +211,30 @@ class _MPOrientationOptionWidgetState extends State<MPOrientationOptionWidget> {
               ),
             ),
 
-            // Additional Inputs for "Set" Option
-            // if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            //     !_isSingleLineSegment) ...[
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MPAzimuthPickerWidget(
-                    initialAzimuth: double.tryParse(_initialAzimuth) ?? 0.0,
-                    azimuthLabel: azimuthLabel,
-                    focusNode: _azimuthTextFieldFocusNode,
-                    azimuthTextController: _azimuthController,
-                    onChanged: (lengthLabel) {
-                      _currentAzimuth = lengthLabel;
-                      _updateOkButtonEnabled();
+                  Observer(
+                    builder: (_) {
+                      final double? linePointOrientation = th2FileEditController
+                          .elementEditController
+                          .linePointOrientation;
+
+                      return MPAzimuthPickerWidget(
+                        initialAzimuth:
+                            linePointOrientation ??
+                            (double.tryParse(_initialAzimuth) ?? 0.0),
+                        azimuthLabel: azimuthLabel,
+                        focusNode: _azimuthTextFieldFocusNode,
+                        azimuthTextController: _azimuthController,
+                        onChanged: (lengthLabel) {
+                          _currentAzimuth = lengthLabel;
+                          _updateOkButtonEnabled();
+                        },
+                      );
                     },
                   ),
                 ],

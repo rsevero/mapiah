@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_context_menu_suppression.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
 
-final MPLocator mpLocator = MPLocator();
+MPLocator? _mpLocator;
+
+MPLocator get mpLocator => _mpLocator ??= MPLocator();
 
 void main(List<String> arguments) {
   String? fileToRead;
@@ -52,30 +54,42 @@ void main(List<String> arguments) {
   // });
 
   runZonedGuarded(
-    () {
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
+      // Wait for settings initialization (reads config file and SharedPreferences)
+      await mpLocator.mpSettingsController.initialized;
+
+      THBaseException.registerUnhandledReporter((error, stack) {
+        MPDialogAux.showUnhandledErrorDialog(error, stack);
+      });
 
       // /// For layout debugging.
       // debugPaintSizeEnabled = true;
-      if (kIsWeb) {
-        suppressContextMenu();
-      }
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
-        MPDialogAux.showUnhandledErrorDialog(details.exception, details.stack);
+        if (details.exception is! THBaseException) {
+          MPDialogAux.showUnhandledErrorDialog(
+            details.exception,
+            details.stack,
+          );
+        }
       };
 
       ui.PlatformDispatcher.instance.onError =
           (Object error, StackTrace stack) {
-            MPDialogAux.showUnhandledErrorDialog(error, stack);
+            if (error is! THBaseException) {
+              MPDialogAux.showUnhandledErrorDialog(error, stack);
+            }
             return true;
           };
 
       runApp(MapiahApp(fileToRead: fileToRead));
     },
     (Object error, StackTrace stack) {
-      MPDialogAux.showUnhandledErrorDialog(error, stack);
+      if (error is! THBaseException) {
+        MPDialogAux.showUnhandledErrorDialog(error, stack);
+      }
     },
   );
 }
@@ -88,33 +102,37 @@ class MapiahApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder: (context) => MaterialApp(
-        navigatorKey: mpLocator.mpNavigatorKey,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
-            dynamicSchemeVariant: DynamicSchemeVariant.content,
-          ),
-          iconButtonTheme: IconButtonThemeData(
-            style: ButtonStyle(
-              padding: WidgetStateProperty.all<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 0),
+      builder: (context) {
+        mpLocator.mpSettingsController.getTrigger(MPSettingsType.Main_LocaleID);
+
+        return MaterialApp(
+          navigatorKey: mpLocator.mpNavigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 0xe2, 0x5b, 0x30),
+              dynamicSchemeVariant: DynamicSchemeVariant.content,
+            ),
+            iconButtonTheme: IconButtonThemeData(
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all<EdgeInsets>(
+                  EdgeInsets.symmetric(horizontal: 0),
+                ),
               ),
             ),
           ),
-        ),
-        // darkTheme: ThemeData(
-        //   useMaterial3: true,
-        //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
-        // ),
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        locale: mpLocator.mpSettingsController.locale,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: MapiahHome(mainFilePath: fileToRead),
-      ),
+          // darkTheme: ThemeData(
+          //   useMaterial3: true,
+          //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
+          // ),
+          onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          locale: mpLocator.mpSettingsController.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MapiahHome(mainFilePath: fileToRead),
+        );
+      },
     );
   }
 }

@@ -7,12 +7,14 @@ sdk-extensions:
 command: mapiah
 finish-args:
 - --device=dri
-- --env=GIO_USE_PORTAL=1
-- --env=GTK_USE_PORTAL=1
+- --env=GIO_USE_PORTAL=0
+- --env=GTK_USE_PORTAL=0
+- --filesystem=home
 - --share=ipc
 - --share=network
 - --socket=fallback-x11
 - --socket=wayland
+- --talk-name=org.freedesktop.Flatpak
 modules:
 - name: mapiah
   buildsystem: simple
@@ -29,7 +31,7 @@ modules:
     env:
       PUB_CACHE: /run/build/mapiah/.pub-cache
   build-commands:
-  - flutter build linux --release --no-pub
+  - flutter build linux --release --no-pub --dart-define=isFlathub=true
   - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
   - cp -r $BUNDLE_PATH/lib /app/bin/lib
   - cp -r $BUNDLE_PATH/data /app/bin/data
@@ -42,10 +44,10 @@ modules:
   sources:
   - type: git
     url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.34-test5
+    tag: v0.2.37-rc4
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
     url: https://github.com/flutter/flutter.git
-    tag: 3.38.9
+    tag: 3.41.2
     dest: flutter

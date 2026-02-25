@@ -6,4 +6,6 @@ abstract class MPSegment {
 
   final Offset start;
   final Offset end;
+
+  double length();
 }

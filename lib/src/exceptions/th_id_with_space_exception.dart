@@ -1,11 +1,6 @@
-class THIDWithSpaceException implements Exception {
-  String id;
-  String elementType;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THIDWithSpaceException(this.elementType, this.id);
-
-  @override
-  String toString() {
-    return "Spaces not allowed in IDs: '$id'. Element type: '$elementType'";
-  }
+class THIDWithSpaceException extends THBaseException {
+  THIDWithSpaceException(String elementType, String id)
+    : super("Spaces not allowed in IDs: '$id'. Element type: '$elementType'");
 }

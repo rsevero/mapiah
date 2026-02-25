@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -23,6 +22,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
@@ -41,26 +41,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   TH2FileEditElementEditControllerBase(this._th2FileEditController)
     : _thFile = _th2FileEditController.thFile;
-
-  void initializeMostUsedTypes() {
-    final Iterable<THElement> elements = _thFile.elements.values;
-
-    for (final THElement element in elements) {
-      switch (element) {
-        case THArea _:
-          _setMostUsedAreaType(element.areaType.name);
-        case THLine _:
-          _setMostUsedLineType(element.lineType.name);
-        case THPoint _:
-          _setMostUsedPointType(element.pointType.name);
-        default:
-      }
-    }
-
-    setUsedAreaType(thDefaultAreaType.name);
-    setUsedLineType(thDefaultLineType.name);
-    setUsedPointType(thDefaultPointType.name);
-  }
 
   @readonly
   Offset? _lineStartScreenPosition;
@@ -93,13 +73,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   double? _linePointLSize;
 
-  @readonly
-  MPLinePointInteractiveOrientationLSizeSettingMode
-  _linePointOrientationLSizeSettingMode =
-      MPLinePointInteractiveOrientationLSizeSettingMode.lsize;
+  THCommandOptionType? _currentOptionTypeBeingEdited;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
+
+  bool _allImagesVisibility = true;
 
   int _missingStepsPreserveStraightToBezierConversionUndoRedo = 2;
 
@@ -111,6 +90,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Map<String, MPTypeUsed> _mostUsedAreaTypes = {};
   final Map<String, MPTypeUsed> _mostUsedLineTypes = {};
   final Map<String, MPTypeUsed> _mostUsedPointTypes = {};
+
+  final Set<THLineSegment> _addedLineSegmentsToIncludeInSelectedEndPoints = {};
 
   bool _lastLinePointSmoothOption = false;
 
@@ -130,6 +111,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   List<String> get mostUsedPointTypes {
     return _getMostUsedTypes(_mostUsedPointTypes);
+  }
+
+  void initializeMostUsedTypes() {
+    final Iterable<THElement> elements = _thFile.elements.values;
+
+    for (final THElement element in elements) {
+      switch (element) {
+        case THArea _:
+          _setMostUsedAreaType(element.areaType.name);
+        case THLine _:
+          _setMostUsedLineType(element.lineType.name);
+        case THPoint _:
+          _setMostUsedPointType(element.pointType.name);
+        default:
+      }
+    }
+
+    setUsedAreaType(thDefaultAreaType.name);
+    setUsedLineType(thDefaultLineType.name);
+    setUsedPointType(thDefaultPointType.name);
   }
 
   List<String> _getMostUsedTypes(Map<String, MPTypeUsed> mostUsedTypesMap) {
@@ -278,11 +279,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _thFile.substituteElement(modifiedElement);
     selectionController.addUpdateSelectableElement(modifiedElement);
-    selectionController.updateSelectedElementLogicalClone(modifiedElement.mpID);
+
     if (modifiedElement is THLineSegment) {
+      final THLine parentLine =
+          modifiedElement.parent(thFile: _thFile) as THLine;
+
+      selectionController.updateSelectedElementLogicalClone(
+        modifiedElement.parentMPID,
+      );
       selectionController.updateSelectedLineSegment(modifiedElement);
-      (modifiedElement.parent(thFile: _thFile) as THLine)
-          .resetLineSegmentsLists();
+      parentLine.resetLineSegmentsLists();
+    } else {
+      selectionController.updateSelectedElementLogicalClone(
+        modifiedElement.mpID,
+      );
     }
   }
 
@@ -366,6 +376,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       childPositionInParent: lineSegmentPositionInParent,
     );
     addOutdatedLineSegmentCloneMPID(newLineSegment.mpID);
+    addLineSegmentToIncludeInSelectedEndPoints(newLineSegment);
   }
 
   @action
@@ -572,12 +583,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
       lineSegmentMPIDs.elementAt(lineSegmentMPIDs.length - 2),
     );
-
     final THPositionPart startPoint = secondToLastLineSegment.endPoint;
     final THPositionPart endPoint = lastLineSegment.endPoint;
     final Offset startPointCoordinates = startPoint.coordinates;
     final Offset endPointCoordinates = endPoint.coordinates;
-
     final Offset quadraticControlPointPositionCanvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(
           quadraticControlPointPositionScreenCoordinates,
@@ -935,7 +944,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
+    final int parentLineMPID = _thFile
+        .lineSegmentByMPID(selectedLineSegmentMPIDs.first)
+        .parentMPID;
     final List<MPCommand> removeLineSegmentCommands = [];
+
+    bool lineRemoved = false;
 
     for (final int lineSegmentMPID in selectedLineSegmentMPIDs) {
       addOutdatedLineSegmentCloneMPID(lineSegmentMPID);
@@ -948,6 +962,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       removeLineSegmentCommand.execute(_th2FileEditController);
       removeLineSegmentCommands.add(removeLineSegmentCommand);
+
+      if (!_thFile.hasElementByMPID(parentLineMPID)) {
+        lineRemoved = true;
+      }
     }
 
     final MPCommand removeCommand = MPCommandFactory.multipleCommandsFromList(
@@ -972,6 +990,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     updateControllersAfterElementEditPartial();
     updateControllersAfterElementEditFinal();
     _th2FileEditController.updateUndoRedoStatus();
+    if (lineRemoved) {
+      _th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
+    } else {
+      _th2FileEditController.stateController.updateStatusBarMessage();
+    }
   }
 
   void clearMPIDsOutdatedClones() {
@@ -1096,10 +1121,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
+  void clearAddedLineSegmentsToIncludeInSelectedEndPoints() {
+    _addedLineSegmentsToIncludeInSelectedEndPoints.clear();
+  }
+
+  void addLineSegmentToIncludeInSelectedEndPoints(THLineSegment lineSegment) {
+    _addedLineSegmentsToIncludeInSelectedEndPoints.add(lineSegment);
+  }
+
   @action
   void applyAddLineSegmentsBetweenSelectedLineSegments() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
     final Map<int, MPSelectedEndControlPoint> selectedEndControlPoints =
-        _th2FileEditController.selectionController.selectedEndControlPoints;
+        selectionController.selectedEndControlPoints;
+
+    clearAddedLineSegmentsToIncludeInSelectedEndPoints();
 
     if (selectedEndControlPoints.length < 2) {
       return;
@@ -1108,24 +1145,30 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THLine line = _thFile.lineByMPID(
       selectedEndControlPoints.values.first.originalLineSegmentClone.parentMPID,
     );
-    final MPCommand addLineSegmentsCommand = getAddLineSegmentsCommand(
+    final MPCommand? addLineSegmentsCommand = getAddLineSegmentsCommand(
       line: line,
       selectedEndControlPoints: selectedEndControlPoints.values,
     );
 
+    if (addLineSegmentsCommand == null) {
+      return;
+    }
+
     _th2FileEditController.execute(addLineSegmentsCommand);
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
+    selectionController.addSelectedEndPoints(
+      _addedLineSegmentsToIncludeInSelectedEndPoints,
+    );
+    clearAddedLineSegmentsToIncludeInSelectedEndPoints();
+    selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
   }
 
-  MPCommand getAddLineSegmentsCommand({
+  MPCommand? getAddLineSegmentsCommand({
     required THLine line,
     required Iterable<MPSelectedEndControlPoint> selectedEndControlPoints,
   }) {
     final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(_thFile);
-    final SplayTreeMap<int, THLineSegment> selectedLineSegmentsPosMap =
-        SplayTreeMap();
+    final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
     final List<MPCommand> addLineSegmentsCommands = [];
 
     for (final MPSelectedEndControlPoint endControlPoint
@@ -1138,7 +1181,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final Iterable<int> selectedLineSegmentsPos =
-        selectedLineSegmentsPosMap.keys;
+        selectedLineSegmentsPosMap.keys.toList()..sort();
 
     int? previousLineSegmentPos;
 
@@ -1147,9 +1190,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           (lineSegmentPos == previousLineSegmentPos + 1)) {
         final THLineSegment lineSegment =
             selectedLineSegmentsPosMap[lineSegmentPos]!;
-        final int lineSegmentPositionInParent = line.getChildPosition(
-          lineSegment,
-        );
         final THLineSegment previousLineSegment =
             selectedLineSegmentsPosMap[previousLineSegmentPos]!;
 
@@ -1164,18 +1204,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
 
           addLineSegmentsCommands.add(
-            MPAddLineSegmentCommand(
+            MPAddLineSegmentCommand.atExistingLineSegmentPosition(
               newLineSegment: newLineSegment,
-              lineSegmentPositionInParent: lineSegmentPositionInParent,
+              existingLineSegmentMPID: lineSegment.mpID,
               posCommand: null,
             ),
           );
         } else {
-          final newLineSegments = MPNumericAux.splitBezierCurveAtPart(
-            startPoint: previousLineSegment.endPoint.coordinates,
-            lineSegment: lineSegment as THBezierCurveLineSegment,
-            part: mpHalfBezierArcPart,
-          );
+          final List<THBezierCurveLineSegment> newLineSegments =
+              MPNumericAux.splitBezierCurveAtPart(
+                startPoint: previousLineSegment.endPoint.coordinates,
+                lineSegment: lineSegment as THBezierCurveLineSegment,
+                part: mpHalfBezierArcPart,
+              );
 
           if (newLineSegments.length != 2) {
             throw Exception(
@@ -1184,9 +1225,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           }
 
           addLineSegmentsCommands.add(
-            MPAddLineSegmentCommand(
+            MPAddLineSegmentCommand.atExistingLineSegmentPosition(
               newLineSegment: newLineSegments[0],
-              lineSegmentPositionInParent: lineSegmentPositionInParent,
+              existingLineSegmentMPID: lineSegment.mpID,
               posCommand: null,
             ),
           );
@@ -1202,21 +1243,25 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       previousLineSegmentPos = lineSegmentPos;
     }
 
+    if (addLineSegmentsCommands.isEmpty) {
+      return null;
+    }
+
     final MPCommand addLineSegmentsCommand =
-        (addLineSegmentsCommands.length == 1)
-        ? addLineSegmentsCommands.first
-        : MPMultipleElementsCommand.forCWJM(
-            commandsList: addLineSegmentsCommands.reversed.toList(),
-            completionType:
-                MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
-          );
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: addLineSegmentsCommands,
+          descriptionType: MPCommandDescriptionType.addLineSegment,
+          completionType:
+              MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+        );
 
     return addLineSegmentsCommand;
   }
 
   void addScrap() {
-    final BuildContext? currentContext =
-        _th2FileEditController.thFileWidgetKey.currentContext;
+    final BuildContext? currentContext = _th2FileEditController
+        .getTHFileWidgetGlobalKey()
+        .currentContext;
 
     if (currentContext == null) {
       return;
@@ -1631,6 +1676,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void toggleAllImagesVisibility() {
+    final bool newVisibilitySetting = !getCurrentAllImagesVisibility();
+    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+
+    for (final THXTherionImageInsertConfig image in allImages) {
+      image.isVisible = newVisibilitySetting;
+    }
+
+    _allImagesVisibility = newVisibilitySetting;
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
+  @action
   void toggleSelectedLinePointsSmoothOption() {
     final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController
         .selectionController
@@ -1998,18 +2056,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void applySetLinePointOrientationLSize() {
-    /// Ctrl/Meta forces orientation and Alt forces lsize to be set.
-    final bool forceOrientation =
-        (_linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.orientation)
-        ? true
-        : MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool forceLSize =
-        (_linePointOrientationLSizeSettingMode ==
-            MPLinePointInteractiveOrientationLSizeSettingMode.lsize)
-        ? true
-        : MPInteractionAux.isAltPressed();
+  void applySetLinePointOrientationLSize({
+    required double? orientation,
+    required double? lSize,
+  }) {
     final List<MPCommand> setCommands = [];
     final Iterable<MPSelectedEndControlPoint> selectedEndPoints =
         _th2FileEditController
@@ -2022,42 +2072,28 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final THLineSegment lineSegment = selectedEndPoint.originalElementClone;
       final int lineSegmentMPID = lineSegment.mpID;
 
-      if (forceOrientation ||
-          (lineSegment.hasOption(THCommandOptionType.orientation) &&
-              !MPNumericAux.nearlyEqual(
-                (lineSegment.getOption(THCommandOptionType.orientation)
-                        as THOrientationCommandOption)
-                    .azimuth
-                    .value,
-                _linePointOrientation!,
-              ))) {
+      if (lSize != null) {
+        final THLSizeCommandOption lsizeOption =
+            THLSizeCommandOption.fromString(
+              parentMPID: lineSegmentMPID,
+              number: lSize.toStringAsFixed(mpLSizeOptionDecimalPlaces),
+            );
+
+        setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
+      }
+
+      if (orientation != null) {
         final THOrientationCommandOption orientationOption =
             THOrientationCommandOption.fromString(
               parentMPID: lineSegmentMPID,
-              azimuth: _linePointOrientation!.toStringAsFixed(1),
+              azimuth: orientation.toStringAsFixed(
+                mpOrientationOptionDecimalPlaces,
+              ),
             );
 
         setCommands.add(
           MPSetOptionToElementCommand(toOption: orientationOption),
         );
-      }
-
-      if (forceLSize ||
-          (lineSegment.hasOption(THCommandOptionType.lSize) &&
-              !MPNumericAux.nearlyEqual(
-                (lineSegment.getOption(THCommandOptionType.lSize)
-                        as THLSizeCommandOption)
-                    .number
-                    .value,
-                _linePointLSize!,
-              ))) {
-        final THLSizeCommandOption lsizeOption =
-            THLSizeCommandOption.fromString(
-              parentMPID: lineSegmentMPID,
-              number: _linePointLSize!.toStringAsFixed(1),
-            );
-
-        setCommands.add(MPSetOptionToElementCommand(toOption: lsizeOption));
       }
     }
 
@@ -2079,19 +2115,79 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void setLinePointOrientationValue(double? orientation) {
+    if ((_linePointOrientation != null) &&
+        (orientation != null) &&
+        MPNumericAux.nearlyEqual(_linePointOrientation!, orientation)) {
+      return;
+    }
+
     _linePointOrientation = orientation;
   }
 
   @action
-  void setLinePointLSizeValue(double? lsize) {
-    _linePointLSize = lsize;
+  void setLinePointLSizeValue(double? lSize) {
+    if ((_linePointLSize != null) &&
+        (lSize != null) &&
+        MPNumericAux.nearlyEqual(_linePointLSize!, lSize)) {
+      return;
+    }
+
+    _linePointLSize = lSize;
   }
 
   @action
-  void setLinePointOrientationLSizeSettingMode(
-    MPLinePointInteractiveOrientationLSizeSettingMode value,
-  ) {
-    _linePointOrientationLSizeSettingMode = value;
+  void setLinePointLSizeAndOrientation({
+    required double? orientation,
+    required double? lSize,
+  }) {
+    if ((_linePointLSize != null) &&
+        (lSize != null) &&
+        MPNumericAux.nearlyEqual(_linePointLSize!, lSize) &&
+        (_linePointOrientation != null) &&
+        (orientation != null) &&
+        MPNumericAux.nearlyEqual(_linePointOrientation!, orientation)) {
+      return;
+    }
+
+    _linePointOrientation = orientation;
+    _linePointLSize = lSize;
+  }
+
+  void setCommandOptionTypeBeingEdited(THCommandOptionType? value) {
+    if (_currentOptionTypeBeingEdited == value) {
+      return;
+    }
+
+    final THCommandOptionType? previousOptionType =
+        _currentOptionTypeBeingEdited;
+
+    _currentOptionTypeBeingEdited = value;
+
+    _th2FileEditController.stateController.state
+        .onChangeCommandOptionTypeEdited(
+          newOptionType: _currentOptionTypeBeingEdited,
+          previousOptionType: previousOptionType,
+        );
+  }
+
+  bool getCurrentAllImagesVisibility() {
+    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+
+    bool? currentVisibility;
+
+    for (final THXTherionImageInsertConfig image in allImages) {
+      if (currentVisibility == null) {
+        currentVisibility = image.isVisible;
+      } else if (image.isVisible != currentVisibility) {
+        return _allImagesVisibility;
+      }
+    }
+
+    return currentVisibility ?? _allImagesVisibility;
+  }
+
+  THCommandOptionType? get currentOptionTypeBeingEdited {
+    return _currentOptionTypeBeingEdited;
   }
 }
 
@@ -2116,5 +2212,3 @@ enum MPLineSimplificationMethod {
   forceBezier,
   keepOriginalTypes,
 }
-
-enum MPLinePointInteractiveOrientationLSizeSettingMode { lsize, orientation }

@@ -18,6 +18,7 @@
 | Ferramenta de seleção                                         | C                                    |
 | Forçar definição de opção em tipos não suportados             | Ctrl+clique na configuração da opção |
 | Inverter linha                                                | R                                    |
+| Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Refazer                                                       | Ctrl+Y                               |
 | Salvar arquivo                                                | Ctrl+S                               |
 | Salvar arquivo como                                           | Ctrl+Shift+S                         |
@@ -30,6 +31,7 @@
 | Zoom 1:1                                                      | 1                                    |
 | Zoom arquivo                                                  | 4                                    |
 | Zoom croqui                                                   | 3                                    |
+| Zoom janela de seleção                                        | 5                                    |
 | Zoom mais distante                                            | -                                    |
 | Zoom mais próximo                                             | +                                    |
 | Zoom seleção                                                  | 2                                    |

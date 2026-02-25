@@ -1,3 +1,4 @@
+import 'package:flutter/painting.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -36,6 +37,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   TH2FileEditUserInteractionControllerBase(this._th2FileEditController)
     : _thFile = _th2FileEditController.thFile;
+
+  Path _compassPath = Path();
+
+  void setCompassPath(Path path) {
+    _compassPath = path;
+  }
+
+  Path get compassPath => _compassPath;
 
   @action
   void prepareSetOption({
@@ -258,6 +267,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       for (final MPSelectedElement mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
+        element.setTHFile(_thFile);
+
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(
@@ -380,12 +391,22 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
+    final THFile thFile = _th2FileEditController.thFile;
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
     final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
-        _th2FileEditController
-            .selectionController
-            .selectedEndControlPoints
-            .values;
-    final Set<THLineSegment> willChangeLineSegments = {};
+        selectionController.selectedEndControlPoints.values;
+
+    if (selectedEndControlPoints.isEmpty) {
+      return;
+    }
+
+    final THLine thLine = thFile.lineByMPID(
+      selectedEndControlPoints.first.originalElementClone.parentMPID,
+    );
+    final Map<int, int> lineSegmentsPositionsByMPID = thLine
+        .getLineSegmentPositionsByLineSegmentMPID(thFile);
+    final List<THLineSegment> willChangeLineSegments = [];
     final THElementType elementType =
         selectedLineSegmentType ==
             MPSelectedLineSegmentType.bezierCurveLineSegment
@@ -394,12 +415,23 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
-      final THLineSegment lineSegment = _th2FileEditController.thFile
-          .lineSegmentByMPID(selectedEndControlPoint.mpID);
+      final int lineSegmentMPID = selectedEndControlPoint.mpID;
 
-      if (lineSegment.elementType != elementType) {
-        willChangeLineSegments.add(lineSegment);
+      if (!lineSegmentsPositionsByMPID.containsKey(lineSegmentMPID) ||
+          (lineSegmentsPositionsByMPID[lineSegmentMPID]! == 0)) {
+        continue;
       }
+
+      final THLineSegment lineSegment = thFile.lineSegmentByMPID(
+        lineSegmentMPID,
+      );
+
+      if ((lineSegment.elementType == elementType) ||
+          willChangeLineSegments.contains(lineSegment)) {
+        continue;
+      }
+
+      willChangeLineSegments.add(lineSegment);
     }
 
     if (willChangeLineSegments.isEmpty) {
@@ -409,16 +441,15 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final MPCommand setLineSegmentsTypeCommand =
         MPCommandFactory.setLineSegmentsType(
           selectedLineSegmentType: selectedLineSegmentType,
-          thFile: _th2FileEditController.thFile,
-          originalLineSegments: willChangeLineSegments.toList(),
+          thFile: thFile,
+          originalLineSegments: willChangeLineSegments,
         );
 
     _th2FileEditController.execute(setLineSegmentsTypeCommand);
-    _th2FileEditController.selectionController.setSelectedEndPointsByMPID(
+    selectionController.setSelectedEndPointsByMPID(
       willChangeLineSegments.map((e) => e.mpID),
     );
-    _th2FileEditController.selectionController
-        .updateSelectableEndAndControlPoints();
+    selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerEditLineRedraw();
     _th2FileEditController.triggerOptionsListRedraw();
   }
@@ -442,14 +473,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     switch (elementType) {
       case THElementType.area:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THArea) ||
-              (mpSelectedElement.originalElementClone as THArea)
-                      .areaType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THArea) ||
+              (originalElementClone.areaType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedAreaType(newPLAType);
         }
 
@@ -465,14 +496,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
       case THElementType.line:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THLine) ||
-              (mpSelectedElement.originalElementClone as THLine)
-                      .lineType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THLine) ||
+              (originalElementClone.lineType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedLineType(newPLAType);
         }
 
@@ -487,14 +518,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         );
       case THElementType.point:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
-          if ((mpSelectedElement.originalElementClone is! THPoint) ||
-              (mpSelectedElement.originalElementClone as THPoint)
-                      .pointType
-                      .name ==
-                  newPLAType) {
+          final THElement originalElementClone =
+              mpSelectedElement.originalElementClone;
+
+          if ((originalElementClone is! THPoint) ||
+              (originalElementClone.pointType.name == newPLAType)) {
             continue;
           }
-          mpIDs.add(mpSelectedElement.originalElementClone.mpID);
+          mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedPointType(newPLAType);
         }
 
@@ -512,6 +543,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     _th2FileEditController.execute(setPLATypeCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
   }
 

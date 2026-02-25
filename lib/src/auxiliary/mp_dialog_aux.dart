@@ -12,6 +12,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
@@ -19,8 +20,10 @@ import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
+import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
@@ -103,18 +106,14 @@ class MPDialogAux {
       }
 
       final PlatformFile picked = result.files.single;
-      final String filename = kIsWeb
-          ? picked.name
-          : (picked.path ?? picked.name);
+      final String filename = picked.path ?? picked.name;
       final String lowerName = filename.toLowerCase();
 
       Uint8List? bytes = picked.bytes;
       String? pickedPath = picked.path;
 
-      if (!kIsWeb) {
-        if ((bytes == null) && (pickedPath != null)) {
-          bytes = await File(pickedPath).readAsBytes();
-        }
+      if ((bytes == null) && (pickedPath != null)) {
+        bytes = await File(pickedPath).readAsBytes();
       }
 
       if (pickedPath != null) {
@@ -267,85 +266,229 @@ class MPDialogAux {
     if (_isUpdateCheckRunning) {
       return;
     }
+
     _isUpdateCheckRunning = true;
 
     try {
+      final SharedPreferencesWithCache prefs =
+          mpLocator.mpSettingsController.prefs;
+      final int lastNewVersionCheckMS =
+          prefs.getInt(MPSettingsType.Internal_LastNewVersionCheckMS.name) ?? 0;
+      final DateTime lastNewVersionCheck = DateTime.fromMillisecondsSinceEpoch(
+        lastNewVersionCheckMS,
+        isUtc: true,
+      );
+      final DateTime now = DateTime.now().toUtc();
+      final Duration timeSinceLastCheck = now.difference(lastNewVersionCheck);
+
+      if (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks) {
+        return;
+      }
+
+      prefs.setInt(
+        MPSettingsType.Internal_LastNewVersionCheckMS.name,
+        now.millisecondsSinceEpoch,
+      );
+
       final PackageInfo info = await PackageInfo.fromPlatform();
       final String currentVersion = info.version;
 
-      final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
-
-      http.Response response;
-
-      try {
-        response = await http.get(
-          uri,
-          headers: const <String, String>{
-            'Accept': mpMapiahReleasesAPIHeaderAccept,
-          },
-        );
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
-
-        return;
-      }
-
-      if (response.statusCode != 200) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.httpStatus,
-          httpStatusCode: response.statusCode,
+      // If built for Flathub (compile-time), fetch Flathub HTML and parse
+      // the JSON-LD. Use `--dart-define=isFlathub=true` when building the
+      // Flatpak/Flathub bundle so this branch is used.
+      if (mpIsFlathub) {
+        final String flathubAppId = mpMapiahFlathubAppID;
+        final Uri uri = Uri.parse(
+          '$mpMapiahVersionFlathubURLPrefix$flathubAppId',
         );
 
+        http.Response response;
+        try {
+          response = await http.get(uri);
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
+
+          return;
+        }
+
+        if (response.statusCode != 200) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.httpStatus,
+            httpStatusCode: response.statusCode,
+          );
+
+          return;
+        }
+
+        final RegExpMatch? match = RegExp(
+          r"""<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>([\s\S]*?)<\/script>""",
+          caseSensitive: false,
+        ).firstMatch(response.body);
+
+        if (match == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        dynamic data;
+        try {
+          data = jsonDecode(match.group(1)!);
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        // Try to get version from JSON-LD first, then fall back to
+        // GitHub release tag link or the "Changes in version" heading.
+        String? remoteVersion;
+
+        if (data is Map<String, dynamic>) {
+          remoteVersion = (data['softwareVersion'] ?? data['version'])
+              ?.toString();
+        }
+
+        if (remoteVersion == null) {
+          // Look for GitHub release tag links like /releases/tag/v0.2.33
+          final RegExp ghTagRe = RegExp(
+            r'/releases/tag/v?(\d+(?:\.\d+)*)',
+            caseSensitive: false,
+          );
+          final RegExpMatch? ghMatch = ghTagRe.firstMatch(response.body);
+
+          if (ghMatch != null) {
+            remoteVersion = ghMatch.group(1);
+          }
+        }
+
+        if (remoteVersion == null) {
+          // Fallback: look for "Changes in version X.Y.Z" headings
+          final RegExp changesRe = RegExp(
+            r'Changes in version\s*([0-9]+(?:\.[0-9]+)*)',
+            caseSensitive: false,
+          );
+          final RegExpMatch? changesMatch = changesRe.firstMatch(response.body);
+
+          if (changesMatch != null) {
+            remoteVersion = changesMatch.group(1);
+          }
+        }
+
+        if (remoteVersion == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        final String? latestVersion = _extractVersion(remoteVersion);
+        final String? current = _extractVersion(currentVersion);
+
+        if (latestVersion == null) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+
+          return;
+        }
+
+        if (current == null) {
+          return;
+        }
+
+        if (!mpDebugAlwaysShowVersions &&
+            (_compareVersions(latestVersion, current) <= 0)) {
+          return;
+        }
+
+        final String releaseUrl =
+            '$mpMapiahVersionFlathubURLPrefix$flathubAppId';
+
+        _showUpdateDialog(
+          latestVersion: latestVersion,
+          currentVersion: currentVersion,
+          tagName: 'flathub:$remoteVersion',
+          releaseUrl: releaseUrl,
+        );
+
         return;
-      }
+      } else {
+        // Not Flatpak: fall back to GitHub releases API
+        final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
 
-      late final List<dynamic> tags;
+        http.Response response;
 
-      try {
-        tags = jsonDecode(response.body) as List<dynamic>;
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+        try {
+          response = await http.get(
+            uri,
+            headers: const <String, String>{
+              'Accept': mpMapiahReleasesAPIHeaderAccept,
+            },
+          );
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
 
-      if (tags.isEmpty) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+          return;
+        }
 
-      final String tagName;
+        if (response.statusCode != 200) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.httpStatus,
+            httpStatusCode: response.statusCode,
+          );
 
-      try {
-        tagName = (tags.first as Map<String, dynamic>)['name'].toString();
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
+          return;
+        }
 
-      final String? latestVersion = _extractVersion(tagName);
-      final String? current = _extractVersion(currentVersion);
+        late final List<dynamic> tags;
 
-      if (latestVersion == null) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.parsing,
+        try {
+          tags = jsonDecode(response.body) as List<dynamic>;
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+        if (tags.isEmpty) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+
+        final String tagName;
+
+        try {
+          tagName = (tags.first as Map<String, dynamic>)['name'].toString();
+        } catch (_) {
+          _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+          return;
+        }
+
+        final String? latestVersion = _extractVersion(tagName);
+        final String? current = _extractVersion(currentVersion);
+
+        if (latestVersion == null) {
+          _showUpdateCheckFailedDialog(
+            type: MPUpdateCheckFailureType.parsing,
+            tagName: tagName,
+          );
+          return;
+        }
+
+        if (current == null) {
+          return;
+        }
+
+        if (!mpDebugAlwaysShowVersions &&
+            (_compareVersions(latestVersion, current) <= 0)) {
+          return;
+        }
+
+        final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
+
+        _showUpdateDialog(
+          latestVersion: latestVersion,
+          currentVersion: currentVersion,
           tagName: tagName,
+          releaseUrl: releaseUrl,
         );
-        return;
       }
-
-      if (current == null) {
-        return;
-      }
-
-      if (_compareVersions(latestVersion, current) <= 0) {
-        return;
-      }
-
-      _showUpdateDialog(
-        latestVersion: latestVersion,
-        currentVersion: currentVersion,
-        tagName: tagName,
-      );
     } catch (e, st) {
       mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
       _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
@@ -356,6 +499,7 @@ class MPDialogAux {
 
   static String? _extractVersion(String input) {
     final RegExpMatch? match = RegExp(r'\d+(?:\.\d+)*').firstMatch(input);
+
     return match?.group(0);
   }
 
@@ -368,7 +512,6 @@ class MPDialogAux {
         .split('.')
         .map((part) => int.tryParse(part) ?? 0)
         .toList();
-
     final int maxLen = aParts.length > bParts.length
         ? aParts.length
         : bParts.length;
@@ -376,6 +519,7 @@ class MPDialogAux {
     for (int i = 0; i < maxLen; i++) {
       final int aVal = i < aParts.length ? aParts[i] : 0;
       final int bVal = i < bParts.length ? bParts[i] : 0;
+
       if (aVal != bVal) {
         return aVal.compareTo(bVal);
       }
@@ -388,6 +532,7 @@ class MPDialogAux {
     required String latestVersion,
     required String currentVersion,
     required String tagName,
+    required String releaseUrl,
   }) {
     if (_isUpdateDialogOpen) {
       return;
@@ -404,8 +549,6 @@ class MPDialogAux {
     }
 
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final String releaseUrl =
-        'https://github.com/rsevero/mapiah/releases/tag/$tagName';
     final String updateBody = appLocalizations.updateAvailableBody(
       currentVersion,
       latestVersion,
@@ -593,44 +736,23 @@ class MPDialogAux {
       if (result != null) {
         String? pickedFilePath = result.files.single.path;
 
-        if (kIsWeb) {
-          // On web, we can't use file paths or File IO. Use bytes and filename.
-          final Uint8List? fileBytes = result.files.single.bytes;
-          final String filename = result.files.single.name;
-
-          if (fileBytes == null) {
-            return;
-          }
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$filename"),
-                filename: filename,
-                fileBytes: fileBytes,
-              ),
-            ),
-          );
-        } else {
-          if (pickedFilePath == null) {
-            return;
-          }
-
-          mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-            pickedFilePath,
-          );
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TH2FileEditPage(
-                key: ValueKey("TH2FileEditPage|$pickedFilePath"),
-                filename: pickedFilePath,
-              ),
-            ),
-          );
+        if (pickedFilePath == null) {
+          return;
         }
+
+        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+          pickedFilePath,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TH2FileEditPage(
+              key: ValueKey("TH2FileEditPage|$pickedFilePath"),
+              filename: pickedFilePath,
+            ),
+          ),
+        );
       } else {
         mpLocator.mpLog.i('No file selected.');
       }
@@ -638,6 +760,146 @@ class MPDialogAux {
       mpLocator.mpLog.e('Error picking file', error: e);
     } finally {
       _isFilePickerOpen[MPFilePickerType.th2] = false;
+    }
+  }
+
+  static Future<bool> pickTHConfigFile(BuildContext context) async {
+    if (_isFilePickerOpen[MPFilePickerType.thconfig] == true) {
+      return false;
+    }
+
+    _isFilePickerOpen[MPFilePickerType.thconfig] = true;
+
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle:
+            mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
+        type: FileType.custom,
+        allowedExtensions: ['thconfig', 'THCONFIG'],
+        lockParentWindow: true,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (result != null) {
+        final String? pickedFilePath = result.files.single.path;
+
+        if (pickedFilePath == null) {
+          return false;
+        }
+
+        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+          pickedFilePath,
+        );
+        mpLocator.mpGeneralController.thConfigFilePath = pickedFilePath;
+
+        return true;
+      } else {
+        mpLocator.mpLog.i('No THConfig file selected.');
+
+        return false;
+      }
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking THConfig file', error: e);
+
+      return false;
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.thconfig] = false;
+    }
+  }
+
+  static Future<void> pickTHConfigFileAndRunTherion(
+    BuildContext context,
+  ) async {
+    final bool isPicked = await pickTHConfigFile(context);
+
+    if (!isPicked) {
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
+    await runTherion(context);
+  }
+
+  static Future<void> runTherion(BuildContext context) async {
+    final String thConfigFilePath = mpLocator
+        .mpGeneralController
+        .thConfigFilePath
+        .trim();
+
+    if (thConfigFilePath.isEmpty) {
+      return;
+    }
+
+    final String configuredExecutablePath = mpLocator.mpSettingsController
+        .getString(MPSettingsType.Main_TherionExecutablePath)
+        .trim();
+    final String therionExecutablePath = configuredExecutablePath.isEmpty
+        ? mpTherionDefaultExecutableCommand
+        : configuredExecutablePath;
+
+    await showDialog<void>(
+      context: context,
+      useRootNavigator: true,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return MPRunTherionDialogWidget(
+          therionExecutablePath: therionExecutablePath,
+          thConfigFilePath: thConfigFilePath,
+        );
+      },
+    );
+  }
+
+  static Future<String?> pickExecutableFilePath(
+    BuildContext context, {
+    required String dialogTitle,
+  }) async {
+    if (_isFilePickerOpen[MPFilePickerType.executable] == true) {
+      return null;
+    }
+
+    _isFilePickerOpen[MPFilePickerType.executable] = true;
+
+    try {
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: dialogTitle,
+        type: FileType.any,
+        lockParentWindow: true,
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (result == null) {
+        mpLocator.mpLog.i('No executable selected.');
+
+        return null;
+      }
+
+      final String? pickedFilePath = result.files.single.path;
+
+      if (pickedFilePath == null) {
+        return null;
+      }
+
+      mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+        pickedFilePath,
+      );
+
+      return pickedFilePath;
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking executable file', error: e);
+
+      return null;
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.executable] = false;
     }
   }
 
@@ -657,7 +919,7 @@ class MPDialogAux {
   }
 }
 
-enum MPFilePickerType { image, th2 }
+enum MPFilePickerType { image, th2, thconfig, executable }
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 

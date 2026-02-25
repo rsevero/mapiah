@@ -69,6 +69,7 @@ class _MPMultipleEndControlPointsClickedWidgetState
 
   String getEndControlPointName(MPSelectableEndControlPoint endControlPoint) {
     final THElement element = endControlPoint.element;
+
     String pointName = '';
 
     switch (element) {
@@ -104,6 +105,7 @@ class _MPMultipleEndControlPointsClickedWidgetState
     }
 
     int index = 1;
+
     for (final MPSelectableEndControlPoint clickedEndControlPoint
         in clickedEndControlPoints) {
       switch (clickedEndControlPoint.type) {

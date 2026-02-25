@@ -88,17 +88,23 @@ Future<int> main(List<String> args) async {
       );
       newContent = newContent.replaceAll(flatpakCommitRegex, '');
     } else if (path.endsWith('io.github.rsevero.mapiah.metainfo.xml')) {
-      final String releaseEntry =
-          '    <release version="$mapiahVersion" date="$today">\n'
-          '      <description>\n'
-          '        <p>Release description</p>\n'
-          '      </description>\n'
-          '    </release>\n';
-      if (releasesBlockRegex.hasMatch(newContent)) {
-        newContent = newContent.replaceFirstMapped(
-          releasesBlockRegex,
-          (m) => '${m[1]}$releaseEntry',
-        );
+      final RegExp releaseVersionRegex = RegExp(
+        '<release\\b[^>]*\\bversion\\s*=\\s*"${RegExp.escape(mapiahVersion)}"',
+      );
+
+      if (!releaseVersionRegex.hasMatch(newContent)) {
+        final String releaseEntry =
+            '    <release version="$mapiahVersion" date="$today">\n'
+            '      <description>\n'
+            '        <p>Release description</p>\n'
+            '      </description>\n'
+            '    </release>\n';
+        if (releasesBlockRegex.hasMatch(newContent)) {
+          newContent = newContent.replaceFirstMapped(
+            releasesBlockRegex,
+            (m) => '${m[1]}$releaseEntry',
+          );
+        }
       }
     } else {
       newContent = newContent.replaceAllMapped(

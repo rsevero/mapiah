@@ -133,6 +133,64 @@
     "description": "The tooltip for the new file button on the main page",
     "type": "text"
   },
+  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Open THConfig file and run Therion",
+  "@mapiahOpenTHConfigAndRunTherionButtonTooltip": {
+    "description": "The tooltip for the button that opens a THConfig file and runs Therion",
+    "type": "text"
+  },
+  "mapiahRunTherionButtonTooltip": "Run Therion",
+  "@mapiahRunTherionButtonTooltip": {
+    "description": "The tooltip for the Run Therion button",
+    "type": "text"
+  },
+  "mapiahTherionRunDialogTitle": "Therion output",
+  "@mapiahTherionRunDialogTitle": {
+    "description": "Title for the Therion output dialog",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusLabel": "Status:",
+  "@mapiahTherionRunStatusLabel": {
+    "description": "Label for Therion run status",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusRunning": "running",
+  "@mapiahTherionRunStatusRunning": {
+    "description": "Status while Therion is running",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusOk": "ok",
+  "@mapiahTherionRunStatusOk": {
+    "description": "Status shown when Therion finishes",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusWarning": "warning",
+  "@mapiahTherionRunStatusWarning": {
+    "description": "Status shown when Therion output has warnings",
+    "type": "text"
+  },
+  "mapiahTherionRunStatusError": "error",
+  "@mapiahTherionRunStatusError": {
+    "description": "Status shown when Therion output has errors",
+    "type": "text"
+  },
+  "mapiahTherionRunOutputLabel": "Output:",
+  "@mapiahTherionRunOutputLabel": {
+    "description": "Label for Therion output area",
+    "type": "text"
+  },
+  "mapiahTherionSelectTHConfigDialogTitle": "Select THConfig file",
+  "@mapiahTherionSelectTHConfigDialogTitle": {
+    "description": "Title for THConfig file picker dialog",
+    "type": "text"
+  },
+  "mpTherionCannotExecuteCommand": "Cannot execute command: {commandLine}",
+  "@mpTherionCannotExecuteCommand": {
+    "description": "Error message shown when Therion command execution fails",
+    "type": "text",
+    "placeholders": {
+      "commandLine": {}
+    }
+  },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
     "description": "The title for the keyboard shortcuts help dialog",
@@ -263,6 +321,16 @@
     "description": "The label for the cancel button",
     "type": "text"
   },
+  "mpButtonApply": "Apply",
+  "@mpButtonApply": {
+    "description": "The label for the apply button",
+    "type": "text"
+  },
+  "mpButtonSaveAndClose": "Save & Close",
+  "@mpButtonSaveAndClose": {
+    "description": "The label for the save and close button",
+    "type": "text"
+  },
   "mpButtonCreate": "Create",
   "@mpButtonCreate": {
     "description": "The label for the create button",
@@ -278,6 +346,11 @@
     "description": "The label for the multiple values choice type",
     "type": "text"
   },
+  "mpButtonResetAllSettings": "Reset all settings",
+  "@mpButtonResetAllSettings": {
+    "description": "The label for the reset all settings button",
+    "type": "text"
+  },
   "mpChoiceSet": "Set",
   "@mpChoiceSet": {
     "description": "The label for the set choice type",
@@ -286,6 +359,51 @@
   "mpChoiceUnset": "Unset",
   "@mpChoiceUnset": {
     "description": "The label for the unset choice type",
+    "type": "text"
+  },
+  "mpSettingsPageTitle": "Settings",
+  "@mpSettingsPageTitle": {
+    "description": "The title for the settings page",
+    "type": "text"
+  },
+  "mpSettingsSectionMain": "Main",
+  "@mpSettingsSectionMain": {
+    "description": "Section title for main settings",
+    "type": "text"
+  },
+  "mpSettingsSectionTH2Edit": "TH2 edit",
+  "@mpSettingsSectionTH2Edit": {
+    "description": "Section title for TH2 edit settings",
+    "type": "text"
+  },
+  "mpSettingsSettingMainLocaleID": "Language",
+  "@mpSettingsSettingMainLocaleID": {
+    "description": "Label for locale setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditLineThickness": "Line thickness",
+  "@mpSettingsSettingTH2EditLineThickness": {
+    "description": "Label for TH2 line thickness setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditPointRadius": "Point radius",
+  "@mpSettingsSettingTH2EditPointRadius": {
+    "description": "Label for TH2 point radius setting",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditSelectionTolerance": "Selection tolerance",
+  "@mpSettingsSettingTH2EditSelectionTolerance": {
+    "description": "Label for TH2 selection tolerance setting",
+    "type": "text"
+  },
+  "mpSettingsInvalidNumber": "Invalid number",
+  "@mpSettingsInvalidNumber": {
+    "description": "Validation message for invalid double values in settings",
+    "type": "text"
+  },
+  "mpSettingsInvalidInteger": "Invalid integer",
+  "@mpSettingsInvalidInteger": {
+    "description": "Validation message for invalid integer values in settings",
     "type": "text"
   },
   "mpCommandDescriptionAddArea": "Add area",
@@ -1414,7 +1532,7 @@
     "description": "The warning message for the station type option",
     "type": "text"
   },
-  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}",
+  "mpStatusBarMessageEditLinePointOrientationLSize": "Orientation {orientation}°{forcedOrientation}, LSize {lsize}{forcedLSize}",
   "@mpStatusBarMessageEditLinePointOrientationLSize": {
     "description": "The status bar message when editing a line point showing its orientation and length",
     "type": "text",
@@ -1890,6 +2008,11 @@
     "description": "The label for the select tool button",
     "type": "text"
   },
+  "th2FileEditPageSelectionWindowZoomStatusBarMessage": "Select a zoom area",
+  "@th2FileEditPageSelectionWindowZoomStatusBarMessage": {
+    "description": "The status bar message for the selection window zoom tool",
+    "type": "text"
+  },
   "th2FileEditPageUndo": "Undo '{undoDescription}' (Ctrl+Z)",
   "@th2FileEditPageUndo": {
     "description": "The label for the undo shortcut",
@@ -1931,6 +2054,11 @@
   "th2FileEditPageZoomToSelection": "Zoom to selection (2)",
   "@th2FileEditPageZoomToSelection": {
     "description": "The label for the zoom to selection button",
+    "type": "text"
+  },
+  "th2FileEditPageZoomToSelectionWindow": "Zoom selection window (5)",
+  "@th2FileEditPageZoomToSelectionWindow": {
+    "description": "The label for the zoom selection window button",
     "type": "text"
   },
   "th2FilePickSelectImageFile": "Select an image file",

@@ -4,7 +4,9 @@ mixin MPPosCommandMixin on MPCommand {
   late final MPCommand? posCommand;
 
   @override
-  void _posCreateUndoRedoCommand(TH2FileEditController th2FileEditController) {
+  void _execPreCreateUndoRedoCommand(
+    TH2FileEditController th2FileEditController,
+  ) {
     posCommand?.execute(th2FileEditController);
   }
 }

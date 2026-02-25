@@ -103,6 +103,42 @@ class AppLocalizationsEn extends AppLocalizations {
       'New file (Ctrl+N or Ctrl+Shift+N)';
 
   @override
+  String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
+      'Open THConfig file and run Therion';
+
+  @override
+  String get mapiahRunTherionButtonTooltip => 'Run Therion';
+
+  @override
+  String get mapiahTherionRunDialogTitle => 'Therion output';
+
+  @override
+  String get mapiahTherionRunStatusLabel => 'Status:';
+
+  @override
+  String get mapiahTherionRunStatusRunning => 'running';
+
+  @override
+  String get mapiahTherionRunStatusOk => 'ok';
+
+  @override
+  String get mapiahTherionRunStatusWarning => 'warning';
+
+  @override
+  String get mapiahTherionRunStatusError => 'error';
+
+  @override
+  String get mapiahTherionRunOutputLabel => 'Output:';
+
+  @override
+  String get mapiahTherionSelectTHConfigDialogTitle => 'Select THConfig file';
+
+  @override
+  String mpTherionCannotExecuteCommand(Object commandLine) {
+    return 'Cannot execute command: $commandLine';
+  }
+
+  @override
   String get mapiahKeyboardShortcutsTitle => 'Keyboard Shortcuts';
 
   @override
@@ -182,6 +218,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpButtonCancel => 'Cancel';
 
   @override
+  String get mpButtonApply => 'Apply';
+
+  @override
+  String get mpButtonSaveAndClose => 'Save & Close';
+
+  @override
   String get mpButtonCreate => 'Create';
 
   @override
@@ -191,10 +233,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpChoiceMultipleValues => 'multiple values';
 
   @override
+  String get mpButtonResetAllSettings => 'Reset all settings';
+
+  @override
   String get mpChoiceSet => 'Set';
 
   @override
   String get mpChoiceUnset => 'Unset';
+
+  @override
+  String get mpSettingsPageTitle => 'Settings';
+
+  @override
+  String get mpSettingsSectionMain => 'Main';
+
+  @override
+  String get mpSettingsSectionTH2Edit => 'TH2 edit';
+
+  @override
+  String get mpSettingsSettingMainLocaleID => 'Language';
+
+  @override
+  String get mpSettingsSettingTH2EditLineThickness => 'Line thickness';
+
+  @override
+  String get mpSettingsSettingTH2EditPointRadius => 'Point radius';
+
+  @override
+  String get mpSettingsSettingTH2EditSelectionTolerance =>
+      'Selection tolerance';
+
+  @override
+  String get mpSettingsInvalidNumber => 'Invalid number';
+
+  @override
+  String get mpSettingsInvalidInteger => 'Invalid integer';
 
   @override
   String get mpCommandDescriptionAddArea => 'Add area';
@@ -913,7 +986,7 @@ class AppLocalizationsEn extends AppLocalizations {
     Object lsize,
     Object forcedLSize,
   ) {
-    return 'Orientation $orientation°$forcedOrientation, lsize $lsize$forcedLSize';
+    return 'Orientation $orientation°$forcedOrientation, LSize $lsize$forcedLSize';
   }
 
   @override
@@ -1208,6 +1281,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Select (C)';
 
   @override
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage =>
+      'Select a zoom area';
+
+  @override
   String th2FileEditPageUndo(Object undoDescription) {
     return 'Undo \'$undoDescription\' (Ctrl+Z)';
   }
@@ -1232,6 +1309,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageZoomToSelection => 'Zoom to selection (2)';
+
+  @override
+  String get th2FileEditPageZoomToSelectionWindow =>
+      'Zoom selection window (5)';
 
   @override
   String get th2FilePickSelectImageFile => 'Select an image file';

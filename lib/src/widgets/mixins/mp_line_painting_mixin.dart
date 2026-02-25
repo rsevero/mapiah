@@ -9,8 +9,7 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
-import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 
 mixin MPLinePaintingMixin {
   (
@@ -99,9 +98,7 @@ mixin MPLinePaintingMixin {
       line: line,
       showLineDirectionTicks: showLineDirectionTicks,
       showMarksOnLineSegments: true,
-      showSizeOrientationOnLineSegments:
-          th2FileEditController.stateController.state
-              is MPTH2FileEditStateEditSingleLine,
+      showSizeOrientationOnLineSegments: false,
       th2FileEditController: th2FileEditController,
     );
     final THLineType lineType = line.lineType;

@@ -1636,22 +1636,22 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void zoomIn({bool fineZoom = false}) {
+  void zoomIn({bool fineZoom = false, Offset? zoomCenter}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.zoomIn');
     try {
-      return super.zoomIn(fineZoom: fineZoom);
+      return super.zoomIn(fineZoom: fineZoom, zoomCenter: zoomCenter);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void zoomOut({bool fineZoom = false}) {
+  void zoomOut({bool fineZoom = false, Offset? zoomCenter}) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.zoomOut');
     try {
-      return super.zoomOut(fineZoom: fineZoom);
+      return super.zoomOut(fineZoom: fineZoom, zoomCenter: zoomCenter);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -1674,6 +1674,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.zoomToFit');
     try {
       return super.zoomToFit(zoomFitToType: zoomFitToType);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void zoomToSelectionWindow(Rect selectionWindow) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.zoomToSelectionWindow');
+    try {
+      return super.zoomToSelectionWindow(selectionWindow);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

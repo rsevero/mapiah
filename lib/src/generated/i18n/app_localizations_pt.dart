@@ -103,6 +103,43 @@ class AppLocalizationsPt extends AppLocalizations {
       'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
 
   @override
+  String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
+      'Abrir arquivo THConfig e executar Therion';
+
+  @override
+  String get mapiahRunTherionButtonTooltip => 'Executar Therion';
+
+  @override
+  String get mapiahTherionRunDialogTitle => 'Saída do Therion';
+
+  @override
+  String get mapiahTherionRunStatusLabel => 'Situação:';
+
+  @override
+  String get mapiahTherionRunStatusRunning => 'rodando';
+
+  @override
+  String get mapiahTherionRunStatusOk => 'ok';
+
+  @override
+  String get mapiahTherionRunStatusWarning => 'aviso';
+
+  @override
+  String get mapiahTherionRunStatusError => 'erro';
+
+  @override
+  String get mapiahTherionRunOutputLabel => 'Saída:';
+
+  @override
+  String get mapiahTherionSelectTHConfigDialogTitle =>
+      'Selecionar arquivo THConfig';
+
+  @override
+  String mpTherionCannotExecuteCommand(Object commandLine) {
+    return 'Não foi possível executar o comando: $commandLine';
+  }
+
+  @override
   String get mapiahKeyboardShortcutsTitle => 'Atalhos de teclado';
 
   @override
@@ -182,6 +219,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpButtonCancel => 'Cancelar';
 
   @override
+  String get mpButtonApply => 'Aplicar';
+
+  @override
+  String get mpButtonSaveAndClose => 'Salvar e fechar';
+
+  @override
   String get mpButtonCreate => 'Criar';
 
   @override
@@ -191,10 +234,41 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpChoiceMultipleValues => 'vários valores';
 
   @override
+  String get mpButtonResetAllSettings => 'Redefinir todas as configurações';
+
+  @override
   String get mpChoiceSet => 'Definido';
 
   @override
   String get mpChoiceUnset => 'Não definido';
+
+  @override
+  String get mpSettingsPageTitle => 'Configurações';
+
+  @override
+  String get mpSettingsSectionMain => 'Principal';
+
+  @override
+  String get mpSettingsSectionTH2Edit => 'Edição TH2';
+
+  @override
+  String get mpSettingsSettingMainLocaleID => 'Idioma';
+
+  @override
+  String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
+
+  @override
+  String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
+
+  @override
+  String get mpSettingsSettingTH2EditSelectionTolerance =>
+      'Tolerância de seleção';
+
+  @override
+  String get mpSettingsInvalidNumber => 'Número inválido';
+
+  @override
+  String get mpSettingsInvalidInteger => 'Inteiro inválido';
 
   @override
   String get mpCommandDescriptionAddArea => 'Adicionar área';
@@ -922,7 +996,7 @@ class AppLocalizationsPt extends AppLocalizations {
     Object lsize,
     Object forcedLSize,
   ) {
-    return 'Orientação: $orientation°$forcedOrientation, tamanho: $lsize$forcedLSize';
+    return 'Orientação: $orientation°$forcedOrientation, Tamanho: $lsize$forcedLSize';
   }
 
   @override
@@ -1219,6 +1293,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSelectTool => 'Selecionar (C)';
 
   @override
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage =>
+      'Clique e arraste para definir a área para zoom';
+
+  @override
   String th2FileEditPageUndo(Object undoDescription) {
     return 'Desfazer \'$undoDescription\' (Ctrl+Z)';
   }
@@ -1227,7 +1305,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomIn => 'Aproximar (+)';
 
   @override
-  String get th2FileEditPageZoomOneToOne => 'Mostrar 1:1 (1)';
+  String get th2FileEditPageZoomOneToOne => 'Zoom 1:1 (1)';
 
   @override
   String get th2FileEditPageZoomOptions => 'Opções de zoom';
@@ -1236,13 +1314,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageZoomOut => 'Afastar (-)';
 
   @override
-  String get th2FileEditPageZoomOutFile => 'Mostrar arquivo (4)';
+  String get th2FileEditPageZoomOutFile => 'Zoom arquivo (4)';
 
   @override
-  String get th2FileEditPageZoomOutScrap => 'Mostrar croqui (3)';
+  String get th2FileEditPageZoomOutScrap => 'Zoom croqui (3)';
 
   @override
-  String get th2FileEditPageZoomToSelection => 'Mostrar seleção (2)';
+  String get th2FileEditPageZoomToSelection => 'Zoom seleção (2)';
+
+  @override
+  String get th2FileEditPageZoomToSelectionWindow =>
+      'Zoom na área de seleção (5)';
 
   @override
   String get th2FilePickSelectImageFile => 'Selecione um arquivo de imagem';
@@ -1954,7 +2036,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointPillarWithCurtains => 'Pilar com cortinas';
 
   @override
-  String get thPointPopcorn => 'Popcorn';
+  String get thPointPopcorn => 'Coralóide';
 
   @override
   String get thPointRaft => 'Balsa';

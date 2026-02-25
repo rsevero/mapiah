@@ -55,7 +55,7 @@ class MPPLATypeWidget extends StatelessWidget {
   void _onPLATypeTap(BuildContext context) {
     Rect? boundingBox = MPInteractionAux.getWidgetRectFromContext(
       widgetContext: context,
-      ancestorGlobalKey: th2FileEditController.thFileWidgetKey,
+      ancestorGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
     );
 
     final Offset outerAnchorPosition = boundingBox == null

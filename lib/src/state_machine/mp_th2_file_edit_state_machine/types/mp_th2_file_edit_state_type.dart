@@ -5,11 +5,11 @@ enum MPTH2FileEditStateType {
   addLine,
   addLineToArea,
   addPoint,
-  editLinePointOrientationLSize,
   editSingleLine,
   movingElements,
   movingEndControlPoints,
   movingSingleControlPoint,
   selectEmptySelection,
+  selectionWindowZoom,
   selectNonEmptySelection,
 }

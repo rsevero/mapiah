@@ -1,7 +1,9 @@
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_segment.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_segment.dart';
 
 const double maxDelta = 1e-12;
@@ -183,49 +185,101 @@ void main() {
   group('MPNumericAux.directionOffsetToDegrees', () {
     test('cardinal directions use azimuth convention', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, -1)),
-        closeTo(0.0, maxDelta),
-      );
-      expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, 0)),
-        closeTo(90.0, maxDelta),
-      );
-      expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, 1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, -1)),
         closeTo(180.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, 0)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, 0)),
+        closeTo(90.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, 1)),
+        closeTo(0.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, 0)),
         closeTo(270.0, maxDelta),
       );
     });
 
     test('diagonal directions map as expected', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(1, -1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, 1)),
         closeTo(45.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(-1, -1)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, 1)),
         closeTo(315.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToAzimuth(const Offset(-1, -1)),
+        closeTo(225.0, maxDelta),
+      );
+      expect(
+        MPNumericAux.directionOffsetToAzimuth(const Offset(1, -1)),
+        closeTo(135.0, maxDelta),
       );
     });
 
     test('zero direction returns 0.0', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(Offset.zero),
+        MPNumericAux.directionOffsetToAzimuth(Offset.zero),
         closeTo(0.0, maxDelta),
       );
     });
 
     test('magnitude does not matter', () {
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(0, -10)),
-        closeTo(0.0, maxDelta),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(0, -10)),
+        closeTo(180.0, maxDelta),
       );
       expect(
-        MPNumericAux.directionOffsetToDegrees(const Offset(10, 0)),
+        MPNumericAux.directionOffsetToAzimuth(const Offset(10, 0)),
         closeTo(90.0, maxDelta),
+      );
+    });
+  });
+
+  group('MPNumericAux.rectContainsPointInclusive', () {
+    final Rect rect = Rect.fromLTRB(-520.0, 62.0, -240.0, 192.0);
+
+    test('includes left and top edges', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-520.0, 62.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('includes right and bottom edges', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-240.0, 192.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('includes point on left-bottom corner', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-520.0, 192.0),
+        ),
+        isTrue,
+      );
+    });
+
+    test('excludes point outside rect', () {
+      expect(
+        MPNumericAux.rectContainsPointInclusive(
+          rect: rect,
+          point: const Offset(-239.999, 192.0),
+        ),
+        isFalse,
       );
     });
   });
@@ -296,6 +350,62 @@ void main() {
     });
   });
 
+  group('MPBezierCurve.length', () {
+    test(
+      'returns near straight-line distance for collinear control points',
+      () {
+        const MPBezierCurve curve = MPCubicBezierCurve(
+          start: Offset(0, 0),
+          c1: Offset(1, 0),
+          c2: Offset(2, 0),
+          end: Offset(3, 0),
+        );
+
+        expect(curve.length(), closeTo(3.0, maxDelta));
+      },
+    );
+
+    test('returns zero for degenerate cubic', () {
+      const MPCubicBezierCurve curve = MPCubicBezierCurve(
+        start: Offset(2, 2),
+        c1: Offset(2, 2),
+        c2: Offset(2, 2),
+        end: Offset(2, 2),
+      );
+
+      expect(curve.length(), 0.0);
+    });
+  });
+
+  group('MPSegment.length / MPStraightSegment.length', () {
+    test('returns Euclidean distance for straight segment', () {
+      const MPStraightSegment segment = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(3, 4),
+      );
+
+      expect(segment.length(), closeTo(5.0, maxDelta));
+    });
+
+    test('returns zero for degenerate straight segment', () {
+      const MPStraightSegment segment = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(1, 1),
+      );
+
+      expect(segment.length(), 0.0);
+    });
+
+    test('works through MPSegment polymorphic reference', () {
+      const MPSegment segment = MPStraightSegment(
+        start: Offset(-1, -1),
+        end: Offset(2, 3),
+      );
+
+      expect(segment.length(), closeTo(5.0, maxDelta));
+    });
+  });
+
   group('MPNumericAux.straightTangent', () {
     test('returns a unit tangent from start to end', () {
       const MPStraightSegment s = MPStraightSegment(
@@ -339,8 +449,45 @@ void main() {
       expect(t.distance, closeTo(1.0, maxDelta));
     });
 
+    test('averages end of first and start of second (straight segments) 2', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      expect(t.dx, closeTo(1.0, maxDelta));
+      expect(t.dy, closeTo(0.0, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
     test('uses bezier end tangent when first is a cubic curve', () {
-      const MPCubicBezierCurve c1 = MPCubicBezierCurve(
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(0, 0),
+        c1: Offset(0.33, 0),
+        c2: Offset(0.66, 0),
+        end: Offset(1, 0),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 0),
+        end: Offset(1, 1),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      final double expected = math.sqrt(2) / 2;
+      expect(t.dx, closeTo(expected, maxDelta));
+      expect(t.dy, closeTo(expected, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('uses bezier end tangent when first is a cubic curve 2', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
         start: Offset(0, 0),
         c1: Offset(1, 0),
         c2: Offset(2, 0),
@@ -351,11 +498,34 @@ void main() {
         end: Offset(3, 1),
       );
 
-      final Offset t = MPNumericAux.averageTangent(c1, s2);
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
 
-      final double expected = math.sqrt(2) / 2;
-      expect(t.dx, closeTo(expected, maxDelta));
-      expect(t.dy, closeTo(expected, maxDelta));
+      final double expectedY = math.sqrt(0.1);
+      final double expectedX = 3 * expectedY;
+
+      expect(t.dx, closeTo(expectedX, maxDelta));
+      expect(t.dy, closeTo(expectedY, maxDelta));
+      expect(t.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('uses bezier when both are cubic curves', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final Offset t = MPNumericAux.averageTangent(s1, s2);
+
+      expect(t.dx, closeTo(1.0, maxDelta));
+      expect(t.dy, closeTo(0.0, maxDelta));
       expect(t.distance, closeTo(1.0, maxDelta));
     });
 
@@ -390,22 +560,39 @@ void main() {
   });
 
   group('MPNumericAux.normalFromTangent', () {
-    test('returns a unit normal (counterclockwise) from a unit tangent', () {
+    test('returns a unit normal from a unit tangent', () {
       final Offset n = MPNumericAux.normalFromTangent(const Offset(1, 0));
 
       expect(n.dx, closeTo(0.0, maxDelta));
+      expect(n.dy, closeTo(1.0, maxDelta));
+      expect(n.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('returns a unit normal from a unit tangent 2', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(-1, 0));
+
+      expect(n.dx, closeTo(0, maxDelta));
       expect(n.dy, closeTo(-1.0, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 
-    test('returns a unit normal (clockwise) from a unit tangent', () {
-      final Offset n = MPNumericAux.normalFromTangent(
-        const Offset(1, 0),
-        clockwise: true,
-      );
+    test('returns a unit normal from a non unit tangent', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(1, 1));
 
-      expect(n.dx, closeTo(0.0, maxDelta));
-      expect(n.dy, closeTo(1.0, maxDelta));
+      final double expected = math.sqrt(2) / 2;
+
+      expect(n.dx, closeTo(-expected, maxDelta));
+      expect(n.dy, closeTo(expected, maxDelta));
+      expect(n.distance, closeTo(1.0, maxDelta));
+    });
+
+    test('returns a unit normal from a non unit tangent 2', () {
+      final Offset n = MPNumericAux.normalFromTangent(const Offset(-1, 1));
+
+      final double expected = math.sqrt(2) / 2;
+
+      expect(n.dx, closeTo(-expected, maxDelta));
+      expect(n.dy, closeTo(-expected, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 
@@ -413,12 +600,94 @@ void main() {
       final Offset n = MPNumericAux.normalFromTangent(const Offset(3, 4));
 
       expect(n.dx, closeTo(-0.8, maxDelta));
-      expect(n.dy, closeTo(-0.6, maxDelta));
+      expect(n.dy, closeTo(0.6, maxDelta));
       expect(n.distance, closeTo(1.0, maxDelta));
     });
 
     test('zero tangent returns zero', () {
       expect(MPNumericAux.normalFromTangent(Offset.zero), Offset.zero);
+    });
+  });
+
+  group('MPNumericAux.segmentNormal', () {
+    test('2 straight segments', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: false,
+      );
+      expect(normal, closeTo(0.0, maxDelta));
+    });
+
+    test('2 straight segments (reversed)', () {
+      const MPStraightSegment s1 = MPStraightSegment(
+        start: Offset(0, 0),
+        end: Offset(1, 1),
+      );
+      const MPStraightSegment s2 = MPStraightSegment(
+        start: Offset(1, 1),
+        end: Offset(2, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: true,
+      );
+      expect(normal, closeTo(180.0, maxDelta));
+    });
+
+    test('2 Bézier curve segments', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: false,
+      );
+      expect(normal, closeTo(0.0, maxDelta));
+    });
+
+    test('2 Bézier curve segments (reversed)', () {
+      const MPCubicBezierCurve s1 = MPCubicBezierCurve(
+        start: Offset(-1.00005507808, 0),
+        c1: Offset(-0.99873327689, 0.55342925736),
+        c2: Offset(-0.55342925736, 0.99873327689),
+        end: Offset(0, 1.00005507808),
+      );
+      const MPCubicBezierCurve s2 = MPCubicBezierCurve(
+        start: Offset(0, 1.00005507808),
+        c1: Offset(0.55342925736, 0.99873327689),
+        c2: Offset(0.99873327689, 0.55342925736),
+        end: Offset(1.00005507808, 0),
+      );
+
+      final double normal = MPNumericAux.segmentNormalFromSegments(
+        firstSegment: s1,
+        secondSegment: s2,
+        isReversed: true,
+      );
+      expect(normal, closeTo(180.0, maxDelta));
     });
   });
 }

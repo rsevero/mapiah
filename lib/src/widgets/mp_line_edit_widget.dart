@@ -6,25 +6,37 @@ import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
+import 'package:mapiah/src/painters/th_lsize_orientation_painter.dart';
+import 'package:mapiah/src/painters/types/mp_lsize_orientation_info.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
-import 'package:mapiah/src/widgets/auxiliary/th_line_Painter_line_info.dart';
+import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
+  final TH2FileEditElementEditController elementEditController;
+  final MPVisualController visualController;
+  final THFile thFile;
 
   MPLineEditWidget({required this.th2FileEditController, required super.key})
-    : selectionController = th2FileEditController.selectionController;
+    : selectionController = th2FileEditController.selectionController,
+      elementEditController = th2FileEditController.elementEditController,
+      visualController = th2FileEditController.visualController,
+      thFile = th2FileEditController.thFile;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +44,8 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
       builder: (_) {
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerEditLine;
+        elementEditController.linePointLSize;
+        elementEditController.linePointOrientation;
 
         final Iterable<MPSelectedElement> logicalSelectedElements =
             selectionController.mpSelectedElementsLogical.values;
@@ -41,12 +55,12 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
           return SizedBox.shrink();
         }
 
-        final MPVisualController visualController =
-            th2FileEditController.visualController;
         final THPointPaint selectedEndPointPaint = visualController
             .getSelectedEndPointPaint();
-        final THPointPaint unselectedEndPointPaint = visualController
-            .getUnselectedEndPointPaint();
+        final THPointPaint unselectedStraightEndPointPaint = visualController
+            .getUnselectedStraightEndPointPaint();
+        final THPointPaint unselectedBezierCurveEndPointPaint = visualController
+            .getUnselectedBezierCurveEndPointPaint();
         final THPointPaint unselectedControlPointPaint = visualController
             .getUnselectedControlPointPaint();
         final THPointPaint selectedControlPointPaint = visualController
@@ -76,13 +90,13 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         final List<CustomPainter> painters = [];
         final THLine line =
             (logicalSelectedElements.first.originalElementClone as THLine)
-              ..setTHFile(th2FileEditController.thFile);
+              ..setTHFile(thFile);
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,
         ) = getLineSegmentsAndEndpointsMaps(
           line: line,
-          thFile: th2FileEditController.thFile,
+          thFile: thFile,
           returnLineSegments: false,
         );
         final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
@@ -92,6 +106,19 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
           showSizeOrientationOnLineSegments: true,
           th2FileEditController: th2FileEditController,
         );
+        final bool settingLSizeOrientation =
+            ((elementEditController.currentOptionTypeBeingEdited ==
+                    THCommandOptionType.orientation) ||
+                (elementEditController.currentOptionTypeBeingEdited ==
+                    THCommandOptionType.lSize)) &&
+            (elementEditController.linePointLSize != null) &&
+            (elementEditController.linePointOrientation != null);
+        final Map<int, MPLineSegmentSizeOrientationInfo>
+        lineSegmentsWithSizeOrientation =
+            lineInfo.lineSegmentsWithLSizeOrientation;
+        final bool lSizeOrientationExists =
+            (lineInfo.showSizeOrientationOnLineSegments &&
+            lineSegmentsWithSizeOrientation.isNotEmpty);
 
         CustomPainter painter = THLinePainter(
           lineInfo: lineInfo,
@@ -116,11 +143,61 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
               /// End points should only be painted as selected when end points
               /// are being selected. If there is a control point selected, it
               /// takes precedence.
-              final THPointPaint pointPaint =
-                  ((selectedControlPoint == null) &&
-                      selectionController.getIsLineSegmentSelected(lineSegment))
-                  ? selectedEndPointPaint
-                  : unselectedEndPointPaint;
+              final THPointPaint pointPaint;
+              final bool noControlPointSelected =
+                  (selectedControlPoint == null);
+              final bool lineSegmentSelected = selectionController
+                  .getIsLineSegmentSelected(lineSegment);
+
+              if (noControlPointSelected && lineSegmentSelected) {
+                pointPaint = selectedEndPointPaint;
+
+                if (settingLSizeOrientation) {
+                  painters.add(
+                    THLSizeOrientationPainter(
+                      lSizeOrientationInfo: MPLSizeOrientationInfo(
+                        offset: point.position,
+                        lSize: elementEditController.linePointLSize!,
+                        orientation:
+                            elementEditController.linePointOrientation!,
+                      ),
+                      th2FileEditController: th2FileEditController,
+                      storeCompassPath: true,
+                    ),
+                  );
+                } else if (lSizeOrientationExists &&
+                    lineSegmentsWithSizeOrientation.containsKey(
+                      lineSegment.mpID,
+                    )) {
+                  _addLSizeOrientationPainter(
+                    position: point.position,
+                    lineSegmentMPID: lineSegment.mpID,
+                    lineSegmentsWithSizeOrientation:
+                        lineSegmentsWithSizeOrientation,
+                    painters: painters,
+                  );
+                }
+              } else {
+                if (lSizeOrientationExists &&
+                    lineSegmentsWithSizeOrientation.containsKey(
+                      lineSegment.mpID,
+                    )) {
+                  _addLSizeOrientationPainter(
+                    position: point.position,
+                    lineSegmentMPID: lineSegment.mpID,
+                    lineSegmentsWithSizeOrientation:
+                        lineSegmentsWithSizeOrientation,
+                    painters: painters,
+                  );
+                }
+
+                if (lineSegment is THStraightLineSegment) {
+                  pointPaint = unselectedStraightEndPointPaint;
+                } else {
+                  pointPaint = unselectedBezierCurveEndPointPaint;
+                }
+              }
+
               final THEndPointPainter endPointPainter = THEndPointPainter(
                 position: point.position,
                 pointPaint: pointPaint,
@@ -164,6 +241,28 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
           ),
         );
       },
+    );
+  }
+
+  void _addLSizeOrientationPainter({
+    required Offset position,
+    required int lineSegmentMPID,
+    required Map<int, MPLineSegmentSizeOrientationInfo>
+    lineSegmentsWithSizeOrientation,
+    required List<CustomPainter> painters,
+  }) {
+    final MPLineSegmentSizeOrientationInfo sizeOrientationInfo =
+        lineSegmentsWithSizeOrientation[lineSegmentMPID]!;
+
+    painters.add(
+      THLSizeOrientationPainter(
+        lSizeOrientationInfo: MPLSizeOrientationInfo(
+          offset: position,
+          lSize: sizeOrientationInfo.lSize,
+          orientation: sizeOrientationInfo.orientation,
+        ),
+        th2FileEditController: th2FileEditController,
+      ),
     );
   }
 }

@@ -1,10 +1,5 @@
-class THCustomException implements Exception {
-  String message;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THCustomException(this.message);
-
-  @override
-  String toString() {
-    return message;
-  }
+class THCustomException extends THBaseException {
+  THCustomException(super.message);
 }

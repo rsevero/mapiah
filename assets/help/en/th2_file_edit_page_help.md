@@ -10,7 +10,6 @@ This is where all TH2 file editing is done.
 - [Element options](#element-options)
 - [Save](#save)
   - [Original file format](#original-file-format)
-  - [Web releases](#web-releases)
 - [Scraps](#scraps)
 - [Simplify lines](#simplify-lines)
   - [Simplification methods](#simplification-methods)
@@ -52,6 +51,7 @@ In case there are available redoes when a new edit operation is performed, the r
   * ![Zoom in button](assets/help/images/buttonZoomIn.png "Zoom in")  _Zoom in_: zooms in the TH2 file view. (+)
   * ![Zoom One to One button](assets/help/images/buttonZoomOneToOne.png "Zoom one to one")  _Zoom one to one_: zooms the TH2 file view to show the elements at their original size, i.e., each TH2 point corresponding to a screen pixel. (1)
   * ![Zoom to selection button](assets/help/images/buttonZoomSelection.png "Zoom to selection")  _Zoom to selection_: zooms the TH2 file view to show the currently selected elements. (2)
+  * ![Zoom to selection window button](assets/help/images/buttonZoomSelectionWindow.png "Zoom to selection window")  _Zoom to selection window_: zooms the TH2 file view to show the window selected by the user with a mouse drag. (5)
   * ![Zoom to file button](assets/help/images/buttonZoomFile.png "Zoom to file")  _Zoom to file_: zooms the TH2 file view to show all elements in the file. (3)
   * ![Zoom to scrap button](assets/help/images/buttonZoomScrap.png "Zoom to scrap")  _Zoom to scrap_: zooms the TH2 file view to show the currently selected scrap. (4)
   * ![Zoom out button](assets/help/images/buttonZoomOut.png "Zoom out")  _Zoom out_: zooms out the TH2 file view. (-)
@@ -81,9 +81,6 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 * Areas with no border references are removed.
 * Line options defined in [LINE DATA] area are moved to the line definition. Not to be confunded with line point options that are defined in [LINE DATA] area and are preserved there.
 * Subtype options defined before the first line point or on the first one are transformed to line subtype.
-
-### Web releases
-Saving on web releases are actually download requests. In case you have your browser set to automatically download to a default download folder, please check there for the updated file after saving.
 
 ## Scraps
 It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.

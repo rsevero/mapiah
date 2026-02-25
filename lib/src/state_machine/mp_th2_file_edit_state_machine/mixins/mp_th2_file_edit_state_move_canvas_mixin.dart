@@ -18,7 +18,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
-    bool handled = false;
+    bool keyProcessed = false;
 
     switch (event.logicalKey) {
       case LogicalKeyboardKey.keyA:
@@ -29,7 +29,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addArea,
           );
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyC:
         if (!isAltPressed &&
@@ -37,7 +37,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isMetaPressed &&
             !isShiftPressed) {
           selectionController.setSelectionState();
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyK:
         if (!isCtrlPressed && !isMetaPressed && !isShiftPressed) {
@@ -46,18 +46,48 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           } else {
             th2FileEditController.elementEditController.addScrap();
           }
-          handled = true;
+          keyProcessed = true;
+        } else if (isCtrlPressed || isMetaPressed) {
+          if (!isAltPressed && !isShiftPressed) {
+            final BuildContext? context = th2FileEditController
+                .getTHFileWidgetGlobalKey()
+                .currentContext;
+
+            if (context == null) {
+              throw Exception(
+                'At MPTH2FileEditStateMoveCanvasMixin._onKeyDownEvent() keyK: unable to get TH file widget context to show help dialog.',
+              );
+            }
+
+            final AppLocalizations appLocalizations =
+                mpLocator.appLocalizations;
+
+            MPDialogAux.showHelpDialog(
+              context,
+              mpHelpPageKeyboardShortcutsEdit,
+              appLocalizations.mapiahKeyboardShortcutsTitle,
+            );
+            keyProcessed = true;
+          }
         }
       case LogicalKeyboardKey.keyI:
-        if (!isShiftPressed && !isCtrlPressed && !isMetaPressed) {
-          if (isAltPressed) {
-            th2FileEditController.overlayWindowController.toggleOverlayWindow(
-              MPWindowType.changeImage,
-            );
-          } else {
-            th2FileEditController.elementEditController.addImage();
+        if (isCtrlPressed || isMetaPressed) {
+          if (!isAltPressed && !isShiftPressed) {
+            th2FileEditController.elementEditController
+                .toggleAllImagesVisibility();
+            keyProcessed = true;
           }
-          handled = true;
+        } else {
+          if (!isShiftPressed) {
+            if (isAltPressed) {
+              th2FileEditController.overlayWindowController.toggleOverlayWindow(
+                MPWindowType.changeImage,
+              );
+            } else {
+              th2FileEditController.elementEditController.addImage();
+            }
+            keyProcessed = true;
+          }
         }
       case LogicalKeyboardKey.keyL:
         if (!isAltPressed &&
@@ -67,7 +97,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addLine,
           );
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyN:
         if (!isAltPressed &&
@@ -89,7 +119,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.editSingleLine,
           );
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyP:
         if (!isAltPressed &&
@@ -99,17 +129,17 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.stateController.setState(
             MPTH2FileEditStateType.addPoint,
           );
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyS:
         if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
           if (th2FileEditController.enableSaveButton) {
-            if (isShiftPressed && !kIsWeb) {
+            if (isShiftPressed) {
               th2FileEditController.saveAsTH2File();
             } else {
               th2FileEditController.saveTH2File();
             }
-            handled = true;
+            keyProcessed = true;
           }
         }
       case LogicalKeyboardKey.keyY:
@@ -118,7 +148,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isShiftPressed &&
             th2FileEditController.hasRedo) {
           th2FileEditController.redo();
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyZ:
         if ((isCtrlPressed || isMetaPressed) &&
@@ -126,21 +156,21 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             !isShiftPressed &&
             th2FileEditController.hasUndo) {
           th2FileEditController.undo();
-          handled = true;
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
         selectionController.removeSelected();
-        handled = true;
+        keyProcessed = true;
       case LogicalKeyboardKey.escape:
         selectionController.deselectAllElements();
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.selectEmptySelection,
         );
-        handled = true;
+        keyProcessed = true;
     }
 
-    if (!handled) {
+    if (!keyProcessed) {
       switch (event.character) {
         case '1':
           th2FileEditController.zoomOneToOne();
@@ -154,6 +184,10 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.scrap);
         case '4':
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        case '5':
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.selectionWindowZoom,
+          );
         case '+':
           th2FileEditController.zoomIn(fineZoom: false);
         case '-':
@@ -167,21 +201,23 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
 
-    if (isShiftPressed && isCtrlPressed) {
-      return;
-    }
-
-    if (isShiftPressed) {
+    if (isShiftPressed && !isCtrlPressed) {
       th2FileEditController.moveCanvasHorizontally(
         left: event.scrollDelta.dy < 0,
       );
-    } else if (isCtrlPressed) {
+    } else if (isCtrlPressed && !isShiftPressed) {
       th2FileEditController.moveCanvasVertically(up: event.scrollDelta.dy < 0);
     } else {
       if (event.scrollDelta.dy < 0) {
-        th2FileEditController.zoomIn(fineZoom: true);
+        th2FileEditController.zoomIn(
+          fineZoom: true,
+          zoomCenter: event.localPosition,
+        );
       } else if (event.scrollDelta.dy > 0) {
-        th2FileEditController.zoomOut(fineZoom: true);
+        th2FileEditController.zoomOut(
+          fineZoom: true,
+          zoomCenter: event.localPosition,
+        );
       }
     }
     th2FileEditController.triggerAllElementsRedraw();

@@ -10,7 +10,7 @@ class THPointPaint {
   final List<Paint> highlightBorders;
 
   THPointPaint({
-    this.radius = thDefaultPointRadius,
+    this.radius = mpDefaultPointRadius,
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,

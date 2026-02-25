@@ -1,19 +1,111 @@
 # Changelog
 
-## 0.2.34 - not yet released
+## 0.2.37 - not yet released
+* New features:
+  * Created Settings page.
+  * Settings page with real time per setting type validation.
+  * Settings page with "reset" button for each setting and for all settings.
+  * Created new settings type: FilePickerExecutable.
+  * Running Therion.
+  * Tracking warnings and errors on Therion run output.
+* Fixed bugs:
+  * 'Cancel' button on settings page not closing page.
+  * Therion run output should be selectable as a whole and not only single lines.
+* Infrastructure maintenance:
+  * Included "Current status" section in README.md. [requested by CaverBruce]
+  * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.
+  * Moving business logic of running therion from MPRunTherionDialogWidget to new MPTherionRunner.
+  * Added MPTherionRunner ok < warning < error escalation test.
+  * Added multi line selection + clickable warnings and errors test.
+  * MPTherionRunner checking exit code at end of therion run.
+  * Fixing therion run for flatpak releases.
+
+## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
+* New features:
+  * Allow multiple "add line segment" operations in sucession. [requested by Edvard]
+  * Create shortcut to toggle all images visibility (keyboard shortcut Ctrl+I).
+  * Show (and edit) orientation and lsize on the line points during edit.
+* Fixed bugs:
+  * Main README.md file stills mentioning the web version of Mapiah, which was removed in version 0.2.31 [reported by CaverBruce at issue [#13](https://github.com/rsevero/mapiah/issues/13)]
+  * Slash produced by keyboard combinations (for example, AltRght + Q) is not processed as a shortcut to add line segments between selected line segments.
+  * When adding line segments through keyboard shortcut '/', if there are no adjacent line segments selected, Mapiah throws instead of just doing nothing. [reported by Edvard]
+  * Parsing scrap scales with 8 numbers but no unit failed. [reported by CaverBruce as issue [#15](https://github.com/rsevero/mapiah/issues/15)]
+  * Undo of Bézier curve line segment addition with keyboard shortcut '/' not working.
+  * Parsing scrap projection value in brackets failing. [reported by CaverBruce as issue [#14](https://github.com/rsevero/mapiah/issues/14)]
+  * Creating a line and making one of its points smooth by overlay option window throws.
+  * MPNumericAux directionOffsetToDegrees() and normalFromTangent() returning wrong values for some directions.
+  * Fixing popcorn point type translation. [reported by Daniel Bean]
+  * LSize and Orientation arrows not presented when end point is selected.
+  * Interactive Orientation arrow not moving with azimuth picker arrow is moved.
+  * Azimuth picker arrow not moving when interactive orientation arrow is moved.
+  * LSize text value in lsize option window does not change when lsize is interactivelly changed.
+  * LSize interactive arrow size does not change when LSize text value in lsize option window changes.
+* Infrastructure maintenance:
+  * Testing all possible variations of scrap scale option parsing.
+  * Custom exceptions should provide trace.
+  * Renaming _execPrePrepareUndoRedoInfo and _execPreCreateUndoRedoCommand at MPCommand.
+  * Creating MPAddLineSegmentCommand.atExistingLineSegmentPosition().
+  * Removing all references to web version.
+  * Making custom exceptions be presented by showUnhandledErrorDialog() at main.dart.
+  * Remove stack trace from THBaseException as showUnhandledErrorDialog() at main.dart already presents the stack trace.
+  * Applying dart fix --apply to all code.
+  * Flutter upgrade to 3.41.2
+  * flutter pub upgrade --major-versions
+  * Created TH2FileEditElementEditController.optionTypeBeingEdited.
+  * Add keys to radio groups at MPPLATypeOptionsOverlayWindowWidget.
+  * Created 3500-ui_change_line_type_test.
+  * Separating THLSizeOrientationPainter from THLinePainter.
+  * Single action to set both LSize and Orientation values at TH2FileEditElementEditController.
+  * MPNumericAux.averageTangent() method to calculate the weighted by segment length average tangent of two line segments.
+  * Using lsize and orientation behaviour inspired by xThreion original one.
+  * LSize and orientation interactive arrow should appear immediately when starting to set either of them.
+  * Reusing Path created to draw compass arrow to also fuel the click test at MPTH2FileEditStateEditSingleLine.
+  * Decimal places for double to string conversion of LSize and Orientation options as constants.
+
+## 0.2.35 - 2026-02-13 - The [Chiquita Bacana's daughter](https://www.youtube.com/watch?v=QajgvvuFOSg) release
+* New features:
+  * Create zoom to selection window: keyboard shortcut 5. [requested by Edvard]
+  * Help dialogs closable by pressing Escape key.
+  * Creating Flathub specific new release check.
+* Fixed bugs:
+  * Options window been shown when there is no element selected. [reported by dankez, issue [#12](https://github.com/rsevero/mapiah/issues/12)]
+  * Flatpak version not saving users language choice. [reported by Daniel Bean]
+  * Deleting a line segment of a line with only one line segment would throw.
+  * Element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
+* Infrastructure maintenance:
+  * Create issue template for bug reports.
+  * Create issue template for feature requests.
+  * Created internal settings storage with SharedPreferencesWithCache package.
+  * Replace application id com.example.mapiah -> io.github.rsevero.mapiah.
+  * Flatpak metainfo file not receiving duplicated &lt;release&gt; tags for same version.
+  * Migrating all settings from TOML to SharedPreferencesWithCache.
+
+## 0.2.34 - 2026-02-05 - The [Viola Caipira](https://pt.wikipedia.org/wiki/Viola_caipira) release
 * New features:
   * Exceptions should be shown to the user as a AlertDialog box with copyable text. [requested by Nicolas]
   * Mapiah should check and present a notice when there is a new version available. [requested by Wal]
+  * When zooming with mouse wheel and there is no element selected, use the cursor position as zoom center. [requested by Edvard]
+  * When editing a line, make straight and Bézier curve line segments visually different.
 * Fixed bugs:
-  * Portuguese edit window help page not being presented. [requested by Edvard]
+  * Portuguese edit window help page not being presented. [reported by Edvard]
   * Changelog URL not opening when user clicked on it at "About" dialog box.
   * Linux/flatpak version does not open URLs for not using GIO portal and not having shared network permission.
   * When creating a new line with one single Bézier line segment, the line is not selectable by direct click. [reported by Edvard]
-  * On windows, language selection is not kept after app restart. [reported by Edvard]
+  * Windows: language selection is not kept after app restart. [reported by Edvard]
   * No app icon in Windows version.
+  * Add a publisher for Mapiah Windows installer.
+  * Changing the line segment type of several line segments of different types wouldn't change any.
+  * Trying to move a control point immediately after transforming a straight line segment to Bézier curve throws and the control point does not move.
+  * Ctrl+K keyboard shortcut (Show keyboard shortcuts) not working at TH2 file edit page. [reported by Edvard]
+  * During new line creation, on Bézier line segments, the control points are presented but are not usable. [reported by Edvard]
+  * When creating a line, any line segment, if dragged to become a Bézier, leaves a shadow red straight line segment behind during drag.
+  * Orientation/LSize arrows presented on all lines when editing a line, not only on the line being edited. 
+  * Removing spurious &lt;a&gt;&lt;/a&gt; tags from portuguese help page.
 * Infrastructure maintenance:
   * flutter upgrade to 3.38.9.
   * flutter pub upgrade --major-versions
+  * Migrated thFileWidgetKey to getTHFileWidgetGlobalKey() at TH2FileEditController.
+  * Created constants to set the help page names.
 
 ## 0.2.33 - 2026-01-30 - The [_o ano um_](https://renataweber.art/trabalhos/o-ano-um/) release
 * New features:

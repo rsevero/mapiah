@@ -1,0 +1,3 @@
+encoding  utf-8
+scrap DELETE-ME-survey-legs-p -projection plan -scale [0.0 0.0 500 1000.0 0.0 0.0 150 300]
+endscrap

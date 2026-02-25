@@ -90,7 +90,7 @@ abstract class MPCommand {
   }
 
   void execute(TH2FileEditController th2FileEditController) {
-    _prePrepareUndoRedoInfo(th2FileEditController);
+    _execPrePrepareUndoRedoInfo(th2FileEditController);
     _prepareUndoRedoInfo(th2FileEditController);
     _actualExecute(th2FileEditController);
 
@@ -101,11 +101,13 @@ abstract class MPCommand {
         'Command of type ${type.name} needs to prepare undo/redo info but did not.',
       );
     }
-    _posCreateUndoRedoCommand(th2FileEditController);
+    _execPreCreateUndoRedoCommand(th2FileEditController);
     _undoRedoCommand ??= _createUndoRedoCommand(th2FileEditController);
   }
 
-  void _prePrepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
+  void _execPrePrepareUndoRedoInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
     // Default implementation does nothing.
   }
 
@@ -122,7 +124,9 @@ abstract class MPCommand {
     TH2FileEditController th2FileEditController,
   );
 
-  void _posCreateUndoRedoCommand(TH2FileEditController th2FileEditController) {
+  void _execPreCreateUndoRedoCommand(
+    TH2FileEditController th2FileEditController,
+  ) {
     /// Default implementation does nothing.
   }
 

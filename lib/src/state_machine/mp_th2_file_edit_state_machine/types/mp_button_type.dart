@@ -22,4 +22,5 @@ enum MPButtonType {
   zoomOptions,
   zoomOut,
   zoomSelection,
+  zoomSelectionWindow,
 }

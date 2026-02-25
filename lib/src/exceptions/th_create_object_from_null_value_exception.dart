@@ -1,10 +1,8 @@
-class THCreateObjectFromNullValueException implements Exception {
-  String objectType;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THCreateObjectFromNullValueException(this.objectType);
+class THCreateObjectFromNullValueException extends THBaseException {
+  final String objectType;
 
-  @override
-  String toString() {
-    return "Can´t create object of type '$objectType' from null.";
-  }
+  THCreateObjectFromNullValueException(this.objectType)
+    : super("Can´t create object of type '$objectType' from null.");
 }

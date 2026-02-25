@@ -11,6 +11,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
@@ -34,7 +35,8 @@ class MPAttrOptionWidget extends StatefulWidget {
   State<MPAttrOptionWidget> createState() => _MPAttrOptionWidgetState();
 }
 
-class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget> {
+class _MPAttrOptionWidgetState extends State<MPAttrOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPAttrOptionWidget> {
   late final TH2FileEditController th2FileEditController;
   Map<String, MPOptionInfo> attrOptions = {};
   final List<MPAttrEdit> _attrs = [];

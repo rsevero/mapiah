@@ -8,6 +8,7 @@ mixin MPTH2FileEditStateClearSelectionOnExitMixin on MPTH2FileEditState {
     MPTH2FileEditStateType.movingEndControlPoints,
     MPTH2FileEditStateType.movingSingleControlPoint,
     MPTH2FileEditStateType.selectEmptySelection,
+    MPTH2FileEditStateType.selectionWindowZoom,
     MPTH2FileEditStateType.selectNonEmptySelection,
   };
 

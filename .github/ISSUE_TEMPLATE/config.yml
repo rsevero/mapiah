@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support
+    url: https://github.com/rsevero/mapiah/issues/new?assignees=&labels=&template=bug_report.yml
+    about: Use this to report bugs or ask for help. Include OS, Mapiah version, steps to reproduce, observed vs expected behavior, and screenshots if possible.

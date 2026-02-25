@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
@@ -47,17 +48,16 @@ class _MapiahHomeState extends State<MapiahHome> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    if (!kIsWeb) {
-      try {
-        setWindowTitle(appLocalizations.appTitle);
-      } on MissingPluginException {
-        // In widget tests, desktop plugins (like window_size) may not be
-        // registered. Ignore the missing plugin so tests can run headless.
-      } on PlatformException {
-        // Also ignore other platform exceptions in non-desktop environments
-        // during tests.
-      }
+    try {
+      setWindowTitle(appLocalizations.appTitle);
+    } on MissingPluginException {
+      // In widget tests, desktop plugins (like window_size) may not be
+      // registered. Ignore the missing plugin so tests can run headless.
+    } on PlatformException {
+      // Also ignore other platform exceptions in non-desktop environments
+      // during tests.
     }
+
     initializeMPCommandLocalizations(context);
 
     final Scaffold scaffold = Scaffold(
@@ -65,20 +65,6 @@ class _MapiahHomeState extends State<MapiahHome> {
         elevation: 4,
         title: Text(appLocalizations.appTitle),
         actions: <Widget>[
-          if (kIsWeb)
-            Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: Center(
-                child: Text(
-                  kIsWasm ? 'WASM web version' : 'Javascript web version',
-                  style: TextStyle(
-                    color: colorScheme.onSecondaryContainer,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
           IconButton(
             key: ValueKey('MapiahHomeNewFileButton'),
             icon: Icon(Icons.insert_drive_file_outlined),
@@ -93,17 +79,52 @@ class _MapiahHomeState extends State<MapiahHome> {
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.mapiahHomeOpenFile,
           ),
+          IconButton(
+            key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
+            icon: Icon(Icons.playlist_add_check_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () async {
+              await MPDialogAux.pickTHConfigFileAndRunTherion(context);
+              if (mounted) {
+                setState(() {});
+              }
+            },
+            tooltip:
+                appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
+          ),
+          IconButton(
+            key: ValueKey('MapiahHomeRunTherionButton'),
+            icon: Icon(Icons.play_arrow_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                ? null
+                : () => MPDialogAux.runTherion(context),
+            tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+          ),
+          IconButton(
+            key: ValueKey('MapiahHomeSettingsButton'),
+            icon: Icon(Icons.settings_outlined),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const MPSettingsPage(),
+                ),
+              );
+            },
+            tooltip: appLocalizations.mpSettingsPageTitle,
+          ),
           buildLanguageDropdown(context),
           MPHelpButtonWidget(
             context,
-            'keyboard_shortcuts_main',
+            mpHelpPageKeyboardShortcutsMain,
             appLocalizations.mapiahKeyboardShortcutsTitle,
             iconData: Icons.keyboard_alt_outlined,
             tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
           ),
           MPHelpButtonWidget(
             context,
-            'mapiah_home_help',
+            mpHelpPageMapiahHome,
             appLocalizations.mapiahHomeHelpDialogTitle,
           ),
           IconButton(
@@ -133,7 +154,10 @@ class _MapiahHomeState extends State<MapiahHome> {
 
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
-            mpLocator.mpSettingsController.setLocaleID(newValue);
+            mpLocator.mpSettingsController.setString(
+              MPSettingsType.Main_LocaleID,
+              newValue,
+            );
           },
           itemBuilder: (BuildContext context) {
             return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
@@ -144,7 +168,9 @@ class _MapiahHomeState extends State<MapiahHome> {
                   child: Row(
                     children: [
                       if (localeID ==
-                          mpLocator.mpSettingsController.localeID) ...[
+                          mpLocator.mpSettingsController.getString(
+                            MPSettingsType.Main_LocaleID,
+                          )) ...[
                         Icon(Icons.check, color: colorScheme.primary),
                         const SizedBox(width: 8),
                       ] else
@@ -283,14 +309,14 @@ extension on _MapiahHomeState {
       const SingleActivator(LogicalKeyboardKey.f1): () =>
           MPDialogAux.showHelpDialog(
             context,
-            'mapiah_home_help',
+            mpHelpPageMapiahHome,
             appLocalizations.mapiahHomeHelpDialogTitle,
           ),
       // Keyboard shortcuts
       const SingleActivator(LogicalKeyboardKey.keyK, control: true): () =>
           MPDialogAux.showHelpDialog(
             context,
-            'keyboard_shortcuts_main',
+            mpHelpPageKeyboardShortcutsMain,
             appLocalizations.mapiahKeyboardShortcutsTitle,
           ),
     };

@@ -1,11 +1,6 @@
-class THDuplicateIDException implements Exception {
-  String duplicateID;
-  String filename;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THDuplicateIDException(this.duplicateID, this.filename);
-
-  @override
-  toString() {
-    return "Duplicate ID '$duplicateID' in file '$filename'";
-  }
+class THDuplicateIDException extends THBaseException {
+  THDuplicateIDException(String duplicateID, String filename)
+    : super("Duplicate ID '$duplicateID' in file '$filename'");
 }

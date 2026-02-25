@@ -1,4 +1,4 @@
-package com.example.mapiah
+package io.github.rsevero.mapiah
 
 import io.flutter.embedding.android.FlutterActivity
 

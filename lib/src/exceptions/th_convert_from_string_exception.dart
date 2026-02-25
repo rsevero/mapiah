@@ -1,11 +1,11 @@
-class THConvertFromStringException implements Exception {
-  String objectNameToCreate;
-  String originalString;
+import 'package:mapiah/src/exceptions/th_base_exception.dart';
 
-  THConvertFromStringException(this.objectNameToCreate, this.originalString);
+class THConvertFromStringException extends THBaseException {
+  final String objectNameToCreate;
+  final String originalString;
 
-  @override
-  String toString() {
-    return "Creation of a '$objectNameToCreate' from string '$originalString' failed.";
-  }
+  THConvertFromStringException(this.objectNameToCreate, this.originalString)
+    : super(
+        "Creation of a '$objectNameToCreate' from string '$originalString' failed.",
+      );
 }

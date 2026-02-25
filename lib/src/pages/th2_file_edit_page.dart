@@ -2,6 +2,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -61,6 +62,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
     colorScheme = Theme.of(context).colorScheme;
+
     return FutureBuilder<TH2FileEditControllerCreateResult>(
       future: th2FileEditControllerCreateResult,
       builder:
@@ -104,26 +106,54 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         tooltip: appLocalizations.th2FileEditPageSave,
                       ),
                     ),
-                    if (!kIsWeb)
-                      IconButton(
-                        icon: Icon(
-                          Icons.save_as_outlined,
-                          color: colorScheme.onSecondaryContainer,
-                        ),
-                        onPressed: () => th2FileEditController.saveAsTH2File(),
-                        tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    IconButton(
+                      icon: Icon(
+                        Icons.save_as_outlined,
+                        color: colorScheme.onSecondaryContainer,
                       ),
+                      onPressed: () => th2FileEditController.saveAsTH2File(),
+                      tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    ),
                   ],
+                  IconButton(
+                    key: ValueKey(
+                      'TH2FileEditPageOpenTHConfigAndRunTherionButton',
+                    ),
+                    icon: Icon(
+                      Icons.playlist_add_check_outlined,
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+                    onPressed: () async {
+                      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    },
+                    tooltip: appLocalizations
+                        .mapiahOpenTHConfigAndRunTherionButtonTooltip,
+                  ),
+                  IconButton(
+                    key: ValueKey('TH2FileEditPageRunTherionButton'),
+                    icon: Icon(
+                      Icons.play_arrow_outlined,
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+                    onPressed:
+                        mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                        ? null
+                        : () => MPDialogAux.runTherion(context),
+                    tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+                  ),
                   MPHelpButtonWidget(
                     context,
-                    'keyboard_shortcuts_edit',
+                    mpHelpPageKeyboardShortcutsEdit,
                     appLocalizations.mapiahKeyboardShortcutsTitle,
                     iconData: Icons.keyboard_alt_outlined,
                     tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
                   ),
                   MPHelpButtonWidget(
                     context,
-                    'th2_file_edit_page_help',
+                    mpHelpPageTh2FileEdit,
                     appLocalizations.th2FileEditPageHelpDialogTitle,
                   ),
                   IconButton(
@@ -164,7 +194,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                               child: Stack(
                                 children: [
                                   THFileWidget(
-                                    key: th2FileEditController.thFileWidgetKey,
+                                    key: th2FileEditController
+                                        .getTHFileWidgetGlobalKey(),
                                     th2FileEditController:
                                         th2FileEditController,
                                   ),
@@ -177,7 +208,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                             return Stack(
                               children: [
                                 THFileWidget(
-                                  key: th2FileEditController.thFileWidgetKey,
+                                  key: th2FileEditController
+                                      .getTHFileWidgetGlobalKey(),
                                   th2FileEditController: th2FileEditController,
                                 ),
                                 _stateActionButtons(),
@@ -769,6 +801,21 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     ),
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
+                      heroTag: 'zoom_selection_window',
+                      onPressed: zoomSelectionWindow,
+                      tooltip: mpLocator
+                          .appLocalizations
+                          .th2FileEditPageZoomToSelectionWindow,
+                      child: Image.asset(
+                        'assets/icons/zoom_selection_window.png',
+                        width: mpFloatingActionZoomIconSize,
+                        height: mpFloatingActionZoomIconSize,
+                        color: colorScheme.onSecondaryContainer,
+                      ),
+                      backgroundColor: colorScheme.secondaryContainer,
+                    ),
+                    SizedBox(width: mpButtonSpace),
+                    FloatingActionButton(
                       heroTag: 'zoom_out_scrap',
                       onPressed: th2FileEditController.hasMultipleScraps
                           ? zoomAllScrapPressed
@@ -777,7 +824,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                           .appLocalizations
                           .th2FileEditPageZoomOutScrap,
                       child: Image.asset(
-                        'assets/icons/zoom-out-scrap.png',
+                        'assets/icons/zoom_out_scrap.png',
                         width: mpFloatingActionZoomIconSize,
                         height: mpFloatingActionZoomIconSize,
                         color: th2FileEditController.hasMultipleScraps
@@ -863,6 +910,12 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
   }
 
   void zoomSelection() {
+    th2FileEditController.stateController.onButtonPressed(
+      MPButtonType.zoomSelection,
+    );
+  }
+
+  void zoomSelectionWindow() {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomSelection,
     );

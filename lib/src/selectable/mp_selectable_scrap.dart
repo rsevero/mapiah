@@ -23,6 +23,9 @@ class MPSelectableScrap extends MPSelectableElement {
 
   @override
   bool contains(Offset point) {
-    return boundingBox.contains(point);
+    return MPNumericAux.rectContainsPointInclusive(
+      rect: boundingBox,
+      point: point,
+    );
   }
 }

@@ -241,6 +241,72 @@ abstract class AppLocalizations {
   /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
   String get mapiahHomeNewFileButtonTooltip;
 
+  /// The tooltip for the button that opens a THConfig file and runs Therion
+  ///
+  /// In en, this message translates to:
+  /// **'Open THConfig file and run Therion'**
+  String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
+
+  /// The tooltip for the Run Therion button
+  ///
+  /// In en, this message translates to:
+  /// **'Run Therion'**
+  String get mapiahRunTherionButtonTooltip;
+
+  /// Title for the Therion output dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Therion output'**
+  String get mapiahTherionRunDialogTitle;
+
+  /// Label for Therion run status
+  ///
+  /// In en, this message translates to:
+  /// **'Status:'**
+  String get mapiahTherionRunStatusLabel;
+
+  /// Status while Therion is running
+  ///
+  /// In en, this message translates to:
+  /// **'running'**
+  String get mapiahTherionRunStatusRunning;
+
+  /// Status shown when Therion finishes
+  ///
+  /// In en, this message translates to:
+  /// **'ok'**
+  String get mapiahTherionRunStatusOk;
+
+  /// Status shown when Therion output has warnings
+  ///
+  /// In en, this message translates to:
+  /// **'warning'**
+  String get mapiahTherionRunStatusWarning;
+
+  /// Status shown when Therion output has errors
+  ///
+  /// In en, this message translates to:
+  /// **'error'**
+  String get mapiahTherionRunStatusError;
+
+  /// Label for Therion output area
+  ///
+  /// In en, this message translates to:
+  /// **'Output:'**
+  String get mapiahTherionRunOutputLabel;
+
+  /// Title for THConfig file picker dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Select THConfig file'**
+  String get mapiahTherionSelectTHConfigDialogTitle;
+
+  /// Error message shown when Therion command execution fails
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot execute command: {commandLine}'**
+  String mpTherionCannotExecuteCommand(Object commandLine);
+
   /// The title for the keyboard shortcuts help dialog
   ///
   /// In en, this message translates to:
@@ -397,6 +463,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get mpButtonCancel;
 
+  /// The label for the apply button
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get mpButtonApply;
+
+  /// The label for the save and close button
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Close'**
+  String get mpButtonSaveAndClose;
+
   /// The label for the create button
   ///
   /// In en, this message translates to:
@@ -415,6 +493,12 @@ abstract class AppLocalizations {
   /// **'multiple values'**
   String get mpChoiceMultipleValues;
 
+  /// The label for the reset all settings button
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all settings'**
+  String get mpButtonResetAllSettings;
+
   /// The label for the set choice type
   ///
   /// In en, this message translates to:
@@ -426,6 +510,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unset'**
   String get mpChoiceUnset;
+
+  /// The title for the settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get mpSettingsPageTitle;
+
+  /// Section title for main settings
+  ///
+  /// In en, this message translates to:
+  /// **'Main'**
+  String get mpSettingsSectionMain;
+
+  /// Section title for TH2 edit settings
+  ///
+  /// In en, this message translates to:
+  /// **'TH2 edit'**
+  String get mpSettingsSectionTH2Edit;
+
+  /// Label for locale setting
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get mpSettingsSettingMainLocaleID;
+
+  /// Label for TH2 line thickness setting
+  ///
+  /// In en, this message translates to:
+  /// **'Line thickness'**
+  String get mpSettingsSettingTH2EditLineThickness;
+
+  /// Label for TH2 point radius setting
+  ///
+  /// In en, this message translates to:
+  /// **'Point radius'**
+  String get mpSettingsSettingTH2EditPointRadius;
+
+  /// Label for TH2 selection tolerance setting
+  ///
+  /// In en, this message translates to:
+  /// **'Selection tolerance'**
+  String get mpSettingsSettingTH2EditSelectionTolerance;
+
+  /// Validation message for invalid double values in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number'**
+  String get mpSettingsInvalidNumber;
+
+  /// Validation message for invalid integer values in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid integer'**
+  String get mpSettingsInvalidInteger;
 
   /// The description for the add area command
   ///
@@ -1770,7 +1908,7 @@ abstract class AppLocalizations {
   /// The status bar message when editing a line point showing its orientation and length
   ///
   /// In en, this message translates to:
-  /// **'Orientation {orientation}°{forcedOrientation}, lsize {lsize}{forcedLSize}'**
+  /// **'Orientation {orientation}°{forcedOrientation}, LSize {lsize}{forcedLSize}'**
   String mpStatusBarMessageEditLinePointOrientationLSize(
     Object orientation,
     Object forcedOrientation,
@@ -2289,6 +2427,12 @@ abstract class AppLocalizations {
   /// **'Select (C)'**
   String get th2FileEditPageSelectTool;
 
+  /// The status bar message for the selection window zoom tool
+  ///
+  /// In en, this message translates to:
+  /// **'Select a zoom area'**
+  String get th2FileEditPageSelectionWindowZoomStatusBarMessage;
+
   /// The label for the undo shortcut
   ///
   /// In en, this message translates to:
@@ -2336,6 +2480,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zoom to selection (2)'**
   String get th2FileEditPageZoomToSelection;
+
+  /// The label for the zoom selection window button
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom selection window (5)'**
+  String get th2FileEditPageZoomToSelectionWindow;
 
   /// The label for the image file selection dialog
   ///

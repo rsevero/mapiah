@@ -1,21 +1,24 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_painter_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPCompassPainter extends CustomPainter {
   final double azimuth;
   final double arrowLength;
-  final bool drawBackgroundLines;
-  final TH2FileEditController? th2FileEditController;
+  final TH2FileEditUserInteractionController? userInteractionController;
+  final Offset canvasOffset;
+  final bool isAzimuthPickerMode;
 
   MPCompassPainter({
     required this.azimuth,
     required this.arrowLength,
-    required this.drawBackgroundLines,
-    this.th2FileEditController,
+    required this.isAzimuthPickerMode,
+    this.userInteractionController,
+    this.canvasOffset = Offset.zero,
   });
 
   @override
@@ -24,7 +27,7 @@ class MPCompassPainter extends CustomPainter {
     final Offset center = Offset(size.width, size.height) / 2;
     final double radius = size.width / 2;
 
-    if (drawBackgroundLines) {
+    if (isAzimuthPickerMode) {
       // Draw compass circle
       final Paint circlePaint = Paint()
         ..color = Colors.grey[200]!
@@ -87,72 +90,39 @@ class MPCompassPainter extends CustomPainter {
       }
     }
 
-    // Save the canvas state
-    canvas.save();
-
-    // Translate the canvas to the center of the compass
-    canvas.translate(center.dx, center.dy);
-
-    // When painting in normal widget coordinates (Y down), flip the local
-    // coordinate system so the arrow math below always runs in a Y-up space.
-    // In the map canvas, the Y-up flip is already applied by
-    // TH2FileEditController.transformCanvas().
-    if (th2FileEditController == null) {
-      canvas.scale(1, -1);
-    }
-
-    // Rotate the canvas based on the azimuth
-    // In a Y-up space, positive rotation is counter-clockwise; azimuth is
-    // defined clockwise, so negate it.
-    canvas.rotate(-azimuth * mp1DegreeInRad);
-
-    final double arrowLengthOnScreen = (th2FileEditController == null)
-        ? arrowLength * mpCompassArrowFixedLengthScreenFactor
-        : th2FileEditController!.scaleCanvasToScreen(
-            arrowLength * mpCompassArrowVariableLengthScreenFactor,
-          );
-    final Offset arrowTipBase = Offset(
-      0,
-      arrowLengthOnScreen * mpCompassArrowTipBaseFactor,
-    );
-    final double arrowBodyWidthOnScreen =
-        mpCompassArrowScreenBodyWidth * mpCompassArrowBodyWidthFactor;
-    final Paint arrowBodyPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = arrowBodyWidthOnScreen;
-
-    canvas.drawLine(Offset.zero, arrowTipBase, arrowBodyPaint);
-
-    // Draw the arrowhead
+    final double arrowLengthOnScreen = isAzimuthPickerMode
+        ? radius * mpCompass90DegreeLineFactor
+        : arrowLength;
     final Paint arrowPaint = Paint()
       ..color = Colors.red
       ..style = PaintingStyle.fill;
-    final Offset arrowTip = Offset(0, arrowLengthOnScreen);
-    final double arrowSide = arrowLengthOnScreen * mpCompassArrowSideFactor;
-    final double arrowBaseLength =
-        arrowLengthOnScreen * mpCompassArrowBaseLengthFactor;
-    final Offset arrowSide1 = Offset(-arrowSide, arrowBaseLength);
-    final Offset arrowSide2 = Offset(arrowSide, arrowBaseLength);
-    final Path path = Path();
-
-    path.moveTo(arrowTip.dx, arrowTip.dy);
-    path.lineTo(arrowSide1.dx, arrowSide1.dy);
-    path.lineTo(arrowTipBase.dx, arrowTipBase.dy);
-    path.lineTo(arrowSide2.dx, arrowSide2.dy);
-    path.close();
-
-    canvas.drawPath(path, arrowPaint);
-
-    // Draw central circle
-    canvas.drawCircle(
-      Offset.zero,
-      arrowLength * mpCompassCentralCircleFactor,
-      arrowPaint,
+    final Path compassPath = MPPainterAux.buildCompassPath(
+      center: center,
+      azimuth: azimuth,
+      arrowLength: arrowLengthOnScreen,
     );
 
-    // Restore the canvas state
-    canvas.restore();
+    /// If drawing the compass arrow in a azimuth picker, we need to apply a
+    /// vertical flip to the arrow path to match the expected direction of
+    /// as the path is created considering the positive y axis as pointing
+    /// downwards (as in Flutter's coordinate system). Besides that, as we want
+    /// to use the created path to click on arrow checking in
+    /// MPTH2FileEditStateEditSingleLine we need to store the path in the user
+    /// interaction controller in canvas coordinates but the azimuth picker
+    /// has its own center. This is why we use the complicate translation below.
+    if (isAzimuthPickerMode) {
+      canvas.save();
+      canvas.translate(center.dx, center.dy);
+      canvas.scale(1, -1);
+      canvas.translate(-center.dx, -center.dy);
+      canvas.drawPath(compassPath, arrowPaint);
+      canvas.restore();
+    } else {
+      canvas.drawPath(compassPath, arrowPaint);
+      userInteractionController?.setCompassPath(
+        compassPath.shift(canvasOffset),
+      );
+    }
   }
 
   void _drawBackgroundLines(Canvas canvas, Offset center, double radius) {

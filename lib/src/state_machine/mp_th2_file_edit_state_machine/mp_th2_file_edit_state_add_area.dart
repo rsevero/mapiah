@@ -18,7 +18,9 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
-    elementEditController.finalizeNewAreaCreation();
+    if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      elementEditController.finalizeNewAreaCreation();
+    }
     th2FileEditController.setStatusBarMessage('');
   }
 

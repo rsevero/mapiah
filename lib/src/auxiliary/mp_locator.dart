@@ -15,7 +15,10 @@ class MPLocator {
 
   final MPGeneralController mpGeneralController = MPGeneralController();
 
-  final MPSettingsController mpSettingsController = MPSettingsController();
+  MPSettingsController? _mpSettingsController;
+
+  MPSettingsController get mpSettingsController =>
+      _mpSettingsController ??= MPSettingsController();
 
   final MPLog mpLog = MPLog.instance;
 
