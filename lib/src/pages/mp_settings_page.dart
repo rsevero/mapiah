@@ -409,9 +409,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
   }
 
   void _cancelChanges() {
-    setState(() {
-      _reloadDraftFromController();
-    });
+    Navigator.of(context).pop();
   }
 
   void _closeAndSave() {

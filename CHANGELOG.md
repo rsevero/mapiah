@@ -7,6 +7,7 @@
   * Settings page with "reset" button for each setting and for all settings.
   * Created new settings type: FilePickerExecutable.
 * Fixed bugs:
+  * 'Cancel' button on settings page not closing page.
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
   * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.
