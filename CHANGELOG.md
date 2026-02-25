@@ -4,6 +4,7 @@
 * New features:
   * Created Settings page.
   * Settings page with real time per setting type validation.
+  * Settings page with "reset" button for each setting and for all settings.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]

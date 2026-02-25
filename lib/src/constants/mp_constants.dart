@@ -137,6 +137,10 @@ const String thProjectsDirectory = 'Projects';
 const String mpMainConfigFilename = 'mapiah.toml';
 const String mpDefaultLocaleID = 'sys';
 const String mpEnglishLocaleID = 'en';
+const String mpSettingsMainSection = 'Main';
+const String mpSettingsTH2EditSection = 'TH2Edit';
+const String mpSettingsInternalSection = 'Internal';
+const String mpSettingsStringListSeparator = ', ';
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;

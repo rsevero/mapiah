@@ -15,6 +15,7 @@ class MPSettingsPage extends StatefulWidget {
 class _MPSettingsPageState extends State<MPSettingsPage> {
   final Map<MPSettingsType, dynamic> _draftValues = {};
   final Map<MPSettingsType, String?> _errors = {};
+  final Map<MPSettingsType, int> _fieldRebuildCounters = {};
 
   @override
   void initState() {
@@ -55,6 +56,11 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               ElevatedButton(
                 onPressed: _cancelChanges,
                 child: Text(appLocalizations.mpButtonCancel),
+              ),
+              const SizedBox(width: mpSettingsPageButtonSpacing),
+              ElevatedButton(
+                onPressed: _resetAllSettings,
+                child: Text(appLocalizations.mpButtonResetAllSettings),
               ),
             ],
           ),
@@ -101,16 +107,20 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
     switch (type.type()) {
       case MPSettingsTypeType.bool:
-        return _constrainedEditableField(
-          SwitchListTile(
-            value: (_draftValues[type] as bool?) ?? false,
-            title: Text(settingLabel),
-            onChanged: (bool value) {
-              setState(() {
-                _draftValues[type] = value;
-              });
-            },
-            contentPadding: EdgeInsets.zero,
+        return _buildSettingFieldWithReset(
+          appLocalizations: appLocalizations,
+          type: type,
+          field: _constrainedEditableField(
+            SwitchListTile(
+              value: (_draftValues[type] as bool?) ?? false,
+              title: Text(settingLabel),
+              onChanged: (bool value) {
+                setState(() {
+                  _draftValues[type] = value;
+                });
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
           ),
         );
       case MPSettingsTypeType.double:
@@ -119,61 +129,91 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
       case MPSettingsTypeType.stringList:
         if (type == MPSettingsType.Main_LocaleID) {
           final List<String> localeIDs = [
-            'sys',
+            mpDefaultLocaleID,
             ...AppLocalizations.supportedLocales.map(
               (locale) => locale.languageCode,
             ),
           ];
 
-          final String currentValue = (_draftValues[type] as String?) ?? 'sys';
+          final String currentValue =
+              (_draftValues[type] as String?) ?? mpDefaultLocaleID;
 
-          return _constrainedEditableField(
-            DropdownButtonFormField<String>(
-              initialValue: localeIDs.contains(currentValue)
-                  ? currentValue
-                  : 'sys',
-              decoration: InputDecoration(labelText: settingLabel),
-              items: localeIDs
-                  .map(
-                    (String localeID) => DropdownMenuItem<String>(
-                      value: localeID,
-                      child: Text(appLocalizations.languageName(localeID)),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (String? value) {
-                if (value == null) {
-                  return;
-                }
-                setState(() {
-                  _draftValues[type] = value;
-                  _errors[type] = null;
-                });
-              },
+          return _buildSettingFieldWithReset(
+            appLocalizations: appLocalizations,
+            type: type,
+            field: _constrainedEditableField(
+              DropdownButtonFormField<String>(
+                key: ValueKey<int>(_fieldRebuildCounters[type] ?? 0),
+                initialValue: localeIDs.contains(currentValue)
+                    ? currentValue
+                    : mpDefaultLocaleID,
+                decoration: InputDecoration(labelText: settingLabel),
+                items: localeIDs
+                    .map(
+                      (String localeID) => DropdownMenuItem<String>(
+                        value: localeID,
+                        child: Text(appLocalizations.languageName(localeID)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (String? value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _draftValues[type] = value;
+                    _errors[type] = null;
+                  });
+                },
+              ),
             ),
           );
         }
 
-        return _constrainedEditableField(
-          TextFormField(
-            initialValue: (_draftValues[type] as String?) ?? '',
-            decoration: InputDecoration(
-              labelText: settingLabel,
-              errorText: _errors[type],
+        return _buildSettingFieldWithReset(
+          appLocalizations: appLocalizations,
+          type: type,
+          field: _constrainedEditableField(
+            TextFormField(
+              key: ValueKey<int>(_fieldRebuildCounters[type] ?? 0),
+              initialValue: (_draftValues[type] as String?) ?? '',
+              decoration: InputDecoration(
+                labelText: settingLabel,
+                errorText: _errors[type],
+              ),
+              onChanged: (String value) {
+                setState(() {
+                  _draftValues[type] = value;
+                  _errors[type] = _validateTextDraftValue(
+                    appLocalizations,
+                    type,
+                    value,
+                  );
+                });
+              },
             ),
-            onChanged: (String value) {
-              setState(() {
-                _draftValues[type] = value;
-                _errors[type] = _validateTextDraftValue(
-                  appLocalizations,
-                  type,
-                  value,
-                );
-              });
-            },
           ),
         );
     }
+  }
+
+  Widget _buildSettingFieldWithReset({
+    required AppLocalizations appLocalizations,
+    required MPSettingsType type,
+    required Widget field,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: field),
+        const SizedBox(width: mpSettingsPageButtonSpacing),
+        IconButton(
+          onPressed: () => _resetSingleSetting(type),
+          tooltip: appLocalizations.thMultipleChoicePlaceDefault,
+          icon: const Icon(Icons.restart_alt),
+        ),
+      ],
+    );
   }
 
   String? _validateTextDraftValue(
@@ -226,7 +266,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     _errors.clear();
 
     for (final MPSettingsType type in MPSettingsType.values) {
-      if (type.section() == 'Internal') {
+      if (type.section() == mpSettingsInternalSection) {
         continue;
       }
 
@@ -242,9 +282,82 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         case MPSettingsTypeType.stringList:
           _draftValues[type] = settingsController
               .getStringList(type)
-              .join(', ');
+              .join(mpSettingsStringListSeparator);
       }
+
+      _incrementFieldRebuildCounter(type);
     }
+  }
+
+  void _resetSingleSetting(MPSettingsType type) {
+    final MPSettingsController settingsController =
+        mpLocator.mpSettingsController;
+
+    setState(() {
+      switch (type.type()) {
+        case MPSettingsTypeType.bool:
+          _draftValues[type] = settingsController.getDefaultBool(type);
+        case MPSettingsTypeType.double:
+          _draftValues[type] = settingsController
+              .getDefaultDouble(type)
+              .toString();
+        case MPSettingsTypeType.int:
+          _draftValues[type] = settingsController
+              .getDefaultInt(type)
+              .toString();
+        case MPSettingsTypeType.string:
+          _draftValues[type] = settingsController.getDefaultString(type);
+        case MPSettingsTypeType.stringList:
+          _draftValues[type] = settingsController
+              .getDefaultStringList(type)
+              .join(mpSettingsStringListSeparator);
+      }
+
+      _errors[type] = null;
+      _incrementFieldRebuildCounter(type);
+    });
+  }
+
+  void _resetAllSettings() {
+    final MPSettingsController settingsController =
+        mpLocator.mpSettingsController;
+
+    setState(() {
+      _errors.clear();
+
+      for (final MPSettingsType type in MPSettingsType.values) {
+        if (type.section() == mpSettingsInternalSection) {
+          continue;
+        }
+
+        switch (type.type()) {
+          case MPSettingsTypeType.bool:
+            _draftValues[type] = settingsController.getDefaultBool(type);
+          case MPSettingsTypeType.double:
+            _draftValues[type] = settingsController
+                .getDefaultDouble(type)
+                .toString();
+          case MPSettingsTypeType.int:
+            _draftValues[type] = settingsController
+                .getDefaultInt(type)
+                .toString();
+          case MPSettingsTypeType.string:
+            _draftValues[type] = settingsController.getDefaultString(type);
+          case MPSettingsTypeType.stringList:
+            _draftValues[type] = settingsController
+                .getDefaultStringList(type)
+                .join(mpSettingsStringListSeparator);
+        }
+
+        _incrementFieldRebuildCounter(type);
+      }
+    });
+  }
+
+  void _incrementFieldRebuildCounter(MPSettingsType type) {
+    final int current = _fieldRebuildCounters[type] ?? mpMinimumInt;
+
+    _fieldRebuildCounters[type] = current + 1;
   }
 
   void _cancelChanges() {
@@ -268,7 +381,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     final Map<MPSettingsType, String?> newErrors = {};
 
     for (final MPSettingsType type in MPSettingsType.values) {
-      if (type.section() == 'Internal') {
+      if (type.section() == mpSettingsInternalSection) {
         continue;
       }
 
@@ -346,16 +459,16 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
   List<String> _sortedSections(AppLocalizations appLocalizations) {
     final Set<String> sectionSet = MPSettingsType.values
         .map((MPSettingsType type) => type.section())
-        .where((String section) => section != 'Internal')
+        .where((String section) => section != mpSettingsInternalSection)
         .toSet();
 
     final List<String> sections = sectionSet.toList();
 
     sections.sort((String a, String b) {
-      if ((a == 'Main') && (b != 'Main')) {
+      if ((a == mpSettingsMainSection) && (b != mpSettingsMainSection)) {
         return -1;
       }
-      if ((a != 'Main') && (b == 'Main')) {
+      if ((a != mpSettingsMainSection) && (b == mpSettingsMainSection)) {
         return 1;
       }
 
@@ -391,9 +504,9 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     String section,
   ) {
     switch (section) {
-      case 'Main':
+      case mpSettingsMainSection:
         return appLocalizations.mpSettingsSectionMain;
-      case 'TH2Edit':
+      case mpSettingsTH2EditSection:
         return appLocalizations.mpSettingsSectionTH2Edit;
       default:
         return _camelCaseToLabel(section);

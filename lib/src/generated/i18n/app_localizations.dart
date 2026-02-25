@@ -439,6 +439,12 @@ abstract class AppLocalizations {
   /// **'multiple values'**
   String get mpChoiceMultipleValues;
 
+  /// The label for the reset all settings button
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all settings'**
+  String get mpButtonResetAllSettings;
+
   /// The label for the set choice type
   ///
   /// In en, this message translates to:
