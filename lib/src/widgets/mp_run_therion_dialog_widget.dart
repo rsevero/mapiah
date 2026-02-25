@@ -24,7 +24,6 @@ class MPRunTherionDialogWidget extends StatefulWidget {
 
 class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _lineKeys = <int, GlobalKey>{};
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
@@ -158,34 +157,20 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                         List<String> outputLines,
                         Widget? child,
                       ) {
+                        final TextSpan outputTextSpan = _buildOutputTextSpan(
+                          outputLines: outputLines,
+                          baseStyle: theme.textTheme.bodyMedium,
+                        );
+
                         return SingleChildScrollView(
                           controller: _scrollController,
                           child: SelectionArea(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: outputLines.asMap().entries.map((
-                                MapEntry<int, String> entry,
-                              ) {
-                                final int lineIndex = entry.key;
-                                final String lineText = entry.value;
-                                final GlobalKey lineKey = _lineKeys.putIfAbsent(
-                                  lineIndex,
-                                  () => GlobalKey(),
-                                );
-                                final List<TextSpan> highlightedSpans =
-                                    _buildHighlightedSpans(lineText);
-
-                                return Container(
-                                  key: lineKey,
-                                  alignment: Alignment.centerLeft,
-                                  child: Text.rich(
-                                    TextSpan(
-                                      style: theme.textTheme.bodyMedium,
-                                      children: highlightedSpans,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text.rich(
+                                outputTextSpan,
+                                textAlign: TextAlign.left,
+                              ),
                             ),
                           ),
                         );
@@ -258,23 +243,52 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   }
 
   void _jumpToLine(int lineIndex) {
-    final GlobalKey? lineKey = _lineKeys[lineIndex];
+    final bool hasScrollClients = _scrollController.hasClients;
+    final List<String> outputLines = _therionRunner.outputLinesNotifier.value;
+    final int lineCount = outputLines.length;
+    final bool hasEnoughLinesToScroll = lineCount > 1;
 
-    if (lineKey == null) {
+    if (!hasScrollClients || !hasEnoughLinesToScroll) {
       return;
     }
 
-    final BuildContext? lineContext = lineKey.currentContext;
-
-    if (lineContext == null) {
-      return;
-    }
-
-    Scrollable.ensureVisible(
-      lineContext,
-      duration: mpTherionRunScrollAnimationDuration,
-      alignment: 0.1,
+    final int lastLineIndex = lineCount - 1;
+    final int clampedLineIndex = lineIndex.clamp(0, lastLineIndex);
+    final double maxScrollExtent = _scrollController.position.maxScrollExtent;
+    final double lineProgress = clampedLineIndex / lastLineIndex;
+    final double targetOffset = (lineProgress * maxScrollExtent).clamp(
+      0.0,
+      maxScrollExtent,
     );
+
+    _scrollController.animateTo(
+      targetOffset,
+      duration: mpTherionRunScrollAnimationDuration,
+      curve: mpTherionRunScrollAnimationCurve,
+    );
+  }
+
+  TextSpan _buildOutputTextSpan({
+    required List<String> outputLines,
+    required TextStyle? baseStyle,
+  }) {
+    final List<TextSpan> outputSpans = <TextSpan>[];
+    final int outputLineCount = outputLines.length;
+
+    for (int lineIndex = 0; lineIndex < outputLineCount; lineIndex++) {
+      final String outputLineText = outputLines[lineIndex];
+      final List<TextSpan> highlightedLineSpans = _buildHighlightedSpans(
+        outputLineText,
+      );
+      outputSpans.addAll(highlightedLineSpans);
+
+      final bool isLastOutputLine = lineIndex == outputLineCount - 1;
+      if (!isLastOutputLine) {
+        outputSpans.add(const TextSpan(text: thUnixLineBreak));
+      }
+    }
+
+    return TextSpan(style: baseStyle, children: outputSpans);
   }
 
   String _statusText(

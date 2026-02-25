@@ -11,6 +11,7 @@
 * Fixed bugs:
   * 'Cancel' button on settings page not closing page.
   * Therion run output should be selectable as a whole and not only single lines.
+  * Therion run output has no line breaks after copy/paste.
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
   * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.

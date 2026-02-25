@@ -134,6 +134,45 @@ void main(List<String> arguments) {
       }
     });
 
+    test('parses carriage return as line break without blank lines', () async {
+      final String scriptSource = '''
+import 'dart:io';
+
+void main(List<String> arguments) {
+  stdout.write('line one\\rline two\\rline three\\n');
+}
+''';
+
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_runner_test_',
+      );
+
+      try {
+        final String scriptPath = await _createScriptFile(
+          directory: tempDirectory,
+          filename: 'runner_carriage_return_lines.dart',
+          source: scriptSource,
+        );
+
+        final MPTherionRunner runner = MPTherionRunner(
+          therionExecutablePath: _dartCommandForPlatform(),
+          thConfigFilePath: scriptPath,
+        );
+
+        try {
+          await runner.start();
+
+          final List<String> outputLines = runner.outputLinesNotifier.value;
+
+          expect(outputLines, <String>['line one', 'line two', 'line three']);
+        } finally {
+          runner.dispose();
+        }
+      } finally {
+        await tempDirectory.delete(recursive: true);
+      }
+    });
+
     test(
       'overwrites final status to error when process exit code is non-zero',
       () async {

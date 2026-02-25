@@ -32,6 +32,7 @@ const String thDecimalSeparator = '.';
 const String thBackslash = '\\';
 const String thUnixLineBreak = '\n';
 const String thWindowsLineBreak = '\r\n';
+const String thCarriageReturn = '\r';
 const String thDoubleQuote = '"';
 const String thDoubleQuotePair = r'""';
 
@@ -162,6 +163,7 @@ const double mpTherionRunIssuesListHeight = 120;
 const Duration mpTherionRunScrollAnimationDuration = Duration(
   milliseconds: 250,
 );
+const Curve mpTherionRunScrollAnimationCurve = Curves.easeInOut;
 
 const Color mpTherionRunStatusBackgroundRunningColor = Colors.yellow;
 const Color mpTherionRunStatusBackgroundOkColor = Colors.green;

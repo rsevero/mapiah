@@ -66,6 +66,22 @@ void main() {
         expect(find.byType(SelectionArea), findsOneWidget);
         expect(find.byType(SelectableText), findsNothing);
 
+        final Finder outputTextFinder = find.byWidgetPredicate((Widget widget) {
+          if (widget is! Text) {
+            return false;
+          }
+
+          final InlineSpan? textSpan = widget.textSpan;
+          if (textSpan == null) {
+            return false;
+          }
+
+          final String plainText = textSpan.toPlainText();
+
+          return plainText.contains('first line\nwarning happened here');
+        });
+        expect(outputTextFinder, findsOneWidget);
+
         expect(find.text('warning: warning happened here'), findsOneWidget);
         expect(find.text('error: error happened here'), findsOneWidget);
 
@@ -90,7 +106,7 @@ void main() {
         await tester.tap(find.text('warning: warning happened here'));
         await tester.pumpAndSettle();
 
-        expect(find.text('first line'), findsOneWidget);
+        expect(outputTextFinder, findsOneWidget);
       },
     );
   });
