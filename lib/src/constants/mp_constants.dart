@@ -458,6 +458,7 @@ const int mpWindowsRegistryQueryMinimumTokens =
 
 const String mpTherionCompileFlag = '-x';
 const String mpTherionBezierInterpolationFlag = '-b';
+const String mpTherionConfigFileExtension = '.thconfig';
 
 const String mpCommandSeparatorSpace = ' ';
 const String mpEmptyString = '';

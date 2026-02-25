@@ -235,8 +235,32 @@ Future<String> _createScriptFile({
 }
 
 String _dartCommandForPlatform() {
-  if (Platform.isWindows) {
-    return 'dart.exe';
+  final String resolvedExecutablePath = Platform.resolvedExecutable;
+  final String normalizedResolvedExecutablePath = resolvedExecutablePath
+      .toLowerCase();
+  final bool resolvedExecutableIsDart =
+      normalizedResolvedExecutablePath.endsWith('dart.exe') ||
+      normalizedResolvedExecutablePath.endsWith('/dart');
+
+  if (resolvedExecutableIsDart) {
+    return resolvedExecutablePath;
+  }
+
+  final String? flutterRootPath = Platform.environment['FLUTTER_ROOT'];
+  final bool hasFlutterRootPath =
+      flutterRootPath != null && flutterRootPath.isNotEmpty;
+
+  if (hasFlutterRootPath) {
+    final String flutterDartExecutablePath = Platform.isWindows
+        ? '$flutterRootPath\\bin\\cache\\dart-sdk\\bin\\dart.exe'
+        : '$flutterRootPath/bin/cache/dart-sdk/bin/dart';
+    final File flutterDartExecutableFile = File(flutterDartExecutablePath);
+    final bool flutterDartExecutableExists = flutterDartExecutableFile
+        .existsSync();
+
+    if (flutterDartExecutableExists) {
+      return flutterDartExecutablePath;
+    }
   }
 
   return 'dart';

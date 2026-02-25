@@ -138,8 +138,13 @@ class MPTherionRunner {
 
   bool _shouldUseWindowsRunner() {
     final bool isWindowsPlatform = Platform.isWindows;
+    final String configFileExtension = p.extension(thConfigFilePath);
+    final String normalizedConfigFileExtension = configFileExtension
+        .toLowerCase();
+    final bool isTherionConfigFile =
+        normalizedConfigFileExtension == mpTherionConfigFileExtension;
 
-    return isWindowsPlatform;
+    return isWindowsPlatform && isTherionConfigFile;
   }
 
   Future<MPTherionExecutionResult> _runUsingWindowsRunner({
@@ -177,14 +182,16 @@ class MPTherionRunner {
   }) async {
     final ({String executable, List<String> arguments}) executionConfig =
         _buildExecutionConfig();
-    final String processExecutable = executionConfig.executable;
+    final String processExecutable = _resolveProcessExecutablePath(
+      executionConfig.executable,
+    );
     final List<String> processArguments = executionConfig.arguments;
 
     final Process process = await Process.start(
       processExecutable,
       processArguments,
       workingDirectory: workingDirectory,
-      runInShell: true,
+      runInShell: false,
     );
 
     _process = process;
@@ -210,6 +217,69 @@ class MPTherionRunner {
     final int therionExitCode = await process.exitCode;
 
     return therionExitCode;
+  }
+
+  String _resolveProcessExecutablePath(String executable) {
+    final bool isWindowsPlatform = Platform.isWindows;
+
+    if (!isWindowsPlatform) {
+      return executable;
+    }
+
+    final bool isAbsolutePath = p.isAbsolute(executable);
+
+    if (isAbsolutePath) {
+      return executable;
+    }
+
+    final String? pathEnvironmentValue =
+        Platform.environment[mpPathEnvironmentVariableName];
+
+    if (pathEnvironmentValue == null || pathEnvironmentValue.isEmpty) {
+      return executable;
+    }
+
+    final List<String> pathEntries = pathEnvironmentValue.split(
+      mpPathEnvironmentEntrySeparatorWindows,
+    );
+    final bool hasWindowsExecutableExtension = executable
+        .toLowerCase()
+        .endsWith(mpWindowsExecutableExtension);
+
+    for (final String pathEntry in pathEntries) {
+      final String trimmedPathEntry = pathEntry.trim();
+
+      if (trimmedPathEntry.isEmpty) {
+        continue;
+      }
+
+      final String executableCandidate = p.join(trimmedPathEntry, executable);
+      final File executableFile = File(executableCandidate);
+      final bool executableExists = executableFile.existsSync();
+
+      if (executableExists) {
+        return executableCandidate;
+      }
+
+      if (hasWindowsExecutableExtension) {
+        continue;
+      }
+
+      final String executableWithExtension =
+          '$executable$mpWindowsExecutableExtension';
+      final String extensionCandidate = p.join(
+        trimmedPathEntry,
+        executableWithExtension,
+      );
+      final File extensionCandidateFile = File(extensionCandidate);
+      final bool extensionCandidateExists = extensionCandidateFile.existsSync();
+
+      if (extensionCandidateExists) {
+        return extensionCandidate;
+      }
+    }
+
+    return executable;
   }
 
   void _finalizeRunStatus({
