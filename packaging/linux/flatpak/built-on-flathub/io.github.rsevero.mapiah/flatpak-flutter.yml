@@ -44,7 +44,7 @@ modules:
   sources:
   - type: git
     url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.37-rc3
+    tag: v0.2.37-rc4
   - type: file
     path: io.github.rsevero.mapiah.metainfo.xml
   - type: git
