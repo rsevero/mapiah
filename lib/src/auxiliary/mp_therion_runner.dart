@@ -65,14 +65,18 @@ class MPTherionRunner {
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
     int? therionExitCode;
+    final ({String executable, List<String> arguments}) executionConfig =
+        _buildExecutionConfig();
+    final String processExecutable = executionConfig.executable;
+    final List<String> processArguments = executionConfig.arguments;
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
 
     try {
       final Process process = await Process.start(
-        therionExecutablePath,
-        [thConfigFilePath],
+        processExecutable,
+        processArguments,
         workingDirectory: workingDirectory,
         runInShell: true,
       );
@@ -116,6 +120,23 @@ class MPTherionRunner {
         statusNotifier.value = MPTherionRunStatus.ok;
       }
     }
+  }
+
+  ({String executable, List<String> arguments}) _buildExecutionConfig() {
+    final String therionExecutable = therionExecutablePath.trim();
+    final List<String> therionArguments = <String>[thConfigFilePath];
+
+    if (!mpIsFlathub) {
+      return (executable: therionExecutable, arguments: therionArguments);
+    }
+
+    final List<String> hostArguments = <String>[
+      mpFlatpakSpawnHostArgument,
+      therionExecutable,
+      ...therionArguments,
+    ];
+
+    return (executable: mpFlatpakSpawnExecutableName, arguments: hostArguments);
   }
 
   void stop() {
