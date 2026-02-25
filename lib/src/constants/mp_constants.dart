@@ -441,6 +441,15 @@ const String mpWindowsRegistryQuery32BitSwitch = '/reg:32';
 const String mpWindowsSystemRootEnvironmentVariable = 'SystemRoot';
 const String mpWindowsSystem32Directory = 'System32';
 
+const String mpTherionWindowsDebugPrefix = '[Mapiah][Therion][Debug]';
+const String mpTherionWindowsRegistryLookupHeader =
+    '$mpTherionWindowsDebugPrefix Registry lookup results:';
+const String mpTherionWindowsRegistryLookupStatusFound = 'FOUND';
+const String mpTherionWindowsRegistryLookupStatusMissing = 'NOT_FOUND_OR_EMPTY';
+const String mpTherionWindowsRegistryLookupFallbackMessage =
+    '$mpTherionWindowsDebugPrefix Falling back to executable from PATH.';
+const String mpTherionWindowsRegistryLookupValueUnavailable = '<unavailable>';
+
 const int mpWindowsRegistryQueryValueStartTokenIndex = 2;
 const int mpWindowsRegistryQueryMinimumTokens =
     mpWindowsRegistryQueryValueStartTokenIndex + 1;

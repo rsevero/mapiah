@@ -117,10 +117,13 @@ class MPWindowsTherionRunner {
     required String therionFileName,
     required String workingDirectory,
   }) async {
-    final String commandLine = buildCompileInvocation(
-      therionOptions: therionOptions,
-      therionFileName: therionFileName,
-    );
+    final ({String commandLine, List<String> registrySearchLogLines})
+    compileInvocationWithDiagnostics =
+        _buildCompileInvocationWithRegistryDiagnostics(
+          therionOptions: therionOptions,
+          therionFileName: therionFileName,
+        );
+    final String commandLine = compileInvocationWithDiagnostics.commandLine;
 
     final MPTherionExecutionResult executionResult = await processRunner.run(
       commandLine: commandLine,
@@ -131,8 +134,16 @@ class MPWindowsTherionRunner {
       return executionResult;
     }
 
-    final String localizedErrorMessage = appLocalizations
+    final String localizedBaseErrorMessage = appLocalizations
         .mpTherionCannotExecuteCommand(commandLine);
+    final String registryLookupDiagnosticsText =
+        _buildRegistryLookupDiagnosticsText(
+          compileInvocationWithDiagnostics.registrySearchLogLines,
+        );
+    final String localizedErrorMessage = _buildLocalizedErrorMessage(
+      localizedBaseErrorMessage: localizedBaseErrorMessage,
+      registryLookupDiagnosticsText: registryLookupDiagnosticsText,
+    );
 
     final MPTherionExecutionResult localizedResult = executionResult.copyWith(
       localizedErrorMessage: localizedErrorMessage,
@@ -142,33 +153,113 @@ class MPWindowsTherionRunner {
   }
 
   String _resolveTherionExecutableCommand() {
+    final ({String executableCommand, List<String> registrySearchLogLines})
+    executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
+
+    return executableResolution.executableCommand;
+  }
+
+  ({String executableCommand, List<String> registrySearchLogLines})
+  _resolveTherionExecutableCommandWithDiagnostics() {
+    final List<String> registrySearchLogLines = <String>[];
+
     final String? machineInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionMachinePath,
+      registrySearchLogLines: registrySearchLogLines,
     );
     if (machineInstallDirectory != null) {
       final String machineExecutableCommand = _buildQuotedExecutableCommand(
         machineInstallDirectory,
       );
-      return machineExecutableCommand;
+
+      return (
+        executableCommand: machineExecutableCommand,
+        registrySearchLogLines: registrySearchLogLines,
+      );
     }
 
     final String? userInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionUserPath,
+      registrySearchLogLines: registrySearchLogLines,
     );
     if (userInstallDirectory != null) {
       final String userExecutableCommand = _buildQuotedExecutableCommand(
         userInstallDirectory,
       );
-      return userExecutableCommand;
+
+      return (
+        executableCommand: userExecutableCommand,
+        registrySearchLogLines: registrySearchLogLines,
+      );
     }
 
-    return mpTherionExecutableName;
+    registrySearchLogLines.add(mpTherionWindowsRegistryLookupFallbackMessage);
+
+    return (
+      executableCommand: mpTherionExecutableName,
+      registrySearchLogLines: registrySearchLogLines,
+    );
   }
 
-  String? _readInstallDirectory(String registryPath) {
+  ({String commandLine, List<String> registrySearchLogLines})
+  _buildCompileInvocationWithRegistryDiagnostics({
+    required String therionOptions,
+    required String therionFileName,
+  }) {
+    final ({String commandLine, List<String> registrySearchLogLines})
+    compilerCommandWithDiagnostics =
+        _buildCompilerCommandWithRegistryDiagnostics();
+    final String quotedFileName = _quoteValue(therionFileName);
+
+    final String compileInvocation = _joinNonEmptyParts(<String>[
+      compilerCommandWithDiagnostics.commandLine,
+      mpTherionCompileFlag,
+      therionOptions,
+      quotedFileName,
+    ]);
+
+    return (
+      commandLine: compileInvocation,
+      registrySearchLogLines:
+          compilerCommandWithDiagnostics.registrySearchLogLines,
+    );
+  }
+
+  ({String commandLine, List<String> registrySearchLogLines})
+  _buildCompilerCommandWithRegistryDiagnostics() {
+    final ({String executableCommand, List<String> registrySearchLogLines})
+    executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
+    final bool cmdExecutableAvailable = shellProbe.isCmdExeAvailable();
+    final String selectedShellExecutable = cmdExecutableAvailable
+        ? mpWindowsCmdExecutable
+        : mpWindowsCommandExecutable;
+
+    final String compilerCommand = _joinNonEmptyParts(<String>[
+      selectedShellExecutable,
+      mpWindowsShellExecuteFlag,
+      executableResolution.executableCommand,
+    ]);
+
+    return (
+      commandLine: compilerCommand,
+      registrySearchLogLines: executableResolution.registrySearchLogLines,
+    );
+  }
+
+  String? _readInstallDirectory(
+    String registryPath, {
+    List<String>? registrySearchLogLines,
+  }) {
     final String? installDirectory64Bit = registryReader.readString64Bit(
       registryPath: registryPath,
       valueName: mpWindowsRegistryInstallDirValueName,
+    );
+
+    _appendRegistryLookupDebugLine(
+      registrySearchLogLines: registrySearchLogLines,
+      registryPath: registryPath,
+      registryView: mpWindowsRegistryQuery64BitSwitch,
+      registryValue: installDirectory64Bit,
     );
 
     if (installDirectory64Bit != null && installDirectory64Bit.isNotEmpty) {
@@ -180,6 +271,13 @@ class MPWindowsTherionRunner {
       valueName: mpWindowsRegistryInstallDirValueName,
     );
 
+    _appendRegistryLookupDebugLine(
+      registrySearchLogLines: registrySearchLogLines,
+      registryPath: registryPath,
+      registryView: mpWindowsRegistryQuery32BitSwitch,
+      registryValue: installDirectory32Bit,
+    );
+
     if (installDirectory32Bit == null) {
       return null;
     }
@@ -189,6 +287,59 @@ class MPWindowsTherionRunner {
     }
 
     return installDirectory32Bit;
+  }
+
+  void _appendRegistryLookupDebugLine({
+    required List<String>? registrySearchLogLines,
+    required String registryPath,
+    required String registryView,
+    required String? registryValue,
+  }) {
+    if (registrySearchLogLines == null) {
+      return;
+    }
+
+    final bool hasRegistryValue =
+        registryValue != null && registryValue.trim().isNotEmpty;
+    final String resultStatus = hasRegistryValue
+        ? mpTherionWindowsRegistryLookupStatusFound
+        : mpTherionWindowsRegistryLookupStatusMissing;
+    final String resultValue = hasRegistryValue
+        ? registryValue
+        : mpTherionWindowsRegistryLookupValueUnavailable;
+    final String debugLine =
+        '$mpTherionWindowsDebugPrefix path="$registryPath" view="$registryView" value="$mpWindowsRegistryInstallDirValueName" result="$resultStatus" resolved="$resultValue"';
+
+    registrySearchLogLines.add(debugLine);
+  }
+
+  String _buildRegistryLookupDiagnosticsText(
+    List<String> registrySearchLogLines,
+  ) {
+    if (registrySearchLogLines.isEmpty) {
+      return mpEmptyString;
+    }
+
+    final List<String> diagnosticsLines = <String>[
+      mpTherionWindowsRegistryLookupHeader,
+      ...registrySearchLogLines,
+    ];
+
+    return diagnosticsLines.join(thUnixLineBreak);
+  }
+
+  String _buildLocalizedErrorMessage({
+    required String localizedBaseErrorMessage,
+    required String registryLookupDiagnosticsText,
+  }) {
+    if (registryLookupDiagnosticsText.isEmpty) {
+      return localizedBaseErrorMessage;
+    }
+
+    final String localizedErrorMessage =
+        '$localizedBaseErrorMessage$thUnixLineBreak$registryLookupDiagnosticsText';
+
+    return localizedErrorMessage;
   }
 
   String _buildQuotedExecutableCommand(String installDirectory) {
@@ -213,7 +364,7 @@ class MPWindowsTherionRunner {
 
     final String joinedPath = hasTrailingSeparator
         ? '$normalizedBaseDirectory$fileName'
-        : '$normalizedBaseDirectory/${fileName}';
+        : '$normalizedBaseDirectory/$fileName';
 
     return joinedPath;
   }

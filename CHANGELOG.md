@@ -8,6 +8,7 @@
   * Created new settings type: FilePickerExecutable.
   * Running Therion.
   * Tracking warnings and errors on Therion run output.
+  * Debug output on Windows search for therion install info.
 * Fixed bugs:
   * 'Cancel' button on settings page not closing page.
   * Therion run output should be selectable as a whole and not only single lines.
