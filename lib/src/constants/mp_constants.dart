@@ -148,8 +148,6 @@ const String mpTherionWindowsExecutableName =
     '$mpTherionExecutableName$mpWindowsExecutableExtension';
 const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
 const String mpTherionPrintEncodingsArgument = '--print-encodings';
-const String mpFlatpakSpawnExecutableName = 'flatpak-spawn';
-const String mpFlatpakSpawnHostArgument = '--host';
 const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';

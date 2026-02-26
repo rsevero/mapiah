@@ -4,18 +4,131 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
 - org.freedesktop.Sdk.Extension.llvm19
+- org.freedesktop.Sdk.Extension.texlive
 command: mapiah
 finish-args:
 - --device=dri
-- --env=GIO_USE_PORTAL=0
-- --env=GTK_USE_PORTAL=0
-- --filesystem=home
+- --env=GIO_USE_PORTAL=1
+- --env=GTK_USE_PORTAL=1
 - --share=ipc
 - --share=network
 - --socket=fallback-x11
 - --socket=wayland
-- --talk-name=org.freedesktop.Flatpak
 modules:
+- name: proj
+  buildsystem: cmake-ninja
+  config-opts:
+  - -DCMAKE_BUILD_TYPE=Release
+  - -DBUILD_TESTING=OFF
+  - -DBUILD_APPS=OFF
+  sources:
+  - type: git
+    url: https://github.com/OSGeo/PROJ.git
+    tag: '@@PROJ_TAG@@'
+
+- name: fmt
+  buildsystem: cmake-ninja
+  config-opts:
+  - -DCMAKE_BUILD_TYPE=Release
+  - -DFMT_TEST=OFF
+  - -DFMT_DOC=OFF
+  sources:
+  - type: git
+    url: https://github.com/fmtlib/fmt.git
+    tag: '@@FMT_TAG@@'
+
+# Copies the minimum texlive subset from the SDK extension into /app so that
+# the bundled therion binary can invoke pdftex and mpost at runtime without any
+# host-system dependency.  mpost and pdftex are exposed as wrapper scripts that
+# set TEXMFCNF before delegating to the real binaries under /app/lib/texlive.
+- name: texlive-therion-runtime
+  buildsystem: simple
+  build-commands:
+  - |
+    set -e
+    TEXLIVE=/usr/lib/sdk/texlive
+    ARCH="$(uname -m)-linux"
+    TL_BIN="${TEXLIVE}/bin/${ARCH}"
+    DEST=/app/lib/texlive
+
+    mkdir -p "${DEST}/bin"
+    mkdir -p "${DEST}/texmf-var"
+    mkdir -p "${DEST}/texmf-dist"
+
+    # Install TeX binaries used by therion at runtime.
+    for exe in pdftex mpost kpsewhich; do
+      install -m 755 "${TL_BIN}/${exe}" "${DEST}/bin/${exe}"
+    done
+
+    # Copy pre-built format files (pdftex.fmt, mpost.mem / mpost.fmt)
+    # from the SDK extension so no fmtutil run is required at runtime.
+    cp -r "${TEXLIVE}/texmf-var/web2c" "${DEST}/texmf-var/"
+
+    # Copy minimal texmf-dist content needed at runtime.
+    cp -r "${TEXLIVE}/texmf-dist/web2c" "${DEST}/texmf-dist/"
+    cp -r "${TEXLIVE}/texmf-dist/metapost" "${DEST}/texmf-dist/"
+    mkdir -p "${DEST}/texmf-dist/tex"
+    cp -r "${TEXLIVE}/texmf-dist/tex/plain"   "${DEST}/texmf-dist/tex/"
+    cp -r "${TEXLIVE}/texmf-dist/tex/generic" "${DEST}/texmf-dist/tex/"
+
+    # Fonts: only the Computer Modern and AMS subsets used by therion.
+    # The full fonts directory is too large to bundle wholesale.
+    mkdir -p "${DEST}/texmf-dist/fonts/type1/public"
+    mkdir -p "${DEST}/texmf-dist/fonts/tfm/public"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/type1/public/cm"       "${DEST}/texmf-dist/fonts/type1/public/"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/type1/public/amsfonts" "${DEST}/texmf-dist/fonts/type1/public/"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/tfm/public/cm"         "${DEST}/texmf-dist/fonts/tfm/public/"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/tfm/public/amsfonts"   "${DEST}/texmf-dist/fonts/tfm/public/"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/map" "${DEST}/texmf-dist/fonts/"
+    cp -r "${TEXLIVE}/texmf-dist/fonts/enc" "${DEST}/texmf-dist/fonts/"
+
+    # Write a texmf.cnf that re-roots all TeX paths under /app.
+    cat > "${DEST}/texmf-dist/web2c/texmf.cnf" << 'CNF_END'
+    TEXMFDIST = /app/lib/texlive/texmf-dist
+    TEXMFVAR  = /app/lib/texlive/texmf-var
+    TEXMFHOME = $HOME/.texlive
+    TEXMF     = {!!$TEXMFHOME,!!$TEXMFVAR,!!$TEXMFDIST}
+    TEXMFCNF  = {$HOME/.texlive/web2c,/app/lib/texlive/texmf-dist/web2c}
+    CNF_END
+
+    # Create wrapper scripts that set TEXMFCNF before running the real binary.
+    # This ensures kpathsea searches /app rather than the host or SDK paths.
+    printf '#!/bin/sh\nexport TEXMFCNF=/app/lib/texlive/texmf-dist/web2c\nexec /app/lib/texlive/bin/pdftex "$@"\n' \
+      > /app/bin/pdftex
+    chmod +x /app/bin/pdftex
+
+    printf '#!/bin/sh\nexport TEXMFCNF=/app/lib/texlive/texmf-dist/web2c\nexec /app/lib/texlive/bin/mpost "$@"\n' \
+      > /app/bin/mpost
+    chmod +x /app/bin/mpost
+
+# Build only the therion command-line compiler (no Loch, no xtherion, no docs).
+# Only the th-runtime CMake component is installed so that symbol/pattern data
+# files end up in /app/share/therion and the binary in /app/bin/therion.
+- name: therion
+  buildsystem: simple
+  build-commands:
+  - mkdir -p _build
+  - >
+    cd _build && cmake .. -G Ninja
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=/app
+    -DCMAKE_PREFIX_PATH=/app
+    -DBUILD_LOCH=OFF
+    -DBUILD_THBOOK=OFF
+    -DBUILD_XTHERION=OFF
+    -DUSE_BUNDLED_CATCH2=ON
+  - ninja -C _build therion
+  - cmake --install _build --prefix /app --component th-runtime
+  # Override therion.ini so therion uses the bundled pdftex and mpost wrappers.
+  - |
+    mkdir -p /app/etc
+    printf 'mpost-path  "/app/bin/mpost"\nmpost-options  "-tex=etex"\npdftex-path  "/app/bin/pdftex"\n' \
+      > /app/etc/therion.ini
+  sources:
+  - type: git
+    url: https://github.com/therion/therion.git
+    tag: '@@THERION_TAG@@'
+
 - name: mapiah
   buildsystem: simple
   build-options:
