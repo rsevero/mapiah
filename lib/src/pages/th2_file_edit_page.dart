@@ -124,20 +124,17 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         key: ValueKey(
                           'TH2FileEditPageOpenTHConfigAndRunTherionButton',
                         ),
-                        icon: Icon(
-                          Icons.playlist_add_check_outlined,
-                          color: therionAvailable
-                              ? colorScheme.onSecondaryContainer
-                              : mpTherionUnavailableButtonColor,
-                        ),
-                        onPressed: () async {
-                          await MPDialogAux.pickTHConfigFileAndRunTherion(
-                            context,
-                          );
-                          if (mounted) {
-                            setState(() {});
-                          }
-                        },
+                        icon: Icon(Icons.playlist_add_check_outlined),
+                        onPressed: therionAvailable
+                            ? () async {
+                                await MPDialogAux.pickTHConfigFileAndRunTherion(
+                                  context,
+                                );
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              }
+                            : null,
                         tooltip: therionAvailable
                             ? appLocalizations
                                   .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -152,19 +149,15 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
 
                       return IconButton(
                         key: ValueKey('TH2FileEditPageRunTherionButton'),
-                        icon: Icon(
-                          Icons.play_arrow_outlined,
-                          color: therionAvailable
-                              ? colorScheme.onSecondaryContainer
-                              : mpTherionUnavailableButtonColor,
-                        ),
-                        onPressed:
-                            mpLocator
-                                .mpGeneralController
-                                .thConfigFilePath
-                                .isEmpty
+                        icon: Icon(Icons.play_arrow_outlined),
+                        onPressed: !therionAvailable
                             ? null
-                            : () => MPDialogAux.runTherion(context),
+                            : (mpLocator
+                                      .mpGeneralController
+                                      .thConfigFilePath
+                                      .isEmpty
+                                  ? null
+                                  : () => MPDialogAux.runTherion(context)),
                         tooltip: therionAvailable
                             ? appLocalizations.mapiahRunTherionButtonTooltip
                             : mpLocator.appLocalizations.mpNoTherionFound,

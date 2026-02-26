@@ -5,7 +5,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -88,15 +87,16 @@ class _MapiahHomeState extends State<MapiahHome> {
               return IconButton(
                 key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
                 icon: Icon(Icons.playlist_add_check_outlined),
-                color: therionAvailable
-                    ? colorScheme.onSecondaryContainer
-                    : mpTherionUnavailableButtonColor,
-                onPressed: () async {
-                  await MPDialogAux.pickTHConfigFileAndRunTherion(context);
-                  if (mounted) {
-                    setState(() {});
-                  }
-                },
+                onPressed: therionAvailable
+                    ? () async {
+                        await MPDialogAux.pickTHConfigFileAndRunTherion(
+                          context,
+                        );
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      }
+                    : null,
                 tooltip: therionAvailable
                     ? appLocalizations
                           .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -112,13 +112,11 @@ class _MapiahHomeState extends State<MapiahHome> {
               return IconButton(
                 key: ValueKey('MapiahHomeRunTherionButton'),
                 icon: Icon(Icons.play_arrow_outlined),
-                color: therionAvailable
-                    ? colorScheme.onSecondaryContainer
-                    : mpTherionUnavailableButtonColor,
-                onPressed:
-                    mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                onPressed: !therionAvailable
                     ? null
-                    : () => MPDialogAux.runTherion(context),
+                    : (mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                          ? null
+                          : () => MPDialogAux.runTherion(context)),
                 tooltip: therionAvailable
                     ? appLocalizations.mapiahRunTherionButtonTooltip
                     : mpLocator.appLocalizations.mpNoTherionFound,
@@ -138,7 +136,6 @@ class _MapiahHomeState extends State<MapiahHome> {
             },
             tooltip: appLocalizations.mpSettingsPageTitle,
           ),
-          buildLanguageDropdown(context),
           MPHelpButtonWidget(
             context,
             mpHelpPageKeyboardShortcutsMain,
@@ -164,64 +161,6 @@ class _MapiahHomeState extends State<MapiahHome> {
     );
 
     return _withShortcuts(scaffold);
-  }
-
-  Widget buildLanguageDropdown(BuildContext context) {
-    final List<String> localeIDs = [
-      'sys',
-      ...AppLocalizations.supportedLocales.map((locale) => locale.languageCode),
-    ];
-
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
-        return PopupMenuButton<String>(
-          onSelected: (String newValue) {
-            mpLocator.mpSettingsController.setString(
-              MPSettingID.Main_LocaleID,
-              newValue,
-            );
-          },
-          itemBuilder: (BuildContext context) {
-            return localeIDs.map<PopupMenuEntry<String>>((String localeID) {
-              return PopupMenuItem<String>(
-                value: localeID,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 300),
-                  child: Row(
-                    children: [
-                      if (localeID ==
-                          mpLocator.mpSettingsController.getString(
-                            MPSettingID.Main_LocaleID,
-                          )) ...[
-                        Icon(Icons.check, color: colorScheme.primary),
-                        const SizedBox(width: 8),
-                      ] else
-                        const SizedBox(width: 32),
-                      Text(AppLocalizations.of(context).languageName(localeID)),
-                    ],
-                  ),
-                ),
-              );
-            }).toList();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 4.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.language, color: colorScheme.onSecondaryContainer),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: colorScheme.onSecondaryContainer,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   void initializeMPCommandLocalizations(BuildContext context) {
