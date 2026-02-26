@@ -7,6 +7,8 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 
 class _FakeWindowsRegistryReader implements MPWindowsRegistryReader {
   final Map<String, String?> _registryValuesByPath;
+  int readString64BitCallCount = 0;
+  int readString32BitCallCount = 0;
 
   _FakeWindowsRegistryReader(this._registryValuesByPath);
 
@@ -15,6 +17,8 @@ class _FakeWindowsRegistryReader implements MPWindowsRegistryReader {
     required String registryPath,
     required String valueName,
   }) {
+    readString64BitCallCount += 1;
+
     return _registryValuesByPath[registryPath];
   }
 
@@ -23,6 +27,8 @@ class _FakeWindowsRegistryReader implements MPWindowsRegistryReader {
     required String registryPath,
     required String valueName,
   }) {
+    readString32BitCallCount += 1;
+
     return _registryValuesByPath[registryPath];
   }
 }
@@ -54,6 +60,14 @@ class _FakeTherionProcessRunner implements MPTherionProcessRunner {
 
 void main() {
   group('MPWindowsTherionRunner command building', () {
+    setUp(() {
+      MPWindowsTherionRunner.clearSearchedTherionExecutablePathCache();
+    });
+
+    tearDown(() {
+      MPWindowsTherionRunner.clearSearchedTherionExecutablePathCache();
+    });
+
     test(
       'buildCompilerCommand uses single backslashes only on Windows path',
       () {
@@ -98,5 +112,42 @@ void main() {
       expect(commandLine, '"$preferredTherionExecutablePath"');
       expect(commandLine, isNot(contains(r'\Program Files\Therion')));
     });
+
+    test(
+      'buildCompilerCommand caches searched path for repeated calls without preferred executable',
+      () {
+        final _FakeWindowsRegistryReader registryReader =
+            _FakeWindowsRegistryReader(<String, String?>{
+              mpWindowsRegistryTherionMachinePath: r'C:\Program Files\Therion',
+            });
+        final MPWindowsTherionRunner firstWindowsTherionRunner =
+            MPWindowsTherionRunner(
+              mpLocator: MPLocator(),
+              registryReader: registryReader,
+              shellProbe: _FakeWindowsShellProbe(),
+              processRunner: _FakeTherionProcessRunner(),
+            );
+        final MPWindowsTherionRunner secondWindowsTherionRunner =
+            MPWindowsTherionRunner(
+              mpLocator: MPLocator(),
+              registryReader: registryReader,
+              shellProbe: _FakeWindowsShellProbe(),
+              processRunner: _FakeTherionProcessRunner(),
+            );
+
+        final String firstCommandLine = firstWindowsTherionRunner
+            .buildCompilerCommand(preferredTherionExecutablePath: '');
+        final String secondCommandLine = secondWindowsTherionRunner
+            .buildCompilerCommand(preferredTherionExecutablePath: '');
+
+        expect(
+          firstCommandLine,
+          contains(r'\Program Files\Therion\therion.exe'),
+        );
+        expect(secondCommandLine, firstCommandLine);
+        expect(registryReader.readString64BitCallCount, 1);
+        expect(registryReader.readString32BitCallCount, 0);
+      },
+    );
   });
 }

@@ -9,6 +9,7 @@
   * Running Therion.
   * Tracking warnings and errors on Therion run output.
   * Debug output on Windows search for therion install info.
+  * Caching Therion install path on windows on search.
 * Fixed bugs:
   * 'Cancel' button on settings page not closing page.
   * Therion run output should be selectable as a whole and not only single lines.

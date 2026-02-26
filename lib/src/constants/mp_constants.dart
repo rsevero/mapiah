@@ -450,6 +450,8 @@ const String mpTherionWindowsRegistryLookupStatusFound = 'FOUND';
 const String mpTherionWindowsRegistryLookupStatusMissing = 'NOT_FOUND_OR_EMPTY';
 const String mpTherionWindowsRegistryLookupFallbackMessage =
     '$mpTherionWindowsDebugPrefix Falling back to executable from PATH.';
+const String mpTherionWindowsRegistryLookupCacheHitMessage =
+    '$mpTherionWindowsDebugPrefix Using cached executable path from previous registry lookup.';
 const String mpTherionWindowsRegistryLookupValueUnavailable = '<unavailable>';
 
 const int mpWindowsRegistryQueryValueStartTokenIndex = 2;

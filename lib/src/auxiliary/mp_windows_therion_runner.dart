@@ -72,6 +72,8 @@ class MPWindowsTherionRunner {
   final MPWindowsShellProbe shellProbe;
   final MPTherionProcessRunner processRunner;
 
+  static String? _cachedSearchedTherionExecutablePath;
+
   const MPWindowsTherionRunner({
     required this.mpLocator,
     required this.registryReader,
@@ -80,6 +82,10 @@ class MPWindowsTherionRunner {
   });
 
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
+
+  static void clearSearchedTherionExecutablePathCache() {
+    _cachedSearchedTherionExecutablePath = null;
+  }
 
   String buildCompilerCommand({String preferredTherionExecutablePath = ''}) {
     final String executableCommand = _resolveTherionExecutableCommand(
@@ -200,6 +206,23 @@ class MPWindowsTherionRunner {
       );
     }
 
+    final String? cachedSearchedTherionExecutablePath =
+        _cachedSearchedTherionExecutablePath;
+
+    if (cachedSearchedTherionExecutablePath != null &&
+        cachedSearchedTherionExecutablePath.isNotEmpty) {
+      final String cachedExecutablePath = cachedSearchedTherionExecutablePath;
+      final String cachedExecutableCommand = _quoteValue(cachedExecutablePath);
+
+      registrySearchLogLines.add(mpTherionWindowsRegistryLookupCacheHitMessage);
+
+      return (
+        executableCommand: cachedExecutableCommand,
+        executablePath: cachedExecutablePath,
+        registrySearchLogLines: registrySearchLogLines,
+      );
+    }
+
     final String? machineInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionMachinePath,
       registrySearchLogLines: registrySearchLogLines,
@@ -211,6 +234,7 @@ class MPWindowsTherionRunner {
       final String machineExecutableCommand = _quoteValue(
         machineExecutablePath,
       );
+      _cacheSearchedTherionExecutablePath(machineExecutablePath);
 
       return (
         executableCommand: machineExecutableCommand,
@@ -228,6 +252,7 @@ class MPWindowsTherionRunner {
         userInstallDirectory,
       );
       final String userExecutableCommand = _quoteValue(userExecutablePath);
+      _cacheSearchedTherionExecutablePath(userExecutablePath);
 
       return (
         executableCommand: userExecutableCommand,
@@ -237,12 +262,24 @@ class MPWindowsTherionRunner {
     }
 
     registrySearchLogLines.add(mpTherionWindowsRegistryLookupFallbackMessage);
+    _cacheSearchedTherionExecutablePath(mpTherionWindowsExecutableName);
 
     return (
       executableCommand: mpTherionWindowsExecutableName,
       executablePath: mpTherionWindowsExecutableName,
       registrySearchLogLines: registrySearchLogLines,
     );
+  }
+
+  void _cacheSearchedTherionExecutablePath(String executablePath) {
+    final String trimmedExecutablePath = executablePath.trim();
+    final bool hasExecutablePath = trimmedExecutablePath.isNotEmpty;
+
+    if (!hasExecutablePath) {
+      return;
+    }
+
+    _cachedSearchedTherionExecutablePath = trimmedExecutablePath;
   }
 
   ({
