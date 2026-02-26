@@ -81,18 +81,23 @@ class MPWindowsTherionRunner {
 
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
 
-  String buildCompilerCommand() {
-    final String executableCommand = _resolveTherionExecutableCommand();
+  String buildCompilerCommand({String preferredTherionExecutablePath = ''}) {
+    final String executableCommand = _resolveTherionExecutableCommand(
+      preferredTherionExecutablePath: preferredTherionExecutablePath,
+    );
     final String compilerCommand = executableCommand;
 
     return compilerCommand;
   }
 
   String buildCompileInvocation({
+    String preferredTherionExecutablePath = '',
     required String therionOptions,
     required String therionFileName,
   }) {
-    final String compilerCommand = buildCompilerCommand();
+    final String compilerCommand = buildCompilerCommand(
+      preferredTherionExecutablePath: preferredTherionExecutablePath,
+    );
     final String quotedFileName = _quoteValue(therionFileName);
 
     final String compileInvocation = _joinNonEmptyParts(<String>[
@@ -106,6 +111,7 @@ class MPWindowsTherionRunner {
   }
 
   Future<MPTherionExecutionResult> runCompile({
+    String preferredTherionExecutablePath = '',
     required String therionOptions,
     required String therionFileName,
     required String workingDirectory,
@@ -118,6 +124,7 @@ class MPWindowsTherionRunner {
     })
     compileInvocationWithDiagnostics =
         _buildCompileInvocationWithRegistryDiagnostics(
+          preferredTherionExecutablePath: preferredTherionExecutablePath,
           therionOptions: therionOptions,
           therionFileName: therionFileName,
         );
@@ -152,13 +159,17 @@ class MPWindowsTherionRunner {
     return localizedResult;
   }
 
-  String _resolveTherionExecutableCommand() {
+  String _resolveTherionExecutableCommand({
+    required String preferredTherionExecutablePath,
+  }) {
     final ({
       String executableCommand,
       String executablePath,
       List<String> registrySearchLogLines,
     })
-    executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
+    executableResolution = _resolveTherionExecutableCommandWithDiagnostics(
+      preferredTherionExecutablePath: preferredTherionExecutablePath,
+    );
 
     return executableResolution.executableCommand;
   }
@@ -168,8 +179,26 @@ class MPWindowsTherionRunner {
     String executablePath,
     List<String> registrySearchLogLines,
   })
-  _resolveTherionExecutableCommandWithDiagnostics() {
+  _resolveTherionExecutableCommandWithDiagnostics({
+    required String preferredTherionExecutablePath,
+  }) {
     final List<String> registrySearchLogLines = <String>[];
+    final String trimmedPreferredTherionExecutablePath =
+        preferredTherionExecutablePath.trim();
+    final bool hasPreferredTherionExecutablePath =
+        trimmedPreferredTherionExecutablePath.isNotEmpty;
+
+    if (hasPreferredTherionExecutablePath) {
+      final String preferredExecutableCommand = _quoteValue(
+        trimmedPreferredTherionExecutablePath,
+      );
+
+      return (
+        executableCommand: preferredExecutableCommand,
+        executablePath: trimmedPreferredTherionExecutablePath,
+        registrySearchLogLines: registrySearchLogLines,
+      );
+    }
 
     final String? machineInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionMachinePath,
@@ -223,6 +252,7 @@ class MPWindowsTherionRunner {
     List<String> registrySearchLogLines,
   })
   _buildCompileInvocationWithRegistryDiagnostics({
+    required String preferredTherionExecutablePath,
     required String therionOptions,
     required String therionFileName,
   }) {
@@ -232,7 +262,9 @@ class MPWindowsTherionRunner {
       List<String> registrySearchLogLines,
     })
     compilerCommandWithDiagnostics =
-        _buildCompilerCommandWithRegistryDiagnostics();
+        _buildCompilerCommandWithRegistryDiagnostics(
+          preferredTherionExecutablePath: preferredTherionExecutablePath,
+        );
     final String quotedFileName = _quoteValue(therionFileName);
     final List<String> processArguments = <String>[];
     final String trimmedTherionOptions = therionOptions.trim();
@@ -267,13 +299,17 @@ class MPWindowsTherionRunner {
     String executablePath,
     List<String> registrySearchLogLines,
   })
-  _buildCompilerCommandWithRegistryDiagnostics() {
+  _buildCompilerCommandWithRegistryDiagnostics({
+    required String preferredTherionExecutablePath,
+  }) {
     final ({
       String executableCommand,
       String executablePath,
       List<String> registrySearchLogLines,
     })
-    executableResolution = _resolveTherionExecutableCommandWithDiagnostics();
+    executableResolution = _resolveTherionExecutableCommandWithDiagnostics(
+      preferredTherionExecutablePath: preferredTherionExecutablePath,
+    );
     final String compilerCommand = executableResolution.executableCommand;
 
     return (

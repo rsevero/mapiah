@@ -76,5 +76,27 @@ void main() {
         expect(commandLine, isNot(contains(r'\\')));
       },
     );
+
+    test('buildCompilerCommand prefers configured executable path', () {
+      final MPWindowsTherionRunner windowsTherionRunner =
+          MPWindowsTherionRunner(
+            mpLocator: MPLocator(),
+            registryReader: _FakeWindowsRegistryReader(<String, String?>{
+              mpWindowsRegistryTherionMachinePath: r'C:\Program Files\Therion',
+            }),
+            shellProbe: _FakeWindowsShellProbe(),
+            processRunner: _FakeTherionProcessRunner(),
+          );
+
+      const String preferredTherionExecutablePath =
+          r'D:\custom\therion\therion.exe';
+
+      final String commandLine = windowsTherionRunner.buildCompilerCommand(
+        preferredTherionExecutablePath: preferredTherionExecutablePath,
+      );
+
+      expect(commandLine, '"$preferredTherionExecutablePath"');
+      expect(commandLine, isNot(contains(r'\Program Files\Therion')));
+    });
   });
 }

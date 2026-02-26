@@ -16,6 +16,7 @@
   * Searching for Therion install path on windows always failing.
   * Therion run on Windows.
   * Windows tests.
+  * Set therion path not used on Windows.
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
   * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.

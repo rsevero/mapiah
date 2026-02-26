@@ -839,9 +839,6 @@ class MPDialogAux {
     final String configuredExecutablePath = mpLocator.mpSettingsController
         .getString(MPSettingID.Main_TherionExecutablePath)
         .trim();
-    final String therionExecutablePath = configuredExecutablePath.isEmpty
-        ? mpTherionDefaultExecutableCommand
-        : configuredExecutablePath;
 
     await showDialog<void>(
       context: context,
@@ -849,7 +846,7 @@ class MPDialogAux {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return MPRunTherionDialogWidget(
-          therionExecutablePath: therionExecutablePath,
+          therionExecutablePath: configuredExecutablePath,
           thConfigFilePath: thConfigFilePath,
         );
       },

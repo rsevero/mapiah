@@ -169,6 +169,8 @@ class MPTherionRunner {
 
     final MPTherionExecutionResult windowsExecutionResult =
         await windowsTherionRunner.runCompile(
+          preferredTherionExecutablePath:
+              _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
           therionFileName: thConfigFilePath,
           workingDirectory: workingDirectory,
@@ -304,7 +306,7 @@ class MPTherionRunner {
   }
 
   ({String executable, List<String> arguments}) _buildExecutionConfig() {
-    final String therionExecutable = therionExecutablePath.trim();
+    final String therionExecutable = _resolveStandardProcessExecutablePath();
     final List<String> therionArguments = <String>[thConfigFilePath];
 
     if (!mpIsFlathub) {
@@ -318,6 +320,25 @@ class MPTherionRunner {
     ];
 
     return (executable: mpFlatpakSpawnExecutableName, arguments: hostArguments);
+  }
+
+  String _resolveStandardProcessExecutablePath() {
+    final String preferredTherionExecutablePath =
+        _trimmedPreferredTherionExecutablePath();
+    final bool hasPreferredTherionExecutablePath =
+        preferredTherionExecutablePath.isNotEmpty;
+
+    if (hasPreferredTherionExecutablePath) {
+      return preferredTherionExecutablePath;
+    }
+
+    return mpTherionDefaultExecutableCommand;
+  }
+
+  String _trimmedPreferredTherionExecutablePath() {
+    final String trimmedTherionExecutablePath = therionExecutablePath.trim();
+
+    return trimmedTherionExecutablePath;
   }
 
   void stop() {
