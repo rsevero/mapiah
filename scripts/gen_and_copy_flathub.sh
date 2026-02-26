@@ -50,55 +50,6 @@ else
   exit 1
 fi
 
-# Resolve the latest upstream release tags and substitute @@…_TAG@@ placeholders
-# in the working copy of the manifest. The tag→commit resolution step that
-# follows will then pin the exact commits automatically.
-echo "Resolving latest dependency versions from GitHub..."
-export MANIFEST
-python3 - <<'PY_VERSIONS'
-import json
-import os
-import sys
-import urllib.request
-
-# Each entry: placeholder_in_yaml -> (github_repo, display_name)
-DEPENDENCIES = {
-    '@@THERION_TAG@@': ('therion/therion', 'therion'),
-    '@@PROJ_TAG@@':    ('OSGeo/PROJ',       'proj'),
-    '@@FMT_TAG@@':     ('fmtlib/fmt',       'fmt'),
-}
-
-manifest_path = os.environ['MANIFEST']
-
-with open(manifest_path, 'r', encoding='utf-8') as f:
-    content = f.read()
-
-for placeholder, (repo, name) in DEPENDENCIES.items():
-    api_url = f'https://api.github.com/repos/{repo}/releases/latest'
-    request = urllib.request.Request(
-        api_url,
-        headers={
-            'Accept': 'application/vnd.github+json',
-            'User-Agent': 'mapiah-flatpak-gen',
-        },
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=30) as response:
-            release_data = json.loads(response.read())
-        tag_name = release_data['tag_name']
-    except Exception as exc:
-        print(
-            f'ERROR: failed to fetch latest release for {name} ({repo}): {exc}',
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    print(f'  {name}: {tag_name}')
-    content = content.replace(placeholder, tag_name)
-
-with open(manifest_path, 'w', encoding='utf-8') as f:
-    f.write(content)
-PY_VERSIONS
-
 # Ensure git sources with tag also include commit in the input manifest.
 export MANIFEST
 python3 - <<'PY'

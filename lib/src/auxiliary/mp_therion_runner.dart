@@ -367,7 +367,17 @@ class MPTherionRunner {
     final String therionExecutable = _resolveStandardProcessExecutablePath();
     final List<String> therionArguments = <String>[thConfigFilePath];
 
-    return (executable: therionExecutable, arguments: therionArguments);
+    if (!mpIsFlathub) {
+      return (executable: therionExecutable, arguments: therionArguments);
+    }
+
+    final List<String> hostArguments = <String>[
+      mpFlatpakSpawnHostArgument,
+      therionExecutable,
+      ...therionArguments,
+    ];
+
+    return (executable: mpFlatpakSpawnExecutableName, arguments: hostArguments);
   }
 
   String _resolveStandardProcessExecutablePath() {
