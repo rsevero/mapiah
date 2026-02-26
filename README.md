@@ -28,6 +28,8 @@ Mapiah is in fast development stage, but it is already usable for real mapping w
 
 If you have TH2 files you want to edit and want to give Mapiah a try, please do. If you find any issue, please report it as a [Mapiah Issue](https://github.com/rsevero/mapiah/issues).
 
+Linux AppImage and Flatpak/Flathub and Windows versions are being used regularly. MacOS version lacks a developer with MacOS to properly test it.
+
 ## Installation
 
 ### Linux
