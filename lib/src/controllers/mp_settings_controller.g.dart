@@ -15,12 +15,12 @@ mixin _$MPSettingsController on MPSettingsControllerBase, Store {
   );
 
   @override
-  void trigger(MPSetting setting) {
+  void trigger(MPSettingsType type) {
     final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
       name: 'MPSettingsControllerBase.trigger',
     );
     try {
-      return super.trigger(setting);
+      return super.trigger(type);
     } finally {
       _$MPSettingsControllerBaseActionController.endAction(_$actionInfo);
     }

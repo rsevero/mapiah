@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey, rootBundle;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/auxiliary/mp_settings.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 class MPHelpDialogWidget extends StatelessWidget {
@@ -19,7 +19,7 @@ class MPHelpDialogWidget extends StatelessWidget {
 
   Future<String> _loadMarkdown(BuildContext context) async {
     final String localIDSetting = mpLocator.mpSettingsController.getString(
-      MPSetting.Main_LocaleID,
+      MPSettingsType.Main_LocaleID,
     );
     final String localeID = (localIDSetting == 'sys')
         ? View.of(context).platformDispatcher.locale.languageCode

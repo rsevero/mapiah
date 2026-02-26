@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/controllers/auxiliary/mp_settings.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
@@ -103,7 +103,7 @@ class MapiahApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        mpLocator.mpSettingsController.getTrigger(MPSetting.Main_LocaleID);
+        mpLocator.mpSettingsController.getTrigger(MPSettingsType.Main_LocaleID);
 
         return MaterialApp(
           navigatorKey: mpLocator.mpNavigatorKey,

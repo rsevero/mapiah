@@ -3,7 +3,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
-import 'package:mapiah/src/controllers/auxiliary/mp_settings.dart';
+import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPSettingsPage extends StatefulWidget {
@@ -14,9 +14,9 @@ class MPSettingsPage extends StatefulWidget {
 }
 
 class _MPSettingsPageState extends State<MPSettingsPage> {
-  final Map<MPSetting, dynamic> _draftValues = {};
-  final Map<MPSetting, String?> _errors = {};
-  final Map<MPSetting, int> _fieldRebuildCounters = {};
+  final Map<MPSettingsType, dynamic> _draftValues = {};
+  final Map<MPSettingsType, String?> _errors = {};
+  final Map<MPSettingsType, int> _fieldRebuildCounters = {};
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     required AppLocalizations appLocalizations,
     required String section,
   }) {
-    final List<MPSetting> types = _sortedSettingsInSection(
+    final List<MPSettingsType> types = _sortedSettingsInSection(
       appLocalizations,
       section,
     );
@@ -90,7 +90,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: mpSettingsPageFieldSpacing),
-            for (final MPSetting type in types) ...[
+            for (final MPSettingsType type in types) ...[
               _buildSettingField(appLocalizations, type),
               const SizedBox(height: mpSettingsPageFieldSpacing),
             ],
@@ -100,11 +100,14 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     );
   }
 
-  Widget _buildSettingField(AppLocalizations appLocalizations, MPSetting type) {
+  Widget _buildSettingField(
+    AppLocalizations appLocalizations,
+    MPSettingsType type,
+  ) {
     final String settingLabel = _localizedSettingName(appLocalizations, type);
 
     switch (type.type()) {
-      case MPSettingType.bool:
+      case MPSettingsTypeType.bool:
         return _buildSettingFieldWithReset(
           appLocalizations: appLocalizations,
           type: type,
@@ -121,7 +124,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             ),
           ),
         );
-      case MPSettingType.filePickerExec:
+      case MPSettingsTypeType.filePickerExec:
         return _buildSettingFieldWithReset(
           appLocalizations: appLocalizations,
           type: type,
@@ -142,11 +145,11 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             ),
           ),
         );
-      case MPSettingType.double:
-      case MPSettingType.int:
-      case MPSettingType.string:
-      case MPSettingType.stringList:
-        if (type == MPSetting.Main_LocaleID) {
+      case MPSettingsTypeType.double:
+      case MPSettingsTypeType.int:
+      case MPSettingsTypeType.string:
+      case MPSettingsTypeType.stringList:
+        if (type == MPSettingsType.Main_LocaleID) {
           final List<String> localeIDs = [
             mpDefaultLocaleID,
             ...AppLocalizations.supportedLocales.map(
@@ -216,7 +219,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     }
   }
 
-  Future<void> _pickExecutableForSetting(MPSetting type) async {
+  Future<void> _pickExecutableForSetting(MPSettingsType type) async {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final String dialogTitle = _localizedSettingName(appLocalizations, type);
     final String? pickedPath = await MPDialogAux.pickExecutableFilePath(
@@ -237,7 +240,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
   Widget _buildSettingFieldWithReset({
     required AppLocalizations appLocalizations,
-    required MPSetting type,
+    required MPSettingsType type,
     required Widget field,
   }) {
     return Row(
@@ -256,24 +259,24 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
   String? _validateTextDraftValue(
     AppLocalizations appLocalizations,
-    MPSetting type,
+    MPSettingsType type,
     String value,
   ) {
     final String raw = value.trim();
 
     switch (type.type()) {
-      case MPSettingType.double:
+      case MPSettingsTypeType.double:
         return double.tryParse(raw) == null
             ? appLocalizations.mpSettingsInvalidNumber
             : null;
-      case MPSettingType.int:
+      case MPSettingsTypeType.int:
         return int.tryParse(raw) == null
             ? appLocalizations.mpSettingsInvalidInteger
             : null;
-      case MPSettingType.bool:
-      case MPSettingType.string:
-      case MPSettingType.stringList:
-      case MPSettingType.filePickerExec:
+      case MPSettingsTypeType.bool:
+      case MPSettingsTypeType.string:
+      case MPSettingsTypeType.stringList:
+      case MPSettingsTypeType.filePickerExec:
         return null;
     }
   }
@@ -304,62 +307,60 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     _draftValues.clear();
     _errors.clear();
 
-    for (final MPSetting setting in MPSetting.values) {
-      if (setting.section() == mpSettingsInternalSection) {
+    for (final MPSettingsType type in MPSettingsType.values) {
+      if (type.section() == mpSettingsInternalSection) {
         continue;
       }
 
-      switch (setting.type()) {
-        case MPSettingType.bool:
-          _draftValues[setting] = settingsController.getBool(setting);
-        case MPSettingType.double:
-          _draftValues[setting] = settingsController
-              .getDouble(setting)
-              .toString();
-        case MPSettingType.int:
-          _draftValues[setting] = settingsController.getInt(setting).toString();
-        case MPSettingType.string:
-          _draftValues[setting] = settingsController.getString(setting);
-        case MPSettingType.stringList:
-          _draftValues[setting] = settingsController
-              .getStringList(setting)
+      switch (type.type()) {
+        case MPSettingsTypeType.bool:
+          _draftValues[type] = settingsController.getBool(type);
+        case MPSettingsTypeType.double:
+          _draftValues[type] = settingsController.getDouble(type).toString();
+        case MPSettingsTypeType.int:
+          _draftValues[type] = settingsController.getInt(type).toString();
+        case MPSettingsTypeType.string:
+          _draftValues[type] = settingsController.getString(type);
+        case MPSettingsTypeType.stringList:
+          _draftValues[type] = settingsController
+              .getStringList(type)
               .join(mpSettingsStringListSeparator);
-        case MPSettingType.filePickerExec:
-          _draftValues[setting] = settingsController.getString(setting);
+        case MPSettingsTypeType.filePickerExec:
+          _draftValues[type] = settingsController.getString(type);
       }
 
-      _incrementFieldRebuildCounter(setting);
+      _incrementFieldRebuildCounter(type);
     }
   }
 
-  void _resetSingleSetting(MPSetting setting) {
+  void _resetSingleSetting(MPSettingsType type) {
     final MPSettingsController settingsController =
         mpLocator.mpSettingsController;
 
     setState(() {
-      switch (setting.type()) {
-        case MPSettingType.bool:
-          _draftValues[setting] = settingsController.getDefaultBool(setting);
-        case MPSettingType.double:
-          _draftValues[setting] = settingsController
-              .getDefaultDouble(setting)
+      switch (type.type()) {
+        case MPSettingsTypeType.bool:
+          _draftValues[type] = settingsController.getDefaultBool(type);
+        case MPSettingsTypeType.double:
+          _draftValues[type] = settingsController
+              .getDefaultDouble(type)
               .toString();
-        case MPSettingType.int:
-          _draftValues[setting] = settingsController
-              .getDefaultInt(setting)
+        case MPSettingsTypeType.int:
+          _draftValues[type] = settingsController
+              .getDefaultInt(type)
               .toString();
-        case MPSettingType.string:
-          _draftValues[setting] = settingsController.getDefaultString(setting);
-        case MPSettingType.stringList:
-          _draftValues[setting] = settingsController
-              .getDefaultStringList(setting)
+        case MPSettingsTypeType.string:
+          _draftValues[type] = settingsController.getDefaultString(type);
+        case MPSettingsTypeType.stringList:
+          _draftValues[type] = settingsController
+              .getDefaultStringList(type)
               .join(mpSettingsStringListSeparator);
-        case MPSettingType.filePickerExec:
-          _draftValues[setting] = settingsController.getDefaultString(setting);
+        case MPSettingsTypeType.filePickerExec:
+          _draftValues[type] = settingsController.getDefaultString(type);
       }
 
-      _errors[setting] = null;
-      _incrementFieldRebuildCounter(setting);
+      _errors[type] = null;
+      _incrementFieldRebuildCounter(type);
     });
   }
 
@@ -370,45 +371,41 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     setState(() {
       _errors.clear();
 
-      for (final MPSetting setting in MPSetting.values) {
-        if (setting.section() == mpSettingsInternalSection) {
+      for (final MPSettingsType type in MPSettingsType.values) {
+        if (type.section() == mpSettingsInternalSection) {
           continue;
         }
 
-        switch (setting.type()) {
-          case MPSettingType.bool:
-            _draftValues[setting] = settingsController.getDefaultBool(setting);
-          case MPSettingType.double:
-            _draftValues[setting] = settingsController
-                .getDefaultDouble(setting)
+        switch (type.type()) {
+          case MPSettingsTypeType.bool:
+            _draftValues[type] = settingsController.getDefaultBool(type);
+          case MPSettingsTypeType.double:
+            _draftValues[type] = settingsController
+                .getDefaultDouble(type)
                 .toString();
-          case MPSettingType.int:
-            _draftValues[setting] = settingsController
-                .getDefaultInt(setting)
+          case MPSettingsTypeType.int:
+            _draftValues[type] = settingsController
+                .getDefaultInt(type)
                 .toString();
-          case MPSettingType.string:
-            _draftValues[setting] = settingsController.getDefaultString(
-              setting,
-            );
-          case MPSettingType.stringList:
-            _draftValues[setting] = settingsController
-                .getDefaultStringList(setting)
+          case MPSettingsTypeType.string:
+            _draftValues[type] = settingsController.getDefaultString(type);
+          case MPSettingsTypeType.stringList:
+            _draftValues[type] = settingsController
+                .getDefaultStringList(type)
                 .join(mpSettingsStringListSeparator);
-          case MPSettingType.filePickerExec:
-            _draftValues[setting] = settingsController.getDefaultString(
-              setting,
-            );
+          case MPSettingsTypeType.filePickerExec:
+            _draftValues[type] = settingsController.getDefaultString(type);
         }
 
-        _incrementFieldRebuildCounter(setting);
+        _incrementFieldRebuildCounter(type);
       }
     });
   }
 
-  void _incrementFieldRebuildCounter(MPSetting setting) {
-    final int current = _fieldRebuildCounters[setting] ?? mpMinimumInt;
+  void _incrementFieldRebuildCounter(MPSettingsType type) {
+    final int current = _fieldRebuildCounters[type] ?? mpMinimumInt;
 
-    _fieldRebuildCounters[setting] = current + 1;
+    _fieldRebuildCounters[type] = current + 1;
   }
 
   void _cancelChanges() {
@@ -427,29 +424,29 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     final MPSettingsController settingsController =
         mpLocator.mpSettingsController;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final Map<MPSetting, String?> newErrors = {};
+    final Map<MPSettingsType, String?> newErrors = {};
 
-    for (final MPSetting setting in MPSetting.values) {
-      if (setting.section() == mpSettingsInternalSection) {
+    for (final MPSettingsType type in MPSettingsType.values) {
+      if (type.section() == mpSettingsInternalSection) {
         continue;
       }
 
-      switch (setting.type()) {
-        case MPSettingType.bool:
+      switch (type.type()) {
+        case MPSettingsTypeType.bool:
           settingsController.setBool(
-            setting,
-            (_draftValues[setting] as bool?) ?? false,
+            type,
+            (_draftValues[type] as bool?) ?? false,
           );
-        case MPSettingType.double:
-          final String raw = (_draftValues[setting] as String?)?.trim() ?? '';
+        case MPSettingsTypeType.double:
+          final String raw = (_draftValues[type] as String?)?.trim() ?? '';
           final String? error = _validateTextDraftValue(
             appLocalizations,
-            setting,
+            type,
             raw,
           );
 
           if (error != null) {
-            newErrors[setting] = error;
+            newErrors[type] = error;
             continue;
           }
 
@@ -459,17 +456,17 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             continue;
           }
 
-          settingsController.setDouble(setting, value);
-        case MPSettingType.int:
-          final String raw = (_draftValues[setting] as String?)?.trim() ?? '';
+          settingsController.setDouble(type, value);
+        case MPSettingsTypeType.int:
+          final String raw = (_draftValues[type] as String?)?.trim() ?? '';
           final String? error = _validateTextDraftValue(
             appLocalizations,
-            setting,
+            type,
             raw,
           );
 
           if (error != null) {
-            newErrors[setting] = error;
+            newErrors[type] = error;
             continue;
           }
 
@@ -479,24 +476,24 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             continue;
           }
 
-          settingsController.setInt(setting, value);
-        case MPSettingType.string:
+          settingsController.setInt(type, value);
+        case MPSettingsTypeType.string:
           settingsController.setString(
-            setting,
-            (_draftValues[setting] as String?) ?? '',
+            type,
+            (_draftValues[type] as String?) ?? '',
           );
-        case MPSettingType.stringList:
-          final String raw = (_draftValues[setting] as String?) ?? '';
+        case MPSettingsTypeType.stringList:
+          final String raw = (_draftValues[type] as String?) ?? '';
           final List<String> values = raw
               .split(',')
               .map((String entry) => entry.trim())
               .where((String entry) => entry.isNotEmpty)
               .toList();
-          settingsController.setStringList(setting, values);
-        case MPSettingType.filePickerExec:
+          settingsController.setStringList(type, values);
+        case MPSettingsTypeType.filePickerExec:
           settingsController.setString(
-            setting,
-            (_draftValues[setting] as String?) ?? '',
+            type,
+            (_draftValues[type] as String?) ?? '',
           );
       }
     }
@@ -511,8 +508,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
   }
 
   List<String> _sortedSections(AppLocalizations appLocalizations) {
-    final Set<String> sectionSet = MPSetting.values
-        .map((MPSetting setting) => setting.section())
+    final Set<String> sectionSet = MPSettingsType.values
+        .map((MPSettingsType type) => type.section())
         .where((String section) => section != mpSettingsInternalSection)
         .toSet();
 
@@ -535,15 +532,15 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     return sections;
   }
 
-  List<MPSetting> _sortedSettingsInSection(
+  List<MPSettingsType> _sortedSettingsInSection(
     AppLocalizations appLocalizations,
     String section,
   ) {
-    final List<MPSetting> settings = MPSetting.values
-        .where((MPSetting setting) => setting.section() == section)
+    final List<MPSettingsType> settings = MPSettingsType.values
+        .where((MPSettingsType type) => type.section() == section)
         .toList();
 
-    settings.sort((MPSetting a, MPSetting b) {
+    settings.sort((MPSettingsType a, MPSettingsType b) {
       final String localizedA = _localizedSettingName(appLocalizations, a);
       final String localizedB = _localizedSettingName(appLocalizations, b);
 
@@ -569,20 +566,20 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
   String _localizedSettingName(
     AppLocalizations appLocalizations,
-    MPSetting type,
+    MPSettingsType type,
   ) {
     switch (type) {
-      case MPSetting.Main_LocaleID:
+      case MPSettingsType.Main_LocaleID:
         return appLocalizations.mpSettingsSettingMainLocaleID;
-      case MPSetting.Main_TherionExecutablePath:
+      case MPSettingsType.Main_TherionExecutablePath:
         return _camelCaseToLabel(type.id());
-      case MPSetting.TH2Edit_LineThickness:
+      case MPSettingsType.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
-      case MPSetting.TH2Edit_PointRadius:
+      case MPSettingsType.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
-      case MPSetting.TH2Edit_SelectionTolerance:
+      case MPSettingsType.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
-      case MPSetting.Internal_LastNewVersionCheckMS:
+      case MPSettingsType.Internal_LastNewVersionCheckMS:
         return _camelCaseToLabel(type.id());
     }
   }
