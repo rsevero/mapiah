@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -22,18 +23,11 @@ class MPMacOSTherionRunner {
   final MPLocator mpLocator;
   final MPTherionProcessRunner processRunner;
 
-  static String? _cachedSearchedTherionExecutablePath;
-
   const MPMacOSTherionRunner({
     required this.mpLocator,
     required this.processRunner,
   });
-
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
-
-  static void clearSearchedTherionExecutablePathCache() {
-    _cachedSearchedTherionExecutablePath = null;
-  }
 
   Future<MPTherionExecutionResult> runCompile({
     String preferredTherionExecutablePath = '',
@@ -141,7 +135,8 @@ class MPMacOSTherionRunner {
       );
     }
 
-    final String? cachedPath = _cachedSearchedTherionExecutablePath;
+    final String? cachedPath =
+        MPTherionCache.cachedSearchedTherionExecutablePath;
     final bool hasCachedPath = (cachedPath != null) && cachedPath.isNotEmpty;
 
     if (hasCachedPath) {
@@ -165,7 +160,7 @@ class MPMacOSTherionRunner {
       );
 
       if (candidateExists) {
-        _cacheSearchedTherionExecutablePath(candidatePath);
+        MPTherionCache.cacheSearchedTherionExecutablePath(candidatePath);
 
         return (
           executablePath: candidatePath,
@@ -175,7 +170,7 @@ class MPMacOSTherionRunner {
     }
 
     pathSearchLogLines.add(mpTherionMacOSPathSearchFallbackMessage);
-    _cacheSearchedTherionExecutablePath(mpTherionExecutableName);
+    MPTherionCache.cacheSearchedTherionExecutablePath(mpTherionExecutableName);
 
     return (
       executablePath: mpTherionExecutableName,
@@ -183,16 +178,7 @@ class MPMacOSTherionRunner {
     );
   }
 
-  void _cacheSearchedTherionExecutablePath(String executablePath) {
-    final String trimmedExecutablePath = executablePath.trim();
-    final bool hasExecutablePath = trimmedExecutablePath.isNotEmpty;
-
-    if (!hasExecutablePath) {
-      return;
-    }
-
-    _cachedSearchedTherionExecutablePath = trimmedExecutablePath;
-  }
+  // Cache is centralized in `MPTherionCache`.
 
   void _appendPathSearchDebugLine({
     required List<String> pathSearchLogLines,

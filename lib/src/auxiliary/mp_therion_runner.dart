@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_macos_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:path/path.dart' as p;
 
 typedef MPTherionRunnerErrorCallback =
@@ -44,6 +46,83 @@ class MPTherionIssue {
 }
 
 class MPTherionRunner {
+  static void clearSearchedTherionExecutablePathCache() {
+    MPTherionCache.clearSearchedTherionExecutablePathCache();
+  }
+
+  /// Checks whether a viable Therion executable is available.
+  ///
+  /// The check prefers an explicit `preferredExecutablePath` if provided,
+  /// then the user-configured setting (via `mpLocator`), and finally
+  /// attempts an automatic probe (default executable name / platform probes).
+  /// Results are cached for the process lifetime; call
+  /// `clearSearchedTherionExecutablePathCache()` to force a re-check.
+  static Future<bool> isTherionAvailable({
+    String? preferredExecutablePath,
+    MPLocator? mpLocator,
+  }) async {
+    final String? cached = MPTherionCache.cachedSearchedTherionExecutablePath;
+
+    if (cached != null && cached.isNotEmpty) {
+      return true;
+    }
+
+    final String? preferred = (preferredExecutablePath ?? '').trim().isNotEmpty
+        ? preferredExecutablePath!.trim()
+        : null;
+
+    Future<bool> validateExecutable(String executable) async {
+      try {
+        final ProcessResult result = await Process.run(executable, <String>[
+          '--version',
+        ]);
+
+        final bool success = result.exitCode == mpProcessExitCodeSuccess;
+        if (success) {
+          MPTherionCache.cacheSearchedTherionExecutablePath(executable);
+        }
+
+        return success;
+      } on Object {
+        return false;
+      }
+    }
+
+    if (preferred != null) {
+      final bool ok = await validateExecutable(preferred);
+      if (ok) {
+        return true;
+      }
+    }
+
+    // If an MPLocator was provided, check the user-configured setting first.
+    if (mpLocator != null) {
+      final String configured = mpLocator.mpSettingsController
+          .getString(MPSettingID.Main_TherionExecutablePath)
+          .trim();
+
+      if (configured.isNotEmpty) {
+        final bool configuredOk = await validateExecutable(configured);
+        if (configuredOk) {
+          return true;
+        }
+      }
+    }
+
+    // Automatic probe: try platform-specific executable name then default.
+    final bool isWindowsPlatform = Platform.isWindows;
+    final String candidate = isWindowsPlatform
+        ? mpTherionWindowsExecutableName
+        : mpTherionDefaultExecutableCommand;
+
+    final bool probeOk = await validateExecutable(candidate);
+    if (probeOk) {
+      return true;
+    }
+
+    return false;
+  }
+
   final String therionExecutablePath;
   final String thConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;

@@ -176,6 +176,9 @@ const Color mpTherionRunOutputWarningColor =
 const Color mpTherionRunOutputErrorColor =
     mpTherionRunStatusBackgroundErrorColor;
 
+/// Color used to indicate Therion is unavailable for actions.
+const Color mpTherionUnavailableButtonColor = Colors.red;
+
 const String mpTherionWarningWord = 'warning';
 const String mpTherionErrorWord = 'error';
 

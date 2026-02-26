@@ -3,6 +3,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 
 class _FakeWindowsRegistryReader implements MPWindowsRegistryReader {
@@ -61,11 +62,11 @@ class _FakeTherionProcessRunner implements MPTherionProcessRunner {
 void main() {
   group('MPWindowsTherionRunner command building', () {
     setUp(() {
-      MPWindowsTherionRunner.clearSearchedTherionExecutablePathCache();
+      MPTherionRunner.clearSearchedTherionExecutablePathCache();
     });
 
     tearDown(() {
-      MPWindowsTherionRunner.clearSearchedTherionExecutablePathCache();
+      MPTherionRunner.clearSearchedTherionExecutablePathCache();
     });
 
     test(

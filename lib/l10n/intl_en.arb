@@ -143,6 +143,11 @@
     "description": "The tooltip for the Run Therion button",
     "type": "text"
   },
+  "mpNoTherionFound": "No Therion found",
+  "@mpNoTherionFound": {
+    "description": "Tooltip shown when no Therion executable is available",
+    "type": "text"
+  },
   "mapiahTherionRunDialogTitle": "Therion output",
   "@mapiahTherionRunDialogTitle": {
     "description": "Title for the Therion output dialog",

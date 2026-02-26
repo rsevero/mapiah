@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mobx/mobx.dart';
@@ -13,6 +15,8 @@ class MPSettingsController = MPSettingsControllerBase
     with _$MPSettingsController;
 
 abstract class MPSettingsControllerBase with Store {
+  @observable
+  bool isTherionAvailable = false;
   Locale get locale {
     final String localIDSetting = getString(MPSettingID.Main_LocaleID);
     final String localeID = (localIDSetting == mpDefaultLocaleID)
@@ -71,6 +75,27 @@ abstract class MPSettingsControllerBase with Store {
     // wait for both async readers to complete. With Future.wait they run in
     //parallel, which is more efficient.
     await Future.wait([_readInternalSettingsFile()]);
+    // Update Therion availability after settings load.
+    try {
+      _updateTherionAvailability();
+    } on Object {
+      // ignore
+    }
+  }
+
+  Future<void> _updateTherionAvailability() async {
+    try {
+      final bool available = await MPTherionRunner.isTherionAvailable(
+        mpLocator: MPLocator(),
+        preferredExecutablePath: getString(
+          MPSettingID.Main_TherionExecutablePath,
+        ),
+      );
+
+      isTherionAvailable = available;
+    } on Object {
+      isTherionAvailable = false;
+    }
   }
 
   Future<void> _readInternalSettingsFile() async {
@@ -404,6 +429,11 @@ abstract class MPSettingsControllerBase with Store {
       _stringSettings[id] = value;
       prefs.setString(id.name, value);
       trigger(id);
+      if (id == MPSettingID.Main_TherionExecutablePath) {
+        // Clear cached probe and re-check availability asynchronously.
+        MPTherionRunner.clearSearchedTherionExecutablePathCache();
+        _updateTherionAvailability();
+      }
     }
 
     return isChanged;

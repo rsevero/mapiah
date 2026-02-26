@@ -25,6 +25,7 @@
   "mapiahHomeOpenFile": "Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)",
   "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Abrir arquivo THConfig e executar Therion",
   "mapiahRunTherionButtonTooltip": "Executar Therion",
+  "mpNoTherionFound": "Therion não encontrado",
   "mapiahTherionRunDialogTitle": "Saída do Therion",
   "mapiahTherionRunStatusLabel": "Situação:",
   "mapiahTherionRunStatusRunning": "rodando",

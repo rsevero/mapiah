@@ -1,3 +1,4 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
@@ -79,27 +80,50 @@ class _MapiahHomeState extends State<MapiahHome> {
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.mapiahHomeOpenFile,
           ),
-          IconButton(
-            key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
-            icon: Icon(Icons.playlist_add_check_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () async {
-              await MPDialogAux.pickTHConfigFileAndRunTherion(context);
-              if (mounted) {
-                setState(() {});
-              }
+          Observer(
+            builder: (_) {
+              final bool therionAvailable =
+                  mpLocator.mpSettingsController.isTherionAvailable;
+
+              return IconButton(
+                key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
+                icon: Icon(Icons.playlist_add_check_outlined),
+                color: therionAvailable
+                    ? colorScheme.onSecondaryContainer
+                    : mpTherionUnavailableButtonColor,
+                onPressed: () async {
+                  await MPDialogAux.pickTHConfigFileAndRunTherion(context);
+                  if (mounted) {
+                    setState(() {});
+                  }
+                },
+                tooltip: therionAvailable
+                    ? appLocalizations
+                          .mapiahOpenTHConfigAndRunTherionButtonTooltip
+                    : mpLocator.appLocalizations.mpNoTherionFound,
+              );
             },
-            tooltip:
-                appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
           ),
-          IconButton(
-            key: ValueKey('MapiahHomeRunTherionButton'),
-            icon: Icon(Icons.play_arrow_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: mpLocator.mpGeneralController.thConfigFilePath.isEmpty
-                ? null
-                : () => MPDialogAux.runTherion(context),
-            tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+          Observer(
+            builder: (_) {
+              final bool therionAvailable =
+                  mpLocator.mpSettingsController.isTherionAvailable;
+
+              return IconButton(
+                key: ValueKey('MapiahHomeRunTherionButton'),
+                icon: Icon(Icons.play_arrow_outlined),
+                color: therionAvailable
+                    ? colorScheme.onSecondaryContainer
+                    : mpTherionUnavailableButtonColor,
+                onPressed:
+                    mpLocator.mpGeneralController.thConfigFilePath.isEmpty
+                    ? null
+                    : () => MPDialogAux.runTherion(context),
+                tooltip: therionAvailable
+                    ? appLocalizations.mapiahRunTherionButtonTooltip
+                    : mpLocator.appLocalizations.mpNoTherionFound,
+              );
+            },
           ),
           IconButton(
             key: ValueKey('MapiahHomeSettingsButton'),

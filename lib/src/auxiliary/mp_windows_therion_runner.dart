@@ -1,4 +1,5 @@
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
@@ -72,8 +73,6 @@ class MPWindowsTherionRunner {
   final MPWindowsShellProbe shellProbe;
   final MPTherionProcessRunner processRunner;
 
-  static String? _cachedSearchedTherionExecutablePath;
-
   const MPWindowsTherionRunner({
     required this.mpLocator,
     required this.registryReader,
@@ -83,9 +82,7 @@ class MPWindowsTherionRunner {
 
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
 
-  static void clearSearchedTherionExecutablePathCache() {
-    _cachedSearchedTherionExecutablePath = null;
-  }
+  // Uses centralized cache in `MPTherionCache`.
 
   String buildCompilerCommand({String preferredTherionExecutablePath = ''}) {
     final String executableCommand = _resolveTherionExecutableCommand(
@@ -207,7 +204,7 @@ class MPWindowsTherionRunner {
     }
 
     final String? cachedSearchedTherionExecutablePath =
-        _cachedSearchedTherionExecutablePath;
+        MPTherionCache.cachedSearchedTherionExecutablePath;
 
     if (cachedSearchedTherionExecutablePath != null &&
         cachedSearchedTherionExecutablePath.isNotEmpty) {
@@ -234,7 +231,7 @@ class MPWindowsTherionRunner {
       final String machineExecutableCommand = _quoteValue(
         machineExecutablePath,
       );
-      _cacheSearchedTherionExecutablePath(machineExecutablePath);
+      MPTherionCache.cacheSearchedTherionExecutablePath(machineExecutablePath);
 
       return (
         executableCommand: machineExecutableCommand,
@@ -252,7 +249,7 @@ class MPWindowsTherionRunner {
         userInstallDirectory,
       );
       final String userExecutableCommand = _quoteValue(userExecutablePath);
-      _cacheSearchedTherionExecutablePath(userExecutablePath);
+      MPTherionCache.cacheSearchedTherionExecutablePath(userExecutablePath);
 
       return (
         executableCommand: userExecutableCommand,
@@ -262,7 +259,9 @@ class MPWindowsTherionRunner {
     }
 
     registrySearchLogLines.add(mpTherionWindowsRegistryLookupFallbackMessage);
-    _cacheSearchedTherionExecutablePath(mpTherionWindowsExecutableName);
+    MPTherionCache.cacheSearchedTherionExecutablePath(
+      mpTherionWindowsExecutableName,
+    );
 
     return (
       executableCommand: mpTherionWindowsExecutableName,
@@ -271,16 +270,7 @@ class MPWindowsTherionRunner {
     );
   }
 
-  void _cacheSearchedTherionExecutablePath(String executablePath) {
-    final String trimmedExecutablePath = executablePath.trim();
-    final bool hasExecutablePath = trimmedExecutablePath.isNotEmpty;
-
-    if (!hasExecutablePath) {
-      return;
-    }
-
-    _cachedSearchedTherionExecutablePath = trimmedExecutablePath;
-  }
+  // Cache is centralized in `MPTherionCache`.
 
   ({
     String commandLine,

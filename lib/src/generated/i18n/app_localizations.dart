@@ -253,6 +253,12 @@ abstract class AppLocalizations {
   /// **'Run Therion'**
   String get mapiahRunTherionButtonTooltip;
 
+  /// Tooltip shown when no Therion executable is available
+  ///
+  /// In en, this message translates to:
+  /// **'No Therion found'**
+  String get mpNoTherionFound;
+
   /// Title for the Therion output dialog
   ///
   /// In en, this message translates to:

@@ -1,13 +1,15 @@
 A few introductory instructions:
 
-1. appLocalizations should be get from mpLocator.appLocalizations.
-2. Magic numbers should not be used. Create appropriate constants at MPConstants file.
-3. Avoid duplicated code.
-4. Try to keep view logic separate from busines logic.
-5. All variable declarations should have explicit variable type definition.
-6. Variable should be final when possible.
-7. Avoid complex calculations on a single step. Set intermediary values to allow easy understanding of the calculation being done.
-8. On multiple condition decisions, all comparisons that involve more than one element should be in parenthesis.
+1. App localizations should be accessed via mpLocator.appLocalizations.
+2. Magic numbers should not be used. Create appropriate constants in the mp_constants.dart file.
+3. Avoid duplicated code. Extract reusable logic into separate methods or widgets.
+4. Keep UI logic separate from business logic. Use MobX stores for business logic and state management.
+5. All variable declarations should have explicit type definitions. Avoid using var when the type is not immediately obvious.
+6. Variables should be declared as final whenever possible.
+7. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
+8. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
+9. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files.
 
 Specific instructions:
+
 

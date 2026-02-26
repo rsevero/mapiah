@@ -115,34 +115,61 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       tooltip: appLocalizations.th2FileEditPageSaveAs,
                     ),
                   ],
-                  IconButton(
-                    key: ValueKey(
-                      'TH2FileEditPageOpenTHConfigAndRunTherionButton',
-                    ),
-                    icon: Icon(
-                      Icons.playlist_add_check_outlined,
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                    onPressed: () async {
-                      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
-                      if (mounted) {
-                        setState(() {});
-                      }
+                  Observer(
+                    builder: (_) {
+                      final bool therionAvailable =
+                          mpLocator.mpSettingsController.isTherionAvailable;
+
+                      return IconButton(
+                        key: ValueKey(
+                          'TH2FileEditPageOpenTHConfigAndRunTherionButton',
+                        ),
+                        icon: Icon(
+                          Icons.playlist_add_check_outlined,
+                          color: therionAvailable
+                              ? colorScheme.onSecondaryContainer
+                              : mpTherionUnavailableButtonColor,
+                        ),
+                        onPressed: () async {
+                          await MPDialogAux.pickTHConfigFileAndRunTherion(
+                            context,
+                          );
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                        tooltip: therionAvailable
+                            ? appLocalizations
+                                  .mapiahOpenTHConfigAndRunTherionButtonTooltip
+                            : mpLocator.appLocalizations.mpNoTherionFound,
+                      );
                     },
-                    tooltip: appLocalizations
-                        .mapiahOpenTHConfigAndRunTherionButtonTooltip,
                   ),
-                  IconButton(
-                    key: ValueKey('TH2FileEditPageRunTherionButton'),
-                    icon: Icon(
-                      Icons.play_arrow_outlined,
-                      color: colorScheme.onSecondaryContainer,
-                    ),
-                    onPressed:
-                        mpLocator.mpGeneralController.thConfigFilePath.isEmpty
-                        ? null
-                        : () => MPDialogAux.runTherion(context),
-                    tooltip: appLocalizations.mapiahRunTherionButtonTooltip,
+                  Observer(
+                    builder: (_) {
+                      final bool therionAvailable =
+                          mpLocator.mpSettingsController.isTherionAvailable;
+
+                      return IconButton(
+                        key: ValueKey('TH2FileEditPageRunTherionButton'),
+                        icon: Icon(
+                          Icons.play_arrow_outlined,
+                          color: therionAvailable
+                              ? colorScheme.onSecondaryContainer
+                              : mpTherionUnavailableButtonColor,
+                        ),
+                        onPressed:
+                            mpLocator
+                                .mpGeneralController
+                                .thConfigFilePath
+                                .isEmpty
+                            ? null
+                            : () => MPDialogAux.runTherion(context),
+                        tooltip: therionAvailable
+                            ? appLocalizations.mapiahRunTherionButtonTooltip
+                            : mpLocator.appLocalizations.mpNoTherionFound,
+                      );
+                    },
                   ),
                   MPHelpButtonWidget(
                     context,
