@@ -15,8 +15,9 @@ class MPSettingsController = MPSettingsControllerBase
     with _$MPSettingsController;
 
 abstract class MPSettingsControllerBase with Store {
-  @observable
-  bool isTherionAvailable = false;
+  @readonly
+  bool _isTherionAvailable = false;
+
   Locale get locale {
     final String localIDSetting = getString(MPSettingID.Main_LocaleID);
     final String localeID = (localIDSetting == mpDefaultLocaleID)
@@ -92,9 +93,9 @@ abstract class MPSettingsControllerBase with Store {
         ),
       );
 
-      isTherionAvailable = available;
+      _isTherionAvailable = available;
     } on Object {
-      isTherionAvailable = false;
+      _isTherionAvailable = false;
     }
   }
 
