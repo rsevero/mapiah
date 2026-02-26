@@ -15,7 +15,7 @@ mixin _$MPSettingsController on MPSettingsControllerBase, Store {
   );
 
   @override
-  void trigger(MPSettingsType type) {
+  void trigger(InvalidType type) {
     final _$actionInfo = _$MPSettingsControllerBaseActionController.startAction(
       name: 'MPSettingsControllerBase.trigger',
     );

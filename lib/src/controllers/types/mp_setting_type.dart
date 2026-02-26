@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 import 'package:mapiah/src/constants/mp_constants.dart';
 
-enum MPSettingsType {
+enum MPSettingType {
   Internal_LastNewVersionCheckMS,
   Main_LocaleID,
   Main_TherionExecutablePath,
@@ -9,20 +9,20 @@ enum MPSettingsType {
   TH2Edit_PointRadius,
   TH2Edit_SelectionTolerance;
 
-  static const Map<MPSettingsType, MPSettingsTypeType> types =
-      <MPSettingsType, MPSettingsTypeType>{
-        MPSettingsType.Internal_LastNewVersionCheckMS: MPSettingsTypeType.int,
-        MPSettingsType.Main_LocaleID: MPSettingsTypeType.string,
-        MPSettingsType.Main_TherionExecutablePath:
-            MPSettingsTypeType.filePickerExec,
-        MPSettingsType.TH2Edit_LineThickness: MPSettingsTypeType.double,
-        MPSettingsType.TH2Edit_PointRadius: MPSettingsTypeType.double,
-        MPSettingsType.TH2Edit_SelectionTolerance: MPSettingsTypeType.double,
+  static const Map<MPSettingType, MPSettingTypeType> types =
+      <MPSettingType, MPSettingTypeType>{
+        MPSettingType.Internal_LastNewVersionCheckMS: MPSettingTypeType.int,
+        MPSettingType.Main_LocaleID: MPSettingTypeType.string,
+        MPSettingType.Main_TherionExecutablePath:
+            MPSettingTypeType.filePickerExec,
+        MPSettingType.TH2Edit_LineThickness: MPSettingTypeType.double,
+        MPSettingType.TH2Edit_PointRadius: MPSettingTypeType.double,
+        MPSettingType.TH2Edit_SelectionTolerance: MPSettingTypeType.double,
       };
 
-  static const Map<MPSettingsType, String> filePickerExecNames =
-      <MPSettingsType, String>{
-        MPSettingsType.Main_TherionExecutablePath: mpTherionExecutableName,
+  static const Map<MPSettingType, String> filePickerExecNames =
+      <MPSettingType, String>{
+        MPSettingType.Main_TherionExecutablePath: mpTherionExecutableName,
       };
 
   String section() {
@@ -45,8 +45,8 @@ enum MPSettingsType {
     return name.substring(underscoreIndex + 1);
   }
 
-  MPSettingsTypeType type() {
-    final MPSettingsTypeType? value = types[this];
+  MPSettingTypeType type() {
+    final MPSettingTypeType? value = types[this];
 
     if (value == null) {
       throw StateError('MPSettingsType has no type mapping: $name');
@@ -56,7 +56,7 @@ enum MPSettingsType {
   }
 
   String filePickerExecName() {
-    if (type() != MPSettingsTypeType.filePickerExec) {
+    if (type() != MPSettingTypeType.filePickerExec) {
       throw ArgumentError(
         'MPSettingsType $this is not of type filePickerExec at filePickerExecName',
       );
@@ -75,11 +75,4 @@ enum MPSettingsType {
   String toString() => name;
 }
 
-enum MPSettingsTypeType {
-  bool,
-  double,
-  filePickerExec,
-  int,
-  string,
-  stringList,
-}
+enum MPSettingTypeType { bool, double, filePickerExec, int, string, stringList }

@@ -12,7 +12,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
@@ -273,7 +273,7 @@ class MPDialogAux {
       final SharedPreferencesWithCache prefs =
           mpLocator.mpSettingsController.prefs;
       final int lastNewVersionCheckMS =
-          prefs.getInt(MPSettingsType.Internal_LastNewVersionCheckMS.name) ?? 0;
+          prefs.getInt(MPSettingType.Internal_LastNewVersionCheckMS.name) ?? 0;
       final DateTime lastNewVersionCheck = DateTime.fromMillisecondsSinceEpoch(
         lastNewVersionCheckMS,
         isUtc: true,
@@ -286,7 +286,7 @@ class MPDialogAux {
       }
 
       prefs.setInt(
-        MPSettingsType.Internal_LastNewVersionCheckMS.name,
+        MPSettingType.Internal_LastNewVersionCheckMS.name,
         now.millisecondsSinceEpoch,
       );
 
@@ -837,7 +837,7 @@ class MPDialogAux {
     }
 
     final String configuredExecutablePath = mpLocator.mpSettingsController
-        .getString(MPSettingsType.Main_TherionExecutablePath)
+        .getString(MPSettingType.Main_TherionExecutablePath)
         .trim();
     final String therionExecutablePath = configuredExecutablePath.isEmpty
         ? mpTherionDefaultExecutableCommand

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/types/mp_settings_type.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
@@ -14,7 +14,7 @@ class MPSettingsController = MPSettingsControllerBase
 
 abstract class MPSettingsControllerBase with Store {
   Locale get locale {
-    final String localIDSetting = getString(MPSettingsType.Main_LocaleID);
+    final String localIDSetting = getString(MPSettingType.Main_LocaleID);
     final String localeID = (localIDSetting == mpDefaultLocaleID)
         ? _getSystemLocaleID()
         : localIDSetting;
@@ -22,42 +22,41 @@ abstract class MPSettingsControllerBase with Store {
     return Locale(localeID);
   }
 
-  final Map<MPSettingsType, bool> _boolSettings = {};
-  final Map<MPSettingsType, double> _doubleSettings = {};
-  final Map<MPSettingsType, int> _intSettings = {};
-  final Map<MPSettingsType, String> _stringSettings = {};
-  final Map<MPSettingsType, List<String>> _stringListSettings = {};
+  final Map<MPSettingType, bool> _boolSettings = {};
+  final Map<MPSettingType, double> _doubleSettings = {};
+  final Map<MPSettingType, int> _intSettings = {};
+  final Map<MPSettingType, String> _stringSettings = {};
+  final Map<MPSettingType, List<String>> _stringListSettings = {};
 
   /// The default default value for bools is mpDefaultDefaultBoolSetting. Only
   /// settings that differ from that should be included here.
-  static const Map<MPSettingsType, bool> _boolDefaultSettings = {};
+  static const Map<MPSettingType, bool> _boolDefaultSettings = {};
 
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingsType, double> _doubleDefaultSettings = {
-    MPSettingsType.TH2Edit_LineThickness: mpDefaultLineThickness,
-    MPSettingsType.TH2Edit_PointRadius: mpDefaultPointRadius,
-    MPSettingsType.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
+  static const Map<MPSettingType, double> _doubleDefaultSettings = {
+    MPSettingType.TH2Edit_LineThickness: mpDefaultLineThickness,
+    MPSettingType.TH2Edit_PointRadius: mpDefaultPointRadius,
+    MPSettingType.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
   };
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only
   /// settings that differ from that should be included here.
-  static const Map<MPSettingsType, int> _intDefaultSettings = {};
+  static const Map<MPSettingType, int> _intDefaultSettings = {};
 
   /// The default default value for strings is mpDefaultDefaultStringSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingsType, String> _stringDefaultSettings = {
-    MPSettingsType.Main_LocaleID: mpDefaultLocaleID,
+  static const Map<MPSettingType, String> _stringDefaultSettings = {
+    MPSettingType.Main_LocaleID: mpDefaultLocaleID,
   };
 
   /// The default default value for string lists is
   /// mpDefaultDefaultStringListSetting. Only settings that differ from that
   /// should be included here.
-  static const Map<MPSettingsType, List<String>> _stringListDefaultSettings =
-      {};
+  static const Map<MPSettingType, List<String>> _stringListDefaultSettings = {};
 
-  final Map<MPSettingsType, Observable<int>> _settingsTriggers = {
-    for (final MPSettingsType t in MPSettingsType.values)
+  final Map<MPSettingType, Observable<int>> _settingsTriggers = {
+    for (final MPSettingType t in MPSettingType.values)
       t: Observable<int>(mpMinimumInt),
   };
 
@@ -79,42 +78,42 @@ abstract class MPSettingsControllerBase with Store {
         InMemorySharedPreferencesAsync.empty();
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
-        allowList: MPSettingsType.values.map((e) => e.name).toSet(),
+        allowList: MPSettingType.values.map((e) => e.name).toSet(),
       ),
     );
-    for (final MPSettingsType type in MPSettingsType.values) {
+    for (final MPSettingType type in MPSettingType.values) {
       switch (type.type()) {
-        case MPSettingsTypeType.bool:
+        case MPSettingTypeType.bool:
           final bool? value = prefs.getBool(type.name);
 
           if (value != null) {
             setBool(type, value);
           }
-        case MPSettingsTypeType.double:
+        case MPSettingTypeType.double:
           final double? value = prefs.getDouble(type.name);
 
           if (value != null) {
             setDouble(type, value);
           }
-        case MPSettingsTypeType.int:
+        case MPSettingTypeType.int:
           final int? value = prefs.getInt(type.name);
 
           if (value != null) {
             setInt(type, value);
           }
-        case MPSettingsTypeType.string:
+        case MPSettingTypeType.string:
           final String? value = prefs.getString(type.name);
 
           if (value != null) {
             setString(type, value);
           }
-        case MPSettingsTypeType.stringList:
+        case MPSettingTypeType.stringList:
           final List<String>? value = prefs.getStringList(type.name);
 
           if (value != null) {
             setStringList(type, value);
           }
-        case MPSettingsTypeType.filePickerExec:
+        case MPSettingTypeType.filePickerExec:
           final String? value = prefs.getString(type.name);
 
           if (value != null) {
@@ -124,9 +123,9 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  bool _isStringBackedType(MPSettingsTypeType type) {
-    return ((type == MPSettingsTypeType.string) ||
-        (type == MPSettingsTypeType.filePickerExec));
+  bool _isStringBackedType(MPSettingTypeType type) {
+    return ((type == MPSettingTypeType.string) ||
+        (type == MPSettingTypeType.filePickerExec));
   }
 
   String _getSystemLocaleID() {
@@ -136,8 +135,8 @@ abstract class MPSettingsControllerBase with Store {
     return systemLocale.languageCode;
   }
 
-  bool getBool(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.bool) {
+  bool getBool(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.bool) {
       throw ArgumentError(
         'MPSettingsType $type is not of type bool at getBool',
       );
@@ -152,8 +151,8 @@ abstract class MPSettingsControllerBase with Store {
     return getDefaultBool(type);
   }
 
-  bool getDefaultBool(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.bool) {
+  bool getDefaultBool(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.bool) {
       throw ArgumentError(
         'MPSettingsType $type is not of type bool at getDefaultBool',
       );
@@ -166,8 +165,8 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultBoolSetting;
   }
 
-  double getDouble(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.double) {
+  double getDouble(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.double) {
       throw ArgumentError(
         'MPSettingsType $type is not of type double at getDouble',
       );
@@ -180,8 +179,8 @@ abstract class MPSettingsControllerBase with Store {
     return getDefaultDouble(type);
   }
 
-  double getDefaultDouble(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.double) {
+  double getDefaultDouble(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.double) {
       throw ArgumentError(
         'MPSettingsType $type is not of type double at getDefaultDouble',
       );
@@ -194,8 +193,8 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultDoubleSetting;
   }
 
-  int getInt(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.int) {
+  int getInt(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.int) {
       throw ArgumentError('MPSettingsType $type is not of type int at getInt');
     }
 
@@ -206,8 +205,8 @@ abstract class MPSettingsControllerBase with Store {
     return getDefaultInt(type);
   }
 
-  int getDefaultInt(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.int) {
+  int getDefaultInt(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.int) {
       throw ArgumentError(
         'MPSettingsType $type is not of type int at getDefaultInt',
       );
@@ -220,7 +219,7 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultIntSetting;
   }
 
-  String getString(MPSettingsType type) {
+  String getString(MPSettingType type) {
     if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
         'MPSettingsType $type is not of type string/filePickerExec at getString',
@@ -234,14 +233,14 @@ abstract class MPSettingsControllerBase with Store {
     return getDefaultString(type);
   }
 
-  String getDefaultString(MPSettingsType type) {
+  String getDefaultString(MPSettingType type) {
     if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
         'MPSettingsType $type is not of type string/filePickerExec at getDefaultString',
       );
     }
 
-    if (type.type() == MPSettingsTypeType.filePickerExec) {
+    if (type.type() == MPSettingTypeType.filePickerExec) {
       return type.filePickerExecName();
     }
 
@@ -252,8 +251,8 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultStringSetting;
   }
 
-  List<String> getStringList(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.stringList) {
+  List<String> getStringList(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.stringList) {
       throw ArgumentError(
         'MPSettingsType $type is not of type stringList at getStringList',
       );
@@ -266,8 +265,8 @@ abstract class MPSettingsControllerBase with Store {
     return getDefaultStringList(type);
   }
 
-  List<String> getDefaultStringList(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.stringList) {
+  List<String> getDefaultStringList(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.stringList) {
       throw ArgumentError(
         'MPSettingsType $type is not of type stringList at getDefaultStringList',
       );
@@ -280,8 +279,8 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultStringListSetting.toList();
   }
 
-  bool setBool(MPSettingsType type, bool value) {
-    if (type.type() != MPSettingsTypeType.bool) {
+  bool setBool(MPSettingType type, bool value) {
+    if (type.type() != MPSettingTypeType.bool) {
       throw ArgumentError(
         'MPSettingsType $type is not of type bool at setBool',
       );
@@ -299,8 +298,8 @@ abstract class MPSettingsControllerBase with Store {
     return isChanged;
   }
 
-  bool isBoolSet(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.bool) {
+  bool isBoolSet(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.bool) {
       throw ArgumentError(
         'MPSettingsType $type is not of type bool at isBoolSet',
       );
@@ -309,8 +308,8 @@ abstract class MPSettingsControllerBase with Store {
     return _boolSettings.containsKey(type);
   }
 
-  void resetBool(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.bool) {
+  void resetBool(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.bool) {
       throw ArgumentError(
         'MPSettingsType $type is not of type bool at resetBool',
       );
@@ -323,8 +322,8 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  bool setDouble(MPSettingsType type, double value) {
-    if (type.type() != MPSettingsTypeType.double) {
+  bool setDouble(MPSettingType type, double value) {
+    if (type.type() != MPSettingTypeType.double) {
       throw ArgumentError(
         'MPSettingsType $type is not of type double at setDouble',
       );
@@ -342,8 +341,8 @@ abstract class MPSettingsControllerBase with Store {
     return isChanged;
   }
 
-  bool isDoubleSet(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.double) {
+  bool isDoubleSet(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.double) {
       throw ArgumentError(
         'MPSettingsType $type is not of type double at isDoubleSet',
       );
@@ -352,8 +351,8 @@ abstract class MPSettingsControllerBase with Store {
     return _doubleSettings.containsKey(type);
   }
 
-  void resetDouble(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.double) {
+  void resetDouble(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.double) {
       throw ArgumentError(
         'MPSettingsType $type is not of type double at resetDouble',
       );
@@ -366,8 +365,8 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  bool setInt(MPSettingsType type, int value) {
-    if (type.type() != MPSettingsTypeType.int) {
+  bool setInt(MPSettingType type, int value) {
+    if (type.type() != MPSettingTypeType.int) {
       throw ArgumentError('MPSettingsType $type is not of type int at setInt');
     }
 
@@ -383,8 +382,8 @@ abstract class MPSettingsControllerBase with Store {
     return isChanged;
   }
 
-  bool isIntSet(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.int) {
+  bool isIntSet(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.int) {
       throw ArgumentError(
         'MPSettingsType $type is not of type int at isIntSet',
       );
@@ -393,8 +392,8 @@ abstract class MPSettingsControllerBase with Store {
     return _intSettings.containsKey(type);
   }
 
-  void resetInt(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.int) {
+  void resetInt(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.int) {
       throw ArgumentError(
         'MPSettingsType $type is not of type int at resetInt',
       );
@@ -407,7 +406,7 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  bool setString(MPSettingsType type, String value) {
+  bool setString(MPSettingType type, String value) {
     if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
         'MPSettingsType $type is not of type string/filePickerExec at setString',
@@ -426,7 +425,7 @@ abstract class MPSettingsControllerBase with Store {
     return isChanged;
   }
 
-  bool isStringSet(MPSettingsType type) {
+  bool isStringSet(MPSettingType type) {
     if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
         'MPSettingsType $type is not of type string/filePickerExec at isStringSet',
@@ -436,7 +435,7 @@ abstract class MPSettingsControllerBase with Store {
     return _stringSettings.containsKey(type);
   }
 
-  void resetString(MPSettingsType type) {
+  void resetString(MPSettingType type) {
     if (!_isStringBackedType(type.type())) {
       throw ArgumentError(
         'MPSettingsType $type is not of type string/filePickerExec at resetString',
@@ -450,8 +449,8 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  bool setStringList(MPSettingsType type, List<String> value) {
-    if (type.type() != MPSettingsTypeType.stringList) {
+  bool setStringList(MPSettingType type, List<String> value) {
+    if (type.type() != MPSettingTypeType.stringList) {
       throw ArgumentError(
         'MPSettingsType $type is not of type stringList at setStringList',
       );
@@ -469,8 +468,8 @@ abstract class MPSettingsControllerBase with Store {
     return isChanged;
   }
 
-  bool isStringListSet(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.stringList) {
+  bool isStringListSet(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.stringList) {
       throw ArgumentError(
         'MPSettingsType $type is not of type stringList at isStringListSet',
       );
@@ -479,8 +478,8 @@ abstract class MPSettingsControllerBase with Store {
     return _stringListSettings.containsKey(type);
   }
 
-  void resetStringList(MPSettingsType type) {
-    if (type.type() != MPSettingsTypeType.stringList) {
+  void resetStringList(MPSettingType type) {
+    if (type.type() != MPSettingTypeType.stringList) {
       throw ArgumentError(
         'MPSettingsType $type is not of type stringList at resetStringList',
       );
@@ -493,10 +492,10 @@ abstract class MPSettingsControllerBase with Store {
     }
   }
 
-  int getTrigger(MPSettingsType type) => _settingsTriggers[type]!.value;
+  int getTrigger(MPSettingType type) => _settingsTriggers[type]!.value;
 
   @action
-  void trigger(MPSettingsType type) {
+  void trigger(MPSettingType type) {
     _settingsTriggers[type]!.value++;
   }
 }
