@@ -273,7 +273,7 @@ class MPDialogAux {
       final SharedPreferencesWithCache prefs =
           mpLocator.mpSettingsController.prefs;
       final int lastNewVersionCheckMS =
-          prefs.getInt(MPSettingType.Internal_LastNewVersionCheckMS.name) ?? 0;
+          prefs.getInt(MPSettingID.Internal_LastNewVersionCheckMS.name) ?? 0;
       final DateTime lastNewVersionCheck = DateTime.fromMillisecondsSinceEpoch(
         lastNewVersionCheckMS,
         isUtc: true,
@@ -286,7 +286,7 @@ class MPDialogAux {
       }
 
       prefs.setInt(
-        MPSettingType.Internal_LastNewVersionCheckMS.name,
+        MPSettingID.Internal_LastNewVersionCheckMS.name,
         now.millisecondsSinceEpoch,
       );
 
@@ -837,7 +837,7 @@ class MPDialogAux {
     }
 
     final String configuredExecutablePath = mpLocator.mpSettingsController
-        .getString(MPSettingType.Main_TherionExecutablePath)
+        .getString(MPSettingID.Main_TherionExecutablePath)
         .trim();
     final String therionExecutablePath = configuredExecutablePath.isEmpty
         ? mpTherionDefaultExecutableCommand

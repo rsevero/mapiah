@@ -103,7 +103,7 @@ class MapiahApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        mpLocator.mpSettingsController.getTrigger(MPSettingType.Main_LocaleID);
+        mpLocator.mpSettingsController.getTrigger(MPSettingID.Main_LocaleID);
 
         return MaterialApp(
           navigatorKey: mpLocator.mpNavigatorKey,

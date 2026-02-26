@@ -19,7 +19,7 @@ class MPHelpDialogWidget extends StatelessWidget {
 
   Future<String> _loadMarkdown(BuildContext context) async {
     final String localIDSetting = mpLocator.mpSettingsController.getString(
-      MPSettingType.Main_LocaleID,
+      MPSettingID.Main_LocaleID,
     );
     final String localeID = (localIDSetting == 'sys')
         ? View.of(context).platformDispatcher.locale.languageCode

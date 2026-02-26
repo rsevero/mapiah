@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 import 'package:mapiah/src/constants/mp_constants.dart';
 
-enum MPSettingType {
+enum MPSettingID {
   Internal_LastNewVersionCheckMS,
   Main_LocaleID,
   Main_TherionExecutablePath,
@@ -9,27 +9,26 @@ enum MPSettingType {
   TH2Edit_PointRadius,
   TH2Edit_SelectionTolerance;
 
-  static const Map<MPSettingType, MPSettingTypeType> types =
-      <MPSettingType, MPSettingTypeType>{
-        MPSettingType.Internal_LastNewVersionCheckMS: MPSettingTypeType.int,
-        MPSettingType.Main_LocaleID: MPSettingTypeType.string,
-        MPSettingType.Main_TherionExecutablePath:
-            MPSettingTypeType.filePickerExec,
-        MPSettingType.TH2Edit_LineThickness: MPSettingTypeType.double,
-        MPSettingType.TH2Edit_PointRadius: MPSettingTypeType.double,
-        MPSettingType.TH2Edit_SelectionTolerance: MPSettingTypeType.double,
+  static const Map<MPSettingID, MPSettingType> types =
+      <MPSettingID, MPSettingType>{
+        MPSettingID.Internal_LastNewVersionCheckMS: MPSettingType.int,
+        MPSettingID.Main_LocaleID: MPSettingType.string,
+        MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
+        MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
+        MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
+        MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
       };
 
-  static const Map<MPSettingType, String> filePickerExecNames =
-      <MPSettingType, String>{
-        MPSettingType.Main_TherionExecutablePath: mpTherionExecutableName,
+  static const Map<MPSettingID, String> filePickerExecNames =
+      <MPSettingID, String>{
+        MPSettingID.Main_TherionExecutablePath: mpTherionExecutableName,
       };
 
   String section() {
     final int underscoreIndex = name.indexOf('_');
 
     if (underscoreIndex <= 0) {
-      throw StateError('MPSettingsType value has no section: $name');
+      throw StateError('MPSettingID value has no section: $name');
     }
 
     return name.substring(0, underscoreIndex);
@@ -39,33 +38,33 @@ enum MPSettingType {
     final int underscoreIndex = name.indexOf('_');
 
     if (underscoreIndex <= 0 || underscoreIndex == name.length - 1) {
-      throw StateError('MPSettingsType value has no id: $name');
+      throw StateError('MPSettingID value has no id: $name');
     }
 
     return name.substring(underscoreIndex + 1);
   }
 
-  MPSettingTypeType type() {
-    final MPSettingTypeType? value = types[this];
+  MPSettingType type() {
+    final MPSettingType? value = types[this];
 
     if (value == null) {
-      throw StateError('MPSettingsType has no type mapping: $name');
+      throw StateError('MPSettingID has no type mapping: $name');
     }
 
     return value;
   }
 
   String filePickerExecName() {
-    if (type() != MPSettingTypeType.filePickerExec) {
+    if (type() != MPSettingType.filePickerExec) {
       throw ArgumentError(
-        'MPSettingsType $this is not of type filePickerExec at filePickerExecName',
+        'MPSettingID $this is not of type filePickerExec at filePickerExecName',
       );
     }
 
     final String? value = filePickerExecNames[this];
 
     if (value == null) {
-      throw StateError('MPSettingsType has no filePickerExec mapping: $name');
+      throw StateError('MPSettingID has no filePickerExec mapping: $name');
     }
 
     return value;
@@ -75,4 +74,4 @@ enum MPSettingType {
   String toString() => name;
 }
 
-enum MPSettingTypeType { bool, double, filePickerExec, int, string, stringList }
+enum MPSettingType { bool, double, filePickerExec, int, string, stringList }

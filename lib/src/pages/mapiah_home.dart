@@ -155,7 +155,7 @@ class _MapiahHomeState extends State<MapiahHome> {
         return PopupMenuButton<String>(
           onSelected: (String newValue) {
             mpLocator.mpSettingsController.setString(
-              MPSettingType.Main_LocaleID,
+              MPSettingID.Main_LocaleID,
               newValue,
             );
           },
@@ -169,7 +169,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                     children: [
                       if (localeID ==
                           mpLocator.mpSettingsController.getString(
-                            MPSettingType.Main_LocaleID,
+                            MPSettingID.Main_LocaleID,
                           )) ...[
                         Icon(Icons.check, color: colorScheme.primary),
                         const SizedBox(width: 8),

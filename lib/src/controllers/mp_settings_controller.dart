@@ -14,7 +14,7 @@ class MPSettingsController = MPSettingsControllerBase
 
 abstract class MPSettingsControllerBase with Store {
   Locale get locale {
-    final String localIDSetting = getString(MPSettingType.Main_LocaleID);
+    final String localIDSetting = getString(MPSettingID.Main_LocaleID);
     final String localeID = (localIDSetting == mpDefaultLocaleID)
         ? _getSystemLocaleID()
         : localIDSetting;
@@ -22,41 +22,41 @@ abstract class MPSettingsControllerBase with Store {
     return Locale(localeID);
   }
 
-  final Map<MPSettingType, bool> _boolSettings = {};
-  final Map<MPSettingType, double> _doubleSettings = {};
-  final Map<MPSettingType, int> _intSettings = {};
-  final Map<MPSettingType, String> _stringSettings = {};
-  final Map<MPSettingType, List<String>> _stringListSettings = {};
+  final Map<MPSettingID, bool> _boolSettings = {};
+  final Map<MPSettingID, double> _doubleSettings = {};
+  final Map<MPSettingID, int> _intSettings = {};
+  final Map<MPSettingID, String> _stringSettings = {};
+  final Map<MPSettingID, List<String>> _stringListSettings = {};
 
   /// The default default value for bools is mpDefaultDefaultBoolSetting. Only
   /// settings that differ from that should be included here.
-  static const Map<MPSettingType, bool> _boolDefaultSettings = {};
+  static const Map<MPSettingID, bool> _boolDefaultSettings = {};
 
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingType, double> _doubleDefaultSettings = {
-    MPSettingType.TH2Edit_LineThickness: mpDefaultLineThickness,
-    MPSettingType.TH2Edit_PointRadius: mpDefaultPointRadius,
-    MPSettingType.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
+  static const Map<MPSettingID, double> _doubleDefaultSettings = {
+    MPSettingID.TH2Edit_LineThickness: mpDefaultLineThickness,
+    MPSettingID.TH2Edit_PointRadius: mpDefaultPointRadius,
+    MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
   };
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only
   /// settings that differ from that should be included here.
-  static const Map<MPSettingType, int> _intDefaultSettings = {};
+  static const Map<MPSettingID, int> _intDefaultSettings = {};
 
   /// The default default value for strings is mpDefaultDefaultStringSetting.
   /// Only settings that differ from that should be included here.
-  static const Map<MPSettingType, String> _stringDefaultSettings = {
-    MPSettingType.Main_LocaleID: mpDefaultLocaleID,
+  static const Map<MPSettingID, String> _stringDefaultSettings = {
+    MPSettingID.Main_LocaleID: mpDefaultLocaleID,
   };
 
   /// The default default value for string lists is
   /// mpDefaultDefaultStringListSetting. Only settings that differ from that
   /// should be included here.
-  static const Map<MPSettingType, List<String>> _stringListDefaultSettings = {};
+  static const Map<MPSettingID, List<String>> _stringListDefaultSettings = {};
 
-  final Map<MPSettingType, Observable<int>> _settingsTriggers = {
-    for (final MPSettingType t in MPSettingType.values)
+  final Map<MPSettingID, Observable<int>> _settingsTriggers = {
+    for (final MPSettingID t in MPSettingID.values)
       t: Observable<int>(mpMinimumInt),
   };
 
@@ -78,54 +78,54 @@ abstract class MPSettingsControllerBase with Store {
         InMemorySharedPreferencesAsync.empty();
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
-        allowList: MPSettingType.values.map((e) => e.name).toSet(),
+        allowList: MPSettingID.values.map((e) => e.name).toSet(),
       ),
     );
-    for (final MPSettingType type in MPSettingType.values) {
-      switch (type.type()) {
-        case MPSettingTypeType.bool:
-          final bool? value = prefs.getBool(type.name);
+    for (final MPSettingID id in MPSettingID.values) {
+      switch (id.type()) {
+        case MPSettingType.bool:
+          final bool? value = prefs.getBool(id.name);
 
           if (value != null) {
-            setBool(type, value);
+            setBool(id, value);
           }
-        case MPSettingTypeType.double:
-          final double? value = prefs.getDouble(type.name);
+        case MPSettingType.double:
+          final double? value = prefs.getDouble(id.name);
 
           if (value != null) {
-            setDouble(type, value);
+            setDouble(id, value);
           }
-        case MPSettingTypeType.int:
-          final int? value = prefs.getInt(type.name);
+        case MPSettingType.int:
+          final int? value = prefs.getInt(id.name);
 
           if (value != null) {
-            setInt(type, value);
+            setInt(id, value);
           }
-        case MPSettingTypeType.string:
-          final String? value = prefs.getString(type.name);
+        case MPSettingType.string:
+          final String? value = prefs.getString(id.name);
 
           if (value != null) {
-            setString(type, value);
+            setString(id, value);
           }
-        case MPSettingTypeType.stringList:
-          final List<String>? value = prefs.getStringList(type.name);
+        case MPSettingType.stringList:
+          final List<String>? value = prefs.getStringList(id.name);
 
           if (value != null) {
-            setStringList(type, value);
+            setStringList(id, value);
           }
-        case MPSettingTypeType.filePickerExec:
-          final String? value = prefs.getString(type.name);
+        case MPSettingType.filePickerExec:
+          final String? value = prefs.getString(id.name);
 
           if (value != null) {
-            setString(type, value);
+            setString(id, value);
           }
       }
     }
   }
 
-  bool _isStringBackedType(MPSettingTypeType type) {
-    return ((type == MPSettingTypeType.string) ||
-        (type == MPSettingTypeType.filePickerExec));
+  bool _isStringBackedType(MPSettingType type) {
+    return ((type == MPSettingType.string) ||
+        (type == MPSettingType.filePickerExec));
   }
 
   String _getSystemLocaleID() {
@@ -135,367 +135,351 @@ abstract class MPSettingsControllerBase with Store {
     return systemLocale.languageCode;
   }
 
-  bool getBool(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.bool) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type bool at getBool',
-      );
+  bool getBool(MPSettingID id) {
+    if (id.type() != MPSettingType.bool) {
+      throw ArgumentError('MPSettingID $id is not of type bool at getBool');
     }
 
     // Prefer an explicitly stored value, then fall back to the default map,
     // and finally return a safe default of `false`.
-    if (_boolSettings.containsKey(type)) {
-      return _boolSettings[type]!;
+    if (_boolSettings.containsKey(id)) {
+      return _boolSettings[id]!;
     }
 
-    return getDefaultBool(type);
+    return getDefaultBool(id);
   }
 
-  bool getDefaultBool(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.bool) {
+  bool getDefaultBool(MPSettingID id) {
+    if (id.type() != MPSettingType.bool) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type bool at getDefaultBool',
+        'MPSettingID $id is not of type bool at getDefaultBool',
       );
     }
 
-    if (_boolDefaultSettings.containsKey(type)) {
-      return _boolDefaultSettings[type]!;
+    if (_boolDefaultSettings.containsKey(id)) {
+      return _boolDefaultSettings[id]!;
     }
 
     return mpDefaultDefaultBoolSetting;
   }
 
-  double getDouble(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.double) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type double at getDouble',
-      );
+  double getDouble(MPSettingID id) {
+    if (id.type() != MPSettingType.double) {
+      throw ArgumentError('MPSettingID $id is not of type double at getDouble');
     }
 
-    if (_doubleSettings.containsKey(type)) {
-      return _doubleSettings[type]!;
+    if (_doubleSettings.containsKey(id)) {
+      return _doubleSettings[id]!;
     }
 
-    return getDefaultDouble(type);
+    return getDefaultDouble(id);
   }
 
-  double getDefaultDouble(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.double) {
+  double getDefaultDouble(MPSettingID id) {
+    if (id.type() != MPSettingType.double) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type double at getDefaultDouble',
+        'MPSettingID $id is not of type double at getDefaultDouble',
       );
     }
 
-    if (_doubleDefaultSettings.containsKey(type)) {
-      return _doubleDefaultSettings[type]!;
+    if (_doubleDefaultSettings.containsKey(id)) {
+      return _doubleDefaultSettings[id]!;
     }
 
     return mpDefaultDefaultDoubleSetting;
   }
 
-  int getInt(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.int) {
-      throw ArgumentError('MPSettingsType $type is not of type int at getInt');
+  int getInt(MPSettingID id) {
+    if (id.type() != MPSettingType.int) {
+      throw ArgumentError('MPSettingID $id is not of type int at getInt');
     }
 
-    if (_intSettings.containsKey(type)) {
-      return _intSettings[type]!;
+    if (_intSettings.containsKey(id)) {
+      return _intSettings[id]!;
     }
 
-    return getDefaultInt(type);
+    return getDefaultInt(id);
   }
 
-  int getDefaultInt(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.int) {
+  int getDefaultInt(MPSettingID id) {
+    if (id.type() != MPSettingType.int) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type int at getDefaultInt',
+        'MPSettingID $id is not of type int at getDefaultInt',
       );
     }
 
-    if (_intDefaultSettings.containsKey(type)) {
-      return _intDefaultSettings[type]!;
+    if (_intDefaultSettings.containsKey(id)) {
+      return _intDefaultSettings[id]!;
     }
 
     return mpDefaultDefaultIntSetting;
   }
 
-  String getString(MPSettingType type) {
-    if (!_isStringBackedType(type.type())) {
+  String getString(MPSettingID id) {
+    if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string/filePickerExec at getString',
+        'MPSettingID $id is not of type string/filePickerExec at getString',
       );
     }
 
-    if (_stringSettings.containsKey(type)) {
-      return _stringSettings[type]!;
+    if (_stringSettings.containsKey(id)) {
+      return _stringSettings[id]!;
     }
 
-    return getDefaultString(type);
+    return getDefaultString(id);
   }
 
-  String getDefaultString(MPSettingType type) {
-    if (!_isStringBackedType(type.type())) {
+  String getDefaultString(MPSettingID id) {
+    if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string/filePickerExec at getDefaultString',
+        'MPSettingID $id is not of type string/filePickerExec at getDefaultString',
       );
     }
 
-    if (type.type() == MPSettingTypeType.filePickerExec) {
-      return type.filePickerExecName();
+    if (id.type() == MPSettingType.filePickerExec) {
+      return id.filePickerExecName();
     }
 
-    if (_stringDefaultSettings.containsKey(type)) {
-      return _stringDefaultSettings[type]!;
+    if (_stringDefaultSettings.containsKey(id)) {
+      return _stringDefaultSettings[id]!;
     }
 
     return mpDefaultDefaultStringSetting;
   }
 
-  List<String> getStringList(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.stringList) {
+  List<String> getStringList(MPSettingID id) {
+    if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type stringList at getStringList',
+        'MPSettingID $id is not of type stringList at getStringList',
       );
     }
 
-    if (_stringListSettings.containsKey(type)) {
-      return _stringListSettings[type]!.toList();
+    if (_stringListSettings.containsKey(id)) {
+      return _stringListSettings[id]!.toList();
     }
 
-    return getDefaultStringList(type);
+    return getDefaultStringList(id);
   }
 
-  List<String> getDefaultStringList(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.stringList) {
+  List<String> getDefaultStringList(MPSettingID id) {
+    if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type stringList at getDefaultStringList',
+        'MPSettingID $id is not of type stringList at getDefaultStringList',
       );
     }
 
-    if (_stringListDefaultSettings.containsKey(type)) {
-      return _stringListDefaultSettings[type]!.toList();
+    if (_stringListDefaultSettings.containsKey(id)) {
+      return _stringListDefaultSettings[id]!.toList();
     }
 
     return mpDefaultDefaultStringListSetting.toList();
   }
 
-  bool setBool(MPSettingType type, bool value) {
-    if (type.type() != MPSettingTypeType.bool) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type bool at setBool',
-      );
+  bool setBool(MPSettingID id, bool value) {
+    if (id.type() != MPSettingType.bool) {
+      throw ArgumentError('MPSettingID $id is not of type bool at setBool');
     }
 
-    final bool oldValue = getBool(type);
+    final bool oldValue = getBool(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
-      _boolSettings[type] = value;
-      prefs.setBool(type.name, value);
-      trigger(type);
+      _boolSettings[id] = value;
+      prefs.setBool(id.name, value);
+      trigger(id);
     }
 
     return isChanged;
   }
 
-  bool isBoolSet(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.bool) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type bool at isBoolSet',
-      );
+  bool isBoolSet(MPSettingID id) {
+    if (id.type() != MPSettingType.bool) {
+      throw ArgumentError('MPSettingID $id is not of type bool at isBoolSet');
     }
 
-    return _boolSettings.containsKey(type);
+    return _boolSettings.containsKey(id);
   }
 
-  void resetBool(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.bool) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type bool at resetBool',
-      );
+  void resetBool(MPSettingID id) {
+    if (id.type() != MPSettingType.bool) {
+      throw ArgumentError('MPSettingID $id is not of type bool at resetBool');
     }
 
-    if (_boolSettings.containsKey(type)) {
-      _boolSettings.remove(type);
-      prefs.remove(type.name);
-      trigger(type);
+    if (_boolSettings.containsKey(id)) {
+      _boolSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
     }
   }
 
-  bool setDouble(MPSettingType type, double value) {
-    if (type.type() != MPSettingTypeType.double) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type double at setDouble',
-      );
+  bool setDouble(MPSettingID id, double value) {
+    if (id.type() != MPSettingType.double) {
+      throw ArgumentError('MPSettingID $id is not of type double at setDouble');
     }
 
-    final double oldValue = getDouble(type);
+    final double oldValue = getDouble(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
-      _doubleSettings[type] = value;
-      prefs.setDouble(type.name, value);
-      trigger(type);
+      _doubleSettings[id] = value;
+      prefs.setDouble(id.name, value);
+      trigger(id);
     }
 
     return isChanged;
   }
 
-  bool isDoubleSet(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.double) {
+  bool isDoubleSet(MPSettingID id) {
+    if (id.type() != MPSettingType.double) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type double at isDoubleSet',
+        'MPSettingID $id is not of type double at isDoubleSet',
       );
     }
 
-    return _doubleSettings.containsKey(type);
+    return _doubleSettings.containsKey(id);
   }
 
-  void resetDouble(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.double) {
+  void resetDouble(MPSettingID id) {
+    if (id.type() != MPSettingType.double) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type double at resetDouble',
+        'MPSettingID $id is not of type double at resetDouble',
       );
     }
 
-    if (_doubleSettings.containsKey(type)) {
-      _doubleSettings.remove(type);
-      prefs.remove(type.name);
-      trigger(type);
+    if (_doubleSettings.containsKey(id)) {
+      _doubleSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
     }
   }
 
-  bool setInt(MPSettingType type, int value) {
-    if (type.type() != MPSettingTypeType.int) {
-      throw ArgumentError('MPSettingsType $type is not of type int at setInt');
+  bool setInt(MPSettingID id, int value) {
+    if (id.type() != MPSettingType.int) {
+      throw ArgumentError('MPSettingID $id is not of type int at setInt');
     }
 
-    final int oldValue = getInt(type);
+    final int oldValue = getInt(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
-      _intSettings[type] = value;
-      prefs.setInt(type.name, value);
-      trigger(type);
+      _intSettings[id] = value;
+      prefs.setInt(id.name, value);
+      trigger(id);
     }
 
     return isChanged;
   }
 
-  bool isIntSet(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.int) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type int at isIntSet',
-      );
+  bool isIntSet(MPSettingID id) {
+    if (id.type() != MPSettingType.int) {
+      throw ArgumentError('MPSettingID $id is not of type int at isIntSet');
     }
 
-    return _intSettings.containsKey(type);
+    return _intSettings.containsKey(id);
   }
 
-  void resetInt(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.int) {
-      throw ArgumentError(
-        'MPSettingsType $type is not of type int at resetInt',
-      );
+  void resetInt(MPSettingID id) {
+    if (id.type() != MPSettingType.int) {
+      throw ArgumentError('MPSettingID $id is not of type int at resetInt');
     }
 
-    if (_intSettings.containsKey(type)) {
-      _intSettings.remove(type);
-      prefs.remove(type.name);
-      trigger(type);
+    if (_intSettings.containsKey(id)) {
+      _intSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
     }
   }
 
-  bool setString(MPSettingType type, String value) {
-    if (!_isStringBackedType(type.type())) {
+  bool setString(MPSettingID id, String value) {
+    if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string/filePickerExec at setString',
+        'MPSettingID $id is not of type string/filePickerExec at setString',
       );
     }
 
-    final String oldValue = getString(type);
+    final String oldValue = getString(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
-      _stringSettings[type] = value;
-      prefs.setString(type.name, value);
-      trigger(type);
+      _stringSettings[id] = value;
+      prefs.setString(id.name, value);
+      trigger(id);
     }
 
     return isChanged;
   }
 
-  bool isStringSet(MPSettingType type) {
-    if (!_isStringBackedType(type.type())) {
+  bool isStringSet(MPSettingID id) {
+    if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string/filePickerExec at isStringSet',
+        'MPSettingID $id is not of type string/filePickerExec at isStringSet',
       );
     }
 
-    return _stringSettings.containsKey(type);
+    return _stringSettings.containsKey(id);
   }
 
-  void resetString(MPSettingType type) {
-    if (!_isStringBackedType(type.type())) {
+  void resetString(MPSettingID id) {
+    if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type string/filePickerExec at resetString',
+        'MPSettingID $id is not of type string/filePickerExec at resetString',
       );
     }
 
-    if (_stringSettings.containsKey(type)) {
-      _stringSettings.remove(type);
-      prefs.remove(type.name);
-      trigger(type);
+    if (_stringSettings.containsKey(id)) {
+      _stringSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
     }
   }
 
-  bool setStringList(MPSettingType type, List<String> value) {
-    if (type.type() != MPSettingTypeType.stringList) {
+  bool setStringList(MPSettingID id, List<String> value) {
+    if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type stringList at setStringList',
+        'MPSettingID $id is not of type stringList at setStringList',
       );
     }
 
-    final List<String> oldValue = getStringList(type);
+    final List<String> oldValue = getStringList(id);
     final bool isChanged = !listEquals(oldValue, value);
 
     if (isChanged) {
-      _stringListSettings[type] = value;
-      prefs.setStringList(type.name, value);
-      trigger(type);
+      _stringListSettings[id] = value;
+      prefs.setStringList(id.name, value);
+      trigger(id);
     }
 
     return isChanged;
   }
 
-  bool isStringListSet(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.stringList) {
+  bool isStringListSet(MPSettingID id) {
+    if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type stringList at isStringListSet',
+        'MPSettingID $id is not of type stringList at isStringListSet',
       );
     }
 
-    return _stringListSettings.containsKey(type);
+    return _stringListSettings.containsKey(id);
   }
 
-  void resetStringList(MPSettingType type) {
-    if (type.type() != MPSettingTypeType.stringList) {
+  void resetStringList(MPSettingID id) {
+    if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
-        'MPSettingsType $type is not of type stringList at resetStringList',
+        'MPSettingID $id is not of type stringList at resetStringList',
       );
     }
 
-    if (_stringListSettings.containsKey(type)) {
-      _stringListSettings.remove(type);
-      prefs.remove(type.name);
-      trigger(type);
+    if (_stringListSettings.containsKey(id)) {
+      _stringListSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
     }
   }
 
-  int getTrigger(MPSettingType type) => _settingsTriggers[type]!.value;
+  int getTrigger(MPSettingID id) => _settingsTriggers[id]!.value;
 
   @action
-  void trigger(MPSettingType type) {
-    _settingsTriggers[type]!.value++;
+  void trigger(MPSettingID id) {
+    _settingsTriggers[id]!.value++;
   }
 }

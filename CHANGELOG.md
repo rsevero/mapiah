@@ -25,6 +25,7 @@
   * MPTherionRunner checking exit code at end of therion run.
   * Fixing therion run for flatpak releases.
   * Renaming MPSettingsType -> MPSettingType and MPSettingTypeType -> MPSettingTypeType.
+  * Renaming MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:
