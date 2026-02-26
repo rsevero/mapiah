@@ -464,3 +464,27 @@ const String mpTherionConfigFileExtension = '.thconfig';
 
 const String mpCommandSeparatorSpace = ' ';
 const String mpEmptyString = '';
+
+// macOS therion path search – well-known package-manager installation
+// directories probed in priority order (most common first).
+const String mpMacOSHomebrewArmBinDirectory = '/opt/homebrew/bin';
+const String mpMacOSHomebrewIntelBinDirectory = '/usr/local/bin';
+const String mpMacOSMacPortsBinDirectory = '/opt/local/bin';
+const String mpMacOSFinkBinDirectory = '/sw/bin';
+
+const List<String> mpTherionMacOSSearchDirectories = <String>[
+  mpMacOSHomebrewArmBinDirectory,
+  mpMacOSHomebrewIntelBinDirectory,
+  mpMacOSMacPortsBinDirectory,
+  mpMacOSFinkBinDirectory,
+];
+
+const String mpTherionMacOSDebugPrefix = '[Mapiah][Therion][Debug][macOS]';
+const String mpTherionMacOSPathSearchHeader =
+    '$mpTherionMacOSDebugPrefix Path search results:';
+const String mpTherionMacOSPathSearchStatusFound = 'FOUND';
+const String mpTherionMacOSPathSearchStatusMissing = 'NOT_FOUND_OR_MISSING';
+const String mpTherionMacOSPathSearchFallbackMessage =
+    '$mpTherionMacOSDebugPrefix Falling back to executable from PATH.';
+const String mpTherionMacOSPathSearchCacheHitMessage =
+    '$mpTherionMacOSDebugPrefix Using cached executable path from previous path search.';

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_macos_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:path/path.dart' as p;
@@ -49,6 +50,7 @@ class MPTherionRunner {
   final MPLocator mpLocator;
   final MPWindowsRegistryReader windowsRegistryReader;
   final MPWindowsShellProbe windowsShellProbe;
+  final MPTherionProcessRunner? macosProcessRunner;
   final MPTherionProcessRunner? windowsProcessRunner;
 
   final StreamController<String> _outputController =
@@ -83,6 +85,7 @@ class MPTherionRunner {
     MPLocator? mpLocator,
     MPWindowsRegistryReader? windowsRegistryReader,
     MPWindowsShellProbe? windowsShellProbe,
+    this.macosProcessRunner,
     this.windowsProcessRunner,
   }) : mpLocator = mpLocator ?? MPLocator(),
        windowsRegistryReader =
@@ -109,6 +112,20 @@ class MPTherionRunner {
 
         final String? localizedErrorMessage =
             windowsExecutionResult.localizedErrorMessage;
+        final bool hasLocalizedErrorMessage =
+            localizedErrorMessage != null && localizedErrorMessage.isNotEmpty;
+
+        if (hasLocalizedErrorMessage) {
+          _handleOutput('$localizedErrorMessage\n');
+        }
+      } else if (_shouldUseMacOSRunner()) {
+        final MPTherionExecutionResult macosExecutionResult =
+            await _runUsingMacOSRunner(workingDirectory: workingDirectory);
+
+        hasExecutionFailure = !macosExecutionResult.success;
+
+        final String? localizedErrorMessage =
+            macosExecutionResult.localizedErrorMessage;
         final bool hasLocalizedErrorMessage =
             localizedErrorMessage != null && localizedErrorMessage.isNotEmpty;
 
@@ -177,6 +194,47 @@ class MPTherionRunner {
         );
 
     return windowsExecutionResult;
+  }
+
+  bool _shouldUseMacOSRunner() {
+    final bool isMacOSPlatform = Platform.isMacOS;
+    final String configFileExtension = p.extension(thConfigFilePath);
+    final String normalizedConfigFileExtension = configFileExtension
+        .toLowerCase();
+    final bool isTherionConfigFile =
+        normalizedConfigFileExtension == mpTherionConfigFileExtension;
+
+    return isMacOSPlatform && isTherionConfigFile;
+  }
+
+  Future<MPTherionExecutionResult> _runUsingMacOSRunner({
+    required String workingDirectory,
+  }) async {
+    final MPTherionProcessRunner processRunner =
+        macosProcessRunner ??
+        _MPMacOSTherionRunnerProcessRunner(
+          onProcessStarted: (Process process) {
+            _process = process;
+          },
+          onOutput: _handleOutput,
+          onError: onError,
+        );
+
+    final MPMacOSTherionRunner macOSTherionRunner = MPMacOSTherionRunner(
+      mpLocator: mpLocator,
+      processRunner: processRunner,
+    );
+
+    final MPTherionExecutionResult macosExecutionResult =
+        await macOSTherionRunner.runCompile(
+          preferredTherionExecutablePath:
+              _trimmedPreferredTherionExecutablePath(),
+          therionOptions: mpEmptyString,
+          therionFileName: thConfigFilePath,
+          workingDirectory: workingDirectory,
+        );
+
+    return macosExecutionResult;
   }
 
   Future<int> _runUsingStandardProcess({
@@ -633,6 +691,105 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
           runInShell: false,
         );
       }
+
+      onProcessStarted(process);
+
+      final StreamSubscription<String> stdoutSubscription = utf8.decoder
+          .bind(process.stdout)
+          .listen(
+            (String outputChunk) {
+              standardOutputBuffer.write(outputChunk);
+              onOutput(outputChunk);
+            },
+            onError: (Object error, StackTrace stackTrace) {
+              final String errorText = '$error';
+              standardErrorBuffer.write('$errorText\n');
+              onOutput('$errorText\n');
+              onError?.call(error, stackTrace);
+            },
+          );
+
+      final StreamSubscription<String> stderrSubscription = utf8.decoder
+          .bind(process.stderr)
+          .listen(
+            (String outputChunk) {
+              standardErrorBuffer.write(outputChunk);
+              onOutput(outputChunk);
+            },
+            onError: (Object error, StackTrace stackTrace) {
+              final String errorText = '$error';
+              standardErrorBuffer.write('$errorText\n');
+              onOutput('$errorText\n');
+              onError?.call(error, stackTrace);
+            },
+          );
+
+      final int processExitCode = await process.exitCode;
+
+      await stdoutSubscription.cancel();
+      await stderrSubscription.cancel();
+
+      final bool success = processExitCode == mpProcessExitCodeSuccess;
+
+      return MPTherionExecutionResult(
+        success: success,
+        commandLine: commandLine,
+        standardOutput: standardOutputBuffer.toString(),
+        standardError: standardErrorBuffer.toString(),
+        localizedErrorMessage: null,
+      );
+    } on Object catch (error, stackTrace) {
+      onError?.call(error, stackTrace);
+
+      final String errorText = '$error';
+      onOutput('$errorText\n');
+
+      return MPTherionExecutionResult(
+        success: false,
+        commandLine: commandLine,
+        standardOutput: standardOutputBuffer.toString(),
+        standardError: errorText,
+        localizedErrorMessage: null,
+      );
+    }
+  }
+}
+
+class _MPMacOSTherionRunnerProcessRunner implements MPTherionProcessRunner {
+  final void Function(Process process) onProcessStarted;
+  final void Function(String outputText) onOutput;
+  final MPTherionRunnerErrorCallback? onError;
+
+  const _MPMacOSTherionRunnerProcessRunner({
+    required this.onProcessStarted,
+    required this.onOutput,
+    required this.onError,
+  });
+
+  @override
+  Future<MPTherionExecutionResult> run({
+    required String commandLine,
+    required String workingDirectory,
+    String? executablePath,
+    List<String>? arguments,
+  }) async {
+    final StringBuffer standardOutputBuffer = StringBuffer();
+    final StringBuffer standardErrorBuffer = StringBuffer();
+    final String? trimmedExecutablePath = executablePath?.trim();
+    final bool hasExecutablePath =
+        trimmedExecutablePath != null && trimmedExecutablePath.isNotEmpty;
+    final String resolvedExecutablePath = hasExecutablePath
+        ? trimmedExecutablePath
+        : mpTherionExecutableName;
+    final List<String> processArguments = arguments ?? const <String>[];
+
+    try {
+      final Process process = await Process.start(
+        resolvedExecutablePath,
+        processArguments,
+        workingDirectory: workingDirectory,
+        runInShell: false,
+      );
 
       onProcessStarted(process);
 

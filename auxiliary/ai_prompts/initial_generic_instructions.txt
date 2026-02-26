@@ -7,7 +7,7 @@ A few introductory instructions:
 5. All variable declarations should have explicit variable type definition.
 6. Variable should be final when possible.
 7. Avoid complex calculations on a single step. Set intermediary values to allow easy understanding of the calculation being done.
+8. On multiple condition decisions, all comparisons that involve more than one element should be in parenthesis.
 
 Specific instructions:
-
 
