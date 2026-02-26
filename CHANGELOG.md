@@ -28,6 +28,7 @@
   * Fixing therion run for flatpak releases.
   * Renaming MPSettingsType -> MPSettingType and MPSettingTypeType -> MPSettingTypeType.
   * Renaming MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
+  * Unifying therion executable path setting and therion executable path for encoding discovery.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:

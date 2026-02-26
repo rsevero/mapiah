@@ -2,9 +2,11 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
@@ -25,7 +27,9 @@ class MPGeneralController {
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
 
   MPGeneralController() {
-    updateAvailableEncodingsList();
+    Future<void>.microtask(() async {
+      await updateAvailableEncodingsList();
+    });
   }
 
   set lastAccessedDirectory(String value) {
@@ -170,12 +174,12 @@ class MPGeneralController {
 
   Future<void> updateAvailableEncodingsList() async {
     try {
-      final String exe = Platform.isWindows
-          ? '$mpTherionExecutableName$mpWindowsExecutableExtension'
-          : mpTherionExecutableName;
-      final ProcessResult result = await Process.run(exe, const [
-        mpTherionPrintEncodingsArgument,
-      ]);
+      final String therionExecutablePath =
+          _resolveTherionExecutablePathForEncodingDiscovery();
+      final ProcessResult result = await Process.run(
+        therionExecutablePath,
+        const [mpTherionPrintEncodingsArgument],
+      );
 
       if (result.exitCode != 0) {
         return;
@@ -204,6 +208,39 @@ class MPGeneralController {
     } catch (_) {
       // Ignore (therion not installed or not in PATH)
     }
+  }
+
+  String _resolveTherionExecutablePathForEncodingDiscovery() {
+    final String configuredTherionExecutablePath =
+        _configuredTherionExecutablePath();
+    final bool hasConfiguredTherionExecutablePath =
+        configuredTherionExecutablePath.isNotEmpty;
+
+    if (hasConfiguredTherionExecutablePath) {
+      return configuredTherionExecutablePath;
+    }
+
+    return _defaultTherionExecutableCommandForCurrentPlatform();
+  }
+
+  String _configuredTherionExecutablePath() {
+    final MPLocator mpLocator = MPLocator();
+    final String configuredTherionExecutablePath = mpLocator
+        .mpSettingsController
+        .getString(MPSettingID.Main_TherionExecutablePath)
+        .trim();
+
+    return configuredTherionExecutablePath;
+  }
+
+  String _defaultTherionExecutableCommandForCurrentPlatform() {
+    final bool isWindowsPlatform = Platform.isWindows;
+
+    if (isWindowsPlatform) {
+      return '$mpTherionExecutableName$mpWindowsExecutableExtension';
+    }
+
+    return mpTherionDefaultExecutableCommand;
   }
 
   List<String> _extractEncodingsFromTherionOutput(String output) {
