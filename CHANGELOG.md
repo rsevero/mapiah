@@ -11,7 +11,8 @@
   * Debug output on Windows search for therion install info.
   * Caching Therion install path on windows on search.
   * MacOS Therion runner implementation.
-  * "Choose THConfig file and run Therion" button painted red if no Therion found.
+  * "Choose THConfig file and run Therion" and "Run Therion" buttons painted red if no Therion found.
+  * "Choose THConfig file and run Therion" and "Run Therion" buttons directed to appropriate help page in case no Therion is found.
 * Fixed bugs:
   * 'Cancel' button on settings page not closing page.
   * Therion run output should be selectable as a whole and not only single lines.

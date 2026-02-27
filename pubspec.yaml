@@ -53,6 +53,7 @@ flutter:
     - assets/help/en/keyboard_shortcuts_edit.md
     - assets/help/en/keyboard_shortcuts_main.md
     - assets/help/en/mapiah_home_help.md
+    - assets/help/en/no_therion_found.md
     - assets/help/en/th2_file_edit_page_help.md
     - assets/help/images/buttonAddArea.png
     - assets/help/images/buttonAddElement.png
@@ -86,6 +87,7 @@ flutter:
     - assets/help/pt/keyboard_shortcuts_edit.md
     - assets/help/pt/keyboard_shortcuts_main.md
     - assets/help/pt/mapiah_home_help.md
+    - assets/help/pt/no_therion_found.md
     - assets/help/pt/th2_file_edit_page_help.md
     - assets/icons/add_element-addArea.png
     - assets/icons/add_element-addElement.png

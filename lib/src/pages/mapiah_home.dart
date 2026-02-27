@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -45,7 +46,9 @@ class _MapiahHomeState extends State<MapiahHome> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final MPSettingsController mpSettingsController =
+        mpLocator.mpSettingsController;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     try {
@@ -82,44 +85,63 @@ class _MapiahHomeState extends State<MapiahHome> {
           Observer(
             builder: (_) {
               final bool therionAvailable =
-                  mpLocator.mpSettingsController.isTherionAvailable;
+                  mpSettingsController.isTherionAvailable;
+
+              final VoidCallback? onPressed = therionAvailable
+                  ? () async {
+                      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    }
+                  : () => MPDialogAux.showHelpDialog(
+                      context,
+                      'no_therion_found',
+                      appLocalizations.mpNoTherionFound,
+                    );
 
               return IconButton(
                 key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
                 icon: Icon(Icons.playlist_add_check_outlined),
-                onPressed: therionAvailable
-                    ? () async {
-                        await MPDialogAux.pickTHConfigFileAndRunTherion(
-                          context,
-                        );
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      }
-                    : null,
+                color: therionAvailable
+                    ? colorScheme.onSecondaryContainer
+                    : mpTherionRunStatusBackgroundErrorColor,
+                onPressed: onPressed,
                 tooltip: therionAvailable
                     ? appLocalizations
                           .mapiahOpenTHConfigAndRunTherionButtonTooltip
-                    : mpLocator.appLocalizations.mpNoTherionFound,
+                    : appLocalizations.mpNoTherionFound,
               );
             },
           ),
           Observer(
             builder: (_) {
               final bool therionAvailable =
-                  mpLocator.mpSettingsController.isTherionAvailable;
+                  mpSettingsController.isTherionAvailable;
+
+              final bool hasTHConfig =
+                  mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
+
+              final VoidCallback? onPressed = !hasTHConfig
+                  ? null
+                  : (therionAvailable
+                        ? () => MPDialogAux.runTherion(context)
+                        : () => MPDialogAux.showHelpDialog(
+                            context,
+                            'no_therion_found',
+                            appLocalizations.mpNoTherionFound,
+                          ));
 
               return IconButton(
                 key: ValueKey('MapiahHomeRunTherionButton'),
                 icon: Icon(Icons.play_arrow_outlined),
-                onPressed: !therionAvailable
-                    ? null
-                    : (mpLocator.mpGeneralController.thConfigFilePath.isEmpty
-                          ? null
-                          : () => MPDialogAux.runTherion(context)),
+                color: therionAvailable
+                    ? colorScheme.onSecondaryContainer
+                    : mpTherionRunStatusBackgroundErrorColor,
+                onPressed: onPressed,
                 tooltip: therionAvailable
                     ? appLocalizations.mapiahRunTherionButtonTooltip
-                    : mpLocator.appLocalizations.mpNoTherionFound,
+                    : appLocalizations.mpNoTherionFound,
               );
             },
           ),
