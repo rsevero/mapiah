@@ -21,6 +21,7 @@
   * Therion run on Windows.
   * Windows tests.
   * Set therion path not used on Windows.
+  * Regression on appLocalizations initialization on MapiahHome.
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
   * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.

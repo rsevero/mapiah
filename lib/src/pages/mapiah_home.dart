@@ -46,7 +46,7 @@ class _MapiahHomeState extends State<MapiahHome> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final MPSettingsController mpSettingsController =
         mpLocator.mpSettingsController;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
