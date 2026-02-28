@@ -837,7 +837,7 @@ class MPDialogAux {
     }
 
     final String configuredExecutablePath = mpLocator.mpSettingsController
-        .getString(MPSettingID.Main_TherionExecutablePath)
+        .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
         .trim();
 
     await showDialog<void>(

@@ -314,19 +314,23 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
       switch (type.type()) {
         case MPSettingType.bool:
-          _draftValues[type] = settingsController.getBool(type);
+          _draftValues[type] = settingsController.getBoolWithDefault(type);
         case MPSettingType.double:
-          _draftValues[type] = settingsController.getDouble(type).toString();
+          _draftValues[type] = settingsController
+              .getDoubleWithDefault(type)
+              .toString();
         case MPSettingType.int:
-          _draftValues[type] = settingsController.getInt(type).toString();
+          _draftValues[type] = settingsController
+              .getIntWithDefault(type)
+              .toString();
         case MPSettingType.string:
-          _draftValues[type] = settingsController.getString(type);
+          _draftValues[type] = settingsController.getStringWithDefault(type);
         case MPSettingType.stringList:
           _draftValues[type] = settingsController
-              .getStringList(type)
+              .getStringListWithDefault(type)
               .join(mpSettingsStringListSeparator);
         case MPSettingType.filePickerExec:
-          _draftValues[type] = settingsController.getString(type);
+          _draftValues[type] = settingsController.getStringWithDefault(type);
       }
 
       _incrementFieldRebuildCounter(type);

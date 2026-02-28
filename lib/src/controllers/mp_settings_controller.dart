@@ -19,7 +19,9 @@ abstract class MPSettingsControllerBase with Store {
   bool _isTherionAvailable = false;
 
   Locale get locale {
-    final String localIDSetting = getString(MPSettingID.Main_LocaleID);
+    final String localIDSetting = getStringWithDefault(
+      MPSettingID.Main_LocaleID,
+    );
     final String localeID = (localIDSetting == mpDefaultLocaleID)
         ? _getSystemLocaleID()
         : localIDSetting;
@@ -88,7 +90,7 @@ abstract class MPSettingsControllerBase with Store {
     try {
       final bool available = await MPTherionRunner.isTherionAvailable(
         mpLocator: MPLocator(),
-        preferredExecutablePath: getString(
+        preferredExecutablePath: getStringWithDefault(
           MPSettingID.Main_TherionExecutablePath,
         ),
       );
@@ -161,7 +163,7 @@ abstract class MPSettingsControllerBase with Store {
     return systemLocale.languageCode;
   }
 
-  bool getBool(MPSettingID id) {
+  bool getBoolWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.bool) {
       throw ArgumentError('MPSettingID $id is not of type bool at getBool');
     }
@@ -189,7 +191,7 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultBoolSetting;
   }
 
-  double getDouble(MPSettingID id) {
+  double getDoubleWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.double) {
       throw ArgumentError('MPSettingID $id is not of type double at getDouble');
     }
@@ -215,7 +217,7 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultDoubleSetting;
   }
 
-  int getInt(MPSettingID id) {
+  int getIntWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.int) {
       throw ArgumentError('MPSettingID $id is not of type int at getInt');
     }
@@ -241,7 +243,7 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultIntSetting;
   }
 
-  String getString(MPSettingID id) {
+  String getStringWithDefault(MPSettingID id) {
     if (!_isStringBackedType(id.type())) {
       throw ArgumentError(
         'MPSettingID $id is not of type string/filePickerExec at getString',
@@ -273,7 +275,7 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultStringSetting;
   }
 
-  List<String> getStringList(MPSettingID id) {
+  List<String> getStringListWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.stringList) {
       throw ArgumentError(
         'MPSettingID $id is not of type stringList at getStringList',
@@ -306,7 +308,7 @@ abstract class MPSettingsControllerBase with Store {
       throw ArgumentError('MPSettingID $id is not of type bool at setBool');
     }
 
-    final bool oldValue = getBool(id);
+    final bool oldValue = getBoolWithDefault(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
@@ -343,7 +345,7 @@ abstract class MPSettingsControllerBase with Store {
       throw ArgumentError('MPSettingID $id is not of type double at setDouble');
     }
 
-    final double oldValue = getDouble(id);
+    final double oldValue = getDoubleWithDefault(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
@@ -384,7 +386,7 @@ abstract class MPSettingsControllerBase with Store {
       throw ArgumentError('MPSettingID $id is not of type int at setInt');
     }
 
-    final int oldValue = getInt(id);
+    final int oldValue = getIntWithDefault(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
@@ -423,7 +425,7 @@ abstract class MPSettingsControllerBase with Store {
       );
     }
 
-    final String oldValue = getString(id);
+    final String oldValue = getStringWithDefault(id);
     final bool isChanged = (oldValue != value);
 
     if (isChanged) {
@@ -471,7 +473,7 @@ abstract class MPSettingsControllerBase with Store {
       );
     }
 
-    final List<String> oldValue = getStringList(id);
+    final List<String> oldValue = getStringListWithDefault(id);
     final bool isChanged = !listEquals(oldValue, value);
 
     if (isChanged) {

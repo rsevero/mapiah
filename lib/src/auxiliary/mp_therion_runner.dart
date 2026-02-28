@@ -98,7 +98,7 @@ class MPTherionRunner {
     // If an MPLocator was provided, check the user-configured setting first.
     if (mpLocator != null) {
       final String configured = mpLocator.mpSettingsController
-          .getString(MPSettingID.Main_TherionExecutablePath)
+          .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
           .trim();
 
       if (configured.isNotEmpty) {

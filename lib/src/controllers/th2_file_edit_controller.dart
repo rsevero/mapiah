@@ -160,13 +160,12 @@ abstract class TH2FileEditControllerBase with Store {
   bool _hasMultipleScraps = false;
 
   @readonly
-  double _lineThicknessOnCanvas = mpLocator.mpSettingsController.getDouble(
-    MPSettingID.TH2Edit_LineThickness,
-  );
+  double _lineThicknessOnCanvas = mpLocator.mpSettingsController
+      .getDoubleWithDefault(MPSettingID.TH2Edit_LineThickness);
 
   @readonly
   double _controlLineThicknessOnCanvas =
-      mpLocator.mpSettingsController.getDouble(
+      mpLocator.mpSettingsController.getDoubleWithDefault(
         MPSettingID.TH2Edit_LineThickness,
       ) *
       mpControlLineThicknessFactor;
@@ -178,21 +177,19 @@ abstract class TH2FileEditControllerBase with Store {
   double _lineDirectionTickLengthOnCanvas = mpLineDirectionTickLength;
 
   @readonly
-  double _pointRadiusOnCanvas = mpLocator.mpSettingsController.getDouble(
-    MPSettingID.TH2Edit_PointRadius,
-  );
+  double _pointRadiusOnCanvas = mpLocator.mpSettingsController
+      .getDoubleWithDefault(MPSettingID.TH2Edit_PointRadius);
 
   @readonly
-  double _selectionToleranceOnCanvas = mpLocator.mpSettingsController.getDouble(
-    MPSettingID.TH2Edit_SelectionTolerance,
-  );
+  double _selectionToleranceOnCanvas = mpLocator.mpSettingsController
+      .getDoubleWithDefault(MPSettingID.TH2Edit_SelectionTolerance);
 
   @readonly
   double _selectionToleranceSquaredOnCanvas =
-      (mpLocator.mpSettingsController.getDouble(
+      (mpLocator.mpSettingsController.getDoubleWithDefault(
         MPSettingID.TH2Edit_SelectionTolerance,
       ) *
-      mpLocator.mpSettingsController.getDouble(
+      mpLocator.mpSettingsController.getDoubleWithDefault(
         MPSettingID.TH2Edit_SelectionTolerance,
       ));
 
@@ -605,7 +602,7 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _lineThicknessOnCanvas =
-            mpLocator.mpSettingsController.getDouble(
+            mpLocator.mpSettingsController.getDoubleWithDefault(
               MPSettingID.TH2Edit_LineThickness,
             ) /
             (_canvasScale * devicePixelRatio);
@@ -626,7 +623,7 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _pointRadiusOnCanvas =
-            mpLocator.mpSettingsController.getDouble(
+            mpLocator.mpSettingsController.getDoubleWithDefault(
               MPSettingID.TH2Edit_PointRadius,
             ) /
             (_canvasScale * devicePixelRatio);
@@ -636,7 +633,7 @@ abstract class TH2FileEditControllerBase with Store {
     _disposers.add(
       autorun((_) {
         _selectionToleranceOnCanvas =
-            mpLocator.mpSettingsController.getDouble(
+            mpLocator.mpSettingsController.getDoubleWithDefault(
               MPSettingID.TH2Edit_SelectionTolerance,
             ) /
             (_canvasScale * devicePixelRatio);

@@ -34,6 +34,7 @@
   * Renamed MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
   * Unified therion executable path setting and therion executable path for encoding discovery.
   * Renamed MPGeneralContorller.thConfigFilePath to mpConfigFilePath.
+  * Renamed MPSettingsController.getTYPE -> getTYPEWithDefault.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:

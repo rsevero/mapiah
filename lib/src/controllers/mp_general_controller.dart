@@ -227,7 +227,7 @@ class MPGeneralController {
     final MPLocator mpLocator = MPLocator();
     final String configuredTherionExecutablePath = mpLocator
         .mpSettingsController
-        .getString(MPSettingID.Main_TherionExecutablePath)
+        .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
         .trim();
 
     return configuredTherionExecutablePath;
