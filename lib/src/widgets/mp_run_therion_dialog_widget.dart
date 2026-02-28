@@ -38,7 +38,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       _therionRunner = injectedRunner;
     } else {
       _therionRunner = MPTherionRunner(
-        therionExecutablePath: widget.therionExecutablePath,
         thConfigFilePath: widget.thConfigFilePath,
         onError: (error, stackTrace) {
           mpLocator.mpLog.e(
