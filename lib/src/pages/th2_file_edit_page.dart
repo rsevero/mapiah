@@ -163,7 +163,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         onPressed:
                             mpLocator
                                 .mpGeneralController
-                                .thConfigFilePath
+                                .mpConfigFilePath
                                 .isEmpty
                             ? null
                             : (therionAvailable

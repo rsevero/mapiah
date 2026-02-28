@@ -124,7 +124,7 @@ class MPTherionRunner {
   }
 
   final String therionExecutablePath;
-  final String thConfigFilePath;
+  final String mpConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;
   final MPLocator mpLocator;
   final MPWindowsRegistryReader windowsRegistryReader;
@@ -159,7 +159,7 @@ class MPTherionRunner {
 
   MPTherionRunner({
     required this.therionExecutablePath,
-    required this.thConfigFilePath,
+    required this.mpConfigFilePath,
     this.onError,
     MPLocator? mpLocator,
     MPWindowsRegistryReader? windowsRegistryReader,
@@ -175,7 +175,8 @@ class MPTherionRunner {
   Stream<String> get outputStream => _outputController.stream;
 
   Future<void> start() async {
-    final String workingDirectory = p.dirname(thConfigFilePath);
+    final String workingDirectory = p.dirname(mpConfigFilePath);
+
     int? therionExitCode;
     bool hasExecutionFailure = false;
 
@@ -234,7 +235,7 @@ class MPTherionRunner {
 
   bool _shouldUseWindowsRunner() {
     final bool isWindowsPlatform = Platform.isWindows;
-    final String configFileExtension = p.extension(thConfigFilePath);
+    final String configFileExtension = p.extension(mpConfigFilePath);
     final String normalizedConfigFileExtension = configFileExtension
         .toLowerCase();
     final bool isTherionConfigFile =
@@ -268,7 +269,7 @@ class MPTherionRunner {
           preferredTherionExecutablePath:
               _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
-          therionFileName: thConfigFilePath,
+          therionFileName: mpConfigFilePath,
           workingDirectory: workingDirectory,
         );
 
@@ -277,7 +278,7 @@ class MPTherionRunner {
 
   bool _shouldUseMacOSRunner() {
     final bool isMacOSPlatform = Platform.isMacOS;
-    final String configFileExtension = p.extension(thConfigFilePath);
+    final String configFileExtension = p.extension(mpConfigFilePath);
     final String normalizedConfigFileExtension = configFileExtension
         .toLowerCase();
     final bool isTherionConfigFile =
@@ -309,7 +310,7 @@ class MPTherionRunner {
           preferredTherionExecutablePath:
               _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
-          therionFileName: thConfigFilePath,
+          therionFileName: mpConfigFilePath,
           workingDirectory: workingDirectory,
         );
 
@@ -444,7 +445,7 @@ class MPTherionRunner {
 
   ({String executable, List<String> arguments}) _buildExecutionConfig() {
     final String therionExecutable = _resolveStandardProcessExecutablePath();
-    final List<String> therionArguments = <String>[thConfigFilePath];
+    final List<String> therionArguments = <String>[mpConfigFilePath];
 
     if (!mpIsFlathub) {
       return (executable: therionExecutable, arguments: therionArguments);
@@ -721,6 +722,77 @@ class _MPTherionRunnerWindowsShellProbe implements MPWindowsShellProbe {
     return cmdExecutableExists;
   }
 }
+
+// Explanation:
+
+// Purpose: _MPTherionRunnerWindowsProcessRunner is a private implementation of
+// MPTherionProcessRunner used to run Therion (or shell commands) on Windows.
+// It's used by MPTherionRunner when Windows-specific execution is needed.
+
+// Constructor:
+
+// Requires three callbacks:
+// onProcessStarted(Process process): notified immediately after the Process is
+// created so the caller can retain/inspect it.
+// onOutput(String outputText): called whenever a chunk of stdout/stderr is
+// received.
+// onError(MPTherionRunnerErrorCallback? onError): optional callback invoked
+// when stream errors or process-start exceptions occur.
+// run(...) behavior:
+
+// Parameters: commandLine, workingDirectory, optional executablePath, optional
+// arguments.
+// If executablePath is provided and non-empty (trimmed), the runner starts that
+// executable directly with processArguments (the arguments list).
+// If no executablePath is given, it constructs shellArguments =
+// [mpWindowsShellExecuteFlag, commandLine] and starts mpWindowsCmdExecutable
+// (typically cmd.exe) with those shell args. This uses Windows shell execution
+// (cmd /c <commandLine>).
+// It sets workingDirectory and runInShell: false for Process.start.
+// Output handling:
+
+// Uses utf8.decoder.bind(process.stdout).listen(...) and similarly for
+//  process.stderr.
+// For each chunk received, it appends to standardOutputBuffer or
+// standardErrorBuffer and invokes onOutput(outputChunk).
+// Stream onError handlers record the error text, call onOutput with an
+// error-looking line, and invoke the provided onError callback with the
+// exception and stack trace.
+// Completion and return:
+
+// Waits for process.exitCode, then cancels both stdout/stderr subscriptions.
+// Determines success by comparing processExitCode to mpProcessExitCodeSuccess.
+// Returns MPTherionExecutionResult containing:
+// success (bool),
+// commandLine (the input commandLine),
+// standardOutput and standardError (the collected buffers),
+// localizedErrorMessage: null (not produced here).
+// Error handling:
+
+// A try/catch surrounds the process start and stream setup. If an exception is
+// thrown, the code:
+// Calls onError?.call(error, stackTrace),
+// Calls onOutput with the error text,
+// Returns a failure MPTherionExecutionResult with standardError set to the
+// error text.
+// Resource management:
+
+// Subscriptions are awaited/cancelled after process exit to avoid leaking
+// stream listeners.
+// onProcessStarted gives the caller the Process reference so it can be
+// killed/stopped elsewhere.
+// Important notes / edge cases:
+
+// The runner passes raw chunk strings to onOutput (not line-normalized), so
+// consumers should handle partial lines.
+// When using shell mode (cmd.exe), the commandLine is passed to the shell; when
+// executablePath is used, commandLine is not executed by a shell—arguments are
+// used instead.
+// No localized error messages are produced here; any localization is handled
+// upstream if needed.
+// The implementation expects the constants mpWindowsCmdExecutable,
+// mpWindowsShellExecuteFlag, and mpProcessExitCodeSuccess from
+// mp_constants.dart.
 
 class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
   final void Function(Process process) onProcessStarted;

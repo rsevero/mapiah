@@ -63,7 +63,7 @@ void main(List<String> arguments) {
 
         final MPTherionRunner runner = MPTherionRunner(
           therionExecutablePath: _dartCommandForPlatform(),
-          thConfigFilePath: scriptPath,
+          mpConfigFilePath: scriptPath,
         );
 
         try {
@@ -107,7 +107,7 @@ void main(List<String> arguments) {
 
         final MPTherionRunner runner = MPTherionRunner(
           therionExecutablePath: _dartCommandForPlatform(),
-          thConfigFilePath: scriptPath,
+          mpConfigFilePath: scriptPath,
         );
 
         try {
@@ -149,7 +149,7 @@ void main(List<String> arguments) {
 
         final MPTherionRunner runner = MPTherionRunner(
           therionExecutablePath: _dartCommandForPlatform(),
-          thConfigFilePath: scriptPath,
+          mpConfigFilePath: scriptPath,
         );
 
         try {
@@ -190,7 +190,7 @@ void main(List<String> arguments) {
 
         final MPTherionRunner runner = MPTherionRunner(
           therionExecutablePath: _dartCommandForPlatform(),
-          thConfigFilePath: scriptPath,
+          mpConfigFilePath: scriptPath,
         );
 
         try {
@@ -232,7 +232,7 @@ void main(List<String> arguments) {
 
           final MPTherionRunner runner = MPTherionRunner(
             therionExecutablePath: _dartCommandForPlatform(),
-            thConfigFilePath: scriptPath,
+            mpConfigFilePath: scriptPath,
           );
 
           try {

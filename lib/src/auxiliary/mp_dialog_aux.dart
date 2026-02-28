@@ -793,7 +793,7 @@ class MPDialogAux {
         mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
           pickedFilePath,
         );
-        mpLocator.mpGeneralController.thConfigFilePath = pickedFilePath;
+        mpLocator.mpGeneralController.mpConfigFilePath = pickedFilePath;
 
         return true;
       } else {
@@ -827,12 +827,12 @@ class MPDialogAux {
   }
 
   static Future<void> runTherion(BuildContext context) async {
-    final String thConfigFilePath = mpLocator
+    final String mpConfigFilePath = mpLocator
         .mpGeneralController
-        .thConfigFilePath
+        .mpConfigFilePath
         .trim();
 
-    if (thConfigFilePath.isEmpty) {
+    if (mpConfigFilePath.isEmpty) {
       return;
     }
 
@@ -847,7 +847,7 @@ class MPDialogAux {
       builder: (BuildContext dialogContext) {
         return MPRunTherionDialogWidget(
           therionExecutablePath: configuredExecutablePath,
-          thConfigFilePath: thConfigFilePath,
+          thConfigFilePath: mpConfigFilePath,
         );
       },
     );

@@ -10,7 +10,7 @@ import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
 
 class _FakeTherionRunner extends MPTherionRunner {
   _FakeTherionRunner()
-    : super(therionExecutablePath: 'therion', thConfigFilePath: '/tmp/dummy');
+    : super(therionExecutablePath: 'therion', mpConfigFilePath: '/tmp/dummy');
 
   @override
   Future<void> start() async {

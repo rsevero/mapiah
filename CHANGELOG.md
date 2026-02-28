@@ -25,14 +25,15 @@
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
   * Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.
-  * Moving business logic of running therion from MPRunTherionDialogWidget to new MPTherionRunner.
+  * Moved business logic of running therion from MPRunTherionDialogWidget to new MPTherionRunner.
   * Added MPTherionRunner ok < warning < error escalation test.
   * Added multi line selection + clickable warnings and errors test.
   * MPTherionRunner checking exit code at end of therion run.
-  * Fixing therion run for flatpak releases.
-  * Renaming MPSettingsType -> MPSettingType and MPSettingTypeType -> MPSettingTypeType.
-  * Renaming MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
-  * Unifying therion executable path setting and therion executable path for encoding discovery.
+  * Fixed therion run for flatpak releases.
+  * Renamed MPSettingsType -> MPSettingType and MPSettingTypeType -> MPSettingTypeType.
+  * Renamed MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
+  * Unified therion executable path setting and therion executable path for encoding discovery.
+  * Renamed MPGeneralContorller.thConfigFilePath to mpConfigFilePath.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:
