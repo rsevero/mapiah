@@ -120,7 +120,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                   mpSettingsController.isTherionAvailable;
 
               final bool hasTHConfig =
-                  mpLocator.mpGeneralController.mpConfigFilePath.isNotEmpty;
+                  mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
 
               final VoidCallback? onPressed = !hasTHConfig
                   ? null

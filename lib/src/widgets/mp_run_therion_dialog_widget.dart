@@ -39,7 +39,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     } else {
       _therionRunner = MPTherionRunner(
         therionExecutablePath: widget.therionExecutablePath,
-        mpConfigFilePath: widget.thConfigFilePath,
+        thConfigFilePath: widget.thConfigFilePath,
         onError: (error, stackTrace) {
           mpLocator.mpLog.e(
             'Failed to run Therion',

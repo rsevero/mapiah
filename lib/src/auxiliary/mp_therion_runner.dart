@@ -125,7 +125,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
   }
 
   final String therionExecutablePath;
-  final String mpConfigFilePath;
+  final String thConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;
   final MPLocator mpLocator;
   final MPWindowsRegistryReader windowsRegistryReader;
@@ -160,7 +160,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
   MPTherionRunner({
     required this.therionExecutablePath,
-    required this.mpConfigFilePath,
+    required this.thConfigFilePath,
     this.onError,
     MPLocator? mpLocator,
     MPWindowsRegistryReader? windowsRegistryReader,
@@ -176,7 +176,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
   Stream<String> get outputStream => _outputController.stream;
 
   Future<void> start() async {
-    final String workingDirectory = p.dirname(mpConfigFilePath);
+    final String workingDirectory = p.dirname(thConfigFilePath);
 
     int? therionExitCode;
     bool hasExecutionFailure = false;
@@ -236,7 +236,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
   bool _shouldUseWindowsRunner() {
     final bool isWindowsPlatform = Platform.isWindows;
-    final String configFileExtension = p.extension(mpConfigFilePath);
+    final String configFileExtension = p.extension(thConfigFilePath);
     final String normalizedConfigFileExtension = configFileExtension
         .toLowerCase();
     final bool isTherionConfigFile =
@@ -270,7 +270,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
           preferredTherionExecutablePath:
               _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
-          therionFileName: mpConfigFilePath,
+          therionFileName: thConfigFilePath,
           workingDirectory: workingDirectory,
         );
 
@@ -279,7 +279,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
   bool _shouldUseMacOSRunner() {
     final bool isMacOSPlatform = Platform.isMacOS;
-    final String configFileExtension = p.extension(mpConfigFilePath);
+    final String configFileExtension = p.extension(thConfigFilePath);
     final String normalizedConfigFileExtension = configFileExtension
         .toLowerCase();
     final bool isTherionConfigFile =
@@ -311,7 +311,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
           preferredTherionExecutablePath:
               _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
-          therionFileName: mpConfigFilePath,
+          therionFileName: thConfigFilePath,
           workingDirectory: workingDirectory,
         );
 
@@ -328,6 +328,12 @@ class MPTherionRunner extends MPBaseTherionRunner {
     );
     final List<String> processArguments = executionConfig.arguments;
 
+    // Use a local non-nullable `process` variable for the Process started
+    // here and assign it to `_process` afterwards. This keeps a stable,
+    // non-null reference for all subscriptions and the awaited `exitCode`
+    // within this function, avoiding repeated null checks or `!` asserts
+    // on the nullable `_process` field and preventing races if another
+    // thread calls `stop()` (which accesses `_process`) concurrently.
     final Process process = await Process.start(
       processExecutable,
       processArguments,
@@ -446,7 +452,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
   ({String executable, List<String> arguments}) _buildExecutionConfig() {
     final String therionExecutable = _resolveStandardProcessExecutablePath();
-    final List<String> therionArguments = <String>[mpConfigFilePath];
+    final List<String> therionArguments = <String>[thConfigFilePath];
 
     if (!mpIsFlathub) {
       return (executable: therionExecutable, arguments: therionArguments);
