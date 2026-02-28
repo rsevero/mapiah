@@ -127,11 +127,11 @@ class MPTherionRunner extends MPBaseTherionRunner {
   final String therionExecutablePath;
   final String thConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;
-  final MPLocator mpLocator;
-  final MPWindowsRegistryReader windowsRegistryReader;
-  final MPWindowsShellProbe windowsShellProbe;
-  final MPTherionProcessRunner? macosProcessRunner;
-  final MPTherionProcessRunner? windowsProcessRunner;
+  final MPLocator mpLocator = MPLocator();
+  final MPWindowsRegistryReader windowsRegistryReader =
+      _MPTherionRunnerWindowsRegistryReader();
+  final MPWindowsShellProbe windowsShellProbe =
+      _MPTherionRunnerWindowsShellProbe();
 
   final StreamController<String> _outputController =
       StreamController<String>.broadcast();
@@ -162,16 +162,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
     required this.therionExecutablePath,
     required this.thConfigFilePath,
     this.onError,
-    MPLocator? mpLocator,
-    MPWindowsRegistryReader? windowsRegistryReader,
-    MPWindowsShellProbe? windowsShellProbe,
-    this.macosProcessRunner,
-    this.windowsProcessRunner,
-  }) : mpLocator = mpLocator ?? MPLocator(),
-       windowsRegistryReader =
-           windowsRegistryReader ?? _MPTherionRunnerWindowsRegistryReader(),
-       windowsShellProbe =
-           windowsShellProbe ?? _MPTherionRunnerWindowsShellProbe();
+  });
 
   Stream<String> get outputStream => _outputController.stream;
 
@@ -249,7 +240,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
     required String workingDirectory,
   }) async {
     final MPTherionProcessRunner processRunner =
-        windowsProcessRunner ??
         _MPTherionRunnerWindowsProcessRunner(
           onProcessStarted: (Process process) {
             _process = process;
@@ -292,7 +282,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
     required String workingDirectory,
   }) async {
     final MPTherionProcessRunner processRunner =
-        macosProcessRunner ??
         _MPMacOSTherionRunnerProcessRunner(
           onProcessStarted: (Process process) {
             _process = process;
