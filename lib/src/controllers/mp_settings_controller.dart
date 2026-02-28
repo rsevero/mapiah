@@ -163,6 +163,20 @@ abstract class MPSettingsControllerBase with Store {
     return systemLocale.languageCode;
   }
 
+  bool? getBoolIfSet(MPSettingID id) {
+    if (id.type() != MPSettingType.bool) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type bool at getBoolIfSet',
+      );
+    }
+
+    if (_boolSettings.containsKey(id)) {
+      return _boolSettings[id]!;
+    }
+
+    return null;
+  }
+
   bool getBoolWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.bool) {
       throw ArgumentError('MPSettingID $id is not of type bool at getBool');
@@ -191,6 +205,20 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultBoolSetting;
   }
 
+  double? getDoubleIfSet(MPSettingID id) {
+    if (id.type() != MPSettingType.double) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type double at getDoubleIfSet',
+      );
+    }
+
+    if (_doubleSettings.containsKey(id)) {
+      return _doubleSettings[id]!;
+    }
+
+    return null;
+  }
+
   double getDoubleWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.double) {
       throw ArgumentError('MPSettingID $id is not of type double at getDouble');
@@ -217,6 +245,18 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultDoubleSetting;
   }
 
+  int? getIntIfSet(MPSettingID id) {
+    if (id.type() != MPSettingType.int) {
+      throw ArgumentError('MPSettingID $id is not of type int at getIntIfSet');
+    }
+
+    if (_intSettings.containsKey(id)) {
+      return _intSettings[id]!;
+    }
+
+    return null;
+  }
+
   int getIntWithDefault(MPSettingID id) {
     if (id.type() != MPSettingType.int) {
       throw ArgumentError('MPSettingID $id is not of type int at getInt');
@@ -241,6 +281,20 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     return mpDefaultDefaultIntSetting;
+  }
+
+  String? getStringIfSet(MPSettingID id) {
+    if (!_isStringBackedType(id.type())) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type string/filePickerExec at getStringIfSet',
+      );
+    }
+
+    if (_stringSettings.containsKey(id)) {
+      return _stringSettings[id]!;
+    }
+
+    return null;
   }
 
   String getStringWithDefault(MPSettingID id) {
@@ -273,6 +327,20 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     return mpDefaultDefaultStringSetting;
+  }
+
+  List<String>? getStringListIfSet(MPSettingID id) {
+    if (id.type() != MPSettingType.stringList) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type stringList at getStringListIfSet',
+      );
+    }
+
+    if (_stringListSettings.containsKey(id)) {
+      return _stringListSettings[id]!.toList();
+    }
+
+    return null;
   }
 
   List<String> getStringListWithDefault(MPSettingID id) {
