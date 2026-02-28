@@ -159,7 +159,7 @@ class MPTherionRunner extends MPBaseTherionRunner {
   );
 
   MPTherionRunner({
-    required this.therionExecutablePath,
+    this.therionExecutablePath = 'therion',
     required this.thConfigFilePath,
     this.onError,
   });

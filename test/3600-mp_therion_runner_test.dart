@@ -1,11 +1,15 @@
-// ignore_for_file: file_names
-
 import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 
 void main() {
+  setUpAll(() async {
+    await MPLocator().mpSettingsController.initialized;
+  });
+
   group('Dart command resolver', () {
     test('uses resolved executable when it already points to dart', () {
       final String resolvedExecutablePath = r'C:\tools\dart-sdk\bin\dart.exe';
@@ -41,6 +45,13 @@ void main() {
   });
 
   group('MPTherionRunner monitoring', () {
+    setUp(() {
+      mpLocator.mpSettingsController.setString(
+        MPSettingID.Main_TherionExecutablePath,
+        _dartCommandForPlatform(),
+      );
+    });
+
     test('escalates status from warning to error and records issues', () async {
       final String scriptSource = '''
 void main(List<String> arguments) {
@@ -62,7 +73,6 @@ void main(List<String> arguments) {
         );
 
         final MPTherionRunner runner = MPTherionRunner(
-          therionExecutablePath: _dartCommandForPlatform(),
           thConfigFilePath: scriptPath,
         );
 
@@ -106,7 +116,6 @@ void main(List<String> arguments) {
         );
 
         final MPTherionRunner runner = MPTherionRunner(
-          therionExecutablePath: _dartCommandForPlatform(),
           thConfigFilePath: scriptPath,
         );
 
@@ -148,7 +157,6 @@ void main(List<String> arguments) {
         );
 
         final MPTherionRunner runner = MPTherionRunner(
-          therionExecutablePath: _dartCommandForPlatform(),
           thConfigFilePath: scriptPath,
         );
 
@@ -189,7 +197,6 @@ void main(List<String> arguments) {
         );
 
         final MPTherionRunner runner = MPTherionRunner(
-          therionExecutablePath: _dartCommandForPlatform(),
           thConfigFilePath: scriptPath,
         );
 
@@ -231,7 +238,6 @@ void main(List<String> arguments) {
           );
 
           final MPTherionRunner runner = MPTherionRunner(
-            therionExecutablePath: _dartCommandForPlatform(),
             thConfigFilePath: scriptPath,
           );
 
