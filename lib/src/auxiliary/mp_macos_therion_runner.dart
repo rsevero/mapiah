@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
@@ -19,7 +20,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 /// installation directories listed in [mpTherionMacOSSearchDirectories].
 /// The first found path is cached for the lifetime of the process
 /// ([_cachedSearchedTherionExecutablePath]).
-class MPMacOSTherionRunner {
+class MPMacOSTherionRunner extends MPBaseTherionRunner {
   final MPLocator mpLocator;
   final MPTherionProcessRunner processRunner;
 
@@ -125,15 +126,6 @@ class MPMacOSTherionRunner {
     required String preferredTherionExecutablePath,
   }) {
     final List<String> pathSearchLogLines = <String>[];
-    final String trimmedPreferredPath = preferredTherionExecutablePath.trim();
-    final bool hasPreferredPath = trimmedPreferredPath.isNotEmpty;
-
-    if (hasPreferredPath) {
-      return (
-        executablePath: trimmedPreferredPath,
-        pathSearchLogLines: pathSearchLogLines,
-      );
-    }
 
     final String? cachedPath =
         MPTherionCache.cachedSearchedTherionExecutablePath;
@@ -144,6 +136,16 @@ class MPMacOSTherionRunner {
 
       return (
         executablePath: cachedPath,
+        pathSearchLogLines: pathSearchLogLines,
+      );
+    }
+
+    final String trimmedUserDefinedPath = getUserDefinedTherionExecutablePath();
+    final bool hasUserDefinedPath = trimmedUserDefinedPath.isNotEmpty;
+
+    if (hasUserDefinedPath) {
+      return (
+        executablePath: trimmedUserDefinedPath,
         pathSearchLogLines: pathSearchLogLines,
       );
     }

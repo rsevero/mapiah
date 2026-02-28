@@ -1,3 +1,4 @@
+import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -67,7 +68,7 @@ class MPTherionExecutionResult {
   }
 }
 
-class MPWindowsTherionRunner {
+class MPWindowsTherionRunner extends MPBaseTherionRunner {
   final MPLocator mpLocator;
   final MPWindowsRegistryReader registryReader;
   final MPWindowsShellProbe shellProbe;

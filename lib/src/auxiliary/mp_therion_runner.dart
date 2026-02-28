@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_macos_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
@@ -45,7 +46,7 @@ class MPTherionIssue {
   });
 }
 
-class MPTherionRunner {
+class MPTherionRunner extends MPBaseTherionRunner {
   static void clearSearchedTherionExecutablePathCache() {
     MPTherionCache.clearSearchedTherionExecutablePathCache();
   }
@@ -461,13 +462,13 @@ class MPTherionRunner {
   }
 
   String _resolveStandardProcessExecutablePath() {
-    final String preferredTherionExecutablePath =
-        _trimmedPreferredTherionExecutablePath();
-    final bool hasPreferredTherionExecutablePath =
-        preferredTherionExecutablePath.isNotEmpty;
+    final String userDefinedTherionExecutablePath =
+        getUserDefinedTherionExecutablePath();
+    final bool hasUserDefinedTherionExecutablePath =
+        userDefinedTherionExecutablePath.isNotEmpty;
 
-    if (hasPreferredTherionExecutablePath) {
-      return preferredTherionExecutablePath;
+    if (hasUserDefinedTherionExecutablePath) {
+      return userDefinedTherionExecutablePath;
     }
 
     return mpTherionDefaultExecutableCommand;
