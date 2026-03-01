@@ -344,7 +344,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
       registryValue: installDirectory64Bit,
     );
 
-    if (installDirectory64Bit != null && installDirectory64Bit.isNotEmpty) {
+    if ((installDirectory64Bit != null) && installDirectory64Bit.isNotEmpty) {
       return installDirectory64Bit;
     }
 
@@ -360,11 +360,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
       registryValue: installDirectory32Bit,
     );
 
-    if (installDirectory32Bit == null) {
-      return null;
-    }
-
-    if (installDirectory32Bit.isEmpty) {
+    if ((installDirectory32Bit == null) || installDirectory32Bit.isEmpty) {
       return null;
     }
 
@@ -382,7 +378,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     }
 
     final bool hasRegistryValue =
-        registryValue != null && registryValue.trim().isNotEmpty;
+        (registryValue != null) && registryValue.trim().isNotEmpty;
     final String resultStatus = hasRegistryValue
         ? mpTherionWindowsRegistryLookupStatusFound
         : mpTherionWindowsRegistryLookupStatusMissing;
