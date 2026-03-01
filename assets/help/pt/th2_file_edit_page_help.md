@@ -25,6 +25,8 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 * À direita:
   * ![Ícone salvar](assets/help/images/iconSave.png "Salvar")  _Salvar_: salva as alterações no mesmo arquivo. Só fica habilitado se houver alterações a serem salvas. (Ctrl+S)
   * ![Ícone salvar como](assets/help/images/iconSaveAs.png "Salvar como")  _Salvar como_: salva as alterações em um novo arquivo. (Shift+Ctrl+S)
+  * ![Ícone escolher THConfig e executar Therion](assets/help/images/iconChooseTHConfigAndRunTherion.png "Escolher THConfig e executar Therion") _Escolher THConfig e executar Therion_: mostra a caixa de diálogo do sistema para escolher qual arquivo THConfig será usado para executar o Therion.
+  * ![Ícone executar Therion](assets/help/images/iconRunTherion.png "Executar Therion") _Executar Therion_: executa o Therion com o projeto atualmente aberto.
   * ![Ícone ajuda](assets/help/images/iconHelp.png "Ajuda") _Ajuda_: mostra esta caixa de diálogo.
   * ![Ícone fechar](assets/help/images/iconClose.png "Fechar") _Fechar_: fecha a janela de edição do arquivo TH2 sem salvar alterações.
 
