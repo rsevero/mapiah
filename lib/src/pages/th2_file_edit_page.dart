@@ -62,6 +62,14 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
     colorScheme = Theme.of(context).colorScheme;
+    final Widget actionsSeparator = SizedBox(
+      height: 24,
+      child: VerticalDivider(
+        width: 8,
+        thickness: 1,
+        color: colorScheme.outlineVariant,
+      ),
+    );
 
     return FutureBuilder<TH2FileEditControllerCreateResult>(
       future: th2FileEditControllerCreateResult,
@@ -114,6 +122,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       onPressed: () => th2FileEditController.saveAsTH2File(),
                       tooltip: appLocalizations.th2FileEditPageSaveAs,
                     ),
+                    actionsSeparator,
                   ],
                   Observer(
                     builder: (_) {
@@ -179,6 +188,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       );
                     },
                   ),
+                  actionsSeparator,
                   MPHelpButtonWidget(
                     context,
                     mpHelpPageKeyboardShortcutsEdit,
