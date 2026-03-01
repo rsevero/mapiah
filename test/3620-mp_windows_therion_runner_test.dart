@@ -1,10 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 
 class _FakeWindowsRegistryReader implements MPWindowsRegistryReader {
   final Map<String, String?> _registryValuesByPath;
@@ -60,9 +62,14 @@ class _FakeTherionProcessRunner implements MPTherionProcessRunner {
 }
 
 void main() {
+  setUpAll(() async {
+    await MPLocator().mpSettingsController.initialized;
+  });
+
   group('MPWindowsTherionRunner command building', () {
     setUp(() {
       MPTherionRunner.clearSearchedTherionExecutablePathCache();
+      mpLocator.mpGeneralController.reset();
     });
 
     tearDown(() {
@@ -106,9 +113,12 @@ void main() {
       const String preferredTherionExecutablePath =
           r'D:\custom\therion\therion.exe';
 
-      final String commandLine = windowsTherionRunner.buildCompilerCommand(
-        preferredTherionExecutablePath: preferredTherionExecutablePath,
+      mpLocator.mpSettingsController.setString(
+        MPSettingID.Main_TherionExecutablePath,
+        preferredTherionExecutablePath,
       );
+
+      final String commandLine = windowsTherionRunner.buildCompilerCommand();
 
       expect(commandLine, '"$preferredTherionExecutablePath"');
       expect(commandLine, isNot(contains(r'\Program Files\Therion')));
@@ -137,9 +147,9 @@ void main() {
             );
 
         final String firstCommandLine = firstWindowsTherionRunner
-            .buildCompilerCommand(preferredTherionExecutablePath: '');
+            .buildCompilerCommand();
         final String secondCommandLine = secondWindowsTherionRunner
-            .buildCompilerCommand(preferredTherionExecutablePath: '');
+            .buildCompilerCommand();
 
         expect(
           firstCommandLine,

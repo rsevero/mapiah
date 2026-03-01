@@ -33,7 +33,6 @@
   * Renamed MPSettingsType -> MPSettingType and MPSettingTypeType -> MPSettingTypeType.
   * Renamed MPSettingType -> MPSettingID and MPSettingTypeType -> MPSettingType.
   * Unified therion executable path setting and therion executable path for encoding discovery.
-  * Renamed MPGeneralContorller.thConfigFilePath to mpConfigFilePath.
   * Renamed MPSettingsController.getTYPE -> getTYPEWithDefault.
   * Created MPSettingsController.getTYPEIfSet() that returns null if not set.
   * Created MPBaseTherionRunner class with getUserDefinedTherionExecutablePath() method.

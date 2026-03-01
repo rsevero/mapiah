@@ -257,8 +257,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
     final MPTherionExecutionResult windowsExecutionResult =
         await windowsTherionRunner.runCompile(
-          preferredTherionExecutablePath:
-              _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
           therionFileName: thConfigFilePath,
           workingDirectory: workingDirectory,
