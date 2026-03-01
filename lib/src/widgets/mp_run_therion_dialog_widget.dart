@@ -415,8 +415,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     if (hours > 0) {
       return '${twoDigits(hours)}:${twoDigits(minutes)}:${secondsWithTenth()}';
+    } else if (minutes > 0) {
+      return '${twoDigits(minutes)}:${secondsWithTenth()}';
     }
 
-    return '${twoDigits(minutes)}:${secondsWithTenth()}';
+    return secondsWithTenth();
   }
 }
