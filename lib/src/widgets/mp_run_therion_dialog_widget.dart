@@ -72,10 +72,11 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     _therionRunner.start();
 
+    // Stop the timer only when the runner stops running (process exit).
     _statusListener = () {
-      final MPTherionRunStatus status = _therionRunner.statusNotifier.value;
+      final bool isRunning = _therionRunner.isRunningNotifier.value;
 
-      if (status != MPTherionRunStatus.running) {
+      if (!isRunning) {
         _timer?.cancel();
         if (mounted && (_startTime != null)) {
           setState(() {
@@ -85,14 +86,14 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       }
     };
 
-    _therionRunner.statusNotifier.addListener(_statusListener!);
+    _therionRunner.isRunningNotifier.addListener(_statusListener!);
   }
 
   @override
   void dispose() {
     _outputSubscription?.cancel();
     if (_statusListener != null) {
-      _therionRunner.statusNotifier.removeListener(_statusListener!);
+      _therionRunner.isRunningNotifier.removeListener(_statusListener!);
     }
 
     _timer?.cancel();
