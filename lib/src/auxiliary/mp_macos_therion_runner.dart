@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -20,7 +20,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 /// installation directories listed in [mpTherionMacOSSearchDirectories].
 /// The first found path is cached for the lifetime of the process
 /// ([_cachedSearchedTherionExecutablePath]).
-class MPMacOSTherionRunner extends MPBaseTherionRunner {
+class MPMacOSTherionRunner extends MPPlatformTherionRunner {
   final MPLocator mpLocator;
   final MPTherionProcessRunner processRunner;
 
@@ -30,6 +30,7 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
   });
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
 
+  @override
   Future<MPTherionExecutionResult> runCompile({
     required String therionOptions,
     required String therionFileName,
@@ -88,7 +89,7 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
     final ({String executablePath, List<String> pathSearchLogLines})
     executableResolution = _resolveTherionExecutablePathWithDiagnostics();
     final String executablePath = executableResolution.executablePath;
-    final String quotedFileName = _quoteValue(therionFileName);
+    final String quotedFileName = quoteValue(therionFileName);
     final List<String> processArguments = <String>[];
     final String trimmedTherionOptions = therionOptions.trim();
     final bool hasTherionOptions = trimmedTherionOptions.isNotEmpty;
@@ -101,7 +102,7 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
 
     processArguments.add(therionFileName);
 
-    final String commandLine = _joinNonEmptyParts(<String>[
+    final String commandLine = joinNonEmptyParts(<String>[
       executablePath,
       mpTherionCompileFlag,
       therionOptions,
@@ -214,28 +215,5 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
         '$localizedBaseErrorMessage$mpUnixLineBreak$pathSearchDiagnosticsText';
 
     return localizedErrorMessage;
-  }
-
-  String _quoteValue(String value) {
-    final String quotedValue = '"$value"';
-
-    return quotedValue;
-  }
-
-  String _joinNonEmptyParts(List<String> values) {
-    final List<String> nonEmptyValues = <String>[];
-
-    for (final String value in values) {
-      final String trimmedValue = value.trim();
-      if (trimmedValue.isEmpty) {
-        continue;
-      }
-
-      nonEmptyValues.add(trimmedValue);
-    }
-
-    final String joinedCommand = nonEmptyValues.join(mpCommandSeparatorSpace);
-
-    return joinedCommand;
   }
 }

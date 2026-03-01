@@ -488,3 +488,10 @@ const String mpTherionMacOSPathSearchFallbackMessage =
     '$mpTherionMacOSDebugPrefix Falling back to executable from PATH.';
 const String mpTherionMacOSPathSearchCacheHitMessage =
     '$mpTherionMacOSDebugPrefix Using cached executable path from previous path search.';
+
+// Linux therion process runner – diagnostic constants.
+const String mpTherionLinuxDebugPrefix = '[Mapiah][Therion][Debug][Linux]';
+const String mpTherionLinuxPathSearchCacheHitMessage =
+    '$mpTherionLinuxDebugPrefix Using cached executable path.';
+const String mpTherionLinuxPathSearchFallbackMessage =
+    '$mpTherionLinuxDebugPrefix Falling back to executable from PATH.';

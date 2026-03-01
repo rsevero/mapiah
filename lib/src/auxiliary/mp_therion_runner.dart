@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_linux_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_macos_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -46,7 +47,7 @@ class MPTherionIssue {
   });
 }
 
-class MPTherionRunner extends MPBaseTherionRunner {
+class MPTherionRunner {
   static void clearSearchedTherionExecutablePathCache() {
     MPTherionCache.clearSearchedTherionExecutablePathCache();
   }
@@ -128,10 +129,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
   final String thConfigFilePath;
   final MPTherionRunnerErrorCallback? onError;
   final MPLocator mpLocator = MPLocator();
-  final MPWindowsRegistryReader windowsRegistryReader =
-      _MPTherionRunnerWindowsRegistryReader();
-  final MPWindowsShellProbe windowsShellProbe =
-      _MPTherionRunnerWindowsShellProbe();
 
   final StreamController<String> _outputController =
       StreamController<String>.broadcast();
@@ -168,46 +165,29 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
-
-    int? therionExitCode;
     bool hasExecutionFailure = false;
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
 
     try {
-      if (_shouldUseWindowsRunner()) {
-        final MPTherionExecutionResult windowsExecutionResult =
-            await _runUsingWindowsRunner(workingDirectory: workingDirectory);
+      final MPPlatformTherionRunner platformRunner = _createPlatformRunner();
+      final MPTherionExecutionResult executionResult = await platformRunner
+          .runCompile(
+            therionOptions: mpEmptyString,
+            therionFileName: thConfigFilePath,
+            workingDirectory: workingDirectory,
+          );
 
-        hasExecutionFailure = !windowsExecutionResult.success;
+      hasExecutionFailure = !executionResult.success;
 
-        final String? localizedErrorMessage =
-            windowsExecutionResult.localizedErrorMessage;
-        final bool hasLocalizedErrorMessage =
-            localizedErrorMessage != null && localizedErrorMessage.isNotEmpty;
+      final String? localizedErrorMessage =
+          executionResult.localizedErrorMessage;
+      final bool hasLocalizedErrorMessage =
+          (localizedErrorMessage != null) && localizedErrorMessage.isNotEmpty;
 
-        if (hasLocalizedErrorMessage) {
-          _handleOutput('$localizedErrorMessage\n');
-        }
-      } else if (_shouldUseMacOSRunner()) {
-        final MPTherionExecutionResult macosExecutionResult =
-            await _runUsingMacOSRunner(workingDirectory: workingDirectory);
-
-        hasExecutionFailure = !macosExecutionResult.success;
-
-        final String? localizedErrorMessage =
-            macosExecutionResult.localizedErrorMessage;
-        final bool hasLocalizedErrorMessage =
-            localizedErrorMessage != null && localizedErrorMessage.isNotEmpty;
-
-        if (hasLocalizedErrorMessage) {
-          _handleOutput('$localizedErrorMessage\n');
-        }
-      } else {
-        therionExitCode = await _runUsingStandardProcess(
-          workingDirectory: workingDirectory,
-        );
+      if (hasLocalizedErrorMessage) {
+        _handleOutput('$localizedErrorMessage\n');
       }
     } on Object catch (error, stackTrace) {
       onError?.call(error, stackTrace);
@@ -217,214 +197,62 @@ class MPTherionRunner extends MPBaseTherionRunner {
     } finally {
       _flushPendingLine();
       isRunningNotifier.value = false;
-
-      _finalizeRunStatus(
-        hasExecutionFailure: hasExecutionFailure,
-        therionExitCode: therionExitCode,
-      );
+      _finalizeRunStatus(hasExecutionFailure: hasExecutionFailure);
     }
   }
 
-  bool _shouldUseWindowsRunner() {
+  MPPlatformTherionRunner _createPlatformRunner() {
     final bool isWindowsPlatform = Platform.isWindows;
-    final String configFileExtension = p.extension(thConfigFilePath);
-    final String normalizedConfigFileExtension = configFileExtension
-        .toLowerCase();
-    final bool isTherionConfigFile =
-        normalizedConfigFileExtension == mpTherionConfigFileExtension;
-
-    return isWindowsPlatform && isTherionConfigFile;
-  }
-
-  Future<MPTherionExecutionResult> _runUsingWindowsRunner({
-    required String workingDirectory,
-  }) async {
-    final MPTherionProcessRunner processRunner =
-        _MPTherionRunnerWindowsProcessRunner(
-          onProcessStarted: (Process process) {
-            _process = process;
-          },
-          onOutput: _handleOutput,
-          onError: onError,
-        );
-
-    final MPWindowsTherionRunner windowsTherionRunner = MPWindowsTherionRunner(
-      mpLocator: mpLocator,
-      registryReader: windowsRegistryReader,
-      shellProbe: windowsShellProbe,
-      processRunner: processRunner,
-    );
-
-    final MPTherionExecutionResult windowsExecutionResult =
-        await windowsTherionRunner.runCompile(
-          therionOptions: mpEmptyString,
-          therionFileName: thConfigFilePath,
-          workingDirectory: workingDirectory,
-        );
-
-    return windowsExecutionResult;
-  }
-
-  bool _shouldUseMacOSRunner() {
     final bool isMacOSPlatform = Platform.isMacOS;
-    final String configFileExtension = p.extension(thConfigFilePath);
-    final String normalizedConfigFileExtension = configFileExtension
+    final String configFileExtension = p
+        .extension(thConfigFilePath)
         .toLowerCase();
     final bool isTherionConfigFile =
-        normalizedConfigFileExtension == mpTherionConfigFileExtension;
+        configFileExtension == mpTherionConfigFileExtension;
 
-    return isMacOSPlatform && isTherionConfigFile;
-  }
-
-  Future<MPTherionExecutionResult> _runUsingMacOSRunner({
-    required String workingDirectory,
-  }) async {
-    final MPTherionProcessRunner processRunner =
-        _MPMacOSTherionRunnerProcessRunner(
+    if (isWindowsPlatform && isTherionConfigFile) {
+      return MPWindowsTherionRunner(
+        mpLocator: mpLocator,
+        registryReader: _MPTherionRunnerWindowsRegistryReader(),
+        shellProbe: _MPTherionRunnerWindowsShellProbe(),
+        processRunner: _MPTherionRunnerWindowsProcessRunner(
           onProcessStarted: (Process process) {
             _process = process;
           },
           onOutput: _handleOutput,
           onError: onError,
-        );
-
-    final MPMacOSTherionRunner macOSTherionRunner = MPMacOSTherionRunner(
-      mpLocator: mpLocator,
-      processRunner: processRunner,
-    );
-
-    final MPTherionExecutionResult macosExecutionResult =
-        await macOSTherionRunner.runCompile(
-          therionOptions: mpEmptyString,
-          therionFileName: thConfigFilePath,
-          workingDirectory: workingDirectory,
-        );
-
-    return macosExecutionResult;
-  }
-
-  Future<int> _runUsingStandardProcess({
-    required String workingDirectory,
-  }) async {
-    final ({String executable, List<String> arguments}) executionConfig =
-        _buildExecutionConfig();
-    final String processExecutable = _resolveProcessExecutablePath(
-      executionConfig.executable,
-    );
-    final List<String> processArguments = executionConfig.arguments;
-
-    // Use a local non-nullable `process` variable for the Process started
-    // here and assign it to `_process` afterwards. This keeps a stable,
-    // non-null reference for all subscriptions and the awaited `exitCode`
-    // within this function, avoiding repeated null checks or `!` asserts
-    // on the nullable `_process` field and preventing races if another
-    // thread calls `stop()` (which accesses `_process`) concurrently.
-    final Process process = await Process.start(
-      processExecutable,
-      processArguments,
-      workingDirectory: workingDirectory,
-      runInShell: false,
-    );
-
-    _process = process;
-
-    _stdoutSubscription = utf8.decoder
-        .bind(process.stdout)
-        .listen(
-          _handleOutput,
-          onError: (Object error) {
-            _handleOutput('$error\n');
-          },
-        );
-
-    _stderrSubscription = utf8.decoder
-        .bind(process.stderr)
-        .listen(
-          _handleOutput,
-          onError: (Object error) {
-            _handleOutput('$error\n');
-          },
-        );
-
-    final int therionExitCode = await process.exitCode;
-
-    return therionExitCode;
-  }
-
-  String _resolveProcessExecutablePath(String executable) {
-    final bool isWindowsPlatform = Platform.isWindows;
-
-    if (!isWindowsPlatform) {
-      return executable;
-    }
-
-    final bool isAbsolutePath = p.isAbsolute(executable);
-
-    if (isAbsolutePath) {
-      return executable;
-    }
-
-    final String? pathEnvironmentValue =
-        Platform.environment[mpPathEnvironmentVariableName];
-
-    if (pathEnvironmentValue == null || pathEnvironmentValue.isEmpty) {
-      return executable;
-    }
-
-    final List<String> pathEntries = pathEnvironmentValue.split(
-      mpPathEnvironmentEntrySeparatorWindows,
-    );
-    final bool hasWindowsExecutableExtension = executable
-        .toLowerCase()
-        .endsWith(mpWindowsExecutableExtension);
-
-    for (final String pathEntry in pathEntries) {
-      final String trimmedPathEntry = pathEntry.trim();
-
-      if (trimmedPathEntry.isEmpty) {
-        continue;
-      }
-
-      final String executableCandidate = p.join(trimmedPathEntry, executable);
-      final File executableFile = File(executableCandidate);
-      final bool executableExists = executableFile.existsSync();
-
-      if (executableExists) {
-        return executableCandidate;
-      }
-
-      if (hasWindowsExecutableExtension) {
-        continue;
-      }
-
-      final String executableWithExtension =
-          '$executable$mpWindowsExecutableExtension';
-      final String extensionCandidate = p.join(
-        trimmedPathEntry,
-        executableWithExtension,
+        ),
       );
-      final File extensionCandidateFile = File(extensionCandidate);
-      final bool extensionCandidateExists = extensionCandidateFile.existsSync();
-
-      if (extensionCandidateExists) {
-        return extensionCandidate;
-      }
     }
 
-    return executable;
+    if (isMacOSPlatform && isTherionConfigFile) {
+      return MPMacOSTherionRunner(
+        mpLocator: mpLocator,
+        processRunner: _MPUnixLikeTherionRunnerProcessRunner(
+          onProcessStarted: (Process process) {
+            _process = process;
+          },
+          onOutput: _handleOutput,
+          onError: onError,
+        ),
+      );
+    }
+
+    // Default: Linux (and other Unix-like platforms).
+    return MPLinuxTherionRunner(
+      mpLocator: mpLocator,
+      processRunner: _MPUnixLikeTherionRunnerProcessRunner(
+        onProcessStarted: (Process process) {
+          _process = process;
+        },
+        onOutput: _handleOutput,
+        onError: onError,
+      ),
+    );
   }
 
-  void _finalizeRunStatus({
-    required bool hasExecutionFailure,
-    required int? therionExitCode,
-  }) {
-    final bool hasExitCode = therionExitCode != null;
-    final bool hasSuccessfulExitCode =
-        hasExitCode && (therionExitCode == mpProcessExitCodeSuccess);
-    final bool hasFailedExitCode = hasExitCode && !hasSuccessfulExitCode;
-    final bool shouldSetErrorStatus = hasExecutionFailure || hasFailedExitCode;
-
-    if (shouldSetErrorStatus) {
+  void _finalizeRunStatus({required bool hasExecutionFailure}) {
+    if (hasExecutionFailure) {
       statusNotifier.value = MPTherionRunStatus.error;
 
       return;
@@ -433,36 +261,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
     if (statusNotifier.value == MPTherionRunStatus.running) {
       statusNotifier.value = MPTherionRunStatus.ok;
     }
-  }
-
-  ({String executable, List<String> arguments}) _buildExecutionConfig() {
-    final String therionExecutable = _resolveStandardProcessExecutablePath();
-    final List<String> therionArguments = <String>[thConfigFilePath];
-
-    if (!mpIsFlathub) {
-      return (executable: therionExecutable, arguments: therionArguments);
-    }
-
-    final List<String> hostArguments = <String>[
-      mpFlatpakSpawnHostArgument,
-      therionExecutable,
-      ...therionArguments,
-    ];
-
-    return (executable: mpFlatpakSpawnExecutableName, arguments: hostArguments);
-  }
-
-  String _resolveStandardProcessExecutablePath() {
-    final String userDefinedTherionExecutablePath =
-        getUserDefinedTherionExecutablePath();
-    final bool hasUserDefinedTherionExecutablePath =
-        userDefinedTherionExecutablePath.isNotEmpty;
-
-    if (hasUserDefinedTherionExecutablePath) {
-      return userDefinedTherionExecutablePath;
-    }
-
-    return mpTherionDefaultExecutableCommand;
   }
 
   void stop() {
@@ -892,12 +690,12 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
   }
 }
 
-class _MPMacOSTherionRunnerProcessRunner implements MPTherionProcessRunner {
+class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
   final void Function(Process process) onProcessStarted;
   final void Function(String outputText) onOutput;
   final MPTherionRunnerErrorCallback? onError;
 
-  const _MPMacOSTherionRunnerProcessRunner({
+  const _MPUnixLikeTherionRunnerProcessRunner({
     required this.onProcessStarted,
     required this.onOutput,
     required this.onError,

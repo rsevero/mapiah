@@ -1,5 +1,5 @@
-import 'package:mapiah/src/auxiliary/mp_base_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -68,7 +68,7 @@ class MPTherionExecutionResult {
   }
 }
 
-class MPWindowsTherionRunner extends MPBaseTherionRunner {
+class MPWindowsTherionRunner extends MPPlatformTherionRunner {
   final MPLocator mpLocator;
   final MPWindowsRegistryReader registryReader;
   final MPWindowsShellProbe shellProbe;
@@ -97,9 +97,9 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     required String therionFileName,
   }) {
     final String compilerCommand = buildCompilerCommand();
-    final String quotedFileName = _quoteValue(therionFileName);
+    final String quotedFileName = quoteValue(therionFileName);
 
-    final String compileInvocation = _joinNonEmptyParts(<String>[
+    final String compileInvocation = joinNonEmptyParts(<String>[
       compilerCommand,
       mpTherionCompileFlag,
       therionOptions,
@@ -109,6 +109,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     return compileInvocation;
   }
 
+  @override
   Future<MPTherionExecutionResult> runCompile({
     required String therionOptions,
     required String therionFileName,
@@ -181,7 +182,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     if ((cachedSearchedTherionExecutablePath != null) &&
         cachedSearchedTherionExecutablePath.isNotEmpty) {
       final String cachedExecutablePath = cachedSearchedTherionExecutablePath;
-      final String cachedExecutableCommand = _quoteValue(cachedExecutablePath);
+      final String cachedExecutableCommand = quoteValue(cachedExecutablePath);
 
       registrySearchLogLines.add(mpTherionWindowsRegistryLookupCacheHitMessage);
 
@@ -198,7 +199,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
         trimmedUserDefinedTherionExecutablePath.isNotEmpty;
 
     if (hasUserDefinedTherionExecutablePath) {
-      final String userDefinedExecutableCommand = _quoteValue(
+      final String userDefinedExecutableCommand = quoteValue(
         trimmedUserDefinedTherionExecutablePath,
       );
 
@@ -217,9 +218,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
       final String machineExecutablePath = _buildExecutablePath(
         machineInstallDirectory,
       );
-      final String machineExecutableCommand = _quoteValue(
-        machineExecutablePath,
-      );
+      final String machineExecutableCommand = quoteValue(machineExecutablePath);
       MPTherionCache.cacheSearchedTherionExecutablePath(machineExecutablePath);
 
       return (
@@ -237,7 +236,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
       final String userExecutablePath = _buildExecutablePath(
         userInstallDirectory,
       );
-      final String userExecutableCommand = _quoteValue(userExecutablePath);
+      final String userExecutableCommand = quoteValue(userExecutablePath);
       MPTherionCache.cacheSearchedTherionExecutablePath(userExecutablePath);
 
       return (
@@ -278,7 +277,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     })
     compilerCommandWithDiagnostics =
         _buildCompilerCommandWithRegistryDiagnostics();
-    final String quotedFileName = _quoteValue(therionFileName);
+    final String quotedFileName = quoteValue(therionFileName);
     final List<String> processArguments = <String>[];
     final String trimmedTherionOptions = therionOptions.trim();
     final bool hasTherionOptions = trimmedTherionOptions.isNotEmpty;
@@ -291,7 +290,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
 
     processArguments.add(therionFileName);
 
-    final String compileInvocation = _joinNonEmptyParts(<String>[
+    final String compileInvocation = joinNonEmptyParts(<String>[
       compilerCommandWithDiagnostics.commandLine,
       mpTherionCompileFlag,
       therionOptions,
@@ -456,28 +455,5 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     );
 
     return normalizedValue;
-  }
-
-  String _quoteValue(String value) {
-    final String quotedValue = '"$value"';
-
-    return quotedValue;
-  }
-
-  String _joinNonEmptyParts(List<String> values) {
-    final List<String> nonEmptyValues = <String>[];
-
-    for (final String value in values) {
-      final String trimmedValue = value.trim();
-      if (trimmedValue.isEmpty) {
-        continue;
-      }
-
-      nonEmptyValues.add(trimmedValue);
-    }
-
-    final String joinedCommand = nonEmptyValues.join(mpCommandSeparatorSpace);
-
-    return joinedCommand;
   }
 }

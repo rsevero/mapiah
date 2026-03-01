@@ -37,6 +37,7 @@
   * Created MPSettingsController.getTYPEIfSet() that returns null if not set.
   * Created MPBaseTherionRunner class with getUserDefinedTherionExecutablePath() method.
   * therionExecutablePath and preferredExecutablePath from MPTherionRunner not used on Linux.
+  * Created MPLinuxTherionRunner.
 
 ## 0.2.36 - 2026-02-24 - The [Danaids](https://en.wikipedia.org/wiki/Danaids) release
 * New features:
