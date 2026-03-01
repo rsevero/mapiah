@@ -52,9 +52,20 @@ class MPTherionRunner {
 
     Future<bool> validateExecutable(String executable) async {
       try {
-        final ProcessResult result = await Process.run(executable, <String>[
-          '--version',
-        ]);
+        final ProcessResult result;
+
+        // Inside a Flatpak sandbox the host filesystem is not directly
+        // accessible, so any executable on the host (including therion) must
+        // be launched via `flatpak-spawn --host`.
+        if (mpIsFlathub && Platform.isLinux) {
+          result = await Process.run(mpFlatpakSpawnExecutableName, <String>[
+            mpFlatpakSpawnHostArgument,
+            executable,
+            '--version',
+          ]);
+        } else {
+          result = await Process.run(executable, <String>['--version']);
+        }
 
         final bool success = result.exitCode == mpProcessExitCodeSuccess;
         if (success) {

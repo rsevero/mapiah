@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
+
+* Bug fixes:
+  * Flatpak release not running Therion from Mapiah.
+
 ## 0.2.37 - 2026-03-01 - The [Run Therion] release
 * New features:
   * Created Settings page.
