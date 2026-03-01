@@ -153,6 +153,14 @@
     "description": "Title for the Therion output dialog",
     "type": "text"
   },
+  "mapiahTherionRunElapsedLabel": "Elapsed time: {elapsed} s",
+  "@mapiahTherionRunElapsedLabel": {
+    "description": "Label for Therion run elapsed time",
+    "type": "text",
+    "placeholders": {
+      "elapsed": {}
+    }
+  },
   "mapiahTherionRunStatusLabel": "Status:",
   "@mapiahTherionRunStatusLabel": {
     "description": "Label for Therion run status",
@@ -364,6 +372,11 @@
   "mpChoiceUnset": "Unset",
   "@mpChoiceUnset": {
     "description": "The label for the unset choice type",
+    "type": "text"
+  },
+  "mpSeconds": "s",
+  "@mpSeconds": {
+    "description": "The abbreviation for seconds unit",
     "type": "text"
   },
   "mpSettingsPageTitle": "Settings",

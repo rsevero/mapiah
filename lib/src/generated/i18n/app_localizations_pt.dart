@@ -116,6 +116,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunDialogTitle => 'Saída do Therion';
 
   @override
+  String mapiahTherionRunElapsedLabel(Object elapsed) {
+    return 'Tempo decorrido: $elapsed s';
+  }
+
+  @override
   String get mapiahTherionRunStatusLabel => 'Situação:';
 
   @override
@@ -244,6 +249,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpChoiceUnset => 'Não definido';
+
+  @override
+  String get mpSeconds => 's';
 
   @override
   String get mpSettingsPageTitle => 'Configurações';

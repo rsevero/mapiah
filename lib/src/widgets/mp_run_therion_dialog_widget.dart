@@ -27,10 +27,29 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
+  Timer? _timer;
+  Duration _elapsed = Duration.zero;
+  DateTime? _startTime;
+  VoidCallback? _statusListener;
 
   @override
   void initState() {
     super.initState();
+
+    _startTime = DateTime.now();
+    _timer = Timer.periodic(
+      const Duration(
+        seconds: mpSecondsBetweenTimerUpdateAtMPRunTherionDialogWidget,
+      ),
+      (_) {
+        if (!mounted || (_startTime == null)) {
+          return;
+        }
+        setState(() {
+          _elapsed = DateTime.now().difference(_startTime!);
+        });
+      },
+    );
 
     final MPTherionRunner? injectedRunner = widget.therionRunner;
 
@@ -52,11 +71,32 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
 
     _therionRunner.start();
+
+    _statusListener = () {
+      final MPTherionRunStatus status = _therionRunner.statusNotifier.value;
+
+      if (status != MPTherionRunStatus.running) {
+        _timer?.cancel();
+        if (mounted && (_startTime != null)) {
+          setState(() {
+            _elapsed = DateTime.now().difference(_startTime!);
+          });
+        }
+      }
+    };
+
+    _therionRunner.statusNotifier.addListener(_statusListener!);
   }
 
   @override
   void dispose() {
     _outputSubscription?.cancel();
+    if (_statusListener != null) {
+      _therionRunner.statusNotifier.removeListener(_statusListener!);
+    }
+
+    _timer?.cancel();
+
     _therionRunner.dispose();
     _scrollController.dispose();
 
@@ -178,6 +218,19 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
               ),
             ),
             const SizedBox(height: mpTherionRunDialogSpacing),
+            // Elapsed time display (updates every second until run finishes)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  appLocalizations.mapiahTherionRunElapsedLabel(
+                    _formatDuration(_elapsed),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: mpTherionRunDialogSpacing),
+
             ValueListenableBuilder<List<MPTherionIssue>>(
               valueListenable: _therionRunner.issuesNotifier,
               builder:
@@ -352,9 +405,34 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     if (currentIndex < lineText.length) {
       final String trailingChunk = lineText.substring(currentIndex);
+
       spans.add(TextSpan(text: trailingChunk));
     }
 
     return spans;
+  }
+
+  String _formatDuration(Duration d) {
+    final int hours = d.inHours;
+    final int minutes = d.inMinutes.remainder(60);
+    final double totalSeconds = d.inMilliseconds / 1000.0;
+    final double seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+
+    String secondsWithTenth() {
+      final String s = seconds.toStringAsFixed(1);
+      // Ensure two-digit integer part for seconds (e.g. 09.3)
+      if (seconds < 10) {
+        return '0$s';
+      }
+      return s;
+    }
+
+    if (hours > 0) {
+      return '${twoDigits(hours)}:${twoDigits(minutes)}:${secondsWithTenth()}';
+    }
+
+    return '${twoDigits(minutes)}:${secondsWithTenth()}';
   }
 }

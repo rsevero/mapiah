@@ -154,6 +154,7 @@ const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';
 const String mpSettingsStringListSeparator = ', ';
+const int mpSecondsBetweenTimerUpdateAtMPRunTherionDialogWidget = 1;
 
 const double mpTherionRunDialogWidth = 900;
 const double mpTherionRunDialogHeight = 600;

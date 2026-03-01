@@ -265,6 +265,12 @@ abstract class AppLocalizations {
   /// **'Therion output'**
   String get mapiahTherionRunDialogTitle;
 
+  /// Label for Therion run elapsed time
+  ///
+  /// In en, this message translates to:
+  /// **'Elapsed time: {elapsed} s'**
+  String mapiahTherionRunElapsedLabel(Object elapsed);
+
   /// Label for Therion run status
   ///
   /// In en, this message translates to:
@@ -516,6 +522,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unset'**
   String get mpChoiceUnset;
+
+  /// The abbreviation for seconds unit
+  ///
+  /// In en, this message translates to:
+  /// **'s'**
+  String get mpSeconds;
 
   /// The title for the settings page
   ///

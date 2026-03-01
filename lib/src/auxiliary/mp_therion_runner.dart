@@ -135,6 +135,7 @@ class MPTherionRunner {
 
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
+
     bool hasExecutionFailure = false;
 
     isRunningNotifier.value = true;
