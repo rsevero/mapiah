@@ -200,5 +200,5 @@
 
 ## Version 2.0
 [ ] - Open/edit/save thconfig files.
-[ ] - Run Therion using the openned thconfig file.
-[ ] - show Therion output log while running Therion from Mapiah.
+[X] - Run Therion using the opened thconfig file.
+[X] - Show Therion output log while running Therion from Mapiah.

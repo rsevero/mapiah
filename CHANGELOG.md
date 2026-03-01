@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.37 - not yet released
+## 0.2.37 - 2026-03-01 - The [Run Therion] release
 * New features:
   * Created Settings page.
   * Settings page with real time per setting type validation.

@@ -57,6 +57,57 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.37" date="2026-03-01">
+      <description>
+        <p>0.2.37 - 2026-03-01 - The Run Therion release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Created Settings page.</li>
+          <li>Settings page with real time per setting type validation.</li>
+          <li>Settings page with "reset" button for each setting and for all settings.</li>
+          <li>Created new settings type: FilePickerExecutable.</li>
+          <li>Running Therion.</li>
+          <li>Tracking warnings and errors on Therion run output.</li>
+          <li>Debug output on Windows search for therion install info.</li>
+          <li>Caching Therion install path on windows on search.</li>
+          <li>MacOS Therion runner implementation.</li>
+          <li>"Choose THConfig file and run Therion" and "Run Therion" buttons painted red if no Therion found.</li>
+          <li>"Choose THConfig file and run Therion" and "Run Therion" buttons directed to appropriate help page in case no Therion is found.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>'Cancel' button on settings page not closing page.</li>
+          <li>Therion run output should be selectable as a whole and not only single lines.</li>
+          <li>Therion run output has no line breaks after copy/paste.</li>
+          <li>Searching for Therion install path on windows always failing.</li>
+          <li>Therion run on Windows.</li>
+          <li>Windows tests.</li>
+          <li>Set therion path not used on Windows.</li>
+          <li>Regression on appLocalizations initialization on MapiahHome.</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Included "Current status" section in README.md. [requested by CaverBruce]</li>
+          <li>Included "Choose THConfig and run Therion" and "Run Therion" buttons in both MapiaHome and TH2FileEdit pages.</li>
+          <li>Moved business logic of running therion from MPRunTherionDialogWidget to new MPTherionRunner.</li>
+          <li>Added MPTherionRunner ok &lt; warning &lt; error escalation test.</li>
+          <li>Added multi line selection + clickable warnings and errors test.</li>
+          <li>MPTherionRunner checking exit code at end of therion run.</li>
+          <li>Fixed therion run for flatpak releases.</li>
+          <li>Renamed MPSettingsType -&gt; MPSettingType and MPSettingTypeType -&gt; MPSettingTypeType.</li>
+          <li>Renamed MPSettingType -&gt; MPSettingID and MPSettingTypeType -&gt; MPSettingType.</li>
+          <li>Unified therion executable path setting and therion executable path for encoding discovery.</li>
+          <li>Renamed MPSettingsController.getTYPE -&gt; getTYPEWithDefault.</li>
+          <li>Created MPSettingsController.getTYPEIfSet() that returns null if not set.</li>
+          <li>Created MPBaseTherionRunner class with getUserDefinedTherionExecutablePath() method.</li>
+          <li>therionExecutablePath and preferredExecutablePath from MPTherionRunner not used on Linux.</li>
+          <li>Created MPLinuxTherionRunner.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.36" date="2026-02-24">
       <url type="details">https://github.com/rsevero/mapiah/releases/tag/v0.2.36</url>
       <description>
