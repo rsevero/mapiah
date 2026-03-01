@@ -27,7 +27,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
-  Timer? _timer;
   Duration _elapsed = Duration.zero;
   DateTime? _startTime;
   VoidCallback? _statusListener;
@@ -37,19 +36,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     super.initState();
 
     _startTime = DateTime.now();
-    _timer = Timer.periodic(
-      const Duration(
-        seconds: mpSecondsBetweenTimerUpdateAtMPRunTherionDialogWidget,
-      ),
-      (_) {
-        if (!mounted || (_startTime == null)) {
-          return;
-        }
-        setState(() {
-          _elapsed = DateTime.now().difference(_startTime!);
-        });
-      },
-    );
 
     final MPTherionRunner? injectedRunner = widget.therionRunner;
 
@@ -77,7 +63,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       final bool isRunning = _therionRunner.isRunningNotifier.value;
 
       if (!isRunning) {
-        _timer?.cancel();
         if (mounted && (_startTime != null)) {
           setState(() {
             _elapsed = DateTime.now().difference(_startTime!);
@@ -95,8 +80,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     if (_statusListener != null) {
       _therionRunner.isRunningNotifier.removeListener(_statusListener!);
     }
-
-    _timer?.cancel();
 
     _therionRunner.dispose();
     _scrollController.dispose();
