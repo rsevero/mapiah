@@ -371,6 +371,24 @@ abstract class MPSettingsControllerBase with Store {
     return mpDefaultDefaultStringListSetting.toList();
   }
 
+  void reset() {
+    for (final MPSettingID id in MPSettingID.values) {
+      switch (id.type()) {
+        case MPSettingType.bool:
+          resetBool(id);
+        case MPSettingType.double:
+          resetDouble(id);
+        case MPSettingType.int:
+          resetInt(id);
+        case MPSettingType.string:
+        case MPSettingType.filePickerExec:
+          resetString(id);
+        case MPSettingType.stringList:
+          resetStringList(id);
+      }
+    }
+  }
+
   bool setBool(MPSettingID id, bool value) {
     if (id.type() != MPSettingType.bool) {
       throw ArgumentError('MPSettingID $id is not of type bool at setBool');

@@ -69,11 +69,12 @@ void main() {
   group('MPWindowsTherionRunner command building', () {
     setUp(() {
       MPTherionRunner.clearSearchedTherionExecutablePathCache();
-      mpLocator.mpGeneralController.reset();
+      mpLocator.mpSettingsController.reset();
     });
 
     tearDown(() {
       MPTherionRunner.clearSearchedTherionExecutablePathCache();
+      mpLocator.mpSettingsController.reset();
     });
 
     test(

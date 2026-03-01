@@ -178,7 +178,7 @@ class MPWindowsTherionRunner extends MPBaseTherionRunner {
     final String? cachedSearchedTherionExecutablePath =
         MPTherionCache.cachedSearchedTherionExecutablePath;
 
-    if (cachedSearchedTherionExecutablePath != null &&
+    if ((cachedSearchedTherionExecutablePath != null) &&
         cachedSearchedTherionExecutablePath.isNotEmpty) {
       final String cachedExecutablePath = cachedSearchedTherionExecutablePath;
       final String cachedExecutableCommand = _quoteValue(cachedExecutablePath);
