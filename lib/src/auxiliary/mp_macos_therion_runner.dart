@@ -31,7 +31,6 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
   AppLocalizations get appLocalizations => mpLocator.appLocalizations;
 
   Future<MPTherionExecutionResult> runCompile({
-    String preferredTherionExecutablePath = '',
     required String therionOptions,
     required String therionFileName,
     required String workingDirectory,
@@ -44,7 +43,6 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
     })
     compileInvocationWithDiagnostics =
         _buildCompileInvocationWithPathDiagnostics(
-          preferredTherionExecutablePath: preferredTherionExecutablePath,
           therionOptions: therionOptions,
           therionFileName: therionFileName,
         );
@@ -84,14 +82,11 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
     List<String> pathSearchLogLines,
   })
   _buildCompileInvocationWithPathDiagnostics({
-    required String preferredTherionExecutablePath,
     required String therionOptions,
     required String therionFileName,
   }) {
     final ({String executablePath, List<String> pathSearchLogLines})
-    executableResolution = _resolveTherionExecutablePathWithDiagnostics(
-      preferredTherionExecutablePath: preferredTherionExecutablePath,
-    );
+    executableResolution = _resolveTherionExecutablePathWithDiagnostics();
     final String executablePath = executableResolution.executablePath;
     final String quotedFileName = _quoteValue(therionFileName);
     final List<String> processArguments = <String>[];
@@ -122,9 +117,7 @@ class MPMacOSTherionRunner extends MPBaseTherionRunner {
   }
 
   ({String executablePath, List<String> pathSearchLogLines})
-  _resolveTherionExecutablePathWithDiagnostics({
-    required String preferredTherionExecutablePath,
-  }) {
+  _resolveTherionExecutablePathWithDiagnostics() {
     final List<String> pathSearchLogLines = <String>[];
 
     final String? cachedPath =

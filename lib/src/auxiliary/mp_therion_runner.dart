@@ -295,8 +295,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
 
     final MPTherionExecutionResult macosExecutionResult =
         await macOSTherionRunner.runCompile(
-          preferredTherionExecutablePath:
-              _trimmedPreferredTherionExecutablePath(),
           therionOptions: mpEmptyString,
           therionFileName: thConfigFilePath,
           workingDirectory: workingDirectory,
@@ -465,12 +463,6 @@ class MPTherionRunner extends MPBaseTherionRunner {
     }
 
     return mpTherionDefaultExecutableCommand;
-  }
-
-  String _trimmedPreferredTherionExecutablePath() {
-    final String trimmedTherionExecutablePath = therionExecutablePath.trim();
-
-    return trimmedTherionExecutablePath;
   }
 
   void stop() {
