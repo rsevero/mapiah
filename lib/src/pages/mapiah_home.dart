@@ -50,6 +50,14 @@ class _MapiahHomeState extends State<MapiahHome> {
     final MPSettingsController mpSettingsController =
         mpLocator.mpSettingsController;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Widget actionsSeparator = SizedBox(
+      height: 24,
+      child: VerticalDivider(
+        width: 8,
+        thickness: 1,
+        color: colorScheme.outlineVariant,
+      ),
+    );
 
     try {
       setWindowTitle(appLocalizations.appTitle);
@@ -82,6 +90,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.mapiahHomeOpenFile,
           ),
+          actionsSeparator,
           Observer(
             builder: (_) {
               final bool therionAvailable =
@@ -145,6 +154,7 @@ class _MapiahHomeState extends State<MapiahHome> {
               );
             },
           ),
+          actionsSeparator,
           IconButton(
             key: ValueKey('MapiahHomeSettingsButton'),
             icon: Icon(Icons.settings_outlined),
