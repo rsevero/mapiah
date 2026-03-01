@@ -42,7 +42,7 @@ abstract class MPPlatformTherionRunner {
     return '"$value"';
   }
 
-  String getUserDefinedTherionExecutablePath() {
+  static String getUserDefinedTherionExecutablePath() {
     final String userDefinedPath =
         mpLocator.mpSettingsController
             .getStringIfSet(MPSettingID.Main_TherionExecutablePath)

@@ -9,27 +9,11 @@ import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+
 import 'package:path/path.dart' as p;
 
 typedef MPTherionRunnerErrorCallback =
     void Function(Object error, StackTrace stackTrace);
-
-List<String> buildWindowsRegistryQueryArguments({
-  required String registryPath,
-  required String valueName,
-  required String registryViewSwitch,
-}) {
-  final List<String> queryArguments = <String>[
-    mpWindowsRegistryQuerySubcommand,
-    registryPath,
-    mpWindowsRegistryQueryValueSwitch,
-    valueName,
-    registryViewSwitch,
-  ];
-
-  return queryArguments;
-}
 
 enum MPTherionRunStatus { running, ok, warning, error }
 
@@ -54,24 +38,17 @@ class MPTherionRunner {
 
   /// Checks whether a viable Therion executable is available.
   ///
-  /// The check prefers an explicit `preferredExecutablePath` if provided,
-  /// then the user-configured setting (via `mpLocator`), and finally
-  /// attempts an automatic probe (default executable name / platform probes).
-  /// Results are cached for the process lifetime; call
+  /// The check prefers a cached path from a previous successful check (via
+  /// `MPTherionCache`), then checks the user-configured setting (via
+  /// `mpLocator`), and finally attempts an automatic probe (default executable
+  /// name / platform probes). Results are cached for the process lifetime; call
   /// `clearSearchedTherionExecutablePathCache()` to force a re-check.
-  static Future<bool> isTherionAvailable({
-    String? preferredExecutablePath,
-    MPLocator? mpLocator,
-  }) async {
+  static Future<bool> isTherionAvailable() async {
     final String? cached = MPTherionCache.cachedSearchedTherionExecutablePath;
 
-    if (cached != null && cached.isNotEmpty) {
+    if ((cached != null) && cached.isNotEmpty) {
       return true;
     }
-
-    final String? preferred = (preferredExecutablePath ?? '').trim().isNotEmpty
-        ? preferredExecutablePath!.trim()
-        : null;
 
     Future<bool> validateExecutable(String executable) async {
       try {
@@ -90,39 +67,32 @@ class MPTherionRunner {
       }
     }
 
-    if (preferred != null) {
-      final bool ok = await validateExecutable(preferred);
-      if (ok) {
+    final String configured =
+        MPPlatformTherionRunner.getUserDefinedTherionExecutablePath();
+
+    if (configured.isNotEmpty) {
+      final bool configuredOk = await validateExecutable(configured);
+
+      if (configuredOk) {
         return true;
       }
     }
 
-    // If an MPLocator was provided, check the user-configured setting first.
-    if (mpLocator != null) {
-      final String configured = mpLocator.mpSettingsController
-          .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
-          .trim();
+    // Automatic probe: delegate to the platform-specific runner so that the
+    // full search strategy (registry lookup on Windows, filesystem scan on
+    // macOS, PATH-based default on Linux/other) is encapsulated in each
+    // subclass rather than hardcoded here.
+    final String candidate;
 
-      if (configured.isNotEmpty) {
-        final bool configuredOk = await validateExecutable(configured);
-        if (configuredOk) {
-          return true;
-        }
-      }
+    if (Platform.isWindows) {
+      candidate = MPWindowsTherionRunner.probeForTherionExecutablePath();
+    } else if (Platform.isMacOS) {
+      candidate = MPMacOSTherionRunner.probeForTherionExecutablePath();
+    } else {
+      candidate = MPLinuxTherionRunner.probeForTherionExecutablePath();
     }
 
-    // Automatic probe: try platform-specific executable name then default.
-    final bool isWindowsPlatform = Platform.isWindows;
-    final String candidate = isWindowsPlatform
-        ? mpTherionWindowsExecutableName
-        : mpTherionDefaultExecutableCommand;
-
-    final bool probeOk = await validateExecutable(candidate);
-    if (probeOk) {
-      return true;
-    }
-
-    return false;
+    return validateExecutable(candidate);
   }
 
   final String therionExecutablePath;
@@ -213,7 +183,7 @@ class MPTherionRunner {
     if (isWindowsPlatform && isTherionConfigFile) {
       return MPWindowsTherionRunner(
         mpLocator: mpLocator,
-        registryReader: _MPTherionRunnerWindowsRegistryReader(),
+        registryReader: MPDefaultWindowsRegistryReader(),
         shellProbe: _MPTherionRunnerWindowsShellProbe(),
         processRunner: _MPTherionRunnerWindowsProcessRunner(
           onProcessStarted: (Process process) {
@@ -393,91 +363,6 @@ class MPTherionRunner {
     }
 
     _outputController.add(text);
-  }
-}
-
-class _MPTherionRunnerWindowsRegistryReader implements MPWindowsRegistryReader {
-  @override
-  String? readString64Bit({
-    required String registryPath,
-    required String valueName,
-  }) {
-    return _readStringWithRegistryView(
-      registryPath: registryPath,
-      valueName: valueName,
-      registryViewSwitch: mpWindowsRegistryQuery64BitSwitch,
-    );
-  }
-
-  @override
-  String? readString32Bit({
-    required String registryPath,
-    required String valueName,
-  }) {
-    return _readStringWithRegistryView(
-      registryPath: registryPath,
-      valueName: valueName,
-      registryViewSwitch: mpWindowsRegistryQuery32BitSwitch,
-    );
-  }
-
-  String? _readStringWithRegistryView({
-    required String registryPath,
-    required String valueName,
-    required String registryViewSwitch,
-  }) {
-    final List<String> queryArguments = buildWindowsRegistryQueryArguments(
-      registryPath: registryPath,
-      valueName: valueName,
-      registryViewSwitch: registryViewSwitch,
-    );
-
-    final ProcessResult queryResult = Process.runSync(
-      mpWindowsRegistryQueryCommand,
-      queryArguments,
-      runInShell: true,
-    );
-    final bool hasSuccessfulExitCode =
-        queryResult.exitCode == mpProcessExitCodeSuccess;
-
-    if (!hasSuccessfulExitCode) {
-      return null;
-    }
-
-    final Object? rawStandardOutput = queryResult.stdout;
-    if (rawStandardOutput is! String) {
-      return null;
-    }
-
-    final Iterable<String> outputLines = LineSplitter.split(rawStandardOutput);
-
-    for (final String outputLine in outputLines) {
-      final String trimmedLine = outputLine.trimLeft();
-      final bool containsRequestedValue = trimmedLine.startsWith(valueName);
-      if (!containsRequestedValue) {
-        continue;
-      }
-
-      final List<String> lineParts = trimmedLine.split(RegExp(r'\s+'));
-      final bool hasExpectedTokenCount =
-          lineParts.length >= mpWindowsRegistryQueryMinimumTokens;
-      if (!hasExpectedTokenCount) {
-        continue;
-      }
-
-      final String parsedValue = lineParts
-          .sublist(mpWindowsRegistryQueryValueStartTokenIndex)
-          .join(mpCommandSeparatorSpace)
-          .trim();
-
-      if (parsedValue.isEmpty) {
-        return null;
-      }
-
-      return parsedValue;
-    }
-
-    return null;
   }
 }
 

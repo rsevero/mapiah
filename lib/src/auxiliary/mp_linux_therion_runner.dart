@@ -112,7 +112,8 @@ class MPLinuxTherionRunner extends MPPlatformTherionRunner {
       return cachedPath;
     }
 
-    final String trimmedUserDefinedPath = getUserDefinedTherionExecutablePath();
+    final String trimmedUserDefinedPath =
+        MPPlatformTherionRunner.getUserDefinedTherionExecutablePath();
     final bool hasUserDefinedPath = trimmedUserDefinedPath.isNotEmpty;
 
     if (hasUserDefinedPath) {
@@ -121,6 +122,19 @@ class MPLinuxTherionRunner extends MPPlatformTherionRunner {
 
     MPTherionCache.cacheSearchedTherionExecutablePath(mpTherionExecutableName);
 
+    return mpTherionExecutableName;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Static probe — used by MPTherionRunner.isTherionAvailable() so that the
+  // platform-specific executable candidate is encapsulated here.
+  // ---------------------------------------------------------------------------
+
+  /// Returns the default Therion executable name for Linux. On a standard
+  /// Linux installation therion is expected to be on the system PATH, so the
+  /// bare [mpTherionExecutableName] is the correct candidate. Does NOT validate
+  /// that the executable actually runs — that is the caller's responsibility.
+  static String probeForTherionExecutablePath() {
     return mpTherionExecutableName;
   }
 }

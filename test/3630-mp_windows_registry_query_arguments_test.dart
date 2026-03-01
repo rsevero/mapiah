@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
+import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 
 void main() {

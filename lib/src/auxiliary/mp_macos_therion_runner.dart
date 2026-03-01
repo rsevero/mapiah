@@ -134,7 +134,8 @@ class MPMacOSTherionRunner extends MPPlatformTherionRunner {
       );
     }
 
-    final String trimmedUserDefinedPath = getUserDefinedTherionExecutablePath();
+    final String trimmedUserDefinedPath =
+        MPPlatformTherionRunner.getUserDefinedTherionExecutablePath();
     final bool hasUserDefinedPath = trimmedUserDefinedPath.isNotEmpty;
 
     if (hasUserDefinedPath) {
@@ -144,25 +145,17 @@ class MPMacOSTherionRunner extends MPPlatformTherionRunner {
       );
     }
 
-    for (final String searchDirectory in mpTherionMacOSSearchDirectories) {
-      final String candidatePath = '$searchDirectory/$mpTherionExecutableName';
-      final File candidateFile = File(candidatePath);
-      final bool candidateExists = candidateFile.existsSync();
+    final String? foundPath = _findTherionInSearchDirectories(
+      pathSearchLogLines: pathSearchLogLines,
+    );
 
-      _appendPathSearchDebugLine(
+    if (foundPath != null) {
+      MPTherionCache.cacheSearchedTherionExecutablePath(foundPath);
+
+      return (
+        executablePath: foundPath,
         pathSearchLogLines: pathSearchLogLines,
-        candidatePath: candidatePath,
-        found: candidateExists,
       );
-
-      if (candidateExists) {
-        MPTherionCache.cacheSearchedTherionExecutablePath(candidatePath);
-
-        return (
-          executablePath: candidatePath,
-          pathSearchLogLines: pathSearchLogLines,
-        );
-      }
     }
 
     pathSearchLogLines.add(mpTherionMacOSPathSearchFallbackMessage);
@@ -172,22 +165,6 @@ class MPMacOSTherionRunner extends MPPlatformTherionRunner {
       executablePath: mpTherionExecutableName,
       pathSearchLogLines: pathSearchLogLines,
     );
-  }
-
-  // Cache is centralized in `MPTherionCache`.
-
-  void _appendPathSearchDebugLine({
-    required List<String> pathSearchLogLines,
-    required String candidatePath,
-    required bool found,
-  }) {
-    final String resultStatus = found
-        ? mpTherionMacOSPathSearchStatusFound
-        : mpTherionMacOSPathSearchStatusMissing;
-    final String debugLine =
-        '$mpTherionMacOSDebugPrefix path="$candidatePath" result="$resultStatus"';
-
-    pathSearchLogLines.add(debugLine);
   }
 
   String _buildPathSearchDiagnosticsText(List<String> pathSearchLogLines) {
@@ -215,5 +192,54 @@ class MPMacOSTherionRunner extends MPPlatformTherionRunner {
         '$localizedBaseErrorMessage$mpUnixLineBreak$pathSearchDiagnosticsText';
 
     return localizedErrorMessage;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Static probe and shared scan helper — used by both
+  // MPTherionRunner.isTherionAvailable() and
+  // _resolveTherionExecutablePathWithDiagnostics() so that the filesystem scan
+  // is written only once.
+  // ---------------------------------------------------------------------------
+
+  /// Returns the best candidate Therion executable path for macOS by scanning
+  /// the well-known installation directories listed in
+  /// [mpTherionMacOSSearchDirectories]. Falls back to [mpTherionExecutableName]
+  /// when no executable file is found. Does NOT validate that the executable
+  /// actually runs — that is the caller's responsibility.
+  static String probeForTherionExecutablePath() {
+    final String? foundPath = _findTherionInSearchDirectories();
+
+    return foundPath ?? mpTherionExecutableName;
+  }
+
+  /// Scans [mpTherionMacOSSearchDirectories] and returns the first path where
+  /// a `therion` executable file exists, or `null` when none is found.
+  ///
+  /// When [pathSearchLogLines] is provided, a per-directory debug line is
+  /// appended for each candidate that is checked.
+  static String? _findTherionInSearchDirectories({
+    List<String>? pathSearchLogLines,
+  }) {
+    for (final String searchDirectory in mpTherionMacOSSearchDirectories) {
+      final String candidatePath = '$searchDirectory/$mpTherionExecutableName';
+      final File candidateFile = File(candidatePath);
+      final bool candidateExists = candidateFile.existsSync();
+
+      if (pathSearchLogLines != null) {
+        final String resultStatus = candidateExists
+            ? mpTherionMacOSPathSearchStatusFound
+            : mpTherionMacOSPathSearchStatusMissing;
+        final String debugLine =
+            '$mpTherionMacOSDebugPrefix path="$candidatePath" result="$resultStatus"';
+
+        pathSearchLogLines.add(debugLine);
+      }
+
+      if (candidateExists) {
+        return candidatePath;
+      }
+    }
+
+    return null;
   }
 }

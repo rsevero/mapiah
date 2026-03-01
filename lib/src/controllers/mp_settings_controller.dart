@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -88,12 +87,7 @@ abstract class MPSettingsControllerBase with Store {
 
   Future<void> _updateTherionAvailability() async {
     try {
-      final bool available = await MPTherionRunner.isTherionAvailable(
-        mpLocator: MPLocator(),
-        preferredExecutablePath: getStringWithDefault(
-          MPSettingID.Main_TherionExecutablePath,
-        ),
-      );
+      final bool available = await MPTherionRunner.isTherionAvailable();
 
       _isTherionAvailable = available;
     } on Object {

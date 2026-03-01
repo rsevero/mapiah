@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
@@ -65,6 +67,122 @@ class MPTherionExecutionResult {
       standardError: nextStandardError,
       localizedErrorMessage: nextLocalizedErrorMessage,
     );
+  }
+}
+
+/// Builds the argument list for a `reg query` command.
+List<String> buildWindowsRegistryQueryArguments({
+  required String registryPath,
+  required String valueName,
+  required String registryViewSwitch,
+}) {
+  final List<String> queryArguments = <String>[
+    mpWindowsRegistryQuerySubcommand,
+    registryPath,
+    mpWindowsRegistryQueryValueSwitch,
+    valueName,
+    registryViewSwitch,
+  ];
+
+  return queryArguments;
+}
+
+/// Concrete [MPWindowsRegistryReader] that reads registry values via
+/// `reg query` run synchronously through [Process.runSync]. Used in
+/// production; inject a test double in unit tests.
+class MPDefaultWindowsRegistryReader implements MPWindowsRegistryReader {
+  const MPDefaultWindowsRegistryReader();
+
+  @override
+  String? readString64Bit({
+    required String registryPath,
+    required String valueName,
+  }) {
+    return _readStringWithRegistryView(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: mpWindowsRegistryQuery64BitSwitch,
+    );
+  }
+
+  @override
+  String? readString32Bit({
+    required String registryPath,
+    required String valueName,
+  }) {
+    return _readStringWithRegistryView(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: mpWindowsRegistryQuery32BitSwitch,
+    );
+  }
+
+  String? _readStringWithRegistryView({
+    required String registryPath,
+    required String valueName,
+    required String registryViewSwitch,
+  }) {
+    final List<String> queryArguments = buildWindowsRegistryQueryArguments(
+      registryPath: registryPath,
+      valueName: valueName,
+      registryViewSwitch: registryViewSwitch,
+    );
+
+    try {
+      final ProcessResult queryResult = Process.runSync(
+        mpWindowsRegistryQueryCommand,
+        queryArguments,
+        runInShell: true,
+      );
+      final bool hasSuccessfulExitCode =
+          queryResult.exitCode == mpProcessExitCodeSuccess;
+
+      if (!hasSuccessfulExitCode) {
+        return null;
+      }
+
+      final Object? rawStandardOutput = queryResult.stdout;
+
+      if (rawStandardOutput is! String) {
+        return null;
+      }
+
+      final Iterable<String> outputLines = LineSplitter.split(
+        rawStandardOutput,
+      );
+
+      for (final String outputLine in outputLines) {
+        final String trimmedLine = outputLine.trimLeft();
+        final bool containsRequestedValue = trimmedLine.startsWith(valueName);
+
+        if (!containsRequestedValue) {
+          continue;
+        }
+
+        final List<String> lineParts = trimmedLine.split(RegExp(r'\s+'));
+        final bool hasExpectedTokenCount =
+            lineParts.length >= mpWindowsRegistryQueryMinimumTokens;
+
+        if (!hasExpectedTokenCount) {
+          continue;
+        }
+
+        final String parsedValue = lineParts
+            .sublist(mpWindowsRegistryQueryValueStartTokenIndex)
+            .join(mpCommandSeparatorSpace)
+            .trim();
+
+        if (parsedValue.isEmpty) {
+          return null;
+        }
+
+        return parsedValue;
+      }
+    } on Object {
+      return null;
+    }
+
+    return null;
   }
 }
 
@@ -194,7 +312,7 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
     }
 
     final String trimmedUserDefinedTherionExecutablePath =
-        getUserDefinedTherionExecutablePath();
+        MPPlatformTherionRunner.getUserDefinedTherionExecutablePath();
     final bool hasUserDefinedTherionExecutablePath =
         trimmedUserDefinedTherionExecutablePath.isNotEmpty;
 
@@ -212,10 +330,11 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
 
     final String? machineInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionMachinePath,
+      reader: registryReader,
       registrySearchLogLines: registrySearchLogLines,
     );
     if (machineInstallDirectory != null) {
-      final String machineExecutablePath = _buildExecutablePath(
+      final String machineExecutablePath = _staticBuildExecutablePath(
         machineInstallDirectory,
       );
       final String machineExecutableCommand = quoteValue(machineExecutablePath);
@@ -230,10 +349,11 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
 
     final String? userInstallDirectory = _readInstallDirectory(
       mpWindowsRegistryTherionUserPath,
+      reader: registryReader,
       registrySearchLogLines: registrySearchLogLines,
     );
     if (userInstallDirectory != null) {
-      final String userExecutablePath = _buildExecutablePath(
+      final String userExecutablePath = _staticBuildExecutablePath(
         userInstallDirectory,
       );
       final String userExecutableCommand = quoteValue(userExecutablePath);
@@ -327,11 +447,12 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
     );
   }
 
-  String? _readInstallDirectory(
+  static String? _readInstallDirectory(
     String registryPath, {
+    required MPWindowsRegistryReader reader,
     List<String>? registrySearchLogLines,
   }) {
-    final String? installDirectory64Bit = registryReader.readString64Bit(
+    final String? installDirectory64Bit = reader.readString64Bit(
       registryPath: registryPath,
       valueName: mpWindowsRegistryInstallDirValueName,
     );
@@ -347,7 +468,7 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
       return installDirectory64Bit;
     }
 
-    final String? installDirectory32Bit = registryReader.readString32Bit(
+    final String? installDirectory32Bit = reader.readString32Bit(
       registryPath: registryPath,
       valueName: mpWindowsRegistryInstallDirValueName,
     );
@@ -366,7 +487,7 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
     return installDirectory32Bit;
   }
 
-  void _appendRegistryLookupDebugLine({
+  static void _appendRegistryLookupDebugLine({
     required List<String>? registrySearchLogLines,
     required String registryPath,
     required String registryView,
@@ -419,36 +540,66 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
     return localizedErrorMessage;
   }
 
-  String _buildExecutablePath(String installDirectory) {
-    final String executablePath = _joinWindowsPath(
+  // ---------------------------------------------------------------------------
+  // Static probe — used by MPTherionRunner.isTherionAvailable() so that the
+  // platform-specific executable search (registry lookup) is encapsulated here.
+  // ---------------------------------------------------------------------------
+
+  /// Returns the best candidate Therion executable path for this platform by
+  /// consulting the Windows registry (machine-wide install first, then per-user
+  /// install). Falls back to [mpTherionWindowsExecutableName] when no registry
+  /// entry is found. Does NOT validate that the executable actually runs — that
+  /// is the caller's responsibility.
+  static String probeForTherionExecutablePath() {
+    const MPDefaultWindowsRegistryReader defaultReader =
+        MPDefaultWindowsRegistryReader();
+
+    final String? machineInstallDirectory = _readInstallDirectory(
+      mpWindowsRegistryTherionMachinePath,
+      reader: defaultReader,
+    );
+
+    if (machineInstallDirectory != null) {
+      return _staticBuildExecutablePath(machineInstallDirectory);
+    }
+
+    final String? userInstallDirectory = _readInstallDirectory(
+      mpWindowsRegistryTherionUserPath,
+      reader: defaultReader,
+    );
+
+    if (userInstallDirectory != null) {
+      return _staticBuildExecutablePath(userInstallDirectory);
+    }
+
+    return mpTherionWindowsExecutableName;
+  }
+
+  static String _staticBuildExecutablePath(String installDirectory) {
+    final String joinedPath = _staticJoinWindowsPath(
       installDirectory,
       mpTherionWindowsExecutableName,
     );
-    final String normalizedExecutablePath = _normalizeToWindowsBackslashes(
-      executablePath,
-    );
 
-    return normalizedExecutablePath;
+    return _staticNormalizeToWindowsBackslashes(joinedPath);
   }
 
-  String _joinWindowsPath(String baseDirectory, String fileName) {
+  static String _staticJoinWindowsPath(String baseDirectory, String fileName) {
     final String normalizedBaseDirectory = baseDirectory.replaceAll(
       mpWindowsBackslashPair,
       mpWindowsForwardSlash,
     );
-
     final bool hasTrailingSeparator = normalizedBaseDirectory.endsWith(
       mpWindowsForwardSlash,
     );
-
     final String joinedPath = hasTrailingSeparator
         ? '$normalizedBaseDirectory$fileName'
-        : '$normalizedBaseDirectory/$fileName';
+        : '$normalizedBaseDirectory$mpWindowsForwardSlash$fileName';
 
     return joinedPath;
   }
 
-  String _normalizeToWindowsBackslashes(String value) {
+  static String _staticNormalizeToWindowsBackslashes(String value) {
     final String normalizedValue = value.replaceAll(
       mpWindowsForwardSlash,
       mpWindowsBackslashPair,

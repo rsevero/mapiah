@@ -116,3 +116,5 @@ android/app/.cxx/
 
 # xTherion temp data files
 .xtherion.dat
+
+.vscode/
