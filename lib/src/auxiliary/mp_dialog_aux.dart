@@ -774,8 +774,7 @@ class MPDialogAux {
       final FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle:
             mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
-        type: FileType.custom,
-        allowedExtensions: ['thconfig', 'THCONFIG'],
+        type: FileType.any,
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty

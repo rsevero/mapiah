@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.39 - not yet released
+* New features:
+* Fixed bugs:
+  * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
+* Infrastructure maintenance:
+
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
 
 * Bug fixes:
