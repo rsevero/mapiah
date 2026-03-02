@@ -104,10 +104,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
-      'Abrir arquivo THConfig e executar Therion';
+      'Abrir arquivo THConfig e executar Therion (Ctrl+T)';
 
   @override
-  String get mapiahRunTherionButtonTooltip => 'Executar Therion';
+  String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
 
   @override
   String get mpNoTherionFound => 'Therion não encontrado';

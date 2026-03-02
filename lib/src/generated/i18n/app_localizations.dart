@@ -244,13 +244,13 @@ abstract class AppLocalizations {
   /// The tooltip for the button that opens a THConfig file and runs Therion
   ///
   /// In en, this message translates to:
-  /// **'Open THConfig file and run Therion'**
+  /// **'Open THConfig file and run Therion (Ctrl+T)'**
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
 
   /// The tooltip for the Run Therion button
   ///
   /// In en, this message translates to:
-  /// **'Run Therion'**
+  /// **'Run Therion (T)'**
   String get mapiahRunTherionButtonTooltip;
 
   /// Tooltip shown when no Therion executable is available
