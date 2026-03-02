@@ -1385,6 +1385,19 @@ abstract class TH2FileEditControllerBase with Store {
     return overlayWindowController
         .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.thFileWidget]!;
   }
+
+  BuildContext getTHFileWidgetBuildContext() {
+    final GlobalKey<State<StatefulWidget>> globalKey =
+        getTHFileWidgetGlobalKey();
+
+    if (globalKey.currentContext == null) {
+      throw Exception(
+        'At TH2FileEditController.getTHFileWidgetBuildContext(): THFileWidget global key context is null.',
+      );
+    }
+
+    return globalKey.currentContext!;
+  }
 }
 
 class TH2FileEditControllerCreateResult {

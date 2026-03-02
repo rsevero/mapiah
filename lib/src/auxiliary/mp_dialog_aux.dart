@@ -792,7 +792,7 @@ class MPDialogAux {
         mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
           pickedFilePath,
         );
-        mpLocator.mpGeneralController.thConfigFilePath = pickedFilePath;
+        mpLocator.mpGeneralController.setTHConfigFilePath(pickedFilePath);
 
         return true;
       } else {
@@ -896,6 +896,34 @@ class MPDialogAux {
       return null;
     } finally {
       _isFilePickerOpen[MPFilePickerType.executable] = false;
+    }
+  }
+
+  static Future<void> chooseTHConfigAndRunTherion(BuildContext context) async {
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
+      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
+    } else {
+      MPDialogAux.showHelpDialog(
+        context,
+        'no_therion_found',
+        mpLocator.appLocalizations.mpNoTherionFound,
+      );
+    }
+  }
+
+  static Future<void> runTherionWithLastTHConfig(BuildContext context) async {
+    if (mpLocator.mpGeneralController.thConfigFilePath.trim().isEmpty) {
+      return;
+    }
+
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
+      MPDialogAux.runTherion(context);
+    } else {
+      MPDialogAux.showHelpDialog(
+        context,
+        'no_therion_found',
+        mpLocator.appLocalizations.mpNoTherionFound,
+      );
     }
   }
 

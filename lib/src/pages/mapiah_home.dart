@@ -96,26 +96,14 @@ class _MapiahHomeState extends State<MapiahHome> {
               final bool therionAvailable =
                   mpSettingsController.isTherionAvailable;
 
-              final VoidCallback? onPressed = therionAvailable
-                  ? () async {
-                      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
-                      if (mounted) {
-                        setState(() {});
-                      }
-                    }
-                  : () => MPDialogAux.showHelpDialog(
-                      context,
-                      'no_therion_found',
-                      appLocalizations.mpNoTherionFound,
-                    );
-
               return IconButton(
                 key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
                 icon: Icon(Icons.playlist_add_check_outlined),
                 color: therionAvailable
                     ? colorScheme.onSecondaryContainer
                     : mpTherionRunStatusBackgroundErrorColor,
-                onPressed: onPressed,
+                onPressed: () =>
+                    MPDialogAux.chooseTHConfigAndRunTherion(context),
                 tooltip: therionAvailable
                     ? appLocalizations
                           .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -127,19 +115,11 @@ class _MapiahHomeState extends State<MapiahHome> {
             builder: (_) {
               final bool therionAvailable =
                   mpSettingsController.isTherionAvailable;
-
               final bool hasTHConfig =
                   mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
-
-              final VoidCallback? onPressed = !hasTHConfig
-                  ? null
-                  : (therionAvailable
-                        ? () => MPDialogAux.runTherion(context)
-                        : () => MPDialogAux.showHelpDialog(
-                            context,
-                            'no_therion_found',
-                            appLocalizations.mpNoTherionFound,
-                          ));
+              final VoidCallback? onPressed = hasTHConfig
+                  ? () => MPDialogAux.runTherionWithLastTHConfig(context)
+                  : null;
 
               return IconButton(
                 key: ValueKey('MapiahHomeRunTherionButton'),
@@ -262,59 +242,68 @@ class _MapiahHomeState extends State<MapiahHome> {
 extension on _MapiahHomeState {
   Widget _withShortcuts(Widget child) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
-    final bindings = <ShortcutActivator, VoidCallback>{
-      // New file
-      const SingleActivator(LogicalKeyboardKey.keyN, control: true): () =>
-          MPDialogAux.newFile(context),
-      const SingleActivator(LogicalKeyboardKey.keyN, meta: true): () =>
-          MPDialogAux.newFile(context),
-      // macOS Cmd+Shift+N
-      const SingleActivator(
-        LogicalKeyboardKey.keyN,
-        meta: true,
-        shift: true,
-      ): () =>
-          MPDialogAux.newFile(context),
-      // Web-safe fallback (Ctrl+Shift+N) since some browsers block Ctrl+N
-      const SingleActivator(
-        LogicalKeyboardKey.keyN,
-        control: true,
-        shift: true,
-      ): () =>
-          MPDialogAux.newFile(context),
-      // Open file: desktop standard Ctrl/Cmd+O
-      const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
-          MPDialogAux.pickTH2File(context),
-      const SingleActivator(LogicalKeyboardKey.keyO, meta: true): () =>
-          MPDialogAux.pickTH2File(context),
-      // macOS Cmd+Shift+O
-      const SingleActivator(
-        LogicalKeyboardKey.keyO,
-        meta: true,
-        shift: true,
-      ): () =>
-          MPDialogAux.pickTH2File(context),
-      const SingleActivator(
-        LogicalKeyboardKey.keyO,
-        control: true,
-        shift: true,
-      ): () =>
-          MPDialogAux.pickTH2File(context),
-      // Help
-      const SingleActivator(LogicalKeyboardKey.f1): () =>
-          MPDialogAux.showHelpDialog(
-            context,
-            mpHelpPageMapiahHome,
-            appLocalizations.mapiahHomeHelpDialogTitle,
-          ),
-      // Keyboard shortcuts
-      const SingleActivator(LogicalKeyboardKey.keyK, control: true): () =>
-          MPDialogAux.showHelpDialog(
-            context,
-            mpHelpPageKeyboardShortcutsMain,
-            appLocalizations.mapiahKeyboardShortcutsTitle,
-          ),
-    };
+    final Map<ShortcutActivator, VoidCallback> bindings =
+        <ShortcutActivator, VoidCallback>{
+          // New file
+          const SingleActivator(LogicalKeyboardKey.keyN, control: true): () =>
+              MPDialogAux.newFile(context),
+          const SingleActivator(LogicalKeyboardKey.keyN, meta: true): () =>
+              MPDialogAux.newFile(context),
+          // macOS Cmd+Shift+N
+          const SingleActivator(
+            LogicalKeyboardKey.keyN,
+            meta: true,
+            shift: true,
+          ): () =>
+              MPDialogAux.newFile(context),
+          // Web-safe fallback (Ctrl+Shift+N) since some browsers block Ctrl+N
+          const SingleActivator(
+            LogicalKeyboardKey.keyN,
+            control: true,
+            shift: true,
+          ): () =>
+              MPDialogAux.newFile(context),
+          // Open file: desktop standard Ctrl/Cmd+O
+          const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
+              MPDialogAux.pickTH2File(context),
+          const SingleActivator(LogicalKeyboardKey.keyO, meta: true): () =>
+              MPDialogAux.pickTH2File(context),
+          // macOS Cmd+Shift+O
+          const SingleActivator(
+            LogicalKeyboardKey.keyO,
+            meta: true,
+            shift: true,
+          ): () =>
+              MPDialogAux.pickTH2File(context),
+          const SingleActivator(
+            LogicalKeyboardKey.keyO,
+            control: true,
+            shift: true,
+          ): () =>
+              MPDialogAux.pickTH2File(context),
+          // Help
+          const SingleActivator(LogicalKeyboardKey.f1): () =>
+              MPDialogAux.showHelpDialog(
+                context,
+                mpHelpPageMapiahHome,
+                appLocalizations.mapiahHomeHelpDialogTitle,
+              ),
+          // Keyboard shortcuts
+          const SingleActivator(LogicalKeyboardKey.keyK, control: true): () =>
+              MPDialogAux.showHelpDialog(
+                context,
+                mpHelpPageKeyboardShortcutsMain,
+                appLocalizations.mapiahKeyboardShortcutsTitle,
+              ),
+          // Therion: Ctrl+T
+          const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
+              MPDialogAux.chooseTHConfigAndRunTherion(context),
+          const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
+              MPDialogAux.chooseTHConfigAndRunTherion(context),
+          // Therion: T (no modifiers)
+          const SingleActivator(LogicalKeyboardKey.keyT): () =>
+              MPDialogAux.runTherionWithLastTHConfig(context),
+        };
 
     return CallbackShortcuts(
       bindings: bindings,

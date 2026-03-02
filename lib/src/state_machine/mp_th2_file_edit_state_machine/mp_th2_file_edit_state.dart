@@ -208,6 +208,11 @@ abstract class MPTH2FileEditState {
       case MPButtonType.changeScrap:
         th2FileEditController.toggleToNextAvailableScrap();
         return true;
+      case MPButtonType.chooseTHConfigAndRunTherion:
+        MPDialogAux.chooseTHConfigAndRunTherion(
+          th2FileEditController.getTHFileWidgetBuildContext(),
+        );
+        return true;
       case MPButtonType.nodeEdit:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.editSingleLine,
@@ -218,6 +223,11 @@ abstract class MPTH2FileEditState {
         return true;
       case MPButtonType.remove:
         selectionController.removeSelected();
+        return true;
+      case MPButtonType.runTherion:
+        MPDialogAux.runTherionWithLastTHConfig(
+          th2FileEditController.getTHFileWidgetBuildContext(),
+        );
         return true;
       case MPButtonType.select:
         selectionController.setSelectionState();

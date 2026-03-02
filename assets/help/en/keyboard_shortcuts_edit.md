@@ -4,6 +4,7 @@
 | Add line segment between selected line segments | /                            |
 | Change active scrap                             | Alt+S                        |
 | Change images                                   | Alt+I                        |
+| Choose THConfig file and run Therion            | Ctrl+T                       |
 | Create area                                     | A                            |
 | Create line                                     | L                            |
 | Create point                                    | P                            |
@@ -17,6 +18,7 @@
 | Options edit                                    | O                            |
 | Redo                                            | Ctrl+Y                       |
 | Reverse line                                    | R                            |
+| Run Therion                                     | T                            |
 | Save file                                       | Ctrl+S                       |
 | Save file as                                    | Ctrl+Shift+S                 |
 | Select all                                      | Ctrl+A                       |

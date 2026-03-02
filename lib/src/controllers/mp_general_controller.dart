@@ -10,23 +10,29 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mobx/mobx.dart';
 
-class MPGeneralController {
+part 'mp_general_controller.g.dart';
+
+class MPGeneralController = MPGeneralControllerBase with _$MPGeneralController;
+
+abstract class MPGeneralControllerBase with Store {
   int _nextMPIDForElements = thFirstMPIDForElements;
   int _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
 
   String _lastAccessedDirectory = '';
-  String _thConfigFilePath = '';
 
   String get lastAccessedDirectory => _lastAccessedDirectory;
-  String get thConfigFilePath => _thConfigFilePath;
+
+  @readonly
+  String _thConfigFilePath = '';
 
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
 
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
 
-  MPGeneralController() {
+  MPGeneralControllerBase() {
     Future<void>.microtask(() async {
       await updateAvailableEncodingsList();
     });
@@ -39,9 +45,12 @@ class MPGeneralController {
     _lastAccessedDirectory = value;
   }
 
-  set thConfigFilePath(String value) {
+  @action
+  void setTHConfigFilePath(String value) {
     _thConfigFilePath = value.trim();
   }
+
+  String get thConfigFilePath => _thConfigFilePath;
 
   int nextMPIDForElements() {
     return _nextMPIDForElements++;

@@ -142,6 +142,19 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             keyProcessed = true;
           }
         }
+      case LogicalKeyboardKey.keyT:
+        if (!isAltPressed && !isShiftPressed) {
+          if (!isCtrlPressed && !isMetaPressed) {
+            th2FileEditController.stateController.onButtonPressed(
+              MPButtonType.runTherion,
+            );
+          } else {
+            th2FileEditController.stateController.onButtonPressed(
+              MPButtonType.chooseTHConfigAndRunTherion,
+            );
+          }
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyY:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&

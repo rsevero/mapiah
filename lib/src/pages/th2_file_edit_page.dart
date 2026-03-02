@@ -137,20 +137,8 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: therionAvailable
                             ? colorScheme.onSecondaryContainer
                             : mpTherionRunStatusBackgroundErrorColor,
-                        onPressed: therionAvailable
-                            ? () async {
-                                await MPDialogAux.pickTHConfigFileAndRunTherion(
-                                  context,
-                                );
-                                if (mounted) {
-                                  setState(() {});
-                                }
-                              }
-                            : () => MPDialogAux.showHelpDialog(
-                                context,
-                                'no_therion_found',
-                                appLocalizations.mpNoTherionFound,
-                              ),
+                        onPressed: () =>
+                            MPDialogAux.chooseTHConfigAndRunTherion(context),
                         tooltip: therionAvailable
                             ? appLocalizations
                                   .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -162,6 +150,10 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                     builder: (_) {
                       final bool therionAvailable =
                           mpLocator.mpSettingsController.isTherionAvailable;
+                      final bool hasTHConfig = mpLocator
+                          .mpGeneralController
+                          .thConfigFilePath
+                          .isNotEmpty;
 
                       return IconButton(
                         key: ValueKey('TH2FileEditPageRunTherionButton'),
@@ -169,19 +161,11 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                         color: therionAvailable
                             ? colorScheme.onSecondaryContainer
                             : mpTherionRunStatusBackgroundErrorColor,
-                        onPressed:
-                            mpLocator
-                                .mpGeneralController
-                                .thConfigFilePath
-                                .isEmpty
-                            ? null
-                            : (therionAvailable
-                                  ? () => MPDialogAux.runTherion(context)
-                                  : () => MPDialogAux.showHelpDialog(
-                                      context,
-                                      'no_therion_found',
-                                      appLocalizations.mpNoTherionFound,
-                                    )),
+                        onPressed: hasTHConfig
+                            ? () => MPDialogAux.runTherionWithLastTHConfig(
+                                context,
+                              )
+                            : null,
                         tooltip: therionAvailable
                             ? appLocalizations.mapiahRunTherionButtonTooltip
                             : appLocalizations.mpNoTherionFound,

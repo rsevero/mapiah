@@ -2,9 +2,13 @@
 
 ## 0.2.39 - not yet released
 * New features:
+  * Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).
 * Fixed bugs:
   * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
 * Infrastructure maintenance:
+  * Converted MPGeneralController to a MobX store.
+  * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.
+  * Created TH2FileEditcontroller.getTHFileWidgetBuildContext().
 
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
 
@@ -19,8 +23,8 @@
   * Created new settings type: FilePickerExecutable.
   * Running Therion.
   * Tracking warnings and errors on Therion run output.
-  * Debug output on Windows search for therion install info.
-  * Caching Therion install path on windows on search.
+  * Debug output on Windows search for Therion install info.
+  * Caching Therion install path on Windows on search.
   * MacOS Therion runner implementation.
   * "Choose THConfig file and run Therion" and "Run Therion" buttons painted red if no Therion found.
   * "Choose THConfig file and run Therion" and "Run Therion" buttons directed to appropriate help page in case no Therion is found.
@@ -28,10 +32,10 @@
   * 'Cancel' button on settings page not closing page.
   * Therion run output should be selectable as a whole and not only single lines.
   * Therion run output has no line breaks after copy/paste.
-  * Searching for Therion install path on windows always failing.
+  * Searching for Therion install path on Windows always failing.
   * Therion run on Windows.
   * Windows tests.
-  * Set therion path not used on Windows.
+  * Set Therion path not used on Windows.
   * Regression on appLocalizations initialization on MapiahHome.
 * Infrastructure maintenance:
   * Included "Current status" section in README.md. [requested by CaverBruce]
