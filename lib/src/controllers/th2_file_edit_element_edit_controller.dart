@@ -752,40 +752,29 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
-        final List<MPCommand> addLineCommands = [];
-        final MPAddLineCommand addLineCommand = MPAddLineCommand(
-          newLine: _newLine!,
-          lineChildren: lineChildren,
-          lineStartScreenPosition: _lineStartScreenPosition,
-          preCommand: null,
-          posCommand: null,
-        );
-
-        addLineCommands.add(addLineCommand);
+        MPCommand? posCommandSetSubtype;
 
         if (typeSubtype.subtype.isNotEmpty) {
           final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
             parentMPID: _newLine!.mpID,
             subtype: typeSubtype.subtype,
           );
-          final MPCommand setLineSubtypeCommand =
-              MPCommandFactory.setOptionOnElements(
-                elements: [_newLine!],
-                thFile: _thFile,
-                toOption: lineSubtypeOption,
-              );
-
-          addLineCommands.add(setLineSubtypeCommand);
+          posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
+            elements: [_newLine!],
+            thFile: _thFile,
+            toOption: lineSubtypeOption,
+          );
         }
 
-        final MPCommand command = MPCommandFactory.multipleCommandsFromList(
-          commandsList: addLineCommands,
-          descriptionType: MPCommandDescriptionType.addLine,
-          completionType:
-              MPMultipleElementsCommandCompletionType.elementsListChanged,
+        final MPAddLineCommand addLineCommand = MPAddLineCommand(
+          newLine: _newLine!,
+          lineChildren: lineChildren,
+          lineStartScreenPosition: _lineStartScreenPosition,
+          preCommand: null,
+          posCommand: posCommandSetSubtype,
         );
 
-        _th2FileEditController.execute(command);
+        _th2FileEditController.execute(addLineCommand);
 
         setUsedLineType(
           lineType: typeSubtype.type,

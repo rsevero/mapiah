@@ -8,6 +8,7 @@
 * Fixed bugs:
   * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
   * PLA types of created elements not added as last and most used types.
+  * Creating new line with a subtype throws.
 * Infrastructure maintenance:
   * Converted MPGeneralController to a MobX store.
   * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.
