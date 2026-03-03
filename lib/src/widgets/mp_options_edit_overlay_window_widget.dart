@@ -10,9 +10,6 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/mp_option_widget.dart';
@@ -157,31 +154,23 @@ class _MPOptionsEditOverlayWindowWidgetState
           final List<Widget> plaTypeWidgets = [];
 
           if (countPoints > 0) {
-            String? pointTypeAsString;
+            String? pointTypeSubtypeAsString;
+            String? pointTypeSubtypeID;
 
-            if (selectedPointPLAType == null) {
-              pointTypeAsString = null;
-            } else {
-              if (THPointType.hasPointType(selectedPointPLAType)) {
-                final THPointType pointType = THPointType.values.byName(
-                  selectedPointPLAType,
-                );
-
-                pointTypeAsString = MPTextToUser.getPointType(pointType);
-              } else {
-                pointTypeAsString = selectedPointPLAType;
-              }
-
-              if (selectedPointSubtype != null) {
-                pointTypeAsString =
-                    '$pointTypeAsString:${MPTextToUser.getSubtypeAsString(selectedPointSubtype)}';
-              }
+            if (selectedPointPLAType != null) {
+              pointTypeSubtypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
+                plaType: selectedPointPLAType,
+                plaSubtype: selectedPointSubtype ?? '',
+              );
+              pointTypeSubtypeAsString = MPTextToUser.getPointTypeSubtype(
+                pointTypeSubtypeID,
+              );
             }
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedPointPLAType,
-                selectedPLATypeToUser: pointTypeAsString,
+                selectedPLAType: pointTypeSubtypeID,
+                selectedPLATypeToUser: pointTypeSubtypeAsString,
                 elementType: THElementType.point,
                 th2FileEditController: th2FileEditController,
               ),
@@ -189,31 +178,23 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
 
           if (countLines > 0) {
-            String? lineTypeAsString;
+            String? lineTypeSubtypeAsString;
+            String? lineTypeSubtypeID;
 
-            if (selectedLinePLAType == null) {
-              lineTypeAsString = null;
-            } else {
-              if (THLineType.hasLineType(selectedLinePLAType)) {
-                final THLineType lineType = THLineType.fromString(
-                  selectedLinePLAType,
-                );
-
-                lineTypeAsString = MPTextToUser.getLineType(lineType);
-              } else {
-                lineTypeAsString = selectedLinePLAType;
-              }
-
-              if (selectedLineSubtype != null) {
-                lineTypeAsString =
-                    '$lineTypeAsString:${MPTextToUser.getSubtypeAsString(selectedLineSubtype)}';
-              }
+            if (selectedLinePLAType != null) {
+              lineTypeSubtypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
+                plaType: selectedLinePLAType,
+                plaSubtype: selectedLineSubtype ?? '',
+              );
+              lineTypeSubtypeAsString = MPTextToUser.getLineTypeSubtype(
+                lineTypeSubtypeID,
+              );
             }
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedLinePLAType,
-                selectedPLATypeToUser: lineTypeAsString,
+                selectedPLAType: lineTypeSubtypeID,
+                selectedPLATypeToUser: lineTypeSubtypeAsString,
                 elementType: THElementType.line,
                 th2FileEditController: th2FileEditController,
               ),
@@ -221,25 +202,17 @@ class _MPOptionsEditOverlayWindowWidgetState
           }
 
           if (countAreas > 0) {
-            String? areaTypeAsString;
+            String? areaTypeSubtypeAsString;
+            String? areaTypeSubtypeID;
 
-            if (selectedAreaPLAType == null) {
-              areaTypeAsString = null;
-            } else {
-              if (THAreaType.hasAreaType(selectedAreaPLAType)) {
-                final THAreaType areaType = THAreaType.values.byName(
-                  selectedAreaPLAType,
-                );
-
-                areaTypeAsString = MPTextToUser.getAreaType(areaType);
-              } else {
-                areaTypeAsString = selectedAreaPLAType;
-              }
-
-              if (selectedAreaSubtype != null) {
-                areaTypeAsString =
-                    '$areaTypeAsString:${MPTextToUser.getSubtypeAsString(selectedAreaSubtype)}';
-              }
+            if (selectedAreaPLAType != null) {
+              areaTypeSubtypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
+                plaType: selectedAreaPLAType,
+                plaSubtype: selectedAreaSubtype ?? '',
+              );
+              areaTypeSubtypeAsString = MPTextToUser.getAreaTypeSubtype(
+                areaTypeSubtypeID,
+              );
             }
 
             if ((countAreas == 1) && (singleSelectedArea != null)) {
@@ -311,8 +284,8 @@ class _MPOptionsEditOverlayWindowWidgetState
 
             plaTypeWidgets.add(
               MPPLATypeWidget(
-                selectedPLAType: selectedAreaPLAType,
-                selectedPLATypeToUser: areaTypeAsString,
+                selectedPLAType: areaTypeSubtypeID,
+                selectedPLATypeToUser: areaTypeSubtypeAsString,
                 elementType: THElementType.area,
                 th2FileEditController: th2FileEditController,
               ),

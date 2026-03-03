@@ -385,4 +385,11 @@ class MPCommandOptionAux {
 
     return (type: type, subtype: subtype);
   }
+
+  static String getPLATypeAndSubtypeID({
+    required String plaType,
+    required String plaSubtype,
+  }) {
+    return '$plaType$mpPLATypeSubtypeSeparator$plaSubtype';
+  }
 }

@@ -168,7 +168,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String areaType,
     required String areaSubtype,
   }) {
-    final String areaTypeID = _getPLATypeAndSubtypeID(
+    final String areaTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: areaType,
       plaSubtype: areaSubtype,
     );
@@ -186,7 +186,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String areaType,
     required String areaSubtype,
   }) {
-    final String areaTypeID = _getPLATypeAndSubtypeID(
+    final String areaTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: areaType,
       plaSubtype: areaSubtype,
     );
@@ -202,7 +202,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String lineType,
     required String lineSubtype,
   }) {
-    final String lineTypeID = _getPLATypeAndSubtypeID(
+    final String lineTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: lineType,
       plaSubtype: lineSubtype,
     );
@@ -220,7 +220,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String lineType,
     required String lineSubtype,
   }) {
-    final String lineTypeID = _getPLATypeAndSubtypeID(
+    final String lineTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: lineType,
       plaSubtype: lineSubtype,
     );
@@ -236,7 +236,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String pointType,
     required String pointSubtype,
   }) {
-    final String pointTypeID = _getPLATypeAndSubtypeID(
+    final String pointTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: pointType,
       plaSubtype: pointSubtype,
     );
@@ -254,7 +254,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String pointType,
     required String pointSubtype,
   }) {
-    final String pointTypeID = _getPLATypeAndSubtypeID(
+    final String pointTypeID = MPCommandOptionAux.getPLATypeAndSubtypeID(
       plaType: pointType,
       plaSubtype: pointSubtype,
     );
@@ -276,13 +276,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   ({String type, String subtype}) getLastUsedAreaTypeAndSubtype() {
     return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedAreaType);
-  }
-
-  String _getPLATypeAndSubtypeID({
-    required String plaType,
-    required String plaSubtype,
-  }) {
-    return '$plaType$mpPLATypeSubtypeSeparator$plaSubtype';
   }
 
   String get lastUsedAreaType {

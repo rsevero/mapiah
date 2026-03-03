@@ -3,6 +3,7 @@
 ## 0.2.39 - not yet released
 * New features:
   * Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).
+  * Showing PLA type and subtype at PLA overlay window.
 * Fixed bugs:
   * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
   * PLA types of created elements not added as last and most used types.
