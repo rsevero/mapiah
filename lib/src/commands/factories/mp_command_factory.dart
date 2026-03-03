@@ -446,8 +446,11 @@ class MPCommandFactory {
   static MPCommand addPoint({
     required Offset screenPosition,
     required String pointTypeString,
+    required String pointSubtypeString,
     required TH2FileEditController th2FileEditController,
   }) {
+    final List<MPCommand> commandsList = [];
+
     final THPoint newPoint = THPoint.pointTypeFromString(
       parentMPID: th2FileEditController.activeScrapID,
       pointTypeString:
@@ -457,12 +460,31 @@ class MPCommandFactory {
         decimalPositions: th2FileEditController.currentDecimalPositions,
       ),
     );
-    final MPAddPointCommand command = MPAddPointCommand(
+    final MPAddPointCommand addPointCommand = MPAddPointCommand(
       newPoint: newPoint,
       posCommand: null,
     );
 
-    return command;
+    commandsList.add(addPointCommand);
+
+    if (pointSubtypeString.trim().isNotEmpty) {
+      final THCommandOption pointSubtypeOption = THSubtypeCommandOption(
+        parentMPID: newPoint.mpID,
+        subtype: pointSubtypeString.trim(),
+      );
+      final MPCommand setPointSubtypeCommand = MPSetOptionToElementCommand(
+        toOption: pointSubtypeOption,
+      );
+
+      commandsList.add(setPointSubtypeCommand);
+    }
+
+    return MPCommandFactory.multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: MPCommandDescriptionType.addPoint,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
+    );
   }
 
   static MPAddPointCommand addPointFromExisting({
@@ -1170,6 +1192,7 @@ class MPCommandFactory {
     }
 
     return (commandsList.length == 1)
+        // ? commandsList.first.copyWith(descriptionType: descriptionType)
         ? commandsList.first
         : MPMultipleElementsCommand.forCWJM(
             commandsList: commandsList,

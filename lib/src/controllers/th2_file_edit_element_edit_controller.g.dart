@@ -494,6 +494,7 @@ mixin _$TH2FileEditElementEditController
   void addPoint({
     required Offset newPointScreenPosition,
     required String pointTypeString,
+    required String pointSubtypeString,
   }) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(name: 'TH2FileEditElementEditControllerBase.addPoint');
@@ -501,6 +502,7 @@ mixin _$TH2FileEditElementEditController
       return super.addPoint(
         newPointScreenPosition: newPointScreenPosition,
         pointTypeString: pointTypeString,
+        pointSubtypeString: pointSubtypeString,
       );
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(

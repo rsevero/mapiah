@@ -119,18 +119,27 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     for (final THElement element in elements) {
       switch (element) {
         case THArea _:
-          _setMostUsedAreaType(element.areaType.name);
+          _setMostUsedAreaType(
+            areaType: element.areaType.name,
+            areaSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
+          );
         case THLine _:
-          _setMostUsedLineType(element.lineType.name);
+          _setMostUsedLineType(
+            lineType: element.lineType.name,
+            lineSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
+          );
         case THPoint _:
-          _setMostUsedPointType(element.pointType.name);
+          _setMostUsedPointType(
+            pointType: element.pointType.name,
+            pointSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
+          );
         default:
       }
     }
 
-    setUsedAreaType(thDefaultAreaType.name);
-    setUsedLineType(thDefaultLineType.name);
-    setUsedPointType(thDefaultPointType.name);
+    setUsedAreaType(areaType: thDefaultAreaType.name, areaSubtype: '');
+    setUsedLineType(lineType: thDefaultLineType.name, lineSubtype: '');
+    setUsedPointType(pointType: thDefaultPointType.name, pointSubtype: '');
   }
 
   List<String> _getMostUsedTypes(Map<String, MPTypeUsed> mostUsedTypesMap) {
@@ -155,58 +164,125 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return mostUsedTypes;
   }
 
-  void setUsedAreaType(String areaType) {
-    if (_lastUsedAreaTypes.contains(areaType)) {
-      _lastUsedAreaTypes.remove(areaType);
+  void setUsedAreaType({
+    required String areaType,
+    required String areaSubtype,
+  }) {
+    final String areaTypeID = _getPLATypeAndSubtypeID(
+      plaType: areaType,
+      plaSubtype: areaSubtype,
+    );
+
+    if (_lastUsedAreaTypes.contains(areaTypeID)) {
+      _lastUsedAreaTypes.remove(areaTypeID);
     }
 
-    _lastUsedAreaTypes.insert(0, areaType);
+    _lastUsedAreaTypes.insert(0, areaTypeID);
 
-    _setMostUsedAreaType(areaType);
+    _setMostUsedAreaType(areaType: areaType, areaSubtype: areaSubtype);
   }
 
-  void _setMostUsedAreaType(String areaType) {
-    if (_mostUsedAreaTypes.containsKey(areaType)) {
-      _mostUsedAreaTypes[areaType]!.incrementUse();
+  void _setMostUsedAreaType({
+    required String areaType,
+    required String areaSubtype,
+  }) {
+    final String areaTypeID = _getPLATypeAndSubtypeID(
+      plaType: areaType,
+      plaSubtype: areaSubtype,
+    );
+
+    if (_mostUsedAreaTypes.containsKey(areaTypeID)) {
+      _mostUsedAreaTypes[areaTypeID]!.incrementUse();
     } else {
-      _mostUsedAreaTypes[areaType] = MPTypeUsed(areaType);
+      _mostUsedAreaTypes[areaTypeID] = MPTypeUsed(areaTypeID);
     }
   }
 
-  void setUsedLineType(String lineType) {
-    if (_lastUsedLineTypes.contains(lineType)) {
-      _lastUsedLineTypes.remove(lineType);
+  void setUsedLineType({
+    required String lineType,
+    required String lineSubtype,
+  }) {
+    final String lineTypeID = _getPLATypeAndSubtypeID(
+      plaType: lineType,
+      plaSubtype: lineSubtype,
+    );
+
+    if (_lastUsedLineTypes.contains(lineTypeID)) {
+      _lastUsedLineTypes.remove(lineTypeID);
     }
 
-    _lastUsedLineTypes.insert(0, lineType);
+    _lastUsedLineTypes.insert(0, lineTypeID);
 
-    _setMostUsedLineType(lineType);
+    _setMostUsedLineType(lineType: lineType, lineSubtype: lineSubtype);
   }
 
-  void _setMostUsedLineType(String lineType) {
-    if (_mostUsedLineTypes.containsKey(lineType)) {
-      _mostUsedLineTypes[lineType]!.incrementUse();
+  void _setMostUsedLineType({
+    required String lineType,
+    required String lineSubtype,
+  }) {
+    final String lineTypeID = _getPLATypeAndSubtypeID(
+      plaType: lineType,
+      plaSubtype: lineSubtype,
+    );
+
+    if (_mostUsedLineTypes.containsKey(lineTypeID)) {
+      _mostUsedLineTypes[lineTypeID]!.incrementUse();
     } else {
-      _mostUsedLineTypes[lineType] = MPTypeUsed(lineType);
+      _mostUsedLineTypes[lineTypeID] = MPTypeUsed(lineTypeID);
     }
   }
 
-  void setUsedPointType(String pointType) {
-    if (_lastUsedPointTypes.contains(pointType)) {
-      _lastUsedPointTypes.remove(pointType);
+  void setUsedPointType({
+    required String pointType,
+    required String pointSubtype,
+  }) {
+    final String pointTypeID = _getPLATypeAndSubtypeID(
+      plaType: pointType,
+      plaSubtype: pointSubtype,
+    );
+
+    if (_lastUsedPointTypes.contains(pointTypeID)) {
+      _lastUsedPointTypes.remove(pointTypeID);
     }
 
-    _lastUsedPointTypes.insert(0, pointType);
+    _lastUsedPointTypes.insert(0, pointTypeID);
 
-    _setMostUsedPointType(pointType);
+    _setMostUsedPointType(pointType: pointType, pointSubtype: pointSubtype);
   }
 
-  void _setMostUsedPointType(String pointType) {
-    if (_mostUsedPointTypes.containsKey(pointType)) {
-      _mostUsedPointTypes[pointType]!.incrementUse();
+  void _setMostUsedPointType({
+    required String pointType,
+    required String pointSubtype,
+  }) {
+    final String pointTypeID = _getPLATypeAndSubtypeID(
+      plaType: pointType,
+      plaSubtype: pointSubtype,
+    );
+
+    if (_mostUsedPointTypes.containsKey(pointTypeID)) {
+      _mostUsedPointTypes[pointTypeID]!.incrementUse();
     } else {
-      _mostUsedPointTypes[pointType] = MPTypeUsed(pointType);
+      _mostUsedPointTypes[pointTypeID] = MPTypeUsed(pointTypeID);
     }
+  }
+
+  ({String type, String subtype}) getLastUsedPointTypeAndSubtype() {
+    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedPointType);
+  }
+
+  ({String type, String subtype}) getLastUsedLineTypeAndSubtype() {
+    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedLineType);
+  }
+
+  ({String type, String subtype}) getLastUsedAreaTypeAndSubtype() {
+    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedAreaType);
+  }
+
+  String _getPLATypeAndSubtypeID({
+    required String plaType,
+    required String plaSubtype,
+  }) {
+    return '$plaType$mpPLATypeSubtypeSeparator$plaSubtype';
   }
 
   String get lastUsedAreaType {
@@ -530,15 +606,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   THArea _createNewArea() {
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedAreaType);
     final THArea newArea = THArea.fromString(
       parentMPID: _th2FileEditController.activeScrapID,
-      areaTypeString: lastUsedAreaType,
+      areaTypeString: typeSubtype.type,
     );
     final THEndarea endarea = THEndarea(parentMPID: newArea.mpID);
 
     executeAddArea(newArea: newArea, areaChildren: [endarea]);
 
-    setUsedAreaType(lastUsedAreaType);
+    setUsedAreaType(
+      areaType: typeSubtype.type,
+      areaSubtype: typeSubtype.subtype,
+    );
 
     return newArea;
   }
@@ -653,9 +734,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
+        final ({String subtype, String type}) typeSubtype =
+            MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedLineType);
+
         _newLine = THLine.fromString(
           parentMPID: _th2FileEditController.activeScrapID,
-          lineTypeString: lastUsedLineType,
+          lineTypeString: typeSubtype.type,
         );
 
         final int newLineMPID = _newLine!.mpID;
@@ -675,7 +759,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
-        final MPAddLineCommand command = MPAddLineCommand(
+        final List<MPCommand> addLineCommands = [];
+        final MPAddLineCommand addLineCommand = MPAddLineCommand(
           newLine: _newLine!,
           lineChildren: lineChildren,
           lineStartScreenPosition: _lineStartScreenPosition,
@@ -683,8 +768,36 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           posCommand: null,
         );
 
+        addLineCommands.add(addLineCommand);
+
+        if (typeSubtype.subtype.isNotEmpty) {
+          final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
+            parentMPID: _newLine!.mpID,
+            subtype: typeSubtype.subtype,
+          );
+          final MPCommand setLineSubtypeCommand =
+              MPCommandFactory.setOptionOnElements(
+                elements: [_newLine!],
+                thFile: _thFile,
+                toOption: lineSubtypeOption,
+              );
+
+          addLineCommands.add(setLineSubtypeCommand);
+        }
+
+        final MPCommand command = MPCommandFactory.multipleCommandsFromList(
+          commandsList: addLineCommands,
+          descriptionType: MPCommandDescriptionType.addLine,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsListChanged,
+        );
+
         _th2FileEditController.execute(command);
-        setUsedLineType(lastUsedLineType);
+
+        setUsedLineType(
+          lineType: typeSubtype.type,
+          lineSubtype: typeSubtype.subtype,
+        );
       }
     } else {
       final int lineMPID = getNewLine().mpID;
@@ -726,15 +839,20 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void addPoint({
     required Offset newPointScreenPosition,
     required String pointTypeString,
+    required String pointSubtypeString,
   }) {
     final MPCommand command = MPCommandFactory.addPoint(
       screenPosition: newPointScreenPosition,
       pointTypeString: pointTypeString,
+      pointSubtypeString: pointSubtypeString,
       th2FileEditController: _th2FileEditController,
     );
 
     _th2FileEditController.execute(command);
-    setUsedPointType(lastUsedPointType);
+    setUsedPointType(
+      pointType: pointTypeString,
+      pointSubtype: pointSubtypeString,
+    );
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 

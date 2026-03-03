@@ -481,7 +481,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
-          elementEditController.setUsedAreaType(newPLAType);
+          elementEditController.setUsedAreaType(
+            areaType: newPLAType,
+            areaSubtype: '',
+          );
         }
 
         if (mpIDs.isEmpty) {
@@ -504,7 +507,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
-          elementEditController.setUsedLineType(newPLAType);
+          elementEditController.setUsedLineType(
+            lineType: newPLAType,
+            lineSubtype: '',
+          );
         }
 
         if (mpIDs.isEmpty) {
@@ -526,7 +532,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
-          elementEditController.setUsedPointType(newPLAType);
+          elementEditController.setUsedPointType(
+            pointType: newPLAType,
+            pointSubtype: '',
+          );
         }
 
         if (mpIDs.isEmpty) {

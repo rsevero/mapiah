@@ -360,6 +360,11 @@ const String mpScrapFromFileTHID = 'FROM_FILE';
 const String mpScrapFreeTextTHID = 'FREE_TEXT';
 
 const String mpUnknownPLAType = 'unknown';
+const String mpPLATypeSubtypeSeparator = ':';
+const String mpSubtypeIDSeparator = '|';
+const String mpPointSubtypeIDPrefix = 'point$mpSubtypeIDSeparator';
+const String mpLineSubtypeIDPrefix = 'line$mpSubtypeIDSeparator';
+const String mpAreaSubtypeIDPrefix = 'area$mpSubtypeIDSeparator';
 
 const String mpAreaTHIDPrefix = 'area';
 const String mpLineTHIDPrefix = 'line';

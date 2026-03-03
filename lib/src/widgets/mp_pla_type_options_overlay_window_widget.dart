@@ -7,9 +7,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_option_widget.dart';
@@ -51,7 +48,10 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
   @override
   void initState() {
     super.initState();
-    _selectedPLATypeForRadioGroup = widget.selectedPLAType ?? '';
+
+    _selectedPLATypeForRadioGroup = (widget.selectedPLAType == null)
+        ? ''
+        : "${widget.selectedPLAType}$mpPLATypeSubtypeSeparator";
   }
 
   @override
@@ -91,9 +91,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
         selectedPLATypeForUser = (widget.selectedPLAType == null)
             ? ''
-            : MPTextToUser.getAreaType(
-                THAreaType.fromString(widget.selectedPLAType!),
-              );
+            : MPTextToUser.getAreaTypeSubtype(widget.selectedPLAType!);
         lastUsedChoices = elementEditController.lastUsedAreaTypes;
         mostUsedChoices = elementEditController.mostUsedAreaTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -105,9 +103,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = mpLocator.appLocalizations.mpPLATypeLineTitle;
         selectedPLATypeForUser = (widget.selectedPLAType == null)
             ? ''
-            : MPTextToUser.getLineType(
-                THLineType.fromString(widget.selectedPLAType!),
-              );
+            : MPTextToUser.getLineTypeSubtype(widget.selectedPLAType!);
         lastUsedChoices = elementEditController.lastUsedLineTypes;
         mostUsedChoices = elementEditController.mostUsedLineTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -119,9 +115,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = mpLocator.appLocalizations.mpPLATypePointTitle;
         selectedPLATypeForUser = (widget.selectedPLAType == null)
             ? ''
-            : MPTextToUser.getPointType(
-                THPointType.fromString(widget.selectedPLAType!),
-              );
+            : MPTextToUser.getPointTypeSubtype(widget.selectedPLAType!);
         lastUsedChoices = elementEditController.lastUsedPointTypes;
         mostUsedChoices = elementEditController.mostUsedPointTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -139,8 +133,8 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
     }
 
     final bool initiallyUnknown =
-        (widget.selectedPLAType != null &&
-        widget.selectedPLAType!.isNotEmpty &&
+        ((widget.selectedPLAType != null) &&
+        (widget.selectedPLAType!.isNotEmpty) &&
         !choices.containsKey(widget.selectedPLAType));
     if (initiallyUnknown && !_unknownSelected) {
       _unknownSelected = true;

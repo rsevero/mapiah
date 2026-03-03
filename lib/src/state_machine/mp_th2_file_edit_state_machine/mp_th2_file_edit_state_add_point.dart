@@ -24,9 +24,13 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
       return Future.value();
     }
 
+    final ({String type, String subtype}) typeSubtype = elementEditController
+        .getLastUsedPointTypeAndSubtype();
+
     elementEditController.addPoint(
       newPointScreenPosition: event.localPosition,
-      pointTypeString: elementEditController.lastUsedPointType,
+      pointTypeString: typeSubtype.type,
+      pointSubtypeString: typeSubtype.subtype,
     );
 
     return Future.value();

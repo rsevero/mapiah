@@ -12,6 +12,7 @@
   * Created TH2FileEditcontroller.getTHFileWidgetBuildContext().
   * Removed unused methods from TH2FileEditElementEditController.
   * Created addPoint() method in TH2FileEditElementEditController.
+  * Monitoring subtypes with last used PLA types.
 
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
 

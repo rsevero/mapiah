@@ -82,6 +82,7 @@ endscrap
               screenPosition: Offset(1, 2),
               pointTypeString:
                   controller.elementEditController.lastUsedPointType,
+              pointSubtypeString: '',
               th2FileEditController: controller,
             );
 

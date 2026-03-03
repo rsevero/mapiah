@@ -1085,16 +1085,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypePointAirDraughtUndefined => 'Indefinido';
 
   @override
-  String get mpSubtypePointStationTemporary => 'Temporário';
+  String get mpSubtypePointStationTemporary => 'Temporária';
 
   @override
-  String get mpSubtypePointStationPainted => 'Pintado';
+  String get mpSubtypePointStationPainted => 'Pintada';
 
   @override
   String get mpSubtypePointStationNatural => 'Natural';
 
   @override
-  String get mpSubtypePointStationFixed => 'Fixo';
+  String get mpSubtypePointStationFixed => 'Fixa';
 
   @override
   String get mpSubtypePointWaterFlowPermanent => 'Permanente';

@@ -137,6 +137,10 @@ enum THPointType {
   }
 
   static THPointType fromString(String value) {
+    if (value.contains(mpPLATypeSubtypeSeparator)) {
+      value = value.substring(0, value.indexOf(mpPLATypeSubtypeSeparator));
+    }
+
     if (hasPointType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 

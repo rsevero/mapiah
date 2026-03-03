@@ -119,7 +119,7 @@ void main() {
         // Click the RadioListTile to select the SET option
         final Finder setRadioFinder = find.byKey(
           const ValueKey(
-            'MPPLATypeOptionWidget|RadioListTile|choices|passageHeight',
+            'MPPLATypeOptionWidget|RadioListTile|choices|passageHeight:',
           ),
         );
 

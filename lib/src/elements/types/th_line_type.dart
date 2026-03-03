@@ -60,6 +60,10 @@ enum THLineType {
   }
 
   static THLineType fromString(String value) {
+    if (value.contains(mpPLATypeSubtypeSeparator)) {
+      value = value.substring(0, value.indexOf(mpPLATypeSubtypeSeparator));
+    }
+
     if (hasLineType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 

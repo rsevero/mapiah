@@ -149,8 +149,8 @@ void main() {
           of: mpWallPLATypeOptionOpenedFinder,
           matching: find.byWidgetPredicate(
             (widget) =>
-                widget is RadioListTile<String> && widget.value == 'slope',
-            description: 'RadioListTile<String> with value "slope"',
+                widget is RadioListTile<String> && widget.value == 'slope:',
+            description: 'RadioListTile<String> with value "slope:"',
           ),
         );
 

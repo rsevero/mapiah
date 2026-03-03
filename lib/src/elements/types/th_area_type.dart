@@ -42,6 +42,10 @@ enum THAreaType {
   }
 
   static THAreaType fromString(String value) {
+    if (value.contains(mpPLATypeSubtypeSeparator)) {
+      value = value.substring(0, value.indexOf(mpPLATypeSubtypeSeparator));
+    }
+
     if (hasAreaType(value)) {
       value = MPTypeAux.convertHyphenatedToCamelCase(value);
 

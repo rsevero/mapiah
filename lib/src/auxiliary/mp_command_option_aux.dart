@@ -1,4 +1,5 @@
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -364,5 +365,24 @@ class MPCommandOptionAux {
     return element is THHasOptionsMixin
         ? getSupportedOptionsForElement(element).contains(optionType)
         : false;
+  }
+
+  static ({String type, String subtype}) getLastUsedPLATypeAndSubtype(
+    String lastUsedPLA,
+  ) {
+    final int separatorPosition = lastUsedPLA.indexOf(
+      mpPLATypeSubtypeSeparator,
+    );
+
+    if (separatorPosition < 0) {
+      return (type: lastUsedPLA.trim(), subtype: '');
+    }
+
+    final String type = lastUsedPLA.substring(0, separatorPosition).trim();
+    final int subtypeStartPosition =
+        separatorPosition + mpPLATypeSubtypeSeparator.length;
+    final String subtype = lastUsedPLA.substring(subtypeStartPosition).trim();
+
+    return (type: type, subtype: subtype);
   }
 }

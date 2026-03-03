@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
@@ -720,6 +721,25 @@ class MPTextToUser {
         localizations.thPointWheelchair;
   }
 
+  static String getPointTypeSubtype(String pointTypeAsString) {
+    final ({String type, String subtype}) typeSubtype =
+        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(pointTypeAsString);
+
+    String pointTypeToUser = MPTextToUser.getPointType(
+      THPointType.fromString(typeSubtype.type),
+    );
+
+    if (typeSubtype.subtype.isNotEmpty) {
+      final String subtypeID =
+          '$mpPointSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
+      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+      pointTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+    }
+
+    return pointTypeToUser;
+  }
+
   static String getPointType(THPointType pointType) {
     return _pointTypeAsString.containsKey(pointType)
         ? _pointTypeAsString[pointType]!
@@ -776,6 +796,25 @@ class MPTextToUser {
     _lineTypeAsString[THLineType.waterFlow] = localizations.thLineWaterFlow;
   }
 
+  static String getLineTypeSubtype(String lineTypeAsString) {
+    final ({String type, String subtype}) typeSubtype =
+        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lineTypeAsString);
+
+    String lineTypeToUser = MPTextToUser.getLineType(
+      THLineType.fromString(typeSubtype.type),
+    );
+
+    if (typeSubtype.subtype.isNotEmpty) {
+      final String subtypeID =
+          '$mpLineSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
+      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+      lineTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+    }
+
+    return lineTypeToUser;
+  }
+
   static String getLineType(THLineType lineType) {
     return _lineTypeAsString.containsKey(lineType)
         ? _lineTypeAsString[lineType]!
@@ -810,6 +849,25 @@ class MPTextToUser {
     _areaTypeAsString[THAreaType.u] = localizations.thAreaU;
     _areaTypeAsString[THAreaType.unknown] = localizations.thAreaUnknown;
     _areaTypeAsString[THAreaType.water] = localizations.thAreaWater;
+  }
+
+  static String getAreaTypeSubtype(String areaTypeAsString) {
+    final ({String type, String subtype}) typeSubtype =
+        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(areaTypeAsString);
+
+    String areaTypeToUser = MPTextToUser.getAreaType(
+      THAreaType.fromString(typeSubtype.type),
+    );
+
+    if (typeSubtype.subtype.isNotEmpty) {
+      final String subtypeID =
+          '$mpAreaSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
+      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+      areaTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+    }
+
+    return areaTypeToUser;
   }
 
   static String getAreaType(THAreaType areaType) {
@@ -1330,18 +1388,20 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final THAreaType choiceType in THAreaType.values) {
-      choices[choiceType.name] = getAreaType(choiceType);
+      choices["${choiceType.name}$mpPLATypeSubtypeSeparator"] = getAreaType(
+        choiceType,
+      );
     }
 
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedAreaTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getAreaTypeSubtype(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedAreaTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getAreaTypeSubtype(extraType);
         }
       }
     }
@@ -1355,18 +1415,20 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final THLineType choiceType in THLineType.values) {
-      choices[choiceType.name] = getLineType(choiceType);
+      choices["${choiceType.name}$mpPLATypeSubtypeSeparator"] = getLineType(
+        choiceType,
+      );
     }
 
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedLineTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getLineTypeSubtype(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedLineTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getLineTypeSubtype(extraType);
         }
       }
     }
@@ -1391,18 +1453,20 @@ class MPTextToUser {
     final Map<String, String> choices = {};
 
     for (final THPointType choiceType in THPointType.values) {
-      choices[choiceType.name] = getPointType(choiceType);
+      choices["${choiceType.name}$mpPLATypeSubtypeSeparator"] = getPointType(
+        choiceType,
+      );
     }
 
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedPointTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getPointTypeSubtype(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedPointTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = extraType;
+          choices[extraType] = getPointTypeSubtype(extraType);
         }
       }
     }
