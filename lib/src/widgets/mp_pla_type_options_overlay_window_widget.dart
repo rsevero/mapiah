@@ -7,6 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_option_widget.dart';
@@ -76,8 +77,11 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final TH2FileEditController th2FileEditController =
+        widget.th2FileEditController;
     final TH2FileEditElementEditController elementEditController =
-        widget.th2FileEditController.elementEditController;
+        th2FileEditController.elementEditController;
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     late Map<String, String> choices;
     late List<String> lastUsedChoices;
     final List<String> lastUsedChoicesReduced = [];
@@ -85,13 +89,14 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
     final List<String> mostUsedChoicesReduced = [];
     late String title;
     final String selectedPLATypeForUser;
+    final String? selectedPLAType = widget.selectedPLAType;
 
     switch (widget.elementType) {
       case THElementType.area:
-        title = mpLocator.appLocalizations.mpPLATypeAreaTitle;
-        selectedPLATypeForUser = (widget.selectedPLAType == null)
+        title = appLocalizations.mpPLATypeAreaTitle;
+        selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getAreaTypeSubtype(widget.selectedPLAType!);
+            : MPTextToUser.getAreaTypeSubtype(selectedPLAType);
         lastUsedChoices = elementEditController.lastUsedAreaTypes;
         mostUsedChoices = elementEditController.mostUsedAreaTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -100,10 +105,10 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
           ),
         );
       case THElementType.line:
-        title = mpLocator.appLocalizations.mpPLATypeLineTitle;
-        selectedPLATypeForUser = (widget.selectedPLAType == null)
+        title = appLocalizations.mpPLATypeLineTitle;
+        selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getLineTypeSubtype(widget.selectedPLAType!);
+            : MPTextToUser.getLineTypeSubtype(selectedPLAType);
         lastUsedChoices = elementEditController.lastUsedLineTypes;
         mostUsedChoices = elementEditController.mostUsedLineTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -112,10 +117,10 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
           ),
         );
       case THElementType.point:
-        title = mpLocator.appLocalizations.mpPLATypePointTitle;
-        selectedPLATypeForUser = (widget.selectedPLAType == null)
+        title = appLocalizations.mpPLATypePointTitle;
+        selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getPointTypeSubtype(widget.selectedPLAType!);
+            : MPTextToUser.getPointTypeSubtype(selectedPLAType);
         lastUsedChoices = elementEditController.lastUsedPointTypes;
         mostUsedChoices = elementEditController.mostUsedPointTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -133,18 +138,18 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
     }
 
     final bool initiallyUnknown =
-        ((widget.selectedPLAType != null) &&
-        (widget.selectedPLAType!.isNotEmpty) &&
-        !choices.containsKey(widget.selectedPLAType));
+        ((selectedPLAType != null) &&
+        selectedPLAType.isNotEmpty &&
+        !choices.containsKey(selectedPLAType));
     if (initiallyUnknown && !_unknownSelected) {
       _unknownSelected = true;
       _selectedPLATypeForRadioGroup = mpUnknownPLAType;
-      _unknownController.text = widget.selectedPLAType!;
+      _unknownController.text = selectedPLAType;
       _validateUnknown();
     }
 
     for (final String choice in lastUsedChoices) {
-      if (choice == widget.selectedPLAType) {
+      if (choice == selectedPLAType) {
         continue;
       }
 
@@ -157,7 +162,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
 
     for (final String choice in mostUsedChoices) {
       if (lastUsedChoicesReduced.contains(choice) ||
-          (choice == widget.selectedPLAType)) {
+          (choice == selectedPLAType)) {
         continue;
       }
 
@@ -174,9 +179,9 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         .join(',');
     final String choicesStringForKey = choices.keys.join(',');
 
-    String currentPLATypeForKey = (widget.selectedPLAType == null)
+    String currentPLATypeForKey = (selectedPLAType == null)
         ? mpUnsetOptionID
-        : widget.selectedPLAType!;
+        : selectedPLAType;
 
     currentPLATypeForKey =
         "MPPLATypeOptionsOverlayWindowWidget|$currentPLATypeForKey";
@@ -196,17 +201,16 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
       overlayWindowType: MPOverlayWindowType.secondary,
       outerAnchorPosition: widget.outerAnchorPosition,
       innerAnchorType: widget.innerAnchorType,
-      th2FileEditController: widget.th2FileEditController,
+      th2FileEditController: th2FileEditController,
       children: [
         Column(
           children: [
-            if ((widget.selectedPLAType != null) &&
-                (widget.selectedPLAType != '')) ...[
+            if ((selectedPLAType != null) && (selectedPLAType != '')) ...[
               const SizedBox(height: mpButtonSpace),
               SizedBox(
                 width: double.infinity,
                 child: MPOverlayWindowBlockWidget(
-                  title: mpLocator.appLocalizations.mpPLATypeCurrent,
+                  title: appLocalizations.mpPLATypeCurrent,
                   overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
                   padding: mpOverlayWindowBlockEdgeInsets,
                   children: [Text(selectedPLATypeForUser)],
@@ -216,13 +220,13 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
             if (lastUsedChoicesReduced.isNotEmpty) ...[
               const SizedBox(height: mpButtonSpace),
               MPOverlayWindowBlockWidget(
-                title: mpLocator.appLocalizations.mpPLATypeLastUsed,
+                title: appLocalizations.mpPLATypeLastUsed,
                 overlayWindowBlockType: MPOverlayWindowBlockType.choices,
                 padding: mpOverlayWindowBlockEdgeInsets,
                 children: [
                   RadioGroup(
                     key: ValueKey(lastUsedChoicesReducedStringKey),
-                    groupValue: widget.selectedPLAType,
+                    groupValue: selectedPLAType,
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         _onChanged(context, newValue);
@@ -235,7 +239,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                             value: choice,
                             label: choices[choice]!,
                             valueKeyID: 'lastUsedChoices',
-                            th2FileEditController: widget.th2FileEditController,
+                            th2FileEditController: th2FileEditController,
                           );
                         }),
                       ],
@@ -247,13 +251,13 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
             if (mostUsedChoicesReduced.isNotEmpty) ...[
               const SizedBox(height: mpButtonSpace),
               MPOverlayWindowBlockWidget(
-                title: mpLocator.appLocalizations.mpPLATypeMostUsed,
+                title: appLocalizations.mpPLATypeMostUsed,
                 overlayWindowBlockType: MPOverlayWindowBlockType.choices,
                 padding: mpOverlayWindowBlockEdgeInsets,
                 children: [
                   RadioGroup(
                     key: ValueKey(mostUsedChoicesReducedStringKey),
-                    groupValue: widget.selectedPLAType,
+                    groupValue: selectedPLAType,
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         _onChanged(context, newValue);
@@ -266,7 +270,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                             value: choice,
                             label: choices[choice]!,
                             valueKeyID: 'mostUsedChoices',
-                            th2FileEditController: widget.th2FileEditController,
+                            th2FileEditController: th2FileEditController,
                           );
                         }),
                       ],
@@ -277,7 +281,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
             ],
             const SizedBox(height: mpButtonSpace),
             MPOverlayWindowBlockWidget(
-              title: mpLocator.appLocalizations.mpPLATypeAll,
+              title: appLocalizations.mpPLATypeAll,
               overlayWindowBlockType: MPOverlayWindowBlockType.choices,
               padding: mpOverlayWindowBlockEdgeInsets,
               children: [
@@ -316,13 +320,12 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                               value: entry.key,
                               label: entry.value,
                               valueKeyID: 'choices',
-                              th2FileEditController:
-                                  widget.th2FileEditController,
+                              th2FileEditController: th2FileEditController,
                             ),
                             if (isUnknown &&
                                 _unknownSelected &&
-                                _selectedPLATypeForRadioGroup ==
-                                    mpUnknownPLAType)
+                                (_selectedPLATypeForRadioGroup ==
+                                    mpUnknownPLAType))
                               Padding(
                                 padding: const EdgeInsets.only(
                                   left: 32,
@@ -349,15 +352,13 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                                                 vertical: 8,
                                               ),
                                           border: const OutlineInputBorder(),
-                                          labelText: mpLocator
-                                              .appLocalizations
+                                          labelText: appLocalizations
                                               .mpPLATypeUnknownLabel,
                                           errorText:
                                               _unknownController.text.isEmpty
                                               ? null
                                               : (!_unknownValid
-                                                    ? mpLocator
-                                                          .appLocalizations
+                                                    ? appLocalizations
                                                           .mpPLATypeUnknownInvalid
                                                     : null),
                                         ),
@@ -374,9 +375,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
                                       onPressed: _unknownValid
                                           ? () => _applyUnknown(context)
                                           : null,
-                                      child: Text(
-                                        mpLocator.appLocalizations.mpButtonOK,
-                                      ),
+                                      child: Text(appLocalizations.mpButtonOK),
                                     ),
                                   ],
                                 ),
@@ -396,11 +395,14 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
   }
 
   void _onChanged(BuildContext context, String newValue) {
-    widget.th2FileEditController.userInteractionController.prepareSetPLAType(
+    final TH2FileEditController th2FileEditController =
+        widget.th2FileEditController;
+
+    th2FileEditController.userInteractionController.prepareSetPLAType(
       elementType: widget.elementType,
       newPLAType: newValue,
     );
-    widget.th2FileEditController.overlayWindowController.setShowOverlayWindow(
+    th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.plaTypes,
       false,
     );

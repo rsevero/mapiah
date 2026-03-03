@@ -49,6 +49,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
   @override
   void initState() {
     super.initState();
+
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
     position = widget.outerAnchorPosition;

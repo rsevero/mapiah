@@ -19,9 +19,11 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     late final Color? iconColor;
     late final Color? textColor;
     late final Color? tileColor;
+
     double elevation = 0;
 
     switch (overlayWindowBlockType) {
@@ -70,7 +72,7 @@ class MPOverlayWindowBlockWidget extends StatelessWidget {
     }
 
     final List<Widget> content = [
-      if (title != null && title!.isNotEmpty)
+      if ((title != null) && title!.isNotEmpty)
         Padding(
           padding: const EdgeInsets.only(
             bottom: mpButtonSpace,
