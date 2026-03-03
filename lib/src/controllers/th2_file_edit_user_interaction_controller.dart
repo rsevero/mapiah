@@ -13,9 +13,6 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mobx/mobx.dart';
@@ -466,6 +463,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             .values;
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getPLATypeSubtypeRecord(newPLAType);
 
     MPCommand setPLATypeCommand;
     List<int> mpIDs = [];
@@ -477,13 +476,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               mpSelectedElement.originalElementClone;
 
           if ((originalElementClone is! THArea) ||
-              (originalElementClone.areaType.name == newPLAType)) {
+              MPCommandOptionAux.isSamePLATypeSubtype(
+                element: originalElementClone,
+                plaTypeSubtype: newPLAType,
+              )) {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedAreaType(
-            areaType: newPLAType,
-            areaSubtype: '',
+            areaType: typeSubtype.type,
+            areaSubtype: typeSubtype.subtype,
           );
         }
 
@@ -491,10 +493,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           return;
         }
 
-        setPLATypeCommand = MPCommandFactory.editAreasType(
-          newAreaType: THAreaType.fromString(newPLAType),
-          unknownPLAType: THAreaType.unknownPLATypeFromString(newPLAType),
+        setPLATypeCommand = MPCommandFactory.editAreasTypeSubtype(
           areaMPIDs: mpIDs,
+          newAreaTypeSubtype: newPLAType,
         );
 
       case THElementType.line:
@@ -503,13 +504,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               mpSelectedElement.originalElementClone;
 
           if ((originalElementClone is! THLine) ||
-              (originalElementClone.lineType.name == newPLAType)) {
+              MPCommandOptionAux.isSamePLATypeSubtype(
+                element: originalElementClone,
+                plaTypeSubtype: newPLAType,
+              )) {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedLineType(
-            lineType: newPLAType,
-            lineSubtype: '',
+            lineType: typeSubtype.type,
+            lineSubtype: typeSubtype.subtype,
           );
         }
 
@@ -517,10 +521,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           return;
         }
 
-        setPLATypeCommand = MPCommandFactory.editLinesType(
-          newLineType: THLineType.fromString(newPLAType),
-          unknownPLAType: THLineType.unknownPLATypeFromString(newPLAType),
+        setPLATypeCommand = MPCommandFactory.editLinesTypeSubtype(
           lineMPIDs: mpIDs,
+          newLineTypeSubtype: newPLAType,
         );
       case THElementType.point:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
@@ -528,13 +531,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
               mpSelectedElement.originalElementClone;
 
           if ((originalElementClone is! THPoint) ||
-              (originalElementClone.pointType.name == newPLAType)) {
+              MPCommandOptionAux.isSamePLATypeSubtype(
+                element: originalElementClone,
+                plaTypeSubtype: newPLAType,
+              )) {
             continue;
           }
           mpIDs.add(originalElementClone.mpID);
           elementEditController.setUsedPointType(
-            pointType: newPLAType,
-            pointSubtype: '',
+            pointType: typeSubtype.type,
+            pointSubtype: typeSubtype.subtype,
           );
         }
 
@@ -542,10 +548,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           return;
         }
 
-        setPLATypeCommand = MPCommandFactory.editPointsType(
-          newPointType: THPointType.fromString(newPLAType),
-          unknownPLAType: THPointType.unknownPLATypeFromString(newPLAType),
+        setPLATypeCommand = MPCommandFactory.editPointsTypeSubtype(
           pointMPIDs: mpIDs,
+          newPointTypeSubtype: newPLAType,
         );
       default:
         return;

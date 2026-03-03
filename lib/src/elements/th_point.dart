@@ -244,4 +244,12 @@ class THPoint extends THElement
 
     setTHFileToOptions(thFile);
   }
+
+  @override
+  String get typeSubtypeID {
+    return MPCommandOptionAux.getPLATypeAndSubtypeID(
+      plaType: pointType.name,
+      plaSubtype: MPCommandOptionAux.getSubtype(this) ?? '',
+    );
+  }
 }

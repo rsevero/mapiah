@@ -330,4 +330,12 @@ class THArea extends THElement
     setTHFileToOptions(thFile);
     setTHFileToChildren(thFile);
   }
+
+  @override
+  String get typeSubtypeID {
+    return MPCommandOptionAux.getPLATypeAndSubtypeID(
+      plaType: areaType.name,
+      plaSubtype: MPCommandOptionAux.getSubtype(this) ?? '',
+    );
+  }
 }

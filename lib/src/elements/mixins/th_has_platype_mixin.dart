@@ -7,4 +7,6 @@ mixin THHasPLATypeMixin on THElement {
   String _unknownPLAType = '';
 
   String get unknownPLAType => _unknownPLAType;
+
+  String get typeSubtypeID;
 }

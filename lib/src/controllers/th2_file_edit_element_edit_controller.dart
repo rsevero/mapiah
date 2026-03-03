@@ -267,15 +267,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   ({String type, String subtype}) getLastUsedPointTypeAndSubtype() {
-    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedPointType);
+    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedPointType);
   }
 
   ({String type, String subtype}) getLastUsedLineTypeAndSubtype() {
-    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedLineType);
+    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedLineType);
   }
 
   ({String type, String subtype}) getLastUsedAreaTypeAndSubtype() {
-    return MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedAreaType);
+    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedAreaType);
   }
 
   String get lastUsedAreaType {
@@ -600,7 +600,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   THArea _createNewArea() {
     final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedAreaType);
+        MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedAreaType);
     final THArea newArea = THArea.fromString(
       parentMPID: _th2FileEditController.activeScrapID,
       areaTypeString: typeSubtype.type,
@@ -728,7 +728,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
         final ({String subtype, String type}) typeSubtype =
-            MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lastUsedLineType);
+            MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedLineType);
 
         _newLine = THLine.fromString(
           parentMPID: _th2FileEditController.activeScrapID,

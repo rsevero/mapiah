@@ -633,4 +633,12 @@ class THLine extends THElement
 
     return lineSegmentsWithMark;
   }
+
+  @override
+  String get typeSubtypeID {
+    return MPCommandOptionAux.getPLATypeAndSubtypeID(
+      plaType: lineType.name,
+      plaSubtype: MPCommandOptionAux.getSubtype(this) ?? '',
+    );
+  }
 }

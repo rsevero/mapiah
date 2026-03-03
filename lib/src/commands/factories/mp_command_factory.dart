@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -685,6 +686,58 @@ class MPCommandFactory {
     );
   }
 
+  static MPCommand editAreasTypeSubtype({
+    required List<int> areaMPIDs,
+    required String newAreaTypeSubtype,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.editAreasTypeSubtype,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getPLATypeSubtypeRecord(newAreaTypeSubtype);
+    final THAreaType newAreaType = THAreaType.fromString(typeSubtype.type);
+    final String unknownPLAType = THAreaType.unknownPLATypeFromString(
+      typeSubtype.type,
+    );
+    final bool setSubtype = typeSubtype.subtype.trim().isNotEmpty;
+
+    for (final int areaMPID in areaMPIDs) {
+      final MPCommand editAreaTypeCommand = MPEditAreaTypeCommand(
+        areaMPID: areaMPID,
+        newAreaType: newAreaType,
+        unknownPLAType: unknownPLAType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editAreaTypeCommand);
+
+      if (setSubtype) {
+        final THSubtypeCommandOption newSubtypeOption = THSubtypeCommandOption(
+          parentMPID: areaMPID,
+          subtype: typeSubtype.subtype,
+        );
+        final MPCommand setAreaSubtypeCommand = MPSetOptionToElementCommand(
+          toOption: newSubtypeOption,
+        );
+
+        commandsList.add(setAreaSubtypeCommand);
+      } else {
+        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
+          parentMPID: areaMPID,
+          optionType: THCommandOptionType.subtype,
+        );
+
+        commandsList.add(removeSubtypeCommand);
+      }
+    }
+
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
   static MPCommand editAreasType({
     required List<int> areaMPIDs,
     required THAreaType newAreaType,
@@ -737,6 +790,58 @@ class MPCommandFactory {
     );
   }
 
+  static MPCommand editLinesTypeSubtype({
+    required List<int> lineMPIDs,
+    required String newLineTypeSubtype,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.editLinesTypeSubtype,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getPLATypeSubtypeRecord(newLineTypeSubtype);
+    final THLineType newLineType = THLineType.fromString(typeSubtype.type);
+    final String unknownPLAType = THLineType.unknownPLATypeFromString(
+      typeSubtype.type,
+    );
+    final bool setSubtype = typeSubtype.subtype.trim().isNotEmpty;
+
+    for (final int lineMPID in lineMPIDs) {
+      final MPCommand editLineTypeCommand = MPEditLineTypeCommand(
+        lineMPID: lineMPID,
+        newLineType: newLineType,
+        unknownPLAType: unknownPLAType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editLineTypeCommand);
+
+      if (setSubtype) {
+        final THSubtypeCommandOption newSubtypeOption = THSubtypeCommandOption(
+          parentMPID: lineMPID,
+          subtype: typeSubtype.subtype,
+        );
+        final MPCommand setLineSubtypeCommand = MPSetOptionToElementCommand(
+          toOption: newSubtypeOption,
+        );
+
+        commandsList.add(setLineSubtypeCommand);
+      } else {
+        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
+          parentMPID: lineMPID,
+          optionType: THCommandOptionType.subtype,
+        );
+
+        commandsList.add(removeSubtypeCommand);
+      }
+    }
+
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
   static MPCommand editLinesType({
     required List<int> lineMPIDs,
     required THLineType newLineType,
@@ -755,6 +860,58 @@ class MPCommandFactory {
       );
 
       commandsList.add(editLineTypeCommand);
+    }
+
+    return multipleCommandsFromList(
+      commandsList: commandsList,
+      descriptionType: descriptionType,
+      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
+    );
+  }
+
+  static MPCommand editPointsTypeSubtype({
+    required List<int> pointMPIDs,
+    required String newPointTypeSubtype,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.editPointsTypeSubtype,
+  }) {
+    final List<MPCommand> commandsList = [];
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getPLATypeSubtypeRecord(newPointTypeSubtype);
+    final THPointType newPointType = THPointType.fromString(typeSubtype.type);
+    final String unknownPLAType = THPointType.unknownPLATypeFromString(
+      typeSubtype.type,
+    );
+    final bool setSubtype = typeSubtype.subtype.trim().isNotEmpty;
+
+    for (final int pointMPID in pointMPIDs) {
+      final MPCommand editPointTypeCommand = MPEditPointTypeCommand(
+        pointMPID: pointMPID,
+        newPointType: newPointType,
+        unknownPLAType: unknownPLAType,
+        descriptionType: descriptionType,
+      );
+
+      commandsList.add(editPointTypeCommand);
+
+      if (setSubtype) {
+        final THSubtypeCommandOption newSubtypeOption = THSubtypeCommandOption(
+          parentMPID: pointMPID,
+          subtype: typeSubtype.subtype,
+        );
+        final MPCommand setPointSubtypeCommand = MPSetOptionToElementCommand(
+          toOption: newSubtypeOption,
+        );
+
+        commandsList.add(setPointSubtypeCommand);
+      } else {
+        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
+          parentMPID: pointMPID,
+          optionType: THCommandOptionType.subtype,
+        );
+
+        commandsList.add(removeSubtypeCommand);
+      }
     }
 
     return multipleCommandsFromList(

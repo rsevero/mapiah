@@ -367,21 +367,21 @@ class MPCommandOptionAux {
         : false;
   }
 
-  static ({String type, String subtype}) getLastUsedPLATypeAndSubtype(
-    String lastUsedPLA,
+  static ({String type, String subtype}) getPLATypeSubtypeRecord(
+    String typeSubtypeID,
   ) {
-    final int separatorPosition = lastUsedPLA.indexOf(
+    final int separatorPosition = typeSubtypeID.indexOf(
       mpPLATypeSubtypeSeparator,
     );
 
     if (separatorPosition < 0) {
-      return (type: lastUsedPLA.trim(), subtype: '');
+      return (type: typeSubtypeID.trim(), subtype: '');
     }
 
-    final String type = lastUsedPLA.substring(0, separatorPosition).trim();
+    final String type = typeSubtypeID.substring(0, separatorPosition).trim();
     final int subtypeStartPosition =
         separatorPosition + mpPLATypeSubtypeSeparator.length;
-    final String subtype = lastUsedPLA.substring(subtypeStartPosition).trim();
+    final String subtype = typeSubtypeID.substring(subtypeStartPosition).trim();
 
     return (type: type, subtype: subtype);
   }
@@ -391,5 +391,14 @@ class MPCommandOptionAux {
     required String plaSubtype,
   }) {
     return '$plaType$mpPLATypeSubtypeSeparator$plaSubtype';
+  }
+
+  static bool isSamePLATypeSubtype({
+    required THHasPLATypeMixin element,
+    required String plaTypeSubtype,
+  }) {
+    final String elementTypeSubtypeID = element.typeSubtypeID;
+
+    return elementTypeSubtypeID == plaTypeSubtype;
   }
 }

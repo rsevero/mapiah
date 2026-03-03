@@ -723,7 +723,7 @@ class MPTextToUser {
 
   static String getPointTypeSubtype(String pointTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(pointTypeAsString);
+        MPCommandOptionAux.getPLATypeSubtypeRecord(pointTypeAsString);
 
     String pointTypeToUser = MPTextToUser.getPointType(
       THPointType.fromString(typeSubtype.type),
@@ -798,7 +798,7 @@ class MPTextToUser {
 
   static String getLineTypeSubtype(String lineTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(lineTypeAsString);
+        MPCommandOptionAux.getPLATypeSubtypeRecord(lineTypeAsString);
 
     String lineTypeToUser = MPTextToUser.getLineType(
       THLineType.fromString(typeSubtype.type),
@@ -853,7 +853,7 @@ class MPTextToUser {
 
   static String getAreaTypeSubtype(String areaTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getLastUsedPLATypeAndSubtype(areaTypeAsString);
+        MPCommandOptionAux.getPLATypeSubtypeRecord(areaTypeAsString);
 
     String areaTypeToUser = MPTextToUser.getAreaType(
       THAreaType.fromString(typeSubtype.type),
