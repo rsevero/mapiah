@@ -723,6 +723,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void addPoint({
+    required Offset newPointScreenPosition,
+    required String pointTypeString,
+  }) {
+    final MPCommand command = MPCommandFactory.addPoint(
+      screenPosition: newPointScreenPosition,
+      pointTypeString: pointTypeString,
+      th2FileEditController: _th2FileEditController,
+    );
+
+    _th2FileEditController.execute(command);
+    setUsedPointType(lastUsedPointType);
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
+  @action
   void executeAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,

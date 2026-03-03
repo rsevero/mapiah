@@ -491,6 +491,25 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void addPoint({
+    required Offset newPointScreenPosition,
+    required String pointTypeString,
+  }) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.addPoint');
+    try {
+      return super.addPoint(
+        newPointScreenPosition: newPointScreenPosition,
+        pointTypeString: pointTypeString,
+      );
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void executeAddLine({
     required THLine newLine,
     required List<THElement> lineChildren,
