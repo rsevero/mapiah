@@ -5,10 +5,12 @@
   * Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).
 * Fixed bugs:
   * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
+  * PLA types of created elements not added as last and most used types.
 * Infrastructure maintenance:
   * Converted MPGeneralController to a MobX store.
   * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.
   * Created TH2FileEditcontroller.getTHFileWidgetBuildContext().
+  * Removed unused methods from TH2FileEditElementEditController.
 
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
 

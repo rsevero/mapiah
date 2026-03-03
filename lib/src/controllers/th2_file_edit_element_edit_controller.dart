@@ -407,17 +407,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void afterAddPoint(THPoint newPoint) {
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-
-    _th2FileEditController.setActiveScrapByChildElement(newPoint);
-    selectionController.addUpdateSelectableElement(newPoint);
-    selectionController.updateSelectedElementLogicalClone(newPoint.mpID);
-    _th2FileEditController.triggerAllElementsRedraw();
-  }
-
-  @action
   void removeElement(THElement element, {bool setState = false}) {
     _removeElement(element, setState: setState);
   }
@@ -549,6 +538,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     executeAddArea(newArea: newArea, areaChildren: [endarea]);
 
+    setUsedAreaType(lastUsedAreaType);
+
     return newArea;
   }
 
@@ -561,11 +552,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     THIDCommandOption(parentMPID: element.mpID, thID: newTHID);
 
     registerElementWithTHID(element, newTHID);
-  }
-
-  @action
-  void setNewLine(THLine newLine) {
-    _newLine = newLine;
   }
 
   @action
@@ -698,6 +684,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
         _th2FileEditController.execute(command);
+        setUsedLineType(lastUsedLineType);
       }
     } else {
       final int lineMPID = getNewLine().mpID;

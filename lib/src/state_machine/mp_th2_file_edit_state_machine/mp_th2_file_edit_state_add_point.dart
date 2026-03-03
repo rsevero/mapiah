@@ -31,6 +31,9 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
     );
 
     th2FileEditController.execute(command);
+    elementEditController.setUsedPointType(
+      elementEditController.lastUsedPointType,
+    );
     th2FileEditController.triggerNonSelectedElementsRedraw();
 
     return Future.value();
