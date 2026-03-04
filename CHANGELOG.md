@@ -10,6 +10,7 @@
   * PLA types of created elements not added as last and most used types.
   * Creating new line with a subtype throws.
   * Test 3400 failing.
+  * Test 3500 failing.
 * Infrastructure maintenance:
   * Converted MPGeneralController to a MobX store.
   * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.

@@ -689,6 +689,7 @@ class MPCommandFactory {
   static MPCommand editAreasTypeSubtype({
     required List<int> areaMPIDs,
     required String newAreaTypeSubtype,
+    required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editAreasTypeSubtype,
   }) {
@@ -722,12 +723,17 @@ class MPCommandFactory {
 
         commandsList.add(setAreaSubtypeCommand);
       } else {
-        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
-          parentMPID: areaMPID,
-          optionType: THCommandOptionType.subtype,
-        );
+        final THArea area = thFile.areaByMPID(areaMPID);
 
-        commandsList.add(removeSubtypeCommand);
+        if (area.hasOption(THCommandOptionType.subtype)) {
+          final MPCommand removeSubtypeCommand =
+              MPRemoveOptionFromElementCommand(
+                parentMPID: areaMPID,
+                optionType: THCommandOptionType.subtype,
+              );
+
+          commandsList.add(removeSubtypeCommand);
+        }
       }
     }
 
@@ -793,6 +799,7 @@ class MPCommandFactory {
   static MPCommand editLinesTypeSubtype({
     required List<int> lineMPIDs,
     required String newLineTypeSubtype,
+    required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editLinesTypeSubtype,
   }) {
@@ -826,12 +833,17 @@ class MPCommandFactory {
 
         commandsList.add(setLineSubtypeCommand);
       } else {
-        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
-          parentMPID: lineMPID,
-          optionType: THCommandOptionType.subtype,
-        );
+        final THLine line = thFile.lineByMPID(lineMPID);
 
-        commandsList.add(removeSubtypeCommand);
+        if (line.hasOption(THCommandOptionType.subtype)) {
+          final MPCommand removeSubtypeCommand =
+              MPRemoveOptionFromElementCommand(
+                parentMPID: lineMPID,
+                optionType: THCommandOptionType.subtype,
+              );
+
+          commandsList.add(removeSubtypeCommand);
+        }
       }
     }
 

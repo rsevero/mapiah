@@ -496,6 +496,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editAreasTypeSubtype(
           areaMPIDs: mpIDs,
           newAreaTypeSubtype: newPLAType,
+          thFile: _thFile,
         );
 
       case THElementType.line:
@@ -524,6 +525,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editLinesTypeSubtype(
           lineMPIDs: mpIDs,
           newLineTypeSubtype: newPLAType,
+          thFile: _thFile,
         );
       case THElementType.point:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
