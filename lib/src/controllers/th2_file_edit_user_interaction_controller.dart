@@ -551,6 +551,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editPointsTypeSubtype(
           pointMPIDs: mpIDs,
           newPointTypeSubtype: newPLAType,
+          thFile: _thFile,
         );
       default:
         return;

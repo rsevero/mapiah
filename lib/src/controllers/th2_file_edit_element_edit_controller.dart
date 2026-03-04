@@ -759,6 +759,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             parentMPID: _newLine!.mpID,
             subtype: typeSubtype.subtype,
           );
+
           posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
             elements: [_newLine!],
             thFile: _thFile,

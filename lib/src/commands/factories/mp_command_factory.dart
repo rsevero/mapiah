@@ -872,6 +872,7 @@ class MPCommandFactory {
   static MPCommand editPointsTypeSubtype({
     required List<int> pointMPIDs,
     required String newPointTypeSubtype,
+    required THFile thFile,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editPointsTypeSubtype,
   }) {
@@ -905,12 +906,17 @@ class MPCommandFactory {
 
         commandsList.add(setPointSubtypeCommand);
       } else {
-        final MPCommand removeSubtypeCommand = MPRemoveOptionFromElementCommand(
-          parentMPID: pointMPID,
-          optionType: THCommandOptionType.subtype,
-        );
+        final THPoint point = thFile.pointByMPID(pointMPID);
 
-        commandsList.add(removeSubtypeCommand);
+        if (point.hasOption(THCommandOptionType.subtype)) {
+          final MPCommand removeSubtypeCommand =
+              MPRemoveOptionFromElementCommand(
+                parentMPID: pointMPID,
+                optionType: THCommandOptionType.subtype,
+              );
+
+          commandsList.add(removeSubtypeCommand);
+        }
       }
     }
 
