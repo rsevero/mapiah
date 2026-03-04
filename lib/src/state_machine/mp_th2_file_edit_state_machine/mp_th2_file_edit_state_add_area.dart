@@ -30,29 +30,56 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       return Future.value();
     }
 
-    final THArea area = elementEditController.getNewArea();
-    final MPCommand? addLineToAreaCommand = await getAddLineToAreaCommand(
-      event: event,
-      th2FileEditController: th2FileEditController,
-      area: area,
-    );
+    final ({MPCommand? command, THArea? area}) addLineToAreaRecord =
+        await getAddLineToAreaCommand(
+          screenCoordinates: event.localPosition,
+          th2FileEditController: th2FileEditController,
+        );
 
-    if (addLineToAreaCommand == null) {
-      elementEditController.applyRemoveArea(area.mpID);
-
+    if ((addLineToAreaRecord.command == null) ||
+        (addLineToAreaRecord.area == null)) {
       return Future.value();
     }
 
-    final MPCommand addAreaCommand = MPCommandFactory.addAreaFromExisting(
-      existingArea: area,
-      thFile: th2FileEditController.thFile,
+    final THArea area = addLineToAreaRecord.area!;
+    final ({String subtype, String type}) typeSubtype =
+        MPCommandOptionAux.getPLATypeSubtypeRecord(
+          elementEditController.lastUsedAreaType,
+        );
+
+    MPCommand? posCommand;
+
+    if (typeSubtype.subtype != '') {
+      final THCommandOption toSubtypeOption = THSubtypeCommandOption(
+        parentMPID: area.mpID,
+        subtype: typeSubtype.subtype,
+      );
+
+      posCommand = MPCommandFactory.setOptionOnElements(
+        toOption: toSubtypeOption,
+        elements: [area],
+        thFile: thFile,
+      );
+    }
+
+    final List<THElement> areaChildren = area.getChildren(thFile).toList();
+    final MPCommand addAreaCommand = MPAddAreaCommand.forCWJM(
+      newArea: area,
+      areaChildren: areaChildren,
+      areaPositionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
+      posCommand: posCommand,
     );
-    final List<MPCommand> commands = [addAreaCommand, addLineToAreaCommand];
-    final MPCommand addAreaWithLineCommand = MPMultipleElementsCommand.forCWJM(
-      commandsList: commands,
-      completionType: MPMultipleElementsCommandCompletionType.elementsEdited,
-      descriptionType: MPCommandDescriptionType.addArea,
-    );
+    final List<MPCommand> commands = [
+      addAreaCommand,
+      addLineToAreaRecord.command!,
+    ];
+    final MPCommand addAreaWithLineCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: commands,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsEdited,
+          descriptionType: MPCommandDescriptionType.addArea,
+        );
 
     th2FileEditController.execute(addAreaWithLineCommand);
     th2FileEditController.triggerAllElementsRedraw();

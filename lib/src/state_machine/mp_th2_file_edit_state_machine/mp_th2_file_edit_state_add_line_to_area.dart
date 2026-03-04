@@ -46,17 +46,18 @@ class MPTH2FileEditStateAddLineToArea extends MPTH2FileEditState
       return Future.value();
     }
 
-    final MPCommand? addLineToAreaCommand = await getAddLineToAreaCommand(
-      event: event,
-      th2FileEditController: th2FileEditController,
-      area: area,
-    );
+    final ({MPCommand? command, THArea? area}) addLineToAreaRecord =
+        await getAddLineToAreaCommand(
+          screenCoordinates: event.localPosition,
+          th2FileEditController: th2FileEditController,
+          area: area,
+        );
 
-    if (addLineToAreaCommand == null) {
+    if (addLineToAreaRecord.command == null) {
       return Future.value();
     }
 
-    th2FileEditController.execute(addLineToAreaCommand);
+    th2FileEditController.execute(addLineToAreaRecord.command!);
     th2FileEditController.triggerAllElementsRedraw();
 
     return Future.value();

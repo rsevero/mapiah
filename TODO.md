@@ -101,7 +101,7 @@
 [X] - BUG: on some situations, when on 'single edit line' mode, Mapiah ends in no mode.
 [X] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 [X] - Keyboard shorcut to toogle smooth between "on/unset".
-[ ] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
+[X] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
 [ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
 [X] - BUG: Simplification of several lines at once is not working at all.
 [X] - BUG: On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
@@ -149,7 +149,8 @@
 [X] - When editing a line, make straight and Bézier curve line segments visually different.
 [X] - BUG: flatpak version not saving users language choice. [reported by Daniel Bean]
 [X] - BUG: element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
-[ ] - BUG: new area not created with subtype.
+[X] - BUG: new area not created with subtype.
+[ ] - On "Multiple elements clicked" dialog box, show the subtype of each element if it has one. 
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

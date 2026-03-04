@@ -1,24 +1,26 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditPageStateAddLineToAreaMixin {
-  Future<MPCommand?> getAddLineToAreaCommand({
-    required PointerUpEvent event,
+  Future<({MPCommand? command, THArea? area})> getAddLineToAreaCommand({
+    required Offset screenCoordinates,
     required TH2FileEditController th2FileEditController,
-    required THArea area,
+    THArea? area,
   }) async {
     final TH2FileEditSelectionController selectionController =
         th2FileEditController.selectionController;
     final Map<int, THElement> clickedLines = await selectionController
         .getSelectableElementsClickedWithDialog(
-          screenCoordinates: event.localPosition,
+          screenCoordinates: screenCoordinates,
           selectionType: THSelectionType.line,
           canBeMultiple: false,
           presentMultipleElementsClickedWidget: true,
         );
 
     if (clickedLines.isEmpty) {
-      return Future.value();
+      return Future.value((command: null, area: null));
     }
+
+    area ??= th2FileEditController.elementEditController.getNewArea();
 
     final THLine line = clickedLines.values.first as THLine;
     final MPCommand addLineToAreaCommand = MPCommandFactory.addLineToArea(
@@ -27,6 +29,6 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
       thFile: th2FileEditController.thFile,
     );
 
-    return addLineToAreaCommand;
+    return Future.value((command: addLineToAreaCommand, area: area));
   }
 }

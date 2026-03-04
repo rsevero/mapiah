@@ -12,6 +12,7 @@
   * Test 3400 failing.
   * Test 3500 failing.
   * Unknown subtypes shown as internal subtype ID (all user type subtypes).
+  * Setting subtype should update the last used subtype for the PLA type.
 * Infrastructure maintenance:
   * Converted MPGeneralController to a MobX store.
   * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.

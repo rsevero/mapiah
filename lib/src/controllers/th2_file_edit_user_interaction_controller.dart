@@ -94,6 +94,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             (!element.hasOption(option.type) ||
                 element.getOption(option.type) != option)) {
           actualElementsForNewOption.add(element);
+
+          if (option is THSubtypeCommandOption) {
+            _setLastPLATypeSubtypeFromElementAndSubtype(
+              element: element,
+              subtype: option.subtype,
+            );
+          }
         }
       }
 
@@ -120,6 +127,36 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           _th2FileEditController.optionEditController.updateOptionStateMap();
         }
       }
+    }
+  }
+
+  void _setLastPLATypeSubtypeFromElementAndSubtype({
+    required THElement element,
+    required String subtype,
+  }) {
+    if (element is! THHasPLATypeMixin) {
+      return;
+    }
+
+    final TH2FileEditElementEditController elementEditController =
+        _th2FileEditController.elementEditController;
+
+    switch (element) {
+      case THPoint point:
+        elementEditController.setUsedPointType(
+          pointType: point.pointType.name,
+          pointSubtype: subtype,
+        );
+      case THLine line:
+        elementEditController.setUsedLineType(
+          lineType: line.lineType.name,
+          lineSubtype: subtype,
+        );
+      case THArea area:
+        elementEditController.setUsedAreaType(
+          areaType: area.areaType.name,
+          areaSubtype: subtype,
+        );
     }
   }
 
@@ -192,6 +229,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       for (final element in candidateElementsForNewOption) {
         if ((element is THHasOptionsMixin) && element.hasOption(optionType)) {
           parentMPIDs.add(element.mpID);
+
+          if (optionType is THSubtypeCommandOption) {
+            _setLastPLATypeSubtypeFromElementAndSubtype(
+              element: element,
+              subtype: '',
+            );
+          }
         }
       }
 
