@@ -207,9 +207,13 @@ class MPTextToUser {
   }
 
   static String getSubtypeAsString(String subtype) {
-    return _subtypeAsString.containsKey(subtype)
-        ? _subtypeAsString[subtype]!
-        : subtype;
+    if (_subtypeAsString.containsKey(subtype)) {
+      return _subtypeAsString[subtype]!;
+    } else {
+      final List<String> parts = subtype.split('|');
+
+      return parts.last;
+    }
   }
 
   static void _initializeProjectionModeTypeAsString() {

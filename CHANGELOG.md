@@ -11,6 +11,7 @@
   * Creating new line with a subtype throws.
   * Test 3400 failing.
   * Test 3500 failing.
+  * Unknown subtypes shown as internal subtype ID (all user type subtypes).
 * Infrastructure maintenance:
   * Converted MPGeneralController to a MobX store.
   * Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.
