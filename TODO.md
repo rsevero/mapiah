@@ -149,6 +149,7 @@
 [X] - When editing a line, make straight and Bézier curve line segments visually different.
 [X] - BUG: flatpak version not saving users language choice. [reported by Daniel Bean]
 [X] - BUG: element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
+[ ] - BUG: new area not created with subtype.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

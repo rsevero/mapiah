@@ -16,6 +16,8 @@
   * Removed unused methods from TH2FileEditElementEditController.
   * Created addPoint() method in TH2FileEditElementEditController.
   * Monitoring subtypes with last used PLA types.
+  * flutter upgrade to 3.41.3
+  * flutter pub upgrade --major-versions
 
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
 
