@@ -70,25 +70,25 @@ class MPLinuxTherionRunner extends MPPlatformTherionRunner {
   _buildCompileInvocation({required String therionFileName}) {
     final String therionExecutablePath = _resolveTherionExecutablePath();
 
-    if (mpIsFlathub) {
-      final List<String> processArguments = <String>[
-        mpFlatpakSpawnHostArgument,
-        therionExecutablePath,
-        therionFileName,
-      ];
-      final String commandLine = joinNonEmptyParts(<String>[
-        mpFlatpakSpawnExecutableName,
-        mpFlatpakSpawnHostArgument,
-        therionExecutablePath,
-        therionFileName,
-      ]);
+    // if (mpIsFlathub) {
+    //   final List<String> processArguments = <String>[
+    //     mpFlatpakSpawnHostArgument,
+    //     therionExecutablePath,
+    //     therionFileName,
+    //   ];
+    //   final String commandLine = joinNonEmptyParts(<String>[
+    //     mpFlatpakSpawnExecutableName,
+    //     mpFlatpakSpawnHostArgument,
+    //     therionExecutablePath,
+    //     therionFileName,
+    //   ]);
 
-      return (
-        commandLine: commandLine,
-        executablePath: mpFlatpakSpawnExecutableName,
-        processArguments: processArguments,
-      );
-    }
+    //   return (
+    //     commandLine: commandLine,
+    //     executablePath: mpFlatpakSpawnExecutableName,
+    //     processArguments: processArguments,
+    //   );
+    // }
 
     final List<String> processArguments = <String>[therionFileName];
     final String commandLine = joinNonEmptyParts(<String>[
