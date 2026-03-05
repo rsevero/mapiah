@@ -57,6 +57,45 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.39" date="2026-03-05">
+      <description>
+        <p>0.2.39 - 2026-03-05 - The Seeds of Love release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).</li>
+          <li>Showing PLA type and subtype at PLA overlay window.</li>
+          <li>Setting PLA type and subtype at PLA overlay window.</li>
+          <li>Element type showing also subtype on multiple elements clicked overlay window.</li>
+          <li>Flathub/flatpak release running embedded Therion.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue #16)]</li>
+          <li>PLA types of created elements not added as last and most used types.</li>
+          <li>Creating new line with a subtype throws.</li>
+          <li>Test 3400 failing.</li>
+          <li>Test 3500 failing.</li>
+          <li>Unknown subtypes shown as internal subtype ID (all user type subtypes).</li>
+          <li>Setting subtype should update the last used subtype for the PLA type.</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Converted MPGeneralController to a MobX store.</li>
+          <li>Created MPButtonTypes chooseTHConfigAndRunTherion and runTherion to run Therion.</li>
+          <li>Created TH2FileEditcontroller.getTHFileWidgetBuildContext().</li>
+          <li>Removed unused methods from TH2FileEditElementEditController.</li>
+          <li>Created addPoint() method in TH2FileEditElementEditController.</li>
+          <li>Monitoring subtypes with last used PLA types.</li>
+          <li>flutter upgrade to 3.41.3</li>
+          <li>flutter pub upgrade --major-versions</li>
+          <li>Embedding Therion (and its dependencies) in Flathub/Flatpak release.</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.2.38" date="2026-03-01">
       <description>
         <p>0.2.38 - 2026-06-01 - The Run therion in Flathub release</p>

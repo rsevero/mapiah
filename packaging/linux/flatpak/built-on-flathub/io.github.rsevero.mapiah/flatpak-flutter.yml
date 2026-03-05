@@ -67,7 +67,6 @@ modules:
       - type: git
         url: https://github.com/therion/therion.git
         tag: v6.3.4
-        commit: 17059ab27ce491f1edac150da2b7e2011f79b800
       - type: patch
         path: flatpak-v634-conditional-components.patch
 
@@ -109,8 +108,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/rsevero/mapiah.git
-        tag: v0.2.39-rc2
-        commit: 62a837d6d98653ca66e78e6859b0c2e78fe8937d
+        tag: v0.2.39
       - type: file
         path: io.github.rsevero.mapiah.metainfo.xml
       - generated/sources/pubspec.json
