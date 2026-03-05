@@ -3,51 +3,94 @@ runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-- org.freedesktop.Sdk.Extension.llvm19
+  - org.freedesktop.Sdk.Extension.llvm19
 command: mapiah
 finish-args:
-- --device=dri
-- --env=GIO_USE_PORTAL=0
-- --env=GTK_USE_PORTAL=0
-- --filesystem=home
-- --share=ipc
-- --share=network
-- --socket=fallback-x11
-- --socket=wayland
-- --talk-name=org.freedesktop.Flatpak
+  - --device=dri
+  - --env=GIO_USE_PORTAL=1
+  - --env=GTK_USE_PORTAL=1
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --talk-name=org.freedesktop.ColorManager
+  - --talk-name=org.freedesktop.Notifications
+cleanup:
+  - /share/doc
+  - /share/man
+  - /share/pkgconfig
+  - '*.la'
+  - '*.a'
 modules:
-- name: mapiah
-  buildsystem: simple
-  build-options:
-    arch:
-      x86_64:
-        env:
-          BUNDLE_PATH: build/linux/x64/release/bundle
-      aarch64:
-        env:
-          BUNDLE_PATH: build/linux/arm64/release/bundle
-    append-path: /usr/lib/sdk/llvm19/bin:/run/build/mapiah/flutter/bin
-    prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
-    env:
-      PUB_CACHE: /run/build/mapiah/.pub-cache
-  build-commands:
-  - flutter build linux --release --no-pub --dart-define=isFlathub=true
-  - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
-  - cp -r $BUNDLE_PATH/lib /app/bin/lib
-  - cp -r $BUNDLE_PATH/data /app/bin/data
-  - install -Dm644 io.github.rsevero.mapiah.metainfo.xml -t /app/share/metainfo
-  - install -Dm644 packaging/linux/io.github.rsevero.mapiah.desktop -t /app/share/applications
-  - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/io.github.rsevero.mapiah.png
-  sources:
-  - type: git
-    url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.38
-  - type: file
-    path: io.github.rsevero.mapiah.metainfo.xml
-  - type: git
-    url: https://github.com/flutter/flutter.git
-    tag: 3.41.2
+  - name: proj
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/OSGeo/PROJ/archive/refs/tags/9.7.1.tar.gz
+        sha256: 83fb1ccd351331a89b3da69c67aee118ab3a381f15745572c4679b597a17514c
+
+  - name: fmt
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz
+        sha256: ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
+
+  - name: tclsh-compat
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/bin
+      - ln -sf /usr/bin/tclsh8.6 /app/bin/tclsh
+
+  - name: therion
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DUSE_BUNDLED_CATCH2=ON
+      - -DBUILD_LOCH=OFF
+      - -DBUILD_THBOOK=OFF
+      - -DBUILD_XTHERION=OFF
+    sources:
+      - type: git
+        url: https://github.com/therion/therion.git
+        tag: 'v6.3.4'
+      - type: patch
+        path: flatpak-v634-conditional-components.patch
+
+  - name: mapiah
+    buildsystem: simple
+    build-options:
+      arch:
+        x86_64:
+          env:
+            BUNDLE_PATH: build/linux/x64/release/bundle
+        aarch64:
+          env:
+            BUNDLE_PATH: build/linux/arm64/release/bundle
+      append-path: /usr/lib/sdk/llvm19/bin:/run/build/mapiah/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      env:
+        PUB_CACHE: /run/build/mapiah/.pub-cache
+    build-commands:
+      - flutter build linux --release --no-pub --dart-define=isFlathub=true
+      - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
+      - cp -r $BUNDLE_PATH/lib /app/bin/lib
+      - cp -r $BUNDLE_PATH/data /app/bin/data
+      - install -Dm644 io.github.rsevero.mapiah.metainfo.xml -t /app/share/metainfo
+      - install -Dm644 packaging/linux/io.github.rsevero.mapiah.desktop -t /app/share/applications
+      - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/io.github.rsevero.mapiah.png
+    sources:
+      - type: git
+        url: https://github.com/rsevero/mapiah.git
+        tag: v0.2.39-rc1
+      - type: file
+        path: io.github.rsevero.mapiah.metainfo.xml
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        tag: 3.41.3
     dest: flutter
