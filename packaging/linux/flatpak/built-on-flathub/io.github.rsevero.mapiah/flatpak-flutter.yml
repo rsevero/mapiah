@@ -4,11 +4,22 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
-command: mapiah
+  - org.freedesktop.Sdk.Extension.texlive
+command: mapiah-wrapper
 finish-args:
   - --device=dri
   - --env=GIO_USE_PORTAL=1
   - --env=GTK_USE_PORTAL=1
+  - --env=LD_LIBRARY_PATH=/app/texlive/lib
+  - --env=LD_LIBRARY_PATH=/app/texlive/lib
+  - --env=PATH=/app/bin:/usr/bin
+  - --env=PATH=/app/bin:/usr/bin
+  - --env=TEXFORMATS=/app/texlive/texmf-var/web2c:/app/texlive/texmf-dist/metapost/base
+  - --env=TEXMFCACHE=/var/cache/texmf
+  - --env=TEXMFCNF=/app/texlive/texmf-dist/web2c
+  - --env=TEXMFDIST=/app/texlive/texmf-dist
+  - --env=TEXMFSYSVAR=/app/texlive/texmf-var
+  - --env=TEXMFVAR=/var/cache/texmf
   - --share=ipc
   - --share=network
   - --socket=fallback-x11
@@ -20,6 +31,114 @@ cleanup:
   - '*.la'
   - '*.a'
 modules:
+  - name: texlive-mpost-runtime
+    buildsystem: simple
+    build-commands:
+      # Layout
+      - install -d /app/texlive/bin /app/texlive/lib /app/texlive/texmf-dist /app/bin
+
+      # Detect arch folder used by texlive extension
+      - |
+        case "$(uname -m)" in
+          x86_64) TL_ARCH="x86_64-linux" ;;
+          aarch64) TL_ARCH="aarch64-linux" ;;
+          *) echo "Unsupported arch: $(uname -m)" >&2; exit 1 ;;
+        esac
+
+        TL_ROOT="/usr/lib/sdk/texlive"
+        TL_BIN_DIR="$TL_ROOT/bin/$TL_ARCH"
+
+        # 1) Binaries
+        install -Dm755 "$TL_BIN_DIR/mpost" "/app/texlive/bin/mpost.real"
+        install -Dm755 "$TL_BIN_DIR/kpsewhich" "/app/texlive/bin/kpsewhich"
+        ln -sf /app/texlive/bin/kpsewhich /app/bin/kpsewhich
+
+        # mpost wrapper: use regular mode when format files exist; fallback to -ini mode otherwise.
+        cat > /app/bin/mpost <<'EOF'
+        #!/usr/bin/env sh
+        REAL="/app/texlive/bin/mpost.real"
+        PLAIN_MP="/app/texlive/texmf-dist/metapost/base/plain"
+
+        has_fmt() {
+          [ -f /app/texlive/texmf-var/web2c/mpost.mem ] || [ -f /app/texlive/texmf-var/web2c/plain.mem ]
+        }
+
+        if has_fmt; then
+          exec "$REAL" "$@"
+        fi
+
+        input=""
+        for arg in "$@"; do
+          case "$arg" in
+            -*) ;;
+            *) input="$arg"; break ;;
+          esac
+        done
+
+        if [ -n "$input" ] && [ -f "$input" ]; then
+          job="$(basename "$input")"
+          job="${job%.mp}"
+          echo "Warning: no mpost/ plain .mem found, using -ini fallback" >&2
+          exec "$REAL" -ini -jobname="$job" "\\input ${PLAIN_MP} ; input ${input}"
+        fi
+
+        exec "$REAL" "$@"
+        EOF
+        chmod 0755 /app/bin/mpost
+
+        # 2) Copy texlive-provided private libs linked by bundled binaries
+        #    (system libs from runtime are not copied)
+        for bin in "$TL_BIN_DIR/mpost" "$TL_BIN_DIR/kpsewhich"; do
+          ldd "$bin" | awk '{print $3}'
+        done | grep "^$TL_ROOT/" | sort -u | while read -r lib; do
+          install -Dm755 "$lib" "/app/texlive/lib/$(basename "$lib")"
+        done
+
+        # 3) Requested TeX subtrees for runtime
+        install -d /app/texlive/texmf-dist/metapost
+        cp -a "$TL_ROOT/texmf-dist/metapost/base" /app/texlive/texmf-dist/metapost/ || true
+
+        install -d /app/texlive/texmf-dist/tex/plain
+        cp -a "$TL_ROOT/texmf-dist/tex/plain/base" /app/texlive/texmf-dist/tex/plain/ || true
+
+        install -d /app/texlive/texmf-dist/tex/generic
+        cp -a "$TL_ROOT/texmf-dist/tex/generic/pdftex" /app/texlive/texmf-dist/tex/generic/ || true
+
+        install -d /app/texlive/texmf-dist/fonts
+        cp -a "$TL_ROOT/texmf-dist/fonts/tfm" /app/texlive/texmf-dist/fonts/ || true
+        cp -a "$TL_ROOT/texmf-dist/fonts/type1" /app/texlive/texmf-dist/fonts/ || true
+
+        install -d /app/texlive/texmf-dist/fonts/map
+        cp -a "$TL_ROOT/texmf-dist/fonts/map/pdftex" /app/texlive/texmf-dist/fonts/map/ || true
+
+        # web2c is still needed for kpathsea defaults
+        cp -a "$TL_ROOT/texmf-dist/web2c" /app/texlive/texmf-dist/ || true
+
+        install -d /app/texlive/texmf-var/web2c
+
+        # 3b) Install any prebuilt format files from the SDK extension if present.
+        find "$TL_ROOT" -type f \( -name plain.mem -o -name mpost.mem \) | while read -r mem; do
+          case "$(basename "$mem")" in
+            plain.mem)
+              install -Dm644 "$mem" /app/texlive/texmf-var/web2c/plain.mem
+              ;;
+            mpost.mem)
+              install -Dm644 "$mem" /app/texlive/texmf-var/web2c/mpost.mem
+              ;;
+          esac
+        done
+
+        # MetaPost may look for mpost.mem first and then plain.mem.
+        if [ ! -f /app/texlive/texmf-var/web2c/mpost.mem ] && [ -f /app/texlive/texmf-var/web2c/plain.mem ]; then
+          ln -sf plain.mem /app/texlive/texmf-var/web2c/mpost.mem
+        fi
+
+        # 4) Writable cache dirs created at build time (runtime will use XDG cache)
+        install -d /app/texlive/var /app/texlive/cache
+
+    # No sources: this module repackages files from sdk-extension at build time.
+    # Keep sdk-extensions: [org.freedesktop.Sdk.Extension.texlive] at top-level manifest.
+    sources: []
   - name: proj
     buildsystem: cmake
     sources:
@@ -82,6 +201,17 @@ modules:
       - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/io.github.rsevero.mapiah.png
       - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/io.github.rsevero.mapiah.png
       - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/io.github.rsevero.mapiah.png
+      - |
+        cat > /app/bin/mapiah-wrapper <<'EOF'
+        #!/usr/bin/env sh
+        if command -v kpsewhich >/dev/null 2>&1; then
+          echo "TEXMFVAR=$(kpsewhich -var-value=TEXMFVAR 2>/dev/null || true)" >&2
+        else
+          echo "TEXMFVAR: kpsewhich not found" >&2
+        fi
+        exec /app/bin/mapiah "$@"
+        EOF
+      - chmod 0755 /app/bin/mapiah-wrapper
     sources:
       - type: git
         url: https://github.com/rsevero/mapiah.git
