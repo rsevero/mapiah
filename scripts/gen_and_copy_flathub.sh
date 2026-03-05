@@ -13,6 +13,7 @@ FLATPAK_FLUTTER="$ROOT_DIR/.tools/flatpak-flutter/flatpak-flutter.py"
 PUBSPEC="$ROOT_DIR/pubspec.yaml"
 METAINFO="$ROOT_DIR/packaging/linux/io.github.rsevero.mapiah.metainfo.xml"
 SOURCE_MANIFEST="$ROOT_DIR/packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml"
+THERION_PATCH="$ROOT_DIR/packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-v634-conditional-components.patch"
 
 echo "Manifest: $MANIFEST"
 echo "Generator: $FLATPAK_FLUTTER"
@@ -192,6 +193,11 @@ if [ -f "$PKG_DIR/io.github.rsevero.mapiah.metainfo.xml" ]; then
 fi
 if [ -f "$PKG_DIR/io.github.rsevero.mapiah.desktop" ]; then
   cp -f "$PKG_DIR/io.github.rsevero.mapiah.desktop" "$TARGET/"
+fi
+
+# Copy local patches referenced by the manifest.
+if [ -f "$THERION_PATCH" ]; then
+  cp -f "$THERION_PATCH" "$TARGET/"
 fi
 
 # Copy icons if present

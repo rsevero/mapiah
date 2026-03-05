@@ -1,0 +1,77 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,7 @@
+ option(BUILD_LOCH "Build loch executable." ON)
+ option(BUILD_THBOOK "Build thbook.pdf." ON)
+ option(BUILD_XTHERION "Build xtherion." ON)
++option(BUILD_TESTING "Build unit tests." ON)
+ 
+ include(GNUInstallDirs)
+ include(BuildType)
+@@ -191,26 +192,28 @@
+         COMPONENT th-runtime)
+ 
+     # unit tests
+-    add_executable(utest 
+-        utest-main.cxx
+-        utest-proj.cxx
+-        utest-str.cxx
+-        utest-thdatastation.cxx
+-        utest-thdb2dab.cxx
+-        utest-thdouble.cxx
+-        utest-thexception.cxx
+-        utest-thlayoutln.cxx
+-        utest-thlogfile.cxx
+-        utest-thobjectid.cxx
+-        utest-thobjectsrc.cxx
+-        utest-thscrapen.cxx
+-        utest-thscraplo.cxx
+-    )
+-    target_link_libraries(utest PUBLIC therion-common catch2-interface)
+-    enable_testing()
+-    add_test(NAME utest COMMAND $<TARGET_FILE:utest> WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+-    if (ENABLE_CODE_COVERAGE)
+-        set_property(TEST utest PROPERTY ENVIRONMENT LLVM_PROFILE_FILE=${COVERAGE_FOLDER}/utest.profraw)
++    if (BUILD_TESTING)
++        add_executable(utest 
++            utest-main.cxx
++            utest-proj.cxx
++            utest-str.cxx
++            utest-thdatastation.cxx
++            utest-thdb2dab.cxx
++            utest-thdouble.cxx
++            utest-thexception.cxx
++            utest-thlayoutln.cxx
++            utest-thlogfile.cxx
++            utest-thobjectid.cxx
++            utest-thobjectsrc.cxx
++            utest-thscrapen.cxx
++            utest-thscraplo.cxx
++        )
++        target_link_libraries(utest PUBLIC therion-common catch2-interface)
++        enable_testing()
++        add_test(NAME utest COMMAND $<TARGET_FILE:utest> WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
++        if (ENABLE_CODE_COVERAGE)
++            set_property(TEST utest PROPERTY ENVIRONMENT LLVM_PROFILE_FILE=${COVERAGE_FOLDER}/utest.profraw)
++        endif()
+     endif()
+ 
+     # updates thlibrarydata.cxx
+@@ -228,8 +231,14 @@
+      add_subdirectory(samples)
+ endif()
+
+ add_subdirectory(loch)
+-add_subdirectory(thbook)
+-add_subdirectory(xtherion)
++
++if (BUILD_THBOOK)
++    add_subdirectory(thbook)
++endif()
++
++if (BUILD_XTHERION)
++    add_subdirectory(xtherion)
++endif()
+ 
+ # deployment of DLL dependencies on Windows
+ if (BUILD_THERION AND BUILD_LOCH AND WIN32)

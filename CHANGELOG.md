@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.2.39 - not yet released
+## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
   * Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).
   * Showing PLA type and subtype at PLA overlay window.
   * Setting PLA type and subtype at PLA overlay window.
   * Element type showing also subtype on multiple elements clicked overlay window.
+  * Flathub/flatpak release running embedded Therion.
 * Fixed bugs:
   * THConfig select file dialog not accepting common thconfig files. [reported by CaverBruce (issue [#16](https://github.com/rsevero/mapiah/issues/16))]
   * PLA types of created elements not added as last and most used types.
@@ -23,9 +24,9 @@
   * Monitoring subtypes with last used PLA types.
   * flutter upgrade to 3.41.3
   * flutter pub upgrade --major-versions
+  * Embedding Therion (and its dependencies) in Flathub/Flatpak release.
 
 ## 0.2.38 - 2026-06-01 - The [Run therion in Flathub] release
-
 * Bug fixes:
   * Flatpak release not running Therion from Mapiah.
 

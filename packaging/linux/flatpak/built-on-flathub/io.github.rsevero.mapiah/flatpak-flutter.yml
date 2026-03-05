@@ -3,51 +3,398 @@ runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-- org.freedesktop.Sdk.Extension.llvm19
-command: mapiah
+  - org.freedesktop.Sdk.Extension.llvm19
+  - org.freedesktop.Sdk.Extension.texlive
+command: mapiah-wrapper
 finish-args:
-- --device=dri
-- --env=GIO_USE_PORTAL=0
-- --env=GTK_USE_PORTAL=0
-- --filesystem=home
-- --share=ipc
-- --share=network
-- --socket=fallback-x11
-- --socket=wayland
-- --talk-name=org.freedesktop.Flatpak
+  - --device=dri
+  - --env=GIO_USE_PORTAL=1
+  - --env=GTK_USE_PORTAL=1
+  - --env=LD_LIBRARY_PATH=/app/texlive/lib
+  - --env=PATH=/app/bin:/usr/bin
+  - --env=TEXFORMATS=/app/texlive/texmf-var/web2c:/app/texlive/texmf-dist/metapost/base
+  - --env=TEXFONTMAPS=/app/texlive/texmf-dist/fonts/map/pdftex//:/app/texlive/texmf-dist/fonts/map//:/app/texlive/texmf-var/web2c
+  - --env=TEXMFCACHE=/var/cache/texmf
+  - --env=TEXMFCNF=/app/texlive/texmf-dist/web2c
+  - --env=TEXMFDIST=/app/texlive/texmf-dist
+  - --env=TEXMFSYSVAR=/app/texlive/texmf-var
+  - --env=TEXMFVAR=/var/cache/texmf
+  - --env=TFMFONTS=/app/texlive/texmf-dist/fonts/tfm//:/app/texlive/texmf-var/fonts/tfm//
+  - --env=T1FONTS=/app/texlive/texmf-dist/fonts/type1//
+  - --env=VARTEXFONTS=/var/cache/texmf/fonts
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+cleanup:
+  - /share/doc
+  - /share/man
+  - /share/pkgconfig
+  - '*.la'
+  - '*.a'
 modules:
-- name: mapiah
-  buildsystem: simple
-  build-options:
-    arch:
-      x86_64:
-        env:
-          BUNDLE_PATH: build/linux/x64/release/bundle
-      aarch64:
-        env:
-          BUNDLE_PATH: build/linux/arm64/release/bundle
-    append-path: /usr/lib/sdk/llvm19/bin:/run/build/mapiah/flutter/bin
-    prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
-    env:
-      PUB_CACHE: /run/build/mapiah/.pub-cache
-  build-commands:
-  - flutter build linux --release --no-pub --dart-define=isFlathub=true
-  - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
-  - cp -r $BUNDLE_PATH/lib /app/bin/lib
-  - cp -r $BUNDLE_PATH/data /app/bin/data
-  - install -Dm644 io.github.rsevero.mapiah.metainfo.xml -t /app/share/metainfo
-  - install -Dm644 packaging/linux/io.github.rsevero.mapiah.desktop -t /app/share/applications
-  - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/io.github.rsevero.mapiah.png
-  - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/io.github.rsevero.mapiah.png
-  sources:
-  - type: git
-    url: https://github.com/rsevero/mapiah.git
-    tag: v0.2.38
-  - type: file
-    path: io.github.rsevero.mapiah.metainfo.xml
-  - type: git
-    url: https://github.com/flutter/flutter.git
-    tag: 3.41.2
-    dest: flutter
+  - name: proj
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/OSGeo/PROJ/archive/refs/tags/9.7.1.tar.gz
+        sha256: 83fb1ccd351331a89b3da69c67aee118ab3a381f15745572c4679b597a17514c
+
+  - name: fmt
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/fmtlib/fmt/archive/refs/tags/12.1.0.tar.gz
+        sha256: ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
+
+  - name: tclsh-compat
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/bin
+      - ln -sf /usr/bin/tclsh8.6 /app/bin/tclsh
+
+  - name: therion
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DUSE_BUNDLED_CATCH2=ON
+      - -DBUILD_LOCH=OFF
+      - -DBUILD_THBOOK=OFF
+      - -DBUILD_XTHERION=OFF
+    sources:
+      - type: git
+        url: https://github.com/therion/therion.git
+        tag: v6.3.4
+        commit: 17059ab27ce491f1edac150da2b7e2011f79b800
+      - type: patch
+        path: flatpak-v634-conditional-components.patch
+
+  - name: mapiah
+    buildsystem: simple
+    build-options:
+      arch:
+        x86_64:
+          env:
+            BUNDLE_PATH: build/linux/x64/release/bundle
+        aarch64:
+          env:
+            BUNDLE_PATH: build/linux/arm64/release/bundle
+      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      env:
+        PUB_CACHE: /run/build/mapiah/.pub-cache
+    build-commands:
+      - setup-flutter.sh
+      - flutter build linux --release --no-pub --dart-define=isFlathub=true
+      - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
+      - cp -r $BUNDLE_PATH/lib /app/bin/lib
+      - cp -r $BUNDLE_PATH/data /app/bin/data
+      - install -Dm644 io.github.rsevero.mapiah.metainfo.xml -t /app/share/metainfo
+      - install -Dm644 packaging/linux/io.github.rsevero.mapiah.desktop -t /app/share/applications
+      - install -Dm644 assets/icons/m-64x64.png /app/share/icons/hicolor/64x64/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-128x128.png /app/share/icons/hicolor/128x128/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-256x256.png /app/share/icons/hicolor/256x256/apps/io.github.rsevero.mapiah.png
+      - install -Dm644 assets/icons/m-512x512.png /app/share/icons/hicolor/512x512/apps/io.github.rsevero.mapiah.png
+      - |
+        # Therion extra tree (equivalent to old Setup/texmf/tex)
+        for d in Setup/texmf/tex setup/texmf/tex therion/Setup/texmf/tex; do
+          if [ -d "$d" ]; then
+            install -d /app/texlive/texmf
+            cp -a "$d" /app/texlive/texmf/tex
+            break
+          fi
+        done
+    sources:
+      - type: git
+        url: https://github.com/rsevero/mapiah.git
+        tag: v0.2.39-rc2
+        commit: 62a837d6d98653ca66e78e6859b0c2e78fe8937d
+      - type: file
+        path: io.github.rsevero.mapiah.metainfo.xml
+      - generated/sources/pubspec.json
+    modules:
+      - generated/modules/flutter-sdk-3.41.3.json
+
+  - name: texlive-mpost-runtime
+    buildsystem: simple
+    build-commands:
+      # Layout
+      - install -d /app/texlive/bin /app/texlive/lib /app/texlive/texmf-dist /app/bin
+
+      # Detect arch folder used by texlive extension
+      - |
+        case "$(uname -m)" in
+          x86_64) TL_ARCH="x86_64-linux" ;;
+          aarch64) TL_ARCH="aarch64-linux" ;;
+          *) echo "Unsupported arch: $(uname -m)" >&2; exit 1 ;;
+        esac
+
+        TL_ROOT="/usr/lib/sdk/texlive"
+        TL_BIN_DIR="$TL_ROOT/bin/$TL_ARCH"
+
+        # 1) Binaries
+        install -Dm755 "$TL_BIN_DIR/mpost" "/app/texlive/bin/mpost.real"
+        install -Dm755 "$TL_BIN_DIR/kpsewhich" "/app/texlive/bin/kpsewhich"
+        ln -sf /app/texlive/bin/kpsewhich /app/bin/kpsewhich
+
+        MKTEXFMT_SRC=""
+        if [ -x "$TL_BIN_DIR/mktexfmt" ]; then
+          MKTEXFMT_SRC="$TL_BIN_DIR/mktexfmt"
+        elif [ -x "$TL_ROOT/texmf-dist/web2c/mktexfmt" ]; then
+          MKTEXFMT_SRC="$TL_ROOT/texmf-dist/web2c/mktexfmt"
+        else
+          echo "Error: mktexfmt not found in TeX Live extension" >&2
+          exit 1
+        fi
+        install -Dm755 "$MKTEXFMT_SRC" "/app/texlive/bin/mktexfmt"
+        ln -sf /app/texlive/bin/mktexfmt /app/bin/mktexfmt
+        echo "Installed mktexfmt: $MKTEXFMT_SRC -> /app/bin/mktexfmt" >&2
+
+        MKTEXTFM_SRC=""
+        if [ -x "$TL_BIN_DIR/mktextfm" ]; then
+          MKTEXTFM_SRC="$TL_BIN_DIR/mktextfm"
+        elif [ -x "$TL_ROOT/texmf-dist/web2c/mktextfm" ]; then
+          MKTEXTFM_SRC="$TL_ROOT/texmf-dist/web2c/mktextfm"
+        else
+          echo "Error: mktextfm not found in TeX Live extension" >&2
+          exit 1
+        fi
+        install -Dm755 "$MKTEXTFM_SRC" "/app/texlive/bin/mktextfm"
+        ln -sf /app/texlive/bin/mktextfm /app/bin/mktextfm
+        echo "Installed mktextfm: $MKTEXTFM_SRC -> /app/bin/mktextfm" >&2
+
+        MKTEXPK_SRC=""
+        if [ -x "$TL_BIN_DIR/mktexpk" ]; then
+          MKTEXPK_SRC="$TL_BIN_DIR/mktexpk"
+        elif [ -x "$TL_ROOT/texmf-dist/web2c/mktexpk" ]; then
+          MKTEXPK_SRC="$TL_ROOT/texmf-dist/web2c/mktexpk"
+        else
+          echo "Error: mktexpk not found in TeX Live extension" >&2
+          exit 1
+        fi
+        install -Dm755 "$MKTEXPK_SRC" "/app/texlive/bin/mktexpk"
+        ln -sf /app/texlive/bin/mktexpk /app/bin/mktexpk
+        echo "Installed mktexpk: $MKTEXPK_SRC -> /app/bin/mktexpk" >&2
+
+        ETEX_BIN=""
+        if [ -x "$TL_BIN_DIR/etex" ]; then
+          install -Dm755 "$TL_BIN_DIR/etex" "/app/texlive/bin/etex.real"
+          ln -sf /app/texlive/bin/etex.real /app/bin/etex
+          ETEX_BIN="$TL_BIN_DIR/etex"
+          echo "Installed etex variant: $ETEX_BIN -> /app/bin/etex" >&2
+        elif [ -x "$TL_BIN_DIR/pdfetex" ]; then
+          install -Dm755 "$TL_BIN_DIR/pdfetex" "/app/texlive/bin/pdfetex"
+          ln -sf /app/texlive/bin/pdfetex /app/bin/etex
+          ETEX_BIN="$TL_BIN_DIR/pdfetex"
+          echo "Installed etex variant: $ETEX_BIN -> /app/bin/etex" >&2
+        else
+          echo "Error: neither etex nor pdfetex found in $TL_BIN_DIR" >&2
+          exit 1
+        fi
+
+        PDFTEX_BIN=""
+        if [ -x "$TL_BIN_DIR/pdftex" ]; then
+          install -Dm755 "$TL_BIN_DIR/pdftex" "/app/texlive/bin/pdftex.real"
+          ln -sf /app/texlive/bin/pdftex.real /app/bin/pdftex
+          PDFTEX_BIN="$TL_BIN_DIR/pdftex"
+          echo "Installed pdftex variant: $PDFTEX_BIN -> /app/bin/pdftex" >&2
+        elif [ -x "$TL_BIN_DIR/pdfetex" ]; then
+          install -Dm755 "$TL_BIN_DIR/pdfetex" "/app/texlive/bin/pdfetex"
+          ln -sf /app/texlive/bin/pdfetex /app/bin/pdftex
+          PDFTEX_BIN="$TL_BIN_DIR/pdfetex"
+          echo "Installed pdftex variant: $PDFTEX_BIN -> /app/bin/pdftex" >&2
+        else
+          echo "Error: neither pdftex nor pdfetex found in $TL_BIN_DIR" >&2
+          exit 1
+        fi
+
+        # mpost wrapper: use regular mode when format files exist; fallback to -ini mode otherwise.
+        cat > /app/bin/mpost <<'EOF'
+        #!/usr/bin/env sh
+        REAL="/app/texlive/bin/mpost.real"
+        PLAIN_MP="/app/texlive/texmf-dist/metapost/base/plain"
+
+        has_fmt() {
+          [ -f /app/texlive/texmf-var/web2c/mpost.mem ] || [ -f /app/texlive/texmf-var/web2c/plain.mem ]
+        }
+
+        if has_fmt; then
+          exec "$REAL" "$@"
+        fi
+
+        input=""
+        for arg in "$@"; do
+          case "$arg" in
+            -*) ;;
+            *) input="$arg"; break ;;
+          esac
+        done
+
+        if [ -n "$input" ] && [ -f "$input" ]; then
+          job="$(basename "$input")"
+          job="${job%.mp}"
+          echo "Warning: no mpost/ plain .mem found, using -ini fallback" >&2
+          exec "$REAL" -ini -jobname="$job" "\\input ${PLAIN_MP} ; input ${input}"
+        fi
+
+        exec "$REAL" "$@"
+        EOF
+        chmod 0755 /app/bin/mpost
+
+        # 2) Copy texlive-provided private libs linked by bundled binaries
+        #    (system libs from runtime are not copied)
+        BINARIES_FOR_LIBS="$TL_BIN_DIR/mpost $TL_BIN_DIR/kpsewhich"
+        if [ -n "$ETEX_BIN" ]; then
+          BINARIES_FOR_LIBS="$BINARIES_FOR_LIBS $ETEX_BIN"
+        fi
+        if [ -n "$PDFTEX_BIN" ]; then
+          BINARIES_FOR_LIBS="$BINARIES_FOR_LIBS $PDFTEX_BIN"
+        fi
+        for bin in $BINARIES_FOR_LIBS; do
+          ldd "$bin" | awk '{print $3}'
+        done | grep "^$TL_ROOT/" | sort -u | while read -r lib; do
+          install -Dm755 "$lib" "/app/texlive/lib/$(basename "$lib")"
+        done
+
+        # 3) Requested TeX subtrees for runtime
+        install -d /app/texlive/texmf-dist/metapost
+        cp -a "$TL_ROOT/texmf-dist/metapost/base" /app/texlive/texmf-dist/metapost/ || true
+
+        install -d /app/texlive/texmf-dist/tex/plain
+        cp -a "$TL_ROOT/texmf-dist/tex/plain/base" /app/texlive/texmf-dist/tex/plain/ || true
+
+        install -d /app/texlive/texmf-dist/tex/generic
+        cp -a "$TL_ROOT/texmf-dist/tex/generic/pdftex" /app/texlive/texmf-dist/tex/generic/ || true
+
+        install -d /app/texlive/texmf-dist/fonts
+        cp -a "$TL_ROOT/texmf-dist/fonts/tfm" /app/texlive/texmf-dist/fonts/ || true
+        cp -a "$TL_ROOT/texmf-dist/fonts/type1" /app/texlive/texmf-dist/fonts/ || true
+
+        # Make sure Computer Modern Type1 fonts used by pdftex.map are present.
+        find "$TL_ROOT" -type f -path '*/fonts/type1/public/amsfonts/cm/*.pfb' | while read -r pfb; do
+          rel="${pfb#*fonts/type1/}"
+          install -Dm644 "$pfb" "/app/texlive/texmf-dist/fonts/type1/$rel"
+        done
+
+        # Prestage full Computer Modern metrics to prevent runtime mktextfm calls.
+        find "$TL_ROOT" -type f -path '*/fonts/tfm/public/cm/*.tfm' | while read -r tfm; do
+          rel="${tfm#*fonts/tfm/}"
+          install -Dm644 "$tfm" "/app/texlive/texmf-dist/fonts/tfm/$rel"
+        done
+
+        # Ensure cmss10 metrics are available to avoid runtime mktextfm calls.
+        if [ ! -f /app/texlive/texmf-dist/fonts/tfm/public/cm/cmss10.tfm ]; then
+          CMSS10_TFM_SRC="$(find "$TL_ROOT" -type f -path '*/fonts/tfm/public/cm/cmss10.tfm' | head -n 1 || true)"
+          if [ -n "$CMSS10_TFM_SRC" ] && [ -f "$CMSS10_TFM_SRC" ]; then
+            install -Dm644 "$CMSS10_TFM_SRC" /app/texlive/texmf-dist/fonts/tfm/public/cm/cmss10.tfm
+            echo "Installed cmss10.tfm from: $CMSS10_TFM_SRC" >&2
+          fi
+        fi
+
+        if [ ! -f /app/texlive/texmf-dist/fonts/tfm/public/cm/cmss10.tfm ]; then
+          echo "Error: missing cmss10.tfm; runtime would require mktextfm/metafont" >&2
+          exit 1
+        fi
+
+        if [ ! -f /app/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb ]; then
+          CMSS10_PFB_SRC="$(find "$TL_ROOT" -type f -name cmss10.pfb | head -n 1 || true)"
+          if [ -n "$CMSS10_PFB_SRC" ] && [ -f "$CMSS10_PFB_SRC" ]; then
+            install -Dm644 "$CMSS10_PFB_SRC" /app/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb
+            echo "Installed cmss10.pfb from: $CMSS10_PFB_SRC" >&2
+          fi
+        fi
+
+        if [ ! -f /app/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb ]; then
+          echo "Error: missing cmss10.pfb required by pdftex.map" >&2
+          exit 1
+        fi
+
+        install -d /app/texlive/texmf-dist/fonts/map
+        cp -a "$TL_ROOT/texmf-dist/fonts/map/pdftex" /app/texlive/texmf-dist/fonts/map/ || true
+
+        # web2c is still needed for kpathsea defaults
+        cp -a "$TL_ROOT/texmf-dist/web2c" /app/texlive/texmf-dist/ || true
+
+        install -d /app/texlive/texmf-var/web2c
+
+        # pdfTeX expects a usable font map; provide pdftex.map in web2c as fallback.
+        if [ ! -f /app/texlive/texmf-var/web2c/pdftex.map ]; then
+          PDFTEX_MAP_SRC="$(find "$TL_ROOT" -type f -name pdftex.map | head -n 1 || true)"
+          if [ -n "$PDFTEX_MAP_SRC" ] && [ -f "$PDFTEX_MAP_SRC" ]; then
+            install -Dm644 "$PDFTEX_MAP_SRC" /app/texlive/texmf-var/web2c/pdftex.map
+            echo "Installed pdftex.map from: $PDFTEX_MAP_SRC" >&2
+          fi
+        fi
+
+        if [ ! -f /app/texlive/texmf-var/web2c/pdftex.map ]; then
+          echo "Error: unable to provide /app/texlive/texmf-var/web2c/pdftex.map" >&2
+          exit 1
+        fi
+
+        # Generate plain.mem with mpost in ini mode.
+        if [ ! -f /app/texlive/texmf-var/web2c/plain.mem ]; then
+          (
+            cd /app/texlive/texmf-var/web2c
+            /app/texlive/bin/mpost.real --ini /app/texlive/texmf-dist/metapost/base/plain.mp
+          )
+        fi
+
+        # Keep the format name expected by MetaPost frontends.
+        if [ ! -f /app/texlive/texmf-var/web2c/mpost.mem ] && [ -f /app/texlive/texmf-var/web2c/plain.mem ]; then
+          ln -sf plain.mem /app/texlive/texmf-var/web2c/mpost.mem
+        fi
+
+        # Ensure etex.fmt is available at runtime to avoid mktexfmt (perl) calls.
+        if [ ! -f /app/texlive/texmf-var/web2c/etex.fmt ]; then
+          ETEX_FMT_SRC="$(find "$TL_ROOT" -type f -name etex.fmt | head -n 1 || true)"
+          if [ -n "$ETEX_FMT_SRC" ] && [ -f "$ETEX_FMT_SRC" ]; then
+            install -Dm644 "$ETEX_FMT_SRC" /app/texlive/texmf-var/web2c/etex.fmt
+            echo "Installed etex.fmt from: $ETEX_FMT_SRC" >&2
+          else
+            ETEX_INI_SRC="$(find "$TL_ROOT/texmf-dist" -type f -name etex.ini | head -n 1 || true)"
+            if [ -n "$ETEX_INI_SRC" ] && [ -f "$ETEX_INI_SRC" ]; then
+              (
+                cd /app/texlive/texmf-var/web2c
+                /app/bin/etex -ini -jobname=etex "$ETEX_INI_SRC"
+              )
+              echo "Generated etex.fmt from: $ETEX_INI_SRC" >&2
+            fi
+          fi
+        fi
+
+        if [ ! -f /app/texlive/texmf-var/web2c/etex.fmt ]; then
+          echo "Error: unable to provide /app/texlive/texmf-var/web2c/etex.fmt" >&2
+          exit 1
+        fi
+
+        # Ensure pdftex.fmt is available at runtime.
+        if [ ! -f /app/texlive/texmf-var/web2c/pdftex.fmt ]; then
+          PDFTEX_FMT_SRC="$(find "$TL_ROOT" -type f -name pdftex.fmt | head -n 1 || true)"
+          if [ -n "$PDFTEX_FMT_SRC" ] && [ -f "$PDFTEX_FMT_SRC" ]; then
+            install -Dm644 "$PDFTEX_FMT_SRC" /app/texlive/texmf-var/web2c/pdftex.fmt
+            echo "Installed pdftex.fmt from: $PDFTEX_FMT_SRC" >&2
+          else
+            PDFTEX_INI_SRC="$(find "$TL_ROOT/texmf-dist" -type f -name pdftex.ini | head -n 1 || true)"
+            if [ -n "$PDFTEX_INI_SRC" ] && [ -f "$PDFTEX_INI_SRC" ]; then
+              (
+                cd /app/texlive/texmf-var/web2c
+                /app/bin/pdftex -ini -jobname=pdftex "$PDFTEX_INI_SRC"
+              )
+              echo "Generated pdftex.fmt from: $PDFTEX_INI_SRC" >&2
+            fi
+          fi
+        fi
+
+        if [ ! -f /app/texlive/texmf-var/web2c/pdftex.fmt ]; then
+          echo "Error: unable to provide /app/texlive/texmf-var/web2c/pdftex.fmt" >&2
+          exit 1
+        fi
+
+        # 4) Writable cache dirs created at build time (runtime will use XDG cache)
+        install -d /app/texlive/var /app/texlive/cache
+
+    # No sources: this module repackages files from sdk-extension at build time.
+    # Keep sdk-extensions: [org.freedesktop.Sdk.Extension.texlive] at top-level manifest.
+    sources: []
