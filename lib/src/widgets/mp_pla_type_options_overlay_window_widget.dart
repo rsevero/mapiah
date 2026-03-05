@@ -96,7 +96,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = appLocalizations.mpPLATypeAreaTitle;
         selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getAreaTypeSubtype(selectedPLAType);
+            : MPTextToUser.getAreaTypeSubtypeFromTypeSubtypeID(selectedPLAType);
         lastUsedChoices = elementEditController.lastUsedAreaTypes;
         mostUsedChoices = elementEditController.mostUsedAreaTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -108,7 +108,7 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = appLocalizations.mpPLATypeLineTitle;
         selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getLineTypeSubtype(selectedPLAType);
+            : MPTextToUser.getLineTypeSubtypeFromTypeSubtypeID(selectedPLAType);
         lastUsedChoices = elementEditController.lastUsedLineTypes;
         mostUsedChoices = elementEditController.mostUsedLineTypes;
         choices = MPTextToUser.getOrderedChoicesMap(
@@ -120,7 +120,9 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         title = appLocalizations.mpPLATypePointTitle;
         selectedPLATypeForUser = (selectedPLAType == null)
             ? ''
-            : MPTextToUser.getPointTypeSubtype(selectedPLAType);
+            : MPTextToUser.getPointTypeSubtypeFromTypeSubtypeID(
+                selectedPLAType,
+              );
         lastUsedChoices = elementEditController.lastUsedPointTypes;
         mostUsedChoices = elementEditController.mostUsedPointTypes;
         choices = MPTextToUser.getOrderedChoicesMap(

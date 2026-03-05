@@ -341,6 +341,13 @@ class MPCommandOptionAux {
         element.hasOption(THCommandOptionType.id);
   }
 
+  static String? getID(THElement element) {
+    return (element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.id)
+        ? (element.getOption(THCommandOptionType.id) as THIDCommandOption).thID
+        : null;
+  }
+
   static String? getSubtype(THElement element) {
     return (element is THHasOptionsMixin) &&
             element.hasOption(THCommandOptionType.subtype)

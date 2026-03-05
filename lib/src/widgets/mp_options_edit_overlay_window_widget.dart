@@ -162,9 +162,10 @@ class _MPOptionsEditOverlayWindowWidgetState
                 plaType: selectedPointPLAType,
                 plaSubtype: selectedPointSubtype ?? '',
               );
-              pointTypeSubtypeAsString = MPTextToUser.getPointTypeSubtype(
-                pointTypeSubtypeID,
-              );
+              pointTypeSubtypeAsString =
+                  MPTextToUser.getPointTypeSubtypeFromTypeSubtypeID(
+                    pointTypeSubtypeID,
+                  );
             }
 
             plaTypeWidgets.add(
@@ -186,9 +187,10 @@ class _MPOptionsEditOverlayWindowWidgetState
                 plaType: selectedLinePLAType,
                 plaSubtype: selectedLineSubtype ?? '',
               );
-              lineTypeSubtypeAsString = MPTextToUser.getLineTypeSubtype(
-                lineTypeSubtypeID,
-              );
+              lineTypeSubtypeAsString =
+                  MPTextToUser.getLineTypeSubtypeFromTypeSubtypeID(
+                    lineTypeSubtypeID,
+                  );
             }
 
             plaTypeWidgets.add(
@@ -210,9 +212,10 @@ class _MPOptionsEditOverlayWindowWidgetState
                 plaType: selectedAreaPLAType,
                 plaSubtype: selectedAreaSubtype ?? '',
               );
-              areaTypeSubtypeAsString = MPTextToUser.getAreaTypeSubtype(
-                areaTypeSubtypeID,
-              );
+              areaTypeSubtypeAsString =
+                  MPTextToUser.getAreaTypeSubtypeFromTypeSubtypeID(
+                    areaTypeSubtypeID,
+                  );
             }
 
             if ((countAreas == 1) && (singleSelectedArea != null)) {

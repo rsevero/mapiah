@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -91,6 +92,16 @@ class _MPMultipleEndControlPointsClickedWidgetState
       case MPEndControlPointType.endPointBezierCurve:
       case MPEndControlPointType.endPointStraight:
         pointName += ' ${appLocalizations.mpMultipleEndControlPointsEndPoint}';
+    }
+
+    final String? pointID = MPCommandOptionAux.getID(element);
+
+    if (pointID != null) {
+      final String trimmedPointID = pointID.trim();
+
+      if (trimmedPointID.isNotEmpty) {
+        pointName += " $trimmedPointID";
+      }
     }
 
     return pointName;

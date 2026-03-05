@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
-import 'package:mapiah/src/elements/types/th_area_type.dart';
-import 'package:mapiah/src/elements/types/th_line_type.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -42,6 +39,7 @@ class _MPMultipleElementsClickedWidgetState
   @override
   void initState() {
     super.initState();
+
     th2FileEditController = widget.th2FileEditController;
     selectionController = th2FileEditController.selectionController;
     appLocalizations = mpLocator.appLocalizations;
@@ -58,24 +56,58 @@ class _MPMultipleElementsClickedWidgetState
     super.dispose();
   }
 
+  String getPointName(THPoint point) {
+    final String pointTypeName = MPTextToUser.getPointTypeSubtypeFromPoint(
+      point,
+    );
+
+    String pointName = "${appLocalizations.thElementPoint} $pointTypeName";
+
+    final String? pointID = MPCommandOptionAux.getID(point);
+
+    if (pointID != null) {
+      final String trimmedPointID = pointID.trim();
+
+      if (trimmedPointID.isNotEmpty) {
+        pointName += " $trimmedPointID";
+      }
+    }
+
+    return pointName;
+  }
+
   String getLineName(THLine line) {
-    final String lineTypeName = (line.lineType == THLineType.unknown)
-        ? line.unknownPLAType
-        : MPTextToUser.getLineType(line.lineType);
-    final String lineName = (line.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementLine} $lineTypeName ${(line.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-        : "${appLocalizations.thElementLine} $lineTypeName";
+    final String lineTypeName = MPTextToUser.getLineTypeSubtypeFromLine(line);
+
+    String lineName = "${appLocalizations.thElementLine} $lineTypeName";
+
+    final String? lineID = MPCommandOptionAux.getID(line);
+
+    if (lineID != null) {
+      final String trimmedLineID = lineID.trim();
+
+      if (trimmedLineID.isNotEmpty) {
+        lineName += " $trimmedLineID";
+      }
+    }
 
     return lineName;
   }
 
   String getAreaName(THArea area) {
-    final String areaTypeName = (area.areaType == THAreaType.unknown)
-        ? area.unknownPLAType
-        : MPTextToUser.getAreaType(area.areaType);
-    final String areaName = (area.hasOption(THCommandOptionType.id))
-        ? "${appLocalizations.thElementArea} $areaTypeName ${(area.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-        : "${appLocalizations.thElementArea} $areaTypeName";
+    final String areaTypeName = MPTextToUser.getAreaTypeSubtypeFromArea(area);
+
+    String areaName = "${appLocalizations.thElementArea} $areaTypeName";
+
+    final String? areaID = MPCommandOptionAux.getID(area);
+
+    if (areaID != null) {
+      final String trimmedAreaID = areaID.trim();
+
+      if (trimmedAreaID.isNotEmpty) {
+        areaName += " $trimmedAreaID";
+      }
+    }
 
     return areaName;
   }
@@ -93,15 +125,8 @@ class _MPMultipleElementsClickedWidgetState
 
     for (final THElement element in clickedElements) {
       switch (element) {
-        case THPoint _:
-          final String pointTypeName =
-              (element.pointType == THPointType.unknown)
-              ? element.unknownPLAType
-              : MPTextToUser.getPointType(element.pointType);
-          final String pointName = (element.hasOption(THCommandOptionType.id))
-              ? "${appLocalizations.thElementPoint} $pointTypeName ${(element.getOption(THCommandOptionType.id) as THIDCommandOption).thID}"
-              : "${appLocalizations.thElementPoint} $pointTypeName";
-          options[element.mpID] = pointName;
+        case THPoint point:
+          options[element.mpID] = getPointName(point);
         case THBezierCurveLineSegment _:
         case THStraightLineSegment _:
           final int lineMPID = element.parentMPID;
@@ -114,8 +139,8 @@ class _MPMultipleElementsClickedWidgetState
           if (!options.containsKey(lineMPID)) {
             options[lineMPID] = getLineName(thFile.lineByMPID(lineMPID));
           }
-        case THLine _:
-          final int lineMPID = element.mpID;
+        case THLine line:
+          final int lineMPID = line.mpID;
           final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
 
           if ((areaMPID != null) && (!options.containsKey(areaMPID))) {
@@ -123,13 +148,11 @@ class _MPMultipleElementsClickedWidgetState
           }
 
           if (!options.containsKey(lineMPID)) {
-            options[lineMPID] = getLineName(element);
+            options[lineMPID] = getLineName(line);
           }
-        case THArea _:
-          if (!options.containsKey(element.mpID)) {
-            options[element.mpID] = getAreaName(
-              thFile.areaByMPID(element.mpID),
-            );
+        case THArea area:
+          if (!options.containsKey(area.mpID)) {
+            options[area.mpID] = getAreaName(thFile.areaByMPID(area.mpID));
           }
         default:
           continue;

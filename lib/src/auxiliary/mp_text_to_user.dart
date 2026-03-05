@@ -725,20 +725,41 @@ class MPTextToUser {
         localizations.thPointWheelchair;
   }
 
-  static String getPointTypeSubtype(String pointTypeAsString) {
+  static String getPointTypeSubtypeFromPoint(THPoint point) {
+    return getPointTypeSubtypeFromTypeSubtype(
+      pointType: point.pointType.name,
+      pointSubtype: MPCommandOptionAux.getSubtype(point),
+    );
+  }
+
+  static String getPointTypeSubtypeFromTypeSubtypeID(String pointTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
         MPCommandOptionAux.getPLATypeSubtypeRecord(pointTypeAsString);
 
+    return getPointTypeSubtypeFromTypeSubtype(
+      pointType: typeSubtype.type,
+      pointSubtype: typeSubtype.subtype,
+    );
+  }
+
+  static String getPointTypeSubtypeFromTypeSubtype({
+    required String pointType,
+    required String? pointSubtype,
+  }) {
     String pointTypeToUser = MPTextToUser.getPointType(
-      THPointType.fromString(typeSubtype.type),
+      THPointType.fromString(pointType),
     );
 
-    if (typeSubtype.subtype.isNotEmpty) {
-      final String subtypeID =
-          '$mpPointSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
-      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+    if (pointSubtype != null) {
+      final String trimmedPointSubtype = pointSubtype.trim();
 
-      pointTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      if (trimmedPointSubtype.isNotEmpty) {
+        final String subtypeID =
+            '$mpPointSubtypeIDPrefix$pointType$mpSubtypeIDSeparator$trimmedPointSubtype';
+        final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+        pointTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      }
     }
 
     return pointTypeToUser;
@@ -800,20 +821,41 @@ class MPTextToUser {
     _lineTypeAsString[THLineType.waterFlow] = localizations.thLineWaterFlow;
   }
 
-  static String getLineTypeSubtype(String lineTypeAsString) {
+  static String getLineTypeSubtypeFromLine(THLine line) {
+    return getLineTypeSubtypeFromTypeSubtype(
+      lineType: line.lineType.name,
+      lineSubtype: MPCommandOptionAux.getSubtype(line),
+    );
+  }
+
+  static String getLineTypeSubtypeFromTypeSubtypeID(String lineTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
         MPCommandOptionAux.getPLATypeSubtypeRecord(lineTypeAsString);
 
+    return getLineTypeSubtypeFromTypeSubtype(
+      lineType: typeSubtype.type,
+      lineSubtype: typeSubtype.subtype,
+    );
+  }
+
+  static String getLineTypeSubtypeFromTypeSubtype({
+    required String lineType,
+    required String? lineSubtype,
+  }) {
     String lineTypeToUser = MPTextToUser.getLineType(
-      THLineType.fromString(typeSubtype.type),
+      THLineType.fromString(lineType),
     );
 
-    if (typeSubtype.subtype.isNotEmpty) {
-      final String subtypeID =
-          '$mpLineSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
-      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+    if (lineSubtype != null) {
+      final String trimmedLineSubtype = lineSubtype.trim();
 
-      lineTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      if (trimmedLineSubtype.isNotEmpty) {
+        final String subtypeID =
+            '$mpLineSubtypeIDPrefix$lineType$mpSubtypeIDSeparator$trimmedLineSubtype';
+        final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+        lineTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      }
     }
 
     return lineTypeToUser;
@@ -855,20 +897,41 @@ class MPTextToUser {
     _areaTypeAsString[THAreaType.water] = localizations.thAreaWater;
   }
 
-  static String getAreaTypeSubtype(String areaTypeAsString) {
+  static String getAreaTypeSubtypeFromArea(THArea area) {
+    return getAreaTypeSubtypeFromTypeSubtype(
+      areaType: area.areaType.name,
+      areaSubtype: MPCommandOptionAux.getSubtype(area),
+    );
+  }
+
+  static String getAreaTypeSubtypeFromTypeSubtypeID(String areaTypeAsString) {
     final ({String type, String subtype}) typeSubtype =
         MPCommandOptionAux.getPLATypeSubtypeRecord(areaTypeAsString);
 
+    return getAreaTypeSubtypeFromTypeSubtype(
+      areaType: typeSubtype.type,
+      areaSubtype: typeSubtype.subtype,
+    );
+  }
+
+  static String getAreaTypeSubtypeFromTypeSubtype({
+    required String areaType,
+    required String? areaSubtype,
+  }) {
     String areaTypeToUser = MPTextToUser.getAreaType(
-      THAreaType.fromString(typeSubtype.type),
+      THAreaType.fromString(areaType),
     );
 
-    if (typeSubtype.subtype.isNotEmpty) {
-      final String subtypeID =
-          '$mpAreaSubtypeIDPrefix${typeSubtype.type}$mpSubtypeIDSeparator${typeSubtype.subtype}';
-      final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+    if (areaSubtype != null) {
+      final String trimmedAreaSubtype = areaSubtype.trim();
 
-      areaTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      if (trimmedAreaSubtype.isNotEmpty) {
+        final String subtypeID =
+            '$mpAreaSubtypeIDPrefix$areaType$mpSubtypeIDSeparator$trimmedAreaSubtype';
+        final String subtypeToUser = MPTextToUser.getSubtypeAsString(subtypeID);
+
+        areaTypeToUser += '$mpPLATypeSubtypeSeparator$subtypeToUser';
+      }
     }
 
     return areaTypeToUser;
@@ -1400,12 +1463,12 @@ class MPTextToUser {
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedAreaTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getAreaTypeSubtype(extraType);
+          choices[extraType] = getAreaTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedAreaTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getAreaTypeSubtype(extraType);
+          choices[extraType] = getAreaTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
     }
@@ -1427,12 +1490,12 @@ class MPTextToUser {
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedLineTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getLineTypeSubtype(extraType);
+          choices[extraType] = getLineTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedLineTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getLineTypeSubtype(extraType);
+          choices[extraType] = getLineTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
     }
@@ -1465,12 +1528,12 @@ class MPTextToUser {
     if (elementEditController != null) {
       for (final String extraType in elementEditController.lastUsedPointTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getPointTypeSubtype(extraType);
+          choices[extraType] = getPointTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
       for (final String extraType in elementEditController.mostUsedPointTypes) {
         if (!choices.containsKey(extraType)) {
-          choices[extraType] = getPointTypeSubtype(extraType);
+          choices[extraType] = getPointTypeSubtypeFromTypeSubtypeID(extraType);
         }
       }
     }
