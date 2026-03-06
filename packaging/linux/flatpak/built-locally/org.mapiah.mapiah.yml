@@ -8,6 +8,9 @@ appstream-compose: false
 command: mapiah
 finish-args:
   - --device=dri
+  - --env=GIO_USE_PORTAL=1
+  - --env=GTK_USE_PORTAL=1
+  - --filesystem=home
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland

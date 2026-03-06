@@ -41,12 +41,19 @@ class MPFlatpakTherionRunner extends MPPlatformTherionRunner {
     })
     compileInvocation = _buildCompileInvocation(
       therionFileName: therionFileName,
+      workingDirectory: workingDirectory,
     );
     final String commandLine = compileInvocation.commandLine;
 
+    // Use a safe sandbox path for Process.start's own workingDirectory.
+    // The actual host working directory for therion is passed explicitly via
+    // the --directory= flag to flatpak-spawn, using the original (unresolved)
+    // portal path. Letting Dart resolve the working directory through the
+    // sandbox mount namespace would produce a /run/flatpak/doc/ path that
+    // does not exist on the host.
     final MPTherionExecutionResult executionResult = await processRunner.run(
       commandLine: commandLine,
-      workingDirectory: workingDirectory,
+      workingDirectory: mpFlatpakSandboxSafeWorkingDirectory,
       executablePath: compileInvocation.executablePath,
       arguments: compileInvocation.processArguments,
     );
@@ -65,16 +72,23 @@ class MPFlatpakTherionRunner extends MPPlatformTherionRunner {
   }
 
   ({String commandLine, String executablePath, List<String> processArguments})
-  _buildCompileInvocation({required String therionFileName}) {
+  _buildCompileInvocation({
+    required String therionFileName,
+    required String workingDirectory,
+  }) {
     final String therionExecutablePath = _resolveTherionExecutablePath();
+    final String directoryArgument =
+        '$mpFlatpakSpawnDirectoryFlag=$workingDirectory';
     final List<String> processArguments = <String>[
       mpFlatpakSpawnHostArgument,
+      directoryArgument,
       therionExecutablePath,
       therionFileName,
     ];
     final String commandLine = joinNonEmptyParts(<String>[
       mpFlatpakSpawnExecutableName,
       mpFlatpakSpawnHostArgument,
+      directoryArgument,
       therionExecutablePath,
       therionFileName,
     ]);
