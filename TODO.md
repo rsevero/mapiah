@@ -153,6 +153,7 @@
 [X] - On "Multiple elements clicked" dialog box, show the subtype of each element if it has one. 
 [ ] - At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
 [ ] - Review portuguese translations of PLA types and subtypes.
+[ ] - Create a feature that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
