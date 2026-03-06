@@ -88,6 +88,23 @@ jobs:
           echo "tag_number=$TAG_NUMBER" >> "$GITHUB_OUTPUT"
           echo "flatpakref_file=$FLATPAKREF_FILE" >> "$GITHUB_OUTPUT"
 
+      - name: Install Flatpak runtime dependencies
+        shell: bash
+        run: |
+          set -e
+          set -x
+
+          RUNTIME_VERSION=$(sed -n "s/^runtime-version: '\([^']*\)'/\1/p" packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml)
+          if [[ -z "$RUNTIME_VERSION" ]]; then
+            echo "::error::Could not read runtime-version from Flatpak manifest"
+            exit 1
+          fi
+
+          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user --noninteractive flathub "org.freedesktop.Sdk/x86_64/$RUNTIME_VERSION"
+          flatpak install --user --noninteractive flathub "org.freedesktop.Platform/x86_64/$RUNTIME_VERSION"
+          flatpak install --user --noninteractive flathub "org.freedesktop.Sdk.Extension.llvm20/x86_64/$RUNTIME_VERSION"
+
       - name: Build with Flatter
         id: flatter
         # No explicit "Set up Flutter" step is needed here.
