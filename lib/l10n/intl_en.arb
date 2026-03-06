@@ -38,6 +38,16 @@
     "description": "Title for the update available dialog",
     "type": "text"
   },
+  "updateAvailableTitleWithCount": "{count, plural, one {1 newer version available} other {{count} newer versions available}}",
+  "@updateAvailableTitleWithCount": {
+    "description": "Title for the update available dialog including the number of newer versions",
+    "type": "text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "updateAvailableBody": "A newer version is available.\n\nCurrent: {currentVersion}\nLatest: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}",
   "@updateAvailableBody": {
     "description": "Body text for the update available dialog",

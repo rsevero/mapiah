@@ -10,6 +10,7 @@ A few introductory instructions:
 8. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
 9. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files.
 10. Don´t use all caps on user text.
+11. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
 
 Specific instructions:
 

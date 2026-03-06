@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Update available'**
   String get updateAvailableTitle;
 
+  /// Title for the update available dialog including the number of newer versions
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 newer version available} other {{count} newer versions available}}'**
+  String updateAvailableTitleWithCount(int count);
+
   /// Body text for the update available dialog
   ///
   /// In en, this message translates to:

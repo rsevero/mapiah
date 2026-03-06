@@ -32,6 +32,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateAvailableTitle => 'Update available';
 
   @override
+  String updateAvailableTitleWithCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count newer versions available',
+      one: '1 newer version available',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String updateAvailableBody(
     Object currentVersion,
     Object latestVersion,

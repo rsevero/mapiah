@@ -30,6 +30,7 @@ const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
 );
 
 const String mpHelpPagePath = 'assets/help';
+const String mpHelpPageFlathubDisabled = 'flathub_disabled';
 
 const String thCommentChar = '#';
 const String thDecimalSeparator = '.';
@@ -421,11 +422,19 @@ const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
 
+const int mpMapiahReleasesAPIPerPage = 100;
+const int mpSemanticVersionComponentCount = 3;
+const String mpMapiahStableReleaseTagPattern = r'^v(\d+)\.(\d+)\.(\d+)$';
+const String mpMapiahStableVersionPattern = r'^(\d+)\.(\d+)\.(\d+)$';
 const String mpMapiahReleasesAPIURL =
-    'https://api.github.com/repos/rsevero/mapiah/tags?per_page=1';
+    'https://api.github.com/repos/rsevero/mapiah/tags?per_page=$mpMapiahReleasesAPIPerPage';
 const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
 const String mpMapiahGithubReleasesURL =
     'https://github.com/rsevero/mapiah/releases/tag/';
+const String mpMapiahGithubRawContentURLPrefix =
+    'https://raw.githubusercontent.com/rsevero/mapiah/main';
+const String mpMapiahGithubHelpPagesURLPrefix =
+    '$mpMapiahGithubRawContentURLPrefix/assets/help';
 const String mpMapiahVersionFlathubURLPrefix =
     'https://flathub.org/apps/details/';
 
@@ -433,6 +442,7 @@ const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
 
 const bool mpDefaultDefaultBoolSetting = false;
 const double mpDefaultDefaultDoubleSetting = 0.0;
+const int mpHttpStatusOk = 200;
 const int mpDefaultDefaultIntSetting = 0;
 const int mpProcessExitCodeSuccess = 0;
 const String mpDefaultDefaultStringSetting = '';

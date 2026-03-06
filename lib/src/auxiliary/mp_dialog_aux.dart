@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
+import 'package:mapiah/src/auxiliary/mp_version_check_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
@@ -309,7 +310,7 @@ class MPDialogAux {
         return;
       }
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != mpHttpStatusOk) {
         _showUpdateCheckFailedDialog(
           type: MPUpdateCheckFailureType.httpStatus,
           httpStatusCode: response.statusCode,
@@ -331,42 +332,37 @@ class MPDialogAux {
         return;
       }
 
-      final String tagName;
+      final MPVersionCheckResult? versionCheckResult = summarizeNewerVersions(
+        tags: tags,
+        currentVersion: currentVersion,
+      );
 
-      try {
-        tagName = (tags.first as Map<String, dynamic>)['name'].toString();
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
+      if ((versionCheckResult == null) ||
+          !versionCheckResult.hasStableVersion) {
         return;
       }
 
-      final String? latestVersion = _extractVersion(tagName);
-      final String? current = _extractVersion(currentVersion);
-
-      if (latestVersion == null) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.parsing,
-          tagName: tagName,
-        );
+      if (!mpDebugAlwaysShowVersions && !versionCheckResult.hasNewerVersion) {
         return;
       }
 
-      if (current == null) {
-        return;
-      }
-
-      if (!mpDebugAlwaysShowVersions &&
-          (_compareVersions(latestVersion, current) <= 0)) {
-        return;
-      }
+      final String latestVersion = versionCheckResult.latestStableVersion!;
+      final String tagName = versionCheckResult.latestStableTagName!;
+      final int newerVersionCount = versionCheckResult.newerVersionCount;
 
       final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
+
+      if (mpIsFlathub) {
+        _showFlathubUpdateDialog(newerVersionCount: newerVersionCount);
+        return;
+      }
 
       _showUpdateDialog(
         latestVersion: latestVersion,
         currentVersion: currentVersion,
         tagName: tagName,
         releaseUrl: releaseUrl,
+        newerVersionCount: newerVersionCount,
       );
     } catch (e, st) {
       mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
@@ -376,42 +372,12 @@ class MPDialogAux {
     }
   }
 
-  static String? _extractVersion(String input) {
-    final RegExpMatch? match = RegExp(r'\d+(?:\.\d+)*').firstMatch(input);
-
-    return match?.group(0);
-  }
-
-  static int _compareVersions(String a, String b) {
-    final List<int> aParts = a
-        .split('.')
-        .map((part) => int.tryParse(part) ?? 0)
-        .toList();
-    final List<int> bParts = b
-        .split('.')
-        .map((part) => int.tryParse(part) ?? 0)
-        .toList();
-    final int maxLen = aParts.length > bParts.length
-        ? aParts.length
-        : bParts.length;
-
-    for (int i = 0; i < maxLen; i++) {
-      final int aVal = i < aParts.length ? aParts[i] : 0;
-      final int bVal = i < bParts.length ? bParts[i] : 0;
-
-      if (aVal != bVal) {
-        return aVal.compareTo(bVal);
-      }
-    }
-
-    return 0;
-  }
-
   static void _showUpdateDialog({
     required String latestVersion,
     required String currentVersion,
     required String tagName,
     required String releaseUrl,
+    required int newerVersionCount,
   }) {
     if (_isUpdateDialogOpen) {
       return;
@@ -428,6 +394,9 @@ class MPDialogAux {
     }
 
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String dialogTitle = (newerVersionCount > 0)
+        ? appLocalizations.updateAvailableTitleWithCount(newerVersionCount)
+        : appLocalizations.updateAvailableTitle;
     final String updateBody = appLocalizations.updateAvailableBody(
       currentVersion,
       latestVersion,
@@ -447,7 +416,7 @@ class MPDialogAux {
       useRootNavigator: true,
       barrierDismissible: true,
       builder: (ctx2) => AlertDialog(
-        title: Text(appLocalizations.updateAvailableTitle),
+        title: Text(dialogTitle),
         content: SingleChildScrollView(
           child: SelectableText.rich(
             TextSpan(
@@ -481,6 +450,39 @@ class MPDialogAux {
     ).whenComplete(() {
       _isUpdateDialogOpen = false;
     });
+  }
+
+  static void _showFlathubUpdateDialog({required int newerVersionCount}) {
+    if (_isUpdateDialogOpen) {
+      return;
+    }
+
+    _isUpdateDialogOpen = true;
+
+    final BuildContext? ctx = mpLocator.mpNavigatorKey.currentContext;
+
+    if (ctx == null) {
+      _isUpdateDialogOpen = false;
+      return;
+    }
+
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String dialogTitle = (newerVersionCount > 0)
+        ? appLocalizations.updateAvailableTitleWithCount(newerVersionCount)
+        : appLocalizations.updateAvailableTitle;
+
+    MPModalOverlayWidget.show(
+      context: ctx,
+      onDismissed: () {
+        _isUpdateDialogOpen = false;
+      },
+      childBuilder: (VoidCallback onPressedClose) => MPHelpDialogWidget(
+        helpPage: mpHelpPageFlathubDisabled,
+        title: dialogTitle,
+        onPressedClose: onPressedClose,
+        source: MPHelpPageSource.githubRaw,
+      ),
+    );
   }
 
   static void _showUpdateCheckFailedDialog({
@@ -809,14 +811,18 @@ class MPDialogAux {
   static void showHelpDialog(
     BuildContext context,
     String helpPage,
-    String title,
-  ) {
+    String title, {
+    MPHelpPageSource source = MPHelpPageSource.asset,
+    VoidCallback? onDismissed,
+  }) {
     MPModalOverlayWidget.show(
       context: context,
+      onDismissed: onDismissed,
       childBuilder: (onPressedClose) => MPHelpDialogWidget(
         helpPage: helpPage,
         title: title,
         onPressedClose: onPressedClose,
+        source: source,
       ),
     );
   }

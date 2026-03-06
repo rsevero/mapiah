@@ -50,6 +50,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/help/en/flathub_disabled.md
     - assets/help/en/keyboard_shortcuts_edit.md
     - assets/help/en/keyboard_shortcuts_main.md
     - assets/help/en/mapiah_home_help.md
@@ -88,6 +89,7 @@ flutter:
     - assets/help/images/iconSave.png
     - assets/help/images/iconSaveAs.png
     - assets/help/images/iconSettings.png
+    - assets/help/pt/flathub_disabled.md
     - assets/help/pt/keyboard_shortcuts_edit.md
     - assets/help/pt/keyboard_shortcuts_main.md
     - assets/help/pt/mapiah_home_help.md
