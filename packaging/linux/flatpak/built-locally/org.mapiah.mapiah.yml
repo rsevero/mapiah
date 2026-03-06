@@ -7,10 +7,11 @@ sdk-extensions:
 appstream-compose: false
 command: mapiah
 finish-args:
+  - --device=dri
   - --share=ipc
   - --socket=fallback-x11
   - --socket=wayland
-  - --device=dri
+  - --talk-name=org.freedesktop.Flatpak
   - --talk-name=org.freedesktop.portal.OpenURI
 modules:
   - name: mapiah
@@ -33,7 +34,7 @@ modules:
       - flutter --version
       - flutter config --enable-linux-desktop
       - flutter pub get
-      - flutter build linux --release
+      - flutter build linux --release --dart-define=isFlatpak=true
       - install -D $BUNDLE_PATH/mapiah /app/bin/mapiah
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
@@ -50,5 +51,5 @@ modules:
         path: ../../../..
       - type: git
         url: https://github.com/flutter/flutter.git
-        tag: 3.38.7
+        tag: 3.41.3
         dest: flutter

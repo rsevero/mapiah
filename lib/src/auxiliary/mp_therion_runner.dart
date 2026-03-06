@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/auxiliary/mp_flatpak_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_linux_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_macos_therion_runner.dart';
@@ -57,7 +58,17 @@ class MPTherionRunner {
         // Inside a Flatpak sandbox the host filesystem is not directly
         // accessible, so any executable on the host (including therion) must
         // be launched via `flatpak-spawn --host`.
-        result = await Process.run(executable, <String>['--version']);
+        if (mpIsFlatpak) {
+          result = await Process.run(mpFlatpakSpawnExecutableName, <String>[
+            mpFlatpakSpawnHostArgument,
+            executable,
+            mpTherionVersionArgument,
+          ]);
+        } else {
+          result = await Process.run(executable, <String>[
+            mpTherionVersionArgument,
+          ]);
+        }
 
         final bool success = result.exitCode == mpProcessExitCodeSuccess;
         if (success) {
@@ -91,6 +102,8 @@ class MPTherionRunner {
       candidate = MPWindowsTherionRunner.probeForTherionExecutablePath();
     } else if (Platform.isMacOS) {
       candidate = MPMacOSTherionRunner.probeForTherionExecutablePath();
+    } else if (mpIsFlatpak) {
+      candidate = MPFlatpakTherionRunner.probeForTherionExecutablePath();
     } else {
       candidate = MPLinuxTherionRunner.probeForTherionExecutablePath();
     }
@@ -211,6 +224,20 @@ class MPTherionRunner {
 
     if (isMacOSPlatform && isTherionConfigFile) {
       return MPMacOSTherionRunner(
+        mpLocator: mpLocator,
+        processRunner: _MPUnixLikeTherionRunnerProcessRunner(
+          onProcessStarted: (Process process) {
+            _process = process;
+          },
+          onOutput: _handleOutput,
+          onError: onError,
+        ),
+      );
+    }
+
+    // Flatpak packaging: wrap all Therion invocations with flatpak-spawn --host.
+    if (mpIsFlatpak) {
+      return MPFlatpakTherionRunner(
         mpLocator: mpLocator,
         processRunner: _MPUnixLikeTherionRunnerProcessRunner(
           onProcessStarted: (Process process) {

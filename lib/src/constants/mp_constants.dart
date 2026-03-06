@@ -17,6 +17,10 @@ const bool mpDebugMousePosition = bool.fromEnvironment(
 // `--dart-define=isFlathub=true` when building). Defaults to false.
 const bool mpIsFlathub = bool.fromEnvironment('isFlathub', defaultValue: false);
 
+// Compile-time flag to indicate we built the app as a Flatpak (set with
+// `--dart-define=isFlatpak=true` when building). Defaults to false.
+const bool mpIsFlatpak = bool.fromEnvironment('isFlatpak', defaultValue: false);
+
 // Debug compile-time flag to force showing Flathub version info dialog even
 // when the remote version is not newer. Set with
 // `--dart-define=debugAlwaysShowVersions=true` for debugging.
@@ -149,8 +153,9 @@ const String mpTherionWindowsExecutableName =
     '$mpTherionExecutableName$mpWindowsExecutableExtension';
 const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
 const String mpTherionPrintEncodingsArgument = '--print-encodings';
-// const String mpFlatpakSpawnExecutableName = 'flatpak-spawn';
-// const String mpFlatpakSpawnHostArgument = '--host';
+const String mpFlatpakSpawnExecutableName = 'flatpak-spawn';
+const String mpFlatpakSpawnHostArgument = '--host';
+const String mpTherionVersionArgument = '--version';
 const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';

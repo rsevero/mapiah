@@ -12,9 +12,10 @@ import 'dart:io';
 
 final List<String> targetFiles = [
   '.github/workflows/linux-appimage.yml',
-  'packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml',
+  '.github/workflows/linux-flatpak.yml',
   '.github/workflows/windows.yml',
   'codemagic.yaml',
+  'packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml',
   'packaging/linux/io.github.rsevero.mapiah.metainfo.xml',
 ];
 
