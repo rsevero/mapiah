@@ -12,15 +12,15 @@ finish-args:
   - --env=GTK_USE_PORTAL=1
   - --env=LD_LIBRARY_PATH=/app/texlive/lib
   - --env=PATH=/app/bin:/usr/bin
-  - --env=TEXFORMATS=/app/texlive/texmf-var/web2c:/app/texlive/texmf-dist/metapost/base
+  - --env=T1FONTS=/app/texlive/texmf-dist/fonts/type1//
   - --env=TEXFONTMAPS=/app/texlive/texmf-dist/fonts/map/pdftex//:/app/texlive/texmf-dist/fonts/map//:/app/texlive/texmf-var/web2c
+  - --env=TEXFORMATS=/app/texlive/texmf-var/web2c:/app/texlive/texmf-dist/metapost/base
   - --env=TEXMFCACHE=/var/cache/texmf
   - --env=TEXMFCNF=/app/texlive/texmf-dist/web2c
   - --env=TEXMFDIST=/app/texlive/texmf-dist
   - --env=TEXMFSYSVAR=/app/texlive/texmf-var
   - --env=TEXMFVAR=/var/cache/texmf
   - --env=TFMFONTS=/app/texlive/texmf-dist/fonts/tfm//:/app/texlive/texmf-var/fonts/tfm//
-  - --env=T1FONTS=/app/texlive/texmf-dist/fonts/type1//
   - --env=VARTEXFONTS=/var/cache/texmf/fonts
   - --share=ipc
   - --share=network
