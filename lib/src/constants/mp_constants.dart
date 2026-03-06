@@ -144,6 +144,7 @@ const String mpPathEnvironmentEntrySeparatorMacOS =
 const String mpPathEnvironmentEntrySeparatorWindows = ';';
 const String mpWindowsExecutableExtension = '.exe';
 const String mpTherionExecutableName = 'therion';
+const String mpTherionLogFileName = 'therion.log';
 const String mpTherionWindowsExecutableName =
     '$mpTherionExecutableName$mpWindowsExecutableExtension';
 const String mpTherionDefaultExecutableCommand = mpTherionExecutableName;
@@ -179,6 +180,7 @@ const Color mpTherionRunOutputErrorColor =
 
 const String mpTherionWarningWord = 'warning';
 const String mpTherionErrorWord = 'error';
+const String mpTherionOutputSectionDelimiter = '====================';
 
 const double mpFloatingActionIconSize = 32;
 const double mpFloatingActionZoomIconSize = 24;

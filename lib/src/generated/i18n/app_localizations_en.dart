@@ -139,11 +139,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionRunOutputLabel => 'Output:';
 
   @override
+  String get mapiahTherionRunTherionOutputBegin => 'Begin Therion output';
+
+  @override
+  String get mapiahTherionRunTherionOutputEnd => 'End Therion output';
+
+  @override
+  String get mapiahTherionRunTherionLogBegin => 'Begin therion.log';
+
+  @override
+  String get mapiahTherionRunTherionLogEnd => 'End therion.log';
+
+  @override
+  String get mapiahTherionRunNoTherionOutputFound => 'No Therion output found';
+
+  @override
   String get mapiahTherionSelectTHConfigDialogTitle => 'Select THConfig file';
 
   @override
   String mpTherionCannotExecuteCommand(Object commandLine) {
-    return 'Cannot execute command: $commandLine';
+    return 'Error executing command: $commandLine';
   }
 
   @override

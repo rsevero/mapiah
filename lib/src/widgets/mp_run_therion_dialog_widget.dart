@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:path/path.dart' as p;
 
 class MPRunTherionDialogWidget extends StatefulWidget {
   final String therionExecutablePath;
@@ -30,6 +32,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   Duration _elapsed = Duration.zero;
   DateTime? _startTime;
   VoidCallback? _statusListener;
+  bool _hasAppendedPostRunOutput = false;
 
   @override
   void initState() {
@@ -63,15 +66,111 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       final bool isRunning = _therionRunner.isRunningNotifier.value;
 
       if (!isRunning) {
-        if (mounted && (_startTime != null)) {
-          setState(() {
-            _elapsed = DateTime.now().difference(_startTime!);
-          });
-        }
+        _onTherionRunFinished();
       }
     };
 
     _therionRunner.isRunningNotifier.addListener(_statusListener!);
+  }
+
+  Future<void> _onTherionRunFinished() async {
+    if (_hasAppendedPostRunOutput) {
+      return;
+    }
+
+    _hasAppendedPostRunOutput = true;
+
+    if (!mpIsFlathub) {
+      final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+      final List<String> therionOutputLines = List<String>.from(
+        _therionRunner.outputLinesNotifier.value,
+      );
+
+      final List<String> therionLogLines = await _readTherionLogLines(
+        appLocalizations,
+      );
+
+      final List<String> postRunOutputLines = <String>[];
+      postRunOutputLines.addAll(
+        _buildSectionLines(
+          beginHeader: appLocalizations.mapiahTherionRunTherionOutputBegin,
+          endHeader: appLocalizations.mapiahTherionRunTherionOutputEnd,
+          contentLines: therionOutputLines,
+        ),
+      );
+      postRunOutputLines.addAll(
+        _buildSectionLines(
+          beginHeader: appLocalizations.mapiahTherionRunTherionLogBegin,
+          endHeader: appLocalizations.mapiahTherionRunTherionLogEnd,
+          contentLines: therionLogLines,
+        ),
+      );
+
+      _therionRunner.outputLinesNotifier.value = <String>[];
+      _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
+      _therionRunner.appendOutputLines(postRunOutputLines);
+    }
+
+    if (mounted && (_startTime != null)) {
+      setState(() {
+        _elapsed = DateTime.now().difference(_startTime!);
+      });
+    }
+  }
+
+  List<String> _buildSectionLines({
+    required String beginHeader,
+    required String endHeader,
+    required List<String> contentLines,
+  }) {
+    final List<String> sectionLines = <String>[];
+
+    sectionLines.add(
+      '$mpTherionOutputSectionDelimiter $beginHeader '
+      '$mpTherionOutputSectionDelimiter',
+    );
+    sectionLines.addAll(contentLines);
+    sectionLines.add(
+      '$mpTherionOutputSectionDelimiter $endHeader '
+      '$mpTherionOutputSectionDelimiter',
+    );
+
+    return sectionLines;
+  }
+
+  Future<List<String>> _readTherionLogLines(
+    AppLocalizations appLocalizations,
+  ) async {
+    final DateTime? startTime = _startTime;
+
+    if (startTime == null) {
+      return <String>[appLocalizations.mapiahTherionRunNoTherionOutputFound];
+    }
+
+    final String thConfigDirectoryPath = p.dirname(widget.thConfigFilePath);
+    final String therionLogFilePath = p.join(
+      thConfigDirectoryPath,
+      mpTherionLogFileName,
+    );
+    final File therionLogFile = File(therionLogFilePath);
+    final bool therionLogFileExists = await therionLogFile.exists();
+
+    if (!therionLogFileExists) {
+      return <String>[appLocalizations.mapiahTherionRunNoTherionOutputFound];
+    }
+
+    final DateTime therionLogLastModified = await therionLogFile.lastModified();
+    final bool therionLogIsNewerThanStartTime = therionLogLastModified.isAfter(
+      startTime,
+    );
+
+    if (!therionLogIsNewerThanStartTime) {
+      return <String>[appLocalizations.mapiahTherionRunNoTherionOutputFound];
+    }
+
+    final List<String> therionLogLines = await therionLogFile.readAsLines();
+
+    return therionLogLines;
   }
 
   @override

@@ -139,12 +139,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunOutputLabel => 'Saída:';
 
   @override
+  String get mapiahTherionRunTherionOutputBegin => 'Início da saída do Therion';
+
+  @override
+  String get mapiahTherionRunTherionOutputEnd => 'Fim da saída do Therion';
+
+  @override
+  String get mapiahTherionRunTherionLogBegin => 'Início de therion.log';
+
+  @override
+  String get mapiahTherionRunTherionLogEnd => 'Fim de therion.log';
+
+  @override
+  String get mapiahTherionRunNoTherionOutputFound =>
+      'Saída do Therion não encontrada';
+
+  @override
   String get mapiahTherionSelectTHConfigDialogTitle =>
       'Selecionar arquivo THConfig';
 
   @override
   String mpTherionCannotExecuteCommand(Object commandLine) {
-    return 'Não foi possível executar o comando: $commandLine';
+    return 'Falha ao executar o comando: $commandLine';
   }
 
   @override
@@ -178,7 +194,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAttrNameEmpty => 'Nome do atributo vazio';
 
   @override
-  String get mpAttrNameInvalid => 'Nome de atributo com characteres inválidos';
+  String get mpAttrNameInvalid => 'Nome de atributo com caracteres inválidos';
 
   @override
   String get mpAttrNameLabel => 'Nome';

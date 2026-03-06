@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.40 - not yet release
+* New features:
+  * Include contents of 'therion.log' file at end of Therion output.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
   * Created keyboard shortcuts to run Therion: Ctrl+T (choose THConfig file and run Therion) and T (run Therion).

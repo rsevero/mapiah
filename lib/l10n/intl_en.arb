@@ -191,12 +191,37 @@
     "description": "Label for Therion output area",
     "type": "text"
   },
+  "mapiahTherionRunTherionOutputBegin": "Begin Therion output",
+  "@mapiahTherionRunTherionOutputBegin": {
+    "description": "Header line marking the beginning of Therion output section",
+    "type": "text"
+  },
+  "mapiahTherionRunTherionOutputEnd": "End Therion output",
+  "@mapiahTherionRunTherionOutputEnd": {
+    "description": "Header line marking the end of Therion output section",
+    "type": "text"
+  },
+  "mapiahTherionRunTherionLogBegin": "Begin therion.log",
+  "@mapiahTherionRunTherionLogBegin": {
+    "description": "Header line marking the beginning of therion.log section",
+    "type": "text"
+  },
+  "mapiahTherionRunTherionLogEnd": "End therion.log",
+  "@mapiahTherionRunTherionLogEnd": {
+    "description": "Header line marking the end of therion.log section",
+    "type": "text"
+  },
+  "mapiahTherionRunNoTherionOutputFound": "No Therion output found",
+  "@mapiahTherionRunNoTherionOutputFound": {
+    "description": "Message shown when no acceptable therion.log can be appended",
+    "type": "text"
+  },
   "mapiahTherionSelectTHConfigDialogTitle": "Select THConfig file",
   "@mapiahTherionSelectTHConfigDialogTitle": {
     "description": "Title for THConfig file picker dialog",
     "type": "text"
   },
-  "mpTherionCannotExecuteCommand": "Cannot execute command: {commandLine}",
+  "mpTherionCannotExecuteCommand": "Error executing command: {commandLine}",
   "@mpTherionCannotExecuteCommand": {
     "description": "Error message shown when Therion command execution fails",
     "type": "text",

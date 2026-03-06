@@ -9,6 +9,7 @@ A few introductory instructions:
 7. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
 8. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
 9. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files.
+10. Don´t use all caps on user text.
 
 Specific instructions:
 

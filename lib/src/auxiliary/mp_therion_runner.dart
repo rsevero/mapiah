@@ -136,6 +136,16 @@ class MPTherionRunner {
 
   Stream<String> get outputStream => _outputController.stream;
 
+  void appendOutputLines(List<String> lines) {
+    if (lines.isEmpty) {
+      return;
+    }
+
+    final String appendedText =
+        '${lines.join(mpUnixLineBreak)}$mpUnixLineBreak';
+    _handleOutput(appendedText);
+  }
+
   Future<void> start() async {
     final String workingDirectory = p.dirname(thConfigFilePath);
 

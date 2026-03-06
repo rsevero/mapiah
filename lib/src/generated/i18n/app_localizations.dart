@@ -307,6 +307,36 @@ abstract class AppLocalizations {
   /// **'Output:'**
   String get mapiahTherionRunOutputLabel;
 
+  /// Header line marking the beginning of Therion output section
+  ///
+  /// In en, this message translates to:
+  /// **'Begin Therion output'**
+  String get mapiahTherionRunTherionOutputBegin;
+
+  /// Header line marking the end of Therion output section
+  ///
+  /// In en, this message translates to:
+  /// **'End Therion output'**
+  String get mapiahTherionRunTherionOutputEnd;
+
+  /// Header line marking the beginning of therion.log section
+  ///
+  /// In en, this message translates to:
+  /// **'Begin therion.log'**
+  String get mapiahTherionRunTherionLogBegin;
+
+  /// Header line marking the end of therion.log section
+  ///
+  /// In en, this message translates to:
+  /// **'End therion.log'**
+  String get mapiahTherionRunTherionLogEnd;
+
+  /// Message shown when no acceptable therion.log can be appended
+  ///
+  /// In en, this message translates to:
+  /// **'No Therion output found'**
+  String get mapiahTherionRunNoTherionOutputFound;
+
   /// Title for THConfig file picker dialog
   ///
   /// In en, this message translates to:
@@ -316,7 +346,7 @@ abstract class AppLocalizations {
   /// Error message shown when Therion command execution fails
   ///
   /// In en, this message translates to:
-  /// **'Cannot execute command: {commandLine}'**
+  /// **'Error executing command: {commandLine}'**
   String mpTherionCannotExecuteCommand(Object commandLine);
 
   /// The title for the keyboard shortcuts help dialog
