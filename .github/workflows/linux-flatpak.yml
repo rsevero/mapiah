@@ -63,7 +63,7 @@ jobs:
         sudo flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk/x86_64/$RUNTIME_VERSION
         sudo flatpak install --system --noninteractive flathub org.freedesktop.Platform/x86_64/$RUNTIME_VERSION
-        sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm19/x86_64/$RUNTIME_VERSION
+        sudo flatpak install --system --noninteractive flathub org.freedesktop.Sdk.Extension.llvm20/x86_64/$RUNTIME_VERSION
         flatpak list --system | grep -E "org.freedesktop.(Sdk|Platform)" || true
 
     - name: Clean host build artifacts
