@@ -54,7 +54,10 @@ flatpak update io.github.rsevero.mapiah
 ```
 
 ##### Install from Mapiah GitHub Pages Flatpak repo
-For production builds published through GitHub Pages, you can install using the generated `.flatpakref` or the repository URL.
+You can install using the `.flatpakref` link below:
+`https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref`
+
+If that URL returns `404`, wait a few minutes and try again. New releases can take a short time to appear on GitHub Pages.
 
 ```bash
 # Option 1: install directly from the generated flatpakref
