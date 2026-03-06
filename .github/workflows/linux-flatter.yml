@@ -100,7 +100,7 @@ jobs:
             exit 1
           fi
 
-          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
           flatpak install --user --noninteractive flathub "org.freedesktop.Sdk/x86_64/$RUNTIME_VERSION"
           flatpak install --user --noninteractive flathub "org.freedesktop.Platform/x86_64/$RUNTIME_VERSION"
           flatpak install --user --noninteractive flathub "org.freedesktop.Sdk.Extension.llvm20/x86_64/$RUNTIME_VERSION"
