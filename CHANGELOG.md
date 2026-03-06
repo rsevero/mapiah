@@ -5,6 +5,7 @@
   * Include contents of 'therion.log' file at end of Therion output.
 * Fixed bugs:
 * Infrastructure maintenance:
+  * Enabling github created flatpak generation.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
