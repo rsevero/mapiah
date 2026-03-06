@@ -1,6 +1,6 @@
 id: org.mapiah.mapiah
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
