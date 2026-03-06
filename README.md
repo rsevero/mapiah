@@ -53,6 +53,18 @@ If you have already installed the Flathub version, you can update it with:
 flatpak update io.github.rsevero.mapiah
 ```
 
+##### Install from Mapiah GitHub Pages Flatpak repo
+For production builds published through GitHub Pages, you can install using the generated `.flatpakref` or the repository URL.
+
+```bash
+# Option 1: install directly from the generated flatpakref
+flatpak install --user --from https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref
+
+# Option 2: add the generated repository and install from it
+flatpak remote-add --if-not-exists mapiah https://rsevero.github.io/mapiah/index.flatpakrepo
+flatpak install --user mapiah org.mapiah.mapiah
+```
+
 #### Other formats
 If someone is interested in creating Linux packages in other formats like arch, deb, rpm, snap or other package and is interested in my help, please contact me at rsev AT pm.me.
 

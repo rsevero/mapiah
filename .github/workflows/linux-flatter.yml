@@ -1,0 +1,124 @@
+name: Mapiah Linux Flatter
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      test_tag:
+        description: 'Simulated tag for testing'
+        required: false
+        default: 'v1.0.0-test'
+      pages_url:
+        description: 'Flatpak repository URL (defaults to GitHub Pages URL)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Flatpak With Flatter
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate tag (automatic runs only)
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -e
+          set -x
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid tag format: $TAG (must match vX.Y.Z)"
+            exit 1
+          fi
+          echo "Validated tag: $TAG"
+
+      - name: Prepare build metadata
+        id: meta
+        shell: bash
+        run: |
+          set -e
+          set -x
+
+          TAG="${{ github.event_name == 'push' && github.ref_name || github.event.inputs.test_tag }}"
+          TAG_NUMBER="${TAG#v}"
+          APP_ID="org.mapiah.mapiah"
+
+          DEFAULT_PAGES_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}"
+          PAGES_URL="${{ github.event.inputs.pages_url }}"
+          if [[ -z "$PAGES_URL" ]]; then
+            PAGES_URL="$DEFAULT_PAGES_URL"
+          fi
+
+          REPO_HOST="$PAGES_URL"
+          REPO_HOST="${REPO_HOST#https://}"
+          REPO_HOST="${REPO_HOST#http://}"
+          REPO_HOST="${REPO_HOST%%/*}"
+
+          if [[ "$REPO_HOST" != *.github.io ]]; then
+            printf '%s\n' "$REPO_HOST" > CNAME
+          fi
+
+          FLATPAKREF_FILE="${APP_ID}.flatpakref"
+
+          printf '%s\n' \
+            '[Flatpak Ref]' \
+            "Name=${APP_ID}" \
+            'Branch=master' \
+            'Title=Mapiah' \
+            "Url=${PAGES_URL}" \
+            'IsRuntime=false' \
+            'RuntimeRepo=https://flathub.org/repo/flathub.flatpakrepo' \
+            > "$FLATPAKREF_FILE"
+
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          echo "TAG_NUMBER=$TAG_NUMBER" >> "$GITHUB_ENV"
+          echo "APP_ID=$APP_ID" >> "$GITHUB_ENV"
+          echo "FLATPAKREF_FILE=$FLATPAKREF_FILE" >> "$GITHUB_ENV"
+          echo "tag_number=$TAG_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "flatpakref_file=$FLATPAKREF_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Build with Flatter
+        id: flatter
+        uses: andyholmes/flatter@v1.0.0
+        with:
+          files: |
+            packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml
+          arch: x86_64
+          upload-bundles: true
+          upload-pages-artifact: true
+          upload-pages-includes: |
+            org.mapiah.mapiah.flatpakref
+            CNAME
+
+      - name: Upload flatpakref artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapiah-flatpakref-${{ steps.meta.outputs.tag_number }}
+          path: ${{ steps.meta.outputs.flatpakref_file }}
+
+      - name: Upload repository artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapiah-flatpak-repo-${{ steps.meta.outputs.tag_number }}
+          path: ${{ steps.flatter.outputs.repository }}
+
+  deploy:
+    name: Deploy GitHub Pages Flatpak Repo
+    runs-on: ubuntu-24.04
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
