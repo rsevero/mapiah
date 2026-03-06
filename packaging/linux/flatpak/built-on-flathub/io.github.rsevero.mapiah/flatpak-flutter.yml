@@ -5,7 +5,7 @@ sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
   - org.freedesktop.Sdk.Extension.texlive
-command: mapiah-wrapper
+command: mapiah
 finish-args:
   - --device=dri
   - --env=GIO_USE_PORTAL=1

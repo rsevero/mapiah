@@ -151,6 +151,8 @@
 [X] - BUG: element types in multiple clicked elements dialog box are not translated. [reported by Daniel Bean]
 [X] - BUG: new area not created with subtype.
 [ ] - On "Multiple elements clicked" dialog box, show the subtype of each element if it has one. 
+[ ] - At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
+[ ] - Review portuguese translations of PLA types and subtypes.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

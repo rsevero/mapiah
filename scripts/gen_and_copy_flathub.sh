@@ -1,14 +1,52 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: gen_and_copy_flathub.sh [MANIFEST] [TARGET]
+# Usage: gen_and_copy_flathub.sh [--verbose|-v] [MANIFEST] [TARGET]
 # Default MANIFEST: packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml
 # Default TARGET: ~/devel/io.github.rsevero.mapiah
 
+VERBOSE=0
+POSITIONAL=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -v|--verbose)
+      VERBOSE=1
+      shift
+      ;;
+    -h|--help)
+      echo "Usage: $0 [--verbose|-v] [MANIFEST] [TARGET]"
+      echo "  MANIFEST: path relative to repo root"
+      echo "  TARGET: destination directory (default: ~/devel/io.github.rsevero.mapiah)"
+      exit 0
+      ;;
+    --)
+      shift
+      while [[ $# -gt 0 ]]; do
+        POSITIONAL+=("$1")
+        shift
+      done
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      echo "Use --help for usage." >&2
+      exit 1
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
+done
+
+if [[ $VERBOSE -eq 1 ]]; then
+  set -x
+fi
+
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-MANIFEST_REL=${1:-.tools/flatpak-flutter/io.github.rsevero.mapiah/flatpak-flutter.yml}
+MANIFEST_REL=${POSITIONAL[0]:-.tools/flatpak-flutter/io.github.rsevero.mapiah/flatpak-flutter.yml}
 MANIFEST="$ROOT_DIR/$MANIFEST_REL"
-TARGET=${2:-$HOME/devel/io.github.rsevero.mapiah}
+TARGET=${POSITIONAL[1]:-$HOME/devel/io.github.rsevero.mapiah}
 FLATPAK_FLUTTER="$ROOT_DIR/.tools/flatpak-flutter/flatpak-flutter.py"
 PUBSPEC="$ROOT_DIR/pubspec.yaml"
 METAINFO="$ROOT_DIR/packaging/linux/io.github.rsevero.mapiah.metainfo.xml"
@@ -18,6 +56,9 @@ THERION_PATCH="$ROOT_DIR/packaging/linux/flatpak/built-on-flathub/io.github.rsev
 echo "Manifest: $MANIFEST"
 echo "Generator: $FLATPAK_FLUTTER"
 echo "Target repo: $TARGET"
+
+# Run from repository root so generator output paths are deterministic.
+cd "$ROOT_DIR"
 
 # Optionally activate virtualenv if present
 if [ -f "$ROOT_DIR/.venv/bin/activate" ]; then
@@ -55,6 +96,7 @@ fi
 export MANIFEST
 python3 - <<'PY'
 import os
+import re
 import subprocess
 import sys
 
@@ -73,6 +115,52 @@ with open(manifest_path, 'r', encoding='utf-8') as f:
   manifest = yaml.safe_load(f)
 
 changed = False
+
+def ensure_flutter_source() -> bool:
+  app_id = manifest.get('id') or manifest.get('app-id')
+  if not app_id:
+    return False
+
+  app_module_name = str(app_id).split('.')[-1].lower()
+  app_module = None
+  for module in manifest.get('modules', []) or []:
+    if not isinstance(module, dict):
+      continue
+    name = str(module.get('name', '')).lower()
+    if name == app_module_name:
+      app_module = module
+      break
+
+  if not app_module:
+    return False
+
+  sources = app_module.get('sources', []) or []
+  for source in sources:
+    if not isinstance(source, dict):
+      continue
+    if source.get('type') == 'git' and str(source.get('url', '')).startswith('https://github.com/flutter/flutter'):
+      return False
+
+  flutter_tag = None
+  for child in app_module.get('modules', []) or []:
+    if not isinstance(child, str):
+      continue
+    m = re.match(r'generated/modules/flutter-sdk-(.+)\.json$', child.strip())
+    if m:
+      flutter_tag = m.group(1)
+      break
+
+  if not flutter_tag:
+    return False
+
+  sources.append({
+    'type': 'git',
+    'url': 'https://github.com/flutter/flutter.git',
+    'tag': flutter_tag,
+    'dest': 'flutter',
+  })
+  app_module['sources'] = sources
+  return True
 
 def resolve_tag_commit(url: str, tag: str) -> str:
   try:
@@ -119,6 +207,9 @@ for module in manifest.get('modules', []) or []:
       source['commit'] = resolved
       changed = True
 
+if ensure_flutter_source():
+  changed = True
+
 if changed:
   with open(manifest_path, 'w', encoding='utf-8') as f:
     yaml.safe_dump(manifest, f, sort_keys=False)
@@ -154,6 +245,26 @@ fi
 
 # No post-processing of generated modules here; rely on flatpak-flutter output.
 
+# Find the generated directory produced by flatpak-flutter.
+# Depending on generator version/invocation it may be in different roots.
+GENERATED_BASE=""
+for candidate in \
+  "$ROOT_DIR/generated" \
+  "$(dirname "$GENERATED_YML")/generated" \
+  "$ROOT_DIR/.tools/flatpak-flutter/$APP_ID/generated"
+do
+  if [ -d "$candidate" ]; then
+    GENERATED_BASE="$candidate"
+    break
+  fi
+done
+
+if [ -n "$GENERATED_BASE" ]; then
+  echo "Using generated artifacts from: $GENERATED_BASE"
+else
+  echo "No generated artifacts directory found after manifest generation." >&2
+fi
+
 # Prepare target directories — clean existing contents first (preserve .git)
 if [ -d "$TARGET" ]; then
   echo "Cleaning target directory $TARGET (preserving .git/.gitignore if present)"
@@ -173,17 +284,17 @@ echo "Copying $GENERATED_YML -> $TARGET/"
 cp -f "$GENERATED_YML" "$TARGET/"
 
 # Copy generated modules/sources if present
-if [ -d "$ROOT_DIR/generated/modules" ]; then
+if [ -n "$GENERATED_BASE" ] && [ -d "$GENERATED_BASE/modules" ]; then
   echo "Copying generated/modules -> $TARGET/generated/modules"
-  cp -r --remove-destination "$ROOT_DIR/generated/modules/"* "$TARGET/generated/modules/" || true
+  cp -r --remove-destination "$GENERATED_BASE/modules/"* "$TARGET/generated/modules/" || true
 fi
-if [ -d "$ROOT_DIR/generated/sources" ]; then
+if [ -n "$GENERATED_BASE" ] && [ -d "$GENERATED_BASE/sources" ]; then
   echo "Copying generated/sources -> $TARGET/generated/sources"
-  cp -r --remove-destination "$ROOT_DIR/generated/sources/"* "$TARGET/generated/sources/" || true
+  cp -r --remove-destination "$GENERATED_BASE/sources/"* "$TARGET/generated/sources/" || true
 fi
-if [ -d "$ROOT_DIR/generated/patches" ]; then
+if [ -n "$GENERATED_BASE" ] && [ -d "$GENERATED_BASE/patches" ]; then
   echo "Copying generated/patches -> $TARGET/generated/patches"
-  cp -r --remove-destination "$ROOT_DIR/generated/patches/"* "$TARGET/generated/patches/" || true
+  cp -r --remove-destination "$GENERATED_BASE/patches/"* "$TARGET/generated/patches/" || true
 fi
 
 # Copy packaging files referenced commonly
@@ -209,6 +320,30 @@ fi
 # If the generator created a .tools/flatpak-flutter/<app>/io.github...yml copy it too
 if [ -f "$ROOT_DIR/.tools/flatpak-flutter/${APP_ID}/io.github.rsevero.mapiah.yml" ]; then
   cp -f "$ROOT_DIR/.tools/flatpak-flutter/${APP_ID}/io.github.rsevero.mapiah.yml" "$TARGET/"
+fi
+
+# Validate that all generated include files referenced by the target manifest exist.
+TARGET_MANIFEST="$TARGET/io.github.rsevero.mapiah.yml"
+if [ ! -f "$TARGET_MANIFEST" ] && [ -f "$TARGET/${APP_ID}.yml" ]; then
+  TARGET_MANIFEST="$TARGET/${APP_ID}.yml"
+fi
+
+if [ -f "$TARGET_MANIFEST" ]; then
+  missing=0
+  while IFS= read -r include_path; do
+    [ -z "$include_path" ] && continue
+    include_path="${include_path#- }"
+    include_path="${include_path# }"
+    if [ ! -f "$TARGET/$include_path" ]; then
+      echo "ERROR: manifest include missing in target: $include_path" >&2
+      missing=1
+    fi
+  done < <(grep -E '^\s*-\s*generated/(sources|modules|patches)/.+\.(json|patch)$' "$TARGET_MANIFEST" | sed -E 's/^\s*//')
+
+  if [ "$missing" -ne 0 ]; then
+    echo "Aborting: generated include files are missing. Re-run this script and check generator output." >&2
+    exit 1
+  fi
 fi
 
 echo "Done. Files copied to $TARGET"

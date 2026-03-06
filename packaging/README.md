@@ -19,11 +19,11 @@
       git pull
       git co -b v0.2.22
       ```
-10. At the main Mapiah repo _~/devel/mapiah_ generate the Flatpak build files and copy them to the Flathub repo:
+10. At the main Mapiah repo _~/devel/mapiah_ (from the repo root) generate the Flatpak build files and copy them to the Flathub repo:
    ```bash
    ./scripts/gen_and_copy_flathub.sh
    ```
-11. At the _~/devel/io.github.rsevero.mapiah_ repo: 
+11. At the _~/devel/io.github.rsevero.mapiah_ repo:
    1. Test the new release Flatpak build locally with:
       ```bash
       flatpak run --command=flathub-build org.flatpak.Builder --install io.github.rsevero.mapiah.yml
@@ -61,11 +61,11 @@
       git co master
       git pull
       ```
-7.  At the main Mapiah repo _~/devel/mapiah_ generate the Flatpak build files and copy them to the Flathub repo:
+7.  At the main Mapiah repo _~/devel/mapiah_ (from the repo root) generate the Flatpak build files and copy them to the Flathub repo:
    ```bash
    ./scripts/gen_and_copy_flathub.sh
    ```
-8.  At the _~/devel/io.github.rsevero.mapiah_ repo: 
+8.  At the _~/devel/io.github.rsevero.mapiah_ repo:
    1. Test the new release Flatpak build locally with:
       ```bash
       flatpak run --command=flathub-build org.flatpak.Builder --install io.github.rsevero.mapiah.yml
