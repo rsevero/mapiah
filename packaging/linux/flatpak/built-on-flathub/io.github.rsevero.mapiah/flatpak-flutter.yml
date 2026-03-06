@@ -108,7 +108,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/rsevero/mapiah.git
-        tag: v0.2.40-rc7
+        tag: v0.2.40-rc8
       - type: file
         path: io.github.rsevero.mapiah.metainfo.xml
       - generated/sources/pubspec.json
