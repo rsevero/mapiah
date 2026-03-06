@@ -31,6 +31,7 @@ modules:
       prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
       env:
         PUB_CACHE: /run/build/mapiah/.pub-cache
+        TAR_OPTIONS: --no-same-owner
       build-args:
         - --share=network
     build-commands:
