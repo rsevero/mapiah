@@ -11,6 +11,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Opções do elemento](#opções-do-elemento)
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
+- [Selecionando elementos](#selecionando-elementos)
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
@@ -88,6 +89,13 @@ O Mapiah preserva o máximo possível a formatação original do arquivo ao salv
 * Áreas sem referências de borda são removidas.
 * Opções de linha definidas na área [LINE DATA] são movidas para a definição da linha. Não confundir com opções de ponto de linha, que são definidas na área [LINE DATA] e são preservadas lá.
 * Opções de subtipo definidas antes do primeiro ponto de linha ou no primeiro ponto são transformadas em subtipo da linha.
+
+## Selecionando elementos
+Para selecionar um elemento, clique nele com a ferramenta _Selecionar elemento_ ativa. Para selecionar vários elementos, mantenha a tecla _Shift_ pressionada enquanto clica neles. Para deselecionar um elemento, mantenha a tecla _Shift_ pressionada enquanto clica nele. Para selecionar todos os elementos, use a opção _Selecionar tudo_ na ferramenta _Selecionar elemento_ ou use o atalho de teclado _Ctrl+A_.
+
+Também é possível selecionar elementos arrastando uma janela de seleção com o mouse. Para fazer isso, clique e segure o botão esquerdo do mouse em uma área vazia do canvas e arraste o mouse. Todos os elementos que estão total ou parcialmente dentro da janela de seleção serão selecionados. Para adicionar elementos à seleção, mantenha a tecla _Shift_ pressionada enquanto arrasta a janela de seleção.
+
+Quando clicar em uma linha que define uma área, o usuário será apresentado com uma caixa de diálogo "Vários elementos clicados", onde poderá escolher qual elemento selecionar. As opções são a própria linha e a área definida pela linha. Se você Ctrl+Clicar (ou Meta+Clicar) em uma linha que define uma área, a área será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados". Se você Shift+Ctrl+Clicar (ou Shift+Meta+Clicar) em uma linha que define uma área, a linha será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados".
 
 ## Simplificar linhas
 Curvas Bézier e segmentos de linha reta são simplificados de forma diferente. Para simplificar linhas, selecione-as primeiro. É possível ter outros tipos de elementos selecionados (pontos ou áreas) durante a simplificação; eles não serão alterados pelo processo.

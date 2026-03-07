@@ -109,7 +109,7 @@
 [X] - BUG: On 'single line edit' mode, if I move a end point and immediatly edit its smooth option, the point moves back to the original position before the move.
 [X] - BUG: On 'single line edit' mode, clicking on empty space with points selected throws.
 [X] - BUG: On 'single line edit' mode, after simplifying a line, it's not possible to select the line by clicking over the new path, only on the old one.
-[ ] - When clicking on an area, create some sort of short cut that would enable the user to automatically selected either the line or the area without being presented with a 'multiple elements clicked' dialog box.
+[X] - When clicking on an area, create some sort of short cut that would enable the user to automatically selected either the line or the area without being presented with a 'multiple elements clicked' dialog box.
 [X] - Create state 'select all/deselect all' methods.
 [X] - Move kerboard shortcuts R (reverse line) and S (smooth line points) to states that actually deal with selected lines.
 [X] - Make 'smooth line points' work when in 'non empty selection' mode acting only on selected lines.
@@ -154,6 +154,8 @@
 [X] - At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
 [ ] - Review portuguese translations of PLA types and subtypes.
 [ ] - Create a feature that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
+[ ] - At flathub_disable.md, explain why Flathub version is being disabled.
+[ ] - At "newer versions available" page, also show how many commits and how many days the users isntalled version is old.s
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

@@ -126,36 +126,23 @@ class _MPMultipleElementsClickedWidgetState
     for (final THElement element in clickedElements) {
       switch (element) {
         case THPoint point:
-          options[element.mpID] = getPointName(point);
-        case THBezierCurveLineSegment _:
-        case THStraightLineSegment _:
-          final int lineMPID = element.parentMPID;
-          final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
+          final int pointMPID = point.mpID;
 
-          if ((areaMPID != null) && (!options.containsKey(areaMPID))) {
-            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
-          }
-
-          if (!options.containsKey(lineMPID)) {
-            options[lineMPID] = getLineName(thFile.lineByMPID(lineMPID));
+          if (!options.containsKey(pointMPID)) {
+            options[pointMPID] = getPointName(point);
           }
         case THLine line:
           final int lineMPID = line.mpID;
-          final int? areaMPID = thFile.getAreaMPIDByLineMPID(lineMPID);
-
-          if ((areaMPID != null) && (!options.containsKey(areaMPID))) {
-            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
-          }
 
           if (!options.containsKey(lineMPID)) {
             options[lineMPID] = getLineName(line);
           }
         case THArea area:
-          if (!options.containsKey(area.mpID)) {
-            options[area.mpID] = getAreaName(thFile.areaByMPID(area.mpID));
+          final int areaMPID = area.mpID;
+
+          if (!options.containsKey(areaMPID)) {
+            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
           }
-        default:
-          continue;
       }
     }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -694,6 +695,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Iterable<MPSelectable> selectableElements =
         getMPSelectableElements().values;
     final Map<int, THElement> clickedElementsMap = {};
+    final bool isCtrlOrMetaPressed =
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
 
     for (final MPSelectable selectableElement in selectableElements) {
       if (!selectableElement.contains(canvasCoordinates) ||
@@ -721,21 +726,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             case THLine _:
               final int? areaMPID = _thFile.getAreaMPIDByLineMPID(element.mpID);
 
-              if (areaMPID != null) {
-                clickedElementsMap[areaMPID] = _thFile.elementByMPID(areaMPID);
+              if (areaMPID == null) {
+                clickedElementsMap[element.mpID] = element;
+              } else {
+                if (isCtrlOrMetaPressed && !isAltPressed) {
+                  if (isShiftPressed) {
+                    clickedElementsMap[element.mpID] = element;
+                  } else {
+                    clickedElementsMap[areaMPID] = _thFile.elementByMPID(
+                      areaMPID,
+                    );
+                  }
+                } else {
+                  clickedElementsMap[element.mpID] = element;
+                  clickedElementsMap[areaMPID] = _thFile.elementByMPID(
+                    areaMPID,
+                  );
+                }
               }
-              clickedElementsMap[element.mpID] = element;
-            case THLineSegment _:
-              final int parentMPID = element.parentMPID;
-              final int? areaMPID = _thFile.getAreaMPIDByLineMPID(parentMPID);
-
-              if (areaMPID != null) {
-                clickedElementsMap[areaMPID] = _thFile.elementByMPID(areaMPID);
-              }
-
-              clickedElementsMap[element.parentMPID] = _thFile.elementByMPID(
-                parentMPID,
-              );
           }
       }
     }

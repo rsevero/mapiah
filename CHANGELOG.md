@@ -8,6 +8,7 @@
   * Enable shortcuts Esc, Ctrl+T and T at "Therion run" window.
   * Adding start and end time at Therion run output.
   * When creating a point or a line point, it should snap to near elements.
+  * When clicking on an area, Ctrl (or Meta+Click) selects the area (and not the line), Shift+Ctrl+Click (or Meta+Shift+Click) selects the line (and not the area).
 * Fixed bugs:
   * Newer version available window not appearing in Flathub version.
   * On very fast Therion executions, therion.log file content not being included in Therion run output.

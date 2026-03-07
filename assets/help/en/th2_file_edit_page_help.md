@@ -7,6 +7,7 @@ This is where all TH2 file editing is done.
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
 - [Drawing lines](#drawing-lines)
+- [Selecting elements](#selecting-elements)
 - [Element options](#element-options)
 - [Save](#save)
   - [Original file format](#original-file-format)
@@ -64,6 +65,13 @@ When drawing lines, each new segment is initially created as a straight line seg
 Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
 
 Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
+
+## Selecting elements
+To select an element, click on it with the _Select element_ tool active. To select multiple elements, hold the _Shift_ key while clicking on them. To deselect an element, hold the _Shift_ key while clicking on it. To select all elements, use the _Select all_ option on the _Select element_ tool or use the keyboard shortcut _Ctrl+A_.
+
+Its also possible to select elements by dragging a selection window with the mouse. To do that, click and hold the left mouse button on an empty area of the canvas and drag the mouse. All elements that are fully or partially inside the selection window will be selected. To add elements to the selection, hold the _Shift_ key while dragging the selection window.
+
+When cliking on a line that defines an area, the the user will be presented with a "Multiple clicked elements" dialog box where the user can choose which element to select. The options are the line itself and the area defined by the line. It you Ctrl+Click (or Meta+Click) on a line that defines an area, the area will be selected directly without showing the "Multiple clicked elements" dialog box. If you Shift+Ctrl+Click (or Shift+Meta+Click) on a line that defines an area, the line will be selected directly without showing the "Multiple clicked elements" dialog box.
 
 ## Element options
 Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be openned by using the 'O' keyboard shortcut when there is at least one element selected.
