@@ -36,8 +36,8 @@ class AppLocalizationsPt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count versões mais recentes disponíveis',
-      one: '1 versão mais recente disponível',
+      other: '$count versões do Mapiah mais recentes disponíveis',
+      one: '1 versão do Mapiah mais recente disponível',
     );
     return '$_temp0';
   }

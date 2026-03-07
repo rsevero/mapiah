@@ -143,7 +143,7 @@ abstract class AppLocalizations {
   /// Title for the update available dialog including the number of newer versions
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one {1 newer version available} other {{count} newer versions available}}'**
+  /// **'{count, plural, one {1 newer Mapiah version available} other {{count} newer Mapiah versions available}}'**
   String updateAvailableTitleWithCount(int count);
 
   /// Body text for the update available dialog

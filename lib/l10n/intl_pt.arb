@@ -7,7 +7,7 @@
   "appTitle": "Mapiah",
   "buttonClose": "Fechar",
   "updateAvailableTitle": "Atualização disponível",
-  "updateAvailableTitleWithCount": "{count, plural, one {1 versão mais recente disponível} other {{count} versões mais recentes disponíveis}}",
+  "updateAvailableTitleWithCount": "{count, plural, one {1 versão do Mapiah mais recente disponível} other {{count} versões do Mapiah mais recentes disponíveis}}",
   "updateAvailableBody": "Uma versão mais recente está disponível.\n\nAtual: {currentVersion}\nMais recente: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}",
   "updateCheckFailedTitle": "Falha ao verificar atualização",
   "updateCheckFailedNoAnswerBody": "Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.",

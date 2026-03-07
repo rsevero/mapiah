@@ -38,7 +38,7 @@
     "description": "Title for the update available dialog",
     "type": "text"
   },
-  "updateAvailableTitleWithCount": "{count, plural, one {1 newer version available} other {{count} newer versions available}}",
+  "updateAvailableTitleWithCount": "{count, plural, one {1 newer Mapiah version available} other {{count} newer Mapiah versions available}}",
   "@updateAvailableTitleWithCount": {
     "description": "Title for the update available dialog including the number of newer versions",
     "type": "text",
