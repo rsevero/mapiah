@@ -26,9 +26,11 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
 
     final ({String type, String subtype}) typeSubtype = elementEditController
         .getLastUsedPointTypeAndSubtype();
+    final Offset snapedScreenOffset = snapController
+        .getScreenSnapedOffsetFromScreenOffset(event.localPosition);
 
     elementEditController.addPoint(
-      newPointScreenPosition: event.localPosition,
+      newPointScreenPosition: snapedScreenOffset,
       pointTypeString: typeSubtype.type,
       pointSubtypeString: typeSubtype.subtype,
     );

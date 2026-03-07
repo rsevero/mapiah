@@ -5,12 +5,10 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
         MPTH2FileEditPageAltClickMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin {
-  final TH2FileEditSnapController snapController;
   THElement? _clickedElementAtPointerDown;
   bool _searchedForClickedElementAtPointerDown = false;
 
-  MPTH2FileEditStateMovingElements({required super.th2FileEditController})
-    : snapController = th2FileEditController.snapController;
+  MPTH2FileEditStateMovingElements({required super.th2FileEditController});
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
