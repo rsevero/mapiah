@@ -4,6 +4,7 @@
 * New features:
   * Include contents of 'therion.log' file at end of Therion output.
 * Fixed bugs:
+  * Newer version available window not appearing in Flathub version.
 * Infrastructure maintenance:
   * Enabling github created flatpak generation.
   * New "New version available" page.

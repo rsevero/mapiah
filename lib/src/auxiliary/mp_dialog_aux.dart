@@ -476,18 +476,19 @@ class MPDialogAux {
         ? appLocalizations.updateAvailableTitleWithCount(newerVersionCount)
         : appLocalizations.updateAvailableTitle;
 
-    MPModalOverlayWidget.show(
+    showDialog<void>(
       context: ctx,
-      onDismissed: () {
-        _isUpdateDialogOpen = false;
-      },
-      childBuilder: (VoidCallback onPressedClose) => MPHelpDialogWidget(
+      useRootNavigator: true,
+      barrierDismissible: true,
+      builder: (BuildContext ctx2) => MPHelpDialogWidget(
         helpPage: mpHelpPageFlathubDisabled,
         title: dialogTitle,
-        onPressedClose: onPressedClose,
+        onPressedClose: () => Navigator.of(ctx2, rootNavigator: true).pop(),
         source: MPHelpPageSource.githubRaw,
       ),
-    );
+    ).whenComplete(() {
+      _isUpdateDialogOpen = false;
+    });
   }
 
   static void _showUpdateCheckFailedDialog({
