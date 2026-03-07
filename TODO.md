@@ -102,7 +102,7 @@
 [X] - BUG: on 'Ctrl+A', the state remains 'empty selection'.
 [X] - Keyboard shorcut to toogle smooth between "on/unset".
 [X] - When recording the last PLA type used to be the default one for the next PLA created, the subtype should also be saved.
-[ ] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
+[X] - When clicking to create either an initial line point or a point, snap should also be effective if enabled.
 [X] - BUG: Simplification of several lines at once is not working at all.
 [X] - BUG: On the PLA type selection overlay window, in the "Current" box, hyphenated options are being presented hyphenated instead of translated.
 [X] - On 'single line edit' mode, after changing line point positions, the line bounding box is not being updated (selection handles still on the old position).

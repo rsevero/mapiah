@@ -7,7 +7,7 @@
   * At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
   * Enable shortcuts Esc, Ctrl+T and T at "Therion run" window.
   * Adding start and end time at Therion run output.
-  * When creating a point, it should snap to near elements.
+  * When creating a point or a line point, it should snap to near elements.
 * Fixed bugs:
   * Newer version available window not appearing in Flathub version.
   * On very fast Therion executions, therion.log file content not being included in Therion run output.

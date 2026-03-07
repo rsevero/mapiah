@@ -23,7 +23,10 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
-    elementEditController.addNewLineLineSegment(event.localPosition);
+    final Offset snapedScreenOffset = snapController
+        .getScreenSnapedOffsetFromScreenOffset(event.localPosition);
+
+    elementEditController.addNewLineLineSegment(snapedScreenOffset);
   }
 
   @override

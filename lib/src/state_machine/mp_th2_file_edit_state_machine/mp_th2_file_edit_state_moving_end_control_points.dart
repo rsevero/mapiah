@@ -50,11 +50,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
-      event.localPosition,
-    );
     final Offset snapedCanvasOffset = snapController
-        .getCanvasSnapedOffsetFromCanvasOffset(canvasOffset);
+        .getCanvasSnapedOffsetFromScreenOffset(event.localPosition);
 
     setStatusBarMessage();
 
