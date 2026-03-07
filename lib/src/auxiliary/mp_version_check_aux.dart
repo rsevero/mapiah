@@ -38,7 +38,7 @@ MPVersionCheckResult? summarizeNewerVersions({
 }) {
   final _MPSemanticVersion? parsedCurrentVersion = _MPSemanticVersion.tryParse(
     input: currentVersion,
-    pattern: mpMapiahStableVersionPattern,
+    pattern: mpMapiahStableReleaseTagPattern,
   );
 
   if (parsedCurrentVersion == null) {

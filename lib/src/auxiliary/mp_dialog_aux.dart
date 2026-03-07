@@ -281,8 +281,11 @@ class MPDialogAux {
       );
       final DateTime now = DateTime.now().toUtc();
       final Duration timeSinceLastCheck = now.difference(lastNewVersionCheck);
+      final bool isDebugVersionOverrideActive =
+          mpDebugNewVersionInterfaceCurrentVersion.isNotEmpty;
 
-      if (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks) {
+      if (!isDebugVersionOverrideActive &&
+          (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks)) {
         return;
       }
 
@@ -292,7 +295,9 @@ class MPDialogAux {
       );
 
       final PackageInfo info = await PackageInfo.fromPlatform();
-      final String currentVersion = info.version;
+      final String currentVersion = isDebugVersionOverrideActive
+          ? mpDebugNewVersionInterfaceCurrentVersion
+          : info.version;
       final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
 
       http.Response response;

@@ -7,6 +7,7 @@
 * Infrastructure maintenance:
   * Enabling github created flatpak generation.
   * New "New version available" page.
+  * Created debug new version structure.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
