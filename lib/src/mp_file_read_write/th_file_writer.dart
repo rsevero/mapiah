@@ -419,11 +419,11 @@ class THFileWriter {
     String newLine = '$_prefix$line';
 
     // Breaking long lines
-    if (newLine.length > thMaxFileLineLength) {
+    if (newLine.length > mpMaxFileLineLength) {
       String splitLine = '';
       bool isFirst = true;
       line = line.trim();
-      int maxLength = thMaxFileLineLength - _prefix.length;
+      int maxLength = mpMaxFileLineLength - _prefix.length;
 
       while ((line.isNotEmpty) && (line.length > maxLength)) {
         int breakPos = line.lastIndexOf(' ', maxLength) + 1;
@@ -461,7 +461,7 @@ class THFileWriter {
           isFirst = false;
           _increasePrefix();
           _increasePrefix();
-          maxLength = thMaxFileLineLength - _prefix.length;
+          maxLength = mpMaxFileLineLength - _prefix.length;
         }
 
         splitLine += part;

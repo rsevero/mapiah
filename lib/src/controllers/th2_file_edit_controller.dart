@@ -143,7 +143,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @readonly
-  int _currentDecimalPositions = thDefaultDecimalPositions;
+  int _currentDecimalPositions = mpDefaultDecimalPositions;
 
   @readonly
   double _currentSnapOnCanvasDistanceSquaredLimit =

@@ -231,6 +231,22 @@
     "description": "Header line marking the end of therion.log section",
     "type": "text"
   },
+  "mapiahTherionRunStartTime": "Start: {time}",
+  "@mapiahTherionRunStartTime": {
+    "description": "Line that shows the Therion run start time before the Therion output section",
+    "type": "text",
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "mapiahTherionRunEndTime": "End: {time}",
+  "@mapiahTherionRunEndTime": {
+    "description": "Line that shows the Therion run end time after the therion.log section",
+    "type": "text",
+    "placeholders": {
+      "time": {}
+    }
+  },
   "mapiahTherionRunNoTherionOutputFound": "No Therion output found",
   "@mapiahTherionRunNoTherionOutputFound": {
     "description": "Message shown when no acceptable therion.log can be appended",

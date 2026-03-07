@@ -91,6 +91,9 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     if (!mpIsFlathub) {
       final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+      final DateTime endTime = DateTime.now();
+      final DateTime? startTime = _startTime;
+
       final List<String> therionOutputLines = List<String>.from(
         _therionRunner.outputLinesNotifier.value,
       );
@@ -99,12 +102,27 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         appLocalizations,
       );
 
+      final String? formattedStartTime = startTime != null
+          ? _formatTimeOfDay(startTime)
+          : null;
+      final String formattedEndTime = _formatTimeOfDay(endTime);
+
+      final List<String> therionOutputWithStartTime = <String>[];
+
+      if (formattedStartTime != null) {
+        therionOutputWithStartTime.add(
+          appLocalizations.mapiahTherionRunStartTime(formattedStartTime),
+        );
+      }
+
+      therionOutputWithStartTime.addAll(therionOutputLines);
+
       final List<String> postRunOutputLines = <String>[];
       postRunOutputLines.addAll(
         _buildSectionLines(
           beginHeader: appLocalizations.mapiahTherionRunTherionOutputBegin,
           endHeader: appLocalizations.mapiahTherionRunTherionOutputEnd,
-          contentLines: therionOutputLines,
+          contentLines: therionOutputWithStartTime,
         ),
       );
       postRunOutputLines.addAll(
@@ -115,6 +133,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         ),
       );
 
+      postRunOutputLines.add(
+        appLocalizations.mapiahTherionRunEndTime(formattedEndTime),
+      );
+
       _therionRunner.outputLinesNotifier.value = <String>[];
       _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
       _therionRunner.appendOutputLines(postRunOutputLines);
@@ -122,7 +144,8 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     if (mounted && (_startTime != null)) {
       setState(() {
-        _elapsed = DateTime.now().difference(_startTime!);
+        final DateTime endTime = DateTime.now();
+        _elapsed = endTime.difference(_startTime!);
       });
     }
   }
@@ -210,11 +233,11 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   }
 
   void _rerunTherion() {
+    final DateTime now = DateTime.now();
+
     _therionRunner.outputLinesNotifier.value = <String>[];
     _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
     _hasAppendedPostRunOutput = false;
-
-    final DateTime now = DateTime.now();
     _startTime = now;
 
     if (mounted) {
@@ -607,5 +630,25 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     }
 
     return secondsWithTenth();
+  }
+
+  String _formatTimeOfDay(DateTime time) {
+    final int hours = time.hour;
+    final int minutes = time.minute;
+    final double secondsWithFraction =
+        time.second + (time.millisecond / 1000.0);
+
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+
+    final String hoursText = twoDigits(hours);
+    final String minutesText = twoDigits(minutes);
+
+    final String rawSeconds = secondsWithFraction.toStringAsFixed(1);
+    final bool hasSingleDigitSeconds = secondsWithFraction < 10.0;
+    final String secondsText = hasSingleDigitSeconds
+        ? '0$rawSeconds'
+        : rawSeconds;
+
+    return '$hoursText:$minutesText:$secondsText';
   }
 }

@@ -41,6 +41,8 @@
   "mapiahTherionRunTherionOutputEnd": "Fim da saída do Therion",
   "mapiahTherionRunTherionLogBegin": "Início de therion.log",
   "mapiahTherionRunTherionLogEnd": "Fim de therion.log",
+  "mapiahTherionRunStartTime": "Início: {time}",
+  "mapiahTherionRunEndTime": "Fim: {time}",
   "mapiahTherionRunNoTherionOutputFound": "Saída do Therion não encontrada",
   "mapiahTherionSelectTHConfigDialogTitle": "Selecionar arquivo THConfig",
   "mpTherionCannotExecuteCommand": "Falha ao executar o comando: {commandLine}",

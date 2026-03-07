@@ -349,6 +349,18 @@ abstract class AppLocalizations {
   /// **'End therion.log'**
   String get mapiahTherionRunTherionLogEnd;
 
+  /// Line that shows the Therion run start time before the Therion output section
+  ///
+  /// In en, this message translates to:
+  /// **'Start: {time}'**
+  String mapiahTherionRunStartTime(Object time);
+
+  /// Line that shows the Therion run end time after the therion.log section
+  ///
+  /// In en, this message translates to:
+  /// **'End: {time}'**
+  String mapiahTherionRunEndTime(Object time);
+
   /// Message shown when no acceptable therion.log can be appended
   ///
   /// In en, this message translates to:

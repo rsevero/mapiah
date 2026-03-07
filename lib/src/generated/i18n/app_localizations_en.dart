@@ -168,6 +168,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionRunTherionLogEnd => 'End therion.log';
 
   @override
+  String mapiahTherionRunStartTime(Object time) {
+    return 'Start: $time';
+  }
+
+  @override
+  String mapiahTherionRunEndTime(Object time) {
+    return 'End: $time';
+  }
+
+  @override
   String get mapiahTherionRunNoTherionOutputFound => 'No Therion output found';
 
   @override

@@ -2553,7 +2553,7 @@ class THFileParser {
 
     for (
       int i = 0;
-      ((i < fileContentRaw.length) && (charsRead < thMaxEncodingLength));
+      ((i < fileContentRaw.length) && (charsRead < mpthMaxEncodingLength));
       i++
     ) {
       byte = fileContentRaw[i];

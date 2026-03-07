@@ -168,6 +168,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunTherionLogEnd => 'Fim de therion.log';
 
   @override
+  String mapiahTherionRunStartTime(Object time) {
+    return 'Início: $time';
+  }
+
+  @override
+  String mapiahTherionRunEndTime(Object time) {
+    return 'Fim: $time';
+  }
+
+  @override
   String get mapiahTherionRunNoTherionOutputFound =>
       'Saída do Therion não encontrada';
 

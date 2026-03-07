@@ -51,10 +51,10 @@ const String thWhitespaceChars = ' \t';
 
 const String thIndentation = '  ';
 
-const int thMaxEncodingLength = 20;
-const int thMaxFileLineLength = 80;
+const int mpthMaxEncodingLength = 20;
+const int mpMaxFileLineLength = 80;
 const int mpMaxDecimalPositions = 6;
-const int thDefaultDecimalPositions = 4;
+const int mpDefaultDecimalPositions = 4;
 const int mpDefaultDecimalPositionsAzimuth = 1;
 const double mpDefaultSnapOnScreenDistance = 9;
 const double mpSnapGridCellSizeFactor = 1.1;
