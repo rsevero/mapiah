@@ -47,7 +47,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   void initState() {
     super.initState();
 
-    _startTime = DateTime.now();
+    _updateStartTime(DateTime.now());
 
     final MPTherionRunner? injectedRunner = widget.therionRunner;
 
@@ -205,6 +205,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     return therionLogLines;
   }
 
+  void _updateStartTime(DateTime baseTime) {
+    _startTime = baseTime.subtract(mpTherionLogOlderLimitDuration);
+  }
+
   @override
   void dispose() {
     _outputSubscription?.cancel();
@@ -233,12 +237,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   }
 
   void _rerunTherion() {
-    final DateTime now = DateTime.now();
-
+    _updateStartTime(DateTime.now());
     _therionRunner.outputLinesNotifier.value = <String>[];
     _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
     _hasAppendedPostRunOutput = false;
-    _startTime = now;
 
     if (mounted) {
       setState(() {

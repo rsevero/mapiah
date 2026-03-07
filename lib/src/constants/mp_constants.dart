@@ -167,7 +167,6 @@ const String mpSettingsMainSection = 'Main';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';
 const String mpSettingsStringListSeparator = ', ';
-const int mpSecondsBetweenTimerUpdateAtMPRunTherionDialogWidget = 1;
 
 const double mpTherionRunDialogWidth = 900;
 const double mpTherionRunDialogHeight = 600;
@@ -179,6 +178,10 @@ const Duration mpTherionRunScrollAnimationDuration = Duration(
   milliseconds: 250,
 );
 const Curve mpTherionRunScrollAnimationCurve = Curves.easeInOut;
+const int mpTherionLogOlderLimitInMilliseconds = 1500;
+final Duration mpTherionLogOlderLimitDuration = Duration(
+  milliseconds: mpTherionLogOlderLimitInMilliseconds,
+);
 
 const Color mpTherionRunStatusBackgroundRunningColor = Colors.yellow;
 const Color mpTherionRunStatusBackgroundOkColor = Colors.green;
