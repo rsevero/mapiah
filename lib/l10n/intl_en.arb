@@ -434,6 +434,11 @@
     "description": "Label for locale setting",
     "type": "text"
   },
+  "mpSettingsSettingMainTherionExecutablePath": "Therion executable path",
+  "@mpSettingsSettingMainTherionExecutablePath": {
+    "description": "Label for Therion executable path setting",
+    "type": "text"
+  },
   "mpSettingsSettingTH2EditLineThickness": "Line thickness",
   "@mpSettingsSettingTH2EditLineThickness": {
     "description": "Label for TH2 line thickness setting",

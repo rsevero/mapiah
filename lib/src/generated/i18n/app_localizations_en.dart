@@ -291,6 +291,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingMainLocaleID => 'Language';
 
   @override
+  String get mpSettingsSettingMainTherionExecutablePath =>
+      'Therion executable path';
+
+  @override
   String get mpSettingsSettingTH2EditLineThickness => 'Line thickness';
 
   @override

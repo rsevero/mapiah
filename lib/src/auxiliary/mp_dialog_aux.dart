@@ -275,6 +275,11 @@ class MPDialogAux {
           mpLocator.mpSettingsController.prefs;
       final int lastNewVersionCheckMS =
           prefs.getInt(MPSettingID.Internal_LastNewVersionCheckMS.name) ?? 0;
+      final int lastCheckNumberOfNewerVersions =
+          prefs.getInt(
+            MPSettingID.Internal_LastCheckNumberOfNewerVersions.name,
+          ) ??
+          0;
       final DateTime lastNewVersionCheck = DateTime.fromMillisecondsSinceEpoch(
         lastNewVersionCheckMS,
         isUtc: true,
@@ -285,7 +290,10 @@ class MPDialogAux {
           mpDebugNewVersionInterfaceCurrentVersion.isNotEmpty;
 
       if (!isDebugVersionOverrideActive &&
-          (timeSinceLastCheck.inSeconds < mpSecondsBetweenNewVersionChecks)) {
+          (timeSinceLastCheck.inSeconds <
+              mpSecondsCheckPauseBetweenNewVersionChecks) &&
+          (lastCheckNumberOfNewerVersions <=
+              mpMaxNumberOfNewerVersionsToRespectCheckPause)) {
         return;
       }
 
@@ -347,14 +355,19 @@ class MPDialogAux {
         return;
       }
 
+      final int newerVersionCount = versionCheckResult.newerVersionCount;
+
+      prefs.setInt(
+        MPSettingID.Internal_LastCheckNumberOfNewerVersions.name,
+        newerVersionCount,
+      );
+
       if (!mpDebugAlwaysShowVersions && !versionCheckResult.hasNewerVersion) {
         return;
       }
 
       final String latestVersion = versionCheckResult.latestStableVersion!;
       final String tagName = versionCheckResult.latestStableTagName!;
-      final int newerVersionCount = versionCheckResult.newerVersionCount;
-
       final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
 
       if (mpIsFlathub) {
@@ -516,7 +529,7 @@ class MPDialogAux {
       MPUpdateCheckFailureType.httpStatus =>
         appLocalizations.updateCheckFailedHttpStatusBody(httpStatusCode ?? 0),
       MPUpdateCheckFailureType.parsing =>
-        tagName == null
+        (tagName == null)
             ? appLocalizations.updateCheckFailedParsingBody
             : appLocalizations.updateCheckFailedParsingWithTagBody(tagName),
     };

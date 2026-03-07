@@ -81,6 +81,7 @@
   "mpSettingsSectionMain": "Principal",
   "mpSettingsSectionTH2Edit": "Edição TH2",
   "mpSettingsSettingMainLocaleID": "Idioma",
+  "mpSettingsSettingMainTherionExecutablePath": "Caminho do executável do Therion",
   "mpSettingsSettingTH2EditLineThickness": "Espessura da linha",
   "mpSettingsSettingTH2EditPointRadius": "Raio do ponto",
   "mpSettingsSettingTH2EditSelectionTolerance": "Tolerância de seleção",

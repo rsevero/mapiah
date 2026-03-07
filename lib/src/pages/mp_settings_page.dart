@@ -573,18 +573,19 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     MPSettingID type,
   ) {
     switch (type) {
+      case MPSettingID.Internal_LastCheckNumberOfNewerVersions:
+      case MPSettingID.Internal_LastNewVersionCheckMS:
+        return _camelCaseToLabel(type.id());
       case MPSettingID.Main_LocaleID:
         return appLocalizations.mpSettingsSettingMainLocaleID;
       case MPSettingID.Main_TherionExecutablePath:
-        return _camelCaseToLabel(type.id());
+        return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
       case MPSettingID.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
       case MPSettingID.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
-      case MPSettingID.Internal_LastNewVersionCheckMS:
-        return _camelCaseToLabel(type.id());
     }
   }
 

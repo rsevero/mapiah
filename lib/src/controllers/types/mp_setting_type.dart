@@ -2,6 +2,7 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
 
 enum MPSettingID {
+  Internal_LastCheckNumberOfNewerVersions,
   Internal_LastNewVersionCheckMS,
   Main_LocaleID,
   Main_TherionExecutablePath,
@@ -11,6 +12,7 @@ enum MPSettingID {
 
   static const Map<MPSettingID, MPSettingType> types =
       <MPSettingID, MPSettingType>{
+        MPSettingID.Internal_LastCheckNumberOfNewerVersions: MPSettingType.int,
         MPSettingID.Internal_LastNewVersionCheckMS: MPSettingType.int,
         MPSettingID.Main_LocaleID: MPSettingType.string,
         MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,

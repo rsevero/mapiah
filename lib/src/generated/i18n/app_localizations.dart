@@ -589,6 +589,12 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get mpSettingsSettingMainLocaleID;
 
+  /// Label for Therion executable path setting
+  ///
+  /// In en, this message translates to:
+  /// **'Therion executable path'**
+  String get mpSettingsSettingMainTherionExecutablePath;
+
   /// Label for TH2 line thickness setting
   ///
   /// In en, this message translates to:

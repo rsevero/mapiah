@@ -441,7 +441,8 @@ const String mpMapiahGithubHelpPagesURLPrefix =
 const String mpMapiahVersionFlathubURLPrefix =
     'https://flathub.org/apps/details/';
 
-const int mpSecondsBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
+const int mpSecondsCheckPauseBetweenNewVersionChecks = 24 * 60 * 60; // 24 hours
+const int mpMaxNumberOfNewerVersionsToRespectCheckPause = 3;
 
 const bool mpDefaultDefaultBoolSetting = false;
 const double mpDefaultDefaultDoubleSetting = 0.0;
