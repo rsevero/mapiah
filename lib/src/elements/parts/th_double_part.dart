@@ -115,7 +115,7 @@ class THDoublePart extends THPart {
     }
     _value = doubleValue;
 
-    final int dotPosition = valueString.indexOf(thDecimalSeparator);
+    final int dotPosition = valueString.indexOf(mpDecimalSeparator);
 
     decimalPositions = (dotPosition > 0)
         ? valueString.length - (dotPosition + 1)

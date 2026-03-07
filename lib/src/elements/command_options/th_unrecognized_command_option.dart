@@ -67,6 +67,6 @@ class THUnrecognizedCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    return value ?? thNullValueAsString;
+    return value ?? mpNullValueAsString;
   }
 }

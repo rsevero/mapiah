@@ -17,8 +17,8 @@ part 'mp_general_controller.g.dart';
 class MPGeneralController = MPGeneralControllerBase with _$MPGeneralController;
 
 abstract class MPGeneralControllerBase with Store {
-  int _nextMPIDForElements = thFirstMPIDForElements;
-  int _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
+  int _nextMPIDForElements = mpFirstMPIDForElements;
+  int _nextMPIDForTHFiles = mpFirstMPIDForTHFiles;
 
   String _lastAccessedDirectory = '';
 
@@ -63,8 +63,8 @@ abstract class MPGeneralControllerBase with Store {
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
   void reset() {
-    _nextMPIDForElements = thFirstMPIDForElements;
-    _nextMPIDForTHFiles = thFirstMPIDForTHFiles;
+    _nextMPIDForElements = mpFirstMPIDForElements;
+    _nextMPIDForTHFiles = mpFirstMPIDForTHFiles;
     _t2hFileEditControllers.clear();
     _thConfigFilePath = '';
   }

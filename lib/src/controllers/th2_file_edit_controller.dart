@@ -197,15 +197,15 @@ abstract class TH2FileEditControllerBase with Store {
   bool _canvasScaleTranslationUndefined = true;
 
   @readonly
-  Paint _selectionWindowFillPaint = thSelectionWindowFillPaint;
+  Paint _selectionWindowFillPaint = mpSelectionWindowFillPaint;
 
   @readonly
-  Paint _selectionWindowBorderPaint = thSelectionWindowBorderPaint;
+  Paint _selectionWindowBorderPaint = mpSelectionWindowBorderPaint;
 
   @computed
   Paint get selectionWindowBorderPaintComplete =>
       _selectionWindowBorderPaint
-        ..strokeWidth = thSelectionWindowBorderPaintStrokeWidth / _canvasScale;
+        ..strokeWidth = mpSelectionWindowBorderPaintStrokeWidth / _canvasScale;
 
   @readonly
   double _selectionWindowBorderPaintDashInterval =
@@ -334,7 +334,7 @@ abstract class TH2FileEditControllerBase with Store {
   double get scrapLengthUnitsOnGraphicalScale {
     double scrapLengthUnitsOnScreen =
         scrapLengthUnitsPerPointOnScreen *
-        thDesiredGraphicalScaleScreenPointLength;
+        mpDesiredGraphicalScaleScreenPointLength;
 
     scrapLengthUnitsOnScreen = MPNumericAux.roundNumber(
       scrapLengthUnitsOnScreen,
@@ -975,7 +975,7 @@ abstract class TH2FileEditControllerBase with Store {
   void zoomIn({bool fineZoom = false, Offset? zoomCenter}) {
     final double newScale = MPNumericAux.calculateNextZoomLevel(
       scale: _canvasScale,
-      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      factor: fineZoom ? mpFineZoomFactor : mpRegularZoomFactor,
       isIncrease: true,
     );
 
@@ -996,7 +996,7 @@ abstract class TH2FileEditControllerBase with Store {
   void zoomOut({bool fineZoom = false, Offset? zoomCenter}) {
     final double newScale = MPNumericAux.calculateNextZoomLevel(
       scale: _canvasScale,
-      factor: fineZoom ? thFineZoomFactor : thRegularZoomFactor,
+      factor: fineZoom ? mpFineZoomFactor : mpRegularZoomFactor,
       isIncrease: false,
     );
 
@@ -1086,7 +1086,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void moveCanvasVertically({required bool up}) {
-    double delta = _canvasSize.height * thCanvasMovementFactor;
+    double delta = _canvasSize.height * mpCanvasMovementFactor;
     if (up) {
       delta = -delta;
     }
@@ -1097,7 +1097,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void moveCanvasHorizontally({required bool left}) {
-    double delta = _canvasSize.width * thCanvasMovementFactor;
+    double delta = _canvasSize.width * mpCanvasMovementFactor;
     if (!left) {
       delta = -delta;
     }
@@ -1111,12 +1111,12 @@ abstract class TH2FileEditControllerBase with Store {
       zoomFitToType: zoomToFitType,
     );
 
-    _dataWidth = (dataBoundingBox.width < thMinimumSizeForDrawing)
-        ? thMinimumSizeForDrawing
+    _dataWidth = (dataBoundingBox.width < mpMinimumSizeForDrawing)
+        ? mpMinimumSizeForDrawing
         : dataBoundingBox.width;
 
-    _dataHeight = (dataBoundingBox.height < thMinimumSizeForDrawing)
-        ? thMinimumSizeForDrawing
+    _dataHeight = (dataBoundingBox.height < mpMinimumSizeForDrawing)
+        ? mpMinimumSizeForDrawing
         : dataBoundingBox.height;
   }
 

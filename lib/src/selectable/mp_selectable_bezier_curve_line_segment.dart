@@ -29,7 +29,7 @@ class MPSelectableBezierCurveLineSegment extends MPSelectableLineSegment {
 
     return MPNumericAux.calculateSegments(
       estimatedLength,
-      thDesiredSegmentLengthOnScreen,
+      mpDesiredSegmentLengthOnScreen,
     );
   }
 

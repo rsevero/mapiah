@@ -11,7 +11,7 @@ class THStringPart extends THPart {
   @override
   THPartType get type => THPartType.string;
 
-  static final _quoteRegex = RegExp(thDoubleQuote);
+  static final _quoteRegex = RegExp(mpDoubleQuote);
 
   @override
   Map<String, dynamic> toMap() {
@@ -47,8 +47,8 @@ class THStringPart extends THPart {
 
     if (content.isEmpty) {
       asString = r'""';
-    } else if ((content.contains(' ')) || (content.contains(thDoubleQuote))) {
-      asString = asString.replaceAll(_quoteRegex, thDoubleQuotePair);
+    } else if ((content.contains(' ')) || (content.contains(mpDoubleQuote))) {
+      asString = asString.replaceAll(_quoteRegex, mpDoubleQuotePair);
       asString = '"$asString"';
     }
 

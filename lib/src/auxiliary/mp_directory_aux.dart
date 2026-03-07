@@ -18,7 +18,7 @@ class MPDirectoryAux {
   static Future<Directory> config() async {
     final Directory rootDir = await rootDirectory;
     final Directory configDirectory = Directory(
-      p.join(rootDir.path, thMainDirectory, thConfigDirectory),
+      p.join(rootDir.path, mpMainDirectory, mpConfigDirectory),
     );
 
     await configDirectory.create(recursive: true);
@@ -29,7 +29,7 @@ class MPDirectoryAux {
   static Future<Directory> main() async {
     final Directory rootDir = await rootDirectory;
     final Directory mainDirectory = Directory(
-      p.join(rootDir.path, thMainDirectory),
+      p.join(rootDir.path, mpMainDirectory),
     );
 
     await mainDirectory.create(recursive: true);
@@ -40,7 +40,7 @@ class MPDirectoryAux {
   static Future<Directory> projects() async {
     final Directory rootDir = await rootDirectory;
     final Directory projectsDirectory = Directory(
-      p.join(rootDir.path, thMainDirectory, thProjectsDirectory),
+      p.join(rootDir.path, mpMainDirectory, mpProjectsDirectory),
     );
 
     await projectsDirectory.create(recursive: true);

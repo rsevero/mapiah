@@ -90,7 +90,7 @@ class THDatetimePart extends THPart {
 
     if ((parts.length == 1) || (parts.length == 2)) {
       parts[0] = parts[0].trim();
-      if (!thDatetimeRegex.hasMatch(parts[0])) {
+      if (!mpDatetimeRegex.hasMatch(parts[0])) {
         throw THCustomException(
           "Can´t parse start of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'",
         );
@@ -98,7 +98,7 @@ class THDatetimePart extends THPart {
       newDatetime = parts[0];
       if (parts.length == 2) {
         parts[1] = parts[1].trim();
-        if (!thDatetimeRegex.hasMatch(parts[1])) {
+        if (!mpDatetimeRegex.hasMatch(parts[1])) {
           throw THCustomException(
             "Can´t parse end of datetime range (a datetime in the format YYYY[.MM.[DD[@HH[:MM[:SS[.SS]]]]]]) from '$date'",
           );

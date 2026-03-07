@@ -13,8 +13,8 @@ import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 class THFileWriter {
   String _prefix = '';
 
-  final RegExp _doubleQuotePairEncodedRegex = RegExp(thDoubleQuotePairEncoded);
-  final RegExp _doubleQuotePairRegex = RegExp(thDoubleQuotePair);
+  final RegExp _doubleQuotePairEncodedRegex = RegExp(mpDoubleQuotePairEncoded);
+  final RegExp _doubleQuotePairRegex = RegExp(mpDoubleQuotePair);
 
   late bool _includeEmptyLines;
   late bool _useOriginalRepresentation;
@@ -167,7 +167,7 @@ class THFileWriter {
       final THXTherionConfig xTC = thElement as THXTherionConfig;
 
       asString =
-          "$xTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
+          "$mpXTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
     }
 
     return asString;
@@ -185,7 +185,7 @@ class THFileWriter {
       final String imgx = "${xTIIC.imgx} ${xTIIC.xData}";
 
       asString =
-          """$xTherionConfigID $xTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+          """$mpXTherionConfigID $mpXTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
     }
 
     return asString;
@@ -389,17 +389,17 @@ class THFileWriter {
   }
 
   void _increasePrefix() {
-    _prefix += thIndentation;
+    _prefix += mpIndentation;
   }
 
   void _reducePrefix() {
-    _prefix = _prefix.substring(thIndentation.length);
+    _prefix = _prefix.substring(mpIndentation.length);
   }
 
   String _encodeDoubleQuotes(String aString) {
     final String encoded = aString.replaceAll(
       _doubleQuotePairRegex,
-      thDoubleQuotePairEncoded,
+      mpDoubleQuotePairEncoded,
     );
 
     return encoded;
@@ -408,7 +408,7 @@ class THFileWriter {
   String _decodeDoubleQuotes(String aString) {
     final String decoded = aString.replaceAll(
       _doubleQuotePairEncodedRegex,
-      thDoubleQuotePair,
+      mpDoubleQuotePair,
     );
 
     return decoded;
@@ -441,15 +441,15 @@ class THFileWriter {
         }
 
         // Dealing with parts that broke a quoted string.
-        int quoteCount = THFileAux.countCharOccurrences(part, thDoubleQuote);
+        int quoteCount = THFileAux.countCharOccurrences(part, mpDoubleQuote);
         if (quoteCount.isOdd) {
-          breakPos = line.lastIndexOf(thDoubleQuote, breakPos);
+          breakPos = line.lastIndexOf(mpDoubleQuote, breakPos);
           part = line.substring(0, breakPos);
 
           // Dealing with parts that consumed no actual content take 2: quoted
           // strings.
           if (part.trim() == '') {
-            breakPos = line.indexOf(thDoubleQuote, breakPos);
+            breakPos = line.indexOf(mpDoubleQuote, breakPos);
             part = line.substring(0, breakPos);
           }
         }

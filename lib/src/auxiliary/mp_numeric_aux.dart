@@ -84,7 +84,7 @@ class MPNumericAux {
     }
     final double value = doubleValue;
 
-    final int dotPosition = valueString.indexOf(thDecimalSeparator);
+    final int dotPosition = valueString.indexOf(mpDecimalSeparator);
     final int decimalPositions = (dotPosition > 0)
         ? valueString.length - (dotPosition + 1)
         : 0;
@@ -322,7 +322,7 @@ class MPNumericAux {
     final double scaleMagnitude = (log10(scale) - 2).floorToDouble();
     final double scaleQuanta = math.pow(10, scaleMagnitude) as double;
     final double rounded =
-        floorTo(value: scale / scaleQuanta, factor: thCanvasRoundFactor) *
+        floorTo(value: scale / scaleQuanta, factor: mpCanvasRoundFactor) *
         scaleQuanta;
 
     return rounded;

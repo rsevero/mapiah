@@ -52,23 +52,23 @@ class THGrammar extends GrammarDefinition {
       endarea() | areaCommandLikeOptions() | borderLineReference();
 
   /// Whitespace
-  Parser thWhitespace() => anyOf(thWhitespaceChars).plus();
+  Parser thWhitespace() => anyOf(mpWhitespaceChars).plus();
 
   /// Quoted string
   ///
   /// No convertion of two double quotes in one being done, i.e., the user will
   /// see each double quote (") being represented by a pair of double quotes ("").
   Parser quotedString() =>
-      (char(thDoubleQuote) &
-              (char(thDoubleQuote).skip(before: char(thDoubleQuote)) |
-                      noneOf(thDoubleQuote))
+      (char(mpDoubleQuote) &
+              (char(mpDoubleQuote).skip(before: char(mpDoubleQuote)) |
+                      noneOf(mpDoubleQuote))
                   .star()
                   .flatten() &
-              char(thDoubleQuote))
+              char(mpDoubleQuote))
           .pick(1);
 
   /// Unquoted string
-  Parser unquotedString() => noneOf('$thWhitespaceChars$thDoubleQuote').plus();
+  Parser unquotedString() => noneOf('$mpWhitespaceChars$mpDoubleQuote').plus();
 
   /// Alphanumeric chars
   Parser alphanumericChars() => pattern('A-Za-z0-9').plus();
@@ -112,13 +112,13 @@ class THGrammar extends GrammarDefinition {
 
   /// point data
   Parser pointData() => number()
-      .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
+      .timesSeparated(anyOf('$mpWhitespaceChars$mpDoubleQuote').plus(), 2)
       .trim()
       .map((value) => value.elements);
 
   /// comment
   Parser commentTemplate(String commentType) =>
-      ((char(thCommentChar) & any().star()).flatten().trim().map(
+      ((char(mpCommentChar) & any().star()).flatten().trim().map(
         (value) => [commentType, value.trim()],
       ));
   Parser fullLineComment() =>
@@ -183,7 +183,7 @@ class THGrammar extends GrammarDefinition {
       quotedString().trim() |
       bracketStringGeneral().trim() |
       unquotedString()
-          .timesSeparated(anyOf('$thWhitespaceChars$thDoubleQuote').plus(), 2)
+          .timesSeparated(anyOf('$mpWhitespaceChars$mpDoubleQuote').plus(), 2)
           .flatten()
           .trim();
 
@@ -916,7 +916,7 @@ class THGrammar extends GrammarDefinition {
 
   /// xtherion config
   Parser xtherionConfig() =>
-      (stringIgnoreCase(xTherionConfigID).trim() &
+      (stringIgnoreCase(mpXTherionConfigID).trim() &
               (keyword() & any().plus().flatten().trim()))
           .map((value) => [value]);
 }

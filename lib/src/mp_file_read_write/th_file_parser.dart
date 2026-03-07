@@ -63,7 +63,7 @@ class THFileParser {
 
   final Set<int> _mpIDsToCleanOriginalLine = {};
 
-  final RegExp _doubleQuoteRegex = RegExp(thDoubleQuotePair);
+  final RegExp _doubleQuoteRegex = RegExp(mpDoubleQuotePair);
   final RegExp _encodingRegex = RegExp(
     r'^\s*encoding\s+([a-zA-Z0-9-]+)',
     caseSensitive: false,
@@ -343,7 +343,7 @@ class THFileParser {
 
     final String xTherionConfigID = element[1][0].toLowerCase();
 
-    if (xTherionConfigID == xTherionImageInsertConfigID) {
+    if (xTherionConfigID == mpXTherionImageInsertConfigID) {
       return _injectXTherionImageInsertConfig(element);
     }
 
@@ -2394,7 +2394,7 @@ class THFileParser {
   String _parseTHString(String stringToParse) {
     final String parsed = stringToParse.replaceAll(
       _doubleQuoteRegex,
-      thDoubleQuote,
+      mpDoubleQuote,
     );
 
     return parsed;
@@ -2584,7 +2584,7 @@ class THFileParser {
 
   @useResult
   bool _isEncodingDelimiter(String priorChar, String char) {
-    if (char == thCommentChar) {
+    if (char == mpCommentChar) {
       return true;
     }
 

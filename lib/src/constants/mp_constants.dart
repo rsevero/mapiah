@@ -36,20 +36,20 @@ const String mpDebugNewVersionInterfaceCurrentVersion = '';
 const String mpHelpPagePath = 'assets/help';
 const String mpHelpPageFlathubDisabled = 'flathub_disabled';
 
-const String thCommentChar = '#';
-const String thDecimalSeparator = '.';
+const String mpCommentChar = '#';
+const String mpDecimalSeparator = '.';
 const String mpUnixLineBreak = '\n';
 const String mpWindowsLineBreak = '\r\n';
 const String mpCarriageReturn = '\r';
-const String thDoubleQuote = '"';
-const String thDoubleQuotePair = r'""';
+const String mpDoubleQuote = '"';
+const String mpDoubleQuotePair = r'""';
 
 /// This char is from the private-use chars.
 // See [https://www.unicode.org/faq/private_use.html]
-const String thDoubleQuotePairEncoded = '\uE001';
-const String thWhitespaceChars = ' \t';
+const String mpDoubleQuotePairEncoded = '\uE001';
+const String mpWhitespaceChars = ' \t';
 
-const String thIndentation = '  ';
+const String mpIndentation = '  ';
 
 const int mpthMaxEncodingLength = 20;
 const int mpMaxFileLineLength = 80;
@@ -61,17 +61,17 @@ const double mpSnapGridCellSizeFactor = 1.1;
 
 const String mpDefaultEncoding = 'UTF-8';
 
-const String thNullValueAsString = '!!! property has null value !!!';
+const String mpNullValueAsString = '!!! property has null value !!!';
 
 const double mpCanvasVisibleMargin = 0.1;
 const double mpCanvasOutOfSightMargin = 2.0;
 const double mpScrapBackgroundPadding = 0.02;
 
-const double thRegularZoomFactor = math.sqrt2;
-const double thRoundToFactor = thRegularZoomFactor - 1;
-const double thFineZoomFactor = thRoundToFactor / 2 + 1;
-const double thCanvasMovementFactor = 0.1;
-const double thCanvasRoundFactor = 25.0;
+const double mpRegularZoomFactor = math.sqrt2;
+const double mpRoundToFactor = mpRegularZoomFactor - 1;
+const double mpFineZoomFactor = mpRoundToFactor / 2 + 1;
+const double mpCanvasMovementFactor = 0.1;
+const double mpCanvasRoundFactor = 25.0;
 
 const double mpDoubleNextEpsilon = 2.220446049250313e-16;
 const double mpDoubleUpEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
@@ -105,17 +105,17 @@ const double mpDegreesInCircle = 360.0;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
 
-const double thMinimumSizeForDrawing = 10.0;
+const double mpMinimumSizeForDrawing = 10.0;
 
-const int thFirstMPIDForTHFiles = -1;
-const int thFirstMPIDForElements = 1;
+const int mpFirstMPIDForTHFiles = -1;
+const int mpFirstMPIDForElements = 1;
 
-const double thDesiredSegmentLengthOnScreen = 15.0;
+const double mpDesiredSegmentLengthOnScreen = 15.0;
 
-const double thDesiredGraphicalScaleScreenPointLength = 200.0;
-const double thGraphicalScalePadding = 20.0;
-const double thGraphicalScaleUptickLength = 8.0;
-const double thGraphicalScaleFontSize = 12.0;
+const double mpDesiredGraphicalScaleScreenPointLength = 200.0;
+const double mpGraphicalScalePadding = 20.0;
+const double mpGraphicalScaleUptickLength = 8.0;
+const double mpGraphicalScaleFontSize = 12.0;
 
 const THLengthUnitType thDefaultLengthUnit = THLengthUnitType.meter;
 final String thDefaultLengthUnitAsString = thDefaultLengthUnit.name;
@@ -124,24 +124,24 @@ final String thDefaultAngleUnitAsString = thDefaultAngleUnit.name;
 const double mpAzimuthConstraintAngle = 15.0;
 
 // keyword . a sequence of A-Z, a-z, 0-9 and _-/ characters (not starting with ‘-’).
-final RegExp thKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
+final RegExp mpKeywordRegex = RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_-]*$');
 
 // ext keyword . keyword that can also contain +*.,’ characters, but not on the first
 // position.
-final RegExp thExtKeywordRegex = RegExp(
+final RegExp mpExtKeywordRegex = RegExp(
   r'''^[a-zA-Z0-9_][a-zA-Z0-9_+*.,'-]*$''',
 );
 
 // date . a date (or a time interval) specification in the format
 // YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]] [- YYYY[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]]
 // or ‘-’ to leave a date unspecified.
-final RegExp thDatetimeRegex = RegExp(
+final RegExp mpDatetimeRegex = RegExp(
   r'^(?<year>\d{4}(\.(?<month>(0[1-9]|1[0-2]))(\.(?<day>(0[1-9]|[12][0-9]|3[01]))(\@(?<hour>(0[0-9]|1[0-9]|2[0-4]))(\:(?<minute>(0[0-9]|[1-5][0-9]))(\:(?<second>(0[0-9]|[1-5][0-9]))(\.(?<fractional>(0[0-9]|[1-5][0-9])))?)?)?)?)?)?)$',
 );
 
-const String thConfigDirectory = 'Config';
-const String thMainDirectory = 'Mapiah';
-const String thProjectsDirectory = 'Projects';
+const String mpConfigDirectory = 'Config';
+const String mpMainDirectory = 'Mapiah';
+const String mpProjectsDirectory = 'Projects';
 
 const String mpMainConfigFilename = 'mapiah.toml';
 const String mpDefaultLocaleID = 'sys';
@@ -274,13 +274,13 @@ const String mpFileEditConfigSelectionTolerance = 'SelectionTolerance';
 const String mpFileEditConfigPointRadius = 'PointRadius';
 const String mpFileEditConfigLineThickness = 'LineThickness';
 
-final Paint thSelectionWindowFillPaint = Paint()
+final Paint mpSelectionWindowFillPaint = Paint()
   ..color = Colors.redAccent.withValues(alpha: 0.3)
   ..style = PaintingStyle.fill;
-final Paint thSelectionWindowBorderPaint = Paint()
+final Paint mpSelectionWindowBorderPaint = Paint()
   ..color = Colors.blue
   ..style = PaintingStyle.stroke;
-const double thSelectionWindowBorderPaintStrokeWidth = 2;
+const double mpSelectionWindowBorderPaintStrokeWidth = 2;
 
 const double mpCompass45DegreeLineFactor = 0.87;
 const double mpCompass90DegreeLineFactor = 0.68;
@@ -299,65 +299,65 @@ const double mpSlopeLinePointDefaultLSize = 40.0;
 const int mpLSizeOptionDecimalPlaces = 1;
 const int mpOrientationOptionDecimalPlaces = 1;
 
-const double thCentimeterToMeter = 0.01;
-const double thMeterToCentimeter = 100.0;
-const double thInchToCentimeter = 2.54;
-const double thFeetToInch = 12.0;
-const double thYardToFeet = 3.0;
+const double mpCentimeterToMeter = 0.01;
+const double mpMeterToCentimeter = 100.0;
+const double mpInchToCentimeter = 2.54;
+const double mpFeetToInch = 12.0;
+const double mpYardToFeet = 3.0;
 
-const double thMeterToInch = thMeterToCentimeter / thInchToCentimeter;
-const double thFeetToCentimeter = thFeetToInch * thInchToCentimeter;
-const double thMeterToFeet = thMeterToCentimeter / thFeetToCentimeter;
-const double thYardToCentimeter =
-    thYardToFeet * thFeetToInch * thInchToCentimeter;
-const double thMeterToYard = thMeterToCentimeter / thYardToCentimeter;
-const double thInchToMeter = thInchToCentimeter / thMeterToCentimeter;
-const double thFeetToMeter = thFeetToCentimeter / thMeterToCentimeter;
-const double thYardToMeter = thYardToCentimeter / thMeterToCentimeter;
-const double thCentimeterToInch = 1 / thInchToCentimeter;
-const double thCentimeterToFeet = 1 / thFeetToCentimeter;
-const double thCentimeterToYard = 1 / thYardToCentimeter;
-const double thInchToFeet = 1 / thFeetToInch;
-const double thYardToInch = thFeetToInch * thYardToFeet;
-const double thInchToYard = 1 / thYardToInch;
-const double thFeetToYard = 1 / thYardToFeet;
+const double mpMeterToInch = mpMeterToCentimeter / mpInchToCentimeter;
+const double mpFeetToCentimeter = mpFeetToInch * mpInchToCentimeter;
+const double mpMeterToFeet = mpMeterToCentimeter / mpFeetToCentimeter;
+const double mpYardToCentimeter =
+    mpYardToFeet * mpFeetToInch * mpInchToCentimeter;
+const double mpMeterToYard = mpMeterToCentimeter / mpYardToCentimeter;
+const double mpInchToMeter = mpInchToCentimeter / mpMeterToCentimeter;
+const double mpFeetToMeter = mpFeetToCentimeter / mpMeterToCentimeter;
+const double mpYardToMeter = mpYardToCentimeter / mpMeterToCentimeter;
+const double mpCentimeterToInch = 1 / mpInchToCentimeter;
+const double mpCentimeterToFeet = 1 / mpFeetToCentimeter;
+const double mpCentimeterToYard = 1 / mpYardToCentimeter;
+const double mpInchToFeet = 1 / mpFeetToInch;
+const double mpYardToInch = mpFeetToInch * mpYardToFeet;
+const double mpInchToYard = 1 / mpYardToInch;
+const double mpFeetToYard = 1 / mpYardToFeet;
 
 const Map<THLengthUnitType, Map<THLengthUnitType, double>>
 lengthConversionFactors = {
   THLengthUnitType.centimeter: {
-    THLengthUnitType.feet: thCentimeterToFeet,
-    THLengthUnitType.inch: thCentimeterToInch,
-    THLengthUnitType.meter: thCentimeterToMeter,
-    THLengthUnitType.yard: thCentimeterToYard,
+    THLengthUnitType.feet: mpCentimeterToFeet,
+    THLengthUnitType.inch: mpCentimeterToInch,
+    THLengthUnitType.meter: mpCentimeterToMeter,
+    THLengthUnitType.yard: mpCentimeterToYard,
   },
   THLengthUnitType.feet: {
-    THLengthUnitType.centimeter: thFeetToCentimeter,
-    THLengthUnitType.inch: thFeetToInch,
-    THLengthUnitType.meter: thFeetToMeter,
-    THLengthUnitType.yard: thFeetToYard,
+    THLengthUnitType.centimeter: mpFeetToCentimeter,
+    THLengthUnitType.inch: mpFeetToInch,
+    THLengthUnitType.meter: mpFeetToMeter,
+    THLengthUnitType.yard: mpFeetToYard,
   },
   THLengthUnitType.inch: {
-    THLengthUnitType.centimeter: thInchToCentimeter,
-    THLengthUnitType.feet: thInchToFeet,
-    THLengthUnitType.meter: thInchToMeter,
-    THLengthUnitType.yard: thInchToYard,
+    THLengthUnitType.centimeter: mpInchToCentimeter,
+    THLengthUnitType.feet: mpInchToFeet,
+    THLengthUnitType.meter: mpInchToMeter,
+    THLengthUnitType.yard: mpInchToYard,
   },
   THLengthUnitType.meter: {
-    THLengthUnitType.centimeter: thMeterToCentimeter,
-    THLengthUnitType.feet: thMeterToFeet,
-    THLengthUnitType.inch: thMeterToInch,
-    THLengthUnitType.yard: thMeterToYard,
+    THLengthUnitType.centimeter: mpMeterToCentimeter,
+    THLengthUnitType.feet: mpMeterToFeet,
+    THLengthUnitType.inch: mpMeterToInch,
+    THLengthUnitType.yard: mpMeterToYard,
   },
   THLengthUnitType.yard: {
-    THLengthUnitType.centimeter: thYardToCentimeter,
-    THLengthUnitType.feet: thYardToFeet,
-    THLengthUnitType.inch: thYardToInch,
-    THLengthUnitType.meter: thYardToMeter,
+    THLengthUnitType.centimeter: mpYardToCentimeter,
+    THLengthUnitType.feet: mpYardToFeet,
+    THLengthUnitType.inch: mpYardToInch,
+    THLengthUnitType.meter: mpYardToMeter,
   },
 };
 
-const double thDefaultTHFileScale = 1.0;
-const THLengthUnitType thDefaultTHFileLengthUnit = THLengthUnitType.meter;
+const double mpDefaultTHFileScale = 1.0;
+const THLengthUnitType mpDefaultTHFileLengthUnit = THLengthUnitType.meter;
 
 const THPointType thDefaultPointType = THPointType.station;
 const THLineType thDefaultLineType = THLineType.wall;
@@ -409,9 +409,9 @@ const String mpLicenseURL =
 // Flathub/Flatpak application id used on Flathub
 const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';
 
-const String xTherionImageInsertConfigID = 'xth_me_image_insert';
+const String mpXTherionImageInsertConfigID = 'xth_me_image_insert';
 const String mpXVIExtension = '.xvi';
-const String xTherionConfigID = '##XTHERION##';
+const String mpXTherionConfigID = '##XTHERION##';
 
 const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
