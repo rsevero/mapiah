@@ -265,6 +265,12 @@ abstract class AppLocalizations {
   /// **'Rerun Therion'**
   String get mapiahRunTherionButtonLabel;
 
+  /// Tooltip for the Close button in the Run Therion dialog, indicating the Escape keyboard shortcut
+  ///
+  /// In en, this message translates to:
+  /// **'Close (Esc)'**
+  String get mapiahTherionRunCloseButtonTooltip;
+
   /// Tooltip shown when no Therion executable is available
   ///
   /// In en, this message translates to:

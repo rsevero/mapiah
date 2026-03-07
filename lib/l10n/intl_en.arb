@@ -158,6 +158,11 @@
     "description": "Label for the Run Therion button",
     "type": "text"
   },
+  "mapiahTherionRunCloseButtonTooltip": "Close (Esc)",
+  "@mapiahTherionRunCloseButtonTooltip": {
+    "description": "Tooltip for the Close button in the Run Therion dialog, indicating the Escape keyboard shortcut",
+    "type": "text"
+  },
   "mpNoTherionFound": "No Therion found",
   "@mpNoTherionFound": {
     "description": "Tooltip shown when no Therion executable is available",

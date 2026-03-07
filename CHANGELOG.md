@@ -5,6 +5,7 @@
   * Include contents of 'therion.log' file at end of Therion output.
   * If there are more than 3 newer versions available, warn the user of the newer versions on all runs instead of just showing the "New version available" dialog once a day.
   * At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
+  * Enable shortcuts Esc, Ctrl+T and T at "Therion run" window.
 * Fixed bugs:
   * Newer version available window not appearing in Flathub version.
 * Infrastructure maintenance:

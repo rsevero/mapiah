@@ -739,7 +739,7 @@ class MPDialogAux {
         .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
         .trim();
 
-    await showDialog<void>(
+    final bool? shouldChooseTHConfig = await showDialog<bool>(
       context: context,
       useRootNavigator: true,
       barrierDismissible: false,
@@ -750,6 +750,10 @@ class MPDialogAux {
         );
       },
     );
+
+    if ((shouldChooseTHConfig == true) && context.mounted) {
+      await chooseTHConfigAndRunTherion(context);
+    }
   }
 
   static Future<String?> pickExecutableFilePath(
