@@ -121,6 +121,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
 
   @override
+  String get mapiahRunTherionButtonLabel => 'Reexecutar Therion';
+
+  @override
   String get mpNoTherionFound => 'Therion não encontrado';
 
   @override

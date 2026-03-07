@@ -366,6 +366,34 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         ),
       ),
       actions: [
+        ValueListenableBuilder<bool>(
+          valueListenable: _therionRunner.isRunningNotifier,
+          builder: (BuildContext context, bool isRunning, Widget? child) {
+            return TextButton(
+              onPressed: isRunning
+                  ? null
+                  : () {
+                      // Prepare for a new run: clear previous output and issues,
+                      // reset run-time tracking and start the runner.
+                      _therionRunner.outputLinesNotifier.value = <String>[];
+                      _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
+                      _hasAppendedPostRunOutput = false;
+
+                      final DateTime now = DateTime.now();
+                      _startTime = now;
+
+                      if (mounted) {
+                        setState(() {
+                          _elapsed = Duration.zero;
+                        });
+                      }
+
+                      _therionRunner.start();
+                    },
+              child: Text(appLocalizations.mapiahRunTherionButtonLabel),
+            );
+          },
+        ),
         TextButton(
           onPressed: () {
             _therionRunner.stop();

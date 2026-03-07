@@ -259,6 +259,12 @@ abstract class AppLocalizations {
   /// **'Run Therion (T)'**
   String get mapiahRunTherionButtonTooltip;
 
+  /// Label for the Run Therion button
+  ///
+  /// In en, this message translates to:
+  /// **'Rerun Therion'**
+  String get mapiahRunTherionButtonLabel;
+
   /// Tooltip shown when no Therion executable is available
   ///
   /// In en, this message translates to:

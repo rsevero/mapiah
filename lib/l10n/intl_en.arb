@@ -153,6 +153,11 @@
     "description": "The tooltip for the Run Therion button",
     "type": "text"
   },
+  "mapiahRunTherionButtonLabel": "Rerun Therion",
+  "@mapiahRunTherionButtonLabel": {
+    "description": "Label for the Run Therion button",
+    "type": "text"
+  },
   "mpNoTherionFound": "No Therion found",
   "@mpNoTherionFound": {
     "description": "Tooltip shown when no Therion executable is available",
