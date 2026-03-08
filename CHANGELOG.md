@@ -12,6 +12,7 @@
 * Fixed bugs:
   * Newer version available window not appearing in Flathub version.
   * On very fast Therion executions, therion.log file content not being included in Therion run output.
+  * Bézier created from straight lines are too tight.
 * Infrastructure maintenance:
   * Enabling github created flatpak generation.
   * New "New version available" page.

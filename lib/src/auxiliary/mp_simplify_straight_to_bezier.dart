@@ -12,6 +12,8 @@ import 'package:mapiah/src/elements/th_element.dart';
 /// 1. Compute adaptive tolerance from data geometry
 /// 2. Douglas-Peucker to reduce polyline points within tolerance
 /// 3. Catmull-Rom tangent estimation → cubic Bézier control points
+/// 4. Merge consecutive Bézier segments via mpSimplifyCubicChain where a
+///    single cubic fits the span within tolerance
 ///
 /// The curve passes through all kept anchor points. Removed points are
 /// guaranteed by Douglas-Peucker to be within tolerance of the simplified
@@ -53,7 +55,10 @@ List<THLineSegment> mpConvertTHStraightToTHBezierLineSegments({
   }
 
   // 3. Catmull-Rom tangents → cubic Bézier control points.
-  final List<MPCubicBez> cubicBezs = _mpBuildCatmullRomBeziers(anchors);
+  List<MPCubicBez> cubicBezs = _mpBuildCatmullRomBeziers(anchors);
+
+  // 4. Merge consecutive Bézier segments where possible.
+  cubicBezs = mpSimplifyCubicChain(cubicBezs, accuracy: fittingAccuracy);
 
   final List<THLineSegment> lineSegmentsList =
       mpConvertCubicBezToTHBezierLineSegments(
