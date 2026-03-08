@@ -1979,12 +1979,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               /// amount of line segments after conversion + simplification.
               onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
             } else {
-              simplifiedLineSegmentsList =
-                  mpSimplifyTHBezierLineSegments(
-                    originalPerTypeLineSegmentsList,
-                    accuracy: _lineSimplifyEpsilonOnCanvas,
-                    decimalPositions: currentDecimalPositions,
-                  );
+              simplifiedLineSegmentsList = mpSimplifyTHBezierLineSegments(
+                originalPerTypeLineSegmentsList,
+                accuracy: _lineSimplifyEpsilonOnCanvas,
+                decimalPositions: currentDecimalPositions,
+              );
             }
           case THElementType.straightLineSegment:
             if (_lineSimplificationMethod ==
@@ -1996,6 +1995,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                     accuracy: _lineSimplifyEpsilonOnCanvas,
                     decimalPositions: currentDecimalPositions,
                   );
+
+              /// When forcing Bézier curves, it's expected to have a higher
+              /// amount of line segments after conversion + simplification.
+              onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
             } else {
               simplifiedLineSegmentsList =
                   MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
@@ -2021,8 +2024,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           simplifiedLineSegmentsToAdd.skip(1).toList(),
         );
 
-        if (simplifiedLineSegmentsCompleteList.length <
-            originalLineSegmentsList.length) {
+        final bool isForceConversion =
+            (_lineSimplificationMethod ==
+                MPLineSimplificationMethod.forceBezier) ||
+            (_lineSimplificationMethod ==
+                MPLineSimplificationMethod.forceStraight);
+
+        if (isForceConversion ||
+            (simplifiedLineSegmentsCompleteList.length <
+                originalLineSegmentsList.length)) {
           final MPCommand simplifyCommand =
               MPEditElementAux.getReplaceLineSegmentsCommand(
                 originalLine: originalLine,

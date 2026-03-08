@@ -88,6 +88,21 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
+/// Factor for converting Catmull-Rom tangent vectors to cubic Bézier control
+/// point offsets. Derived from the cubic Bézier derivative: B'(0) = 3*(P1-P0),
+/// so P1 = P0 + tangent/3.
+const double mpCatmullRomToBezierHandleFactor = 1.0 / 3.0;
+
+/// Standard Catmull-Rom centripetal parameter for interior anchor tangent
+/// estimation: tangent = 0.5 * (P[i+1] - P[i-1]).
+const double mpCatmullRomInteriorTangentFactor = 0.5;
+
+/// Fraction of the average segment length used as the fitting tolerance when
+/// converting straight line segments to Bézier curves. This makes the
+/// tolerance adapt to the data's geometric scale, enabling meaningful merging
+/// of segments regardless of coordinate magnitude.
+const double mpStraightToBezierFittingToleranceFraction = 0.1;
+
 /// Limits compatible with Dart VM (used on Linux, MacOS and Windows).
 const int mpMinimumInt = -0x7fffffffffffffff - 1;
 const int mpMaximumInt = 0x7fffffffffffffff;
