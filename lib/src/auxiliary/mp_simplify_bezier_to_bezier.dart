@@ -11,11 +11,11 @@ import 'package:mapiah/src/elements/th_element.dart';
 /// Build a list of connected cubics and call:
 /// final result = simplifyCubicChain(myCubics, accuracy: 0.5);
 /// Or, if you prefer the near-optimal approach, swap the call inside the function to fitToBezPathOpt.
-class MPSimplificationCubicChainSource
-    implements MPSimplificationParamCurveFit {
-  final List<MPSimplificationCubicBez> curves;
+class MPCubicChainSource
+    implements MPParamCurveFit {
+  final List<MPCubicBez> curves;
 
-  MPSimplificationCubicChainSource(this.curves) {
+  MPCubicChainSource(this.curves) {
     if (curves.isEmpty) {
       throw ArgumentError('curves must not be empty');
     }
@@ -38,21 +38,21 @@ class MPSimplificationCubicChainSource
   }
 
   @override
-  (MPSimplificationPoint, MPSimplificationVec2) samplePtDeriv(double t) {
+  (MPFitPoint, MPVec2) samplePtDeriv(double t) {
     final (int i, double u) = _segForT(t);
-    final MPSimplificationCubicBez c = curves[i];
-    final MPSimplificationPoint p = c.eval(u);
+    final MPCubicBez c = curves[i];
+    final MPFitPoint p = c.eval(u);
     // Chain rule: dt over concatenated segments (equal share per segment)
-    final MPSimplificationVec2 d = c.deriv(u) * _n.toDouble();
+    final MPVec2 d = c.deriv(u) * _n.toDouble();
 
     return (p, d);
   }
 
   @override
-  MPSimplificationCurveFitSample samplePtTangent(double t, double sign) {
-    final (MPSimplificationPoint p, MPSimplificationVec2 d0) = samplePtDeriv(t);
+  MPCurveFitSample samplePtTangent(double t, double sign) {
+    final (MPFitPoint p, MPVec2 d0) = samplePtDeriv(t);
 
-    MPSimplificationVec2 d = d0;
+    MPVec2 d = d0;
     // If near a cusp or join, peek slightly to the chosen side
     if (d.x * d.x + d.y * d.y < 1e-18) {
       final double eps = (sign >= 0 ? 1 : -1) * (1e-5 / _n);
@@ -61,11 +61,11 @@ class MPSimplificationCubicChainSource
       d = samplePtDeriv(tp).$2;
     }
 
-    return MPSimplificationCurveFitSample(p, d);
+    return MPCurveFitSample(p, d);
   }
 
   @override
-  double? breakCusp(MPSimplificationRange range) {
+  double? breakCusp(MPFitRange range) {
     // Always break only at actual cusps (sharp direction change), not at every join.
     for (int i = 1; i < _n; i++) {
       final double b = i / _n;
@@ -84,12 +84,12 @@ class MPSimplificationCubicChainSource
   // Heuristic cusp detector at the join between curves[i-1] and curves[i].
   // Returns true when the tangent direction changes acutely (angle > threshold).
   bool _isCuspAtJoin(int i) {
-    final MPSimplificationCubicBez prev = curves[i - 1];
-    final MPSimplificationCubicBez next = curves[i];
+    final MPCubicBez prev = curves[i - 1];
+    final MPCubicBez next = curves[i];
 
     // Tangents at the boundary
-    MPSimplificationVec2 t1 = prev.deriv(1.0);
-    MPSimplificationVec2 t2 = next.deriv(0.0);
+    MPVec2 t1 = prev.deriv(1.0);
+    MPVec2 t2 = next.deriv(0.0);
 
     const double eps = 1e-12;
     // If derivative nearly zero at the junction (rare), peek slightly inside
@@ -120,15 +120,15 @@ class MPSimplificationCubicChainSource
   // Provide moment integrals (area and first moments) using quadrature,
   // matching the default in ParamCurveFit.
   @override
-  (double, double, double) momentIntegrals(MPSimplificationRange range) {
+  (double, double, double) momentIntegrals(MPFitRange range) {
     final double t0 = 0.5 * (range.start + range.end);
     final dt = 0.5 * (range.end - range.start);
 
     double a = 0, x = 0, y = 0;
 
-    for (final (double w, double xi) in gaussLegendre16) {
+    for (final (double w, double xi) in mpGaussLegendre16) {
       final double t = t0 + xi * dt;
-      final (MPSimplificationPoint p, MPSimplificationVec2 d) = samplePtDeriv(
+      final (MPFitPoint p, MPVec2 d) = samplePtDeriv(
         t,
       );
       final double ai = w * d.x * p.y;
@@ -142,19 +142,19 @@ class MPSimplificationCubicChainSource
   }
 }
 
-List<MPSimplificationCubicBez> mpSimplifyCubicChain(
-  List<MPSimplificationCubicBez> chain, {
+List<MPCubicBez> mpSimplifyCubicChain(
+  List<MPCubicBez> chain, {
   double accuracy = mpLineSimplifyEpsilonOnScreen,
 }) {
   // Merge-only simplification: never split original segments; only merge
   // consecutive segments when a single cubic fits the span within accuracy.
   // This guarantees the output segment count is <= input.
   if (chain.length <= 1) {
-    return List<MPSimplificationCubicBez>.from(chain);
+    return List<MPCubicBez>.from(chain);
   }
 
-  final MPSimplificationCubicChainSource source =
-      MPSimplificationCubicChainSource(chain);
+  final MPCubicChainSource source =
+      MPCubicChainSource(chain);
   final int n = chain.length;
 
   // Precompute cusp boundaries (indices between segments where merging is forbidden).
@@ -166,7 +166,7 @@ List<MPSimplificationCubicBez> mpSimplifyCubicChain(
     }
   }
 
-  final List<MPSimplificationCubicBez> out = <MPSimplificationCubicBez>[];
+  final List<MPCubicBez> out = <MPCubicBez>[];
 
   int i = 0;
 
@@ -183,16 +183,16 @@ List<MPSimplificationCubicBez> mpSimplifyCubicChain(
 
     // Prefer longest-possible merge first: try [i, j) from hardEnd down to i+2.
     // This remains merge-only (never splits) and improves reduction odds vs. early break.
-    MPSimplificationCubicBez? merged;
+    MPCubicBez? merged;
     int nextI = i + 1; // default advance if no merge found
 
     for (int j = hardEnd; j >= i + 2; j--) {
       final double t0 = i / n;
       final double t1 = j / n;
-      final (MPSimplificationCubicBez, double)? fit =
-          mpSimplificationFitToCubic(
+      final (MPCubicBez, double)? fit =
+          mpFitToCubic(
             source,
-            MPSimplificationRange(t0, t1),
+            MPFitRange(t0, t1),
             accuracy,
           );
 
@@ -219,14 +219,14 @@ List<MPSimplificationCubicBez> mpSimplifyCubicChain(
 // Note: cusp detection is implemented once in CubicChainSource._isCuspAtJoin.
 
 List<THLineSegment>
-mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+mpSimplifyTHBezierLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
   double accuracy = mpLineSimplifyEpsilonOnScreen,
   required int decimalPositions,
 }) {
-  final List<MPSimplificationCubicBez> asCubicBez =
-      mpConvertTHBeziersToCubicsBez(originalLineSegmentsList);
-  final List<MPSimplificationCubicBez> fittedCubics = mpSimplifyCubicChain(
+  final List<MPCubicBez> asCubicBez =
+      mpConvertTHBeziersToCubicBez(originalLineSegmentsList);
+  final List<MPCubicBez> fittedCubics = mpSimplifyCubicChain(
     asCubicBez,
     accuracy: accuracy,
   );
@@ -252,7 +252,7 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   }
 
   final List<THLineSegment> simplifiedLineSegmentsList =
-      mpConvertCubicBezsToTHBezierCurveLineSegments(
+      mpConvertCubicBezToTHBezierLineSegments(
         cubicBezs: fittedCubics,
         originalLineSegmentsList: originalLineSegmentsList,
         decimalPositionsForCalculatedValues: decimalPositions,
@@ -261,8 +261,8 @@ mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
   return simplifiedLineSegmentsList;
 }
 
-List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
-  required List<MPSimplificationCubicBez> cubicBezs,
+List<THLineSegment> mpConvertCubicBezToTHBezierLineSegments({
+  required List<MPCubicBez> cubicBezs,
   required List<THLineSegment> originalLineSegmentsList,
   required int decimalPositionsForCalculatedValues,
 }) {
@@ -281,7 +281,7 @@ List<THLineSegment> mpConvertCubicBezsToTHBezierCurveLineSegments({
 
   lineSegmentsList.add(firstFittedLineSegment);
 
-  for (final MPSimplificationCubicBez fittedCubic in cubicBezs) {
+  for (final MPCubicBez fittedCubic in cubicBezs) {
     final THPositionPart controlPoint1;
     final THPositionPart controlPoint2;
     final THPositionPart endPoint;

@@ -1980,7 +1980,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               onlyUseSimplifiedSegmentsIfReducedAmountOfSegments = false;
             } else {
               simplifiedLineSegmentsList =
-                  mpSimplifyTHBezierCurveLineSegmentsToTHBezierCurveLineSegments(
+                  mpSimplifyTHBezierLineSegments(
                     originalPerTypeLineSegmentsList,
                     accuracy: _lineSimplifyEpsilonOnCanvas,
                     decimalPositions: currentDecimalPositions,
@@ -1990,7 +1990,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             if (_lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceBezier) {
               simplifiedLineSegmentsList =
-                  convertTHStraightLinesToTHBezierCurveLineSegments(
+                  mpConvertTHStraightToTHBezierLineSegments(
                     originalStraightLineSegmentsList:
                         originalPerTypeLineSegmentsList,
                     accuracy: _lineSimplifyEpsilonOnCanvas,

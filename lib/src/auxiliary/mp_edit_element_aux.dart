@@ -349,7 +349,7 @@ class MPEditElementAux {
     required int decimalPositions,
   }) {
     final List<THLineSegment> bezierLineSegments =
-        convertTHStraightLinesToTHBezierCurveLineSegments(
+        mpConvertTHStraightToTHBezierLineSegments(
           originalStraightLineSegmentsList: originalLineSegmentsList,
           accuracy: accuracy,
           decimalPositions: decimalPositions,

@@ -18,6 +18,7 @@
   * Created debug new version structure.
   * Improving newer version available messages.
   * Mapiah constants should start with 'mp' prefix. Save the 'th' prefix for Therion related constants.
+  * Simplifying and reorganizing code related to Bézier curves and straight line segments simplification and conversion.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
