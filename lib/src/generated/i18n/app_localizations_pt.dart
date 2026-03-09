@@ -1180,10 +1180,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypeLineWallClay => 'Argila';
 
   @override
-  String get mpSubtypeLineWallDebris => 'Detritos';
+  String get mpSubtypeLineWallDebris => 'Escombros';
 
   @override
-  String get mpSubtypeLineWallFlowstone => 'Travertino';
+  String get mpSubtypeLineWallFlowstone => 'Escorrimento';
 
   @override
   String get mpSubtypeLineWallIce => 'Gelo';
@@ -1195,7 +1195,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypeLineWallMoonmilk => 'Leite de lua';
 
   @override
-  String get mpSubtypeLineWallOverlying => 'Sobreposta';
+  String get mpSubtypeLineWallOverlying => 'Galeria superior';
 
   @override
   String get mpSubtypeLineWallPebbles => 'Seixos';
@@ -1210,7 +1210,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSubtypeLineWallSand => 'Areia';
 
   @override
-  String get mpSubtypeLineWallUnderlying => 'Subjacente';
+  String get mpSubtypeLineWallUnderlying => 'Galeria inferior';
 
   @override
   String get mpSubtypeLineWallUnsurveyed => 'Não levantada';
@@ -1400,7 +1400,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thAreaClay => 'Argila';
 
   @override
-  String get thAreaDebris => 'Detritos';
+  String get thAreaDebris => 'Escombros';
 
   @override
   String get thAreaFlowstone => 'Travertino';
@@ -1412,22 +1412,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thAreaMoonmilk => 'Leite de Lua';
 
   @override
-  String get thAreaMudcrack => 'Rachadura de Lama';
+  String get thAreaMudcrack => 'Lama rachada';
 
   @override
   String get thAreaPebbles => 'Seixos';
 
   @override
-  String get thAreaPillar => 'Pilar';
+  String get thAreaPillar => 'Coluna';
 
   @override
-  String get thAreaPillars => 'Pilares';
+  String get thAreaPillars => 'Colunas';
 
   @override
-  String get thAreaPillarsWithCurtains => 'Pilares com Cortinas';
+  String get thAreaPillarsWithCurtains => 'Colunas com Cortinas';
 
   @override
-  String get thAreaPillarWithCurtains => 'Pilar com Cortinas';
+  String get thAreaPillarWithCurtains => 'Coluna com Cortinas';
 
   @override
   String get thAreaSand => 'Areia';
