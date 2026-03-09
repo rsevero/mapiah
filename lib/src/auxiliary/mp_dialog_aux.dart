@@ -20,6 +20,8 @@ import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:markdown_widget/markdown_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -352,7 +354,15 @@ class MPDialogAux {
           );
 
       if (mpIsFlathub) {
-        _showFlathubUpdateDialog(newerVersionCount: newerVersionCount);
+        _showFlathubUpdateDialog(
+          latestVersion: latestVersion,
+          currentVersion: currentVersion,
+          tagName: tagName,
+          releaseUrl: releaseUrl,
+          newerVersionCount: newerVersionCount,
+          commitsBehind: installedVersionAgeInfo?.commitsBehind,
+          daysOld: installedVersionAgeInfo?.daysOld,
+        );
         return;
       }
 
@@ -415,13 +425,6 @@ class MPDialogAux {
     final String updateBodyWithVersionAge = versionAgeText.isEmpty
         ? updateBody
         : '$updateBody\n\n$versionAgeText';
-    final int urlIndex = updateBodyWithVersionAge.indexOf(releaseUrl);
-    final String beforeUrl = urlIndex >= 0
-        ? updateBodyWithVersionAge.substring(0, urlIndex)
-        : updateBodyWithVersionAge;
-    final String afterUrl = urlIndex >= 0
-        ? updateBodyWithVersionAge.substring(urlIndex + releaseUrl.length)
-        : '';
 
     showDialog<void>(
       context: ctx,
@@ -430,26 +433,10 @@ class MPDialogAux {
       builder: (ctx2) => AlertDialog(
         title: Text(dialogTitle),
         content: SingleChildScrollView(
-          child: SelectableText.rich(
-            TextSpan(
-              style: Theme.of(ctx2).textTheme.bodyLarge,
-              children: <TextSpan>[
-                TextSpan(text: beforeUrl),
-                if (urlIndex >= 0)
-                  TextSpan(
-                    text: releaseUrl,
-                    style: TextStyle(
-                      color: Theme.of(ctx2).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        MPUrlLauncher.openUrl(Uri.parse(releaseUrl));
-                      },
-                  ),
-                TextSpan(text: afterUrl),
-              ],
-            ),
+          child: _commonUpdateContent(
+            ctx2,
+            updateBodyWithVersionAge,
+            releaseUrl,
           ),
         ),
         actions: <Widget>[
@@ -464,7 +451,15 @@ class MPDialogAux {
     });
   }
 
-  static void _showFlathubUpdateDialog({required int newerVersionCount}) {
+  static void _showFlathubUpdateDialog({
+    required String latestVersion,
+    required String currentVersion,
+    required String tagName,
+    required String releaseUrl,
+    required int newerVersionCount,
+    int? commitsBehind,
+    int? daysOld,
+  }) {
     if (_isUpdateDialogOpen) {
       return;
     }
@@ -483,19 +478,139 @@ class MPDialogAux {
         ? appLocalizations.updateAvailableTitleWithCount(newerVersionCount)
         : appLocalizations.updateAvailableTitle;
 
+    Future<String> loadFlathubMarkdown(BuildContext ctx2) async {
+      final String localIDSetting = mpLocator.mpSettingsController
+          .getStringWithDefault(MPSettingID.Main_LocaleID);
+
+      final String localeID = (localIDSetting == mpDefaultLocaleID)
+          ? View.of(ctx2).platformDispatcher.locale.languageCode
+          : localIDSetting;
+
+      final List<String> preferredLocaleIDs = <String>[
+        localeID,
+        mpEnglishLocaleID,
+      ];
+      Object? lastError;
+
+      for (final String preferredLocaleID in preferredLocaleIDs) {
+        final String helpPageAssetPath =
+            '$mpHelpPagePath/$preferredLocaleID/$mpHelpPageFlathubDisabled.md';
+
+        try {
+          return await rootBundle.loadString(helpPageAssetPath);
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError ?? StateError('Unable to load Flathub help page.');
+    }
+
+    final String updateBody = mpLocator.appLocalizations.updateAvailableBody(
+      currentVersion,
+      latestVersion,
+      tagName,
+      releaseUrl,
+    );
+    final String versionAgeText = ((commitsBehind != null) && (daysOld != null))
+        ? mpLocator.appLocalizations.updateAvailableInstalledVersionAge(
+            commitsBehind,
+            daysOld,
+          )
+        : mpEmptyString;
+    final String updateBodyWithVersionAge = versionAgeText.isEmpty
+        ? updateBody
+        : '$updateBody\n\n$versionAgeText';
+
     showDialog<void>(
       context: ctx,
       useRootNavigator: true,
       barrierDismissible: true,
-      builder: (BuildContext ctx2) => MPHelpDialogWidget(
-        helpPage: mpHelpPageFlathubDisabled,
-        title: dialogTitle,
-        onPressedClose: () => Navigator.of(ctx2, rootNavigator: true).pop(),
-        source: MPHelpPageSource.githubRaw,
+      builder: (BuildContext ctx2) => FutureBuilder<String>(
+        future: loadFlathubMarkdown(ctx2),
+        builder: (BuildContext buildCtx, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return AlertDialog(
+              title: Text(dialogTitle),
+              content: const Center(child: CircularProgressIndicator()),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () =>
+                      Navigator.of(buildCtx, rootNavigator: true).pop(),
+                  child: Text(appLocalizations.buttonClose),
+                ),
+              ],
+            );
+          }
+
+          final String flathubMarkdown = snapshot.hasData ? snapshot.data! : '';
+
+          return AlertDialog(
+            title: Text(dialogTitle),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _commonUpdateContent(
+                    buildCtx,
+                    updateBodyWithVersionAge,
+                    releaseUrl,
+                  ),
+                  if (flathubMarkdown.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    MarkdownBlock(data: flathubMarkdown, selectable: false),
+                  ],
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(ctx2, rootNavigator: true).pop(),
+                child: Text(appLocalizations.buttonClose),
+              ),
+            ],
+          );
+        },
       ),
     ).whenComplete(() {
       _isUpdateDialogOpen = false;
     });
+  }
+
+  static Widget _commonUpdateContent(
+    BuildContext ctx2,
+    String updateBodyWithVersionAge,
+    String releaseUrl,
+  ) {
+    final int urlIndex = updateBodyWithVersionAge.indexOf(releaseUrl);
+    final String beforeUrl = urlIndex >= 0
+        ? updateBodyWithVersionAge.substring(0, urlIndex)
+        : updateBodyWithVersionAge;
+    final String afterUrl = urlIndex >= 0
+        ? updateBodyWithVersionAge.substring(urlIndex + releaseUrl.length)
+        : '';
+
+    return SelectableText.rich(
+      TextSpan(
+        style: Theme.of(ctx2).textTheme.bodyLarge,
+        children: <TextSpan>[
+          TextSpan(text: beforeUrl),
+          if (urlIndex >= 0)
+            TextSpan(
+              text: releaseUrl,
+              style: TextStyle(
+                color: Theme.of(ctx2).colorScheme.primary,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  MPUrlLauncher.openUrl(Uri.parse(releaseUrl));
+                },
+            ),
+          TextSpan(text: afterUrl),
+        ],
+      ),
+    );
   }
 
   static Future<MPInstalledVersionAgeInfo?> _getInstalledVersionAgeInfo({
@@ -565,8 +680,9 @@ class MPDialogAux {
       try {
         response = await http.get(
           pageUri,
-          headers: const <String, String>{
+          headers: <String, String>{
             'Accept': mpMapiahReleasesAPIHeaderAccept,
+            'User-Agent': mpHttpUserAgent,
           },
         );
       } catch (_) {
@@ -574,6 +690,11 @@ class MPDialogAux {
       }
 
       if (response.statusCode != mpHttpStatusOk) {
+        // Show a specific dialog informing about HTTP error status.
+        _showUpdateCheckFailedDialog(
+          type: MPUpdateCheckFailureType.httpStatus,
+          httpStatusCode: response.statusCode,
+        );
         return null;
       }
 

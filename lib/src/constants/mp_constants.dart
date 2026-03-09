@@ -458,6 +458,7 @@ const String mpMapiahReleasesAPIURL =
 const String mpMapiahCommitsAPIURL =
     'https://api.github.com/repos/rsevero/mapiah/commits?per_page=$mpMapiahCommitsAPIPerPage';
 const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
+const String mpHttpUserAgent = 'Mapiah';
 const String mpMapiahGithubReleasesURL =
     'https://github.com/rsevero/mapiah/releases/tag/';
 const String mpMapiahGithubRawContentURLPrefix =

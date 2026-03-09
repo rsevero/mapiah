@@ -11,7 +11,7 @@ A few introductory instructions:
 9. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files.
 10. Don´t use all caps on user text.
 11. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
-12. Don't worry about the indentation of the code. This is automtically fixed on save.
+12. Don't worry about code formatting. This is automtically fixed on save.
 13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 
 Specific instructions:
