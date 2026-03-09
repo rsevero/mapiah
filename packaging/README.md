@@ -6,18 +6,18 @@
 4. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
 5. Update release info at _./packaging/linux/io.github.rsevero.mapiah.metainfo.xml_ with _CHANGELOG_ info.
-6. Commit the previous changes with a comment like 'v0.2.22'
+6. Commit the previous changes with a comment like 'v0.3.0'
 7. Push the previous changes
 8. Create a new tag with the new version:
    ```bash
-   git tag -a v0.2.22 -m "v0.2.22"
-   git push origin v0.2.22
+   git tag -a v0.3.0 -m "v0.3.0"
+   git push origin v0.3.0
    ```
 9. At the _~/devel/io.github.rsevero.mapiah_ repo pull any changes from the remote main branch and create new branch:
       ```bash
       git co master
       git pull
-      git co -b v0.2.22
+      git co -b v0.3.0
       ```
 10. At the main Mapiah repo _~/devel/mapiah_ (from the repo root) generate the Flatpak build files and copy them to the Flathub repo:
    ```bash
@@ -36,8 +36,8 @@
       git status
       git add -A
       git status
-      git commit -m "v0.2.22"
-      git push --set-upstream origin v0.2.22
+      git commit -m "v0.3.0"
+      git push --set-upstream origin v0.3.0
       ```
    3. Create a Pull Request in the Flathub repo and get it merged.
 12. After the new release has been created in GitHub:
@@ -49,12 +49,12 @@
 1. Update Mapiah version in `pubspec.yaml` to some `-rcXX` version.
 2. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
-3. Commit the previous changes with a comment like 'v0.2.22'
+3. Commit the previous changes with a comment like 'v0.3.0'
 4. Push the previous changes
 5. Create a new lightweight tag with the new version:
    ```bash
-   git tag v0.2.22
-   git push origin v0.2.22
+   git tag v0.3.0
+   git push origin v0.3.0
    ```
 6. At the _~/devel/io.github.rsevero.mapiah_ repo pull any changes from the remote main branch and create new branch:
       ```bash

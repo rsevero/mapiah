@@ -6,6 +6,11 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 
+// Optional release information constants. If empty, they are not shown
+// in the About dialog.
+const String mpReleaseName = 'Great Fanfarra';
+const String mpReleaseURL = 'https://youtu.be/HlV59UbrY-E';
+
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
 const bool mpDebugMousePosition = bool.fromEnvironment(
@@ -430,11 +435,6 @@ const String mpChangelogURL =
     'https://github.com/rsevero/mapiah/blob/main/CHANGELOG.md';
 const String mpLicenseURL =
     'https://github.com/rsevero/mapiah/blob/main/LICENSE.md';
-
-// Optional release information constants. If empty, they are not shown
-// in the About dialog.
-const String mpReleaseName = 'Fanfarra';
-const String mpReleaseURL = 'https://youtu.be/HlV59UbrY-E';
 
 // Flathub/Flatpak application id used on Flathub
 const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';

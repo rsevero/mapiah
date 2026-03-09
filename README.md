@@ -3,7 +3,6 @@
 [Free software](https://www.gnu.org/philosophy/free-sw.en.html) graphical interface for [Therion](https://therion.speleo.sk/) cave mapping written in [Flutter](https://flutter.dev/).
 
 ## Main objectives
-
 User-friendly interface to the powerful Therion mapping software.
 
 As an intended side effect, it aims to completely replace xTherion, the venerable but ostensibly ancient Therion graphical interface.
@@ -11,7 +10,6 @@ As an intended side effect, it aims to completely replace xTherion, the venerabl
 Also create a thriving community of users and developers to make it as powerful and user friendly as such community needs and creates.
 
 ## Interesting characteristics
-
 * Visually distinguish all point, line, and area types supported by Therion.
 * Graphical interface for editing all supported options of points, lines, and areas supported by Therion.
 * Multiple mouse and keyboard pan and zoom options.
@@ -23,6 +21,7 @@ Also create a thriving community of users and developers to make it as powerful 
 * Redos available after some undos and new actions merged in the undo queue.
 
 ## Current status
+With the release of version 0.3.0, Mapiah is considered to have reached "real editing" full capabilities.
 
 Mapiah is in fast development stage, but it is already usable for real mapping work. It is being used by the author and some other people to map real caves, and it is already being used in some caving courses.
 

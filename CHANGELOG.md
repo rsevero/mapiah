@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.40 - not yet release
+## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:
   * Include contents of 'therion.log' file at end of Therion output.
   * If there are more than 3 newer versions available, warn the user of the newer versions on all runs instead of just showing the "New version available" dialog once a day.

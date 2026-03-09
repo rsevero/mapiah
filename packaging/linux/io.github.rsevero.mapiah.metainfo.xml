@@ -57,14 +57,51 @@
   </screenshots>
 
   <releases>
-    <release version="0.2.40-rc11" date="2026-03-06">
+    <release version="0.3.0" date="2026-03-09">
       <description>
-        <p>Release description</p>
-      </description>
-    </release>
-    <release version="0.2.40-rc3" date="2026-03-06">
-      <description>
-        <p>Release description</p>
+        <p>0.3.0 - 2026-03-09 - The Great Fanfarra release</p>
+
+        <p>New features:</p>
+        <ul>
+          <li>Include contents of 'therion.log' file at end of Therion output.</li>
+          <li>If there are more than 3 newer versions available, warn the user of the newer versions on all runs instead of just showing the "New version available" dialog once a day.</li>
+          <li>At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]</li>
+          <li>Enable shortcuts Esc, Ctrl+T and T at "Therion run" window.</li>
+          <li>Adding start and end time at Therion run output.</li>
+          <li>When creating a point or a line point, it should snap to near elements.</li>
+          <li>When clicking on an area, Ctrl (or Meta+Click) selects the area (and not the line), Shift+Ctrl+Click (or Meta+Shift+Click) selects the line (and not the area).</li>
+          <li>Created keyboard shortcut Ctrl+X that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]</li>
+          <li>At flathub_disable.md, explain why Flathub version is being disabled.</li>
+          <li>At "newer versions available" page, also show how many commits and how many days the users installed version is old.</li>
+          <li>Release name and URL at About dialog.</li>
+        </ul>
+
+        <p>Fixed bugs:</p>
+        <ul>
+          <li>Newer version available window not appearing in Flathub version.</li>
+          <li>On very fast Therion executions, therion.log file content not being included in Therion run output.</li>
+          <li>Bézier created from straight lines are too tight.</li>
+          <li>Status bar info for selected elements not internationalized.</li>
+          <li>Current PLA type at PLA type selection overlay with too small left and bottom margins.</li>
+          <li>Zoom to file or to scrap should not consider images not visible.</li>
+          <li>When clicking on the name of an image, checkbox is not changed on "available images" dialog box.</li>
+        </ul>
+
+        <p>Infrastructure maintenance:</p>
+        <ul>
+          <li>Enabling github created flatpak generation.</li>
+          <li>New "New version available" page.</li>
+          <li>Created debug new version structure.</li>
+          <li>Improving newer version available messages.</li>
+          <li>Mapiah constants should start with 'mp' prefix. Save the 'th' prefix for Therion related constants.</li>
+          <li>Simplifying and reorganizing code related to Bézier curves and straight line segments simplification and conversion.</li>
+          <li>Review portuguese translations of PLA types and subtypes.</li>
+          <li>Renaming mpSubtype* localization strings to thSubtype*.</li>
+          <li>Included "Used on:..." on translation strings.</li>
+          <li>Created scripts/generate_releases_brief.dart and assets/releases/releases_summary.json to speed new version check.</li>
+          <li>Including "Accept-Encoding: gzip" on all http requests.</li>
+          <li>All clearBoundingBox() calls clear ancestor bounding boxes.</li>
+        </ul>
       </description>
     </release>
     <release version="0.2.39" date="2026-03-05">
