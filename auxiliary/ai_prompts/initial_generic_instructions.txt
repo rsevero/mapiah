@@ -13,6 +13,7 @@ A few introductory instructions:
 11. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
 12. Don't worry about code formatting. This is automtically fixed on save.
 13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+14. Run 'dart analyze' or similar on generated code.
 
 Specific instructions:
 
