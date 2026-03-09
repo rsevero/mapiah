@@ -24,9 +24,9 @@ import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart'
 class THFile
     with
         MPTHFileReferenceMixin,
-        THIsParentMixin,
+        MPBoundingBoxMixin,
         THCalculateChildrenBoundingBoxMixin,
-        MPBoundingBoxMixin {
+        THIsParentMixin {
   /// This is the internal, Mapiah-only IDs used to identify each element only
   /// during this run. This value is never saved anywhere.
   ///
@@ -367,7 +367,9 @@ class THFile
     if ((newElement is THPoint) ||
         (newElement is THLine) ||
         (newElement is THLineSegment)) {
-      _clearOwnAndAncestryBoundingBoxes(newElement);
+      if (newElement is MPBoundingBoxMixin) {
+        (newElement as MPBoundingBoxMixin).clearBoundingBox();
+      }
     }
 
     newElement.setTHFile(this);
@@ -401,12 +403,12 @@ class THFile
     switch (element) {
       case THPoint _:
         _pointsMPIDs.add(element.mpID);
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THLine _:
         _linesMPIDs.add(element.mpID);
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THLineSegment _:
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THArea _:
         _areasMPIDs.add(element.mpID);
       case THAreaBorderTHID _:
@@ -480,12 +482,12 @@ class THFile
         _clearAreaXLineInfo(element);
       case THLine _:
         _linesMPIDs.remove(elementMPID);
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THLineSegment _:
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THPoint _:
         _pointsMPIDs.remove(elementMPID);
-        _clearOwnAndAncestryBoundingBoxes(element);
+        element.clearBoundingBox();
       case THScrap _:
         if ((_scrapMPIDs != null) && _scrapMPIDs!.contains(elementMPID)) {
           _scrapMPIDs!.remove(elementMPID);
@@ -520,22 +522,6 @@ class THFile
 
     parent.removeElementFromParent(element);
     _elementByMPID.remove(elementMPID);
-  }
-
-  void _clearOwnAndAncestryBoundingBoxes(THElement element) {
-    if (element is MPBoundingBoxMixin) {
-      (element as MPBoundingBoxMixin).clearBoundingBox();
-    } else if (element is THLineSegment) {
-      element.clearBoundingBox();
-    }
-
-    final THIsParentMixin parent = element.parent(thFile: this);
-
-    if (parent is THElement) {
-      _clearOwnAndAncestryBoundingBoxes(parent as THElement);
-    } else if (parent is THFile) {
-      parent.clearBoundingBox();
-    }
   }
 
   bool hasElementByMPID(int mpID) {

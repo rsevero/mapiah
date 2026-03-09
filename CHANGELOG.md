@@ -18,6 +18,7 @@
   * Bézier created from straight lines are too tight.
   * Status bar info for selected elements not internationalized.
   * Current PLA type at PLA type selection overlay with too small left and bottom margins.
+  * Zoom to file or to scrap should not consider images not visible.
 * Infrastructure maintenance:
   * Enabling github created flatpak generation.
   * New "New version available" page.
@@ -30,6 +31,7 @@
   * Included "Used on:..." on translation strings.
   * Created scripts/generate_releases_brief.dart and assets/releases/releases_summary.json to speed new version check.
   * Including "Accept-Encoding: gzip" on all http requests.
+  * All clearBoundingBox() calls clear ancestor bounding boxes.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:

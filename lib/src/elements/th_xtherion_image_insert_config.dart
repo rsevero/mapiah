@@ -19,7 +19,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   //   visibility. They are produced subtracting 2 from the original vsb value
   //   on load failure and adding 2 on load success.
   // In Mapiah it is converted to 'isVisible' as a simple bool.
-  bool isVisible;
+  bool _isVisible;
   THDoublePart igamma;
   THDoublePart yy;
   String xviRoot;
@@ -45,7 +45,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     super.sameLineComment,
     required this.filename,
     required this.xx,
-    required this.isVisible,
+    required bool isVisible,
     required this.igamma,
     required this.yy,
     required this.xviRoot,
@@ -55,7 +55,8 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required this.xImage,
     required this.isXVI,
     required super.originalLineInTH2File,
-  }) : super.forCWJM();
+  }) : _isVisible = isVisible,
+       super.forCWJM();
 
   THXTherionImageInsertConfig.fromString({
     required super.parentMPID,
@@ -71,7 +72,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     this.xImage = false,
     super.originalLineInTH2File = '',
   }) : xx = THDoublePart.fromString(valueString: xx),
-       isVisible = (int.tryParse(vsb) ?? 1) > 0,
+       _isVisible = (int.tryParse(vsb) ?? 1) > 0,
        igamma = THDoublePart.fromString(valueString: igamma),
        yy = THDoublePart.fromString(valueString: yy),
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
@@ -81,7 +82,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required super.parentMPID,
     required this.filename,
     required this.xx,
-    this.isVisible = true,
+    bool isVisible = true,
     THDoublePart? igamma,
     required this.yy,
     this.xviRoot = '',
@@ -94,13 +95,14 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
            ? THDoublePart.fromString(valueString: '1.0')
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+       _isVisible = isVisible,
        super.getMPID();
 
   THXTherionImageInsertConfig.adjustPosition({
     required super.parentMPID,
     required this.filename,
     required this.xx,
-    this.isVisible = true,
+    bool isVisible = true,
     THDoublePart? igamma,
     required this.yy,
     this.xviRoot = '',
@@ -114,6 +116,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
            ? THDoublePart.fromString(valueString: '1.0')
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
+       _isVisible = isVisible,
        super.getMPID() {
     if (isXVI) {
       final XVIFile? xviFile = getXVIFile(th2FileEditController);
@@ -148,7 +151,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
       ...super.toMap(),
       'filename': filename,
       'xx': xx.toMap(),
-      'isVisible': isVisible,
+      'isVisible': _isVisible,
       'igamma': igamma.toMap(),
       'yy': yy.toMap(),
       'xviRoot': xviRoot,
@@ -350,6 +353,10 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   Rect? _calculateRasterImageBoundingBox(
     TH2FileEditController th2FileEditController,
   ) {
+    if (!isVisible) {
+      return null;
+    }
+
     // Ensure loading has been triggered (will cache when done)
     getRasterImageFrameInfo(th2FileEditController);
 
@@ -368,6 +375,10 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   }
 
   Rect? _calculateXVIBoundingBox(TH2FileEditController th2FileEditController) {
+    if (!isVisible) {
+      return null;
+    }
+
     final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
     if (xviFile == null) {
@@ -398,5 +409,16 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
   void setRasterImage(ui.Image? image) {
     _decodedRasterImage = image;
+  }
+
+  bool get isVisible => _isVisible;
+
+  set isVisible(bool isVisible) {
+    if (_isVisible == isVisible) {
+      return;
+    }
+
+    _isVisible = isVisible;
+    clearBoundingBox();
   }
 }
