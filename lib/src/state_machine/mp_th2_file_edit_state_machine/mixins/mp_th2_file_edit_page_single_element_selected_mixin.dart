@@ -21,7 +21,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
     String pointType = appLocalizations
         .mpStatusBarMessageSingleSelectedPointType(
-          MPTextToUser.getPointType(point.pointType),
+          MPTextToUser.getPointTypeSubtypeFromTypeSubtype(
+            pointType: point.pointType.name,
+            pointSubtype: MPCommandOptionAux.getSubtype(point),
+          ),
         );
 
     if (point.pointType == THPointType.unknown) {
@@ -42,7 +45,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     String lineType = appLocalizations.mpStatusBarMessageSingleSelectedLineType(
-      MPTextToUser.getLineType(line.lineType),
+      MPTextToUser.getLineTypeSubtypeFromTypeSubtype(
+        lineType: line.lineType.name,
+        lineSubtype: MPCommandOptionAux.getSubtype(line),
+      ),
     );
 
     if (line.lineType == THLineType.unknown) {
@@ -60,7 +66,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       final THArea parentArea = thFile.elementByMPID(parentAreaMPID) as THArea;
       final String areaType = mpLocator.appLocalizations
           .mpStatusBarMessageSingleSelectedAreaType(
-            MPTextToUser.getAreaType(parentArea.areaType),
+            MPTextToUser.getAreaTypeSubtypeFromTypeSubtype(
+              areaType: parentArea.areaType.name,
+              areaSubtype: MPCommandOptionAux.getSubtype(parentArea),
+            ),
           );
 
       message += appLocalizations
@@ -116,7 +125,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     String areaType = appLocalizations.mpStatusBarMessageSingleSelectedAreaType(
-      MPTextToUser.getAreaType(area.areaType),
+      MPTextToUser.getAreaTypeSubtypeFromTypeSubtype(
+        areaType: area.areaType.name,
+        areaSubtype: MPCommandOptionAux.getSubtype(area),
+      ),
     );
 
     if (area.areaType == THAreaType.unknown) {
@@ -201,16 +213,6 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
     String message = elementType;
 
-    if (element.hasOption(THCommandOptionType.subtype)) {
-      message += appLocalizations
-          .mpStatusBarMessageSingleSelectedElementSubtype(
-            MPTextToUser.getSubtypeAsString(
-              (element.getOption(THCommandOptionType.subtype)!
-                      as THSubtypeCommandOption)
-                  .subtype,
-            ),
-          );
-    }
     if (element.hasOption(THCommandOptionType.id)) {
       message += appLocalizations.mpStatusBarMessageSingleSelectedElementID(
         (element.getOption(THCommandOptionType.id)! as THIDCommandOption).thID,
