@@ -506,8 +506,12 @@ class MPDialogAux {
         );
 
         try {
+          final Map<String, String> headers = <String, String>{
+            mpHttpHeaderAcceptEncoding: mpHttpHeaderAcceptEncodingGzip,
+          };
+
           final http.Response resp = await http
-              .get(helpPageUrl)
+              .get(helpPageUrl, headers: headers)
               .timeout(const Duration(seconds: 10));
 
           if ((resp.statusCode == 200) && resp.body.isNotEmpty) {
@@ -632,10 +636,13 @@ class MPDialogAux {
 
   static Future<List<dynamic>?> _fetchReleasesSummaryFromWeb() async {
     final Uri rawUrl = Uri.parse(mpMapiahReleasesSummaryRawURL);
+    final Map<String, String> headers = <String, String>{
+      mpHttpHeaderAcceptEncoding: mpHttpHeaderAcceptEncodingGzip,
+    };
 
     try {
       final http.Response response = await http
-          .get(rawUrl)
+          .get(rawUrl, headers: headers)
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != mpHttpStatusOk) {

@@ -27,6 +27,7 @@
   * Renaming mpSubtype* localization strings to thSubtype*.
   * Included "Used on:..." on translation strings.
   * Created scripts/generate_releases_brief.dart and assets/releases/releases_summary.json to speed new version check.
+  * Including "Accept-Encoding: gzip" on all http requests.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
