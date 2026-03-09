@@ -67,7 +67,7 @@ Future<List<Release>> _collectReleases() async {
     }
 
     final String? sha = await _gitRevParse(t);
-    if (sha == null || sha.isEmpty) {
+    if ((sha == null) || sha.isEmpty) {
       continue;
     }
 
@@ -76,14 +76,16 @@ Future<List<Release>> _collectReleases() async {
 
     if (annotated) {
       final String? tagDate = await _gitForEachRefTaggerDate(t);
-      if (tagDate != null && tagDate.isNotEmpty) {
+
+      if ((tagDate != null) && tagDate.isNotEmpty) {
         date = DateTime.parse(tagDate);
       }
     }
 
     if (date == null) {
       final String? commitDate = await _gitCommitDate(sha);
-      if (commitDate != null && commitDate.isNotEmpty) {
+
+      if ((commitDate != null) && commitDate.isNotEmpty) {
         date = DateTime.parse(commitDate);
       }
     }
@@ -94,6 +96,7 @@ Future<List<Release>> _collectReleases() async {
     }
 
     final Release r = Release(name: t, date: date, sha: sha, commits: 0);
+
     releasesRaw.add(r);
   }
 
@@ -110,14 +113,91 @@ Future<List<Release>> _collectReleases() async {
         previous.name,
         current.name,
       );
+
       current.commits = count ?? 0;
     } else {
       final int? count = await _gitCountCommitsUpTo(current.name);
+
       current.commits = count ?? 0;
     }
   }
 
+  // Check pubspec.yaml for current version and include it as the
+  // most up-to-date release if it's not already represented by a tag.
+  final String? pubVersion = await _readPubspecVersion();
+  if ((pubVersion != null) && pubVersion.isNotEmpty) {
+    final String pubTagName = 'v$pubVersion';
+    final bool alreadyPresent = releasesRaw.any(
+      (Release r) => r.name == pubTagName,
+    );
+
+    if (!alreadyPresent) {
+      final String? headSha = await _gitRevParse('HEAD');
+      final DateTime nowUtc = DateTime.now().toUtc();
+
+      int commitsSince = 0;
+      if (releasesRaw.isNotEmpty) {
+        final Release newestTag = releasesRaw[0];
+        final int? count = await _gitCountCommitsBetween(
+          newestTag.name,
+          'HEAD',
+        );
+        commitsSince = count ?? 0;
+      } else {
+        final int? count = await _gitCountCommitsUpTo('HEAD');
+        commitsSince = count ?? 0;
+      }
+
+      final Release pubRelease = Release(
+        name: pubTagName,
+        date: nowUtc,
+        sha: headSha ?? 'HEAD',
+        commits: commitsSince,
+      );
+
+      // Insert as newest release.
+      releasesRaw.insert(0, pubRelease);
+    }
+  }
+
   return releasesRaw;
+}
+
+Future<String?> _readPubspecVersion() async {
+  final File file = File('pubspec.yaml');
+  if (!await file.exists()) {
+    return null;
+  }
+
+  final String content = await file.readAsString();
+
+  // Match a line like: version: 1.2.3+4 or version: "1.2.3"
+  final RegExp versionLine = RegExp(r'^\s*version:\s*(.+)', multiLine: true);
+  final Iterable<RegExpMatch> matches = versionLine.allMatches(content);
+  if (matches.isEmpty) {
+    return null;
+  }
+
+  final RegExpMatch match = matches.first;
+  String raw = match.group(1)!.trim();
+
+  // Remove surrounding quotes if present.
+  if ((raw.startsWith('"') && raw.endsWith('"')) ||
+      (raw.startsWith("'") && raw.endsWith("'"))) {
+    raw = raw.substring(1, raw.length - 1);
+  }
+
+  // Drop build metadata (+...) if present.
+  final List<String> parts = raw.split('+');
+  final String semver = parts.first;
+
+  // Basic sanity check: ensure it looks like X.Y.Z
+  final RegExp semverPattern = RegExp(r'^\d+\.\d+\.\d+$');
+  if (!semverPattern.hasMatch(semver)) {
+    return null;
+  }
+
+  return semver;
 }
 
 Future<List<String>> _gitTagList() async {
@@ -135,6 +215,7 @@ Future<List<String>> _gitTagList() async {
       .map((String s) => s.trim())
       .where((String s) => s.isNotEmpty)
       .toList();
+
   return lines;
 }
 
@@ -144,6 +225,7 @@ Future<String?> _gitRevParse(String ref) async {
     '--verify',
     ref,
   ]);
+
   if (result.exitCode != 0) {
     return null;
   }
@@ -157,11 +239,13 @@ Future<bool> _isAnnotatedTag(String tag) async {
     '-t',
     tag,
   ]);
+
   if (result.exitCode != 0) {
     return false;
   }
 
   final String type = (result.stdout as String).toString().trim();
+
   return type == 'tag';
 }
 
@@ -178,6 +262,7 @@ Future<String?> _gitForEachRefTaggerDate(String tag) async {
   }
 
   final String out = (result.stdout as String).toString().trim();
+
   if (out.isEmpty) {
     return null;
   }
@@ -197,6 +282,7 @@ Future<String?> _gitCommitDate(String sha) async {
   }
 
   final String out = (result.stdout as String).toString().trim();
+
   if (out.isEmpty) {
     return null;
   }
@@ -210,11 +296,13 @@ Future<int?> _gitCountCommitsBetween(String olderRef, String newerRef) async {
     '--count',
     '$olderRef..$newerRef',
   ]);
+
   if (result.exitCode != 0) {
     return null;
   }
 
   final String out = (result.stdout as String).toString().trim();
+
   return int.tryParse(out);
 }
 
@@ -224,10 +312,12 @@ Future<int?> _gitCountCommitsUpTo(String ref) async {
     '--count',
     ref,
   ]);
+
   if (result.exitCode != 0) {
     return null;
   }
 
   final String out = (result.stdout as String).toString().trim();
+
   return int.tryParse(out);
 }

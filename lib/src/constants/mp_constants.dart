@@ -31,7 +31,7 @@ const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
 
 // Debug constant to override the current version used when comparing to the
 // newest version available. If empty, the actual current version is used.
-const String mpDebugNewVersionInterfaceCurrentVersion = 'v0.2.35';
+const String mpDebugNewVersionInterfaceCurrentVersion = '';
 
 const String mpHelpPagePath = 'assets/help';
 const String mpHelpPageFlathubDisabled = 'flathub_disabled';
