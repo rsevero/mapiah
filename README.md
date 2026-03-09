@@ -37,19 +37,21 @@ Linux AppImage and Flatpak/Flathub and Windows versions are being used regularly
 Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
 
 #### Flatpak
-Mapiah Flatpak version moved back to Flathub.
+Mapiah Flatpak version moved back to manual Flatpak distribution.
 
-If you have previously installed a Flatpak package directly downloaded from [Mapiah releases](https://github.com/rsevero/mapiah/releases), please uninstall it and install the Flathub version instead. You will need Flathub installed in your system first: [Flathub setup instructions](https://flatpak.org/setup/).
+This was necessary because running Therion from a Flathub distributed package is a nightmare. I am sorry from the trouble. I really hope this issue is definitely solved now.
+
+To go back to non Flathub packages:
 
 ```bash
-flatpak remove org.mapiah.mapiah
-flatpak install io.github.rsevero.mapiah
+flatpak remove io.github.rsevero.mapiah
+flatpak install --user --from https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref
 ```
 
-If you have already installed the Flathub version, you can update it with:
+If you have already installed the non-Flathub version, you can update it with:
 
 ```bash
-flatpak update io.github.rsevero.mapiah
+flatpak update org.mapiah.mapiah
 ```
 
 ##### Install from Mapiah GitHub Pages Flatpak repo
