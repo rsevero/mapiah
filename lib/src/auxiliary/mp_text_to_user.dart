@@ -350,6 +350,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddEmptyLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLine] =
         localizations.mpCommandDescriptionAddLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.addLines] =
+        localizations.mpCommandDescriptionAddLines;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLineSegment] =
         localizations.mpCommandDescriptionAddLineSegment;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addPoint] =

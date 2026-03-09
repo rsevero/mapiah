@@ -679,6 +679,12 @@ abstract class AppLocalizations {
   /// **'Add line'**
   String get mpCommandDescriptionAddLine;
 
+  /// The description for the add lines command Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Add lines'**
+  String get mpCommandDescriptionAddLines;
+
   /// The description for the add line segment command Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

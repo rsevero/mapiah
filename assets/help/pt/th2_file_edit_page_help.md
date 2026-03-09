@@ -5,6 +5,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Barra superior](#barra-superior)
 - [Croquis](#croquis)
 - [Desenhando linhas](#desenhando-linhas)
+  - [Conexão de mapa](#conexão-de-mapa)
 - [Janela de edição](#janela-de-edição)
   - [Canto superior direito](#canto-superior-direito)
   - [Canto inferior direito](#canto-inferior-direito)
@@ -42,6 +43,9 @@ Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento d
 Curvas Bézier no Therion (e no Mapiah) são curvas cúbicas, isto é, têm 2 pontos de controle para cada segmento. Apenas durante a criação do segmento, o Mapiah finge que a curva Bézier sendo criada é uma Bézier quadrática (com apenas um ponto de controle) para dar flexibilidade ao usuário na criação do segmento.
 
 Observe que, apesar de o Mapiah simular a existência de apenas um ponto de controle, uma curva Bézier cúbica real é criada com dois pontos de controle, como esperado.
+
+### Conexão de mapa
+Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procura por uma opção "Croqui" que termine com "-xs-BASE", onde BASE será tratada como a base onde o corte foi criado. Ele procura por um tipo de ponto base com sua opção "Nome" definida como BASE. Se ambos forem encontrados, uma linha do tipo "conexão de mapa" é criada entre o ponto do corte e o ponto da base.
 
 ## Janela de edição
 

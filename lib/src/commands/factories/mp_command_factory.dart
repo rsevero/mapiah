@@ -285,6 +285,69 @@ class MPCommandFactory {
     );
   }
 
+  static MPAddLineCommand addLineFromStartEnd({
+    required THLineType type,
+    required String subtype,
+    required Offset start,
+    required Offset end,
+    required TH2FileEditController th2FileEditController,
+    bool setUsedLinetype = true,
+  }) {
+    final THLine line = THLine.fromString(
+      parentMPID: th2FileEditController.activeScrapID,
+      lineTypeString: type.name,
+    );
+    final int newLineMPID = line.mpID;
+    final List<THElement> lineChildren = [];
+
+    lineChildren.add(
+      MPEditElementAux.createStraightLineSegmentFromCanvasCoordinates(
+        endPointCanvasCoordinates: start,
+        lineMPID: newLineMPID,
+        th2FileEditController: th2FileEditController,
+      ),
+    );
+    lineChildren.add(
+      MPEditElementAux.createStraightLineSegmentFromCanvasCoordinates(
+        endPointCanvasCoordinates: end,
+        lineMPID: newLineMPID,
+        th2FileEditController: th2FileEditController,
+      ),
+    );
+    lineChildren.add(THEndline(parentMPID: newLineMPID));
+
+    MPCommand? posCommandSetSubtype;
+
+    if (subtype.isNotEmpty) {
+      final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
+        parentMPID: line.mpID,
+        subtype: subtype,
+      );
+
+      posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
+        elements: [line],
+        thFile: th2FileEditController.thFile,
+        toOption: lineSubtypeOption,
+      );
+    }
+
+    final MPAddLineCommand addLineCommand = MPAddLineCommand(
+      newLine: line,
+      lineChildren: lineChildren,
+      preCommand: null,
+      posCommand: posCommandSetSubtype,
+    );
+
+    if (setUsedLinetype) {
+      th2FileEditController.elementEditController.setUsedLineType(
+        lineType: type.name,
+        lineSubtype: subtype,
+      );
+    }
+
+    return addLineCommand;
+  }
+
   static MPAddLineCommand addLineFromExisting({
     required THLine existingLine,
     int? linePositionInParent,

@@ -5,6 +5,7 @@ enum MPCommandDescriptionType {
   addElements,
   addEmptyLine,
   addLine,
+  addLines,
   addLineSegment,
   addPoint,
   addScrap,

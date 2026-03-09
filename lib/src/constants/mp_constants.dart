@@ -88,6 +88,9 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
+/// Fraction used to inset connection lines from endpoints (e.g., 1/20).
+const double mpConnectionLineInsetFraction = 1.0 / 20.0;
+
 /// Factor for converting Catmull-Rom tangent vectors to cubic Bézier control
 /// point offsets. Derived from the cubic Bézier derivative: B'(0) = 3*(P1-P0),
 /// so P1 = P0 + tangent/3.

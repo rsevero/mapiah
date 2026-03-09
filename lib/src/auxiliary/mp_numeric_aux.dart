@@ -621,11 +621,35 @@ class MPNumericAux {
     final double dx = point2.dx - point1.dx;
     final double dy = point2.dy - point1.dy;
 
-    return math.sqrt(dx * dx + dy * dy);
+    return math.sqrt((dx * dx) + (dy * dy));
   }
 
   static Offset lerp(Offset a, Offset b, double t) {
-    return a + (b - a) * t;
+    return a + ((b - a) * t);
+  }
+
+  /// Returns connection line coordinates inset from the endpoints.
+  ///
+  /// Given two offsets `from` and `to` this returns a record `(start, end)`
+  /// where `start` is located at `mpConnectionLineInsetFraction` of the
+  /// total distance from `from` towards `to` and `end` is located at the
+  /// same fraction from `to` towards `from` (i.e. at `1 - mpConnectionLineInsetFraction`).
+  static ({Offset start, Offset end}) getConnectionLineCoordinates({
+    required Offset from,
+    required Offset to,
+  }) {
+    // Degenerate case: identical points
+    if (from == to) {
+      return (start: from, end: to);
+    }
+
+    final double tStart = mpConnectionLineInsetFraction;
+    final double tEnd = 1.0 - mpConnectionLineInsetFraction;
+
+    final Offset start = lerp(from, to, tStart);
+    final Offset end = lerp(from, to, tEnd);
+
+    return (start: start, end: end);
   }
 
   static Offset deCasteljau(List<Offset> points, double t) {

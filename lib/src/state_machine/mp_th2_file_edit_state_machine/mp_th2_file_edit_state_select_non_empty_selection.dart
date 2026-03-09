@@ -315,6 +315,14 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
               .toggleSelectedLinesReverseOption();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyX:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .createMapConnectionLines();
+          keyProcessed = true;
+        }
     }
 
     if (keyProcessed) {

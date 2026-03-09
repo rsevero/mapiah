@@ -344,6 +344,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionAddLine => 'Adicionar linha';
 
   @override
+  String get mpCommandDescriptionAddLines => 'Adicionar linhas';
+
+  @override
   String get mpCommandDescriptionAddLineSegment =>
       'Adicionar segmento de linha';
 

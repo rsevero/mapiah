@@ -373,6 +373,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void createMapConnectionLines() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.createMapConnectionLines',
+        );
+    try {
+      return super.createMapConnectionLines();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void createScrap({
     required String thID,
     List<THElement>? scrapChildren,

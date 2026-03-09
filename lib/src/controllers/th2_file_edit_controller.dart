@@ -713,6 +713,10 @@ abstract class TH2FileEditControllerBase with Store {
     _statusBarMessage = message;
   }
 
+  THScrap getActiveScrap() {
+    return _thFile.scrapByMPID(_activeScrapID);
+  }
+
   int getNextAvailableScrapID() {
     final List<int> scrapIDs = _thFile.scrapMPIDs.toList();
     final int currentIndex = scrapIDs.indexOf(_activeScrapID);

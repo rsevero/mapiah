@@ -12,6 +12,7 @@ A few introductory instructions:
 10. Don´t use all caps on user text.
 11. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
 12. Don't worry about the indentation of the code. This is automtically fixed on save.
+13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 
 Specific instructions:
 

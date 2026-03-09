@@ -21,6 +21,8 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
@@ -567,6 +569,83 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void createMapConnectionLines() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final ObservableMap<int, MPSelectedElement> selectedElements =
+        selectionController.mpSelectedElementsLogical;
+
+    if (selectedElements.isEmpty) {
+      return;
+    }
+
+    Map<String, THPoint>? stationPointsByStationName;
+
+    final Map<THPoint, THPoint> sectionPointsToConnect = {};
+
+    for (final MPSelectedElement mpSelectedElement in selectedElements.values) {
+      final THElement selectedElement = mpSelectedElement.originalElementClone;
+
+      if ((selectedElement is! THPoint) ||
+          (selectedElement.pointType != THPointType.section)) {
+        continue;
+      }
+
+      stationPointsByStationName ??=
+          MPCommandOptionAux.getStationPointsByStationName(
+            _th2FileEditController,
+          );
+
+      final String? stationName =
+          MPCommandOptionAux.getStationNameFromScrapOption(selectedElement);
+
+      if ((stationName != null) &&
+          (stationName.isNotEmpty) &&
+          stationPointsByStationName.containsKey(stationName)) {
+        sectionPointsToConnect[selectedElement] =
+            stationPointsByStationName[stationName]!;
+      }
+    }
+
+    if (sectionPointsToConnect.isEmpty) {
+      return;
+    }
+
+    final List<MPCommand> addLineCommands = [];
+
+    for (final sectionPointToConnect in sectionPointsToConnect.entries) {
+      final ({Offset end, Offset start}) coordinates =
+          MPNumericAux.getConnectionLineCoordinates(
+            from: sectionPointToConnect.key.position.coordinates,
+            to: sectionPointToConnect.value.position.coordinates,
+          );
+      final MPAddLineCommand addLinecommand =
+          MPCommandFactory.addLineFromStartEnd(
+            start: coordinates.start,
+            end: coordinates.end,
+            type: THLineType.mapConnection,
+            subtype: '',
+            th2FileEditController: _th2FileEditController,
+          );
+
+      addLineCommands.add(addLinecommand);
+    }
+
+    if (addLineCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand addLinesCommand = MPCommandFactory.multipleCommandsFromList(
+      commandsList: addLineCommands,
+      descriptionType: MPCommandDescriptionType.addLines,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
+    );
+
+    _th2FileEditController.execute(addLinesCommand);
+  }
+
+  @action
   void createScrap({
     required String thID,
     List<THElement>? scrapChildren,
@@ -704,23 +783,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerNewLineRedraw();
   }
 
-  THStraightLineSegment _createStraightLineSegment(
-    Offset endpoint,
-    int lineMPID,
-  ) {
-    final Offset endPointCanvasCoordinates = _th2FileEditController
-        .offsetScreenToCanvas(endpoint);
-    final THStraightLineSegment lineSegment = THStraightLineSegment(
-      parentMPID: lineMPID,
-      endPoint: THPositionPart(
-        coordinates: endPointCanvasCoordinates,
-        decimalPositions: _th2FileEditController.currentDecimalPositions,
-      ),
-    );
-
-    return lineSegment;
-  }
-
   @action
   void addNewLineLineSegment(Offset endPointScreenCoordinates) {
     if (_newLine == null) {
@@ -745,10 +807,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         /// the file before creating a strange undo/redo command that would deal
         /// with an empty line which makes no sense for the user.
         lineChildren.add(
-          _createStraightLineSegment(_lineStartScreenPosition!, newLineMPID),
+          MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+            endPointScreenCoordinates: _lineStartScreenPosition!,
+            lineMPID: newLineMPID,
+            th2FileEditController: _th2FileEditController,
+          ),
         );
         lineChildren.add(
-          _createStraightLineSegment(endPointScreenCoordinates, newLineMPID),
+          MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+            endPointScreenCoordinates: endPointScreenCoordinates,
+            lineMPID: newLineMPID,
+            th2FileEditController: _th2FileEditController,
+          ),
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
@@ -775,19 +845,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           posCommand: posCommandSetSubtype,
         );
 
-        _th2FileEditController.execute(addLineCommand);
-
         setUsedLineType(
           lineType: typeSubtype.type,
           lineSubtype: typeSubtype.subtype,
         );
+
+        _th2FileEditController.execute(addLineCommand);
       }
     } else {
       final int lineMPID = getNewLine().mpID;
-      final THStraightLineSegment newLineSegment = _createStraightLineSegment(
-        endPointScreenCoordinates,
-        lineMPID,
-      );
+      final THStraightLineSegment newLineSegment =
+          MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+            endPointScreenCoordinates: endPointScreenCoordinates,
+            lineMPID: lineMPID,
+            th2FileEditController: _th2FileEditController,
+          );
       final MPAddLineSegmentCommand command = MPAddLineSegmentCommand(
         newLineSegment: newLineSegment,
         posCommand: null,

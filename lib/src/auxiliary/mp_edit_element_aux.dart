@@ -17,6 +17,37 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
 class MPEditElementAux {
+  static THStraightLineSegment createStraightLineSegmentFromCanvasCoordinates({
+    required Offset endPointCanvasCoordinates,
+    required int lineMPID,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final THStraightLineSegment lineSegment = THStraightLineSegment(
+      parentMPID: lineMPID,
+      endPoint: THPositionPart(
+        coordinates: endPointCanvasCoordinates,
+        decimalPositions: th2FileEditController.currentDecimalPositions,
+      ),
+    );
+
+    return lineSegment;
+  }
+
+  static THStraightLineSegment createStraightLineSegmentFromScreenCoordinates({
+    required Offset endPointScreenCoordinates,
+    required int lineMPID,
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final Offset endPointCanvasCoordinates = th2FileEditController
+        .offsetScreenToCanvas(endPointScreenCoordinates);
+
+    return createStraightLineSegmentFromCanvasCoordinates(
+      endPointCanvasCoordinates: endPointCanvasCoordinates,
+      lineMPID: lineMPID,
+      th2FileEditController: th2FileEditController,
+    );
+  }
+
   static THBezierCurveLineSegment
   getBezierCurveLineSegmentFromStraightLineSegment({
     required Offset start,

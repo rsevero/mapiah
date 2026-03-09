@@ -153,12 +153,13 @@
 [X] - On "Multiple elements clicked" dialog box, show the subtype of each element if it has one. 
 [X] - At the "Therion run" window, create a "Run Therion" button. [requested by Edvard]
 [X] - Review portuguese translations of PLA types and subtypes.
-[ ] - Create a feature that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
+[X] - Create a keyboard shortcut that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
 [ ] - At flathub_disable.md, explain why Flathub version is being disabled.
 [ ] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
 [ ] - BUG: status bar info for selected elements not internationalized.
 [ ] - BUG: current PLA type at PLA type selection overlay not centralized (vertically and horizontally).
 [ ] - BUG: zoom to file or to scrap should not consider images not visible.
+[ ] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
@@ -201,6 +202,7 @@
 [ ] - Create a easy way to find slope lines without lsize.
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
 [X] - BUG: flatpak version does not open URLs.
+[ ] - Create rotate, scale, mirror and screw modes.
 
 ## Version 1.0
 [ ] - Raster images tracing.

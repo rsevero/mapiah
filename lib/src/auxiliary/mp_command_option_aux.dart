@@ -1,5 +1,6 @@
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
@@ -281,6 +282,50 @@ class MPCommandOptionAux {
     return orderedList;
   }
 
+  static String? getStationNameFromScrapOption(THPoint point) {
+    final String? scrapName = MPCommandOptionAux.getScrap(point);
+
+    if (scrapName == null) {
+      return null;
+    }
+
+    /// Assuming the scrap name is in the format "-xs-StationName" as
+    /// TopoDroid uses on x-sections on stations.
+    final RegExp stationRegExp = RegExp(r'-xs-(.+)$');
+    final Match? match = stationRegExp.firstMatch(scrapName);
+
+    if (match == null) {
+      return null;
+    }
+
+    final String station = match.group(1)?.trim() ?? '';
+
+    return station.isEmpty ? null : station;
+  }
+
+  static Map<String, THPoint> getStationPointsByStationName(
+    TH2FileEditController th2FileEditController,
+  ) {
+    final Map<String, THPoint> stationPointsByStationName = {};
+    final THScrap activeScrap = th2FileEditController.getActiveScrap();
+    final Iterable<THElement> scrapChildren = activeScrap.getChildren(
+      th2FileEditController.thFile,
+    );
+
+    for (final THElement scrapChild in scrapChildren) {
+      if ((scrapChild is THPoint) &&
+          (scrapChild.pointType == THPointType.station)) {
+        final String? stationName = MPCommandOptionAux.getName(scrapChild);
+
+        if (stationName != null) {
+          stationPointsByStationName[stationName] = scrapChild;
+        }
+      }
+    }
+
+    return stationPointsByStationName;
+  }
+
   static List<String> getStringOrderedList(Iterable<String> unorderedList) {
     final List<String> orderedList = List.from(unorderedList);
 
@@ -326,6 +371,14 @@ class MPCommandOptionAux {
         : null;
   }
 
+  static String? getName(THElement element) {
+    return (element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.name)
+        ? (element.getOption(THCommandOptionType.name) as THNameCommandOption)
+              .reference
+        : null;
+  }
+
   static double? getOrientation(THElement element) {
     return ((element is THHasOptionsMixin) &&
             element.hasOption(THCommandOptionType.orientation))
@@ -354,6 +407,14 @@ class MPCommandOptionAux {
         ? (element.getOption(THCommandOptionType.subtype)
                   as THSubtypeCommandOption)
               .subtype
+        : null;
+  }
+
+  static String? getScrap(THElement element) {
+    return (element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.scrap)
+        ? (element.getOption(THCommandOptionType.scrap) as THScrapCommandOption)
+              .reference
         : null;
   }
 

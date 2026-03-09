@@ -7,6 +7,7 @@ This is where all TH2 file editing is done.
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
 - [Drawing lines](#drawing-lines)
+  - [Map connection](#map-connection)
 - [Selecting elements](#selecting-elements)
 - [Element options](#element-options)
 - [Save](#save)
@@ -65,6 +66,9 @@ When drawing lines, each new segment is initially created as a straight line seg
 Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
 
 Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.
+
+### Map connection
+For selected X-Section points, on Ctrl+X, Mapiah searchs for a scrap option that ends on "-xs-STATION" where STATION is the station where the x-section was created. It searchs for a point type station with its name option set to STATION. If both are found, a line of type "map connection" is created between the x-section point and the station point.
 
 ## Selecting elements
 To select an element, click on it with the _Select element_ tool active. To select multiple elements, hold the _Shift_ key while clicking on them. To deselect an element, hold the _Shift_ key while clicking on it. To select all elements, use the _Select all_ option on the _Select element_ tool or use the keyboard shortcut _Ctrl+A_.
