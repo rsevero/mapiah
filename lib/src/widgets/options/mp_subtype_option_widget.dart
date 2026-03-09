@@ -130,7 +130,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
         _isValid = _subtypeController.text.trim().isNotEmpty;
         _subtypeWarningMessage = _isValid
             ? null
-            : appLocalizations.mpSubtypeEmpty;
+            : appLocalizations.thSubtypeEmpty;
 
       default:
         _isValid = false;
@@ -153,7 +153,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
     return MPTextFieldInputWidget(
       controller: _subtypeController,
       errorText: _subtypeWarningMessage,
-      labelText: appLocalizations.mpSubtypeLabel,
+      labelText: appLocalizations.thSubtypeLabel,
       autofocus: true,
       focusNode: _subtypeFieldFocusNode,
       onChanged: (value) {

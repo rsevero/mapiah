@@ -1709,183 +1709,183 @@
       "pointType": {}
     }
   },
-  "mpSubtypeEmpty": "Subtype empty",
-  "@mpSubtypeEmpty": {
+  "thSubtypeEmpty": "Subtype empty",
+  "@thSubtypeEmpty": {
     "description": "The error message for empty subtype",
     "type": "text"
   },
-  "mpSubtypeLabel": "Subtype",
-  "@mpSubtypeLabel": {
+  "thSubtypeLabel": "Subtype",
+  "@thSubtypeLabel": {
     "description": "The label for the subtype type",
     "type": "text"
   },
-  "mpSubtypePointAirDraughtWinter": "Winter",
-  "@mpSubtypePointAirDraughtWinter": {
+  "thSubtypePointAirDraughtWinter": "Winter",
+  "@thSubtypePointAirDraughtWinter": {
     "description": "The label for the winter subtype",
     "type": "text"
   },
-  "mpSubtypePointAirDraughtSummer": "Summer",
-  "@mpSubtypePointAirDraughtSummer": {
+  "thSubtypePointAirDraughtSummer": "Summer",
+  "@thSubtypePointAirDraughtSummer": {
     "description": "The label for the summer subtype",
     "type": "text"
   },
-  "mpSubtypePointAirDraughtUndefined": "Undefined",
-  "@mpSubtypePointAirDraughtUndefined": {
+  "thSubtypePointAirDraughtUndefined": "Undefined",
+  "@thSubtypePointAirDraughtUndefined": {
     "description": "The label for the undefined subtype",
     "type": "text"
   },
-  "mpSubtypePointStationTemporary": "Temporary",
-  "@mpSubtypePointStationTemporary": {
+  "thSubtypePointStationTemporary": "Temporary",
+  "@thSubtypePointStationTemporary": {
     "description": "The label for the temporary subtype",
     "type": "text"
   },
-  "mpSubtypePointStationPainted": "Painted",
-  "@mpSubtypePointStationPainted": {
+  "thSubtypePointStationPainted": "Painted",
+  "@thSubtypePointStationPainted": {
     "description": "The label for the painted subtype",
     "type": "text"
   },
-  "mpSubtypePointStationNatural": "Natural",
-  "@mpSubtypePointStationNatural": {
+  "thSubtypePointStationNatural": "Natural",
+  "@thSubtypePointStationNatural": {
     "description": "The label for the natural subtype",
     "type": "text"
   },
-  "mpSubtypePointStationFixed": "Fixed",
-  "@mpSubtypePointStationFixed": {
+  "thSubtypePointStationFixed": "Fixed",
+  "@thSubtypePointStationFixed": {
     "description": "The label for the fixed subtype",
     "type": "text"
   },
-  "mpSubtypePointWaterFlowPermanent": "Permanent",
-  "@mpSubtypePointWaterFlowPermanent": {
+  "thSubtypePointWaterFlowPermanent": "Permanent",
+  "@thSubtypePointWaterFlowPermanent": {
     "description": "The label for the permanent water flow subtype",
     "type": "text"
   },
-  "mpSubtypePointWaterFlowIntermittent": "Intermittent",
-  "@mpSubtypePointWaterFlowIntermittent": {
+  "thSubtypePointWaterFlowIntermittent": "Intermittent",
+  "@thSubtypePointWaterFlowIntermittent": {
     "description": "The label for the intermittent water flow subtype",
     "type": "text"
   },
-  "mpSubtypePointWaterFlowPaleo": "Paleo",
-  "@mpSubtypePointWaterFlowPaleo": {
+  "thSubtypePointWaterFlowPaleo": "Paleo",
+  "@thSubtypePointWaterFlowPaleo": {
     "description": "The label for the paleo water flow subtype",
     "type": "text"
   },
-  "mpSubtypeLineBorderInvisible": "Invisible",
-  "@mpSubtypeLineBorderInvisible": {
+  "thSubtypeLineBorderInvisible": "Invisible",
+  "@thSubtypeLineBorderInvisible": {
     "description": "The label for the invisible border subtype",
     "type": "text"
   },
-  "mpSubtypeLineBorderPresumed": "Presumed",
-  "@mpSubtypeLineBorderPresumed": {
+  "thSubtypeLineBorderPresumed": "Presumed",
+  "@thSubtypeLineBorderPresumed": {
     "description": "The label for the presumed border subtype",
     "type": "text"
   },
-  "mpSubtypeLineBorderTemporary": "Temporary",
-  "@mpSubtypeLineBorderTemporary": {
+  "thSubtypeLineBorderTemporary": "Temporary",
+  "@thSubtypeLineBorderTemporary": {
     "description": "The label for the temporary border subtype",
     "type": "text"
   },
-  "mpSubtypeLineBorderVisible": "Visible",
-  "@mpSubtypeLineBorderVisible": {
+  "thSubtypeLineBorderVisible": "Visible",
+  "@thSubtypeLineBorderVisible": {
     "description": "The label for the visible border subtype",
     "type": "text"
   },
-  "mpSubtypeLineSurveyCave": "Cave",
-  "@mpSubtypeLineSurveyCave": {
+  "thSubtypeLineSurveyCave": "Cave",
+  "@thSubtypeLineSurveyCave": {
     "description": "The label for the cave survey subtype",
     "type": "text"
   },
-  "mpSubtypeLineSurveySurface": "Surface",
-  "@mpSubtypeLineSurveySurface": {
+  "thSubtypeLineSurveySurface": "Surface",
+  "@thSubtypeLineSurveySurface": {
     "description": "The label for the surface survey subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallBedrock": "Bedrock",
-  "@mpSubtypeLineWallBedrock": {
+  "thSubtypeLineWallBedrock": "Bedrock",
+  "@thSubtypeLineWallBedrock": {
     "description": "The label for the bedrock wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallBlocks": "Blocks",
-  "@mpSubtypeLineWallBlocks": {
+  "thSubtypeLineWallBlocks": "Blocks",
+  "@thSubtypeLineWallBlocks": {
     "description": "The label for the blocks wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallClay": "Clay",
-  "@mpSubtypeLineWallClay": {
+  "thSubtypeLineWallClay": "Clay",
+  "@thSubtypeLineWallClay": {
     "description": "The label for the clay wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallDebris": "Debris",
-  "@mpSubtypeLineWallDebris": {
+  "thSubtypeLineWallDebris": "Debris",
+  "@thSubtypeLineWallDebris": {
     "description": "The label for the debris wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallFlowstone": "Flowstone",
-  "@mpSubtypeLineWallFlowstone": {
+  "thSubtypeLineWallFlowstone": "Flowstone",
+  "@thSubtypeLineWallFlowstone": {
     "description": "The label for the flowstone wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallIce": "Ice",
-  "@mpSubtypeLineWallIce": {
+  "thSubtypeLineWallIce": "Ice",
+  "@thSubtypeLineWallIce": {
     "description": "The label for the ice wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallInvisible": "Invisible",
-  "@mpSubtypeLineWallInvisible": {
+  "thSubtypeLineWallInvisible": "Invisible",
+  "@thSubtypeLineWallInvisible": {
     "description": "The label for the invisible wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallMoonmilk": "Moonmilk",
-  "@mpSubtypeLineWallMoonmilk": {
+  "thSubtypeLineWallMoonmilk": "Moonmilk",
+  "@thSubtypeLineWallMoonmilk": {
     "description": "The label for the moonmilk wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallOverlying": "Overlying",
-  "@mpSubtypeLineWallOverlying": {
+  "thSubtypeLineWallOverlying": "Overlying",
+  "@thSubtypeLineWallOverlying": {
     "description": "The label for the overlying wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallPebbles": "Pebbles",
-  "@mpSubtypeLineWallPebbles": {
+  "thSubtypeLineWallPebbles": "Pebbles",
+  "@thSubtypeLineWallPebbles": {
     "description": "The label for the pebbles wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallPit": "Pit",
-  "@mpSubtypeLineWallPit": {
+  "thSubtypeLineWallPit": "Pit",
+  "@thSubtypeLineWallPit": {
     "description": "The label for the pit wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallPresumed": "Presumed",
-  "@mpSubtypeLineWallPresumed": {
+  "thSubtypeLineWallPresumed": "Presumed",
+  "@thSubtypeLineWallPresumed": {
     "description": "The label for the presumed wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallSand": "Sand",
-  "@mpSubtypeLineWallSand": {
+  "thSubtypeLineWallSand": "Sand",
+  "@thSubtypeLineWallSand": {
     "description": "The label for the sand wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallUnderlying": "Underlying",
-  "@mpSubtypeLineWallUnderlying": {
+  "thSubtypeLineWallUnderlying": "Underlying",
+  "@thSubtypeLineWallUnderlying": {
     "description": "The label for the underlying wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWallUnsurveyed": "Unsurveyed",
-  "@mpSubtypeLineWallUnsurveyed": {
+  "thSubtypeLineWallUnsurveyed": "Unsurveyed",
+  "@thSubtypeLineWallUnsurveyed": {
     "description": "The label for the unsurveyed wall subtype",
     "type": "text"
   },
-  "mpSubtypeLineWaterFlowPermanent": "Permanent",
-  "@mpSubtypeLineWaterFlowPermanent": {
+  "thSubtypeLineWaterFlowPermanent": "Permanent",
+  "@thSubtypeLineWaterFlowPermanent": {
     "description": "The label for the permanent water flow line subtype",
     "type": "text"
   },
-  "mpSubtypeLineWaterFlowConjectural": "Conjectural",
-  "@mpSubtypeLineWaterFlowConjectural": {
+  "thSubtypeLineWaterFlowConjectural": "Conjectural",
+  "@thSubtypeLineWaterFlowConjectural": {
     "description": "The label for the conjectural water flow line subtype",
     "type": "text"
   },
-  "mpSubtypeLineWaterFlowIntermittent": "Intermittent",
-  "@mpSubtypeLineWaterFlowIntermittent": {
+  "thSubtypeLineWaterFlowIntermittent": "Intermittent",
+  "@thSubtypeLineWaterFlowIntermittent": {
     "description": "The label for the intermittent water flow line subtype",
     "type": "text"
   },

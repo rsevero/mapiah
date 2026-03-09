@@ -141,69 +141,69 @@ class MPTextToUser {
     final AppLocalizations localizations = mpLocator.appLocalizations;
 
     _subtypeAsString['point|air-draught|winter'] =
-        localizations.mpSubtypePointAirDraughtWinter;
+        localizations.thSubtypePointAirDraughtWinter;
     _subtypeAsString['point|air-draught|summer'] =
-        localizations.mpSubtypePointAirDraughtSummer;
+        localizations.thSubtypePointAirDraughtSummer;
     _subtypeAsString['point|air-draught|undefined'] =
-        localizations.mpSubtypePointAirDraughtUndefined;
+        localizations.thSubtypePointAirDraughtUndefined;
     _subtypeAsString['point|station|temporary'] =
-        localizations.mpSubtypePointStationTemporary;
+        localizations.thSubtypePointStationTemporary;
     _subtypeAsString['point|station|painted'] =
-        localizations.mpSubtypePointStationPainted;
+        localizations.thSubtypePointStationPainted;
     _subtypeAsString['point|station|natural'] =
-        localizations.mpSubtypePointStationNatural;
+        localizations.thSubtypePointStationNatural;
     _subtypeAsString['point|station|fixed'] =
-        localizations.mpSubtypePointStationFixed;
+        localizations.thSubtypePointStationFixed;
     _subtypeAsString['point|water-flow|permanent'] =
-        localizations.mpSubtypePointWaterFlowPermanent;
+        localizations.thSubtypePointWaterFlowPermanent;
     _subtypeAsString['point|water-flow|intermittent'] =
-        localizations.mpSubtypePointWaterFlowIntermittent;
+        localizations.thSubtypePointWaterFlowIntermittent;
     _subtypeAsString['point|water-flow|paleo'] =
-        localizations.mpSubtypePointWaterFlowPaleo;
+        localizations.thSubtypePointWaterFlowPaleo;
     _subtypeAsString['line|border|invisible'] =
-        localizations.mpSubtypeLineBorderInvisible;
+        localizations.thSubtypeLineBorderInvisible;
     _subtypeAsString['line|border|presumed'] =
-        localizations.mpSubtypeLineBorderPresumed;
+        localizations.thSubtypeLineBorderPresumed;
     _subtypeAsString['line|border|temporary'] =
-        localizations.mpSubtypeLineBorderTemporary;
+        localizations.thSubtypeLineBorderTemporary;
     _subtypeAsString['line|border|visible'] =
-        localizations.mpSubtypeLineBorderVisible;
+        localizations.thSubtypeLineBorderVisible;
     _subtypeAsString['line|survey|cave'] =
-        localizations.mpSubtypeLineSurveyCave;
+        localizations.thSubtypeLineSurveyCave;
     _subtypeAsString['line|survey|surface'] =
-        localizations.mpSubtypeLineSurveySurface;
+        localizations.thSubtypeLineSurveySurface;
     _subtypeAsString['line|wall|bedrock'] =
-        localizations.mpSubtypeLineWallBedrock;
+        localizations.thSubtypeLineWallBedrock;
     _subtypeAsString['line|wall|blocks'] =
-        localizations.mpSubtypeLineWallBlocks;
-    _subtypeAsString['line|wall|clay'] = localizations.mpSubtypeLineWallClay;
+        localizations.thSubtypeLineWallBlocks;
+    _subtypeAsString['line|wall|clay'] = localizations.thSubtypeLineWallClay;
     _subtypeAsString['line|wall|debris'] =
-        localizations.mpSubtypeLineWallDebris;
+        localizations.thSubtypeLineWallDebris;
     _subtypeAsString['line|wall|flowstone'] =
-        localizations.mpSubtypeLineWallFlowstone;
-    _subtypeAsString['line|wall|ice'] = localizations.mpSubtypeLineWallIce;
+        localizations.thSubtypeLineWallFlowstone;
+    _subtypeAsString['line|wall|ice'] = localizations.thSubtypeLineWallIce;
     _subtypeAsString['line|wall|invisible'] =
-        localizations.mpSubtypeLineWallInvisible;
+        localizations.thSubtypeLineWallInvisible;
     _subtypeAsString['line|wall|moonmilk'] =
-        localizations.mpSubtypeLineWallMoonmilk;
+        localizations.thSubtypeLineWallMoonmilk;
     _subtypeAsString['line|wall|overlying'] =
-        localizations.mpSubtypeLineWallOverlying;
+        localizations.thSubtypeLineWallOverlying;
     _subtypeAsString['line|wall|pebbles'] =
-        localizations.mpSubtypeLineWallPebbles;
-    _subtypeAsString['line|wall|pit'] = localizations.mpSubtypeLineWallPit;
+        localizations.thSubtypeLineWallPebbles;
+    _subtypeAsString['line|wall|pit'] = localizations.thSubtypeLineWallPit;
     _subtypeAsString['line|wall|presumed'] =
-        localizations.mpSubtypeLineWallPresumed;
-    _subtypeAsString['line|wall|sand'] = localizations.mpSubtypeLineWallSand;
+        localizations.thSubtypeLineWallPresumed;
+    _subtypeAsString['line|wall|sand'] = localizations.thSubtypeLineWallSand;
     _subtypeAsString['line|wall|underlying'] =
-        localizations.mpSubtypeLineWallUnderlying;
+        localizations.thSubtypeLineWallUnderlying;
     _subtypeAsString['line|wall|unsurveyed'] =
-        localizations.mpSubtypeLineWallUnsurveyed;
+        localizations.thSubtypeLineWallUnsurveyed;
     _subtypeAsString['line|water-flow|permanent'] =
-        localizations.mpSubtypeLineWaterFlowPermanent;
+        localizations.thSubtypeLineWaterFlowPermanent;
     _subtypeAsString['line|water-flow|conjectural'] =
-        localizations.mpSubtypeLineWaterFlowConjectural;
+        localizations.thSubtypeLineWaterFlowConjectural;
     _subtypeAsString['line|water-flow|intermittent'] =
-        localizations.mpSubtypeLineWaterFlowIntermittent;
+        localizations.thSubtypeLineWaterFlowIntermittent;
   }
 
   static String getSubtypeAsString(String subtype) {

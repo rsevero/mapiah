@@ -156,7 +156,8 @@
 [ ] - Create a feature that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
 [ ] - At flathub_disable.md, explain why Flathub version is being disabled.
 [ ] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
-[ ] - Internationalize status bar info for selected elements.
+[ ] - BUG: status bar info for selected elements not internationalized.
+[ ] - BUG: current PLA type at PLA type selection overlay not centralized (vertically and horizontally).
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

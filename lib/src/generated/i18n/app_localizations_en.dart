@@ -1106,112 +1106,112 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mpSubtypeEmpty => 'Subtype empty';
+  String get thSubtypeEmpty => 'Subtype empty';
 
   @override
-  String get mpSubtypeLabel => 'Subtype';
+  String get thSubtypeLabel => 'Subtype';
 
   @override
-  String get mpSubtypePointAirDraughtWinter => 'Winter';
+  String get thSubtypePointAirDraughtWinter => 'Winter';
 
   @override
-  String get mpSubtypePointAirDraughtSummer => 'Summer';
+  String get thSubtypePointAirDraughtSummer => 'Summer';
 
   @override
-  String get mpSubtypePointAirDraughtUndefined => 'Undefined';
+  String get thSubtypePointAirDraughtUndefined => 'Undefined';
 
   @override
-  String get mpSubtypePointStationTemporary => 'Temporary';
+  String get thSubtypePointStationTemporary => 'Temporary';
 
   @override
-  String get mpSubtypePointStationPainted => 'Painted';
+  String get thSubtypePointStationPainted => 'Painted';
 
   @override
-  String get mpSubtypePointStationNatural => 'Natural';
+  String get thSubtypePointStationNatural => 'Natural';
 
   @override
-  String get mpSubtypePointStationFixed => 'Fixed';
+  String get thSubtypePointStationFixed => 'Fixed';
 
   @override
-  String get mpSubtypePointWaterFlowPermanent => 'Permanent';
+  String get thSubtypePointWaterFlowPermanent => 'Permanent';
 
   @override
-  String get mpSubtypePointWaterFlowIntermittent => 'Intermittent';
+  String get thSubtypePointWaterFlowIntermittent => 'Intermittent';
 
   @override
-  String get mpSubtypePointWaterFlowPaleo => 'Paleo';
+  String get thSubtypePointWaterFlowPaleo => 'Paleo';
 
   @override
-  String get mpSubtypeLineBorderInvisible => 'Invisible';
+  String get thSubtypeLineBorderInvisible => 'Invisible';
 
   @override
-  String get mpSubtypeLineBorderPresumed => 'Presumed';
+  String get thSubtypeLineBorderPresumed => 'Presumed';
 
   @override
-  String get mpSubtypeLineBorderTemporary => 'Temporary';
+  String get thSubtypeLineBorderTemporary => 'Temporary';
 
   @override
-  String get mpSubtypeLineBorderVisible => 'Visible';
+  String get thSubtypeLineBorderVisible => 'Visible';
 
   @override
-  String get mpSubtypeLineSurveyCave => 'Cave';
+  String get thSubtypeLineSurveyCave => 'Cave';
 
   @override
-  String get mpSubtypeLineSurveySurface => 'Surface';
+  String get thSubtypeLineSurveySurface => 'Surface';
 
   @override
-  String get mpSubtypeLineWallBedrock => 'Bedrock';
+  String get thSubtypeLineWallBedrock => 'Bedrock';
 
   @override
-  String get mpSubtypeLineWallBlocks => 'Blocks';
+  String get thSubtypeLineWallBlocks => 'Blocks';
 
   @override
-  String get mpSubtypeLineWallClay => 'Clay';
+  String get thSubtypeLineWallClay => 'Clay';
 
   @override
-  String get mpSubtypeLineWallDebris => 'Debris';
+  String get thSubtypeLineWallDebris => 'Debris';
 
   @override
-  String get mpSubtypeLineWallFlowstone => 'Flowstone';
+  String get thSubtypeLineWallFlowstone => 'Flowstone';
 
   @override
-  String get mpSubtypeLineWallIce => 'Ice';
+  String get thSubtypeLineWallIce => 'Ice';
 
   @override
-  String get mpSubtypeLineWallInvisible => 'Invisible';
+  String get thSubtypeLineWallInvisible => 'Invisible';
 
   @override
-  String get mpSubtypeLineWallMoonmilk => 'Moonmilk';
+  String get thSubtypeLineWallMoonmilk => 'Moonmilk';
 
   @override
-  String get mpSubtypeLineWallOverlying => 'Overlying';
+  String get thSubtypeLineWallOverlying => 'Overlying';
 
   @override
-  String get mpSubtypeLineWallPebbles => 'Pebbles';
+  String get thSubtypeLineWallPebbles => 'Pebbles';
 
   @override
-  String get mpSubtypeLineWallPit => 'Pit';
+  String get thSubtypeLineWallPit => 'Pit';
 
   @override
-  String get mpSubtypeLineWallPresumed => 'Presumed';
+  String get thSubtypeLineWallPresumed => 'Presumed';
 
   @override
-  String get mpSubtypeLineWallSand => 'Sand';
+  String get thSubtypeLineWallSand => 'Sand';
 
   @override
-  String get mpSubtypeLineWallUnderlying => 'Underlying';
+  String get thSubtypeLineWallUnderlying => 'Underlying';
 
   @override
-  String get mpSubtypeLineWallUnsurveyed => 'Unsurveyed';
+  String get thSubtypeLineWallUnsurveyed => 'Unsurveyed';
 
   @override
-  String get mpSubtypeLineWaterFlowPermanent => 'Permanent';
+  String get thSubtypeLineWaterFlowPermanent => 'Permanent';
 
   @override
-  String get mpSubtypeLineWaterFlowConjectural => 'Conjectural';
+  String get thSubtypeLineWaterFlowConjectural => 'Conjectural';
 
   @override
-  String get mpSubtypeLineWaterFlowIntermittent => 'Intermittent';
+  String get thSubtypeLineWaterFlowIntermittent => 'Intermittent';
 
   @override
   String get mpTextTextLabel => 'Text';
