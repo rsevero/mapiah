@@ -159,7 +159,7 @@
 [X] - BUG: status bar info for selected elements not internationalized.
 [X] - BUG: current PLA type at PLA type selection overlay with too small left and bottom margins.
 [X] - BUG: zoom to file or to scrap should not consider images not visible.
-[ ] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
+[X] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.

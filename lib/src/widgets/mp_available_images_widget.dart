@@ -92,7 +92,15 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                     colorScheme.surfaceContainerHighest,
                                   ),
                                 ),
-                                Expanded(child: Text(name)),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () => _imageVisibilityChanged(
+                                      image.mpID,
+                                      !isVisible,
+                                    ),
+                                    child: Text(name),
+                                  ),
+                                ),
                                 IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,

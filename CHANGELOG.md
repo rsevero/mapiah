@@ -19,6 +19,7 @@
   * Status bar info for selected elements not internationalized.
   * Current PLA type at PLA type selection overlay with too small left and bottom margins.
   * Zoom to file or to scrap should not consider images not visible.
+  * When clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 * Infrastructure maintenance:
   * Enabling github created flatpak generation.
   * New "New version available" page.
