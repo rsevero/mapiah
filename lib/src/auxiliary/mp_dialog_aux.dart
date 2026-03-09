@@ -20,10 +20,9 @@ import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -490,14 +489,28 @@ class MPDialogAux {
         localeID,
         mpEnglishLocaleID,
       ];
+
+      // Try fetching the markdown from the project's GitHub raw URL so the
+      // latest version is presented to the user. If the network fetch fails
+      // we bubble the error to the caller which will simply omit the help
+      // block in the dialog.
       Object? lastError;
 
       for (final String preferredLocaleID in preferredLocaleIDs) {
-        final String helpPageAssetPath =
-            '$mpHelpPagePath/$preferredLocaleID/$mpHelpPageFlathubDisabled.md';
+        final Uri helpPageUrl = Uri.parse(
+          'https://raw.githubusercontent.com/rsevero/mapiah/main/assets/help/$preferredLocaleID/$mpHelpPageFlathubDisabled.md',
+        );
 
         try {
-          return await rootBundle.loadString(helpPageAssetPath);
+          final http.Response resp = await http
+              .get(helpPageUrl)
+              .timeout(const Duration(seconds: 10));
+
+          if ((resp.statusCode == 200) && resp.body.isNotEmpty) {
+            return resp.body;
+          }
+
+          lastError = StateError('HTTP ${resp.statusCode}');
         } catch (error) {
           lastError = error;
         }
