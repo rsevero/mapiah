@@ -237,6 +237,10 @@ const EdgeInsets mpOverlayWindowBlockEdgeInsets = EdgeInsets.only(
   left: mpOverlayWindowBlockPadding,
   right: mpOverlayWindowBlockPadding,
 );
+// Extra padding adjustments used by specific overlay blocks when they need
+// slightly different spacing to visually align with sibling blocks.
+const double mpOverlayWindowBlockExtraLeftPadding = 8.0;
+const double mpOverlayWindowBlockExtraBottomPadding = 8.0;
 const double mpOverlayWindowMinWidth = 180;
 const double mpSettingsPageOuterPadding = 16;
 const double mpSettingsPageSectionSpacing = 12;

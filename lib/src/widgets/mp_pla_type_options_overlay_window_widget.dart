@@ -206,17 +206,24 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
       th2FileEditController: th2FileEditController,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if ((selectedPLAType != null) && (selectedPLAType != '')) ...[
               const SizedBox(height: mpButtonSpace),
-              SizedBox(
-                width: double.infinity,
-                child: MPOverlayWindowBlockWidget(
-                  title: appLocalizations.mpPLATypeCurrent,
-                  overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
-                  padding: mpOverlayWindowBlockEdgeInsets,
-                  children: [Text(selectedPLATypeForUser)],
+              MPOverlayWindowBlockWidget(
+                title: appLocalizations.mpPLATypeCurrent,
+                overlayWindowBlockType: MPOverlayWindowBlockType.choiceSet,
+                padding: const EdgeInsets.only(
+                  top: mpOverlayWindowBlockPadding,
+                  bottom:
+                      mpOverlayWindowBlockPadding / 2 +
+                      mpOverlayWindowBlockExtraBottomPadding,
+                  left:
+                      mpOverlayWindowBlockPadding +
+                      mpOverlayWindowBlockExtraLeftPadding,
+                  right: mpOverlayWindowBlockPadding,
                 ),
+                children: [Text(selectedPLATypeForUser)],
               ),
             ],
             if (lastUsedChoicesReduced.isNotEmpty) ...[

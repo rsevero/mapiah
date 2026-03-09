@@ -157,7 +157,7 @@
 [X] - At flathub_disable.md, explain why Flathub version is being disabled.
 [X] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
 [X] - BUG: status bar info for selected elements not internationalized.
-[ ] - BUG: current PLA type at PLA type selection overlay not centralized (vertically and horizontally).
+[X] - BUG: current PLA type at PLA type selection overlay with too small left and bottom margins.
 [ ] - BUG: zoom to file or to scrap should not consider images not visible.
 [ ] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
