@@ -307,14 +307,18 @@ class MPDialogAux {
       final String currentVersion = isDebugVersionOverrideActive
           ? mpDebugNewVersionInterfaceCurrentVersion
           : info.version;
-      final List<dynamic>? fetchedTags = await _fetchMapiahTags();
 
-      if (fetchedTags == null) {
+      // Fetch the releases summary JSON from the project's raw GitHub
+      // content URL and use it as the source of past versions info.
+      final List<dynamic>? fetchedSummary =
+          await _fetchReleasesSummaryFromWeb();
+
+      if (fetchedSummary == null) {
         _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
         return;
       }
 
-      final List<dynamic> tags = fetchedTags;
+      final List<dynamic> tags = fetchedSummary;
 
       if (tags.isEmpty) {
         _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
@@ -346,8 +350,8 @@ class MPDialogAux {
       final String tagName = versionCheckResult.latestStableTagName!;
       final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
       final MPInstalledVersionAgeInfo? installedVersionAgeInfo =
-          await _getInstalledVersionAgeInfo(
-            tags: tags,
+          await _getInstalledVersionAgeInfoFromSummary(
+            summary: tags,
             currentVersion: currentVersion,
             latestStableTagName: tagName,
           );
@@ -626,111 +630,130 @@ class MPDialogAux {
     );
   }
 
-  static Future<MPInstalledVersionAgeInfo?> _getInstalledVersionAgeInfo({
-    required List<dynamic> tags,
-    required String currentVersion,
-    required String latestStableTagName,
-  }) async {
-    final MPTaggedVersionInfo? installedVersionTagInfo = findTaggedVersionInfo(
-      tags: tags,
-      currentVersion: currentVersion,
-    );
-    final MPTaggedVersionInfo? latestStableTagInfo =
-        findTaggedVersionInfoByTagName(
-          tags: tags,
-          tagName: latestStableTagName,
-        );
+  static Future<List<dynamic>?> _fetchReleasesSummaryFromWeb() async {
+    final Uri rawUrl = Uri.parse(mpMapiahReleasesSummaryRawURL);
 
-    if ((installedVersionTagInfo == null) || (latestStableTagInfo == null)) {
-      return null;
-    }
-
-    final List<dynamic>? commits = await _fetchMapiahCommits();
-
-    if (commits == null) {
-      return null;
-    }
-
-    return summarizeInstalledVersionAge(
-      commits: commits,
-      installedVersionCommitSha: installedVersionTagInfo.commitSha,
-      latestReleaseCommitSha: latestStableTagInfo.commitSha,
-    );
-  }
-
-  static Future<List<dynamic>?> _fetchMapiahCommits() async {
-    return _fetchGithubListWithPagination(
-      initialUrl: mpMapiahCommitsAPIURL,
-      perPage: mpMapiahCommitsAPIPerPage,
-      maxPages: mpMapiahCommitsAPIMaxPages,
-    );
-  }
-
-  static Future<List<dynamic>?> _fetchMapiahTags() async {
-    return _fetchGithubListWithPagination(
-      initialUrl: mpMapiahReleasesAPIURL,
-      perPage: mpMapiahReleasesAPIPerPage,
-      maxPages: mpMapiahTagsAPIMaxPages,
-    );
-  }
-
-  static Future<List<dynamic>?> _fetchGithubListWithPagination({
-    required String initialUrl,
-    required int perPage,
-    required int maxPages,
-  }) async {
-    final Uri baseUri = Uri.parse(initialUrl);
-    final List<dynamic> allItems = <dynamic>[];
-
-    for (int page = 1; page <= maxPages; page += 1) {
-      final Map<String, String> queryParameters = <String, String>{
-        ...baseUri.queryParameters,
-        'page': page.toString(),
-      };
-      final Uri pageUri = baseUri.replace(queryParameters: queryParameters);
-      final http.Response response;
-
-      try {
-        response = await http.get(
-          pageUri,
-          headers: <String, String>{
-            'Accept': mpMapiahReleasesAPIHeaderAccept,
-            'User-Agent': mpHttpUserAgent,
-          },
-        );
-      } catch (_) {
-        return null;
-      }
+    try {
+      final http.Response response = await http
+          .get(rawUrl)
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != mpHttpStatusOk) {
-        // Show a specific dialog informing about HTTP error status.
         _showUpdateCheckFailedDialog(
           type: MPUpdateCheckFailureType.httpStatus,
           httpStatusCode: response.statusCode,
         );
+
         return null;
       }
 
-      final dynamic responseBody;
-
-      try {
-        responseBody = jsonDecode(response.body);
-      } catch (_) {
-        return null;
-      }
+      final dynamic responseBody = jsonDecode(response.body);
 
       if (responseBody is! List<dynamic>) {
         return null;
       }
 
-      allItems.addAll(responseBody);
+      return responseBody;
+    } catch (_) {
+      return null;
+    }
+  }
 
-      if (responseBody.length < perPage) {
+  static Future<MPInstalledVersionAgeInfo?>
+  _getInstalledVersionAgeInfoFromSummary({
+    required List<dynamic> summary,
+    required String currentVersion,
+    required String latestStableTagName,
+  }) async {
+    // The summary is expected to be an ordered list (newest first) of
+    // objects with fields: `name` (tag), `datetime` (ISO8601) and `commits`
+    // (number of commits since previous release). Compute commits behind
+    // by summing `commits` for releases newer than the installed one,
+    // and compute days old by subtracting datetimes.
+
+    int? installedIndex;
+    int? latestIndex;
+
+    for (int i = 0; i < summary.length; i += 1) {
+      final dynamic item = summary[i];
+      if (item is! Map<Object?, Object?>) {
+        continue;
+      }
+
+      final Object? rawName = item['name'];
+      final String name = rawName?.toString().trim() ?? '';
+
+      if (name.isEmpty) {
+        continue;
+      }
+
+      if (name == latestStableTagName) {
+        latestIndex = i;
+      }
+
+      if (name == currentVersion || ('v$currentVersion' == name)) {
+        installedIndex = i;
+      }
+
+      if ((installedIndex != null) && (latestIndex != null)) {
         break;
       }
     }
 
-    return allItems;
+    if ((installedIndex == null) || (latestIndex == null)) {
+      return null;
+    }
+
+    // If installed is newer or equal to latest, no behind commits.
+    if (installedIndex <= latestIndex) {
+      return MPInstalledVersionAgeInfo(commitsBehind: 0, daysOld: 0);
+    }
+
+    int commitsBehind = 0;
+    DateTime? installedDate;
+    DateTime? latestDate;
+
+    for (int i = 0; i < summary.length; i += 1) {
+      final dynamic item = summary[i];
+      if (item is! Map<Object?, Object?>) {
+        continue;
+      }
+
+      final Object? rawName = item['name'];
+      final String name = rawName?.toString().trim() ?? '';
+
+      final Object? rawDatetime = item['datetime'];
+      final String datetimeStr = rawDatetime?.toString().trim() ?? '';
+
+      final DateTime? parsedDate = DateTime.tryParse(datetimeStr)?.toUtc();
+
+      if (name == latestStableTagName) {
+        latestDate = parsedDate;
+      }
+
+      if (name == currentVersion || ('v$currentVersion' == name)) {
+        installedDate = parsedDate;
+      }
+
+      // Entries with index < installedIndex are newer than installed.
+      if (i < installedIndex) {
+        final Object? rawCommits = item['commits'];
+        final int parsedCommits =
+            int.tryParse(rawCommits?.toString() ?? '') ?? 0;
+        commitsBehind += parsedCommits;
+      }
+    }
+
+    if ((installedDate == null) || (latestDate == null)) {
+      return null;
+    }
+
+    final int daysOld = latestDate.difference(installedDate).inDays;
+
+    return MPInstalledVersionAgeInfo(
+      commitsBehind: commitsBehind < 0 ? 0 : commitsBehind,
+      daysOld: daysOld < 0 ? 0 : daysOld,
+    );
   }
 
   static void _showUpdateCheckFailedDialog({
