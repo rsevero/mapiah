@@ -4,6 +4,28 @@
   "aboutMapiahDialogLicense": "Licença",
   "aboutMapiahDialogMapiahVersion": "Versão {version}",
   "aboutMapiahDialogWindowTitle": "Sobre o Mapiah",
+  "aboutMapiahDialogRelease": "Versão {releaseName} ({releaseUrl})",
+  "@aboutMapiahDialogRelease": {
+    "description": "O nome da release e URL a mostrar na caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "type": "text",
+    "placeholders": {
+      "releaseName": {},
+      "releaseUrl": {}
+    }
+  },
+  "aboutMapiahDialogReleaseNoUrl": "Versão {releaseName}",
+  "@aboutMapiahDialogReleaseNoUrl": {
+    "description": "Nome da release sem URL para a caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "type": "text",
+    "placeholders": {
+      "releaseName": {}
+    }
+  },
+  "aboutMapiahDialogReleaseUrlLabel": "Página da versão",
+  "@aboutMapiahDialogReleaseUrlLabel": {
+    "description": "Rótulo para o link da release na caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "type": "text"
+  },
   "appTitle": "Mapiah",
   "buttonClose": "Fechar",
   "fileEditWindowWindowTitle": "Edição de arquivo",

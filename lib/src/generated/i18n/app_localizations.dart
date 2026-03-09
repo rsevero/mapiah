@@ -122,6 +122,24 @@ abstract class AppLocalizations {
   /// **'About Mapiah'**
   String get aboutMapiahDialogWindowTitle;
 
+  /// The release name and URL to show in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  ///
+  /// In en, this message translates to:
+  /// **'The {releaseName} release ({releaseUrl})'**
+  String aboutMapiahDialogRelease(Object releaseName, Object releaseUrl);
+
+  /// Release name without URL for the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  ///
+  /// In en, this message translates to:
+  /// **'The {releaseName} release'**
+  String aboutMapiahDialogReleaseNoUrl(Object releaseName);
+
+  /// Label for the release URL link in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  ///
+  /// In en, this message translates to:
+  /// **'Release page'**
+  String get aboutMapiahDialogReleaseUrlLabel;
+
   /// The title of the application. Used on: MapiahApp.build, _MapiahHomeState.build
   ///
   /// In en, this message translates to:

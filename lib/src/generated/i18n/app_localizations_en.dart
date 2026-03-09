@@ -23,6 +23,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutMapiahDialogWindowTitle => 'About Mapiah';
 
   @override
+  String aboutMapiahDialogRelease(Object releaseName, Object releaseUrl) {
+    return 'The $releaseName release ($releaseUrl)';
+  }
+
+  @override
+  String aboutMapiahDialogReleaseNoUrl(Object releaseName) {
+    return 'The $releaseName release';
+  }
+
+  @override
+  String get aboutMapiahDialogReleaseUrlLabel => 'Release page';
+
+  @override
   String get appTitle => 'Mapiah';
 
   @override

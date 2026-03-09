@@ -23,6 +23,28 @@
     "description": "The title for the About dialog. Used on: _MapiahHomeState.showAboutDialog",
     "type": "text"
   },
+  "aboutMapiahDialogRelease": "The {releaseName} release ({releaseUrl})",
+  "@aboutMapiahDialogRelease": {
+    "description": "The release name and URL to show in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "type": "text",
+    "placeholders": {
+      "releaseName": {},
+      "releaseUrl": {}
+    }
+  },
+  "aboutMapiahDialogReleaseNoUrl": "The {releaseName} release",
+  "@aboutMapiahDialogReleaseNoUrl": {
+    "description": "Release name without URL for the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "type": "text",
+    "placeholders": {
+      "releaseName": {}
+    }
+  },
+  "aboutMapiahDialogReleaseUrlLabel": "Release page",
+  "@aboutMapiahDialogReleaseUrlLabel": {
+    "description": "Label for the release URL link in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "type": "text"
+  },
   "appTitle": "Mapiah",
   "@appTitle": {
     "description": "The title of the application. Used on: MapiahApp.build, _MapiahHomeState.build",

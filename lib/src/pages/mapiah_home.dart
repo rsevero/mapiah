@@ -210,8 +210,40 @@ class _MapiahHomeState extends State<MapiahHome> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                // Version
                 Text(appLocalizations.aboutMapiahDialogMapiahVersion(version)),
                 SizedBox(height: mpButtonSpace),
+                // Optional release information (handle name-only, url-only, and both)
+                if (mpReleaseName.isNotEmpty && mpReleaseURL.isNotEmpty) ...[
+                  // Show localized release name and a clickable URL in parentheses
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        appLocalizations.aboutMapiahDialogReleaseNoUrl(
+                          mpReleaseName,
+                        ),
+                      ),
+                      Text(' ('),
+                      MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
+                      Text(')'),
+                    ],
+                  ),
+                  SizedBox(height: mpButtonSpace),
+                ] else if (mpReleaseName.isNotEmpty) ...[
+                  Text(
+                    appLocalizations.aboutMapiahDialogReleaseNoUrl(
+                      mpReleaseName,
+                    ),
+                  ),
+                  SizedBox(height: mpButtonSpace),
+                ] else if (mpReleaseURL.isNotEmpty) ...[
+                  // Only URL present: show it as a clickable link
+                  MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
+                  SizedBox(height: mpButtonSpace),
+                ],
+                // Changelog and license links
                 MPURLTextWidget(
                   url: mpChangelogURL,
                   label: appLocalizations.aboutMapiahDialogChangelog,

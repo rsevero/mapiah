@@ -431,6 +431,11 @@ const String mpChangelogURL =
 const String mpLicenseURL =
     'https://github.com/rsevero/mapiah/blob/main/LICENSE.md';
 
+// Optional release information constants. If empty, they are not shown
+// in the About dialog.
+const String mpReleaseName = 'Fanfarra';
+const String mpReleaseURL = 'https://youtu.be/HlV59UbrY-E';
+
 // Flathub/Flatpak application id used on Flathub
 const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';
 
