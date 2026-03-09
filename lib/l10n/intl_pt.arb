@@ -21,7 +21,6 @@
   "languageName": "{language, select, sys {Sistema} en {English} pt {Português} other {Desconhecido}}",
   "mapiahHomeAboutMapiahDialog": "Sobre o Mapiah",
   "mapiahHomeHelpDialogTitle": "Tela inicial",
-  "mapiahHomeLanguage": "Idioma",
   "mapiahHomeNewFileButtonTooltip": "Novo arquivo (Ctrl+N ou Ctrl+Shift+N)",
   "mapiahHomeOpenFile": "Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)",
   "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Abrir arquivo THConfig e executar Therion (Ctrl+T)",

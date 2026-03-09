@@ -22,6 +22,7 @@
   * Simplifying and reorganizing code related to Bézier curves and straight line segments simplification and conversion.
   * Review portuguese translations of PLA types and subtypes.
   * Renaming mpSubtype* localization strings to thSubtype*.
+  * Included "Used on:..." on translation strings.
 
 ## 0.2.39 - 2026-03-05 - [The Seeds of Love](https://youtu.be/VAtGOESO7W8) release
 * New features:
