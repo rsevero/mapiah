@@ -104,9 +104,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahHomeHelpDialogTitle => 'Tela inicial';
 
   @override
-  String get mapiahHomeLanguage => 'Idioma';
-
-  @override
   String get mapiahHomeOpenFile => 'Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)';
 
   @override
@@ -1156,10 +1153,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thSubtypeLineBorderInvisible => 'Invisível';
 
   @override
-  String get thSubtypeLineBorderPresumed => 'Presumido';
+  String get thSubtypeLineBorderPresumed => 'Presumida';
 
   @override
-  String get thSubtypeLineBorderTemporary => 'Temporário';
+  String get thSubtypeLineBorderTemporary => 'Temporária';
 
   @override
   String get thSubtypeLineBorderVisible => 'Visível';
@@ -1580,7 +1577,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionReverse => 'Reverter';
 
   @override
-  String get thCommandOptionScrap => 'Sucata';
+  String get thCommandOptionScrap => 'Croqui';
 
   @override
   String get thCommandOptionScrapScale => 'Escala';
@@ -1592,10 +1589,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionSmooth => 'Suavizar';
 
   @override
-  String get thCommandOptionStationNames => 'Nomes das estações';
+  String get thCommandOptionStationNames => 'Nomes das bases';
 
   @override
-  String get thCommandOptionStations => 'Estações';
+  String get thCommandOptionStations => 'Bases';
 
   @override
   String get thCommandOptionSubtype => 'Subtipo';
@@ -1607,7 +1604,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionTitle => 'Título';
 
   @override
-  String get thCommandOptionUnrecognized => 'Opção de Comando Não Reconhecida';
+  String get thCommandOptionUnrecognized => 'Opção de comando não reconhecida';
 
   @override
   String get thCommandOptionVisibility => 'Visibilidade';
@@ -1764,7 +1761,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thLineRopeLadder => 'Escada de Corda';
 
   @override
-  String get thLineSection => 'Seção';
+  String get thLineSection => 'Corte';
 
   @override
   String get thLineSlope => 'Declive';
@@ -1908,7 +1905,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointCamp => 'Acampamento';
 
   @override
-  String get thPointCavePearl => 'Pérola de caverna';
+  String get thPointCavePearl => 'Pérola';
 
   @override
   String get thPointClay => 'Argila';
@@ -1938,7 +1935,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointDate => 'Data';
 
   @override
-  String get thPointDebris => 'Detritos';
+  String get thPointDebris => 'Escombros';
 
   @override
   String get thPointDig => 'Escavação';
@@ -2097,10 +2094,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointPopcorn => 'Coralóide';
 
   @override
-  String get thPointRaft => 'Balsa';
+  String get thPointRaft => 'Jangada';
 
   @override
-  String get thPointRaftCone => 'Cone de balsa';
+  String get thPointRaftCone => 'Cone de jangada';
 
   @override
   String get thPointRemark => 'Observação';
@@ -2127,19 +2124,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointScallop => 'Escalope';
 
   @override
-  String get thPointSection => 'Seção';
+  String get thPointSection => 'Corte';
 
   @override
   String get thPointSeedGermination => 'Germinação de sementes';
 
   @override
-  String get thPointSink => 'Pia';
+  String get thPointSink => 'Sifão';
 
   @override
   String get thPointSnow => 'Neve';
 
   @override
-  String get thPointSodaStraw => 'Canudo de refrigerante';
+  String get thPointSodaStraw => 'Canudo';
 
   @override
   String get thPointSpring => 'Fonte';
@@ -2196,7 +2193,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointWalkway => 'Passarela';
 
   @override
-  String get thPointWallCalcite => 'Calcita de parede';
+  String get thPointWallCalcite => 'Calcita';
 
   @override
   String get thPointWater => 'Água';

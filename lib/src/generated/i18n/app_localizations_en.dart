@@ -104,9 +104,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahHomeHelpDialogTitle => 'Main page';
 
   @override
-  String get mapiahHomeLanguage => 'Language';
-
-  @override
   String get mapiahHomeOpenFile => 'Open file (Ctrl+O or Ctrl+Shift+O)';
 
   @override

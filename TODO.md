@@ -158,6 +158,7 @@
 [ ] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
 [ ] - BUG: status bar info for selected elements not internationalized.
 [ ] - BUG: current PLA type at PLA type selection overlay not centralized (vertically and horizontally).
+[ ] - BUG: zoom to file or to scrap should not consider images not visible.
 
 ## Version 0.4
 [ ] - Open multiple files simultaneously.
