@@ -11,6 +11,7 @@
   * When clicking on an area, Ctrl (or Meta+Click) selects the area (and not the line), Shift+Ctrl+Click (or Meta+Shift+Click) selects the line (and not the area).
   * Created keyboard shortcut Ctrl+X that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
   * At flathub_disable.md, explain why Flathub version is being disabled.
+  * At "newer versions available" page, also show how many commits and how many days the users installed version is old.
 * Fixed bugs:
   * Newer version available window not appearing in Flathub version.
   * On very fast Therion executions, therion.log file content not being included in Therion run output.

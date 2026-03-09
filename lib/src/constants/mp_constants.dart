@@ -31,7 +31,7 @@ const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
 
 // Debug constant to override the current version used when comparing to the
 // newest version available. If empty, the actual current version is used.
-const String mpDebugNewVersionInterfaceCurrentVersion = '';
+const String mpDebugNewVersionInterfaceCurrentVersion = 'v0.2.35';
 
 const String mpHelpPagePath = 'assets/help';
 const String mpHelpPageFlathubDisabled = 'flathub_disabled';
@@ -448,10 +448,15 @@ const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
 
 const int mpMapiahReleasesAPIPerPage = 100;
+const int mpMapiahCommitsAPIPerPage = 100;
+const int mpMapiahTagsAPIMaxPages = 10;
+const int mpMapiahCommitsAPIMaxPages = 50;
 const int mpSemanticVersionComponentCount = 3;
 const String mpMapiahStableReleaseTagPattern = r'^v?(\d+)\.(\d+)\.(\d+)$';
 const String mpMapiahReleasesAPIURL =
     'https://api.github.com/repos/rsevero/mapiah/tags?per_page=$mpMapiahReleasesAPIPerPage';
+const String mpMapiahCommitsAPIURL =
+    'https://api.github.com/repos/rsevero/mapiah/commits?per_page=$mpMapiahCommitsAPIPerPage';
 const String mpMapiahReleasesAPIHeaderAccept = 'application/vnd.github+json';
 const String mpMapiahGithubReleasesURL =
     'https://github.com/rsevero/mapiah/releases/tag/';

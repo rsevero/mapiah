@@ -157,13 +157,19 @@ abstract class AppLocalizations {
     Object releaseUrl,
   );
 
+  /// Additional update dialog information showing how old the installed version is by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest commit.'**
+  String updateAvailableInstalledVersionAge(int commitCount, int dayCount);
+
   /// Title for the update check failure dialog Used on: lib/src/auxiliary/mp_dialog_aux.dart
   ///
   /// In en, this message translates to:
   /// **'Update check failed'**
   String get updateCheckFailedTitle;
 
-  /// Body text for the update check failure dialog when there is no response Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  /// Body text for the update check failure dialog when there is no response. Used on: lib/src/auxiliary/mp_dialog_aux.dart
   ///
   /// In en, this message translates to:
   /// **'Unable to check for updates because the server did not respond. Do you have an internet connection?'**

@@ -155,7 +155,7 @@
 [X] - Review portuguese translations of PLA types and subtypes.
 [X] - Create a keyboard shortcut that creates a "Map connection" line between the "section" point and the "base" point the section refers to. [requested by Edvard]
 [X] - At flathub_disable.md, explain why Flathub version is being disabled.
-[ ] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
+[X] - At "newer versions available" page, also show how many commits and how many days the users installed version is old.
 [ ] - BUG: status bar info for selected elements not internationalized.
 [ ] - BUG: current PLA type at PLA type selection overlay not centralized (vertically and horizontally).
 [ ] - BUG: zoom to file or to scrap should not consider images not visible.

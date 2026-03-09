@@ -53,6 +53,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String updateAvailableInstalledVersionAge(int commitCount, int dayCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      commitCount,
+      locale: localeName,
+      other: '$commitCount commits',
+      one: '1 commit',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      dayCount,
+      locale: localeName,
+      other: '$dayCount days',
+      one: '1 day',
+    );
+    return 'Installed version is $_temp0 and $_temp1 behind the latest commit.';
+  }
+
+  @override
   String get updateCheckFailedTitle => 'Update check failed';
 
   @override

@@ -1,5 +1,22 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
 
+class MPTaggedVersionInfo {
+  final String tagName;
+  final String commitSha;
+
+  const MPTaggedVersionInfo({required this.tagName, required this.commitSha});
+}
+
+class MPInstalledVersionAgeInfo {
+  final int commitsBehind;
+  final int daysOld;
+
+  const MPInstalledVersionAgeInfo({
+    required this.commitsBehind,
+    required this.daysOld,
+  });
+}
+
 class MPVersionCheckResult {
   final String? latestStableTagName;
   final String? latestStableVersion;
@@ -85,6 +102,133 @@ MPVersionCheckResult? summarizeNewerVersions({
     latestStableTagName: latestStableTagName,
     latestStableVersion: latestStableVersion,
     newerVersionCount: newerVersionCount,
+  );
+}
+
+MPTaggedVersionInfo? findTaggedVersionInfo({
+  required List<dynamic> tags,
+  required String currentVersion,
+}) {
+  final _MPSemanticVersion? parsedCurrentVersion = _MPSemanticVersion.tryParse(
+    input: currentVersion,
+    pattern: mpMapiahStableReleaseTagPattern,
+  );
+
+  if (parsedCurrentVersion == null) {
+    return null;
+  }
+
+  for (final dynamic tag in tags) {
+    if (tag is! Map<Object?, Object?>) {
+      continue;
+    }
+
+    final Object? rawTagName = tag['name'];
+    final String tagName = rawTagName?.toString().trim() ?? '';
+    final _MPSemanticVersion? parsedTagVersion = _MPSemanticVersion.tryParse(
+      input: tagName,
+      pattern: mpMapiahStableReleaseTagPattern,
+    );
+
+    if (parsedTagVersion == null) {
+      continue;
+    }
+
+    final bool isCurrentVersionTag =
+        (parsedTagVersion.compareTo(parsedCurrentVersion) == 0);
+
+    if (!isCurrentVersionTag) {
+      continue;
+    }
+
+    final Object? rawCommit = tag['commit'];
+
+    if (rawCommit is! Map<Object?, Object?>) {
+      return null;
+    }
+
+    final Object? rawSha = rawCommit['sha'];
+    final String commitSha = rawSha?.toString().trim() ?? '';
+
+    if (commitSha.isEmpty) {
+      return null;
+    }
+
+    return MPTaggedVersionInfo(tagName: tagName, commitSha: commitSha);
+  }
+
+  return null;
+}
+
+MPInstalledVersionAgeInfo? summarizeInstalledVersionAge({
+  required List<dynamic> commits,
+  required String installedVersionCommitSha,
+  required DateTime now,
+}) {
+  final String normalizedInstalledCommitSha = installedVersionCommitSha
+      .toLowerCase();
+  int commitsBehind = 0;
+  DateTime? installedCommitDate;
+
+  for (final dynamic commitItem in commits) {
+    if (commitItem is! Map<Object?, Object?>) {
+      continue;
+    }
+
+    final Object? rawCommitSha = commitItem['sha'];
+    final String commitSha =
+        rawCommitSha?.toString().trim().toLowerCase() ?? '';
+
+    if (commitSha.isEmpty) {
+      continue;
+    }
+
+    final bool isInstalledCommit =
+        (commitSha == normalizedInstalledCommitSha) ||
+        commitSha.startsWith(normalizedInstalledCommitSha) ||
+        normalizedInstalledCommitSha.startsWith(commitSha);
+
+    final Object? rawCommitData = commitItem['commit'];
+
+    if (rawCommitData is! Map<Object?, Object?>) {
+      if (!isInstalledCommit) {
+        commitsBehind += 1;
+      }
+      continue;
+    }
+
+    final Object? rawAuthorData = rawCommitData['author'];
+    DateTime? commitDate;
+
+    if (rawAuthorData is Map<Object?, Object?>) {
+      final Object? rawDate = rawAuthorData['date'];
+      final String dateString = rawDate?.toString().trim() ?? '';
+      if (dateString.isNotEmpty) {
+        final DateTime? parsedDate = DateTime.tryParse(dateString);
+        if (parsedDate != null) {
+          commitDate = parsedDate.toUtc();
+        }
+      }
+    }
+
+    if (isInstalledCommit) {
+      installedCommitDate = commitDate;
+      break;
+    }
+
+    commitsBehind += 1;
+  }
+
+  if (installedCommitDate == null) {
+    return null;
+  }
+
+  final Duration ageDuration = now.toUtc().difference(installedCommitDate);
+  final int daysOld = ageDuration.inDays < 0 ? 0 : ageDuration.inDays;
+
+  return MPInstalledVersionAgeInfo(
+    commitsBehind: commitsBehind,
+    daysOld: daysOld,
   );
 }
 

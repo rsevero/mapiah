@@ -59,6 +59,19 @@
       "releaseUrl": {}
     }
   },
+  "updateAvailableInstalledVersionAge": "Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest commit.",
+  "@updateAvailableInstalledVersionAge": {
+    "description": "Additional update dialog information showing how old the installed version is by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
+    "type": "text",
+    "placeholders": {
+      "commitCount": {
+        "type": "int"
+      },
+      "dayCount": {
+        "type": "int"
+      }
+    }
+  },
   "updateCheckFailedTitle": "Update check failed",
   "@updateCheckFailedTitle": {
     "description": "Title for the update check failure dialog Used on: lib/src/auxiliary/mp_dialog_aux.dart",
@@ -66,7 +79,7 @@
   },
   "updateCheckFailedNoAnswerBody": "Unable to check for updates because the server did not respond. Do you have an internet connection?",
   "@updateCheckFailedNoAnswerBody": {
-    "description": "Body text for the update check failure dialog when there is no response Used on: lib/src/auxiliary/mp_dialog_aux.dart",
+    "description": "Body text for the update check failure dialog when there is no response. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text"
   },
   "updateCheckFailedHttpStatusBody": "Update server returned HTTP {statusCode}.",

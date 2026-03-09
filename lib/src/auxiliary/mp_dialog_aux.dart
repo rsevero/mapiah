@@ -306,40 +306,15 @@ class MPDialogAux {
       final String currentVersion = isDebugVersionOverrideActive
           ? mpDebugNewVersionInterfaceCurrentVersion
           : info.version;
-      final Uri uri = Uri.parse(mpMapiahReleasesAPIURL);
+      final List<dynamic>? fetchedTags = await _fetchMapiahTags();
 
-      http.Response response;
-
-      try {
-        response = await http.get(
-          uri,
-          headers: const <String, String>{
-            'Accept': mpMapiahReleasesAPIHeaderAccept,
-          },
-        );
-      } catch (_) {
+      if (fetchedTags == null) {
         _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.noAnswer);
-
         return;
       }
 
-      if (response.statusCode != mpHttpStatusOk) {
-        _showUpdateCheckFailedDialog(
-          type: MPUpdateCheckFailureType.httpStatus,
-          httpStatusCode: response.statusCode,
-        );
+      final List<dynamic> tags = fetchedTags;
 
-        return;
-      }
-
-      late final List<dynamic> tags;
-
-      try {
-        tags = jsonDecode(response.body) as List<dynamic>;
-      } catch (_) {
-        _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
-        return;
-      }
       if (tags.isEmpty) {
         _showUpdateCheckFailedDialog(type: MPUpdateCheckFailureType.parsing);
         return;
@@ -369,6 +344,12 @@ class MPDialogAux {
       final String latestVersion = versionCheckResult.latestStableVersion!;
       final String tagName = versionCheckResult.latestStableTagName!;
       final String releaseUrl = '$mpMapiahGithubReleasesURL$tagName';
+      final MPInstalledVersionAgeInfo? installedVersionAgeInfo =
+          await _getInstalledVersionAgeInfo(
+            tags: tags,
+            currentVersion: currentVersion,
+            now: now,
+          );
 
       if (mpIsFlathub) {
         _showFlathubUpdateDialog(newerVersionCount: newerVersionCount);
@@ -381,6 +362,8 @@ class MPDialogAux {
         tagName: tagName,
         releaseUrl: releaseUrl,
         newerVersionCount: newerVersionCount,
+        commitsBehind: installedVersionAgeInfo?.commitsBehind,
+        daysOld: installedVersionAgeInfo?.daysOld,
       );
     } catch (e, st) {
       mpLocator.mpLog.e('Update check failed', error: e, stackTrace: st);
@@ -396,6 +379,8 @@ class MPDialogAux {
     required String tagName,
     required String releaseUrl,
     required int newerVersionCount,
+    int? commitsBehind,
+    int? daysOld,
   }) {
     if (_isUpdateDialogOpen) {
       return;
@@ -421,12 +406,21 @@ class MPDialogAux {
       tagName,
       releaseUrl,
     );
-    final int urlIndex = updateBody.indexOf(releaseUrl);
+    final String versionAgeText = ((commitsBehind != null) && (daysOld != null))
+        ? appLocalizations.updateAvailableInstalledVersionAge(
+            commitsBehind,
+            daysOld,
+          )
+        : mpEmptyString;
+    final String updateBodyWithVersionAge = versionAgeText.isEmpty
+        ? updateBody
+        : '$updateBody\n\n$versionAgeText';
+    final int urlIndex = updateBodyWithVersionAge.indexOf(releaseUrl);
     final String beforeUrl = urlIndex >= 0
-        ? updateBody.substring(0, urlIndex)
-        : updateBody;
+        ? updateBodyWithVersionAge.substring(0, urlIndex)
+        : updateBodyWithVersionAge;
     final String afterUrl = urlIndex >= 0
-        ? updateBody.substring(urlIndex + releaseUrl.length)
+        ? updateBodyWithVersionAge.substring(urlIndex + releaseUrl.length)
         : '';
 
     showDialog<void>(
@@ -502,6 +496,102 @@ class MPDialogAux {
     ).whenComplete(() {
       _isUpdateDialogOpen = false;
     });
+  }
+
+  static Future<MPInstalledVersionAgeInfo?> _getInstalledVersionAgeInfo({
+    required List<dynamic> tags,
+    required String currentVersion,
+    required DateTime now,
+  }) async {
+    final MPTaggedVersionInfo? taggedVersionInfo = findTaggedVersionInfo(
+      tags: tags,
+      currentVersion: currentVersion,
+    );
+
+    if (taggedVersionInfo == null) {
+      return null;
+    }
+
+    final List<dynamic>? commits = await _fetchMapiahCommits();
+
+    if (commits == null) {
+      return null;
+    }
+
+    return summarizeInstalledVersionAge(
+      commits: commits,
+      installedVersionCommitSha: taggedVersionInfo.commitSha,
+      now: now,
+    );
+  }
+
+  static Future<List<dynamic>?> _fetchMapiahCommits() async {
+    return _fetchGithubListWithPagination(
+      initialUrl: mpMapiahCommitsAPIURL,
+      perPage: mpMapiahCommitsAPIPerPage,
+      maxPages: mpMapiahCommitsAPIMaxPages,
+    );
+  }
+
+  static Future<List<dynamic>?> _fetchMapiahTags() async {
+    return _fetchGithubListWithPagination(
+      initialUrl: mpMapiahReleasesAPIURL,
+      perPage: mpMapiahReleasesAPIPerPage,
+      maxPages: mpMapiahTagsAPIMaxPages,
+    );
+  }
+
+  static Future<List<dynamic>?> _fetchGithubListWithPagination({
+    required String initialUrl,
+    required int perPage,
+    required int maxPages,
+  }) async {
+    final Uri baseUri = Uri.parse(initialUrl);
+    final List<dynamic> allItems = <dynamic>[];
+
+    for (int page = 1; page <= maxPages; page += 1) {
+      final Map<String, String> queryParameters = <String, String>{
+        ...baseUri.queryParameters,
+        'page': page.toString(),
+      };
+      final Uri pageUri = baseUri.replace(queryParameters: queryParameters);
+      final http.Response response;
+
+      try {
+        response = await http.get(
+          pageUri,
+          headers: const <String, String>{
+            'Accept': mpMapiahReleasesAPIHeaderAccept,
+          },
+        );
+      } catch (_) {
+        return null;
+      }
+
+      if (response.statusCode != mpHttpStatusOk) {
+        return null;
+      }
+
+      final dynamic responseBody;
+
+      try {
+        responseBody = jsonDecode(response.body);
+      } catch (_) {
+        return null;
+      }
+
+      if (responseBody is! List<dynamic>) {
+        return null;
+      }
+
+      allItems.addAll(responseBody);
+
+      if (responseBody.length < perPage) {
+        break;
+      }
+    }
+
+    return allItems;
   }
 
   static void _showUpdateCheckFailedDialog({
