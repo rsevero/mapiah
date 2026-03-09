@@ -66,7 +66,7 @@ class AppLocalizationsEn extends AppLocalizations {
       other: '$dayCount days',
       one: '1 day',
     );
-    return 'Installed version is $_temp0 and $_temp1 behind the latest commit.';
+    return 'Installed version is $_temp0 and $_temp1 behind the latest release.';
   }
 
   @override

@@ -677,7 +677,7 @@
   "thSubtypePointWaterFlowPaleo": "Paleofluxo",
   "thSubtypePointWaterFlowPermanent": "Permanente",
   "updateAvailableBody": "Uma versão mais recente está disponível.\n\nAtual: {currentVersion}\nMais recente: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}",
-  "updateAvailableInstalledVersionAge": "A versão instalada está {commitCount, plural, one {1 commit} other {{commitCount} commits}} e {dayCount, plural, one {1 dia} other {{dayCount} dias}} atrás do commit mais recente.",
+  "updateAvailableInstalledVersionAge": "A versão instalada está {commitCount, plural, one {1 commit} other {{commitCount} commits}} e {dayCount, plural, one {1 dia} other {{dayCount} dias}} atrás da versão estável mais recente.",
   "updateAvailableTitle": "Atualização disponível",
   "updateAvailableTitleWithCount": "{count, plural, one {1 versão do Mapiah mais recente disponível} other {{count} versões do Mapiah mais recentes disponíveis}}",
   "updateCheckFailedHttpStatusBody": "O servidor de atualizações retornou HTTP {statusCode}.",

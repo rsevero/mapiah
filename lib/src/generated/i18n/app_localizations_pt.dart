@@ -66,7 +66,7 @@ class AppLocalizationsPt extends AppLocalizations {
       other: '$dayCount dias',
       one: '1 dia',
     );
-    return 'A versão instalada está $_temp0 e $_temp1 atrás do commit mais recente.';
+    return 'A versão instalada está $_temp0 e $_temp1 atrás da versão estável mais recente.';
   }
 
   @override

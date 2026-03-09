@@ -348,7 +348,7 @@ class MPDialogAux {
           await _getInstalledVersionAgeInfo(
             tags: tags,
             currentVersion: currentVersion,
-            now: now,
+            latestStableTagName: tagName,
           );
 
       if (mpIsFlathub) {
@@ -501,14 +501,19 @@ class MPDialogAux {
   static Future<MPInstalledVersionAgeInfo?> _getInstalledVersionAgeInfo({
     required List<dynamic> tags,
     required String currentVersion,
-    required DateTime now,
+    required String latestStableTagName,
   }) async {
-    final MPTaggedVersionInfo? taggedVersionInfo = findTaggedVersionInfo(
+    final MPTaggedVersionInfo? installedVersionTagInfo = findTaggedVersionInfo(
       tags: tags,
       currentVersion: currentVersion,
     );
+    final MPTaggedVersionInfo? latestStableTagInfo =
+        findTaggedVersionInfoByTagName(
+          tags: tags,
+          tagName: latestStableTagName,
+        );
 
-    if (taggedVersionInfo == null) {
+    if ((installedVersionTagInfo == null) || (latestStableTagInfo == null)) {
       return null;
     }
 
@@ -520,8 +525,8 @@ class MPDialogAux {
 
     return summarizeInstalledVersionAge(
       commits: commits,
-      installedVersionCommitSha: taggedVersionInfo.commitSha,
-      now: now,
+      installedVersionCommitSha: installedVersionTagInfo.commitSha,
+      latestReleaseCommitSha: latestStableTagInfo.commitSha,
     );
   }
 

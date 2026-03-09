@@ -157,10 +157,10 @@ abstract class AppLocalizations {
     Object releaseUrl,
   );
 
-  /// Additional update dialog information showing how old the installed version is by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  /// Additional update dialog information showing how old the installed version is relative to the latest stable release, by commit count and days Used on: lib/src/auxiliary/mp_dialog_aux.dart
   ///
   /// In en, this message translates to:
-  /// **'Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest commit.'**
+  /// **'Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest release.'**
   String updateAvailableInstalledVersionAge(int commitCount, int dayCount);
 
   /// Title for the update check failure dialog Used on: lib/src/auxiliary/mp_dialog_aux.dart

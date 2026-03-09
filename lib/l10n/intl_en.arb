@@ -59,9 +59,9 @@
       "releaseUrl": {}
     }
   },
-  "updateAvailableInstalledVersionAge": "Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest commit.",
+  "updateAvailableInstalledVersionAge": "Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest release.",
   "@updateAvailableInstalledVersionAge": {
-    "description": "Additional update dialog information showing how old the installed version is by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
+    "description": "Additional update dialog information showing how old the installed version is relative to the latest stable release, by commit count and days Used on: lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text",
     "placeholders": {
       "commitCount": {

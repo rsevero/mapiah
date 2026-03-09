@@ -160,17 +160,65 @@ MPTaggedVersionInfo? findTaggedVersionInfo({
   return null;
 }
 
+MPTaggedVersionInfo? findTaggedVersionInfoByTagName({
+  required List<dynamic> tags,
+  required String tagName,
+}) {
+  final String normalizedTagName = tagName.trim();
+
+  if (normalizedTagName.isEmpty) {
+    return null;
+  }
+
+  for (final dynamic tag in tags) {
+    if (tag is! Map<Object?, Object?>) {
+      continue;
+    }
+
+    final Object? rawTagName = tag['name'];
+    final String currentTagName = rawTagName?.toString().trim() ?? '';
+
+    if (currentTagName != normalizedTagName) {
+      continue;
+    }
+
+    final Object? rawCommit = tag['commit'];
+
+    if (rawCommit is! Map<Object?, Object?>) {
+      return null;
+    }
+
+    final Object? rawSha = rawCommit['sha'];
+    final String commitSha = rawSha?.toString().trim() ?? '';
+
+    if (commitSha.isEmpty) {
+      return null;
+    }
+
+    return MPTaggedVersionInfo(tagName: currentTagName, commitSha: commitSha);
+  }
+
+  return null;
+}
+
 MPInstalledVersionAgeInfo? summarizeInstalledVersionAge({
   required List<dynamic> commits,
   required String installedVersionCommitSha,
-  required DateTime now,
+  required String latestReleaseCommitSha,
 }) {
   final String normalizedInstalledCommitSha = installedVersionCommitSha
       .toLowerCase();
-  int commitsBehind = 0;
-  DateTime? installedCommitDate;
+  final String normalizedLatestReleaseCommitSha = latestReleaseCommitSha
+      .toLowerCase();
 
-  for (final dynamic commitItem in commits) {
+  int? installedCommitIndex;
+  int? latestReleaseCommitIndex;
+  DateTime? installedCommitDate;
+  DateTime? latestReleaseCommitDate;
+
+  for (int index = 0; index < commits.length; index += 1) {
+    final dynamic commitItem = commits[index];
+
     if (commitItem is! Map<Object?, Object?>) {
       continue;
     }
@@ -183,47 +231,62 @@ MPInstalledVersionAgeInfo? summarizeInstalledVersionAge({
       continue;
     }
 
-    final bool isInstalledCommit =
+    final bool isInstalledCommitSha =
         (commitSha == normalizedInstalledCommitSha) ||
         commitSha.startsWith(normalizedInstalledCommitSha) ||
         normalizedInstalledCommitSha.startsWith(commitSha);
+    final bool isLatestReleaseCommitSha =
+        (commitSha == normalizedLatestReleaseCommitSha) ||
+        commitSha.startsWith(normalizedLatestReleaseCommitSha) ||
+        normalizedLatestReleaseCommitSha.startsWith(commitSha);
 
     final Object? rawCommitData = commitItem['commit'];
 
-    if (rawCommitData is! Map<Object?, Object?>) {
-      if (!isInstalledCommit) {
-        commitsBehind += 1;
-      }
-      continue;
-    }
-
-    final Object? rawAuthorData = rawCommitData['author'];
     DateTime? commitDate;
+    if (rawCommitData is Map<Object?, Object?>) {
+      final Object? rawAuthorData = rawCommitData['author'];
 
-    if (rawAuthorData is Map<Object?, Object?>) {
-      final Object? rawDate = rawAuthorData['date'];
-      final String dateString = rawDate?.toString().trim() ?? '';
-      if (dateString.isNotEmpty) {
-        final DateTime? parsedDate = DateTime.tryParse(dateString);
-        if (parsedDate != null) {
-          commitDate = parsedDate.toUtc();
+      if (rawAuthorData is Map<Object?, Object?>) {
+        final Object? rawDate = rawAuthorData['date'];
+        final String dateString = rawDate?.toString().trim() ?? '';
+        if (dateString.isNotEmpty) {
+          final DateTime? parsedDate = DateTime.tryParse(dateString);
+          if (parsedDate != null) {
+            commitDate = parsedDate.toUtc();
+          }
         }
       }
     }
 
-    if (isInstalledCommit) {
+    if ((installedCommitIndex == null) && isInstalledCommitSha) {
+      installedCommitIndex = index;
       installedCommitDate = commitDate;
-      break;
     }
 
-    commitsBehind += 1;
+    if ((latestReleaseCommitIndex == null) && isLatestReleaseCommitSha) {
+      latestReleaseCommitIndex = index;
+      latestReleaseCommitDate = commitDate;
+    }
+
+    if ((installedCommitIndex != null) && (latestReleaseCommitIndex != null)) {
+      break;
+    }
   }
 
-  if (installedCommitDate == null) {
+  if ((installedCommitIndex == null) || (latestReleaseCommitIndex == null)) {
     return null;
   }
 
-  final Duration ageDuration = now.toUtc().difference(installedCommitDate);
+  if ((installedCommitDate == null) || (latestReleaseCommitDate == null)) {
+    return null;
+  }
+
+  final int rawCommitsBehind = installedCommitIndex - latestReleaseCommitIndex;
+  final int commitsBehind = rawCommitsBehind < 0 ? 0 : rawCommitsBehind;
+
+  final Duration ageDuration = latestReleaseCommitDate.difference(
+    installedCommitDate,
+  );
   final int daysOld = ageDuration.inDays < 0 ? 0 : ageDuration.inDays;
 
   return MPInstalledVersionAgeInfo(
