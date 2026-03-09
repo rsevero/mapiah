@@ -133,6 +133,26 @@ Future<int> main(List<String> args) async {
   stdout.writeln(
     'Files updated: ${changedFiles.isEmpty ? 'none' : changedFiles.join(', ')}',
   );
+  // Run the release brief generator as the last step
+  try {
+    final ProcessResult genResult = await Process.run('dart', [
+      'run',
+      'scripts/generate_releases_brief.dart',
+    ]);
+
+    if (genResult.exitCode != 0) {
+      stderr.writeln(
+        'scripts/generate_releases_brief.dart failed:\n${genResult.stderr}',
+      );
+      return genResult.exitCode;
+    }
+
+    stdout.writeln('Ran scripts/generate_releases_brief.dart successfully.');
+  } catch (e) {
+    stderr.writeln('Failed to run scripts/generate_releases_brief.dart: $e');
+    return 2;
+  }
+
   return 0;
 }
 
