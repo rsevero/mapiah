@@ -10,6 +10,7 @@
   * Status bar message not updating on option edit.
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().
+  * Upgrade actions/checkout github action from v4 to v6.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:
