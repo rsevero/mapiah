@@ -31,10 +31,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       pointType += ' (${point.unknownPLAType})';
     }
 
-    String message = getStatusBarMainMessage(
-      elementType: pointType,
-      element: point,
-    );
+    String message = pointType;
 
     message += getStatusBarMessageElementOptions(point);
 
@@ -55,10 +52,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       lineType += ' (${line.unknownPLAType})';
     }
 
-    String message = getStatusBarMainMessage(
-      elementType: lineType,
-      element: line,
-    );
+    String message = lineType;
 
     final int? parentAreaMPID = thFile.getAreaMPIDByLineMPID(line.mpID);
 
@@ -135,10 +129,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       areaType += ' (${area.unknownPLAType})';
     }
 
-    String message = getStatusBarMainMessage(
-      elementType: areaType,
-      element: area,
-    );
+    String message = areaType;
 
     final List<THAreaBorderTHID> areaBorders = area.getAreaBorderTHIDs(thFile);
 
@@ -169,12 +160,26 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
     return message;
   }
 
+  String getOptionToUser(THCommandOption option) {
+    final String typeToUser = MPTextToUser.getCommandOptionType(option.type);
+    final String spec = option.specToFile();
+
+    return "$typeToUser: $spec";
+  }
+
   String getStatusBarMessageElementOptions(THHasOptionsMixin element) {
     final SplayTreeMap<THCommandOptionType, THCommandOption> elementOptions =
         element.optionsMap;
     final List<THCommandOption> optionsToInclude = <THCommandOption>[];
+    final List<String> optionsStringsPre = <String>[];
+    final List<String> optionsStringsSorted = <String>[];
+    final bool hasTHID = element.hasOption(THCommandOptionType.id);
 
-    String message;
+    if (hasTHID) {
+      optionsStringsPre.add(
+        getOptionToUser(element.getOption(THCommandOptionType.id)!),
+      );
+    }
 
     for (final THCommandOptionType optionType in elementOptions.keys) {
       if ((optionType != THCommandOptionType.id) &&
@@ -185,22 +190,23 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
     optionsToInclude.addAll(element.attrOptionsMap.values);
 
-    if (optionsToInclude.isEmpty) {
-      message = '';
-    } else {
-      final List<String> optionsStrings = [];
-
+    if (optionsToInclude.isNotEmpty) {
       for (final THCommandOption option in optionsToInclude) {
-        final String typeToFile = option.typeToFile();
-        final String spec = option.specToFile();
+        final String optionToUser = getOptionToUser(option);
 
-        optionsStrings.add("$typeToFile $spec");
+        optionsStringsSorted.add(optionToUser);
       }
 
-      optionsStrings.sort();
-      message = ' - ';
-      message += optionsStrings.join(', ');
+      optionsStringsSorted.sort();
     }
+
+    final List<String> allOptionsStrings = [
+      ...optionsStringsPre,
+      ...optionsStringsSorted,
+    ];
+    final String message = allOptionsStrings.isEmpty
+        ? ''
+        : " - ${allOptionsStrings.join(mpToUserOptionsSeparator)}";
 
     return message;
   }
