@@ -286,19 +286,19 @@ class MPCommandFactory {
   }
 
   static MPAddLineCommand addLineFromStartEnd({
-    required THLineType type,
+    required THLine line,
+    required String type,
     required String subtype,
     required Offset start,
     required Offset end,
     required TH2FileEditController th2FileEditController,
+    List<MPCommand>? posCommands,
     bool setUsedLinetype = true,
   }) {
-    final THLine line = THLine.fromString(
-      parentMPID: th2FileEditController.activeScrapID,
-      lineTypeString: type.name,
-    );
     final int newLineMPID = line.mpID;
     final List<THElement> lineChildren = [];
+
+    posCommands ??= [];
 
     lineChildren.add(
       MPEditElementAux.createStraightLineSegmentFromCanvasCoordinates(
@@ -329,18 +329,28 @@ class MPCommandFactory {
         thFile: th2FileEditController.thFile,
         toOption: lineSubtypeOption,
       );
+
+      posCommands.add(posCommandSetSubtype);
     }
 
+    final MPCommand? posCommand = (posCommands.isEmpty)
+        ? null
+        : MPCommandFactory.multipleCommandsFromList(
+            commandsList: posCommands,
+            descriptionType: MPCommandDescriptionType.addLine,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsEdited,
+          );
     final MPAddLineCommand addLineCommand = MPAddLineCommand(
       newLine: line,
       lineChildren: lineChildren,
       preCommand: null,
-      posCommand: posCommandSetSubtype,
+      posCommand: posCommand,
     );
 
     if (setUsedLinetype) {
       th2FileEditController.elementEditController.setUsedLineType(
-        lineType: type.name,
+        lineType: type,
         lineSubtype: subtype,
       );
     }

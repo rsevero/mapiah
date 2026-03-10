@@ -581,7 +581,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     Map<String, THPoint>? stationPointsByStationName;
 
-    final Map<THPoint, THPoint> sectionPointsToConnect = {};
+    final Map<THPoint, MPStationPointNameRecord> sectionPointsToConnect = {};
 
     for (final MPSelectedElement mpSelectedElement in selectedElements.values) {
       final THElement selectedElement = mpSelectedElement.originalElementClone;
@@ -602,8 +602,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if ((stationName != null) &&
           (stationName.isNotEmpty) &&
           stationPointsByStationName.containsKey(stationName)) {
-        sectionPointsToConnect[selectedElement] =
-            stationPointsByStationName[stationName]!;
+        sectionPointsToConnect[selectedElement] = MPStationPointNameRecord(
+          stationName: stationName,
+          stationPoint: stationPointsByStationName[stationName]!,
+        );
       }
     }
 
@@ -614,17 +616,38 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> addLineCommands = [];
 
     for (final sectionPointToConnect in sectionPointsToConnect.entries) {
+      final THPoint sectionPoint = sectionPointToConnect.key;
+      final MPStationPointNameRecord stationPointNameRecord =
+          sectionPointToConnect.value;
       final ({Offset end, Offset start}) coordinates =
           MPNumericAux.getConnectionLineCoordinates(
-            from: sectionPointToConnect.key.position.coordinates,
-            to: sectionPointToConnect.value.position.coordinates,
+            from: sectionPoint.position.coordinates,
+            to: stationPointNameRecord.stationPoint.position.coordinates,
           );
+      final String lineTypeString = THLineType.mapConnection.name;
+      final THLine line = THLine.fromString(
+        parentMPID: _th2FileEditController.activeScrapID,
+        lineTypeString: lineTypeString,
+      );
+      final String prefix =
+          "$mpAutomaticMapConnectionPrefix${stationPointNameRecord.stationName}-";
+      final String mapConnectionTHID = _thFile.getNewTHID(
+        element: line,
+        prefix: prefix,
+      );
+      final MPCommand addLineTHIDCommand = MPCommandFactory.addTHIDToElement(
+        element: line,
+        thFile: _thFile,
+        newTHID: mapConnectionTHID,
+      );
       final MPAddLineCommand addLinecommand =
           MPCommandFactory.addLineFromStartEnd(
+            line: line,
             start: coordinates.start,
             end: coordinates.end,
-            type: THLineType.mapConnection,
+            type: lineTypeString,
             subtype: '',
+            posCommands: [addLineTHIDCommand],
             th2FileEditController: _th2FileEditController,
           );
 
@@ -2386,4 +2409,14 @@ enum MPLineSimplificationMethod {
   forceStraight,
   forceBezier,
   keepOriginalTypes,
+}
+
+class MPStationPointNameRecord {
+  final String stationName;
+  final THPoint stationPoint;
+
+  MPStationPointNameRecord({
+    required this.stationName,
+    required this.stationPoint,
+  });
 }

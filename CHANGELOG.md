@@ -3,6 +3,7 @@
 ## 0.3.1 - not yet released
 * New features:
   * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
+  * Including an ID on automatically added map connection lines.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().

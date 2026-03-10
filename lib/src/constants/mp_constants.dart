@@ -416,6 +416,8 @@ const String mpScrapTHIDPrefix = 'scrap';
 
 const String mpNewFilePrefix = 'NEW_TH2_FILE';
 
+const String mpAutomaticMapConnectionPrefix = 'mp-xs-';
+
 const int mpParentMPIDPlaceholder = 0;
 
 const int mpScrapScaleMaxValues = 8;
