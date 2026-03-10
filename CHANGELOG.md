@@ -5,6 +5,7 @@
   * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
   * Including an ID on automatically added map connection lines.
 * Fixed bugs:
+  * "Run Therion" button blinking red on every start.
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().
 

@@ -15,7 +15,7 @@ class MPSettingsController = MPSettingsControllerBase
 
 abstract class MPSettingsControllerBase with Store {
   @readonly
-  bool _isTherionAvailable = false;
+  bool _isTherionAvailable = true;
 
   Locale get locale {
     final String localIDSetting = getStringWithDefault(
