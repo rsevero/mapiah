@@ -5,6 +5,7 @@
   * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
 * Fixed bugs:
 * Infrastructure maintenance:
+  * Created MPCommandAux.addTHIDToElement().
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:

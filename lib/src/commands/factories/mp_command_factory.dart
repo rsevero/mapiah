@@ -434,6 +434,23 @@ class MPCommandFactory {
     );
   }
 
+  static MPCommand addTHIDToElement({
+    required THElement element,
+    required THFile thFile,
+    required String newTHID,
+  }) {
+    final THIDCommandOption thIDOption = THIDCommandOption.forCWJM(
+      parentMPID: element.mpID,
+      thID: newTHID,
+      originalLineInTH2File: '',
+    );
+    final MPCommand addTHIDCommand = MPSetOptionToElementCommand(
+      toOption: thIDOption,
+    );
+
+    return addTHIDCommand;
+  }
+
   static MPCommand addLineToArea({
     required THArea area,
     required THLine line,
@@ -442,29 +459,21 @@ class MPCommandFactory {
         MPCommandDescriptionType.addAreaBorderTHID,
   }) {
     final List<MPCommand> commandsList = [];
-    final String lineTHID;
 
-    if (line.hasOption(THCommandOptionType.id)) {
-      lineTHID =
-          (line.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
-    } else {
-      final String areaTHID;
+    String? lineTHID = MPCommandOptionAux.getID(line);
 
-      if (area.hasOption(THCommandOptionType.id)) {
-        areaTHID =
-            (area.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
-      } else {
+    if (lineTHID == null) {
+      String? areaTHID = MPCommandOptionAux.getID(area);
+
+      if (areaTHID == null) {
         final String newAreaTHID = thFile.getNewTHID(
           element: area,
           prefix: mpAreaTHIDPrefix,
         );
-        final THIDCommandOption areaTHIDOption = THIDCommandOption.forCWJM(
-          parentMPID: area.mpID,
-          thID: newAreaTHID,
-          originalLineInTH2File: '',
-        );
-        final MPCommand addAreaTHIDCommand = MPSetOptionToElementCommand(
-          toOption: areaTHIDOption,
+        final MPCommand addAreaTHIDCommand = addTHIDToElement(
+          element: area,
+          thFile: thFile,
+          newTHID: newAreaTHID,
         );
 
         commandsList.add(addAreaTHIDCommand);
@@ -476,13 +485,10 @@ class MPCommandFactory {
         element: line,
         prefix: lineTHIDPrefix,
       );
-      final THIDCommandOption lineTHIDOption = THIDCommandOption.forCWJM(
-        parentMPID: line.mpID,
-        thID: newLineTHID,
-        originalLineInTH2File: '',
-      );
-      final MPCommand addLineTHIDCommand = MPSetOptionToElementCommand(
-        toOption: lineTHIDOption,
+      final MPCommand addLineTHIDCommand = addTHIDToElement(
+        element: line,
+        thFile: thFile,
+        newTHID: newLineTHID,
       );
 
       commandsList.add(addLineTHIDCommand);

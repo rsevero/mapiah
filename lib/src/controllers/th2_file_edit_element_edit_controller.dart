@@ -696,17 +696,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return newArea;
   }
 
-  void addAutomaticTHIDOption({
-    required THHasOptionsMixin element,
-    String prefix = '',
-  }) {
-    final String newTHID = _thFile.getNewTHID(element: element, prefix: prefix);
-
-    THIDCommandOption(parentMPID: element.mpID, thID: newTHID);
-
-    registerElementWithTHID(element, newTHID);
-  }
-
   @action
   void updateBezierLineSegment(
     Offset quadraticControlPointPositionScreenCoordinates,
