@@ -316,12 +316,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyX:
-        if ((isCtrlPressed || isMetaPressed) &&
-            !isAltPressed &&
-            !isShiftPressed) {
-          th2FileEditController.elementEditController
-              .createMapConnectionLines();
-          keyProcessed = true;
+        if ((isCtrlPressed || isMetaPressed) && !isShiftPressed) {
+          if (isAltPressed) {
+            th2FileEditController.elementEditController
+                .createMapConnectionLines();
+            keyProcessed = true;
+          }
         }
     }
 

@@ -7,7 +7,7 @@
 | Choose THConfig file and run Therion                       | Ctrl+T                       |
 | Create area                                                | A                            |
 | Create line                                                | L                            |
-| Create map connection line from point X-Section to Station | Ctrl+X                       |
+| Create map connection line from point X-Section to Station | Ctrl+Alt+X                   |
 | Create point                                               | P                            |
 | Create scrap                                               | K                            |
 | Delete point, line, area or line segment                   | Del or Backspace             |

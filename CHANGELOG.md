@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - not yet released
+* New features:
+  * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:
   * Include contents of 'therion.log' file at end of Therion output.

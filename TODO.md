@@ -162,6 +162,7 @@
 [X] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
+[ ] - Migrate MacOS build (codemagic.yml) to Github.
 [ ] - Open multiple files simultaneously.
 [ ] - Allow copy/paste between scraps.
 [ ] - Allow copy/paste between files.
