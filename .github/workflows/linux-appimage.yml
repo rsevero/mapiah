@@ -55,7 +55,7 @@ jobs:
         flutter config --enable-linux-desktop
         flutter build linux --release
 
-    - name: Install appimage dependencies (incompatible with Flatpak)
+    - name: Install appimage dependencies
       run: |
         set -e
         set -x
