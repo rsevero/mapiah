@@ -38,11 +38,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       elementEditController.resetOriginalFileForLineSimplification();
       th2FileEditController.triggerEditLineRedraw();
     }
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(
       _isLSizeOrientationEdit
           ? _getLSizeOrientationStatusBarMessage()
@@ -148,7 +148,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   @override
   void onKeyDownEvent(KeyDownEvent event) {
     if (_isLSizeOrientationEdit) {
-      setStatusBarMessage();
+      updateStatusBarMessage();
     }
 
     final bool isAltPressed = MPInteractionAux.isAltPressed();
@@ -230,7 +230,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   @override
   void onKeyUpEvent(KeyUpEvent event) {
     if (_isLSizeOrientationEdit) {
-      setStatusBarMessage();
+      updateStatusBarMessage();
     }
 
     super.onKeyUpEvent(event);
@@ -552,7 +552,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     _isLSizeOrientationEdit = _isLSizeOrientation(newOptionType);
 
     _lSizeOrientationInitialization();
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   void _lSizeOrientationInitialization() {
@@ -721,7 +721,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       lSize: lSize,
     );
 
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   bool _isOverInteractiveLSizeOrientationCompass(Offset mouseScreen) {

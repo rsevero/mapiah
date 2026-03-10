@@ -14,7 +14,7 @@ class MPTH2FileEditStateSelectionWindowZoom extends MPTH2FileEditState
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     _previousStateType = previousState.type;
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
@@ -28,7 +28,7 @@ class MPTH2FileEditStateSelectionWindowZoom extends MPTH2FileEditState
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(
       mpLocator
           .appLocalizations

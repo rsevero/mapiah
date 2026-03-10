@@ -12,7 +12,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
@@ -37,7 +37,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     final int selectedEndControlPointsCount =
         selectionController.selectedEndControlPoints.length;
 
@@ -53,7 +53,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     final Offset snapedCanvasOffset = snapController
         .getCanvasSnapedOffsetFromScreenOffset(event.localPosition);
 
-    setStatusBarMessage();
+    updateStatusBarMessage();
 
     selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
       snapedCanvasOffset,
@@ -90,7 +90,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
           decimalPositions: th2FileEditController.currentDecimalPositions,
         );
 
-    setStatusBarMessage();
+    updateStatusBarMessage();
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {

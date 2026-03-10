@@ -2156,7 +2156,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     updateControllersAfterElementEditPartial();
     updateControllersAfterElementEditFinal();
 
-    _th2FileEditController.stateController.state.setStatusBarMessage();
+    _th2FileEditController.stateController.state.updateStatusBarMessage();
   }
 
   List<MPSingleTypeLineSegmentList> groupLineSegmentsForSimplification({

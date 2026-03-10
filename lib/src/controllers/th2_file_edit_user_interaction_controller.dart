@@ -54,6 +54,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       _prepareSetOption(option);
     }
 
+    _th2FileEditController.stateController.state.updateStatusBarMessage();
     _th2FileEditController.overlayWindowController.setShowOverlayWindow(
       MPWindowType.optionChoices,
       false,

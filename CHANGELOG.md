@@ -7,6 +7,7 @@
   * Translating option names on status bar.
 * Fixed bugs:
   * "Run Therion" button blinking red on every start.
+  * Status bar message not updating on option edit.
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().
 

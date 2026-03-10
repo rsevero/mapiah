@@ -25,7 +25,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       selectionController.clearSelectedLineSegments();
       elementEditController.resetOriginalFileForLineSimplification();
     }
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
@@ -100,7 +100,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
 
         if (!stateChanged) {
-          setStatusBarMessage();
+          updateStatusBarMessage();
         }
 
         return Future.value();
@@ -226,7 +226,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       );
 
       if (!stateChanged) {
-        setStatusBarMessage();
+        updateStatusBarMessage();
       }
     } else {
       if (elementsInsideSelectionWindow.isEmpty) {
@@ -241,14 +241,14 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         );
 
         if (!stateChanged) {
-          setStatusBarMessage();
+          updateStatusBarMessage();
         }
       }
     }
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     final int selectedElementsCount =
         selectionController.mpSelectedElementsLogical.length;
     final String message;

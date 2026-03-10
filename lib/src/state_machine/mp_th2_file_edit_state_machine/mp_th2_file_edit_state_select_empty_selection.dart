@@ -23,7 +23,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
       selectionController.clearSelectedEndControlPoints();
       selectionController.clearSelectedLineSegments();
     }
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
@@ -35,7 +35,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageEmptySelectionStatusBarMessage,
     );

@@ -43,13 +43,13 @@ abstract class TH2FileEditStateControllerBase
 
     _state.onStateEnter(previousState);
     _state.setCursor();
-    _state.setStatusBarMessage();
+    _state.updateStatusBarMessage();
 
     return true;
   }
 
   void updateStatusBarMessage() {
-    _state.setStatusBarMessage();
+    _state.updateStatusBarMessage();
   }
 
   @override

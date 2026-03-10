@@ -12,7 +12,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
-    setStatusBarMessage();
+    updateStatusBarMessage();
   }
 
   @override
@@ -24,7 +24,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   }
 
   @override
-  void setStatusBarMessage() {
+  void updateStatusBarMessage() {
     final List<int> selectedElementsCount = getSelectedElementsCount();
 
     final String statusBarMessage = mpLocator.appLocalizations

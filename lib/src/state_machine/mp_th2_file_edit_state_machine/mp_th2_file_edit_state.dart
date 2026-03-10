@@ -130,7 +130,7 @@ abstract class MPTH2FileEditState {
 
   void setCursor() {}
 
-  void setStatusBarMessage() {}
+  void updateStatusBarMessage() {}
 
   void onPrimaryButtonPointerDown(PointerDownEvent event) {}
 
