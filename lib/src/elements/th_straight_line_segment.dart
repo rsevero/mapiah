@@ -72,9 +72,15 @@ class THStraightLineSegment extends THLineSegment {
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      endPoint: endPoint ?? this.endPoint,
-      optionsMap: optionsMap ?? this.optionsMap,
-      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
+      endPoint: endPoint ?? this.endPoint.copyWith(),
+      optionsMap:
+          optionsMap ??
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            this.optionsMap,
+          ),
+      attrOptionsMap:
+          attrOptionsMap ??
+          SplayTreeMap<String, THAttrCommandOption>.from(this.attrOptionsMap),
     );
   }
 

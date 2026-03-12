@@ -29,7 +29,7 @@ part of 'th_element.dart';
 // photo, root, seed-germination, sink, spring19 , tree-trunk, u20 , vegetable-debris,
 // water-drip, water-flow.
 class THPoint extends THElement
-    with THHasOptionsMixin, MPBoundingBoxMixin, THHasPLATypeMixin
+    with MPBoundingBoxMixin, THHasOptionsMixin, THHasPLATypeMixin
     implements THPointInterface {
   final THPositionPart position;
   final THPointType pointType;
@@ -168,11 +168,17 @@ class THPoint extends THElement
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      position: position ?? this.position,
+      position: position ?? this.position.copyWith(),
       pointType: pointType ?? this.pointType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
-      optionsMap: optionsMap ?? this.optionsMap,
-      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
+      optionsMap:
+          optionsMap ??
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            this.optionsMap,
+          ),
+      attrOptionsMap:
+          attrOptionsMap ??
+          SplayTreeMap<String, THAttrCommandOption>.from(this.attrOptionsMap),
     );
   }
 

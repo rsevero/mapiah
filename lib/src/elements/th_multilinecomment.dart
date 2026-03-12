@@ -54,7 +54,7 @@ class THMultiLineComment extends THElement with THIsParentMixin {
     return THMultiLineComment.forCWJM(
       mpID: mpID ?? this.mpID,
       parentMPID: parentMPID ?? this.parentMPID,
-      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs.toList(),
       sameLineComment: makeSameLineCommentNull
           ? null
           : (sameLineComment ?? this.sameLineComment),

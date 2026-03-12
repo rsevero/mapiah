@@ -2,10 +2,10 @@ part of 'th_element.dart';
 
 class THArea extends THElement
     with
-        THHasOptionsMixin,
-        THIsParentMixin,
         MPBoundingBoxMixin,
-        THHasPLATypeMixin {
+        THHasOptionsMixin,
+        THHasPLATypeMixin,
+        THIsParentMixin {
   final THAreaType areaType;
 
   Set<String>? _lineTHIDs;
@@ -126,9 +126,15 @@ class THArea extends THElement
           originalLineInTH2File ?? this.originalLineInTH2File,
       areaType: areaType ?? this.areaType,
       unknownPLAType: unknownPLAType ?? this.unknownPLAType,
-      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
-      optionsMap: optionsMap ?? this.optionsMap,
-      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs.toList(),
+      optionsMap:
+          optionsMap ??
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            this.optionsMap,
+          ),
+      attrOptionsMap:
+          attrOptionsMap ??
+          SplayTreeMap<String, THAttrCommandOption>.from(this.attrOptionsMap),
     );
   }
 

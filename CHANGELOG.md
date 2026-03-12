@@ -15,6 +15,7 @@
   * Removing flatpak mention on AppImage GitHub action.
   * flutter upgrade to 3.41.4.
   * flutter pub upgrade --major-versions.
+  * Making copyWith do a deep copy for options map, children, etc.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:

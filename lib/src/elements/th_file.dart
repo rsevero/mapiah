@@ -138,10 +138,8 @@ class THFile
         elementByMPID ??
         LinkedHashMap.fromEntries(
           _elementByMPID.entries.map(
-            (MapEntry<int, THElement> e) => MapEntry<int, THElement>(
-              e.key,
-              THElement.fromMap(e.value.toMap()),
-            ),
+            (MapEntry<int, THElement> e) =>
+                MapEntry<int, THElement>(e.key, e.value.copyWith()),
           ),
         );
 
@@ -150,7 +148,7 @@ class THFile
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mpID: mpID ?? _mpID,
       elementByMPID: effectiveElements,
-      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs.toList(),
     );
   }
 

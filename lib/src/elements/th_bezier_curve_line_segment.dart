@@ -101,11 +101,17 @@ class THBezierCurveLineSegment extends THLineSegment {
           : (sameLineComment ?? this.sameLineComment),
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      controlPoint1: controlPoint1 ?? this.controlPoint1,
-      controlPoint2: controlPoint2 ?? this.controlPoint2,
-      endPoint: endPoint ?? this.endPoint,
-      optionsMap: optionsMap ?? this.optionsMap,
-      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
+      controlPoint1: controlPoint1 ?? this.controlPoint1.copyWith(),
+      controlPoint2: controlPoint2 ?? this.controlPoint2.copyWith(),
+      endPoint: endPoint ?? this.endPoint.copyWith(),
+      optionsMap:
+          optionsMap ??
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            this.optionsMap,
+          ),
+      attrOptionsMap:
+          attrOptionsMap ??
+          SplayTreeMap<String, THAttrCommandOption>.from(this.attrOptionsMap),
     );
   }
 

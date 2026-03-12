@@ -126,9 +126,15 @@ class THScrap extends THElement
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
       thID: thID ?? _thID,
-      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs,
-      optionsMap: optionsMap ?? this.optionsMap,
-      attrOptionsMap: attrOptionsMap ?? this.attrOptionsMap,
+      childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs.toList(),
+      optionsMap:
+          optionsMap ??
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            this.optionsMap,
+          ),
+      attrOptionsMap:
+          attrOptionsMap ??
+          SplayTreeMap<String, THAttrCommandOption>.from(this.attrOptionsMap),
     );
   }
 

@@ -162,7 +162,6 @@
 [X] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
-[ ] - Migrate MacOS build (codemagic.yml) to Github.
 [ ] - Open multiple files simultaneously.
 [ ] - Allow copy/paste between scraps.
 [ ] - Allow copy/paste between files.
@@ -176,7 +175,6 @@
 [ ] - Show status message listing what's selected in 'single line edit' mode.
 [ ] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.
-[ ] - Migrate away from Github.
 [ ] - Include options and point/line count in multiple elements clicked dialog box.
 [ ] - Implement default option values.
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
@@ -204,6 +202,7 @@
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
 [X] - BUG: flatpak version does not open URLs.
 [ ] - Create rotate, scale, mirror and screw modes.
+[ ] - Create "Duplicate selected elements" (Ctrl+D) action.
 
 ## Version 1.0
 [ ] - Raster images tracing.
