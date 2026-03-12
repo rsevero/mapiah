@@ -6,14 +6,15 @@ A few introductory instructions:
 4. Keep UI logic separate from business logic. Use MobX stores for business logic and state management.
 5. All variable declarations should have explicit type definitions. Avoid using var when the type is not immediately obvious.
 6. Variables should be declared as final whenever possible.
-7. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
-8. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-9. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files. If you created new internationalized strings, run 'flutter gen-l10n'.
-10. Don´t use all caps on user text.
-11. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
-12. Don't worry about code formatting. This is automtically fixed on save.
-13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-14. Run 'dart analyze' or similar on generated code.
+7. Put an empty line between "finals", non-finals and regular code.
+8. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
+9. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
+10. All user-facing strings must be localized using the AppLocalizations class. Do not hardcode text displayed to users. Localizations are set at lib/l10n/intl_en.arb and lib/l10n/intl_pt.arb files. If you created new internationalized strings, run 'flutter gen-l10n'.
+11. Don´t use all caps on user text.
+12. Mapiah is released as Linux/AppImage, Linux/Flatpak (built by a Github action), MacOS and Windows. There is no more web or Linux/Flathub versions.
+13. Don't worry about code formatting. This is automtically fixed on save.
+14. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+15. Run 'dart analyze' or similar on generated code.
 
 Specific instructions:
 
