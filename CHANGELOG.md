@@ -13,6 +13,8 @@
   * Upgrade actions/checkout github action from v4 to v6.
   * Tightening flatpak GitHub action permissions.
   * Removing flatpak mention on AppImage GitHub action.
+  * flutter upgrade to 3.41.4.
+  * flutter pub upgrade --major-versions.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:
