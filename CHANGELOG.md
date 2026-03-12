@@ -21,6 +21,7 @@
   * Making copyWith do a deep copy for options map, children, etc.
   * Testing point duplication.
   * Default positionInParent on MPCommandFactory.addElements() changed to mpAddChildAtEndMinusOneOfParentChildrenList.
+  * Using a cache for updating THIDs of duplicated elements and their options.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:

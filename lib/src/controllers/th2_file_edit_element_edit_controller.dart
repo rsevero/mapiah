@@ -976,6 +976,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final List<THElement> duplicateElements = [];
+    final Map<int, String> updatedTHIDs = {};
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       final THElement originalElement = selectedElement.originalElementClone;
@@ -983,7 +984,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           MPEditElementAux.getDuplicateElement(
             element: originalElement,
             thFile: _thFile,
-            updateTHID: true,
+            updatedTHIDs: updatedTHIDs,
           );
 
       duplicateElements.addAll(duplicatedElement);
