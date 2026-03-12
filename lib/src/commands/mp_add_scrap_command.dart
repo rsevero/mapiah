@@ -34,6 +34,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
     addScrapChildrenCommand = MPCommandFactory.addElements(
       elements: scrapChildren,
       thFile: thFile,
+      positionInParent: mpAddChildAtEndOfParentChildrenList,
     );
   }
 

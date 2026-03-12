@@ -145,7 +145,7 @@ class MPCommandFactory {
   static MPCommand addElements({
     required List<THElement> elements,
     required THFile thFile,
-    int positionInParent = mpAddChildAtEndOfParentChildrenList,
+    int positionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.addElements,
   }) {

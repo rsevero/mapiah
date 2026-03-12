@@ -995,6 +995,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPCommand duplicateCommand = MPCommandFactory.addElements(
       elements: duplicateElements,
       thFile: _thFile,
+      positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
     );
 
     _th2FileEditController.execute(duplicateCommand);

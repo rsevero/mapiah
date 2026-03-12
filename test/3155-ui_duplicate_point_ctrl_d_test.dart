@@ -94,6 +94,16 @@ void main() {
 
       final THPoint duplicatedPoint = pointsAfterDuplicate.last;
 
+      final List<int> scrapChildrenMPIDs = thFile
+          .getScraps()
+          .first
+          .childrenMPIDs;
+
+      expect(
+        scrapChildrenMPIDs.indexOf(duplicatedPoint.mpID),
+        scrapChildrenMPIDs.length - 2,
+      );
+
       expect(duplicatedPoint.mpID == originalPoint.mpID, isFalse);
       expect(duplicatedPoint.position, originalPoint.position);
       expect(duplicatedPoint.pointType, originalPoint.pointType);
