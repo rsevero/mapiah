@@ -983,6 +983,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           MPEditElementAux.getDuplicateElement(
             element: originalElement,
             thFile: _thFile,
+            updateTHID: true,
           );
 
       duplicateElements.addAll(duplicatedElement);

@@ -10,6 +10,7 @@
   * "Run Therion" button blinking red on every start.
   * Status bar message not updating on option edit.
   * Duplicated point appearing after scrap.
+  * Duplicated elements with THID throws because of duplicate THID.
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().
   * Upgrade actions/checkout github action from v4 to v6.

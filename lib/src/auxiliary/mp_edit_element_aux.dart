@@ -37,6 +37,7 @@ class MPEditElementAux {
     required THArea area,
     int? newParentMPID,
     required THFile thFile,
+    required bool updateTHID,
   }) {
     final int duplicatedAreaMPID = mpLocator.mpGeneralController
         .nextMPIDForElements();
@@ -44,6 +45,8 @@ class MPEditElementAux {
         _getDuplicateCommandOptions(
           options: area.optionsMap,
           parentMPID: duplicatedAreaMPID,
+          updateTHID: updateTHID,
+          thFile: thFile,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _getDuplicateCommandAttrOptions(
@@ -83,6 +86,7 @@ class MPEditElementAux {
           line: borderLine,
           newParentMPID: duplicatedAreaMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
 
         duplicateChildren.addAll(duplicatedBorderLine);
@@ -92,6 +96,7 @@ class MPEditElementAux {
           element: childElement,
           newParentMPID: duplicatedAreaMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
 
         duplicateChildren.addAll(duplicatedChild);
@@ -105,6 +110,7 @@ class MPEditElementAux {
     required THIsParentMixin parent,
     int? newParentMPID,
     required THFile thFile,
+    required bool updateTHID,
   }) {
     final List<THElement> duplicateChildren = [];
 
@@ -114,6 +120,7 @@ class MPEditElementAux {
         element: childElement,
         newParentMPID: newParentMPID,
         thFile: thFile,
+        updateTHID: updateTHID,
       );
 
       duplicateChildren.addAll(duplicatedChild);
@@ -126,6 +133,7 @@ class MPEditElementAux {
     required THElement element,
     int? newParentMPID,
     required THFile thFile,
+    required bool updateTHID,
   }) {
     final List<THElement> duplicate;
 
@@ -135,29 +143,35 @@ class MPEditElementAux {
           area: area,
           newParentMPID: newParentMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
       case THLine line:
         duplicate = _getDuplicateLine(
           line: line,
           newParentMPID: newParentMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
       case THMultiLineComment multiComment:
         duplicate = _getDuplicateMultiLineComment(
           multiComment: multiComment,
           newParentMPID: newParentMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
       case THPoint point:
         duplicate = _getDuplicatePoint(
           point: point,
           newParentMPID: newParentMPID,
+          thFile: thFile,
+          updateTHID: updateTHID,
         );
       case THScrap scrap:
         duplicate = _getDuplicateScrap(
           scrap: scrap,
           newParentMPID: newParentMPID,
           thFile: thFile,
+          updateTHID: updateTHID,
         );
       default:
         duplicate = [
@@ -172,6 +186,7 @@ class MPEditElementAux {
     required THLine line,
     int? newParentMPID,
     required THFile thFile,
+    required bool updateTHID,
   }) {
     final int duplicatedLineMPID = mpLocator.mpGeneralController
         .nextMPIDForElements();
@@ -179,6 +194,8 @@ class MPEditElementAux {
         _getDuplicateCommandOptions(
           options: line.optionsMap,
           parentMPID: duplicatedLineMPID,
+          updateTHID: updateTHID,
+          thFile: thFile,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _getDuplicateCommandAttrOptions(
@@ -196,6 +213,7 @@ class MPEditElementAux {
       parent: line,
       newParentMPID: duplicatedLineMPID,
       thFile: thFile,
+      updateTHID: updateTHID,
     );
 
     return [duplicateLine, ...duplicateChildren];
@@ -205,6 +223,7 @@ class MPEditElementAux {
     required THMultiLineComment multiComment,
     int? newParentMPID,
     required THFile thFile,
+    required bool updateTHID,
   }) {
     final THMultiLineComment duplicateMultiComment =
         _getDuplicateElement(
@@ -217,6 +236,7 @@ class MPEditElementAux {
       parent: multiComment,
       newParentMPID: duplicatedMultiCommentMPID,
       thFile: thFile,
+      updateTHID: updateTHID,
     );
 
     return [duplicateMultiComment, ...duplicateChildren];
@@ -243,19 +263,32 @@ class MPEditElementAux {
   static SplayTreeMap<THCommandOptionType, THCommandOption>
   _getDuplicateCommandOptions({
     required SplayTreeMap<THCommandOptionType, THCommandOption> options,
-
+    required bool updateTHID,
+    required THFile thFile,
     int? parentMPID,
   }) {
     final SplayTreeMap<THCommandOptionType, THCommandOption> duplicateOptions =
         SplayTreeMap();
 
     for (final optionEntry in options.entries) {
-      final THCommandOption duplicateOption = optionEntry.value.copyWith(
-        parentMPID: parentMPID,
-        originalLineInTH2File: '',
-      );
+      final THCommandOptionType optionType = optionEntry.key;
+      final THCommandOption option = optionEntry.value;
+      final THCommandOption duplicateOption;
 
-      duplicateOptions[optionEntry.key] = duplicateOption;
+      if (updateTHID && (option is THIDCommandOption)) {
+        duplicateOption = option.copyWith(
+          parentMPID: parentMPID,
+          originalLineInTH2File: '',
+          thID: thFile.getNewTHID(prefix: '${option.thID}-'),
+        );
+      } else {
+        duplicateOption = option.copyWith(
+          parentMPID: parentMPID,
+          originalLineInTH2File: '',
+        );
+      }
+
+      duplicateOptions[optionType] = duplicateOption;
     }
 
     return duplicateOptions;
@@ -263,6 +296,8 @@ class MPEditElementAux {
 
   static List<THElement> _getDuplicatePoint({
     required THPoint point,
+    required bool updateTHID,
+    required THFile thFile,
     int? newParentMPID,
   }) {
     final int duplicatedPointMPID = mpLocator.mpGeneralController
@@ -271,6 +306,8 @@ class MPEditElementAux {
         _getDuplicateCommandOptions(
           options: point.optionsMap,
           parentMPID: duplicatedPointMPID,
+          updateTHID: updateTHID,
+          thFile: thFile,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _getDuplicateCommandAttrOptions(
@@ -290,8 +327,9 @@ class MPEditElementAux {
 
   static List<THElement> _getDuplicateScrap({
     required THScrap scrap,
-    int? newParentMPID,
+    required bool updateTHID,
     required THFile thFile,
+    int? newParentMPID,
   }) {
     final THScrap duplicateScrap =
         _getDuplicateElement(element: scrap, newParentMPID: newParentMPID)
@@ -300,6 +338,7 @@ class MPEditElementAux {
     final List<THElement> duplicateChildren = _getDuplicateChildren(
       parent: scrap,
       newParentMPID: duplicatedScrapMPID,
+      updateTHID: updateTHID,
       thFile: thFile,
     );
 

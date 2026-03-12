@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -46,7 +47,7 @@ void main() {
 
       final THFileWriter writer = THFileWriter();
       final String testFilename = THTestAux.testPath(
-        '2025-06-16-002-point_with_attr_option.th2',
+        '2026-03-12-001-point_with_attr_and_id_option.th2',
       );
       final TH2FileEditController th2Controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: testFilename);
@@ -82,6 +83,14 @@ void main() {
       expect(thFile.getPoints().length, 1);
       expect(originalPoint.getAttrOptionValue('text'), '35');
 
+      final String? originalTHID = MPCommandOptionAux.getID(originalPoint);
+      expect(originalTHID, 'blaus');
+
+      final String? originalSubtype = MPCommandOptionAux.getSubtype(
+        originalPoint,
+      );
+      expect(originalSubtype, 'mappe');
+
       selectionController.setSelectedElements([originalPoint]);
       th2Controller.stateController.setState(
         MPTH2FileEditStateType.selectNonEmptySelection,
@@ -109,12 +118,19 @@ void main() {
       expect(duplicatedPoint.pointType, originalPoint.pointType);
       expect(duplicatedPoint.unknownPLAType, originalPoint.unknownPLAType);
 
-      final bool areOptionsMapsEquivalent =
-          THTestAux.areCommandOptionsMapsEquivalent(
-            firstOptionsMap: duplicatedPoint.optionsMap,
-            secondOptionsMap: originalPoint.optionsMap,
-          );
-      expect(areOptionsMapsEquivalent, isTrue);
+      final String? duplicatedTHID = MPCommandOptionAux.getID(duplicatedPoint);
+      expect(duplicatedTHID, 'blaus-1');
+      expect(duplicatedPoint.getAttrOptionValue('text'), '35');
+
+      final String? duplicatedSubtype = MPCommandOptionAux.getSubtype(
+        duplicatedPoint,
+      );
+      expect(duplicatedSubtype, originalSubtype);
+
+      expect(
+        originalPoint.optionsMap.length,
+        duplicatedPoint.optionsMap.length,
+      );
 
       final bool areAttrOptionsMapsEquivalent =
           THTestAux.areAttrCommandOptionsMapsEquivalent(
