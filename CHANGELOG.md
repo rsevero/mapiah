@@ -5,6 +5,7 @@
   * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
   * Including an ID on automatically added map connection lines.
   * Translating option names on status bar.
+  * Element duplication with Ctrl+D.
 * Fixed bugs:
   * "Run Therion" button blinking red on every start.
   * Status bar message not updating on option edit.
@@ -16,6 +17,7 @@
   * flutter upgrade to 3.41.4.
   * flutter pub upgrade --major-versions.
   * Making copyWith do a deep copy for options map, children, etc.
+  * Testing point duplication.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:

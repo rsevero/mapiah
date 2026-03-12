@@ -101,7 +101,9 @@ abstract class THElement with MPTHFileReferenceMixin {
     required this.parentMPID,
     this.sameLineComment,
     required this.originalLineInTH2File,
-  }) : _mpID = mpID;
+  }) : _mpID = mpID == mpCreateNewMPIDForElement
+           ? mpLocator.mpGeneralController.nextMPIDForElements()
+           : mpID;
 
   /// Main constructor.
   ///

@@ -733,6 +733,12 @@ abstract class AppLocalizations {
   /// **'Add image'**
   String get mpCommandDescriptionAddXTherionImageInsertConfig;
 
+  /// The description for the duplicate elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate elements'**
+  String get mpCommandDescriptionDuplicateElements;
+
   /// The description for the edit areas type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
@@ -888,6 +894,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove line'**
   String get mpCommandDescriptionRemoveLine;
+
+  /// The description for the remove lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Remove lines'**
+  String get mpCommandDescriptionRemoveLines;
 
   /// The description for the remove line segment command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///

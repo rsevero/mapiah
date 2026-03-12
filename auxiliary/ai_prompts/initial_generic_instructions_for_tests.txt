@@ -1,0 +1,13 @@
+A few introductory instructions:
+
+1. All variable declarations should have explicit type definitions. Avoid using var when the type is not immediately obvious.
+2. Variables should be declared as final whenever possible.
+3. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
+4. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
+5. Don't worry about code formatting. This is automtically fixed on save.
+6. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+7. Run 'dart analyze' or similar on generated code.
+
+Specific instructions:
+
+

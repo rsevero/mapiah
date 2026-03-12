@@ -361,6 +361,9 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .addXTherionImageInsertConfig] =
         localizations.mpCommandDescriptionAddXTherionImageInsertConfig;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .duplicateElements] =
+        localizations.mpCommandDescriptionDuplicateElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreasType] =
         localizations.mpCommandDescriptionEditAreasType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreaType] =
@@ -418,6 +421,8 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemoveEmptyLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
         localizations.mpCommandDescriptionRemoveLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLines] =
+        localizations.mpCommandDescriptionRemoveLines;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .removeLineSegment] =
         localizations.mpCommandDescriptionRemoveLineSegment;

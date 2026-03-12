@@ -575,6 +575,11 @@
     "description": "The description for the add XTherion image insert config command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionDuplicateElements": "Duplicate elements",
+  "@mpCommandDescriptionDuplicateElements": {
+    "description": "The description for the duplicate elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionEditAreasType": "Edit multiple areas type",
   "@mpCommandDescriptionEditAreasType": {
     "description": "The description for the edit areas type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
@@ -703,6 +708,11 @@
   "mpCommandDescriptionRemoveLine": "Remove line",
   "@mpCommandDescriptionRemoveLine": {
     "description": "The description for the remove line command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
+  "mpCommandDescriptionRemoveLines": "Remove lines",
+  "@mpCommandDescriptionRemoveLines": {
+    "description": "The description for the remove lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
   "mpCommandDescriptionRemoveLineSegment": "Remove line segment",

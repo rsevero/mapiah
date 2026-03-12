@@ -391,6 +391,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Adicionar imagem';
 
   @override
+  String get mpCommandDescriptionDuplicateElements => 'Duplicar elementos';
+
+  @override
   String get mpCommandDescriptionEditAreasType => 'Editar tipo de áreas';
 
   @override
@@ -471,6 +474,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemoveLine => 'Apagar linha';
+
+  @override
+  String get mpCommandDescriptionRemoveLines => 'Apagar linhas';
 
   @override
   String get mpCommandDescriptionRemoveLineSegment =>

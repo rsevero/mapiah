@@ -10,6 +10,7 @@ enum MPCommandDescriptionType {
   addPoint,
   addScrap,
   addXTherionImageInsertConfig,
+  duplicateElements,
   editAreasType,
   editAreasTypeSubtype,
   editAreaType,
@@ -42,6 +43,7 @@ enum MPCommandDescriptionType {
   removeElements,
   removeEmptyLine,
   removeLine,
+  removeLines,
   removeLineSegment,
   removeLineSegments,
   removeOptionFromElement,
@@ -75,6 +77,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeEmptyLine;
       case MPCommandDescriptionType.addLine:
         return MPCommandDescriptionType.removeLine;
+      case MPCommandDescriptionType.addLines:
+        return MPCommandDescriptionType.removeLines;
       case MPCommandDescriptionType.addLineSegment:
         return MPCommandDescriptionType.removeLineSegment;
       case MPCommandDescriptionType.addPoint:
@@ -83,6 +87,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeScrap;
       case MPCommandDescriptionType.addXTherionImageInsertConfig:
         return MPCommandDescriptionType.removeXTherionImageInsertConfig;
+      case MPCommandDescriptionType.duplicateElements:
+        return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;
       case MPCommandDescriptionType.removeElement:
@@ -93,6 +99,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.addEmptyLine;
       case MPCommandDescriptionType.removeLine:
         return MPCommandDescriptionType.addLine;
+      case MPCommandDescriptionType.removeLines:
+        return MPCommandDescriptionType.addLines;
       case MPCommandDescriptionType.removeLineSegment:
         return MPCommandDescriptionType.addLineSegment;
       case MPCommandDescriptionType.removeOptionFromElement:

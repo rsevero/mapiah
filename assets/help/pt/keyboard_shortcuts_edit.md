@@ -13,6 +13,7 @@
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
 | Desfazer                                                      | Ctrl+Z                               |
 | Desselecionar tudo                                            | Escape                               |
+| Duplicar elementos selecionados                               | Ctrl+D                               |
 | Editar nó de linha                                            | N                                    |
 | Editar opções                                                 | O                                    |
 | Escolher arquivo THConfig e executar Therion                  | Ctrl+T                               |

@@ -552,6 +552,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void duplicateSelectedElements() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.duplicateSelectedElements',
+        );
+    try {
+      return super.duplicateSelectedElements();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void executeAddArea({
     required THArea newArea,
     required List<THElement> areaChildren,

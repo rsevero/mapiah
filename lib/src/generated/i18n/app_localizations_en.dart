@@ -387,6 +387,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddXTherionImageInsertConfig => 'Add image';
 
   @override
+  String get mpCommandDescriptionDuplicateElements => 'Duplicate elements';
+
+  @override
   String get mpCommandDescriptionEditAreasType => 'Edit multiple areas type';
 
   @override
@@ -468,6 +471,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionRemoveLine => 'Remove line';
+
+  @override
+  String get mpCommandDescriptionRemoveLines => 'Remove lines';
 
   @override
   String get mpCommandDescriptionRemoveLineSegment => 'Remove line segment';

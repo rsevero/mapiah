@@ -1,6 +1,8 @@
+import 'dart:collection';
 import 'dart:io' show File;
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -17,6 +19,293 @@ import 'package:mapiah/src/elements/th_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
 class MPEditElementAux {
+  static THElement _getDuplicateElement({
+    required THElement element,
+    int mpID = mpCreateNewMPIDForElement,
+    int? newParentMPID,
+  }) {
+    final THElement duplicate = element.copyWith(
+      mpID: mpID,
+      parentMPID: newParentMPID,
+      originalLineInTH2File: '',
+    );
+
+    return duplicate;
+  }
+
+  static List<THElement> _getDuplicateArea({
+    required THArea area,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final int duplicatedAreaMPID = mpLocator.mpGeneralController
+        .nextMPIDForElements();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> duplicatedOptions =
+        _getDuplicateCommandOptions(
+          options: area.optionsMap,
+          parentMPID: duplicatedAreaMPID,
+        );
+    final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
+        _getDuplicateCommandAttrOptions(
+          attrOptions: area.attrOptionsMap,
+          parentMPID: duplicatedAreaMPID,
+        );
+    final THArea duplicateArea = area.copyWith(
+      mpID: duplicatedAreaMPID,
+      parentMPID: newParentMPID,
+      attrOptionsMap: duplicatedAttrOptions,
+      optionsMap: duplicatedOptions,
+      originalLineInTH2File: '',
+    );
+    final List<THElement> duplicateChildren = [];
+    final List<int> childrenMPIDs = area.childrenMPIDs;
+
+    for (final int childMPID in childrenMPIDs) {
+      final THElement childElement = thFile.elementByMPID(childMPID);
+
+      if (childElement is THAreaBorderTHID) {
+        final String borderTHID = childElement.thID;
+
+        if (!thFile.hasElementByTHID(borderTHID)) {
+          throw Exception(
+            'Border THID $borderTHID not found in THFile when duplicating area with MPEditElementAux.getDuplicateArea().',
+          );
+        }
+
+        final THLine borderLine = thFile.elementByTHID(borderTHID) as THLine;
+        final THAreaBorderTHID duplicateBorderTHID =
+            _getDuplicateElement(
+                  element: childElement,
+                  newParentMPID: duplicatedAreaMPID,
+                )
+                as THAreaBorderTHID;
+        final List<THElement> duplicatedBorderLine = _getDuplicateLine(
+          line: borderLine,
+          newParentMPID: duplicatedAreaMPID,
+          thFile: thFile,
+        );
+
+        duplicateChildren.addAll(duplicatedBorderLine);
+        duplicateChildren.add(duplicateBorderTHID);
+      } else {
+        final List<THElement> duplicatedChild = getDuplicateElement(
+          element: childElement,
+          newParentMPID: duplicatedAreaMPID,
+          thFile: thFile,
+        );
+
+        duplicateChildren.addAll(duplicatedChild);
+      }
+    }
+
+    return [duplicateArea, ...duplicateChildren];
+  }
+
+  static List<THElement> _getDuplicateChildren({
+    required THIsParentMixin parent,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final List<THElement> duplicateChildren = [];
+
+    for (final int childMPID in parent.childrenMPIDs) {
+      final THElement childElement = thFile.elementByMPID(childMPID);
+      final List<THElement> duplicatedChild = getDuplicateElement(
+        element: childElement,
+        newParentMPID: newParentMPID,
+        thFile: thFile,
+      );
+
+      duplicateChildren.addAll(duplicatedChild);
+    }
+
+    return duplicateChildren;
+  }
+
+  static List<THElement> getDuplicateElement({
+    required THElement element,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final List<THElement> duplicate;
+
+    switch (element) {
+      case THArea area:
+        duplicate = _getDuplicateArea(
+          area: area,
+          newParentMPID: newParentMPID,
+          thFile: thFile,
+        );
+      case THLine line:
+        duplicate = _getDuplicateLine(
+          line: line,
+          newParentMPID: newParentMPID,
+          thFile: thFile,
+        );
+      case THMultiLineComment multiComment:
+        duplicate = _getDuplicateMultiLineComment(
+          multiComment: multiComment,
+          newParentMPID: newParentMPID,
+          thFile: thFile,
+        );
+      case THPoint point:
+        duplicate = _getDuplicatePoint(
+          point: point,
+          newParentMPID: newParentMPID,
+        );
+      case THScrap scrap:
+        duplicate = _getDuplicateScrap(
+          scrap: scrap,
+          newParentMPID: newParentMPID,
+          thFile: thFile,
+        );
+      default:
+        duplicate = [
+          _getDuplicateElement(element: element, newParentMPID: newParentMPID),
+        ];
+    }
+
+    return duplicate;
+  }
+
+  static List<THElement> _getDuplicateLine({
+    required THLine line,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final int duplicatedLineMPID = mpLocator.mpGeneralController
+        .nextMPIDForElements();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> duplicatedOptions =
+        _getDuplicateCommandOptions(
+          options: line.optionsMap,
+          parentMPID: duplicatedLineMPID,
+        );
+    final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
+        _getDuplicateCommandAttrOptions(
+          attrOptions: line.attrOptionsMap,
+          parentMPID: duplicatedLineMPID,
+        );
+    final THLine duplicateLine = line.copyWith(
+      mpID: duplicatedLineMPID,
+      parentMPID: newParentMPID,
+      optionsMap: duplicatedOptions,
+      attrOptionsMap: duplicatedAttrOptions,
+      originalLineInTH2File: '',
+    );
+    final List<THElement> duplicateChildren = _getDuplicateChildren(
+      parent: line,
+      newParentMPID: duplicatedLineMPID,
+      thFile: thFile,
+    );
+
+    return [duplicateLine, ...duplicateChildren];
+  }
+
+  static List<THElement> _getDuplicateMultiLineComment({
+    required THMultiLineComment multiComment,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final THMultiLineComment duplicateMultiComment =
+        _getDuplicateElement(
+              element: multiComment,
+              newParentMPID: newParentMPID,
+            )
+            as THMultiLineComment;
+    final int duplicatedMultiCommentMPID = duplicateMultiComment.mpID;
+    final List<THElement> duplicateChildren = _getDuplicateChildren(
+      parent: multiComment,
+      newParentMPID: duplicatedMultiCommentMPID,
+      thFile: thFile,
+    );
+
+    return [duplicateMultiComment, ...duplicateChildren];
+  }
+
+  static SplayTreeMap<String, THAttrCommandOption>
+  _getDuplicateCommandAttrOptions({
+    required SplayTreeMap<String, THAttrCommandOption> attrOptions,
+    int? parentMPID,
+  }) {
+    final SplayTreeMap<String, THAttrCommandOption> duplicateAttrOptions =
+        SplayTreeMap();
+
+    for (final attrOptionEntry in attrOptions.entries) {
+      final THAttrCommandOption duplicateAttrOption = attrOptionEntry.value
+          .copyWith(parentMPID: parentMPID, originalLineInTH2File: '');
+
+      duplicateAttrOptions[attrOptionEntry.key] = duplicateAttrOption;
+    }
+
+    return duplicateAttrOptions;
+  }
+
+  static SplayTreeMap<THCommandOptionType, THCommandOption>
+  _getDuplicateCommandOptions({
+    required SplayTreeMap<THCommandOptionType, THCommandOption> options,
+
+    int? parentMPID,
+  }) {
+    final SplayTreeMap<THCommandOptionType, THCommandOption> duplicateOptions =
+        SplayTreeMap();
+
+    for (final optionEntry in options.entries) {
+      final THCommandOption duplicateOption = optionEntry.value.copyWith(
+        parentMPID: parentMPID,
+        originalLineInTH2File: '',
+      );
+
+      duplicateOptions[optionEntry.key] = duplicateOption;
+    }
+
+    return duplicateOptions;
+  }
+
+  static List<THElement> _getDuplicatePoint({
+    required THPoint point,
+    int? newParentMPID,
+  }) {
+    final int duplicatedPointMPID = mpLocator.mpGeneralController
+        .nextMPIDForElements();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> duplicatedOptions =
+        _getDuplicateCommandOptions(
+          options: point.optionsMap,
+          parentMPID: duplicatedPointMPID,
+        );
+    final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
+        _getDuplicateCommandAttrOptions(
+          attrOptions: point.attrOptionsMap,
+          parentMPID: duplicatedPointMPID,
+        );
+    final THPoint duplicatePoint = point.copyWith(
+      mpID: duplicatedPointMPID,
+      parentMPID: newParentMPID,
+      optionsMap: duplicatedOptions,
+      attrOptionsMap: duplicatedAttrOptions,
+      originalLineInTH2File: '',
+    );
+
+    return [duplicatePoint];
+  }
+
+  static List<THElement> _getDuplicateScrap({
+    required THScrap scrap,
+    int? newParentMPID,
+    required THFile thFile,
+  }) {
+    final THScrap duplicateScrap =
+        _getDuplicateElement(element: scrap, newParentMPID: newParentMPID)
+            as THScrap;
+    final int duplicatedScrapMPID = duplicateScrap.mpID;
+    final List<THElement> duplicateChildren = _getDuplicateChildren(
+      parent: scrap,
+      newParentMPID: duplicatedScrapMPID,
+      thFile: thFile,
+    );
+
+    return [duplicateScrap, ...duplicateChildren];
+  }
+
   static THStraightLineSegment createStraightLineSegmentFromCanvasCoordinates({
     required Offset endPointCanvasCoordinates,
     required int lineMPID,

@@ -459,6 +459,8 @@ const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
 
+const int mpCreateNewMPIDForElement = 0;
+
 const int mpMapiahReleasesAPIPerPage = 100;
 const int mpMapiahCommitsAPIPerPage = 100;
 const int mpMapiahTagsAPIMaxPages = 10;

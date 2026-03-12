@@ -965,6 +965,45 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void duplicateSelectedElements() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final Iterable<MPSelectedElement> selectedElements =
+        selectionController.mpSelectedElementsLogical.values;
+
+    if (selectedElements.isEmpty) {
+      return;
+    }
+
+    final List<THElement> duplicateElements = [];
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      final THElement originalElement = selectedElement.originalElementClone;
+      final List<THElement> duplicatedElement =
+          MPEditElementAux.getDuplicateElement(
+            element: originalElement,
+            thFile: _thFile,
+          );
+
+      duplicateElements.addAll(duplicatedElement);
+    }
+
+    if (duplicateElements.isEmpty) {
+      return;
+    }
+
+    final MPCommand duplicateCommand = MPCommandFactory.addElements(
+      elements: duplicateElements,
+      thFile: _thFile,
+    );
+
+    _th2FileEditController.execute(duplicateCommand);
+    selectionController.setSelectedElements(duplicateElements);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
+  @action
   void executeAddArea({
     required THArea newArea,
     required List<THElement> areaChildren,
