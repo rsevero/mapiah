@@ -16,6 +16,7 @@ class MPTHElementDuplicatorAux {
   final bool updateTHIDs;
 
   MPDuplicateElementResult? _cachedDuplicate;
+  Map<int, String>? _updatedTHIDsMap;
 
   MPTHElementDuplicatorAux({
     required this.elements,
@@ -28,15 +29,13 @@ class MPTHElementDuplicatorAux {
       return _cachedDuplicate!;
     }
 
-    final Map<int, String>? updatedTHIDsMap = updateTHIDs ? {} : null;
+    _updatedTHIDsMap = updateTHIDs ? {} : null;
+
     final List<THElement> duplicateMainElements = [];
     final List<THElement> duplicateChildrenElements = [];
 
     for (final THElement element in elements) {
-      final MPDuplicateElementResult result = _duplicateElement(
-        element: element,
-        updatedTHIDs: updatedTHIDsMap,
-      );
+      final MPDuplicateElementResult result = _duplicateElement(element: element);
 
       duplicateMainElements.addAll(result.duplicatesMainElements);
       duplicateChildrenElements.addAll(result.duplicateChildren);
@@ -93,7 +92,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateArea({
     required THArea area,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final int duplicatedAreaMPID = mpLocator.mpGeneralController
         .nextMPIDForElements();
@@ -101,7 +99,6 @@ class MPTHElementDuplicatorAux {
         _duplicateCommandOptions(
           options: area.optionsMap,
           parentMPID: duplicatedAreaMPID,
-          updatedTHIDs: updatedTHIDs,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _duplicateCommandAttrOptions(
@@ -127,7 +124,7 @@ class MPTHElementDuplicatorAux {
 
         if (!thFile.hasElementByTHID(borderTHID)) {
           throw Exception(
-            'Border THID $borderTHID not found in THFile when duplicating area with THElementDuplicatorAux.',
+            'Border THID $borderTHID not found in THFile when duplicating area with MPTHElementDuplicatorAux.',
           );
         }
 
@@ -141,7 +138,6 @@ class MPTHElementDuplicatorAux {
         final MPDuplicateElementResult duplicatedBorderLine = _duplicateLine(
           line: borderLine,
           newParentMPID: duplicatedAreaMPID,
-          updatedTHIDs: updatedTHIDs,
         );
 
         duplicatedMain.addAll(duplicatedBorderLine.duplicatesMainElements);
@@ -151,7 +147,6 @@ class MPTHElementDuplicatorAux {
         final MPDuplicateElementResult duplicatedChild = _duplicateElement(
           element: childElement,
           newParentMPID: duplicatedAreaMPID,
-          updatedTHIDs: updatedTHIDs,
         );
 
         duplicatedMain.addAll(duplicatedChild.duplicatesMainElements);
@@ -170,7 +165,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateChildren({
     required THIsParentMixin parent,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final List<THElement> duplicatedMainElements = [];
     final List<THElement> duplicateChildren = [];
@@ -180,7 +174,6 @@ class MPTHElementDuplicatorAux {
       final MPDuplicateElementResult duplicatedChild = _duplicateElement(
         element: childElement,
         newParentMPID: newParentMPID,
-        updatedTHIDs: updatedTHIDs,
       );
 
       duplicatedMainElements.addAll(duplicatedChild.duplicatesMainElements);
@@ -196,7 +189,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateElement({
     required THElement element,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final MPDuplicateElementResult duplicate;
 
@@ -205,31 +197,26 @@ class MPTHElementDuplicatorAux {
         duplicate = _duplicateArea(
           area: area,
           newParentMPID: newParentMPID,
-          updatedTHIDs: updatedTHIDs,
         );
       case THLine line:
         duplicate = _duplicateLine(
           line: line,
           newParentMPID: newParentMPID,
-          updatedTHIDs: updatedTHIDs,
         );
       case THMultiLineComment multiComment:
         duplicate = _duplicateMultiLineComment(
           multiComment: multiComment,
           newParentMPID: newParentMPID,
-          updatedTHIDs: updatedTHIDs,
         );
       case THPoint point:
         duplicate = _duplicatePoint(
           point: point,
           newParentMPID: newParentMPID,
-          updatedTHIDs: updatedTHIDs,
         );
       case THScrap scrap:
         duplicate = _duplicateScrap(
           scrap: scrap,
           newParentMPID: newParentMPID,
-          updatedTHIDs: updatedTHIDs,
         );
       default:
 
@@ -249,7 +236,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateLine({
     required THLine line,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final int duplicatedLineMPID = mpLocator.mpGeneralController
         .nextMPIDForElements();
@@ -257,7 +243,6 @@ class MPTHElementDuplicatorAux {
         _duplicateCommandOptions(
           options: line.optionsMap,
           parentMPID: duplicatedLineMPID,
-          updatedTHIDs: updatedTHIDs,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _duplicateCommandAttrOptions(
@@ -276,7 +261,6 @@ class MPTHElementDuplicatorAux {
     final MPDuplicateElementResult duplicateChildren = _duplicateChildren(
       parent: line,
       newParentMPID: duplicatedLineMPID,
-      updatedTHIDs: updatedTHIDs,
     );
 
     duplicateMainElements.addAll(duplicateChildren.duplicatesMainElements);
@@ -290,7 +274,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateMultiLineComment({
     required THMultiLineComment multiComment,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final THMultiLineComment duplicateMultiComment =
         _copyElement(element: multiComment, newParentMPID: newParentMPID)
@@ -300,7 +283,6 @@ class MPTHElementDuplicatorAux {
     final MPDuplicateElementResult duplicateChildren = _duplicateChildren(
       parent: multiComment,
       newParentMPID: duplicatedMultiCommentMPID,
-      updatedTHIDs: updatedTHIDs,
     );
 
     duplicatedMainElements.addAll(duplicateChildren.duplicatesMainElements);
@@ -314,7 +296,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicatePoint({
     required THPoint point,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final int duplicatedPointMPID = mpLocator.mpGeneralController
         .nextMPIDForElements();
@@ -322,7 +303,6 @@ class MPTHElementDuplicatorAux {
         _duplicateCommandOptions(
           options: point.optionsMap,
           parentMPID: duplicatedPointMPID,
-          updatedTHIDs: updatedTHIDs,
         );
     final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
         _duplicateCommandAttrOptions(
@@ -346,7 +326,6 @@ class MPTHElementDuplicatorAux {
   MPDuplicateElementResult _duplicateScrap({
     required THScrap scrap,
     int? newParentMPID,
-    required Map<int, String>? updatedTHIDs,
   }) {
     final THScrap duplicateScrap =
         _copyElement(element: scrap, newParentMPID: newParentMPID) as THScrap;
@@ -355,7 +334,6 @@ class MPTHElementDuplicatorAux {
     final MPDuplicateElementResult duplicateChildren = _duplicateChildren(
       parent: scrap,
       newParentMPID: duplicatedScrapMPID,
-      updatedTHIDs: updatedTHIDs,
     );
 
     duplicatedMainElements.addAll(duplicateChildren.duplicatesMainElements);
@@ -387,7 +365,6 @@ class MPTHElementDuplicatorAux {
 
   SplayTreeMap<THCommandOptionType, THCommandOption> _duplicateCommandOptions({
     required SplayTreeMap<THCommandOptionType, THCommandOption> options,
-    required Map<int, String>? updatedTHIDs,
     int? parentMPID,
   }) {
     final SplayTreeMap<THCommandOptionType, THCommandOption> duplicateOptions =
@@ -399,12 +376,12 @@ class MPTHElementDuplicatorAux {
       final THCommandOption option = optionEntry.value;
       final THCommandOption duplicateOption;
 
-      if ((updatedTHIDs != null) && (option is THIDCommandOption)) {
+      if ((_updatedTHIDsMap != null) && (option is THIDCommandOption)) {
         final String newTHID =
-            updatedTHIDs[option.parentMPID] ??
+            _updatedTHIDsMap![option.parentMPID] ??
             thFile.getNewTHID(prefix: '${option.thID}-');
 
-        updatedTHIDs[option.parentMPID] = newTHID;
+        _updatedTHIDsMap![option.parentMPID] = newTHID;
         duplicateOption = option.copyWith(
           parentMPID: parentMPID,
           originalLineInTH2File: '',
