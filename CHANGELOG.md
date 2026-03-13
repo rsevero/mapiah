@@ -11,6 +11,7 @@
   * Status bar message not updating on option edit.
   * Duplicated point appearing after scrap.
   * Duplicated elements with THID throws because of duplicate THID.
+  * REGRESSION: When moving line point that didn´t snap, it would jump arbitrarily on the screen. [reported by Daniel Bean]
 * Infrastructure maintenance:
   * Created MPCommandAux.addTHIDToElement().
   * Upgrade actions/checkout github action from v4 to v6.

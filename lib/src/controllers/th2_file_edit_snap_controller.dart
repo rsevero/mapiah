@@ -422,11 +422,14 @@ abstract class TH2FileEditSnapControllerBase with Store {
   }
 
   Offset getCanvasSnapedOffsetFromScreenOffset(Offset screenPosition) {
-    final THPositionPart? snapTarget = getCanvasSnapedPositionFromScreenOffset(
+    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
       screenPosition,
     );
+    final THPositionPart? snapTarget = getCanvasSnapedPositionFromCanvasOffset(
+      canvasPosition,
+    );
 
-    return (snapTarget == null) ? screenPosition : snapTarget.coordinates;
+    return (snapTarget == null) ? canvasPosition : snapTarget.coordinates;
   }
 
   Offset getCanvasSnapedOffsetFromCanvasOffset(Offset canvasPosition) {
