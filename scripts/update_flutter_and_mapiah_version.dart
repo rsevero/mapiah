@@ -15,14 +15,11 @@ final List<String> targetFiles = [
   '.github/workflows/linux-flatpak.yml',
   '.github/workflows/windows.yml',
   'codemagic.yaml',
-  'packaging/linux/flatpak/built-on-flathub/io.github.rsevero.mapiah/flatpak-flutter.yml',
-  'packaging/linux/io.github.rsevero.mapiah.metainfo.xml',
 ];
 
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
   final String? mapiahVersion = await getMapiahVersion();
-  final String today = DateTime.now().toIso8601String().split('T').first;
 
   if (version == null) {
     stderr.writeln('Could not determine Flutter version.');
@@ -48,24 +45,6 @@ Future<int> main(List<String> args) async {
     r"""(^\s*flutter:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
     multiLine: true,
   );
-  final RegExp flutterFlatpakTagRegex = RegExp(
-    r"""(url:\s*https://github.com/flutter/flutter\.git\s*\n(?:.*?\n)*?\s*tag:\s*)([^\n]+)""",
-    multiLine: true,
-    dotAll: true,
-  );
-  final RegExp mapiahFlatpakTagRegex = RegExp(
-    r"""(url:\s*https://github.com/rsevero/mapiah\.git\s*\n(?:.*?\n)*?\s*tag:\s*)([^\n]+)""",
-    multiLine: true,
-    dotAll: true,
-  );
-  final RegExp flatpakCommitRegex = RegExp(
-    r"""^\s*commit:\s*.*\n""",
-    multiLine: true,
-  );
-  final RegExp releasesBlockRegex = RegExp(
-    r"""(<releases>\s*\n)""",
-    multiLine: true,
-  );
 
   for (final path in targetFiles) {
     final File file = File(path);
@@ -77,46 +56,14 @@ Future<int> main(List<String> args) async {
     String content = await file.readAsString();
     String newContent = content;
 
-    if (path.endsWith('flatpak-flutter.yml')) {
-      newContent = newContent.replaceAllMapped(
-        flutterFlatpakTagRegex,
-        (m) => '${m[1]}$version',
-      );
-      final String mapiahTag = 'v${mapiahVersion.split('+').first}';
-      newContent = newContent.replaceAllMapped(
-        mapiahFlatpakTagRegex,
-        (m) => '${m[1]}$mapiahTag',
-      );
-      newContent = newContent.replaceAll(flatpakCommitRegex, '');
-    } else if (path.endsWith('io.github.rsevero.mapiah.metainfo.xml')) {
-      final RegExp releaseVersionRegex = RegExp(
-        '<release\\b[^>]*\\bversion\\s*=\\s*"${RegExp.escape(mapiahVersion)}"',
-      );
-
-      if (!releaseVersionRegex.hasMatch(newContent)) {
-        final String releaseEntry =
-            '    <release version="$mapiahVersion" date="$today">\n'
-            '      <description>\n'
-            '        <p>Release description</p>\n'
-            '      </description>\n'
-            '    </release>\n';
-        if (releasesBlockRegex.hasMatch(newContent)) {
-          newContent = newContent.replaceFirstMapped(
-            releasesBlockRegex,
-            (m) => '${m[1]}$releaseEntry',
-          );
-        }
-      }
-    } else {
-      newContent = newContent.replaceAllMapped(
-        flutterVersionRegex,
-        (m) => '${m[1]}$version',
-      );
-      newContent = newContent.replaceAllMapped(
-        flutterSimpleRegex,
-        (m) => '${m[1]}$version',
-      );
-    }
+    newContent = newContent.replaceAllMapped(
+      flutterVersionRegex,
+      (m) => '${m[1]}$version',
+    );
+    newContent = newContent.replaceAllMapped(
+      flutterSimpleRegex,
+      (m) => '${m[1]}$version',
+    );
 
     if (newContent != content) {
       await file.writeAsString(newContent);
