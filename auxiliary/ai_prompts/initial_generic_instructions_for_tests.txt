@@ -5,9 +5,10 @@ A few introductory instructions:
 3. Put an empty line between "finals", non-finals and regular code.
 4. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names to make the logic easier to understand.
 5. In multiple condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-6. Don't worry about code formatting. This is automtically fixed on save.
-7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-8. Run 'dart analyze' or similar on generated code.
+6. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
+7. Don't worry about code formatting. This is automtically fixed on save.
+8. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+9. Run 'dart analyze' or similar on generated code.
 
 Specific instructions:
 

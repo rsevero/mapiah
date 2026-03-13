@@ -139,10 +139,11 @@ Uses `flutter_localizations` with `.arb` files in `lib/src/generated/i18n/`. Run
 7. Put an empty line between "finals", non-finals and regular code.
 8. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
 9. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-10. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
-11. Don't use all caps in user-facing text.
-12. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-13. Run `flutter analyze` after generating or modifying code.
+10. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
+11. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
+12. Don't use all caps in user-facing text.
+13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+14. Run `flutter analyze` after generating or modifying code.
 
 ### When writing scripts (command-line tools)
 
@@ -152,9 +153,10 @@ Uses `flutter_localizations` with `.arb` files in `lib/src/generated/i18n/`. Run
 4. Put an empty line between "finals", non-finals and regular code.
 5. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
 6. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-7. Don't use all caps in user-facing text.
-8. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-9. Run `flutter analyze` after generating or modifying code.
+7. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
+8. Don't use all caps in user-facing text.
+9. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+10. Run `flutter analyze` after generating or modifying code.
 
 ### When writing tests
 
@@ -163,8 +165,9 @@ Uses `flutter_localizations` with `.arb` files in `lib/src/generated/i18n/`. Run
 3. Put an empty line between "finals", non-finals and regular code.
 4. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
 5. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-6. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-7. Run `flutter analyze` after generating or modifying code.
+6. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
+7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
+8. Run `flutter analyze` after generating or modifying code.
 
 ## Release Targets
 
