@@ -975,33 +975,53 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final List<THElement> duplicateElements = [];
+    final List<THElement> duplicateMainElements = [];
+    final List<THElement> duplicateChildrenElements = [];
     final Map<int, String> updatedTHIDs = {};
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       final THElement originalElement = selectedElement.originalElementClone;
-      final List<THElement> duplicatedElement =
+      final MPDuplicateElementResult duplicatedElements =
           MPEditElementAux.getDuplicateElement(
             element: originalElement,
             thFile: _thFile,
             updatedTHIDs: updatedTHIDs,
           );
 
-      duplicateElements.addAll(duplicatedElement);
+      duplicateMainElements.addAll(duplicatedElements.duplicatesMainElements);
+      duplicateChildrenElements.addAll(duplicatedElements.duplicateChildren);
     }
 
-    if (duplicateElements.isEmpty) {
+    if (duplicateMainElements.isEmpty) {
       return;
     }
 
-    final MPCommand duplicateCommand = MPCommandFactory.addElements(
-      elements: duplicateElements,
+    final MPCommand duplicateMainCommand = MPCommandFactory.addElements(
+      elements: duplicateMainElements,
       thFile: _thFile,
       positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
     );
 
-    _th2FileEditController.execute(duplicateCommand);
-    selectionController.setSelectedElements(duplicateElements);
+    if (duplicateChildrenElements.isEmpty) {
+      _th2FileEditController.execute(duplicateMainCommand);
+    } else {
+      final MPCommand duplicateChildrenCommand = MPCommandFactory.addElements(
+        elements: duplicateChildrenElements,
+        thFile: _thFile,
+        positionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+      final MPCommand combinedCommand =
+          MPCommandFactory.multipleCommandsFromList(
+            commandsList: [duplicateMainCommand, duplicateChildrenCommand],
+            descriptionType: MPCommandDescriptionType.duplicateElements,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          );
+
+      _th2FileEditController.execute(combinedCommand);
+    }
+
+    selectionController.setSelectedElements(duplicateMainElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
