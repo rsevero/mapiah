@@ -3,16 +3,17 @@
 1. Update Mapiah version in `pubspec.yaml`.
 2. Update `CHANGELOG.md` with the new version and changes.
 3. Update `TODO.md` with changes.
-4. Update Flutter and Mapiah version in the action/workflow files with:
+4. Update mpReleaseName and mpReleaseURL in `lib/src/constants/mp_constants.dart`
+5. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
-5. Commit the previous changes with a comment like 'v0.3.0'
-6. Push the previous changes
-7. Create a new tag with the new version:
+6. Commit the previous changes with a comment like 'v0.3.0'
+7. Push the previous changes
+8. Create a new tag with the new version:
    ```bash
    git tag -a v0.3.0 -m "v0.3.0"
    git push origin v0.3.0
    ```
-8.  After the new release has been created in GitHub:
+9.  After the new release has been created in GitHub:
    1. update the release title to include the version number and the name of the release;
    2. update the release description including the changelog for the release.
 

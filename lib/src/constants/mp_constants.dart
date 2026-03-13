@@ -8,8 +8,8 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = 'Great Fanfarra';
-const String mpReleaseURL = 'https://youtu.be/HlV59UbrY-E';
+const String mpReleaseName = 'Memória Musical';
+const String mpReleaseURL = 'https://radios.ebc.com.br/memoria-musical';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';

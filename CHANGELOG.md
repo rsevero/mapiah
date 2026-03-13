@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Updated packaging/README.md to mention release constant.
+
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:
   * Changed "Create map connection line from point X-Section to Station" shortcut from Ctrl+X to Ctrl+Alt+X.
