@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_thelement_duplicator_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -975,53 +976,24 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final List<THElement> duplicateMainElements = [];
-    final List<THElement> duplicateChildrenElements = [];
-    final Map<int, String> updatedTHIDs = {};
+    final List<THElement> elementsToDuplicate = selectedElements
+        .map((MPSelectedElement e) => e.originalElementClone)
+        .toList();
+    final MPTHElementDuplicatorAux duplicator = MPTHElementDuplicatorAux(
+      elements: elementsToDuplicate,
+      thFile: _thFile,
+      updateTHIDs: true,
+    );
+    final MPDuplicateElementResult duplicate = duplicator.getDuplicate();
 
-    for (final MPSelectedElement selectedElement in selectedElements) {
-      final THElement originalElement = selectedElement.originalElementClone;
-      final MPDuplicateElementResult duplicatedElements =
-          MPEditElementAux.getDuplicateElement(
-            element: originalElement,
-            thFile: _thFile,
-            updatedTHIDs: updatedTHIDs,
-          );
-
-      duplicateMainElements.addAll(duplicatedElements.duplicatesMainElements);
-      duplicateChildrenElements.addAll(duplicatedElements.duplicateChildren);
-    }
-
-    if (duplicateMainElements.isEmpty) {
+    if (duplicate.duplicatesMainElements.isEmpty) {
       return;
     }
 
-    final MPCommand duplicateMainCommand = MPCommandFactory.addElements(
-      elements: duplicateMainElements,
-      thFile: _thFile,
-      positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
-    );
+    final MPCommand addDuplicateCommand = duplicator.getAddDuplicateCommand();
 
-    if (duplicateChildrenElements.isEmpty) {
-      _th2FileEditController.execute(duplicateMainCommand);
-    } else {
-      final MPCommand duplicateChildrenCommand = MPCommandFactory.addElements(
-        elements: duplicateChildrenElements,
-        thFile: _thFile,
-        positionInParent: mpAddChildAtEndOfParentChildrenList,
-      );
-      final MPCommand combinedCommand =
-          MPCommandFactory.multipleCommandsFromList(
-            commandsList: [duplicateMainCommand, duplicateChildrenCommand],
-            descriptionType: MPCommandDescriptionType.duplicateElements,
-            completionType:
-                MPMultipleElementsCommandCompletionType.elementsListChanged,
-          );
-
-      _th2FileEditController.execute(combinedCommand);
-    }
-
-    selectionController.setSelectedElements(duplicateMainElements);
+    _th2FileEditController.execute(addDuplicateCommand);
+    selectionController.setSelectedElements(duplicate.duplicatesMainElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
