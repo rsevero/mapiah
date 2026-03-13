@@ -25,6 +25,7 @@
   * Testing line duplication.
   * Created MPTHElementDuplicatorAux class.
   * Make _updatedTHIDsMap an internal class variable on MPTHElementDuplicatorAux.
+  * Testing area duplication.
 
 ## 0.3.0 - 2026-03-09 - The [Great Fanfarra](https://youtu.be/HlV59UbrY-E) release
 * New features:

@@ -202,7 +202,7 @@
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
 [X] - BUG: flatpak version does not open URLs.
 [ ] - Create rotate, scale, mirror and screw modes.
-[ ] - Create "Duplicate selected elements" (Ctrl+D) action.
+[X] - Create "Duplicate selected elements" (Ctrl+D) action.
 
 ## Version 1.0
 [ ] - Raster images tracing.

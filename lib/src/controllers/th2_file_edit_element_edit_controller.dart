@@ -986,14 +986,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
     final MPDuplicateElementResult duplicate = duplicator.getDuplicate();
 
-    if (duplicate.duplicatesMainElements.isEmpty) {
+    if (duplicate.duplicateMainElements.isEmpty) {
       return;
     }
 
     final MPCommand addDuplicateCommand = duplicator.getAddDuplicateCommand();
 
     _th2FileEditController.execute(addDuplicateCommand);
-    selectionController.setSelectedElements(duplicate.duplicatesMainElements);
+    selectionController.setSelectedElements(duplicate.duplicateMainElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
