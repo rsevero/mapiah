@@ -8,6 +8,7 @@
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
   * Test for scrap duplication.
+  * update_flutter_and_mapiah_version.dart script updating release name and URL constants.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:

@@ -20,6 +20,7 @@ final List<String> targetFiles = [
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
   final String? mapiahVersion = await getMapiahVersion();
+  final ({String name, String url})? releaseInfo = await getChangelogReleaseInfo();
 
   if (version == null) {
     stderr.writeln('Could not determine Flutter version.');
@@ -31,9 +32,16 @@ Future<int> main(List<String> args) async {
 
     return 2;
   }
+  if (releaseInfo == null) {
+    stderr.writeln('Could not read CHANGELOG.md.');
+
+    return 2;
+  }
 
   stdout.writeln('Detected Flutter framework version: $version');
   stdout.writeln('Detected Mapiah version: $mapiahVersion');
+  stdout.writeln('Detected release name: "${releaseInfo.name}"');
+  stdout.writeln('Detected release URL: "${releaseInfo.url}"');
 
   List<String> changedFiles = <String>[];
 
@@ -74,9 +82,26 @@ Future<int> main(List<String> args) async {
     }
   }
 
+  final bool constantsUpdated = await updateReleaseConstants(
+    releaseName: releaseInfo.name,
+    releaseURL: releaseInfo.url,
+  );
+
+  if (constantsUpdated) {
+    stdout.writeln(
+      'Updated: lib/src/constants/mp_constants.dart (mpReleaseName, mpReleaseURL)',
+    );
+  } else {
+    stdout.writeln(
+      'No change: lib/src/constants/mp_constants.dart (mpReleaseName, mpReleaseURL)',
+    );
+  }
+
   stdout.writeln('\nSummary:');
   stdout.writeln('Flutter version: $version');
   stdout.writeln('Mapiah version: $mapiahVersion');
+  stdout.writeln('Release name: "${releaseInfo.name}"');
+  stdout.writeln('Release URL: "${releaseInfo.url}"');
   stdout.writeln(
     'Files updated: ${changedFiles.isEmpty ? 'none' : changedFiles.join(', ')}',
   );
@@ -162,4 +187,81 @@ Future<String?> getFlutterVersion() async {
   }
 
   return null;
+}
+
+/// Reads the top entry of CHANGELOG.md and extracts the release name
+/// (between square brackets) and optional URL (between parentheses) from a
+/// line like:
+/// `## 0.3.1 - 2026-03-13 - The [Release Name](https://example.com) release`
+/// or:
+/// `## 0.3.1 - 2026-03-13 - The [Release Name] release`
+/// Returns a record with empty strings if no such pattern is found.
+Future<({String name, String url})?> getChangelogReleaseInfo() async {
+  final File changelog = File('CHANGELOG.md');
+
+  if (!await changelog.exists()) {
+    return null;
+  }
+
+  final String content = await changelog.readAsString();
+  final RegExp sectionRegex = RegExp(r'^## .+$', multiLine: true);
+  final RegExpMatch? firstSection = sectionRegex.firstMatch(content);
+
+  if (firstSection == null) {
+    return (name: '', url: '');
+  }
+
+  final String firstLine = firstSection.group(0)!;
+  final RegExpMatch? nameUrlMatch = RegExp(
+    r'\[([^\]]+)\]\(([^)]+)\)',
+  ).firstMatch(firstLine);
+
+  if (nameUrlMatch != null) {
+    return (name: nameUrlMatch.group(1)!, url: nameUrlMatch.group(2)!);
+  }
+
+  final RegExpMatch? nameOnlyMatch = RegExp(
+    r'\[([^\]]+)\]',
+  ).firstMatch(firstLine);
+
+  if (nameOnlyMatch != null) {
+    return (name: nameOnlyMatch.group(1)!, url: '');
+  }
+
+  return (name: '', url: '');
+}
+
+/// Updates mpReleaseName and mpReleaseURL constants in mp_constants.dart.
+/// Returns true if the file was changed.
+Future<bool> updateReleaseConstants({
+  required String releaseName,
+  required String releaseURL,
+}) async {
+  final File constantsFile = File('lib/src/constants/mp_constants.dart');
+
+  if (!await constantsFile.exists()) {
+    stderr.writeln('Could not find lib/src/constants/mp_constants.dart.');
+
+    return false;
+  }
+
+  final String content = await constantsFile.readAsString();
+  String newContent = content;
+
+  newContent = newContent.replaceFirstMapped(
+    RegExp(r"(const String mpReleaseName = ')(.*)(';)"),
+    (m) => "${m[1]}$releaseName${m[3]}",
+  );
+  newContent = newContent.replaceFirstMapped(
+    RegExp(r"(const String mpReleaseURL = ')(.*)(';)"),
+    (m) => "${m[1]}$releaseURL${m[3]}",
+  );
+
+  if (newContent == content) {
+    return false;
+  }
+
+  await constantsFile.writeAsString(newContent);
+
+  return true;
 }
