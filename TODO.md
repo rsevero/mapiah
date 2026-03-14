@@ -162,6 +162,7 @@
 [X] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
+[ ] - Migrate flatpak repo to mapiah.org.
 [ ] - Open multiple files simultaneously.
 [ ] - Allow copy/paste between scraps.
 [ ] - Allow copy/paste between files.
