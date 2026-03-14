@@ -30,18 +30,15 @@ class MPRemoveScrapCommand extends MPCommand with MPPreCommandMixin {
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final THFile thFile = th2FileEditController.thFile;
-    final THScrap originalScrap = thFile.scrapByMPID(scrapMPID);
-    final THIsParentMixin scrapParent = originalScrap.parent(thFile: thFile);
-    final int scrapPositionInParent = scrapParent.getChildPosition(
-      originalScrap,
-    );
-    final MPCommand addScrapChildrenCommand = MPCommandFactory.addScrapChildren(
-      scrap: originalScrap,
-      thFile: thFile,
-    );
+    final THScrap scrap = thFile.scrapByMPID(scrapMPID);
+    final THIsParentMixin scrapParent = scrap.parent(thFile: thFile);
+    final int scrapPositionInParent = scrapParent.getChildPosition(scrap);
+    final MPCommand? addScrapChildrenCommand = scrap.childrenMPIDs.isEmpty
+        ? null
+        : MPCommandFactory.addScrapChildren(scrap: scrap, thFile: thFile);
 
     _undoRedoInfo = {
-      'removedScrap': originalScrap,
+      'removedScrap': scrap,
       'removedScrapPositionInParent': scrapPositionInParent,
       'removedScrapAddScrapChildrenCommand': addScrapChildrenCommand,
     };
@@ -65,7 +62,9 @@ class MPRemoveScrapCommand extends MPCommand with MPPreCommandMixin {
       scrapPositionInParent:
           _undoRedoInfo!['removedScrapPositionInParent'] as int,
       addScrapChildrenCommand:
-          _undoRedoInfo!['removedScrapAddScrapChildrenCommand'] as MPCommand,
+          (_undoRedoInfo!['removedScrapAddScrapChildrenCommand'] == null)
+          ? null
+          : _undoRedoInfo!['removedScrapAddScrapChildrenCommand'] as MPCommand,
       posCommand: preCommand
           ?.getUndoRedoCommand(th2FileEditController)
           .undoCommand,

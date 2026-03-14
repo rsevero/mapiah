@@ -232,6 +232,11 @@ class MPTHElementDuplicatorAux {
         duplicate = _duplicatePoint(point: point, newParentMPID: newParentMPID);
       case THScrap scrap:
         duplicate = _duplicateScrap(scrap: scrap, newParentMPID: newParentMPID);
+      case THEmptyLine _:
+        duplicate = MPDuplicateElementResult(
+          duplicateMainElements: [],
+          duplicateChildren: [],
+        );
       default:
 
         /// All THElements that should be treated as a main element in
@@ -380,12 +385,13 @@ class MPTHElementDuplicatorAux {
       parent: scrap,
       newParentMPID: duplicatedScrapMPID,
     );
-
-    duplicatedMainElements.addAll(duplicateChildren.duplicateMainElements);
+    final List<THElement> duplicateChildrenComplete =
+        duplicateChildren.duplicateMainElements +
+        duplicateChildren.duplicateChildren;
 
     return MPDuplicateElementResult(
       duplicateMainElements: duplicatedMainElements,
-      duplicateChildren: duplicateChildren.duplicateChildren,
+      duplicateChildren: duplicateChildrenComplete,
     );
   }
 
