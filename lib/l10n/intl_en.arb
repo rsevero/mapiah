@@ -2099,6 +2099,11 @@
     "description": "The label for the remove image button. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageDuplicateScrapButton": "Duplicate scrap",
+  "@th2FileEditPageDuplicateScrapButton": {
+    "description": "The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageRemoveScrapButton": "Remove scrap",
   "@th2FileEditPageRemoveScrapButton": {
     "description": "The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build",

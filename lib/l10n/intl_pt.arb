@@ -372,6 +372,7 @@
   "th2FileEditPageRedo": "Refazer '{redoDescription}' (Ctrl+Y)",
   "th2FileEditPageRemoveButton": "Apagar (Del)",
   "th2FileEditPageRemoveImageButton": "Remover imagem",
+  "th2FileEditPageDuplicateScrapButton": "Duplicar croqui",
   "th2FileEditPageRemoveScrapButton": "Remover croqui",
   "th2FileEditPageSave": "Salvar (Ctrl+S)",
   "th2FileEditPageSaveAs": "Salvar como (Shift+Ctrl+S)",

@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -15,9 +14,10 @@ class MPTHElementDuplicatorAux {
   final THFile thFile;
   final bool updateTHIDs;
 
+  final Set<int> _duplicatedLineMPIDs = {};
+
   MPDuplicateElementResult? _cachedDuplicate;
   Map<int, String>? _updatedTHIDsMap;
-  Set<int> _duplicatedLineMPIDs = {};
 
   MPTHElementDuplicatorAux({
     required this.elements,
@@ -351,10 +351,31 @@ class MPTHElementDuplicatorAux {
     required THScrap scrap,
     int? newParentMPID,
   }) {
-    final THScrap duplicateScrap =
-        _copyElement(element: scrap, newParentMPID: newParentMPID) as THScrap;
+    final int duplicatedScrapMPID = mpLocator.mpGeneralController
+        .nextMPIDForElements();
+    final SplayTreeMap<THCommandOptionType, THCommandOption> duplicatedOptions =
+        _duplicateCommandOptions(
+          options: scrap.optionsMap,
+          parentMPID: duplicatedScrapMPID,
+        );
+    final SplayTreeMap<String, THAttrCommandOption> duplicatedAttrOptions =
+        _duplicateCommandAttrOptions(
+          attrOptions: scrap.attrOptionsMap,
+          parentMPID: duplicatedScrapMPID,
+        );
+    final String duplicatedScrapTHID = thFile.getNewTHID(
+      prefix: '${scrap.thID}-',
+    );
+    final THScrap duplicateScrap = scrap.copyWith(
+      mpID: duplicatedScrapMPID,
+      thID: duplicatedScrapTHID,
+      parentMPID: newParentMPID,
+      childrenMPIDs: [],
+      attrOptionsMap: duplicatedAttrOptions,
+      optionsMap: duplicatedOptions,
+      originalLineInTH2File: '',
+    );
     final List<THElement> duplicatedMainElements = [duplicateScrap];
-    final int duplicatedScrapMPID = duplicateScrap.mpID;
     final MPDuplicateElementResult duplicateChildren = _duplicateChildren(
       parent: scrap,
       newParentMPID: duplicatedScrapMPID,

@@ -406,6 +406,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         case THLine _:
         case THArea _:
           addSelectedElement(element);
+        case THScrap scrap:
+          _mpSelectedElementsLogical[scrap.mpID] = MPSelectedScrap(
+            originalScrap: scrap,
+          );
       }
     }
 

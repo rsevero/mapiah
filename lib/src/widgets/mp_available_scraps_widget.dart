@@ -126,6 +126,18 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                             ),
                                             IconButton(
                                               icon: Icon(
+                                                Icons.copy_outlined,
+                                                color: colorScheme.onSecondary,
+                                              ),
+                                              tooltip: appLocalizations
+                                                  .th2FileEditPageDuplicateScrapButton,
+                                              onPressed: () =>
+                                                  _onPressedDuplicateScrap(
+                                                    scrapID,
+                                                  ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(
                                                 Icons.delete_outline_rounded,
                                                 color: colorScheme.onSecondary,
                                               ),
@@ -199,6 +211,10 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addScrap,
     );
+  }
+
+  void _onPressedDuplicateScrap(int scrapID) {
+    th2FileEditController.elementEditController.duplicateScrap(scrapID);
   }
 
   void _onPressedRemoveScrap(int scrapID) {

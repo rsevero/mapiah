@@ -1559,6 +1559,24 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.execute(removeScrapCommand);
   }
 
+  void duplicateScrap(int scrapMPID) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
+
+    selectionController.setSelectedElements([scrap]);
+    duplicateSelectedElements();
+
+    final int newScrapMPID =
+        selectionController.mpSelectedElementsLogical.keys.first;
+
+    _th2FileEditController.setActiveScrap(newScrapMPID);
+    selectionController.clearSelectedElements();
+    _th2FileEditController.triggerSelectedListChanged();
+    _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
   void updateControlPointSmoothInfo() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;

@@ -6,7 +6,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
 
   /// The addScrapChildrenCommand should have a THEndScrap element as the last
   /// child added.
-  late final MPCommand addScrapChildrenCommand;
+  late final MPCommand? addScrapChildrenCommand;
 
   static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addScrap;
@@ -31,11 +31,15 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
   }) : super() {
     this.posCommand = posCommand;
 
-    addScrapChildrenCommand = MPCommandFactory.addElements(
-      elements: scrapChildren,
-      thFile: thFile,
-      positionInParent: mpAddChildAtEndOfParentChildrenList,
-    );
+    if (scrapChildren.isEmpty) {
+      addScrapChildrenCommand = null;
+    } else {
+      addScrapChildrenCommand = MPCommandFactory.addElements(
+        elements: scrapChildren,
+        thFile: thFile,
+        positionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+    }
   }
 
   @override
@@ -50,7 +54,8 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
       newScrap: newScrap,
       scrapPositionAtParent: scrapPositionInParent,
     );
-    addScrapChildrenCommand.execute(th2FileEditController);
+
+    addScrapChildrenCommand?.execute(th2FileEditController);
     elementEditController.afterAddScrap(newScrap);
   }
 
@@ -94,9 +99,11 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
     return MPAddScrapCommand.forCWJM(
       newScrap: THScrap.fromMap(map['newScrap']),
       scrapPositionInParent: map['scrapPositionInParent'],
-      addScrapChildrenCommand: MPCommand.fromMap(
-        map['addScrapChildrenCommand'],
-      ),
+      addScrapChildrenCommand:
+          (map.containsKey('addScrapChildrenCommand') &&
+              (map['addScrapChildrenCommand'] != null))
+          ? MPCommand.fromMap(map['addScrapChildrenCommand'])
+          : null,
       posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
           ? MPCommand.fromMap(map['posCommand'])
           : null,
@@ -117,7 +124,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
     map.addAll({
       'newScrap': newScrap.toMap(),
       'scrapPositionInParent': scrapPositionInParent,
-      'addScrapChildrenCommand': addScrapChildrenCommand.toMap(),
+      'addScrapChildrenCommand': addScrapChildrenCommand?.toMap(),
       'posCommand': posCommand?.toMap(),
     });
 

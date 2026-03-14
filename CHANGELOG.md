@@ -2,6 +2,7 @@
 
 ## 0.3.2 - not yet released
 * New features:
+  * Scrap duplication.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
