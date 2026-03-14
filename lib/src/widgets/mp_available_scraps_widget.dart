@@ -74,87 +74,98 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                             }
                           },
                           child: Column(
-                            children: th2FileEditController
-                                .availableScraps()
-                                .entries
-                                .map((entry) {
-                                  final int scrapID = entry.key;
-                                  final String scrapName = entry.value;
+                            children: th2FileEditController.availableScraps().entries.map((
+                              entry,
+                            ) {
+                              final int scrapID = entry.key;
+                              final String scrapName = entry.value;
 
-                                  return Builder(
-                                    builder: (listenerContext) {
-                                      return Listener(
-                                        onPointerDown:
-                                            (PointerDownEvent event) {
-                                              if (event.kind ==
-                                                      PointerDeviceKind.mouse &&
-                                                  event.buttons ==
-                                                      kSecondaryMouseButton) {
-                                                _onRightClickSelectScrap(
-                                                  listenerContext,
-                                                  scrapID,
-                                                );
-                                              }
-                                            },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Expanded(
-                                              child: RadioListTile<int>(
-                                                key: ValueKey(
-                                                  "MPAvailableScrapsWidget|RadioListTile|$scrapID",
-                                                ),
-                                                title: Text(
-                                                  scrapName,
-                                                  style: DefaultTextStyle.of(
-                                                    blockContext,
-                                                  ).style,
-                                                ),
-                                                value: scrapID,
-                                                contentPadding: EdgeInsets.zero,
-                                                activeColor: IconTheme.of(
-                                                  blockContext,
-                                                ).color,
-                                                dense: true,
-                                                visualDensity: VisualDensity
-                                                    .adaptivePlatformDensity,
-                                              ),
-                                            ),
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.copy_outlined,
-                                                color: colorScheme.onSecondary,
-                                              ),
-                                              tooltip: appLocalizations
-                                                  .th2FileEditPageDuplicateScrapButton,
-                                              onPressed: () =>
-                                                  _onPressedDuplicateScrap(
-                                                    scrapID,
-                                                  ),
-                                            ),
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.delete_outline_rounded,
-                                                color: colorScheme.onSecondary,
-                                              ),
-                                              tooltip: appLocalizations
-                                                  .th2FileEditPageRemoveScrapButton,
-                                              onPressed: () =>
-                                                  _onPressedRemoveScrap(
-                                                    scrapID,
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
+                              return Builder(
+                                builder: (listenerContext) {
+                                  return Listener(
+                                    onPointerDown: (PointerDownEvent event) {
+                                      if (event.kind ==
+                                              PointerDeviceKind.mouse &&
+                                          event.buttons ==
+                                              kSecondaryMouseButton) {
+                                        _onRightClickSelectScrap(
+                                          listenerContext,
+                                          scrapID,
+                                        );
+                                      }
                                     },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Expanded(
+                                          child: RadioListTile<int>(
+                                            key: ValueKey(
+                                              "MPAvailableScrapsWidget|RadioListTile|$scrapID",
+                                            ),
+                                            title: Text(
+                                              scrapName,
+                                              style: DefaultTextStyle.of(
+                                                blockContext,
+                                              ).style,
+                                            ),
+                                            value: scrapID,
+                                            contentPadding: EdgeInsets.zero,
+                                            activeColor: IconTheme.of(
+                                              blockContext,
+                                            ).color,
+                                            dense: true,
+                                            visualDensity: VisualDensity
+                                                .adaptivePlatformDensity,
+                                          ),
+                                        ),
+                                        const SizedBox(width: mpButtonSpace),
+                                        IconButton(
+                                          icon: Transform.translate(
+                                            offset: const Offset(
+                                              0,
+                                              mpFinePixelAdjustment,
+                                            ),
+                                            child: Icon(
+                                              Icons.copy_outlined,
+                                              color: colorScheme.onSecondary,
+                                            ),
+                                          ),
+                                          tooltip: appLocalizations
+                                              .th2FileEditPageDuplicateScrapButton,
+                                          iconSize: mpSmallIconSize,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 0,
+                                            vertical: mpButtonSpace,
+                                          ),
+                                          constraints: const BoxConstraints(),
+                                          onPressed: () =>
+                                              _onPressedDuplicateScrap(scrapID),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.delete_outline_rounded,
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                          tooltip: appLocalizations
+                                              .th2FileEditPageRemoveScrapButton,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 0,
+                                            vertical: mpButtonSpace,
+                                          ),
+                                          constraints: const BoxConstraints(),
+                                          onPressed: () =>
+                                              _onPressedRemoveScrap(scrapID),
+                                        ),
+                                      ],
+                                    ),
                                   );
-                                })
-                                .toList(),
+                                },
+                              );
+                            }).toList(),
                           ),
                         ),
                         const SizedBox(height: mpButtonSpace),

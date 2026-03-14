@@ -4,6 +4,7 @@
 * New features:
   * Scrap duplication.
 * Fixed bugs:
+  * Duplicate scrap icon looking ugly.
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
