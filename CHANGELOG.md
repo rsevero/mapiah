@@ -6,6 +6,7 @@
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]
+  * Regular loop error reports being treated as actual errors.
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.

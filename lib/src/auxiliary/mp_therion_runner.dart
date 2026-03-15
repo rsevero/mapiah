@@ -131,6 +131,7 @@ class MPTherionRunner {
   StreamSubscription<String>? _stdoutSubscription;
   StreamSubscription<String>? _stderrSubscription;
   String _pendingLine = '';
+  bool _isInsideLoopErrorsSection = false;
 
   static final RegExp _warningRegex = RegExp(
     '\\b$mpTherionWarningWord\\b',
@@ -138,6 +139,18 @@ class MPTherionRunner {
   );
   static final RegExp _errorRegex = RegExp(
     '\\b$mpTherionErrorWord\\b',
+    caseSensitive: false,
+  );
+  static final RegExp _loopErrorsSectionHeaderRegex = RegExp(
+    r'#.*loop errors.*#',
+    caseSensitive: false,
+  );
+  static final RegExp _loopErrorsSectionFooterRegex = RegExp(
+    r'#.*end of loop errors.*#',
+    caseSensitive: false,
+  );
+  static final RegExp _averageLoopErrorRegex = RegExp(
+    r'average loop error',
     caseSensitive: false,
   );
 
@@ -339,6 +352,33 @@ class MPTherionRunner {
 
     currentLines.add(line);
     outputLinesNotifier.value = currentLines;
+
+    // Track loop errors sections to avoid treating loop closure reports as errors
+    final bool isLoopErrorsHeader = _loopErrorsSectionHeaderRegex.hasMatch(line);
+    final bool isLoopErrorsFooter = _loopErrorsSectionFooterRegex.hasMatch(line);
+
+    if (isLoopErrorsHeader) {
+      _isInsideLoopErrorsSection = true;
+
+      return;
+    }
+
+    if (isLoopErrorsFooter) {
+      _isInsideLoopErrorsSection = false;
+
+      return;
+    }
+
+    // Skip error/warning detection while inside loop errors section
+    if (_isInsideLoopErrorsSection) {
+      return;
+    }
+
+    // Skip error detection for average loop error summary lines
+    final bool isAverageLoopError = _averageLoopErrorRegex.hasMatch(line);
+    if (isAverageLoopError) {
+      return;
+    }
 
     final bool containsWarning = _warningRegex.hasMatch(line);
     final bool containsError = _errorRegex.hasMatch(line);
