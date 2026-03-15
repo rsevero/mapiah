@@ -592,14 +592,39 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     final List<TextSpan> outputSpans = <TextSpan>[];
     final int outputLineCount = outputLines.length;
 
+    bool isInsideLoopErrorsSection = false;
+
     for (int lineIndex = 0; lineIndex < outputLineCount; lineIndex++) {
       final String outputLineText = outputLines[lineIndex];
+
+      // Track loop errors section boundaries
+      final bool isLoopErrorsHeader = RegExp(
+        r'#.*loop errors.*#',
+        caseSensitive: false,
+      ).hasMatch(outputLineText);
+      final bool isLoopErrorsFooter = RegExp(
+        r'#.*end of loop errors.*#',
+        caseSensitive: false,
+      ).hasMatch(outputLineText);
+      final bool shouldSkipHighlight =
+          isLoopErrorsHeader || isLoopErrorsFooter || isInsideLoopErrorsSection;
       final List<TextSpan> highlightedLineSpans = _buildHighlightedSpans(
         outputLineText,
+        skipHighlight: shouldSkipHighlight,
       );
+
       outputSpans.addAll(highlightedLineSpans);
 
+      if (isLoopErrorsHeader) {
+        isInsideLoopErrorsSection = true;
+      }
+
+      if (isLoopErrorsFooter) {
+        isInsideLoopErrorsSection = false;
+      }
+
       final bool isLastOutputLine = lineIndex == outputLineCount - 1;
+
       if (!isLastOutputLine) {
         outputSpans.add(const TextSpan(text: mpUnixLineBreak));
       }
@@ -637,7 +662,24 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     }
   }
 
-  List<TextSpan> _buildHighlightedSpans(String lineText) {
+  List<TextSpan> _buildHighlightedSpans(
+    String lineText, {
+    bool skipHighlight = false,
+  }) {
+    // Skip highlighting for loop error section lines or when explicitly requested
+    if (skipHighlight) {
+      return <TextSpan>[TextSpan(text: lineText)];
+    }
+
+    final bool isAverageLoopError = RegExp(
+      r'average loop error',
+      caseSensitive: false,
+    ).hasMatch(lineText);
+
+    if (isAverageLoopError) {
+      return <TextSpan>[TextSpan(text: lineText)];
+    }
+
     final RegExp keywordRegex = RegExp(
       '($mpTherionWarningWord|$mpTherionErrorWord)',
       caseSensitive: false,
