@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey;
+import 'package:charset/charset.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -200,9 +202,76 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       return <String>[appLocalizations.mapiahTherionRunNoTherionOutputFound];
     }
 
-    final List<String> therionLogLines = await therionLogFile.readAsLines();
+    final List<String> decodingAttemptLines = <String>[];
+    final Encoding? cp1252Encoding = Charset.getByName('cp1252');
 
-    return therionLogLines;
+    if (Platform.isWindows && (cp1252Encoding == null)) {
+      decodingAttemptLines.add(
+        'Mapiah: cp1252 decoder unavailable on Windows; skipping cp1252 '
+        'fallback.',
+      );
+    }
+
+    final List<({String name, Encoding encoding})> logEncodings =
+        <({String name, Encoding encoding})>[
+          (name: 'utf8', encoding: utf8),
+          if (cp1252Encoding != null)
+            (name: 'cp1252', encoding: cp1252Encoding),
+          (name: 'latin1', encoding: latin1),
+        ];
+
+    try {
+      final List<int> therionLogFileBytes = await therionLogFile.readAsBytes();
+
+      for (final ({String name, Encoding encoding}) logEncoding
+          in logEncodings) {
+        try {
+          final String decodedLog = logEncoding.encoding.decode(
+            therionLogFileBytes,
+          );
+          final List<String> therionLogLines = const LineSplitter().convert(
+            decodedLog,
+          );
+          final String decodingSuccessLine =
+              'Mapiah: successfully decoded Therion log with '
+              '${logEncoding.name}.';
+
+          return <String>[
+            ...decodingAttemptLines,
+            decodingSuccessLine,
+            ...therionLogLines,
+          ];
+        } on FormatException catch (error, stackTrace) {
+          final String decodingErrorLine =
+              'Mapiah: failed to decode Therion log with '
+              '${logEncoding.name}: $error';
+          decodingAttemptLines.add(decodingErrorLine);
+
+          mpLocator.mpLog.e(
+            'Failed to decode Therion log file with ${logEncoding.name}',
+            error: error,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+
+      return <String>[
+        ...decodingAttemptLines,
+        appLocalizations.mapiahTherionRunNoTherionOutputFound,
+      ];
+    } on FileSystemException catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Failed to read Therion log file',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      return <String>[
+        ...decodingAttemptLines,
+        'Mapiah: failed to read Therion log file: $error',
+        appLocalizations.mapiahTherionRunNoTherionOutputFound,
+      ];
+    }
   }
 
   void _updateStartTime(DateTime baseTime) {
