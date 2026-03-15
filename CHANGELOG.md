@@ -14,6 +14,7 @@
   * Test for scrap duplication.
   * update_flutter_and_mapiah_version.dart script updating release name and URL constants.
   * Migrated from "rsevero.github.io" to "flatpak.mapiah.org".
+  * Moved dart format from VSC to git hook.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:

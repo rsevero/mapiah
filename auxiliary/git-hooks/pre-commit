@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+# Get staged files that are Dart files
+DART_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' || true)
+
+if [[ -z "$DART_FILES" ]]; then
+  exit 0
+fi
+
+# Format only staged files
+dart format $DART_FILES
+
+# Re-stage formatted files
+git add $DART_FILES
