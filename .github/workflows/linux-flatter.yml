@@ -54,7 +54,7 @@ jobs:
           TAG_NUMBER="${TAG#v}"
           APP_ID="org.mapiah.mapiah"
 
-          DEFAULT_PAGES_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}"
+          DEFAULT_PAGES_URL="https://flatpak.mapiah.org"
           PAGES_URL="${{ github.event.inputs.pages_url }}"
           if [[ -z "$PAGES_URL" ]]; then
             PAGES_URL="$DEFAULT_PAGES_URL"

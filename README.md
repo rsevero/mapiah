@@ -45,7 +45,7 @@ To go back to non Flathub packages:
 
 ```bash
 flatpak remove io.github.rsevero.mapiah
-flatpak install --user --from https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref
+flatpak install --user --from https://flatpak.mapiah.org/mapiah/org.mapiah.mapiah.flatpakref
 ```
 
 If you have already installed the non-Flathub version, you can update it with:
@@ -56,16 +56,16 @@ flatpak update org.mapiah.mapiah
 
 ##### Install from Mapiah GitHub Pages Flatpak repo
 You can install using the `.flatpakref` link below:
-`https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref`
+`https://flatpak.mapiah.org/mapiah/org.mapiah.mapiah.flatpakref`
 
 If that URL returns `404`, wait a few minutes and try again. New releases can take a short time to appear on GitHub Pages.
 
 ```bash
 # Option 1: install directly from the generated flatpakref
-flatpak install --user --from https://rsevero.github.io/mapiah/org.mapiah.mapiah.flatpakref
+flatpak install --user --from https://flatpak.mapiah.org/mapiah/org.mapiah.mapiah.flatpakref
 
 # Option 2: add the generated repository and install from it
-flatpak remote-add --if-not-exists mapiah https://rsevero.github.io/mapiah/index.flatpakrepo
+flatpak remote-add --if-not-exists mapiah https://flatpak.mapiah.org/mapiah/index.flatpakrepo
 flatpak install --user mapiah org.mapiah.mapiah
 ```
 
