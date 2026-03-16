@@ -270,27 +270,13 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                                 int tabIndex = 0;
                                 tabIndex < openFileOrder.length;
                                 tabIndex++
-                              ) ...[
-                                if (_dragOverTabIndex == tabIndex)
-                                  SizedBox(
-                                    width: 40.0,
-                                    height: 40.0,
-                                    child: Center(
-                                      child: Container(
-                                        width: 2.0,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
+                              )
                                 _buildDraggableTab(
                                   filename: openFileOrder[tabIndex],
                                   tabIndex: tabIndex,
                                   openFileOrder: openFileOrder,
                                   activeTabIndex: activeTabIndex,
                                 ),
-                              ],
                             ],
                           ),
                         ),
@@ -416,22 +402,38 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
           }
         },
         builder: (context, candidateData, rejectedData) {
-          return GestureDetector(
-            onTap: () {
-              mpLocator.mpGeneralController.setActiveTab(tabIndex);
-            },
-            child: MPFileTabWidget(
-              filename: filename,
-              isActive:
-                  (activeTabIndex < openFileOrder.length) &&
-                  (openFileOrder[activeTabIndex] == filename),
-              onClose: () {
-                final TH2FileEditController? controller = mpLocator
-                    .mpGeneralController
-                    .getTH2FileEditControllerIfExists(filename);
-                controller?.close();
-              },
-            ),
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (_dragOverTabIndex == tabIndex)
+                SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Center(
+                    child: Container(
+                      width: 2.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              GestureDetector(
+                onTap: () {
+                  mpLocator.mpGeneralController.setActiveTab(tabIndex);
+                },
+                child: MPFileTabWidget(
+                  filename: filename,
+                  isActive:
+                      (activeTabIndex < openFileOrder.length) &&
+                      (openFileOrder[activeTabIndex] == filename),
+                  onClose: () {
+                    final TH2FileEditController? controller = mpLocator
+                        .mpGeneralController
+                        .getTH2FileEditControllerIfExists(filename);
+                    controller?.close();
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
