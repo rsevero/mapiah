@@ -8,7 +8,6 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
-import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -182,6 +181,11 @@ class _MapiahHomeState extends State<MapiahHome> {
 
   void _openTH2FileFromPath(String filePath) async {
     try {
+      // Create the controller for the file before adding the tab
+      mpLocator.mpGeneralController.getTH2FileEditController(
+        filename: filePath,
+      );
+
       mpLocator.mpGeneralController.addFileTab(filePath);
       MPDialogAux.ensureTabsPageOpen(context);
     } catch (e) {

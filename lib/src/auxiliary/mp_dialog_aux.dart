@@ -903,6 +903,11 @@ class MPDialogAux {
           pickedFilePath,
         );
 
+        // Create the controller for the file before adding the tab
+        mpLocator.mpGeneralController.getTH2FileEditController(
+          filename: pickedFilePath,
+        );
+
         mpLocator.mpGeneralController.addFileTab(pickedFilePath);
         ensureTabsPageOpen(context);
       } else {
