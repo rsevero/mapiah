@@ -48,28 +48,30 @@ add_markdown_headers() {
   echo "Added SPDX headers to: $file"
 }
 
-# Add headers to Dart files if needed
+# Step 1: Add headers to Dart files if needed
 if [[ -n "$DART_FILES" ]]; then
   for file in $DART_FILES; do
     add_dart_headers "$file"
   done
 fi
 
-# Add headers to Markdown files if needed
+# Step 2: Add headers to Markdown files if needed
 if [[ -n "$MD_FILES" ]]; then
   for file in $MD_FILES; do
     add_markdown_headers "$file"
   done
 fi
 
-# Format only staged Dart files
+# Step 3: Format Dart files (after headers have been added)
 if [[ -n "$DART_FILES" ]]; then
   dart format $DART_FILES
-  # Re-stage formatted files
+fi
+
+# Step 4: Re-stage all modified files
+if [[ -n "$DART_FILES" ]]; then
   git add $DART_FILES
 fi
 
-# Re-stage Markdown files if any were modified
 if [[ -n "$MD_FILES" ]]; then
   git add $MD_FILES
 fi
