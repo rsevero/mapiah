@@ -945,7 +945,7 @@ class MPDialogAux {
     final int openFileCount =
         mpLocator.mpGeneralController.openFileOrder.length;
 
-    if (openFileCount == 1) {
+    if (openFileCount > 0) {
       Navigator.of(
         context,
       ).push(MaterialPageRoute(builder: (_) => const TH2FileTabsPage()));
