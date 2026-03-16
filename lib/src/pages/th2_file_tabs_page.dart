@@ -243,26 +243,16 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (String filename in openFileOrder)
-                          GestureDetector(
-                            onTap: () {
-                              final int index = openFileOrder.indexOf(filename);
-                              mpLocator.mpGeneralController.setActiveTab(index);
-                            },
-                            child: MPFileTabWidget(
-                              filename: filename,
-                              isActive:
-                                  (activeTabIndex < openFileOrder.length) &&
-                                  (openFileOrder[activeTabIndex] == filename),
-                              onClose: () {
-                                final TH2FileEditController? controller =
-                                    mpLocator.mpGeneralController
-                                        .getTH2FileEditControllerIfExists(
-                                          filename,
-                                        );
-                                controller?.close();
-                              },
-                            ),
+                        for (
+                          int tabIndex = 0;
+                          tabIndex < openFileOrder.length;
+                          tabIndex++
+                        )
+                          _buildDraggableTab(
+                            filename: openFileOrder[tabIndex],
+                            tabIndex: tabIndex,
+                            openFileOrder: openFileOrder,
+                            activeTabIndex: activeTabIndex,
                           ),
                       ],
                     ),
@@ -328,6 +318,65 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     return TH2FileEditBodyWidget(
       th2FileEditController: controller,
       loadFuture: future,
+    );
+  }
+
+  Widget _buildDraggableTab({
+    required String filename,
+    required int tabIndex,
+    required List<String> openFileOrder,
+    required int activeTabIndex,
+  }) {
+    return Draggable<String>(
+      data: filename,
+      feedback: Material(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.grey.withAlpha(200),
+            borderRadius: BorderRadius.circular(24.0),
+          ),
+          child: Text(
+            filename.split('/').last,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+      ),
+      child: DragTarget<String>(
+        onAcceptWithDetails: (DragTargetDetails<String> details) {
+          final String draggedFilename = details.data;
+          final int draggedIndex = openFileOrder.indexOf(draggedFilename);
+
+          if (draggedIndex != tabIndex && draggedIndex != -1) {
+            // Reorder the files
+            final List<String> newOrder = List<String>.from(openFileOrder);
+            newOrder.removeAt(draggedIndex);
+            newOrder.insert(tabIndex, draggedFilename);
+
+            // Update the controller with the new order
+            mpLocator.mpGeneralController.reorderFileTabs(newOrder);
+          }
+        },
+        builder: (context, candidateData, rejectedData) {
+          return GestureDetector(
+            onTap: () {
+              mpLocator.mpGeneralController.setActiveTab(tabIndex);
+            },
+            child: MPFileTabWidget(
+              filename: filename,
+              isActive:
+                  (activeTabIndex < openFileOrder.length) &&
+                  (openFileOrder[activeTabIndex] == filename),
+              onClose: () {
+                final TH2FileEditController? controller = mpLocator
+                    .mpGeneralController
+                    .getTH2FileEditControllerIfExists(filename);
+                controller?.close();
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 

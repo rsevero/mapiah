@@ -90,6 +90,30 @@ abstract class MPGeneralControllerBase with Store {
     }
   }
 
+  @action
+  void reorderFileTabs(List<String> newOrder) {
+    // Only update if the new order has the same number of files
+    if (newOrder.length != _openFileOrder.length) {
+      return;
+    }
+
+    // Get the current active filename
+    final String? currentActiveFilename =
+        (_activeTabIndex >= 0 && _activeTabIndex < _openFileOrder.length)
+        ? _openFileOrder[_activeTabIndex]
+        : null;
+
+    // Update the order
+    _openFileOrder.clear();
+    _openFileOrder.addAll(newOrder);
+
+    // Update activeTabIndex to match the new position of the currently active file
+    if (currentActiveFilename != null &&
+        newOrder.contains(currentActiveFilename)) {
+      _activeTabIndex = newOrder.indexOf(currentActiveFilename);
+    }
+  }
+
   int nextMPIDForElements() {
     return _nextMPIDForElements++;
   }

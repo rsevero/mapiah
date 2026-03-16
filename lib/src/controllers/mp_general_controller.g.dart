@@ -123,6 +123,18 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
   }
 
   @override
+  void reorderFileTabs(List<String> newOrder) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.reorderFileTabs',
+    );
+    try {
+      return super.reorderFileTabs(newOrder);
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
