@@ -43,7 +43,12 @@ class MPFileTabWidget extends StatelessWidget {
             : null,
       ),
       margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 8.0,
+        top: 10.0,
+        bottom: 10.0,
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -63,7 +68,6 @@ class MPFileTabWidget extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10.0),
           SizedBox(
             width: mpTabCloseIconSize + 8.0,
             height: mpTabCloseIconSize + 8.0,
