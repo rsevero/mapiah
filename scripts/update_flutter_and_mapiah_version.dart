@@ -1,4 +1,6 @@
 #!/usr/bin/env dart
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 
 import 'dart:convert';
 import 'dart:io';
@@ -20,7 +22,8 @@ final List<String> targetFiles = [
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
   final String? mapiahVersion = await getMapiahVersion();
-  final ({String name, String url})? releaseInfo = await getChangelogReleaseInfo();
+  final ({String name, String url})? releaseInfo =
+      await getChangelogReleaseInfo();
 
   if (version == null) {
     stderr.writeln('Could not determine Flutter version.');

@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
 ## 0.3.2 - not yet released
@@ -19,6 +21,7 @@
   * Migrated from "rsevero.github.io" to "flatpak.mapiah.org".
   * Moved dart format from VSC to git hook.
   * Including instructions to Claude update help pages when adding new features or changing existing ones.
+  * Added SPDX license identifiers to all Dart and Markdown source files.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:

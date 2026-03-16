@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 Aqui é onde toda a edição de arquivos TH2 é feita.
 
 ## Índice

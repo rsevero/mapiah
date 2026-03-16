@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateMovingElements extends MPTH2FileEditState

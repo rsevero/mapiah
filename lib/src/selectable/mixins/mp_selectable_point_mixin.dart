@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of '../mp_selectable.dart';
 
 mixin MPSelectablePointMixin on MPSelectable {

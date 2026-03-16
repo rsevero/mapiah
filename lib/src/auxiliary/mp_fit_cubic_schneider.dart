@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 /// Dart port of "An Algorithm for Automatically Fitting Digitized Curves"
 /// by Philip J. Schneider (Graphics Gems, 1990).
 ///
@@ -32,21 +34,10 @@ List<MPCubicBez> mpFitCubicSchneider(
   }
 
   final MPVec2 tHat1 = _mpComputeLeftTangent(d, 0);
-  final MPVec2 tHat2 = _mpComputeRightTangent(
-    d,
-    d.length - 1,
-  );
+  final MPVec2 tHat2 = _mpComputeRightTangent(d, d.length - 1);
   final List<MPCubicBez> out = <MPCubicBez>[];
 
-  _mpFitCubic(
-    d,
-    0,
-    d.length - 1,
-    tHat1,
-    tHat2,
-    errorSquared,
-    out,
-  );
+  _mpFitCubic(d, 0, d.length - 1, tHat1, tHat2, errorSquared, out);
 
   return out;
 }
@@ -73,29 +64,14 @@ void _mpFitCubic(
     final MPFitPoint p1 = p0 + (tHat1 * dist);
     final MPFitPoint p2 = p3 + (tHat2 * dist);
 
-    out.add(
-      MPCubicBez(
-        p0,
-        p1,
-        p2,
-        p3,
-        lineSegment: d[last].lineSegment,
-      ),
-    );
+    out.add(MPCubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment));
 
     return;
   }
 
   // Initial parameterization using chord-length.
   List<double> u = _chordLengthParameterize(d, first, last);
-  MPCubicBez bez = _generateBezier(
-    d,
-    first,
-    last,
-    u,
-    tHat1,
-    tHat2,
-  );
+  MPCubicBez bez = _generateBezier(d, first, last, u, tHat1, tHat2);
 
   // Find max deviation of points to fitted curve.
   int splitPoint = 0;
@@ -144,33 +120,13 @@ void _mpFitCubic(
   // Split and recurse.
   final MPVec2 tCenter = _computeCenterTangent(d, splitPoint);
 
-  _mpFitCubic(
-    d,
-    first,
-    splitPoint,
-    tHat1,
-    tCenter,
-    errorSquared,
-    out,
-  );
-  _mpFitCubic(
-    d,
-    splitPoint,
-    last,
-    -tCenter,
-    tHat2,
-    errorSquared,
-    out,
-  );
+  _mpFitCubic(d, first, splitPoint, tHat1, tCenter, errorSquared, out);
+  _mpFitCubic(d, splitPoint, last, -tCenter, tHat2, errorSquared, out);
 }
 
 // --- Parameterization -------------------------------------------------------
 
-List<double> _chordLengthParameterize(
-  List<MPFitPoint> d,
-  int first,
-  int last,
-) {
+List<double> _chordLengthParameterize(List<MPFitPoint> d, int first, int last) {
   final int n = last - first + 1;
   final List<double> u = List<double>.filled(n, 0);
 
@@ -205,16 +161,11 @@ List<double> _reparameterize(
   return uPrime;
 }
 
-double _newtonRaphson(
-  MPCubicBez c,
-  MPFitPoint p,
-  double u,
-) {
+double _newtonRaphson(MPCubicBez c, MPFitPoint p, double u) {
   final MPFitPoint q = c.eval(u); // Q(u)
   final MPVec2 q1 = c.deriv(u); // Q'(u)
   final MPVec2 q2 = _secondDeriv(c, u); // Q''(u)
-  final MPVec2 diff =
-      q - p; // vector from point on curve to data point
+  final MPVec2 diff = q - p; // vector from point on curve to data point
   final double numerator = diff.dot(q1);
   final double denominator = q1.dot(q1) + diff.dot(q2);
 
@@ -230,10 +181,8 @@ double _newtonRaphson(
 
 MPVec2 _secondDeriv(MPCubicBez c, double t) {
   // d^2/dt^2 of cubic Bezier: 6*((1-t)*(p2 - 2p1 + p0) + t*(p3 - 2p2 + p1))
-  final MPVec2 a =
-      (c.p2 - c.p1) * 2.0 - (c.p1 - c.p0) * 2.0; // (p2 - 2p1 + p0)
-  final MPVec2 b =
-      (c.p3 - c.p2) * 2.0 - (c.p2 - c.p1) * 2.0; // (p3 - 2p2 + p1)
+  final MPVec2 a = (c.p2 - c.p1) * 2.0 - (c.p1 - c.p0) * 2.0; // (p2 - 2p1 + p0)
+  final MPVec2 b = (c.p3 - c.p2) * 2.0 - (c.p2 - c.p1) * 2.0; // (p3 - 2p2 + p1)
 
   return (a * (1 - t) + b * t) * 6.0;
 }
@@ -251,14 +200,8 @@ MPCubicBez _generateBezier(
   final int nPts = last - first + 1;
 
   // Precompute the A vectors: A[i][0] = tHat1 * B1(u[i]), A[i][1] = tHat2 * B2(u[i])
-  final List<MPVec2> a0 = List<MPVec2>.filled(
-    nPts,
-    const MPVec2(0, 0),
-  );
-  final List<MPVec2> a1 = List<MPVec2>.filled(
-    nPts,
-    const MPVec2(0, 0),
-  );
+  final List<MPVec2> a0 = List<MPVec2>.filled(nPts, const MPVec2(0, 0));
+  final List<MPVec2> a1 = List<MPVec2>.filled(nPts, const MPVec2(0, 0));
 
   for (int i = 0; i < nPts; i++) {
     final double ui = u[i];
@@ -306,25 +249,13 @@ MPCubicBez _generateBezier(
     final MPFitPoint p1 = p0 + tHat1 * dist;
     final MPFitPoint p2 = p3 + tHat2 * dist;
 
-    return MPCubicBez(
-      p0,
-      p1,
-      p2,
-      p3,
-      lineSegment: d[last].lineSegment,
-    );
+    return MPCubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
   }
 
   final MPFitPoint p1 = p0 + tHat1 * alphaL;
   final MPFitPoint p2 = p3 + tHat2 * alphaR;
 
-  return MPCubicBez(
-    p0,
-    p1,
-    p2,
-    p3,
-    lineSegment: d[last].lineSegment,
-  );
+  return MPCubicBez(p0, p1, p2, p3, lineSegment: d[last].lineSegment);
 }
 
 double _computeMaxError(
@@ -355,34 +286,23 @@ double _computeMaxError(
 
 // --- Tangents ---------------------------------------------------------------
 
-MPVec2 _mpComputeLeftTangent(
-  List<MPFitPoint> d,
-  int end,
-) {
+MPVec2 _mpComputeLeftTangent(List<MPFitPoint> d, int end) {
   final MPVec2 v = d[end + 1] - d[end];
 
   return _mpNormalize(v);
 }
 
-MPVec2 _mpComputeRightTangent(
-  List<MPFitPoint> d,
-  int end,
-) {
+MPVec2 _mpComputeRightTangent(List<MPFitPoint> d, int end) {
   final MPVec2 v = d[end - 1] - d[end];
 
   return _mpNormalize(v);
 }
 
-MPVec2 _computeCenterTangent(
-  List<MPFitPoint> d,
-  int center,
-) {
+MPVec2 _computeCenterTangent(List<MPFitPoint> d, int center) {
   final MPVec2 v1 = d[center - 1] - d[center];
   final MPVec2 v2 = d[center] - d[center + 1];
 
-  return _mpNormalize(
-    MPVec2((v1.x + v2.x) / 2.0, (v1.y + v2.y) / 2.0),
-  );
+  return _mpNormalize(MPVec2((v1.x + v2.x) / 2.0, (v1.y + v2.y) / 2.0));
 }
 
 MPVec2 _mpNormalize(MPVec2 v) {
@@ -415,9 +335,7 @@ double _b3(double u) => u * u * u;
 
 // --- Utilities --------------------------------------------------------------
 
-List<MPFitPoint> _mpDedup(
-  List<MPFitPoint> pts,
-) {
+List<MPFitPoint> _mpDedup(List<MPFitPoint> pts) {
   if (pts.isEmpty) {
     return pts;
   }

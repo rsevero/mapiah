@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';

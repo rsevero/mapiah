@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
 // scrap <reference> . if the point type is section, this is a reference to a

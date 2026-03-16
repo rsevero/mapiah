@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
 // height <value> . height of pit or wall:pit; available in METAPOST as a numeric

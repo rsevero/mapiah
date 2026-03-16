@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'dart:io' show File;
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
@@ -552,4 +554,3 @@ class MPSingleTypeLineSegmentList {
 
   MPSingleTypeLineSegmentList({required this.type, required this.lineSegments});
 }
-

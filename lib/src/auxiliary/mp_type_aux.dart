@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 class MPTypeAux {
   static final RegExp _camelCasePattern = RegExp(r'[A-Z]');
   static final RegExp _hyphenatedPattern = RegExp(r'-([a-z])');

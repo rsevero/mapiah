@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Update available
 
 Newer versions of Mapiah are available, but this Flathub build is not upgraded anymore.

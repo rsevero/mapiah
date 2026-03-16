@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Flatpak built locally instructions
 
 1. Update Flutter version in _~/devel/mapiah/packaging/linux/flutter-build-docker-images/22.04/Dockerfile_

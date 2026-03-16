@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Therion não encontrado
 
 O Mapiah precisa de acesso a uma instalação prévia do Therion para funcionar. Se você está vendo esta mensagem, significa que o Mapiah não conseguiu localizar uma instalação do Therion no seu sistema.

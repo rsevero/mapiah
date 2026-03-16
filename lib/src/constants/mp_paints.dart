@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 
@@ -19,7 +21,6 @@ class THPaint {
     Color(0xffaaffc3), // 13
     Color(0xff000075), // 14
     Color(0xffa9a9a9), // 15
-
     /// The following colors might be problematic for the most common kind of
     /// color blindness.
     Color(0xff911eb4), // 16

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // Adapter: a source curve made of consecutive cubic Beziers
 import 'dart:collection';
 import 'dart:math' as math;
@@ -11,8 +13,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 /// Build a list of connected cubics and call:
 /// final result = simplifyCubicChain(myCubics, accuracy: 0.5);
 /// Or, if you prefer the near-optimal approach, swap the call inside the function to fitToBezPathOpt.
-class MPCubicChainSource
-    implements MPParamCurveFit {
+class MPCubicChainSource implements MPParamCurveFit {
   final List<MPCubicBez> curves;
 
   MPCubicChainSource(this.curves) {
@@ -128,9 +129,7 @@ class MPCubicChainSource
 
     for (final (double w, double xi) in mpGaussLegendre16) {
       final double t = t0 + xi * dt;
-      final (MPFitPoint p, MPVec2 d) = samplePtDeriv(
-        t,
-      );
+      final (MPFitPoint p, MPVec2 d) = samplePtDeriv(t);
       final double ai = w * d.x * p.y;
 
       a += ai;
@@ -153,8 +152,7 @@ List<MPCubicBez> mpSimplifyCubicChain(
     return List<MPCubicBez>.from(chain);
   }
 
-  final MPCubicChainSource source =
-      MPCubicChainSource(chain);
+  final MPCubicChainSource source = MPCubicChainSource(chain);
   final int n = chain.length;
 
   // Precompute cusp boundaries (indices between segments where merging is forbidden).
@@ -189,12 +187,11 @@ List<MPCubicBez> mpSimplifyCubicChain(
     for (int j = hardEnd; j >= i + 2; j--) {
       final double t0 = i / n;
       final double t1 = j / n;
-      final (MPCubicBez, double)? fit =
-          mpFitToCubic(
-            source,
-            MPFitRange(t0, t1),
-            accuracy,
-          );
+      final (MPCubicBez, double)? fit = mpFitToCubic(
+        source,
+        MPFitRange(t0, t1),
+        accuracy,
+      );
 
       if (fit != null) {
         merged = fit.$1.copyWith(lineSegment: chain[j - 1].lineSegment);
@@ -218,14 +215,14 @@ List<MPCubicBez> mpSimplifyCubicChain(
 
 // Note: cusp detection is implemented once in CubicChainSource._isCuspAtJoin.
 
-List<THLineSegment>
-mpSimplifyTHBezierLineSegments(
+List<THLineSegment> mpSimplifyTHBezierLineSegments(
   List<THLineSegment> originalLineSegmentsList, {
   double accuracy = mpLineSimplifyEpsilonOnScreen,
   required int decimalPositions,
 }) {
-  final List<MPCubicBez> asCubicBez =
-      mpConvertTHBeziersToCubicBez(originalLineSegmentsList);
+  final List<MPCubicBez> asCubicBez = mpConvertTHBeziersToCubicBez(
+    originalLineSegmentsList,
+  );
   final List<MPCubicBez> fittedCubics = mpSimplifyCubicChain(
     asCubicBez,
     accuracy: accuracy,

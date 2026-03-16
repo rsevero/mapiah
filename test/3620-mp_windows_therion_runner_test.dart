@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // ignore_for_file: file_names
 
 import 'package:flutter_test/flutter_test.dart';

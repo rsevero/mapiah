@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
 // height: according to the sign of the value (positive, negative or unsigned),

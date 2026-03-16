@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/src/elements/th_file.dart';
 
 mixin MPTHFileReferenceMixin {

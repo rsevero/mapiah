@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Flatpak built in Flathub instructions
 
 1. Update Mapiah version on the following files:

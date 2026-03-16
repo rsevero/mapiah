@@ -1,4 +1,5 @@
 // Copyright 2022 the Kurbo Authors
+// Copyright (C) 2023- Mapiah Ltda
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 //
 // Dart port of kurbo/kurbo/src/fit.rs. This is a standalone, dependency-free
@@ -26,14 +27,10 @@ class MPVec2 {
   final double x, y;
   const MPVec2(this.x, this.y);
 
-  MPVec2 operator +(MPVec2 o) =>
-      MPVec2(x + o.x, y + o.y);
-  MPVec2 operator -(MPVec2 o) =>
-      MPVec2(x - o.x, y - o.y);
-  MPVec2 operator *(double s) =>
-      MPVec2(x * s, y * s);
-  MPVec2 operator /(double s) =>
-      MPVec2(x / s, y / s);
+  MPVec2 operator +(MPVec2 o) => MPVec2(x + o.x, y + o.y);
+  MPVec2 operator -(MPVec2 o) => MPVec2(x - o.x, y - o.y);
+  MPVec2 operator *(double s) => MPVec2(x * s, y * s);
+  MPVec2 operator /(double s) => MPVec2(x / s, y / s);
 
   MPVec2 operator -() => MPVec2(-x, -y);
 
@@ -50,10 +47,8 @@ class MPFitPoint {
 
   const MPFitPoint(this.x, this.y, {this.lineSegment});
 
-  MPFitPoint operator +(MPVec2 v) =>
-      MPFitPoint(x + v.x, y + v.y);
-  MPVec2 operator -(MPFitPoint p) =>
-      MPVec2(x - p.x, y - p.y);
+  MPFitPoint operator +(MPVec2 v) => MPFitPoint(x + v.x, y + v.y);
+  MPVec2 operator -(MPFitPoint p) => MPVec2(x - p.x, y - p.y);
   MPFitPoint lerp(MPFitPoint other, double t) =>
       MPFitPoint(x + (other.x - x) * t, y + (other.y - y) * t);
   MPVec2 toVec2() => MPVec2(x, y);
@@ -76,10 +71,8 @@ class MPAffine {
 
   static const identity = MPAffine(1, 0, 0, 1, 0, 0);
 
-  static MPAffine translate(MPVec2 v) =>
-      MPAffine(1, 0, 0, 1, v.x, v.y);
-  static MPAffine scale(double s) =>
-      MPAffine(s, 0, 0, s, 0, 0);
+  static MPAffine translate(MPVec2 v) => MPAffine(1, 0, 0, 1, v.x, v.y);
+  static MPAffine scale(double s) => MPAffine(s, 0, 0, s, 0, 0);
   static MPAffine rotate(double th) {
     final ct = math.cos(th), st = math.sin(th);
     return MPAffine(ct, st, -st, ct, 0, 0);
@@ -122,10 +115,7 @@ class Line {
     }
 
     final double t = c1 / c2;
-    final MPFitPoint proj = MPFitPoint(
-      p0.x + v.x * t,
-      p0.y + v.y * t,
-    );
+    final MPFitPoint proj = MPFitPoint(p0.x + v.x * t, p0.y + v.y * t);
 
     return p.distanceSquared(proj);
   }
@@ -264,13 +254,12 @@ class MPCubicBez {
     return dt * sum;
   }
 
-  MPCubicBez transform(MPAffine a) =>
-      MPCubicBez(
-        a.applyToPoint(p0),
-        a.applyToPoint(p1),
-        a.applyToPoint(p2),
-        a.applyToPoint(p3),
-      );
+  MPCubicBez transform(MPAffine a) => MPCubicBez(
+    a.applyToPoint(p0),
+    a.applyToPoint(p1),
+    a.applyToPoint(p2),
+    a.applyToPoint(p3),
+  );
 }
 
 class BezPath {
@@ -281,11 +270,8 @@ class BezPath {
 
   void moveTo(MPFitPoint p) => _elements.add(_MoveTo(p));
 
-  void curveTo(
-    MPFitPoint p1,
-    MPFitPoint p2,
-    MPFitPoint p3,
-  ) => _elements.add(_CurveTo(p1, p2, p3));
+  void curveTo(MPFitPoint p1, MPFitPoint p2, MPFitPoint p3) =>
+      _elements.add(_CurveTo(p1, p2, p3));
 
   void truncate(int n) => _elements.length = math.min(n, _elements.length);
 
@@ -366,9 +352,7 @@ abstract class MPParamCurveFit {
     double a = 0, x = 0, y = 0;
     for (final (double w, double xi) in mpGaussLegendre16) {
       final double t = t0 + xi * dt;
-      final (MPFitPoint p, MPVec2 d) = samplePtDeriv(
-        t,
-      );
+      final (MPFitPoint p, MPVec2 d) = samplePtDeriv(t);
       final double ai = w * d.x * p.y;
 
       a += ai;
@@ -394,17 +378,9 @@ class MPCurveDist {
   final MPFitRange range;
   final bool spicy;
 
-  MPCurveDist._(
-    this.samples,
-    this.arcparams,
-    this.range,
-    this.spicy,
-  );
+  MPCurveDist._(this.samples, this.arcparams, this.range, this.spicy);
 
-  factory MPCurveDist.fromCurve(
-    MPParamCurveFit source,
-    MPFitRange range,
-  ) {
+  factory MPCurveDist.fromCurve(MPParamCurveFit source, MPFitRange range) {
     final double step = (range.end - range.start) * (1.0 / (nSample + 1));
 
     MPVec2? lastTan;
@@ -413,8 +389,7 @@ class MPCurveDist {
 
     const double spicyThresh = 0.2;
 
-    final List<MPCurveFitSample> samples =
-        <MPCurveFitSample>[];
+    final List<MPCurveFitSample> samples = <MPCurveFitSample>[];
 
     for (int i = 0; i < nSample + 2; i++) {
       final MPCurveFitSample s = source.samplePtTangent(
@@ -489,11 +464,7 @@ class MPCurveDist {
     return maxErr2;
   }
 
-  double? evalArc(
-    MPParamCurveFit source,
-    MPCubicBez c,
-    double acc2,
-  ) {
+  double? evalArc(MPParamCurveFit source, MPCubicBez c, double acc2) {
     const double eps = 1e-9;
 
     final double cLen = c.arclen(eps);
@@ -516,11 +487,7 @@ class MPCurveDist {
     return maxErr2;
   }
 
-  double? evalDist(
-    MPParamCurveFit source,
-    MPCubicBez c,
-    double acc2,
-  ) {
+  double? evalDist(MPParamCurveFit source, MPCubicBez c, double acc2) {
     final double? ray = evalRay(c, acc2);
 
     if (ray == null) {
@@ -552,14 +519,17 @@ void _fitToBezPathRec(
   BezPath path,
 ) {
   final double start = range.start, end = range.end;
-  final MPFitPoint startP = source
-      .samplePtTangent(range.start, 1.0)
-      .p;
+  final MPFitPoint startP = source.samplePtTangent(range.start, 1.0).p;
   final MPFitPoint endP = source.samplePtTangent(range.end, -1.0).p;
 
   if (startP.distanceSquared(endP) <= accuracy * accuracy) {
-    final (MPCubicBez, double)? line =
-        _mpTryFitLine(source, accuracy, range, startP, endP);
+    final (MPCubicBez, double)? line = _mpTryFitLine(
+      source,
+      accuracy,
+      range,
+      startP,
+      endP,
+    );
 
     if (line != null) {
       final (MPCubicBez c, _) = line;
@@ -648,12 +618,7 @@ void _fitToBezPathRec(
   }
   final MPFitPoint p1 = start.lerp(end, 1.0 / 3.0);
   final MPFitPoint p2 = end.lerp(start, 1.0 / 3.0);
-  final MPCubicBez c = MPCubicBez(
-    start,
-    p1,
-    p2,
-    end,
-  );
+  final MPCubicBez c = MPCubicBez(start, p1, p2, end);
 
   return (c, maxErr2);
 }
@@ -663,14 +628,8 @@ void _fitToBezPathRec(
   MPFitRange range,
   double accuracy,
 ) {
-  final MPCurveFitSample start = source.samplePtTangent(
-    range.start,
-    1.0,
-  );
-  final MPCurveFitSample end = source.samplePtTangent(
-    range.end,
-    -1.0,
-  );
+  final MPCurveFitSample start = source.samplePtTangent(range.start, 1.0);
+  final MPCurveFitSample end = source.samplePtTangent(range.end, -1.0);
   final MPVec2 d = end.p - start.p;
   final double chord2 = d.hypot2();
   final double acc2 = accuracy * accuracy;
@@ -711,18 +670,20 @@ void _fitToBezPathRec(
   final double mx = moment * math.pow(chord2Inv, 2);
 
   final double chord = math.sqrt(chord2);
-  final MPAffine aff =
-      MPAffine.translate(start.p.toVec2())
-          .then(MPAffine.rotate(th))
-          .then(MPAffine.scale(chord));
-  final MPCurveDist curveDist =
-      MPCurveDist.fromCurve(source, range.copy());
+  final MPAffine aff = MPAffine.translate(
+    start.p.toVec2(),
+  ).then(MPAffine.rotate(th)).then(MPAffine.scale(chord));
+  final MPCurveDist curveDist = MPCurveDist.fromCurve(source, range.copy());
 
   MPCubicBez? bestC;
   double? bestErr2;
 
-  for (final (MPCubicBez cand, double d0, double d1)
-      in _mpCubicFit(th0, th1, unitArea, mx)) {
+  for (final (MPCubicBez cand, double d0, double d1) in _mpCubicFit(
+    th0,
+    th1,
+    unitArea,
+    mx,
+  )) {
     final MPCubicBez c = cand.transform(aff);
     final double? err2 = curveDist.evalDist(source, c, acc2);
 
@@ -924,11 +885,7 @@ double? _fitToBezPathOptInner(
 
   while (true) {
     n += 1;
-    final _FitResult r = _mpFitOptSegment(
-      source,
-      accuracy,
-      MPFitRange(t0, t1),
-    );
+    final _FitResult r = _mpFitOptSegment(source, accuracy, MPFitRange(t0, t1));
     if (r is _ParamVal) {
       t0 = r.t;
     } else if (r is _SegmentError) {
@@ -979,11 +936,7 @@ double? _fitToBezPathOptInner(
   for (int i = 0; i < n; i++) {
     final double tNext = (i < n - 1)
         ? (() {
-            final r = _mpFitOptSegment(
-              source,
-              x,
-              MPFitRange(t0, range.end),
-            );
+            final r = _mpFitOptSegment(source, x, MPFitRange(t0, range.end));
             if (r is _ParamVal) return r.t;
             if (r is _SegmentError) return range.end;
             if (r is _CuspFound) {
@@ -994,12 +947,11 @@ double? _fitToBezPathOptInner(
           })()
         : range.end;
 
-    final (MPCubicBez, double)? fitSeg =
-        mpFitToCubic(
-          source,
-          MPFitRange(t0, tNext),
-          accuracy,
-        );
+    final (MPCubicBez, double)? fitSeg = mpFitToCubic(
+      source,
+      MPFitRange(t0, tNext),
+      accuracy,
+    );
 
     MPCubicBez seg;
 
@@ -1009,14 +961,13 @@ double? _fitToBezPathOptInner(
       // Fallback: try a straight-line cubic segment if a precise fit fails.
       final MPFitPoint startP = source.samplePtTangent(t0, 1.0).p;
       final MPFitPoint endP = source.samplePtTangent(tNext, -1.0).p;
-      final (MPCubicBez, double)? line =
-          _mpTryFitLine(
-            source,
-            accuracy,
-            MPFitRange(t0, tNext),
-            startP,
-            endP,
-          );
+      final (MPCubicBez, double)? line = _mpTryFitLine(
+        source,
+        accuracy,
+        MPFitRange(t0, tNext),
+        startP,
+        endP,
+      );
 
       if (line != null) {
         seg = line.$1;
@@ -1046,11 +997,7 @@ double? _mpMeasureOneSeg(
   MPFitRange range,
   double limit,
 ) {
-  final (MPCubicBez, double)? r = mpFitToCubic(
-    source,
-    range,
-    limit,
-  );
+  final (MPCubicBez, double)? r = mpFitToCubic(source, range, limit);
 
   return r == null ? null : math.sqrt(r.$2);
 }
@@ -1101,8 +1048,7 @@ _FitResult _mpFitOptSegment(
     }
 
     final double e =
-        _mpMeasureOneSeg(source, MPFitRange(t0, x), accuracy) ??
-        missingErr;
+        _mpMeasureOneSeg(source, MPFitRange(t0, x), accuracy) ?? missingErr;
 
     return e - accuracy;
   }
@@ -1155,11 +1101,7 @@ _ErrDelta _mpFitOptErrDelta(
   final double t1 = range.end;
 
   for (int i = 0; i < n - 1; i++) {
-    final _FitResult r = _mpFitOptSegment(
-      source,
-      accuracy,
-      MPFitRange(t0, t1),
-    );
+    final _FitResult r = _mpFitOptSegment(source, accuracy, MPFitRange(t0, t1));
 
     if (r is _ParamVal) {
       t0 = r.t;
@@ -1170,8 +1112,7 @@ _ErrDelta _mpFitOptErrDelta(
     }
   }
   final double err =
-      _mpMeasureOneSeg(source, MPFitRange(t0, t1), limit) ??
-      accuracy * 2.0;
+      _mpMeasureOneSeg(source, MPFitRange(t0, t1), limit) ?? accuracy * 2.0;
 
   return _Delta(accuracy - err);
 }
@@ -1423,9 +1364,7 @@ double solveItp(
   return x;
 }
 
-List<MPCubicBez> mpConvertTHBeziersToCubicBez(
-  List<THLineSegment> segs,
-) {
+List<MPCubicBez> mpConvertTHBeziersToCubicBez(List<THLineSegment> segs) {
   final List<MPCubicBez> cubics = <MPCubicBez>[];
 
   THLineSegment startSegment = segs.first;
@@ -1464,14 +1403,7 @@ List<MPCubicBez> mpConvertTHBeziersToCubicBez(
 
     startSegment = seg;
     cubics.add(
-      MPCubicBez(
-        p0,
-        p1,
-        p2,
-        p3,
-        lineSegment: seg,
-        isCalculated: false,
-      ),
+      MPCubicBez(p0, p1, p2, p3, lineSegment: seg, isCalculated: false),
     );
   }
 

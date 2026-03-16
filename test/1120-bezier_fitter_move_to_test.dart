@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 
@@ -5,10 +7,7 @@ class _LineSource extends MPParamCurveFit {
   // Parametric straight line from (0,0) to (1,0)
   @override
   MPCurveFitSample samplePtTangent(double t, double sign) {
-    final MPFitPoint p = MPFitPoint(
-      t.clamp(0.0, 1.0),
-      0.0,
-    );
+    final MPFitPoint p = MPFitPoint(t.clamp(0.0, 1.0), 0.0);
     final MPVec2 tan = const MPVec2(1.0, 0.0);
     return MPCurveFitSample(p, tan);
   }
@@ -16,10 +15,7 @@ class _LineSource extends MPParamCurveFit {
   @override
   (MPFitPoint, MPVec2) samplePtDeriv(double t) {
     final double tc = t.clamp(0.0, 1.0);
-    return (
-      MPFitPoint(tc, 0.0),
-      const MPVec2(1.0, 0.0),
-    );
+    return (MPFitPoint(tc, 0.0), const MPVec2(1.0, 0.0));
   }
 
   @override

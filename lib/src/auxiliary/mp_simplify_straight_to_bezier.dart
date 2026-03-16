@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
 import 'package:flutter/painting.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';

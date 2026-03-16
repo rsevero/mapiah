@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
 import 'dart:ui' show Offset;
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';

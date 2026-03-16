@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import "package:flutter/material.dart";
 
 class MaterialTheme {
@@ -360,16 +362,16 @@ class MaterialTheme {
   }
 
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
-        useMaterial3: true,
-        brightness: colorScheme.brightness,
-        colorScheme: colorScheme,
-        textTheme: textTheme.apply(
-          bodyColor: colorScheme.onSurface,
-          displayColor: colorScheme.onSurface,
-        ),
-        scaffoldBackgroundColor: colorScheme.surface,
-        canvasColor: colorScheme.surface,
-      );
+    useMaterial3: true,
+    brightness: colorScheme.brightness,
+    colorScheme: colorScheme,
+    textTheme: textTheme.apply(
+      bodyColor: colorScheme.onSurface,
+      displayColor: colorScheme.onSurface,
+    ),
+    scaffoldBackgroundColor: colorScheme.surface,
+    canvasColor: colorScheme.surface,
+  );
 
   /// Custom Color
   static const customColor = ExtendedColor(
@@ -498,10 +500,10 @@ class MaterialTheme {
   );
 
   List<ExtendedColor> get extendedColors => [
-        customColor,
-        customColor1,
-        customColor2,
-      ];
+    customColor,
+    customColor1,
+    customColor2,
+  ];
 }
 
 class MaterialScheme {

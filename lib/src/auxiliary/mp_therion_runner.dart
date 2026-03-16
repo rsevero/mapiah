@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -354,8 +356,12 @@ class MPTherionRunner {
     outputLinesNotifier.value = currentLines;
 
     // Track loop errors sections to avoid treating loop closure reports as errors
-    final bool isLoopErrorsHeader = _loopErrorsSectionHeaderRegex.hasMatch(line);
-    final bool isLoopErrorsFooter = _loopErrorsSectionFooterRegex.hasMatch(line);
+    final bool isLoopErrorsHeader = _loopErrorsSectionHeaderRegex.hasMatch(
+      line,
+    );
+    final bool isLoopErrorsFooter = _loopErrorsSectionFooterRegex.hasMatch(
+      line,
+    );
 
     if (isLoopErrorsHeader) {
       _isInsideLoopErrorsSection = true;

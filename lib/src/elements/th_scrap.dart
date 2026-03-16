@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'th_element.dart';
 
 // Description: Scrap is a piece of 2D map, which doesn’t contain overlapping passages

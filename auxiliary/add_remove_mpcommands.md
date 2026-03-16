@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Add/remove commands in Mapiah
 
 1. The _elementPositionInParent_ parameter determines the position at which the new element will be inserted in the parent's children list:

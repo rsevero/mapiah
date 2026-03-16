@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
 /// flip none/horizontal/vertical - flips the scrap after scale transformation.

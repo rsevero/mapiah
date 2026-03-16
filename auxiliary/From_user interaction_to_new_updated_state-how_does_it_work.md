@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # From user interaction to new updated state: how does Mapiah works?
 
 Here is a brief explanation of the infrastructure involved in the actual execution of a action requested by the user in Mapiah.

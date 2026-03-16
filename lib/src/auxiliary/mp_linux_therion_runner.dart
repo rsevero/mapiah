@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';

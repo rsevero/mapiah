@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
 # Mapiah
 
 [Free software](https://www.gnu.org/philosophy/free-sw.en.html) graphical interface for [Therion](https://therion.speleo.sk/) cave mapping written in [Flutter](https://flutter.dev/).

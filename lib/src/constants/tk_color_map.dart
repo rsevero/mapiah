@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // tk_color_map.dart
 //
 // This file provides a mechanism to create and retrieve TK Color objects on
