@@ -365,7 +365,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               vertical: 10.0,
             ),
             child: Text(
-              filename.split('/').last,
+              filename
+                  .split('/')
+                  .last
+                  .replaceAll(RegExp(r'\.th2$', caseSensitive: false), ''),
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),

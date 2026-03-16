@@ -20,7 +20,7 @@ class MPFileTabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final String basename = p.basename(filename);
+    final String basename = p.basenameWithoutExtension(filename);
     final Color backgroundColor = isActive
         ? theme.colorScheme.primary.withAlpha(80)
         : theme.colorScheme.surfaceContainerLow;
