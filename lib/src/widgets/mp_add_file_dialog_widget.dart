@@ -4,7 +4,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_encoding_widget.dart';
 
@@ -55,16 +55,8 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
 
     th2FileEditController.setCanvasScale(mpDefaultTHFileScale);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TH2FileEditPage(
-          key: ValueKey("TH2FileEditPage|$fileName"),
-          filename: fileName,
-          th2FileEditController: th2FileEditController,
-        ),
-      ),
-    );
+    mpLocator.mpGeneralController.addFileTab(fileName);
+    MPDialogAux.ensureTabsPageOpen(context);
 
     widget.onPressedClose();
   }

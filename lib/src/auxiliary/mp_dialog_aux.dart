@@ -17,7 +17,7 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
@@ -903,15 +903,8 @@ class MPDialogAux {
           pickedFilePath,
         );
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TH2FileEditPage(
-              key: ValueKey("TH2FileEditPage|$pickedFilePath"),
-              filename: pickedFilePath,
-            ),
-          ),
-        );
+        mpLocator.mpGeneralController.addFileTab(pickedFilePath);
+        ensureTabsPageOpen(context);
       } else {
         mpLocator.mpLog.i('No file selected.');
       }
@@ -919,6 +912,17 @@ class MPDialogAux {
       mpLocator.mpLog.e('Error picking file', error: e);
     } finally {
       _isFilePickerOpen[MPFilePickerType.th2] = false;
+    }
+  }
+
+  static void ensureTabsPageOpen(BuildContext context) {
+    final int openFileCount =
+        mpLocator.mpGeneralController.openFileOrder.length;
+
+    if (openFileCount == 1) {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const TH2FileTabsPage()));
     }
   }
 

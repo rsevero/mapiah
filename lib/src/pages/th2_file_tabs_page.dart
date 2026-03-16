@@ -6,42 +6,49 @@ import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
-import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
-import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
+import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
+import 'package:mobx/mobx.dart';
 import 'package:window_size/window_size.dart';
 
-class MapiahHome extends StatefulWidget {
-  final String? mainFilePath;
-
-  const MapiahHome({super.key, this.mainFilePath}) : super();
+class TH2FileTabsPage extends StatefulWidget {
+  const TH2FileTabsPage({super.key});
 
   @override
-  State<MapiahHome> createState() => _MapiahHomeState();
+  State<TH2FileTabsPage> createState() => _TH2FileTabsPageState();
 }
 
-class _MapiahHomeState extends State<MapiahHome> {
+class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
+  late ReactionDisposer _openFileOrderReaction;
+  final Map<String, Future<TH2FileEditControllerCreateResult>> _loadFutures =
+      <String, Future<TH2FileEditControllerCreateResult>>{};
+
   @override
   void initState() {
     super.initState();
 
-    // If a TH2 file path is provided, navigate to edit page after frame builds
-    if (widget.mainFilePath != null) {
-      if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _openTH2FileFromPath(widget.mainFilePath!);
-        });
-      } else {
-        mpLocator.mpLog.e('Invalid file extension: ${widget.mainFilePath}');
-      }
-    }
+    initializeMPCommandLocalizations(context);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      MPDialogAux.checkForUpdates();
-    });
+    _openFileOrderReaction = reaction(
+      (_) => mpLocator.mpGeneralController.openFileOrder.length,
+      (int length) {
+        if (length == 0) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pop(context);
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _openFileOrderReaction();
+    super.dispose();
   }
 
   @override
@@ -69,26 +76,69 @@ class _MapiahHomeState extends State<MapiahHome> {
       // during tests.
     }
 
-    initializeMPCommandLocalizations(context);
-
     final Scaffold scaffold = Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 4,
-        title: Text(appLocalizations.appTitle),
+        title: const SizedBox.shrink(),
         actions: <Widget>[
           IconButton(
-            key: ValueKey('MapiahHomeNewFileButton'),
-            icon: Icon(Icons.insert_drive_file_outlined),
+            key: const ValueKey('TH2FileTabsPageNewFileButton'),
+            icon: const Icon(Icons.insert_drive_file_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.newFile(context),
             tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
           ),
           IconButton(
-            key: ValueKey('MapiahHomeOpenFileButton'),
-            icon: Icon(Icons.file_open_outlined),
+            key: const ValueKey('TH2FileTabsPageOpenFileButton'),
+            icon: const Icon(Icons.file_open_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () => MPDialogAux.pickTH2File(context),
             tooltip: appLocalizations.mapiahHomeOpenFile,
+          ),
+          actionsSeparator,
+          Observer(
+            builder: (_) {
+              final List<String> openFileOrder =
+                  mpLocator.mpGeneralController.openFileOrder;
+              final int activeTabIndex =
+                  mpLocator.mpGeneralController.activeTabIndex;
+
+              if (openFileOrder.isEmpty ||
+                  activeTabIndex >= openFileOrder.length) {
+                return SizedBox.shrink();
+              }
+
+              final String activeFilename = openFileOrder[activeTabIndex];
+              final TH2FileEditController? controller = mpLocator
+                  .mpGeneralController
+                  .getTH2FileEditControllerIfExists(activeFilename);
+
+              return Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.save_outlined,
+                      color: (controller?.enableSaveButton ?? false)
+                          ? colorScheme.onSecondaryContainer
+                          : colorScheme.onSecondaryContainer.withAlpha(100),
+                    ),
+                    onPressed: (controller?.enableSaveButton ?? false)
+                        ? () => controller?.saveTH2File()
+                        : null,
+                    tooltip: appLocalizations.th2FileEditPageSave,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.save_as_outlined,
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+                    onPressed: () => controller?.saveAsTH2File(),
+                    tooltip: appLocalizations.th2FileEditPageSaveAs,
+                  ),
+                ],
+              );
+            },
           ),
           actionsSeparator,
           Observer(
@@ -97,8 +147,10 @@ class _MapiahHomeState extends State<MapiahHome> {
                   mpSettingsController.isTherionAvailable;
 
               return IconButton(
-                key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
-                icon: Icon(Icons.playlist_add_check_outlined),
+                key: const ValueKey(
+                  'TH2FileTabsPageOpenTHConfigAndRunTherionButton',
+                ),
+                icon: const Icon(Icons.playlist_add_check_outlined),
                 color: therionAvailable
                     ? colorScheme.onSecondaryContainer
                     : mpTherionRunStatusBackgroundErrorColor,
@@ -122,8 +174,8 @@ class _MapiahHomeState extends State<MapiahHome> {
                   : null;
 
               return IconButton(
-                key: ValueKey('MapiahHomeRunTherionButton'),
-                icon: Icon(Icons.play_arrow_outlined),
+                key: const ValueKey('TH2FileTabsPageRunTherionButton'),
+                icon: const Icon(Icons.play_arrow_outlined),
                 color: therionAvailable
                     ? colorScheme.onSecondaryContainer
                     : mpTherionRunStatusBackgroundErrorColor,
@@ -136,8 +188,8 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
           actionsSeparator,
           IconButton(
-            key: ValueKey('MapiahHomeSettingsButton'),
-            icon: Icon(Icons.settings_outlined),
+            key: const ValueKey('TH2FileTabsPageSettingsButton'),
+            icon: const Icon(Icons.settings_outlined),
             color: colorScheme.onSecondaryContainer,
             onPressed: () {
               Navigator.of(context).push(
@@ -150,29 +202,112 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
           MPHelpButtonWidget(
             context,
-            mpHelpPageKeyboardShortcutsMain,
+            mpHelpPageKeyboardShortcutsEdit,
             appLocalizations.mapiahKeyboardShortcutsTitle,
             iconData: Icons.keyboard_alt_outlined,
             tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
           ),
           MPHelpButtonWidget(
             context,
-            mpHelpPageMapiahHome,
-            appLocalizations.mapiahHomeHelpDialogTitle,
-          ),
-          IconButton(
-            key: ValueKey('MapiahHomeAboutButton'),
-            icon: Icon(Icons.info_outline),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => showAboutDialog(context),
-            tooltip: appLocalizations.mapiahHomeAboutMapiahDialog,
+            mpHelpPageTh2FileEdit,
+            appLocalizations.th2FileEditPageHelpDialogTitle,
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(mpTabBarHeight),
+          child: Observer(
+            builder: (_) {
+              final List<String> openFileOrder =
+                  mpLocator.mpGeneralController.openFileOrder;
+              final int activeTabIndex =
+                  mpLocator.mpGeneralController.activeTabIndex;
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (String filename in openFileOrder)
+                      GestureDetector(
+                        onTap: () {
+                          final int index = openFileOrder.indexOf(filename);
+                          mpLocator.mpGeneralController.setActiveTab(index);
+                        },
+                        child: MPFileTabWidget(
+                          filename: filename,
+                          isActive:
+                              (activeTabIndex < openFileOrder.length) &&
+                              (openFileOrder[activeTabIndex] == filename),
+                          onClose: () {
+                            final TH2FileEditController? controller = mpLocator
+                                .mpGeneralController
+                                .getTH2FileEditControllerIfExists(filename);
+                            controller?.close();
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
       ),
-      body: Center(child: Text(appLocalizations.initialPagePresentation)),
+      body: Observer(
+        builder: (_) {
+          final List<String> openFileOrder =
+              mpLocator.mpGeneralController.openFileOrder;
+          final int activeTabIndex =
+              mpLocator.mpGeneralController.activeTabIndex;
+
+          if (openFileOrder.isEmpty) {
+            return Center(
+              child: Text(appLocalizations.initialPagePresentation),
+            );
+          }
+
+          return PopScope(
+            canPop: false,
+            child: IndexedStack(
+              index: activeTabIndex,
+              children: <Widget>[
+                for (String filename in openFileOrder)
+                  _buildTabContentWidget(filename),
+              ],
+            ),
+          );
+        },
+      ),
     );
 
     return _withShortcuts(scaffold);
+  }
+
+  Widget _buildTabContentWidget(String filename) {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(filename);
+
+    if (controller == null) {
+      return const Center(child: Text('Controller not found'));
+    }
+
+    if (!_loadFutures.containsKey(filename)) {
+      if (filename.startsWith(mpNewFilePrefix)) {
+        _loadFutures[filename] =
+            Future<TH2FileEditControllerCreateResult>.value(
+              TH2FileEditControllerCreateResult(true, <String>[]),
+            );
+      } else {
+        _loadFutures[filename] = controller.load();
+      }
+    }
+
+    final Future<TH2FileEditControllerCreateResult> future =
+        _loadFutures[filename]!;
+
+    return TH2FileEditBodyWidget(
+      th2FileEditController: controller,
+      loadFuture: future,
+    );
   }
 
   void initializeMPCommandLocalizations(BuildContext context) {
@@ -180,91 +315,6 @@ class _MapiahHomeState extends State<MapiahHome> {
     MPTextToUser.initialize();
   }
 
-  void _openTH2FileFromPath(String filePath) async {
-    try {
-      mpLocator.mpGeneralController.addFileTab(filePath);
-      MPDialogAux.ensureTabsPageOpen(context);
-    } catch (e) {
-      mpLocator.mpLog.e('Error opening file: $e');
-    }
-  }
-
-  void showAboutDialog(BuildContext context) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    final String version = packageInfo.version;
-    final AppLocalizations appLocalizations = AppLocalizations.of(context);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(appLocalizations.aboutMapiahDialogWindowTitle),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                // Version
-                Text(appLocalizations.aboutMapiahDialogMapiahVersion(version)),
-                SizedBox(height: mpButtonSpace),
-                // Optional release information (handle name-only, url-only, and both)
-                if (mpReleaseName.isNotEmpty && mpReleaseURL.isNotEmpty) ...[
-                  // Show localized release name and a clickable URL in parentheses
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        appLocalizations.aboutMapiahDialogReleaseNoUrl(
-                          mpReleaseName,
-                        ),
-                      ),
-                      Text(' ('),
-                      MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
-                      Text(')'),
-                    ],
-                  ),
-                  SizedBox(height: mpButtonSpace),
-                ] else if (mpReleaseName.isNotEmpty) ...[
-                  Text(
-                    appLocalizations.aboutMapiahDialogReleaseNoUrl(
-                      mpReleaseName,
-                    ),
-                  ),
-                  SizedBox(height: mpButtonSpace),
-                ] else if (mpReleaseURL.isNotEmpty) ...[
-                  // Only URL present: show it as a clickable link
-                  MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
-                  SizedBox(height: mpButtonSpace),
-                ],
-                // Changelog and license links
-                MPURLTextWidget(
-                  url: mpChangelogURL,
-                  label: appLocalizations.aboutMapiahDialogChangelog,
-                ),
-                SizedBox(height: mpButtonSpace),
-                MPURLTextWidget(
-                  url: mpLicenseURL,
-                  label: appLocalizations.aboutMapiahDialogLicense,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(appLocalizations.buttonClose),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-// Shortcut handling using CallbackShortcuts (simpler than Intent/Action for basic triggers)
-extension on _MapiahHomeState {
   Widget _withShortcuts(Widget child) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final Map<ShortcutActivator, VoidCallback> bindings =
@@ -310,14 +360,14 @@ extension on _MapiahHomeState {
           const SingleActivator(LogicalKeyboardKey.f1): () =>
               MPDialogAux.showHelpDialog(
                 context,
-                mpHelpPageMapiahHome,
-                appLocalizations.mapiahHomeHelpDialogTitle,
+                mpHelpPageTh2FileEdit,
+                appLocalizations.th2FileEditPageHelpDialogTitle,
               ),
           // Keyboard shortcuts
           const SingleActivator(LogicalKeyboardKey.keyK, control: true): () =>
               MPDialogAux.showHelpDialog(
                 context,
-                mpHelpPageKeyboardShortcutsMain,
+                mpHelpPageKeyboardShortcutsEdit,
                 appLocalizations.mapiahKeyboardShortcutsTitle,
               ),
           // Therion: Ctrl+T
