@@ -21,3 +21,45 @@ Você pode abrir múltiplos arquivos TH2 ao mesmo tempo. Quando você clica no b
 * Clique em **Abrir** para abrir todos os arquivos selecionados em abas separadas
 
 Todos os arquivos selecionados serão abertos no editor de arquivo com cada arquivo tendo sua própria aba. Você pode facilmente alternar entre os arquivos abertos clicando em suas abas, ou usar navegação por teclado para se mover entre eles.
+
+## Argumentos de Linha de Comando
+
+Mapiah suporta argumentos de linha de comando para abrir arquivos diretamente ao iniciar:
+
+### Argumentos Posicionais (Compatibilidade com Versões Anteriores)
+```bash
+mapiah /caminho/para/arquivo.th2          # Abre arquivo TH2
+mapiah /caminho/para/therion.cfg          # Executa Therion com config
+```
+
+Ele detecta arquivos TH2 por sua extensão .th2, e trata qualquer outro arquivo como um THConfig para executar o Therion. Isso permite compatibilidade com versões anteriores do Mapiah que só aceitavam um único argumento posicional.
+
+### Argumentos Nomeados
+
+#### --th2: Abrir arquivos TH2
+- Pode aparecer múltiplas vezes para abrir vários arquivos
+- Cada arquivo abre em uma aba separada
+
+```bash
+mapiah --th2 arquivo1.th2 --th2 arquivo2.th2
+mapiah --th2 /caminho/para/levantamento.th2
+```
+
+#### --thconfig: Executar Therion com THConfig
+- Máximo de um --thconfig por comando
+- Mostrará erro se múltiplos argumentos --thconfig forem fornecidos
+
+```bash
+mapiah --thconfig projeto.cfg
+mapiah --thconfig /caminho/para/therion.cfg
+```
+
+#### Combinando Argumentos
+```bash
+# Abrir múltiplos arquivos TH2 E executar Therion com config
+mapiah --th2 arquivo1.th2 --th2 arquivo2.th2 --thconfig projeto.cfg
+```
+
+### Tratamento de Erros
+- Se múltiplos argumentos `--thconfig` forem fornecidos, Mapiah sairá com uma mensagem de erro
+- Se a flag `--th2` ou `--thconfig` for fornecida sem um caminho de arquivo, Mapiah sairá com uma mensagem de erro
