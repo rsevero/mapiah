@@ -222,30 +222,36 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               final int activeTabIndex =
                   mpLocator.mpGeneralController.activeTabIndex;
 
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    for (String filename in openFileOrder)
-                      GestureDetector(
-                        onTap: () {
-                          final int index = openFileOrder.indexOf(filename);
-                          mpLocator.mpGeneralController.setActiveTab(index);
-                        },
-                        child: MPFileTabWidget(
-                          filename: filename,
-                          isActive:
-                              (activeTabIndex < openFileOrder.length) &&
-                              (openFileOrder[activeTabIndex] == filename),
-                          onClose: () {
-                            final TH2FileEditController? controller = mpLocator
-                                .mpGeneralController
-                                .getTH2FileEditControllerIfExists(filename);
-                            controller?.close();
+              return Align(
+                alignment: Alignment.topLeft,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (String filename in openFileOrder)
+                        GestureDetector(
+                          onTap: () {
+                            final int index = openFileOrder.indexOf(filename);
+                            mpLocator.mpGeneralController.setActiveTab(index);
                           },
+                          child: MPFileTabWidget(
+                            filename: filename,
+                            isActive:
+                                (activeTabIndex < openFileOrder.length) &&
+                                (openFileOrder[activeTabIndex] == filename),
+                            onClose: () {
+                              final TH2FileEditController? controller =
+                                  mpLocator.mpGeneralController
+                                      .getTH2FileEditControllerIfExists(
+                                        filename,
+                                      );
+                              controller?.close();
+                            },
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
