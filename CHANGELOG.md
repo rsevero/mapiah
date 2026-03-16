@@ -10,7 +10,7 @@
   * Mouse wheel scrolling support for tab bar.
   * Tab drag-to-reorder: reorder file tabs by clicking and dragging them with visual insertion point indicator. [suggested by Patrícia Finageiv]
   * Enhanced tab bar styling with pill-shaped appearance and better spacing.
-  * Command-line argument handling for TH2 files (*.th2) and THConfig files (other extensions).
+  * Command-line argument handling: positional arguments, --th2 (multiple), and --thconfig (single).
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]

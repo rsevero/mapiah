@@ -17,8 +17,15 @@ import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatefulWidget {
   final String? mainFilePath;
+  final List<String> th2FilePaths;
+  final String? thConfigFilePath;
 
-  const MapiahHome({super.key, this.mainFilePath}) : super();
+  const MapiahHome({
+    super.key,
+    this.mainFilePath,
+    this.th2FilePaths = const <String>[],
+    this.thConfigFilePath,
+  }) : super();
 
   @override
   State<MapiahHome> createState() => _MapiahHomeState();
@@ -29,20 +36,36 @@ class _MapiahHomeState extends State<MapiahHome> {
   void initState() {
     super.initState();
 
-    // If a file path is provided, handle it based on extension
-    if (widget.mainFilePath != null) {
-      if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
-        // Open as TH2 file
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _openTH2FileFromPath(widget.mainFilePath!);
-        });
-      } else {
-        // Treat as THConfig file and run Therion
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          MPDialogAux.runTherionWithTHConfigFile(context, widget.mainFilePath!);
-        });
+    // Handle command-line file arguments
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Handle --th2 files (named argument)
+      if (widget.th2FilePaths.isNotEmpty) {
+        for (final String filePath in widget.th2FilePaths) {
+          _openTH2FileFromPath(filePath);
+        }
       }
-    }
+
+      // Handle --thconfig file (named argument)
+      if (widget.thConfigFilePath != null) {
+        MPDialogAux.runTherionWithTHConfigFile(
+          context,
+          widget.thConfigFilePath!,
+        );
+      }
+
+      // Handle positional argument (backward compatibility)
+      if (widget.mainFilePath != null &&
+          widget.th2FilePaths.isEmpty &&
+          widget.thConfigFilePath == null) {
+        if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
+          // Open as TH2 file
+          _openTH2FileFromPath(widget.mainFilePath!);
+        } else {
+          // Treat as THConfig file and run Therion
+          MPDialogAux.runTherionWithTHConfigFile(context, widget.mainFilePath!);
+        }
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       MPDialogAux.checkForUpdates();

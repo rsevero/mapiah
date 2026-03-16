@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +21,44 @@ MPLocator get mpLocator => _mpLocator ??= MPLocator();
 
 void main(List<String> arguments) {
   String? fileToRead;
+  String? thConfigFile;
+  final List<String> th2Files = <String>[];
 
-  // Parse command line arguments: first arg not starting with '-'
-  for (final String arg in arguments) {
-    if (!arg.startsWith('-')) {
-      fileToRead = arg;
-      break;
+  // Parse command line arguments
+  for (int i = 0; i < arguments.length; i++) {
+    final String arg = arguments[i];
+
+    if (arg == '--thconfig') {
+      if (thConfigFile != null) {
+        print(
+          'Error: Multiple --thconfig parameters provided. Only one is allowed.',
+        );
+        exit(1);
+      }
+      if (i + 1 < arguments.length) {
+        thConfigFile = arguments[i + 1];
+        i++; // Skip next argument as it's the value
+      } else {
+        print('Error: --thconfig requires a file path.');
+        exit(1);
+      }
+    } else if (arg == '--th2') {
+      if ((i + 1) < arguments.length) {
+        th2Files.add(arguments[i + 1]);
+        i++; // Skip next argument as it's the value
+      } else {
+        print('Error: --th2 requires a file path.');
+        exit(1);
+      }
+    } else if (!arg.startsWith('-')) {
+      // Backward compatibility: first non-flag argument
+      fileToRead ??= arg;
     }
+  }
+
+  // Merge th2Files into fileToRead for backward compatibility handling
+  if (th2Files.isNotEmpty) {
+    fileToRead = null; // Ignore positional arg if named args are used
   }
 
   // /// For mobx debugging with spy().
@@ -86,7 +118,13 @@ void main(List<String> arguments) {
             return true;
           };
 
-      runApp(MapiahApp(fileToRead: fileToRead));
+      runApp(
+        MapiahApp(
+          mainFilePath: fileToRead,
+          th2FilePaths: th2Files,
+          thConfigFilePath: thConfigFile,
+        ),
+      );
     },
     (Object error, StackTrace stack) {
       if (error is! THBaseException) {
@@ -97,9 +135,16 @@ void main(List<String> arguments) {
 }
 
 class MapiahApp extends StatelessWidget {
-  final String? fileToRead;
+  final String? mainFilePath;
+  final List<String> th2FilePaths;
+  final String? thConfigFilePath;
 
-  const MapiahApp({super.key, this.fileToRead});
+  const MapiahApp({
+    super.key,
+    this.mainFilePath,
+    this.th2FilePaths = const <String>[],
+    this.thConfigFilePath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +177,11 @@ class MapiahApp extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           locale: mpLocator.mpSettingsController.locale,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: MapiahHome(mainFilePath: fileToRead),
+          home: MapiahHome(
+            mainFilePath: mainFilePath,
+            th2FilePaths: th2FilePaths,
+            thConfigFilePath: thConfigFilePath,
+          ),
         );
       },
     );
