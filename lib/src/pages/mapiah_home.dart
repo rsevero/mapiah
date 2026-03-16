@@ -29,14 +29,18 @@ class _MapiahHomeState extends State<MapiahHome> {
   void initState() {
     super.initState();
 
-    // If a TH2 file path is provided, navigate to edit page after frame builds
+    // If a file path is provided, handle it based on extension
     if (widget.mainFilePath != null) {
       if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
+        // Open as TH2 file
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _openTH2FileFromPath(widget.mainFilePath!);
         });
       } else {
-        mpLocator.mpLog.e('Invalid file extension: ${widget.mainFilePath}');
+        // Treat as THConfig file and run Therion
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          MPDialogAux.runTherionWithTHConfigFile(context, widget.mainFilePath!);
+        });
       }
     }
 

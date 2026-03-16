@@ -1120,6 +1120,25 @@ class MPDialogAux {
     }
   }
 
+  static Future<void> runTherionWithTHConfigFile(
+    BuildContext context,
+    String thConfigFilePath,
+  ) async {
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
+      // Set the THConfig file path
+      mpLocator.mpGeneralController.setTHConfigFilePath(thConfigFilePath);
+
+      // Show the run dialog
+      await runTherion(context);
+    } else {
+      MPDialogAux.showHelpDialog(
+        context,
+        'no_therion_found',
+        mpLocator.appLocalizations.mpNoTherionFound,
+      );
+    }
+  }
+
   static void showHelpDialog(
     BuildContext context,
     String helpPage,
