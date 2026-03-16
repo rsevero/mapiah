@@ -31,8 +31,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   void initState() {
     super.initState();
 
-    initializeMPCommandLocalizations(context);
-
     _openFileOrderReaction = reaction(
       (_) => mpLocator.mpGeneralController.openFileOrder.length,
       (int length) {
@@ -53,6 +51,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
   @override
   Widget build(BuildContext context) {
+    initializeMPCommandLocalizations(context);
+
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final MPSettingsController mpSettingsController =
         mpLocator.mpSettingsController;
