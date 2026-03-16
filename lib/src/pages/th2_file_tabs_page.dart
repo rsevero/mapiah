@@ -389,7 +389,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     return CallbackShortcuts(
       bindings: bindings,
       child: Focus(
-        autofocus: true,
         onKeyEvent: (node, event) {
           return KeyEventResult.ignored;
         },
