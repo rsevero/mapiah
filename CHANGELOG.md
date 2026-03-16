@@ -7,12 +7,15 @@
   * Scrap duplication.
   * Multiple TH2 file open support with multi-selection in file dialog.
   * Click-and-drag horizontal scrolling for tabs when many files are open.
+  * Tab drag-to-reorder: reorder file tabs by clicking and dragging them.
   * Enhanced tab bar styling with pill-shaped appearance and better spacing.
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]
   * Regular loop error reports being treated as actual errors.
   * Non actual error should not be marked in red.
+  * RenderFlex overflow error when resizing window smaller than tab bar width.
+  * Tab drag-to-reorder functionality now properly reorders tabs without overflow.
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.

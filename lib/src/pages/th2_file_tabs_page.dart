@@ -228,33 +228,36 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               final int activeTabIndex =
                   mpLocator.mpGeneralController.activeTabIndex;
 
-              return Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: (DragUpdateDetails details) {
-                    _tabScrollController.jumpTo(
-                      _tabScrollController.offset - details.delta.dx,
-                    );
-                  },
-                  child: SingleChildScrollView(
-                    controller: _tabScrollController,
-                    scrollDirection: Axis.horizontal,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (
-                          int tabIndex = 0;
-                          tabIndex < openFileOrder.length;
-                          tabIndex++
-                        )
-                          _buildDraggableTab(
-                            filename: openFileOrder[tabIndex],
-                            tabIndex: tabIndex,
-                            openFileOrder: openFileOrder,
-                            activeTabIndex: activeTabIndex,
-                          ),
-                      ],
+              return SizedBox(
+                width: double.infinity,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onHorizontalDragUpdate: (DragUpdateDetails details) {
+                      _tabScrollController.jumpTo(
+                        _tabScrollController.offset - details.delta.dx,
+                      );
+                    },
+                    child: SingleChildScrollView(
+                      controller: _tabScrollController,
+                      scrollDirection: Axis.horizontal,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (
+                            int tabIndex = 0;
+                            tabIndex < openFileOrder.length;
+                            tabIndex++
+                          )
+                            _buildDraggableTab(
+                              filename: openFileOrder[tabIndex],
+                              tabIndex: tabIndex,
+                              openFileOrder: openFileOrder,
+                              activeTabIndex: activeTabIndex,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
