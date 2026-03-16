@@ -3,7 +3,9 @@
 ## 0.3.2 - not yet released
 * New features:
   * Scrap duplication.
-  * Multiple TH2 file open support.
+  * Multiple TH2 file open support with multi-selection in file dialog.
+  * Click-and-drag horizontal scrolling for tabs when many files are open.
+  * Enhanced tab bar styling with pill-shaped appearance and better spacing.
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]

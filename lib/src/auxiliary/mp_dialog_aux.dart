@@ -885,6 +885,7 @@ class MPDialogAux {
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],
+        allowMultiple: true,
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
@@ -892,24 +893,42 @@ class MPDialogAux {
             : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
-      if (result != null) {
-        String? pickedFilePath = result.files.single.path;
+      if ((result != null) && result.files.isNotEmpty) {
+        final List<String> pickedFilePaths = <String>[];
 
-        if (pickedFilePath == null) {
+        for (final file in result.files) {
+          final String? filePath = file.path;
+
+          if (filePath != null) {
+            pickedFilePaths.add(filePath);
+          }
+        }
+
+        if (pickedFilePaths.isEmpty) {
           return;
         }
 
+        // Check if this is the first time opening files
+        final bool wasEmpty =
+            mpLocator.mpGeneralController.openFileOrder.isEmpty;
+
+        // Update last accessed directory from the first file
         mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-          pickedFilePath,
+          pickedFilePaths.first,
         );
 
-        // Create the controller for the file before adding the tab
-        mpLocator.mpGeneralController.getTH2FileEditController(
-          filename: pickedFilePath,
-        );
+        // Create controllers and add tabs for all selected files
+        for (final String filePath in pickedFilePaths) {
+          mpLocator.mpGeneralController.getTH2FileEditController(
+            filename: filePath,
+          );
+          mpLocator.mpGeneralController.addFileTab(filePath);
+        }
 
-        mpLocator.mpGeneralController.addFileTab(pickedFilePath);
-        ensureTabsPageOpen(context);
+        // Only navigate to tabs page if we went from 0 to some files
+        if (wasEmpty) {
+          ensureTabsPageOpen(context);
+        }
       } else {
         mpLocator.mpLog.i('No file selected.');
       }
