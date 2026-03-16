@@ -5,6 +5,7 @@ This is where all TH2 file editing is done.
 ## Index
 - [Index](#index)
 - [Top bar](#top-bar)
+- [File tabs](#file-tabs)
 - [Edit window](#edit-window)
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
@@ -33,6 +34,18 @@ This is where all TH2 file editing is done.
   * ![Run Therion icon](assets/help/images/iconRunTherion.png "Run Therion")" _Run Therion_: runs Therion with currently opened project.
   * ![Help icon](assets/help/images/iconHelp.png "Help") _Help_: show this dialog box.
   * ![Close icon](assets/help/images/iconClose.png "Close") _Close_: close the TH2 file edit window without saving changes.
+
+## File tabs
+
+When multiple files are open, each file appears as a tab at the top of the editor. The file name is displayed on the tab along with an **X** button to close that file.
+
+**Tab features:**
+* **Switch between files**: Click on any tab to switch to that file
+* **Close a file**: Click the **X** button on the tab to close that file
+* **Scroll tabs**: If you have many files open, use your mouse to click and drag horizontally on the tabs to scroll through them
+* **Multiple selection**: Use the _File open_ button on the top bar to select and open multiple files at once
+
+The currently active file's tab is highlighted, making it easy to see which file you're editing. All open files maintain their editing state, so you can switch between them without losing your work.
 
 ## Edit window
 

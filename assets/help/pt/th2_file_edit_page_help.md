@@ -5,6 +5,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 ## Índice
 - [Índice](#índice)
 - [Barra superior](#barra-superior)
+- [Abas de arquivo](#abas-de-arquivo)
 - [Croquis](#croquis)
 - [Desenhando linhas](#desenhando-linhas)
   - [Conexão de mapa](#conexão-de-mapa)
@@ -33,6 +34,18 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   * ![Ícone executar Therion](assets/help/images/iconRunTherion.png "Executar Therion") _Executar Therion_: executa o Therion com o projeto atualmente aberto.
   * ![Ícone ajuda](assets/help/images/iconHelp.png "Ajuda") _Ajuda_: mostra esta caixa de diálogo.
   * ![Ícone fechar](assets/help/images/iconClose.png "Fechar") _Fechar_: fecha a janela de edição do arquivo TH2 sem salvar alterações.
+
+## Abas de arquivo
+
+Quando múltiplos arquivos estão abertos, cada arquivo aparece como uma aba no topo do editor. O nome do arquivo é exibido na aba juntamente com um botão **X** para fechar esse arquivo.
+
+**Recursos das abas:**
+* **Alternar entre arquivos**: Clique em qualquer aba para alternar para esse arquivo
+* **Fechar um arquivo**: Clique no botão **X** na aba para fechar esse arquivo
+* **Rolar as abas**: Se você tiver muitos arquivos abertos, use o mouse para clicar e arrastar horizontalmente nas abas para rolá-las
+* **Seleção múltipla**: Use o botão _Abrir arquivo_ na barra superior para selecionar e abrir múltiplos arquivos de uma vez
+
+A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo você está editando. Todos os arquivos abertos mantêm seu estado de edição, para que você possa alternar entre eles sem perder seu trabalho.
 
 ## Croquis
 Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
