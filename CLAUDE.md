@@ -128,46 +128,41 @@ Uses `flutter_localizations` with `.arb` files in `lib/src/generated/i18n/`. Run
 
 ## Coding Style
 
-### When writing general app code
+### General Guidelines
 
-1. App localizations must be accessed via `mpLocator.appLocalizations`. Exception: `MapiahHome` uses `final AppLocalizations appLocalizations = AppLocalizations.of(context);`.
-2. No magic numbers. Define constants in `lib/src/constants/mp_constants.dart`.
-3. Avoid duplicated code. Extract reusable logic into separate methods or widgets.
-4. Keep UI logic separate from business logic. Use MobX controllers for business logic and state management.
-5. All variable declarations must have explicit type definitions. Avoid `var` when the type is not immediately obvious.
-6. Declare variables as `final` whenever possible.
-7. Put an empty line between "finals", non-finals and regular code.
-8. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
-9. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-10. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
-11. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
-12. Don't use all caps in user-facing text.
-13. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-14. Run `flutter analyze` after generating or modifying code.
-
-### When writing scripts (command-line tools)
-
-1. Avoid duplicated code. Extract reusable logic into separate methods.
-2. All variable declarations must have explicit type definitions. Avoid `var` when the type is not immediately obvious.
-3. Declare variables as `final` whenever possible.
-4. Put an empty line between "finals", non-finals and regular code.
-5. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
-6. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-7. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
-8. Don't use all caps in user-facing text.
-9. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
-10. Run `flutter analyze` after generating or modifying code.
-
-### When writing tests
+These guidelines apply to all code (app code, scripts, and tests):
 
 1. All variable declarations must have explicit type definitions. Avoid `var` when the type is not immediately obvious.
 2. Declare variables as `final` whenever possible.
 3. Put an empty line between "finals", non-finals and regular code.
 4. Avoid complex calculations in a single step. Break them down into intermediate variables with descriptive names.
 5. In multiple-condition decisions, wrap all comparisons that involve more than one element in parentheses for clarity.
-6. Avoid onliners "if-thens", i.e., always put curly braces around conditional commands.
+6. Avoid one-liners "if-thens", i.e., always put curly braces around conditional commands.
 7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 8. Run `flutter analyze` after generating or modifying code.
+9. When proposing a commit, always add an entry on CHANGELOG.md.
+
+### When writing general app code
+
+In addition to General Guidelines, follow these app-specific rules:
+
+1. App localizations must be accessed via `mpLocator.appLocalizations`. Exception: `MapiahHome` uses `final AppLocalizations appLocalizations = AppLocalizations.of(context);`.
+2. No magic numbers. Define constants in `lib/src/constants/mp_constants.dart`.
+3. Avoid duplicated code. Extract reusable logic into separate methods or widgets.
+4. Keep UI logic separate from business logic. Use MobX controllers for business logic and state management.
+5. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
+6. Don't use all caps in user-facing text.
+
+### When writing scripts (command-line tools)
+
+In addition to General Guidelines, follow these script-specific rules:
+
+1. Avoid duplicated code. Extract reusable logic into separate methods.
+2. Don't use all caps in user-facing text.
+
+### When writing tests
+
+No additional specific rules beyond General Guidelines.
 
 ## Release Targets
 

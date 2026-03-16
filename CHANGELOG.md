@@ -3,6 +3,7 @@
 ## 0.3.2 - not yet released
 * New features:
   * Scrap duplication.
+  * Multiple TH2 file open support.
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]
