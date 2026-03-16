@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
@@ -14,7 +15,7 @@ import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
-import 'package:mobx/mobx.dart';
+import 'package:mobx/mobx.dart' hide Listener;
 import 'package:window_size/window_size.dart';
 
 class TH2FileTabsPage extends StatefulWidget {
@@ -232,31 +233,51 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                 width: double.infinity,
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: GestureDetector(
-                    onHorizontalDragUpdate: (DragUpdateDetails details) {
-                      _tabScrollController.jumpTo(
-                        _tabScrollController.offset - details.delta.dx,
-                      );
+                  child: MouseRegion(
+                    onEnter: (_) {
+                      // Focus the SingleChildScrollView to receive mouse wheel events
                     },
-                    child: SingleChildScrollView(
-                      controller: _tabScrollController,
-                      scrollDirection: Axis.horizontal,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          for (
-                            int tabIndex = 0;
-                            tabIndex < openFileOrder.length;
-                            tabIndex++
-                          )
-                            _buildDraggableTab(
-                              filename: openFileOrder[tabIndex],
-                              tabIndex: tabIndex,
-                              openFileOrder: openFileOrder,
-                              activeTabIndex: activeTabIndex,
+                    child: Listener(
+                      onPointerSignal: (PointerSignalEvent event) {
+                        if (event is PointerScrollEvent) {
+                          final double newOffset =
+                              (_tabScrollController.offset +
+                              event.scrollDelta.dy);
+                          _tabScrollController.jumpTo(
+                            newOffset.clamp(
+                              0.0,
+                              _tabScrollController.position.maxScrollExtent,
                             ),
-                        ],
+                          );
+                        }
+                      },
+                      child: GestureDetector(
+                        onHorizontalDragUpdate: (DragUpdateDetails details) {
+                          _tabScrollController.jumpTo(
+                            _tabScrollController.offset - details.delta.dx,
+                          );
+                        },
+                        child: SingleChildScrollView(
+                          controller: _tabScrollController,
+                          scrollDirection: Axis.horizontal,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              for (
+                                int tabIndex = 0;
+                                tabIndex < openFileOrder.length;
+                                tabIndex++
+                              )
+                                _buildDraggableTab(
+                                  filename: openFileOrder[tabIndex],
+                                  tabIndex: tabIndex,
+                                  openFileOrder: openFileOrder,
+                                  activeTabIndex: activeTabIndex,
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),

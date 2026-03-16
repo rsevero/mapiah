@@ -7,6 +7,7 @@
   * Scrap duplication.
   * Multiple TH2 file open support with multi-selection in file dialog.
   * Click-and-drag horizontal scrolling for tabs when many files are open.
+  * Mouse wheel scrolling support for tab bar.
   * Tab drag-to-reorder: reorder file tabs by clicking and dragging them.
   * Enhanced tab bar styling with pill-shaped appearance and better spacing.
 * Fixed bugs:
