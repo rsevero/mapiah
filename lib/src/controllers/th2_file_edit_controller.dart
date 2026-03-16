@@ -480,6 +480,13 @@ abstract class TH2FileEditControllerBase with Store {
     if (_thFile.scrapMPIDs.isNotEmpty) {
       _activeScrapID = _thFile.scrapMPIDs.first;
       updateHasMultipleScraps();
+
+      // Initialize snap targets only after activeScrapID is set
+      snapController.setSnapTargets(
+        pointTarget: MPSnapPointTarget.point,
+        linePointTarget: MPSnapLinePointTarget.linePoint,
+        xviTargets: [MPSnapXVIFileTarget.shot],
+      );
     }
 
     _initializeReactions();
@@ -495,12 +502,6 @@ abstract class TH2FileEditControllerBase with Store {
     selectionController.resetSelectableElements();
 
     elementEditController.initializeMostUsedTypes();
-
-    snapController.setSnapTargets(
-      pointTarget: MPSnapPointTarget.point,
-      linePointTarget: MPSnapLinePointTarget.linePoint,
-      xviTargets: [MPSnapXVIFileTarget.shot],
-    );
 
     setFilename(_thFile.filename);
 
