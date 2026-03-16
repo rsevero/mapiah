@@ -15,16 +15,20 @@ The hook is already configured in the repository. Git should automatically detec
 
 ### Manual Installation (if needed)
 
+Run the following commands from a **bash shell** (Git Bash on Windows, any terminal on Linux/macOS):
+
 ```bash
 # Navigate to the repository root
-cd /devel/mapiah
+cd /path/to/mapiah
 
 # Copy the hook to Git's hooks directory
 cp auxiliary/git-hooks/pre-commit .git/hooks/pre-commit
 
-# Make it executable
+# Make it executable (Linux/macOS only — Git Bash on Windows handles this automatically)
 chmod +x .git/hooks/pre-commit
 ```
+
+> **Windows note**: run the commands above from **Git Bash**, not PowerShell or cmd.exe.
 
 ### Verify Installation
 
@@ -109,10 +113,13 @@ The hook uses `set -e`, which means it **stops and fails** if any step errors:
 - **Solution**: Fix the formatting issues that `dart format` reports and try again
 
 **Issue**: Permission denied on hook
-- **Solution**: Make it executable: `chmod +x .git/hooks/pre-commit`
+- **Solution**: Make it executable: `chmod +x .git/hooks/pre-commit` (Linux/macOS; not needed on Windows with Git Bash)
 
 **Issue**: Hook not running
 - **Solution**: Verify installation with `ls -l .git/hooks/pre-commit`
+
+**Issue**: Hook fails on Windows with `sed` errors
+- **Solution**: Ensure the hook uses `sed -i''` (no space between `-i` and `''`). Re-copy the hook from `auxiliary/git-hooks/pre-commit`.
 
 ## Disabling the Hook (Not Recommended)
 
