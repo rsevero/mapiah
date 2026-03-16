@@ -141,6 +141,7 @@ These guidelines apply to all code (app code, scripts, and tests):
 7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 8. Run `flutter analyze` after generating or modifying code.
 9. When proposing a commit, always add an entry on CHANGELOG.md.
+10. Always include a "Signed-off-by: Your Name <your.email@example.com>" line in your commit message.
 
 ### When writing general app code
 
@@ -152,6 +153,8 @@ In addition to General Guidelines, follow these app-specific rules:
 4. Keep UI logic separate from business logic. Use MobX controllers for business logic and state management.
 5. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
 6. Don't use all caps in user-facing text.
+7. Update the appropriate help page (both in english and portuguese) when adding new features or changing existing ones. Help pages are in `assets/help/` and are written in markdown.
+8. Updte the appropriate keyboard shortcuts page in `assets/help/` when adding new features or changing existing ones. They are written in markdown.
 
 ### When writing scripts (command-line tools)
 
