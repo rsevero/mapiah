@@ -31,6 +31,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       <String, Future<TH2FileEditControllerCreateResult>>{};
   late final ScrollController _tabScrollController;
 
+  int _dragOverTabIndex = -1;
+
   @override
   void initState() {
     super.initState();
@@ -268,13 +270,27 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                                 int tabIndex = 0;
                                 tabIndex < openFileOrder.length;
                                 tabIndex++
-                              )
+                              ) ...[
+                                if (_dragOverTabIndex == tabIndex)
+                                  SizedBox(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: Center(
+                                      child: Container(
+                                        width: 2.0,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
                                 _buildDraggableTab(
                                   filename: openFileOrder[tabIndex],
                                   tabIndex: tabIndex,
                                   openFileOrder: openFileOrder,
                                   activeTabIndex: activeTabIndex,
                                 ),
+                              ],
                             ],
                           ),
                         ),
@@ -370,7 +386,22 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         ),
       ),
       child: DragTarget<String>(
+        onWillAcceptWithDetails: (details) {
+          setState(() {
+            _dragOverTabIndex = tabIndex;
+          });
+          return true;
+        },
+        onLeave: (_) {
+          setState(() {
+            _dragOverTabIndex = -1;
+          });
+        },
         onAcceptWithDetails: (DragTargetDetails<String> details) {
+          setState(() {
+            _dragOverTabIndex = -1;
+          });
+
           final String draggedFilename = details.data;
           final int draggedIndex = openFileOrder.indexOf(draggedFilename);
 
