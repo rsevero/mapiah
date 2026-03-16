@@ -709,5 +709,10 @@
   "updateCheckFailedNoAnswerBody": "Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.",
   "updateCheckFailedParsingBody": "Não foi possível ler a versão mais recente no servidor de atualizações.",
   "updateCheckFailedParsingWithTagBody": "Não foi possível interpretar a tag da versão mais recente: {tagName}",
-  "updateCheckFailedTitle": "Falha ao verificar atualização"
+  "updateCheckFailedTitle": "Falha ao verificar atualização",
+  "th2FileTabsPageCloseTabTooltip": "Fechar arquivo",
+  "@th2FileTabsPageCloseTabTooltip": {
+    "description": "Dica de ferramenta para o botão de fechamento em uma aba de arquivo no editor multi-arquivo. Usado em: TH2FileTabsPage botão de fechamento de aba",
+    "type": "text"
+  }
 }

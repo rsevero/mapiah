@@ -259,6 +259,10 @@ const int mpDefaultMinDigitsForTextFields = 6;
 const int mpDefaultMinCharsForTextFields = 10;
 const int mpDefaultMaxCharsForTextFields = 20;
 
+const double mpTabBarHeight = 46.0;
+const double mpTabCloseIconSize = 14.0;
+const double mpTabLabelMaxWidth = 160.0;
+
 const int mpETRSMin = 28;
 const int mpETRSMax = 37;
 const int mpEPSGESRIMin = 1;

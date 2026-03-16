@@ -4268,6 +4268,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Projection'**
   String get thProjection;
+
+  /// Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close file'**
+  String get th2FileTabsPageCloseTabTooltip;
 }
 
 class _AppLocalizationsDelegate

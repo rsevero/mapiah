@@ -2251,4 +2251,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thProjection => 'Projeção';
+
+  @override
+  String get th2FileTabsPageCloseTabTooltip => 'Fechar arquivo';
 }

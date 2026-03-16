@@ -3574,5 +3574,10 @@
   "@thProjection": {
     "description": "The label for the projection line type. Used on: _MPAddScrapDialogWidgetState.build, lib/src/widgets/options/mp_projection_option_overlay_window_widget.dart",
     "type": "text"
+  },
+  "th2FileTabsPageCloseTabTooltip": "Close file",
+  "@th2FileTabsPageCloseTabTooltip": {
+    "description": "Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button",
+    "type": "text"
   }
 }

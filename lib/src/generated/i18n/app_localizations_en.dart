@@ -2237,4 +2237,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thProjection => 'Projection';
+
+  @override
+  String get th2FileTabsPageCloseTabTooltip => 'Close file';
 }

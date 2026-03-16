@@ -162,25 +162,25 @@
 [X] - BUG: when clicking on the name of an image, checkbox is not changed on "available images" dialog box.
 
 ## Version 0.4
-[ ] - Migrate flatpak repo to mapiah.org.
+[X] - Migrate flatpak repo to mapiah.org.
 [ ] - Open multiple files simultaneously.
 [ ] - Allow copy/paste between scraps.
 [ ] - Allow copy/paste between files.
 [ ] - Search/select elements by characteristics.
 [ ] - Change cursors to show current status.
-[ ] - Config page.
+[X] - Config page.
 [X] - Drag overlay windows.
-[ ] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]
+[X] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]
 [ ] - Hide elements by type.
 [ ] - Copy/Paste.
 [ ] - Show status message listing what's selected in 'single line edit' mode.
 [ ] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.
-[ ] - Include options and point/line count in multiple elements clicked dialog box.
+[X] - Include options and point/line count in multiple elements clicked dialog box.
 [ ] - Implement default option values.
 [ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
 [ ] - Control which scraps are visible in Mapiah (that is not a Therion setting).
-[ ] - Show points, lines and areas using therion symbology [requested by Marco Corvi]
+[ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...).
@@ -195,8 +195,7 @@
 [ ] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
-[ ] - Manually edit position of points.
-[ ] - Manually edit position of end and control points in line segments.
+[ ] - Show current position during drag in status bar.
 [ ] - Convert multiline comment into a single element.
 [ ] - Reorder images.
 [ ] - Create a easy way to find slope lines without lsize.
@@ -209,7 +208,7 @@
 [ ] - Raster images tracing.
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 [ ] - Freehand drawing tool. [requested by Edvard]
-[ ] - Show shorcuts related to current state on status bar. [requested by Edvard]
+[ ] - Show shortcuts related to current state on status bar. [requested by Edvard]
 
 ## Version 2.0
 [ ] - Open/edit/save thconfig files.

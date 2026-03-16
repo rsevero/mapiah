@@ -27,6 +27,12 @@ abstract class MPGeneralControllerBase with Store {
   @readonly
   String _thConfigFilePath = '';
 
+  @readonly
+  ObservableList<String> _openFileOrder = ObservableList<String>();
+
+  @readonly
+  int _activeTabIndex = 0;
+
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
 
@@ -51,6 +57,36 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   String get thConfigFilePath => _thConfigFilePath;
+
+  @action
+  void addFileTab(String filename) {
+    if (!_openFileOrder.contains(filename)) {
+      _openFileOrder.add(filename);
+    }
+    _activeTabIndex = _openFileOrder.indexOf(filename);
+  }
+
+  @action
+  void removeFileTab({required String filename}) {
+    final int indexToRemove = _openFileOrder.indexOf(filename);
+    if (indexToRemove != -1) {
+      _openFileOrder.removeAt(indexToRemove);
+      removeFileController(filename: filename);
+
+      if (_openFileOrder.isEmpty) {
+        _activeTabIndex = 0;
+      } else if (_activeTabIndex >= _openFileOrder.length) {
+        _activeTabIndex = _openFileOrder.length - 1;
+      }
+    }
+  }
+
+  @action
+  void setActiveTab(int index) {
+    if (index >= 0 && index < _openFileOrder.length) {
+      _activeTabIndex = index;
+    }
+  }
 
   int nextMPIDForElements() {
     return _nextMPIDForElements++;
