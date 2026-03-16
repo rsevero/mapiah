@@ -1,15 +1,75 @@
 #!/bin/bash
 set -e
 
-# Get staged files that are Dart files
-DART_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' || true)
+SPDX_IDENTIFIER="// SPDX-License-Identifier: GPL-3.0-or-later"
+COPYRIGHT_HEADER="// Copyright (C) 2023- Mapiah Ltda"
 
-if [[ -z "$DART_FILES" ]]; then
-  exit 0
+SPDX_IDENTIFIER_MD="<!-- SPDX-License-Identifier: GPL-3.0-or-later -->"
+COPYRIGHT_HEADER_MD="<!-- Copyright (C) 2023- Mapiah Ltda -->"
+
+# Get staged files that are Dart or Markdown files
+DART_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' || true)
+MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
+
+# Function to add SPDX headers to Dart files
+add_dart_headers() {
+  local file="$1"
+
+  # Skip if file already has SPDX identifier
+  if grep -q "SPDX-License-Identifier" "$file"; then
+    return 0
+  fi
+
+  # Check if file has shebang (for scripts)
+  local first_line=$(head -n 1 "$file")
+  if [[ "$first_line" == "#!/"* ]]; then
+    # For scripts: shebang first, then headers
+    sed -i "1a $COPYRIGHT_HEADER" "$file"
+    sed -i "1a $SPDX_IDENTIFIER" "$file"
+  else
+    # For regular files: add headers at the beginning
+    sed -i "1i $SPDX_IDENTIFIER" "$file"
+    sed -i "1a $COPYRIGHT_HEADER" "$file"
+  fi
+  echo "Added SPDX headers to: $file"
+}
+
+# Function to add SPDX headers to Markdown files
+add_markdown_headers() {
+  local file="$1"
+
+  # Skip if file already has SPDX identifier
+  if grep -q "SPDX-License-Identifier" "$file"; then
+    return 0
+  fi
+
+  sed -i "1i $SPDX_IDENTIFIER_MD" "$file"
+  sed -i "1a $COPYRIGHT_HEADER_MD" "$file"
+  echo "Added SPDX headers to: $file"
+}
+
+# Add headers to Dart files if needed
+if [[ -n "$DART_FILES" ]]; then
+  for file in $DART_FILES; do
+    add_dart_headers "$file"
+  done
 fi
 
-# Format only staged files
-dart format $DART_FILES
+# Add headers to Markdown files if needed
+if [[ -n "$MD_FILES" ]]; then
+  for file in $MD_FILES; do
+    add_markdown_headers "$file"
+  done
+fi
 
-# Re-stage formatted files
-git add $DART_FILES
+# Format only staged Dart files
+if [[ -n "$DART_FILES" ]]; then
+  dart format $DART_FILES
+  # Re-stage formatted files
+  git add $DART_FILES
+fi
+
+# Re-stage Markdown files if any were modified
+if [[ -n "$MD_FILES" ]]; then
+  git add $MD_FILES
+fi
