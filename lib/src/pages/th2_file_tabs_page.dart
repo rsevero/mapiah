@@ -353,16 +353,19 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   }) {
     return Draggable<String>(
       data: filename,
-      feedback: Material(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
-          decoration: BoxDecoration(
-            color: Colors.grey.withAlpha(200),
-            borderRadius: BorderRadius.circular(24.0),
-          ),
-          child: Text(
-            filename.split('/').last,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+      feedback: ClipRRect(
+        borderRadius: BorderRadius.circular(24.0),
+        child: Material(
+          color: Colors.grey.withAlpha(200),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+              vertical: 10.0,
+            ),
+            child: Text(
+              filename.split('/').last,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ),

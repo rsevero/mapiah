@@ -17,6 +17,7 @@
   * Non actual error should not be marked in red.
   * RenderFlex overflow error when resizing window smaller than tab bar width.
   * Tab drag-to-reorder functionality now properly reorders tabs without overflow.
+  * Drag feedback image now has rounded corners matching the tab style.
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
