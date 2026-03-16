@@ -32,6 +32,7 @@
   * Including instructions to Claude update help pages when adding new features or changing existing ones.
   * Added SPDX license identifiers to all Dart and Markdown source files.
   * Updated pre-commit git hook to automatically add SPDX headers and copyright information to new Dart and Markdown files.
+  * Added comprehensive pre-commit hook documentation with examples and troubleshooting guide.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:
