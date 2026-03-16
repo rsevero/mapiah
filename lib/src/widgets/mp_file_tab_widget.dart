@@ -20,22 +20,28 @@ class MPFileTabWidget extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final String basename = p.basename(filename);
     final Color backgroundColor = isActive
-        ? theme.colorScheme.primary.withAlpha(51)
-        : theme.colorScheme.surface;
+        ? theme.colorScheme.primary.withAlpha(25)
+        : theme.colorScheme.surfaceContainerLow;
     final Color textColor = isActive
         ? theme.colorScheme.onSurface
-        : theme.colorScheme.onSurface.withAlpha(153);
+        : theme.colorScheme.onSurfaceVariant;
+    final Color borderColor = isActive
+        ? theme.colorScheme.primary
+        : theme.colorScheme.outlineVariant;
 
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border(
-          bottom: isActive
-              ? BorderSide(color: theme.colorScheme.primary, width: 2.0)
-              : BorderSide(color: theme.dividerColor, width: 1.0),
+          bottom: BorderSide(color: borderColor, width: isActive ? 3.0 : 1.0),
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8.0),
+          topRight: Radius.circular(8.0),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: mpButtonSpace),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -47,20 +53,30 @@ class MPFileTabWidget extends StatelessWidget {
                 basename,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: textColor),
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                ),
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.close),
-            iconSize: mpTabCloseIconSize,
-            constraints: const BoxConstraints(
-              minWidth: mpTabCloseIconSize + 8.0,
-              minHeight: mpTabCloseIconSize + 8.0,
+          const SizedBox(width: 8.0),
+          SizedBox(
+            width: mpTabCloseIconSize + 8.0,
+            height: mpTabCloseIconSize + 8.0,
+            child: IconButton(
+              icon: Icon(
+                Icons.close,
+                size: mpTabCloseIconSize,
+                color: textColor,
+              ),
+              constraints: const BoxConstraints(),
+              padding: const EdgeInsets.all(2.0),
+              onPressed: onClose,
+              tooltip:
+                  mpLocator.appLocalizations.th2FileTabsPageCloseTabTooltip,
+              hoverColor: theme.colorScheme.primary.withAlpha(30),
             ),
-            padding: const EdgeInsets.all(4.0),
-            onPressed: onClose,
-            tooltip: mpLocator.appLocalizations.th2FileTabsPageCloseTabTooltip,
           ),
         ],
       ),
