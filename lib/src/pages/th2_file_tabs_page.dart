@@ -26,10 +26,13 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   late ReactionDisposer _openFileOrderReaction;
   final Map<String, Future<TH2FileEditControllerCreateResult>> _loadFutures =
       <String, Future<TH2FileEditControllerCreateResult>>{};
+  late final ScrollController _tabScrollController;
 
   @override
   void initState() {
     super.initState();
+
+    _tabScrollController = ScrollController();
 
     _openFileOrderReaction = reaction(
       (_) => mpLocator.mpGeneralController.openFileOrder.length,
@@ -45,6 +48,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
   @override
   void dispose() {
+    _tabScrollController.dispose();
     _openFileOrderReaction();
     super.dispose();
   }
@@ -224,33 +228,42 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
               return Align(
                 alignment: Alignment.topLeft,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (String filename in openFileOrder)
-                        GestureDetector(
-                          onTap: () {
-                            final int index = openFileOrder.indexOf(filename);
-                            mpLocator.mpGeneralController.setActiveTab(index);
-                          },
-                          child: MPFileTabWidget(
-                            filename: filename,
-                            isActive:
-                                (activeTabIndex < openFileOrder.length) &&
-                                (openFileOrder[activeTabIndex] == filename),
-                            onClose: () {
-                              final TH2FileEditController? controller =
-                                  mpLocator.mpGeneralController
-                                      .getTH2FileEditControllerIfExists(
-                                        filename,
-                                      );
-                              controller?.close();
+                child: GestureDetector(
+                  onHorizontalDragUpdate: (DragUpdateDetails details) {
+                    _tabScrollController.jumpTo(
+                      _tabScrollController.offset - details.delta.dx,
+                    );
+                  },
+                  child: SingleChildScrollView(
+                    controller: _tabScrollController,
+                    scrollDirection: Axis.horizontal,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (String filename in openFileOrder)
+                          GestureDetector(
+                            onTap: () {
+                              final int index = openFileOrder.indexOf(filename);
+                              mpLocator.mpGeneralController.setActiveTab(index);
                             },
+                            child: MPFileTabWidget(
+                              filename: filename,
+                              isActive:
+                                  (activeTabIndex < openFileOrder.length) &&
+                                  (openFileOrder[activeTabIndex] == filename),
+                              onClose: () {
+                                final TH2FileEditController? controller =
+                                    mpLocator.mpGeneralController
+                                        .getTH2FileEditControllerIfExists(
+                                          filename,
+                                        );
+                                controller?.close();
+                              },
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
