@@ -22,6 +22,7 @@
   * Unable to open multiple files at once from home screen (first time opening files).
   * Exception "No element with index '0'" when opening TH2 file from command line.
   * Tab names now display without .th2 extension for cleaner UI.
+  * Test 3100 assertions now correctly expect TH2FileTabsPage instead of TH2FileEditPage.
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
