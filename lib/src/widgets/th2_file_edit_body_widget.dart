@@ -53,7 +53,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                     return Center(
                       child: Text(
                         appLocalizations.th2FileEditPageLoadingFile(
-                          widget.th2FileEditController.filenameAndScrap,
+                          widget.th2FileEditController.currentScrapName,
                         ),
                       ),
                     );
@@ -132,7 +132,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.th2FileEditController.filenameAndScrap,
+                      widget.th2FileEditController.currentScrapName,
                       style: statusBarInfoStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

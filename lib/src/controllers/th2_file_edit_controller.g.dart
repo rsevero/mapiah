@@ -458,23 +458,23 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_filenameAndScrapAtom = Atom(
-    name: 'TH2FileEditControllerBase._filenameAndScrap',
+  late final _$_currentScrapNameAtom = Atom(
+    name: 'TH2FileEditControllerBase._currentScrapName',
     context: context,
   );
 
-  String get filenameAndScrap {
-    _$_filenameAndScrapAtom.reportRead();
-    return super._filenameAndScrap;
+  String get currentScrapName {
+    _$_currentScrapNameAtom.reportRead();
+    return super._currentScrapName;
   }
 
   @override
-  String get _filenameAndScrap => filenameAndScrap;
+  String get _currentScrapName => currentScrapName;
 
   @override
-  set _filenameAndScrap(String value) {
-    _$_filenameAndScrapAtom.reportWrite(value, super._filenameAndScrap, () {
-      super._filenameAndScrap = value;
+  set _currentScrapName(String value) {
+    _$_currentScrapNameAtom.reportWrite(value, super._currentScrapName, () {
+      super._currentScrapName = value;
     });
   }
 

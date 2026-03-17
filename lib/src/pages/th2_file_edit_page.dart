@@ -287,7 +287,7 @@ class _TH2FileEditPageState extends State<TH2FileEditPage> {
                       children: [
                         Expanded(
                           child: Text(
-                            th2FileEditController.filenameAndScrap,
+                            th2FileEditController.currentScrapName,
                             style: statusBarInfoStyle,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

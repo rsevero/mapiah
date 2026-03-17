@@ -144,6 +144,7 @@ These guidelines apply to all code (app code, scripts, and tests):
 8. Run `flutter analyze` after generating or modifying code.
 9. When proposing a commit, always add an entry on CHANGELOG.md. The added new entry should go at the end of the appropriate section of CHANGELOG.
 10. Always include a "Signed-off-by: My Name <my.email@example.com>" line and a "Co-Authored-By: MODEL <email>" line in your commit message.
+11. Don´t manually run "dart run build_runner build" as there already is a watch instance running. 
 
 ### When writing general app code
 

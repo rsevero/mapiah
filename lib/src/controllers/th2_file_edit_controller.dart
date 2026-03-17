@@ -107,7 +107,7 @@ abstract class TH2FileEditControllerBase with Store {
   String _redoDescription = '';
 
   @readonly
-  String _filenameAndScrap = '';
+  String _currentScrapName = '';
 
   @readonly
   bool _isAddElementMode = false;
@@ -1343,12 +1343,11 @@ abstract class TH2FileEditControllerBase with Store {
   void setFilename(String filename) {
     _th2File.filename = filename;
 
-    _filenameAndScrap = p.basename(_th2File.filename);
-
     if (_activeScrapID > 0) {
       final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
-
-      _filenameAndScrap += ' | ${scrap.thID}';
+      _currentScrapName = scrap.thID;
+    } else {
+      _currentScrapName = '';
     }
   }
 
