@@ -132,7 +132,7 @@ const double mpLineSimplifyEpsilonOnScreen = 1.0;
 
 const double mpMinimumSizeForDrawing = 10.0;
 
-const int mpFirstMPIDForTHFiles = -1;
+const int mpFirstMPIDForTH2Files = -1;
 const int mpFirstMPIDForElements = 1;
 
 const double mpDesiredSegmentLengthOnScreen = 15.0;
@@ -394,8 +394,8 @@ lengthConversionFactors = {
   },
 };
 
-const double mpDefaultTHFileScale = 1.0;
-const THLengthUnitType mpDefaultTHFileLengthUnit = THLengthUnitType.meter;
+const double mpDefaultTH2FileScale = 1.0;
+const THLengthUnitType mpDefaultTH2FileLengthUnit = THLengthUnitType.meter;
 
 const THPointType thDefaultPointType = THPointType.station;
 const THLineType thDefaultLineType = THLineType.wall;

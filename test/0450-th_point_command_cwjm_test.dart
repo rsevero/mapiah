@@ -19,7 +19,7 @@ void main() {
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
   group('point json', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const successes = [
       {
@@ -74,7 +74,7 @@ endscrap
   });
 
   group('point copyWith', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const successes = [
       {

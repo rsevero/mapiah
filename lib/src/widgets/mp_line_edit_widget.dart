@@ -92,7 +92,7 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         final List<CustomPainter> painters = [];
         final THLine line =
             (logicalSelectedElements.first.originalElementClone as THLine)
-              ..setTHFile(th2File);
+              ..setTH2File(th2File);
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,

@@ -214,7 +214,7 @@ abstract class MPTH2FileEditState {
         return true;
       case MPButtonType.chooseTHConfigAndRunTherion:
         MPDialogAux.chooseTHConfigAndRunTherion(
-          th2FileEditController.getTHFileWidgetBuildContext(),
+          th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;
       case MPButtonType.nodeEdit:
@@ -230,7 +230,7 @@ abstract class MPTH2FileEditState {
         return true;
       case MPButtonType.runTherion:
         MPDialogAux.runTherionWithLastTHConfig(
-          th2FileEditController.getTHFileWidgetBuildContext(),
+          th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;
       case MPButtonType.select:

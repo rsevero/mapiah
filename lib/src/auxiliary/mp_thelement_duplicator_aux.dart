@@ -133,7 +133,7 @@ class MPTHElementDuplicatorAux {
 
         if (!th2File.hasElementByTHID(borderTHID)) {
           throw Exception(
-            'Border THID $borderTHID not found in THFile when duplicating area with MPTHElementDuplicatorAux.',
+            'Border THID $borderTHID not found in TH2File when duplicating area with MPTHElementDuplicatorAux.',
           );
         }
 

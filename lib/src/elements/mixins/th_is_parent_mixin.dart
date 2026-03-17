@@ -9,7 +9,7 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 /// Parent elements.
 ///
 /// Mixin that provides parenting capabilities.
-mixin THIsParentMixin on MPTHFileReferenceMixin {
+mixin THIsParentMixin on MPTH2FileReferenceMixin {
   // Here are registered all children mapiah IDs.
   final List<int> childrenMPIDs = [];
 
@@ -71,7 +71,7 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     }
 
     if (th2File != null) {
-      element.setTHFile(th2File!);
+      element.setTH2File(th2File!);
     }
 
     if (drawableChildElementTypes.contains(element.elementType)) {
@@ -79,9 +79,9 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     }
   }
 
-  void setTHFileToChildren(TH2File th2File) {
+  void setTH2FileToChildren(TH2File th2File) {
     for (final THElement child in getChildren(th2File)) {
-      child.setTHFile(th2File);
+      child.setTH2File(th2File);
     }
   }
 
@@ -104,7 +104,7 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
 
     if (th2File == null) {
       throw THCustomException(
-        "At THIsParentMixin.removeElementFromParent: THFile is null.",
+        "At THIsParentMixin.removeElementFromParent: TH2File is null.",
       );
     }
 

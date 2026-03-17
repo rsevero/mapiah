@@ -46,7 +46,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final THFileWriter writer = THFileWriter();
+      final TH2FileWriter writer = TH2FileWriter();
       final String testFilename = THTestAux.testPath(
         '2025-09-20-001-area_line_exists_but_has_no_id.th2',
       );
@@ -146,7 +146,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final THFileWriter writer = THFileWriter();
+      final TH2FileWriter writer = TH2FileWriter();
       final String testFilename = THTestAux.testPath(
         '2025-09-20-001-area_line_exists_but_has_no_id.th2',
       );

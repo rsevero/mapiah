@@ -23,7 +23,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 /// * gyy: Y increment for moving one step along the grid's Y direction
 /// * ngx: number of grid elements in x direction
 /// * ngy: number of grid elements in y direction
-class XVIGrid with MPTHFileReferenceMixin, MPBoundingBoxMixin {
+class XVIGrid with MPTH2FileReferenceMixin, MPBoundingBoxMixin {
   THDoublePart gx;
   THDoublePart gy;
   THDoublePart gxx;

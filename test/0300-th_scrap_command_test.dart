@@ -85,8 +85,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -129,8 +129,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -170,8 +170,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -224,8 +224,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -246,7 +246,7 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final parser = THFileParser();
+        final parser = TH2FileParser();
         mpLocator.mpGeneralController.reset();
         final (_, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(failure),
@@ -350,8 +350,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -431,8 +431,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -468,8 +468,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -502,8 +502,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -536,8 +536,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -570,8 +570,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -590,8 +590,8 @@ endscrap
   });
 
   group('scrap -walls', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -660,8 +660,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -694,8 +694,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         mpLocator.mpGeneralController.reset();
 
@@ -722,7 +722,7 @@ endscrap
 
     for (var failure in failures) {
       test(failure, () async {
-        final parser = THFileParser();
+        final parser = TH2FileParser();
 
         mpLocator.mpGeneralController.reset();
 

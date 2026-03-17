@@ -25,7 +25,7 @@ import 'package:meta/meta.dart';
 import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
 
-class THFileParser {
+class TH2FileParser {
   final THGrammar _grammar = THGrammar();
 
   late final Parser _areaContentParser;
@@ -57,7 +57,7 @@ class THFileParser {
   bool _runTraceParser = false;
   String _xTherionContent = '';
 
-  late TH2File _parsedTHFile;
+  late TH2File _parsedTH2File;
   late TH2FileEditController _th2FileEditController;
   late TH2FileEditElementEditController _th2FileElementEditController;
 
@@ -109,7 +109,7 @@ class THFileParser {
     caseSensitive: false,
   );
 
-  THFileParser() {
+  TH2FileParser() {
     _areaContentParser = _grammar.buildFrom(_grammar.areaStart());
     _lineContentParser = _grammar.buildFrom(_grammar.lineStart());
     _multiLineCommentContentParser = _grammar.buildFrom(
@@ -295,7 +295,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(th2File: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTH2File),
     );
     _returnToParentParser();
   }
@@ -691,7 +691,7 @@ class THFileParser {
     _currentElement = newBezierCurveLineSegment;
     _injectComment();
     _currentElement =
-        newBezierCurveLineSegment.parent(th2File: _parsedTHFile) as THElement;
+        newBezierCurveLineSegment.parent(th2File: _parsedTH2File) as THElement;
   }
 
   void _injectAreaBorderTHID(List<dynamic> element) {
@@ -764,7 +764,7 @@ class THFileParser {
     _currentElement = newStraightLineSegment;
     _injectComment();
     _currentElement =
-        newStraightLineSegment.parent(th2File: _parsedTHFile) as THElement;
+        newStraightLineSegment.parent(th2File: _parsedTH2File) as THElement;
   }
 
   void _injectScrap(List<dynamic> element) {
@@ -818,7 +818,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(th2File: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTH2File),
     );
     _returnToParentParser();
   }
@@ -864,7 +864,7 @@ class THFileParser {
     _injectComment();
     if (_lastLineSegment != null) {
       _currentElement =
-          _lastLineSegment!.parent(th2File: _parsedTHFile) as THElement;
+          _lastLineSegment!.parent(th2File: _parsedTH2File) as THElement;
     }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
@@ -985,7 +985,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(th2File: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTH2File),
     );
     _returnToParentParser();
   }
@@ -998,7 +998,7 @@ class THFileParser {
         'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
       );
       setCurrentParent(
-        (_currentParent as THElement).parent(th2File: _parsedTHFile),
+        (_currentParent as THElement).parent(th2File: _parsedTH2File),
       );
 
       return;
@@ -1014,7 +1014,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(th2File: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTH2File),
     );
 
     _returnToParentParser();
@@ -1228,7 +1228,7 @@ class THFileParser {
         _injectOrientationCommandOption();
       case 'subtype':
         if ((_currentHasOptions as THLine)
-                .getLineSegmentMPIDs(_parsedTHFile)
+                .getLineSegmentMPIDs(_parsedTH2File)
                 .length <
             2) {
           _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
@@ -2591,12 +2591,12 @@ class THFileParser {
     }
 
     if ((priorChar + char) == mpWindowsLineBreak) {
-      _parsedTHFile.lineEnding = mpWindowsLineBreak;
+      _parsedTH2File.lineEnding = mpWindowsLineBreak;
       return true;
     }
 
     if (char == mpUnixLineBreak) {
-      _parsedTHFile.lineEnding = mpUnixLineBreak;
+      _parsedTH2File.lineEnding = mpUnixLineBreak;
       return true;
     }
 
@@ -2628,8 +2628,8 @@ class THFileParser {
         );
     _th2FileElementEditController =
         _th2FileEditController.elementEditController;
-    _parsedTHFile = _th2FileEditController.th2File;
-    setCurrentParent(_parsedTHFile);
+    _parsedTH2File = _th2FileEditController.th2File;
+    setCurrentParent(_parsedTH2File);
     _parseErrors.clear();
 
     try {
@@ -2644,9 +2644,9 @@ class THFileParser {
         fileBytes = await file.readAsBytes();
       }
 
-      _parsedTHFile.encoding = _encodingNameFromFile(fileBytes);
+      _parsedTH2File.encoding = _encodingNameFromFile(fileBytes);
 
-      String contents = _decodeFile(fileBytes, _parsedTHFile.encoding);
+      String contents = _decodeFile(fileBytes, _parsedTH2File.encoding);
 
       fileBytes = null;
 
@@ -2658,11 +2658,11 @@ class THFileParser {
 
     _injectContents();
     _cleanOriginalLinesInFile();
-    _linesCleanUp(_parsedTHFile);
-    _areasCleanUp(_parsedTHFile);
+    _linesCleanUp(_parsedTH2File);
+    _areasCleanUp(_parsedTH2File);
 
-    if (!(_parsedTHFile).isSameClass(_currentParent) ||
-        (_currentParent != _parsedTHFile)) {
+    if (!(_parsedTH2File).isSameClass(_currentParent) ||
+        (_currentParent != _parsedTH2File)) {
       _addError(
         'Multiline commmands left open at end of file',
         'parse',
@@ -2697,11 +2697,11 @@ class THFileParser {
 
   void _cleanOriginalLinesInFile() {
     for (final int mpID in _mpIDsToCleanOriginalLine) {
-      final THElement element = _parsedTHFile.elementByMPID(mpID);
+      final THElement element = _parsedTH2File.elementByMPID(mpID);
       final THElement elementWithoutOriginalLine = element.copyWith(
         originalLineInTH2File: '',
       );
-      _parsedTHFile.substituteElement(elementWithoutOriginalLine);
+      _parsedTH2File.substituteElement(elementWithoutOriginalLine);
     }
     _mpIDsToCleanOriginalLine.clear();
   }
@@ -2710,7 +2710,7 @@ class THFileParser {
     final List<int> childrenMPIDs = parent.childrenMPIDs.toList();
 
     for (final int childMPID in childrenMPIDs) {
-      final THElement child = _parsedTHFile.elementByMPID(childMPID);
+      final THElement child = _parsedTH2File.elementByMPID(childMPID);
 
       if (child is THLine) {
         final List<int> lineChildrenMPIDs = child.childrenMPIDs.toList();
@@ -2718,7 +2718,7 @@ class THFileParser {
         THLineSegment? previousLineSegment;
 
         for (final int lineSegmentMPID in lineChildrenMPIDs) {
-          final THElement lineSegment = _parsedTHFile.elementByMPID(
+          final THElement lineSegment = _parsedTH2File.elementByMPID(
             lineSegmentMPID,
           );
 
@@ -2746,10 +2746,10 @@ class THFileParser {
                           lineSegment.controlPoint2.coordinates)))) {
             if (lineSegment.optionsMap.isEmpty &&
                 lineSegment.attrOptionsMap.isEmpty) {
-              _parsedTHFile.removeElement(lineSegment);
+              _parsedTH2File.removeElement(lineSegment);
             } else if (previousLineSegment.optionsMap.isEmpty &&
                 previousLineSegment.attrOptionsMap.isEmpty) {
-              _parsedTHFile.removeElement(previousLineSegment);
+              _parsedTH2File.removeElement(previousLineSegment);
               previousLineSegment = lineSegment;
             }
           } else {
@@ -2757,26 +2757,28 @@ class THFileParser {
           }
         }
 
-        if (child.getLineSegmentMPIDs(_parsedTHFile).length < 2) {
-          final int? areaMPID = _parsedTHFile.getAreaMPIDByLineMPID(child.mpID);
+        if (child.getLineSegmentMPIDs(_parsedTH2File).length < 2) {
+          final int? areaMPID = _parsedTH2File.getAreaMPIDByLineMPID(
+            child.mpID,
+          );
 
           if (areaMPID != null) {
-            final THArea area = _parsedTHFile.areaByMPID(areaMPID);
+            final THArea area = _parsedTH2File.areaByMPID(areaMPID);
             final THAreaBorderTHID? areaBorder = area.areaBorderByLineMPID(
               child.mpID,
-              _parsedTHFile,
+              _parsedTH2File,
             );
 
             if (areaBorder == null) {
               throw THCustomException(
-                "Inconsistent THFile data: line '${child.mpID}' is linked to area '${area.mpID}' but the area has no border for it at THFileParser._cleanDuplicateLinePoints().",
+                "Inconsistent TH2File data: line '${child.mpID}' is linked to area '${area.mpID}' but the area has no border for it at TH2FileParser._cleanDuplicateLinePoints().",
               );
             }
 
-            _parsedTHFile.removeElement(areaBorder);
+            _parsedTH2File.removeElement(areaBorder);
           }
 
-          _parsedTHFile.removeElement(child);
+          _parsedTH2File.removeElement(child);
         }
       } else if (child is THScrap) {
         _linesCleanUp(child);
@@ -2788,33 +2790,33 @@ class THFileParser {
     final List<int> childrenMPIDs = parent.childrenMPIDs.toList();
 
     for (final int chidlMPID in childrenMPIDs) {
-      final THElement child = _parsedTHFile.elementByMPID(chidlMPID);
+      final THElement child = _parsedTH2File.elementByMPID(chidlMPID);
 
       if (child is THArea) {
         final List<int> childrenMPIDs = child.childrenMPIDs.toList();
 
         for (final int childMPID in childrenMPIDs) {
-          final THElement border = _parsedTHFile.elementByMPID(childMPID);
+          final THElement border = _parsedTH2File.elementByMPID(childMPID);
 
           if (border is! THAreaBorderTHID) {
             continue;
           }
 
-          if (!_parsedTHFile.hasElementByTHID(border.thID)) {
-            _parsedTHFile.removeElement(border);
+          if (!_parsedTH2File.hasElementByTHID(border.thID)) {
+            _parsedTH2File.removeElement(border);
 
             continue;
           }
 
-          final THElement line = _parsedTHFile.elementByTHID(border.thID);
+          final THElement line = _parsedTH2File.elementByTHID(border.thID);
 
           if (line is! THLine) {
-            _parsedTHFile.removeElement(border);
+            _parsedTH2File.removeElement(border);
           }
         }
 
-        if (child.getAreaBorderTHIDMPIDs(_parsedTHFile).isEmpty) {
-          _parsedTHFile.removeElement(child);
+        if (child.getAreaBorderTHIDMPIDs(_parsedTH2File).isEmpty) {
+          _parsedTH2File.removeElement(child);
         }
       } else if (child is THScrap) {
         _areasCleanUp(child);
@@ -2978,7 +2980,7 @@ class THFileParser {
 
     if ((_continuationDelimiter == ']') && !_slashJoinLine) {
       throw THCustomException(
-        "Multiline square bracket delimited content not closed on line '$text' at THFileParser._splitContents().",
+        "Multiline square bracket delimited content not closed on line '$text' at TH2FileParser._splitContents().",
       );
     }
   }

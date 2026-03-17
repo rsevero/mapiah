@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of '../th_element.dart';
 
-mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
+mixin THHasOptionsMixin on THElement, MPTH2FileReferenceMixin {
   final SplayTreeMap<THCommandOptionType, THCommandOption> _optionsMap =
       SplayTreeMap<THCommandOptionType, THCommandOption>();
   final SplayTreeMap<String, THAttrCommandOption> _attrOptionsMap =
@@ -13,7 +13,7 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
   /// 2. there was an option with the same name but with a different value.
   bool addUpdateOption(THCommandOption option) {
     if (th2File != null) {
-      option.setTHFile(th2File!);
+      option.setTH2File(th2File!);
     }
 
     bool changedValue = false;
@@ -37,13 +37,13 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
     return changedValue;
   }
 
-  void setTHFileToOptions(TH2File th2File) {
+  void setTH2FileToOptions(TH2File th2File) {
     for (final THCommandOption option in _optionsMap.values) {
-      option.setTHFile(th2File);
+      option.setTH2File(th2File);
     }
 
     for (final THAttrCommandOption attrOption in _attrOptionsMap.values) {
-      attrOption.setTHFile(th2File);
+      attrOption.setTH2File(th2File);
     }
   }
 

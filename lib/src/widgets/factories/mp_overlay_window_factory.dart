@@ -125,7 +125,7 @@ class MPOverlayWindowFactory {
           outerAnchorPosition: outerAnchorPosition,
           innerAnchorType: innerAnchorType ?? MPWidgetPositionType.centerLeft,
         );
-      case MPWindowType.mainTHFileEditWindow:
+      case MPWindowType.mainTH2FileEditWindow:
         throw UnimplementedError(
           'The main TH file edit window is automatically created when opening a TH2File.',
         );

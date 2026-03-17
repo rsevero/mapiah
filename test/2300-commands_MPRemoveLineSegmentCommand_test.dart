@@ -63,8 +63,8 @@ endscrap
         'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
         () async {
           try {
-            final parser = THFileParser();
-            final writer = THFileWriter();
+            final parser = TH2FileParser();
+            final writer = TH2FileWriter();
             mpLocator.mpGeneralController.reset();
             final String path = THTestAux.testPath(success['file']! as String);
             final (parsedFile, isSuccessful, errors) = await parser.parse(
@@ -167,8 +167,8 @@ endscrap
         'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
         () async {
           try {
-            final parser = THFileParser();
-            final writer = THFileWriter();
+            final parser = TH2FileParser();
+            final writer = TH2FileWriter();
             mpLocator.mpGeneralController.reset();
             final String path = THTestAux.testPath(success['file']! as String);
             final (parsedFile, isSuccessful, errors) = await parser.parse(
@@ -271,8 +271,8 @@ endscrap
         'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
         () async {
           try {
-            final parser = THFileParser();
-            final writer = THFileWriter();
+            final parser = TH2FileParser();
+            final writer = TH2FileWriter();
             mpLocator.mpGeneralController.reset();
             final String path = THTestAux.testPath(success['file']! as String);
             final (parsedFile, isSuccessful, errors) = await parser.parse(
@@ -378,8 +378,8 @@ endscrap
           'apply and undo yields original state (equal by value, not identity) : ${success['file']}',
           () async {
             try {
-              final parser = THFileParser();
-              final writer = THFileWriter();
+              final parser = TH2FileParser();
+              final writer = TH2FileWriter();
               mpLocator.mpGeneralController.reset();
               final String path = THTestAux.testPath(
                 success['file']! as String,

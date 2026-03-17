@@ -15,7 +15,7 @@ import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 
-class XVIFile with MPTHFileReferenceMixin, MPBoundingBoxMixin {
+class XVIFile with MPTH2FileReferenceMixin, MPBoundingBoxMixin {
   String filename;
   double gridSizeLength;
   THLengthUnitPart gridSizeUnit;

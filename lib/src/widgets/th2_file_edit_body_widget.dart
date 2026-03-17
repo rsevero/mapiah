@@ -69,9 +69,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                               .performSetMousePosition(event.localPosition),
                           child: Stack(
                             children: [
-                              THFileWidget(
+                              TH2FileWidget(
                                 key: widget.th2FileEditController
-                                    .getTHFileWidgetGlobalKey(),
+                                    .getTH2FileWidgetGlobalKey(),
                                 th2FileEditController:
                                     widget.th2FileEditController,
                               ),
@@ -83,9 +83,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                       } else {
                         return Stack(
                           children: [
-                            THFileWidget(
+                            TH2FileWidget(
                               key: widget.th2FileEditController
-                                  .getTHFileWidgetGlobalKey(),
+                                  .getTH2FileWidgetGlobalKey(),
                               th2FileEditController:
                                   widget.th2FileEditController,
                             ),

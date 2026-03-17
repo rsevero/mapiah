@@ -507,15 +507,15 @@ class THLine extends THElement
   }
 
   @override
-  void setTHFile(TH2File th2File) {
+  void setTH2File(TH2File th2File) {
     if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(th2File);
+    super.setTH2File(th2File);
 
-    setTHFileToOptions(th2File);
-    setTHFileToChildren(th2File);
+    setTH2FileToOptions(th2File);
+    setTH2FileToChildren(th2File);
 
     updateSubtypeLineSegmentMPIDs();
   }
@@ -526,7 +526,7 @@ class THLine extends THElement
   void updateSubtypeLineSegmentMPIDs() {
     if (th2File == null) {
       throw THCustomException(
-        "At THLine.updateSubtypeLineSegmentMPIDs: THFile is null.",
+        "At THLine.updateSubtypeLineSegmentMPIDs: TH2File is null.",
       );
     }
 
@@ -574,7 +574,7 @@ class THLine extends THElement
   _generateLineSegmentsWithSizeOrientation() {
     if (th2File == null) {
       throw THCustomException(
-        "At THLine._generateLineSegmentsWithSizeOrientation: THFile is null.",
+        "At THLine._generateLineSegmentsWithSizeOrientation: TH2File is null.",
       );
     }
 
@@ -622,7 +622,7 @@ class THLine extends THElement
   Map<int, MPLineSegmentMarkInfo> _generateLineSegmentsWithMark() {
     if (th2File == null) {
       throw THCustomException(
-        "At THLine._generateLineSegmentsWithMark: THFile is null.",
+        "At THLine._generateLineSegmentsWithMark: TH2File is null.",
       );
     }
 

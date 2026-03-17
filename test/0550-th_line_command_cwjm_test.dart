@@ -20,7 +20,7 @@ void main() {
   final MPLocator mpLocator = MPLocator();
   group('line json', () {
     mpLocator.mpGeneralController.reset();
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const successes = [
       {

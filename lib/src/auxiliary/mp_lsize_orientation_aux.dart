@@ -86,7 +86,7 @@ class MPLSizeOrientationAux {
       lSizeEnabled: lSizeEnabled,
       originalOrientation:
           initialOrientation ??
-          MPNumericAux.segmentNormalFromTHFile(
+          MPNumericAux.segmentNormalFromTH2File(
             lineSegmentMPID,
             th2FileEditController.th2File,
           ),

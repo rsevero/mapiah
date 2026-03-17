@@ -52,7 +52,7 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
         } else if (isCtrlPressed || isMetaPressed) {
           if (!isAltPressed && !isShiftPressed) {
             final BuildContext? context = th2FileEditController
-                .getTHFileWidgetGlobalKey()
+                .getTH2FileWidgetGlobalKey()
                 .currentContext;
 
             if (context == null) {

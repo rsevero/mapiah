@@ -261,8 +261,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -490,8 +490,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -529,8 +529,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -547,8 +547,8 @@ endscrap
   });
 
   group('linepoint -adjust', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -584,7 +584,7 @@ endscrap
   });
 
   group('linepoint -adjust failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03081-line_with_adjust_option_invalid-failure.th2',
@@ -602,8 +602,8 @@ endscrap
   });
 
   group('linepoint -altitude', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -729,8 +729,8 @@ endscrap
   });
 
   group('line -anchors', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -778,7 +778,7 @@ endscrap
   });
 
   group('line -anchors failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-02395-line_with_invalid_anchors_option-failure.th2',
@@ -795,8 +795,8 @@ endscrap
   });
 
   group('linepoint -anchors', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -831,7 +831,7 @@ endscrap
   });
 
   group('linepoint -anchors failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-02391-linepoint_with_anchors_option_invalid_line_type-failure.th2',
@@ -849,8 +849,8 @@ endscrap
   });
 
   group('line -border', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -899,7 +899,7 @@ endscrap
   });
 
   group('line -border failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-03004-line_with_border_option_invalid_line_type-failure.th2',
@@ -917,8 +917,8 @@ endscrap
   });
 
   group('linepoint -border', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -953,7 +953,7 @@ endscrap
   });
 
   group('linepoint -border failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-03001-linepoint_with_border_option_invalid_line_type-failure.th2',
@@ -971,8 +971,8 @@ endscrap
   });
 
   group('line -clip', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1007,7 +1007,7 @@ endscrap
   });
 
   group('line -clip failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03021-line_with_invalid_clip_option-failure.th2',
@@ -1024,8 +1024,8 @@ endscrap
   });
 
   group('linepoint -clip', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1060,7 +1060,7 @@ endscrap
   });
 
   group('linepoint -clip failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03026-linepoint_with_invalid_clip_option-failure.th2',
@@ -1077,8 +1077,8 @@ endscrap
   });
 
   group('line -close', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1113,7 +1113,7 @@ endscrap
   });
 
   group('line -close failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-02381-line_with_invalid_close_option-failure.th2',
@@ -1130,8 +1130,8 @@ endscrap
   });
 
   group('linepoint -close', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1166,7 +1166,7 @@ endscrap
   });
 
   group('linepoint -close failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03011-linepoint_with_invalid_close_option-failure.th2',
@@ -1183,8 +1183,8 @@ endscrap
   });
 
   group('line -context', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1219,8 +1219,8 @@ endscrap
   });
 
   group('linepoint -context', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1255,8 +1255,8 @@ endscrap
   });
 
   group('line -direction', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1291,7 +1291,7 @@ endscrap
   });
 
   group('line -direction failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03072-line_with_direction_option_set_to_point_invalid-failure.th2',
@@ -1308,8 +1308,8 @@ endscrap
   });
 
   group('linepoint -direction', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1388,7 +1388,7 @@ endscrap
   });
 
   group('linepoint -direction failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-03074-linepoint_with_direction_option_unsupported_line_type-failure.th2',
@@ -1406,8 +1406,8 @@ endscrap
   });
 
   group('line -head', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1455,8 +1455,8 @@ endscrap
   });
 
   group('line -height', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1504,8 +1504,8 @@ endscrap
   });
 
   group('line -id', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1553,7 +1553,7 @@ endscrap
   });
 
   group('line -id failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = ['th_file_parser-03192-line_with_invalid_id-failure.th2'];
 
@@ -1568,8 +1568,8 @@ endscrap
   });
 
   group('linepoint l-size', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1619,7 +1619,7 @@ endscrap
   });
 
   group('linepoint l-size failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-03141-linepoint_with_lsize_option_on_non_slope-failure.th2',
@@ -1636,8 +1636,8 @@ endscrap
   });
 
   group('linepoint -mark', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1673,7 +1673,7 @@ endscrap
   });
 
   group('linepoint -mark failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03111-linepoint_with_invalid_mark_option-failure.th2',
@@ -1690,8 +1690,8 @@ endscrap
   });
 
   group('linepoint orientation', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1743,7 +1743,7 @@ endscrap
   });
 
   group('linepoint orientation failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       // 'th_file_parser-03152-linepoint_with_invalid_orientation_option-failure.th2',
@@ -1761,8 +1761,8 @@ endscrap
   });
 
   group('line -outline', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1810,7 +1810,7 @@ endscrap
   });
 
   group('line -outline failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03212-linepoint_with_invalid_outline_option-failure.th2',
@@ -1827,8 +1827,8 @@ endscrap
   });
 
   group('line -place', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1876,7 +1876,7 @@ endscrap
   });
 
   group('line -place failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03202-linepoint_with_invalid_place_option-failure.th2',
@@ -1893,8 +1893,8 @@ endscrap
   });
 
   group('line -rebelays', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1942,8 +1942,8 @@ endscrap
   });
 
   group('line -reverse', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -1991,8 +1991,8 @@ endscrap
   });
 
   group('linepoint -smooth', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2028,7 +2028,7 @@ endscrap
   });
 
   group('linepoint -smooth failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03091-line_with_smooth_option_invalid-failure.th2',
@@ -2046,8 +2046,8 @@ endscrap
   });
 
   group('line -scale', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2108,7 +2108,7 @@ endscrap
   });
 
   group('line -scale failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03163-linepoint_with_text_scale_option-failure.th2',
@@ -2126,8 +2126,8 @@ endscrap
   });
 
   group('linepoint -subtype', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2223,8 +2223,8 @@ endscrap
   });
 
   group('linepoint -subtype with original output', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2355,8 +2355,8 @@ endscrap''',
   });
 
   group('linepoint -subtype manipulation', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2463,8 +2463,8 @@ endscrap
   });
 
   group('line -text', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -2512,7 +2512,7 @@ endscrap
   });
 
   group('line -text failures', () {
-    final parser = THFileParser();
+    final parser = TH2FileParser();
 
     const failures = [
       'th_file_parser-03171-line_with_invalid_text_option-failure.th2',
@@ -2531,8 +2531,8 @@ endscrap
   });
 
   group('line -visibility', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {

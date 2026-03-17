@@ -21,7 +21,7 @@ import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
 
-class THFileWidget extends StatelessWidget {
+class TH2FileWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
   late final TH2File th2File = th2FileEditController.th2File;
@@ -29,11 +29,11 @@ class THFileWidget extends StatelessWidget {
   late final TH2FileEditOverlayWindowController overlayWindowController =
       th2FileEditController.overlayWindowController;
 
-  THFileWidget({required super.key, required this.th2FileEditController});
+  TH2FileWidget({required super.key, required this.th2FileEditController});
 
   @override
   Widget build(BuildContext context) {
-    mpLocator.mpLog.finer("THFileWidget.build()");
+    mpLocator.mpLog.finer("TH2FileWidget.build()");
     th2FileEditController.devicePixelRatio = MediaQuery.of(
       context,
     ).devicePixelRatio;
@@ -57,7 +57,7 @@ class THFileWidget extends StatelessWidget {
                 ? Colors.black
                 : Colors.white,
             child: Stack(
-              key: ValueKey("THFileWidgetStack|$thFileMPID"),
+              key: ValueKey("TH2FileWidgetStack|$thFileMPID"),
               children: [
                 if (th2FileEditController.showImages)
                   MPImagesWidget(

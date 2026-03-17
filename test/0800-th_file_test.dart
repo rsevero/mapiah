@@ -23,7 +23,7 @@ void main() {
   group('initial', () {
     final file = TH2File();
 
-    test("THFile", () {
+    test("TH2File", () {
       expect(file.mpID, -1);
       expect(file.elements.length, 0);
     });
@@ -69,8 +69,8 @@ endscrap
 
     for (var success in successes) {
       test(success['file']!, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -115,8 +115,8 @@ endscrap
 
     for (var success in successes) {
       test(success['file']!, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -204,8 +204,8 @@ endcomment
     };
 
     test("${success['file']} in parts", () async {
-      final parser = THFileParser();
-      final writer = THFileWriter();
+      final parser = TH2FileParser();
+      final writer = TH2FileWriter();
       mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
@@ -267,8 +267,8 @@ endcomment
     });
 
     test("${success['file']} as once", () async {
-      final parser = THFileParser();
-      final writer = THFileWriter();
+      final parser = TH2FileParser();
+      final writer = TH2FileWriter();
       mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
@@ -320,8 +320,8 @@ endscrap
     };
 
     test("${success['file']} as once", () async {
-      final parser = THFileParser();
-      final writer = THFileWriter();
+      final parser = TH2FileParser();
+      final writer = TH2FileWriter();
       mpLocator.mpGeneralController.reset();
       final (file, isSuccessful, errors) = await parser.parse(
         THTestAux.testPath(success['file'] as String),
@@ -418,8 +418,8 @@ endscrap
 
     for (var success in successes) {
       test("$success with Mapiah format output", () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -520,8 +520,8 @@ endscrap
 
     for (var success in successes) {
       test("$success with original format output", () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),

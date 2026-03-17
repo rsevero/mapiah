@@ -93,7 +93,7 @@ part 'types/th_option_choices_on_off_type.dart';
 part 'types/th_option_choices_outline_type.dart';
 part 'types/th_option_choices_place_type.dart';
 
-abstract class THCommandOption with MPTHFileReferenceMixin {
+abstract class THCommandOption with MPTH2FileReferenceMixin {
   final int parentMPID;
   final String originalLineInTH2File;
 

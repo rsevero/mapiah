@@ -47,7 +47,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final THFileWriter writer = THFileWriter();
+      final TH2FileWriter writer = TH2FileWriter();
       final String testFilename = THTestAux.testPath('2025-10-05-001-line.th2');
       final TH2FileEditController th2Controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: testFilename);

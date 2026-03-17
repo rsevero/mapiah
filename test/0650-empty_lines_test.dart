@@ -32,8 +32,8 @@ void main() {
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),

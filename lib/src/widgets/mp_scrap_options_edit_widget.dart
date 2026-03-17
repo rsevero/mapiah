@@ -112,12 +112,12 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
   void onOptionSelected(BuildContext childContext, THCommandOptionType type) {
     Rect? thisBoundingBox = MPInteractionAux.getWidgetRectFromContext(
       widgetContext: context,
-      ancestorGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
+      ancestorGlobalKey: th2FileEditController.getTH2FileWidgetGlobalKey(),
     );
 
     Rect? childBoundingBox = MPInteractionAux.getWidgetRectFromContext(
       widgetContext: childContext,
-      ancestorGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
+      ancestorGlobalKey: th2FileEditController.getTH2FileWidgetGlobalKey(),
     );
 
     /// Use the left of this widget and the vertical center of the child (taped

@@ -187,7 +187,7 @@ class MPInteractionAux {
         .globalKeyWidgetKeyByType[buttonType]!;
     final Rect? buttonBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
       widgetGlobalKey: buttonGlobalKey,
-      ancestorGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
+      ancestorGlobalKey: th2FileEditController.getTH2FileWidgetGlobalKey(),
     );
     final Offset outerAnchorPosition = (buttonBoundingBox == null)
         ? Offset.zero

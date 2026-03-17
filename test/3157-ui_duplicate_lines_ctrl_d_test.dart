@@ -47,7 +47,7 @@ void main() {
           tester.view.resetDevicePixelRatio();
         });
 
-        final THFileWriter writer = THFileWriter();
+        final TH2FileWriter writer = TH2FileWriter();
         final String testFilename = THTestAux.testPath(
           '2026-03-13-001-lines.th2',
         );

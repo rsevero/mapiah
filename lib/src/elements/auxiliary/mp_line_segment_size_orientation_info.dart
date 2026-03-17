@@ -20,6 +20,6 @@ class MPLineSegmentSizeOrientationInfo {
   }) {
     this.lSize = lSize ?? mpSlopeLinePointDefaultLSize;
     this.orientation =
-        orientation ?? MPNumericAux.segmentNormalFromTHFile(mpID, th2File);
+        orientation ?? MPNumericAux.segmentNormalFromTH2File(mpID, th2File);
   }
 }

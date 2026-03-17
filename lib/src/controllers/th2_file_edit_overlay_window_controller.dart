@@ -42,7 +42,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   Map<MPWindowType, bool> _isOverlayWindowShown = {};
 
   @readonly
-  MPWindowType _activeWindow = MPWindowType.mainTHFileEditWindow;
+  MPWindowType _activeWindow = MPWindowType.mainTH2FileEditWindow;
 
   @readonly
   ObservableMap<MPWindowType, OverlayEntry> _overlayWindows =
@@ -129,12 +129,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _activeWindow = type;
 
     BuildContext? context = _th2FileEditController
-        .getTHFileWidgetGlobalKey()
+        .getTH2FileWidgetGlobalKey()
         .currentContext;
 
     if (context == null) {
       throw StateError(
-        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController._showOverlayWindow().",
+        "The context of the TH2FileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController._showOverlayWindow().",
       );
     }
 
@@ -169,12 +169,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _secondLevelOptionOpenedOverlayWindow = overlayWindowType;
 
     BuildContext? context = _th2FileEditController
-        .getTHFileWidgetGlobalKey()
+        .getTH2FileWidgetGlobalKey()
         .currentContext;
 
     if (context == null) {
       throw StateError(
-        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().",
+        "The context of the TH2FileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showOptionChoicesOverlayWindow().",
       );
     }
 
@@ -209,7 +209,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _overlayWindows.remove(type);
     if (_activeWindow == type) {
       _activeWindow = _overlayWindows.isEmpty
-          ? MPWindowType.mainTHFileEditWindow
+          ? MPWindowType.mainTH2FileEditWindow
           : _overlayWindows.keys.last;
     }
 
@@ -227,7 +227,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _currentPLATypeShown = null;
     }
 
-    if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
+    if (_activeWindow == MPWindowType.mainTH2FileEditWindow) {
       _th2FileEditController.th2FileFocusNode.requestFocus();
     }
   }
@@ -346,12 +346,12 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     _isOverlayWindowShown[overlayWindowType] = true;
 
     BuildContext? context = _th2FileEditController
-        .getTHFileWidgetGlobalKey()
+        .getTH2FileWidgetGlobalKey()
         .currentContext;
 
     if (context == null) {
       throw StateError(
-        "The context of the THFileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showPLATypeOverlayWindow().",
+        "The context of the TH2FileWidget is null. Can't create options overlay window in TH2FileEditOverlayWindowController.showPLATypeOverlayWindow().",
       );
     }
 

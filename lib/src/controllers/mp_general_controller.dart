@@ -20,7 +20,7 @@ class MPGeneralController = MPGeneralControllerBase with _$MPGeneralController;
 
 abstract class MPGeneralControllerBase with Store {
   int _nextMPIDForElements = mpFirstMPIDForElements;
-  int _nextMPIDForTHFiles = mpFirstMPIDForTHFiles;
+  int _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
 
   String _lastAccessedDirectory = '';
 
@@ -118,15 +118,15 @@ abstract class MPGeneralControllerBase with Store {
     return _nextMPIDForElements++;
   }
 
-  int nextMPIDForTHFiles() {
-    return _nextMPIDForTHFiles--;
+  int nextMPIDForTH2Files() {
+    return _nextMPIDForTH2Files--;
   }
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
   void reset() {
     _nextMPIDForElements = mpFirstMPIDForElements;
-    _nextMPIDForTHFiles = mpFirstMPIDForTHFiles;
+    _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
     _t2hFileEditControllers.clear();
     _thConfigFilePath = '';
   }
@@ -199,7 +199,7 @@ abstract class MPGeneralControllerBase with Store {
     }
 
     final TH2FileEditController createdController =
-        TH2FileEditControllerBase.createFromNewTHFile(th2File);
+        TH2FileEditControllerBase.createFromNewTH2File(th2File);
 
     createdController.setActiveScrap(thScrapMPID);
     createdController.setFilename(filename);

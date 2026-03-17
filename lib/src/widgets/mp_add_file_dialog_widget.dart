@@ -55,7 +55,7 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
         );
     final String fileName = th2FileEditController.th2File.filename;
 
-    th2FileEditController.setCanvasScale(mpDefaultTHFileScale);
+    th2FileEditController.setCanvasScale(mpDefaultTH2FileScale);
 
     mpLocator.mpGeneralController.addFileTab(fileName);
     MPDialogAux.ensureTabsPageOpen(context);

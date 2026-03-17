@@ -6,7 +6,7 @@ enum MPWindowType {
   commandOptions,
   lineSegmentOptions,
   lineSegmentTypes,
-  mainTHFileEditWindow,
+  mainTH2FileEditWindow,
   multipleElementsClicked,
   multipleEndControlPointsClicked,
   optionChoices,

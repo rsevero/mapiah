@@ -147,8 +147,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, errors) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -190,8 +190,8 @@ endscrap
 
     for (var success in successes) {
       test(success, () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
         mpLocator.mpGeneralController.reset();
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
@@ -208,8 +208,8 @@ endscrap
   });
 
   group('area -clip', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -279,7 +279,7 @@ endscrap
   });
 
   // group('area -clip failures', () {
-  //   final parser = THFileParser();
+  //   final parser = TH2FileParser();
 
   //   const failures = [
   //     // 'th_file_parser-03232-area_with_invalid_command_like_clip_option-failure.th2',
@@ -296,8 +296,8 @@ endscrap
   // });
 
   group('area -context', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -358,8 +358,8 @@ endscrap
   });
 
   group('area -id', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -419,8 +419,8 @@ endscrap
   });
 
   group('area -place', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -510,7 +510,7 @@ endscrap
   });
 
   // group('area -place failures', () {
-  //   final parser = THFileParser();
+  //   final parser = TH2FileParser();
 
   //   const failures = [
   //     'th_file_parser-03222-area_with_invalid_command_like_place_option-failure.th2',
@@ -527,8 +527,8 @@ endscrap
   // });
 
   group('area -visibility', () {
-    final parser = THFileParser();
-    final writer = THFileWriter();
+    final parser = TH2FileParser();
+    final writer = TH2FileWriter();
 
     const successes = [
       {
@@ -599,7 +599,7 @@ endscrap
   });
 
   // group('area -visibility failures', () {
-  //   final parser = THFileParser();
+  //   final parser = TH2FileParser();
 
   //   const failures = [
   //     'th_file_parser-03242-area_with_invalid_command_like_visibility_option-failure.th2',

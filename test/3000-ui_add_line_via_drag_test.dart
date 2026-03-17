@@ -128,7 +128,7 @@ void main() {
       await tester.sendEventToBinding(mouse.up());
       await tester.pumpAndSettle();
 
-      // Assert: one line exists in the THFile (under the active scrap)
+      // Assert: one line exists in the TH2File (under the active scrap)
       final List<THLine> lines = th2Controller.th2File.getLines().toList();
       expect(lines.length, 1);
 

@@ -6,7 +6,7 @@ import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
-mixin MPBoundingBoxMixin on MPTHFileReferenceMixin {
+mixin MPBoundingBoxMixin on MPTH2FileReferenceMixin {
   Rect? _boundingBox;
 
   Rect? getBoundingBox(TH2FileEditController th2FileEditController) {

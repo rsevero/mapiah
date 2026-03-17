@@ -139,7 +139,7 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
 
-      // Assert: one line exists in the THFile
+      // Assert: one line exists in the TH2File
       final List<THLine> lines = th2File.getLines().toList();
       expect(lines.length, 1);
 

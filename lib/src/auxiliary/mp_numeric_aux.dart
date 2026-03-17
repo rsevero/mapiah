@@ -935,7 +935,10 @@ class MPNumericAux {
     return average / averageLength;
   }
 
-  static Offset segmentTangentFromTHFile(int lineSegmentMPID, TH2File th2File) {
+  static Offset segmentTangentFromTH2File(
+    int lineSegmentMPID,
+    TH2File th2File,
+  ) {
     final THLineSegment lineSegment = th2File.lineSegmentByMPID(
       lineSegmentMPID,
     );
@@ -1060,8 +1063,8 @@ class MPNumericAux {
     return rawNormal / length;
   }
 
-  static double segmentNormalFromTHFile(int lineSegmentMPID, TH2File th2File) {
-    final Offset tangent = MPNumericAux.segmentTangentFromTHFile(
+  static double segmentNormalFromTH2File(int lineSegmentMPID, TH2File th2File) {
+    final Offset tangent = MPNumericAux.segmentTangentFromTH2File(
       lineSegmentMPID,
       th2File,
     );

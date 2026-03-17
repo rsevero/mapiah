@@ -19,13 +19,13 @@ import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 
-/// THFile represents the complete contents of a .th or .th2 file.
+/// TH2File represents the complete contents of a .th or .th2 file.
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
 class TH2File
     with
-        MPTHFileReferenceMixin,
+        MPTH2FileReferenceMixin,
         MPBoundingBoxMixin,
         THCalculateChildrenBoundingBoxMixin,
         THIsParentMixin {
@@ -48,7 +48,7 @@ class TH2File
   /// Here are registered all items with a Therion ID (thID), the one mentioned
   /// in Therion Book. These thIDs should be unique inside a survey. As Mapiah
   /// doesn´t deals with surveys yet, it will guarantee that thIDs are unique
-  /// inside a THFile for now.
+  /// inside a TH2File for now.
   ///
   /// Not to be confused with Mapiah IDs, which are internal and unique only
   /// during a run.
@@ -78,7 +78,7 @@ class TH2File
   }
 
   TH2File() {
-    _mpID = mpLocator.mpGeneralController.nextMPIDForTHFiles();
+    _mpID = mpLocator.mpGeneralController.nextMPIDForTH2Files();
   }
 
   void _initializeSupportMaps() {
@@ -134,7 +134,7 @@ class TH2File
   }) {
     // Elements:
     // - If a map is provided, use it as-is (caller controls ownership).
-    // - If not provided, deep-clone elements from this THFile to avoid
+    // - If not provided, deep-clone elements from this TH2File to avoid
     //   sharing mutable instances between the original and the copy.
     final LinkedHashMap<int, THElement> effectiveElements =
         elementByMPID ??
@@ -245,7 +245,7 @@ class TH2File
     return calculateChildrenBoundingBox(th2FileEditController, childrenMPIDs);
   }
 
-  /// Updates the thID of a given element of the THFile.
+  /// Updates the thID of a given element of the TH2File.
   /// @param element The element to have its thID updated.
   /// @param newTHID The new thID to be set.
   /// @throws THCustomException If the element has no registered thID.
@@ -271,7 +271,7 @@ class TH2File
   void registerMPIDWithTHID(int mpID, String thID) {
     if (_mpIDByTHID.containsKey(thID) && (_mpIDByTHID[thID] != mpID)) {
       throw THCustomException(
-        "At THFile.registerMPIDWithTHID: duplicate thID: '$thID'.",
+        "At TH2File.registerMPIDWithTHID: duplicate thID: '$thID'.",
       );
     }
 
@@ -287,7 +287,7 @@ class TH2File
         return;
       } else {
         throw THCustomException(
-          "At THFile.registerElementWithTHID: duplicate thID: '$thID'.",
+          "At TH2File.registerElementWithTHID: duplicate thID: '$thID'.",
         );
       }
     }
@@ -372,7 +372,7 @@ class TH2File
       }
     }
 
-    newElement.setTHFile(this);
+    newElement.setTH2File(this);
   }
 
   bool hasOption(THElement element, THCommandOptionType optionType) {
@@ -383,7 +383,7 @@ class TH2File
 
   void addElement(THElement element) {
     _elementByMPID[element.mpID] = element;
-    element.setTHFile(this);
+    element.setTH2File(this);
 
     _updateSupportMaps(element);
   }
@@ -436,7 +436,7 @@ class TH2File
         area = element;
       default:
         throw THCustomException(
-          "Element is not a THArea or THAreaBorderTHID in THFile._clearAreaXLineInfo.",
+          "Element is not a THArea or THAreaBorderTHID in TH2File._clearAreaXLineInfo.",
         );
     }
 
@@ -553,7 +553,7 @@ class TH2File
 
     if (element is! THHasOptionsMixin) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a THHasOptionsMixin in THFile.hasOptionByMPID.",
+        "Element with MPID '$mpID' is not a THHasOptionsMixin in TH2File.hasOptionByMPID.",
       );
     }
 
@@ -569,7 +569,7 @@ class TH2File
 
     if (element is! THIsParentMixin) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a parent in THFile.parentByMPID.",
+        "Element with MPID '$mpID' is not a parent in TH2File.parentByMPID.",
       );
     }
 
@@ -585,7 +585,7 @@ class TH2File
 
     if (element is! THPoint) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a point in THFile.pointByMPID.",
+        "Element with MPID '$mpID' is not a point in TH2File.pointByMPID.",
       );
     }
 
@@ -601,7 +601,7 @@ class TH2File
 
     if (element is! THLine) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a line in THFile.lineByMPID.",
+        "Element with MPID '$mpID' is not a line in TH2File.lineByMPID.",
       );
     }
 
@@ -617,7 +617,7 @@ class TH2File
 
     if (element is! THXTherionImageInsertConfig) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an image in THFile.imageByMPID.",
+        "Element with MPID '$mpID' is not an image in TH2File.imageByMPID.",
       );
     }
 
@@ -633,7 +633,7 @@ class TH2File
 
     if (element is! THArea) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an area in THFile.areaByMPID.",
+        "Element with MPID '$mpID' is not an area in TH2File.areaByMPID.",
       );
     }
 
@@ -649,7 +649,7 @@ class TH2File
 
     if (element is! THAreaBorderTHID) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an area border in THFile.areaBorderByMPID.",
+        "Element with MPID '$mpID' is not an area border in TH2File.areaBorderByMPID.",
       );
     }
 
@@ -665,7 +665,7 @@ class TH2File
 
     if (element is! THEmptyLine) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an empty line in THFile.emptyLineByMPID.",
+        "Element with MPID '$mpID' is not an empty line in TH2File.emptyLineByMPID.",
       );
     }
 
@@ -681,7 +681,7 @@ class TH2File
 
     if (element is! THScrap) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a scrap in THFile.scrapByMPID.",
+        "Element with MPID '$mpID' is not a scrap in TH2File.scrapByMPID.",
       );
     }
 
@@ -697,7 +697,7 @@ class TH2File
 
     if (element is! THLineSegment) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a line segment in THFile.lineSegmentByMPID.",
+        "Element with MPID '$mpID' is not a line segment in TH2File.lineSegmentByMPID.",
       );
     }
 
@@ -713,7 +713,7 @@ class TH2File
 
     if (element is! THBezierCurveLineSegment) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a bezier curve line segment in THFile.bezierCurveLineSegmentByMPID.",
+        "Element with MPID '$mpID' is not a bezier curve line segment in TH2File.bezierCurveLineSegmentByMPID.",
       );
     }
 
@@ -729,7 +729,7 @@ class TH2File
 
     if (element is! THStraightLineSegment) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not a straight line segment in THFile.straightLineSegmentByMPID.",
+        "Element with MPID '$mpID' is not a straight line segment in TH2File.straightLineSegmentByMPID.",
       );
     }
 
@@ -745,7 +745,7 @@ class TH2File
 
     if (element is! THXTherionConfig) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an THXTherionConfig in THFile.xtherionConfigByMPID.",
+        "Element with MPID '$mpID' is not an THXTherionConfig in TH2File.xtherionConfigByMPID.",
       );
     }
 
@@ -761,7 +761,7 @@ class TH2File
 
     if (element is! THXTherionImageInsertConfig) {
       throw THCustomException(
-        "Element with MPID '$mpID' is not an THXTherionImageInsertConfig in THFile.xtherionImageInsertConfigByMPID.",
+        "Element with MPID '$mpID' is not an THXTherionImageInsertConfig in TH2File.xtherionImageInsertConfigByMPID.",
       );
     }
 
@@ -801,30 +801,30 @@ class TH2File
     return elementByMPID(mpID).elementType;
   }
 
-  /// Returns a set of all area MPIDs in the THFile.
+  /// Returns a set of all area MPIDs in the TH2File.
   /// There might be more than one scrap where the areas will be, so this method
   /// does not indicate the order of the areas, thus, we return a Set.
   Set<int> get areasMPIDs {
     return _areasMPIDs;
   }
 
-  /// Returns a set of all line MPIDs in the THFile.
+  /// Returns a set of all line MPIDs in the TH2File.
   /// There might be more than one scrap where the lines will be, so this method
   /// does not indicate the order of the lines, thus, we return a Set.
   Set<int> get linesMPIDs {
     return _linesMPIDs;
   }
 
-  /// Returns a set of all point MPIDs in the THFile.
+  /// Returns a set of all point MPIDs in the TH2File.
   /// There might be more than one scrap where the points will be, so this
   /// method does not indicate the order of the points, thus, we return a Set.
   Set<int> get pointsMPIDs {
     return _pointsMPIDs;
   }
 
-  /// Returns a list of all scrap MPIDs in the THFile.
-  /// Scraps are all children of the THFile itself, so the order of the scraps
-  /// is the same as the order of the childrenMPIDs of the THFile, thus we
+  /// Returns a list of all scrap MPIDs in the TH2File.
+  /// Scraps are all children of the TH2File itself, so the order of the scraps
+  /// is the same as the order of the childrenMPIDs of the TH2File, thus we
   /// return a List.
   List<int> get scrapMPIDs {
     _scrapMPIDs ??= childrenMPIDs
@@ -834,9 +834,9 @@ class TH2File
     return _scrapMPIDs!;
   }
 
-  /// Returns a list of all image MPIDs in the THFile.
-  /// Images are all children of the THFile itself, so the order of the images
-  /// is the same as the order of the childrenMPIDs of the THFile, thus we
+  /// Returns a list of all image MPIDs in the TH2File.
+  /// Images are all children of the TH2File itself, so the order of the images
+  /// is the same as the order of the childrenMPIDs of the TH2File, thus we
   /// return a List.
   List<int> get imageMPIDs {
     _imageMPIDs ??= childrenMPIDs
@@ -846,9 +846,9 @@ class TH2File
     return _imageMPIDs!;
   }
 
-  /// Returns a list of all xtherion setting MPIDs in the THFile.
-  /// XTherion settings are all children of the THFile itself, so the order of
-  /// the settings is the same as the order of the childrenMPIDs of the THFile,
+  /// Returns a list of all xtherion setting MPIDs in the TH2File.
+  /// XTherion settings are all children of the TH2File itself, so the order of
+  /// the settings is the same as the order of the childrenMPIDs of the TH2File,
   /// thus we return a List.
   List<int> get xtherionSettingMPIDs {
     _xtherionSettingMPIDs ??= childrenMPIDs.where((int mpID) {
@@ -946,7 +946,7 @@ class TH2File
   TH2File get th2File => this;
 
   @override
-  void setTHFile(TH2File th2File) {
-    /// Nothing to do here, as THFile is the top-level element.
+  void setTH2File(TH2File th2File) {
+    /// Nothing to do here, as TH2File is the top-level element.
   }
 }

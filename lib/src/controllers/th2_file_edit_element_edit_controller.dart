@@ -1076,7 +1076,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2File
             .elementByMPID(parentMPID)
             .copyWith(originalLineInTH2File: plaOriginalLineInTH2File)
-          ..setTHFile(_th2File);
+          ..setTH2File(_th2File);
 
     if (parentElement is! THHasOptionsMixin) {
       throw Exception(
@@ -1117,7 +1117,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THHasOptionsMixin newParentElement =
         (parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
               as THHasOptionsMixin)
-          ..setTHFile(_th2File);
+          ..setTH2File(_th2File);
 
     newParentElement.removeOption(optionType);
     _th2File.substituteElement(newParentElement);
@@ -1486,7 +1486,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   void addScrap() {
     final BuildContext? currentContext = _th2FileEditController
-        .getTHFileWidgetGlobalKey()
+        .getTH2FileWidgetGlobalKey()
         .currentContext;
 
     if (currentContext == null) {

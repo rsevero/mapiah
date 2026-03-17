@@ -393,7 +393,7 @@ abstract class TH2FileEditControllerBase with Store {
   final List<String> errorMessages = <String>[];
 
   /// This is a factory constructor that creates a new instance of
-  /// TH2FileEditController with an empty THFile.
+  /// TH2FileEditController with an empty TH2File.
   static TH2FileEditController create(String filename, {Uint8List? fileBytes}) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
@@ -407,8 +407,8 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   /// This is a factory constructor that creates a new instance of
-  /// TH2FileEditController with an newly created THFile.
-  static TH2FileEditController createFromNewTHFile(TH2File th2File) {
+  /// TH2FileEditController with an newly created TH2File.
+  static TH2FileEditController createFromNewTH2File(TH2File th2File) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
 
@@ -452,7 +452,7 @@ abstract class TH2FileEditControllerBase with Store {
   Future<TH2FileEditControllerCreateResult> load() async {
     _preParseInitialize();
 
-    final THFileParser parser = THFileParser();
+    final TH2FileParser parser = TH2FileParser();
     final (_, isSuccessful, errors) = await parser.parse(
       _th2File.filename,
       fileBytes: _th2File.fileBytes,
@@ -1188,7 +1188,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Uint8List _encodedFileContents() {
-    final THFileWriter th2FileWriter = THFileWriter();
+    final TH2FileWriter th2FileWriter = TH2FileWriter();
     final Uint8List fileBytes = th2FileWriter.toBytes(
       _th2File,
       includeEmptyLines: true,
@@ -1378,12 +1378,12 @@ abstract class TH2FileEditControllerBase with Store {
     return canvasPadding;
   }
 
-  GlobalKey<State<StatefulWidget>> getTHFileWidgetGlobalKey() {
+  GlobalKey<State<StatefulWidget>> getTH2FileWidgetGlobalKey() {
     if (!overlayWindowController.globalKeyWidgetKeyByType.containsKey(
       MPGlobalKeyWidgetType.th2FileWidget,
     )) {
       throw Exception(
-        'At TH2FileEditController.getTHFileWidgetGlobalKey(): THFileWidget global key not found in overlayWindowController.',
+        'At TH2FileEditController.getTH2FileWidgetGlobalKey(): TH2FileWidget global key not found in overlayWindowController.',
       );
     }
 
@@ -1391,13 +1391,13 @@ abstract class TH2FileEditControllerBase with Store {
         .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.th2FileWidget]!;
   }
 
-  BuildContext getTHFileWidgetBuildContext() {
+  BuildContext getTH2FileWidgetBuildContext() {
     final GlobalKey<State<StatefulWidget>> globalKey =
-        getTHFileWidgetGlobalKey();
+        getTH2FileWidgetGlobalKey();
 
     if (globalKey.currentContext == null) {
       throw Exception(
-        'At TH2FileEditController.getTHFileWidgetBuildContext(): THFileWidget global key context is null.',
+        'At TH2FileEditController.getTH2FileWidgetBuildContext(): TH2FileWidget global key context is null.',
       );
     }
 

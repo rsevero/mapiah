@@ -577,7 +577,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         mpSlopeLinePointDefaultLSize;
     final double pointOrientation =
         MPCommandOptionAux.getOrientation(lineSegment) ??
-        MPNumericAux.segmentNormalFromTHFile(lineSegment.mpID, th2File);
+        MPNumericAux.segmentNormalFromTH2File(lineSegment.mpID, th2File);
 
     elementEditController.setLinePointLSizeAndOrientation(
       lSize: pointLSize,

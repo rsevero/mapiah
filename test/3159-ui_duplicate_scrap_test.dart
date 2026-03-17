@@ -45,7 +45,7 @@ void main() {
           tester.view.resetDevicePixelRatio();
         });
 
-        final THFileWriter writer = THFileWriter();
+        final TH2FileWriter writer = TH2FileWriter();
         final String testFilename = THTestAux.testPath(
           '2026-03-14-001-point_line_and_area.th2',
         );

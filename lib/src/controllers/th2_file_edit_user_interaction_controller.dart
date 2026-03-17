@@ -84,10 +84,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       final List<THElement> actualElementsForNewOption = [];
 
-      option.setTHFile(_th2File);
+      option.setTH2File(_th2File);
 
       for (final THElement element in candidateElementsForNewOption) {
-        element.setTHFile(_th2File);
+        element.setTH2File(_th2File);
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(
@@ -311,7 +311,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       for (final MPSelectedElement mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
-        element.setTHFile(_th2File);
+        element.setTH2File(_th2File);
 
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||

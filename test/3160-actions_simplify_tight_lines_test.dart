@@ -33,8 +33,8 @@ void main() {
     test(
       'simplifySelectedLines transforms pre into expected pos6 and undo restores',
       () async {
-        final parser = THFileParser();
-        final writer = THFileWriter();
+        final parser = TH2FileParser();
+        final writer = TH2FileWriter();
 
         final String preFilename = THTestAux.testPath(
           '2026-03-08-001-tight_lines_pre.th2',

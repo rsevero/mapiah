@@ -12,7 +12,7 @@ import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 
-class THFileWriter {
+class TH2FileWriter {
   String _prefix = '';
 
   final RegExp _doubleQuotePairEncodedRegex = RegExp(mpDoubleQuotePairEncoded);
@@ -94,7 +94,7 @@ class THFileWriter {
         asString += _serializeXTherionImageInsertConfig(thElement);
       } else {
         throw THCustomException(
-          "At THFileWriter._serializeAllXTherionConfigs: thElement with MPID '$xtherionSettingMPID' is not a Therion config.",
+          "At TH2FileWriter._serializeAllXTherionConfigs: thElement with MPID '$xtherionSettingMPID' is not a Therion config.",
         );
       }
     }
@@ -443,7 +443,7 @@ class THFileWriter {
         }
 
         // Dealing with parts that broke a quoted string.
-        int quoteCount = THFileAux.countCharOccurrences(part, mpDoubleQuote);
+        int quoteCount = TH2FileAux.countCharOccurrences(part, mpDoubleQuote);
         if (quoteCount.isOdd) {
           breakPos = line.lastIndexOf(mpDoubleQuote, breakPos);
           part = line.substring(0, breakPos);

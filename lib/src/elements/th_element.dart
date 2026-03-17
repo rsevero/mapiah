@@ -84,8 +84,8 @@ enum THElementType {
   xTherionImageInsertConfig,
 }
 
-/// Base class for all elements that form a THFile, including THFile itself.
-abstract class THElement with MPTHFileReferenceMixin {
+/// Base class for all elements that form a TH2File, including TH2File itself.
+abstract class THElement with MPTH2FileReferenceMixin {
   // Internal ID used by Mapiah to identify each element during this run. This
   // value is never saved anywhere.
   final int _mpID;

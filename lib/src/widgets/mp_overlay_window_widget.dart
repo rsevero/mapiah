@@ -102,12 +102,12 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
           }
 
           Rect? thFileBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
-            widgetGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
+            widgetGlobalKey: th2FileEditController.getTH2FileWidgetGlobalKey(),
           );
 
           thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
 
-          /// Up to here newPosition is the position inside the THFileWidget
+          /// Up to here newPosition is the position inside the TH2FileWidget
           /// window. Adjusting it to global coordinates as overlay windows
           /// are positioned in global coordinates.
           newPosition += thFileBoundingBox.topLeft;
@@ -143,7 +143,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
   Rect _getBoundingBoxForClamping() {
     Rect? thFileBoundingBox = MPInteractionAux.getWidgetRectFromGlobalKey(
-      widgetGlobalKey: th2FileEditController.getTHFileWidgetGlobalKey(),
+      widgetGlobalKey: th2FileEditController.getTH2FileWidgetGlobalKey(),
     );
 
     thFileBoundingBox ??= th2FileEditController.screenBoundingBox;
@@ -257,7 +257,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: getMaxHeightForOverlayWindows(
-                th2FileEditController.getTHFileWidgetGlobalKey(),
+                th2FileEditController.getTH2FileWidgetGlobalKey(),
               ),
               minWidth: mpOverlayWindowMinWidth,
             ),
@@ -313,7 +313,7 @@ class _MPOverlayWindowWidgetState extends State<MPOverlayWindowWidget> {
 
     if (renderBox == null) {
       throw Exception(
-        'No render box found for THFileWidget in MPOverlayWindowWidget.getMaxHeightForOverlayWindows()',
+        'No render box found for TH2FileWidget in MPOverlayWindowWidget.getMaxHeightForOverlayWindows()',
       );
     }
 
