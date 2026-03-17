@@ -28,7 +28,7 @@
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
   * Test for scrap duplication.
   * update_flutter_and_mapiah_version.dart script updating release name and URL constants.
-  * Migrated from "rsevero.github.io" to "flatpak.mapiah.org".
+  * Migrated from "rsevero.github.io" to "flatpak.mapiah.org" and updated all installation URLs in documentation and help files.
   * Moved dart format from VSC to git hook.
   * Including instructions to Claude update help pages when adding new features or changing existing ones.
   * Added SPDX license identifiers to all Dart and Markdown source files.
