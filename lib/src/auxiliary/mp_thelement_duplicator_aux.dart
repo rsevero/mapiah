@@ -42,13 +42,13 @@ class MPTHElementDuplicatorAux {
         element: element,
       );
 
-      duplicateMainElements.addAll(result.duplicateMainElements);
-      duplicateChildrenElements.addAll(result.duplicateChildren);
+      duplicateMainElements.addAll(result.addAtEndMinusOneOfParent);
+      duplicateChildrenElements.addAll(result.addAtEndOfParent);
     }
 
     _cachedDuplicate = MPDuplicateElementResult(
-      duplicateMainElements: duplicateMainElements,
-      duplicateChildren: duplicateChildrenElements,
+      addAtEndMinusOneOfParent: duplicateMainElements,
+      addAtEndOfParent: duplicateChildrenElements,
     );
 
     return _cachedDuplicate!;
@@ -57,17 +57,17 @@ class MPTHElementDuplicatorAux {
   MPCommand getAddDuplicateCommand() {
     final MPDuplicateElementResult duplicate = getDuplicate();
     final MPCommand duplicateMainCommand = MPCommandFactory.addElements(
-      elements: duplicate.duplicateMainElements,
+      elements: duplicate.addAtEndMinusOneOfParent,
       thFile: thFile,
       positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
     );
 
-    if (duplicate.duplicateChildren.isEmpty) {
+    if (duplicate.addAtEndOfParent.isEmpty) {
       return duplicateMainCommand;
     }
 
     final MPCommand duplicateChildrenCommand = MPCommandFactory.addElements(
-      elements: duplicate.duplicateChildren,
+      elements: duplicate.addAtEndOfParent,
       thFile: thFile,
       positionInParent: mpAddChildAtEndOfParentChildrenList,
     );
@@ -146,8 +146,10 @@ class MPTHElementDuplicatorAux {
           );
 
           _duplicatedLineMPIDs.add(borderLine.mpID);
-          duplicateLineMain.addAll(duplicateBorderLine.duplicateMainElements);
-          duplicateLineChildren.addAll(duplicateBorderLine.duplicateChildren);
+          duplicateLineMain.addAll(
+            duplicateBorderLine.addAtEndMinusOneOfParent,
+          );
+          duplicateLineChildren.addAll(duplicateBorderLine.addAtEndOfParent);
         }
 
         String? newBorderTHID;
@@ -177,16 +179,16 @@ class MPTHElementDuplicatorAux {
           newParentMPID: duplicatedAreaMPID,
         );
 
-        duplicateMain.addAll(duplicatedChild.duplicateMainElements);
-        duplicateChildren.addAll(duplicatedChild.duplicateChildren);
+        duplicateMain.addAll(duplicatedChild.addAtEndMinusOneOfParent);
+        duplicateChildren.addAll(duplicatedChild.addAtEndOfParent);
       }
     }
 
     /// Lines come before so when the area is created, its border lines already
     /// exist.
     return MPDuplicateElementResult(
-      duplicateMainElements: duplicateLineMain + duplicateMain,
-      duplicateChildren: duplicateLineChildren + duplicateChildren,
+      addAtEndMinusOneOfParent: duplicateLineMain + duplicateMain,
+      addAtEndOfParent: duplicateLineChildren + duplicateChildren,
     );
   }
 
@@ -204,13 +206,13 @@ class MPTHElementDuplicatorAux {
         newParentMPID: newParentMPID,
       );
 
-      duplicatedMainElements.addAll(duplicatedChild.duplicateMainElements);
-      duplicateChildren.addAll(duplicatedChild.duplicateChildren);
+      duplicatedMainElements.addAll(duplicatedChild.addAtEndMinusOneOfParent);
+      duplicateChildren.addAll(duplicatedChild.addAtEndOfParent);
     }
 
     return MPDuplicateElementResult(
-      duplicateMainElements: duplicatedMainElements,
-      duplicateChildren: duplicateChildren,
+      addAtEndMinusOneOfParent: duplicatedMainElements,
+      addAtEndOfParent: duplicateChildren,
     );
   }
 
@@ -236,16 +238,16 @@ class MPTHElementDuplicatorAux {
         duplicate = _duplicateScrap(scrap: scrap, newParentMPID: newParentMPID);
       case THEmptyLine _:
         duplicate = MPDuplicateElementResult(
-          duplicateMainElements: [],
-          duplicateChildren: [],
+          addAtEndMinusOneOfParent: [],
+          addAtEndOfParent: [],
         );
       default:
 
         /// All THElements that should be treated as a main element in
         /// duplication should be covered by the cases above.
         duplicate = MPDuplicateElementResult(
-          duplicateMainElements: [],
-          duplicateChildren: [
+          addAtEndMinusOneOfParent: [],
+          addAtEndOfParent: [
             _copyElement(element: element, newParentMPID: newParentMPID),
           ],
         );
@@ -262,8 +264,8 @@ class MPTHElementDuplicatorAux {
       /// This line has already been duplicated as a child of an area, so we skip
       /// it to avoid duplication loops.
       return MPDuplicateElementResult(
-        duplicateMainElements: [],
-        duplicateChildren: [],
+        addAtEndMinusOneOfParent: [],
+        addAtEndOfParent: [],
       );
     }
 
@@ -294,11 +296,11 @@ class MPTHElementDuplicatorAux {
     );
 
     _duplicatedLineMPIDs.add(line.mpID);
-    duplicateMainElements.addAll(duplicateChildren.duplicateMainElements);
+    duplicateMainElements.addAll(duplicateChildren.addAtEndMinusOneOfParent);
 
     return MPDuplicateElementResult(
-      duplicateMainElements: duplicateMainElements,
-      duplicateChildren: duplicateChildren.duplicateChildren,
+      addAtEndMinusOneOfParent: duplicateMainElements,
+      addAtEndOfParent: duplicateChildren.addAtEndOfParent,
     );
   }
 
@@ -316,11 +318,11 @@ class MPTHElementDuplicatorAux {
       newParentMPID: duplicatedMultiCommentMPID,
     );
 
-    duplicatedMainElements.addAll(duplicateChildren.duplicateMainElements);
+    duplicatedMainElements.addAll(duplicateChildren.addAtEndMinusOneOfParent);
 
     return MPDuplicateElementResult(
-      duplicateMainElements: duplicatedMainElements,
-      duplicateChildren: duplicateChildren.duplicateChildren,
+      addAtEndMinusOneOfParent: duplicatedMainElements,
+      addAtEndOfParent: duplicateChildren.addAtEndOfParent,
     );
   }
 
@@ -349,8 +351,8 @@ class MPTHElementDuplicatorAux {
     );
 
     return MPDuplicateElementResult(
-      duplicateMainElements: [duplicatePoint],
-      duplicateChildren: [],
+      addAtEndMinusOneOfParent: [duplicatePoint],
+      addAtEndOfParent: [],
     );
   }
 
@@ -388,12 +390,12 @@ class MPTHElementDuplicatorAux {
       newParentMPID: duplicatedScrapMPID,
     );
     final List<THElement> duplicateChildrenComplete =
-        duplicateChildren.duplicateMainElements +
-        duplicateChildren.duplicateChildren;
+        duplicateChildren.addAtEndMinusOneOfParent +
+        duplicateChildren.addAtEndOfParent;
 
     return MPDuplicateElementResult(
-      duplicateMainElements: duplicatedMainElements,
-      duplicateChildren: duplicateChildrenComplete,
+      addAtEndMinusOneOfParent: duplicatedMainElements,
+      addAtEndOfParent: duplicateChildrenComplete,
     );
   }
 
@@ -455,19 +457,19 @@ class MPTHElementDuplicatorAux {
 }
 
 class MPDuplicateElementResult {
-  /// The main elements should be added with position in parent ==
-  /// mpAddChildAtEndMinusOneOfParentChildrenList because they are being added
-  /// on previously existing full elements, probably a scrap (or a THFile if
-  /// adding a duplicated scrap).
-  /// The duplicate children should be added with position in parent ==
-  /// mpAddChildAtEndOfParentChildrenList because they are being added on a
-  /// new element, the duplicated main element which does not have its ending
-  /// element yet (THEndLine, THEndArea or THEndScrap).
-  final List<THElement> duplicateMainElements;
-  final List<THElement> duplicateChildren;
+  /// The addAtEndMinusOneOfParent elements should be added before the
+  /// addAtEndOfParent elements because they usually are the parent of the
+  /// addAtEndOfParent elements, so they need to exist before the children are
+  /// added.
+  ///
+  /// The addAtEndOfParent elements are added at the end because their parents
+  /// don´t have their respective end elements yet (THEndLine, THEndArea or
+  /// THEndScrap).
+  final List<THElement> addAtEndMinusOneOfParent;
+  final List<THElement> addAtEndOfParent;
 
   MPDuplicateElementResult({
-    required this.duplicateMainElements,
-    required this.duplicateChildren,
+    required this.addAtEndMinusOneOfParent,
+    required this.addAtEndOfParent,
   });
 }
