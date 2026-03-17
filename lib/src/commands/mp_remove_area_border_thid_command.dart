@@ -29,11 +29,11 @@ class MPRemoveAreaBorderTHIDCommand extends MPCommand with MPPreCommandMixin {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
+    final TH2File th2File = th2FileEditController.th2File;
+    final THAreaBorderTHID areaBorderTHID = th2File.areaBorderTHIDByMPID(
       areaBorderTHIDMPID,
     );
-    final THIsParentMixin parent = thFile.parentByMPID(
+    final THIsParentMixin parent = th2File.parentByMPID(
       areaBorderTHID.parentMPID,
     );
     final int positionInParent = parent.getChildPosition(areaBorderTHID);

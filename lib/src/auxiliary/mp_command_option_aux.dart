@@ -311,7 +311,7 @@ class MPCommandOptionAux {
     final Map<String, THPoint> stationPointsByStationName = {};
     final THScrap activeScrap = th2FileEditController.getActiveScrap();
     final Iterable<THElement> scrapChildren = activeScrap.getChildren(
-      th2FileEditController.thFile,
+      th2FileEditController.th2File,
     );
 
     for (final THElement scrapChild in scrapChildren) {

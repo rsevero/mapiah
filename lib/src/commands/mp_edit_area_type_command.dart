@@ -32,7 +32,7 @@ class MPEditAreaTypeCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THArea originalArea = th2FileEditController.thFile.areaByMPID(
+    final THArea originalArea = th2FileEditController.th2File.areaByMPID(
       areaMPID,
     );
 
@@ -45,7 +45,7 @@ class MPEditAreaTypeCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THArea newArea = th2FileEditController.thFile
+    final THArea newArea = th2FileEditController.th2File
         .areaByMPID(areaMPID)
         .copyWith(
           areaType: newAreaType,

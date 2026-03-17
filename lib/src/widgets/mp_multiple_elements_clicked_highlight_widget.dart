@@ -9,7 +9,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
@@ -20,13 +20,13 @@ import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
-  final THFile thFile;
+  final TH2File th2File;
   final MPVisualController visualController;
 
   MPMultipleElementsClickedHighlightWidget({
     required super.key,
     required this.th2FileEditController,
-  }) : thFile = th2FileEditController.thFile,
+  }) : th2File = th2FileEditController.th2File,
        visualController = th2FileEditController.visualController;
 
   @override
@@ -45,7 +45,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
 
           final List<THElement> highlightedElements = (highlightedMPID == 0)
               ? selectionController.clickedElements.values.toList()
-              : [thFile.elementByMPID(highlightedMPID)];
+              : [th2File.elementByMPID(highlightedMPID)];
 
           final List<CustomPainter> painters = [];
 
@@ -71,7 +71,7 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                   _,
                 ) = getLineSegmentsAndEndpointsMaps(
                   line: highlightedElement,
-                  thFile: thFile,
+                  th2File: th2File,
                   returnLineSegments: false,
                 );
                 final THLinePaint linePaint = visualController
@@ -96,17 +96,19 @@ class MPMultipleElementsClickedHighlightWidget extends StatelessWidget
                 );
               case THArea _:
                 final List<int> areaLineMPIDs = highlightedElement.getLineMPIDs(
-                  thFile,
+                  th2File,
                 );
 
                 for (final int lineMPID in areaLineMPIDs) {
-                  final THLine highlightedElement = thFile.lineByMPID(lineMPID);
+                  final THLine highlightedElement = th2File.lineByMPID(
+                    lineMPID,
+                  );
                   final (
                     LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
                     _,
                   ) = getLineSegmentsAndEndpointsMaps(
                     line: highlightedElement,
-                    thFile: thFile,
+                    th2File: th2File,
                     returnLineSegments: false,
                   );
                   final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(

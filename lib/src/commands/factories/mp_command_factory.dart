@@ -14,7 +14,7 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -24,28 +24,28 @@ import 'package:path/path.dart' as p;
 class MPCommandFactory {
   static MPCommand _actualRemoveLineSegmentFromExisting({
     required int toRemoveLineSegmentMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
   }) {
-    final THLine parentLine = thFile.lineByMPID(
-      thFile.lineSegmentByMPID(toRemoveLineSegmentMPID).parentMPID,
+    final THLine parentLine = th2File.lineByMPID(
+      th2File.lineSegmentByMPID(toRemoveLineSegmentMPID).parentMPID,
     );
     final int lineSegmentsCountInParentLine = parentLine
-        .getLineSegmentMPIDs(thFile)
+        .getLineSegmentMPIDs(th2File)
         .length;
 
     if (lineSegmentsCountInParentLine < 3) {
       return removeLineFromExisting(
         existingLineMPID: parentLine.mpID,
         isInteractiveLineCreation: false,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
     } else {
       final MPCommand? preCommand = removeEmptyLinesAfterCommand(
         elementMPID: toRemoveLineSegmentMPID,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
 
@@ -59,12 +59,12 @@ class MPCommandFactory {
   static MPAddAreaBorderTHIDCommand addAreaBorderTHIDFromExisting({
     required THAreaBorderTHID existingAreaBorderTHID,
     int? areaBorderTHIDPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddAreaBorderTHIDCommand.defaultDescriptionType,
   }) {
     final THIsParentMixin parent = existingAreaBorderTHID.parent(
-      thFile: thFile,
+      th2File: th2File,
     );
 
     areaBorderTHIDPositionInParent =
@@ -72,7 +72,7 @@ class MPCommandFactory {
         parent.getChildPosition(existingAreaBorderTHID);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: areaBorderTHIDPositionInParent,
       descriptionType: descriptionType,
@@ -89,20 +89,20 @@ class MPCommandFactory {
   static MPAddAreaCommand addAreaFromExisting({
     required THArea existingArea,
     int? areaPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddAreaCommand.defaultDescriptionType,
   }) {
     final List<THElement> areaChildren = existingArea
-        .getChildren(thFile)
+        .getChildren(th2File)
         .toList();
-    final THIsParentMixin parent = existingArea.parent(thFile: thFile);
+    final THIsParentMixin parent = existingArea.parent(th2File: th2File);
 
     areaPositionInParent =
         areaPositionInParent ?? parent.getChildPosition(existingArea);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: areaPositionInParent,
       descriptionType: descriptionType,
@@ -120,17 +120,17 @@ class MPCommandFactory {
   static MPAddElementCommand addElementFromExisting({
     required THElement existingElement,
     int? elementPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddElementCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingElement.parent(thFile: thFile);
+    final THIsParentMixin parent = existingElement.parent(th2File: th2File);
 
     elementPositionInParent =
         elementPositionInParent ?? parent.getChildPosition(existingElement);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: elementPositionInParent,
       descriptionType: descriptionType,
@@ -146,7 +146,7 @@ class MPCommandFactory {
 
   static MPCommand addElements({
     required List<THElement> elements,
-    required THFile thFile,
+    required TH2File th2File,
     int positionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.addElements,
@@ -160,7 +160,7 @@ class MPCommandFactory {
         case THArea _:
           addCommand = MPAddAreaCommand.forCWJM(
             newArea: element,
-            areaChildren: element.getChildren(thFile).toList(),
+            areaChildren: element.getChildren(th2File).toList(),
             areaPositionInParent: positionInParent,
             posCommand: null,
             descriptionType: descriptionType,
@@ -180,7 +180,7 @@ class MPCommandFactory {
           addCommand = MPAddLineCommand.forCWJM(
             newLine: element,
             linePositionInParent: positionInParent,
-            lineChildren: element.getChildren(thFile).toList(),
+            lineChildren: element.getChildren(th2File).toList(),
             preCommand: null,
             posCommand: null,
           );
@@ -200,8 +200,8 @@ class MPCommandFactory {
           addCommand = MPAddScrapCommand(
             newScrap: element,
             scrapPositionInParent: positionInParent,
-            scrapChildren: element.getChildren(thFile).toList(),
-            thFile: thFile,
+            scrapChildren: element.getChildren(th2File).toList(),
+            th2File: th2File,
             posCommand: null,
           );
         case THXTherionImageInsertConfig _:
@@ -230,13 +230,13 @@ class MPCommandFactory {
   }
 
   static MPCommand? addEmptyLinesAfterCommand({
-    required THFile thFile,
+    required TH2File th2File,
     required THIsParentMixin parent,
     required int positionInParent,
     required MPCommandDescriptionType descriptionType,
   }) {
     final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: positionInParent,
     );
@@ -248,10 +248,10 @@ class MPCommandFactory {
     final List<MPCommand> addEmptyLinesAfterCommands = [];
 
     for (final int emptyLineMPID in emptyLinesAfter) {
-      final THEmptyLine emptyLine = thFile.emptyLineByMPID(emptyLineMPID);
+      final THEmptyLine emptyLine = th2File.emptyLineByMPID(emptyLineMPID);
       final MPCommand addEmptyLineCommand = addEmptyLineFromExisting(
         existingEmptyLine: emptyLine,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
       addEmptyLinesAfterCommands.add(addEmptyLineCommand);
@@ -270,14 +270,14 @@ class MPCommandFactory {
   static MPAddEmptyLineCommand addEmptyLineFromExisting({
     required THEmptyLine existingEmptyLine,
     int? emptyLinePositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddEmptyLineCommand.defaultDescriptionType,
   }) {
     emptyLinePositionInParent =
         emptyLinePositionInParent ??
         existingEmptyLine
-            .parent(thFile: thFile)
+            .parent(th2File: th2File)
             .getChildPosition(existingEmptyLine);
 
     return MPAddEmptyLineCommand.forCWJM(
@@ -328,7 +328,7 @@ class MPCommandFactory {
 
       posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
         elements: [line],
-        thFile: th2FileEditController.thFile,
+        th2File: th2FileEditController.th2File,
         toOption: lineSubtypeOption,
       );
 
@@ -364,16 +364,16 @@ class MPCommandFactory {
     required THLine existingLine,
     int? linePositionInParent,
     Offset? lineStartScreenPosition,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddLineCommand.defaultDescriptionType,
   }) {
     final List<THElement> lineChildren = existingLine
-        .getChildren(thFile)
+        .getChildren(th2File)
         .toList();
     final int existingLineMPID = existingLine.mpID;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
-    final THIsParentMixin parent = existingLine.parent(thFile: thFile);
+    final int? areaMPID = th2File.getAreaMPIDByLineMPID(existingLineMPID);
+    final THIsParentMixin parent = existingLine.parent(th2File: th2File);
     final MPAddAreaBorderTHIDCommand? addAreaTHIDCommand;
 
     linePositionInParent =
@@ -382,10 +382,10 @@ class MPCommandFactory {
     if (areaMPID == null) {
       addAreaTHIDCommand = null;
     } else {
-      final THArea area = thFile.areaByMPID(areaMPID);
+      final THArea area = th2File.areaByMPID(areaMPID);
       final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
         existingLineMPID,
-        thFile,
+        th2File,
       );
 
       if (areaTHID == null) {
@@ -393,14 +393,14 @@ class MPCommandFactory {
       } else {
         addAreaTHIDCommand = MPCommandFactory.addAreaBorderTHIDFromExisting(
           existingAreaBorderTHID: areaTHID,
-          thFile: thFile,
+          th2File: th2File,
           descriptionType: descriptionType,
         );
       }
     }
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: linePositionInParent,
       descriptionType: descriptionType,
@@ -421,18 +421,18 @@ class MPCommandFactory {
   static MPAddLineSegmentCommand addLineSegmentFromExisting({
     required THLineSegment existingLineSegment,
     int? lineSegmentPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddLineSegmentCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingLineSegment.parent(thFile: thFile);
+    final THIsParentMixin parent = existingLineSegment.parent(th2File: th2File);
 
     lineSegmentPositionInParent =
         lineSegmentPositionInParent ??
         parent.getChildPosition(existingLineSegment);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: lineSegmentPositionInParent,
       descriptionType: descriptionType,
@@ -448,7 +448,7 @@ class MPCommandFactory {
 
   static MPCommand addTHIDToElement({
     required THElement element,
-    required THFile thFile,
+    required TH2File th2File,
     required String newTHID,
   }) {
     final THIDCommandOption thIDOption = THIDCommandOption.forCWJM(
@@ -466,7 +466,7 @@ class MPCommandFactory {
   static MPCommand addLineToArea({
     required THArea area,
     required THLine line,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.addAreaBorderTHID,
   }) {
@@ -478,13 +478,13 @@ class MPCommandFactory {
       String? areaTHID = MPCommandOptionAux.getID(area);
 
       if (areaTHID == null) {
-        final String newAreaTHID = thFile.getNewTHID(
+        final String newAreaTHID = th2File.getNewTHID(
           element: area,
           prefix: mpAreaTHIDPrefix,
         );
         final MPCommand addAreaTHIDCommand = addTHIDToElement(
           element: area,
-          thFile: thFile,
+          th2File: th2File,
           newTHID: newAreaTHID,
         );
 
@@ -493,13 +493,13 @@ class MPCommandFactory {
       }
 
       final String lineTHIDPrefix = '$areaTHID-$mpLineTHIDPrefix';
-      final String newLineTHID = thFile.getNewTHID(
+      final String newLineTHID = th2File.getNewTHID(
         element: line,
         prefix: lineTHIDPrefix,
       );
       final MPCommand addLineTHIDCommand = addTHIDToElement(
         element: line,
-        thFile: thFile,
+        th2File: th2File,
         newTHID: newLineTHID,
       );
 
@@ -572,17 +572,17 @@ class MPCommandFactory {
   static MPAddPointCommand addPointFromExisting({
     required THPoint existingPoint,
     int? pointPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddPointCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingPoint.parent(thFile: thFile);
+    final THIsParentMixin parent = existingPoint.parent(th2File: th2File);
 
     pointPositionInParent =
         pointPositionInParent ?? parent.getChildPosition(existingPoint);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: pointPositionInParent,
       descriptionType: descriptionType,
@@ -598,11 +598,11 @@ class MPCommandFactory {
 
   static MPCommand addScrap({
     required String thID,
-    required THFile thFile,
+    required TH2File th2File,
     List<THElement>? scrapChildren,
     List<THCommandOption>? scrapOptions,
   }) {
-    final THScrap newScrap = THScrap(parentMPID: thFile.mpID, thID: thID);
+    final THScrap newScrap = THScrap(parentMPID: th2File.mpID, thID: thID);
     final int newScrapMPID = newScrap.mpID;
 
     scrapChildren ??= [];
@@ -632,7 +632,7 @@ class MPCommandFactory {
     final MPCommand addScrapCommandForNewScrap = MPAddScrapCommand(
       newScrap: newScrap,
       scrapChildren: scrapChildren,
-      thFile: thFile,
+      th2File: th2File,
       posCommand: null,
     );
 
@@ -641,14 +641,14 @@ class MPCommandFactory {
 
   static MPCommand addScrapChildren({
     required THScrap scrap,
-    required THFile thFile,
+    required TH2File th2File,
   }) {
     final List<THElement> scrapChildrenAsElements = scrap
-        .getChildren(thFile)
+        .getChildren(th2File)
         .toList();
     final MPCommand scrapChildrenCommand = MPCommandFactory.addElements(
       elements: scrapChildrenAsElements,
-      thFile: thFile,
+      th2File: th2File,
       positionInParent: mpAddChildAtEndOfParentChildrenList,
     );
 
@@ -658,21 +658,21 @@ class MPCommandFactory {
   static MPAddScrapCommand addSScrapFromExisting({
     required THScrap existingScrap,
     int? scrapPositionInParent,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPAddScrapCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingScrap.parent(thFile: thFile);
+    final THIsParentMixin parent = existingScrap.parent(th2File: th2File);
 
     scrapPositionInParent =
         scrapPositionInParent ?? parent.getChildPosition(existingScrap);
 
     final MPCommand addScrapChildrenCommand = addScrapChildren(
       scrap: existingScrap,
-      thFile: thFile,
+      th2File: th2File,
     );
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: scrapPositionInParent,
       descriptionType: descriptionType,
@@ -691,8 +691,8 @@ class MPCommandFactory {
     required String imageFilename,
     required TH2FileEditController th2FileEditController,
   }) {
-    final THFile thFile = th2FileEditController.thFile;
-    final String fromPath = p.dirname(thFile.filename);
+    final TH2File th2File = th2FileEditController.th2File;
+    final String fromPath = p.dirname(th2File.filename);
     final String normalizedImageFilename = imageFilename.replaceAll(
       mpWindowsBackslashPair,
       mpWindowsForwardSlash,
@@ -710,10 +710,10 @@ class MPCommandFactory {
             rawRelativeImagePath.startsWith('../'))
         ? rawRelativeImagePath
         : './$rawRelativeImagePath';
-    final Rect fileBoundingBox = thFile.getBoundingBox(th2FileEditController)!;
+    final Rect fileBoundingBox = th2File.getBoundingBox(th2FileEditController)!;
     final THXTherionImageInsertConfig
     newImage = THXTherionImageInsertConfig.adjustPosition(
-      parentMPID: thFile.mpID,
+      parentMPID: th2File.mpID,
       filename: relativeImagePath,
       xx: THDoublePart(value: fileBoundingBox.left),
       // For Flutter's canvas, the top is 0 and positive values of Y go down but
@@ -738,13 +738,13 @@ class MPCommandFactory {
   static MPAddXTherionImageInsertConfigCommand
   addXTherionImageInsertConfigFromExisting({
     required THXTherionImageInsertConfig existingImageInsertConfig,
-    required THFile thFile,
+    required TH2File th2File,
     int? xTherionImageInsertConfigPositionInParent,
     MPCommandDescriptionType descriptionType =
         MPAddXTherionImageInsertConfigCommand.defaultDescriptionType,
   }) {
     final THIsParentMixin parent = existingImageInsertConfig.parent(
-      thFile: thFile,
+      th2File: th2File,
     );
 
     xTherionImageInsertConfigPositionInParent =
@@ -752,7 +752,7 @@ class MPCommandFactory {
         parent.getChildPosition(existingImageInsertConfig);
 
     final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: xTherionImageInsertConfigPositionInParent,
       descriptionType: descriptionType,
@@ -770,7 +770,7 @@ class MPCommandFactory {
   static MPCommand editAreasTypeSubtype({
     required List<int> areaMPIDs,
     required String newAreaTypeSubtype,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editAreasTypeSubtype,
   }) {
@@ -804,7 +804,7 @@ class MPCommandFactory {
 
         commandsList.add(setAreaSubtypeCommand);
       } else {
-        final THArea area = thFile.areaByMPID(areaMPID);
+        final THArea area = th2File.areaByMPID(areaMPID);
 
         if (area.hasOption(THCommandOptionType.subtype)) {
           final MPCommand removeSubtypeCommand =
@@ -854,7 +854,7 @@ class MPCommandFactory {
 
   static MPCommand editLineSegmentsType({
     required List<THLineSegment> changedLineSegments,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editLineSegmentsType,
   }) {
@@ -862,7 +862,7 @@ class MPCommandFactory {
 
     for (final THLineSegment changedLineSegment in changedLineSegments) {
       final MPCommand setLineSegmentTypeCommand = MPEditLineSegmentCommand(
-        originalLineSegment: thFile.lineSegmentByMPID(changedLineSegment.mpID),
+        originalLineSegment: th2File.lineSegmentByMPID(changedLineSegment.mpID),
         newLineSegment: changedLineSegment,
         descriptionType: descriptionType,
       );
@@ -880,7 +880,7 @@ class MPCommandFactory {
   static MPCommand editLinesTypeSubtype({
     required List<int> lineMPIDs,
     required String newLineTypeSubtype,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editLinesTypeSubtype,
   }) {
@@ -914,7 +914,7 @@ class MPCommandFactory {
 
         commandsList.add(setLineSubtypeCommand);
       } else {
-        final THLine line = thFile.lineByMPID(lineMPID);
+        final THLine line = th2File.lineByMPID(lineMPID);
 
         if (line.hasOption(THCommandOptionType.subtype)) {
           final MPCommand removeSubtypeCommand =
@@ -965,7 +965,7 @@ class MPCommandFactory {
   static MPCommand editPointsTypeSubtype({
     required List<int> pointMPIDs,
     required String newPointTypeSubtype,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.editPointsTypeSubtype,
   }) {
@@ -999,7 +999,7 @@ class MPCommandFactory {
 
         commandsList.add(setPointSubtypeCommand);
       } else {
-        final THPoint point = thFile.pointByMPID(pointMPID);
+        final THPoint point = th2File.pointByMPID(pointMPID);
 
         if (point.hasOption(THCommandOptionType.subtype)) {
           final MPCommand removeSubtypeCommand =
@@ -1459,28 +1459,28 @@ class MPCommandFactory {
 
   static MPCommand removeAreaBorderTHIDFromExisting({
     required int existingAreaBorderTHIDMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveAreaBorderTHIDCommand.defaultDescriptionType,
   }) {
-    final THAreaBorderTHID areaBorderTHID = thFile.areaBorderTHIDByMPID(
+    final THAreaBorderTHID areaBorderTHID = th2File.areaBorderTHIDByMPID(
       existingAreaBorderTHIDMPID,
     );
-    final THArea parentArea = thFile.areaByMPID(areaBorderTHID.parentMPID);
+    final THArea parentArea = th2File.areaByMPID(areaBorderTHID.parentMPID);
     final int areaBorderSiblingsCount = parentArea
-        .getAreaBorderTHIDMPIDs(thFile)
+        .getAreaBorderTHIDMPIDs(th2File)
         .length;
 
     if (areaBorderSiblingsCount == 1) {
       return removeAreaFromExisting(
         existingAreaMPID: parentArea.mpID,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
     } else if (areaBorderSiblingsCount > 1) {
       final MPCommand? preCommand = removeEmptyLinesAfterCommand(
         elementMPID: existingAreaBorderTHIDMPID,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
 
@@ -1498,13 +1498,13 @@ class MPCommandFactory {
 
   static MPRemoveAreaCommand removeAreaFromExisting({
     required int existingAreaMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveAreaCommand.defaultDescriptionType,
   }) {
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingAreaMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
 
@@ -1518,7 +1518,7 @@ class MPCommandFactory {
   static MPCommand removeAttrOptionFromElements({
     required String attrName,
     required List<int> parentMPIDs,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeOptionFromElements,
   }) {
@@ -1529,7 +1529,7 @@ class MPCommandFactory {
       removeAttrOptionFromElementCommand = MPRemoveAttrOptionFromElementCommand(
         parentMPID: parentMPID,
         attrName: attrName,
-        plaOriginalTH2FileLine: thFile
+        plaOriginalTH2FileLine: th2File
             .elementByMPID(parentMPID)
             .originalLineInTH2File,
         descriptionType: descriptionType,
@@ -1547,13 +1547,13 @@ class MPCommandFactory {
 
   static MPRemoveElementCommand removeElementFromExisting({
     required int existingElementMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveElementCommand.defaultDescriptionType,
   }) {
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingElementMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
 
@@ -1566,7 +1566,7 @@ class MPCommandFactory {
 
   static MPCommand removeElements({
     required List<int> mpIDs,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeElements,
   }) {
@@ -1575,17 +1575,17 @@ class MPCommandFactory {
     for (final int mpID in mpIDs) {
       final MPCommand removeCommand;
 
-      switch (thFile.getElementTypeByMPID(mpID)) {
+      switch (th2File.getElementTypeByMPID(mpID)) {
         case THElementType.area:
           removeCommand = removeAreaFromExisting(
             existingAreaMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         case THElementType.areaBorderTHID:
           removeCommand = MPCommandFactory.removeAreaBorderTHIDFromExisting(
             existingAreaBorderTHIDMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         case THElementType.emptyLine:
@@ -1594,36 +1594,36 @@ class MPCommandFactory {
           removeCommand = removeLineFromExisting(
             existingLineMPID: mpID,
             isInteractiveLineCreation: false,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         case THElementType.lineSegment:
           removeCommand = removeLineSegmentFromExisting(
             toRemoveLineSegmentMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         case THElementType.point:
           removeCommand = removePointFromExisting(
             existingPointMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         case THElementType.scrap:
           removeCommand = removeScrapFromExisting(
             existingScrapMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
           );
         case THElementType.xTherionImageInsertConfig:
           removeCommand = removeXTherionImageInsertConfigFromExisting(
             existingXTherionImageInsertConfigMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
         default:
           removeCommand = removeElementFromExisting(
             existingElementMPID: mpID,
-            thFile: thFile,
+            th2File: th2File,
             descriptionType: descriptionType,
           );
       }
@@ -1641,13 +1641,13 @@ class MPCommandFactory {
 
   static MPCommand? removeEmptyLinesAfterCommand({
     required int elementMPID,
-    required THFile thFile,
+    required TH2File th2File,
     required MPCommandDescriptionType descriptionType,
   }) {
-    final THElement element = thFile.elementByMPID(elementMPID);
-    final THIsParentMixin parent = element.parent(thFile: thFile);
+    final THElement element = th2File.elementByMPID(elementMPID);
+    final THIsParentMixin parent = element.parent(th2File: th2File);
     final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
-      thFile: thFile,
+      th2File: th2File,
       parent: parent,
       positionInParent: parent.getChildPosition(element),
     );
@@ -1658,7 +1658,7 @@ class MPCommandFactory {
 
     return MPCommandFactory.removeElements(
       mpIDs: emptyLinesAfter,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
   }
@@ -1666,25 +1666,25 @@ class MPCommandFactory {
   static MPRemoveLineCommand removeLineFromExisting({
     required int existingLineMPID,
     required bool isInteractiveLineCreation,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveLineCommand.defaultDescriptionType,
   }) {
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingLineMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
     final MPCommand? posCommand;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(existingLineMPID);
+    final int? areaMPID = th2File.getAreaMPIDByLineMPID(existingLineMPID);
 
     if (areaMPID == null) {
       posCommand = null;
     } else {
-      final THArea area = thFile.areaByMPID(areaMPID);
+      final THArea area = th2File.areaByMPID(areaMPID);
       final THAreaBorderTHID? areaTHID = area.areaBorderByLineMPID(
         existingLineMPID,
-        thFile,
+        th2File,
       );
 
       if (areaTHID == null) {
@@ -1694,7 +1694,7 @@ class MPCommandFactory {
       } else {
         posCommand = MPCommandFactory.removeAreaBorderTHIDFromExisting(
           existingAreaBorderTHIDMPID: areaTHID.mpID,
-          thFile: thFile,
+          th2File: th2File,
           descriptionType: descriptionType,
         );
       }
@@ -1711,22 +1711,22 @@ class MPCommandFactory {
 
   static MPCommand removeLineSegmentFromExisting({
     required int toRemoveLineSegmentMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
   }) {
-    final THLineSegment toRemoveLineSegment = thFile.lineSegmentByMPID(
+    final THLineSegment toRemoveLineSegment = th2File.lineSegmentByMPID(
       toRemoveLineSegmentMPID,
     );
-    final THLine line = thFile.lineByMPID(toRemoveLineSegment.parentMPID);
-    final List<THLineSegment> lineSegments = line.getLineSegments(thFile);
+    final THLine line = th2File.lineByMPID(toRemoveLineSegment.parentMPID);
+    final List<THLineSegment> lineSegments = line.getLineSegments(th2File);
     final int lineSegmentIndex = lineSegments.indexOf(toRemoveLineSegment);
 
     if ((lineSegmentIndex == 0) ||
         (lineSegmentIndex == lineSegments.length - 1)) {
       return _actualRemoveLineSegmentFromExisting(
         toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
-        thFile: thFile,
+        th2File: th2File,
       );
     } else {
       final bool toRemoveLineSegmentIsStraight =
@@ -1738,12 +1738,12 @@ class MPCommandFactory {
       if (toRemoveLineSegmentIsStraight && nextLineSegmentIsStraight) {
         return _actualRemoveLineSegmentFromExisting(
           toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
-          thFile: thFile,
+          th2File: th2File,
         );
       } else {
         final THLineSegment? previousLineSegment = line.getPreviousLineSegment(
           toRemoveLineSegment,
-          thFile,
+          th2File,
         );
 
         if (previousLineSegment == null) {
@@ -1781,7 +1781,7 @@ class MPCommandFactory {
         return MPCommandFactory.removeLineSegmentWithSubstitution(
           toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
           lineSegmentSubstitute: lineSegmentSubstitute,
-          thFile: thFile,
+          th2File: th2File,
         );
       }
     }
@@ -1789,17 +1789,17 @@ class MPCommandFactory {
 
   static MPCommand removeLineSegments({
     required Iterable<int> lineSegmentMPIDs,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegments,
   }) {
     assert(lineSegmentMPIDs.isNotEmpty);
 
-    final THLine parentLine = thFile.lineByMPID(
-      thFile.lineSegmentByMPID(lineSegmentMPIDs.first).parentMPID,
+    final THLine parentLine = th2File.lineByMPID(
+      th2File.lineSegmentByMPID(lineSegmentMPIDs.first).parentMPID,
     );
     final int lineSegmentsCountInParentLine = parentLine
-        .getLineSegmentMPIDs(thFile)
+        .getLineSegmentMPIDs(th2File)
         .length;
     final int remainingLineSegmentsCount =
         lineSegmentsCountInParentLine - lineSegmentMPIDs.length;
@@ -1808,7 +1808,7 @@ class MPCommandFactory {
       return removeLineFromExisting(
         existingLineMPID: parentLine.mpID,
         isInteractiveLineCreation: false,
-        thFile: thFile,
+        th2File: th2File,
         descriptionType: descriptionType,
       );
     } else {
@@ -1818,7 +1818,7 @@ class MPCommandFactory {
         final MPCommand removeLineSegmentCommand =
             removeLineSegmentFromExisting(
               toRemoveLineSegmentMPID: lineSegmentMPID,
-              thFile: thFile,
+              th2File: th2File,
               descriptionType: descriptionType,
             );
 
@@ -1836,7 +1836,7 @@ class MPCommandFactory {
   static MPCommand removeLineSegmentWithSubstitution({
     required int toRemoveLineSegmentMPID,
     required THLineSegment lineSegmentSubstitute,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeLineSegment,
   }) {
@@ -1845,11 +1845,13 @@ class MPCommandFactory {
     final MPCommand removeLineSegmentCommand =
         _actualRemoveLineSegmentFromExisting(
           toRemoveLineSegmentMPID: toRemoveLineSegmentMPID,
-          thFile: thFile,
+          th2File: th2File,
           descriptionType: descriptionType,
         );
     final MPCommand editLineSegmentCommand = MPEditLineSegmentCommand(
-      originalLineSegment: thFile.lineSegmentByMPID(lineSegmentSubstitute.mpID),
+      originalLineSegment: th2File.lineSegmentByMPID(
+        lineSegmentSubstitute.mpID,
+      ),
       newLineSegment: lineSegmentSubstitute,
     );
 
@@ -1866,7 +1868,7 @@ class MPCommandFactory {
   static MPCommand removeOptionFromElements({
     required THCommandOptionType optionType,
     required List<int> parentMPIDs,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.removeOptionFromElements,
   }) {
@@ -1892,13 +1894,13 @@ class MPCommandFactory {
 
   static MPRemovePointCommand removePointFromExisting({
     required int existingPointMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemovePointCommand.defaultDescriptionType,
   }) {
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingPointMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
 
@@ -1911,7 +1913,7 @@ class MPCommandFactory {
 
   static MPRemoveScrapCommand removeScrapFromExisting({
     required int existingScrapMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveScrapCommand.defaultDescriptionType,
   }) {
@@ -1919,7 +1921,7 @@ class MPCommandFactory {
 
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingScrapMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
 
@@ -1933,13 +1935,13 @@ class MPCommandFactory {
   static MPRemoveXTherionImageInsertConfigCommand
   removeXTherionImageInsertConfigFromExisting({
     required int existingXTherionImageInsertConfigMPID,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveXTherionImageInsertConfigCommand.defaultDescriptionType,
   }) {
     final MPCommand? preCommand = removeEmptyLinesAfterCommand(
       elementMPID: existingXTherionImageInsertConfigMPID,
-      thFile: thFile,
+      th2File: th2File,
       descriptionType: descriptionType,
     );
 
@@ -1953,7 +1955,7 @@ class MPCommandFactory {
   static MPCommand setAttrOptionOnElements({
     required THAttrCommandOption toOption,
     required List<THElement> elements,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.setOptionToElements,
   }) {
@@ -1984,7 +1986,7 @@ class MPCommandFactory {
 
   static MPCommand setLineSegmentsType({
     required MPSelectedLineSegmentType selectedLineSegmentType,
-    required THFile thFile,
+    required TH2File th2File,
     required Iterable<THLineSegment> originalLineSegments,
   }) {
     if (originalLineSegments.isEmpty) {
@@ -1994,7 +1996,7 @@ class MPCommandFactory {
     }
 
     final List<THLineSegment> changedLineSegments = [];
-    final THLine line = thFile.lineByMPID(
+    final THLine line = th2File.lineByMPID(
       originalLineSegments.first.parentMPID,
     );
 
@@ -2008,7 +2010,7 @@ class MPCommandFactory {
           }
 
           final THLineSegment? previousLineSegment = line
-              .getPreviousLineSegment(currentLineSegment, thFile);
+              .getPreviousLineSegment(currentLineSegment, th2File);
 
           if (previousLineSegment == null) {
             continue;
@@ -2050,7 +2052,7 @@ class MPCommandFactory {
 
     final MPCommand setLineSegmentTypeCommand =
         MPCommandFactory.editLineSegmentsType(
-          thFile: thFile,
+          th2File: th2File,
           changedLineSegments: changedLineSegments,
         );
 
@@ -2060,7 +2062,7 @@ class MPCommandFactory {
   static MPCommand setOptionOnElements({
     required THCommandOption toOption,
     required List<THElement> elements,
-    required THFile thFile,
+    required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.setOptionToElements,
   }) {

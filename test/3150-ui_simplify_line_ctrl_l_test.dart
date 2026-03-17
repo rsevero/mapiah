@@ -7,7 +7,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -55,7 +55,7 @@ void main() {
 
       final TH2FileEditSelectionController selectionController =
           th2Controller.selectionController;
-      final THFile thFile = th2Controller.thFile;
+      final TH2File th2File = th2Controller.th2File;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -72,9 +72,9 @@ void main() {
 
       th2Controller.zoomOneToOne();
 
-      final THLine linePre = thFile.getLines().first;
+      final THLine linePre = th2File.getLines().first;
 
-      expect(linePre.getLineSegmentMPIDs(thFile).length == 17, isTrue);
+      expect(linePre.getLineSegmentMPIDs(th2File).length == 17, isTrue);
 
       selectionController.setSelectedElements([linePre]);
       th2Controller.stateController.setState(
@@ -88,9 +88,9 @@ void main() {
       await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
       await tester.pumpAndSettle();
 
-      final THLine linePost = thFile.getLines().first;
+      final THLine linePost = th2File.getLines().first;
 
-      expect(linePost.getLineSegmentMPIDs(thFile).length == 9, isTrue);
+      expect(linePost.getLineSegmentMPIDs(th2File).length == 9, isTrue);
     });
   });
 }

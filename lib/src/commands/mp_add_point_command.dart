@@ -45,7 +45,7 @@ class MPAddPointCommand extends MPCommand with MPPosCommandMixin {
   ) {
     final MPCommand oppositeCommand = MPCommandFactory.removePointFromExisting(
       existingPointMPID: newPoint.mpID,
-      thFile: th2FileEditController.thFile,
+      th2File: th2FileEditController.th2File,
       descriptionType: descriptionType,
     );
 

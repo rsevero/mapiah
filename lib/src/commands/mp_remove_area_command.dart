@@ -29,10 +29,10 @@ class MPRemoveAreaCommand extends MPCommand with MPPreCommandMixin {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THArea area = thFile.areaByMPID(areaMPID);
-    final List<THElement> areaChildren = area.getChildren(thFile).toList();
-    final THIsParentMixin areaParent = area.parent(thFile: thFile);
+    final TH2File th2File = th2FileEditController.th2File;
+    final THArea area = th2File.areaByMPID(areaMPID);
+    final List<THElement> areaChildren = area.getChildren(th2File).toList();
+    final THIsParentMixin areaParent = area.parent(th2File: th2File);
     final int areaPositionInParent = areaParent.getChildPosition(area);
 
     _undoRedoInfo = {

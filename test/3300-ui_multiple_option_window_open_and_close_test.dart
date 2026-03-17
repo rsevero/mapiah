@@ -9,7 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/th2_file_edit_page.dart';
@@ -61,7 +61,7 @@ void main() {
 
         final TH2FileEditSelectionController selectionController =
             th2Controller.selectionController;
-        final THFile thFile = th2Controller.thFile;
+        final TH2File th2File = th2Controller.th2File;
 
         await tester.pumpWidget(
           MaterialApp(
@@ -78,9 +78,9 @@ void main() {
 
         th2Controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
 
-        final THLine linePre = thFile.getLines().first;
+        final THLine linePre = th2File.getLines().first;
 
-        expect(linePre.getLineSegmentMPIDs(thFile).length == 17, isTrue);
+        expect(linePre.getLineSegmentMPIDs(th2File).length == 17, isTrue);
 
         selectionController.setSelectedElements([linePre]);
         th2Controller.stateController.setState(

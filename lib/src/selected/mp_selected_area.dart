@@ -35,7 +35,7 @@ class MPSelectedArea extends MPSelectedElement {
     );
 
     final List<int> lineMPIDs = originalArea.getLineMPIDs(
-      th2FileEditController.thFile,
+      th2FileEditController.th2File,
     );
     final Map<int, MPSelectable> mpSelectableElements = th2FileEditController
         .selectionController
@@ -55,7 +55,7 @@ class MPSelectedArea extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THArea updatedOriginalArea = th2FileEditController.thFile.areaByMPID(
+    final THArea updatedOriginalArea = th2FileEditController.th2File.areaByMPID(
       mpID,
     );
 

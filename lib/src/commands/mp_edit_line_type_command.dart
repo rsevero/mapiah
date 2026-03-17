@@ -32,7 +32,7 @@ class MPEditLineTypeCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
+    final THLine originalLine = th2FileEditController.th2File.lineByMPID(
       lineMPID,
     );
 
@@ -45,7 +45,7 @@ class MPEditLineTypeCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THLine originalLine = th2FileEditController.thFile.lineByMPID(
+    final THLine originalLine = th2FileEditController.th2File.lineByMPID(
       lineMPID,
     );
     final THLine newLine = originalLine.copyWith(

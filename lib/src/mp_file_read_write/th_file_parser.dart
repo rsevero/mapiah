@@ -14,7 +14,7 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
@@ -57,7 +57,7 @@ class THFileParser {
   bool _runTraceParser = false;
   String _xTherionContent = '';
 
-  late THFile _parsedTHFile;
+  late TH2File _parsedTHFile;
   late TH2FileEditController _th2FileEditController;
   late TH2FileEditElementEditController _th2FileElementEditController;
 
@@ -119,7 +119,7 @@ class THFileParser {
     _th2FileFirstLineParser = _grammar.buildFrom(
       _grammar.th2FileFirstLineStart(),
     );
-    _th2FileParser = _grammar.buildFrom(_grammar.thFileStart());
+    _th2FileParser = _grammar.buildFrom(_grammar.th2FileStart());
   }
 
   void _addChildParser(Parser newParser) {
@@ -295,7 +295,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTHFile),
     );
     _returnToParentParser();
   }
@@ -691,7 +691,7 @@ class THFileParser {
     _currentElement = newBezierCurveLineSegment;
     _injectComment();
     _currentElement =
-        newBezierCurveLineSegment.parent(thFile: _parsedTHFile) as THElement;
+        newBezierCurveLineSegment.parent(th2File: _parsedTHFile) as THElement;
   }
 
   void _injectAreaBorderTHID(List<dynamic> element) {
@@ -764,7 +764,7 @@ class THFileParser {
     _currentElement = newStraightLineSegment;
     _injectComment();
     _currentElement =
-        newStraightLineSegment.parent(thFile: _parsedTHFile) as THElement;
+        newStraightLineSegment.parent(th2File: _parsedTHFile) as THElement;
   }
 
   void _injectScrap(List<dynamic> element) {
@@ -818,7 +818,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTHFile),
     );
     _returnToParentParser();
   }
@@ -864,7 +864,7 @@ class THFileParser {
     _injectComment();
     if (_lastLineSegment != null) {
       _currentElement =
-          _lastLineSegment!.parent(thFile: _parsedTHFile) as THElement;
+          _lastLineSegment!.parent(th2File: _parsedTHFile) as THElement;
     }
 
     /// Reverting the change made by _lineSegmentRegularOptions().
@@ -985,7 +985,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTHFile),
     );
     _returnToParentParser();
   }
@@ -998,7 +998,7 @@ class THFileParser {
         'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
       );
       setCurrentParent(
-        (_currentParent as THElement).parent(thFile: _parsedTHFile),
+        (_currentParent as THElement).parent(th2File: _parsedTHFile),
       );
 
       return;
@@ -1014,7 +1014,7 @@ class THFileParser {
       childPositionInParent: mpAddChildAtEndOfParentChildrenList,
     );
     setCurrentParent(
-      (_currentParent as THElement).parent(thFile: _parsedTHFile),
+      (_currentParent as THElement).parent(th2File: _parsedTHFile),
     );
 
     _returnToParentParser();
@@ -2604,7 +2604,7 @@ class THFileParser {
   }
 
   @useResult
-  Future<(THFile, bool, List<String>)> parse(
+  Future<(TH2File, bool, List<String>)> parse(
     String filename, {
     Uint8List? fileBytes,
     Parser? alternateStartParser,
@@ -2628,7 +2628,7 @@ class THFileParser {
         );
     _th2FileElementEditController =
         _th2FileEditController.elementEditController;
-    _parsedTHFile = _th2FileEditController.thFile;
+    _parsedTHFile = _th2FileEditController.th2File;
     setCurrentParent(_parsedTHFile);
     _parseErrors.clear();
 
@@ -2671,7 +2671,7 @@ class THFileParser {
     }
 
     return (
-      _th2FileElementEditController.thFile,
+      _th2FileElementEditController.th2File,
       _parseErrors.isEmpty,
       _parseErrors,
     );

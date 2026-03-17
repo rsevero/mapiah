@@ -27,7 +27,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -89,10 +89,10 @@ abstract class TH2FileEditControllerBase with Store {
   bool _isLoading = false;
 
   @readonly
-  late THFile _thFile;
+  late TH2File _th2File;
 
   @readonly
-  late int _thFileMPID;
+  late int _th2FileMPID;
 
   @readonly
   bool _hasUndo = false;
@@ -289,7 +289,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
-  bool get enableSaveButton => _hasUndo && !_thFile.isNewFile;
+  bool get enableSaveButton => _hasUndo && !_th2File.isNewFile;
 
   @readonly
   String _statusBarMessage = '';
@@ -300,7 +300,7 @@ abstract class TH2FileEditControllerBase with Store {
       return false;
     }
 
-    final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
+    final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
 
     return scrap.hasOption(THCommandOptionType.scrapScale);
   }
@@ -308,7 +308,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   THLengthUnitType get scrapLengthUnitType {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
+      final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
 
       return (scrap.getOption(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -322,7 +322,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   double get scrapLengthUnitsPerPoint {
     if (scrapHasScaleOption) {
-      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
+      final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
 
       return (scrap.getOption(THCommandOptionType.scrapScale)
               as THScrapScaleCommandOption)
@@ -388,7 +388,7 @@ abstract class TH2FileEditControllerBase with Store {
   double _dataWidth = 0.0;
   double _dataHeight = 0.0;
 
-  final FocusNode thFileFocusNode = FocusNode();
+  final FocusNode th2FileFocusNode = FocusNode();
 
   final List<String> errorMessages = <String>[];
 
@@ -397,31 +397,31 @@ abstract class TH2FileEditControllerBase with Store {
   static TH2FileEditController create(String filename, {Uint8List? fileBytes}) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
-    final THFile thFile = THFile();
+    final TH2File th2File = TH2File();
 
-    thFile.filename = filename;
-    thFile.fileBytes = fileBytes;
-    th2FileEditController._basicInitialization(thFile);
+    th2File.filename = filename;
+    th2File.fileBytes = fileBytes;
+    th2FileEditController._basicInitialization(th2File);
 
     return th2FileEditController;
   }
 
   /// This is a factory constructor that creates a new instance of
   /// TH2FileEditController with an newly created THFile.
-  static TH2FileEditController createFromNewTHFile(THFile thFile) {
+  static TH2FileEditController createFromNewTHFile(TH2File th2File) {
     final TH2FileEditController th2FileEditController =
         TH2FileEditController._create();
 
-    th2FileEditController._basicInitialization(thFile);
-    th2FileEditController._finalFilePreparations(thFile);
+    th2FileEditController._basicInitialization(th2File);
+    th2FileEditController._finalFilePreparations(th2File);
 
     return th2FileEditController;
   }
 
   TH2FileEditControllerBase._create();
 
-  void _basicInitialization(THFile file) {
-    _thFile = file;
+  void _basicInitialization(TH2File file) {
+    _th2File = file;
     elementEditController = TH2FileEditElementEditController(
       this as TH2FileEditController,
     );
@@ -441,7 +441,7 @@ abstract class TH2FileEditControllerBase with Store {
       this as TH2FileEditController,
     );
     stateController = TH2FileEditStateController(this as TH2FileEditController);
-    _thFileMPID = _thFile.mpID;
+    _th2FileMPID = _th2File.mpID;
   }
 
   void _preParseInitialize() {
@@ -454,18 +454,18 @@ abstract class TH2FileEditControllerBase with Store {
 
     final THFileParser parser = THFileParser();
     final (_, isSuccessful, errors) = await parser.parse(
-      _thFile.filename,
-      fileBytes: _thFile.fileBytes,
+      _th2File.filename,
+      fileBytes: _th2File.fileBytes,
       forceNewController: false,
     );
 
-    _postParseInitialize(_thFile, isSuccessful, errors);
+    _postParseInitialize(_th2File, isSuccessful, errors);
 
     return TH2FileEditControllerCreateResult(isSuccessful, errors);
   }
 
   void _postParseInitialize(
-    THFile parsedFile,
+    TH2File parsedFile,
     bool isSuccessful,
     List<String> errors,
   ) {
@@ -476,9 +476,9 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
-  void _finalFilePreparations(THFile parsedFile) {
-    if (_thFile.scrapMPIDs.isNotEmpty) {
-      _activeScrapID = _thFile.scrapMPIDs.first;
+  void _finalFilePreparations(TH2File parsedFile) {
+    if (_th2File.scrapMPIDs.isNotEmpty) {
+      _activeScrapID = _th2File.scrapMPIDs.first;
       updateHasMultipleScraps();
 
       // Initialize snap targets only after activeScrapID is set
@@ -503,7 +503,7 @@ abstract class TH2FileEditControllerBase with Store {
 
     elementEditController.initializeMostUsedTypes();
 
-    setFilename(_thFile.filename);
+    setFilename(_th2File.filename);
 
     _isLoading = false;
   }
@@ -693,7 +693,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void _updateShowImages() {
-    _showImages = _shouldShowImages && _thFile.getImages().isNotEmpty;
+    _showImages = _shouldShowImages && _th2File.getImages().isNotEmpty;
   }
 
   void setShouldShowImages(bool shouldShow) {
@@ -717,11 +717,11 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   THScrap getActiveScrap() {
-    return _thFile.scrapByMPID(_activeScrapID);
+    return _th2File.scrapByMPID(_activeScrapID);
   }
 
   int getNextAvailableScrapID() {
-    final List<int> scrapIDs = _thFile.scrapMPIDs.toList();
+    final List<int> scrapIDs = _th2File.scrapMPIDs.toList();
     final int currentIndex = scrapIDs.indexOf(_activeScrapID);
 
     if (currentIndex == -1 || scrapIDs.isEmpty) {
@@ -755,7 +755,7 @@ abstract class TH2FileEditControllerBase with Store {
   void setActiveScrapByChildElement(THElement element) {
     THIsParentMixin parent = (element is THIsParentMixin)
         ? element as THIsParentMixin
-        : element.parent(thFile: _thFile);
+        : element.parent(th2File: _th2File);
 
     while (parent is THElement) {
       if (parent is THScrap) {
@@ -763,7 +763,7 @@ abstract class TH2FileEditControllerBase with Store {
         return;
       }
 
-      parent = (parent as THElement).parent(thFile: _thFile);
+      parent = (parent as THElement).parent(th2File: _th2File);
     }
   }
 
@@ -772,7 +772,7 @@ abstract class TH2FileEditControllerBase with Store {
       return;
     }
 
-    final List<THScrap> availableScraps = _thFile.getScraps().toList();
+    final List<THScrap> availableScraps = _th2File.getScraps().toList();
 
     if (availableScraps.length == 1) {
       setActiveScrap(0);
@@ -791,8 +791,8 @@ abstract class TH2FileEditControllerBase with Store {
   Map<int, String> availableScraps() {
     final Map<int, String> scraps = {};
 
-    for (final int scrapMPID in _thFile.scrapMPIDs) {
-      final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
+    for (final int scrapMPID in _th2File.scrapMPIDs) {
+      final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
 
       scraps[scrapMPID] = scrap.thID;
     }
@@ -872,7 +872,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void onAltClickSelectScrap(PointerUpEvent event) {
-    final List<int> scrapMPIDs = _thFile.scrapMPIDs;
+    final List<int> scrapMPIDs = _th2File.scrapMPIDs;
 
     if (scrapMPIDs.length <= 2) {
       return;
@@ -883,7 +883,7 @@ abstract class TH2FileEditControllerBase with Store {
         continue;
       }
 
-      final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
+      final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
       final Rect scrapBoundingBox = MPInteractionAux.getScrapBackgroundRect(
         scrap: scrap,
         th2FileEditController: this as TH2FileEditController,
@@ -1078,7 +1078,7 @@ abstract class TH2FileEditControllerBase with Store {
   void close() {
     overlayWindowController.close();
     _disposeReactions();
-    mpLocator.mpGeneralController.removeFileTab(filename: _thFile.filename);
+    mpLocator.mpGeneralController.removeFileTab(filename: _th2File.filename);
   }
 
   @action
@@ -1128,13 +1128,13 @@ abstract class TH2FileEditControllerBase with Store {
   Rect _getZoomToFitBoundingBox({required MPZoomToFitType zoomFitToType}) {
     switch (zoomFitToType) {
       case MPZoomToFitType.file:
-        return _thFile.getBoundingBox(this as TH2FileEditController)!;
+        return _th2File.getBoundingBox(this as TH2FileEditController)!;
       case MPZoomToFitType.scrap:
         return (_activeScrapID > 0)
-            ? (_thFile.scrapByMPID(
+            ? (_th2File.scrapByMPID(
                 _activeScrapID,
               )).getBoundingBox(this as TH2FileEditController)!
-            : _thFile.getBoundingBox(this as TH2FileEditController)!;
+            : _th2File.getBoundingBox(this as TH2FileEditController)!;
       case MPZoomToFitType.selection:
         return selectionController.getSelectedElementsBoundingBoxOnCanvas();
     }
@@ -1188,9 +1188,9 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Uint8List _encodedFileContents() {
-    final THFileWriter thFileWriter = THFileWriter();
-    final Uint8List fileBytes = thFileWriter.toBytes(
-      _thFile,
+    final THFileWriter th2FileWriter = THFileWriter();
+    final Uint8List fileBytes = th2FileWriter.toBytes(
+      _th2File,
       includeEmptyLines: true,
       useOriginalRepresentation: true,
     );
@@ -1203,13 +1203,13 @@ abstract class TH2FileEditControllerBase with Store {
 
     _actualSave(file);
 
-    _thFile.isNewFile = false;
+    _th2File.isNewFile = false;
 
     overlayWindowController.closeAutoDismissOverlayWindows();
   }
 
   Future<void> saveAsTH2File() async {
-    final String filename = _thFile.isNewFile ? '' : _thFile.filename;
+    final String filename = _th2File.isNewFile ? '' : _th2File.filename;
     final MPGeneralController mpGeneralController =
         mpLocator.mpGeneralController;
     final String? initialDirectory =
@@ -1231,10 +1231,10 @@ abstract class TH2FileEditControllerBase with Store {
         filePath += '.th2';
       }
       mpGeneralController.renameFileController(
-        oldFilename: _thFile.filename,
+        oldFilename: _th2File.filename,
         newFilename: filePath,
       );
-      _thFile.filename = filePath;
+      _th2File.filename = filePath;
 
       String directoryPath = p.dirname(filePath);
 
@@ -1244,8 +1244,8 @@ abstract class TH2FileEditControllerBase with Store {
 
       _actualSave(file);
 
-      _thFile.isNewFile = false;
-      setFilename(_thFile.filename);
+      _th2File.isNewFile = false;
+      setFilename(_th2File.filename);
 
       overlayWindowController.closeAutoDismissOverlayWindows();
     }
@@ -1261,14 +1261,14 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   File _localFile() {
-    final String filename = _thFile.filename;
+    final String filename = _th2File.filename;
 
     return File(filename);
   }
 
   @action
   void updateHasMultipleScraps() {
-    _hasMultipleScraps = _thFile.scrapMPIDs.length > 1;
+    _hasMultipleScraps = _th2File.scrapMPIDs.length > 1;
   }
 
   @action
@@ -1341,12 +1341,12 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void setFilename(String filename) {
-    _thFile.filename = filename;
+    _th2File.filename = filename;
 
-    _filenameAndScrap = p.basename(_thFile.filename);
+    _filenameAndScrap = p.basename(_th2File.filename);
 
     if (_activeScrapID > 0) {
-      final THScrap scrap = _thFile.scrapByMPID(_activeScrapID);
+      final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
 
       _filenameAndScrap += ' | ${scrap.thID}';
     }
@@ -1366,7 +1366,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   double getScrapBackgroundPaddingOnCanvas() {
-    final Rect fileBoundingBox = _thFile.getBoundingBox(
+    final Rect fileBoundingBox = _th2File.getBoundingBox(
       this as TH2FileEditController,
     )!;
     final double largerDimension = max(
@@ -1380,7 +1380,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   GlobalKey<State<StatefulWidget>> getTHFileWidgetGlobalKey() {
     if (!overlayWindowController.globalKeyWidgetKeyByType.containsKey(
-      MPGlobalKeyWidgetType.thFileWidget,
+      MPGlobalKeyWidgetType.th2FileWidget,
     )) {
       throw Exception(
         'At TH2FileEditController.getTHFileWidgetGlobalKey(): THFileWidget global key not found in overlayWindowController.',
@@ -1388,7 +1388,7 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     return overlayWindowController
-        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.thFileWidget]!;
+        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.th2FileWidget]!;
   }
 
   BuildContext getTHFileWidgetBuildContext() {

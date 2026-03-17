@@ -5,7 +5,7 @@ import 'package:mapiah/src/controllers/auxiliary/mp_snap_grid_cell.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
@@ -22,13 +22,13 @@ class TH2FileEditSnapController = TH2FileEditSnapControllerBase
 
 abstract class TH2FileEditSnapControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditSnapControllerBase(this._th2FileEditController)
-    : _thFile = _th2FileEditController.thFile;
+    : _th2File = _th2FileEditController.th2File;
 
   @readonly
   List<THPositionPart> _snapPointTargets = [];
@@ -167,12 +167,12 @@ abstract class TH2FileEditSnapControllerBase with Store {
       return;
     }
 
-    final List<int> elementMPIDs = _thFile
+    final List<int> elementMPIDs = _th2File
         .scrapByMPID(_th2FileEditController.activeScrapID)
         .childrenMPIDs;
 
     for (final int elementMPID in elementMPIDs) {
-      final THElement element = _thFile.elementByMPID(elementMPID);
+      final THElement element = _th2File.elementByMPID(elementMPID);
 
       if (element is THPoint) {
         if ((_snapPointTargetType == MPSnapPointTarget.none) ||
@@ -191,7 +191,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
         }
 
         final List<THLineSegment> lineSegments = element.getLineSegments(
-          _thFile,
+          _th2File,
         );
 
         for (final THLineSegment lineSegment in lineSegments) {
@@ -201,10 +201,10 @@ abstract class TH2FileEditSnapControllerBase with Store {
     }
 
     if (_snapXVIFileTargets.isNotEmpty) {
-      final List<int> imageInsetConfigMPIDs = _thFile.imageMPIDs;
+      final List<int> imageInsetConfigMPIDs = _th2File.imageMPIDs;
 
       for (final int imageInsertConfigMPID in imageInsetConfigMPIDs) {
-        final THXTherionImageInsertConfig imageInsertConfig = _thFile
+        final THXTherionImageInsertConfig imageInsertConfig = _th2File
             .imageByMPID(imageInsertConfigMPID);
 
         if (!imageInsertConfig.isXVI) {
@@ -622,7 +622,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   ({THLineSegment? lineSegment, double distanceSquared})
   getNearerLineSegmentFromLine(Offset canvasCoordinates, THLine line) {
-    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+    final List<THLineSegment> lineSegments = line.getLineSegments(_th2File);
 
     if (lineSegments.isEmpty) {
       return (lineSegment: null, distanceSquared: double.infinity);
@@ -649,7 +649,7 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   ({THLineSegment? lineSegment, double distanceSquared})
   getNearerLineSegmentFromArea(Offset canvasCoordinates, THArea area) {
-    final List<int> areaLineSegments = area.getLineMPIDs(_thFile);
+    final List<int> areaLineSegments = area.getLineMPIDs(_th2File);
 
     if (areaLineSegments.isEmpty) {
       return (lineSegment: null, distanceSquared: double.infinity);
@@ -657,10 +657,10 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
     THLineSegment? nearerLineSegmentFinal;
     double nearerDistanceSquaredFinal = double.infinity;
-    final Iterable<int> areaLineMPIDs = area.getLineMPIDs(_thFile);
+    final Iterable<int> areaLineMPIDs = area.getLineMPIDs(_th2File);
 
     for (final int lineMPID in areaLineMPIDs) {
-      final THLine line = _thFile.lineByMPID(lineMPID);
+      final THLine line = _th2File.lineByMPID(lineMPID);
       final ({double distanceSquared, THLineSegment? lineSegment})
       nearerPerLine = getNearerLineSegmentFromLine(canvasCoordinates, line);
 

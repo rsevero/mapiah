@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
@@ -24,8 +24,8 @@ import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
 class THFileWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
 
-  late final THFile thFile = th2FileEditController.thFile;
-  late final int thFileMPID = th2FileEditController.thFileMPID;
+  late final TH2File th2File = th2FileEditController.th2File;
+  late final int thFileMPID = th2FileEditController.th2FileMPID;
   late final TH2FileEditOverlayWindowController overlayWindowController =
       th2FileEditController.overlayWindowController;
 

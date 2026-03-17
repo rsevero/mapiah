@@ -7,7 +7,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -58,7 +58,7 @@ void main() {
 
         final TH2FileEditSelectionController selectionController =
             th2Controller.selectionController;
-        final THFile thFile = th2Controller.thFile;
+        final TH2File th2File = th2Controller.th2File;
 
         await tester.pumpWidget(
           MaterialApp(
@@ -75,9 +75,9 @@ void main() {
 
         th2Controller.zoomOneToOne();
 
-        final THLine linePre = thFile.getLines().first;
+        final THLine linePre = th2File.getLines().first;
 
-        expect(linePre.getLineSegmentMPIDs(thFile).length == 2, isTrue);
+        expect(linePre.getLineSegmentMPIDs(th2File).length == 2, isTrue);
 
         selectionController.setSelectedElements([linePre]);
         th2Controller.stateController.setState(
@@ -100,7 +100,7 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.delete);
         await tester.pumpAndSettle();
 
-        final Iterable<THLine> linesAfterDelete = th2Controller.thFile
+        final Iterable<THLine> linesAfterDelete = th2Controller.th2File
             .getLines();
 
         expect(linesAfterDelete.isEmpty, true);

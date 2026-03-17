@@ -5,7 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -268,7 +268,7 @@ endscrap
           THTestAux.testPath(success['file'] as String),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -497,7 +497,7 @@ endscrap
           THTestAux.testPath(success['file'] as String),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -536,7 +536,7 @@ endscrap
           THTestAux.testPath(success['file'] as String),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -573,7 +573,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -718,7 +718,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -767,7 +767,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -820,7 +820,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -888,7 +888,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -942,7 +942,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -996,7 +996,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1049,7 +1049,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1102,7 +1102,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1155,7 +1155,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1208,7 +1208,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1244,7 +1244,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1280,7 +1280,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1377,7 +1377,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1444,7 +1444,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1493,7 +1493,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1542,7 +1542,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1608,7 +1608,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1662,7 +1662,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1732,7 +1732,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1799,7 +1799,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1865,7 +1865,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1931,7 +1931,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -1980,7 +1980,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2017,7 +2017,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2097,7 +2097,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2212,7 +2212,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2341,7 +2341,7 @@ endscrap''',
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2402,7 +2402,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2501,7 +2501,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 
@@ -2569,7 +2569,7 @@ endscrap
           (THTestAux.testPath(success['file'] as String)),
         );
         expect(isSuccessful, true);
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 

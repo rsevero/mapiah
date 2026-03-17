@@ -186,7 +186,7 @@ class THLine extends THElement
       return Rect.zero;
     }
 
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
 
     double minX = double.infinity;
     double minY = double.infinity;
@@ -197,7 +197,7 @@ class THLine extends THElement
     Offset startPoint = Offset.zero;
 
     for (final int childMPID in childrenMPIDs) {
-      final THElement child = thFile.elementByMPID(childMPID);
+      final THElement child = th2File.elementByMPID(childMPID);
 
       if (child is! THLineSegment) {
         continue;
@@ -236,8 +236,8 @@ class THLine extends THElement
     );
   }
 
-  void clearLineAndLineSegmentsBoundingBoxes(THFile thFile) {
-    final List<THLineSegment> lineSegments = getLineSegments(thFile);
+  void clearLineAndLineSegmentsBoundingBoxes(TH2File th2File) {
+    final List<THLineSegment> lineSegments = getLineSegments(th2File);
 
     for (final THLineSegment lineSegment in lineSegments) {
       lineSegment.clearBoundingBox();
@@ -246,10 +246,10 @@ class THLine extends THElement
     clearBoundingBox();
   }
 
-  int? getNextLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
+  int? getNextLineSegmentMPID(int lineSegmentMPID, TH2File th2File) {
     final int indexLineSegmentMPID = getLineSegmentIndexByMPID(
       lineSegmentMPID,
-      thFile,
+      th2File,
     );
 
     if (indexLineSegmentMPID == -1) {
@@ -258,7 +258,7 @@ class THLine extends THElement
       );
     }
 
-    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(th2File);
 
     if (indexLineSegmentMPID == lineSegmentMPIDs.length - 1) {
       return null;
@@ -267,17 +267,17 @@ class THLine extends THElement
     return lineSegmentMPIDs[indexLineSegmentMPID + 1];
   }
 
-  List<int> getLineSegmentMPIDs(THFile thFile) {
-    _lineSegmentMPIDs ??= _generateLineSegmentMPIDs(thFile);
+  List<int> getLineSegmentMPIDs(TH2File th2File) {
+    _lineSegmentMPIDs ??= _generateLineSegmentMPIDs(th2File);
 
     return _lineSegmentMPIDs!;
   }
 
-  List<int> _generateLineSegmentMPIDs(THFile thFile) {
+  List<int> _generateLineSegmentMPIDs(TH2File th2File) {
     final List<int> lineSegmentMPIDs = [];
 
     for (final int childMPID in childrenMPIDs) {
-      final THElementType childType = thFile.getElementTypeByMPID(childMPID);
+      final THElementType childType = th2File.getElementTypeByMPID(childMPID);
 
       if ((childType == THElementType.bezierCurveLineSegment) ||
           (childType == THElementType.straightLineSegment)) {
@@ -288,18 +288,18 @@ class THLine extends THElement
     return lineSegmentMPIDs;
   }
 
-  List<THLineSegment> getLineSegments(THFile thFile) {
-    _lineSegments ??= _generateLineSegmentsList(thFile);
+  List<THLineSegment> getLineSegments(TH2File th2File) {
+    _lineSegments ??= _generateLineSegmentsList(th2File);
 
     return _lineSegments!;
   }
 
-  List<THLineSegment> _generateLineSegmentsList(THFile thFile) {
+  List<THLineSegment> _generateLineSegmentsList(TH2File th2File) {
     final List<THLineSegment> lineSegments = [];
-    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(th2File);
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final THLineSegment lineSegment = thFile.lineSegmentByMPID(
+      final THLineSegment lineSegment = th2File.lineSegmentByMPID(
         lineSegmentMPID,
       );
 
@@ -309,11 +309,11 @@ class THLine extends THElement
     return lineSegments;
   }
 
-  int? getPreviousLineSegmentMPID(int lineSegmentMPID, THFile thFile) {
+  int? getPreviousLineSegmentMPID(int lineSegmentMPID, TH2File th2File) {
     int? previousLineSegmentMPID;
 
     for (final int childMPID in childrenMPIDs) {
-      final THElementType childElementType = thFile.getElementTypeByMPID(
+      final THElementType childElementType = th2File.getElementTypeByMPID(
         childMPID,
       );
 
@@ -336,45 +336,48 @@ class THLine extends THElement
 
   THLineSegment? getPreviousLineSegment(
     THLineSegment lineSegment,
-    THFile thFile,
+    TH2File th2File,
   ) {
     final int? previousLineSegmentMPID = getPreviousLineSegmentMPID(
       lineSegment.mpID,
-      thFile,
+      th2File,
     );
 
     return previousLineSegmentMPID == null
         ? null
-        : thFile.elementByMPID(previousLineSegmentMPID) as THLineSegment;
+        : th2File.elementByMPID(previousLineSegmentMPID) as THLineSegment;
   }
 
-  bool isFirstLineSegment(THLineSegment lineSegment, THFile thFile) {
+  bool isFirstLineSegment(THLineSegment lineSegment, TH2File th2File) {
     final int? previousLineSegmentMPID = getPreviousLineSegmentMPID(
       lineSegment.mpID,
-      thFile,
+      th2File,
     );
 
     return previousLineSegmentMPID == null;
   }
 
-  bool isLastLineSegment(THLineSegment lineSegment, THFile thFile) {
+  bool isLastLineSegment(THLineSegment lineSegment, TH2File th2File) {
     final int? nextLineSegmentMPID = getNextLineSegmentMPID(
       lineSegment.mpID,
-      thFile,
+      th2File,
     );
 
     return nextLineSegmentMPID == null;
   }
 
-  THLineSegment? getNextLineSegment(THLineSegment lineSegment, THFile thFile) {
+  THLineSegment? getNextLineSegment(
+    THLineSegment lineSegment,
+    TH2File th2File,
+  ) {
     final int? nextLineSegmentMPID = getNextLineSegmentMPID(
       lineSegment.mpID,
-      thFile,
+      th2File,
     );
 
     return nextLineSegmentMPID == null
         ? null
-        : thFile.elementByMPID(nextLineSegmentMPID) as THLineSegment;
+        : th2File.elementByMPID(nextLineSegmentMPID) as THLineSegment;
   }
 
   @override
@@ -391,8 +394,8 @@ class THLine extends THElement
     clearBoundingBox();
   }
 
-  int getLineSegmentIndexByMPID(int lineSegmentMPID, THFile thFile) {
-    return getLineSegmentMPIDs(thFile).indexOf(lineSegmentMPID);
+  int getLineSegmentIndexByMPID(int lineSegmentMPID, TH2File th2File) {
+    return getLineSegmentMPIDs(th2File).indexOf(lineSegmentMPID);
   }
 
   @override
@@ -422,11 +425,11 @@ class THLine extends THElement
   void insertLineSegmentBefore(
     THLineSegment lineSegment,
     int beforeLineSegmentMPID,
-    THFile thFile,
+    TH2File th2File,
   ) {
     final int childrenMPIDIndex = getLineSegmentIndexByMPID(
       beforeLineSegmentMPID,
-      thFile,
+      th2File,
     );
 
     if (childrenMPIDIndex == -1) {
@@ -439,7 +442,7 @@ class THLine extends THElement
 
     final int lineSegmentsMPIDsIndex = getLineSegmentIndexByMPID(
       beforeLineSegmentMPID,
-      thFile,
+      th2File,
     );
 
     if (lineSegmentsMPIDsIndex == -1) {
@@ -451,14 +454,14 @@ class THLine extends THElement
     resetLineSegmentsLists();
   }
 
-  LinkedHashMap<int, THLineSegment> getLineSegmentsMap(THFile thFile) {
+  LinkedHashMap<int, THLineSegment> getLineSegmentsMap(TH2File th2File) {
     final LinkedHashMap<int, THLineSegment> lineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
-    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(th2File);
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
       final THLineSegment lineSegment =
-          thFile.elementByMPID(lineSegmentMPID) as THLineSegment;
+          th2File.elementByMPID(lineSegmentMPID) as THLineSegment;
 
       lineSegmentsMap[lineSegmentMPID] = lineSegment;
     }
@@ -467,13 +470,13 @@ class THLine extends THElement
   }
 
   List<({int lineSegmentPosition, THLineSegment lineSegment})>
-  getLineSegmentsChildPositionList(THFile thFile) {
+  getLineSegmentsChildPositionList(TH2File th2File) {
     final List<({int lineSegmentPosition, THLineSegment lineSegment})>
     originalLineSegments = [];
-    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(th2File);
 
     for (final int originalLineSegmentMPID in lineSegmentMPIDs) {
-      final THLineSegment originalLineSegment = thFile.lineSegmentByMPID(
+      final THLineSegment originalLineSegment = th2File.lineSegmentByMPID(
         originalLineSegmentMPID,
       );
       final int originalLineSegmentPosition = getChildPosition(
@@ -489,9 +492,9 @@ class THLine extends THElement
     return originalLineSegments;
   }
 
-  Map<int, int> getLineSegmentPositionsByLineSegmentMPID(THFile thFile) {
+  Map<int, int> getLineSegmentPositionsByLineSegmentMPID(TH2File th2File) {
     final Map<int, int> lineSegmentPositionsByLineSegmentMPID = {};
-    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(thFile);
+    final List<int> lineSegmentMPIDs = getLineSegmentMPIDs(th2File);
 
     int position = 0;
 
@@ -504,15 +507,15 @@ class THLine extends THElement
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToOptions(thFile);
-    setTHFileToChildren(thFile);
+    setTHFileToOptions(th2File);
+    setTHFileToChildren(th2File);
 
     updateSubtypeLineSegmentMPIDs();
   }
@@ -521,7 +524,7 @@ class THLine extends THElement
       _subtypeLineSegmentMPIDsByLineSegmentIndex;
 
   void updateSubtypeLineSegmentMPIDs() {
-    if (thFile == null) {
+    if (th2File == null) {
       throw THCustomException(
         "At THLine.updateSubtypeLineSegmentMPIDs: THFile is null.",
       );
@@ -531,7 +534,7 @@ class THLine extends THElement
 
     _subtypeLineSegmentMPIDsByLineSegmentIndex.clear();
 
-    for (final THLineSegment lineSegment in getLineSegments(thFile!)) {
+    for (final THLineSegment lineSegment in getLineSegments(th2File!)) {
       if (lineSegment.hasOption(THCommandOptionType.subtype)) {
         if (lineSegmentIndex == 0) {
           /// Moving subtype option to line level, as first line segment subtype
@@ -569,7 +572,7 @@ class THLine extends THElement
 
   Map<int, MPLineSegmentSizeOrientationInfo>
   _generateLineSegmentsWithSizeOrientation() {
-    if (thFile == null) {
+    if (th2File == null) {
       throw THCustomException(
         "At THLine._generateLineSegmentsWithSizeOrientation: THFile is null.",
       );
@@ -577,7 +580,7 @@ class THLine extends THElement
 
     final Map<int, MPLineSegmentSizeOrientationInfo>
     lineSegmentWithSizeOrientation = {};
-    final List<THLineSegment> lineSegments = getLineSegments(thFile!);
+    final List<THLineSegment> lineSegments = getLineSegments(th2File!);
 
     for (final THLineSegment lineSegment in lineSegments) {
       if (lineSegment.hasOption(THCommandOptionType.lSize) ||
@@ -598,7 +601,7 @@ class THLine extends THElement
                     .azimuth
                     .value
               : null,
-          thFile: thFile!,
+          th2File: th2File!,
         );
       }
     }
@@ -617,14 +620,14 @@ class THLine extends THElement
   }
 
   Map<int, MPLineSegmentMarkInfo> _generateLineSegmentsWithMark() {
-    if (thFile == null) {
+    if (th2File == null) {
       throw THCustomException(
         "At THLine._generateLineSegmentsWithMark: THFile is null.",
       );
     }
 
     final Map<int, MPLineSegmentMarkInfo> lineSegmentsWithMark = {};
-    final List<THLineSegment> lineSegments = getLineSegments(thFile!);
+    final List<THLineSegment> lineSegments = getLineSegments(th2File!);
 
     for (final THLineSegment lineSegment in lineSegments) {
       if (lineSegment.hasOption(THCommandOptionType.mark)) {

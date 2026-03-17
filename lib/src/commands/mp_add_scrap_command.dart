@@ -27,7 +27,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
     required this.newScrap,
     this.scrapPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
     required List<THElement> scrapChildren,
-    required THFile thFile,
+    required TH2File th2File,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {
@@ -38,7 +38,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
     } else {
       addScrapChildrenCommand = MPCommandFactory.addElements(
         elements: scrapChildren,
-        thFile: thFile,
+        th2File: th2File,
         positionInParent: mpAddChildAtEndOfParentChildrenList,
       );
     }
@@ -67,7 +67,7 @@ class MPAddScrapCommand extends MPCommand with MPPosCommandMixin {
   ) {
     final MPCommand oppositeCommand = MPCommandFactory.removeScrapFromExisting(
       existingScrapMPID: newScrap.mpID,
-      thFile: th2FileEditController.thFile,
+      th2File: th2FileEditController.th2File,
       descriptionType: descriptionType,
     );
 

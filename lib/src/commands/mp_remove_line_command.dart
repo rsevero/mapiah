@@ -37,10 +37,10 @@ class MPRemoveLineCommand extends MPCommand
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THLine line = thFile.lineByMPID(lineMPID);
-    final List<THElement> lineChildren = line.getChildren(thFile).toList();
-    final THIsParentMixin lineParent = line.parent(thFile: thFile);
+    final TH2File th2File = th2FileEditController.th2File;
+    final THLine line = th2File.lineByMPID(lineMPID);
+    final List<THElement> lineChildren = line.getChildren(th2File).toList();
+    final THIsParentMixin lineParent = line.parent(th2File: th2File);
     final int linePositionInParent = lineParent.getChildPosition(line);
 
     _undoRedoInfo = {

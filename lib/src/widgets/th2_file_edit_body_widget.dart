@@ -36,7 +36,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
     colorScheme = Theme.of(context).colorScheme;
-    final String heroPrefix = widget.th2FileEditController.thFileMPID
+    final String heroPrefix = widget.th2FileEditController.th2FileMPID
         .toString();
 
     return Column(

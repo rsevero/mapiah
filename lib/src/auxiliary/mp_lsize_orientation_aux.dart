@@ -88,7 +88,7 @@ class MPLSizeOrientationAux {
           initialOrientation ??
           MPNumericAux.segmentNormalFromTHFile(
             lineSegmentMPID,
-            th2FileEditController.thFile,
+            th2FileEditController.th2File,
           ),
       originalLSize: initialLSize ?? mpSlopeLinePointDefaultLSize,
       initialMouseRadius: math.sqrt((dx * dx) + (dy * dy)),

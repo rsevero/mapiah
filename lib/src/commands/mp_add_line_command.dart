@@ -68,7 +68,7 @@ class MPAddLineCommand extends MPCommand
     final MPCommand oppositeCommand = MPCommandFactory.removeLineFromExisting(
       existingLineMPID: newLine.mpID,
       isInteractiveLineCreation: lineStartScreenPosition != null,
-      thFile: th2FileEditController.thFile,
+      th2File: th2FileEditController.th2File,
       descriptionType: descriptionType,
     );
 

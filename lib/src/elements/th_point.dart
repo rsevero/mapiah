@@ -243,14 +243,14 @@ class THPoint extends THElement
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToOptions(thFile);
+    setTHFileToOptions(th2File);
   }
 
   @override

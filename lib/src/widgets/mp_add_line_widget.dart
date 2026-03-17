@@ -62,7 +62,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             LinkedHashMap<int, THLineSegment> lineSegments,
           ) = getLineSegmentsAndEndpointsMaps(
             line: newLine,
-            thFile: th2FileEditController.thFile,
+            th2File: th2FileEditController.th2File,
             returnLineSegments: true,
           );
           final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 
 mixin MPTHFileReferenceMixin {
-  THFile? _thFile;
+  TH2File? _th2File;
 
-  THFile? get thFile => _thFile;
+  TH2File? get th2File => _th2File;
 
-  void setTHFile(THFile thFile) {
-    _thFile = thFile;
+  void setTHFile(TH2File th2File) {
+    _th2File = th2File;
   }
 }

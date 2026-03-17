@@ -67,7 +67,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     for (final int selectedLineSegmentMPID
         in selectedControlPointLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] = thFile
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = th2File
             .lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
@@ -82,7 +82,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       final int smoothedLineSegmentMPID =
           moveControlPointSmoothInfo.adjacentLineSegment!.mpID;
 
-      modifiedLineSegmentsMap[smoothedLineSegmentMPID] = thFile
+      modifiedLineSegmentsMap[smoothedLineSegmentMPID] = th2File
           .lineSegmentByMPID(smoothedLineSegmentMPID);
       originalLineSegmentsMap[smoothedLineSegmentMPID] =
           originalLineSegmentsMapClone[smoothedLineSegmentMPID]!;

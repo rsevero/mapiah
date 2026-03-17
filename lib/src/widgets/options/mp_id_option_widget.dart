@@ -139,11 +139,11 @@ class _MPIDOptionWidgetState extends State<MPIDOptionWidget>
         _updateOkButtonEnabled();
       });
     } else if (MPInteractionAux.isValidID(_thIDController.text)) {
-      if ((widget.th2FileEditController.thFile.hasElementByTHID(
+      if ((widget.th2FileEditController.th2File.hasElementByTHID(
             _thIDController.text,
           )) &&
           ((widget.optionInfo.option == null) ||
-              (widget.th2FileEditController.thFile.mpIDByTHID(
+              (widget.th2FileEditController.th2File.mpIDByTHID(
                     _thIDController.text,
                   ) !=
                   widget.optionInfo.option!.parentMPID))) {

@@ -10,7 +10,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -221,9 +221,9 @@ class _MPOptionsEditOverlayWindowWidgetState
             }
 
             if ((countAreas == 1) && (singleSelectedArea != null)) {
-              final THFile thFile = th2FileEditController.thFile;
+              final TH2File th2File = th2FileEditController.th2File;
               final List<THAreaBorderTHID> areaBorders = singleSelectedArea
-                  .getAreaBorderTHIDs(thFile);
+                  .getAreaBorderTHIDs(th2File);
 
               // Build rows for each border with delete icon.
               final List<Widget> areaBorderWidgets = areaBorders

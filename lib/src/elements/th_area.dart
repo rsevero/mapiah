@@ -181,20 +181,20 @@ class THArea extends THElement
     return childrenMPIDs.contains(int.parse(thID));
   }
 
-  void _updateAreaXLineInfo(THFile thFile) {
+  void _updateAreaXLineInfo(TH2File th2File) {
     _lineTHIDs = <String>{};
     _lineMPIDs = <int>[];
     _areaBorderTHIDMPIDs = <int>[];
 
     for (final int childMPID in childrenMPIDs) {
-      final THElement element = thFile.elementByMPID(childMPID);
+      final THElement element = th2File.elementByMPID(childMPID);
 
       if (element is! THAreaBorderTHID) {
         continue;
       }
 
       final String lineTHID = element.thID;
-      final int? lineMPID = thFile.mpIDByTHID(lineTHID);
+      final int? lineMPID = th2File.mpIDByTHID(lineTHID);
 
       /// Checking _lineTHIDs for previous existence because _lineTHIDs is a Set
       /// so we solve eventual duplicate THIDs in the same area.
@@ -206,66 +206,66 @@ class THArea extends THElement
     }
   }
 
-  Set<String> getLineTHIDs(THFile thFile) {
+  Set<String> getLineTHIDs(TH2File th2File) {
     if (_lineTHIDs == null) {
-      _updateAreaXLineInfo(thFile);
+      _updateAreaXLineInfo(th2File);
     }
 
     return _lineTHIDs!;
   }
 
-  List<int> getLineMPIDs(THFile thFile) {
+  List<int> getLineMPIDs(TH2File th2File) {
     if (_lineMPIDs == null) {
-      _updateAreaXLineInfo(thFile);
+      _updateAreaXLineInfo(th2File);
     }
 
     return _lineMPIDs!;
   }
 
-  List<THLine> getLines(THFile thFile) {
-    final List<int> lineMPIDs = getLineMPIDs(thFile);
+  List<THLine> getLines(TH2File th2File) {
+    final List<int> lineMPIDs = getLineMPIDs(th2File);
     final List<THLine> lines = [];
 
     for (final int lineMPID in lineMPIDs) {
-      lines.add(thFile.lineByMPID(lineMPID));
+      lines.add(th2File.lineByMPID(lineMPID));
     }
 
     return lines;
   }
 
-  List<THAreaBorderTHID> getAreaBorderTHIDs(THFile thFile) {
-    final List<int> areaBorderTHIDMPIDs = getAreaBorderTHIDMPIDs(thFile);
+  List<THAreaBorderTHID> getAreaBorderTHIDs(TH2File th2File) {
+    final List<int> areaBorderTHIDMPIDs = getAreaBorderTHIDMPIDs(th2File);
     final List<THAreaBorderTHID> areaBorders = [];
 
     for (final int areaBorderTHIDMPID in areaBorderTHIDMPIDs) {
-      areaBorders.add(thFile.areaBorderTHIDByMPID(areaBorderTHIDMPID));
+      areaBorders.add(th2File.areaBorderTHIDByMPID(areaBorderTHIDMPID));
     }
 
     return areaBorders;
   }
 
-  List<int> getAreaBorderTHIDMPIDs(THFile thFile) {
+  List<int> getAreaBorderTHIDMPIDs(TH2File th2File) {
     if (_areaBorderTHIDMPIDs == null) {
-      _updateAreaXLineInfo(thFile);
+      _updateAreaXLineInfo(th2File);
     }
 
     return _areaBorderTHIDMPIDs!;
   }
 
-  bool hasLineTHID(String thID, THFile thFile) {
-    return getLineTHIDs(thFile).contains(thID);
+  bool hasLineTHID(String thID, TH2File th2File) {
+    return getLineTHIDs(th2File).contains(thID);
   }
 
-  bool hasLineMPID(int mpID, THFile thFile) {
-    return getLineMPIDs(thFile).contains(mpID);
+  bool hasLineMPID(int mpID, TH2File th2File) {
+    return getLineMPIDs(th2File).contains(mpID);
   }
 
-  THAreaBorderTHID? areaBorderByLineMPID(int lineMPID, THFile thFile) {
-    if (!hasLineMPID(lineMPID, thFile)) {
+  THAreaBorderTHID? areaBorderByLineMPID(int lineMPID, TH2File th2File) {
+    if (!hasLineMPID(lineMPID, th2File)) {
       return null;
     }
 
-    final THLine line = thFile.lineByMPID(lineMPID);
+    final THLine line = th2File.lineByMPID(lineMPID);
 
     if (!line.hasOption(THCommandOptionType.id)) {
       return null;
@@ -274,16 +274,16 @@ class THArea extends THElement
     final String lineTHID =
         (line.getOption(THCommandOptionType.id) as THIDCommandOption).thID;
 
-    return areaBorderByLineTHID(lineTHID, thFile);
+    return areaBorderByLineTHID(lineTHID, th2File);
   }
 
-  THAreaBorderTHID? areaBorderByLineTHID(String lineTHID, THFile thFile) {
-    if (!hasLineTHID(lineTHID, thFile)) {
+  THAreaBorderTHID? areaBorderByLineTHID(String lineTHID, TH2File th2File) {
+    if (!hasLineTHID(lineTHID, th2File)) {
       return null;
     }
 
     for (final int childMPID in childrenMPIDs) {
-      final THElement element = thFile.elementByMPID(childMPID);
+      final THElement element = th2File.elementByMPID(childMPID);
 
       if (element is THAreaBorderTHID && (element.thID == lineTHID)) {
         return element;
@@ -310,12 +310,12 @@ class THArea extends THElement
 
   @override
   Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final List<int> lineMPIDs = getLineMPIDs(thFile);
+    final TH2File th2File = th2FileEditController.th2File;
+    final List<int> lineMPIDs = getLineMPIDs(th2File);
     Rect? boundingBox;
 
     for (final lineMPID in lineMPIDs) {
-      final THLine line = thFile.lineByMPID(lineMPID);
+      final THLine line = th2File.lineByMPID(lineMPID);
 
       boundingBox =
           boundingBox?.expandToInclude(
@@ -328,15 +328,15 @@ class THArea extends THElement
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToOptions(thFile);
-    setTHFileToChildren(thFile);
+    setTHFileToOptions(th2File);
+    setTHFileToChildren(th2File);
   }
 
   @override

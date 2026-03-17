@@ -8,7 +8,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -36,7 +36,7 @@ class _MPMultipleElementsClickedWidgetState
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditSelectionController selectionController;
   late final AppLocalizations appLocalizations;
-  late final THFile thFile;
+  late final TH2File th2File;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _MPMultipleElementsClickedWidgetState
     th2FileEditController = widget.th2FileEditController;
     selectionController = th2FileEditController.selectionController;
     appLocalizations = mpLocator.appLocalizations;
-    thFile = th2FileEditController.thFile;
+    th2File = th2FileEditController.th2File;
     selectionController.setMultipleElementsClickedChoice(
       mpMultipleElementsClickedNoneChoiceID,
     );
@@ -143,7 +143,7 @@ class _MPMultipleElementsClickedWidgetState
           final int areaMPID = area.mpID;
 
           if (!options.containsKey(areaMPID)) {
-            options[areaMPID] = getAreaName(thFile.areaByMPID(areaMPID));
+            options[areaMPID] = getAreaName(th2File.areaByMPID(areaMPID));
           }
       }
     }

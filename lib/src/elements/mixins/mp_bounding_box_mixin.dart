@@ -21,8 +21,8 @@ mixin MPBoundingBoxMixin on MPTHFileReferenceMixin {
     if (this is THElement) {
       final THElement element = this as THElement;
 
-      if (thFile != null) {
-        final THIsParentMixin parent = element.parent(thFile: thFile);
+      if (th2File != null) {
+        final THIsParentMixin parent = element.parent(th2File: th2File);
 
         if (parent is MPBoundingBoxMixin) {
           (parent as MPBoundingBoxMixin).clearBoundingBox();

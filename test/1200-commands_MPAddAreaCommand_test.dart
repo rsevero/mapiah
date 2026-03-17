@@ -7,7 +7,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -102,7 +102,7 @@ endscrap
               forceNewController: true,
             );
             expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
-            expect(parsedFile, isA<THFile>());
+            expect(parsedFile, isA<TH2File>());
             expect(parsedFile.encoding, (success['encoding'] as String));
             expect(parsedFile.countElements(), success['length']);
 
@@ -113,8 +113,8 @@ endscrap
                 .getTH2FileEditController(filename: path);
 
             // Snapshot original state (deep clone via toMap/fromMap)
-            final THFile snapshotOriginal = THFile.fromMap(
-              controller.thFile.toMap(),
+            final TH2File snapshotOriginal = TH2File.fromMap(
+              controller.th2File.toMap(),
             );
 
             /// Execution: taken from MPTH2FileEditStateAddArea.onPrimaryButtonClick()
@@ -125,14 +125,14 @@ endscrap
             final MPCommand addAreaCommand =
                 MPCommandFactory.addAreaFromExisting(
                   existingArea: area,
-                  thFile: controller.thFile,
+                  th2File: controller.th2File,
                 );
             final THLine line = parsedFile.getLines().first;
             final MPCommand addLineToAreaCommand =
                 MPCommandFactory.addLineToArea(
                   area: area,
                   line: line,
-                  thFile: controller.thFile,
+                  th2File: controller.th2File,
                 );
             final List<MPCommand> commands = [
               addAreaCommand,
@@ -148,20 +148,20 @@ endscrap
 
             controller.execute(addAreaWithLineCommand);
 
-            final String asFileChanged = writer.serialize(controller.thFile);
+            final String asFileChanged = writer.serialize(controller.th2File);
 
             expect(asFileChanged, success['asFileChanged']);
 
             // Undo the action
             controller.undo();
 
-            final String asFileUndone = writer.serialize(controller.thFile);
+            final String asFileUndone = writer.serialize(controller.th2File);
 
             expect(asFileUndone, success['asFileOriginal']);
 
             // Assert: final state equals original by value but is not the same object
-            expect(identical(controller.thFile, snapshotOriginal), isFalse);
-            expect(controller.thFile == snapshotOriginal, isTrue);
+            expect(identical(controller.th2File, snapshotOriginal), isFalse);
+            expect(controller.th2File == snapshotOriginal, isTrue);
           } catch (e, st) {
             fail('Unexpected exception: $e\n$st');
           }

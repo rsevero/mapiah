@@ -209,8 +209,8 @@ class THScrap extends THElement
     return _thID;
   }
 
-  void setTHID(THFile thFile, String aTHID) {
-    thFile.updateTHID(this, aTHID);
+  void setTHID(TH2File th2File, String aTHID) {
+    th2File.updateTHID(this, aTHID);
     _thID = aTHID;
   }
 
@@ -219,44 +219,44 @@ class THScrap extends THElement
     return calculateChildrenBoundingBox(th2FileEditController, childrenMPIDs);
   }
 
-  List<int> getAreasMPIDs(THFile thFile) {
+  List<int> getAreasMPIDs(TH2File th2File) {
     if (_areasMPIDs == null) {
-      _initializeAreasList(thFile);
+      _initializeAreasList(th2File);
     }
 
     return _areasMPIDs!;
   }
 
-  List<int> getLinesMPIDs(THFile thFile) {
+  List<int> getLinesMPIDs(TH2File th2File) {
     if (_linesMPIDs == null) {
-      _initializeLinesList(thFile);
+      _initializeLinesList(th2File);
     }
 
     return _linesMPIDs!;
   }
 
-  List<int> getPointsMPIDs(THFile thFile) {
+  List<int> getPointsMPIDs(TH2File th2File) {
     if (_pointsMPIDs == null) {
-      _initializePointsList(thFile);
+      _initializePointsList(th2File);
     }
 
     return _pointsMPIDs!;
   }
 
-  Iterable<THArea> getAreas(THFile thFile) {
-    return getAreasMPIDs(thFile).map((int mpID) => thFile.areaByMPID(mpID));
+  Iterable<THArea> getAreas(TH2File th2File) {
+    return getAreasMPIDs(th2File).map((int mpID) => th2File.areaByMPID(mpID));
   }
 
-  Iterable<THLine> getLines(THFile thFile) {
-    return getLinesMPIDs(thFile).map((int mpID) => thFile.lineByMPID(mpID));
+  Iterable<THLine> getLines(TH2File th2File) {
+    return getLinesMPIDs(th2File).map((int mpID) => th2File.lineByMPID(mpID));
   }
 
-  Iterable<THPoint> getPoints(THFile thFile) {
-    return getPointsMPIDs(thFile).map((int mpID) => thFile.pointByMPID(mpID));
+  Iterable<THPoint> getPoints(TH2File th2File) {
+    return getPointsMPIDs(th2File).map((int mpID) => th2File.pointByMPID(mpID));
   }
 
-  void _initializeAreasList(THFile thFile) {
-    final Iterable<THElement> children = getChildren(thFile);
+  void _initializeAreasList(TH2File th2File) {
+    final Iterable<THElement> children = getChildren(th2File);
 
     _areasMPIDs = [];
 
@@ -267,8 +267,8 @@ class THScrap extends THElement
     }
   }
 
-  void _initializeLinesList(THFile thFile) {
-    final Iterable<THElement> children = getChildren(thFile);
+  void _initializeLinesList(TH2File th2File) {
+    final Iterable<THElement> children = getChildren(th2File);
 
     _linesMPIDs = [];
 
@@ -279,8 +279,8 @@ class THScrap extends THElement
     }
   }
 
-  void _initializePointsList(THFile thFile) {
-    final Iterable<THElement> children = getChildren(thFile);
+  void _initializePointsList(TH2File th2File) {
+    final Iterable<THElement> children = getChildren(th2File);
 
     _pointsMPIDs = [];
 
@@ -326,14 +326,14 @@ class THScrap extends THElement
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToOptions(thFile);
-    setTHFileToChildren(thFile);
+    setTHFileToOptions(th2File);
+    setTHFileToChildren(th2File);
   }
 }

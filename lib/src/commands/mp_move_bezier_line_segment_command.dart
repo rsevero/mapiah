@@ -114,7 +114,7 @@ class MPMoveBezierLineSegmentCommand extends MPCommand {
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
     final THBezierCurveLineSegment originalLineSegment = th2FileEditController
-        .thFile
+        .th2File
         .bezierCurveLineSegmentByMPID(lineSegmentMPID);
     final THBezierCurveLineSegment newLineSegment = originalLineSegment
         .copyWith(

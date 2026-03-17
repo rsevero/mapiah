@@ -52,7 +52,7 @@ class MPMoveStraightLineSegmentCommand extends MPCommand {
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
     final THStraightLineSegment originalLineSegment = th2FileEditController
-        .thFile
+        .th2File
         .straightLineSegmentByMPID(lineSegmentMPID);
     final THStraightLineSegment newLineSegment = originalLineSegment.copyWith(
       endPoint: toEndPointPosition,

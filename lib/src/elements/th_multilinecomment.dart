@@ -86,13 +86,13 @@ class THMultiLineComment extends THElement with THIsParentMixin {
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToChildren(thFile);
+    setTHFileToChildren(th2File);
   }
 }

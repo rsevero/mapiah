@@ -56,7 +56,7 @@ class MPOverlayWindowFactory {
     MPWidgetPositionType? innerAnchorType,
     required MPWindowType type,
   }) {
-    final int thFileMPID = th2FileEditController.thFileMPID;
+    final int thFileMPID = th2FileEditController.th2FileMPID;
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
     final TH2FileEditSelectionController selectionController =
@@ -194,7 +194,7 @@ class MPOverlayWindowFactory {
     Widget overlayWindowWidget;
 
     if (THCommandOption.isMultipleChoiceOptions(optionType)) {
-      final int thFileMPID = th2FileEditController.thFileMPID;
+      final int thFileMPID = th2FileEditController.th2FileMPID;
       late Map<String, String> choices;
 
       switch (optionType) {
@@ -434,7 +434,7 @@ class MPOverlayWindowFactory {
     required THElementType elementType,
     required String? selectedPLAType,
   }) {
-    final int thFileMPID = th2FileEditController.thFileMPID;
+    final int thFileMPID = th2FileEditController.th2FileMPID;
     final TH2FileEditOverlayWindowController overlayWindowController =
         th2FileEditController.overlayWindowController;
 

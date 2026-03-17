@@ -98,10 +98,10 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
         modifiedLineSegmentsMap[selectedLineSegmentMPID] =
             (selectedLineSegmentMPID == referenceLineSegmentMPID)
-            ? thFile
+            ? th2File
                   .lineSegmentByMPID(selectedLineSegmentMPID)
                   .copyWith(endPoint: snapedPosition)
-            : thFile.lineSegmentByMPID(selectedLineSegmentMPID);
+            : th2File.lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
@@ -114,7 +114,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
       if ((nextLineSegmentMPID != null) &&
           !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
-        final THLineSegment nextLineSegment = thFile.lineSegmentByMPID(
+        final THLineSegment nextLineSegment = th2File.lineSegmentByMPID(
           nextLineSegmentMPID,
         );
 

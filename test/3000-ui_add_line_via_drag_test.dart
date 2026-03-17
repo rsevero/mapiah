@@ -55,8 +55,8 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('en'),
           home: TH2FileEditPage(
-            key: ValueKey('TH2FileEditPage|${th2Controller.thFile.filename}'),
-            filename: th2Controller.thFile.filename,
+            key: ValueKey('TH2FileEditPage|${th2Controller.th2File.filename}'),
+            filename: th2Controller.th2File.filename,
             th2FileEditController: th2Controller,
           ),
         ),
@@ -87,7 +87,7 @@ void main() {
 
       // Target the listener surface to send mouse events
       final Finder listenerFinder = find.byKey(
-        ValueKey('MPListenerWidget|${th2Controller.thFileMPID}'),
+        ValueKey('MPListenerWidget|${th2Controller.th2FileMPID}'),
       );
       expect(listenerFinder, findsOneWidget);
 
@@ -129,12 +129,12 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert: one line exists in the THFile (under the active scrap)
-      final List<THLine> lines = th2Controller.thFile.getLines().toList();
+      final List<THLine> lines = th2Controller.th2File.getLines().toList();
       expect(lines.length, 1);
 
       // Optional: the line should have at least one line segment
       final List<THLineSegment> lineSegments = lines.first.getLineSegments(
-        th2Controller.thFile,
+        th2Controller.th2File,
       );
       expect(lineSegments.isNotEmpty, isTrue);
     });

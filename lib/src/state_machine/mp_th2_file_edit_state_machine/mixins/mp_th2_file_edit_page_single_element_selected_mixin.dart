@@ -56,10 +56,10 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
     String message = lineType;
 
-    final int? parentAreaMPID = thFile.getAreaMPIDByLineMPID(line.mpID);
+    final int? parentAreaMPID = th2File.getAreaMPIDByLineMPID(line.mpID);
 
     if (parentAreaMPID != null) {
-      final THArea parentArea = thFile.elementByMPID(parentAreaMPID) as THArea;
+      final THArea parentArea = th2File.elementByMPID(parentAreaMPID) as THArea;
       final String areaType = mpLocator.appLocalizations
           .mpStatusBarMessageSingleSelectedAreaType(
             MPTextToUser.getAreaTypeSubtypeFromTypeSubtype(
@@ -82,7 +82,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
     /// Skiping the first as it's not actually a line segment, it's just the
     /// starting point of the line.
     final Iterable<THLineSegment> lineSegments = line
-        .getLineSegments(thFile)
+        .getLineSegments(th2File)
         .skip(1);
 
     if (lineSegments.isEmpty) {
@@ -133,7 +133,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
 
     String message = areaType;
 
-    final List<THAreaBorderTHID> areaBorders = area.getAreaBorderTHIDs(thFile);
+    final List<THAreaBorderTHID> areaBorders = area.getAreaBorderTHIDs(th2File);
 
     if (areaBorders.isEmpty) {
       message +=
@@ -240,7 +240,7 @@ mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
       );
     }
 
-    final THElement selectedElement = thFile.elementByMPID(
+    final THElement selectedElement = th2File.elementByMPID(
       selectedElements.first.mpID,
     );
 

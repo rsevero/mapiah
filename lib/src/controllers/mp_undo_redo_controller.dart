@@ -4,7 +4,7 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mobx/mobx.dart';
@@ -16,14 +16,14 @@ class MPUndoRedoController = MPUndoRedoControllerBase
 
 abstract class MPUndoRedoControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   MPUndoRedoControllerBase(TH2FileEditController th2FileEditController)
     : _th2FileEditController = th2FileEditController,
-      _thFile = th2FileEditController.thFile;
+      _th2File = th2FileEditController.th2File;
 
   final List<MPUndoRedoCommand> _undos = [];
   final List<MPUndoRedoCommand> _redos = [];

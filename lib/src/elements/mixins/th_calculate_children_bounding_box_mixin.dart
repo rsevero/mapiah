@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 
 mixin THCalculateChildrenBoundingBoxMixin {
@@ -12,7 +12,7 @@ mixin THCalculateChildrenBoundingBoxMixin {
     TH2FileEditController th2FileEditController,
     Iterable<int> childrenMPIDs,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
 
     double minX = double.infinity;
     double minY = double.infinity;
@@ -21,7 +21,7 @@ mixin THCalculateChildrenBoundingBoxMixin {
     Rect childBoundingBox = Rect.zero;
 
     for (final int mpID in childrenMPIDs) {
-      final THElement child = thFile.elementByMPID(mpID);
+      final THElement child = th2File.elementByMPID(mpID);
 
       switch (child) {
         case THPoint _:

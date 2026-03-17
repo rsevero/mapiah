@@ -13,7 +13,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -32,13 +32,13 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditSelectionController selectionController;
   final TH2FileEditElementEditController elementEditController;
   final MPVisualController visualController;
-  final THFile thFile;
+  final TH2File th2File;
 
   MPLineEditWidget({required this.th2FileEditController, required super.key})
     : selectionController = th2FileEditController.selectionController,
       elementEditController = th2FileEditController.elementEditController,
       visualController = th2FileEditController.visualController,
-      thFile = th2FileEditController.thFile;
+      th2File = th2FileEditController.th2File;
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +92,13 @@ class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
         final List<CustomPainter> painters = [];
         final THLine line =
             (logicalSelectedElements.first.originalElementClone as THLine)
-              ..setTHFile(thFile);
+              ..setTHFile(th2File);
         final (
           LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
           _,
         ) = getLineSegmentsAndEndpointsMaps(
           line: line,
-          thFile: thFile,
+          th2File: th2File,
           returnLineSegments: false,
         );
         final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(

@@ -324,56 +324,56 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
-  late final _$_thFileAtom = Atom(
-    name: 'TH2FileEditControllerBase._thFile',
+  late final _$_th2FileAtom = Atom(
+    name: 'TH2FileEditControllerBase._th2File',
     context: context,
   );
 
-  THFile get thFile {
-    _$_thFileAtom.reportRead();
-    return super._thFile;
+  TH2File get th2File {
+    _$_th2FileAtom.reportRead();
+    return super._th2File;
   }
 
   @override
-  THFile get _thFile => thFile;
+  TH2File get _th2File => th2File;
 
-  bool __thFileIsInitialized = false;
+  bool __th2FileIsInitialized = false;
 
   @override
-  set _thFile(THFile value) {
-    _$_thFileAtom.reportWrite(
+  set _th2File(TH2File value) {
+    _$_th2FileAtom.reportWrite(
       value,
-      __thFileIsInitialized ? super._thFile : null,
+      __th2FileIsInitialized ? super._th2File : null,
       () {
-        super._thFile = value;
-        __thFileIsInitialized = true;
+        super._th2File = value;
+        __th2FileIsInitialized = true;
       },
     );
   }
 
-  late final _$_thFileMPIDAtom = Atom(
-    name: 'TH2FileEditControllerBase._thFileMPID',
+  late final _$_th2FileMPIDAtom = Atom(
+    name: 'TH2FileEditControllerBase._th2FileMPID',
     context: context,
   );
 
-  int get thFileMPID {
-    _$_thFileMPIDAtom.reportRead();
-    return super._thFileMPID;
+  int get th2FileMPID {
+    _$_th2FileMPIDAtom.reportRead();
+    return super._th2FileMPID;
   }
 
   @override
-  int get _thFileMPID => thFileMPID;
+  int get _th2FileMPID => th2FileMPID;
 
-  bool __thFileMPIDIsInitialized = false;
+  bool __th2FileMPIDIsInitialized = false;
 
   @override
-  set _thFileMPID(int value) {
-    _$_thFileMPIDAtom.reportWrite(
+  set _th2FileMPID(int value) {
+    _$_th2FileMPIDAtom.reportWrite(
       value,
-      __thFileMPIDIsInitialized ? super._thFileMPID : null,
+      __th2FileMPIDIsInitialized ? super._th2FileMPID : null,
       () {
-        super._thFileMPID = value;
-        __thFileMPIDIsInitialized = true;
+        super._th2FileMPID = value;
+        __th2FileMPIDIsInitialized = true;
       },
     );
   }

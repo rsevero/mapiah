@@ -80,7 +80,7 @@ class _MPAddScrapDialogWidgetState extends State<MPAddScrapDialogWidget> {
       return appLocalizations.mpIDMissingErrorMessage;
     } else if (!RegExp(r'^[a-zA-Z0-9_][a-zA-Z0-9_\-]*$').hasMatch(text)) {
       return appLocalizations.mpIDInvalidValueErrorMessage;
-    } else if (widget.fileEditController?.thFile.hasElementByTHID(text) ??
+    } else if (widget.fileEditController?.th2File.hasElementByTHID(text) ??
         false) {
       return appLocalizations.mpIDNonUniqueValueErrorMessage;
     }

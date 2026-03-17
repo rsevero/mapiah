@@ -29,7 +29,7 @@ class MPRemoveAttrOptionFromElementCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THHasOptionsMixin parentElement = th2FileEditController.thFile
+    final THHasOptionsMixin parentElement = th2FileEditController.th2File
         .hasOptionByMPID(parentMPID);
     final THAttrCommandOption? option = parentElement.attrOptionByName(
       attrName,

@@ -7,7 +7,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/widgets/factories/mp_overlay_window_factory.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 import 'package:mobx/mobx.dart';
@@ -19,13 +19,13 @@ class TH2FileEditOverlayWindowController = TH2FileEditOverlayWindowControllerBas
 
 abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditOverlayWindowControllerBase(this._th2FileEditController)
-    : _thFile = _th2FileEditController.thFile {
+    : _th2File = _th2FileEditController.th2File {
     for (MPWindowType type in MPWindowType.values) {
       _isOverlayWindowShown[type] = false;
     }
@@ -228,7 +228,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     }
 
     if (_activeWindow == MPWindowType.mainTHFileEditWindow) {
-      _th2FileEditController.thFileFocusNode.requestFocus();
+      _th2FileEditController.th2FileFocusNode.requestFocus();
     }
   }
 

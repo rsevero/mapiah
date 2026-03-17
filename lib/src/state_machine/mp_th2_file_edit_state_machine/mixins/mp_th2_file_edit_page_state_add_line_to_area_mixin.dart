@@ -28,7 +28,7 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
     final MPCommand addLineToAreaCommand = MPCommandFactory.addLineToArea(
       area: area,
       line: line,
-      thFile: th2FileEditController.thFile,
+      th2File: th2FileEditController.th2File,
     );
 
     return Future.value((command: addLineToAreaCommand, area: area));

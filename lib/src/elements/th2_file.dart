@@ -23,7 +23,7 @@ import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart'
 ///
 /// It should be defined in the same file as THElement so it can access
 /// THElement parameterless private constructor.
-class THFile
+class TH2File
     with
         MPTHFileReferenceMixin,
         MPBoundingBoxMixin,
@@ -65,7 +65,7 @@ class THFile
   Map<int, int>? _areaMPIDByLineMPID;
   Map<String, int>? _areaMPIDByLineTHID;
 
-  THFile.forCWJM({
+  TH2File.forCWJM({
     required this.filename,
     required this.encoding,
     required int mpID,
@@ -77,7 +77,7 @@ class THFile
     _initializeSupportMaps();
   }
 
-  THFile() {
+  TH2File() {
     _mpID = mpLocator.mpGeneralController.nextMPIDForTHFiles();
   }
 
@@ -105,8 +105,8 @@ class THFile
     };
   }
 
-  factory THFile.fromMap(Map<String, dynamic> map) {
-    return THFile.forCWJM(
+  factory TH2File.fromMap(Map<String, dynamic> map) {
+    return TH2File.forCWJM(
       filename: map['filename'],
       encoding: map['encoding'],
       mpID: map['mpID'],
@@ -119,11 +119,11 @@ class THFile
     );
   }
 
-  factory THFile.fromJson(String jsonString) {
-    return THFile.fromMap(jsonDecode(jsonString));
+  factory TH2File.fromJson(String jsonString) {
+    return TH2File.fromMap(jsonDecode(jsonString));
   }
 
-  THFile copyWith({
+  TH2File copyWith({
     String? filename,
     bool makeFilenameNull = false,
     String? encoding,
@@ -145,7 +145,7 @@ class THFile
           ),
         );
 
-    return THFile.forCWJM(
+    return TH2File.forCWJM(
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
       mpID: mpID ?? _mpID,
@@ -157,7 +157,7 @@ class THFile
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THFile) return false;
+    if (other is! TH2File) return false;
 
     final Function deepEq = const DeepCollectionEquality().equals;
     final Function unorderedEq =
@@ -518,7 +518,7 @@ class THFile
             ?.resetShowImages();
     }
 
-    final THIsParentMixin parent = element.parent(thFile: this);
+    final THIsParentMixin parent = element.parent(th2File: this);
 
     parent.removeElementFromParent(element);
     _elementByMPID.remove(elementMPID);
@@ -794,7 +794,7 @@ class THFile
   }
 
   bool isSameClass(Object object) {
-    return object is THFile;
+    return object is TH2File;
   }
 
   THElementType getElementTypeByMPID(int mpID) {
@@ -943,10 +943,10 @@ class THFile
   int get mpID => _mpID;
 
   @override
-  THFile get thFile => this;
+  TH2File get th2File => this;
 
   @override
-  void setTHFile(THFile thFile) {
+  void setTHFile(TH2File th2File) {
     /// Nothing to do here, as THFile is the top-level element.
   }
 }

@@ -14,7 +14,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mobx/mobx.dart';
@@ -29,13 +29,13 @@ class TH2FileEditUserInteractionController = TH2FileEditUserInteractionControlle
 
 abstract class TH2FileEditUserInteractionControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditUserInteractionControllerBase(this._th2FileEditController)
-    : _thFile = _th2FileEditController.thFile;
+    : _th2File = _th2FileEditController.th2File;
 
   Path _compassPath = Path();
 
@@ -84,10 +84,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     } else {
       final List<THElement> actualElementsForNewOption = [];
 
-      option.setTHFile(_thFile);
+      option.setTHFile(_th2File);
 
       for (final THElement element in candidateElementsForNewOption) {
-        element.setTHFile(_thFile);
+        element.setTHFile(_th2File);
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
                 MPCommandOptionAux.elementTypeSupportsOptionType(
@@ -113,12 +113,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             ? MPCommandFactory.setAttrOptionOnElements(
                 elements: actualElementsForNewOption,
                 toOption: option as THAttrCommandOption,
-                thFile: _th2FileEditController.thFile,
+                th2File: _th2FileEditController.th2File,
               )
             : MPCommandFactory.setOptionOnElements(
                 elements: actualElementsForNewOption,
                 toOption: option,
-                thFile: _th2FileEditController.thFile,
+                th2File: _th2FileEditController.th2File,
               );
 
         _th2FileEditController.execute(addOptionCommand);
@@ -194,7 +194,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPCommandFactory.removeAttrOptionFromElements(
               attrName: attrName,
               parentMPIDs: parentMPIDs,
-              thFile: _th2FileEditController.thFile,
+              th2File: _th2FileEditController.th2File,
             );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -247,7 +247,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
-              thFile: _th2FileEditController.thFile,
+              th2File: _th2FileEditController.th2File,
             );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -311,7 +311,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       for (final MPSelectedElement mpSelectedElement in selectedElements) {
         final THElement element = mpSelectedElement.originalElementClone;
 
-        element.setTHFile(_thFile);
+        element.setTHFile(_th2File);
 
         if ((element is THHasOptionsMixin) &&
             (isCtrlPressed ||
@@ -350,11 +350,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             elements: elements,
             toOption: THCommandOption.byType(
               /// This parentMPID will be replaced in the command factory.
-              parentMPID: _thFile.mpID,
+              parentMPID: _th2File.mpID,
               type: optionType,
               value: choice,
             ),
-            thFile: _thFile,
+            th2File: _th2File,
           ),
         );
       }
@@ -411,7 +411,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             MPCommandFactory.removeOptionFromElements(
               optionType: optionType,
               parentMPIDs: parentMPIDs,
-              thFile: _th2FileEditController.thFile,
+              th2File: _th2FileEditController.th2File,
             );
 
         _th2FileEditController.execute(removeOptionCommand);
@@ -435,7 +435,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
-    final THFile thFile = _th2FileEditController.thFile;
+    final TH2File th2File = _th2FileEditController.th2File;
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
@@ -445,11 +445,11 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       return;
     }
 
-    final THLine thLine = thFile.lineByMPID(
+    final THLine thLine = th2File.lineByMPID(
       selectedEndControlPoints.first.originalElementClone.parentMPID,
     );
     final Map<int, int> lineSegmentsPositionsByMPID = thLine
-        .getLineSegmentPositionsByLineSegmentMPID(thFile);
+        .getLineSegmentPositionsByLineSegmentMPID(th2File);
     final List<THLineSegment> willChangeLineSegments = [];
     final THElementType elementType =
         selectedLineSegmentType ==
@@ -466,7 +466,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         continue;
       }
 
-      final THLineSegment lineSegment = thFile.lineSegmentByMPID(
+      final THLineSegment lineSegment = th2File.lineSegmentByMPID(
         lineSegmentMPID,
       );
 
@@ -485,7 +485,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     final MPCommand setLineSegmentsTypeCommand =
         MPCommandFactory.setLineSegmentsType(
           selectedLineSegmentType: selectedLineSegmentType,
-          thFile: thFile,
+          th2File: th2File,
           originalLineSegments: willChangeLineSegments,
         );
 
@@ -543,7 +543,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editAreasTypeSubtype(
           areaMPIDs: mpIDs,
           newAreaTypeSubtype: newPLAType,
-          thFile: _thFile,
+          th2File: _th2File,
         );
 
       case THElementType.line:
@@ -572,7 +572,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editLinesTypeSubtype(
           lineMPIDs: mpIDs,
           newLineTypeSubtype: newPLAType,
-          thFile: _thFile,
+          th2File: _th2File,
         );
       case THElementType.point:
         for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
@@ -600,7 +600,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         setPLATypeCommand = MPCommandFactory.editPointsTypeSubtype(
           pointMPIDs: mpIDs,
           newPointTypeSubtype: newPLAType,
-          thFile: _thFile,
+          th2File: _th2File,
         );
       default:
         return;
@@ -613,20 +613,20 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   @action
   void prepareRemoveAreaBorderTHID(int areaBorderTHIDMPID) {
-    final THAreaBorderTHID areaBorderTHID = _thFile.areaBorderTHIDByMPID(
+    final THAreaBorderTHID areaBorderTHID = _th2File.areaBorderTHIDByMPID(
       areaBorderTHIDMPID,
     );
     final int areaMPID = areaBorderTHID.parentMPID;
-    final THArea area = _thFile.areaByMPID(areaMPID);
+    final THArea area = _th2File.areaByMPID(areaMPID);
     final MPCommand removeAreaBorderTHIDCommand =
-        (area.getAreaBorderTHIDMPIDs(_thFile).length == 1)
+        (area.getAreaBorderTHIDMPIDs(_th2File).length == 1)
         ? MPCommandFactory.removeAreaFromExisting(
             existingAreaMPID: areaMPID,
-            thFile: _thFile,
+            th2File: _th2File,
           )
         : MPCommandFactory.removeAreaBorderTHIDFromExisting(
             existingAreaBorderTHIDMPID: areaBorderTHIDMPID,
-            thFile: _thFile,
+            th2File: _th2File,
           );
 
     _th2FileEditController.execute(removeAreaBorderTHIDCommand);

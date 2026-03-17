@@ -9,23 +9,23 @@ part of 'mp_undo_redo_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MPUndoRedoController on MPUndoRedoControllerBase, Store {
-  late final _$_thFileAtom = Atom(
-    name: 'MPUndoRedoControllerBase._thFile',
+  late final _$_th2FileAtom = Atom(
+    name: 'MPUndoRedoControllerBase._th2File',
     context: context,
   );
 
-  THFile get thFile {
-    _$_thFileAtom.reportRead();
-    return super._thFile;
+  TH2File get th2File {
+    _$_th2FileAtom.reportRead();
+    return super._th2File;
   }
 
   @override
-  THFile get _thFile => thFile;
+  TH2File get _th2File => th2File;
 
   @override
-  set _thFile(THFile value) {
-    _$_thFileAtom.reportWrite(value, super._thFile, () {
-      super._thFile = value;
+  set _th2File(TH2File value) {
+    _$_th2FileAtom.reportWrite(value, super._th2File, () {
+      super._th2File = value;
     });
   }
 

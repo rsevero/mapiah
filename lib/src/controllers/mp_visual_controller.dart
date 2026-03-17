@@ -11,7 +11,7 @@ import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -25,14 +25,14 @@ class MPVisualController = MPVisualControllerBase with _$MPVisualController;
 
 abstract class MPVisualControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   MPVisualControllerBase(TH2FileEditController th2FileEditController)
     : _th2FileEditController = th2FileEditController,
-      _thFile = th2FileEditController.thFile;
+      _th2File = th2FileEditController.th2File;
 
   static final Map<THPointType, THPointPaint> pointTypePaints = {
     THPointType.altar: THPointPaint(

@@ -76,7 +76,7 @@ class MPMoveLineCommand extends MPCommand {
 
     lineSegmentsMoveCommand.execute(th2FileEditController);
     elementEditController.substituteElement(
-      th2FileEditController.thFile.elementByMPID(lineMPID),
+      th2FileEditController.th2File.elementByMPID(lineMPID),
     );
     elementEditController.addOutdatedCloneMPID(lineMPID);
     elementEditController.updateControllersAfterElementEditPartial();

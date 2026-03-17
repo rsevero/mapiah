@@ -6,7 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 
 class THLinePainterLineInfo {
   late final int mpID;
@@ -36,9 +36,9 @@ class THLinePainterLineInfo {
     lineSegmentsWithLSizeOrientation = line.lineSegmentsWithLSizeOrientation;
     lineSegmentsWithMark = line.lineSegmentsWithMark;
 
-    final THFile thFile = th2FileEditController.thFile;
-    final int? areaMPID = thFile.getAreaMPIDByLineMPID(mpID);
+    final TH2File th2File = th2FileEditController.th2File;
+    final int? areaMPID = th2File.getAreaMPIDByLineMPID(mpID);
 
-    parentArea = (areaMPID == null) ? null : thFile.areaByMPID(areaMPID);
+    parentArea = (areaMPID == null) ? null : th2File.areaByMPID(areaMPID);
   }
 }

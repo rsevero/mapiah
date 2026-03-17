@@ -42,7 +42,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
     super.initState();
     th2FileEditController = widget.th2FileEditController;
     overlayWindowController = th2FileEditController.overlayWindowController;
-    _focusNode = th2FileEditController.thFileFocusNode;
+    _focusNode = th2FileEditController.th2FileFocusNode;
   }
 
   @override

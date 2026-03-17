@@ -36,6 +36,7 @@
   * Added comprehensive pre-commit hook documentation with examples and troubleshooting guide.
   * Fixed pre-commit hook `sed -i` to `sed -i''` for Windows (Git Bash) compatibility; updated installation docs to mention Git Bash requirement on Windows.
   * Renamed MPDuplicateElementResult parameters.
+  * Refactored THFile class rename: updated all variable names (thFile → th2File, _thFile → _th2File) and related properties throughout the codebase.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:

@@ -77,7 +77,7 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
   Future<ui.Image> loadUIImage(String imagePath) async {
     final String resolvedPath = MPDirectoryAux.getResolvedPath(
-      th2FileEditController.thFile.filename,
+      th2FileEditController.th2File.filename,
       imagePath,
     );
 

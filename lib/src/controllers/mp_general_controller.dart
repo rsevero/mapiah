@@ -11,7 +11,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_general_controller.g.dart';
@@ -161,8 +161,8 @@ abstract class MPGeneralControllerBase with Store {
     required List<THCommandOption> scrapOptions,
     required String encoding,
   }) {
-    final THFile thFile = THFile();
-    final int thFileMPID = thFile.mpID;
+    final TH2File th2File = TH2File();
+    final int thFileMPID = th2File.mpID;
     final int filenameNumber = thFileMPID.abs();
     final String filename = '${mpNewFilePrefix}_$filenameNumber';
     final THEncoding thEncoding = THEncoding(
@@ -173,13 +173,13 @@ abstract class MPGeneralControllerBase with Store {
     final int thScrapMPID = thScrap.mpID;
     final THEndscrap thEndscrap = THEndscrap(parentMPID: thScrapMPID);
 
-    thFile.isNewFile = true;
-    thFile.filename = filename;
-    thFile.addElement(thEncoding);
-    thFile.addElementToParent(thEncoding);
-    thFile.addElement(thScrap);
-    thFile.addElementToParent(thScrap);
-    thFile.addElement(thEndscrap);
+    th2File.isNewFile = true;
+    th2File.filename = filename;
+    th2File.addElement(thEncoding);
+    th2File.addElementToParent(thEncoding);
+    th2File.addElement(thScrap);
+    th2File.addElementToParent(thScrap);
+    th2File.addElement(thEndscrap);
     thScrap.addElementToParent(
       thEndscrap,
       elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
@@ -199,7 +199,7 @@ abstract class MPGeneralControllerBase with Store {
     }
 
     final TH2FileEditController createdController =
-        TH2FileEditControllerBase.createFromNewTHFile(thFile);
+        TH2FileEditControllerBase.createFromNewTHFile(th2File);
 
     createdController.setActiveScrap(thScrapMPID);
     createdController.setFilename(filename);

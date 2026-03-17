@@ -32,7 +32,7 @@ class MPEditPointTypeCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THPoint originalPoint = th2FileEditController.thFile.pointByMPID(
+    final THPoint originalPoint = th2FileEditController.th2File.pointByMPID(
       pointMPID,
     );
 
@@ -45,7 +45,7 @@ class MPEditPointTypeCommand extends MPCommand {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final THPoint newPoint = th2FileEditController.thFile
+    final THPoint newPoint = th2FileEditController.th2File
         .pointByMPID(pointMPID)
         .copyWith(
           pointType: newPointType,

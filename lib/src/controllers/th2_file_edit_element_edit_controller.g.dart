@@ -10,23 +10,23 @@ part of 'th2_file_edit_element_edit_controller.dart';
 
 mixin _$TH2FileEditElementEditController
     on TH2FileEditElementEditControllerBase, Store {
-  late final _$_thFileAtom = Atom(
-    name: 'TH2FileEditElementEditControllerBase._thFile',
+  late final _$_th2FileAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._th2File',
     context: context,
   );
 
-  THFile get thFile {
-    _$_thFileAtom.reportRead();
-    return super._thFile;
+  TH2File get th2File {
+    _$_th2FileAtom.reportRead();
+    return super._th2File;
   }
 
   @override
-  THFile get _thFile => thFile;
+  TH2File get _th2File => th2File;
 
   @override
-  set _thFile(THFile value) {
-    _$_thFileAtom.reportWrite(value, super._thFile, () {
-      super._thFile = value;
+  set _th2File(TH2File value) {
+    _$_th2FileAtom.reportWrite(value, super._th2File, () {
+      super._th2File = value;
     });
   }
 

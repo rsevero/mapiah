@@ -53,7 +53,7 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
           scrapOptions: scrapOptions,
           encoding: encoding,
         );
-    final String fileName = th2FileEditController.thFile.filename;
+    final String fileName = th2FileEditController.th2File.filename;
 
     th2FileEditController.setCanvasScale(mpDefaultTHFileScale);
 

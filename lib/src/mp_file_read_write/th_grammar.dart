@@ -10,10 +10,10 @@ class THGrammar extends GrammarDefinition {
   bool changedValue = false;
 
   @override
-  Parser start() => thFileStart().star();
+  Parser start() => th2FileStart().star();
 
   // .th file
-  Parser thFileStart() => th2Structure().end();
+  Parser th2FileStart() => th2Structure().end();
 
   // scrap contents
   Parser scrapStart() => scrapStructure().end();

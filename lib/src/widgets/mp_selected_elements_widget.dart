@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -15,13 +15,13 @@ import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 class MPSelectedElementsWidget extends StatelessWidget
     with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
-  final THFile thFile;
+  final TH2File th2File;
   final MPVisualController visualController;
 
   MPSelectedElementsWidget({
     required super.key,
     required this.th2FileEditController,
-  }) : thFile = th2FileEditController.thFile,
+  }) : th2File = th2FileEditController.th2File,
        visualController = th2FileEditController.visualController;
 
   @override
@@ -40,7 +40,7 @@ class MPSelectedElementsWidget extends StatelessWidget
                 .values;
 
         for (final mpSelectedElement in mpSelectedElements) {
-          final THElement element = thFile.elementByMPID(
+          final THElement element = th2File.elementByMPID(
             mpSelectedElement.mpID,
           );
 
@@ -67,10 +67,10 @@ class MPSelectedElementsWidget extends StatelessWidget
                 ),
               );
             case THArea _:
-              final List<int> areaLineMPIDs = element.getLineMPIDs(thFile);
+              final List<int> areaLineMPIDs = element.getLineMPIDs(th2File);
 
               for (final int areaLineMPID in areaLineMPIDs) {
-                final THLine line = thFile.lineByMPID(areaLineMPID);
+                final THLine line = th2File.lineByMPID(areaLineMPID);
 
                 painters.addAll(
                   getLinePainters(

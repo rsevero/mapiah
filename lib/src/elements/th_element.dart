@@ -27,7 +27,7 @@ import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mi
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -118,16 +118,16 @@ abstract class THElement with MPTHFileReferenceMixin {
     this.originalLineInTH2File = '',
   }) : _mpID = mpLocator.mpGeneralController.nextMPIDForElements();
 
-  THIsParentMixin parent({THFile? thFile}) {
-    if ((thFile == null) && (this.thFile == null)) {
-      throw ArgumentError('No thFile provided at THElement.parent()');
+  THIsParentMixin parent({TH2File? th2File}) {
+    if ((th2File == null) && (this.th2File == null)) {
+      throw ArgumentError('No th2File provided at THElement.parent()');
     }
 
-    thFile ??= this.thFile!;
+    th2File ??= this.th2File!;
 
     return (parentMPID < 0)
-        ? thFile
-        : thFile.elementByMPID(parentMPID) as THIsParentMixin;
+        ? th2File
+        : th2File.elementByMPID(parentMPID) as THIsParentMixin;
   }
 
   THElementType get elementType;

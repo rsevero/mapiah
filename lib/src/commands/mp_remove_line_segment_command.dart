@@ -29,10 +29,12 @@ class MPRemoveLineSegmentCommand extends MPCommand with MPPreCommandMixin {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
+    final TH2File th2File = th2FileEditController.th2File;
+    final THLineSegment lineSegment = th2File.lineSegmentByMPID(
+      lineSegmentMPID,
+    );
     final THIsParentMixin lineSegmentParent = lineSegment.parent(
-      thFile: thFile,
+      th2File: th2File,
     );
     final int lineSegmentPositionInParent = lineSegmentParent.getChildPosition(
       lineSegment,

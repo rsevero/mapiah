@@ -6,7 +6,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -42,7 +42,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
@@ -58,7 +58,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
 
-            final Iterable<THXTherionImageInsertConfig> images = thFile
+            final Iterable<THXTherionImageInsertConfig> images = th2File
                 .getImages();
 
             return MPOverlayWindowBlockWidget(

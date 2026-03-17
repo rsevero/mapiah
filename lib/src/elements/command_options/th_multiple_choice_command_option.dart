@@ -31,18 +31,18 @@ abstract class THMultipleChoiceCommandOption extends THCommandOption {
     return parentTypeNameForChecking;
   }
 
-  THElementType getParentElementType(THFile thFile) {
-    parentElementType ??= thFile.getElementTypeByMPID(parentMPID);
+  THElementType getParentElementType(TH2File th2File) {
+    parentElementType ??= th2File.getElementTypeByMPID(parentMPID);
 
     return parentElementType!;
   }
 
-  String getParentElementTypeName(THFile thFile) {
-    return getParentElementType(thFile).name;
+  String getParentElementTypeName(TH2File th2File) {
+    return getParentElementType(th2File).name;
   }
 
-  String getParentTypeNameForChecking(THFile thFile) =>
-      _getParentTypeNameForChecking(getParentElementTypeName(thFile));
+  String getParentTypeNameForChecking(TH2File th2File) =>
+      _getParentTypeNameForChecking(getParentElementTypeName(th2File));
 
   @override
   Map<String, dynamic> toMap() {

@@ -7,7 +7,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -59,9 +59,9 @@ void main() {
 
       final TH2FileEditSelectionController selectionController =
           th2Controller.selectionController;
-      final THFile thFile = th2Controller.thFile;
-      final String originalSerialized = writer.serialize(thFile);
-      final THFile snapshotOriginal = THFile.fromMap(thFile.toMap());
+      final TH2File th2File = th2Controller.th2File;
+      final String originalSerialized = writer.serialize(th2File);
+      final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
 
       await tester.pumpWidget(
         MaterialApp(
@@ -77,10 +77,10 @@ void main() {
       await tester.pump();
 
       th2Controller.zoomOneToOne();
-      th2Controller.setActiveScrap(thFile.getScraps().first.mpID);
+      th2Controller.setActiveScrap(th2File.getScraps().first.mpID);
 
-      final List<THArea> originalAreas = thFile.getAreas().toList();
-      final List<THLine> originalLines = thFile.getLines().toList();
+      final List<THArea> originalAreas = th2File.getAreas().toList();
+      final List<THLine> originalLines = th2File.getLines().toList();
 
       expect(originalAreas.length, 1);
       expect(originalLines.length, 2);
@@ -102,8 +102,8 @@ void main() {
       );
       th2Controller.elementEditController.duplicateSelectedElements();
 
-      final List<THArea> areasAfterDuplicate = thFile.getAreas().toList();
-      final List<THLine> linesAfterDuplicate = thFile.getLines().toList();
+      final List<THArea> areasAfterDuplicate = th2File.getAreas().toList();
+      final List<THLine> linesAfterDuplicate = th2File.getLines().toList();
 
       expect(areasAfterDuplicate.length, 2);
       expect(linesAfterDuplicate.length, 3);
@@ -129,11 +129,11 @@ void main() {
       th2Controller.undo();
       await tester.pumpAndSettle();
 
-      final String undoneSerialized = writer.serialize(th2Controller.thFile);
+      final String undoneSerialized = writer.serialize(th2Controller.th2File);
 
       expect(undoneSerialized, originalSerialized);
-      expect(identical(th2Controller.thFile, snapshotOriginal), isFalse);
-      expect(th2Controller.thFile == snapshotOriginal, isTrue);
+      expect(identical(th2Controller.th2File, snapshotOriginal), isFalse);
+      expect(th2Controller.th2File == snapshotOriginal, isTrue);
     });
 
     testWidgets('select area and both lines: one copy of each element', (
@@ -159,9 +159,9 @@ void main() {
 
       final TH2FileEditSelectionController selectionController =
           th2Controller.selectionController;
-      final THFile thFile = th2Controller.thFile;
-      final String originalSerialized = writer.serialize(thFile);
-      final THFile snapshotOriginal = THFile.fromMap(thFile.toMap());
+      final TH2File th2File = th2Controller.th2File;
+      final String originalSerialized = writer.serialize(th2File);
+      final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
 
       await tester.pumpWidget(
         MaterialApp(
@@ -177,10 +177,10 @@ void main() {
       await tester.pump();
 
       th2Controller.zoomOneToOne();
-      th2Controller.setActiveScrap(thFile.getScraps().first.mpID);
+      th2Controller.setActiveScrap(th2File.getScraps().first.mpID);
 
-      final List<THArea> originalAreas = thFile.getAreas().toList();
-      final List<THLine> originalLines = thFile.getLines().toList();
+      final List<THArea> originalAreas = th2File.getAreas().toList();
+      final List<THLine> originalLines = th2File.getLines().toList();
 
       expect(originalAreas.length, 1);
       expect(originalLines.length, 2);
@@ -206,8 +206,8 @@ void main() {
       );
       th2Controller.elementEditController.duplicateSelectedElements();
 
-      final List<THArea> areasAfterDuplicate = thFile.getAreas().toList();
-      final List<THLine> linesAfterDuplicate = thFile.getLines().toList();
+      final List<THArea> areasAfterDuplicate = th2File.getAreas().toList();
+      final List<THLine> linesAfterDuplicate = th2File.getLines().toList();
 
       // Border line is deduplicated: the area already duplicates it, so the
       // direct selection of that same line is skipped.
@@ -243,11 +243,11 @@ void main() {
       th2Controller.undo();
       await tester.pumpAndSettle();
 
-      final String undoneSerialized = writer.serialize(th2Controller.thFile);
+      final String undoneSerialized = writer.serialize(th2Controller.th2File);
 
       expect(undoneSerialized, originalSerialized);
-      expect(identical(th2Controller.thFile, snapshotOriginal), isFalse);
-      expect(th2Controller.thFile == snapshotOriginal, isTrue);
+      expect(identical(th2Controller.th2File, snapshotOriginal), isFalse);
+      expect(th2Controller.th2File == snapshotOriginal, isTrue);
     });
   });
 }

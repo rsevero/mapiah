@@ -20,7 +20,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/th_string_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 part 'th_adjust_command_option.dart';
@@ -549,8 +549,8 @@ abstract class THCommandOption with MPTHFileReferenceMixin {
   String debugHashString() =>
       debugHashDetails().entries.map((e) => '${e.key}=${e.value}').join(', ');
 
-  THHasOptionsMixin optionParent(THFile thFile) =>
-      thFile.hasOptionByMPID(parentMPID);
+  THHasOptionsMixin optionParent(TH2File th2File) =>
+      th2File.hasOptionByMPID(parentMPID);
 
   String specToFile();
 }

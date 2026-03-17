@@ -3,7 +3,7 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/mixins/mp_thfile_reference_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 
 /// Parent elements.
@@ -70,8 +70,8 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
       );
     }
 
-    if (thFile != null) {
-      element.setTHFile(thFile!);
+    if (th2File != null) {
+      element.setTHFile(th2File!);
     }
 
     if (drawableChildElementTypes.contains(element.elementType)) {
@@ -79,9 +79,9 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     }
   }
 
-  void setTHFileToChildren(THFile thFile) {
-    for (final THElement child in getChildren(thFile)) {
-      child.setTHFile(thFile);
+  void setTHFileToChildren(TH2File th2File) {
+    for (final THElement child in getChildren(th2File)) {
+      child.setTHFile(th2File);
     }
   }
 
@@ -102,14 +102,14 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
       throw THCustomException("'$element' not found.");
     }
 
-    if (thFile == null) {
+    if (th2File == null) {
       throw THCustomException(
         "At THIsParentMixin.removeElementFromParent: THFile is null.",
       );
     }
 
-    if (thFile!.hasTHIDByElement(element)) {
-      thFile!.unregisterElementTHIDByElement(element);
+    if (th2File!.hasTHIDByElement(element)) {
+      th2File!.unregisterElementTHIDByElement(element);
     }
 
     if (drawableChildElementTypes.contains(element.elementType)) {
@@ -117,8 +117,8 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     }
   }
 
-  Iterable<THElement> getChildren(THFile thFile) {
-    return childrenMPIDs.map((mpID) => thFile.elementByMPID(mpID));
+  Iterable<THElement> getChildren(TH2File th2File) {
+    return childrenMPIDs.map((mpID) => th2File.elementByMPID(mpID));
   }
 
   int get mpID;
@@ -133,7 +133,7 @@ mixin THIsParentMixin on MPTHFileReferenceMixin {
     final List<int> drawableChildrenMPIDs = [];
 
     for (final int childMPID in childrenMPIDs) {
-      final THElementType childElementType = thFile!.getElementTypeByMPID(
+      final THElementType childElementType = th2File!.getElementTypeByMPID(
         childMPID,
       );
 

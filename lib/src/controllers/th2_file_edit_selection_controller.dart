@@ -15,7 +15,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
@@ -30,7 +30,7 @@ class TH2FileEditSelectionController = TH2FileEditSelectionControllerBase
 
 abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
@@ -38,7 +38,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   TH2FileEditSelectionControllerBase(
     TH2FileEditController th2FileEditController,
   ) : _th2FileEditController = th2FileEditController,
-      _thFile = th2FileEditController.thFile;
+      _th2File = th2FileEditController.th2File;
 
   @readonly
   Set<int> _isSelected = {};
@@ -158,12 +158,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return;
     }
 
-    final THScrap scrap = _thFile.scrapByMPID(
+    final THScrap scrap = _th2File.scrapByMPID(
       _th2FileEditController.activeScrapID,
     );
 
     for (final int elementMPID in scrap.childrenMPIDs) {
-      final THElement element = _thFile.elementByMPID(elementMPID);
+      final THElement element = _th2File.elementByMPID(elementMPID);
 
       addUpdateSelectableElement(element);
     }
@@ -216,7 +216,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         .values
         .map(
           (MPSelectedElement selectedElement) =>
-              _thFile.elementByMPID(selectedElement.mpID),
+              _th2File.elementByMPID(selectedElement.mpID),
         );
 
     return _getElementsListBoundingBoxOnCanvas(selectedElements);
@@ -235,7 +235,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final List<int> selectedMPIDs = _mpSelectedElementsLogical.keys.toList();
     final MPCommand mpCommand = MPCommandFactory.removeElements(
       mpIDs: selectedMPIDs,
-      thFile: _thFile,
+      th2File: _th2File,
     );
 
     _th2FileEditController.execute(mpCommand);
@@ -361,13 +361,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return;
     }
 
-    final THScrap scrap = _thFile.scrapByMPID(
+    final THScrap scrap = _th2File.scrapByMPID(
       _th2FileEditController.activeScrapID,
     );
     final List<int> elementMPIDs = scrap.childrenMPIDs;
 
     for (final int elementMPID in elementMPIDs) {
-      final THElement element = _thFile.elementByMPID(elementMPID);
+      final THElement element = _th2File.elementByMPID(elementMPID);
 
       if ((element is THPoint) || (element is THLine)) {
         addSelectedElement(element);
@@ -391,7 +391,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void selectAllEndPoints() {
     final THLine selectedLine = getSelectedLine();
 
-    setSelectedEndPoints(selectedLine.getLineSegments(_thFile));
+    setSelectedEndPoints(selectedLine.getLineSegments(_th2File));
     _th2FileEditController.triggerEditLineRedraw();
   }
 
@@ -608,7 +608,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     /// Adding line segments as selectable elements so on 'single line edit'
     /// mode its possible to select end point clicking on line segments.
-    final List<THLineSegment> lineSegments = line.getLineSegments(_thFile);
+    final List<THLineSegment> lineSegments = line.getLineSegments(_th2File);
 
     Offset? startPoint;
 
@@ -633,9 +633,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       );
     }
 
-    final THLine parentLine = _thFile.lineByMPID(lineSegment.parentMPID);
+    final THLine parentLine = _th2File.lineByMPID(lineSegment.parentMPID);
     final THLineSegment? previousLineSegment = parentLine
-        .getPreviousLineSegment(lineSegment, _thFile);
+        .getPreviousLineSegment(lineSegment, _th2File);
 
     if (previousLineSegment == null) {
       return;
@@ -730,7 +730,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
             case THPoint _:
               clickedElementsMap[element.mpID] = element;
             case THLine _:
-              final int? areaMPID = _thFile.getAreaMPIDByLineMPID(element.mpID);
+              final int? areaMPID = _th2File.getAreaMPIDByLineMPID(
+                element.mpID,
+              );
 
               if (areaMPID == null) {
                 clickedElementsMap[element.mpID] = element;
@@ -739,13 +741,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
                   if (isShiftPressed) {
                     clickedElementsMap[element.mpID] = element;
                   } else {
-                    clickedElementsMap[areaMPID] = _thFile.elementByMPID(
+                    clickedElementsMap[areaMPID] = _th2File.elementByMPID(
                       areaMPID,
                     );
                   }
                 } else {
                   clickedElementsMap[element.mpID] = element;
-                  clickedElementsMap[areaMPID] = _thFile.elementByMPID(
+                  clickedElementsMap[areaMPID] = _th2File.elementByMPID(
                     areaMPID,
                   );
                 }
@@ -794,9 +796,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       if (_multipleElementsClickedChoice > 0) {
         clickedElements.clear();
-        clickedElements[_multipleElementsClickedChoice] = _thFile.elementByMPID(
-          _multipleElementsClickedChoice,
-        );
+        clickedElements[_multipleElementsClickedChoice] = _th2File
+            .elementByMPID(_multipleElementsClickedChoice);
       } else if (_multipleElementsClickedChoice < 0) {
         clickedElements.clear();
       }
@@ -831,9 +832,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
       if (_multipleElementsClickedChoice > 0) {
         clickedElements.clear();
-        clickedElements[_multipleElementsClickedChoice] = _thFile.elementByMPID(
-          _multipleElementsClickedChoice,
-        );
+        clickedElements[_multipleElementsClickedChoice] = _th2File
+            .elementByMPID(_multipleElementsClickedChoice);
       } else if (_multipleElementsClickedChoice < 0) {
         clickedElements.clear();
       }
@@ -958,7 +958,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       return;
     }
 
-    final THLine line = _thFile.lineByMPID(
+    final THLine line = _th2File.lineByMPID(
       _mpSelectedElementsLogical.values.first.mpID,
     );
     final List<THLineSegment> lineSegments = _th2FileEditController
@@ -1063,7 +1063,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final List<THLineSegment> lineSegments = [];
 
     for (final int mpID in lineSegmentMPIDs) {
-      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(mpID);
+      final THLineSegment lineSegment = _th2File.lineSegmentByMPID(mpID);
 
       lineSegments.add(lineSegment);
     }
@@ -1142,7 +1142,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   List<THLineSegment> getLineSegmentAndPrevious(THLineSegment lineSegment) {
-    final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
+    final THLine line = _th2File.lineByMPID(lineSegment.parentMPID);
     final List<THLineSegment> lineSegments = _th2FileEditController
         .elementEditController
         .getLineSegmentsList(line: line, clone: false);
@@ -1322,7 +1322,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       _updateTHLinePosition(mpAreaLine, localDeltaPositionOnCanvas);
     }
 
-    _thFile.areaByMPID(selectedArea.mpID).clearBoundingBox();
+    _th2File.areaByMPID(selectedArea.mpID).clearBoundingBox();
   }
 
   void moveSelectedEndControlPointsToScreenCoordinates(
@@ -1411,7 +1411,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       );
 
       if (nextLineSegmentMPID != null) {
-        final THLineSegment nextLineSegment = _thFile.lineSegmentByMPID(
+        final THLineSegment nextLineSegment = _th2File.lineSegmentByMPID(
           nextLineSegmentMPID,
         );
 
@@ -1616,7 +1616,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _selectedLineLineSegmentsMPIDs ??= getSelectedLine().childrenMPIDs.where((
       childMPID,
     ) {
-      return _thFile.elementByMPID(childMPID) is THLineSegment;
+      return _th2File.elementByMPID(childMPID) is THLineSegment;
     }).toList();
 
     return _selectedLineLineSegmentsMPIDs!;
@@ -1645,7 +1645,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     List<THLineSegment>? lineSegments,
   }) {
     if (lineSegments == null) {
-      final THLine line = _thFile.lineByMPID(lineSegment.parentMPID);
+      final THLine line = _th2File.lineByMPID(lineSegment.parentMPID);
 
       lineSegments = _th2FileEditController.elementEditController
           .getLineSegmentsList(line: line, clone: false);
@@ -1828,13 +1828,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void setImageVisibility(int imageMPID, bool isVisible) {
-    _th2FileEditController.thFile.imageByMPID(imageMPID).isVisible = isVisible;
+    _th2FileEditController.th2File.imageByMPID(imageMPID).isVisible = isVisible;
     _th2FileEditController.triggerImagesRedraw();
   }
 
   @action
   void setSelectedScrapByMPID(int scrapID) {
-    final THScrap scrap = _thFile.scrapByMPID(scrapID);
+    final THScrap scrap = _th2File.scrapByMPID(scrapID);
 
     _clearSelectedElementsWithoutResettingRedrawTriggers();
     _mpSelectedElementsLogical[scrapID] = MPSelectedScrap(originalScrap: scrap);

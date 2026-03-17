@@ -8,7 +8,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 
@@ -24,33 +24,33 @@ class THFileWriter {
   bool _insideMultiLineComment = false;
   bool _xTherionConfigWritten = false;
 
-  late THFile _thFile;
+  late TH2File _th2File;
 
   String serialize(
-    THFile thFile, {
+    TH2File th2File, {
     bool includeEmptyLines = false,
     bool useOriginalRepresentation = false,
     String? lineEnding,
   }) {
-    _thFile = thFile;
+    _th2File = th2File;
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
-    _lineEnding = lineEnding ?? _thFile.lineEnding;
+    _lineEnding = lineEnding ?? _th2File.lineEnding;
     _insideMultiLineComment = false;
     _xTherionConfigWritten = false;
 
     String asString = '';
 
     _prefix = '';
-    if (thFile.elementByMPID(thFile.childrenMPIDs.first) is! THEncoding) {
-      final String newLine = 'encoding ${thFile.encoding}$_lineEnding';
+    if (th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding) {
+      final String newLine = 'encoding ${th2File.encoding}$_lineEnding';
 
       asString += newLine;
 
       asString += _trySerializeXTherionConfig();
     }
 
-    asString += _childrenAsString(thFile);
+    asString += _childrenAsString(th2File);
 
     return asString;
   }
@@ -62,8 +62,8 @@ class THFileWriter {
 
     bool onlyNewXTherionConfigs = true;
 
-    for (final int xtherionSettingMPID in _thFile.xtherionSettingMPIDs) {
-      final THElement element = _thFile.elementByMPID(xtherionSettingMPID);
+    for (final int xtherionSettingMPID in _th2File.xtherionSettingMPIDs) {
+      final THElement element = _th2File.elementByMPID(xtherionSettingMPID);
 
       if (element.originalLineInTH2File.isNotEmpty) {
         onlyNewXTherionConfigs = false;
@@ -85,8 +85,8 @@ class THFileWriter {
 
     String asString = '';
 
-    for (final int xtherionSettingMPID in _thFile.xtherionSettingMPIDs) {
-      final THElement thElement = _thFile.elementByMPID(xtherionSettingMPID);
+    for (final int xtherionSettingMPID in _th2File.xtherionSettingMPIDs) {
+      final THElement thElement = _th2File.elementByMPID(xtherionSettingMPID);
 
       if (thElement is THXTherionConfig) {
         asString += _serializeXTherionConfig(thElement);
@@ -382,7 +382,7 @@ class THFileWriter {
     String asString = '';
 
     for (final int childMPID in thParent.childrenMPIDs) {
-      final THElement child = _thFile.elementByMPID(childMPID);
+      final THElement child = _th2File.elementByMPID(childMPID);
 
       asString += serializeElement(child);
     }
@@ -525,16 +525,16 @@ class THFileWriter {
   }
 
   Uint8List toBytes(
-    THFile thFile, {
+    TH2File th2File, {
     bool includeEmptyLines = false,
     bool useOriginalRepresentation = false,
   }) {
-    _thFile = thFile;
+    _th2File = th2File;
 
-    String encoding = thFile.encoding;
+    String encoding = th2File.encoding;
     Uint8List fileContentEncoded = Uint8List(0);
     final String fileContent = serialize(
-      thFile,
+      th2File,
       includeEmptyLines: includeEmptyLines,
       useOriginalRepresentation: useOriginalRepresentation,
     );

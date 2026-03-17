@@ -29,11 +29,11 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
   MPReplaceLineSegmentsCommand.fromExisting({
     required this.lineMPID,
     required this.newLineSegments,
-    required THFile thFile,
+    required TH2File th2File,
     super.descriptionType = defaultDescriptionType,
-  }) : originalLineSegments = thFile
+  }) : originalLineSegments = th2File
            .lineByMPID(lineMPID)
-           .getLineSegmentsChildPositionList(thFile),
+           .getLineSegmentsChildPositionList(th2File),
        super();
 
   @override
@@ -41,10 +41,10 @@ class MPReplaceLineSegmentsCommand extends MPCommand {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THLine line = thFile.lineByMPID(lineMPID);
+    final TH2File th2File = th2FileEditController.th2File;
+    final THLine line = th2File.lineByMPID(lineMPID);
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
-    originalLineSegments = line.getLineSegmentsChildPositionList(thFile);
+    originalLineSegments = line.getLineSegmentsChildPositionList(th2File);
     final MPCommand replaceLineSegmentsCommand =
         MPReplaceLineSegmentsCommand.forCWJM(
           lineMPID: lineMPID,

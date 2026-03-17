@@ -277,7 +277,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
       final bool isSuccessful;
       final List<String> errors;
       final String resolvedPath = MPDirectoryAux.getResolvedPath(
-        th2FileEditController.thFile.filename,
+        th2FileEditController.th2File.filename,
         filename,
       );
 

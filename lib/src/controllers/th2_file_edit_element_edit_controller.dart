@@ -22,7 +22,7 @@ import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -39,13 +39,13 @@ class TH2FileEditElementEditController = TH2FileEditElementEditControllerBase
 
 abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditElementEditControllerBase(this._th2FileEditController)
-    : _thFile = _th2FileEditController.thFile;
+    : _th2File = _th2FileEditController.th2File;
 
   @readonly
   Offset? _lineStartScreenPosition;
@@ -59,7 +59,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   THScrap? _newScrap;
 
-  THFile? _originalFileForLineSimplification;
+  TH2File? _originalFileForLineSimplification;
 
   final Set<int> _lineSegmentsWithOptionsToPreserveSimplification = {};
 
@@ -119,7 +119,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void initializeMostUsedTypes() {
-    final Iterable<THElement> elements = _thFile.elements.values;
+    final Iterable<THElement> elements = _th2File.elements.values;
 
     for (final THElement element in elements) {
       switch (element) {
@@ -321,7 +321,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<int> lineSegmentMPIDs = line.childrenMPIDs;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
+      final THElement lineSegment = _th2File.elementByMPID(lineSegmentMPID);
 
       if (lineSegment is THLineSegment) {
         lineSegments.add(clone ? lineSegment.copyWith() : lineSegment);
@@ -337,7 +337,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<int> lineSegmentMPIDs = line.childrenMPIDs;
 
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      final THElement lineSegment = _thFile.elementByMPID(lineSegmentMPID);
+      final THElement lineSegment = _th2File.elementByMPID(lineSegmentMPID);
 
       if (lineSegment is THLineSegment) {
         lineSegmentsMap[lineSegment.mpID] = lineSegment;
@@ -351,12 +351,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
 
-    _thFile.substituteElement(modifiedElement);
+    _th2File.substituteElement(modifiedElement);
     selectionController.addUpdateSelectableElement(modifiedElement);
 
     if (modifiedElement is THLineSegment) {
       final THLine parentLine =
-          modifiedElement.parent(thFile: _thFile) as THLine;
+          modifiedElement.parent(th2File: _th2File) as THLine;
 
       selectionController.updateSelectedElementLogicalClone(
         modifiedElement.parentMPID,
@@ -371,7 +371,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void substituteElementWithoutAddSelectableElement(THElement modifiedElement) {
-    _thFile.substituteElement(modifiedElement);
+    _th2File.substituteElement(modifiedElement);
   }
 
   void substituteLineSegments(
@@ -381,11 +381,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     for (final THLineSegment lineSegment in modifiedLineSegmentsMap.values) {
-      _thFile.substituteElement(lineSegment);
+      _th2File.substituteElement(lineSegment);
       selectionController.addUpdateSelectableElement(lineSegment);
     }
 
-    final THLine line = _thFile.lineByMPID(
+    final THLine line = _th2File.lineByMPID(
       modifiedLineSegmentsMap.values.first.parentMPID,
     );
 
@@ -400,17 +400,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   ) {
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
-    final THLine line = _thFile.lineByMPID(lineMPID);
+    final THLine line = _th2File.lineByMPID(lineMPID);
     final List<int> originalLineSegmentMPIDs = line
-        .getLineSegmentMPIDs(_thFile)
+        .getLineSegmentMPIDs(_th2File)
         .toList();
 
     for (final int originalLineSegmentMPID in originalLineSegmentMPIDs) {
-      final THLineSegment originalLineSegment = _thFile.lineSegmentByMPID(
+      final THLineSegment originalLineSegment = _th2File.lineSegmentByMPID(
         originalLineSegmentMPID,
       );
 
-      _thFile.removeElement(originalLineSegment);
+      _th2File.removeElement(originalLineSegment);
       elementEditController.addOutdatedLineSegmentCloneMPID(
         originalLineSegmentMPID,
       );
@@ -421,7 +421,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         in newLineSegments) {
       final THLineSegment lineSegment = newLineSegment.lineSegment;
 
-      _thFile.addElement(lineSegment);
+      _th2File.addElement(lineSegment);
       line.addElementToParent(
         lineSegment,
         elementPositionInParent: newLineSegment.lineSegmentPosition,
@@ -465,14 +465,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (parent == null) {
       parentMPID = newElement.parentMPID;
       parentElement = (parentMPID < 0)
-          ? _thFile
-          : _thFile.parentByMPID(parentMPID);
+          ? _th2File
+          : _th2File.parentByMPID(parentMPID);
     } else {
       parentMPID = parent.mpID;
       parentElement = parent;
     }
 
-    _thFile.addElement(newElement);
+    _th2File.addElement(newElement);
 
     parentElement.addElementToParent(
       newElement,
@@ -496,7 +496,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           .toList();
 
       for (final int childMPID in childrenMPIDList) {
-        final THElement child = _thFile.elementByMPID(childMPID);
+        final THElement child = _th2File.elementByMPID(childMPID);
 
         _removeElement(child);
       }
@@ -507,7 +507,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       elementMPID,
       setState: setState,
     );
-    _thFile.removeElement(element);
+    _th2File.removeElement(element);
 
     switch (element) {
       case THLineSegment _:
@@ -523,7 +523,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final int parentMPID = element.parentMPID;
 
     if (parentMPID > 0) {
-      final THIsParentMixin parent = _thFile.parentByMPID(parentMPID);
+      final THIsParentMixin parent = _th2File.parentByMPID(parentMPID);
 
       if (parent is THElement) {
         selectionController.updateSelectedElementLogicalClone(parentMPID);
@@ -536,7 +536,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void executeRemoveElementByMPID(int mpID, {bool setState = false}) {
-    final THElement element = _thFile.elementByMPID(mpID);
+    final THElement element = _th2File.elementByMPID(mpID);
 
     removeElement(element, setState: setState);
   }
@@ -550,7 +550,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void registerElementWithTHID(THElement element, String thID) {
-    _thFile.registerElementWithTHID(element, thID);
+    _th2File.registerElementWithTHID(element, thID);
   }
 
   @action
@@ -634,13 +634,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       );
       final String prefix =
           "$mpAutomaticMapConnectionPrefix${stationPointNameRecord.stationName}-";
-      final String mapConnectionTHID = _thFile.getNewTHID(
+      final String mapConnectionTHID = _th2File.getNewTHID(
         element: line,
         prefix: prefix,
       );
       final MPCommand addLineTHIDCommand = MPCommandFactory.addTHIDToElement(
         element: line,
-        thFile: _thFile,
+        th2File: _th2File,
         newTHID: mapConnectionTHID,
       );
       final MPAddLineCommand addLinecommand =
@@ -679,7 +679,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final MPCommand addScrapCommand = MPCommandFactory.addScrap(
       thID: thID,
-      thFile: _thFile,
+      th2File: _th2File,
       scrapChildren: scrapChildren,
       scrapOptions: scrapOptions,
     );
@@ -730,11 +730,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_thFile);
-    final THLineSegment lastLineSegment = _thFile.lineSegmentByMPID(
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
       lineSegmentMPIDs.last,
     );
-    final THLineSegment secondToLastLineSegment = _thFile.lineSegmentByMPID(
+    final THLineSegment secondToLastLineSegment = _th2File.lineSegmentByMPID(
       lineSegmentMPIDs.elementAt(lineSegmentMPIDs.length - 2),
     );
     final THPositionPart startPoint = secondToLastLineSegment.endPoint;
@@ -847,7 +847,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
           posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
             elements: [_newLine!],
-            thFile: _thFile,
+            th2File: _th2File,
             toOption: lineSubtypeOption,
           );
         }
@@ -983,7 +983,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         .toList();
     final MPTHElementDuplicatorAux duplicator = MPTHElementDuplicatorAux(
       elements: elementsToDuplicate,
-      thFile: _thFile,
+      th2File: _th2File,
       updateTHIDs: true,
     );
     final MPDuplicateElementResult duplicate = duplicator.getDuplicate();
@@ -1073,10 +1073,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     final int parentMPID = option.parentMPID;
     final THElement parentElement =
-        _thFile
+        _th2File
             .elementByMPID(parentMPID)
             .copyWith(originalLineInTH2File: plaOriginalLineInTH2File)
-          ..setTHFile(_thFile);
+          ..setTHFile(_th2File);
 
     if (parentElement is! THHasOptionsMixin) {
       throw Exception(
@@ -1087,7 +1087,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     parentElement.addUpdateOption(option);
 
     if (parentMPID >= 0) {
-      _thFile.substituteElement(parentElement);
+      _th2File.substituteElement(parentElement);
     }
 
     if (parentElement is THLineSegment) {
@@ -1106,19 +1106,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required int parentMPID,
     required String newOriginalLineInTH2File,
   }) {
-    final THHasOptionsMixin parentElement = _thFile.hasOptionByMPID(parentMPID);
+    final THHasOptionsMixin parentElement = _th2File.hasOptionByMPID(
+      parentMPID,
+    );
 
     if (optionType == THCommandOptionType.id) {
-      _thFile.unregisterElementTHIDByMPID(parentMPID);
+      _th2File.unregisterElementTHIDByMPID(parentMPID);
     }
 
     final THHasOptionsMixin newParentElement =
         (parentElement.copyWith(originalLineInTH2File: newOriginalLineInTH2File)
               as THHasOptionsMixin)
-          ..setTHFile(_thFile);
+          ..setTHFile(_th2File);
 
     newParentElement.removeOption(optionType);
-    _thFile.substituteElement(newParentElement);
+    _th2File.substituteElement(newParentElement);
 
     if (parentElement is THLineSegment) {
       _th2FileEditController.elementEditController
@@ -1136,7 +1138,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required int parentMPID,
     required String newOriginalLineInTH2File,
   }) {
-    final THHasOptionsMixin parentElement = _th2FileEditController.thFile
+    final THHasOptionsMixin parentElement = _th2FileEditController.th2File
         .hasOptionByMPID(parentMPID);
 
     final THHasOptionsMixin newParentElement =
@@ -1144,7 +1146,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             as THHasOptionsMixin;
 
     newParentElement.removeAttrOption(attrName);
-    _thFile.substituteElement(newParentElement);
+    _th2File.substituteElement(newParentElement);
     if (parentElement is THLineSegment) {
       _th2FileEditController.elementEditController
           .addOutdatedLineSegmentCloneMPID(parentMPID);
@@ -1168,7 +1170,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final int parentLineMPID = _thFile
+    final int parentLineMPID = _th2File
         .lineSegmentByMPID(selectedLineSegmentMPIDs.first)
         .parentMPID;
     final List<MPCommand> removeLineSegmentCommands = [];
@@ -1181,13 +1183,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final MPCommand removeLineSegmentCommand =
           MPCommandFactory.removeLineSegmentFromExisting(
             toRemoveLineSegmentMPID: lineSegmentMPID,
-            thFile: _thFile,
+            th2File: _th2File,
           );
 
       removeLineSegmentCommand.execute(_th2FileEditController);
       removeLineSegmentCommands.add(removeLineSegmentCommand);
 
-      if (!_thFile.hasElementByMPID(parentLineMPID)) {
+      if (!_th2File.hasElementByMPID(parentLineMPID)) {
         lineRemoved = true;
       }
     }
@@ -1231,7 +1233,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void addOutdatedCloneMPID(int mpID) {
     _mpIDsOutdatedNonLineSegmentClones.add(mpID);
 
-    final THElement? element = _thFile.tryElementByMPID(mpID);
+    final THElement? element = _th2File.tryElementByMPID(mpID);
 
     if (element != null) {
       if (element is THAreaBorderTHID) {
@@ -1247,7 +1249,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void addOutdatedLineSegmentCloneMPID(int mpID) {
     _mpIDsOutdatedLineSegmentClones.add(mpID);
 
-    final THElement? element = _thFile.tryElementByMPID(mpID);
+    final THElement? element = _th2File.tryElementByMPID(mpID);
 
     if (element != null) {
       if (element is THLineSegment) {
@@ -1281,7 +1283,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.selectionController;
 
     for (final int nonLineSegmentMPID in mpIDsOutdatedNonLineSegmentClones) {
-      final THElement? element = _thFile.tryElementByMPID(nonLineSegmentMPID);
+      final THElement? element = _th2File.tryElementByMPID(nonLineSegmentMPID);
 
       if (element == null) {
         selectionController.removeElementFromSelectable(nonLineSegmentMPID);
@@ -1305,7 +1307,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     for (final int lineSegmentMPID in mpIDsOutdatedLineSegmentClones) {
-      final THElement? lineSegment = _thFile.tryElementByMPID(lineSegmentMPID);
+      final THElement? lineSegment = _th2File.tryElementByMPID(lineSegmentMPID);
 
       if (lineSegment == null) {
         selectionController.removeElementFromSelectable(lineSegmentMPID);
@@ -1366,7 +1368,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final THLine line = _thFile.lineByMPID(
+    final THLine line = _th2File.lineByMPID(
       selectedEndControlPoints.values.first.originalLineSegmentClone.parentMPID,
     );
     final MPCommand? addLineSegmentsCommand = getAddLineSegmentsCommand(
@@ -1391,7 +1393,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THLine line,
     required Iterable<MPSelectedEndControlPoint> selectedEndControlPoints,
   }) {
-    final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(_thFile);
+    final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(_th2File);
     final Map<int, THLineSegment> selectedLineSegmentsPosMap = {};
     final List<MPCommand> addLineSegmentsCommands = [];
 
@@ -1492,13 +1494,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     final String filename = MPEditElementAux.getFilenameFromPath(
-      _thFile.filename,
+      _th2File.filename,
     );
     final String normalizedFilename = MPEditElementAux.normalizeToTHID(
       filename,
     );
     final String thIDPrefix = '$normalizedFilename-scrap';
-    final String initialScrapTHID = _thFile.getNewTHID(prefix: thIDPrefix);
+    final String initialScrapTHID = _th2File.getNewTHID(prefix: thIDPrefix);
 
     MPModalOverlayWidget.show(
       context: currentContext,
@@ -1542,7 +1544,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPRemoveXTherionImageInsertConfigCommand removeImageCommand =
         MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
           existingXTherionImageInsertConfigMPID: mpID,
-          thFile: _th2FileEditController.thFile,
+          th2File: _th2FileEditController.th2File,
         );
 
     _th2FileEditController.execute(removeImageCommand);
@@ -1554,7 +1556,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPRemoveScrapCommand removeScrapCommand =
         MPCommandFactory.removeScrapFromExisting(
           existingScrapMPID: scrapMPID,
-          thFile: _th2FileEditController.thFile,
+          th2File: _th2FileEditController.th2File,
         );
 
     _th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
@@ -1564,7 +1566,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void duplicateScrap(int scrapMPID) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final THScrap scrap = _thFile.scrapByMPID(scrapMPID);
+    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
 
     selectionController.setSelectedElements([scrap]);
     duplicateSelectedElements();
@@ -1594,22 +1596,22 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final THBezierCurveLineSegment originalControlPointLineSegment =
         originalLineSegments[controlPointLineSegmentMPID]
             as THBezierCurveLineSegment;
-    final THLine line = _thFile.lineByMPID(controlPointLineSegment.parentMPID);
+    final THLine line = _th2File.lineByMPID(controlPointLineSegment.parentMPID);
 
     switch (selectedControlPoint.type) {
       case MPEndControlPointType.controlPoint1:
         final THLineSegment? originalPreviousLineSegment = line
-            .getPreviousLineSegment(controlPointLineSegment, _thFile);
+            .getPreviousLineSegment(controlPointLineSegment, _th2File);
 
         if ((originalPreviousLineSegment != null) &&
             MPCommandOptionAux.isSmooth(originalPreviousLineSegment) &&
-            !line.isFirstLineSegment(originalPreviousLineSegment, _thFile)) {
+            !line.isFirstLineSegment(originalPreviousLineSegment, _th2File)) {
           final Offset junction =
               originalPreviousLineSegment.endPoint.coordinates;
 
           if (originalPreviousLineSegment is THStraightLineSegment) {
             final THLineSegment? originalSecondPreviousLineSegment = line
-                .getPreviousLineSegment(originalPreviousLineSegment, _thFile);
+                .getPreviousLineSegment(originalPreviousLineSegment, _th2File);
 
             if (originalSecondPreviousLineSegment == null) {
               moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
@@ -1665,9 +1667,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         }
       case MPEndControlPointType.controlPoint2:
         if (MPCommandOptionAux.isSmooth(controlPointLineSegment) &&
-            !line.isLastLineSegment(controlPointLineSegment, _thFile)) {
+            !line.isLastLineSegment(controlPointLineSegment, _th2File)) {
           final THLineSegment? originalNextLineSegment = line
-              .getNextLineSegment(controlPointLineSegment, _thFile);
+              .getNextLineSegment(controlPointLineSegment, _th2File);
           final Offset junction = controlPointLineSegment.endPoint.coordinates;
 
           if (originalNextLineSegment is THStraightLineSegment) {
@@ -1721,24 +1723,24 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPCommand? getSmoothLineSegmentsCommand(THLineSegment lineSegment) {
     final bool isLineSegmentBezier =
         lineSegment.elementType == THElementType.bezierCurveLineSegment;
-    final THFile thFile = _th2FileEditController.thFile;
-    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+    final TH2File th2File = _th2FileEditController.th2File;
+    final THLine line = th2File.lineByMPID(lineSegment.parentMPID);
     final THLineSegment? nextLineSegment = line.getNextLineSegment(
       lineSegment,
-      thFile,
+      th2File,
     );
     final bool isNextLineSegmentBezier =
         nextLineSegment?.elementType == THElementType.bezierCurveLineSegment;
 
     if ((isLineSegmentBezier || isNextLineSegmentBezier) &&
         (nextLineSegment != null) &&
-        (!line.isFirstLineSegment(lineSegment, thFile))) {
+        (!line.isFirstLineSegment(lineSegment, th2File))) {
       if (isLineSegmentBezier && isNextLineSegmentBezier) {
         final List<THBezierCurveLineSegment> smoothedBezierSegments =
             MPEditElementAux.getSmoothedBezierLineSegments(
               lineSegment: lineSegment as THBezierCurveLineSegment,
               nextLineSegment: nextLineSegment as THBezierCurveLineSegment,
-              thFile: thFile,
+              th2File: th2File,
             );
 
         if (smoothedBezierSegments.isNotEmpty) {
@@ -1768,7 +1770,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 controlPoint: lineSegment.controlPoint2.coordinates,
                 junction: lineSegment.endPoint.coordinates,
                 startStraightLineSegment: nextLineSegment.endPoint.coordinates,
-                thFile: thFile,
+                th2File: th2File,
               );
 
           if (alignedControlPoint == null) {
@@ -1780,7 +1782,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           );
         } else {
           final THLineSegment? previousLineSegment = line
-              .getPreviousLineSegment(lineSegment, thFile);
+              .getPreviousLineSegment(lineSegment, th2File);
 
           if (previousLineSegment == null) {
             return null;
@@ -1795,7 +1797,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 junction: lineSegment.endPoint.coordinates,
                 startStraightLineSegment:
                     previousLineSegment.endPoint.coordinates,
-                thFile: thFile,
+                th2File: th2File,
               );
 
           if (alignedControlPoint == null) {
@@ -1920,7 +1922,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @action
   void toggleAllImagesVisibility() {
     final bool newVisibilitySetting = !getCurrentAllImagesVisibility();
-    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+    final Iterable<THXTherionImageInsertConfig> allImages = _th2File
+        .getImages();
 
     for (final THXTherionImageInsertConfig image in allImages) {
       image.isVisible = newVisibilitySetting;
@@ -1966,7 +1969,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> toggleCommands = [];
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
-      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
+      final THLineSegment lineSegment = _th2File.lineSegmentByMPID(
         selectedLineSegmentMPID,
       );
       final bool isSmooth = MPCommandOptionAux.isSmooth(lineSegment);
@@ -2077,7 +2080,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       final List<MPSingleTypeLineSegmentList> perTypeLineSegments =
           groupLineSegmentsForSimplification(
             line: originalLine,
-            thFile: _originalFileForLineSimplification!,
+            th2File: _originalFileForLineSimplification!,
           );
       final THLineSegment firstLineSegment =
           perTypeLineSegments.first.lineSegments.first;
@@ -2104,7 +2107,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                 MPLineSimplificationMethod.forceStraight) {
               simplifiedLineSegmentsList =
                   MPEditElementAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
-                    thFile: _originalFileForLineSimplification!,
+                    th2File: _originalFileForLineSimplification!,
                     originalLine: originalLine,
                     originalLineSegmentsList: originalPerTypeLineSegmentsList,
                     convertToStraightRefTolerance:
@@ -2174,7 +2177,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           final MPCommand simplifyCommand =
               MPEditElementAux.getReplaceLineSegmentsCommand(
                 originalLine: originalLine,
-                thFile: _originalFileForLineSimplification!,
+                th2File: _originalFileForLineSimplification!,
                 newLineSegmentsList: simplifiedLineSegmentsCompleteList,
                 descriptionType: (lineCount == 1)
                     ? MPCommandDescriptionType.simplifyLine
@@ -2215,11 +2218,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   List<MPSingleTypeLineSegmentList> groupLineSegmentsForSimplification({
     required THLine line,
-    required THFile thFile,
+    required TH2File th2File,
   }) {
     final List<MPSingleTypeLineSegmentList> segmentsByType = [];
     final List<THLineSegment> lineSegmentsComplete = line.getLineSegments(
-      thFile,
+      th2File,
     );
 
     if (lineSegmentsComplete.length <= 2) {
@@ -2290,7 +2293,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         getLineSimplifyEpsilonOnCanvasIncrease();
 
     if (_originalFileForLineSimplification == null) {
-      _originalFileForLineSimplification = _thFile.copyWith();
+      _originalFileForLineSimplification = _th2File.copyWith();
       _lineSimplifyEpsilonOnCanvas = lineSimplifyEpsilonOnCanvasIncrease;
       _isFirstLineSimplification = true;
     } else {
@@ -2423,7 +2426,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   bool getCurrentAllImagesVisibility() {
-    final Iterable<THXTherionImageInsertConfig> allImages = _thFile.getImages();
+    final Iterable<THXTherionImageInsertConfig> allImages = _th2File
+        .getImages();
 
     bool? currentVisibility;
 

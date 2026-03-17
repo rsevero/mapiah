@@ -9,11 +9,11 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 
 class MPTHElementDuplicatorAux {
   final List<THElement> elements;
-  final THFile thFile;
+  final TH2File th2File;
   final bool updateTHIDs;
 
   final Set<int> _duplicatedLineMPIDs = {};
@@ -23,7 +23,7 @@ class MPTHElementDuplicatorAux {
 
   MPTHElementDuplicatorAux({
     required this.elements,
-    required this.thFile,
+    required this.th2File,
     required this.updateTHIDs,
   });
 
@@ -58,7 +58,7 @@ class MPTHElementDuplicatorAux {
     final MPDuplicateElementResult duplicate = getDuplicate();
     final MPCommand duplicateMainCommand = MPCommandFactory.addElements(
       elements: duplicate.addAtEndMinusOneOfParent,
-      thFile: thFile,
+      th2File: th2File,
       positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
     );
 
@@ -68,7 +68,7 @@ class MPTHElementDuplicatorAux {
 
     final MPCommand duplicateChildrenCommand = MPCommandFactory.addElements(
       elements: duplicate.addAtEndOfParent,
-      thFile: thFile,
+      th2File: th2File,
       positionInParent: mpAddChildAtEndOfParentChildrenList,
     );
 
@@ -126,18 +126,18 @@ class MPTHElementDuplicatorAux {
     duplicateMain.add(duplicateArea);
 
     for (final int childMPID in childrenMPIDs) {
-      final THElement childElement = thFile.elementByMPID(childMPID);
+      final THElement childElement = th2File.elementByMPID(childMPID);
 
       if (childElement is THAreaBorderTHID) {
         final String borderTHID = childElement.thID;
 
-        if (!thFile.hasElementByTHID(borderTHID)) {
+        if (!th2File.hasElementByTHID(borderTHID)) {
           throw Exception(
             'Border THID $borderTHID not found in THFile when duplicating area with MPTHElementDuplicatorAux.',
           );
         }
 
-        final THLine borderLine = thFile.elementByTHID(borderTHID) as THLine;
+        final THLine borderLine = th2File.elementByTHID(borderTHID) as THLine;
 
         if (!_duplicatedLineMPIDs.contains(borderLine.mpID)) {
           final MPDuplicateElementResult duplicateBorderLine = _duplicateLine(
@@ -200,7 +200,7 @@ class MPTHElementDuplicatorAux {
     final List<THElement> duplicateChildren = [];
 
     for (final int childMPID in parent.childrenMPIDs) {
-      final THElement childElement = thFile.elementByMPID(childMPID);
+      final THElement childElement = th2File.elementByMPID(childMPID);
       final MPDuplicateElementResult duplicatedChild = _duplicateElement(
         element: childElement,
         newParentMPID: newParentMPID,
@@ -372,7 +372,7 @@ class MPTHElementDuplicatorAux {
           attrOptions: scrap.attrOptionsMap,
           parentMPID: duplicatedScrapMPID,
         );
-    final String duplicatedScrapTHID = thFile.getNewTHID(
+    final String duplicatedScrapTHID = th2File.getNewTHID(
       prefix: '${scrap.thID}-',
     );
     final THScrap duplicateScrap = scrap.copyWith(
@@ -434,7 +434,7 @@ class MPTHElementDuplicatorAux {
       if ((_updatedTHIDsMap != null) && (option is THIDCommandOption)) {
         final String newTHID =
             _updatedTHIDsMap![option.parentMPID] ??
-            thFile.getNewTHID(prefix: '${option.thID}-');
+            th2File.getNewTHID(prefix: '${option.thID}-');
 
         _updatedTHIDsMap![option.parentMPID] = newTHID;
         duplicateOption = option.copyWith(

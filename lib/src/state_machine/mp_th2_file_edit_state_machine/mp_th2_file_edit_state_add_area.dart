@@ -60,11 +60,11 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       posCommand = MPCommandFactory.setOptionOnElements(
         toOption: toSubtypeOption,
         elements: [area],
-        thFile: thFile,
+        th2File: th2File,
       );
     }
 
-    final List<THElement> areaChildren = area.getChildren(thFile).toList();
+    final List<THElement> areaChildren = area.getChildren(th2File).toList();
     final MPCommand addAreaCommand = MPAddAreaCommand.forCWJM(
       newArea: area,
       areaChildren: areaChildren,

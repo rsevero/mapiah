@@ -10,7 +10,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/painters/th_scrap_background_painter.dart';
@@ -21,14 +21,14 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
   final TH2FileEditController th2FileEditController;
   final TH2FileEditSelectionController selectionController;
   final MPVisualController visualController;
-  final THFile thFile;
+  final TH2File th2File;
 
   MPNonSelectedScrapsWidget({
     required super.key,
     required this.th2FileEditController,
   }) : selectionController = th2FileEditController.selectionController,
        visualController = th2FileEditController.visualController,
-       thFile = th2FileEditController.thFile;
+       th2File = th2FileEditController.th2File;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
         final List<CustomPainter> painters = [];
 
         addChildrenPainters(
-          parent: thFile,
+          parent: th2File,
           painters: painters,
           isFromActiveScrap: false,
         );
@@ -75,7 +75,7 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
         continue;
       }
 
-      final THElement childElement = thFile.elementByMPID(drawableChildMPID);
+      final THElement childElement = th2File.elementByMPID(drawableChildMPID);
 
       switch (childElement) {
         case THPoint point:

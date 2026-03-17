@@ -12,7 +12,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
 
 class MPNumericAux {
@@ -935,11 +935,13 @@ class MPNumericAux {
     return average / averageLength;
   }
 
-  static Offset segmentTangentFromTHFile(int lineSegmentMPID, THFile thFile) {
-    final THLineSegment lineSegment = thFile.lineSegmentByMPID(lineSegmentMPID);
-    final THLine line = thFile.lineByMPID(lineSegment.parentMPID);
+  static Offset segmentTangentFromTHFile(int lineSegmentMPID, TH2File th2File) {
+    final THLineSegment lineSegment = th2File.lineSegmentByMPID(
+      lineSegmentMPID,
+    );
+    final THLine line = th2File.lineByMPID(lineSegment.parentMPID);
     final Map<int, int> lineSegmentsPositionMap = line
-        .getLineSegmentPositionsByLineSegmentMPID(thFile);
+        .getLineSegmentPositionsByLineSegmentMPID(th2File);
     final int position = lineSegmentsPositionMap[lineSegmentMPID]!;
 
     Offset tangent;
@@ -947,7 +949,7 @@ class MPNumericAux {
     if (position == 0) {
       final THLineSegment nextLineSegment = line.getNextLineSegment(
         lineSegment,
-        thFile,
+        th2File,
       )!;
       final MPSegment segment = (nextLineSegment is THBezierCurveLineSegment)
           ? MPCubicBezierCurve(
@@ -968,7 +970,7 @@ class MPNumericAux {
     } else if (position == (lineSegmentsPositionMap.length - 1)) {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
-        thFile,
+        th2File,
       )!;
       final MPSegment segment = (lineSegment is THBezierCurveLineSegment)
           ? MPCubicBezierCurve(
@@ -989,11 +991,11 @@ class MPNumericAux {
     } else {
       final THLineSegment previousLineSegment = line.getPreviousLineSegment(
         lineSegment,
-        thFile,
+        th2File,
       )!;
       final THLineSegment nextLineSegment = line.getNextLineSegment(
         lineSegment,
-        thFile,
+        th2File,
       )!;
       final MPSegment segment = (lineSegment is THBezierCurveLineSegment)
           ? MPCubicBezierCurve(
@@ -1058,10 +1060,10 @@ class MPNumericAux {
     return rawNormal / length;
   }
 
-  static double segmentNormalFromTHFile(int lineSegmentMPID, THFile thFile) {
+  static double segmentNormalFromTHFile(int lineSegmentMPID, TH2File th2File) {
     final Offset tangent = MPNumericAux.segmentTangentFromTHFile(
       lineSegmentMPID,
-      thFile,
+      th2File,
     );
     final Offset normal = MPNumericAux.normalFromTangent(tangent);
     final double azimuth = MPNumericAux.directionOffsetToAzimuth(normal);

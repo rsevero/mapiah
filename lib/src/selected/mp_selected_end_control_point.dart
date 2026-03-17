@@ -29,7 +29,7 @@ class MPSelectedEndControlPoint extends MPSelectedElement {
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
     final THLineSegment updatedOriginalLineSegment = th2FileEditController
-        .thFile
+        .th2File
         .lineSegmentByMPID(mpID);
 
     _createClone(updatedOriginalLineSegment);

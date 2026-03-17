@@ -7,7 +7,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
@@ -38,7 +38,7 @@ class _MPMultipleEndControlPointsClickedWidgetState
   late final TH2FileEditSelectionController selectionController;
   late final List<MPSelectableEndControlPoint> clickedEndControlPoints;
   late final AppLocalizations appLocalizations;
-  late final THFile thFile;
+  late final TH2File th2File;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _MPMultipleEndControlPointsClickedWidgetState
     selectionController = th2FileEditController.selectionController;
     clickedEndControlPoints = selectionController.clickedEndControlPoints;
     appLocalizations = mpLocator.appLocalizations;
-    thFile = th2FileEditController.thFile;
+    th2File = th2FileEditController.th2File;
     selectionController.setMultipleEndControlPointsClickedChoice(
       MPMultipleEndControlPointsClickedChoice(
         type: MPMultipleEndControlPointsClickedType.none,

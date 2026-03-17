@@ -143,7 +143,7 @@ These guidelines apply to all code (app code, scripts, and tests):
 7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 8. Run `flutter analyze` after generating or modifying code.
 9. When proposing a commit, always add an entry on CHANGELOG.md. The added new entry should go at the end of the appropriate section of CHANGELOG.
-10. Always include a "Signed-off-by: Your Name <your.email@example.com>" line in your commit message.
+10. Always include a "Signed-off-by: My Name <my.email@example.com>" line and a "Co-Authored-By: MODEL <email>" line in your commit message.
 
 ### When writing general app code
 

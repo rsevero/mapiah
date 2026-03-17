@@ -55,8 +55,8 @@ class MPAddLineSegmentCommand extends MPCommand with MPPosCommandMixin {
         th2FileEditController.elementEditController;
 
     if (_existingLineSegmentMPID != null) {
-      final THFile thFile = th2FileEditController.thFile;
-      final THLine line = thFile.lineByMPID(newLineSegment.parentMPID);
+      final TH2File th2File = th2FileEditController.th2File;
+      final THLine line = th2File.lineByMPID(newLineSegment.parentMPID);
 
       lineSegmentPositionInParent = line.childrenMPIDs.indexOf(
         _existingLineSegmentMPID,

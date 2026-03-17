@@ -12,7 +12,7 @@ class MPSelectionWindowWidget extends StatelessWidget {
   MPSelectionWindowWidget({
     required this.th2FileEditController,
     required super.key,
-  }) : thFileMPID = th2FileEditController.thFileMPID;
+  }) : thFileMPID = th2FileEditController.th2FileMPID;
 
   @override
   Widget build(BuildContext context) {

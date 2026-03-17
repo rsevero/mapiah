@@ -7,7 +7,7 @@ import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
@@ -20,7 +20,7 @@ mixin MPLinePaintingMixin {
   )
   getLineSegmentsAndEndpointsMaps({
     required THLine line,
-    required THFile thFile,
+    required TH2File th2File,
     required bool returnLineSegments,
   }) {
     final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap =
@@ -29,14 +29,14 @@ mixin MPLinePaintingMixin {
         LinkedHashMap<int, THLineSegment>();
 
     /// We need to get childrenMPIDs and filter for line segments later. Using
-    /// line.getLineSegments(thFile) here messes with the updating of the
+    /// line.getLineSegments(th2File) here messes with the updating of the
     /// line segments during interactive editing.
     final List<int> lineChildrenMPIDs = line.childrenMPIDs;
 
     bool isFirst = true;
 
     for (int lineSegmentMPID in lineChildrenMPIDs) {
-      final THElement lineSegment = thFile.elementByMPID(lineSegmentMPID);
+      final THElement lineSegment = th2File.elementByMPID(lineSegmentMPID);
 
       if (lineSegment is! THLineSegment) {
         continue;
@@ -85,7 +85,7 @@ mixin MPLinePaintingMixin {
     THScrapPaint? parentScrapPaint,
     required TH2FileEditController th2FileEditController,
   }) {
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
     final MPVisualController visualController =
         th2FileEditController.visualController;
     final (
@@ -93,7 +93,7 @@ mixin MPLinePaintingMixin {
       _,
     ) = getLineSegmentsAndEndpointsMaps(
       line: line,
-      thFile: thFile,
+      th2File: th2File,
       returnLineSegments: false,
     );
     final THLinePainterLineInfo lineInfo = THLinePainterLineInfo(
@@ -177,7 +177,7 @@ mixin MPLinePaintingMixin {
           final String? subtype = MPCommandOptionAux.getSubtype(
             (i == 0)
                 ? line
-                : thFile.elementByMPID(
+                : th2File.elementByMPID(
                     subtypeLineSegmentsMap.values.elementAt(i - 1),
                   ),
           );

@@ -26,11 +26,11 @@ mixin MPTH2FileEditStateGetSelectedElementsMixin on MPTH2FileEditState {
     Iterable<THElement> selectedWithLineSegments,
   ) {
     final List<THElement> selectedElementsWithLines = [];
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
 
     for (final THElement element in selectedWithLineSegments) {
       if (element is THLineSegment) {
-        final THLine line = thFile.lineByMPID(element.parentMPID);
+        final THLine line = th2File.lineByMPID(element.parentMPID);
         selectedElementsWithLines.add(line);
       } else {
         selectedElementsWithLines.add(element);

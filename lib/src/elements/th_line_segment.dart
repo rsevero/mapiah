@@ -156,8 +156,8 @@ abstract class THLineSegment extends THElement
     final bool changed = super.addUpdateOption(option);
 
     if (option.type == THCommandOptionType.subtype) {
-      if (thFile != null) {
-        final THLine parentLine = thFile!.lineByMPID(parentMPID);
+      if (th2File != null) {
+        final THLine parentLine = th2File!.lineByMPID(parentMPID);
 
         parentLine.updateSubtypeLineSegmentMPIDs();
       }
@@ -176,8 +176,8 @@ abstract class THLineSegment extends THElement
     final bool removed = super.removeOption(type);
 
     if (type == THCommandOptionType.subtype) {
-      if ((thFile != null) && callUpdateSubtypeLineSegmentMPIDs) {
-        final THLine parentLine = thFile!.lineByMPID(parentMPID);
+      if ((th2File != null) && callUpdateSubtypeLineSegmentMPIDs) {
+        final THLine parentLine = th2File!.lineByMPID(parentMPID);
 
         parentLine.updateSubtypeLineSegmentMPIDs();
       }
@@ -189,24 +189,24 @@ abstract class THLineSegment extends THElement
   }
 
   @override
-  void setTHFile(THFile thFile) {
-    if (this.thFile == thFile) {
+  void setTHFile(TH2File th2File) {
+    if (this.th2File == th2File) {
       return;
     }
 
-    super.setTHFile(thFile);
+    super.setTHFile(th2File);
 
-    setTHFileToOptions(thFile);
+    setTHFileToOptions(th2File);
   }
 
   void _invalidateCache(THCommandOptionType type) {
     if ((type == THCommandOptionType.lSize) ||
         (type == THCommandOptionType.orientation)) {
-      if (thFile != null) {
+      if (th2File != null) {
         (parent() as THLine).clearLineSegmentsWithSizeOrientationCache();
       }
     } else if (type == THCommandOptionType.mark) {
-      if (thFile != null) {
+      if (th2File != null) {
         (parent() as THLine).clearLineSegmentsWithMarkCache();
       }
     }

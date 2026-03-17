@@ -12,8 +12,8 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
   /// 1. the were no option with the same name and it was added; or
   /// 2. there was an option with the same name but with a different value.
   bool addUpdateOption(THCommandOption option) {
-    if (thFile != null) {
-      option.setTHFile(thFile!);
+    if (th2File != null) {
+      option.setTHFile(th2File!);
     }
 
     bool changedValue = false;
@@ -37,13 +37,13 @@ mixin THHasOptionsMixin on THElement, MPTHFileReferenceMixin {
     return changedValue;
   }
 
-  void setTHFileToOptions(THFile thFile) {
+  void setTHFileToOptions(TH2File th2File) {
     for (final THCommandOption option in _optionsMap.values) {
-      option.setTHFile(thFile);
+      option.setTHFile(th2File);
     }
 
     for (final THAttrCommandOption attrOption in _attrOptionsMap.values) {
-      attrOption.setTHFile(thFile);
+      attrOption.setTHFile(th2File);
     }
   }
 

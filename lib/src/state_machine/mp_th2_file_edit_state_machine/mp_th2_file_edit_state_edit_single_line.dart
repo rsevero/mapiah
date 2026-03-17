@@ -312,7 +312,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       final THLineSegment clickedLineSegment =
           clickedElements.values.first as THLineSegment;
       final THLineSegment? previousLineSegment = currentLine
-          .getPreviousLineSegment(clickedLineSegment, thFile);
+          .getPreviousLineSegment(clickedLineSegment, th2File);
 
       if (previousLineSegment == null) {
         throw Exception(
@@ -577,7 +577,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         mpSlopeLinePointDefaultLSize;
     final double pointOrientation =
         MPCommandOptionAux.getOrientation(lineSegment) ??
-        MPNumericAux.segmentNormalFromTHFile(lineSegment.mpID, thFile);
+        MPNumericAux.segmentNormalFromTHFile(lineSegment.mpID, th2File);
 
     elementEditController.setLinePointLSizeAndOrientation(
       lSize: pointLSize,

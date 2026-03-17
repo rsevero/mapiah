@@ -15,7 +15,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
 class MPEditElementAux {
@@ -138,7 +138,7 @@ class MPEditElementAux {
   static List<THBezierCurveLineSegment> getSmoothedBezierLineSegments({
     required THBezierCurveLineSegment lineSegment,
     required THBezierCurveLineSegment nextLineSegment,
-    required THFile thFile,
+    required TH2File th2File,
   }) {
     final List<THBezierCurveLineSegment> smoothedSegments = [];
     final Offset junction = lineSegment.endPoint.coordinates;
@@ -223,7 +223,7 @@ class MPEditElementAux {
     required Offset controlPoint,
     required Offset startStraightLineSegment,
     required Offset junction,
-    required THFile thFile,
+    required TH2File th2File,
   }) {
     final Offset straightLineVector = junction - startStraightLineSegment;
     final Offset controlPointVector = controlPoint - junction;
@@ -250,7 +250,7 @@ class MPEditElementAux {
     String imageFilename,
   ) {
     final String resolvedPath = MPDirectoryAux.getResolvedPath(
-      th2FileEditController.thFile.filename,
+      th2FileEditController.th2File.filename,
       imageFilename,
     );
 
@@ -291,7 +291,7 @@ class MPEditElementAux {
   }
 
   static List<int> getEmptyLinesAfter({
-    required THFile thFile,
+    required TH2File th2File,
     required THIsParentMixin parent,
     required int positionInParent,
   }) {
@@ -300,7 +300,7 @@ class MPEditElementAux {
 
     for (int i = positionInParent + 1; i < siblingsMPIDs.length; i++) {
       final int siblingMPID = siblingsMPIDs[i];
-      final THElementType siblingElementType = thFile.getElementTypeByMPID(
+      final THElementType siblingElementType = th2File.getElementTypeByMPID(
         siblingMPID,
       );
 
@@ -322,25 +322,25 @@ class MPEditElementAux {
   static void addOptionToElement({
     required THCommandOption option,
     required THHasOptionsMixin element,
-    THFile? thFile,
+    TH2File? th2File,
   }) {
     final bool elementUpdated = element.addUpdateOption(option);
 
-    if (elementUpdated && (thFile != null)) {
-      thFile.substituteElement(element);
+    if (elementUpdated && (th2File != null)) {
+      th2File.substituteElement(element);
     }
   }
 
   static MPCommand getReplaceLineSegmentsCommand({
     required THLine originalLine,
-    required THFile thFile,
+    required TH2File th2File,
     required List<THLineSegment> newLineSegmentsList,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.replaceLineSegments,
   }) {
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     originalLineSegments = originalLine.getLineSegmentsChildPositionList(
-      thFile,
+      th2File,
     );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     newLineSegments = convertTHLineSegmentListToLineSegmentWithPositionList(
@@ -375,7 +375,7 @@ class MPEditElementAux {
 
   static MPCommand?
   getSimplifyCommandForStraightLineSegmentsConvertedToBezierCurves({
-    required THFile thFile,
+    required TH2File th2File,
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
     required double accuracy,
@@ -394,7 +394,7 @@ class MPEditElementAux {
         );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     originalLineSegments = originalLine.getLineSegmentsChildPositionList(
-      thFile,
+      th2File,
     );
     final MPCommand simplifyCommand = MPReplaceLineSegmentsCommand(
       lineMPID: originalLine.mpID,
@@ -407,7 +407,7 @@ class MPEditElementAux {
 
   static List<THLineSegment>
   mpSimplifyBezierCurveLineSegmentsToStraightLineSegments({
-    required THFile thFile,
+    required TH2File th2File,
     required THLine originalLine,
     required List<THLineSegment> originalLineSegmentsList,
     required double convertToStraightRefTolerance,

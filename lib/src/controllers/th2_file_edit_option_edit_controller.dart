@@ -6,7 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mobx/mobx.dart';
@@ -18,13 +18,13 @@ class TH2FileEditOptionEditController = TH2FileEditOptionEditControllerBase
 
 abstract class TH2FileEditOptionEditControllerBase with Store {
   @readonly
-  THFile _thFile;
+  TH2File _th2File;
 
   @readonly
   TH2FileEditController _th2FileEditController;
 
   TH2FileEditOptionEditControllerBase(this._th2FileEditController)
-    : _thFile = _th2FileEditController.thFile;
+    : _th2File = _th2FileEditController.th2File;
 
   @readonly
   Map<THCommandOptionType, MPOptionInfo> _optionStateMap = {};
@@ -60,7 +60,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
   }
 
   void updateElementOptionMapByMPID(int mpID) {
-    final THElement element = _thFile.elementByMPID(mpID);
+    final THElement element = _th2File.elementByMPID(mpID);
 
     if (element is! THHasOptionsMixin) {
       throw Exception(
@@ -83,7 +83,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     for (final MPSelectedEndControlPoint selectedEndControlPoint
         in selectedEndControlPoints) {
-      final THLineSegment lineSegment = _thFile.lineSegmentByMPID(
+      final THLineSegment lineSegment = _th2File.lineSegmentByMPID(
         selectedEndControlPoint.mpID,
       );
 

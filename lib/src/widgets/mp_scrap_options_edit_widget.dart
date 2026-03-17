@@ -47,7 +47,7 @@ class _MPScrapOptionsEditWidgetState extends State<MPScrapOptionsEditWidget> {
 
         final int scrapMPID =
             th2FileEditController.optionEditController.optionsScrapMPID;
-        final THScrap scrap = th2FileEditController.thFile.scrapByMPID(
+        final THScrap scrap = th2FileEditController.th2File.scrapByMPID(
           scrapMPID,
         );
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;

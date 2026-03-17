@@ -30,7 +30,7 @@ class MPSelectedScrap extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THScrap updatedOriginalScrap = th2FileEditController.thFile
+    final THScrap updatedOriginalScrap = th2FileEditController.th2File
         .scrapByMPID(mpID);
 
     _createClone(updatedOriginalScrap);

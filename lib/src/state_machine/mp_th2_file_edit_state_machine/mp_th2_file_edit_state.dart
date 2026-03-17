@@ -29,7 +29,7 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -67,7 +67,7 @@ abstract class MPTH2FileEditState {
   final TH2FileEditSelectionController selectionController;
   final TH2FileEditSnapController snapController;
   final TH2FileEditUserInteractionController userInteractionController;
-  final THFile thFile;
+  final TH2File th2File;
   MPTH2FileEditStateType get type;
 
   MPTH2FileEditState({required this.th2FileEditController})
@@ -76,7 +76,7 @@ abstract class MPTH2FileEditState {
       snapController = th2FileEditController.snapController,
       userInteractionController =
           th2FileEditController.userInteractionController,
-      thFile = th2FileEditController.thFile;
+      th2File = th2FileEditController.th2File;
 
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,

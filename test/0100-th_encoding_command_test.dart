@@ -3,7 +3,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/elements/th_file.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -92,7 +92,7 @@ endscrap
           true,
           reason: 'Parsing failed with errors: $errors',
         );
-        expect(file, isA<THFile>());
+        expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
 

@@ -28,7 +28,7 @@ class MPSetOptionToElementCommand extends MPCommand {
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final int parentMPID = toOption.parentMPID;
     final THHasOptionsMixin parentElement =
-        th2FileEditController.thFile.elementByMPID(parentMPID)
+        th2FileEditController.th2File.elementByMPID(parentMPID)
             as THHasOptionsMixin;
     final THCommandOptionType optionType = toOption.type;
     final THCommandOption? fromOption = parentElement.getOption(optionType);

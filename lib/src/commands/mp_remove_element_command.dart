@@ -29,9 +29,9 @@ class MPRemoveElementCommand extends MPCommand with MPPreCommandMixin {
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
-    final THFile thFile = th2FileEditController.thFile;
-    final THElement element = thFile.elementByMPID(elementMPID);
-    final THIsParentMixin elementParent = element.parent(thFile: thFile);
+    final TH2File th2File = th2FileEditController.th2File;
+    final THElement element = th2File.elementByMPID(elementMPID);
+    final THIsParentMixin elementParent = element.parent(th2File: th2File);
     final int elementPositionInParent = elementParent.getChildPosition(element);
 
     _undoRedoInfo = {

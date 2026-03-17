@@ -18,18 +18,18 @@ class MPSelectedLine extends MPSelectedElement {
     THLine currentLine,
     TH2FileEditController th2FileEditController,
   ) {
-    final THFile thFile = th2FileEditController.thFile;
+    final TH2File th2File = th2FileEditController.th2File;
 
     /// We need to use the childrenMPIDs directly from the line, because
-    /// using originalLine.getLineSegments(thFile) or
-    /// originalLine.getLineSegmentMPIDs(thFile,) here messes with the updating
+    /// using originalLine.getLineSegments(th2File) or
+    /// originalLine.getLineSegmentMPIDs(th2File,) here messes with the updating
     /// of the control points during interactive editing.
     final Iterable<int> lineSegmentMPIDs = currentLine.childrenMPIDs;
 
     originalLineSegmentsMapClone.clear();
 
     for (final int mpID in lineSegmentMPIDs) {
-      final THElement lineSegment = thFile.elementByMPID(mpID);
+      final THElement lineSegment = th2File.elementByMPID(mpID);
 
       if (lineSegment is! THLineSegment) {
         continue;
@@ -75,7 +75,7 @@ class MPSelectedLine extends MPSelectedElement {
 
   @override
   void updateClone(TH2FileEditController th2FileEditController) {
-    final THLine updatedOriginalLine = th2FileEditController.thFile.lineByMPID(
+    final THLine updatedOriginalLine = th2FileEditController.th2File.lineByMPID(
       mpID,
     );
 
