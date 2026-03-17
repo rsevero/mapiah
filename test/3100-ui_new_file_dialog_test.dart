@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
+import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -55,16 +55,16 @@ void main() {
       await tester.tap(okButton);
       await tester.pumpAndSettle();
 
-      // Assert we've navigated to the TH2FileEditPage
-      expect(find.byType(TH2FileEditPage), findsOneWidget);
+      // Assert we've navigated to the TH2FileTabsPage (which contains TH2FileEditBodyWidget)
+      expect(find.byType(TH2FileTabsPage), findsOneWidget);
 
       // Optionally, press ESC to ensure the page handles it gracefully (no crash)
       // and does not pop the editor unexpectedly (since ESC was for modals).
       await tester.sendKeyEvent(LogicalKeyboardKey.escape);
       await tester.pump();
 
-      // Still on the editor page
-      expect(find.byType(TH2FileEditPage), findsOneWidget);
+      // Still on the tabs page
+      expect(find.byType(TH2FileTabsPage), findsOneWidget);
     });
   });
 }
