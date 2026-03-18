@@ -59,6 +59,8 @@ Você também pode _Alt+clicar_ em um croqui inativo para torná-lo o croqui atu
 ## Desenhando linhas
 Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
 
+O comportamento exato desse arrasto depende da opção de configuração "Método de criação de nova linha". "Quadrático do Mapiah" mantém o comportamento atual descrito abaixo. "Cúbico suave do xTherion" usa a posição arrastada como o futuro ponto de controle do próximo segmento, espelha o outro ponto de controle do segmento atual em torno do ponto final compartilhado e permite manter Ctrl pressionado durante o arrasto para fixar a distância do ponto de controle espelhado.
+
 Curvas Bézier no Therion (e no Mapiah) são curvas cúbicas, isto é, têm 2 pontos de controle para cada segmento. Apenas durante a criação do segmento, o Mapiah finge que a curva Bézier sendo criada é uma Bézier quadrática (com apenas um ponto de controle) para dar flexibilidade ao usuário na criação do segmento.
 
 Observe que, apesar de o Mapiah simular a existência de apenas um ponto de controle, uma curva Bézier cúbica real é criada com dois pontos de controle, como esperado.

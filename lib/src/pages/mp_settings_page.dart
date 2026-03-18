@@ -641,7 +641,7 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
-      case MPSettingID.TH2Edit_newLineCreationMethod:
+      case MPSettingID.TH2Edit_NewLineCreationMethod:
         return appLocalizations.mpSettingsSettingTH2EditNewLineCreationMethod;
       case MPSettingID.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;

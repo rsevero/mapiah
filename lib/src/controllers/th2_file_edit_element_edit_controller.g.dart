@@ -451,17 +451,13 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
-  void updateBezierLineSegment(
-    Offset quadraticControlPointPositionScreenCoordinates,
-  ) {
+  void updateBezierLineSegment(Offset mousePositionScreenCoordinates) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
           name: 'TH2FileEditElementEditControllerBase.updateBezierLineSegment',
         );
     try {
-      return super.updateBezierLineSegment(
-        quadraticControlPointPositionScreenCoordinates,
-      );
+      return super.updateBezierLineSegment(mousePositionScreenCoordinates);
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

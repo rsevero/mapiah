@@ -30,12 +30,12 @@ void main() {
 
       expect(
         settingsController.getEnumWithDefault(
-          MPSettingID.TH2Edit_newLineCreationMethod,
+          MPSettingID.TH2Edit_NewLineCreationMethod,
         ),
         MPNewLineCreationMethod.mapiahQuadratic,
       );
       expect(
-        settingsController.isEnumSet(MPSettingID.TH2Edit_newLineCreationMethod),
+        settingsController.isEnumSet(MPSettingID.TH2Edit_NewLineCreationMethod),
         isFalse,
       );
     });
@@ -46,14 +46,14 @@ void main() {
       await settingsController.initialized;
 
       final bool isChanged = settingsController.setEnum(
-        MPSettingID.TH2Edit_newLineCreationMethod,
+        MPSettingID.TH2Edit_NewLineCreationMethod,
         MPNewLineCreationMethod.xTherionCubicSmooth,
       );
 
       expect(isChanged, isTrue);
       expect(
         settingsController.getEnumWithDefault(
-          MPSettingID.TH2Edit_newLineCreationMethod,
+          MPSettingID.TH2Edit_NewLineCreationMethod,
         ),
         MPNewLineCreationMethod.xTherionCubicSmooth,
       );
@@ -64,21 +64,21 @@ void main() {
 
       expect(
         reloadedController.getEnumWithDefault(
-          MPSettingID.TH2Edit_newLineCreationMethod,
+          MPSettingID.TH2Edit_NewLineCreationMethod,
         ),
         MPNewLineCreationMethod.xTherionCubicSmooth,
       );
 
-      reloadedController.resetEnum(MPSettingID.TH2Edit_newLineCreationMethod);
+      reloadedController.resetEnum(MPSettingID.TH2Edit_NewLineCreationMethod);
 
       expect(
         reloadedController.getEnumWithDefault(
-          MPSettingID.TH2Edit_newLineCreationMethod,
+          MPSettingID.TH2Edit_NewLineCreationMethod,
         ),
         MPNewLineCreationMethod.mapiahQuadratic,
       );
       expect(
-        reloadedController.isEnumSet(MPSettingID.TH2Edit_newLineCreationMethod),
+        reloadedController.isEnumSet(MPSettingID.TH2Edit_NewLineCreationMethod),
         isFalse,
       );
     });
@@ -91,7 +91,7 @@ void main() {
         await settingsController.initialized;
 
         settingsController.prefs.setString(
-          MPSettingID.TH2Edit_newLineCreationMethod.name,
+          MPSettingID.TH2Edit_NewLineCreationMethod.name,
           'invalidSettingValue',
         );
 
@@ -101,13 +101,13 @@ void main() {
 
         expect(
           reloadedController.getEnumWithDefault(
-            MPSettingID.TH2Edit_newLineCreationMethod,
+            MPSettingID.TH2Edit_NewLineCreationMethod,
           ),
           MPNewLineCreationMethod.mapiahQuadratic,
         );
         expect(
           reloadedController.prefs.getString(
-            MPSettingID.TH2Edit_newLineCreationMethod.name,
+            MPSettingID.TH2Edit_NewLineCreationMethod.name,
           ),
           isNull,
         );
@@ -116,7 +116,7 @@ void main() {
 
     test('localizes enum values for the new line creation method', () {
       final MPSettingEnumDefinition enumDefinition =
-          MPSettingID.TH2Edit_newLineCreationMethod.enumDefinition();
+          MPSettingID.TH2Edit_NewLineCreationMethod.enumDefinition();
 
       expect(
         enumDefinition.localizedLabel(

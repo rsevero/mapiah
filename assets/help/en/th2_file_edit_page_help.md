@@ -82,6 +82,8 @@ In case there are available redoes when a new edit operation is performed, the r
 ## Drawing lines
 When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated as the position of the single control point of a quadratic Bézier Curve.
 
+The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold Ctrl while dragging to keep the mirrored control point at a fixed distance.
+
 Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
 
 Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.

@@ -11,7 +11,7 @@ enum MPSettingID {
   Main_LocaleID,
   Main_TherionExecutablePath,
   TH2Edit_LineThickness,
-  TH2Edit_newLineCreationMethod,
+  TH2Edit_NewLineCreationMethod,
   TH2Edit_PointRadius,
   TH2Edit_SelectionTolerance;
 
@@ -22,7 +22,7 @@ enum MPSettingID {
         MPSettingID.Main_LocaleID: MPSettingType.string,
         MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
         MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
-        MPSettingID.TH2Edit_newLineCreationMethod: MPSettingType.enumeration,
+        MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
         MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
         MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
       };
@@ -34,7 +34,7 @@ enum MPSettingID {
 
   static final Map<MPSettingID, MPSettingEnumDefinition>
   enumDefinitions = <MPSettingID, MPSettingEnumDefinition>{
-    MPSettingID.TH2Edit_newLineCreationMethod:
+    MPSettingID.TH2Edit_NewLineCreationMethod:
         MPSettingEnumDefinitionImpl<MPNewLineCreationMethod>(
           enumValues: MPNewLineCreationMethod.values,
           parser: (String storedValue) {
