@@ -1035,6 +1035,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           endPoint: straightLineSegment.endPoint.copyWith(),
         );
 
+    _missingStepsPreserveStraightToBezierConversionUndoRedo = 1;
     _newLinePendingControlPoint1CanvasCoordinates = null;
 
     return bezierCurveLineSegment;

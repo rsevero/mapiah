@@ -177,6 +177,61 @@ void main() {
         greaterThan(1e-6),
       );
     });
+
+    testWidgets(
+      'xTherion mode allows dragging two consecutive segments after many updates',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1 = origin + const Offset(120, 120);
+        final Offset p2 = origin + const Offset(240, 160);
+        final Offset p3 = origin + const Offset(300, 200);
+        final Offset p4 = origin + const Offset(380, 235);
+        final List<Offset> dragPoints1 = <Offset>[
+          origin + const Offset(332, 208),
+          origin + const Offset(346, 216),
+          origin + const Offset(360, 224),
+          origin + const Offset(372, 231),
+        ];
+        final List<Offset> dragPoints2 = <Offset>[
+          origin + const Offset(410, 255),
+          origin + const Offset(430, 275),
+        ];
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+        await _clickMouse(tester, mouse, p2);
+        await _dragMouse(tester, mouse, p3, dragPoints1);
+        expect(tester.takeException(), isNull);
+
+        await _dragMouse(tester, mouse, p4, dragPoints2);
+        expect(tester.takeException(), isNull);
+
+        await _finalizeLineCreation(tester);
+        expect(tester.takeException(), isNull);
+
+        final List<THLine> lines = editor.th2File.getLines().toList();
+        final List<THLineSegment> lineSegments = lines.first.getLineSegments(
+          editor.th2File,
+        );
+
+        expect(lines.length, 1);
+        expect(lineSegments.length, 4);
+        expect(lineSegments[2], isA<THBezierCurveLineSegment>());
+        expect(lineSegments[3], isA<THBezierCurveLineSegment>());
+      },
+    );
   });
 }
 
@@ -236,6 +291,28 @@ Future<void> _clickMouse(
     mouse.down(position, buttons: kPrimaryButton),
   );
   await tester.pump();
+  await tester.sendEventToBinding(mouse.up());
+  await tester.pumpAndSettle();
+}
+
+Future<void> _dragMouse(
+  WidgetTester tester,
+  TestPointer mouse,
+  Offset downPosition,
+  List<Offset> movePositions,
+) async {
+  await tester.sendEventToBinding(
+    mouse.down(downPosition, buttons: kPrimaryButton),
+  );
+  await tester.pump();
+
+  for (final Offset movePosition in movePositions) {
+    await tester.sendEventToBinding(
+      mouse.move(movePosition, buttons: kPrimaryButton),
+    );
+    await tester.pump();
+  }
+
   await tester.sendEventToBinding(mouse.up());
   await tester.pumpAndSettle();
 }

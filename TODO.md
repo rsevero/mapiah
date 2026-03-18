@@ -180,7 +180,7 @@
 [X] - Create shortcut to reverse line.
 [X] - Include options and point/line count in multiple elements clicked dialog box.
 [ ] - Implement default option values.
-[ ] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
+[X] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
 [ ] - Control which scraps are visible in Mapiah (that is not a Therion setting).
 [ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
