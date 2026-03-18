@@ -42,7 +42,7 @@ abstract class MPGeneralControllerBase with Store {
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
 
   /// Global clipboard for copy/paste operations.
-  MPCopyElementResult? _clipboard;
+  List<MPCopyElementWithChildren>? _clipboard;
 
   MPGeneralControllerBase() {
     Future<void>.microtask(() async {
@@ -127,17 +127,17 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   /// Get the current clipboard content.
-  MPCopyElementResult? getClipboard() {
+  List<MPCopyElementWithChildren>? getClipboard() {
     return _clipboard;
   }
 
   /// Set the clipboard content.
-  void setClipboard(MPCopyElementResult? copyResult) {
+  void setClipboard(List<MPCopyElementWithChildren>? copyResult) {
     _clipboard = copyResult;
   }
 
   /// Check if clipboard has content.
-  bool get hasClipboardContent => _clipboard != null && !_clipboard!.isEmpty;
+  bool get hasClipboardContent => _clipboard != null && _clipboard!.isNotEmpty;
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
