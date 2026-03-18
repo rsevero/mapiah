@@ -2,6 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 // ignore_for_file: constant_identifier_names
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
 
 enum MPSettingID {
   Internal_LastCheckNumberOfNewerVersions,
@@ -9,6 +11,7 @@ enum MPSettingID {
   Main_LocaleID,
   Main_TherionExecutablePath,
   TH2Edit_LineThickness,
+  TH2Edit_newLineCreationMethod,
   TH2Edit_PointRadius,
   TH2Edit_SelectionTolerance;
 
@@ -19,6 +22,7 @@ enum MPSettingID {
         MPSettingID.Main_LocaleID: MPSettingType.string,
         MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
         MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
+        MPSettingID.TH2Edit_newLineCreationMethod: MPSettingType.enumeration,
         MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
         MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
       };
@@ -27,6 +31,32 @@ enum MPSettingID {
       <MPSettingID, String>{
         MPSettingID.Main_TherionExecutablePath: mpTherionExecutableName,
       };
+
+  static final Map<MPSettingID, MPSettingEnumDefinition>
+  enumDefinitions = <MPSettingID, MPSettingEnumDefinition>{
+    MPSettingID.TH2Edit_newLineCreationMethod:
+        MPSettingEnumDefinitionImpl<MPNewLineCreationMethod>(
+          enumValues: MPNewLineCreationMethod.values,
+          parser: (String storedValue) {
+            try {
+              return MPNewLineCreationMethod.values.byName(storedValue);
+            } on ArgumentError {
+              return null;
+            }
+          },
+          localizedLabelBuilder:
+              (appLocalizations, MPNewLineCreationMethod value) {
+                switch (value) {
+                  case MPNewLineCreationMethod.mapiahQuadratic:
+                    return appLocalizations
+                        .mpSettingsEnumNewLineCreationMethodMapiahQuadratic;
+                  case MPNewLineCreationMethod.xTherionCubicSmooth:
+                    return appLocalizations
+                        .mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
+                }
+              },
+        ),
+  };
 
   String section() {
     final int underscoreIndex = name.indexOf('_');
@@ -74,8 +104,32 @@ enum MPSettingID {
     return value;
   }
 
+  MPSettingEnumDefinition enumDefinition() {
+    if (type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $this is not of type enumeration at enumDefinition',
+      );
+    }
+
+    final MPSettingEnumDefinition? value = enumDefinitions[this];
+
+    if (value == null) {
+      throw StateError('MPSettingID has no enum mapping: $name');
+    }
+
+    return value;
+  }
+
   @override
   String toString() => name;
 }
 
-enum MPSettingType { bool, double, filePickerExec, int, string, stringList }
+enum MPSettingType {
+  bool,
+  double,
+  enumeration,
+  filePickerExec,
+  int,
+  string,
+  stringList,
+}

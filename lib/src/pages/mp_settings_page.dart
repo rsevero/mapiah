@@ -126,6 +126,47 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             ),
           ),
         );
+      case MPSettingType.enumeration:
+        final List<Enum> enumValues = type.enumDefinition().values;
+        final Enum defaultValue = type.enumDefinition().defaultValue;
+        final Enum currentValue = enumValues.contains(_draftValues[type])
+            ? _draftValues[type] as Enum
+            : defaultValue;
+
+        return _buildSettingFieldWithReset(
+          appLocalizations: appLocalizations,
+          type: type,
+          field: _constrainedEditableField(
+            DropdownButtonFormField<Enum>(
+              key: ValueKey<int>(_fieldRebuildCounters[type] ?? 0),
+              initialValue: currentValue,
+              decoration: InputDecoration(labelText: settingLabel),
+              items: enumValues
+                  .map(
+                    (Enum value) => DropdownMenuItem<Enum>(
+                      value: value,
+                      child: Text(
+                        type.enumDefinition().localizedLabel(
+                          appLocalizations,
+                          value,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (Enum? value) {
+                if (value == null) {
+                  return;
+                }
+
+                setState(() {
+                  _draftValues[type] = value;
+                  _errors[type] = null;
+                });
+              },
+            ),
+          ),
+        );
       case MPSettingType.filePickerExec:
         return _buildSettingFieldWithReset(
           appLocalizations: appLocalizations,
@@ -271,6 +312,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return double.tryParse(raw) == null
             ? appLocalizations.mpSettingsInvalidNumber
             : null;
+      case MPSettingType.enumeration:
+        return null;
       case MPSettingType.int:
         return int.tryParse(raw) == null
             ? appLocalizations.mpSettingsInvalidInteger
@@ -321,6 +364,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           _draftValues[type] = settingsController
               .getDoubleWithDefault(type)
               .toString();
+        case MPSettingType.enumeration:
+          _draftValues[type] = settingsController.getEnumWithDefault(type);
         case MPSettingType.int:
           _draftValues[type] = settingsController
               .getIntWithDefault(type)
@@ -351,6 +396,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           _draftValues[type] = settingsController
               .getDefaultDouble(type)
               .toString();
+        case MPSettingType.enumeration:
+          _draftValues[type] = settingsController.getDefaultEnum(type);
         case MPSettingType.int:
           _draftValues[type] = settingsController
               .getDefaultInt(type)
@@ -389,6 +436,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             _draftValues[type] = settingsController
                 .getDefaultDouble(type)
                 .toString();
+          case MPSettingType.enumeration:
+            _draftValues[type] = settingsController.getDefaultEnum(type);
           case MPSettingType.int:
             _draftValues[type] = settingsController
                 .getDefaultInt(type)
@@ -463,6 +512,14 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           }
 
           settingsController.setDouble(type, value);
+        case MPSettingType.enumeration:
+          final Enum? value = _draftValues[type] as Enum?;
+
+          if (value == null) {
+            continue;
+          }
+
+          settingsController.setEnum(type, value);
         case MPSettingType.int:
           final String raw = (_draftValues[type] as String?)?.trim() ?? '';
           final String? error = _validateTextDraftValue(
@@ -584,6 +641,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
+      case MPSettingID.TH2Edit_newLineCreationMethod:
+        return appLocalizations.mpSettingsSettingTH2EditNewLineCreationMethod;
       case MPSettingID.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
       case MPSettingID.TH2Edit_SelectionTolerance:

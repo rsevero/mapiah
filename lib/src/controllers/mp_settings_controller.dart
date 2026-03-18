@@ -32,6 +32,7 @@ abstract class MPSettingsControllerBase with Store {
 
   final Map<MPSettingID, bool> _boolSettings = {};
   final Map<MPSettingID, double> _doubleSettings = {};
+  final Map<MPSettingID, Enum> _enumSettings = {};
   final Map<MPSettingID, int> _intSettings = {};
   final Map<MPSettingID, String> _stringSettings = {};
   final Map<MPSettingID, List<String>> _stringListSettings = {};
@@ -47,6 +48,9 @@ abstract class MPSettingsControllerBase with Store {
     MPSettingID.TH2Edit_PointRadius: mpDefaultPointRadius,
     MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
   };
+
+  static final Map<MPSettingID, Enum> _enumDefaultSettings =
+      <MPSettingID, Enum>{};
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only
   /// settings that differ from that should be included here.
@@ -118,6 +122,20 @@ abstract class MPSettingsControllerBase with Store {
 
           if (value != null) {
             setDouble(id, value);
+          }
+        case MPSettingType.enumeration:
+          final String? storedValue = prefs.getString(id.name);
+
+          if (storedValue != null) {
+            final Enum? value = id.enumDefinition().tryParseStoredValue(
+              storedValue,
+            );
+
+            if (value != null) {
+              setEnum(id, value);
+            } else {
+              prefs.remove(id.name);
+            }
           }
         case MPSettingType.int:
           final int? value = prefs.getInt(id.name);
@@ -239,6 +257,48 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     return mpDefaultDefaultDoubleSetting;
+  }
+
+  Enum? getEnumIfSet(MPSettingID id) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at getEnumIfSet',
+      );
+    }
+
+    if (_enumSettings.containsKey(id)) {
+      return _enumSettings[id]!;
+    }
+
+    return null;
+  }
+
+  Enum getEnumWithDefault(MPSettingID id) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at getEnum',
+      );
+    }
+
+    if (_enumSettings.containsKey(id)) {
+      return _enumSettings[id]!;
+    }
+
+    return getDefaultEnum(id);
+  }
+
+  Enum getDefaultEnum(MPSettingID id) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at getDefaultEnum',
+      );
+    }
+
+    if (_enumDefaultSettings.containsKey(id)) {
+      return _enumDefaultSettings[id]!;
+    }
+
+    return id.enumDefinition().defaultValue;
   }
 
   int? getIntIfSet(MPSettingID id) {
@@ -374,6 +434,8 @@ abstract class MPSettingsControllerBase with Store {
           resetBool(id);
         case MPSettingType.double:
           resetDouble(id);
+        case MPSettingType.enumeration:
+          resetEnum(id);
         case MPSettingType.int:
           resetInt(id);
         case MPSettingType.string:
@@ -437,6 +499,57 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     return isChanged;
+  }
+
+  bool setEnum(MPSettingID id, Enum value) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at setEnum',
+      );
+    }
+
+    final List<Enum> allowedValues = id.enumDefinition().values;
+
+    if (!allowedValues.contains(value)) {
+      throw ArgumentError(
+        'Enum value $value is not valid for MPSettingID $id at setEnum',
+      );
+    }
+
+    final Enum oldValue = getEnumWithDefault(id);
+    final bool isChanged = (oldValue != value);
+
+    if (isChanged) {
+      _enumSettings[id] = value;
+      prefs.setString(id.name, id.enumDefinition().storedValue(value));
+      trigger(id);
+    }
+
+    return isChanged;
+  }
+
+  bool isEnumSet(MPSettingID id) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at isEnumSet',
+      );
+    }
+
+    return _enumSettings.containsKey(id);
+  }
+
+  void resetEnum(MPSettingID id) {
+    if (id.type() != MPSettingType.enumeration) {
+      throw ArgumentError(
+        'MPSettingID $id is not of type enumeration at resetEnum',
+      );
+    }
+
+    if (_enumSettings.containsKey(id)) {
+      _enumSettings.remove(id);
+      prefs.remove(id.name);
+      trigger(id);
+    }
   }
 
   bool isDoubleSet(MPSettingID id) {

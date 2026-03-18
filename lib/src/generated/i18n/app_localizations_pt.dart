@@ -343,6 +343,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
 
   @override
+  String get mpSettingsSettingTH2EditNewLineCreationMethod =>
+      'Método de criação de nova linha';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic =>
+      'Quadrático do Mapiah';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth =>
+      'Cúbico suave do xTherion';
+
+  @override
   String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
 
   @override
@@ -1031,8 +1043,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapTargetLinePoint => 'Pontos de linha';
 
   @override
-  String get mpSnapTargetLinePointByType =>
-      'Pontoss de linha por tipo de linha';
+  String get mpSnapTargetLinePointByType => 'Pontos de linha por tipo de linha';
 
   @override
   String get mpSnapTargetPoint => 'Pontos';

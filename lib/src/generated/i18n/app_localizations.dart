@@ -643,6 +643,24 @@ abstract class AppLocalizations {
   /// **'Line thickness'**
   String get mpSettingsSettingTH2EditLineThickness;
 
+  /// Label for the TH2 new line creation method setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'New line creation method'**
+  String get mpSettingsSettingTH2EditNewLineCreationMethod;
+
+  /// Label for the Mapiah quadratic new line creation method. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah quadratic'**
+  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic;
+
+  /// Label for the xTherion cubic smooth new line creation method. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'xTherion cubic smooth'**
+  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
+
   /// Label for TH2 point radius setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

@@ -341,6 +341,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditLineThickness => 'Line thickness';
 
   @override
+  String get mpSettingsSettingTH2EditNewLineCreationMethod =>
+      'New line creation method';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic =>
+      'Mapiah quadratic';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth =>
+      'xTherion cubic smooth';
+
+  @override
   String get mpSettingsSettingTH2EditPointRadius => 'Point radius';
 
   @override

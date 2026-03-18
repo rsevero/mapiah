@@ -143,7 +143,7 @@ These guidelines apply to all code (app code, scripts, and tests):
 7. Prefer named parameters; allow positional parameters only when there are at most two parameters and they have different types.
 8. Run `flutter analyze` after generating or modifying code.
 9. When proposing a commit, always add an entry on CHANGELOG.md. The added new entry should go at the end of the appropriate section of CHANGELOG.
-10. Always include a "Signed-off-by: My Name <my.email@example.com>" (use git to get name and email if necessary) line and a "Co-Authored-By: MODEL <email>" line in your commit message. The "Signed-off-by" line should always be the last on the commit message.
+10. Always include a "Signed-off-by: My Name <my.email@example.com>" (use git to get name and email if necessary) line and a "Co-Authored-By: AI_MODEL <AI_MODEL_email>" line in your commit message. The "Signed-off-by" line should always be the last on the commit message.
 11. On commit, always prefer to git add -A" instead of manually listing chagnes files to add. This way you avoid forgetting to add some files, which can lead to broken builds and tests.
 12. Don´t manually run "dart run build_runner build" as there already is a watch instance running. 
 
@@ -157,8 +157,8 @@ In addition to General Guidelines, follow these app-specific rules:
 4. Keep UI logic separate from business logic. Use MobX controllers for business logic and state management.
 5. All user-facing strings must be localized via `AppLocalizations`. Do not hardcode displayed text. Localization files: `lib/l10n/intl_en.arb` (English) and `lib/l10n/intl_pt.arb` (Portuguese). Run `flutter gen-l10n` after adding new strings.
 6. Don't use all caps in user-facing text.
-7. Update the appropriate help page (both in english and portuguese) when adding new features or changing existing ones. Help pages are in `assets/help/` and are written in markdown.
-8. Updte the appropriate keyboard shortcuts page in `assets/help/` when adding new features or changing existing ones. They are written in markdown.
+7. Update the appropriate help page (both in English and Portuguese) when adding new features or changing existing ones. Help pages are in `assets/help/` and are written in markdown.
+8. Update the appropriate keyboard shortcuts page in `assets/help/` when adding new features or changing existing ones. They are written in markdown.
 
 ### When writing scripts (command-line tools)
 
