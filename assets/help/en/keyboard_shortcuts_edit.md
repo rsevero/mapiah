@@ -13,6 +13,7 @@
 | Create point                                               | P                            |
 | Create scrap                                               | K                            |
 | Copy selected elements                                     | Ctrl+C                       |
+| Cut selected elements                                      | Ctrl+X                       |
 | Delete point, line, area or line segment                   | Del or Backspace             |
 | Deselect all                                               | Escape                       |
 | Duplicate selected elements                                | Ctrl+D                       |

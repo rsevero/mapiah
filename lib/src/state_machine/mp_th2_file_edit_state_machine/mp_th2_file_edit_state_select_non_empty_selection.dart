@@ -344,6 +344,9 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
             th2FileEditController.elementEditController
                 .createMapConnectionLines();
             keyProcessed = true;
+          } else {
+            th2FileEditController.copyPasteController.cutSelectedElements();
+            keyProcessed = true;
           }
         }
     }

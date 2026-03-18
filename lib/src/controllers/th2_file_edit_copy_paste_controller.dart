@@ -203,6 +203,14 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
     pasteElements();
   }
 
+  @action
+  void cutSelectedElements() {
+    copySelectedElements();
+    _th2FileEditController.selectionController.removeSelected(
+      descriptionType: MPCommandDescriptionType.cutElements,
+    );
+  }
+
   void duplicateScrap(int scrapMPID) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;

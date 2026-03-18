@@ -347,11 +347,14 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void removeSelected() {
+  void removeSelected({
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeElements,
+  }) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(name: 'TH2FileEditSelectionControllerBase.removeSelected');
     try {
-      return super.removeSelected();
+      return super.removeSelected(descriptionType: descriptionType);
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

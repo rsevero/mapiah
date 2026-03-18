@@ -391,6 +391,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Adicionar imagem';
 
   @override
+  String get mpCommandDescriptionCutElements => 'Recortar elementos';
+
+  @override
   String get mpCommandDescriptionDuplicateElements => 'Duplicar elementos';
 
   @override

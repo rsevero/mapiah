@@ -8,6 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -227,7 +228,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   @action
-  void removeSelected() {
+  void removeSelected({
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.removeElements,
+  }) {
     if (_mpSelectedElementsLogical.isEmpty) {
       return;
     }
@@ -236,6 +240,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final MPCommand mpCommand = MPCommandFactory.removeElements(
       mpIDs: selectedMPIDs,
       th2File: _th2File,
+      descriptionType: descriptionType,
     );
 
     _th2FileEditController.execute(mpCommand);

@@ -19,6 +19,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Operações com elementos](#operações-com-elementos)
   - [Copiar e colar](#copiar-e-colar)
   - [Duplicar](#duplicar)
+  - [Recortar](#recortar)
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
@@ -149,6 +150,16 @@ Elementos selecionados podem ser rapidamente duplicados no mesmo lugar.
 - A operação de duplicação cria novos IDs exclusivos para todos os elementos duplicados
 - Os elementos duplicados se tornam a nova seleção
 - A operação de duplicação pode ser desfeita com _Ctrl+Z_
+
+### Recortar
+Elementos selecionados podem ser recortados (copiados para a área de transferência e imediatamente removidos do arquivo).
+
+**Para recortar elementos selecionados:**
+- Pressione _Ctrl+X_ (ou _Meta+X_ no macOS)
+- Pelo menos um elemento deve estar selecionado
+- Os elementos são copiados para a área de transferência e então removidos do arquivo
+- O conteúdo da área de transferência pode ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto
+- A operação de recortar pode ser desfeita com _Ctrl+Z_, que restaura os elementos nas suas posições originais
 
 ## Simplificar linhas
 Curvas Bézier e segmentos de linha reta são simplificados de forma diferente. Para simplificar linhas, selecione-as primeiro. É possível ter outros tipos de elementos selecionados (pontos ou áreas) durante a simplificação; eles não serão alterados pelo processo.

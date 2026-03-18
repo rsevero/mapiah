@@ -387,6 +387,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionAddXTherionImageInsertConfig => 'Add image';
 
   @override
+  String get mpCommandDescriptionCutElements => 'Cut elements';
+
+  @override
   String get mpCommandDescriptionDuplicateElements => 'Duplicate elements';
 
   @override

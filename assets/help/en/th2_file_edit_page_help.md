@@ -14,6 +14,7 @@ This is where all TH2 file editing is done.
 - [Selecting elements](#selecting-elements)
 - [Element operations](#element-operations)
   - [Copy and paste](#copy-and-paste)
+  - [Cut](#cut)
   - [Duplicate](#duplicate)
 - [Element options](#element-options)
 - [Save](#save)
@@ -114,6 +115,16 @@ Selected elements can be copied to a clipboard and pasted into the current file 
 
 **Cross-file pasting:**
 When you have multiple files open in tabs, you can copy elements from one file and paste them into another file. Simply switch to the target file tab and press _Ctrl+V_.
+
+### Cut
+Selected elements can be cut (copied to clipboard and immediately removed from the file).
+
+**To cut selected elements:**
+- Press _Ctrl+X_ (or _Meta+X_ on macOS)
+- At least one element must be selected
+- The elements are copied to the clipboard and then removed from the file
+- The clipboard content can be pasted with _Ctrl+V_ into the same or another open file
+- The cut operation can be undone with _Ctrl+Z_, which restores the elements to their original positions
 
 ### Duplicate
 Selected elements can be quickly duplicated in place.

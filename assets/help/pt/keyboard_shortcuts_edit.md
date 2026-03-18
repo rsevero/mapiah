@@ -27,6 +27,7 @@
 | Inverter linha                                                | R                                    |
 | Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Refazer                                                       | Ctrl+Y                               |
+| Recortar elementos selecionados                              | Ctrl+X                               |
 | Rodar o Therion                                               | T                                    |
 | Salvar arquivo                                                | Ctrl+S                               |
 | Salvar arquivo como                                           | Ctrl+Shift+S                         |

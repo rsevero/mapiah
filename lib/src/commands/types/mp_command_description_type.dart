@@ -13,6 +13,7 @@ enum MPCommandDescriptionType {
   addScrap,
   addXTherionImageInsertConfig,
   copyElements,
+  cutElements,
   duplicateElements,
   editAreasType,
   editAreasTypeSubtype,
@@ -93,6 +94,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeXTherionImageInsertConfig;
       case MPCommandDescriptionType.copyElements:
         return MPCommandDescriptionType.copyElements;
+      case MPCommandDescriptionType.cutElements:
+        return MPCommandDescriptionType.addElements;
       case MPCommandDescriptionType.duplicateElements:
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.pasteElements:

@@ -733,6 +733,12 @@ abstract class AppLocalizations {
   /// **'Add image'**
   String get mpCommandDescriptionAddXTherionImageInsertConfig;
 
+  /// The description for the cut elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Cut elements'**
+  String get mpCommandDescriptionCutElements;
+
   /// The description for the duplicate elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

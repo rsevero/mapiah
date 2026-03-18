@@ -5,6 +5,7 @@
 ## 0.3.2 - not yet released
 * New features:
   * Copy/Paste functionality for elements (Ctrl+C / Ctrl+V or Meta+C / Meta+V) with cross-file support and automatic THID conflict resolution.
+  * Cut selected elements (Ctrl+X / Meta+X): copies elements to clipboard and deletes originals.
   * Scrap duplication.
   * Multiple TH2 file open support with multi-selection in file dialog.
   * Click-and-drag horizontal scrolling for tabs when many files are open.

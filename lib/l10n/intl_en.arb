@@ -575,6 +575,11 @@
     "description": "The description for the add XTherion image insert config command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionCutElements": "Cut elements",
+  "@mpCommandDescriptionCutElements": {
+    "description": "The description for the cut elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionDuplicateElements": "Duplicate elements",
   "@mpCommandDescriptionDuplicateElements": {
     "description": "The description for the duplicate elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",

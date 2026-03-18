@@ -104,6 +104,21 @@ mixin _$TH2FileEditCopyPasteController
   }
 
   @override
+  void cutSelectedElements() {
+    final _$actionInfo = _$TH2FileEditCopyPasteControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditCopyPasteControllerBase.cutSelectedElements',
+        );
+    try {
+      return super.cutSelectedElements();
+    } finally {
+      _$TH2FileEditCopyPasteControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

@@ -366,6 +366,8 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .duplicateElements] =
         localizations.mpCommandDescriptionDuplicateElements;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.cutElements] =
+        localizations.mpCommandDescriptionCutElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreasType] =
         localizations.mpCommandDescriptionEditAreasType;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.editAreaType] =
