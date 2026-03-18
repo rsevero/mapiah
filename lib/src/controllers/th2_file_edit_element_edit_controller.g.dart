@@ -438,6 +438,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void endNewLineDrag() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.endNewLineDrag',
+        );
+    try {
+      return super.endNewLineDrag();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void clearNewArea() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(name: 'TH2FileEditElementEditControllerBase.clearNewArea');

@@ -58,6 +58,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   Offset? _newLinePendingControlPoint1CanvasCoordinates;
 
+  Offset? get newLinePendingControlPoint1CanvasCoordinates =>
+      _newLinePendingControlPoint1CanvasCoordinates;
+
+  bool _isNewLineDragging = false;
+
+  bool get isNewLineDragging => _isNewLineDragging;
+
   @readonly
   THArea? _newArea;
 
@@ -702,6 +709,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _newLine = null;
     _lineStartScreenPosition = null;
     _newLinePendingControlPoint1CanvasCoordinates = null;
+    _isNewLineDragging = false;
+  }
+
+  @action
+  void endNewLineDrag() {
+    _isNewLineDragging = false;
+    _th2FileEditController.triggerNewLineRedraw();
   }
 
   @action
@@ -730,6 +744,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void updateBezierLineSegment(Offset mousePositionScreenCoordinates) {
+    _isNewLineDragging = true;
     switch (_getNewLineCreationMethod()) {
       case MPNewLineCreationMethod.mapiahQuadratic:
         _newLinePendingControlPoint1CanvasCoordinates = null;

@@ -37,6 +37,11 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   }
 
   @override
+  void onPrimaryButtonDragEnd(PointerUpEvent event) {
+    elementEditController.endNewLineDrag();
+  }
+
+  @override
   void onKeyDownEvent(KeyDownEvent event) {
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();

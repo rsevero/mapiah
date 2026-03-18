@@ -15,6 +15,7 @@
   * Command-line argument handling: positional arguments, --th2 (multiple), and --thconfig (single).
   * Created enumeration-backed settings, including the new TH2Edit_newLineCreationMethod setting with localized enum values.
   * Implemented selectable new-line creation behavior for both the Mapiah quadratic mode and the xTherion cubic smooth mode with Ctrl-drag distance locking.
+  * Show Bézier control points during click-and-drag line creation: CP1 and CP2 visible while dragging, with the dragged handle painted black and others white; control points disappear on mouse release.
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]

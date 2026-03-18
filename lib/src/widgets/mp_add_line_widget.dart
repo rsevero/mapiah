@@ -11,6 +11,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
+import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
@@ -38,6 +39,12 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
         final THPointPaint bezierPointPaint = visualController
             .getUnselectedBezierCurveEndPointPaint();
         final THLinePaint linePaint = visualController.getNewLinePaint();
+        final THPointPaint unselectedControlPointPaint = visualController
+            .getUnselectedControlPointPaint();
+        final THPointPaint selectedControlPointPaint = visualController
+            .getSelectedControlPointPaint();
+        final Paint controlPointLinePaint = visualController
+            .getControlPointLinePaint();
         final List<CustomPainter> painters = [];
 
         if (elementEditController.newLine == null) {
@@ -81,20 +88,87 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
 
           painters.add(painter);
 
+          final List<CustomPainter> endPointPainters = [];
+
           for (final THLineSegment lineSegment in lineSegments.values) {
             final THPointPaint pointPaint =
                 (lineSegment is THStraightLineSegment)
                 ? straightPointPaint
                 : bezierPointPaint;
-            final CustomPainter painter = THEndPointPainter(
+            final CustomPainter endPointPainter = THEndPointPainter(
               position: lineSegment.endPoint.coordinates,
               pointPaint: pointPaint,
               isSmooth: MPCommandOptionAux.isSmooth(lineSegment),
               th2FileEditController: th2FileEditController,
             );
 
-            painters.add(painter);
+            endPointPainters.add(endPointPainter);
           }
+
+          // Control points for the last segment (visible only during drag).
+          // Requires at least 2 segments so we can find the segment-start
+          // anchor.
+          if (elementEditController.isNewLineDragging &&
+              (lineSegments.length >= 2)) {
+            final List<THLineSegment> segmentList = lineSegments.values
+                .toList();
+            final THLineSegment lastLineSegment = segmentList.last;
+
+            if (lastLineSegment is THBezierCurveLineSegment) {
+              final Offset startPointPosition =
+                  segmentList[segmentList.length - 2].endPoint.coordinates;
+              final Offset endPointPosition =
+                  lastLineSegment.endPoint.coordinates;
+
+              // In XTherionCubicSmooth mode, the pending CP1 is the mouse
+              // position (black). In MapiahQuadratic mode it is null (no
+              // handle at the mouse).
+              final Offset? pendingCP1 = elementEditController
+                  .newLinePendingControlPoint1CanvasCoordinates;
+              final bool xTherionDragging = (pendingCP1 != null);
+
+              // CP1 — always white (never directly under the mouse).
+              painters.add(
+                THControlPointPainter(
+                  controlPointPosition:
+                      lastLineSegment.controlPoint1.coordinates,
+                  endPointPosition: startPointPosition,
+                  pointPaint: unselectedControlPointPaint,
+                  controlLinePaint: controlPointLinePaint,
+                  th2FileEditController: th2FileEditController,
+                ),
+              );
+
+              // CP2 — always white.
+              painters.add(
+                THControlPointPainter(
+                  controlPointPosition:
+                      lastLineSegment.controlPoint2.coordinates,
+                  endPointPosition: endPointPosition,
+                  pointPaint: unselectedControlPointPaint,
+                  controlLinePaint: controlPointLinePaint,
+                  th2FileEditController: th2FileEditController,
+                ),
+              );
+
+              // XTherionCubicSmooth only: the ghost CP1 for the next
+              // segment, at the mouse position → painted black.
+              if (xTherionDragging) {
+                painters.add(
+                  THControlPointPainter(
+                    controlPointPosition: pendingCP1,
+                    endPointPosition: endPointPosition,
+                    pointPaint: selectedControlPointPaint,
+                    controlLinePaint: controlPointLinePaint,
+                    th2FileEditController: th2FileEditController,
+                  ),
+                );
+              }
+            }
+          }
+
+          // End-point painters on top of control point painters.
+          painters.addAll(endPointPainters);
         }
 
         return RepaintBoundary(
