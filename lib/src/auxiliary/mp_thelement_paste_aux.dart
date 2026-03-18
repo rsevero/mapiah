@@ -34,15 +34,20 @@ class MPTHElementPasteAux {
   });
 
   /// Materialize the copied elements into live THElements ready for insertion.
+  /// Preserves positioning structure: elements from copy result's addAtEndMinusOne
+  /// stay in addAtEndMinusOne; elements from addAtEndOfParent stay in addAtEndOfParent.
+  /// This ensures line children (always in addAtEndOfParent in copy) remain at end during paste.
   MPMaterialisedResult materialise() {
     if (_cachedResult != null) {
       return _cachedResult!;
     }
 
-    final List<dynamic> mainElements = [];
-    final List<dynamic> childrenElements = [];
+    final List<dynamic> endMinusOneElements = [];
+    final List<dynamic> endMinusOneChildren = [];
+    final List<dynamic> endOfParentElements = [];
+    final List<dynamic> endOfParentChildren = [];
 
-    /// Process top-level entries.
+    /// Process top-level entries from addAtEndMinusOne.
     for (final entry in copyResult.addAtEndMinusOneOfParent) {
       final (main, children) = _processEntry(
         entry: entry,
@@ -50,10 +55,11 @@ class MPTHElementPasteAux {
         isAddAtEndMinusOne: true,
       );
 
-      mainElements.addAll(main);
-      childrenElements.addAll(children);
+      endMinusOneElements.addAll(main);
+      endMinusOneChildren.addAll(children);
     }
 
+    /// Process top-level entries from addAtEndOfParent.
     for (final entry in copyResult.addAtEndOfParent) {
       final (main, children) = _processEntry(
         entry: entry,
@@ -61,13 +67,16 @@ class MPTHElementPasteAux {
         isAddAtEndMinusOne: false,
       );
 
-      mainElements.addAll(main);
-      childrenElements.addAll(children);
+      endOfParentElements.addAll(main);
+      endOfParentChildren.addAll(children);
     }
 
     _cachedResult = MPMaterialisedResult(
-      addAtEndMinusOneOfParent: mainElements,
-      addAtEndOfParent: childrenElements,
+      addAtEndMinusOneOfParent: [
+        ...endMinusOneElements,
+        ...endMinusOneChildren,
+      ],
+      addAtEndOfParent: [...endOfParentElements, ...endOfParentChildren],
     );
 
     return _cachedResult!;

@@ -1088,21 +1088,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
     final materialisedResult = pasteAux.materialise();
 
-    final List<THElement> mainElements =
-        (materialisedResult.addAtEndMinusOneOfParent).cast<THElement>();
-    final List<THElement> childrenElements =
-        (materialisedResult.addAtEndOfParent).cast<THElement>();
-
-    if (mainElements.isEmpty && childrenElements.isEmpty) {
+    if (materialisedResult.addAtEndMinusOneOfParent.isEmpty &&
+        materialisedResult.addAtEndOfParent.isEmpty) {
       return;
     }
 
-    /// Build and execute paste command(s).
-    /// Use the same pattern as the old duplicator: build commands with explicit
-    /// child passing instead of relying on getChildren(th2File).
+    /// Build paste commands, respecting copy result positioning structure.
+    /// Main elements (from addAtEndMinusOne) and children (from addAtEndOfParent)
+    /// are treated as-is, preserving the copy result's positioning.
     final List<MPCommand> pasteCommands = _buildPasteCommands(
-      mainElements,
-      childrenElements,
+      materialisedResult.addAtEndMinusOneOfParent.cast<THElement>(),
+      materialisedResult.addAtEndOfParent.cast<THElement>(),
       activeScrapMPID,
     );
 
@@ -1121,8 +1117,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _th2FileEditController.execute(pasteCommand);
 
-    /// Select pasted elements.
-    final allPastedElements = [...mainElements, ...childrenElements];
+    /// Select all pasted elements (from both addAtEndMinusOne and addAtEndOfParent).
+    final allPastedElements = [
+      ...materialisedResult.addAtEndMinusOneOfParent.cast<THElement>(),
+      ...materialisedResult.addAtEndOfParent.cast<THElement>(),
+    ];
     selectionController.setSelectedElements(allPastedElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
@@ -1152,65 +1151,142 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> commands = [];
     final Set<int> newlyCreatedParentMPIDs = {};
 
-    /// Add parent elements first (they have empty childrenMPIDs).
+    /// Map children by their parent MPID for later attachment.
+    final Map<int, List<THElement>> childrenByParent = {};
+    for (final child in childrenElements) {
+      childrenByParent.putIfAbsent(child.parentMPID, () => []).add(child);
+    }
+
+    /// Add parent elements with their children as posCommands.
     if (mainElements.isNotEmpty) {
       // Track which parents are newly created
       for (final element in mainElements) {
         newlyCreatedParentMPIDs.add(element.mpID);
       }
 
-      // Determine position based on whether main elements are being added to pre-existing or new parent
+      // Determine position for parents based on whether they're added to pre-existing or new parent
       final int position = mainElements.first.parentMPID == activeScrapMPID
           ? mpAddChildAtEndMinusOneOfParentChildrenList
           : mpAddChildAtEndOfParentChildrenList;
 
+      // Build commands for each main element with its children as posCommand
+      for (final mainElement in mainElements) {
+        final List<THElement>? elementChildren =
+            childrenByParent[mainElement.mpID];
+        final MPCommand cmd = _buildElementAddCommand(
+          element: mainElement,
+          elementPosition: position,
+          children: elementChildren ?? [],
+          childrenPosition: mpAddChildAtEndOfParentChildrenList,
+          childrenByParent: childrenByParent,
+        );
+        commands.add(cmd);
+      }
+    }
+
+    /// Add children of existing parents separately (before endmarker).
+    /// Only add children whose parent is NOT in newlyCreatedParentMPIDs
+    /// (those have been added via posCommand already).
+    final List<THElement> childrenOfExistingParents = [];
+    for (final child in childrenElements) {
+      if (!newlyCreatedParentMPIDs.contains(child.parentMPID)) {
+        childrenOfExistingParents.add(child);
+      }
+    }
+
+    if (childrenOfExistingParents.isNotEmpty) {
       commands.add(
         MPCommandFactory.addElements(
-          elements: mainElements,
+          elements: childrenOfExistingParents,
           th2File: _th2File,
-          positionInParent: position,
+          positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
         ),
       );
     }
 
-    /// Add children - use different positions based on parent type.
-    if (childrenElements.isNotEmpty) {
-      // Separate children by parent type
-      final List<THElement> childrenOfNewParents = [];
-      final List<THElement> childrenOfExistingParents = [];
+    return commands;
+  }
 
-      for (final child in childrenElements) {
-        if (newlyCreatedParentMPIDs.contains(child.parentMPID)) {
-          childrenOfNewParents.add(child);
-        } else {
-          childrenOfExistingParents.add(child);
-        }
-      }
-
-      /// Children of newly-created parents go at end.
-      if (childrenOfNewParents.isNotEmpty) {
-        commands.add(
-          MPCommandFactory.addElements(
-            elements: childrenOfNewParents,
-            th2File: _th2File,
-            positionInParent: mpAddChildAtEndOfParentChildrenList,
-          ),
+  /// Build an add command for a single element with its children as posCommand.
+  /// Recursively handles nested children via childrenByParent map.
+  MPCommand _buildElementAddCommand({
+    required THElement element,
+    required int elementPosition,
+    required List<THElement> children,
+    required int childrenPosition,
+    required Map<int, List<THElement>> childrenByParent,
+  }) {
+    // Build posCommand from children if any
+    final MPCommand? posCommand;
+    if (children.isNotEmpty) {
+      final List<MPCommand> childCmds = children.map((child) {
+        final childOfChildElements = childrenByParent[child.mpID] ?? [];
+        return _buildElementAddCommand(
+          element: child,
+          elementPosition: childrenPosition,
+          children: childOfChildElements,
+          childrenPosition: childrenPosition,
+          childrenByParent: childrenByParent,
         );
-      }
+      }).toList();
 
-      /// Children of existing parents go before endmarker.
-      if (childrenOfExistingParents.isNotEmpty) {
-        commands.add(
-          MPCommandFactory.addElements(
-            elements: childrenOfExistingParents,
-            th2File: _th2File,
-            positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
-          ),
-        );
-      }
+      posCommand = MPCommandFactory.multipleCommandsFromList(
+        commandsList: childCmds,
+        descriptionType: MPCommandDescriptionType.addElements,
+        completionType:
+            MPMultipleElementsCommandCompletionType.elementsListChanged,
+      );
+    } else {
+      posCommand = null;
     }
 
-    return commands;
+    // Create appropriate command based on element type
+    final MPCommand cmd;
+    switch (element) {
+      case THScrap scrap:
+        cmd = MPAddScrapCommand(
+          newScrap: scrap,
+          scrapPositionInParent: elementPosition,
+          scrapChildren: [],
+          th2File: _th2File,
+          posCommand: posCommand,
+        );
+      case THLine line:
+        cmd = MPAddLineCommand.forCWJM(
+          newLine: line,
+          linePositionInParent: elementPosition,
+          lineChildren: [],
+          preCommand: null,
+          posCommand: posCommand,
+        );
+      case THLineSegment segment:
+        cmd = MPAddLineSegmentCommand.forCWJM(
+          newLineSegment: segment,
+          lineSegmentPositionInParent: elementPosition,
+          posCommand: posCommand,
+        );
+      case THPoint point:
+        cmd = MPAddPointCommand.forCWJM(
+          newPoint: point,
+          pointPositionInParent: elementPosition,
+          posCommand: null,
+        );
+      case THArea area:
+        cmd = MPAddAreaCommand.forCWJM(
+          newArea: area,
+          areaChildren: [],
+          areaPositionInParent: elementPosition,
+          posCommand: posCommand,
+        );
+      default:
+        cmd = MPAddElementCommand.forCWJM(
+          newElement: element,
+          elementPositionInParent: elementPosition,
+          posCommand: null,
+        );
+    }
+
+    return cmd;
   }
 
   /// Helper method to build children result for an element.
