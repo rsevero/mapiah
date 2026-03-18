@@ -981,134 +981,150 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    /// Build copy templates from selected elements.
-    /// For areas, we need to handle border lines specially.
-    final List<MPCopyElementWithChildren> mainEntries = [];
-    final List<MPCopyElementWithChildren> childrenEntries = [];
-    final Set<int> copiedLineMPIDs = {};
+    /// Filter selection to only top elements (THScrap, THPoint, THLine, THArea).
+    final List<THElement> topElements = [];
+    for (final selectedElement in selectedElements) {
+      final THElement element = selectedElement.originalElementClone;
 
-    for (final element
-        in selectedElements.map((e) => e.originalElementClone).toList()) {
-      if (element is THArea) {
-        /// For areas, copy referenced border lines first.
-        final List<MPCopyElementWithChildren> borderLineEntries = [];
+      if ((element is THScrap) ||
+          (element is THPoint) ||
+          (element is THLine) ||
+          (element is THArea)) {
+        topElements.add(element);
+      }
+    }
 
-        for (final childMPID in element.childrenMPIDs) {
-          final child = _th2File.elementByMPID(childMPID);
-          if (child is THAreaBorderTHID) {
-            final borderTHID = child.thID;
-            if (_th2File.hasElementByTHID(borderTHID)) {
-              final borderLine = _th2File.elementByTHID(borderTHID);
-              if (!copiedLineMPIDs.contains(borderLine.mpID)) {
-                final template = MPCopyTemplate.fromElement(borderLine);
-                final childrenResult = _buildChildrenResult(borderLine);
-                final entry = MPCopyElementWithChildren(
-                  template: template,
-                  childrenResult: childrenResult,
-                );
-                borderLineEntries.add(entry);
-                copiedLineMPIDs.add(borderLine.mpID);
-              }
+    if (topElements.isEmpty) {
+      return;
+    }
+
+    /// Initialize tracking set for copied MPIDs (for deduplication).
+    final Set<int> trackedMPIDs = {};
+
+    /// Build clipboard with new structure.
+    final List<MPCopyElementWithChildren> result = [];
+
+    for (final THElement element in topElements) {
+      final List<MPCopyElementWithChildren> entries = _buildCopyResult(
+        element,
+        mpAddChildAtEndMinusOneOfParentChildrenList,
+        trackedMPIDs,
+      );
+
+      result.addAll(entries);
+    }
+
+    /// Store as List<MPCopyElementWithChildren> in clipboard.
+    mpLocator.mpGeneralController.setClipboard(result);
+  }
+
+  /// Build copy result recursively for one element with its children.
+  ///
+  /// Returns a List<MPCopyElementWithChildren> which may include pre-sibling
+  /// entries (e.g., border lines for areas, already duplicated lines).
+  List<MPCopyElementWithChildren> _buildCopyResult(
+    THElement element,
+    int positionAtParent,
+    Set<int> trackedMPIDs,
+  ) {
+    final List<MPCopyElementWithChildren> result = [];
+
+    /// Handle THArea special case: extract border lines first.
+    if (element is THArea) {
+      final THIsParentMixin parent = element as THIsParentMixin;
+
+      for (final int childMPID in parent.childrenMPIDs) {
+        final THElement child = _th2File.elementByMPID(childMPID);
+
+        if (child is THAreaBorderTHID) {
+          /// Extract referenced border line's MPID from thID.
+          final String borderTHID = child.thID;
+
+          if (_th2File.hasElementByTHID(borderTHID)) {
+            final THElement borderLine = _th2File.elementByTHID(borderTHID);
+
+            if (!trackedMPIDs.contains(borderLine.mpID)) {
+              /// Call _buildCopyResult recursively with SAME position as area.
+              final List<MPCopyElementWithChildren> borderLineEntries =
+                  _buildCopyResult(borderLine, positionAtParent, trackedMPIDs);
+
+              result.addAll(borderLineEntries);
             }
           }
         }
-
-        /// Add border lines first, then the area.
-        mainEntries.addAll(borderLineEntries);
-
-        final areaTemplate = MPCopyTemplate.fromElement(element);
-        final areaChildrenResult = _buildChildrenResult(element);
-        final areaEntry = MPCopyElementWithChildren(
-          template: areaTemplate,
-          childrenResult: areaChildrenResult,
-        );
-        mainEntries.add(areaEntry);
-      } else {
-        /// For non-area elements, proceed normally.
-        final template = MPCopyTemplate.fromElement(element);
-        final childrenResult = _buildChildrenResult(element);
-        final entry = MPCopyElementWithChildren(
-          template: template,
-          childrenResult: childrenResult,
-        );
-
-        if (element is THLine || element is THPoint || element is THScrap) {
-          mainEntries.add(entry);
-        } else {
-          childrenEntries.add(entry);
-        }
       }
     }
 
-    /// Sort remaining mainEntries (non-area, non-copied-border-lines) to ensure
-    /// lines come before areas. This ensures other border lines are added before
-    /// areas reference them.
-    final List<MPCopyElementWithChildren> areaLines = [];
-    final List<MPCopyElementWithChildren> otherElements = [];
+    /// Handle THLine special case: check if already copied.
+    if (element is THLine) {
+      if (trackedMPIDs.contains(element.mpID)) {
+        return [];
+      }
+      trackedMPIDs.add(element.mpID);
+    }
 
-    for (final entry in mainEntries) {
-      if (entry.template.elementType == 'line' &&
-          !copiedLineMPIDs.contains(entry.template.originalMPID)) {
-        areaLines.add(entry);
-      } else {
-        otherElements.add(entry);
+    /// Create entry for this element.
+    final List<MPCopyElementWithChildren> childrenList = [];
+
+    if (element is THIsParentMixin) {
+      final THIsParentMixin parent = element as THIsParentMixin;
+      for (final int childMPID in parent.childrenMPIDs) {
+        final THElement child = _th2File.elementByMPID(childMPID);
+        final List<MPCopyElementWithChildren> childEntries = _buildCopyResult(
+          child,
+          mpAddChildAtEndOfParentChildrenList,
+          trackedMPIDs,
+        );
+
+        childrenList.addAll(childEntries);
       }
     }
 
-    mainEntries.clear();
-    mainEntries.addAll(areaLines);
-    mainEntries.addAll(otherElements);
-
-    final copyResult = MPCopyElementResult(
-      addAtEndMinusOneOfParent: mainEntries,
-      addAtEndOfParent: childrenEntries,
+    final MPCopyTemplate template = MPCopyTemplate.fromElement(element);
+    final MPCopyElementWithChildren entry = MPCopyElementWithChildren(
+      template: template,
+      positionAtParent: positionAtParent,
+      childrenResult: childrenList,
     );
 
-    /// Store to global clipboard.
-    mpLocator.mpGeneralController.setClipboard(copyResult);
+    result.add(entry);
+
+    return result;
   }
 
   @action
   void pasteElements() {
-    final clipboard = mpLocator.mpGeneralController.getClipboard();
+    final List<MPCopyElementWithChildren>? clipboard = mpLocator
+        .mpGeneralController
+        .getClipboard();
 
-    if (clipboard == null || clipboard.isEmpty) {
+    if ((clipboard == null) || clipboard.isEmpty) {
       return;
     }
 
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
     final int activeScrapMPID = _th2FileEditController.activeScrapID;
 
-    /// Materialize templates to live elements.
-    final pasteAux = MPTHElementPasteAux(
+    /// Materialize and build commands from clipboard.
+    final MPTHElementPasteAux pasteAux = MPTHElementPasteAux(
       copyResult: clipboard,
       th2File: _th2File,
       activeScrapMPID: activeScrapMPID,
     );
-    final materialisedResult = pasteAux.materialise();
+    final List<MPCommand> topLevelCommands = pasteAux
+        .materializeAndBuildCommands();
 
-    if (materialisedResult.addAtEndMinusOneOfParent.isEmpty &&
-        materialisedResult.addAtEndOfParent.isEmpty) {
+    if (topLevelCommands.isEmpty) {
       return;
     }
 
-    /// Build paste commands, respecting copy result positioning structure.
-    /// Main elements (from addAtEndMinusOne) and children (from addAtEndOfParent)
-    /// are treated as-is, preserving the copy result's positioning.
-    final List<MPCommand> pasteCommands = _buildPasteCommands(
-      materialisedResult.addAtEndMinusOneOfParent.cast<THElement>(),
-      materialisedResult.addAtEndOfParent.cast<THElement>(),
-      activeScrapMPID,
-    );
-
     /// Execute as single undo action.
     final MPCommand pasteCommand;
-    if (pasteCommands.length == 1) {
-      pasteCommand = pasteCommands.first;
+
+    if (topLevelCommands.length == 1) {
+      pasteCommand = topLevelCommands.first;
     } else {
       pasteCommand = MPCommandFactory.multipleCommandsFromList(
-        commandsList: pasteCommands,
+        commandsList: topLevelCommands,
         descriptionType: MPCommandDescriptionType.pasteElements,
         completionType:
             MPMultipleElementsCommandCompletionType.elementsListChanged,
@@ -1116,13 +1132,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _th2FileEditController.execute(pasteCommand);
-
-    /// Select all pasted elements (from both addAtEndMinusOne and addAtEndOfParent).
-    final allPastedElements = [
-      ...materialisedResult.addAtEndMinusOneOfParent.cast<THElement>(),
-      ...materialisedResult.addAtEndOfParent.cast<THElement>(),
-    ];
-    selectionController.setSelectedElements(allPastedElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
@@ -1131,204 +1140,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void duplicateSelectedElements() {
     copySelectedElements();
     pasteElements();
-  }
-
-  /// Build paste commands: add main elements first (with empty childrenMPIDs),
-  /// then children which will automatically populate parent childrenMPIDs.
-  ///
-  /// Main elements (points, lines, areas):
-  /// - If parent is pre-existing (activeScrap) → go before endmarker (addAtEndMinusOne)
-  /// - If parent is newly-created (from paste) → go at end (addAtEndOfParent)
-  ///
-  /// Children:
-  /// - If parent is newly-created → go at end (addAtEndOfParent)
-  /// - If parent is pre-existing → go before endmarker (addAtEndMinusOne)
-  List<MPCommand> _buildPasteCommands(
-    List<THElement> mainElements,
-    List<THElement> childrenElements,
-    int activeScrapMPID,
-  ) {
-    final List<MPCommand> commands = [];
-    final Set<int> newlyCreatedParentMPIDs = {};
-
-    /// Map children by their parent MPID for later attachment.
-    final Map<int, List<THElement>> childrenByParent = {};
-    for (final child in childrenElements) {
-      childrenByParent.putIfAbsent(child.parentMPID, () => []).add(child);
-    }
-
-    /// Add parent elements with their children as posCommands.
-    if (mainElements.isNotEmpty) {
-      // Track which parents are newly created
-      for (final element in mainElements) {
-        newlyCreatedParentMPIDs.add(element.mpID);
-      }
-
-      // Determine position for parents based on whether they're added to pre-existing or new parent
-      final int position = mainElements.first.parentMPID == activeScrapMPID
-          ? mpAddChildAtEndMinusOneOfParentChildrenList
-          : mpAddChildAtEndOfParentChildrenList;
-
-      // Build commands for each main element with its children as posCommand
-      for (final mainElement in mainElements) {
-        final List<THElement>? elementChildren =
-            childrenByParent[mainElement.mpID];
-        final MPCommand cmd = _buildElementAddCommand(
-          element: mainElement,
-          elementPosition: position,
-          children: elementChildren ?? [],
-          childrenPosition: mpAddChildAtEndOfParentChildrenList,
-          childrenByParent: childrenByParent,
-        );
-        commands.add(cmd);
-      }
-    }
-
-    /// Add children of existing parents separately (before endmarker).
-    /// Only add children whose parent is NOT in newlyCreatedParentMPIDs
-    /// (those have been added via posCommand already).
-    final List<THElement> childrenOfExistingParents = [];
-    for (final child in childrenElements) {
-      if (!newlyCreatedParentMPIDs.contains(child.parentMPID)) {
-        childrenOfExistingParents.add(child);
-      }
-    }
-
-    if (childrenOfExistingParents.isNotEmpty) {
-      commands.add(
-        MPCommandFactory.addElements(
-          elements: childrenOfExistingParents,
-          th2File: _th2File,
-          positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
-        ),
-      );
-    }
-
-    return commands;
-  }
-
-  /// Build an add command for a single element with its children as posCommand.
-  /// Recursively handles nested children via childrenByParent map.
-  MPCommand _buildElementAddCommand({
-    required THElement element,
-    required int elementPosition,
-    required List<THElement> children,
-    required int childrenPosition,
-    required Map<int, List<THElement>> childrenByParent,
-  }) {
-    // Build posCommand from children if any
-    final MPCommand? posCommand;
-    if (children.isNotEmpty) {
-      final List<MPCommand> childCmds = children.map((child) {
-        final childOfChildElements = childrenByParent[child.mpID] ?? [];
-        return _buildElementAddCommand(
-          element: child,
-          elementPosition: childrenPosition,
-          children: childOfChildElements,
-          childrenPosition: childrenPosition,
-          childrenByParent: childrenByParent,
-        );
-      }).toList();
-
-      posCommand = MPCommandFactory.multipleCommandsFromList(
-        commandsList: childCmds,
-        descriptionType: MPCommandDescriptionType.addElements,
-        completionType:
-            MPMultipleElementsCommandCompletionType.elementsListChanged,
-      );
-    } else {
-      posCommand = null;
-    }
-
-    // Create appropriate command based on element type
-    final MPCommand cmd;
-    switch (element) {
-      case THScrap scrap:
-        cmd = MPAddScrapCommand(
-          newScrap: scrap,
-          scrapPositionInParent: elementPosition,
-          scrapChildren: [],
-          th2File: _th2File,
-          posCommand: posCommand,
-        );
-      case THLine line:
-        cmd = MPAddLineCommand.forCWJM(
-          newLine: line,
-          linePositionInParent: elementPosition,
-          lineChildren: [],
-          preCommand: null,
-          posCommand: posCommand,
-        );
-      case THLineSegment segment:
-        cmd = MPAddLineSegmentCommand.forCWJM(
-          newLineSegment: segment,
-          lineSegmentPositionInParent: elementPosition,
-          posCommand: posCommand,
-        );
-      case THPoint point:
-        cmd = MPAddPointCommand.forCWJM(
-          newPoint: point,
-          pointPositionInParent: elementPosition,
-          posCommand: null,
-        );
-      case THArea area:
-        cmd = MPAddAreaCommand.forCWJM(
-          newArea: area,
-          areaChildren: [],
-          areaPositionInParent: elementPosition,
-          posCommand: posCommand,
-        );
-      default:
-        cmd = MPAddElementCommand.forCWJM(
-          newElement: element,
-          elementPositionInParent: elementPosition,
-          posCommand: null,
-        );
-    }
-
-    return cmd;
-  }
-
-  /// Helper method to build children result for an element.
-  MPCopyElementResult _buildChildrenResult(THElement element) {
-    if (element is! THIsParentMixin) {
-      return MPCopyElementResult.empty();
-    }
-
-    final parent = element as THIsParentMixin;
-    final mainEntries = <MPCopyElementWithChildren>[];
-    final childrenEntries = <MPCopyElementWithChildren>[];
-
-    for (final childMPID in parent.childrenMPIDs) {
-      final child = _th2File.elementByMPID(childMPID);
-      final template = MPCopyTemplate.fromElement(child);
-      final childrenResult = _buildChildrenResult(child);
-      final entry = MPCopyElementWithChildren(
-        template: template,
-        childrenResult: childrenResult,
-      );
-
-      if (child is THEndscrap ||
-          child is THEndline ||
-          child is THEndarea ||
-          child is THEmptyLine ||
-          child is THEndcomment ||
-          child is THAreaBorderTHID) {
-        /// End markers and area border THIDs always go at end of parent.
-        childrenEntries.add(entry);
-      } else if (element is THScrap || element is THLine) {
-        /// Children of scraps and lines always go at end of parent.
-        childrenEntries.add(entry);
-      } else {
-        /// For other parents, main children go at end minus one.
-        mainEntries.add(entry);
-      }
-    }
-
-    return MPCopyElementResult(
-      addAtEndMinusOneOfParent: mainEntries,
-      addAtEndOfParent: childrenEntries,
-    );
   }
 
   @action

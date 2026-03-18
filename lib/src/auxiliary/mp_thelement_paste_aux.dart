@@ -1,20 +1,26 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:collection';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
+import 'package:mapiah/src/auxiliary/mp_copy_template.dart';
+import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
+import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 
-/// Materializes copied elements (templates) into live THElements.
+/// Materializes copied elements (templates) into live THElements and builds
+/// the corresponding add commands in a single recursive pass.
 ///
 /// Processing is depth-first: each entry's childrenResult is fully processed
 /// before moving to the next sibling. This guarantees that when a
 /// THAreaBorderTHID is processed, the border line's new THID is already
 /// recorded in _oldToNewTHIDMap.
 class MPTHElementPasteAux {
-  final MPCopyElementResult copyResult;
+  final List<MPCopyElementWithChildren> copyResult;
   final TH2File th2File;
   final int activeScrapMPID;
 
@@ -24,136 +30,132 @@ class MPTHElementPasteAux {
   /// Map old MPID → new THID for elements with THID (THLine, THScrap, etc).
   final Map<int, String> _oldToNewTHIDMap = {};
 
-  /// Cached materialised result.
-  MPMaterialisedResult? _cachedResult;
-
   MPTHElementPasteAux({
     required this.copyResult,
     required this.th2File,
     required this.activeScrapMPID,
   });
 
-  /// Materialize the copied elements into live THElements ready for insertion.
-  /// Preserves positioning structure: elements from copy result's addAtEndMinusOne
-  /// stay in addAtEndMinusOne; elements from addAtEndOfParent stay in addAtEndOfParent.
-  /// This ensures line children (always in addAtEndOfParent in copy) remain at end during paste.
-  MPMaterialisedResult materialise() {
-    if (_cachedResult != null) {
-      return _cachedResult!;
+  /// Materialize and build commands in a single recursive pass.
+  ///
+  /// Returns a list of top-level add commands ready to execute.
+  List<MPCommand> materializeAndBuildCommands() {
+    final List<MPCommand> topLevelCommands = [];
+
+    for (final entry in copyResult) {
+      /// Determine parent MPID for this top-level element.
+      final THElement topElement = THElement.fromMap(entry.template.elementMap);
+      final int parentMPID = topElement is THScrap
+          ? th2File.mpID
+          : activeScrapMPID;
+
+      final MPCommand command = _processMaterializeAndBuild(entry, parentMPID);
+      topLevelCommands.add(command);
     }
 
-    final List<dynamic> endMinusOneElements = [];
-    final List<dynamic> endMinusOneChildren = [];
-    final List<dynamic> endOfParentElements = [];
-    final List<dynamic> endOfParentChildren = [];
-
-    /// Process top-level entries from addAtEndMinusOne.
-    for (final entry in copyResult.addAtEndMinusOneOfParent) {
-      final (main, children) = _processEntry(
-        entry: entry,
-        parentMPID: _getTopLevelParentMPID(entry),
-        isAddAtEndMinusOne: true,
-      );
-
-      endMinusOneElements.addAll(main);
-      endMinusOneChildren.addAll(children);
-    }
-
-    /// Process top-level entries from addAtEndOfParent.
-    for (final entry in copyResult.addAtEndOfParent) {
-      final (main, children) = _processEntry(
-        entry: entry,
-        parentMPID: _getTopLevelParentMPID(entry),
-        isAddAtEndMinusOne: false,
-      );
-
-      endOfParentElements.addAll(main);
-      endOfParentChildren.addAll(children);
-    }
-
-    _cachedResult = MPMaterialisedResult(
-      addAtEndMinusOneOfParent: [
-        ...endMinusOneElements,
-        ...endMinusOneChildren,
-      ],
-      addAtEndOfParent: [...endOfParentElements, ...endOfParentChildren],
-    );
-
-    return _cachedResult!;
-  }
-
-  /// Determine parent MPID for top-level elements.
-  int _getTopLevelParentMPID(MPCopyElementWithChildren entry) {
-    final element = THElement.fromMap(entry.template.elementMap);
-    return element is THScrap ? th2File.mpID : activeScrapMPID;
+    return topLevelCommands;
   }
 
   /// Process a single copy entry with depth-first recursion.
   ///
-  /// Returns a tuple of (mainElements, childrenElements).
-  (List<dynamic>, List<dynamic>) _processEntry({
-    required MPCopyElementWithChildren entry,
-    required int parentMPID,
-    required bool isAddAtEndMinusOne,
-  }) {
-    final template = entry.template;
-    final List<dynamic> result = [];
-
-    /// 1. Allocate new MPID.
+  /// Materializes the element and builds its add command with children as posCommand.
+  /// Returns the add command for this element.
+  MPCommand _processMaterializeAndBuild(
+    MPCopyElementWithChildren entry,
+    int parentMPID,
+  ) {
+    /// Step 1: Allocate new MPID.
     final int newMPID = mpLocator.mpGeneralController.nextMPIDForElements();
 
-    /// 2. Create element from template.
+    /// Step 2: Create element from template.
+    final MPCopyTemplate template = entry.template;
+
     THElement element = THElement.fromMap(template.elementMap);
 
-    /// 3. Resolve THID options if present, then apply all updates in one copyWith.
-    if (element is THArea) {
-      final newOptionsMap = _resolveOptionsTHIDs(element.optionsMap, newMPID);
+    /// Step 3 & 4: Check THID and update element with copyWith().
+    /// Handle THScrap THID specially since it's not in options.
+    if (element is THScrap) {
+      final String originalTHID = element.thID;
+
+      String newTHID = originalTHID;
+
+      if (originalTHID.isNotEmpty) {
+        if (th2File.hasElementByTHID(originalTHID)) {
+          newTHID = th2File.getNewTHID(prefix: '$originalTHID-');
+        }
+        _oldToNewTHIDMap[template.originalMPID ?? 0] = newTHID;
+      }
+
       element = element.copyWith(
         mpID: newMPID,
         parentMPID: parentMPID,
         originalLineInTH2File: '',
-        optionsMap: newOptionsMap,
-        childrenMPIDs: [], // Clear children - they'll be added separately
-      );
-    } else if (element is THLine) {
-      final newOptionsMap = _resolveOptionsTHIDs(element.optionsMap, newMPID);
-      element = element.copyWith(
-        mpID: newMPID,
-        parentMPID: parentMPID,
-        originalLineInTH2File: '',
-        optionsMap: newOptionsMap,
-        childrenMPIDs: [], // Clear children - they'll be added separately
-      );
-    } else if (element is THPoint) {
-      final newOptionsMap = _resolveOptionsTHIDs(element.optionsMap, newMPID);
-      element = element.copyWith(
-        mpID: newMPID,
-        parentMPID: parentMPID,
-        originalLineInTH2File: '',
-        optionsMap: newOptionsMap,
-      );
-    } else if (element is THScrap) {
-      final newOptionsMap = _resolveOptionsTHIDs(element.optionsMap, newMPID);
-      element = element.copyWith(
-        mpID: newMPID,
-        parentMPID: parentMPID,
-        originalLineInTH2File: '',
-        optionsMap: newOptionsMap,
-        childrenMPIDs: [], // Clear children - they'll be added separately
+        thID: newTHID,
+        childrenMPIDs: [],
       );
     } else {
-      /// For other element types, just update MPID and parent.
+      /// For all other elements, update MPID and parent.
       element = element.copyWith(
         mpID: newMPID,
         parentMPID: parentMPID,
         originalLineInTH2File: '',
       );
+
+      /// If element has children, clear the children list.
+      if (element is THIsParentMixin) {
+        final THIsParentMixin parent = element as THIsParentMixin;
+
+        parent.childrenMPIDs.clear();
+      }
+
+      /// Handle THID conflicts in optionsMap for elements with
+      /// THIDCommandOption.
+      if (element is THHasOptionsMixin) {
+        final String? originalTHID = MPCommandOptionAux.getID(element);
+
+        if ((originalTHID != null) && originalTHID.isNotEmpty) {
+          String resolvedTHID = originalTHID;
+
+          /// Check if THID already exists in th2File
+          if (th2File.hasElementByTHID(originalTHID)) {
+            /// Generate new THID with prefix
+            resolvedTHID = th2File.getNewTHID(prefix: '$originalTHID-');
+          }
+
+          /// Register the original MPID → resolved THID mapping
+          _oldToNewTHIDMap[template.originalMPID ?? 0] = resolvedTHID;
+
+          /// If THID needed to be changed, update the option
+          if (resolvedTHID != originalTHID) {
+            /// Create new THIDCommandOption with resolved THID
+            final THIDCommandOption newTHIDOption = THIDCommandOption(
+              parentMPID: newMPID,
+              thID: resolvedTHID,
+            );
+
+            /// Update the element's option with new THID
+            element.addUpdateOption(newTHIDOption);
+          }
+        }
+      }
     }
 
-    /// 4. Record MPID mapping.
+    /// Record MPID mapping.
     _oldToNewMPIDMap[template.originalMPID ?? 0] = newMPID;
 
-    /// 5. Handle THAreaBorderTHID references (depth-first ensures border lines done).
+    /// Step 5: Recursively process children and collect commands.
+    final List<MPCommand> childCommands = [];
+
+    for (final childEntry in entry.childrenResult) {
+      final MPCommand childCmd = _processMaterializeAndBuild(
+        childEntry,
+        newMPID,
+      );
+
+      childCommands.add(childCmd);
+    }
+
+    /// Step 6: Handle THAreaBorderTHID special case (update THID if needed).
     if (element is THAreaBorderTHID) {
       final String? newReferencedTHID =
           _oldToNewTHIDMap[template.originalMPID ?? 0];
@@ -163,69 +165,63 @@ class MPTHElementPasteAux {
       }
     }
 
-    /// Place in correct list.
-    result.add(element);
+    /// Step 7: Create appropriate add command based on element type.
+    final MPCommand? posCommand = childCommands.isNotEmpty
+        ? MPCommandFactory.multipleCommandsFromList(
+            commandsList: childCommands,
+            descriptionType: MPCommandDescriptionType.addElements,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          )
+        : null;
 
-    /// 6. Depth-first recursion: process children.
-    /// Children will automatically populate parent's childrenMPIDs when added to th2File.
-    final List<dynamic> allChildren = [];
+    final int elementPosition = entry.positionAtParent;
+    final MPCommand cmd;
 
-    for (final childEntry in entry.childrenResult.addAtEndMinusOneOfParent) {
-      final (childMain, childChildren) = _processEntry(
-        entry: childEntry,
-        parentMPID: newMPID,
-        isAddAtEndMinusOne: true,
-      );
-
-      result.addAll(childMain);
-      allChildren.addAll(childChildren);
+    switch (element) {
+      case THScrap scrap:
+        cmd = MPAddScrapCommand(
+          newScrap: scrap,
+          scrapPositionInParent: elementPosition,
+          scrapChildren: [],
+          th2File: th2File,
+          posCommand: posCommand,
+        );
+      case THLine line:
+        cmd = MPAddLineCommand.forCWJM(
+          newLine: line,
+          linePositionInParent: elementPosition,
+          lineChildren: [],
+          preCommand: null,
+          posCommand: posCommand,
+        );
+      case THArea area:
+        cmd = MPAddAreaCommand.forCWJM(
+          newArea: area,
+          areaChildren: [],
+          areaPositionInParent: elementPosition,
+          posCommand: posCommand,
+        );
+      case THPoint point:
+        cmd = MPAddPointCommand.forCWJM(
+          newPoint: point,
+          pointPositionInParent: elementPosition,
+          posCommand: null,
+        );
+      case THLineSegment segment:
+        cmd = MPAddLineSegmentCommand.forCWJM(
+          newLineSegment: segment,
+          lineSegmentPositionInParent: elementPosition,
+          posCommand: null,
+        );
+      default:
+        cmd = MPAddElementCommand.forCWJM(
+          newElement: element,
+          elementPositionInParent: elementPosition,
+          posCommand: null,
+        );
     }
 
-    for (final childEntry in entry.childrenResult.addAtEndOfParent) {
-      final (childMain, childChildren) = _processEntry(
-        entry: childEntry,
-        parentMPID: newMPID,
-        isAddAtEndMinusOne: false,
-      );
-
-      result.addAll(childMain);
-      allChildren.addAll(childChildren);
-    }
-
-    return (result, allChildren);
-  }
-
-  /// Resolve THIDs in command options, checking for conflicts.
-  SplayTreeMap<THCommandOptionType, THCommandOption> _resolveOptionsTHIDs(
-    SplayTreeMap<THCommandOptionType, THCommandOption> optionsMap,
-    int elementMPID,
-  ) {
-    final newMap = SplayTreeMap<THCommandOptionType, THCommandOption>();
-
-    for (final entry in optionsMap.entries) {
-      final option = entry.value;
-
-      if (option is THIDCommandOption) {
-        final String originalTHID = option.thID;
-        final String resolvedTHID;
-
-        if (th2File.hasElementByTHID(originalTHID)) {
-          /// Conflict: generate new THID.
-          resolvedTHID = th2File.getNewTHID(prefix: '$originalTHID-');
-        } else {
-          /// No conflict: keep original THID.
-          resolvedTHID = originalTHID;
-        }
-
-        /// Update the mapping and option.
-        _oldToNewTHIDMap[elementMPID] = resolvedTHID;
-        final updatedOption = option.copyWith(thID: resolvedTHID);
-        newMap[entry.key] = updatedOption;
-      } else {
-        newMap[entry.key] = option;
-      }
-    }
-
-    return newMap;
+    return cmd;
   }
 }
