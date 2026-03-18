@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 
@@ -156,6 +157,7 @@ class MPTHElementPasteAux {
 
     /// 6. Depth-first recursion: process children.
     final List<dynamic> allChildren = [];
+    final List<int> newChildrenMPIDs = [];
 
     for (final childEntry in entry.childrenResult.addAtEndMinusOneOfParent) {
       final (childMain, childChildren) = _processEntry(
@@ -166,6 +168,14 @@ class MPTHElementPasteAux {
 
       result.addAll(childMain);
       allChildren.addAll(childChildren);
+
+      if (childEntry.template.originalMPID != null) {
+        final newChildMPID =
+            _oldToNewMPIDMap[childEntry.template.originalMPID!];
+        if (newChildMPID != null) {
+          newChildrenMPIDs.add(newChildMPID);
+        }
+      }
     }
 
     for (final childEntry in entry.childrenResult.addAtEndOfParent) {
@@ -177,6 +187,21 @@ class MPTHElementPasteAux {
 
       result.addAll(childMain);
       allChildren.addAll(childChildren);
+
+      if (childEntry.template.originalMPID != null) {
+        final newChildMPID =
+            _oldToNewMPIDMap[childEntry.template.originalMPID!];
+        if (newChildMPID != null) {
+          newChildrenMPIDs.add(newChildMPID);
+        }
+      }
+    }
+
+    /// 7. Update parent's childrenMPIDs to point to newly materialized children.
+    if (element is THIsParentMixin && newChildrenMPIDs.isNotEmpty) {
+      final parent = element as THIsParentMixin;
+      parent.childrenMPIDs.clear();
+      parent.childrenMPIDs.addAll(newChildrenMPIDs);
     }
 
     return (result, allChildren);

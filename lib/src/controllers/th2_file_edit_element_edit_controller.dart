@@ -982,27 +982,82 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     /// Build copy templates from selected elements.
+    /// For areas, we need to handle border lines specially.
     final List<MPCopyElementWithChildren> mainEntries = [];
     final List<MPCopyElementWithChildren> childrenEntries = [];
+    final Set<int> copiedLineMPIDs = {};
 
     for (final element
         in selectedElements.map((e) => e.originalElementClone).toList()) {
-      final template = MPCopyTemplate.fromElement(element);
-      final childrenResult = _buildChildrenResult(element);
-      final entry = MPCopyElementWithChildren(
-        template: template,
-        childrenResult: childrenResult,
-      );
+      if (element is THArea) {
+        /// For areas, copy referenced border lines first.
+        final List<MPCopyElementWithChildren> borderLineEntries = [];
 
-      if (element is THArea ||
-          element is THLine ||
-          element is THPoint ||
-          element is THScrap) {
-        mainEntries.add(entry);
+        for (final childMPID in element.childrenMPIDs) {
+          final child = _th2File.elementByMPID(childMPID);
+          if (child is THAreaBorderTHID) {
+            final borderTHID = child.thID;
+            if (_th2File.hasElementByTHID(borderTHID)) {
+              final borderLine = _th2File.elementByTHID(borderTHID);
+              if (!copiedLineMPIDs.contains(borderLine.mpID)) {
+                final template = MPCopyTemplate.fromElement(borderLine);
+                final childrenResult = _buildChildrenResult(borderLine);
+                final entry = MPCopyElementWithChildren(
+                  template: template,
+                  childrenResult: childrenResult,
+                );
+                borderLineEntries.add(entry);
+                copiedLineMPIDs.add(borderLine.mpID);
+              }
+            }
+          }
+        }
+
+        /// Add border lines first, then the area.
+        mainEntries.addAll(borderLineEntries);
+
+        final areaTemplate = MPCopyTemplate.fromElement(element);
+        final areaChildrenResult = _buildChildrenResult(element);
+        final areaEntry = MPCopyElementWithChildren(
+          template: areaTemplate,
+          childrenResult: areaChildrenResult,
+        );
+        mainEntries.add(areaEntry);
       } else {
-        childrenEntries.add(entry);
+        /// For non-area elements, proceed normally.
+        final template = MPCopyTemplate.fromElement(element);
+        final childrenResult = _buildChildrenResult(element);
+        final entry = MPCopyElementWithChildren(
+          template: template,
+          childrenResult: childrenResult,
+        );
+
+        if (element is THLine || element is THPoint || element is THScrap) {
+          mainEntries.add(entry);
+        } else {
+          childrenEntries.add(entry);
+        }
       }
     }
+
+    /// Sort remaining mainEntries (non-area, non-copied-border-lines) to ensure
+    /// lines come before areas. This ensures other border lines are added before
+    /// areas reference them.
+    final List<MPCopyElementWithChildren> areaLines = [];
+    final List<MPCopyElementWithChildren> otherElements = [];
+
+    for (final entry in mainEntries) {
+      if (entry.template.elementType == 'line' &&
+          !copiedLineMPIDs.contains(entry.template.originalMPID)) {
+        areaLines.add(entry);
+      } else {
+        otherElements.add(entry);
+      }
+    }
+
+    mainEntries.clear();
+    mainEntries.addAll(areaLines);
+    mainEntries.addAll(otherElements);
 
     final copyResult = MPCopyElementResult(
       addAtEndMinusOneOfParent: mainEntries,
@@ -1116,9 +1171,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           child is THEndline ||
           child is THEndarea ||
           child is THEmptyLine ||
-          child is THEndcomment) {
+          child is THEndcomment ||
+          child is THAreaBorderTHID) {
+        /// End markers and area border THIDs always go at end of parent.
+        childrenEntries.add(entry);
+      } else if (element is THScrap || element is THLine) {
+        /// Children of scraps and lines always go at end of parent.
         childrenEntries.add(entry);
       } else {
+        /// For other parents, main children go at end minus one.
         mainEntries.add(entry);
       }
     }

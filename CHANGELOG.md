@@ -24,6 +24,7 @@
   * Exception "No element with index '0'" when opening TH2 file from command line.
   * Tab names now display without .th2 extension for cleaner UI.
   * Test 3100 assertions now correctly expect TH2FileTabsPage instead of TH2FileEditPage.
+  * Copy/Paste logic refined: border lines are now processed before areas to ensure proper THID references; children of scraps and lines always added at end of parent (not end minus one).
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
