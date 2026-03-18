@@ -12,6 +12,7 @@ enum MPCommandDescriptionType {
   addPoint,
   addScrap,
   addXTherionImageInsertConfig,
+  copyElements,
   duplicateElements,
   editAreasType,
   editAreasTypeSubtype,
@@ -39,6 +40,7 @@ enum MPCommandDescriptionType {
   movePoint,
   moveStraightLineSegment,
   multipleElements,
+  pasteElements,
   removeArea,
   removeAreaBorderTHID,
   removeElement,
@@ -89,7 +91,11 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeScrap;
       case MPCommandDescriptionType.addXTherionImageInsertConfig:
         return MPCommandDescriptionType.removeXTherionImageInsertConfig;
+      case MPCommandDescriptionType.copyElements:
+        return MPCommandDescriptionType.copyElements;
       case MPCommandDescriptionType.duplicateElements:
+        return MPCommandDescriptionType.removeElements;
+      case MPCommandDescriptionType.pasteElements:
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;

@@ -295,6 +295,13 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           onSelectAll();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyC:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController.copySelectedElements();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyD:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
@@ -323,6 +330,13 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
             !isShiftPressed) {
           th2FileEditController.elementEditController
               .toggleSelectedLinesReverseOption();
+          keyProcessed = true;
+        }
+      case LogicalKeyboardKey.keyV:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController.pasteElements();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyX:

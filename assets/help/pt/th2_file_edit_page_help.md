@@ -16,6 +16,9 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
 - [Selecionando elementos](#selecionando-elementos)
+- [Operações com elementos](#operações-com-elementos)
+  - [Copiar e colar](#copiar-e-colar)
+  - [Duplicar](#duplicar)
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
@@ -115,6 +118,37 @@ Para selecionar um elemento, clique nele com a ferramenta _Selecionar elemento_ 
 Também é possível selecionar elementos arrastando uma janela de seleção com o mouse. Para fazer isso, clique e segure o botão esquerdo do mouse em uma área vazia do canvas e arraste o mouse. Todos os elementos que estão total ou parcialmente dentro da janela de seleção serão selecionados. Para adicionar elementos à seleção, mantenha a tecla _Shift_ pressionada enquanto arrasta a janela de seleção.
 
 Quando clicar em uma linha que define uma área, o usuário será apresentado com uma caixa de diálogo "Vários elementos clicados", onde poderá escolher qual elemento selecionar. As opções são a própria linha e a área definida pela linha. Se você Ctrl+Clicar (ou Meta+Clicar) em uma linha que define uma área, a área será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados". Se você Shift+Ctrl+Clicar (ou Shift+Meta+Clicar) em uma linha que define uma área, a linha será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados".
+
+## Operações com elementos
+
+### Copiar e colar
+Elementos selecionados podem ser copiados para uma área de transferência (clipboard) e colados no arquivo atual ou em outro arquivo aberto.
+
+**Para copiar elementos selecionados:**
+- Pressione _Ctrl+C_ (ou _Meta+C_ no macOS)
+- Pelo menos um elemento deve estar selecionado
+
+**Para colar elementos copiados:**
+- Pressione _Ctrl+V_ (ou _Meta+V_ no macOS)
+- Os elementos colados aparecem no croqui atual
+- Todos os elementos filhos (segmentos de linha, bordas de área, etc.) são automaticamente incluídos na colagem
+- As referências de THID são automaticamente resolvidas para evitar conflitos: se o THID de um elemento colado já existe no arquivo de destino, um novo THID exclusivo é automaticamente gerado
+- Os elementos colados se tornam a nova seleção, deixando-os prontos para edição ou movimento adicional
+- A operação de colagem pode ser desfeita com _Ctrl+Z_
+
+**Colagem entre arquivos:**
+Quando você tem múltiplos arquivos abertos em abas, você pode copiar elementos de um arquivo e colá-los em outro arquivo. Simplesmente alterne para a aba do arquivo de destino e pressione _Ctrl+V_.
+
+### Duplicar
+Elementos selecionados podem ser rapidamente duplicados no mesmo lugar.
+
+**Para duplicar elementos selecionados:**
+- Pressione _Ctrl+D_
+- Todos os elementos selecionados e seus filhos são duplicados
+- Os elementos duplicados aparecem na mesma posição que os originais
+- A operação de duplicação cria novos IDs exclusivos para todos os elementos duplicados
+- Os elementos duplicados se tornam a nova seleção
+- A operação de duplicação pode ser desfeita com _Ctrl+Z_
 
 ## Simplificar linhas
 Curvas Bézier e segmentos de linha reta são simplificados de forma diferente. Para simplificar linhas, selecione-as primeiro. É possível ter outros tipos de elementos selecionados (pontos ou áreas) durante a simplificação; eles não serão alterados pelo processo.

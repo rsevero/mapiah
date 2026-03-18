@@ -13,8 +13,10 @@
 | Criar linha de conexão de mapa de ponto Corte para Base       | Ctrl+Alt+X                           |
 | Criar ponto                                                   | P                                    |
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
+| Copiar elementos selecionados                                | Ctrl+C                               |
 | Desfazer                                                      | Ctrl+Z                               |
 | Desselecionar tudo                                            | Escape                               |
+| Colar elementos                                               | Ctrl+V                               |
 | Duplicar elementos selecionados                               | Ctrl+D                               |
 | Editar nó de linha                                            | N                                    |
 | Editar opções                                                 | O                                    |

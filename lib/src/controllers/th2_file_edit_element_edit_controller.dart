@@ -2,14 +2,17 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
+import 'package:mapiah/src/auxiliary/mp_copy_template.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_thelement_duplicator_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_thelement_paste_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -968,7 +971,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
-  void duplicateSelectedElements() {
+  void copySelectedElements() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
     final Iterable<MPSelectedElement> selectedElements =
@@ -978,26 +981,152 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final List<THElement> elementsToDuplicate = selectedElements
-        .map((MPSelectedElement e) => e.originalElementClone)
-        .toList();
-    final MPTHElementDuplicatorAux duplicator = MPTHElementDuplicatorAux(
-      elements: elementsToDuplicate,
-      th2File: _th2File,
-      updateTHIDs: true,
-    );
-    final MPDuplicateElementResult duplicate = duplicator.getDuplicate();
+    /// Build copy templates from selected elements.
+    final List<MPCopyElementWithChildren> mainEntries = [];
+    final List<MPCopyElementWithChildren> childrenEntries = [];
 
-    if (duplicate.addAtEndMinusOneOfParent.isEmpty) {
+    for (final element
+        in selectedElements.map((e) => e.originalElementClone).toList()) {
+      final template = MPCopyTemplate.fromElement(element);
+      final childrenResult = _buildChildrenResult(element);
+      final entry = MPCopyElementWithChildren(
+        template: template,
+        childrenResult: childrenResult,
+      );
+
+      if (element is THArea ||
+          element is THLine ||
+          element is THPoint ||
+          element is THScrap) {
+        mainEntries.add(entry);
+      } else {
+        childrenEntries.add(entry);
+      }
+    }
+
+    final copyResult = MPCopyElementResult(
+      addAtEndMinusOneOfParent: mainEntries,
+      addAtEndOfParent: childrenEntries,
+    );
+
+    /// Store to global clipboard.
+    mpLocator.mpGeneralController.setClipboard(copyResult);
+  }
+
+  @action
+  void pasteElements() {
+    final clipboard = mpLocator.mpGeneralController.getClipboard();
+
+    if (clipboard == null || clipboard.isEmpty) {
       return;
     }
 
-    final MPCommand addDuplicateCommand = duplicator.getAddDuplicateCommand();
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final int activeScrapMPID = _th2FileEditController.activeScrapID;
 
-    _th2FileEditController.execute(addDuplicateCommand);
-    selectionController.setSelectedElements(duplicate.addAtEndMinusOneOfParent);
+    /// Materialize templates to live elements.
+    final pasteAux = MPTHElementPasteAux(
+      copyResult: clipboard,
+      th2File: _th2File,
+      activeScrapMPID: activeScrapMPID,
+    );
+    final materialisedResult = pasteAux.materialise();
+
+    final List<THElement> mainElements =
+        (materialisedResult.addAtEndMinusOneOfParent).cast<THElement>();
+    final List<THElement> childrenElements =
+        (materialisedResult.addAtEndOfParent).cast<THElement>();
+
+    if (mainElements.isEmpty && childrenElements.isEmpty) {
+      return;
+    }
+
+    /// Build and execute paste command(s).
+    final List<MPCommand> pasteCommands = [];
+
+    if (mainElements.isNotEmpty) {
+      pasteCommands.add(
+        MPCommandFactory.addElements(
+          elements: mainElements,
+          th2File: _th2File,
+          positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
+        ),
+      );
+    }
+
+    if (childrenElements.isNotEmpty) {
+      pasteCommands.add(
+        MPCommandFactory.addElements(
+          elements: childrenElements,
+          th2File: _th2File,
+          positionInParent: mpAddChildAtEndOfParentChildrenList,
+        ),
+      );
+    }
+
+    /// Execute as single undo action.
+    final MPCommand pasteCommand;
+    if (pasteCommands.length == 1) {
+      pasteCommand = pasteCommands.first;
+    } else {
+      pasteCommand = MPCommandFactory.multipleCommandsFromList(
+        commandsList: pasteCommands,
+        descriptionType: MPCommandDescriptionType.pasteElements,
+        completionType:
+            MPMultipleElementsCommandCompletionType.elementsListChanged,
+      );
+    }
+
+    _th2FileEditController.execute(pasteCommand);
+
+    /// Select pasted elements.
+    final allPastedElements = [...mainElements, ...childrenElements];
+    selectionController.setSelectedElements(allPastedElements);
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
+  @action
+  void duplicateSelectedElements() {
+    copySelectedElements();
+    pasteElements();
+  }
+
+  /// Helper method to build children result for an element.
+  MPCopyElementResult _buildChildrenResult(THElement element) {
+    if (element is! THIsParentMixin) {
+      return MPCopyElementResult.empty();
+    }
+
+    final parent = element as THIsParentMixin;
+    final mainEntries = <MPCopyElementWithChildren>[];
+    final childrenEntries = <MPCopyElementWithChildren>[];
+
+    for (final childMPID in parent.childrenMPIDs) {
+      final child = _th2File.elementByMPID(childMPID);
+      final template = MPCopyTemplate.fromElement(child);
+      final childrenResult = _buildChildrenResult(child);
+      final entry = MPCopyElementWithChildren(
+        template: template,
+        childrenResult: childrenResult,
+      );
+
+      if (child is THEndscrap ||
+          child is THEndline ||
+          child is THEndarea ||
+          child is THEmptyLine ||
+          child is THEndcomment) {
+        childrenEntries.add(entry);
+      } else {
+        mainEntries.add(entry);
+      }
+    }
+
+    return MPCopyElementResult(
+      addAtEndMinusOneOfParent: mainEntries,
+      addAtEndOfParent: childrenEntries,
+    );
   }
 
   @action

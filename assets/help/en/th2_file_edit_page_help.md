@@ -12,6 +12,9 @@ This is where all TH2 file editing is done.
 - [Drawing lines](#drawing-lines)
   - [Map connection](#map-connection)
 - [Selecting elements](#selecting-elements)
+- [Element operations](#element-operations)
+  - [Copy and paste](#copy-and-paste)
+  - [Duplicate](#duplicate)
 - [Element options](#element-options)
 - [Save](#save)
   - [Original file format](#original-file-format)
@@ -91,6 +94,37 @@ To select an element, click on it with the _Select element_ tool active. To sele
 Its also possible to select elements by dragging a selection window with the mouse. To do that, click and hold the left mouse button on an empty area of the canvas and drag the mouse. All elements that are fully or partially inside the selection window will be selected. To add elements to the selection, hold the _Shift_ key while dragging the selection window.
 
 When cliking on a line that defines an area, the the user will be presented with a "Multiple clicked elements" dialog box where the user can choose which element to select. The options are the line itself and the area defined by the line. It you Ctrl+Click (or Meta+Click) on a line that defines an area, the area will be selected directly without showing the "Multiple clicked elements" dialog box. If you Shift+Ctrl+Click (or Shift+Meta+Click) on a line that defines an area, the line will be selected directly without showing the "Multiple clicked elements" dialog box.
+
+## Element operations
+
+### Copy and paste
+Selected elements can be copied to a clipboard and pasted into the current file or another open file.
+
+**To copy selected elements:**
+- Press _Ctrl+C_ (or _Meta+C_ on macOS)
+- At least one element must be selected
+
+**To paste copied elements:**
+- Press _Ctrl+V_ (or _Meta+V_ on macOS)
+- Pasted elements appear in the current scrap
+- All child elements (line segments, area borders, etc.) are automatically included in the paste
+- THID references are automatically resolved to avoid conflicts: if a pasted element's THID already exists in the target file, a new unique THID is automatically generated
+- Pasted elements become the new selection, making them ready for further editing or moving
+- The paste operation can be undone with _Ctrl+Z_
+
+**Cross-file pasting:**
+When you have multiple files open in tabs, you can copy elements from one file and paste them into another file. Simply switch to the target file tab and press _Ctrl+V_.
+
+### Duplicate
+Selected elements can be quickly duplicated in place.
+
+**To duplicate selected elements:**
+- Press _Ctrl+D_
+- All selected elements and their children are duplicated
+- Duplicated elements appear at the same position as the originals
+- The duplicate operation creates new unique IDs for all duplicated elements
+- Duplicated elements become the new selection
+- The duplicate operation can be undone with _Ctrl+Z_
 
 ## Element options
 Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be openned by using the 'O' keyboard shortcut when there is at least one element selected.

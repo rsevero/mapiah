@@ -12,6 +12,7 @@
 | Create map connection line from point X-Section to Station | Ctrl+Alt+X                   |
 | Create point                                               | P                            |
 | Create scrap                                               | K                            |
+| Copy selected elements                                     | Ctrl+C                       |
 | Delete point, line, area or line segment                   | Del or Backspace             |
 | Deselect all                                               | Escape                       |
 | Duplicate selected elements                                | Ctrl+D                       |
@@ -20,6 +21,7 @@
 | Keyboard shortcuts                                         | Ctrl+K                       |
 | Line node edit                                             | N                            |
 | Options edit                                               | O                            |
+| Paste elements                                             | Ctrl+V                       |
 | Redo                                                       | Ctrl+Y                       |
 | Reverse line                                               | R                            |
 | Run Therion                                                | T                            |

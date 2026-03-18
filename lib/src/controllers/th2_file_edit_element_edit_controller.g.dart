@@ -552,6 +552,36 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void copySelectedElements() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.copySelectedElements',
+        );
+    try {
+      return super.copySelectedElements();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void pasteElements() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.pasteElements',
+        );
+    try {
+      return super.pasteElements();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void duplicateSelectedElements() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

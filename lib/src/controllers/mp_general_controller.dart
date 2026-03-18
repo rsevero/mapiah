@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -39,6 +40,9 @@ abstract class MPGeneralControllerBase with Store {
       HashMap<String, TH2FileEditController>();
 
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
+
+  /// Global clipboard for copy/paste operations.
+  MPCopyElementResult? _clipboard;
 
   MPGeneralControllerBase() {
     Future<void>.microtask(() async {
@@ -122,6 +126,19 @@ abstract class MPGeneralControllerBase with Store {
     return _nextMPIDForTH2Files--;
   }
 
+  /// Get the current clipboard content.
+  MPCopyElementResult? getClipboard() {
+    return _clipboard;
+  }
+
+  /// Set the clipboard content.
+  void setClipboard(MPCopyElementResult? copyResult) {
+    _clipboard = copyResult;
+  }
+
+  /// Check if clipboard has content.
+  bool get hasClipboardContent => _clipboard != null && !_clipboard!.isEmpty;
+
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
   void reset() {
@@ -129,6 +146,7 @@ abstract class MPGeneralControllerBase with Store {
     _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
     _t2hFileEditControllers.clear();
     _thConfigFilePath = '';
+    _clipboard = null;
   }
 
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {

@@ -69,6 +69,13 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
           // openOptionEditOverlayWindow();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyV:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController.pasteElements();
+          keyProcessed = true;
+        }
     }
 
     if (keyProcessed) {
