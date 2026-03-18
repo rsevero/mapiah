@@ -1098,27 +1098,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     /// Build and execute paste command(s).
-    final List<MPCommand> pasteCommands = [];
-
-    if (mainElements.isNotEmpty) {
-      pasteCommands.add(
-        MPCommandFactory.addElements(
-          elements: mainElements,
-          th2File: _th2File,
-          positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
-        ),
-      );
-    }
-
-    if (childrenElements.isNotEmpty) {
-      pasteCommands.add(
-        MPCommandFactory.addElements(
-          elements: childrenElements,
-          th2File: _th2File,
-          positionInParent: mpAddChildAtEndOfParentChildrenList,
-        ),
-      );
-    }
+    /// Use the same pattern as the old duplicator: build commands with explicit
+    /// child passing instead of relying on getChildren(th2File).
+    final List<MPCommand> pasteCommands = _buildPasteCommands(
+      mainElements,
+      childrenElements,
+    );
 
     /// Execute as single undo action.
     final MPCommand pasteCommand;
@@ -1146,6 +1131,40 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void duplicateSelectedElements() {
     copySelectedElements();
     pasteElements();
+  }
+
+  /// Build paste commands: add parents first (with empty childrenMPIDs),
+  /// then children which will automatically populate parent childrenMPIDs.
+  List<MPCommand> _buildPasteCommands(
+    List<THElement> mainElements,
+    List<THElement> childrenElements,
+  ) {
+    final List<MPCommand> commands = [];
+
+    /// Add parent elements first (they have empty childrenMPIDs).
+    /// Since they have no children yet, they need to be added at end, not end-minus-one.
+    if (mainElements.isNotEmpty) {
+      commands.add(
+        MPCommandFactory.addElements(
+          elements: mainElements,
+          th2File: _th2File,
+          positionInParent: mpAddChildAtEndOfParentChildrenList,
+        ),
+      );
+    }
+
+    /// Add children - these will automatically populate parent childrenMPIDs.
+    if (childrenElements.isNotEmpty) {
+      commands.add(
+        MPCommandFactory.addElements(
+          elements: childrenElements,
+          th2File: _th2File,
+          positionInParent: mpAddChildAtEndOfParentChildrenList,
+        ),
+      );
+    }
+
+    return commands;
   }
 
   /// Helper method to build children result for an element.
