@@ -1103,6 +1103,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final List<MPCommand> pasteCommands = _buildPasteCommands(
       mainElements,
       childrenElements,
+      activeScrapMPID,
     );
 
     /// Execute as single undo action.
@@ -1133,35 +1134,80 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     pasteElements();
   }
 
-  /// Build paste commands: add parents first (with empty childrenMPIDs),
+  /// Build paste commands: add main elements first (with empty childrenMPIDs),
   /// then children which will automatically populate parent childrenMPIDs.
+  ///
+  /// Main elements (points, lines, areas):
+  /// - If parent is pre-existing (activeScrap) → go before endmarker (addAtEndMinusOne)
+  /// - If parent is newly-created (from paste) → go at end (addAtEndOfParent)
+  ///
+  /// Children:
+  /// - If parent is newly-created → go at end (addAtEndOfParent)
+  /// - If parent is pre-existing → go before endmarker (addAtEndMinusOne)
   List<MPCommand> _buildPasteCommands(
     List<THElement> mainElements,
     List<THElement> childrenElements,
+    int activeScrapMPID,
   ) {
     final List<MPCommand> commands = [];
+    final Set<int> newlyCreatedParentMPIDs = {};
 
     /// Add parent elements first (they have empty childrenMPIDs).
-    /// Since they have no children yet, they need to be added at end, not end-minus-one.
     if (mainElements.isNotEmpty) {
+      // Track which parents are newly created
+      for (final element in mainElements) {
+        newlyCreatedParentMPIDs.add(element.mpID);
+      }
+
+      // Determine position based on whether main elements are being added to pre-existing or new parent
+      final int position = mainElements.first.parentMPID == activeScrapMPID
+          ? mpAddChildAtEndMinusOneOfParentChildrenList
+          : mpAddChildAtEndOfParentChildrenList;
+
       commands.add(
         MPCommandFactory.addElements(
           elements: mainElements,
           th2File: _th2File,
-          positionInParent: mpAddChildAtEndOfParentChildrenList,
+          positionInParent: position,
         ),
       );
     }
 
-    /// Add children - these will automatically populate parent childrenMPIDs.
+    /// Add children - use different positions based on parent type.
     if (childrenElements.isNotEmpty) {
-      commands.add(
-        MPCommandFactory.addElements(
-          elements: childrenElements,
-          th2File: _th2File,
-          positionInParent: mpAddChildAtEndOfParentChildrenList,
-        ),
-      );
+      // Separate children by parent type
+      final List<THElement> childrenOfNewParents = [];
+      final List<THElement> childrenOfExistingParents = [];
+
+      for (final child in childrenElements) {
+        if (newlyCreatedParentMPIDs.contains(child.parentMPID)) {
+          childrenOfNewParents.add(child);
+        } else {
+          childrenOfExistingParents.add(child);
+        }
+      }
+
+      /// Children of newly-created parents go at end.
+      if (childrenOfNewParents.isNotEmpty) {
+        commands.add(
+          MPCommandFactory.addElements(
+            elements: childrenOfNewParents,
+            th2File: _th2File,
+            positionInParent: mpAddChildAtEndOfParentChildrenList,
+          ),
+        );
+      }
+
+      /// Children of existing parents go before endmarker.
+      if (childrenOfExistingParents.isNotEmpty) {
+        commands.add(
+          MPCommandFactory.addElements(
+            elements: childrenOfExistingParents,
+            th2File: _th2File,
+            positionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
+          ),
+        );
+      }
     }
 
     return commands;
