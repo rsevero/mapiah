@@ -91,7 +91,7 @@ void main() {
         th2Controller1.stateController.setState(
           MPTH2FileEditStateType.selectNonEmptySelection,
         );
-        th2Controller1.elementEditController.copySelectedElements();
+        th2Controller1.copyPasteController.copySelectedElements();
 
         /// Verify clipboard has content
         expect(mpLocator.mpGeneralController.hasClipboardContent, isTrue);
@@ -105,7 +105,7 @@ void main() {
         th2Controller2.stateController.setState(
           MPTH2FileEditStateType.selectEmptySelection,
         );
-        th2Controller2.elementEditController.pasteElements();
+        th2Controller2.copyPasteController.pasteElements();
 
         /// Verify point was pasted into file 2
         final int pointsInFile2AfterPaste = th2File2.getPoints().length;

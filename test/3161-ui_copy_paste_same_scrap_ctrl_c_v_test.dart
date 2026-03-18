@@ -88,7 +88,7 @@ void main() {
       th2Controller.stateController.setState(
         MPTH2FileEditStateType.selectNonEmptySelection,
       );
-      th2Controller.elementEditController.copySelectedElements();
+      th2Controller.copyPasteController.copySelectedElements();
 
       final List<THPoint> pointsAfterCopy = th2File.getPoints().toList();
       expect(pointsAfterCopy.length, 1);
@@ -97,7 +97,7 @@ void main() {
       th2Controller.stateController.setState(
         MPTH2FileEditStateType.selectEmptySelection,
       );
-      th2Controller.elementEditController.pasteElements();
+      th2Controller.copyPasteController.pasteElements();
 
       final List<THPoint> pointsAfterPaste = th2File.getPoints().toList();
       expect(pointsAfterPaste.length, 2);

@@ -227,7 +227,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   }
 
   void _onPressedDuplicateScrap(int scrapID) {
-    th2FileEditController.elementEditController.duplicateScrap(scrapID);
+    th2FileEditController.copyPasteController.duplicateScrap(scrapID);
   }
 
   void _onPressedRemoveScrap(int scrapID) {

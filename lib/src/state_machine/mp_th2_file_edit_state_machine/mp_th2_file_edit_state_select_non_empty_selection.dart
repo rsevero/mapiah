@@ -299,15 +299,14 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
-          th2FileEditController.elementEditController.copySelectedElements();
+          th2FileEditController.copyPasteController.copySelectedElements();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyD:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
-          th2FileEditController.elementEditController
-              .duplicateSelectedElements();
+          th2FileEditController.copyPasteController.duplicateSelectedElements();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyL:
@@ -336,7 +335,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
-          th2FileEditController.elementEditController.pasteElements();
+          th2FileEditController.copyPasteController.pasteElements();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyX:

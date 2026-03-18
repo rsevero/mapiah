@@ -13,6 +13,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -45,6 +46,7 @@ class TH2FileEditController = TH2FileEditControllerBase
 abstract class TH2FileEditControllerBase with Store {
   late final MPUndoRedoController undoRedoController;
   late final MPVisualController visualController;
+  late final TH2FileEditCopyPasteController copyPasteController;
   late final TH2FileEditElementEditController elementEditController;
   late final TH2FileEditOptionEditController optionEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
@@ -422,6 +424,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   void _basicInitialization(TH2File file) {
     _th2File = file;
+    copyPasteController = TH2FileEditCopyPasteController(
+      this as TH2FileEditController,
+    );
     elementEditController = TH2FileEditElementEditController(
       this as TH2FileEditController,
     );

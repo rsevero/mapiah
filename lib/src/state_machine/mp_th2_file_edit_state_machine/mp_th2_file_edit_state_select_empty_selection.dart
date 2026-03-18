@@ -73,7 +73,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
-          th2FileEditController.elementEditController.pasteElements();
+          th2FileEditController.copyPasteController.pasteElements();
           keyProcessed = true;
         }
     }

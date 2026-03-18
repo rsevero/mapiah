@@ -95,7 +95,7 @@ void main() {
       th2Controller.stateController.setState(
         MPTH2FileEditStateType.selectNonEmptySelection,
       );
-      th2Controller.elementEditController.duplicateSelectedElements();
+      th2Controller.copyPasteController.duplicateSelectedElements();
 
       final List<THLine> linesAfterDuplicate = th2File.getLines().toList();
 

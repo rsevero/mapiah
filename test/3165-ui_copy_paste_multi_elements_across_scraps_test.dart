@@ -152,14 +152,14 @@ void main() {
           th2Controller.stateController.setState(
             MPTH2FileEditStateType.selectNonEmptySelection,
           );
-          th2Controller.elementEditController.copySelectedElements();
+          th2Controller.copyPasteController.copySelectedElements();
 
           /// Switch to second scrap and paste
           th2Controller.setActiveScrap(secondScrap.mpID);
           th2Controller.stateController.setState(
             MPTH2FileEditStateType.selectEmptySelection,
           );
-          th2Controller.elementEditController.pasteElements();
+          th2Controller.copyPasteController.pasteElements();
 
           /// Verify elements were pasted into second scrap
           final int pointsInSecondScrapAfterPaste = secondScrap
