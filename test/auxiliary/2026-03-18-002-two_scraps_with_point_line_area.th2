@@ -1,0 +1,23 @@
+encoding UTF-8
+scrap first_scrap
+	area clay
+	border-1
+	endarea
+
+	line border -id border-1 -close on -visibility off
+		100.0 100.0
+		50.0 150.0
+		50.0 50.0
+	endline
+
+	point 200 200 station -id first-point -visibility on
+
+	line contour -close on -visibility on -id contour-1
+		300.0 300.0
+		350.0 350.0
+		250.0 350.0
+	endline
+endscrap
+
+scrap second_scrap
+endscrap

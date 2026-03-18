@@ -26,6 +26,7 @@
   * Test 3100 assertions now correctly expect TH2FileTabsPage instead of TH2FileEditPage.
   * Copy/Paste logic refined: parents (scraps, areas, lines) materialized with empty childrenMPIDs and added at end position; children automatically populate parent childrenMPIDs when added to th2File. Border lines processed before areas during copy. (3/4 duplicate tests now passing)
   * THID conflict resolution for elements with THIDCommandOption: duplicate pasted lines now get new unique THIDs when conflicts exist (all 5/5 duplicate tests now passing).
+  * Phase 6 validation tests for multi-element copy/paste: same scrap, across scraps, and cross-file paste with point + line + area elements and implicit border line inclusion (3164-3166).
 * Infrastructure maintenance:
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.
