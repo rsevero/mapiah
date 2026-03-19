@@ -191,6 +191,39 @@ class MPCommandOptionAux {
         },
       };
 
+  static Set<THCommandOptionType> getAllSupportedPointOptions() {
+    final Set<THCommandOptionType> result = {..._supportPointOptionsForAll};
+
+    for (final List<THCommandOptionType> options
+        in _supportedPointOptions.values) {
+      result.addAll(options);
+    }
+
+    return result;
+  }
+
+  static Set<THCommandOptionType> getAllSupportedLineOptions() {
+    final Set<THCommandOptionType> result = {..._supportLineOptionsForAll};
+
+    for (final List<THCommandOptionType> options
+        in _supportedLineOptions.values) {
+      result.addAll(options);
+    }
+
+    return result;
+  }
+
+  static Set<THCommandOptionType> getAllSupportedAreaOptions() {
+    final Set<THCommandOptionType> result = {..._supportAreaOptionsForAll};
+
+    for (final List<THCommandOptionType> options
+        in _supportedAreaOptions.values) {
+      result.addAll(options);
+    }
+
+    return result;
+  }
+
   static List<THCommandOptionType> getSupportedOptionsForArea(
     THAreaType areaType,
   ) {

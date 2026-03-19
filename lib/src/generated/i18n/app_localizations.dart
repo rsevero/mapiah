@@ -2332,6 +2332,120 @@ abstract class AppLocalizations {
   /// **'Save TH2 file as'**
   String get th2FileEditPageSaveAsDialogTitle;
 
+  /// Add to selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Add to selection'**
+  String get th2FileEditPageSearchSelectAddToSelection;
+
+  /// All option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get th2FileEditPageSearchSelectAll;
+
+  /// Areas section title in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Areas'**
+  String get th2FileEditPageSearchSelectAreas;
+
+  /// Tooltip for the search and select button. Used on: _TH2FileEditPageState._stateActionButtons
+  ///
+  /// In en, this message translates to:
+  /// **'Search and select'**
+  String get th2FileEditPageSearchSelectButton;
+
+  /// By ID option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'By ID'**
+  String get th2FileEditPageSearchSelectByID;
+
+  /// By option option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'By option'**
+  String get th2FileEditPageSearchSelectByOption;
+
+  /// By subtype option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'By subtype'**
+  String get th2FileEditPageSearchSelectBySubtype;
+
+  /// By type option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'By type'**
+  String get th2FileEditPageSearchSelectByType;
+
+  /// Cancel button in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get th2FileEditPageSearchSelectCancel;
+
+  /// Lines section title in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Lines'**
+  String get th2FileEditPageSearchSelectLines;
+
+  /// Status bar showing the number of matching elements in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count} elements match'**
+  String th2FileEditPageSearchSelectMatchCount(Object count);
+
+  /// Set option state in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get th2FileEditPageSearchSelectOptionSet;
+
+  /// Undefined option state in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Undefined'**
+  String get th2FileEditPageSearchSelectOptionUndefined;
+
+  /// Unset option state in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Unset'**
+  String get th2FileEditPageSearchSelectOptionUnset;
+
+  /// Points section title in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get th2FileEditPageSearchSelectPoints;
+
+  /// Remove from selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from selection'**
+  String get th2FileEditPageSearchSelectRemoveFromSelection;
+
+  /// Reset button in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get th2FileEditPageSearchSelectReset;
+
+  /// Set selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Set selection'**
+  String get th2FileEditPageSearchSelectSetSelection;
+
+  /// Title for the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Search and select'**
+  String get th2FileEditPageSearchSelectTitle;
+
   /// The label for the select tool button. Used on: _TH2FileEditPageState._editElementButtons
   ///
   /// In en, this message translates to:

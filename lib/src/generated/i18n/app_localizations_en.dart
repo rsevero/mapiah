@@ -1237,6 +1237,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSaveAsDialogTitle => 'Save TH2 file as';
 
   @override
+  String get th2FileEditPageSearchSelectAddToSelection => 'Add to selection';
+
+  @override
+  String get th2FileEditPageSearchSelectAll => 'All';
+
+  @override
+  String get th2FileEditPageSearchSelectAreas => 'Areas';
+
+  @override
+  String get th2FileEditPageSearchSelectButton => 'Search and select';
+
+  @override
+  String get th2FileEditPageSearchSelectByID => 'By ID';
+
+  @override
+  String get th2FileEditPageSearchSelectByOption => 'By option';
+
+  @override
+  String get th2FileEditPageSearchSelectBySubtype => 'By subtype';
+
+  @override
+  String get th2FileEditPageSearchSelectByType => 'By type';
+
+  @override
+  String get th2FileEditPageSearchSelectCancel => 'Cancel';
+
+  @override
+  String get th2FileEditPageSearchSelectLines => 'Lines';
+
+  @override
+  String th2FileEditPageSearchSelectMatchCount(Object count) {
+    return '$count elements match';
+  }
+
+  @override
+  String get th2FileEditPageSearchSelectOptionSet => 'Set';
+
+  @override
+  String get th2FileEditPageSearchSelectOptionUndefined => 'Undefined';
+
+  @override
+  String get th2FileEditPageSearchSelectOptionUnset => 'Unset';
+
+  @override
+  String get th2FileEditPageSearchSelectPoints => 'Points';
+
+  @override
+  String get th2FileEditPageSearchSelectRemoveFromSelection =>
+      'Remove from selection';
+
+  @override
+  String get th2FileEditPageSearchSelectReset => 'Reset';
+
+  @override
+  String get th2FileEditPageSearchSelectSetSelection => 'Set selection';
+
+  @override
+  String get th2FileEditPageSearchSelectTitle => 'Search and select';
+
+  @override
   String get th2FileEditPageSelectTool => 'Select (C)';
 
   @override

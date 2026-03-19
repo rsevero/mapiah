@@ -33,6 +33,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
   - [Segmentos de linha mistos](#segmentos-de-linha-mistos)
   - [Segmentos de linha reta](#segmentos-de-linha-reta)
+- [Pesquisar e selecionar](#pesquisar-e-selecionar)
 - [Snap](#snap)
 - [Zoom e pan](#zoom-e-pan)
 
@@ -244,6 +245,28 @@ Quando uma linha contém tanto segmentos em curva Bézier quanto segmentos retos
 
 ### Segmentos de linha reta
 Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O Mapiah usa uma versão interativa (não recursiva) do [algoritmo de Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) para simplificar segmentos de linha reta. Ele opera no espaço do canvas. A tolerância inicial (epsilon) equivale a 1,5 pixels de tela. Esse valor é convertido para coordenadas do canvas. Em cada execução subsequente, a tolerância é aumentada pelo mesmo valor inicial.
+
+## Pesquisar e selecionar
+O diálogo de pesquisar e selecionar permite encontrar e selecionar elementos no croqui atual com base em suas características. Abra-o clicando no botão ![Botão Pesquisar](assets/help/images/buttonSearch.png "Pesquisar e selecionar") no canto superior direito.
+
+O diálogo tem três seções recolhíveis: **Pontos**, **Linhas** e **Áreas**. Ative uma seção marcando sua caixa de seleção. Cada seção ativada oferece cinco critérios de filtragem:
+
+* **Todos**: seleciona todos os elementos daquele tipo no croqui atual. Ativar esta opção desativa os outros quatro critérios.
+* **Por ID**: filtra elementos cujo ID do Therion contém o texto digitado (correspondência parcial, sem distinção de maiúsculas/minúsculas).
+* **Por subtipo**: filtra elementos pelo subtipo. Selecione subtipos conhecidos nos chips e/ou digite texto livre para subtipos desconhecidos. Disponível apenas para pontos e linhas.
+* **Por tipo**: filtra elementos pelo tipo. Selecione um ou mais tipos dos chips disponíveis. Tipos desconhecidos encontrados no croqui atual também são listados.
+* **Por opção**: filtra elementos por opções específicas estarem definidas ou não. Cada opção pode ser definida como _Indefinido_ (ignorado), _Definido_ (elemento deve ter a opção) ou _Não definido_ (elemento não deve ter a opção).
+
+Quando múltiplos critérios estão ativados dentro de uma seção, um elemento deve corresponder a **todos** eles (lógica E). Quando múltiplas seções estão ativadas, elementos correspondentes de qualquer seção são incluídos (lógica OU).
+
+Uma barra de status na parte inferior mostra o número de elementos que correspondem aos critérios atuais, atualizada ao vivo conforme você altera os filtros.
+
+**Botões de ação:**
+* **Definir seleção**: substitui a seleção atual pelos elementos correspondentes.
+* **Adicionar à seleção**: adiciona os elementos correspondentes à seleção atual.
+* **Remover da seleção**: remove os elementos correspondentes da seleção atual.
+* **Cancelar**: fecha o diálogo sem alterar a seleção.
+* **Redefinir**: redefine todos os critérios sem fechar o diálogo.
 
 ## Snap
 Há várias opções de snap disponíveis que podem ser controladas na janela apresentada quando o botão ![Botão Snap](assets/help/images/buttonSnap.png "Snap") é pressionado:

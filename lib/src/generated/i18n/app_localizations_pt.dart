@@ -1249,6 +1249,66 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSaveAsDialogTitle => 'Salvar arquivo TH2 como';
 
   @override
+  String get th2FileEditPageSearchSelectAddToSelection => 'Adicionar à seleção';
+
+  @override
+  String get th2FileEditPageSearchSelectAll => 'Todos';
+
+  @override
+  String get th2FileEditPageSearchSelectAreas => 'Áreas';
+
+  @override
+  String get th2FileEditPageSearchSelectButton => 'Pesquisar e selecionar';
+
+  @override
+  String get th2FileEditPageSearchSelectByID => 'Por ID';
+
+  @override
+  String get th2FileEditPageSearchSelectByOption => 'Por opção';
+
+  @override
+  String get th2FileEditPageSearchSelectBySubtype => 'Por subtipo';
+
+  @override
+  String get th2FileEditPageSearchSelectByType => 'Por tipo';
+
+  @override
+  String get th2FileEditPageSearchSelectCancel => 'Cancelar';
+
+  @override
+  String get th2FileEditPageSearchSelectLines => 'Linhas';
+
+  @override
+  String th2FileEditPageSearchSelectMatchCount(Object count) {
+    return '$count elementos correspondem';
+  }
+
+  @override
+  String get th2FileEditPageSearchSelectOptionSet => 'Definido';
+
+  @override
+  String get th2FileEditPageSearchSelectOptionUndefined => 'Indefinido';
+
+  @override
+  String get th2FileEditPageSearchSelectOptionUnset => 'Não definido';
+
+  @override
+  String get th2FileEditPageSearchSelectPoints => 'Pontos';
+
+  @override
+  String get th2FileEditPageSearchSelectRemoveFromSelection =>
+      'Remover da seleção';
+
+  @override
+  String get th2FileEditPageSearchSelectReset => 'Redefinir';
+
+  @override
+  String get th2FileEditPageSearchSelectSetSelection => 'Definir seleção';
+
+  @override
+  String get th2FileEditPageSearchSelectTitle => 'Pesquisar e selecionar';
+
+  @override
   String get th2FileEditPageSelectTool => 'Selecionar (C)';
 
   @override

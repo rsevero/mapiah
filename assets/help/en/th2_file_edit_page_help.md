@@ -33,6 +33,7 @@ This is where all TH2 file editing is done.
   - [Bézier curve line segments](#bézier-curve-line-segments)
   - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
+- [Search and select](#search-and-select)
 - [Snap](#snap)
 - [Zoom and panning](#zoom-and-panning)
 
@@ -244,6 +245,28 @@ When a line contains both Bézier curve and straight line segments, Mapiah treat
 
 ### Straight line segments
 Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
+
+## Search and select
+The search and select dialog allows you to find and select elements in the current scrap based on their characteristics. Open it by clicking the ![Search button](assets/help/images/buttonSearch.png "Search and select") button in the top right corner.
+
+The dialog has three collapsible sections: **Points**, **Lines**, and **Areas**. Enable a section by checking its checkbox. Each enabled section offers five filtering criteria:
+
+* **All**: selects all elements of that type in the current scrap. Enabling this disables the other four criteria.
+* **By ID**: filters elements whose Therion ID contains the entered text (case-insensitive partial match).
+* **By subtype**: filters elements by their subtype. Select known subtypes from chips and/or enter free text for unknown subtypes. Available for points and lines only.
+* **By type**: filters elements by their type. Select one or more types from the available chips. Unknown types found in the current scrap are also listed.
+* **By option**: filters elements by whether specific options are set or not. Each option can be set to _Undefined_ (ignored), _Set_ (element must have the option), or _Unset_ (element must not have the option).
+
+When multiple criteria are enabled within a section, an element must match **all** of them (AND logic). When multiple sections are enabled, matching elements from any section are included (OR logic).
+
+A status bar at the bottom shows the number of elements matching the current criteria, updated live as you change the filters.
+
+**Action buttons:**
+* **Set selection**: replaces the current selection with the matching elements.
+* **Add to selection**: adds the matching elements to the current selection.
+* **Remove from selection**: removes the matching elements from the current selection.
+* **Cancel**: closes the dialog without changing the selection.
+* **Reset**: resets all criteria without closing the dialog.
 
 ## Snap
 There are several snap options available that can be controled on the window presented when the button ![Snap button](assets/help/images/buttonSnap.png "Snap") is pressed:

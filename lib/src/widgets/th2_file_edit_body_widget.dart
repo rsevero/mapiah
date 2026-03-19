@@ -10,6 +10,8 @@ import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
+import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
+import 'package:mapiah/src/widgets/mp_search_select_dialog_widget.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
 
 class TH2FileEditBodyWidget extends StatefulWidget {
@@ -530,6 +532,23 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
           right: 16,
           child: Row(
             children: [
+              FloatingActionButton(
+                heroTag: '${heroPrefix}_search_select',
+                mini: true,
+                tooltip: appLocalizations.th2FileEditPageSearchSelectButton,
+                onPressed: () {
+                  MPModalOverlayWidget.show(
+                    context: context,
+                    childBuilder: (VoidCallback onPressedClose) =>
+                        MPSearchSelectDialogWidget(
+                          th2FileEditController: widget.th2FileEditController,
+                          onPressedClose: onPressedClose,
+                        ),
+                  );
+                },
+                child: const Icon(Icons.search),
+              ),
+              SizedBox(width: mpButtonSpace),
               FloatingActionButton(
                 key:
                     widget

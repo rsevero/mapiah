@@ -1937,6 +1937,103 @@
     "description": "The title for the save as dialog. Used on: TH2FileEditControllerBase.saveAsTH2File",
     "type": "text"
   },
+  "th2FileEditPageSearchSelectAddToSelection": "Add to selection",
+  "@th2FileEditPageSearchSelectAddToSelection": {
+    "description": "Add to selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectAll": "All",
+  "@th2FileEditPageSearchSelectAll": {
+    "description": "All option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectAreas": "Areas",
+  "@th2FileEditPageSearchSelectAreas": {
+    "description": "Areas section title in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectButton": "Search and select",
+  "@th2FileEditPageSearchSelectButton": {
+    "description": "Tooltip for the search and select button. Used on: _TH2FileEditPageState._stateActionButtons",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectByID": "By ID",
+  "@th2FileEditPageSearchSelectByID": {
+    "description": "By ID option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectByOption": "By option",
+  "@th2FileEditPageSearchSelectByOption": {
+    "description": "By option option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectBySubtype": "By subtype",
+  "@th2FileEditPageSearchSelectBySubtype": {
+    "description": "By subtype option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectByType": "By type",
+  "@th2FileEditPageSearchSelectByType": {
+    "description": "By type option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectCancel": "Cancel",
+  "@th2FileEditPageSearchSelectCancel": {
+    "description": "Cancel button in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectLines": "Lines",
+  "@th2FileEditPageSearchSelectLines": {
+    "description": "Lines section title in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectMatchCount": "{count} elements match",
+  "@th2FileEditPageSearchSelectMatchCount": {
+    "description": "Status bar showing the number of matching elements in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "th2FileEditPageSearchSelectOptionSet": "Set",
+  "@th2FileEditPageSearchSelectOptionSet": {
+    "description": "Set option state in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectOptionUndefined": "Undefined",
+  "@th2FileEditPageSearchSelectOptionUndefined": {
+    "description": "Undefined option state in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectOptionUnset": "Unset",
+  "@th2FileEditPageSearchSelectOptionUnset": {
+    "description": "Unset option state in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectPoints": "Points",
+  "@th2FileEditPageSearchSelectPoints": {
+    "description": "Points section title in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectRemoveFromSelection": "Remove from selection",
+  "@th2FileEditPageSearchSelectRemoveFromSelection": {
+    "description": "Remove from selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectReset": "Reset",
+  "@th2FileEditPageSearchSelectReset": {
+    "description": "Reset button in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectSetSelection": "Set selection",
+  "@th2FileEditPageSearchSelectSetSelection": {
+    "description": "Set selection button in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageSearchSelectTitle": "Search and select",
+  "@th2FileEditPageSearchSelectTitle": {
+    "description": "Title for the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
   "th2FileEditPageSelectTool": "Select (C)",
   "@th2FileEditPageSelectTool": {
     "description": "The label for the select tool button. Used on: _TH2FileEditPageState._editElementButtons",

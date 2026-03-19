@@ -168,7 +168,7 @@
 [X] - Open multiple files simultaneously.
 [X] - Allow copy/paste between scraps.
 [X] - Allow copy/paste between files.
-[ ] - Search/select elements by characteristics.
+[X] - Search/select elements by characteristics.
 [ ] - Change cursors to show current status.
 [X] - Config page.
 [X] - Drag overlay windows.

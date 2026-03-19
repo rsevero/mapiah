@@ -2,6 +2,15 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.3.3 - not yet released
+* New features:
+  * Search and select dialog: find and select elements in the current scrap by type, ID, subtype, and option presence. Supports set/add/remove selection actions with live matching count. Accessible via the search button in the top right corner.
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
+  * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
+  * Added public getAllSupportedPointOptions/LineOptions/AreaOptions getters to MPCommandOptionAux.
+
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
   * Copy/Paste functionality for elements (Ctrl+C / Ctrl+V or Meta+C / Meta+V) with cross-file support and automatic THID conflict resolution.
