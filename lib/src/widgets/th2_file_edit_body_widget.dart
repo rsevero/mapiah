@@ -105,7 +105,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                                   widget.th2FileEditController.th2File.filename,
                             );
                           },
-                        );
+                        ).then((_) {
+                          widget.th2FileEditController.close();
+                        });
                       });
 
                       return Container();
