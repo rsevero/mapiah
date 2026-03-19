@@ -55,7 +55,9 @@ The pre-commit hook automatically performs the following steps **in order**:
 
 **Special Handling**: For executable scripts with a shebang (`#!/...`), the shebang remains on line 1, and the headers are added after it.
 
-**Skips**: Files that already have an SPDX identifier
+**Skips**:
+- Files that already have an SPDX identifier
+- Auto-generated files: `*.g.dart` (MobX boilerplate) and any file under a `generated/` directory
 
 ### 2. Add SPDX License Headers to Markdown Files
 

@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2023- Mapiah Ltda
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'th2_file_edit_controller.dart';

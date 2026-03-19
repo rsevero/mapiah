@@ -16,6 +16,11 @@ ARB_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.arb$' || t
 add_dart_headers() {
   local file="$1"
 
+  # Skip auto-generated files (MobX .g.dart and files under any generated/ directory)
+  if [[ "$file" == *.g.dart ]] || [[ "$file" == */generated/* ]]; then
+    return 0
+  fi
+
   # Skip if file already has SPDX identifier
   if grep -q "SPDX-License-Identifier" "$file"; then
     return 0
