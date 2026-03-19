@@ -24,6 +24,7 @@
   * Pasted elements are now automatically selected after a paste; if a scrap was pasted, the selection is cleared instead.
   * Available images panel now supports click-and-drag reordering; image order is persisted in the TH2File top-level children list.
 * Fixed bugs:
+  * Parsing error dialog now shows the file's basename and full path above the error list so the user knows which file caused the errors.
   * Drag-to-reorder (scraps and images): items dropped on a lower-index row landed one position below the visual indicator when dragging downward (off-by-one due to removeAt index shift). Fixed by decrementing newIndex when oldIndex < newIndex.
   * Drag-to-reorder (scraps and images): no drop zone existed after the last row, making it impossible to drag an item to the last position. Fixed by adding a trailing DragTarget with an animated insertion indicator below the last row.
   * Duplicate scrap throws "Bad state: No element": duplicateScrap() was relying on the selection to find the new scrap MPID after paste, but pasteElements() now clears selection after pasting a scrap. Fixed by having pasteElements() return the top-level pasted MPIDs, which duplicateScrap() now uses directly.

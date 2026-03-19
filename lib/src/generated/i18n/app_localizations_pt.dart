@@ -536,6 +536,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpEncodingLabel => 'Codificação';
 
   @override
+  String get mpErrorDialogFilenameLabel => 'Arquivo';
+
+  @override
+  String get mpErrorDialogFullPathLabel => 'Caminho completo';
+
+  @override
   String get mpErrorReadingXVIFile => 'Erro ao ler arquivo XVI';
 
   @override

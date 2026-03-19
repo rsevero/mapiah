@@ -1052,6 +1052,18 @@ abstract class AppLocalizations {
   /// **'Encoding'**
   String get mpEncodingLabel;
 
+  /// Label shown before the filename (basename) in the parsing error dialog. Used on: MPErrorDialog
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get mpErrorDialogFilenameLabel;
+
+  /// Label shown before the full file path in the parsing error dialog. Used on: MPErrorDialog
+  ///
+  /// In en, this message translates to:
+  /// **'Full path'**
+  String get mpErrorDialogFullPathLabel;
+
   /// The error message displayed when there is an error reading an XVI file. Used on: MPDialogAux.showNow
   ///
   /// In en, this message translates to:

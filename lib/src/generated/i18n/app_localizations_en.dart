@@ -527,6 +527,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpEncodingLabel => 'Encoding';
 
   @override
+  String get mpErrorDialogFilenameLabel => 'File';
+
+  @override
+  String get mpErrorDialogFullPathLabel => 'Full path';
+
+  @override
   String get mpErrorReadingXVIFile => 'Error reading XVI file';
 
   @override

@@ -99,7 +99,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return MPErrorDialog(errorMessages: errorMessages);
+                            return MPErrorDialog(
+                              errorMessages: errorMessages,
+                              filename:
+                                  widget.th2FileEditController.th2File.filename,
+                            );
                           },
                         );
                       });

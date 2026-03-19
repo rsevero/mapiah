@@ -820,6 +820,16 @@
     "description": "The label for the encoding type. Used on: MPEncodingWidgetState.build, _MPAddFileDialogWidgetState.build",
     "type": "text"
   },
+  "mpErrorDialogFilenameLabel": "File",
+  "@mpErrorDialogFilenameLabel": {
+    "description": "Label shown before the filename (basename) in the parsing error dialog. Used on: MPErrorDialog",
+    "type": "text"
+  },
+  "mpErrorDialogFullPathLabel": "Full path",
+  "@mpErrorDialogFullPathLabel": {
+    "description": "Label shown before the full file path in the parsing error dialog. Used on: MPErrorDialog",
+    "type": "text"
+  },
   "mpErrorReadingXVIFile": "Error reading XVI file",
   "@mpErrorReadingXVIFile": {
     "description": "The error message displayed when there is an error reading an XVI file. Used on: MPDialogAux.showNow",

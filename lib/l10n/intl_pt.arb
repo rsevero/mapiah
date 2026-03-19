@@ -178,6 +178,8 @@
   "mpDoubleValueInvalidValueErrorMessage": "Valor inválido",
   "mpEditSingleLineStateStatusBarMessage": "Editando linha",
   "mpEncodingLabel": "Codificação",
+  "mpErrorDialogFilenameLabel": "Arquivo",
+  "mpErrorDialogFullPathLabel": "Caminho completo",
   "mpErrorReadingXVIFile": "Erro ao ler arquivo XVI",
   "mpExploredLengthLabel": "Extensão",
   "mpExtendStationLabel": "Base",
