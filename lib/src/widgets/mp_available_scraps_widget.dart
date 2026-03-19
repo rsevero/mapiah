@@ -421,21 +421,35 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            childWhenDragging: Icon(
-                                                              Icons
-                                                                  .drag_indicator,
-                                                              color: colorScheme
-                                                                  .onSecondary,
-                                                            ),
-                                                            child: MouseRegion(
-                                                              cursor:
-                                                                  SystemMouseCursors
-                                                                      .grab,
+                                                            childWhenDragging: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        mpButtonSpace,
+                                                                  ),
                                                               child: Icon(
                                                                 Icons
                                                                     .drag_indicator,
                                                                 color: colorScheme
                                                                     .onSecondary,
+                                                              ),
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    vertical:
+                                                                        mpButtonSpace,
+                                                                  ),
+                                                              child: MouseRegion(
+                                                                cursor:
+                                                                    SystemMouseCursors
+                                                                        .grab,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .drag_indicator,
+                                                                  color: colorScheme
+                                                                      .onSecondary,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
