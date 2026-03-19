@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey, rootBundle;
 import 'package:http/http.dart' as http;
@@ -99,6 +101,17 @@ class MPHelpDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.sizeOf(context);
+    final double maxDialogWidth =
+        screenSize.width -
+        (mpOverlayWindowOutsidePadding * 2) -
+        (mpOverlayWindowPadding * 2);
+    final double maxDialogHeight =
+        screenSize.height -
+        (mpOverlayWindowOutsidePadding * 2) -
+        (mpOverlayWindowPadding * 2);
+    final double dialogWidth = math.max(280, math.min(maxDialogWidth, 900));
+
     return Shortcuts(
       shortcuts: const <ShortcutActivator, Intent>{
         SingleActivator(LogicalKeyboardKey.escape): ActivateIntent(),
@@ -134,20 +147,63 @@ class MPHelpDialogWidget extends StatelessWidget {
                   ],
                 );
               }
-              return AlertDialog(
-                title: Text(title),
-                content: SingleChildScrollView(
-                  child: MarkdownBlock(
-                    data: snapshot.data ?? '',
-                    selectable: false,
-                  ),
+              final ThemeData theme = Theme.of(context);
+
+              return SizedBox(
+                width: dialogWidth,
+                height: maxDialogHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+                      child: Text(
+                        title,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: SingleChildScrollView(
+                          child: MarkdownBlock(
+                            data: snapshot.data ?? '',
+                            selectable: false,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Divider(height: 1),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest
+                            .withValues(alpha: 0.35),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(
+                            mpOverlayWindowCornerRadius,
+                          ),
+                          bottomRight: Radius.circular(
+                            mpOverlayWindowCornerRadius,
+                          ),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: onPressedClose,
+                            child: Text(mpLocator.appLocalizations.buttonClose),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: onPressedClose,
-                    child: Text(mpLocator.appLocalizations.buttonClose),
-                  ),
-                ],
               );
             },
           ),
