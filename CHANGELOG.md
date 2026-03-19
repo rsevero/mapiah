@@ -10,6 +10,7 @@
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
   * Added public getAllSupportedPointOptions/LineOptions/AreaOptions getters to MPCommandOptionAux.
+  * Removed the legacy TH2FileEditPage entry point, standardized widget tests on TH2FileTabsPage with a shared test helper, and made MPGeneralController.reset clear tab state for isolated tabbed-page tests.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

@@ -6,9 +6,9 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
+import 'th2_file_tabs_page_test_aux.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -48,15 +48,7 @@ void main() {
       });
 
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('en'),
-          home: TH2FileEditPage(
-            filename: testFilename,
-            th2FileEditController: th2Controller,
-          ),
-        ),
+        buildTH2FileTabsPageTestApp(th2FileEditController: th2Controller),
       );
       await tester.pump();
 

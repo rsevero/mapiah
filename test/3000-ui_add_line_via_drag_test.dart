@@ -7,10 +7,10 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
+import 'th2_file_tabs_page_test_aux.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -50,25 +50,18 @@ void main() {
           );
 
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('en'),
-          home: TH2FileEditPage(
-            key: ValueKey('TH2FileEditPage|${th2Controller.th2File.filename}'),
-            filename: th2Controller.th2File.filename,
-            th2FileEditController: th2Controller,
-          ),
-        ),
+        buildTH2FileTabsPageTestApp(th2FileEditController: th2Controller),
       );
       await tester.pumpAndSettle();
+
+      final String heroPrefix = th2Controller.th2FileMPID.toString();
 
       // Verify the Add Element FAB is present by hero tag before changing state
       // Note: The heroTag uses the enum name, so 'addLine' becomes 'add_element_addLine'.
       // Initially, the active button is 'addElement'.
       final Finder addElementHero = find.byWidgetPredicate(
-        (w) => w is Hero && w.tag == 'add_element_addElement',
-        description: 'Hero(tag: add_element_addElement)',
+        (w) => w is Hero && w.tag == '${heroPrefix}_add_element_addElement',
+        description: 'Hero(tag: ${heroPrefix}_add_element_addElement)',
       );
       expect(addElementHero, findsOneWidget);
 
@@ -80,8 +73,8 @@ void main() {
 
       // After switching to addLine state, the active FAB hero tag changes accordingly.
       final Finder addLineHero = find.byWidgetPredicate(
-        (w) => w is Hero && w.tag == 'add_element_addLine',
-        description: 'Hero(tag: add_element_addLine)',
+        (w) => w is Hero && w.tag == '${heroPrefix}_add_element_addLine',
+        description: 'Hero(tag: ${heroPrefix}_add_element_addLine)',
       );
       expect(addLineHero, findsOneWidget);
 

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -101,14 +102,18 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       ),
     );
 
-    try {
-      setWindowTitle(appLocalizations.appTitle);
-    } on MissingPluginException {
-      // In widget tests, desktop plugins (like window_size) may not be
-      // registered. Ignore the missing plugin so tests can run headless.
-    } on PlatformException {
-      // Also ignore other platform exceptions in non-desktop environments
-      // during tests.
+    final bool isWidgetTestEnvironment = WidgetsBinding.instance.runtimeType
+        .toString()
+        .contains('TestWidgetsFlutterBinding');
+
+    if (!isWidgetTestEnvironment) {
+      try {
+        setWindowTitle(appLocalizations.appTitle);
+      } on MissingPluginException {
+        // Ignore missing window-size plugin on unsupported platforms.
+      } on PlatformException {
+        // Ignore unsupported platform calls outside desktop environments.
+      }
     }
 
     final Scaffold scaffold = Scaffold(

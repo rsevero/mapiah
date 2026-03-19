@@ -11,13 +11,13 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/th2_file_edit_page.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_id_option_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
+import 'th2_file_tabs_page_test_aux.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
   @override
@@ -65,15 +65,7 @@ void main() {
         final TH2File th2File = th2Controller.th2File;
 
         await tester.pumpWidget(
-          MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('en'),
-            home: TH2FileEditPage(
-              filename: testFilename,
-              th2FileEditController: th2Controller,
-            ),
-          ),
+          buildTH2FileTabsPageTestApp(th2FileEditController: th2Controller),
         );
         await tester.pump();
 

@@ -176,6 +176,8 @@ abstract class MPGeneralControllerBase with Store {
     _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
     _t2hFileEditControllers.clear();
     _thConfigFilePath = '';
+    _openFileOrder.clear();
+    _activeTabIndex = 0;
     _clipboard = null;
   }
 

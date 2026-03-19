@@ -110,7 +110,7 @@ Elements with children use `THIsParentMixin`. Element options/attributes use `TH
 
 `lib/src/pages/`:
 - `mapiah_home.dart` — Home screen (open/create file)
-- `th2_file_edit_page.dart` — Main canvas editing page
+- `th2_file_tabs_page.dart` — Main canvas editing page with tabbed TH2 file support
 - `mp_settings_page.dart` — App settings
 
 ### Localization
