@@ -7,8 +7,8 @@ import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
@@ -20,10 +20,11 @@ import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
 
 class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;
-  final TH2FileEditElementEditController elementEditController;
+  final TH2FileEditAreaLineCreationController areaLineCreationController;
 
   MPAddLineWidget({required this.th2FileEditController, required super.key})
-    : elementEditController = th2FileEditController.elementEditController;
+    : areaLineCreationController =
+          th2FileEditController.areaLineCreationController;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +48,11 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             .getControlPointLinePaint();
         final List<CustomPainter> painters = [];
 
-        if (elementEditController.newLine == null) {
-          if (elementEditController.lineStartScreenPosition != null) {
+        if (areaLineCreationController.newLine == null) {
+          if (areaLineCreationController.lineStartScreenPosition != null) {
             final Offset startPoint = th2FileEditController
                 .offsetScreenToCanvas(
-                  elementEditController.lineStartScreenPosition!,
+                  areaLineCreationController.lineStartScreenPosition!,
                 );
             final CustomPainter painter = THEndPointPainter(
               position: startPoint,
@@ -63,7 +64,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             painters.add(painter);
           }
         } else {
-          final THLine newLine = elementEditController.getNewLine();
+          final THLine newLine = areaLineCreationController.getNewLine();
           final (
             LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
             LinkedHashMap<int, THLineSegment> lineSegments,
@@ -108,7 +109,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           // Control points for the last segment (visible only during drag).
           // Requires at least 2 segments so we can find the segment-start
           // anchor.
-          if (elementEditController.isNewLineDragging &&
+          if (areaLineCreationController.isNewLineDragging &&
               (lineSegments.length >= 2)) {
             final List<THLineSegment> segmentList = lineSegments.values
                 .toList();
@@ -123,7 +124,7 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
               // In XTherionCubicSmooth mode, the pending CP1 is the mouse
               // position (black). In MapiahQuadratic mode it is null (no
               // handle at the mouse).
-              final Offset? pendingCP1 = elementEditController
+              final Offset? pendingCP1 = areaLineCreationController
                   .newLinePendingControlPoint1CanvasCoordinates;
               final bool xTherionDragging = (pendingCP1 != null);
 

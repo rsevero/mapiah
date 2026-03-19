@@ -22,7 +22,7 @@ mixin MPTH2FileEditPageStateAddLineToAreaMixin {
       return Future.value((command: null, area: null));
     }
 
-    area ??= th2FileEditController.elementEditController.getNewArea();
+    area ??= th2FileEditController.areaLineCreationController.getNewArea();
 
     final THLine line = clickedLines.values.first as THLine;
     final MPCommand addLineToAreaCommand = MPCommandFactory.addLineToArea(

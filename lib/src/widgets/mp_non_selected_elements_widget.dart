@@ -68,7 +68,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     final Iterable<int> drawableChildrenMPIDs = parent
         .getDrawableChildrenMPIDs();
     final int? newLineMPID =
-        th2FileEditController.elementEditController.newLine?.mpID;
+        th2FileEditController.areaLineCreationController.newLine?.mpID;
 
     for (final int drawableChildMPID in drawableChildrenMPIDs) {
       if (isFromActiveScrap &&

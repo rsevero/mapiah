@@ -25,15 +25,12 @@ class MPAddAreaCommand extends MPCommand with MPPosCommandMixin {
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
-    final TH2FileEditElementEditController elementEditController =
-        th2FileEditController.elementEditController;
-
-    elementEditController.executeAddArea(
+    th2FileEditController.areaLineCreationController.executeAddArea(
       newArea: newArea,
       areaChildren: areaChildren,
       areaPositionInParent: areaPositionInParent,
     );
-    elementEditController.afterAddArea(newArea);
+    th2FileEditController.areaLineCreationController.afterAddArea(newArea);
   }
 
   @override

@@ -121,7 +121,8 @@ endscrap
 
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
-            final THArea area = controller.elementEditController.getNewArea();
+            final THArea area = controller.areaLineCreationController
+                .getNewArea();
             final MPCommand addAreaCommand =
                 MPCommandFactory.addAreaFromExisting(
                   existingArea: area,

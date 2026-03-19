@@ -10,14 +10,12 @@
   * Multiple TH2 file open support with multi-selection in file dialog.
   * Click-and-drag horizontal scrolling for tabs when many files are open.
   * Mouse wheel scrolling support for tab bar.
-  * Tab drag-to-reorder: reorder file tabs by clicking and dragging them with visual insertion point indicator. [suggested by Patrícia Finageiv]
-  * Enhanced tab bar styling with pill-shaped appearance and better spacing.
+  * Tab drag-to-reorder: reorder file tabs by clicking and dragging them with visual insertion point indicator. [requested by Patrícia Finageiv]
   * Command-line argument handling: positional arguments, --th2 (multiple), and --thconfig (single).
   * Created enumeration-backed settings, including the new TH2Edit_newLineCreationMethod setting with localized enum values.
-  * Implemented selectable new-line creation behavior for both the Mapiah quadratic mode and the xTherion cubic smooth mode with Ctrl-drag distance locking.
+  * Implemented selectable new line creation behavior for both the Mapiah quadratic mode and the xTherion cubic smooth mode with Ctrl-drag distance locking.
   * Show Bézier control points during click-and-drag line creation: CP1 and CP2 visible while dragging, with the dragged handle painted black and others white; control points disappear on mouse release.
   * Per-scrap visibility toggle in the available scraps panel: each scrap row shows a checkbox to hide/show the scrap on the canvas. Hidden scraps cannot be the active scrap. The checkbox is hidden for the active scrap.
-  * Scrap visibility checkbox now shown for the active scrap too; disabled when only one scrap is visible to prevent hiding all scraps. When the active scrap is hidden, Mapiah automatically switches to the nearest previously visible scrap. Checkbox hidden when the file has only one scrap.
   * Added toggle-all scrap visibility button above the scrap list; hides all but the active scrap when all are visible, or shows all when any are hidden. Tooltip and icon update dynamically to describe what the button will do.
   * Added toggle-all image visibility button above the image list; hides all images when all are visible, or shows all when any are hidden. Tooltip and icon update dynamically to describe what the button will do.
   * Scrap reordering via drag-and-drop in the available scraps panel, with animated insertion indicator. Reordering is undoable with Ctrl+Z (MPReorderScrapsCommand).
@@ -56,6 +54,7 @@
   * Added sort_arb_files.dart script to sort ARB localization files alphabetically; runs flutter gen-l10n automatically only when files change.
   * Pre-commit hook now runs sort_arb_files.dart and re-stages ARB and generated l10n files whenever an ARB file is staged.
 * Infrastructure maintenance:
+  * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Extracted TH2FileEditCopyPasteController: separated copy/paste/duplicate logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Updated packaging/README.md to mention release constant.
   * Removed Flathub files from scripts/update_flutter_and_mapiah_version.dart.

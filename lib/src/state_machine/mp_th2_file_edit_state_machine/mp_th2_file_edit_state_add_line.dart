@@ -18,7 +18,8 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
-      elementEditController.finalizeNewLineCreation();
+      th2FileEditController.areaLineCreationController
+          .finalizeNewLineCreation();
     }
     th2FileEditController.setStatusBarMessage('');
   }
@@ -28,17 +29,21 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     final Offset snapedScreenOffset = snapController
         .getScreenSnapedOffsetFromScreenOffset(event.localPosition);
 
-    elementEditController.addNewLineLineSegment(snapedScreenOffset);
+    th2FileEditController.areaLineCreationController.addNewLineLineSegment(
+      snapedScreenOffset,
+    );
   }
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    elementEditController.updateBezierLineSegment(event.localPosition);
+    th2FileEditController.areaLineCreationController.updateBezierLineSegment(
+      event.localPosition,
+    );
   }
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    elementEditController.endNewLineDrag();
+    th2FileEditController.areaLineCreationController.endNewLineDrag();
   }
 
   @override
@@ -55,7 +60,8 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
             !isCtrlPressed &&
             !isMetaPressed &&
             !isShiftPressed) {
-          elementEditController.finalizeNewLineCreation();
+          th2FileEditController.areaLineCreationController
+              .finalizeNewLineCreation();
 
           return;
         }

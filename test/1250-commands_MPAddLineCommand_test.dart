@@ -90,10 +90,10 @@ endscrap
             controller.setActiveScrap(parsedFile.getScraps().first.mpID);
             controller.setCanvasScale(0.5);
 
-            controller.elementEditController.addNewLineLineSegment(
+            controller.areaLineCreationController.addNewLineLineSegment(
               Offset(1, 2),
             );
-            controller.elementEditController.addNewLineLineSegment(
+            controller.areaLineCreationController.addNewLineLineSegment(
               Offset(3, 4),
             );
 
@@ -105,7 +105,7 @@ endscrap
 
             expect(asFileIntermediate, success['asFileIntermediate1']);
 
-            controller.elementEditController.addNewLineLineSegment(
+            controller.areaLineCreationController.addNewLineLineSegment(
               Offset(1, -5),
             );
 

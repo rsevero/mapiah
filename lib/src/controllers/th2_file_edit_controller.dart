@@ -13,6 +13,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
@@ -44,6 +45,7 @@ class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
 abstract class TH2FileEditControllerBase with Store {
+  late final TH2FileEditAreaLineCreationController areaLineCreationController;
   late final MPUndoRedoController undoRedoController;
   late final MPVisualController visualController;
   late final TH2FileEditCopyPasteController copyPasteController;
@@ -245,8 +247,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get showAddLine =>
-      (elementEditController.newLine != null) ||
-      (elementEditController.lineStartScreenPosition != null);
+      (areaLineCreationController.newLine != null) ||
+      (areaLineCreationController.lineStartScreenPosition != null);
 
   @computed
   bool get showEditLineSegment => _isEditLineMode;
@@ -431,6 +433,9 @@ abstract class TH2FileEditControllerBase with Store {
 
   void _basicInitialization(TH2File file) {
     _th2File = file;
+    areaLineCreationController = TH2FileEditAreaLineCreationController(
+      this as TH2FileEditController,
+    );
     copyPasteController = TH2FileEditCopyPasteController(
       this as TH2FileEditController,
     );

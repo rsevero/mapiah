@@ -21,7 +21,8 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
-      elementEditController.finalizeNewAreaCreation();
+      th2FileEditController.areaLineCreationController
+          .finalizeNewAreaCreation();
     }
     th2FileEditController.setStatusBarMessage('');
   }
@@ -100,7 +101,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       case LogicalKeyboardKey.numpadEnter:
         if (!isCtrlPressed && !isAltPressed && !isShiftPressed) {
           selectionController.setSelectedElements([
-            elementEditController.getNewArea(),
+            th2FileEditController.areaLineCreationController.getNewArea(),
           ], setState: true);
 
           return;
