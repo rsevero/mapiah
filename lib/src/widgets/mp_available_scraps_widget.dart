@@ -126,13 +126,45 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                         ),
                                         const SizedBox(width: mpButtonSpace),
                                         IconButton(
+                                          icon: Icon(
+                                            Icons.copy_outlined,
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                          tooltip: appLocalizations
+                                              .th2FileEditPageCopyScrapButton,
+                                          iconSize: mpSmallIconSize,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 0,
+                                            vertical: mpButtonSpace,
+                                          ),
+                                          constraints: const BoxConstraints(),
+                                          onPressed: () =>
+                                              _onPressedCopyScrap(scrapID),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.content_cut,
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                          tooltip: appLocalizations
+                                              .th2FileEditPageCutScrapButton,
+                                          iconSize: mpSmallIconSize,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 0,
+                                            vertical: mpButtonSpace,
+                                          ),
+                                          constraints: const BoxConstraints(),
+                                          onPressed: () =>
+                                              _onPressedCutScrap(scrapID),
+                                        ),
+                                        IconButton(
                                           icon: Transform.translate(
                                             offset: const Offset(
                                               0,
                                               mpFinePixelAdjustment,
                                             ),
                                             child: Icon(
-                                              Icons.copy_outlined,
+                                              Icons.file_copy_outlined,
                                               color: colorScheme.onSecondary,
                                             ),
                                           ),
@@ -224,6 +256,14 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addScrap,
     );
+  }
+
+  void _onPressedCopyScrap(int scrapID) {
+    th2FileEditController.copyPasteController.copyScrap(scrapID);
+  }
+
+  void _onPressedCutScrap(int scrapID) {
+    th2FileEditController.copyPasteController.cutScrap(scrapID);
   }
 
   void _onPressedDuplicateScrap(int scrapID) {

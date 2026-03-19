@@ -1378,6 +1378,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageRemoveImageButton => 'Remover imagem';
 
   @override
+  String get th2FileEditPageCopyScrapButton => 'Copiar croqui';
+
+  @override
+  String get th2FileEditPageCutScrapButton => 'Recortar croqui';
+
+  @override
   String get th2FileEditPageDuplicateScrapButton => 'Duplicar croqui';
 
   @override

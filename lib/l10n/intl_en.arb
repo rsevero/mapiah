@@ -2119,6 +2119,16 @@
     "description": "The label for the remove image button. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageCopyScrapButton": "Copy scrap",
+  "@th2FileEditPageCopyScrapButton": {
+    "description": "The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageCutScrapButton": "Cut scrap",
+  "@th2FileEditPageCutScrapButton": {
+    "description": "The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageDuplicateScrapButton": "Duplicate scrap",
   "@th2FileEditPageDuplicateScrapButton": {
     "description": "The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build",

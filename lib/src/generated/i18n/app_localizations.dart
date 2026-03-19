@@ -2529,6 +2529,18 @@ abstract class AppLocalizations {
   /// **'Remove image'**
   String get th2FileEditPageRemoveImageButton;
 
+  /// The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Copy scrap'**
+  String get th2FileEditPageCopyScrapButton;
+
+  /// The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Cut scrap'**
+  String get th2FileEditPageCutScrapButton;
+
   /// The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:

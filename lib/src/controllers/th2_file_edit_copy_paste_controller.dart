@@ -228,4 +228,30 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
     _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
+
+  void copyScrap(int scrapMPID) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
+
+    selectionController.setSelectedElements([scrap]);
+    copySelectedElements();
+    selectionController.clearSelectedElements();
+    _th2FileEditController.triggerSelectedListChanged();
+    _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
+  void cutScrap(int scrapMPID) {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
+
+    selectionController.setSelectedElements([scrap]);
+    cutSelectedElements();
+    selectionController.clearSelectedElements();
+    _th2FileEditController.triggerSelectedListChanged();
+    _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
 }

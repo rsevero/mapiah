@@ -1366,6 +1366,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageRemoveImageButton => 'Remove image';
 
   @override
+  String get th2FileEditPageCopyScrapButton => 'Copy scrap';
+
+  @override
+  String get th2FileEditPageCutScrapButton => 'Cut scrap';
+
+  @override
   String get th2FileEditPageDuplicateScrapButton => 'Duplicate scrap';
 
   @override
