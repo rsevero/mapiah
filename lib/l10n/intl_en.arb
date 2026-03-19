@@ -2139,6 +2139,11 @@
     "description": "The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageToggleScrapVisibilityTooltip": "Toggle scrap visibility",
+  "@th2FileEditPageToggleScrapVisibilityTooltip": {
+    "description": "Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageSave": "Save (Ctrl+S)",
   "@th2FileEditPageSave": {
     "description": "The label for the save button. Used on: _TH2FileEditPageState.build",

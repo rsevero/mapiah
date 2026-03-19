@@ -164,6 +164,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool _hasMultipleScraps = false;
 
   @readonly
+  ObservableSet<int> _hiddenScrapMPIDs = ObservableSet<int>();
+
+  @readonly
   double _lineThicknessOnCanvas = mpLocator.mpSettingsController
       .getDoubleWithDefault(MPSettingID.TH2Edit_LineThickness);
 
@@ -790,6 +793,75 @@ abstract class TH2FileEditControllerBase with Store {
           : currentIndex - 1;
 
       setActiveScrap(availableScraps[newIndex].mpID);
+    }
+  }
+
+  bool isScrapVisible(int scrapMPID) {
+    return !_hiddenScrapMPIDs.contains(scrapMPID);
+  }
+
+  @computed
+  int get visibleScrapCount {
+    return _th2File.scrapMPIDs
+        .where((mpID) => !_hiddenScrapMPIDs.contains(mpID))
+        .length;
+  }
+
+  @action
+  void toggleScrapVisibility(int scrapMPID) {
+    if (_hiddenScrapMPIDs.contains(scrapMPID)) {
+      _hiddenScrapMPIDs.remove(scrapMPID);
+    } else {
+      _hiddenScrapMPIDs.add(scrapMPID);
+      setActiveScrapForVisibilityHide(scrapMPID);
+    }
+
+    triggerNonSelectedElementsRedraw();
+  }
+
+  void setActiveScrapForVisibilityHide(int hiddenScrapMPID) {
+    if (_activeScrapID != hiddenScrapMPID) {
+      return;
+    }
+
+    final List<THScrap> visibleScraps = _th2File
+        .getScraps()
+        .where((s) => !_hiddenScrapMPIDs.contains(s.mpID))
+        .toList();
+
+    if (visibleScraps.isEmpty) {
+      setActiveScrap(0);
+    } else {
+      final List<THScrap> allScraps = _th2File.getScraps().toList();
+      final int currentIndex = allScraps.indexWhere(
+        (s) => s.mpID == hiddenScrapMPID,
+      );
+
+      /// Walk backwards from current position to find the nearest visible scrap.
+      THScrap? newActiveScrap;
+
+      for (int i = currentIndex - 1; i >= 0; i--) {
+        if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
+          newActiveScrap = allScraps[i];
+          break;
+        }
+      }
+
+      /// If no visible scrap found before current, try after.
+      if (newActiveScrap == null) {
+        for (int i = currentIndex + 1; i < allScraps.length; i++) {
+          if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
+            newActiveScrap = allScraps[i];
+            break;
+          }
+        }
+      }
+
+      if (newActiveScrap != null) {
+        setActiveScrap(newActiveScrap.mpID);
+      } else {
+        setActiveScrap(0);
+      }
     }
   }
 

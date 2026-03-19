@@ -2553,6 +2553,12 @@ abstract class AppLocalizations {
   /// **'Remove scrap'**
   String get th2FileEditPageRemoveScrapButton;
 
+  /// Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle scrap visibility'**
+  String get th2FileEditPageToggleScrapVisibilityTooltip;
+
   /// The label for the save button. Used on: _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:

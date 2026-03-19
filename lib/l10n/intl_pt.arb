@@ -380,6 +380,7 @@
   "th2FileEditPageCutScrapButton": "Recortar croqui",
   "th2FileEditPageDuplicateScrapButton": "Duplicar croqui",
   "th2FileEditPageRemoveScrapButton": "Remover croqui",
+  "th2FileEditPageToggleScrapVisibilityTooltip": "Alternar visibilidade do croqui",
   "th2FileEditPageSave": "Salvar (Ctrl+S)",
   "th2FileEditPageSaveAs": "Salvar como (Shift+Ctrl+S)",
   "th2FileEditPageSaveAsDialogTitle": "Salvar arquivo TH2 como",

@@ -36,6 +36,7 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
       builder: (_) {
         th2FileEditController.activeScrapID;
         th2FileEditController.redrawTriggerAllElements;
+        th2FileEditController.redrawTriggerNonSelectedElements;
 
         final List<CustomPainter> painters = [];
 
@@ -106,6 +107,10 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
           );
         case THScrap scrap:
           if (scrap.mpID == th2FileEditController.activeScrapID) {
+            continue;
+          }
+
+          if (!th2FileEditController.isScrapVisible(scrap.mpID)) {
             continue;
           }
 

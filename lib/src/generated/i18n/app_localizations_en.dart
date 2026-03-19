@@ -1378,6 +1378,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageRemoveScrapButton => 'Remove scrap';
 
   @override
+  String get th2FileEditPageToggleScrapVisibilityTooltip =>
+      'Toggle scrap visibility';
+
+  @override
   String get th2FileEditPageSave => 'Save (Ctrl+S)';
 
   @override

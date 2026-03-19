@@ -183,6 +183,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.scrapLengthUnitsPerPointOnScreen,
         name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen',
       )).value;
+  Computed<int>? _$visibleScrapCountComputed;
+
+  @override
+  int get visibleScrapCount => (_$visibleScrapCountComputed ??= Computed<int>(
+    () => super.visibleScrapCount,
+    name: 'TH2FileEditControllerBase.visibleScrapCount',
+  )).value;
 
   late final _$_screenSizeAtom = Atom(
     name: 'TH2FileEditControllerBase._screenSize',
@@ -740,6 +747,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _hasMultipleScraps(bool value) {
     _$_hasMultipleScrapsAtom.reportWrite(value, super._hasMultipleScraps, () {
       super._hasMultipleScraps = value;
+    });
+  }
+
+  late final _$_hiddenScrapMPIDsAtom = Atom(
+    name: 'TH2FileEditControllerBase._hiddenScrapMPIDs',
+    context: context,
+  );
+
+  ObservableSet<int> get hiddenScrapMPIDs {
+    _$_hiddenScrapMPIDsAtom.reportRead();
+    return super._hiddenScrapMPIDs;
+  }
+
+  @override
+  ObservableSet<int> get _hiddenScrapMPIDs => hiddenScrapMPIDs;
+
+  @override
+  set _hiddenScrapMPIDs(ObservableSet<int> value) {
+    _$_hiddenScrapMPIDsAtom.reportWrite(value, super._hiddenScrapMPIDs, () {
+      super._hiddenScrapMPIDs = value;
     });
   }
 
@@ -1466,6 +1493,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void toggleScrapVisibility(int scrapMPID) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.toggleScrapVisibility');
+    try {
+      return super.toggleScrapVisibility(scrapMPID);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toggleToNextAvailableScrap() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(
@@ -1853,7 +1891,8 @@ scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
+visibleScrapCount: ${visibleScrapCount}
     ''';
   }
 }

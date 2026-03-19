@@ -55,6 +55,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
         Observer(
           builder: (_) {
             final int activeScrapID = th2FileEditController.activeScrapID;
+            final Map<int, String> scraps = th2FileEditController
+                .availableScraps();
+            final bool showVisibilityCheckboxes = scraps.length > 1;
 
             th2FileEditController.redrawTriggerNonSelectedElements;
 
@@ -76,11 +79,13 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                             }
                           },
                           child: Column(
-                            children: th2FileEditController.availableScraps().entries.map((
-                              entry,
-                            ) {
+                            children: scraps.entries.map((entry) {
                               final int scrapID = entry.key;
                               final String scrapName = entry.value;
+                              final bool isVisible = th2FileEditController
+                                  .isScrapVisible(scrapID);
+                              final bool isActiveScrap =
+                                  scrapID == activeScrapID;
 
                               return Builder(
                                 builder: (listenerContext) {
@@ -124,6 +129,24 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                 .adaptivePlatformDensity,
                                           ),
                                         ),
+                                        if (showVisibilityCheckboxes &&
+                                            !isActiveScrap)
+                                          Tooltip(
+                                            message: appLocalizations
+                                                .th2FileEditPageToggleScrapVisibilityTooltip,
+                                            child: Checkbox(
+                                              key: ValueKey(
+                                                "MPAvailableScrapsWidget|VisibilityCheckbox|$scrapID",
+                                              ),
+                                              value: isVisible,
+                                              onChanged: (_) =>
+                                                  _onToggleScrapVisibility(
+                                                    scrapID,
+                                                  ),
+                                              visualDensity: VisualDensity
+                                                  .adaptivePlatformDensity,
+                                            ),
+                                          ),
                                         const SizedBox(width: mpButtonSpace),
                                         IconButton(
                                           icon: Icon(
@@ -272,5 +295,9 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
   void _onPressedRemoveScrap(int scrapID) {
     th2FileEditController.elementEditController.removeScrap(scrapID);
+  }
+
+  void _onToggleScrapVisibility(int scrapID) {
+    th2FileEditController.toggleScrapVisibility(scrapID);
   }
 }

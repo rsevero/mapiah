@@ -1390,6 +1390,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageRemoveScrapButton => 'Remover croqui';
 
   @override
+  String get th2FileEditPageToggleScrapVisibilityTooltip =>
+      'Alternar visibilidade do croqui';
+
+  @override
   String get th2FileEditPageSave => 'Salvar (Ctrl+S)';
 
   @override
