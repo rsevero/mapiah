@@ -216,7 +216,7 @@ Future<({String name, String url})?> getChangelogReleaseInfo() async {
 
   final String firstLine = firstSection.group(0)!;
   final RegExpMatch? nameUrlMatch = RegExp(
-    r'\[([^\]]+)\]\(([^)]+)\)',
+    r'\[([^\]]+)\]\(((?:[^()]+|\([^()]*\))*)\)',
   ).firstMatch(firstLine);
 
   if (nameUrlMatch != null) {
