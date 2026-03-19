@@ -1937,6 +1937,16 @@
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
+  "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Hide all but active",
+  "@th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": {
+    "description": "Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": "Show all scraps",
+  "@th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": {
+    "description": "Tooltip for the toggle-all scrap visibility button when any scrap is hidden (clicking will make all scraps visible). Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageToggleScrapVisibilityTooltip": "Toggle scrap visibility",
   "@th2FileEditPageToggleScrapVisibilityTooltip": {
     "description": "Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build",

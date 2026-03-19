@@ -71,6 +71,29 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (showVisibilityCheckboxes)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Tooltip(
+                              message: th2FileEditController.allScrapsVisible
+                                  ? appLocalizations
+                                        .th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip
+                                  : appLocalizations
+                                        .th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip,
+                              child: IconButton(
+                                icon: Icon(
+                                  th2FileEditController.allScrapsVisible
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: colorScheme.onSecondary,
+                                ),
+                                iconSize: mpSmallIconSize,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                onPressed: _onPressedToggleAllScrapsVisibility,
+                              ),
+                            ),
+                          ),
                         RadioGroup(
                           groupValue: activeScrapID,
                           onChanged: (int? value) {
@@ -301,6 +324,10 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
 
   void _onPressedRemoveScrap(int scrapID) {
     th2FileEditController.elementEditController.removeScrap(scrapID);
+  }
+
+  void _onPressedToggleAllScrapsVisibility() {
+    th2FileEditController.toggleAllScrapsVisibility();
   }
 
   void _onToggleScrapVisibility(int scrapID) {

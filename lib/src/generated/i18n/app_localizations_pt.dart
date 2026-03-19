@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
@@ -1248,6 +1250,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageSnapButton => 'Ajustar a pontos';
+
+  @override
+  String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>
+      'Ocultar todos exceto o ativo';
+
+  @override
+  String get th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip =>
+      'Mostrar todos os croquis';
 
   @override
   String get th2FileEditPageToggleScrapVisibilityTooltip =>

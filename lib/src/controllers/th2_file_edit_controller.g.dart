@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'th2_file_edit_controller.dart';
@@ -189,6 +191,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   int get visibleScrapCount => (_$visibleScrapCountComputed ??= Computed<int>(
     () => super.visibleScrapCount,
     name: 'TH2FileEditControllerBase.visibleScrapCount',
+  )).value;
+  Computed<bool>? _$allScrapsVisibleComputed;
+
+  @override
+  bool get allScrapsVisible => (_$allScrapsVisibleComputed ??= Computed<bool>(
+    () => super.allScrapsVisible,
+    name: 'TH2FileEditControllerBase.allScrapsVisible',
   )).value;
 
   late final _$_screenSizeAtom = Atom(
@@ -1493,6 +1502,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void toggleAllScrapsVisibility() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.toggleAllScrapsVisibility',
+        );
+    try {
+      return super.toggleAllScrapsVisibility();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toggleScrapVisibility(int scrapMPID) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.toggleScrapVisibility');
@@ -1892,7 +1914,8 @@ scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
 scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
-visibleScrapCount: ${visibleScrapCount}
+visibleScrapCount: ${visibleScrapCount},
+allScrapsVisible: ${allScrapsVisible}
     ''';
   }
 }

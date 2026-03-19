@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -2331,6 +2333,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snap'**
   String get th2FileEditPageSnapButton;
+
+  /// Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Hide all but active'**
+  String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip;
+
+  /// Tooltip for the toggle-all scrap visibility button when any scrap is hidden (clicking will make all scraps visible). Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Show all scraps'**
+  String get th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip;
 
   /// Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build
   ///

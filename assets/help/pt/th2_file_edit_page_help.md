@@ -84,8 +84,12 @@ Você também pode _Alt+clicar_ em um croqui inativo para torná-lo o croqui atu
 
 Cada croqui é listado como uma linha na caixa de diálogo. A linha contém:
 * Um botão de rádio para selecioná-lo como o croqui ativo
-* Uma caixa de seleção de visibilidade (exibida apenas para croquis inativos quando o arquivo tem mais de um croqui) — veja [Visibilidade do croqui](#visibilidade-do-croqui)
+* Uma caixa de seleção de visibilidade (quando o arquivo tem mais de um croqui) — veja [Visibilidade do croqui](#visibilidade-do-croqui)
 * Quatro botões de ícone: _Copiar croqui_, _Recortar croqui_, _Duplicar croqui_ e _Remover croqui_
+
+Um botão _alternar todos_ aparece acima da lista (quando o arquivo tem mais de um croqui). Seu tooltip e ícone refletem o que o botão fará:
+* _Ocultar todos exceto o ativo_ (ícone de olho fechado): exibido quando todos os croquis estão visíveis; clicar oculta todos os croquis exceto o ativo.
+* _Mostrar todos os croquis_ (ícone de olho): exibido quando algum croqui está oculto; clicar torna todos os croquis visíveis.
 
 ### Copiar croqui
 Copia todos os elementos do croqui para a área de transferência sem remover o croqui. O conteúdo da área de transferência pode então ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto.

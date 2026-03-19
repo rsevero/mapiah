@@ -191,8 +191,12 @@ You can also _Alt+click_ on a non active scrap to make it the current scrap.
 
 Each scrap is listed as a row in the dialog box. The row contains:
 * A radio button to select it as the active scrap
-* A visibility checkbox (only shown for inactive scraps when the file has more than one scrap) — see [Scrap visibility](#scrap-visibility)
+* A visibility checkbox (when the file has more than one scrap) — see [Scrap visibility](#scrap-visibility)
 * Four icon buttons: _Copy scrap_, _Cut scrap_, _Duplicate scrap_, and _Remove scrap_
+
+A _toggle all_ button appears above the list (when the file has more than one scrap). Its tooltip and icon reflect what the button will do:
+* _Hide all but active_ (eye-off icon): shown when all scraps are visible; clicking hides all scraps except the active one.
+* _Show all scraps_ (eye icon): shown when any scrap is hidden; clicking makes all scraps visible.
 
 ### Scrap copy
 Copies all elements within the scrap to the clipboard without removing the scrap. The clipboard content can then be pasted with _Ctrl+V_ into the same or another open file.

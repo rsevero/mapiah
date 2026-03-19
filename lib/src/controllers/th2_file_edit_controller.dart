@@ -807,6 +807,24 @@ abstract class TH2FileEditControllerBase with Store {
         .length;
   }
 
+  @computed
+  bool get allScrapsVisible => _hiddenScrapMPIDs.isEmpty;
+
+  /// If all scraps are visible, hides all except the active one.
+  /// If any scrap is hidden, makes all scraps visible.
+  @action
+  void toggleAllScrapsVisibility() {
+    if (allScrapsVisible) {
+      _hiddenScrapMPIDs.addAll(
+        _th2File.scrapMPIDs.where((mpID) => mpID != _activeScrapID),
+      );
+    } else {
+      _hiddenScrapMPIDs.clear();
+    }
+
+    triggerNonSelectedElementsRedraw();
+  }
+
   @action
   void toggleScrapVisibility(int scrapMPID) {
     if (_hiddenScrapMPIDs.contains(scrapMPID)) {
