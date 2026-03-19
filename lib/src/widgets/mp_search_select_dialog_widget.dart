@@ -200,7 +200,7 @@ class _MPSearchSelectDialogWidgetState
     final int matchingCount = _searchController.matchingCount;
 
     return SizedBox(
-      width: 500,
+      width: 720,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -209,6 +209,23 @@ class _MPSearchSelectDialogWidgetState
             _appLocalizations.th2FileEditPageSearchSelectTitle,
             style: theme.textTheme.titleMedium,
           ),
+          const SizedBox(height: mpButtonSpace),
+
+          // Status
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              _appLocalizations.th2FileEditPageSearchSelectMatchCount(
+                matchingCount,
+              ),
+              style: theme.textTheme.bodyMedium,
+            ),
+          ),
+
           const SizedBox(height: mpButtonSpace),
 
           _buildSection(
@@ -225,23 +242,6 @@ class _MPSearchSelectDialogWidgetState
             title: _appLocalizations.th2FileEditPageSearchSelectAreas,
             section: _criteria.areas,
             plaCategory: 'area',
-          ),
-
-          const SizedBox(height: mpButtonSpace),
-
-          // Status bar
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              _appLocalizations.th2FileEditPageSearchSelectMatchCount(
-                matchingCount,
-              ),
-              style: theme.textTheme.bodyMedium,
-            ),
           ),
 
           const SizedBox(height: mpButtonSpace),
