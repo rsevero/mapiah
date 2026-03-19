@@ -27,6 +27,7 @@ class TH2FileTabsPage extends StatefulWidget {
 
 class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   late ReactionDisposer _openFileOrderReaction;
+  late ReactionDisposer _activeTabFocusReaction;
   final Map<String, Future<TH2FileEditControllerCreateResult>> _loadFutures =
       <String, Future<TH2FileEditControllerCreateResult>>{};
   late final ScrollController _tabScrollController;
@@ -49,12 +50,37 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         }
       },
     );
+
+    /// Give keyboard focus to the incoming tab's canvas after each tab
+    /// switch so that keyboard shortcuts (e.g. Ctrl+V) are delivered to
+    /// the visible canvas and not to an offstage one.
+    _activeTabFocusReaction = reaction(
+      (_) => mpLocator.mpGeneralController.activeTabIndex,
+      (int index) {
+        final List<String> order = mpLocator.mpGeneralController.openFileOrder;
+
+        if ((index < 0) || (index >= order.length)) {
+          return;
+        }
+
+        final String filename = order[index];
+        final TH2FileEditController? controller = mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(filename);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            controller?.th2FileFocusNode.requestFocus();
+          }
+        });
+      },
+    );
   }
 
   @override
   void dispose() {
     _tabScrollController.dispose();
     _openFileOrderReaction();
+    _activeTabFocusReaction();
     super.dispose();
   }
 

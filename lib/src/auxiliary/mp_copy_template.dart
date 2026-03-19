@@ -15,8 +15,10 @@ class MPCopyTemplate {
   /// Create a template from a live THElement.
   factory MPCopyTemplate.fromElement(THElement element) {
     final Map<String, dynamic> map = element.toMap();
+
     // Clear the originalLineInTH2File to avoid issues during paste
     map['originalLineInTH2File'] = '';
+
     return MPCopyTemplate(elementMap: map);
   }
 

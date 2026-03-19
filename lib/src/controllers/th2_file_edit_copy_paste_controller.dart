@@ -44,7 +44,7 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     /// Filter selection to only top elements (THScrap, THPoint, THLine, THArea).
     final List<THElement> topElements = [];
-    for (final selectedElement in selectedElements) {
+    for (final MPSelectedElement selectedElement in selectedElements) {
       final THElement element = selectedElement.originalElementClone;
 
       if ((element is THScrap) ||
@@ -129,6 +129,7 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     if (element is THIsParentMixin) {
       final THIsParentMixin parent = element as THIsParentMixin;
+
       for (final int childMPID in parent.childrenMPIDs) {
         final THElement child = _th2File.elementByMPID(childMPID);
         final List<MPCopyElementWithChildren> childEntries = _buildCopyResult(

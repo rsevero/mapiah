@@ -103,6 +103,17 @@ abstract class MPGeneralControllerBase with Store {
       }
 
       _activeTabIndex = index;
+
+      /// Give keyboard focus to the incoming tab's canvas so that shortcuts
+      /// such as Ctrl+V are delivered there and not to an offstage canvas.
+      /// TH2FileTabsPage also reinforces this via a post-frame callback, but
+      /// calling requestFocus here ensures focus is correct even in contexts
+      /// where the page is not yet mounted (e.g. logic-level tests).
+      final String incomingFilename = _openFileOrder[index];
+      final TH2FileEditController? incomingController =
+          _t2hFileEditControllers[incomingFilename];
+
+      incomingController?.th2FileFocusNode.requestFocus();
     }
   }
 
@@ -149,7 +160,8 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   /// Check if clipboard has content.
-  bool get hasClipboardContent => _clipboard != null && _clipboard!.isNotEmpty;
+  bool get hasClipboardContent =>
+      (_clipboard != null) && _clipboard!.isNotEmpty;
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.

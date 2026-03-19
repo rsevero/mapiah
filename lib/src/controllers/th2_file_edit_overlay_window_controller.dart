@@ -202,6 +202,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _secondLevelOptionOpenedOverlayWindow = null;
     }
 
+    /// Track whether this call is actually closing an open overlay so that
+    /// we only restore focus to the canvas when a real overlay was dismissed.
+    final bool wasOpen = _overlayWindows.containsKey(type);
+
     _overlayWindows[type]?.remove();
     if (type == MPWindowType.optionChoices) {
       _th2FileEditController.optionEditController.clearCurrentOptionType();
@@ -227,7 +231,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _currentPLATypeShown = null;
     }
 
-    if (_activeWindow == MPWindowType.mainTH2FileEditWindow) {
+    /// Only restore focus to the canvas when an overlay was actually open.
+    /// Without this guard, clearOverlayWindows() would steal focus to this
+    /// controller's canvas on every MPWindowType iteration, even when no
+    /// overlays were open — breaking keyboard delivery to the incoming tab.
+    if (wasOpen && (_activeWindow == MPWindowType.mainTH2FileEditWindow)) {
       _th2FileEditController.th2FileFocusNode.requestFocus();
     }
   }
