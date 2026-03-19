@@ -90,6 +90,10 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   bool _isLoading = false;
 
+  bool _isFileLoaded = false;
+
+  bool get isFileLoaded => _isFileLoaded;
+
   @readonly
   late TH2File _th2File;
 
@@ -478,6 +482,7 @@ abstract class TH2FileEditControllerBase with Store {
     List<String> errors,
   ) {
     _finalFilePreparations(parsedFile);
+    _isFileLoaded = true;
 
     if (!isSuccessful) {
       errorMessages.addAll(errors);
@@ -1340,6 +1345,7 @@ abstract class TH2FileEditControllerBase with Store {
       _actualSave(file);
 
       _th2File.isNewFile = false;
+      _isFileLoaded = true;
       setFilename(_th2File.filename);
 
       overlayWindowController.closeAutoDismissOverlayWindows();

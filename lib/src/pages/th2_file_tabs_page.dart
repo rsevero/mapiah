@@ -354,7 +354,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     }
 
     if (!_loadFutures.containsKey(filename)) {
-      if (filename.startsWith(mpNewFilePrefix)) {
+      if (filename.startsWith(mpNewFilePrefix) || controller.isFileLoaded) {
         _loadFutures[filename] =
             Future<TH2FileEditControllerCreateResult>.value(
               TH2FileEditControllerCreateResult(true, <String>[]),

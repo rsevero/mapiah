@@ -268,6 +268,12 @@ abstract class MPGeneralControllerBase with Store {
 
       _t2hFileEditControllers[newFilename] = controller;
     }
+
+    final int index = _openFileOrder.indexOf(oldFilename);
+
+    if (index >= 0) {
+      _openFileOrder[index] = newFilename;
+    }
   }
 
   void removeFileController({required String filename}) {
