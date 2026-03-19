@@ -75,6 +75,7 @@ abstract class MPGeneralControllerBase with Store {
   @action
   void removeFileTab({required String filename}) {
     final int indexToRemove = _openFileOrder.indexOf(filename);
+
     if (indexToRemove != -1) {
       _openFileOrder.removeAt(indexToRemove);
       removeFileController(filename: filename);
@@ -89,7 +90,18 @@ abstract class MPGeneralControllerBase with Store {
 
   @action
   void setActiveTab(int index) {
-    if (index >= 0 && index < _openFileOrder.length) {
+    if ((index >= 0) && (index < _openFileOrder.length)) {
+      /// Close all overlay windows on the outgoing tab before switching.
+      if ((_activeTabIndex != index) &&
+          (_activeTabIndex >= 0) &&
+          (_activeTabIndex < _openFileOrder.length)) {
+        final String outgoingFilename = _openFileOrder[_activeTabIndex];
+        final TH2FileEditController? outgoingController =
+            _t2hFileEditControllers[outgoingFilename];
+
+        outgoingController?.overlayWindowController.clearOverlayWindows();
+      }
+
       _activeTabIndex = index;
     }
   }

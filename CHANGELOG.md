@@ -28,6 +28,7 @@
   * Exception "No element with index '0'" when opening TH2 file from command line.
   * Tab names now display without .th2 extension for cleaner UI.
   * Creating a new file while another file is already open caused a "Multiple widgets used the same GlobalKey" crash due to a duplicate TH2FileTabsPage being pushed onto the navigator.
+  * Overlay windows left open on a tab were not closed when switching to another tab.
   * Test 3100 assertions now correctly expect TH2FileTabsPage instead of TH2FileEditPage.
   * Copy/Paste logic refined: parents (scraps, areas, lines) materialized with empty childrenMPIDs and added at end position; children automatically populate parent childrenMPIDs when added to th2File. Border lines processed before areas during copy. (3/4 duplicate tests now passing)
   * THID conflict resolution for elements with THIDCommandOption: duplicate pasted lines now get new unique THIDs when conflicts exist (all 5/5 duplicate tests now passing).
