@@ -488,15 +488,18 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                         List<int?> candidateData,
                                         List<dynamic> rejectedData,
                                       ) {
+                                        // Always render at full height so the
+                                        // DragTarget has a hit area; toggle
+                                        // color instead of height.
                                         return AnimatedContainer(
                                           duration: const Duration(
                                             milliseconds: 150,
                                           ),
-                                          height: _isDragTargetAfterLast
-                                              ? mpDragDropIndicatorHeight
-                                              : 0.0,
+                                          height: mpDragDropIndicatorHeight,
                                           decoration: BoxDecoration(
-                                            color: colorScheme.secondary,
+                                            color: _isDragTargetAfterLast
+                                                ? colorScheme.secondary
+                                                : Colors.transparent,
                                             borderRadius: BorderRadius.circular(
                                               mpDragDropIndicatorHeight / 2,
                                             ),
