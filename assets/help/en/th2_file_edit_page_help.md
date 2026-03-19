@@ -20,6 +20,10 @@ This is where all TH2 file editing is done.
 - [Save](#save)
   - [Original file format](#original-file-format)
 - [Scraps](#scraps)
+  - [Scrap copy](#scrap-copy)
+  - [Scrap cut](#scrap-cut)
+  - [Scrap duplicate](#scrap-duplicate)
+  - [Scrap visibility](#scrap-visibility)
 - [Simplify lines](#simplify-lines)
   - [Simplification methods](#simplification-methods)
   - [Bézier curve line segments](#bézier-curve-line-segments)
@@ -162,6 +166,23 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.
 
 You can also _Alt+click_ on a non active scrap to make it the current scrap.
+
+Each scrap is listed as a row in the dialog box. The row contains:
+* A radio button to select it as the active scrap
+* A visibility checkbox (only shown for inactive scraps when the file has more than one scrap) — see [Scrap visibility](#scrap-visibility)
+* Four icon buttons: _Copy scrap_, _Cut scrap_, _Duplicate scrap_, and _Remove scrap_
+
+### Scrap copy
+Copies all elements within the scrap to the clipboard without removing the scrap. The clipboard content can then be pasted with _Ctrl+V_ into the same or another open file.
+
+### Scrap cut
+Copies all elements within the scrap to the clipboard and then removes the scrap from the file. The clipboard content can then be pasted with _Ctrl+V_ into the same or another open file. The cut operation can be undone with _Ctrl+Z_, which restores the scrap and all its elements.
+
+### Scrap duplicate
+Duplicates the entire scrap, including all its elements, creating a new scrap in the same file. New unique IDs are generated for all duplicated elements. The duplicate operation can be undone with _Ctrl+Z_.
+
+### Scrap visibility
+When the file has more than one scrap, a visibility checkbox appears in the row of each inactive (non-current) scrap. Checking or unchecking this box toggles whether that scrap is displayed on the canvas. The active scrap is always visible and has no visibility checkbox.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.

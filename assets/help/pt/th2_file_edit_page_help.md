@@ -7,6 +7,10 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
 - [Croquis](#croquis)
+  - [Copiar croqui](#copiar-croqui)
+  - [Recortar croqui](#recortar-croqui)
+  - [Duplicar croqui](#duplicar-croqui)
+  - [Visibilidade do croqui](#visibilidade-do-croqui)
 - [Desenhando linhas](#desenhando-linhas)
   - [Conexão de mapa](#conexão-de-mapa)
 - [Janela de edição](#janela-de-edição)
@@ -55,6 +59,23 @@ A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo voc
 Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
 
 Você também pode _Alt+clicar_ em um croqui inativo para torná-lo o croqui atual.
+
+Cada croqui é listado como uma linha na caixa de diálogo. A linha contém:
+* Um botão de rádio para selecioná-lo como o croqui ativo
+* Uma caixa de seleção de visibilidade (exibida apenas para croquis inativos quando o arquivo tem mais de um croqui) — veja [Visibilidade do croqui](#visibilidade-do-croqui)
+* Quatro botões de ícone: _Copiar croqui_, _Recortar croqui_, _Duplicar croqui_ e _Remover croqui_
+
+### Copiar croqui
+Copia todos os elementos do croqui para a área de transferência sem remover o croqui. O conteúdo da área de transferência pode então ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto.
+
+### Recortar croqui
+Copia todos os elementos do croqui para a área de transferência e então remove o croqui do arquivo. O conteúdo da área de transferência pode então ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto. A operação de recortar pode ser desfeita com _Ctrl+Z_, que restaura o croqui e todos os seus elementos.
+
+### Duplicar croqui
+Duplica o croqui inteiro, incluindo todos os seus elementos, criando um novo croqui no mesmo arquivo. Novos IDs exclusivos são gerados para todos os elementos duplicados. A operação de duplicação pode ser desfeita com _Ctrl+Z_.
+
+### Visibilidade do croqui
+Quando o arquivo tem mais de um croqui, uma caixa de seleção de visibilidade aparece na linha de cada croqui inativo (não atual). Marcar ou desmarcar essa caixa alterna se aquele croqui é exibido no canvas. O croqui ativo é sempre visível e não possui caixa de seleção de visibilidade.
 
 ## Desenhando linhas
 Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
