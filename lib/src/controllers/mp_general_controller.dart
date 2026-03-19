@@ -64,8 +64,20 @@ abstract class MPGeneralControllerBase with Store {
 
   String get thConfigFilePath => _thConfigFilePath;
 
+  void _clearActiveTabOverlayWindows() {
+    if ((_activeTabIndex >= 0) && (_activeTabIndex < _openFileOrder.length)) {
+      final String outgoingFilename = _openFileOrder[_activeTabIndex];
+      final TH2FileEditController? outgoingController =
+          _t2hFileEditControllers[outgoingFilename];
+
+      outgoingController?.overlayWindowController.clearOverlayWindows();
+    }
+  }
+
   @action
   void addFileTab(String filename) {
+    _clearActiveTabOverlayWindows();
+
     if (!_openFileOrder.contains(filename)) {
       _openFileOrder.add(filename);
     }
@@ -92,14 +104,8 @@ abstract class MPGeneralControllerBase with Store {
   void setActiveTab(int index) {
     if ((index >= 0) && (index < _openFileOrder.length)) {
       /// Close all overlay windows on the outgoing tab before switching.
-      if ((_activeTabIndex != index) &&
-          (_activeTabIndex >= 0) &&
-          (_activeTabIndex < _openFileOrder.length)) {
-        final String outgoingFilename = _openFileOrder[_activeTabIndex];
-        final TH2FileEditController? outgoingController =
-            _t2hFileEditControllers[outgoingFilename];
-
-        outgoingController?.overlayWindowController.clearOverlayWindows();
+      if (_activeTabIndex != index) {
+        _clearActiveTabOverlayWindows();
       }
 
       _activeTabIndex = index;
