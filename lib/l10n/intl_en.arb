@@ -1937,6 +1937,16 @@
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
+  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Hide all images",
+  "@th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": {
+    "description": "Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Show all images",
+  "@th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": {
+    "description": "Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Hide all but active",
   "@th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": {
     "description": "Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build",

@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -2333,6 +2331,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snap'**
   String get th2FileEditPageSnapButton;
+
+  /// Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Hide all images'**
+  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip;
+
+  /// Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Show all images'**
+  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
 
   /// Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build
   ///

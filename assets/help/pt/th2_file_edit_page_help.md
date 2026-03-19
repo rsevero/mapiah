@@ -61,6 +61,10 @@ A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo voc
 ## Imagens
 A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI e imagens raster) inseridas no arquivo atual.
 
+Um botão _alternar todas_ aparece acima da lista quando há imagens presentes. Seu tooltip e ícone refletem o que o botão fará:
+* _Ocultar todas as imagens_ (ícone de olho fechado): exibido quando todas as imagens estão visíveis; clicar oculta todas as imagens.
+* _Mostrar todas as imagens_ (ícone de olho): exibido quando alguma imagem está oculta; clicar torna todas as imagens visíveis.
+
 Cada linha de imagem contém:
 * Uma caixa de seleção de visibilidade para mostrar ou ocultar a imagem no canvas
 * O nome do arquivo da imagem

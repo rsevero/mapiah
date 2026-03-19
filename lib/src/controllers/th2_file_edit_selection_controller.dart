@@ -1837,6 +1837,26 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
+  /// If all images are visible, hides all of them.
+  /// If any image is hidden, makes all images visible.
+  @action
+  void toggleAllImagesVisibility() {
+    final List<THXTherionImageInsertConfig> images = _th2FileEditController
+        .th2File
+        .getImages()
+        .toList();
+
+    final bool allVisible = images.every(
+      (THXTherionImageInsertConfig image) => image.isVisible,
+    );
+
+    for (final THXTherionImageInsertConfig image in images) {
+      image.isVisible = !allVisible;
+    }
+
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
   @action
   void setSelectedScrapByMPID(int scrapID) {
     final THScrap scrap = _th2File.scrapByMPID(scrapID);

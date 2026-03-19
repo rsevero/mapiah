@@ -64,6 +64,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                 .getImages()
                 .toList();
 
+            final bool allImagesVisible = images.every(
+              (THXTherionImageInsertConfig image) => image.isVisible,
+            );
+
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
               padding: mpOverlayWindowBlockEdgeInsets,
@@ -73,6 +77,29 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (images.isNotEmpty)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Tooltip(
+                              message: allImagesVisible
+                                  ? appLocalizations
+                                        .th2FileEditPageToggleAllImagesVisibilityHideAllTooltip
+                                  : appLocalizations
+                                        .th2FileEditPageToggleAllImagesVisibilityShowAllTooltip,
+                              child: IconButton(
+                                icon: Icon(
+                                  allImagesVisible
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: colorScheme.onSecondary,
+                                ),
+                                iconSize: mpSmallIconSize,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                onPressed: _onPressedToggleAllImagesVisibility,
+                              ),
+                            ),
+                          ),
                         if (images.isNotEmpty)
                           Column(
                             children: images.map((
@@ -313,6 +340,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
         ),
       ],
     );
+  }
+
+  void _onPressedToggleAllImagesVisibility() {
+    th2FileEditController.selectionController.toggleAllImagesVisibility();
   }
 
   void _imageVisibilityChanged(int imageMPID, bool newVisibility) {

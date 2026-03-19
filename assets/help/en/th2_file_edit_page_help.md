@@ -168,6 +168,10 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 ## Images
 The images overlay window is opened with the ![Images button](assets/help/images/buttonImages.png "Images") button (Alt+I) in the bottom right corner. It lists all images (XVI survey backgrounds and raster images) inserted in the current file.
 
+A _toggle all_ button appears above the list when images are present. Its tooltip and icon reflect what the button will do:
+* _Hide all images_ (eye-off icon): shown when all images are visible; clicking hides all images.
+* _Show all images_ (eye icon): shown when any image is hidden; clicking makes all images visible.
+
 Each image row contains:
 * A visibility checkbox to show or hide the image on the canvas
 * The image filename

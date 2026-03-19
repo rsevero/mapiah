@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2023- Mapiah Ltda
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'th2_file_edit_selection_controller.dart';
@@ -667,6 +669,21 @@ mixin _$TH2FileEditSelectionController
         );
     try {
       return super.setImageVisibility(imageMPID, isVisible);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void toggleAllImagesVisibility() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.toggleAllImagesVisibility',
+        );
+    try {
+      return super.toggleAllImagesVisibility();
     } finally {
       _$TH2FileEditSelectionControllerBaseActionController.endAction(
         _$actionInfo,

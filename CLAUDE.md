@@ -128,6 +128,11 @@ Uses `flutter_localizations` with `.arb` files in `lib/src/generated/i18n/`. Run
 - Generated MobX files have `.g.dart` suffix — do not edit these directly.
 - Test files are numerically prefixed (e.g., `1200-commands_MPAddAreaCommand_test.dart`) for ordering.
 
+## Prompt abbreviations
+
+- cc: Update CHANGELOG.md and prepare commit command with proper message and sign-off lines.
+- hpcc: Update help pages (EN/PT) with documentation for new features or changes and cc above.
+
 ## Coding Style
 
 ### General Guidelines

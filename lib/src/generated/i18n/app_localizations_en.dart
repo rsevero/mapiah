@@ -1,5 +1,3 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2023- Mapiah Ltda
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
@@ -1238,6 +1236,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageSnapButton => 'Snap';
+
+  @override
+  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
+      'Hide all images';
+
+  @override
+  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
+      'Show all images';
 
   @override
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>

@@ -388,6 +388,8 @@
   "th2FileEditPageSelectTool": "Selecionar (C)",
   "th2FileEditPageSelectionWindowZoomStatusBarMessage": "Clique e arraste para definir a área para zoom",
   "th2FileEditPageSnapButton": "Ajustar a pontos",
+  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Ocultar todas as imagens",
+  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Mostrar todas as imagens",
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Ocultar todos exceto o ativo",
   "th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": "Mostrar todos os croquis",
   "th2FileEditPageToggleScrapVisibilityTooltip": "Alternar visibilidade do croqui",
