@@ -145,7 +145,8 @@ These guidelines apply to all code (app code, scripts, and tests):
 9. When proposing a commit, always add an entry on CHANGELOG.md. The added new entry should go at the end of the appropriate section of CHANGELOG.
 10. Always include a "Signed-off-by: My Name <my.email@example.com>" (use git to get name and email if necessary) line and a "Co-Authored-By: AI_MODEL <AI_MODEL_email>" line in your commit message. The "Signed-off-by" line should always be the last on the commit message.
 11. On commit, always prefer to git add -A" instead of manually listing chagnes files to add. This way you avoid forgetting to add some files, which can lead to broken builds and tests.
-12. Don´t manually run "dart run build_runner build" as there already is a watch instance running. 
+12. Don´t manually run "dart run build_runner build" as there already is a watch instance running.
+13. Check on the TODO.md file if there is some item that should be checked as done because of this commit. If so, update TODO.md accordingly.
 
 ### When writing general app code
 

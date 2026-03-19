@@ -33,6 +33,8 @@ class MPAvailableImagesWidget extends StatefulWidget {
 
 class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   late final TH2FileEditController th2FileEditController;
+  int? _draggedImageMPID;
+  int? _dragTargetImageMPID;
 
   @override
   void initState() {
@@ -58,8 +60,9 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
 
-            final Iterable<THXTherionImageInsertConfig> images = th2File
-                .getImages();
+            final List<THXTherionImageInsertConfig> images = th2File
+                .getImages()
+                .toList();
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -71,51 +74,180 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (images.isNotEmpty)
-                          ...images.map((image) {
-                            final bool isVisible = image.isVisible;
-                            final String name = p.basename(image.filename);
+                          Column(
+                            children: images.map((
+                              THXTherionImageInsertConfig image,
+                            ) {
+                              final bool isVisible = image.isVisible;
+                              final String name = p.basename(image.filename);
+                              final bool isDragTarget =
+                                  (_dragTargetImageMPID == image.mpID) &&
+                                  (_draggedImageMPID != image.mpID);
 
-                            return Row(
-                              children: [
-                                Checkbox(
-                                  value: isVisible,
-                                  onChanged: (bool? value) {
-                                    if (value == null) {
-                                      return;
-                                    }
-                                    _imageVisibilityChanged(image.mpID, value);
-                                  },
-                                  checkColor: colorScheme.onSurface,
-                                  side: BorderSide(
-                                    color: colorScheme.onSurface,
-                                    width: 2,
-                                  ),
-                                  fillColor: WidgetStateProperty.all(
-                                    colorScheme.surfaceContainerHighest,
-                                  ),
+                              return DragTarget<int>(
+                                key: ValueKey(
+                                  'MPAvailableImagesWidget|ImageRow|${image.mpID}',
                                 ),
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () => _imageVisibilityChanged(
-                                      image.mpID,
-                                      !isVisible,
-                                    ),
-                                    child: Text(name),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete_outline_rounded,
-                                    color: colorScheme.onSecondary,
-                                  ),
-                                  tooltip: appLocalizations
-                                      .th2FileEditPageRemoveImageButton,
-                                  onPressed: () =>
-                                      _onPressedRemoveImage(image.mpID),
-                                ),
-                              ],
-                            );
-                          }),
+                                onWillAcceptWithDetails:
+                                    (DragTargetDetails<int> details) {
+                                      if (details.data == image.mpID) {
+                                        return false;
+                                      }
+
+                                      setState(() {
+                                        _dragTargetImageMPID = image.mpID;
+                                      });
+
+                                      return true;
+                                    },
+                                onLeave: (_) {
+                                  if (_dragTargetImageMPID == image.mpID) {
+                                    setState(() {
+                                      _dragTargetImageMPID = null;
+                                    });
+                                  }
+                                },
+                                onAcceptWithDetails:
+                                    (DragTargetDetails<int> details) {
+                                      _onAcceptReorderedImage(
+                                        draggedImageMPID: details.data,
+                                        targetImageMPID: image.mpID,
+                                        images: images,
+                                      );
+                                    },
+                                builder:
+                                    (
+                                      BuildContext context,
+                                      List<int?> candidateData,
+                                      List<dynamic> rejectedData,
+                                    ) {
+                                      return AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 120,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isDragTarget
+                                              ? colorScheme
+                                                    .surfaceContainerHighest
+                                                    .withValues(alpha: 0.45)
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(
+                                            mpDefaultButtonRadius,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: isVisible,
+                                              onChanged: (bool? value) {
+                                                if (value == null) {
+                                                  return;
+                                                }
+                                                _imageVisibilityChanged(
+                                                  image.mpID,
+                                                  value,
+                                                );
+                                              },
+                                              checkColor: colorScheme.onSurface,
+                                              side: BorderSide(
+                                                color: colorScheme.onSurface,
+                                                width: 2,
+                                              ),
+                                              fillColor: WidgetStateProperty.all(
+                                                colorScheme
+                                                    .surfaceContainerHighest,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () =>
+                                                    _imageVisibilityChanged(
+                                                      image.mpID,
+                                                      !isVisible,
+                                                    ),
+                                                child: Text(name),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.delete_outline_rounded,
+                                                color: colorScheme.onSecondary,
+                                              ),
+                                              tooltip: appLocalizations
+                                                  .th2FileEditPageRemoveImageButton,
+                                              onPressed: () =>
+                                                  _onPressedRemoveImage(
+                                                    image.mpID,
+                                                  ),
+                                            ),
+                                            Draggable<int>(
+                                              data: image.mpID,
+                                              dragAnchorStrategy:
+                                                  pointerDragAnchorStrategy,
+                                              onDragStarted: () {
+                                                setState(() {
+                                                  _draggedImageMPID =
+                                                      image.mpID;
+                                                });
+                                              },
+                                              onDragEnd: (_) {
+                                                _clearDragState();
+                                              },
+                                              onDraggableCanceled: (_, __) {
+                                                _clearDragState();
+                                              },
+                                              feedback: Material(
+                                                color: Colors.transparent,
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 6,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color: colorScheme
+                                                        .surfaceContainerHighest,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          mpDefaultButtonRadius,
+                                                        ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.drag_indicator,
+                                                        color: colorScheme
+                                                            .onSecondary,
+                                                      ),
+                                                      const SizedBox(width: 4),
+                                                      Text(name),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              childWhenDragging: Icon(
+                                                Icons.drag_indicator,
+                                                color: colorScheme.onSecondary
+                                                    .withValues(alpha: 0.35),
+                                              ),
+                                              child: MouseRegion(
+                                                cursor: SystemMouseCursors.grab,
+                                                child: Icon(
+                                                  Icons.drag_indicator,
+                                                  color:
+                                                      colorScheme.onSecondary,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                              );
+                            }).toList(),
+                          ),
                         const SizedBox(height: mpButtonSpace),
                         ElevatedButton(
                           onPressed: () => _onPressedAddImage(context),
@@ -150,5 +282,41 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   void _onPressedRemoveImage(int imageMPID) {
     th2FileEditController.elementEditController.removeImage(imageMPID);
+  }
+
+  void _onAcceptReorderedImage({
+    required int draggedImageMPID,
+    required int targetImageMPID,
+    required List<THXTherionImageInsertConfig> images,
+  }) {
+    final int oldIndex = images.indexWhere(
+      (THXTherionImageInsertConfig image) => image.mpID == draggedImageMPID,
+    );
+    final int newIndex = images.indexWhere(
+      (THXTherionImageInsertConfig image) => image.mpID == targetImageMPID,
+    );
+
+    _clearDragState();
+
+    if ((oldIndex < 0) || (newIndex < 0) || (oldIndex == newIndex)) {
+      return;
+    }
+
+    th2FileEditController.th2File.reorderImageMPIDs(
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+    );
+    th2FileEditController.triggerImagesRedraw();
+  }
+
+  void _clearDragState() {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _draggedImageMPID = null;
+      _dragTargetImageMPID = null;
+    });
   }
 }

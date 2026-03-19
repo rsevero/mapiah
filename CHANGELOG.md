@@ -18,6 +18,7 @@
   * Show Bézier control points during click-and-drag line creation: CP1 and CP2 visible while dragging, with the dragged handle painted black and others white; control points disappear on mouse release.
   * Per-scrap visibility toggle in the available scraps panel: each scrap row shows a checkbox to hide/show the scrap on the canvas. Hidden scraps cannot be the active scrap. The checkbox is hidden for the active scrap.
   * Pasted elements are now automatically selected after a paste; if a scrap was pasted, the selection is cleared instead.
+  * Available images panel now supports click-and-drag reordering; image order is persisted in the TH2File top-level children list.
 * Fixed bugs:
   * Duplicate scrap throws "Bad state: No element": duplicateScrap() was relying on the selection to find the new scrap MPID after paste, but pasteElements() now clears selection after pasting a scrap. Fixed by having pasteElements() return the top-level pasted MPIDs, which duplicateScrap() now uses directly.
   * Duplicate (elements and scrap) was overwriting the clipboard; now saves and restores the clipboard around the internal copy so duplicate never affects clipboard contents.

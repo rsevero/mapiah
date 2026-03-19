@@ -135,6 +135,47 @@ endscrap
     }
   });
 
+  group('xtherion image reorder', () {
+    test('reorders images through TH2File children order', () async {
+      final TH2FileParser parser = TH2FileParser();
+      final TH2FileWriter writer = TH2FileWriter();
+
+      mpLocator.mpGeneralController.reset();
+
+      final (
+        TH2File file,
+        bool isSuccessful,
+        List<String> errors,
+      ) = await parser.parse(
+        THTestAux.testPath(
+          'th_file_parser-00040-adding_several_xtherionsettings.th2',
+        ),
+      );
+
+      expect(isSuccessful, true, reason: 'Failed to parse file: $errors');
+      expect(
+        file.imageMPIDs.map((int mpID) => file.imageByMPID(mpID).filename),
+        <String>['croquis/croqui-006.jpg', 'croquis/croqui-007.jpg'],
+      );
+
+      file.reorderImageMPIDs(oldIndex: 0, newIndex: 1);
+
+      expect(
+        file.imageMPIDs.map((int mpID) => file.imageByMPID(mpID).filename),
+        <String>['croquis/croqui-007.jpg', 'croquis/croqui-006.jpg'],
+      );
+
+      final String asFile = writer.serialize(file);
+
+      expect(asFile, """encoding UTF-8
+##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
+##XTHERION## xth_me_area_zoom_to 100
+##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} \"croquis/croqui-007.jpg\" 0 {}
+##XTHERION## xth_me_image_insert {1890 1 1} {1380 {}} \"croquis/croqui-006.jpg\" 0 {}
+""");
+    });
+  });
+
   group('remove elements', () {
     var success = {
       'file': 'th_file_parser-02300-delete_elements.th2',

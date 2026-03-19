@@ -199,7 +199,7 @@
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
 [ ] - Show current position during drag in status bar.
 [ ] - Convert multiline comment into a single element.
-[ ] - Reorder images.
+[X] - Reorder images.
 [ ] - Create a easy way to find slope lines without lsize.
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
 [X] - BUG: flatpak version does not open URLs.

@@ -846,6 +846,55 @@ class TH2File
     return _imageMPIDs!;
   }
 
+  void reorderImageMPIDs({required int oldIndex, required int newIndex}) {
+    final List<int> reorderedImageMPIDs = imageMPIDs.toList();
+
+    if (reorderedImageMPIDs.length <= 1) {
+      return;
+    }
+
+    if ((oldIndex < 0) || (oldIndex >= reorderedImageMPIDs.length)) {
+      throw THCustomException(
+        "Invalid old image index '$oldIndex' in TH2File.reorderImageMPIDs.",
+      );
+    }
+
+    if ((newIndex < 0) || (newIndex >= reorderedImageMPIDs.length)) {
+      throw THCustomException(
+        "Invalid new image index '$newIndex' in TH2File.reorderImageMPIDs.",
+      );
+    }
+
+    if (oldIndex == newIndex) {
+      return;
+    }
+
+    final int movedImageMPID = reorderedImageMPIDs.removeAt(oldIndex);
+
+    reorderedImageMPIDs.insert(newIndex, movedImageMPID);
+
+    final List<int> reorderedChildrenMPIDs = <int>[];
+    int reorderedImageIndex = 0;
+
+    for (final int childMPID in childrenMPIDs) {
+      final THElement childElement = elementByMPID(childMPID);
+
+      if (childElement is THXTherionImageInsertConfig) {
+        reorderedChildrenMPIDs.add(reorderedImageMPIDs[reorderedImageIndex]);
+        reorderedImageIndex++;
+      } else {
+        reorderedChildrenMPIDs.add(childMPID);
+      }
+    }
+
+    childrenMPIDs
+      ..clear()
+      ..addAll(reorderedChildrenMPIDs);
+
+    _imageMPIDs = null;
+    _xtherionSettingMPIDs = null;
+  }
+
   /// Returns a list of all xtherion setting MPIDs in the TH2File.
   /// XTherion settings are all children of the TH2File itself, so the order of
   /// the settings is the same as the order of the childrenMPIDs of the TH2File,
