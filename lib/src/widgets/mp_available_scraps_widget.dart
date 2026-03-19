@@ -34,6 +34,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   late final TH2FileEditController th2FileEditController;
   int? _draggedScrapMPID;
   int? _dragTargetScrapMPID;
+  bool _isDragTargetAfterLast = false;
 
   @override
   void initState() {
@@ -107,341 +108,403 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                             }
                           },
                           child: Column(
-                            children: scrapEntries.map((entry) {
-                              final int scrapID = entry.key;
-                              final String scrapName = entry.value;
-                              final bool isVisible = th2FileEditController
-                                  .isScrapVisible(scrapID);
-                              final bool isActiveScrap =
-                                  scrapID == activeScrapID;
-                              final bool isVisibilityCheckboxDisabled =
-                                  isActiveScrap &&
-                                  (th2FileEditController.visibleScrapCount <=
-                                      1);
-                              final bool isDragTarget =
-                                  (_dragTargetScrapMPID == scrapID) &&
-                                  (_draggedScrapMPID != scrapID);
-                              final bool isDragged =
-                                  _draggedScrapMPID == scrapID;
+                            children: [
+                              ...scrapEntries.map((entry) {
+                                final int scrapID = entry.key;
+                                final String scrapName = entry.value;
+                                final bool isVisible = th2FileEditController
+                                    .isScrapVisible(scrapID);
+                                final bool isActiveScrap =
+                                    scrapID == activeScrapID;
+                                final bool isVisibilityCheckboxDisabled =
+                                    isActiveScrap &&
+                                    (th2FileEditController.visibleScrapCount <=
+                                        1);
+                                final bool isDragTarget =
+                                    (_dragTargetScrapMPID == scrapID) &&
+                                    (_draggedScrapMPID != scrapID);
+                                final bool isDragged =
+                                    _draggedScrapMPID == scrapID;
 
-                              return DragTarget<int>(
-                                key: ValueKey(
-                                  'MPAvailableScrapsWidget|ScrapRow|$scrapID',
-                                ),
-                                onWillAcceptWithDetails:
-                                    (DragTargetDetails<int> details) {
-                                      if (details.data == scrapID) {
-                                        return false;
-                                      }
+                                return DragTarget<int>(
+                                  key: ValueKey(
+                                    'MPAvailableScrapsWidget|ScrapRow|$scrapID',
+                                  ),
+                                  onWillAcceptWithDetails:
+                                      (DragTargetDetails<int> details) {
+                                        if (details.data == scrapID) {
+                                          return false;
+                                        }
 
+                                        setState(() {
+                                          _dragTargetScrapMPID = scrapID;
+                                        });
+
+                                        return true;
+                                      },
+                                  onLeave: (_) {
+                                    if (_dragTargetScrapMPID == scrapID) {
                                       setState(() {
-                                        _dragTargetScrapMPID = scrapID;
+                                        _dragTargetScrapMPID = null;
                                       });
-
-                                      return true;
-                                    },
-                                onLeave: (_) {
-                                  if (_dragTargetScrapMPID == scrapID) {
-                                    setState(() {
-                                      _dragTargetScrapMPID = null;
-                                    });
-                                  }
-                                },
-                                onAcceptWithDetails:
-                                    (DragTargetDetails<int> details) {
-                                      _onAcceptReorderedScrap(
-                                        draggedScrapMPID: details.data,
-                                        targetScrapMPID: scrapID,
-                                        scrapEntries: scrapEntries,
-                                      );
-                                    },
-                                builder:
-                                    (
-                                      BuildContext context,
-                                      List<int?> candidateData,
-                                      List<dynamic> rejectedData,
-                                    ) {
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          AnimatedContainer(
-                                            duration: const Duration(
-                                              milliseconds: 150,
+                                    }
+                                  },
+                                  onAcceptWithDetails:
+                                      (DragTargetDetails<int> details) {
+                                        _onAcceptReorderedScrap(
+                                          draggedScrapMPID: details.data,
+                                          targetScrapMPID: scrapID,
+                                          scrapEntries: scrapEntries,
+                                        );
+                                      },
+                                  builder:
+                                      (
+                                        BuildContext context,
+                                        List<int?> candidateData,
+                                        List<dynamic> rejectedData,
+                                      ) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                milliseconds: 150,
+                                              ),
+                                              height: isDragTarget
+                                                  ? mpDragDropIndicatorHeight
+                                                  : 0.0,
+                                              decoration: BoxDecoration(
+                                                color: colorScheme.secondary,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      mpDragDropIndicatorHeight /
+                                                          2,
+                                                    ),
+                                              ),
                                             ),
-                                            height: isDragTarget
-                                                ? mpDragDropIndicatorHeight
-                                                : 0.0,
-                                            decoration: BoxDecoration(
-                                              color: colorScheme.secondary,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                    mpDragDropIndicatorHeight /
-                                                        2,
-                                                  ),
-                                            ),
-                                          ),
-                                          Visibility(
-                                            visible: !isDragged,
-                                            maintainSize: false,
-                                            maintainAnimation: false,
-                                            maintainState: false,
-                                            child: Builder(
-                                              builder: (listenerContext) {
-                                                return Listener(
-                                                  onPointerDown:
-                                                      (PointerDownEvent event) {
-                                                        if (event.kind ==
-                                                                PointerDeviceKind
-                                                                    .mouse &&
-                                                            event.buttons ==
-                                                                kSecondaryMouseButton) {
-                                                          _onRightClickSelectScrap(
-                                                            listenerContext,
-                                                            scrapID,
-                                                          );
-                                                        }
-                                                      },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Expanded(
-                                                        child: RadioListTile<int>(
-                                                          key: ValueKey(
-                                                            "MPAvailableScrapsWidget|RadioListTile|$scrapID",
-                                                          ),
-                                                          title: Text(
-                                                            scrapName,
-                                                            style:
-                                                                DefaultTextStyle.of(
-                                                                  blockContext,
-                                                                ).style,
-                                                          ),
-                                                          value: scrapID,
-                                                          contentPadding:
-                                                              EdgeInsets.zero,
-                                                          activeColor:
-                                                              IconTheme.of(
-                                                                blockContext,
-                                                              ).color,
-                                                          dense: true,
-                                                          visualDensity:
-                                                              VisualDensity
-                                                                  .adaptivePlatformDensity,
-                                                        ),
-                                                      ),
-                                                      if (showVisibilityCheckboxes)
-                                                        Tooltip(
-                                                          message: appLocalizations
-                                                              .th2FileEditPageToggleScrapVisibilityTooltip,
-                                                          child: Checkbox(
+                                            Visibility(
+                                              visible: !isDragged,
+                                              maintainSize: false,
+                                              maintainAnimation: false,
+                                              maintainState: false,
+                                              child: Builder(
+                                                builder: (listenerContext) {
+                                                  return Listener(
+                                                    onPointerDown:
+                                                        (
+                                                          PointerDownEvent
+                                                          event,
+                                                        ) {
+                                                          if (event.kind ==
+                                                                  PointerDeviceKind
+                                                                      .mouse &&
+                                                              event.buttons ==
+                                                                  kSecondaryMouseButton) {
+                                                            _onRightClickSelectScrap(
+                                                              listenerContext,
+                                                              scrapID,
+                                                            );
+                                                          }
+                                                        },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Expanded(
+                                                          child: RadioListTile<int>(
                                                             key: ValueKey(
-                                                              "MPAvailableScrapsWidget|VisibilityCheckbox|$scrapID",
+                                                              "MPAvailableScrapsWidget|RadioListTile|$scrapID",
                                                             ),
-                                                            value: isVisible,
-                                                            onChanged:
-                                                                isVisibilityCheckboxDisabled
-                                                                ? null
-                                                                : (_) =>
-                                                                      _onToggleScrapVisibility(
-                                                                        scrapID,
-                                                                      ),
+                                                            title: Text(
+                                                              scrapName,
+                                                              style:
+                                                                  DefaultTextStyle.of(
+                                                                    blockContext,
+                                                                  ).style,
+                                                            ),
+                                                            value: scrapID,
+                                                            contentPadding:
+                                                                EdgeInsets.zero,
+                                                            activeColor:
+                                                                IconTheme.of(
+                                                                  blockContext,
+                                                                ).color,
+                                                            dense: true,
                                                             visualDensity:
                                                                 VisualDensity
                                                                     .adaptivePlatformDensity,
                                                           ),
                                                         ),
-                                                      const SizedBox(
-                                                        width: mpButtonSpace,
-                                                      ),
-                                                      IconButton(
-                                                        icon: Icon(
-                                                          Icons.copy_outlined,
-                                                          color: colorScheme
-                                                              .onSecondary,
-                                                        ),
-                                                        tooltip: appLocalizations
-                                                            .th2FileEditPageCopyScrapButton,
-                                                        iconSize:
-                                                            mpSmallIconSize,
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 0,
-                                                              vertical:
-                                                                  mpButtonSpace,
+                                                        if (showVisibilityCheckboxes)
+                                                          Tooltip(
+                                                            message:
+                                                                appLocalizations
+                                                                    .th2FileEditPageToggleScrapVisibilityTooltip,
+                                                            child: Checkbox(
+                                                              key: ValueKey(
+                                                                "MPAvailableScrapsWidget|VisibilityCheckbox|$scrapID",
+                                                              ),
+                                                              value: isVisible,
+                                                              onChanged:
+                                                                  isVisibilityCheckboxDisabled
+                                                                  ? null
+                                                                  : (
+                                                                      _,
+                                                                    ) => _onToggleScrapVisibility(
+                                                                      scrapID,
+                                                                    ),
+                                                              visualDensity:
+                                                                  VisualDensity
+                                                                      .adaptivePlatformDensity,
                                                             ),
-                                                        constraints:
-                                                            const BoxConstraints(),
-                                                        onPressed: () =>
-                                                            _onPressedCopyScrap(
-                                                              scrapID,
-                                                            ),
-                                                      ),
-                                                      IconButton(
-                                                        icon: Icon(
-                                                          Icons.content_cut,
-                                                          color: colorScheme
-                                                              .onSecondary,
-                                                        ),
-                                                        tooltip: appLocalizations
-                                                            .th2FileEditPageCutScrapButton,
-                                                        iconSize:
-                                                            mpSmallIconSize,
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 0,
-                                                              vertical:
-                                                                  mpButtonSpace,
-                                                            ),
-                                                        constraints:
-                                                            const BoxConstraints(),
-                                                        onPressed: () =>
-                                                            _onPressedCutScrap(
-                                                              scrapID,
-                                                            ),
-                                                      ),
-                                                      IconButton(
-                                                        icon: Transform.translate(
-                                                          offset: const Offset(
-                                                            0,
-                                                            mpFinePixelAdjustment,
                                                           ),
-                                                          child: Icon(
-                                                            Icons
-                                                                .file_copy_outlined,
+                                                        const SizedBox(
+                                                          width: mpButtonSpace,
+                                                        ),
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.copy_outlined,
                                                             color: colorScheme
                                                                 .onSecondary,
                                                           ),
+                                                          tooltip: appLocalizations
+                                                              .th2FileEditPageCopyScrapButton,
+                                                          iconSize:
+                                                              mpSmallIconSize,
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 0,
+                                                                vertical:
+                                                                    mpButtonSpace,
+                                                              ),
+                                                          constraints:
+                                                              const BoxConstraints(),
+                                                          onPressed: () =>
+                                                              _onPressedCopyScrap(
+                                                                scrapID,
+                                                              ),
                                                         ),
-                                                        tooltip: appLocalizations
-                                                            .th2FileEditPageDuplicateScrapButton,
-                                                        iconSize:
-                                                            mpSmallIconSize,
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 0,
-                                                              vertical:
-                                                                  mpButtonSpace,
-                                                            ),
-                                                        constraints:
-                                                            const BoxConstraints(),
-                                                        onPressed: () =>
-                                                            _onPressedDuplicateScrap(
-                                                              scrapID,
-                                                            ),
-                                                      ),
-                                                      IconButton(
-                                                        icon: Icon(
-                                                          Icons
-                                                              .delete_outline_rounded,
-                                                          color: colorScheme
-                                                              .onSecondary,
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.content_cut,
+                                                            color: colorScheme
+                                                                .onSecondary,
+                                                          ),
+                                                          tooltip: appLocalizations
+                                                              .th2FileEditPageCutScrapButton,
+                                                          iconSize:
+                                                              mpSmallIconSize,
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 0,
+                                                                vertical:
+                                                                    mpButtonSpace,
+                                                              ),
+                                                          constraints:
+                                                              const BoxConstraints(),
+                                                          onPressed: () =>
+                                                              _onPressedCutScrap(
+                                                                scrapID,
+                                                              ),
                                                         ),
-                                                        tooltip: appLocalizations
-                                                            .th2FileEditPageRemoveScrapButton,
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              horizontal: 0,
-                                                              vertical:
-                                                                  mpButtonSpace,
+                                                        IconButton(
+                                                          icon: Transform.translate(
+                                                            offset: const Offset(
+                                                              0,
+                                                              mpFinePixelAdjustment,
                                                             ),
-                                                        constraints:
-                                                            const BoxConstraints(),
-                                                        onPressed: () =>
-                                                            _onPressedRemoveScrap(
-                                                              scrapID,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .file_copy_outlined,
+                                                              color: colorScheme
+                                                                  .onSecondary,
                                                             ),
-                                                      ),
-                                                      if (showDragHandles)
-                                                        Draggable<int>(
-                                                          data: scrapID,
-                                                          dragAnchorStrategy:
-                                                              pointerDragAnchorStrategy,
-                                                          onDragStarted: () {
-                                                            setState(() {
-                                                              _draggedScrapMPID =
-                                                                  scrapID;
-                                                            });
-                                                          },
-                                                          onDragEnd: (_) {
-                                                            _clearDragState();
-                                                          },
-                                                          onDraggableCanceled:
-                                                              (_, _) {
-                                                                _clearDragState();
-                                                              },
-                                                          feedback: Material(
-                                                            color: Colors
-                                                                .transparent,
-                                                            child: Opacity(
-                                                              opacity:
-                                                                  mpDragFeedbackOpacity,
-                                                              child: Container(
-                                                                decoration: BoxDecoration(
-                                                                  color: colorScheme
-                                                                      .surfaceContainerHighest,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                        mpDefaultButtonRadius,
-                                                                      ),
-                                                                ),
-                                                                child: IntrinsicWidth(
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        scrapName,
-                                                                        style: DefaultTextStyle.of(
-                                                                          blockContext,
-                                                                        ).style,
-                                                                      ),
-                                                                      Icon(
-                                                                        Icons
-                                                                            .drag_indicator,
-                                                                        color: colorScheme
-                                                                            .onSecondary,
-                                                                      ),
-                                                                    ],
+                                                          ),
+                                                          tooltip: appLocalizations
+                                                              .th2FileEditPageDuplicateScrapButton,
+                                                          iconSize:
+                                                              mpSmallIconSize,
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 0,
+                                                                vertical:
+                                                                    mpButtonSpace,
+                                                              ),
+                                                          constraints:
+                                                              const BoxConstraints(),
+                                                          onPressed: () =>
+                                                              _onPressedDuplicateScrap(
+                                                                scrapID,
+                                                              ),
+                                                        ),
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons
+                                                                .delete_outline_rounded,
+                                                            color: colorScheme
+                                                                .onSecondary,
+                                                          ),
+                                                          tooltip: appLocalizations
+                                                              .th2FileEditPageRemoveScrapButton,
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 0,
+                                                                vertical:
+                                                                    mpButtonSpace,
+                                                              ),
+                                                          constraints:
+                                                              const BoxConstraints(),
+                                                          onPressed: () =>
+                                                              _onPressedRemoveScrap(
+                                                                scrapID,
+                                                              ),
+                                                        ),
+                                                        if (showDragHandles)
+                                                          Draggable<int>(
+                                                            data: scrapID,
+                                                            dragAnchorStrategy:
+                                                                pointerDragAnchorStrategy,
+                                                            onDragStarted: () {
+                                                              setState(() {
+                                                                _draggedScrapMPID =
+                                                                    scrapID;
+                                                              });
+                                                            },
+                                                            onDragEnd: (_) {
+                                                              _clearDragState();
+                                                            },
+                                                            onDraggableCanceled:
+                                                                (_, _) {
+                                                                  _clearDragState();
+                                                                },
+                                                            feedback: Material(
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child: Opacity(
+                                                                opacity:
+                                                                    mpDragFeedbackOpacity,
+                                                                child: Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color: colorScheme
+                                                                        .surfaceContainerHighest,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          mpDefaultButtonRadius,
+                                                                        ),
+                                                                  ),
+                                                                  child: IntrinsicWidth(
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Text(
+                                                                          scrapName,
+                                                                          style: DefaultTextStyle.of(
+                                                                            blockContext,
+                                                                          ).style,
+                                                                        ),
+                                                                        Icon(
+                                                                          Icons
+                                                                              .drag_indicator,
+                                                                          color:
+                                                                              colorScheme.onSecondary,
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          childWhenDragging: Icon(
-                                                            Icons
-                                                                .drag_indicator,
-                                                            color: colorScheme
-                                                                .onSecondary,
-                                                          ),
-                                                          child: MouseRegion(
-                                                            cursor:
-                                                                SystemMouseCursors
-                                                                    .grab,
-                                                            child: Icon(
+                                                            childWhenDragging: Icon(
                                                               Icons
                                                                   .drag_indicator,
                                                               color: colorScheme
                                                                   .onSecondary,
                                                             ),
+                                                            child: MouseRegion(
+                                                              cursor:
+                                                                  SystemMouseCursors
+                                                                      .grab,
+                                                              child: Icon(
+                                                                Icons
+                                                                    .drag_indicator,
+                                                                color: colorScheme
+                                                                    .onSecondary,
+                                                              ),
+                                                            ),
                                                           ),
-                                                        ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                );
+                              }),
+                              if (showDragHandles)
+                                DragTarget<int>(
+                                  key: const ValueKey(
+                                    'MPAvailableScrapsWidget|TrailingDropZone',
+                                  ),
+                                  onWillAcceptWithDetails:
+                                      (DragTargetDetails<int> details) {
+                                        final int lastScrapMPID =
+                                            scrapEntries.last.key;
+
+                                        if (details.data == lastScrapMPID) {
+                                          return false;
+                                        }
+
+                                        setState(() {
+                                          _isDragTargetAfterLast = true;
+                                        });
+
+                                        return true;
+                                      },
+                                  onLeave: (_) {
+                                    setState(() {
+                                      _isDragTargetAfterLast = false;
+                                    });
+                                  },
+                                  onAcceptWithDetails:
+                                      (DragTargetDetails<int> details) {
+                                        _onAcceptReorderedScrapAtEnd(
+                                          draggedScrapMPID: details.data,
+                                          scrapEntries: scrapEntries,
+                                        );
+                                      },
+                                  builder:
+                                      (
+                                        BuildContext context,
+                                        List<int?> candidateData,
+                                        List<dynamic> rejectedData,
+                                      ) {
+                                        return AnimatedContainer(
+                                          duration: const Duration(
+                                            milliseconds: 150,
+                                          ),
+                                          height: _isDragTargetAfterLast
+                                              ? mpDragDropIndicatorHeight
+                                              : 0.0,
+                                          decoration: BoxDecoration(
+                                            color: colorScheme.secondary,
+                                            borderRadius: BorderRadius.circular(
+                                              mpDragDropIndicatorHeight / 2,
                                             ),
                                           ),
-                                        ],
-                                      );
-                                    },
-                              );
-                            }).toList(),
+                                        );
+                                      },
+                                ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: mpButtonSpace),
@@ -532,17 +595,52 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     final int oldIndex = scrapEntries.indexWhere(
       (MapEntry<int, String> entry) => entry.key == draggedScrapMPID,
     );
-    final int newIndex = scrapEntries.indexWhere(
+    int newIndex = scrapEntries.indexWhere(
       (MapEntry<int, String> entry) => entry.key == targetScrapMPID,
     );
+
+    // When dragging downward the removeAt shifts later indices by -1, so the
+    // item would land one position below the visual indicator without this fix.
+    if (oldIndex < newIndex) {
+      newIndex--;
+    }
 
     // Clear drag state BEFORE the MobX action so the Observer sees null values
     // when it rebuilds in response to the reorder — preventing the row from
     // staying hidden after the drag completes.
     _draggedScrapMPID = null;
     _dragTargetScrapMPID = null;
+    _isDragTargetAfterLast = false;
 
     if ((oldIndex < 0) || (newIndex < 0) || (oldIndex == newIndex)) {
+      if (mounted) {
+        setState(() {});
+      }
+
+      return;
+    }
+
+    th2FileEditController.elementEditController.reorderScraps(
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+    );
+  }
+
+  void _onAcceptReorderedScrapAtEnd({
+    required int draggedScrapMPID,
+    required List<MapEntry<int, String>> scrapEntries,
+  }) {
+    final int oldIndex = scrapEntries.indexWhere(
+      (MapEntry<int, String> entry) => entry.key == draggedScrapMPID,
+    );
+    final int newIndex = scrapEntries.length - 1;
+
+    // Clear drag state BEFORE the MobX action (same timing fix as above).
+    _draggedScrapMPID = null;
+    _dragTargetScrapMPID = null;
+    _isDragTargetAfterLast = false;
+
+    if ((oldIndex < 0) || (oldIndex == newIndex)) {
       if (mounted) {
         setState(() {});
       }
@@ -564,6 +662,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
     setState(() {
       _draggedScrapMPID = null;
       _dragTargetScrapMPID = null;
+      _isDragTargetAfterLast = false;
     });
   }
 }
