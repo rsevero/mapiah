@@ -222,9 +222,18 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
   }
 
   @action
-  void duplicateSelectedElements() {
+  List<int> duplicateSelectedElements() {
+    final List<MPCopyElementWithChildren>? savedClipboard = mpLocator
+        .mpGeneralController
+        .getClipboard();
+
     copySelectedElements();
-    pasteElements();
+
+    final List<int> pastedMPIDs = pasteElements();
+
+    mpLocator.mpGeneralController.setClipboard(savedClipboard);
+
+    return pastedMPIDs;
   }
 
   @action
@@ -242,9 +251,7 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     selectionController.setSelectedElements([scrap]);
 
-    copySelectedElements();
-
-    final List<int> pastedMPIDs = pasteElements();
+    final List<int> pastedMPIDs = duplicateSelectedElements();
 
     selectionController.clearSelectedElements();
 

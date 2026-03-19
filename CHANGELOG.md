@@ -20,6 +20,7 @@
   * Pasted elements are now automatically selected after a paste; if a scrap was pasted, the selection is cleared instead.
 * Fixed bugs:
   * Duplicate scrap throws "Bad state: No element": duplicateScrap() was relying on the selection to find the new scrap MPID after paste, but pasteElements() now clears selection after pasting a scrap. Fixed by having pasteElements() return the top-level pasted MPIDs, which duplicateScrap() now uses directly.
+  * Duplicate (elements and scrap) was overwriting the clipboard; now saves and restores the clipboard around the internal copy so duplicate never affects clipboard contents.
   * THAreaBorderTHID.thID not updated when border line THID is conflict-resolved during paste: when pasting an area with a border line into the same file (cross-scrap), the border line's THID gets a conflict suffix but the THAreaBorderTHID reference was never updated, causing crashes in MPSelectedArea creation. Fixed by tracking old-THID → new-THID in MPTHElementPasteAux and applying it in step 6.
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]

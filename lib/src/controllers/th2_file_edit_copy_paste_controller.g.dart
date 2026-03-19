@@ -89,7 +89,7 @@ mixin _$TH2FileEditCopyPasteController
   }
 
   @override
-  void duplicateSelectedElements() {
+  List<int> duplicateSelectedElements() {
     final _$actionInfo = _$TH2FileEditCopyPasteControllerBaseActionController
         .startAction(
           name: 'TH2FileEditCopyPasteControllerBase.duplicateSelectedElements',
