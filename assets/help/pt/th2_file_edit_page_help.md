@@ -17,6 +17,9 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   - [Canto superior direito](#canto-superior-direito)
   - [Canto inferior direito](#canto-inferior-direito)
 - [Opções do elemento](#opções-do-elemento)
+- [Imagens](#imagens)
+  - [Visibilidade da imagem](#visibilidade-da-imagem)
+  - [Reordenação de imagens](#reordenação-de-imagens)
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
 - [Selecionando elementos](#selecionando-elementos)
@@ -54,6 +57,25 @@ Quando múltiplos arquivos estão abertos, cada arquivo aparece como uma aba no 
 * **Seleção múltipla**: Use o botão _Abrir arquivo_ na barra superior para selecionar e abrir múltiplos arquivos de uma vez
 
 A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo você está editando. Todos os arquivos abertos mantêm seu estado de edição, para que você possa alternar entre eles sem perder seu trabalho.
+
+## Imagens
+A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI e imagens raster) inseridas no arquivo atual.
+
+Cada linha de imagem contém:
+* Uma caixa de seleção de visibilidade para mostrar ou ocultar a imagem no canvas
+* O nome do arquivo da imagem
+* Um botão de exclusão para remover a imagem
+* Um identificador de arrasto (⣿) para reordenar as imagens
+
+### Visibilidade da imagem
+Clicar na caixa de seleção alterna se a imagem é exibida no canvas. Imagens ocultas ainda são armazenadas no arquivo.
+
+### Reordenação de imagens
+Clique e arraste o identificador de arrasto (⣿) de qualquer linha de imagem para alterar sua posição na lista. A ordem das imagens nesta lista determina a ordem de renderização no canvas: imagens listadas antes são desenhadas abaixo das imagens listadas depois. A reordenação pode ser desfeita com _Ctrl+Z_.
+
+Durante o arrasto:
+* A linha arrastada desaparece da lista e uma prévia semitransparente dela segue o cursor.
+* Uma barra colorida aparece acima da linha onde a imagem arrastada será inserida ao soltar o botão do mouse.
 
 ## Croquis
 Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
@@ -100,7 +122,7 @@ Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procu
 Caso existam operações no stack de refazer e uma nova operação de edição seja executada, o stack de refazer é migrado para o stack de desfazer, mantendo os “refazer” acessíveis.
 
 ### Canto inferior direito
-* ![Botão imagens](assets/help/images/buttonImages.png "Imagens")  _Imagens_: abre a janela de opções de imagens (overlay). Mostra todas as imagens inseridas no arquivo atual. Apresenta um botão “Delete” para cada imagem e um botão “Add Image (I)”. (Alt+I)
+* ![Botão imagens](assets/help/images/buttonImages.png “Imagens”)  _Imagens_: abre a janela de imagens (overlay). Mostra todas as imagens inseridas no arquivo atual. Cada linha de imagem possui uma caixa de seleção de visibilidade, um botão de exclusão e um identificador de arrasto para reordenação. Também apresenta um botão “Add Image (I)”. (Alt+I)
 * ![Botão scraps](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: abre uma caixa de diálogo para mudar o scrap atual, excluir um scrap existente e adicionar um novo. A caixa de diálogo mostra todos os scraps disponíveis e permite selecionar um deles. A janela de opções do scrap (overlay) é apresentada ao clicar com o botão direito no scrap desejado. (Alt+C)
 * ![Botão selecionar elemento](assets/help/images/buttonSelectElement.png "Selecionar elemento")  _Selecionar elemento_: permite selecionar elementos no arquivo TH2. (C)
 * ![Botão editar linha](assets/help/images/buttonLineEdit.png "Editar linha")  _Editar linha_: permite editar linhas individuais no arquivo TH2. (N)

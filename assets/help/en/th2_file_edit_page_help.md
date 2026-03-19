@@ -19,6 +19,9 @@ This is where all TH2 file editing is done.
 - [Element options](#element-options)
 - [Save](#save)
   - [Original file format](#original-file-format)
+- [Images](#images)
+  - [Image visibility](#image-visibility)
+  - [Image reordering](#image-reordering)
 - [Scraps](#scraps)
   - [Scrap copy](#scrap-copy)
   - [Scrap cut](#scrap-cut)
@@ -66,7 +69,7 @@ The currently active file's tab is highlighted, making it easy to see which file
 In case there are available redoes when a new edit operation is performed, the redo stack is migrated to the undo stack making redoes still accessible.
 
 ### Bottom right corner
-* ![Images button](assets/help/images/buttonImages.png "Imges")  _Images_: opens the images options overlay window. Shows all images inserted in the current file. Presents a "Delete" button for each image and a "Add Image (I)" button. (Alt+I)
+* ![Images button](assets/help/images/buttonImages.png "Images")  _Images_: opens the images options overlay window. Shows all images inserted in the current file. Each image row has a visibility checkbox, a delete button, and a drag handle for reordering. Also presents an "Add Image (I)" button. (Alt+I)
 * ![Scraps button](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: opens a dialog box to change the current scrap, delete an existing scrap and add a new one. The dialog box shows all available scraps and allows to select one of them. The scrap options overlay window is presented when right clicking on the desired scrap. (Alt+C)
 * ![Select element button](assets/help/images/buttonSelectElement.png "Select element")  _Select element_: allows to select elements in the TH2 file. (C)
 * ![Line edit button](assets/help/images/buttonLineEdit.png "Line edit")  _Line edit_: allows to edit individual lines in the TH2 file. (N)
@@ -161,6 +164,25 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 * Areas with no border references are removed.
 * Line options defined in [LINE DATA] area are moved to the line definition. Not to be confunded with line point options that are defined in [LINE DATA] area and are preserved there.
 * Subtype options defined before the first line point or on the first one are transformed to line subtype.
+
+## Images
+The images overlay window is opened with the ![Images button](assets/help/images/buttonImages.png "Images") button (Alt+I) in the bottom right corner. It lists all images (XVI survey backgrounds and raster images) inserted in the current file.
+
+Each image row contains:
+* A visibility checkbox to show or hide the image on the canvas
+* The image filename
+* A delete button to remove the image
+* A drag handle (⣿) to reorder images
+
+### Image visibility
+Clicking the checkbox toggles whether the image is displayed on the canvas. Hidden images are still stored in the file.
+
+### Image reordering
+Click and drag the drag handle (⣿) of any image row to change its position in the list. The order of images in this list determines the rendering order on the canvas: images listed earlier are drawn below images listed later. Reordering is undoable with _Ctrl+Z_.
+
+While dragging:
+* The dragged row disappears from the list and a semi-transparent preview of it follows the cursor.
+* A colored bar appears above the row where the dragged image will be inserted when released.
 
 ## Scraps
 It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.

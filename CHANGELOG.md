@@ -65,6 +65,7 @@
   * Fixed help dialog rendering HTML comments (SPDX license headers) as visible text: markdown is now pre-processed to strip HTML comments before display.
   * Fixed help dialog "Close" button being hidden when help content is long: the markdown body now scrolls independently while the Close button stays pinned in a visually separated footer.
   * Improved image reorder drag feedback: dragged row disappears from the list while a semi-transparent row preview follows the cursor; an animated colored bar opens above the hovered drop target to indicate the insertion point.
+  * Updated help pages (EN/PT) with documentation for image visibility toggle and image reordering via drag-and-drop.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:
