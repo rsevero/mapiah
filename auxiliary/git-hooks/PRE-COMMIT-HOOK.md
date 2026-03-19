@@ -69,7 +69,17 @@ The pre-commit hook automatically performs the following steps **in order**:
 
 **Skips**: Files that already have an SPDX identifier
 
-### 3. Format Dart Code
+### 3. Sort ARB Localization Files
+
+**What**: Runs `dart run scripts/sort_arb_files.dart` when any `.arb` file is staged
+
+**Effect**:
+- Sorts all entries in `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb` alphabetically by key
+- `@@locale` is always kept first; each `@key` metadata block stays immediately after its entry
+- Runs `flutter gen-l10n` to regenerate the localization Dart files (only if files changed)
+- Re-stages the sorted ARB files and the regenerated files in `lib/src/generated/i18n/`
+
+### 4. Format Dart Code
 
 **What**: Runs `dart format` on all modified Dart files
 
@@ -78,7 +88,7 @@ The pre-commit hook automatically performs the following steps **in order**:
 - Fixes common formatting issues
 - Ensures compliance with Dart style guide
 
-### 4. Re-stage Modified Files
+### 5. Re-stage Modified Files
 
 **What**: Automatically stages all modified files after formatting
 
@@ -136,6 +146,7 @@ git commit --no-verify
 The hook processes only:
 - Staged Dart files (`.dart`)
 - Staged Markdown files (`.md`)
+- Staged ARB localization files (`.arb`)
 - Files with status: Added (A), Copied (C), or Modified (M)
 
 ## Examples

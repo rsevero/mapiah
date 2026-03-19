@@ -46,6 +46,7 @@
   * Available images reordering is now undoable/redoable and uses a dedicated "Reorder images" undo/redo label instead of the generic move-elements message.
 * Scripts:
   * Added sort_arb_files.dart script to sort ARB localization files alphabetically; runs flutter gen-l10n automatically only when files change.
+  * Pre-commit hook now runs sort_arb_files.dart and re-stages ARB and generated l10n files whenever an ARB file is staged.
 * Infrastructure maintenance:
   * Extracted TH2FileEditCopyPasteController: separated copy/paste/duplicate logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Updated packaging/README.md to mention release constant.
