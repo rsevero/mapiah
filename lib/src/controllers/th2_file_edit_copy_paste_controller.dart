@@ -155,13 +155,13 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
   }
 
   @action
-  void pasteElements() {
+  List<int> pasteElements() {
     final List<MPCopyElementWithChildren>? clipboard = mpLocator
         .mpGeneralController
         .getClipboard();
 
     if ((clipboard == null) || clipboard.isEmpty) {
-      return;
+      return const [];
     }
 
     final int activeScrapMPID = _th2FileEditController.activeScrapID;
@@ -176,7 +176,7 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
         .materializeAndBuildCommands();
 
     if (topLevelCommands.isEmpty) {
-      return;
+      return const [];
     }
 
     /// Capture pasted MPIDs before execute (they are allocated during
@@ -217,6 +217,8 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
     _th2FileEditController.triggerNonSelectedElementsRedraw();
+
+    return pastedMPIDs;
   }
 
   @action
@@ -239,13 +241,17 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
     final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
 
     selectionController.setSelectedElements([scrap]);
-    duplicateSelectedElements();
 
-    final int newScrapMPID =
-        selectionController.mpSelectedElementsLogical.keys.first;
+    copySelectedElements();
 
-    _th2FileEditController.setActiveScrap(newScrapMPID);
+    final List<int> pastedMPIDs = pasteElements();
+
     selectionController.clearSelectedElements();
+
+    if (pastedMPIDs.isNotEmpty) {
+      _th2FileEditController.setActiveScrap(pastedMPIDs.first);
+    }
+
     _th2FileEditController.triggerSelectedListChanged();
     _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
     _th2FileEditController.triggerNonSelectedElementsRedraw();

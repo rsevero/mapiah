@@ -30,6 +30,10 @@ class MPTHElementPasteAux {
   /// Map old MPID → new THID for elements with THID (THLine, THScrap, etc).
   final Map<int, String> _oldToNewTHIDMap = {};
 
+  /// Map old THID → new THID for elements whose THID was changed due to
+  /// conflict resolution. Used to update THAreaBorderTHID references.
+  final Map<String, String> _oldTHIDToNewTHIDMap = {};
+
   /// New MPIDs of the top-level pasted elements, in clipboard order.
   /// Populated by [materializeAndBuildCommands].
   final List<int> _topLevelPastedMPIDs = [];
@@ -94,6 +98,7 @@ class MPTHElementPasteAux {
       if (originalTHID.isNotEmpty) {
         if (th2File.hasElementByTHID(originalTHID)) {
           newTHID = th2File.getNewTHID(prefix: '$originalTHID-');
+          _oldTHIDToNewTHIDMap[originalTHID] = newTHID;
         }
         _oldToNewTHIDMap[template.originalMPID ?? 0] = newTHID;
       }
@@ -134,8 +139,14 @@ class MPTHElementPasteAux {
             resolvedTHID = th2File.getNewTHID(prefix: '$originalTHID-');
           }
 
-          /// Register the original MPID → resolved THID mapping
+          /// Register the original MPID → resolved THID mapping.
           _oldToNewTHIDMap[template.originalMPID ?? 0] = resolvedTHID;
+
+          /// If THID needed to be changed, also record old THID → new THID
+          /// so that THAreaBorderTHID references can be updated in step 6.
+          if (resolvedTHID != originalTHID) {
+            _oldTHIDToNewTHIDMap[originalTHID] = resolvedTHID;
+          }
 
           /// If THID needed to be changed, update the option
           if (resolvedTHID != originalTHID) {
@@ -168,9 +179,12 @@ class MPTHElementPasteAux {
     }
 
     /// Step 6: Handle THAreaBorderTHID special case (update THID if needed).
+    ///
+    /// element.thID is the THID of the referenced border line. If that line's
+    /// THID was conflict-resolved to a new value, update this reference to
+    /// point to the new THID.
     if (element is THAreaBorderTHID) {
-      final String? newReferencedTHID =
-          _oldToNewTHIDMap[template.originalMPID ?? 0];
+      final String? newReferencedTHID = _oldTHIDToNewTHIDMap[element.thID];
 
       if (newReferencedTHID != null) {
         element = element.copyWith(thID: newReferencedTHID);

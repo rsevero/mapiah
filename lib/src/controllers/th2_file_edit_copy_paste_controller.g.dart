@@ -76,7 +76,7 @@ mixin _$TH2FileEditCopyPasteController
   }
 
   @override
-  void pasteElements() {
+  List<int> pasteElements() {
     final _$actionInfo = _$TH2FileEditCopyPasteControllerBaseActionController
         .startAction(name: 'TH2FileEditCopyPasteControllerBase.pasteElements');
     try {
