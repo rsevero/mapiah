@@ -57,8 +57,20 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
 
     th2FileEditController.setCanvasScale(mpDefaultTH2FileScale);
 
+    /// Capture whether the tabs page is already open before adding the new tab.
+    /// If it is already open, we must not push another TH2FileTabsPage, since
+    /// doing so would put two instances of TH2FileTabsPage in the navigator
+    /// simultaneously. Both instances would then render TH2FileEditBodyWidgets
+    /// for the same files using the same GlobalKey instances, causing a
+    /// "Multiple widgets used the same GlobalKey" error.
+    final bool tabsPageAlreadyOpen =
+        mpLocator.mpGeneralController.openFileOrder.isNotEmpty;
+
     mpLocator.mpGeneralController.addFileTab(fileName);
-    MPDialogAux.ensureTabsPageOpen(context);
+
+    if (!tabsPageAlreadyOpen) {
+      MPDialogAux.ensureTabsPageOpen(context);
+    }
 
     widget.onPressedClose();
   }
