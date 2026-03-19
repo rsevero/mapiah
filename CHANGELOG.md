@@ -59,6 +59,7 @@
   * Refactored THFile class rename: updated all variable names (thFile → th2File, _thFile → _th2File), related properties throughout the codebase, and THFile → TH2File in comments.
   * Renamed `_filenameAndScrap` to `_currentScrapName` and updated to store only scrap name, not filename (filename is already shown in tab).
   * Updated help pages (EN/PT) with documentation for scrap copy, cut, duplicate, and per-scrap visibility toggle.
+  * Added settings help pages (EN/PT) covering all settings and their sections; added help button to the settings page AppBar.
 
 ## 0.3.1 - 2026-03-13 - The [Memória Musical](https://radios.ebc.com.br/memoria-musical) release
 * New features:

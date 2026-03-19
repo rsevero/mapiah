@@ -7,6 +7,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/help_button_widget.dart';
 
 class MPSettingsPage extends StatefulWidget {
   const MPSettingsPage({super.key});
@@ -32,7 +33,16 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     final List<String> sections = _sortedSections(appLocalizations);
 
     return Scaffold(
-      appBar: AppBar(title: Text(appLocalizations.mpSettingsPageTitle)),
+      appBar: AppBar(
+        title: Text(appLocalizations.mpSettingsPageTitle),
+        actions: [
+          MPHelpButtonWidget(
+            context,
+            mpHelpPageSettings,
+            appLocalizations.mpSettingsPageHelpDialogTitle,
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(mpSettingsPageOuterPadding),
         children: [

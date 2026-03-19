@@ -296,6 +296,7 @@
   "mpSettingsInvalidInteger": "Inteiro inválido",
   "mpSettingsInvalidNumber": "Número inválido",
   "mpSettingsPageTitle": "Configurações",
+  "mpSettingsPageHelpDialogTitle": "Ajuda para Configurações",
   "mpSettingsSectionMain": "Principal",
   "mpSettingsSectionTH2Edit": "Edição TH2",
   "mpSettingsSettingMainLocaleID": "Idioma",

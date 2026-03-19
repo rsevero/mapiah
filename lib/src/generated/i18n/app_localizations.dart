@@ -613,6 +613,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get mpSettingsPageTitle;
 
+  /// The title for the Settings page help dialog. Used on: _MPSettingsPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Settings Help'**
+  String get mpSettingsPageHelpDialogTitle;
+
   /// Section title for main settings. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

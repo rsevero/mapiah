@@ -327,6 +327,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsPageTitle => 'Configurações';
 
   @override
+  String get mpSettingsPageHelpDialogTitle => 'Ajuda para Configurações';
+
+  @override
   String get mpSettingsSectionMain => 'Principal';
 
   @override

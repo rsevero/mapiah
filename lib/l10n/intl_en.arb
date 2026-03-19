@@ -475,6 +475,11 @@
     "description": "The title for the settings page. Used on: _MPSettingsPageState.build, _MapiahHomeState.build",
     "type": "text"
   },
+  "mpSettingsPageHelpDialogTitle": "Settings Help",
+  "@mpSettingsPageHelpDialogTitle": {
+    "description": "The title for the Settings page help dialog. Used on: _MPSettingsPageState.build",
+    "type": "text"
+  },
   "mpSettingsSectionMain": "Main",
   "@mpSettingsSectionMain": {
     "description": "Section title for main settings. Used on: lib/src/pages/mp_settings_page.dart",
