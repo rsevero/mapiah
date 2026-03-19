@@ -86,6 +86,10 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                   .isScrapVisible(scrapID);
                               final bool isActiveScrap =
                                   scrapID == activeScrapID;
+                              final bool isVisibilityCheckboxDisabled =
+                                  isActiveScrap &&
+                                  (th2FileEditController.visibleScrapCount <=
+                                      1);
 
                               return Builder(
                                 builder: (listenerContext) {
@@ -129,8 +133,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                 .adaptivePlatformDensity,
                                           ),
                                         ),
-                                        if (showVisibilityCheckboxes &&
-                                            !isActiveScrap)
+                                        if (showVisibilityCheckboxes)
                                           Tooltip(
                                             message: appLocalizations
                                                 .th2FileEditPageToggleScrapVisibilityTooltip,
@@ -139,10 +142,13 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                                 "MPAvailableScrapsWidget|VisibilityCheckbox|$scrapID",
                                               ),
                                               value: isVisible,
-                                              onChanged: (_) =>
-                                                  _onToggleScrapVisibility(
-                                                    scrapID,
-                                                  ),
+                                              onChanged:
+                                                  isVisibilityCheckboxDisabled
+                                                  ? null
+                                                  : (_) =>
+                                                        _onToggleScrapVisibility(
+                                                          scrapID,
+                                                        ),
                                               visualDensity: VisualDensity
                                                   .adaptivePlatformDensity,
                                             ),

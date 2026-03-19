@@ -204,7 +204,11 @@ Copies all elements within the scrap to the clipboard and then removes the scrap
 Duplicates the entire scrap, including all its elements, creating a new scrap in the same file. New unique IDs are generated for all duplicated elements. The duplicate operation can be undone with _Ctrl+Z_.
 
 ### Scrap visibility
-When the file has more than one scrap, a visibility checkbox appears in the row of each inactive (non-current) scrap. Checking or unchecking this box toggles whether that scrap is displayed on the canvas. The active scrap is always visible and has no visibility checkbox.
+When the file has more than one scrap, a visibility checkbox appears in every scrap row, including the active one. Checking or unchecking this box toggles whether that scrap is displayed on the canvas.
+
+If only one scrap is currently visible, the active scrap's checkbox is disabled to prevent hiding all scraps. When the active scrap is hidden, Mapiah automatically switches the active scrap to the nearest previously visible one.
+
+If the file has only one scrap, the visibility checkbox is hidden.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.

@@ -17,6 +17,7 @@
   * Implemented selectable new-line creation behavior for both the Mapiah quadratic mode and the xTherion cubic smooth mode with Ctrl-drag distance locking.
   * Show Bézier control points during click-and-drag line creation: CP1 and CP2 visible while dragging, with the dragged handle painted black and others white; control points disappear on mouse release.
   * Per-scrap visibility toggle in the available scraps panel: each scrap row shows a checkbox to hide/show the scrap on the canvas. Hidden scraps cannot be the active scrap. The checkbox is hidden for the active scrap.
+  * Scrap visibility checkbox now shown for the active scrap too; disabled when only one scrap is visible to prevent hiding all scraps. When the active scrap is hidden, Mapiah automatically switches to the nearest previously visible scrap. Checkbox hidden when the file has only one scrap.
   * Pasted elements are now automatically selected after a paste; if a scrap was pasted, the selection is cleared instead.
   * Available images panel now supports click-and-drag reordering; image order is persisted in the TH2File top-level children list.
 * Fixed bugs:

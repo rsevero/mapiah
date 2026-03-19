@@ -97,7 +97,11 @@ Copia todos os elementos do croqui para a área de transferência e então remov
 Duplica o croqui inteiro, incluindo todos os seus elementos, criando um novo croqui no mesmo arquivo. Novos IDs exclusivos são gerados para todos os elementos duplicados. A operação de duplicação pode ser desfeita com _Ctrl+Z_.
 
 ### Visibilidade do croqui
-Quando o arquivo tem mais de um croqui, uma caixa de seleção de visibilidade aparece na linha de cada croqui inativo (não atual). Marcar ou desmarcar essa caixa alterna se aquele croqui é exibido no canvas. O croqui ativo é sempre visível e não possui caixa de seleção de visibilidade.
+Quando o arquivo tem mais de um croqui, uma caixa de seleção de visibilidade aparece em todas as linhas de croqui, incluindo a do croqui ativo. Marcar ou desmarcar essa caixa alterna se aquele croqui é exibido no canvas.
+
+Se apenas um croqui estiver visível no momento, a caixa de seleção do croqui ativo fica desabilitada para evitar ocultar todos os croquis. Quando o croqui ativo é ocultado, o Mapiah troca automaticamente o croqui ativo pelo mais próximo que estava visível anteriormente.
+
+Se o arquivo tiver apenas um croqui, a caixa de seleção de visibilidade fica oculta.
 
 ## Desenhando linhas
 Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
