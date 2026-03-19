@@ -2,7 +2,7 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.3.2 - not yet released
+## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
   * Copy/Paste functionality for elements (Ctrl+C / Ctrl+V or Meta+C / Meta+V) with cross-file support and automatic THID conflict resolution.
   * Cut selected elements (Ctrl+X / Meta+X): copies elements to clipboard and deletes originals.
