@@ -146,6 +146,7 @@
   "mpCommandDescriptionRemoveScrap": "Remover croqui",
   "mpCommandDescriptionRemoveXTherionImageInsertConfig": "Remover imagem",
   "mpCommandDescriptionReorderImages": "Reordenar imagens",
+  "mpCommandDescriptionReorderScraps": "Reordenar croquis",
   "mpCommandDescriptionSetOptionToElement": "Definir opção",
   "mpCommandDescriptionSetOptionToElements": "Definir opção para diversos elementos",
   "mpCommandDescriptionSimplifyBezier": "Simplificar curva Bézier",

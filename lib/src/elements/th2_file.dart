@@ -846,6 +846,54 @@ class TH2File
     return _imageMPIDs!;
   }
 
+  void reorderScrapMPIDs({required int oldIndex, required int newIndex}) {
+    final List<int> reorderedScrapMPIDs = scrapMPIDs.toList();
+
+    if (reorderedScrapMPIDs.length <= 1) {
+      return;
+    }
+
+    if ((oldIndex < 0) || (oldIndex >= reorderedScrapMPIDs.length)) {
+      throw THCustomException(
+        "Invalid old scrap index '$oldIndex' in TH2File.reorderScrapMPIDs.",
+      );
+    }
+
+    if ((newIndex < 0) || (newIndex >= reorderedScrapMPIDs.length)) {
+      throw THCustomException(
+        "Invalid new scrap index '$newIndex' in TH2File.reorderScrapMPIDs.",
+      );
+    }
+
+    if (oldIndex == newIndex) {
+      return;
+    }
+
+    final int movedScrapMPID = reorderedScrapMPIDs.removeAt(oldIndex);
+
+    reorderedScrapMPIDs.insert(newIndex, movedScrapMPID);
+
+    final List<int> reorderedChildrenMPIDs = <int>[];
+    int reorderedScrapIndex = 0;
+
+    for (final int childMPID in childrenMPIDs) {
+      final THElement childElement = elementByMPID(childMPID);
+
+      if (childElement is THScrap) {
+        reorderedChildrenMPIDs.add(reorderedScrapMPIDs[reorderedScrapIndex]);
+        reorderedScrapIndex++;
+      } else {
+        reorderedChildrenMPIDs.add(childMPID);
+      }
+    }
+
+    childrenMPIDs
+      ..clear()
+      ..addAll(reorderedChildrenMPIDs);
+
+    _scrapMPIDs = null;
+  }
+
   void reorderImageMPIDs({required int oldIndex, required int newIndex}) {
     final List<int> reorderedImageMPIDs = imageMPIDs.toList();
 

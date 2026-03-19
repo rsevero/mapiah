@@ -34,6 +34,7 @@ enum MPCommandType {
   removeScrap,
   removeXTherionImageInsertConfig,
   reorderImages,
+  reorderScraps,
   replaceLineSegments,
   setAttrOptionToElement,
   setOptionToElement,

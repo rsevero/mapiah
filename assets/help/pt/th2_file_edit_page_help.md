@@ -11,6 +11,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   - [Recortar croqui](#recortar-croqui)
   - [Duplicar croqui](#duplicar-croqui)
   - [Visibilidade do croqui](#visibilidade-do-croqui)
+  - [Reordenação de croquis](#reordenação-de-croquis)
 - [Desenhando linhas](#desenhando-linhas)
   - [Conexão de mapa](#conexão-de-mapa)
 - [Janela de edição](#janela-de-edição)
@@ -90,6 +91,7 @@ Cada croqui é listado como uma linha na caixa de diálogo. A linha contém:
 * Um botão de rádio para selecioná-lo como o croqui ativo
 * Uma caixa de seleção de visibilidade (quando o arquivo tem mais de um croqui) — veja [Visibilidade do croqui](#visibilidade-do-croqui)
 * Quatro botões de ícone: _Copiar croqui_, _Recortar croqui_, _Duplicar croqui_ e _Remover croqui_
+* Um identificador de arrasto (⣿) para reordenar os croquis (quando o arquivo tem mais de um croqui) — veja [Reordenação de croquis](#reordenação-de-croquis)
 
 Um botão _alternar todos_ aparece acima da lista (quando o arquivo tem mais de um croqui). Seu tooltip e ícone refletem o que o botão fará:
 * _Ocultar todos exceto o ativo_ (ícone de olho fechado): exibido quando todos os croquis estão visíveis; clicar oculta todos os croquis exceto o ativo.
@@ -110,6 +112,13 @@ Quando o arquivo tem mais de um croqui, uma caixa de seleção de visibilidade a
 Se apenas um croqui estiver visível no momento, a caixa de seleção do croqui ativo fica desabilitada para evitar ocultar todos os croquis. Quando o croqui ativo é ocultado, o Mapiah troca automaticamente o croqui ativo pelo mais próximo que estava visível anteriormente.
 
 Se o arquivo tiver apenas um croqui, a caixa de seleção de visibilidade fica oculta.
+
+### Reordenação de croquis
+Clique e arraste o identificador de arrasto (⣿) de qualquer linha de croqui para alterar sua posição na lista. A reordenação pode ser desfeita com _Ctrl+Z_.
+
+Durante o arrasto:
+* A linha arrastada desaparece da lista e uma prévia semitransparente dela segue o cursor.
+* Uma barra colorida aparece acima da linha onde o croqui arrastado será inserido ao soltar o botão do mouse.
 
 ## Desenhando linhas
 Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.

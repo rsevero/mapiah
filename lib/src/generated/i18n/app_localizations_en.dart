@@ -423,6 +423,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionReorderImages => 'Reorder images';
 
   @override
+  String get mpCommandDescriptionReorderScraps => 'Reorder scraps';
+
+  @override
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
 
   @override

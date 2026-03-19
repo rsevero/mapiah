@@ -428,6 +428,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionReorderImages => 'Reordenar imagens';
 
   @override
+  String get mpCommandDescriptionReorderScraps => 'Reordenar croquis';
+
+  @override
   String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override

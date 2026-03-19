@@ -27,6 +27,7 @@ This is where all TH2 file editing is done.
   - [Scrap cut](#scrap-cut)
   - [Scrap duplicate](#scrap-duplicate)
   - [Scrap visibility](#scrap-visibility)
+  - [Scrap reordering](#scrap-reordering)
 - [Simplify lines](#simplify-lines)
   - [Simplification methods](#simplification-methods)
   - [Bézier curve line segments](#bézier-curve-line-segments)
@@ -197,6 +198,7 @@ Each scrap is listed as a row in the dialog box. The row contains:
 * A radio button to select it as the active scrap
 * A visibility checkbox (when the file has more than one scrap) — see [Scrap visibility](#scrap-visibility)
 * Four icon buttons: _Copy scrap_, _Cut scrap_, _Duplicate scrap_, and _Remove scrap_
+* A drag handle (⣿) to reorder scraps (when the file has more than one scrap) — see [Scrap reordering](#scrap-reordering)
 
 A _toggle all_ button appears above the list (when the file has more than one scrap). Its tooltip and icon reflect what the button will do:
 * _Hide all but active_ (eye-off icon): shown when all scraps are visible; clicking hides all scraps except the active one.
@@ -217,6 +219,13 @@ When the file has more than one scrap, a visibility checkbox appears in every sc
 If only one scrap is currently visible, the active scrap's checkbox is disabled to prevent hiding all scraps. When the active scrap is hidden, Mapiah automatically switches the active scrap to the nearest previously visible one.
 
 If the file has only one scrap, the visibility checkbox is hidden.
+
+### Scrap reordering
+Click and drag the drag handle (⣿) of any scrap row to change its position in the list. Reordering is undoable with _Ctrl+Z_.
+
+While dragging:
+* The dragged row disappears from the list and a semi-transparent preview of it follows the cursor.
+* A colored bar appears above the row where the dragged scrap will be inserted when released.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.

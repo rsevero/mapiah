@@ -660,6 +660,11 @@
     "description": "The description for the reorder images command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionReorderScraps": "Reorder scraps",
+  "@mpCommandDescriptionReorderScraps": {
+    "description": "The description for the reorder scraps command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionSetOptionToElement": "Set option",
   "@mpCommandDescriptionSetOptionToElement": {
     "description": "The description for the set option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",

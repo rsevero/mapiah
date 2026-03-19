@@ -1965,6 +1965,19 @@ class MPCommandFactory {
     );
   }
 
+  static MPReorderScrapsCommand reorderScraps({
+    required int oldIndex,
+    required int newIndex,
+    MPCommandDescriptionType descriptionType =
+        MPReorderScrapsCommand.defaultDescriptionType,
+  }) {
+    return MPReorderScrapsCommand(
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand setAttrOptionOnElements({
     required THAttrCommandOption toOption,
     required List<THElement> elements,

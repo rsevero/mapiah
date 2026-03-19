@@ -860,6 +860,12 @@ abstract class AppLocalizations {
   /// **'Reorder images'**
   String get mpCommandDescriptionReorderImages;
 
+  /// The description for the reorder scraps command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder scraps'**
+  String get mpCommandDescriptionReorderScraps;
+
   /// The description for the set option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
