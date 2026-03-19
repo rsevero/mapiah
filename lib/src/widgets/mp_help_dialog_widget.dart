@@ -84,16 +84,17 @@ class MPHelpDialogWidget extends StatelessWidget {
 
   Future<String> _loadMarkdown(BuildContext context) async {
     final String localeID = _getLocaleID(context);
+    final String raw;
 
     if (source == MPHelpPageSource.githubRaw) {
       final String? remoteMarkdown = await _loadMarkdownFromWeb(localeID);
 
-      if (remoteMarkdown != null) {
-        return remoteMarkdown;
-      }
+      raw = remoteMarkdown ?? await _loadMarkdownFromAssets(localeID);
+    } else {
+      raw = await _loadMarkdownFromAssets(localeID);
     }
 
-    return _loadMarkdownFromAssets(localeID);
+    return raw.replaceAll(RegExp(r'<!--.*?-->', dotAll: true), '').trim();
   }
 
   @override
