@@ -17,6 +17,7 @@
   * Implemented selectable new-line creation behavior for both the Mapiah quadratic mode and the xTherion cubic smooth mode with Ctrl-drag distance locking.
   * Show Bézier control points during click-and-drag line creation: CP1 and CP2 visible while dragging, with the dragged handle painted black and others white; control points disappear on mouse release.
   * Per-scrap visibility toggle in the available scraps panel: each scrap row shows a checkbox to hide/show the scrap on the canvas. Hidden scraps cannot be the active scrap. The checkbox is hidden for the active scrap.
+  * Pasted elements are now automatically selected after a paste; if a scrap was pasted, the selection is cleared instead.
 * Fixed bugs:
   * Duplicate scrap icon looking ugly.
   * Failure decoding "therion.log". [reported by CaverBruce  (issue [#17](https://github.com/rsevero/mapiah/issues/17))]

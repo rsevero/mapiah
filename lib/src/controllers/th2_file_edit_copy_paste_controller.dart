@@ -179,6 +179,10 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
       return;
     }
 
+    /// Capture pasted MPIDs before execute (they are allocated during
+    /// materializeAndBuildCommands, so the list is already populated).
+    final List<int> pastedMPIDs = pasteAux.topLevelPastedMPIDs;
+
     /// Execute as single undo action.
     final MPCommand pasteCommand;
 
@@ -194,7 +198,24 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
     }
 
     _th2FileEditController.execute(pasteCommand);
-    _th2FileEditController.triggerSelectedElementsRedraw();
+
+    /// After paste: if a scrap was pasted, clear selection; otherwise select
+    /// the pasted top-level elements.
+    final List<THElement> pastedElements = pastedMPIDs
+        .map((mpID) => _th2File.elementByMPID(mpID))
+        .toList();
+    final bool pastedAScrap = pastedElements.any((e) => e is THScrap);
+
+    if (pastedAScrap) {
+      _th2FileEditController.selectionController.clearSelectedElements();
+    } else {
+      _th2FileEditController.selectionController.setSelectedElements(
+        pastedElements,
+        setState: true,
+      );
+    }
+
+    _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 

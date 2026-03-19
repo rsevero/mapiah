@@ -30,6 +30,12 @@ class MPTHElementPasteAux {
   /// Map old MPID → new THID for elements with THID (THLine, THScrap, etc).
   final Map<int, String> _oldToNewTHIDMap = {};
 
+  /// New MPIDs of the top-level pasted elements, in clipboard order.
+  /// Populated by [materializeAndBuildCommands].
+  final List<int> _topLevelPastedMPIDs = [];
+
+  List<int> get topLevelPastedMPIDs => List.unmodifiable(_topLevelPastedMPIDs);
+
   MPTHElementPasteAux({
     required this.copyResult,
     required this.th2File,
@@ -42,6 +48,8 @@ class MPTHElementPasteAux {
   List<MPCommand> materializeAndBuildCommands() {
     final List<MPCommand> topLevelCommands = [];
 
+    _topLevelPastedMPIDs.clear();
+
     for (final entry in copyResult) {
       /// Determine parent MPID for this top-level element.
       final THElement topElement = THElement.fromMap(entry.template.elementMap);
@@ -50,7 +58,11 @@ class MPTHElementPasteAux {
           : activeScrapMPID;
 
       final MPCommand command = _processMaterializeAndBuild(entry, parentMPID);
+
       topLevelCommands.add(command);
+      _topLevelPastedMPIDs.add(
+        _oldToNewMPIDMap[entry.template.originalMPID ?? 0]!,
+      );
     }
 
     return topLevelCommands;
