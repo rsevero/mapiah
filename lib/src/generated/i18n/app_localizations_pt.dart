@@ -20,9 +20,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get aboutMapiahDialogWindowTitle => 'Sobre o Mapiah';
-
-  @override
   String aboutMapiahDialogRelease(Object releaseName, Object releaseUrl) {
     return 'Versão $releaseName ($releaseUrl)';
   }
@@ -36,79 +33,26 @@ class AppLocalizationsPt extends AppLocalizations {
   String get aboutMapiahDialogReleaseUrlLabel => 'Página da versão';
 
   @override
+  String get aboutMapiahDialogWindowTitle => 'Sobre o Mapiah';
+
+  @override
   String get appTitle => 'Mapiah';
 
   @override
   String get buttonClose => 'Fechar';
 
   @override
-  String get updateAvailableTitle => 'Atualização disponível';
+  String get fileEditWindowWindowTitle => 'Edição de arquivo';
 
   @override
-  String updateAvailableTitleWithCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count versões do Mapiah mais recentes disponíveis',
-      one: '1 versão do Mapiah mais recente disponível',
-    );
-    return '$_temp0';
-  }
+  String get helpDialogFailureToLoad => 'Falha ao carregar o conteúdo de ajuda';
 
   @override
-  String updateAvailableBody(
-    Object currentVersion,
-    Object latestVersion,
-    Object tagName,
-    Object releaseUrl,
-  ) {
-    return 'Uma versão mais recente está disponível.\n\nAtual: $currentVersion\nMais recente: $latestVersion ($tagName)\n\nDownload: $releaseUrl';
-  }
-
-  @override
-  String updateAvailableInstalledVersionAge(int commitCount, int dayCount) {
-    String _temp0 = intl.Intl.pluralLogic(
-      commitCount,
-      locale: localeName,
-      other: '$commitCount commits',
-      one: '1 commit',
-    );
-    String _temp1 = intl.Intl.pluralLogic(
-      dayCount,
-      locale: localeName,
-      other: '$dayCount dias',
-      one: '1 dia',
-    );
-    return 'A versão instalada está $_temp0 e $_temp1 atrás da versão estável mais recente.';
-  }
-
-  @override
-  String get updateCheckFailedTitle => 'Falha ao verificar atualização';
-
-  @override
-  String get updateCheckFailedNoAnswerBody =>
-      'Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.';
-
-  @override
-  String updateCheckFailedHttpStatusBody(Object statusCode) {
-    return 'O servidor de atualizações retornou HTTP $statusCode.';
-  }
-
-  @override
-  String get updateCheckFailedParsingBody =>
-      'Não foi possível ler a versão mais recente no servidor de atualizações.';
-
-  @override
-  String updateCheckFailedParsingWithTagBody(Object tagName) {
-    return 'Não foi possível interpretar a tag da versão mais recente: $tagName';
-  }
+  String get helpDialogTooltip => 'Ajuda (F1)';
 
   @override
   String get initialPagePresentation =>
       'Mapiah: uma interface gráfica amigável para mapeamento de cavernas com Therion';
-
-  @override
-  String get fileEditWindowWindowTitle => 'Edição de arquivo';
 
   @override
   String languageName(String language) {
@@ -122,39 +66,36 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get helpDialogFailureToLoad => 'Falha ao carregar o conteúdo de ajuda';
-
-  @override
-  String get helpDialogTooltip => 'Ajuda (F1)';
-
-  @override
   String get mapiahHomeAboutMapiahDialog => 'Sobre o Mapiah';
 
   @override
   String get mapiahHomeHelpDialogTitle => 'Tela inicial';
 
   @override
+  String get mapiahHomeNewFileButtonTooltip =>
+      'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
+
+  @override
   String get mapiahHomeOpenFile => 'Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)';
 
   @override
-  String get mapiahHomeNewFileButtonTooltip =>
-      'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
+  String get mapiahKeyboardShortcutsTitle => 'Atalhos de teclado';
+
+  @override
+  String get mapiahKeyboardShortcutsTooltip => 'Atalhos de teclado (Ctrl+K)';
 
   @override
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
       'Abrir arquivo THConfig e executar Therion (Ctrl+T)';
 
   @override
-  String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
-
-  @override
   String get mapiahRunTherionButtonLabel => 'Reexecutar Therion';
 
   @override
-  String get mapiahTherionRunCloseButtonTooltip => 'Fechar (Esc)';
+  String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
 
   @override
-  String get mpNoTherionFound => 'Therion não encontrado';
+  String get mapiahTherionRunCloseButtonTooltip => 'Fechar (Esc)';
 
   @override
   String get mapiahTherionRunDialogTitle => 'Saída do Therion';
@@ -162,41 +103,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String mapiahTherionRunElapsedLabel(Object elapsed) {
     return 'Tempo decorrido: $elapsed s';
-  }
-
-  @override
-  String get mapiahTherionRunStatusLabel => 'Situação:';
-
-  @override
-  String get mapiahTherionRunStatusRunning => 'rodando';
-
-  @override
-  String get mapiahTherionRunStatusOk => 'ok';
-
-  @override
-  String get mapiahTherionRunStatusWarning => 'aviso';
-
-  @override
-  String get mapiahTherionRunStatusError => 'erro';
-
-  @override
-  String get mapiahTherionRunOutputLabel => 'Saída:';
-
-  @override
-  String get mapiahTherionRunTherionOutputBegin => 'Início da saída do Therion';
-
-  @override
-  String get mapiahTherionRunTherionOutputEnd => 'Fim da saída do Therion';
-
-  @override
-  String get mapiahTherionRunTherionLogBegin => 'Início de therion.log';
-
-  @override
-  String get mapiahTherionRunTherionLogEnd => 'Fim de therion.log';
-
-  @override
-  String mapiahTherionRunStartTime(Object time) {
-    return 'Início: $time';
   }
 
   @override
@@ -209,19 +115,46 @@ class AppLocalizationsPt extends AppLocalizations {
       'Saída do Therion não encontrada';
 
   @override
+  String get mapiahTherionRunOutputLabel => 'Saída:';
+
+  @override
+  String mapiahTherionRunStartTime(Object time) {
+    return 'Início: $time';
+  }
+
+  @override
+  String get mapiahTherionRunStatusError => 'erro';
+
+  @override
+  String get mapiahTherionRunStatusLabel => 'Situação:';
+
+  @override
+  String get mapiahTherionRunStatusOk => 'ok';
+
+  @override
+  String get mapiahTherionRunStatusRunning => 'rodando';
+
+  @override
+  String get mapiahTherionRunStatusWarning => 'aviso';
+
+  @override
+  String get mapiahTherionRunTherionLogBegin => 'Início de therion.log';
+
+  @override
+  String get mapiahTherionRunTherionLogEnd => 'Fim de therion.log';
+
+  @override
+  String get mapiahTherionRunTherionOutputBegin => 'Início da saída do Therion';
+
+  @override
+  String get mapiahTherionRunTherionOutputEnd => 'Fim da saída do Therion';
+
+  @override
   String get mapiahTherionSelectTHConfigDialogTitle =>
       'Selecionar arquivo THConfig';
 
   @override
-  String mpTherionCannotExecuteCommand(Object commandLine) {
-    return 'Falha ao executar o comando: $commandLine';
-  }
-
-  @override
-  String get mapiahKeyboardShortcutsTitle => 'Atalhos de teclado';
-
-  @override
-  String get mapiahKeyboardShortcutsTooltip => 'Atalhos de teclado (Ctrl+K)';
+  String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
   String get mpAngleUnitDegree => 'grau';
@@ -236,13 +169,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAngleUnitMinute => 'minuto';
 
   @override
-  String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
+  String get mpAreaBordersAddButton => 'Adicionar borda';
 
   @override
   String get mpAreaBordersPanelTitle => 'Bordas da área';
-
-  @override
-  String get mpAreaBordersAddButton => 'Adicionar borda';
 
   @override
   String get mpAttrNameEmpty => 'Nome do atributo vazio';
@@ -267,40 +197,37 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpAzimuthAzimuthLabel => 'Azimute';
 
   @override
+  String get mpAzimuthEast => 'Leste';
+
+  @override
+  String get mpAzimuthEastAbbreviation => 'L';
+
+  @override
   String get mpAzimuthInvalidErrorMessage => 'Azimute inválido';
 
   @override
   String get mpAzimuthNorth => 'Norte';
 
   @override
-  String get mpAzimuthSouth => 'Sul';
-
-  @override
-  String get mpAzimuthEast => 'Leste';
-
-  @override
-  String get mpAzimuthWest => 'Oeste';
-
-  @override
   String get mpAzimuthNorthAbbreviation => 'N';
+
+  @override
+  String get mpAzimuthSouth => 'Sul';
 
   @override
   String get mpAzimuthSouthAbbreviation => 'S';
 
   @override
-  String get mpAzimuthEastAbbreviation => 'L';
+  String get mpAzimuthWest => 'Oeste';
 
   @override
   String get mpAzimuthWestAbbreviation => 'O';
 
   @override
-  String get mpButtonCancel => 'Cancelar';
-
-  @override
   String get mpButtonApply => 'Aplicar';
 
   @override
-  String get mpButtonSaveAndClose => 'Salvar e fechar';
+  String get mpButtonCancel => 'Cancelar';
 
   @override
   String get mpButtonCreate => 'Criar';
@@ -309,66 +236,42 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpButtonOK => 'OK';
 
   @override
-  String get mpChoiceMultipleValues => 'vários valores';
+  String get mpButtonResetAllSettings => 'Redefinir todas as configurações';
 
   @override
-  String get mpButtonResetAllSettings => 'Redefinir todas as configurações';
+  String get mpButtonSaveAndClose => 'Salvar e fechar';
+
+  @override
+  String mpCSEPSGESRILabel(Object csOption) {
+    return 'Identificador $csOption (1-99999)';
+  }
+
+  @override
+  String get mpCSETRSLabel => 'Identificador opcional ETRS (1-99999)';
+
+  @override
+  String get mpCSForOutputLabel => 'Para saída';
+
+  @override
+  String get mpCSInvalidValueErrorMessage => 'Valor inválido';
+
+  @override
+  String get mpCSOSGBMajorLabel => 'OSGB principal';
+
+  @override
+  String get mpCSOSGBMinorLabel => 'OSGB menor';
+
+  @override
+  String get mpCSUTMZoneNumberLabel => 'Número da zona UTM (1-60)';
+
+  @override
+  String get mpChoiceMultipleValues => 'vários valores';
 
   @override
   String get mpChoiceSet => 'Definido';
 
   @override
   String get mpChoiceUnset => 'Não definido';
-
-  @override
-  String get mpSeconds => 's';
-
-  @override
-  String get mpSettingsPageTitle => 'Configurações';
-
-  @override
-  String get mpSettingsPageHelpDialogTitle => 'Ajuda para Configurações';
-
-  @override
-  String get mpSettingsSectionMain => 'Principal';
-
-  @override
-  String get mpSettingsSectionTH2Edit => 'Edição TH2';
-
-  @override
-  String get mpSettingsSettingMainLocaleID => 'Idioma';
-
-  @override
-  String get mpSettingsSettingMainTherionExecutablePath =>
-      'Caminho do executável do Therion';
-
-  @override
-  String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
-
-  @override
-  String get mpSettingsSettingTH2EditNewLineCreationMethod =>
-      'Método de criação de nova linha';
-
-  @override
-  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic =>
-      'Quadrático do Mapiah';
-
-  @override
-  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth =>
-      'Cúbico suave do xTherion';
-
-  @override
-  String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
-
-  @override
-  String get mpSettingsSettingTH2EditSelectionTolerance =>
-      'Tolerância de seleção';
-
-  @override
-  String get mpSettingsInvalidNumber => 'Número inválido';
-
-  @override
-  String get mpSettingsInvalidInteger => 'Inteiro inválido';
 
   @override
   String get mpCommandDescriptionAddArea => 'Adicionar área';
@@ -389,11 +292,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionAddLine => 'Adicionar linha';
 
   @override
-  String get mpCommandDescriptionAddLines => 'Adicionar linhas';
-
-  @override
   String get mpCommandDescriptionAddLineSegment =>
       'Adicionar segmento de linha';
+
+  @override
+  String get mpCommandDescriptionAddLines => 'Adicionar linhas';
 
   @override
   String get mpCommandDescriptionAddPoint => 'Adicionar ponto';
@@ -412,10 +315,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionDuplicateElements => 'Duplicar elementos';
 
   @override
-  String get mpCommandDescriptionEditAreasType => 'Editar tipo de áreas';
+  String get mpCommandDescriptionEditAreaType => 'Editar tipo de área';
 
   @override
-  String get mpCommandDescriptionEditAreaType => 'Editar tipo de área';
+  String get mpCommandDescriptionEditAreasType => 'Editar tipo de áreas';
 
   @override
   String get mpCommandDescriptionEditBezierCurve => 'Editar curva Bézier';
@@ -427,24 +330,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionEditLineSegment => 'Editar segmento de linha';
 
   @override
-  String get mpCommandDescriptionEditLineSegmentsType =>
-      'Editar tipo de segmentos de linha';
-
-  @override
   String get mpCommandDescriptionEditLineSegmentType =>
       'Editar tipo de segmento de linha';
 
   @override
-  String get mpCommandDescriptionEditLinesType => 'Editar tipo de linhas';
+  String get mpCommandDescriptionEditLineSegmentsType =>
+      'Editar tipo de segmentos de linha';
 
   @override
   String get mpCommandDescriptionEditLineType => 'Editar tipo de linha';
 
   @override
-  String get mpCommandDescriptionEditPointsType => 'Editar tipo de pontos';
+  String get mpCommandDescriptionEditLinesType => 'Editar tipo de linhas';
 
   @override
   String get mpCommandDescriptionEditPointType => 'Editar tipo de ponto';
+
+  @override
+  String get mpCommandDescriptionEditPointsType => 'Editar tipo de pontos';
 
   @override
   String get mpCommandDescriptionMoveArea => 'Mover área';
@@ -460,10 +363,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMoveLine => 'Mover linha';
 
   @override
-  String get mpCommandDescriptionMoveLines => 'Mover linhas';
+  String get mpCommandDescriptionMoveLineSegments => 'Mover segmentos de linha';
 
   @override
-  String get mpCommandDescriptionMoveLineSegments => 'Mover segmentos de linha';
+  String get mpCommandDescriptionMoveLines => 'Mover linhas';
 
   @override
   String get mpCommandDescriptionMovePoint => 'Mover ponto';
@@ -474,9 +377,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpCommandDescriptionMultipleElements => 'Editar vários elementos';
-
-  @override
-  String get mpCommandDescriptionReorderImages => 'Reordenar imagens';
 
   @override
   String get mpCommandDescriptionRemoveArea => 'Apagar área';
@@ -497,15 +397,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionRemoveLine => 'Apagar linha';
 
   @override
-  String get mpCommandDescriptionRemoveLines => 'Apagar linhas';
-
-  @override
   String get mpCommandDescriptionRemoveLineSegment =>
       'Apagar segmento de linha';
 
   @override
   String get mpCommandDescriptionRemoveLineSegments =>
       'Apagar segmentos de linha';
+
+  @override
+  String get mpCommandDescriptionRemoveLines => 'Apagar linhas';
 
   @override
   String get mpCommandDescriptionRemoveOptionFromElement => 'Remover opção';
@@ -525,14 +425,17 @@ class AppLocalizationsPt extends AppLocalizations {
       'Remover imagem';
 
   @override
-  String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
+  String get mpCommandDescriptionReorderImages => 'Reordenar imagens';
 
   @override
-  String get mpCommandDescriptionSimplifyBezier => 'Simplificar curva Bézier';
+  String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override
   String get mpCommandDescriptionSetOptionToElements =>
       'Definir opção para diversos elementos';
+
+  @override
+  String get mpCommandDescriptionSimplifyBezier => 'Simplificar curva Bézier';
 
   @override
   String get mpCommandDescriptionSimplifyLine => 'Simplificar linha';
@@ -575,29 +478,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCopyrightMessageLabel => 'Direitos autorais';
 
   @override
-  String mpCSEPSGESRILabel(Object csOption) {
-    return 'Identificador $csOption (1-99999)';
-  }
-
-  @override
-  String get mpCSETRSLabel => 'Identificador opcional ETRS (1-99999)';
-
-  @override
-  String get mpCSInvalidValueErrorMessage => 'Valor inválido';
-
-  @override
-  String get mpCSForOutputLabel => 'Para saída';
-
-  @override
-  String get mpCSOSGBMajorLabel => 'OSGB principal';
-
-  @override
-  String get mpCSOSGBMinorLabel => 'OSGB menor';
-
-  @override
-  String get mpCSUTMZoneNumberLabel => 'Número da zona UTM (1-60)';
-
-  @override
   String get mpDateIntervalEndDateHint => 'AAAA[.MM[.DD[@HH[:MM[:SS[.SS]]]]]]';
 
   @override
@@ -638,13 +518,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpDimensionsInvalidValueErrorMessage => 'Valor inválida';
 
   @override
-  String get mpDistInvalidValueErrorMessage => 'Distância inválida';
-
-  @override
   String get mpDistDistanceLabel => 'Distância';
 
   @override
+  String get mpDistInvalidValueErrorMessage => 'Distância inválida';
+
+  @override
   String get mpDoubleValueInvalidValueErrorMessage => 'Valor inválido';
+
+  @override
+  String get mpEditSingleLineStateStatusBarMessage => 'Editando linha';
 
   @override
   String get mpEncodingLabel => 'Codificação';
@@ -670,6 +553,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpIDNonUniqueValueErrorMessage => 'IDs devem ser únicos.';
+
+  @override
+  String get mpLSizeLabel => 'Tamanho';
 
   @override
   String get mpLengthUnitCentimeter => 'centímetro';
@@ -702,16 +588,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpLengthUnitYardAbbreviation => 'yd';
 
   @override
-  String get mpLineHeightInvalidValueErrorMessage => 'Altura inválida';
-
-  @override
   String get mpLineHeightHeightLabel => 'Altura';
 
   @override
-  String get mpLineSegmentTypeTypesTitle => 'Tipo de segmento de linha';
+  String get mpLineHeightInvalidValueErrorMessage => 'Altura inválida';
 
   @override
-  String get mpLSizeLabel => 'Tamanho';
+  String get mpLineSegmentTypeTypesTitle => 'Tipo de segmento de linha';
 
   @override
   String get mpMarkTextLabel => 'Identificador';
@@ -753,32 +636,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpMultipleEndControlPointsEndPoint => 'Ponto final';
 
   @override
-  String get mpNamedScaleTiny => 'Minúsculo';
-
-  @override
-  String get mpNamedScaleSmall => 'Pequeno';
-
-  @override
-  String get mpNamedScaleNormal => 'Normal';
-
-  @override
-  String get mpNamedScaleLarge => 'Grande';
+  String get mpNameStationLabel => 'Base';
 
   @override
   String get mpNamedScaleHuge => 'Enorme';
 
   @override
-  String get mpNameStationLabel => 'Base';
+  String get mpNamedScaleLarge => 'Grande';
+
+  @override
+  String get mpNamedScaleNormal => 'Normal';
+
+  @override
+  String get mpNamedScaleSmall => 'Pequeno';
+
+  @override
+  String get mpNamedScaleTiny => 'Minúsculo';
 
   @override
   String get mpNewScrapDialogCreateNewScrap => 'Criar novo croqui';
 
   @override
+  String get mpNewScrapDialogCreateScrapIDHint =>
+      'Digite o identificador do croqui';
+
+  @override
   String get mpNewScrapDialogCreateScrapIDLabel => 'ID do croqui';
 
   @override
-  String get mpNewScrapDialogCreateScrapIDHint =>
-      'Digite o identificador do croqui';
+  String get mpNoTherionFound => 'Therion não encontrado';
 
   @override
   String mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage(
@@ -793,6 +679,51 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpOptionsEditLineSegmentTypes => 'Tipos de segmentos de linha';
 
   @override
+  String get mpOptionsEditTitle => 'Opções';
+
+  @override
+  String get mpPLATypeAll => 'Todos';
+
+  @override
+  String get mpPLATypeAreaTitle => 'Tipos de área';
+
+  @override
+  String get mpPLATypeCurrent => 'Atual';
+
+  @override
+  String get mpPLATypeDropdownSelectATypeLabel => 'Selecione um tipo';
+
+  @override
+  String get mpPLATypeLastUsed => 'Últimos usados';
+
+  @override
+  String get mpPLATypeLineTitle => 'Tipos de linha';
+
+  @override
+  String get mpPLATypeMostUsed => 'Mais usados';
+
+  @override
+  String get mpPLATypeNone => 'Nenhum';
+
+  @override
+  String get mpPLATypePointTitle => 'Tipos de ponto';
+
+  @override
+  String get mpPLATypeUnknownInvalid => 'Tipo inválido';
+
+  @override
+  String get mpPLATypeUnknownLabel => 'Tipo';
+
+  @override
+  String get mpPLScaleCommandOptionNamed => 'Pré-definidos';
+
+  @override
+  String get mpPLScaleCommandOptionNumeric => 'Numérico';
+
+  @override
+  String get mpPLScaleNumericLabel => 'Tamanho';
+
+  @override
   String get mpPassageHeightCeiling => 'Teto';
 
   @override
@@ -802,10 +733,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPassageHeightDepth => 'Profundidade';
 
   @override
-  String get mpPassageHeightDepthWarning => 'Profundidade inválida';
+  String get mpPassageHeightDepthLabel => 'Profundidade';
 
   @override
-  String get mpPassageHeightDepthLabel => 'Profundidade';
+  String get mpPassageHeightDepthWarning => 'Profundidade inválida';
 
   @override
   String get mpPassageHeightDistanceBetweenFloorAndCeiling => 'Do piso ao teto';
@@ -838,64 +769,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPassageHeightHeightWarning => 'Altura inválida';
 
   @override
+  String get mpPersonNameHint => '\'Nome Sobrenome\' ou \'Nomes/Sobrenomes\'';
+
+  @override
   String get mpPersonNameInvalidFormatErrorMessage => 'Nome inválido';
 
   @override
   String get mpPersonNameLabel => 'Nome';
 
   @override
-  String get mpPersonNameHint => '\'Nome Sobrenome\' ou \'Nomes/Sobrenomes\'';
-
-  @override
-  String get mpPLATypeAll => 'Todos';
-
-  @override
-  String get mpPLATypeNone => 'Nenhum';
-
-  @override
-  String get mpPLATypeAreaTitle => 'Tipos de área';
-
-  @override
-  String get mpPLATypeCurrent => 'Atual';
-
-  @override
-  String get mpPLATypeDropdownSelectATypeLabel => 'Selecione um tipo';
-
-  @override
-  String get mpPLATypeLastUsed => 'Últimos usados';
-
-  @override
-  String get mpPLATypeLineTitle => 'Tipos de linha';
-
-  @override
-  String get mpPLATypeMostUsed => 'Mais usados';
-
-  @override
-  String get mpPLATypePointTitle => 'Tipos de ponto';
-
-  @override
-  String get mpPLATypeUnknownInvalid => 'Tipo inválido';
-
-  @override
-  String get mpPLATypeUnknownLabel => 'Tipo';
-
-  @override
-  String get mpPLScaleCommandOptionNamed => 'Pré-definidos';
-
-  @override
-  String get mpPLScaleCommandOptionNumeric => 'Numérico';
-
-  @override
-  String get mpPLScaleNumericLabel => 'Tamanho';
-
-  @override
   String get mpPointHeightChimney => 'Chaminé';
 
   @override
-  String get mpPointHeightValueChimneyLabel => 'Altura';
+  String get mpPointHeightLengthWarning => 'Medida inválida';
 
   @override
-  String get mpPointHeightLengthWarning => 'Medida inválida';
+  String get mpPointHeightPit => 'Poço';
 
   @override
   String get mpPointHeightPresumedMinus => 'Presumido negativo (-?)';
@@ -904,24 +793,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpPointHeightPresumedPlus => 'Presumido positivo (+?)';
 
   @override
-  String get mpPointHeightPit => 'Poço';
-
-  @override
-  String get mpPointHeightValuePitLabel => 'Profundidade';
-
-  @override
   String get mpPointHeightStep => 'Degrau';
 
   @override
-  String get mpPointHeightValueStepLabel => 'Altura';
+  String get mpPointHeightValueChimneyLabel => 'Altura';
 
   @override
   String get mpPointHeightValueChimneyObservation =>
       'Altura do teto (tratado como positivo)';
 
   @override
+  String get mpPointHeightValuePitLabel => 'Profundidade';
+
+  @override
   String get mpPointHeightValuePitObservation =>
       'Profundidade do poço (tratado como negativo)';
+
+  @override
+  String get mpPointHeightValueStepLabel => 'Altura';
 
   @override
   String get mpPointHeightValueStepObservation =>
@@ -949,7 +838,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpProjectionModePlan => 'Planta baixa';
 
   @override
-  String get mpOptionsEditTitle => 'Opções';
+  String get mpScrapFreeText => 'Texto livre';
+
+  @override
+  String get mpScrapFromFile => 'Deste arquivo';
+
+  @override
+  String get mpScrapLabel => 'ID de croqui';
+
+  @override
+  String get mpScrapScale11Label => 'Real';
 
   @override
   String get mpScrapScale1ValueLabel => 'Real para 1 ponto';
@@ -959,28 +857,17 @@ class AppLocalizationsPt extends AppLocalizations {
       'Medida real por ponto do desenho';
 
   @override
-  String get mpScrapScale11Label => 'Real';
-
-  @override
-  String get mpScrapScale2ValuesLabel => 'Real para pontos';
-
-  @override
-  String get mpScrapScale2ValueObservation =>
-      'Medida real por pontos do desenho';
-
-  @override
   String get mpScrapScale21Label => 'Desenho';
 
   @override
   String get mpScrapScale22Label => 'Real';
 
   @override
-  String get mpScrapScale8ValuesLabel =>
-      'Coordenadas reais por coordenadas do desenho';
+  String get mpScrapScale2ValueObservation =>
+      'Medida real por pontos do desenho';
 
   @override
-  String get mpScrapScale8ValueObservation =>
-      'Coordenadas reais por coordenadas do desenho';
+  String get mpScrapScale2ValuesLabel => 'Real para pontos';
 
   @override
   String get mpScrapScale81Label => 'X1 desenho';
@@ -1007,19 +894,68 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpScrapScale88Label => 'Y2 real';
 
   @override
-  String get mpScrapFreeText => 'Texto livre';
+  String get mpScrapScale8ValueObservation =>
+      'Coordenadas reais por coordenadas do desenho';
 
   @override
-  String get mpScrapFromFile => 'Deste arquivo';
+  String get mpScrapScale8ValuesLabel =>
+      'Coordenadas reais por coordenadas do desenho';
 
   @override
   String get mpScrapScaleInvalidValueError => 'Referência de escala inválida';
 
   @override
-  String get mpScrapLabel => 'ID de croqui';
+  String get mpScrapWarning => 'Croqui não definido';
 
   @override
-  String get mpScrapWarning => 'Croqui não definido';
+  String get mpSeconds => 's';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic =>
+      'Quadrático do Mapiah';
+
+  @override
+  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth =>
+      'Cúbico suave do xTherion';
+
+  @override
+  String get mpSettingsInvalidInteger => 'Inteiro inválido';
+
+  @override
+  String get mpSettingsInvalidNumber => 'Número inválido';
+
+  @override
+  String get mpSettingsPageHelpDialogTitle => 'Ajuda para Configurações';
+
+  @override
+  String get mpSettingsPageTitle => 'Configurações';
+
+  @override
+  String get mpSettingsSectionMain => 'Principal';
+
+  @override
+  String get mpSettingsSectionTH2Edit => 'Edição TH2';
+
+  @override
+  String get mpSettingsSettingMainLocaleID => 'Idioma';
+
+  @override
+  String get mpSettingsSettingMainTherionExecutablePath =>
+      'Caminho do executável do Therion';
+
+  @override
+  String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
+
+  @override
+  String get mpSettingsSettingTH2EditNewLineCreationMethod =>
+      'Método de criação de nova linha';
+
+  @override
+  String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
+
+  @override
+  String get mpSettingsSettingTH2EditSelectionTolerance =>
+      'Tolerância de seleção';
 
   @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
@@ -1043,13 +979,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapPointTargetsLabel => 'Ajuste a pontos';
 
   @override
-  String get mpSnapTargetNone => 'Nenhum';
-
-  @override
   String get mpSnapTargetLinePoint => 'Pontos de linha';
 
   @override
   String get mpSnapTargetLinePointByType => 'Pontos de linha por tipo de linha';
+
+  @override
+  String get mpSnapTargetNone => 'Nenhum';
 
   @override
   String get mpSnapTargetPoint => 'Pontos';
@@ -1077,9 +1013,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapXVIFileTargetsLabel => 'Ajuste a arquivo XVI';
 
   @override
-  String get mpEditSingleLineStateStatusBarMessage => 'Editando linha';
-
-  @override
   String get mpStationNamesPrefixLabel => 'Prefixo';
 
   @override
@@ -1092,6 +1025,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpStationNamesSuffixMessageEmpty => 'Sufixo vazio';
 
   @override
+  String get mpStationTypeOptionWarning => 'Base não definida';
+
+  @override
   String get mpStationsAddField => 'Adicionar campo';
 
   @override
@@ -1099,9 +1035,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mpStationsNameLabel => 'Base';
-
-  @override
-  String get mpStationTypeOptionWarning => 'Base não definida';
 
   @override
   String mpStatusBarMessageEditLinePointOrientationLSize(
@@ -1173,118 +1106,15 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get thSubtypeEmpty => 'Subtipo vazio';
-
-  @override
-  String get thSubtypeLabel => 'Subtipo';
-
-  @override
-  String get thSubtypePointAirDraughtWinter => 'Inverno';
-
-  @override
-  String get thSubtypePointAirDraughtSummer => 'Verão';
-
-  @override
-  String get thSubtypePointAirDraughtUndefined => 'Indefinido';
-
-  @override
-  String get thSubtypePointStationTemporary => 'Temporária';
-
-  @override
-  String get thSubtypePointStationPainted => 'Pintada';
-
-  @override
-  String get thSubtypePointStationNatural => 'Natural';
-
-  @override
-  String get thSubtypePointStationFixed => 'Fixa';
-
-  @override
-  String get thSubtypePointWaterFlowPermanent => 'Permanente';
-
-  @override
-  String get thSubtypePointWaterFlowIntermittent => 'Intermitente';
-
-  @override
-  String get thSubtypePointWaterFlowPaleo => 'Paleofluxo';
-
-  @override
-  String get thSubtypeLineBorderInvisible => 'Invisível';
-
-  @override
-  String get thSubtypeLineBorderPresumed => 'Presumida';
-
-  @override
-  String get thSubtypeLineBorderTemporary => 'Temporária';
-
-  @override
-  String get thSubtypeLineBorderVisible => 'Visível';
-
-  @override
-  String get thSubtypeLineSurveyCave => 'Caverna';
-
-  @override
-  String get thSubtypeLineSurveySurface => 'Superfície';
-
-  @override
-  String get thSubtypeLineWallBedrock => 'Rocha matriz';
-
-  @override
-  String get thSubtypeLineWallBlocks => 'Blocos';
-
-  @override
-  String get thSubtypeLineWallClay => 'Argila';
-
-  @override
-  String get thSubtypeLineWallDebris => 'Escombros';
-
-  @override
-  String get thSubtypeLineWallFlowstone => 'Escorrimento';
-
-  @override
-  String get thSubtypeLineWallIce => 'Gelo';
-
-  @override
-  String get thSubtypeLineWallInvisible => 'Invisível';
-
-  @override
-  String get thSubtypeLineWallMoonmilk => 'Leite de lua';
-
-  @override
-  String get thSubtypeLineWallOverlying => 'Galeria superior';
-
-  @override
-  String get thSubtypeLineWallPebbles => 'Seixos';
-
-  @override
-  String get thSubtypeLineWallPit => 'Poço';
-
-  @override
-  String get thSubtypeLineWallPresumed => 'Presumida';
-
-  @override
-  String get thSubtypeLineWallSand => 'Areia';
-
-  @override
-  String get thSubtypeLineWallUnderlying => 'Galeria inferior';
-
-  @override
-  String get thSubtypeLineWallUnsurveyed => 'Não levantada';
-
-  @override
-  String get thSubtypeLineWaterFlowPermanent => 'Permanente';
-
-  @override
-  String get thSubtypeLineWaterFlowConjectural => 'Conjectural';
-
-  @override
-  String get thSubtypeLineWaterFlowIntermittent => 'Intermitente';
-
-  @override
   String get mpTextTextLabel => 'Texto';
 
   @override
   String get mpTextTypeOptionWarning => 'Texto não definido';
+
+  @override
+  String mpTherionCannotExecuteCommand(Object commandLine) {
+    return 'Falha ao executar o comando: $commandLine';
+  }
 
   @override
   String get mpTitleTextLabel => 'Título';
@@ -1294,10 +1124,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
-
-  @override
-  String get th2FileEditPageHelpDialogTitle =>
-      'Ajuda para edição de arquivo TH2';
 
   @override
   String get th2FileEditPageAddArea => 'Criar área (A)';
@@ -1338,50 +1164,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddScrapButton => 'Adicionar croqui (K)';
 
   @override
-  String get th2FileEditPageChangeActiveScrapTool =>
-      'Alterar croqui ativo (Alt+S)';
+  String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
 
   @override
-  String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
+  String get th2FileEditPageChangeActiveScrapTool =>
+      'Alterar croqui ativo (Alt+S)';
 
   @override
   String get th2FileEditPageChangeImageTitle => 'Alterar imagens';
 
   @override
   String get th2FileEditPageChangeImageTool => 'Alterar imagem (Alt+I)';
-
-  @override
-  String get th2FileEditPageEmptySelectionStatusBarMessage =>
-      'Nenhum elemento selecionado';
-
-  @override
-  String get th2FileEditPageLoadImageButton => 'Carregar imagem';
-
-  @override
-  String th2FileEditPageLoadingFile(Object filename) {
-    return 'Lendo arquivo $filename ...';
-  }
-
-  @override
-  String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
-
-  @override
-  String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';
-
-  @override
-  String get th2FileEditPageNoRedoAvailable => 'Nenhuma ação para refazer';
-
-  @override
-  String get th2FileEditPageOptionTool => 'Opções (O)';
-
-  @override
-  String get th2FileEditPagePanTool => 'Mover ponto de vista';
-
-  @override
-  String get th2FileEditPageRemoveButton => 'Apagar (Del)';
-
-  @override
-  String get th2FileEditPageRemoveImageButton => 'Remover imagem';
 
   @override
   String get th2FileEditPageCopyScrapButton => 'Copiar croqui';
@@ -1393,11 +1186,49 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageDuplicateScrapButton => 'Duplicar croqui';
 
   @override
-  String get th2FileEditPageRemoveScrapButton => 'Remover croqui';
+  String get th2FileEditPageEmptySelectionStatusBarMessage =>
+      'Nenhum elemento selecionado';
 
   @override
-  String get th2FileEditPageToggleScrapVisibilityTooltip =>
-      'Alternar visibilidade do croqui';
+  String get th2FileEditPageHelpDialogTitle =>
+      'Ajuda para edição de arquivo TH2';
+
+  @override
+  String get th2FileEditPageLoadImageButton => 'Carregar imagem';
+
+  @override
+  String th2FileEditPageLoadingFile(Object filename) {
+    return 'Lendo arquivo $filename ...';
+  }
+
+  @override
+  String get th2FileEditPageNoRedoAvailable => 'Nenhuma ação para refazer';
+
+  @override
+  String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';
+
+  @override
+  String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
+
+  @override
+  String get th2FileEditPageOptionTool => 'Opções (O)';
+
+  @override
+  String get th2FileEditPagePanTool => 'Mover ponto de vista';
+
+  @override
+  String th2FileEditPageRedo(Object redoDescription) {
+    return 'Refazer \'$redoDescription\' (Ctrl+Y)';
+  }
+
+  @override
+  String get th2FileEditPageRemoveButton => 'Apagar (Del)';
+
+  @override
+  String get th2FileEditPageRemoveImageButton => 'Remover imagem';
+
+  @override
+  String get th2FileEditPageRemoveScrapButton => 'Remover croqui';
 
   @override
   String get th2FileEditPageSave => 'Salvar (Ctrl+S)';
@@ -1409,19 +1240,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSaveAsDialogTitle => 'Salvar arquivo TH2 como';
 
   @override
-  String get th2FileEditPageSnapButton => 'Ajustar a pontos';
-
-  @override
-  String th2FileEditPageRedo(Object redoDescription) {
-    return 'Refazer \'$redoDescription\' (Ctrl+Y)';
-  }
-
-  @override
   String get th2FileEditPageSelectTool => 'Selecionar (C)';
 
   @override
   String get th2FileEditPageSelectionWindowZoomStatusBarMessage =>
       'Clique e arraste para definir a área para zoom';
+
+  @override
+  String get th2FileEditPageSnapButton => 'Ajustar a pontos';
+
+  @override
+  String get th2FileEditPageToggleScrapVisibilityTooltip =>
+      'Alternar visibilidade do croqui';
 
   @override
   String th2FileEditPageUndo(Object undoDescription) {
@@ -1460,6 +1290,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
 
   @override
+  String get th2FileTabsPageCloseTabTooltip => 'Fechar arquivo';
+
+  @override
   String get thAreaBedrock => 'Rocha matriz';
 
   @override
@@ -1490,13 +1323,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thAreaPillar => 'Coluna';
 
   @override
+  String get thAreaPillarWithCurtains => 'Coluna com Cortinas';
+
+  @override
   String get thAreaPillars => 'Colunas';
 
   @override
   String get thAreaPillarsWithCurtains => 'Colunas com Cortinas';
-
-  @override
-  String get thAreaPillarWithCurtains => 'Coluna com Cortinas';
 
   @override
   String get thAreaSand => 'Areia';
@@ -1553,6 +1386,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionBorder => 'Borda';
 
   @override
+  String get thCommandOptionCS => 'Sistema de Coordenadas';
+
+  @override
   String get thCommandOptionClip => 'Recortar';
 
   @override
@@ -1563,9 +1399,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thCommandOptionCopyright => 'Direitos Autorais';
-
-  @override
-  String get thCommandOptionCS => 'Sistema de Coordenadas';
 
   @override
   String get thCommandOptionDateValue => 'Data';
@@ -1595,6 +1428,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionId => 'ID';
 
   @override
+  String get thCommandOptionLSize => 'Tamanho L';
+
+  @override
   String get thCommandOptionLengthUnit => 'Unidade';
 
   @override
@@ -1613,19 +1449,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionLinePointGradient => 'Gradiente';
 
   @override
-  String get thCommandOptionLSize => 'Tamanho L';
-
-  @override
   String get thCommandOptionMark => 'Marca';
 
   @override
   String get thCommandOptionName => 'Base';
 
   @override
+  String get thCommandOptionOrientation => 'Orientação';
+
+  @override
   String get thCommandOptionOutline => 'Contorno';
 
   @override
-  String get thCommandOptionOrientation => 'Orientação';
+  String get thCommandOptionPLScale => 'Escala';
 
   @override
   String get thCommandOptionPassageHeightValue => 'Altura da Passagem';
@@ -1635,9 +1471,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get thCommandOptionPointHeightValue => 'Altura do Ponto';
-
-  @override
-  String get thCommandOptionPLScale => 'Escala';
 
   @override
   String get thCommandOptionProjection => 'Projeção';
@@ -1721,11 +1554,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thElementLineSegment => 'Segmento de linha';
 
   @override
-  String get thElementMultilineCommentContent =>
-      'Conteúdo de comentário multilinha';
+  String get thElementMultilineComment => 'Comentário multilinha';
 
   @override
-  String get thElementMultilineComment => 'Comentário multilinha';
+  String get thElementMultilineCommentContent =>
+      'Conteúdo de comentário multilinha';
 
   @override
   String get thElementPoint => 'Ponto';
@@ -1809,10 +1642,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thLinePit => 'Poço';
 
   @override
-  String get thLinePitch => 'Lance';
+  String get thLinePitChimney => 'Chaminé do Poço';
 
   @override
-  String get thLinePitChimney => 'Chaminé do Poço';
+  String get thLinePitch => 'Lance';
 
   @override
   String get thLineRimstoneDam => 'Dique de Travertino';
@@ -1896,18 +1729,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thMultipleChoiceAlignTopRight => 'Superior Direito';
 
   @override
-  String get thMultipleChoiceOnOffOff => 'Desligado';
-
-  @override
-  String get thMultipleChoiceOnOffOn => 'Ligado';
-
-  @override
-  String get thMultipleChoiceOnOffAutoAuto => 'Automático';
-
-  @override
-  String get thMultipleChoiceFlipNone => 'Nenhum';
-
-  @override
   String get thMultipleChoiceArrowPositionBegin => 'Início';
 
   @override
@@ -1917,7 +1738,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thMultipleChoiceArrowPositionEnd => 'Fim';
 
   @override
+  String get thMultipleChoiceFlipNone => 'Nenhum';
+
+  @override
   String get thMultipleChoiceLinePointGradientPoint => 'Ponto';
+
+  @override
+  String get thMultipleChoiceOnOffAutoAuto => 'Automático';
+
+  @override
+  String get thMultipleChoiceOnOffOff => 'Desligado';
+
+  @override
+  String get thMultipleChoiceOnOffOn => 'Ligado';
 
   @override
   String get thMultipleChoiceOutlineIn => 'Dentro';
@@ -2043,10 +1876,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointEntrance => 'Entrada';
 
   @override
-  String get thPointExtra => 'Extra';
+  String get thPointExVoto => 'Ex-voto';
 
   @override
-  String get thPointExVoto => 'Ex-voto';
+  String get thPointExtra => 'Extra';
 
   @override
   String get thPointFixedLadder => 'Escada fixa';
@@ -2157,10 +1990,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointPillar => 'Pilar';
 
   @override
-  String get thPointPillarsWithCurtains => 'Pilares com cortinas';
+  String get thPointPillarWithCurtains => 'Pilar com cortinas';
 
   @override
-  String get thPointPillarWithCurtains => 'Pilar com cortinas';
+  String get thPointPillarsWithCurtains => 'Pilares com cortinas';
 
   @override
   String get thPointPopcorn => 'Coralóide';
@@ -2217,13 +2050,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointStalactite => 'Estalactite';
 
   @override
+  String get thPointStalactiteStalagmite => 'Estalactite e estalagmite';
+
+  @override
   String get thPointStalactites => 'Estalactites';
 
   @override
   String get thPointStalactitesStalagmites => 'Estalactites e estalagmites';
-
-  @override
-  String get thPointStalactiteStalagmite => 'Estalactite e estalagmite';
 
   @override
   String get thPointStalagmite => 'Estalagmite';
@@ -2283,5 +2116,172 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thProjection => 'Projeção';
 
   @override
-  String get th2FileTabsPageCloseTabTooltip => 'Fechar arquivo';
+  String get thSubtypeEmpty => 'Subtipo vazio';
+
+  @override
+  String get thSubtypeLabel => 'Subtipo';
+
+  @override
+  String get thSubtypeLineBorderInvisible => 'Invisível';
+
+  @override
+  String get thSubtypeLineBorderPresumed => 'Presumida';
+
+  @override
+  String get thSubtypeLineBorderTemporary => 'Temporária';
+
+  @override
+  String get thSubtypeLineBorderVisible => 'Visível';
+
+  @override
+  String get thSubtypeLineSurveyCave => 'Caverna';
+
+  @override
+  String get thSubtypeLineSurveySurface => 'Superfície';
+
+  @override
+  String get thSubtypeLineWallBedrock => 'Rocha matriz';
+
+  @override
+  String get thSubtypeLineWallBlocks => 'Blocos';
+
+  @override
+  String get thSubtypeLineWallClay => 'Argila';
+
+  @override
+  String get thSubtypeLineWallDebris => 'Escombros';
+
+  @override
+  String get thSubtypeLineWallFlowstone => 'Escorrimento';
+
+  @override
+  String get thSubtypeLineWallIce => 'Gelo';
+
+  @override
+  String get thSubtypeLineWallInvisible => 'Invisível';
+
+  @override
+  String get thSubtypeLineWallMoonmilk => 'Leite de lua';
+
+  @override
+  String get thSubtypeLineWallOverlying => 'Galeria superior';
+
+  @override
+  String get thSubtypeLineWallPebbles => 'Seixos';
+
+  @override
+  String get thSubtypeLineWallPit => 'Poço';
+
+  @override
+  String get thSubtypeLineWallPresumed => 'Presumida';
+
+  @override
+  String get thSubtypeLineWallSand => 'Areia';
+
+  @override
+  String get thSubtypeLineWallUnderlying => 'Galeria inferior';
+
+  @override
+  String get thSubtypeLineWallUnsurveyed => 'Não levantada';
+
+  @override
+  String get thSubtypeLineWaterFlowConjectural => 'Conjectural';
+
+  @override
+  String get thSubtypeLineWaterFlowIntermittent => 'Intermitente';
+
+  @override
+  String get thSubtypeLineWaterFlowPermanent => 'Permanente';
+
+  @override
+  String get thSubtypePointAirDraughtSummer => 'Verão';
+
+  @override
+  String get thSubtypePointAirDraughtUndefined => 'Indefinido';
+
+  @override
+  String get thSubtypePointAirDraughtWinter => 'Inverno';
+
+  @override
+  String get thSubtypePointStationFixed => 'Fixa';
+
+  @override
+  String get thSubtypePointStationNatural => 'Natural';
+
+  @override
+  String get thSubtypePointStationPainted => 'Pintada';
+
+  @override
+  String get thSubtypePointStationTemporary => 'Temporária';
+
+  @override
+  String get thSubtypePointWaterFlowIntermittent => 'Intermitente';
+
+  @override
+  String get thSubtypePointWaterFlowPaleo => 'Paleofluxo';
+
+  @override
+  String get thSubtypePointWaterFlowPermanent => 'Permanente';
+
+  @override
+  String updateAvailableBody(
+    Object currentVersion,
+    Object latestVersion,
+    Object tagName,
+    Object releaseUrl,
+  ) {
+    return 'Uma versão mais recente está disponível.\n\nAtual: $currentVersion\nMais recente: $latestVersion ($tagName)\n\nDownload: $releaseUrl';
+  }
+
+  @override
+  String updateAvailableInstalledVersionAge(int commitCount, int dayCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      commitCount,
+      locale: localeName,
+      other: '$commitCount commits',
+      one: '1 commit',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      dayCount,
+      locale: localeName,
+      other: '$dayCount dias',
+      one: '1 dia',
+    );
+    return 'A versão instalada está $_temp0 e $_temp1 atrás da versão estável mais recente.';
+  }
+
+  @override
+  String get updateAvailableTitle => 'Atualização disponível';
+
+  @override
+  String updateAvailableTitleWithCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count versões do Mapiah mais recentes disponíveis',
+      one: '1 versão do Mapiah mais recente disponível',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String updateCheckFailedHttpStatusBody(Object statusCode) {
+    return 'O servidor de atualizações retornou HTTP $statusCode.';
+  }
+
+  @override
+  String get updateCheckFailedNoAnswerBody =>
+      'Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.';
+
+  @override
+  String get updateCheckFailedParsingBody =>
+      'Não foi possível ler a versão mais recente no servidor de atualizações.';
+
+  @override
+  String updateCheckFailedParsingWithTagBody(Object tagName) {
+    return 'Não foi possível interpretar a tag da versão mais recente: $tagName';
+  }
+
+  @override
+  String get updateCheckFailedTitle => 'Falha ao verificar atualização';
 }

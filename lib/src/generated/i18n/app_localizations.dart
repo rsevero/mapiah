@@ -116,12 +116,6 @@ abstract class AppLocalizations {
   /// **'Version {version}'**
   String aboutMapiahDialogMapiahVersion(Object version);
 
-  /// The title for the About dialog. Used on: _MapiahHomeState.showAboutDialog
-  ///
-  /// In en, this message translates to:
-  /// **'About Mapiah'**
-  String get aboutMapiahDialogWindowTitle;
-
   /// The release name and URL to show in the About dialog. Used on: _MapiahHomeState.showAboutDialog
   ///
   /// In en, this message translates to:
@@ -140,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Release page'**
   String get aboutMapiahDialogReleaseUrlLabel;
 
+  /// The title for the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  ///
+  /// In en, this message translates to:
+  /// **'About Mapiah'**
+  String get aboutMapiahDialogWindowTitle;
+
   /// The title of the application. Used on: MapiahApp.build, _MapiahHomeState.build
   ///
   /// In en, this message translates to:
@@ -152,82 +152,11 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get buttonClose;
 
-  /// Title for the update available dialog. Used on: MPDialogAux._showFlathubUpdateDialog, lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Update available'**
-  String get updateAvailableTitle;
-
-  /// Title for the update available dialog including the number of newer versions. Used on: MPDialogAux._showFlathubUpdateDialog, lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, one {1 newer Mapiah version available} other {{count} newer Mapiah versions available}}'**
-  String updateAvailableTitleWithCount(int count);
-
-  /// Body text for the update available dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'A newer version is available.\n\nCurrent: {currentVersion}\nLatest: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}'**
-  String updateAvailableBody(
-    Object currentVersion,
-    Object latestVersion,
-    Object tagName,
-    Object releaseUrl,
-  );
-
-  /// Additional update dialog information showing how old the installed version is relative to the latest stable release, by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest release.'**
-  String updateAvailableInstalledVersionAge(int commitCount, int dayCount);
-
-  /// Title for the update check failure dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Update check failed'**
-  String get updateCheckFailedTitle;
-
-  /// Body text for the update check failure dialog when there is no response. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to check for updates because the server did not respond. Do you have an internet connection?'**
-  String get updateCheckFailedNoAnswerBody;
-
-  /// Body text for the update check failure dialog when a non-200 HTTP status is returned. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Update server returned HTTP {statusCode}.'**
-  String updateCheckFailedHttpStatusBody(Object statusCode);
-
-  /// Body text for the update check failure dialog when parsing fails. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to read the latest version from the update server.'**
-  String get updateCheckFailedParsingBody;
-
-  /// Body text for the update check failure dialog when parsing fails and a tag is available. Used on: lib/src/auxiliary/mp_dialog_aux.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Unable to parse the latest version tag: {tagName}'**
-  String updateCheckFailedParsingWithTagBody(Object tagName);
-
-  /// The initial page presentation of the application. Used on: _MapiahHomeState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Mapiah: an user-friendly graphical interface for cave mapping with Therion'**
-  String get initialPagePresentation;
-
   /// The title for the file edit window. Used on: _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'File edit'**
   String get fileEditWindowWindowTitle;
-
-  /// The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
-  String languageName(String language);
 
   /// The message displayed when the help content fails to load. Used on: MPHelpDialogWidget.build
   ///
@@ -241,6 +170,18 @@ abstract class AppLocalizations {
   /// **'Help (F1)'**
   String get helpDialogTooltip;
 
+  /// The initial page presentation of the application. Used on: _MapiahHomeState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah: an user-friendly graphical interface for cave mapping with Therion'**
+  String get initialPagePresentation;
+
+  /// The name of the language based on the language code. Translate only 'System' and your language name. Leave the other values as they are. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
+  String languageName(String language);
+
   /// The label for the about Mapiah dialog. Used on: _MapiahHomeState.build
   ///
   /// In en, this message translates to:
@@ -253,17 +194,29 @@ abstract class AppLocalizations {
   /// **'Main page'**
   String get mapiahHomeHelpDialogTitle;
 
+  /// The tooltip for the new file button on the main page. Used on: _MapiahHomeState.build
+  ///
+  /// In en, this message translates to:
+  /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
+  String get mapiahHomeNewFileButtonTooltip;
+
   /// The label for the open file button. Used on: _MapiahHomeState.build
   ///
   /// In en, this message translates to:
   /// **'Open file (Ctrl+O or Ctrl+Shift+O)'**
   String get mapiahHomeOpenFile;
 
-  /// The tooltip for the new file button on the main page. Used on: _MapiahHomeState.build
+  /// The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts
   ///
   /// In en, this message translates to:
-  /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
-  String get mapiahHomeNewFileButtonTooltip;
+  /// **'Keyboard Shortcuts'**
+  String get mapiahKeyboardShortcutsTitle;
+
+  /// The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard Shortcuts (Ctrl+K)'**
+  String get mapiahKeyboardShortcutsTooltip;
 
   /// The tooltip for the button that opens a THConfig file and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
   ///
@@ -271,29 +224,23 @@ abstract class AppLocalizations {
   /// **'Open THConfig file and run Therion (Ctrl+T)'**
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
 
-  /// The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Run Therion (T)'**
-  String get mapiahRunTherionButtonTooltip;
-
   /// Label for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Rerun Therion'**
   String get mapiahRunTherionButtonLabel;
 
+  /// The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Run Therion (T)'**
+  String get mapiahRunTherionButtonTooltip;
+
   /// Tooltip for the Close button in the Run Therion dialog, indicating the Escape keyboard shortcut. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Close (Esc)'**
   String get mapiahTherionRunCloseButtonTooltip;
-
-  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, _MapiahHomeState.build, _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'No Therion found'**
-  String get mpNoTherionFound;
 
   /// Title for the Therion output dialog. Used on: _MPRunTherionDialogWidgetState.build
   ///
@@ -307,35 +254,17 @@ abstract class AppLocalizations {
   /// **'Elapsed time: {elapsed} s'**
   String mapiahTherionRunElapsedLabel(Object elapsed);
 
-  /// Label for Therion run status. Used on: _MPRunTherionDialogWidgetState.build
+  /// Line that shows the Therion run end time after the therion.log section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:
-  /// **'Status:'**
-  String get mapiahTherionRunStatusLabel;
+  /// **'End: {time}'**
+  String mapiahTherionRunEndTime(Object time);
 
-  /// Status while Therion is running. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
+  /// Message shown when no acceptable therion.log can be appended. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'running'**
-  String get mapiahTherionRunStatusRunning;
-
-  /// Status shown when Therion finishes. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'ok'**
-  String get mapiahTherionRunStatusOk;
-
-  /// Status shown when Therion output has warnings. Used on: _MPRunTherionDialogWidgetState.build, lib/src/widgets/mp_run_therion_dialog_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'warning'**
-  String get mapiahTherionRunStatusWarning;
-
-  /// Status shown when Therion output has errors. Used on: _MPRunTherionDialogWidgetState.build, lib/src/widgets/mp_run_therion_dialog_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'error'**
-  String get mapiahTherionRunStatusError;
+  /// **'No Therion output found'**
+  String get mapiahTherionRunNoTherionOutputFound;
 
   /// Label for Therion output area. Used on: _MPRunTherionDialogWidgetState.build
   ///
@@ -343,17 +272,41 @@ abstract class AppLocalizations {
   /// **'Output:'**
   String get mapiahTherionRunOutputLabel;
 
-  /// Header line marking the beginning of Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
+  /// Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:
-  /// **'Begin Therion output'**
-  String get mapiahTherionRunTherionOutputBegin;
+  /// **'Start: {time}'**
+  String mapiahTherionRunStartTime(Object time);
 
-  /// Header line marking the end of Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
+  /// Status shown when Therion output has errors. Used on: _MPRunTherionDialogWidgetState.build, lib/src/widgets/mp_run_therion_dialog_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'End Therion output'**
-  String get mapiahTherionRunTherionOutputEnd;
+  /// **'error'**
+  String get mapiahTherionRunStatusError;
+
+  /// Label for Therion run status. Used on: _MPRunTherionDialogWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Status:'**
+  String get mapiahTherionRunStatusLabel;
+
+  /// Status shown when Therion finishes. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'ok'**
+  String get mapiahTherionRunStatusOk;
+
+  /// Status while Therion is running. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'running'**
+  String get mapiahTherionRunStatusRunning;
+
+  /// Status shown when Therion output has warnings. Used on: _MPRunTherionDialogWidgetState.build, lib/src/widgets/mp_run_therion_dialog_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'warning'**
+  String get mapiahTherionRunStatusWarning;
 
   /// Header line marking the beginning of therion.log section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
@@ -367,23 +320,17 @@ abstract class AppLocalizations {
   /// **'End therion.log'**
   String get mapiahTherionRunTherionLogEnd;
 
-  /// Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
+  /// Header line marking the beginning of Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:
-  /// **'Start: {time}'**
-  String mapiahTherionRunStartTime(Object time);
+  /// **'Begin Therion output'**
+  String get mapiahTherionRunTherionOutputBegin;
 
-  /// Line that shows the Therion run end time after the therion.log section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
+  /// Header line marking the end of Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:
-  /// **'End: {time}'**
-  String mapiahTherionRunEndTime(Object time);
-
-  /// Message shown when no acceptable therion.log can be appended. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'No Therion output found'**
-  String get mapiahTherionRunNoTherionOutputFound;
+  /// **'End Therion output'**
+  String get mapiahTherionRunTherionOutputEnd;
 
   /// Title for THConfig file picker dialog. Used on: MPDialogAux.pickTHConfigFile
   ///
@@ -391,23 +338,11 @@ abstract class AppLocalizations {
   /// **'Select THConfig file'**
   String get mapiahTherionSelectTHConfigDialogTitle;
 
-  /// Error message shown when Therion command execution fails. Used on: lib/src/auxiliary/mp_flatpak_therion_runner.dart, lib/src/auxiliary/mp_linux_therion_runner.dart, lib/src/auxiliary/mp_macos_therion_runner.dart, lib/src/auxiliary/mp_windows_therion_runner.dart
+  /// The error message for invalid altitude value. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Error executing command: {commandLine}'**
-  String mpTherionCannotExecuteCommand(Object commandLine);
-
-  /// The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts
-  ///
-  /// In en, this message translates to:
-  /// **'Keyboard Shortcuts'**
-  String get mapiahKeyboardShortcutsTitle;
-
-  /// The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Keyboard Shortcuts (Ctrl+K)'**
-  String get mapiahKeyboardShortcutsTooltip;
+  /// **'Invalid altitude'**
+  String get mpAltitudeInvalidValueErrorMessage;
 
   /// The description for the degree angle unit. Used on: MPTextToUser._initializeAngleUnitTypeAsString
   ///
@@ -433,23 +368,17 @@ abstract class AppLocalizations {
   /// **'minute'**
   String get mpAngleUnitMinute;
 
-  /// The error message for invalid altitude value. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart
+  /// Label for the button to add a new area border THID reference. Used on: lib/src/widgets/mp_options_edit_overlay_window_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Invalid altitude'**
-  String get mpAltitudeInvalidValueErrorMessage;
+  /// **'Add area border'**
+  String get mpAreaBordersAddButton;
 
   /// Title for the area borders block listing area border THIDs. Used on: lib/src/widgets/mp_options_edit_overlay_window_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Area borders'**
   String get mpAreaBordersPanelTitle;
-
-  /// Label for the button to add a new area border THID reference. Used on: lib/src/widgets/mp_options_edit_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Add area border'**
-  String get mpAreaBordersAddButton;
 
   /// The error message for an empty attribute name. Used on: lib/src/widgets/options/mp_attr_option_widget.dart
   ///
@@ -493,6 +422,18 @@ abstract class AppLocalizations {
   /// **'Azimuth'**
   String get mpAzimuthAzimuthLabel;
 
+  /// The label for the east azimuth. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'East'**
+  String get mpAzimuthEast;
+
+  /// The abbreviation for the east azimuth. Used on: MPCompassPainter.paint
+  ///
+  /// In en, this message translates to:
+  /// **'E'**
+  String get mpAzimuthEastAbbreviation;
+
   /// The error message for invalid azimuth value. Used on: lib/src/widgets/options/mp_orientation_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -505,29 +446,17 @@ abstract class AppLocalizations {
   /// **'North'**
   String get mpAzimuthNorth;
 
-  /// The label for the south azimuth. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'South'**
-  String get mpAzimuthSouth;
-
-  /// The label for the east azimuth. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'East'**
-  String get mpAzimuthEast;
-
-  /// The label for the west azimuth. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'West'**
-  String get mpAzimuthWest;
-
   /// The abbreviation for the north azimuth. Used on: MPCompassPainter.paint, lib/src/widgets/options/mp_cs_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'N'**
   String get mpAzimuthNorthAbbreviation;
+
+  /// The label for the south azimuth. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'South'**
+  String get mpAzimuthSouth;
 
   /// The abbreviation for the south azimuth. Used on: MPCompassPainter.paint, lib/src/widgets/options/mp_cs_option_widget.dart
   ///
@@ -535,11 +464,11 @@ abstract class AppLocalizations {
   /// **'S'**
   String get mpAzimuthSouthAbbreviation;
 
-  /// The abbreviation for the east azimuth. Used on: MPCompassPainter.paint
+  /// The label for the west azimuth. Used on: none
   ///
   /// In en, this message translates to:
-  /// **'E'**
-  String get mpAzimuthEastAbbreviation;
+  /// **'West'**
+  String get mpAzimuthWest;
 
   /// The abbreviation for the west azimuth. Used on: MPCompassPainter.paint
   ///
@@ -547,23 +476,17 @@ abstract class AppLocalizations {
   /// **'W'**
   String get mpAzimuthWestAbbreviation;
 
-  /// The label for the cancel button. Used on: MPEncodingWidgetState.build, MPProjectionOptionWidgetState.build, MPScrapScaleOptionWidgetState.build, _MPAddFileDialogWidgetState.build, _MPAddScrapDialogWidgetState.build, _MPSettingsPageState.build, lib/src/widgets/options/mp_altitude_option_widget.dart, lib/src/widgets/options/mp_attr_option_widget.dart, lib/src/widgets/options/mp_author_option_widget.dart, lib/src/widgets/options/mp_context_option_widget.dart, lib/src/widgets/options/mp_copyright_option_widget.dart, lib/src/widgets/options/mp_cs_option_widget.dart, lib/src/widgets/options/mp_date_value_option_widget.dart, lib/src/widgets/options/mp_dimensions_option_widget.dart, lib/src/widgets/options/mp_distance_type_option_widget.dart, lib/src/widgets/options/mp_double_value_option_widget.dart, lib/src/widgets/options/mp_id_option_widget.dart, lib/src/widgets/options/mp_orientation_option_widget.dart, lib/src/widgets/options/mp_passage_height_option_widget.dart, lib/src/widgets/options/mp_pl_scale_option_widget.dart, lib/src/widgets/options/mp_point_height_option_widget.dart, lib/src/widgets/options/mp_scrap_option_widget.dart, lib/src/widgets/options/mp_sketch_option_widget.dart, lib/src/widgets/options/mp_station_names_option_widget.dart, lib/src/widgets/options/mp_station_type_option_widget.dart, lib/src/widgets/options/mp_stations_option_widget.dart, lib/src/widgets/options/mp_subtype_option_widget.dart, lib/src/widgets/options/mp_text_type_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get mpButtonCancel;
-
   /// The label for the apply button. Used on: _MPSettingsPageState.build
   ///
   /// In en, this message translates to:
   /// **'Apply'**
   String get mpButtonApply;
 
-  /// The label for the save and close button. Used on: _MPSettingsPageState.build
+  /// The label for the cancel button. Used on: MPEncodingWidgetState.build, MPProjectionOptionWidgetState.build, MPScrapScaleOptionWidgetState.build, _MPAddFileDialogWidgetState.build, _MPAddScrapDialogWidgetState.build, _MPSettingsPageState.build, lib/src/widgets/options/mp_altitude_option_widget.dart, lib/src/widgets/options/mp_attr_option_widget.dart, lib/src/widgets/options/mp_author_option_widget.dart, lib/src/widgets/options/mp_context_option_widget.dart, lib/src/widgets/options/mp_copyright_option_widget.dart, lib/src/widgets/options/mp_cs_option_widget.dart, lib/src/widgets/options/mp_date_value_option_widget.dart, lib/src/widgets/options/mp_dimensions_option_widget.dart, lib/src/widgets/options/mp_distance_type_option_widget.dart, lib/src/widgets/options/mp_double_value_option_widget.dart, lib/src/widgets/options/mp_id_option_widget.dart, lib/src/widgets/options/mp_orientation_option_widget.dart, lib/src/widgets/options/mp_passage_height_option_widget.dart, lib/src/widgets/options/mp_pl_scale_option_widget.dart, lib/src/widgets/options/mp_point_height_option_widget.dart, lib/src/widgets/options/mp_scrap_option_widget.dart, lib/src/widgets/options/mp_sketch_option_widget.dart, lib/src/widgets/options/mp_station_names_option_widget.dart, lib/src/widgets/options/mp_station_type_option_widget.dart, lib/src/widgets/options/mp_stations_option_widget.dart, lib/src/widgets/options/mp_subtype_option_widget.dart, lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Save & Close'**
-  String get mpButtonSaveAndClose;
+  /// **'Cancel'**
+  String get mpButtonCancel;
 
   /// The label for the create button. Used on: _MPAddScrapDialogWidgetState.build
   ///
@@ -577,17 +500,65 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mpButtonOK;
 
-  /// The label for the multiple values choice type. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'multiple values'**
-  String get mpChoiceMultipleValues;
-
   /// The label for the reset all settings button. Used on: _MPSettingsPageState.build
   ///
   /// In en, this message translates to:
   /// **'Reset all settings'**
   String get mpButtonResetAllSettings;
+
+  /// The label for the save and close button. Used on: _MPSettingsPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Close'**
+  String get mpButtonSaveAndClose;
+
+  /// The label for the CS EPSG SGRI option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'{csOption} identifier (1-99999)'**
+  String mpCSEPSGESRILabel(Object csOption);
+
+  /// The label for the CS ETRS option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Optional ETRS identifier (28-37)'**
+  String get mpCSETRSLabel;
+
+  /// The label for the CS for output option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'For output'**
+  String get mpCSForOutputLabel;
+
+  /// The error message for invalid CS value. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid value'**
+  String get mpCSInvalidValueErrorMessage;
+
+  /// The label for the CS OSGB major option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'OSGB major'**
+  String get mpCSOSGBMajorLabel;
+
+  /// The label for the CS OSGB minor option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'OSGB minor'**
+  String get mpCSOSGBMinorLabel;
+
+  /// The label for the CS UTM zone number option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Zone number (1-60)'**
+  String get mpCSUTMZoneNumberLabel;
+
+  /// The label for the multiple values choice type. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'multiple values'**
+  String get mpChoiceMultipleValues;
 
   /// The label for the set choice type. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart, lib/src/widgets/options/mp_author_option_widget.dart, lib/src/widgets/options/mp_context_option_widget.dart, lib/src/widgets/options/mp_copyright_option_widget.dart, lib/src/widgets/options/mp_cs_option_widget.dart, lib/src/widgets/options/mp_date_value_option_widget.dart, lib/src/widgets/options/mp_dimensions_option_widget.dart, lib/src/widgets/options/mp_distance_type_option_widget.dart, lib/src/widgets/options/mp_double_value_option_widget.dart, lib/src/widgets/options/mp_id_option_widget.dart, lib/src/widgets/options/mp_orientation_option_widget.dart, lib/src/widgets/options/mp_sketch_option_widget.dart, lib/src/widgets/options/mp_station_names_option_widget.dart, lib/src/widgets/options/mp_station_type_option_widget.dart, lib/src/widgets/options/mp_stations_option_widget.dart, lib/src/widgets/options/mp_subtype_option_widget.dart, lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
@@ -600,96 +571,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unset'**
   String get mpChoiceUnset;
-
-  /// The abbreviation for seconds unit. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'s'**
-  String get mpSeconds;
-
-  /// The title for the settings page. Used on: _MPSettingsPageState.build, _MapiahHomeState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get mpSettingsPageTitle;
-
-  /// The title for the Settings page help dialog. Used on: _MPSettingsPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Settings Help'**
-  String get mpSettingsPageHelpDialogTitle;
-
-  /// Section title for main settings. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Main'**
-  String get mpSettingsSectionMain;
-
-  /// Section title for TH2 edit settings. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'TH2 edit'**
-  String get mpSettingsSectionTH2Edit;
-
-  /// Label for locale setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get mpSettingsSettingMainLocaleID;
-
-  /// Label for Therion executable path setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Therion executable path'**
-  String get mpSettingsSettingMainTherionExecutablePath;
-
-  /// Label for TH2 line thickness setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Line thickness'**
-  String get mpSettingsSettingTH2EditLineThickness;
-
-  /// Label for the TH2 new line creation method setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'New line creation method'**
-  String get mpSettingsSettingTH2EditNewLineCreationMethod;
-
-  /// Label for the Mapiah quadratic new line creation method. Used on: enum-backed settings UI
-  ///
-  /// In en, this message translates to:
-  /// **'Mapiah quadratic'**
-  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic;
-
-  /// Label for the xTherion cubic smooth new line creation method. Used on: enum-backed settings UI
-  ///
-  /// In en, this message translates to:
-  /// **'xTherion cubic smooth'**
-  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
-
-  /// Label for TH2 point radius setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Point radius'**
-  String get mpSettingsSettingTH2EditPointRadius;
-
-  /// Label for TH2 selection tolerance setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Selection tolerance'**
-  String get mpSettingsSettingTH2EditSelectionTolerance;
-
-  /// Validation message for invalid double values in settings. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid number'**
-  String get mpSettingsInvalidNumber;
-
-  /// Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid integer'**
-  String get mpSettingsInvalidInteger;
 
   /// The description for the add area command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -727,17 +608,17 @@ abstract class AppLocalizations {
   /// **'Add line'**
   String get mpCommandDescriptionAddLine;
 
-  /// The description for the add lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Add lines'**
-  String get mpCommandDescriptionAddLines;
-
   /// The description for the add line segment command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Add line segment'**
   String get mpCommandDescriptionAddLineSegment;
+
+  /// The description for the add lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Add lines'**
+  String get mpCommandDescriptionAddLines;
 
   /// The description for the add point command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -769,17 +650,17 @@ abstract class AppLocalizations {
   /// **'Duplicate elements'**
   String get mpCommandDescriptionDuplicateElements;
 
-  /// The description for the edit areas type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Edit multiple areas type'**
-  String get mpCommandDescriptionEditAreasType;
-
   /// The description for the edit area type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Edit area type'**
   String get mpCommandDescriptionEditAreaType;
+
+  /// The description for the edit areas type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple areas type'**
+  String get mpCommandDescriptionEditAreasType;
 
   /// The description for the edit Bézier curve command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -799,23 +680,17 @@ abstract class AppLocalizations {
   /// **'Edit line segment'**
   String get mpCommandDescriptionEditLineSegment;
 
-  /// The description for the edit line segments type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Edit multiple line segments type'**
-  String get mpCommandDescriptionEditLineSegmentsType;
-
   /// The description for the edit line segment type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Edit line segment type'**
   String get mpCommandDescriptionEditLineSegmentType;
 
-  /// The description for the edit lines type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  /// The description for the edit line segments type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
-  /// **'Edit multiple lines type'**
-  String get mpCommandDescriptionEditLinesType;
+  /// **'Edit multiple line segments type'**
+  String get mpCommandDescriptionEditLineSegmentsType;
 
   /// The description for the edit line type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -823,17 +698,23 @@ abstract class AppLocalizations {
   /// **'Edit line type'**
   String get mpCommandDescriptionEditLineType;
 
-  /// The description for the edit points type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  /// The description for the edit lines type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
-  /// **'Edit multiple points type'**
-  String get mpCommandDescriptionEditPointsType;
+  /// **'Edit multiple lines type'**
+  String get mpCommandDescriptionEditLinesType;
 
   /// The description for the edit point type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Edit point type'**
   String get mpCommandDescriptionEditPointType;
+
+  /// The description for the edit points type command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Edit multiple points type'**
+  String get mpCommandDescriptionEditPointsType;
 
   /// The description for the move area command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -859,17 +740,17 @@ abstract class AppLocalizations {
   /// **'Move line'**
   String get mpCommandDescriptionMoveLine;
 
-  /// The description for the move lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Move lines'**
-  String get mpCommandDescriptionMoveLines;
-
   /// The description for the move line segments command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Move line segments'**
   String get mpCommandDescriptionMoveLineSegments;
+
+  /// The description for the move lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Move lines'**
+  String get mpCommandDescriptionMoveLines;
 
   /// The description for the move point command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -888,12 +769,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Multiple elements edit'**
   String get mpCommandDescriptionMultipleElements;
-
-  /// The description for the reorder images command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Reorder images'**
-  String get mpCommandDescriptionReorderImages;
 
   /// The description for the remove area command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -931,12 +806,6 @@ abstract class AppLocalizations {
   /// **'Remove line'**
   String get mpCommandDescriptionRemoveLine;
 
-  /// The description for the remove lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Remove lines'**
-  String get mpCommandDescriptionRemoveLines;
-
   /// The description for the remove line segment command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
@@ -948,6 +817,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove line segments'**
   String get mpCommandDescriptionRemoveLineSegments;
+
+  /// The description for the remove lines command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Remove lines'**
+  String get mpCommandDescriptionRemoveLines;
 
   /// The description for the remove option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -979,23 +854,29 @@ abstract class AppLocalizations {
   /// **'Remove image'**
   String get mpCommandDescriptionRemoveXTherionImageInsertConfig;
 
+  /// The description for the reorder images command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder images'**
+  String get mpCommandDescriptionReorderImages;
+
   /// The description for the set option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Set option'**
   String get mpCommandDescriptionSetOptionToElement;
 
-  /// The description for the simplify Bézier curve command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Simplify Bézier curve'**
-  String get mpCommandDescriptionSimplifyBezier;
-
   /// The description for the set option to elements command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Set option to multiple elements'**
   String get mpCommandDescriptionSetOptionToElements;
+
+  /// The description for the simplify Bézier curve command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify Bézier curve'**
+  String get mpCommandDescriptionSimplifyBezier;
 
   /// The description for the simplify line command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
@@ -1062,48 +943,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copyright'**
   String get mpCopyrightMessageLabel;
-
-  /// The label for the CS EPSG SGRI option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'{csOption} identifier (1-99999)'**
-  String mpCSEPSGESRILabel(Object csOption);
-
-  /// The label for the CS ETRS option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Optional ETRS identifier (28-37)'**
-  String get mpCSETRSLabel;
-
-  /// The error message for invalid CS value. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid value'**
-  String get mpCSInvalidValueErrorMessage;
-
-  /// The label for the CS for output option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'For output'**
-  String get mpCSForOutputLabel;
-
-  /// The label for the CS OSGB major option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'OSGB major'**
-  String get mpCSOSGBMajorLabel;
-
-  /// The label for the CS OSGB minor option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'OSGB minor'**
-  String get mpCSOSGBMinorLabel;
-
-  /// The label for the CS UTM zone number option. Used on: lib/src/widgets/options/mp_cs_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Zone number (1-60)'**
-  String get mpCSUTMZoneNumberLabel;
 
   /// The hint for the end date field in the date interval dialog. Used on: _MPDateIntervalInputWidgetState.build
   ///
@@ -1177,23 +1016,29 @@ abstract class AppLocalizations {
   /// **'Invalid dimension value'**
   String get mpDimensionsInvalidValueErrorMessage;
 
-  /// The error message for invalid distance value. Used on: lib/src/widgets/options/mp_distance_type_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid numeric distance value'**
-  String get mpDistInvalidValueErrorMessage;
-
   /// The label for the distance type. Used on: lib/src/widgets/options/mp_distance_type_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Distance'**
   String get mpDistDistanceLabel;
 
+  /// The error message for invalid distance value. Used on: lib/src/widgets/options/mp_distance_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid numeric distance value'**
+  String get mpDistInvalidValueErrorMessage;
+
   /// The error message for invalid double value. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Invalid numeric value'**
   String get mpDoubleValueInvalidValueErrorMessage;
+
+  /// The status bar message when editing a line. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'Editing line'**
+  String get mpEditSingleLineStateStatusBarMessage;
 
   /// The label for the encoding type. Used on: MPEncodingWidgetState.build, _MPAddFileDialogWidgetState.build
   ///
@@ -1242,6 +1087,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ID must be unique'**
   String get mpIDNonUniqueValueErrorMessage;
+
+  /// The label for the size type. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get mpLSizeLabel;
 
   /// The description for the centimeter length unit. Used on: MPTextToUser._initializeLengthUnitTypeAsString
   ///
@@ -1303,29 +1154,23 @@ abstract class AppLocalizations {
   /// **'yd'**
   String get mpLengthUnitYardAbbreviation;
 
-  /// The error message for invalid line height value. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid line height'**
-  String get mpLineHeightInvalidValueErrorMessage;
-
   /// The label for the height type. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Height'**
   String get mpLineHeightHeightLabel;
 
+  /// The error message for invalid line height value. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid line height'**
+  String get mpLineHeightInvalidValueErrorMessage;
+
   /// The title for the line segment type. Used on: MPLineSegmentTypeOptionsOverlayWindowWidget.build
   ///
   /// In en, this message translates to:
   /// **'Line segment type'**
   String get mpLineSegmentTypeTypesTitle;
-
-  /// The label for the size type. Used on: lib/src/widgets/options/mp_double_value_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Size'**
-  String get mpLSizeLabel;
 
   /// The label for the mark text type. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
@@ -1391,29 +1236,11 @@ abstract class AppLocalizations {
   /// **'End point'**
   String get mpMultipleEndControlPointsEndPoint;
 
-  /// The label for the tiny named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
+  /// The label for the name station type. Used on: lib/src/widgets/options/mp_station_type_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Tiny'**
-  String get mpNamedScaleTiny;
-
-  /// The label for the small named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Small'**
-  String get mpNamedScaleSmall;
-
-  /// The label for the normal named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Normal'**
-  String get mpNamedScaleNormal;
-
-  /// The label for the large named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Large'**
-  String get mpNamedScaleLarge;
+  /// **'Station'**
+  String get mpNameStationLabel;
 
   /// The label for the huge named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
   ///
@@ -1421,11 +1248,29 @@ abstract class AppLocalizations {
   /// **'Huge'**
   String get mpNamedScaleHuge;
 
-  /// The label for the name station type. Used on: lib/src/widgets/options/mp_station_type_option_widget.dart
+  /// The label for the large named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
   ///
   /// In en, this message translates to:
-  /// **'Station'**
-  String get mpNameStationLabel;
+  /// **'Large'**
+  String get mpNamedScaleLarge;
+
+  /// The label for the normal named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get mpNamedScaleNormal;
+
+  /// The label for the small named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get mpNamedScaleSmall;
+
+  /// The label for the tiny named scale. Used on: MPTextToUser._initializeNamedScaleOptionsAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Tiny'**
+  String get mpNamedScaleTiny;
 
   /// The label for the create new scrap action in the new scrap dialog. Used on: _MPAddFileDialogWidgetState.build, _MPAddScrapDialogWidgetState.build
   ///
@@ -1433,17 +1278,23 @@ abstract class AppLocalizations {
   /// **'Create new scrap'**
   String get mpNewScrapDialogCreateNewScrap;
 
+  /// The hint text for the scrap ID input field in the new scrap dialog. Used on: _MPAddScrapDialogWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the scrap identifier'**
+  String get mpNewScrapDialogCreateScrapIDHint;
+
   /// The label for the scrap ID input field in the new scrap dialog. Used on: _MPAddScrapDialogWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Scrap ID'**
   String get mpNewScrapDialogCreateScrapIDLabel;
 
-  /// The hint text for the scrap ID input field in the new scrap dialog. Used on: _MPAddScrapDialogWidgetState.build
+  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, _MapiahHomeState.build, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
-  /// **'Enter the scrap identifier'**
-  String get mpNewScrapDialogCreateScrapIDHint;
+  /// **'No Therion found'**
+  String get mpNoTherionFound;
 
   /// The label for points, lines, and areas selected status bar messagee. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_non_empty_selection.dart
   ///
@@ -1460,6 +1311,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Line segments types'**
   String get mpOptionsEditLineSegmentTypes;
+
+  /// The title for the options edit dialog. Used on: _MPScrapOptionsEditWidgetState.build, lib/src/widgets/mp_line_segment_options_edit_overlay_window_widget.dart, lib/src/widgets/mp_options_edit_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get mpOptionsEditTitle;
+
+  /// The label for the all type. Used on: _MPSnapTargetsWidgetState._buildLinePointTargetGroup, _MPSnapTargetsWidgetState._buildPointTargetGroup, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get mpPLATypeAll;
+
+  /// The title for the area types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Area types'**
+  String get mpPLATypeAreaTitle;
+
+  /// The label for the current type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get mpPLATypeCurrent;
+
+  /// The label for the dropdown select a type. Used on: _MPPLATypeDropdownWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Select a type'**
+  String get mpPLATypeDropdownSelectATypeLabel;
+
+  /// The label for the last used type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Last used'**
+  String get mpPLATypeLastUsed;
+
+  /// The title for the line types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Line types'**
+  String get mpPLATypeLineTitle;
+
+  /// The label for the most used type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Most used'**
+  String get mpPLATypeMostUsed;
+
+  /// The label for the none type. Used on: _MPSnapTargetsWidgetState._buildLinePointTargetGroup, _MPSnapTargetsWidgetState._buildPointTargetGroup
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get mpPLATypeNone;
+
+  /// The title for the point types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Point types'**
+  String get mpPLATypePointTitle;
+
+  /// The label for the invalid type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid type'**
+  String get mpPLATypeUnknownInvalid;
+
+  /// The label for the unknown type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get mpPLATypeUnknownLabel;
+
+  /// The label for the named scale option. Used on: MPTextToUser._initializePLScaleCommandOptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Named'**
+  String get mpPLScaleCommandOptionNamed;
+
+  /// The label for the numeric scale option. Used on: MPTextToUser._initializePLScaleCommandOptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Numeric'**
+  String get mpPLScaleCommandOptionNumeric;
+
+  /// The label for the numeric scale type. Used on: lib/src/widgets/options/mp_pl_scale_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get mpPLScaleNumericLabel;
 
   /// The label for the ceiling type. Used on: none
   ///
@@ -1479,17 +1420,17 @@ abstract class AppLocalizations {
   /// **'Depth'**
   String get mpPassageHeightDepth;
 
-  /// The warning message for invalid depth. Used on: lib/src/widgets/options/mp_passage_height_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid depth'**
-  String get mpPassageHeightDepthWarning;
-
   /// The label for the depth type. Used on: lib/src/widgets/options/mp_passage_height_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Depth'**
   String get mpPassageHeightDepthLabel;
+
+  /// The warning message for invalid depth. Used on: lib/src/widgets/options/mp_passage_height_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid depth'**
+  String get mpPassageHeightDepthWarning;
 
   /// The label for the distance between floor and ceiling type. Used on: MPTextToUser._initializePassageHeightModesChoiceAsString
   ///
@@ -1545,6 +1486,12 @@ abstract class AppLocalizations {
   /// **'Invalid height'**
   String get mpPassageHeightHeightWarning;
 
+  /// The hint for the name field in the person name dialog. Used on: _MPPersonNameInputWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'\'FirstName Surname\' or \'FirstNames/Surnames\''**
+  String get mpPersonNameHint;
+
   /// The error message for invalid person name format. Used on: _MPPersonNameInputWidgetState.setState
   ///
   /// In en, this message translates to:
@@ -1557,113 +1504,23 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get mpPersonNameLabel;
 
-  /// The hint for the name field in the person name dialog. Used on: _MPPersonNameInputWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'\'FirstName Surname\' or \'FirstNames/Surnames\''**
-  String get mpPersonNameHint;
-
-  /// The label for the all type. Used on: _MPSnapTargetsWidgetState._buildLinePointTargetGroup, _MPSnapTargetsWidgetState._buildPointTargetGroup, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'All'**
-  String get mpPLATypeAll;
-
-  /// The label for the none type. Used on: _MPSnapTargetsWidgetState._buildLinePointTargetGroup, _MPSnapTargetsWidgetState._buildPointTargetGroup
-  ///
-  /// In en, this message translates to:
-  /// **'None'**
-  String get mpPLATypeNone;
-
-  /// The title for the area types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Area types'**
-  String get mpPLATypeAreaTitle;
-
-  /// The label for the current type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Current'**
-  String get mpPLATypeCurrent;
-
-  /// The label for the dropdown select a type. Used on: _MPPLATypeDropdownWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Select a type'**
-  String get mpPLATypeDropdownSelectATypeLabel;
-
-  /// The label for the last used type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Last used'**
-  String get mpPLATypeLastUsed;
-
-  /// The title for the line types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Line types'**
-  String get mpPLATypeLineTitle;
-
-  /// The label for the most used type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Most used'**
-  String get mpPLATypeMostUsed;
-
-  /// The title for the point types. Used on: MPPLATypeWidget.build, lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Point types'**
-  String get mpPLATypePointTitle;
-
-  /// The label for the invalid type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid type'**
-  String get mpPLATypeUnknownInvalid;
-
-  /// The label for the unknown type. Used on: lib/src/widgets/mp_pla_type_options_overlay_window_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Type'**
-  String get mpPLATypeUnknownLabel;
-
-  /// The label for the named scale option. Used on: MPTextToUser._initializePLScaleCommandOptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Named'**
-  String get mpPLScaleCommandOptionNamed;
-
-  /// The label for the numeric scale option. Used on: MPTextToUser._initializePLScaleCommandOptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Numeric'**
-  String get mpPLScaleCommandOptionNumeric;
-
-  /// The label for the numeric scale type. Used on: lib/src/widgets/options/mp_pl_scale_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Size'**
-  String get mpPLScaleNumericLabel;
-
   /// The label for the chimney type. Used on: MPTextToUser._initializePointHeightValueModeAsString
   ///
   /// In en, this message translates to:
   /// **'Chimney'**
   String get mpPointHeightChimney;
 
-  /// The label for the chimney height type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Height'**
-  String get mpPointHeightValueChimneyLabel;
-
   /// The warning message for invalid length. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Invalid length'**
   String get mpPointHeightLengthWarning;
+
+  /// The label for the pit type. Used on: MPTextToUser._initializePointHeightValueModeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get mpPointHeightPit;
 
   /// The label for the presumed minus type. Used on: MPTextToUser._initializePointHeightValueModeAsString
   ///
@@ -1677,29 +1534,17 @@ abstract class AppLocalizations {
   /// **'Plus presumed (+?)'**
   String get mpPointHeightPresumedPlus;
 
-  /// The label for the pit type. Used on: MPTextToUser._initializePointHeightValueModeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pit'**
-  String get mpPointHeightPit;
-
-  /// The label for the pit depth type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Depth'**
-  String get mpPointHeightValuePitLabel;
-
   /// The label for the step type. Used on: MPTextToUser._initializePointHeightValueModeAsString
   ///
   /// In en, this message translates to:
   /// **'Step'**
   String get mpPointHeightStep;
 
-  /// The label for the step height type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
+  /// The label for the chimney height type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Height'**
-  String get mpPointHeightValueStepLabel;
+  String get mpPointHeightValueChimneyLabel;
 
   /// The label for the height observation type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
   ///
@@ -1707,11 +1552,23 @@ abstract class AppLocalizations {
   /// **'Chimeny height (treated as positive)'**
   String get mpPointHeightValueChimneyObservation;
 
+  /// The label for the pit depth type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Depth'**
+  String get mpPointHeightValuePitLabel;
+
   /// The label for the depth observation type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Pit depth (treated as negative)'**
   String get mpPointHeightValuePitObservation;
+
+  /// The label for the step height type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get mpPointHeightValueStepLabel;
 
   /// The label for the step observation type. Used on: lib/src/widgets/options/mp_point_height_option_widget.dart
   ///
@@ -1761,11 +1618,29 @@ abstract class AppLocalizations {
   /// **'Plan'**
   String get mpProjectionModePlan;
 
-  /// The title for the options edit dialog. Used on: _MPScrapOptionsEditWidgetState.build, lib/src/widgets/mp_line_segment_options_edit_overlay_window_widget.dart, lib/src/widgets/mp_options_edit_overlay_window_widget.dart
+  /// The label for the free text scrap type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Options'**
-  String get mpOptionsEditTitle;
+  /// **'Free text'**
+  String get mpScrapFreeText;
+
+  /// The label for the from file scrap type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'From file'**
+  String get mpScrapFromFile;
+
+  /// The label for the scrap ID type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap ID'**
+  String get mpScrapLabel;
+
+  /// The label for the real units per drawing point type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
+  ///
+  /// In en, this message translates to:
+  /// **'Real'**
+  String get mpScrapScale11Label;
 
   /// The label for the real to 1 point type. Used on: MPScrapScaleOptionWidgetState.build
   ///
@@ -1779,24 +1654,6 @@ abstract class AppLocalizations {
   /// **'Real units per drawing point'**
   String get mpScrapScale1ValueObservation;
 
-  /// The label for the real units per drawing point type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
-  ///
-  /// In en, this message translates to:
-  /// **'Real'**
-  String get mpScrapScale11Label;
-
-  /// The label for the real to points type. Used on: MPScrapScaleOptionWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Real to points'**
-  String get mpScrapScale2ValuesLabel;
-
-  /// The label for the real units per drawing points observation type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
-  ///
-  /// In en, this message translates to:
-  /// **'real units per drawing points'**
-  String get mpScrapScale2ValueObservation;
-
   /// The label for the drawing units per drawing point type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
   ///
   /// In en, this message translates to:
@@ -1809,17 +1666,17 @@ abstract class AppLocalizations {
   /// **'Real'**
   String get mpScrapScale22Label;
 
-  /// The label for the real to drawing coordinates type. Used on: MPScrapScaleOptionWidgetState.build
+  /// The label for the real units per drawing points observation type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
   ///
   /// In en, this message translates to:
-  /// **'Real to drawing coordinates'**
-  String get mpScrapScale8ValuesLabel;
+  /// **'real units per drawing points'**
+  String get mpScrapScale2ValueObservation;
 
-  /// The label for the real coordinates per drawing coordinates observation type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
+  /// The label for the real to points type. Used on: MPScrapScaleOptionWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'Real coordinates per drawing coordinates'**
-  String get mpScrapScale8ValueObservation;
+  /// **'Real to points'**
+  String get mpScrapScale2ValuesLabel;
 
   /// The label for the drawing X1 type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
   ///
@@ -1869,17 +1726,17 @@ abstract class AppLocalizations {
   /// **'Real Y2'**
   String get mpScrapScale88Label;
 
-  /// The label for the free text scrap type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
+  /// The label for the real coordinates per drawing coordinates observation type. Used on: MPScrapScaleOptionWidgetState._buildFormForOption
   ///
   /// In en, this message translates to:
-  /// **'Free text'**
-  String get mpScrapFreeText;
+  /// **'Real coordinates per drawing coordinates'**
+  String get mpScrapScale8ValueObservation;
 
-  /// The label for the from file scrap type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
+  /// The label for the real to drawing coordinates type. Used on: MPScrapScaleOptionWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'From file'**
-  String get mpScrapFromFile;
+  /// **'Real to drawing coordinates'**
+  String get mpScrapScale8ValuesLabel;
 
   /// The error message for invalid scale reference. Used on: MPScrapScaleOptionWidgetState._updateIsValid
   ///
@@ -1887,17 +1744,101 @@ abstract class AppLocalizations {
   /// **'Invalid scale ref'**
   String get mpScrapScaleInvalidValueError;
 
-  /// The label for the scrap ID type. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Scrap ID'**
-  String get mpScrapLabel;
-
   /// The warning message for the scrap option. Used on: lib/src/widgets/options/mp_scrap_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Scrap not set'**
   String get mpScrapWarning;
+
+  /// The abbreviation for seconds unit. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'s'**
+  String get mpSeconds;
+
+  /// Label for the Mapiah quadratic new line creation method. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah quadratic'**
+  String get mpSettingsEnumNewLineCreationMethodMapiahQuadratic;
+
+  /// Label for the xTherion cubic smooth new line creation method. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'xTherion cubic smooth'**
+  String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
+
+  /// Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid integer'**
+  String get mpSettingsInvalidInteger;
+
+  /// Validation message for invalid double values in settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number'**
+  String get mpSettingsInvalidNumber;
+
+  /// The title for the Settings page help dialog. Used on: _MPSettingsPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Settings Help'**
+  String get mpSettingsPageHelpDialogTitle;
+
+  /// The title for the settings page. Used on: _MPSettingsPageState.build, _MapiahHomeState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get mpSettingsPageTitle;
+
+  /// Section title for main settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Main'**
+  String get mpSettingsSectionMain;
+
+  /// Section title for TH2 edit settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'TH2 edit'**
+  String get mpSettingsSectionTH2Edit;
+
+  /// Label for locale setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get mpSettingsSettingMainLocaleID;
+
+  /// Label for Therion executable path setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Therion executable path'**
+  String get mpSettingsSettingMainTherionExecutablePath;
+
+  /// Label for TH2 line thickness setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Line thickness'**
+  String get mpSettingsSettingTH2EditLineThickness;
+
+  /// Label for the TH2 new line creation method setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'New line creation method'**
+  String get mpSettingsSettingTH2EditNewLineCreationMethod;
+
+  /// Label for TH2 point radius setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Point radius'**
+  String get mpSettingsSettingTH2EditPointRadius;
+
+  /// Label for TH2 selection tolerance setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Selection tolerance'**
+  String get mpSettingsSettingTH2EditSelectionTolerance;
 
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
@@ -1941,12 +1882,6 @@ abstract class AppLocalizations {
   /// **'Point snap'**
   String get mpSnapPointTargetsLabel;
 
-  /// The label for the none snap target option. Used on: MPTextToUser._initializeSnapLinePointTargetAsString, MPTextToUser._initializeSnapPointTargetAsString
-  ///
-  /// In en, this message translates to:
-  /// **'None'**
-  String get mpSnapTargetNone;
-
   /// The label for the line point snap target option. Used on: MPTextToUser._initializeSnapLinePointTargetAsString
   ///
   /// In en, this message translates to:
@@ -1958,6 +1893,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Line points by line type'**
   String get mpSnapTargetLinePointByType;
+
+  /// The label for the none snap target option. Used on: MPTextToUser._initializeSnapLinePointTargetAsString, MPTextToUser._initializeSnapPointTargetAsString
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get mpSnapTargetNone;
 
   /// The label for the point snap target option. Used on: MPTextToUser._initializeSnapPointTargetAsString
   ///
@@ -2007,12 +1948,6 @@ abstract class AppLocalizations {
   /// **'XVI file snap'**
   String get mpSnapXVIFileTargetsLabel;
 
-  /// The status bar message when editing a line. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'Editing line'**
-  String get mpEditSingleLineStateStatusBarMessage;
-
   /// The label for the station names prefix type. Used on: lib/src/widgets/options/mp_station_names_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2037,6 +1972,12 @@ abstract class AppLocalizations {
   /// **'Suffix empty'**
   String get mpStationNamesSuffixMessageEmpty;
 
+  /// The warning message for the station type option. Used on: lib/src/widgets/options/mp_station_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Station not set'**
+  String get mpStationTypeOptionWarning;
+
   /// The label for the add field button. Used on: lib/src/widgets/options/mp_stations_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2054,12 +1995,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Station'**
   String get mpStationsNameLabel;
-
-  /// The warning message for the station type option. Used on: lib/src/widgets/options/mp_station_type_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Station not set'**
-  String get mpStationTypeOptionWarning;
 
   /// The status bar message when editing a line point showing its orientation and length. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_edit_single_line.dart
   ///
@@ -2145,222 +2080,6 @@ abstract class AppLocalizations {
   /// **'Point {pointType}'**
   String mpStatusBarMessageSingleSelectedPointType(Object pointType);
 
-  /// The error message for empty subtype. Used on: lib/src/widgets/options/mp_subtype_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Subtype empty'**
-  String get thSubtypeEmpty;
-
-  /// The label for the subtype type. Used on: lib/src/widgets/options/mp_subtype_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Subtype'**
-  String get thSubtypeLabel;
-
-  /// The label for the winter subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Winter'**
-  String get thSubtypePointAirDraughtWinter;
-
-  /// The label for the summer subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Summer'**
-  String get thSubtypePointAirDraughtSummer;
-
-  /// The label for the undefined subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Undefined'**
-  String get thSubtypePointAirDraughtUndefined;
-
-  /// The label for the temporary subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Temporary'**
-  String get thSubtypePointStationTemporary;
-
-  /// The label for the painted subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Painted'**
-  String get thSubtypePointStationPainted;
-
-  /// The label for the natural subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Natural'**
-  String get thSubtypePointStationNatural;
-
-  /// The label for the fixed subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Fixed'**
-  String get thSubtypePointStationFixed;
-
-  /// The label for the permanent water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Permanent'**
-  String get thSubtypePointWaterFlowPermanent;
-
-  /// The label for the intermittent water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Intermittent'**
-  String get thSubtypePointWaterFlowIntermittent;
-
-  /// The label for the paleo water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Paleo'**
-  String get thSubtypePointWaterFlowPaleo;
-
-  /// The label for the invisible border subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Invisible'**
-  String get thSubtypeLineBorderInvisible;
-
-  /// The label for the presumed border subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Presumed'**
-  String get thSubtypeLineBorderPresumed;
-
-  /// The label for the temporary border subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Temporary'**
-  String get thSubtypeLineBorderTemporary;
-
-  /// The label for the visible border subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Visible'**
-  String get thSubtypeLineBorderVisible;
-
-  /// The label for the cave survey subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Cave'**
-  String get thSubtypeLineSurveyCave;
-
-  /// The label for the surface survey subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Surface'**
-  String get thSubtypeLineSurveySurface;
-
-  /// The label for the bedrock wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Bedrock'**
-  String get thSubtypeLineWallBedrock;
-
-  /// The label for the blocks wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Blocks'**
-  String get thSubtypeLineWallBlocks;
-
-  /// The label for the clay wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Clay'**
-  String get thSubtypeLineWallClay;
-
-  /// The label for the debris wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Debris'**
-  String get thSubtypeLineWallDebris;
-
-  /// The label for the flowstone wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Flowstone'**
-  String get thSubtypeLineWallFlowstone;
-
-  /// The label for the ice wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Ice'**
-  String get thSubtypeLineWallIce;
-
-  /// The label for the invisible wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Invisible'**
-  String get thSubtypeLineWallInvisible;
-
-  /// The label for the moonmilk wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Moonmilk'**
-  String get thSubtypeLineWallMoonmilk;
-
-  /// The label for the overlying wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Overlying'**
-  String get thSubtypeLineWallOverlying;
-
-  /// The label for the pebbles wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pebbles'**
-  String get thSubtypeLineWallPebbles;
-
-  /// The label for the pit wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pit'**
-  String get thSubtypeLineWallPit;
-
-  /// The label for the presumed wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Presumed'**
-  String get thSubtypeLineWallPresumed;
-
-  /// The label for the sand wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Sand'**
-  String get thSubtypeLineWallSand;
-
-  /// The label for the underlying wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Underlying'**
-  String get thSubtypeLineWallUnderlying;
-
-  /// The label for the unsurveyed wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Unsurveyed'**
-  String get thSubtypeLineWallUnsurveyed;
-
-  /// The label for the permanent water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Permanent'**
-  String get thSubtypeLineWaterFlowPermanent;
-
-  /// The label for the conjectural water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Conjectural'**
-  String get thSubtypeLineWaterFlowConjectural;
-
-  /// The label for the intermittent water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Intermittent'**
-  String get thSubtypeLineWaterFlowIntermittent;
-
   /// The label for the text type. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2372,6 +2091,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Text not set'**
   String get mpTextTypeOptionWarning;
+
+  /// Error message shown when Therion command execution fails. Used on: lib/src/auxiliary/mp_flatpak_therion_runner.dart, lib/src/auxiliary/mp_linux_therion_runner.dart, lib/src/auxiliary/mp_macos_therion_runner.dart, lib/src/auxiliary/mp_windows_therion_runner.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Error executing command: {commandLine}'**
+  String mpTherionCannotExecuteCommand(Object commandLine);
 
   /// The label for the title type. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
@@ -2390,12 +2115,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Parsing errors'**
   String get parsingErrors;
-
-  /// The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'TH2 File Edit Help'**
-  String get th2FileEditPageHelpDialogTitle;
 
   /// The label for the add area button. Used on: lib/src/pages/th2_file_edit_page.dart
   ///
@@ -2457,17 +2176,17 @@ abstract class AppLocalizations {
   /// **'Add scrap (K)'**
   String get th2FileEditPageAddScrapButton;
 
-  /// The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton
-  ///
-  /// In en, this message translates to:
-  /// **'Change active scrap (Alt+S)'**
-  String get th2FileEditPageChangeActiveScrapTool;
-
   /// The title for the change active scrap dialog. Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Change active scrap'**
   String get th2FileEditPageChangeActiveScrapTitle;
+
+  /// The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton
+  ///
+  /// In en, this message translates to:
+  /// **'Change active scrap (Alt+S)'**
+  String get th2FileEditPageChangeActiveScrapTool;
 
   /// The title for the change image dialog. Used on: _MPAvailableImagesWidgetState.build
   ///
@@ -2480,66 +2199,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change image (Alt+I)'**
   String get th2FileEditPageChangeImageTool;
-
-  /// The status bar message for the empty selection. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_empty_selection.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Empty selection'**
-  String get th2FileEditPageEmptySelectionStatusBarMessage;
-
-  /// The label for the load image button. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'Load image'**
-  String get th2FileEditPageLoadImageButton;
-
-  /// The label for the loading file message. Used on: _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Loading file {filename} ...'**
-  String th2FileEditPageLoadingFile(Object filename);
-
-  /// The label for the node edit tool button. Used on: _TH2FileEditPageState._editElementButtons
-  ///
-  /// In en, this message translates to:
-  /// **'Node edit (N)'**
-  String get th2FileEditPageNodeEditTool;
-
-  /// The label for the no undo available message. Used on: _TH2FileEditPageState._stateActionButtons
-  ///
-  /// In en, this message translates to:
-  /// **'No undo available'**
-  String get th2FileEditPageNoUndoAvailable;
-
-  /// The label for the no redo available message. Used on: _TH2FileEditPageState._stateActionButtons
-  ///
-  /// In en, this message translates to:
-  /// **'No redo available'**
-  String get th2FileEditPageNoRedoAvailable;
-
-  /// The label for the option tool button. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'Option edit (O)'**
-  String get th2FileEditPageOptionTool;
-
-  /// The label for the pan tool button. Used on: none
-  ///
-  /// In en, this message translates to:
-  /// **'Pan'**
-  String get th2FileEditPagePanTool;
-
-  /// The label for the remove tool button. Used on: _TH2FileEditPageState._stateActionButtons
-  ///
-  /// In en, this message translates to:
-  /// **'Remove (Del)'**
-  String get th2FileEditPageRemoveButton;
-
-  /// The label for the remove image button. Used on: _MPAvailableImagesWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Remove image'**
-  String get th2FileEditPageRemoveImageButton;
 
   /// The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
@@ -2559,17 +2218,83 @@ abstract class AppLocalizations {
   /// **'Duplicate scrap'**
   String get th2FileEditPageDuplicateScrapButton;
 
+  /// The status bar message for the empty selection. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_empty_selection.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Empty selection'**
+  String get th2FileEditPageEmptySelectionStatusBarMessage;
+
+  /// The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'TH2 File Edit Help'**
+  String get th2FileEditPageHelpDialogTitle;
+
+  /// The label for the load image button. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'Load image'**
+  String get th2FileEditPageLoadImageButton;
+
+  /// The label for the loading file message. Used on: _TH2FileEditPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Loading file {filename} ...'**
+  String th2FileEditPageLoadingFile(Object filename);
+
+  /// The label for the no redo available message. Used on: _TH2FileEditPageState._stateActionButtons
+  ///
+  /// In en, this message translates to:
+  /// **'No redo available'**
+  String get th2FileEditPageNoRedoAvailable;
+
+  /// The label for the no undo available message. Used on: _TH2FileEditPageState._stateActionButtons
+  ///
+  /// In en, this message translates to:
+  /// **'No undo available'**
+  String get th2FileEditPageNoUndoAvailable;
+
+  /// The label for the node edit tool button. Used on: _TH2FileEditPageState._editElementButtons
+  ///
+  /// In en, this message translates to:
+  /// **'Node edit (N)'**
+  String get th2FileEditPageNodeEditTool;
+
+  /// The label for the option tool button. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'Option edit (O)'**
+  String get th2FileEditPageOptionTool;
+
+  /// The label for the pan tool button. Used on: none
+  ///
+  /// In en, this message translates to:
+  /// **'Pan'**
+  String get th2FileEditPagePanTool;
+
+  /// The label for the redo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus
+  ///
+  /// In en, this message translates to:
+  /// **'Redo \'{redoDescription}\' (Ctrl+Y)'**
+  String th2FileEditPageRedo(Object redoDescription);
+
+  /// The label for the remove tool button. Used on: _TH2FileEditPageState._stateActionButtons
+  ///
+  /// In en, this message translates to:
+  /// **'Remove (Del)'**
+  String get th2FileEditPageRemoveButton;
+
+  /// The label for the remove image button. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Remove image'**
+  String get th2FileEditPageRemoveImageButton;
+
   /// The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Remove scrap'**
   String get th2FileEditPageRemoveScrapButton;
-
-  /// Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Toggle scrap visibility'**
-  String get th2FileEditPageToggleScrapVisibilityTooltip;
 
   /// The label for the save button. Used on: _TH2FileEditPageState.build
   ///
@@ -2589,18 +2314,6 @@ abstract class AppLocalizations {
   /// **'Save TH2 file as'**
   String get th2FileEditPageSaveAsDialogTitle;
 
-  /// The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons
-  ///
-  /// In en, this message translates to:
-  /// **'Snap'**
-  String get th2FileEditPageSnapButton;
-
-  /// The label for the redo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus
-  ///
-  /// In en, this message translates to:
-  /// **'Redo \'{redoDescription}\' (Ctrl+Y)'**
-  String th2FileEditPageRedo(Object redoDescription);
-
   /// The label for the select tool button. Used on: _TH2FileEditPageState._editElementButtons
   ///
   /// In en, this message translates to:
@@ -2612,6 +2325,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a zoom area'**
   String get th2FileEditPageSelectionWindowZoomStatusBarMessage;
+
+  /// The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons
+  ///
+  /// In en, this message translates to:
+  /// **'Snap'**
+  String get th2FileEditPageSnapButton;
+
+  /// Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle scrap visibility'**
+  String get th2FileEditPageToggleScrapVisibilityTooltip;
 
   /// The label for the undo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus
   ///
@@ -2679,6 +2404,12 @@ abstract class AppLocalizations {
   /// **'Select a TH2 file'**
   String get th2FilePickSelectTH2File;
 
+  /// Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close file'**
+  String get th2FileTabsPageCloseTabTooltip;
+
   /// The label for the bedrock area type. Used on: MPTextToUser._initializeAreaTypeAsString
   ///
   /// In en, this message translates to:
@@ -2739,6 +2470,12 @@ abstract class AppLocalizations {
   /// **'Pillar'**
   String get thAreaPillar;
 
+  /// The label for the pillar with curtains area type. Used on: MPTextToUser._initializeAreaTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar with Curtains'**
+  String get thAreaPillarWithCurtains;
+
   /// The label for the pillars area type. Used on: MPTextToUser._initializeAreaTypeAsString
   ///
   /// In en, this message translates to:
@@ -2750,12 +2487,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pillars with Curtains'**
   String get thAreaPillarsWithCurtains;
-
-  /// The label for the pillar with curtains area type. Used on: MPTextToUser._initializeAreaTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pillar with Curtains'**
-  String get thAreaPillarWithCurtains;
 
   /// The label for the sand area type. Used on: MPTextToUser._initializeAreaTypeAsString
   ///
@@ -2865,6 +2596,12 @@ abstract class AppLocalizations {
   /// **'Border'**
   String get thCommandOptionBorder;
 
+  /// The label for the Coordinate System command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_cs_option_widget.dart, lib/src/widgets/options/mp_pl_scale_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinate System'**
+  String get thCommandOptionCS;
+
   /// The label for the clip command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
   ///
   /// In en, this message translates to:
@@ -2888,12 +2625,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copyright'**
   String get thCommandOptionCopyright;
-
-  /// The label for the Coordinate System command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_cs_option_widget.dart, lib/src/widgets/options/mp_pl_scale_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Coordinate System'**
-  String get thCommandOptionCS;
 
   /// The label for the date value command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_date_value_option_widget.dart
   ///
@@ -2949,6 +2680,12 @@ abstract class AppLocalizations {
   /// **'ID'**
   String get thCommandOptionId;
 
+  /// The label for the L size command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_double_value_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'L-Size'**
+  String get thCommandOptionLSize;
+
   /// The label for the length unit command option type. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart, lib/src/widgets/options/mp_dimensions_option_widget.dart, lib/src/widgets/options/mp_distance_type_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2985,12 +2722,6 @@ abstract class AppLocalizations {
   /// **'Gradient'**
   String get thCommandOptionLinePointGradient;
 
-  /// The label for the L size command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_double_value_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'L-Size'**
-  String get thCommandOptionLSize;
-
   /// The label for the mark command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -3003,17 +2734,23 @@ abstract class AppLocalizations {
   /// **'Station'**
   String get thCommandOptionName;
 
+  /// The label for the orientation command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_orientation_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation'**
+  String get thCommandOptionOrientation;
+
   /// The label for the outline command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Outline'**
   String get thCommandOptionOutline;
 
-  /// The label for the orientation command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString, lib/src/widgets/options/mp_orientation_option_widget.dart
+  /// The label for the point/line/line segment scale command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
   ///
   /// In en, this message translates to:
-  /// **'Orientation'**
-  String get thCommandOptionOrientation;
+  /// **'Scale'**
+  String get thCommandOptionPLScale;
 
   /// The label for the passage height value command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
   ///
@@ -3032,12 +2769,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Height'**
   String get thCommandOptionPointHeightValue;
-
-  /// The label for the point/line/line segment scale command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Scale'**
-  String get thCommandOptionPLScale;
 
   /// The label for the projection command option type. Used on: MPTextToUser._initializeCommandOptionTypeAsString
   ///
@@ -3201,17 +2932,17 @@ abstract class AppLocalizations {
   /// **'Line segment'**
   String get thElementLineSegment;
 
-  /// The label for the multiline comment content element type. Used on: MPTextToUser._initializeElementTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Multiline comment content'**
-  String get thElementMultilineCommentContent;
-
   /// The label for the multiline comment element type. Used on: MPTextToUser._initializeElementTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Multiline comment'**
   String get thElementMultilineComment;
+
+  /// The label for the multiline comment content element type. Used on: MPTextToUser._initializeElementTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Multiline comment content'**
+  String get thElementMultilineCommentContent;
 
   /// The label for the point element type. Used on: MPTextToUser._initializeElementTypeAsString, lib/src/widgets/inputs/mp_pla_type_input_widget.dart, lib/src/widgets/mp_multiple_elements_clicked_widget.dart
   ///
@@ -3375,17 +3106,17 @@ abstract class AppLocalizations {
   /// **'Pit'**
   String get thLinePit;
 
-  /// The label for the pitch line type. Used on: MPTextToUser._initializeLineTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pitch'**
-  String get thLinePitch;
-
   /// The label for the pit chimney line type. Used on: MPTextToUser._initializeLineTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Pit Chimney'**
   String get thLinePitChimney;
+
+  /// The label for the pitch line type. Used on: MPTextToUser._initializeLineTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pitch'**
+  String get thLinePitch;
 
   /// The label for the rimstone dam line type. Used on: MPTextToUser._initializeLineTypeAsString
   ///
@@ -3549,30 +3280,6 @@ abstract class AppLocalizations {
   /// **'Top Right'**
   String get thMultipleChoiceAlignTopRight;
 
-  /// The label for the off on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString, MPTextToUser._initializeMultipleChoiceOnOffChoiceAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get thMultipleChoiceOnOffOff;
-
-  /// The label for the on on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString, MPTextToUser._initializeMultipleChoiceOnOffChoiceAsString
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get thMultipleChoiceOnOffOn;
-
-  /// The label for the auto auto/on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get thMultipleChoiceOnOffAutoAuto;
-
-  /// The label for the none flip multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceArrowPositionChoiceAsString, MPTextToUser._initializeMultipleChoiceFlipChoiceAsString, MPTextToUser._initializeMultipleChoiceLineGradientChoiceAsString, MPTextToUser._initializeMultipleChoiceLinePointDirectionChoiceAsString, MPTextToUser._initializeMultipleChoiceLinePointGradientChoiceAsString, MPTextToUser._initializeMultipleChoiceOutlineChoiceAsString
-  ///
-  /// In en, this message translates to:
-  /// **'None'**
-  String get thMultipleChoiceFlipNone;
-
   /// The label for the begin arrow position multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceArrowPositionChoiceAsString, MPTextToUser._initializeMultipleChoiceLinePointDirectionChoiceAsString
   ///
   /// In en, this message translates to:
@@ -3591,11 +3298,35 @@ abstract class AppLocalizations {
   /// **'End'**
   String get thMultipleChoiceArrowPositionEnd;
 
+  /// The label for the none flip multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceArrowPositionChoiceAsString, MPTextToUser._initializeMultipleChoiceFlipChoiceAsString, MPTextToUser._initializeMultipleChoiceLineGradientChoiceAsString, MPTextToUser._initializeMultipleChoiceLinePointDirectionChoiceAsString, MPTextToUser._initializeMultipleChoiceLinePointGradientChoiceAsString, MPTextToUser._initializeMultipleChoiceOutlineChoiceAsString
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get thMultipleChoiceFlipNone;
+
   /// The label for the point line point gradient multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceLinePointGradientChoiceAsString
   ///
   /// In en, this message translates to:
   /// **'Point'**
   String get thMultipleChoiceLinePointGradientPoint;
+
+  /// The label for the auto auto/on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get thMultipleChoiceOnOffAutoAuto;
+
+  /// The label for the off on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString, MPTextToUser._initializeMultipleChoiceOnOffChoiceAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get thMultipleChoiceOnOffOff;
+
+  /// The label for the on on/off multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOnOffAutoChoiceAsString, MPTextToUser._initializeMultipleChoiceOnOffChoiceAsString
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get thMultipleChoiceOnOffOn;
 
   /// The label for the in outline multiple choice type. Used on: MPTextToUser._initializeMultipleChoiceOutlineChoiceAsString
   ///
@@ -3843,17 +3574,17 @@ abstract class AppLocalizations {
   /// **'Entrance'**
   String get thPointEntrance;
 
-  /// The label for the extra point type. Used on: MPTextToUser._initializePointTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Extra'**
-  String get thPointExtra;
-
   /// The label for the ex voto point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Ex Voto'**
   String get thPointExVoto;
+
+  /// The label for the extra point type. Used on: MPTextToUser._initializePointTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Extra'**
+  String get thPointExtra;
 
   /// The label for the fixed ladder point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
@@ -4071,17 +3802,17 @@ abstract class AppLocalizations {
   /// **'Pillar'**
   String get thPointPillar;
 
-  /// The label for the pillars with curtains point type. Used on: MPTextToUser._initializePointTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Pillars With Curtains'**
-  String get thPointPillarsWithCurtains;
-
   /// The label for the pillar with curtains point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
   /// In en, this message translates to:
   /// **'Pillar With Curtains'**
   String get thPointPillarWithCurtains;
+
+  /// The label for the pillars with curtains point type. Used on: MPTextToUser._initializePointTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars With Curtains'**
+  String get thPointPillarsWithCurtains;
 
   /// The label for the popcorn point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
@@ -4191,6 +3922,12 @@ abstract class AppLocalizations {
   /// **'Stalactite'**
   String get thPointStalactite;
 
+  /// The label for the stalactite stalagmite point type. Used on: MPTextToUser._initializePointTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Stalactite Stalagmite'**
+  String get thPointStalactiteStalagmite;
+
   /// The label for the stalactites point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
   /// In en, this message translates to:
@@ -4202,12 +3939,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stalactites Stalagmites'**
   String get thPointStalactitesStalagmites;
-
-  /// The label for the stalactite stalagmite point type. Used on: MPTextToUser._initializePointTypeAsString
-  ///
-  /// In en, this message translates to:
-  /// **'Stalactite Stalagmite'**
-  String get thPointStalactiteStalagmite;
 
   /// The label for the stalagmite point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
@@ -4323,11 +4054,280 @@ abstract class AppLocalizations {
   /// **'Projection'**
   String get thProjection;
 
-  /// Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button
+  /// The error message for empty subtype. Used on: lib/src/widgets/options/mp_subtype_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Close file'**
-  String get th2FileTabsPageCloseTabTooltip;
+  /// **'Subtype empty'**
+  String get thSubtypeEmpty;
+
+  /// The label for the subtype type. Used on: lib/src/widgets/options/mp_subtype_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Subtype'**
+  String get thSubtypeLabel;
+
+  /// The label for the invisible border subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Invisible'**
+  String get thSubtypeLineBorderInvisible;
+
+  /// The label for the presumed border subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Presumed'**
+  String get thSubtypeLineBorderPresumed;
+
+  /// The label for the temporary border subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary'**
+  String get thSubtypeLineBorderTemporary;
+
+  /// The label for the visible border subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Visible'**
+  String get thSubtypeLineBorderVisible;
+
+  /// The label for the cave survey subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Cave'**
+  String get thSubtypeLineSurveyCave;
+
+  /// The label for the surface survey subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Surface'**
+  String get thSubtypeLineSurveySurface;
+
+  /// The label for the bedrock wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Bedrock'**
+  String get thSubtypeLineWallBedrock;
+
+  /// The label for the blocks wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get thSubtypeLineWallBlocks;
+
+  /// The label for the clay wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Clay'**
+  String get thSubtypeLineWallClay;
+
+  /// The label for the debris wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Debris'**
+  String get thSubtypeLineWallDebris;
+
+  /// The label for the flowstone wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Flowstone'**
+  String get thSubtypeLineWallFlowstone;
+
+  /// The label for the ice wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Ice'**
+  String get thSubtypeLineWallIce;
+
+  /// The label for the invisible wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Invisible'**
+  String get thSubtypeLineWallInvisible;
+
+  /// The label for the moonmilk wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Moonmilk'**
+  String get thSubtypeLineWallMoonmilk;
+
+  /// The label for the overlying wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Overlying'**
+  String get thSubtypeLineWallOverlying;
+
+  /// The label for the pebbles wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pebbles'**
+  String get thSubtypeLineWallPebbles;
+
+  /// The label for the pit wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pit'**
+  String get thSubtypeLineWallPit;
+
+  /// The label for the presumed wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Presumed'**
+  String get thSubtypeLineWallPresumed;
+
+  /// The label for the sand wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Sand'**
+  String get thSubtypeLineWallSand;
+
+  /// The label for the underlying wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Underlying'**
+  String get thSubtypeLineWallUnderlying;
+
+  /// The label for the unsurveyed wall subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Unsurveyed'**
+  String get thSubtypeLineWallUnsurveyed;
+
+  /// The label for the conjectural water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Conjectural'**
+  String get thSubtypeLineWaterFlowConjectural;
+
+  /// The label for the intermittent water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Intermittent'**
+  String get thSubtypeLineWaterFlowIntermittent;
+
+  /// The label for the permanent water flow line subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get thSubtypeLineWaterFlowPermanent;
+
+  /// The label for the summer subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Summer'**
+  String get thSubtypePointAirDraughtSummer;
+
+  /// The label for the undefined subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Undefined'**
+  String get thSubtypePointAirDraughtUndefined;
+
+  /// The label for the winter subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Winter'**
+  String get thSubtypePointAirDraughtWinter;
+
+  /// The label for the fixed subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get thSubtypePointStationFixed;
+
+  /// The label for the natural subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Natural'**
+  String get thSubtypePointStationNatural;
+
+  /// The label for the painted subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Painted'**
+  String get thSubtypePointStationPainted;
+
+  /// The label for the temporary subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary'**
+  String get thSubtypePointStationTemporary;
+
+  /// The label for the intermittent water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Intermittent'**
+  String get thSubtypePointWaterFlowIntermittent;
+
+  /// The label for the paleo water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Paleo'**
+  String get thSubtypePointWaterFlowPaleo;
+
+  /// The label for the permanent water flow subtype. Used on: MPTextToUser._initializeSubtypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get thSubtypePointWaterFlowPermanent;
+
+  /// Body text for the update available dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version is available.\n\nCurrent: {currentVersion}\nLatest: {latestVersion} ({tagName})\n\nDownload: {releaseUrl}'**
+  String updateAvailableBody(
+    Object currentVersion,
+    Object latestVersion,
+    Object tagName,
+    Object releaseUrl,
+  );
+
+  /// Additional update dialog information showing how old the installed version is relative to the latest stable release, by commit count and days. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Installed version is {commitCount, plural, one {1 commit} other {{commitCount} commits}} and {dayCount, plural, one {1 day} other {{dayCount} days}} behind the latest release.'**
+  String updateAvailableInstalledVersionAge(int commitCount, int dayCount);
+
+  /// Title for the update available dialog. Used on: MPDialogAux._showFlathubUpdateDialog, lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get updateAvailableTitle;
+
+  /// Title for the update available dialog including the number of newer versions. Used on: MPDialogAux._showFlathubUpdateDialog, lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 newer Mapiah version available} other {{count} newer Mapiah versions available}}'**
+  String updateAvailableTitleWithCount(int count);
+
+  /// Body text for the update check failure dialog when a non-200 HTTP status is returned. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Update server returned HTTP {statusCode}.'**
+  String updateCheckFailedHttpStatusBody(Object statusCode);
+
+  /// Body text for the update check failure dialog when there is no response. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to check for updates because the server did not respond. Do you have an internet connection?'**
+  String get updateCheckFailedNoAnswerBody;
+
+  /// Body text for the update check failure dialog when parsing fails. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to read the latest version from the update server.'**
+  String get updateCheckFailedParsingBody;
+
+  /// Body text for the update check failure dialog when parsing fails and a tag is available. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to parse the latest version tag: {tagName}'**
+  String updateCheckFailedParsingWithTagBody(Object tagName);
+
+  /// Title for the update check failure dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Update check failed'**
+  String get updateCheckFailedTitle;
 }
 
 class _AppLocalizationsDelegate
