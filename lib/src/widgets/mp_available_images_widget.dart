@@ -68,6 +68,12 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
             final bool allImagesVisible = images.every(
               (THXTherionImageInsertConfig image) => image.isVisible,
             );
+            final int draggedImageIndex = (_draggedImageMPID == null)
+                ? -1
+                : images.indexWhere(
+                    (THXTherionImageInsertConfig img) =>
+                        img.mpID == _draggedImageMPID,
+                  );
 
             return MPOverlayWindowBlockWidget(
               overlayWindowBlockType: MPOverlayWindowBlockType.main,
@@ -104,14 +110,19 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                         if (images.isNotEmpty)
                           Column(
                             children: [
-                              ...images.map((
-                                THXTherionImageInsertConfig image,
+                              ...images.asMap().entries.map((
+                                MapEntry<int, THXTherionImageInsertConfig>
+                                indexedEntry,
                               ) {
+                                final int entryIndex = indexedEntry.key;
+                                final THXTherionImageInsertConfig image =
+                                    indexedEntry.value;
                                 final bool isVisible = image.isVisible;
                                 final String name = p.basename(image.filename);
                                 final bool isDragTarget =
                                     (_dragTargetImageMPID == image.mpID) &&
-                                    (_draggedImageMPID != image.mpID);
+                                    (_draggedImageMPID != image.mpID) &&
+                                    (entryIndex != draggedImageIndex + 1);
                                 final bool isDragged =
                                     _draggedImageMPID == image.mpID;
 
@@ -173,153 +184,175 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                     ),
                                               ),
                                             ),
-                                            Visibility(
-                                              visible: !isDragged,
-                                              maintainSize: false,
-                                              maintainAnimation: false,
-                                              maintainState: false,
-                                              child: Row(
-                                                children: [
-                                                  Checkbox(
-                                                    value: isVisible,
-                                                    onChanged: (bool? value) {
-                                                      if (value == null) {
-                                                        return;
-                                                      }
-                                                      _imageVisibilityChanged(
-                                                        image.mpID,
-                                                        value,
-                                                      );
-                                                    },
-                                                    checkColor:
-                                                        colorScheme.onSurface,
-                                                    side: BorderSide(
-                                                      color:
-                                                          colorScheme.onSurface,
-                                                      width: 2,
-                                                    ),
-                                                    fillColor:
-                                                        WidgetStateProperty.all(
-                                                          colorScheme
-                                                              .surfaceContainerHighest,
-                                                        ),
-                                                  ),
-                                                  Expanded(
-                                                    child: InkWell(
-                                                      onTap: () =>
+                                            Stack(
+                                              children: [
+                                                Visibility(
+                                                  visible: !isDragged,
+                                                  maintainSize: true,
+                                                  maintainAnimation: true,
+                                                  maintainState: true,
+                                                  child: Row(
+                                                    children: [
+                                                      Checkbox(
+                                                        value: isVisible,
+                                                        onChanged: (bool? value) {
+                                                          if (value == null) {
+                                                            return;
+                                                          }
                                                           _imageVisibilityChanged(
                                                             image.mpID,
-                                                            !isVisible,
-                                                          ),
-                                                      child: Text(name),
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    icon: Icon(
-                                                      Icons
-                                                          .delete_outline_rounded,
-                                                      color: colorScheme
-                                                          .onSecondary,
-                                                    ),
-                                                    tooltip: appLocalizations
-                                                        .th2FileEditPageRemoveImageButton,
-                                                    onPressed: () =>
-                                                        _onPressedRemoveImage(
-                                                          image.mpID,
+                                                            value,
+                                                          );
+                                                        },
+                                                        checkColor: colorScheme
+                                                            .onSurface,
+                                                        side: BorderSide(
+                                                          color: colorScheme
+                                                              .onSurface,
+                                                          width: 2,
                                                         ),
-                                                  ),
-                                                  Draggable<int>(
-                                                    data: image.mpID,
-                                                    dragAnchorStrategy:
-                                                        pointerDragAnchorStrategy,
-                                                    onDragStarted: () {
-                                                      setState(() {
-                                                        _draggedImageMPID =
-                                                            image.mpID;
-                                                      });
-                                                    },
-                                                    onDragEnd: (_) {
-                                                      _clearDragState();
-                                                    },
-                                                    onDraggableCanceled:
-                                                        (_, _) {
+                                                        fillColor:
+                                                            WidgetStateProperty.all(
+                                                              colorScheme
+                                                                  .surfaceContainerHighest,
+                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        child: InkWell(
+                                                          onTap: () =>
+                                                              _imageVisibilityChanged(
+                                                                image.mpID,
+                                                                !isVisible,
+                                                              ),
+                                                          child: Text(name),
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          Icons
+                                                              .delete_outline_rounded,
+                                                          color: colorScheme
+                                                              .onSecondary,
+                                                        ),
+                                                        tooltip: appLocalizations
+                                                            .th2FileEditPageRemoveImageButton,
+                                                        onPressed: () =>
+                                                            _onPressedRemoveImage(
+                                                              image.mpID,
+                                                            ),
+                                                      ),
+                                                      Draggable<int>(
+                                                        data: image.mpID,
+                                                        dragAnchorStrategy:
+                                                            pointerDragAnchorStrategy,
+                                                        onDragStarted: () {
+                                                          setState(() {
+                                                            _draggedImageMPID =
+                                                                image.mpID;
+                                                          });
+                                                        },
+                                                        onDragEnd: (_) {
                                                           _clearDragState();
                                                         },
-                                                    feedback: Material(
-                                                      color: Colors.transparent,
-                                                      child: Opacity(
-                                                        opacity:
-                                                            mpDragFeedbackOpacity,
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                            color: colorScheme
-                                                                .surfaceContainerHighest,
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                  mpDefaultButtonRadius,
+                                                        onDraggableCanceled:
+                                                            (_, _) {
+                                                              _clearDragState();
+                                                            },
+                                                        feedback: Material(
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Opacity(
+                                                            opacity:
+                                                                mpDragFeedbackOpacity,
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                color: colorScheme
+                                                                    .surfaceContainerHighest,
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      mpDefaultButtonRadius,
+                                                                    ),
+                                                              ),
+                                                              child: IntrinsicWidth(
+                                                                child: Row(
+                                                                  children: [
+                                                                    Checkbox(
+                                                                      value:
+                                                                          isVisible,
+                                                                      onChanged:
+                                                                          null,
+                                                                      checkColor:
+                                                                          colorScheme
+                                                                              .onSurface,
+                                                                      side: BorderSide(
+                                                                        color: colorScheme
+                                                                            .onSurface,
+                                                                        width:
+                                                                            2,
+                                                                      ),
+                                                                      fillColor: WidgetStateProperty.all(
+                                                                        colorScheme
+                                                                            .surfaceContainerHighest,
+                                                                      ),
+                                                                    ),
+                                                                    Text(name),
+                                                                    IconButton(
+                                                                      icon: Icon(
+                                                                        Icons
+                                                                            .delete_outline_rounded,
+                                                                        color: colorScheme
+                                                                            .onSecondary,
+                                                                      ),
+                                                                      onPressed:
+                                                                          null,
+                                                                    ),
+                                                                    Icon(
+                                                                      Icons
+                                                                          .drag_indicator,
+                                                                      color: colorScheme
+                                                                          .onSecondary,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                          ),
-                                                          child: IntrinsicWidth(
-                                                            child: Row(
-                                                              children: [
-                                                                Checkbox(
-                                                                  value:
-                                                                      isVisible,
-                                                                  onChanged:
-                                                                      null,
-                                                                  checkColor:
-                                                                      colorScheme
-                                                                          .onSurface,
-                                                                  side: BorderSide(
-                                                                    color: colorScheme
-                                                                        .onSurface,
-                                                                    width: 2,
-                                                                  ),
-                                                                  fillColor: WidgetStateProperty.all(
-                                                                    colorScheme
-                                                                        .surfaceContainerHighest,
-                                                                  ),
-                                                                ),
-                                                                Text(name),
-                                                                IconButton(
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .delete_outline_rounded,
-                                                                    color: colorScheme
-                                                                        .onSecondary,
-                                                                  ),
-                                                                  onPressed:
-                                                                      null,
-                                                                ),
-                                                                Icon(
-                                                                  Icons
-                                                                      .drag_indicator,
-                                                                  color: colorScheme
-                                                                      .onSecondary,
-                                                                ),
-                                                              ],
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
+                                                        childWhenDragging: Icon(
+                                                          Icons.drag_indicator,
+                                                          color: colorScheme
+                                                              .onSecondary,
+                                                        ),
+                                                        child: MouseRegion(
+                                                          cursor:
+                                                              SystemMouseCursors
+                                                                  .grab,
+                                                          child: Icon(
+                                                            Icons
+                                                                .drag_indicator,
+                                                            color: colorScheme
+                                                                .onSecondary,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                    childWhenDragging: Icon(
-                                                      Icons.drag_indicator,
-                                                      color: colorScheme
-                                                          .onSecondary,
-                                                    ),
-                                                    child: MouseRegion(
-                                                      cursor: SystemMouseCursors
-                                                          .grab,
-                                                      child: Icon(
-                                                        Icons.drag_indicator,
+                                                    ],
+                                                  ),
+                                                ),
+                                                if (isDragged)
+                                                  Positioned.fill(
+                                                    child: DecoratedBox(
+                                                      decoration: BoxDecoration(
                                                         color: colorScheme
-                                                            .onSecondary,
+                                                            .secondary,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              mpDragDropIndicatorHeight /
+                                                                  2,
+                                                            ),
                                                       ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                              ],
                                             ),
                                           ],
                                         );
