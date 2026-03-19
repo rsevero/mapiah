@@ -705,6 +705,11 @@
     "description": "The description for the multiple elements edit command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionReorderImages": "Reorder images",
+  "@mpCommandDescriptionReorderImages": {
+    "description": "The description for the reorder images command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionRemoveArea": "Remove area",
   "@mpCommandDescriptionRemoveArea": {
     "description": "The description for the remove area command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",

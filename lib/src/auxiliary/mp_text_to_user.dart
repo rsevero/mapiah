@@ -446,6 +446,8 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .removeXTherionImageInsertConfig] =
         localizations.mpCommandDescriptionRemoveXTherionImageInsertConfig;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType.reorderImages] =
+        localizations.mpCommandDescriptionReorderImages;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .setOptionToElement] =
         localizations.mpCommandDescriptionSetOptionToElement;

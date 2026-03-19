@@ -124,6 +124,7 @@
   "mpCommandDescriptionMovePoint": "Mover ponto",
   "mpCommandDescriptionMoveStraightLineSegment": "Mover segmento de linha reta",
   "mpCommandDescriptionMultipleElements": "Editar vários elementos",
+  "mpCommandDescriptionReorderImages": "Reordenar imagens",
   "mpCommandDescriptionRemoveArea": "Apagar área",
   "mpCommandDescriptionRemoveAreaBorderTHID": "Apagar borda de área",
   "mpCommandDescriptionRemoveElement": "Apagar elemento",

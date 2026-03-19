@@ -472,6 +472,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionMultipleElements => 'Multiple elements edit';
 
   @override
+  String get mpCommandDescriptionReorderImages => 'Reorder images';
+
+  @override
   String get mpCommandDescriptionRemoveArea => 'Remove area';
 
   @override

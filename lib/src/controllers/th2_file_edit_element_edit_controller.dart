@@ -1696,6 +1696,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
+  void reorderImages({required int oldIndex, required int newIndex}) {
+    final MPReorderImagesCommand reorderImagesCommand =
+        MPCommandFactory.reorderImages(oldIndex: oldIndex, newIndex: newIndex);
+
+    _th2FileEditController.execute(reorderImagesCommand);
+  }
+
+  @action
+  void executeReorderImages({required int oldIndex, required int newIndex}) {
+    _th2File.reorderImageMPIDs(oldIndex: oldIndex, newIndex: newIndex);
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
   @action
   void removeScrap(int scrapMPID) {
     final MPRemoveScrapCommand removeScrapCommand =

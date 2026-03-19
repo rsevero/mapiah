@@ -302,11 +302,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
       return;
     }
 
-    th2FileEditController.th2File.reorderImageMPIDs(
+    th2FileEditController.elementEditController.reorderImages(
       oldIndex: oldIndex,
       newIndex: newIndex,
     );
-    th2FileEditController.triggerImagesRedraw();
   }
 
   void _clearDragState() {

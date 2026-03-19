@@ -476,6 +476,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionMultipleElements => 'Editar vários elementos';
 
   @override
+  String get mpCommandDescriptionReorderImages => 'Reordenar imagens';
+
+  @override
   String get mpCommandDescriptionRemoveArea => 'Apagar área';
 
   @override

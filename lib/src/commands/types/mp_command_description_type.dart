@@ -56,6 +56,7 @@ enum MPCommandDescriptionType {
   removePoint,
   removeScrap,
   removeXTherionImageInsertConfig,
+  reorderImages,
   replaceLineSegments,
   setOptionToElement,
   setOptionToElements,
@@ -100,6 +101,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.pasteElements:
         return MPCommandDescriptionType.removeElements;
+      case MPCommandDescriptionType.reorderImages:
+        return MPCommandDescriptionType.reorderImages;
       case MPCommandDescriptionType.removeArea:
         return MPCommandDescriptionType.addArea;
       case MPCommandDescriptionType.removeElement:

@@ -793,6 +793,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void executeReorderImages({required int oldIndex, required int newIndex}) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.executeReorderImages',
+        );
+    try {
+      return super.executeReorderImages(oldIndex: oldIndex, newIndex: newIndex);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void removeScrap(int scrapMPID) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(name: 'TH2FileEditElementEditControllerBase.removeScrap');

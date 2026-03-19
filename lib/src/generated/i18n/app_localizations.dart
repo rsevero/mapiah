@@ -889,6 +889,12 @@ abstract class AppLocalizations {
   /// **'Multiple elements edit'**
   String get mpCommandDescriptionMultipleElements;
 
+  /// The description for the reorder images command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder images'**
+  String get mpCommandDescriptionReorderImages;
+
   /// The description for the remove area command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

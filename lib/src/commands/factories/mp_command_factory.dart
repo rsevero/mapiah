@@ -1952,6 +1952,19 @@ class MPCommandFactory {
     );
   }
 
+  static MPReorderImagesCommand reorderImages({
+    required int oldIndex,
+    required int newIndex,
+    MPCommandDescriptionType descriptionType =
+        MPReorderImagesCommand.defaultDescriptionType,
+  }) {
+    return MPReorderImagesCommand(
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand setAttrOptionOnElements({
     required THAttrCommandOption toOption,
     required List<THElement> elements,
