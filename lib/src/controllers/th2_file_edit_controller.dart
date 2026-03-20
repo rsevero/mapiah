@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart'
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_hide_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
@@ -47,6 +48,7 @@ class TH2FileEditController = TH2FileEditControllerBase
 
 abstract class TH2FileEditControllerBase with Store {
   late final TH2FileEditAreaLineCreationController areaLineCreationController;
+  late final TH2FileHideElementController hideElementController;
   late final MPUndoRedoController undoRedoController;
   late final MPVisualController visualController;
   late final TH2FileEditCopyPasteController copyPasteController;
@@ -170,12 +172,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   bool _hasMultipleScraps = false;
-
-  @readonly
-  ObservableSet<int> _hiddenScrapMPIDs = ObservableSet<int>();
-
-  @readonly
-  ObservableSet<int> _hiddenElementMPIDs = ObservableSet<int>();
 
   @readonly
   double _lineThicknessOnCanvas = mpLocator.mpSettingsController
@@ -439,6 +435,9 @@ abstract class TH2FileEditControllerBase with Store {
   void _basicInitialization(TH2File file) {
     _th2File = file;
     areaLineCreationController = TH2FileEditAreaLineCreationController(
+      this as TH2FileEditController,
+    );
+    hideElementController = TH2FileHideElementController(
       this as TH2FileEditController,
     );
     copyPasteController = TH2FileEditCopyPasteController(
@@ -812,118 +811,6 @@ abstract class TH2FileEditControllerBase with Store {
 
       setActiveScrap(availableScraps[newIndex].mpID);
     }
-  }
-
-  bool isScrapVisible(int scrapMPID) {
-    return !_hiddenScrapMPIDs.contains(scrapMPID);
-  }
-
-  @computed
-  int get visibleScrapCount {
-    return _th2File.scrapMPIDs
-        .where((mpID) => !_hiddenScrapMPIDs.contains(mpID))
-        .length;
-  }
-
-  @computed
-  bool get allScrapsVisible => _hiddenScrapMPIDs.isEmpty;
-
-  /// If all scraps are visible, hides all except the active one.
-  /// If any scrap is hidden, makes all scraps visible.
-  @action
-  void toggleAllScrapsVisibility() {
-    if (allScrapsVisible) {
-      _hiddenScrapMPIDs.addAll(
-        _th2File.scrapMPIDs.where((mpID) => mpID != _activeScrapID),
-      );
-    } else {
-      _hiddenScrapMPIDs.clear();
-    }
-
-    triggerNonSelectedElementsRedraw();
-  }
-
-  @action
-  void toggleScrapVisibility(int scrapMPID) {
-    if (_hiddenScrapMPIDs.contains(scrapMPID)) {
-      _hiddenScrapMPIDs.remove(scrapMPID);
-    } else {
-      _hiddenScrapMPIDs.add(scrapMPID);
-      setActiveScrapForVisibilityHide(scrapMPID);
-    }
-
-    triggerNonSelectedElementsRedraw();
-  }
-
-  void setActiveScrapForVisibilityHide(int hiddenScrapMPID) {
-    if (_activeScrapID != hiddenScrapMPID) {
-      return;
-    }
-
-    final List<THScrap> visibleScraps = _th2File
-        .getScraps()
-        .where((s) => !_hiddenScrapMPIDs.contains(s.mpID))
-        .toList();
-
-    if (visibleScraps.isEmpty) {
-      setActiveScrap(0);
-    } else {
-      final List<THScrap> allScraps = _th2File.getScraps().toList();
-      final int currentIndex = allScraps.indexWhere(
-        (s) => s.mpID == hiddenScrapMPID,
-      );
-
-      /// Walk backwards from current position to find the nearest visible scrap.
-      THScrap? newActiveScrap;
-
-      for (int i = currentIndex - 1; i >= 0; i--) {
-        if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
-          newActiveScrap = allScraps[i];
-          break;
-        }
-      }
-
-      /// If no visible scrap found before current, try after.
-      if (newActiveScrap == null) {
-        for (int i = currentIndex + 1; i < allScraps.length; i++) {
-          if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
-            newActiveScrap = allScraps[i];
-            break;
-          }
-        }
-      }
-
-      if (newActiveScrap != null) {
-        setActiveScrap(newActiveScrap.mpID);
-      } else {
-        setActiveScrap(0);
-      }
-    }
-  }
-
-  bool isElementVisible(int mpID) {
-    return !_hiddenElementMPIDs.contains(mpID);
-  }
-
-  @computed
-  bool get allElementsVisible => _hiddenElementMPIDs.isEmpty;
-
-  @action
-  void performHideSelectedOrClearHidden() {
-    final Set<int> selectedMPIDs = selectionController
-        .mpSelectedElementsLogical
-        .keys
-        .toSet();
-
-    if (selectedMPIDs.isNotEmpty) {
-      _hiddenElementMPIDs.addAll(selectedMPIDs);
-      selectionController.deselectAllElements();
-    } else {
-      _hiddenElementMPIDs.clear();
-    }
-
-    selectionController.resetSelectableElements();
-    triggerNonSelectedElementsRedraw();
   }
 
   Map<int, String> availableScraps() {

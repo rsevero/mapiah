@@ -19,6 +19,7 @@
   * Added no-op guard to setShowOverlayWindow() to skip MobX notifications when the window state is unchanged.
   * Search and select dialog: consolidated duplicated option row/subsection builder methods into unified helpers parameterized by option list and state map.
   * Search controller: extracted _matchesOptionStates() helper to eliminate duplicated logic between _matchesOptions() and _matchesLineSegmentOptions().
+  * Created TH2FileHideElementController: extracted all hide/show logic for both elements and scraps from TH2FileEditController into a dedicated controller, accessible as hideElementController.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

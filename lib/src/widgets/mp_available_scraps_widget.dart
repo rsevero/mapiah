@@ -86,14 +86,19 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Tooltip(
-                              message: th2FileEditController.allScrapsVisible
+                              message:
+                                  th2FileEditController
+                                      .hideElementController
+                                      .allScrapsVisible
                                   ? appLocalizations
                                         .th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip
                                   : appLocalizations
                                         .th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip,
                               child: IconButton(
                                 icon: Icon(
-                                  th2FileEditController.allScrapsVisible
+                                  th2FileEditController
+                                          .hideElementController
+                                          .allScrapsVisible
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
                                   color: colorScheme.onSecondary,
@@ -124,12 +129,15 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                 final int scrapID = entry.key;
                                 final String scrapName = entry.value;
                                 final bool isVisible = th2FileEditController
+                                    .hideElementController
                                     .isScrapVisible(scrapID);
                                 final bool isActiveScrap =
                                     scrapID == activeScrapID;
                                 final bool isVisibilityCheckboxDisabled =
                                     isActiveScrap &&
-                                    (th2FileEditController.visibleScrapCount <=
+                                    (th2FileEditController
+                                            .hideElementController
+                                            .visibleScrapCount <=
                                         1);
                                 final bool isDragTarget =
                                     (_dragTargetScrapMPID == scrapID) &&
@@ -631,11 +639,11 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   }
 
   void _onPressedToggleAllScrapsVisibility() {
-    th2FileEditController.toggleAllScrapsVisibility();
+    th2FileEditController.hideElementController.toggleAllScrapsVisibility();
   }
 
   void _onToggleScrapVisibility(int scrapID) {
-    th2FileEditController.toggleScrapVisibility(scrapID);
+    th2FileEditController.hideElementController.toggleScrapVisibility(scrapID);
   }
 
   void _onAcceptReorderedScrap({

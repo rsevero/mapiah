@@ -164,7 +164,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
 
     for (final int elementMPID in scrap.childrenMPIDs) {
-      if (!_th2FileEditController.isElementVisible(elementMPID)) {
+      if (!_th2FileEditController.hideElementController.isElementVisible(
+        elementMPID,
+      )) {
         continue;
       }
 

@@ -183,28 +183,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.scrapLengthUnitsPerPointOnScreen,
         name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen',
       )).value;
-  Computed<int>? _$visibleScrapCountComputed;
-
-  @override
-  int get visibleScrapCount => (_$visibleScrapCountComputed ??= Computed<int>(
-    () => super.visibleScrapCount,
-    name: 'TH2FileEditControllerBase.visibleScrapCount',
-  )).value;
-  Computed<bool>? _$allScrapsVisibleComputed;
-
-  @override
-  bool get allScrapsVisible => (_$allScrapsVisibleComputed ??= Computed<bool>(
-    () => super.allScrapsVisible,
-    name: 'TH2FileEditControllerBase.allScrapsVisible',
-  )).value;
-  Computed<bool>? _$allElementsVisibleComputed;
-
-  @override
-  bool get allElementsVisible =>
-      (_$allElementsVisibleComputed ??= Computed<bool>(
-        () => super.allElementsVisible,
-        name: 'TH2FileEditControllerBase.allElementsVisible',
-      )).value;
 
   late final _$_screenSizeAtom = Atom(
     name: 'TH2FileEditControllerBase._screenSize',
@@ -762,46 +740,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _hasMultipleScraps(bool value) {
     _$_hasMultipleScrapsAtom.reportWrite(value, super._hasMultipleScraps, () {
       super._hasMultipleScraps = value;
-    });
-  }
-
-  late final _$_hiddenScrapMPIDsAtom = Atom(
-    name: 'TH2FileEditControllerBase._hiddenScrapMPIDs',
-    context: context,
-  );
-
-  ObservableSet<int> get hiddenScrapMPIDs {
-    _$_hiddenScrapMPIDsAtom.reportRead();
-    return super._hiddenScrapMPIDs;
-  }
-
-  @override
-  ObservableSet<int> get _hiddenScrapMPIDs => hiddenScrapMPIDs;
-
-  @override
-  set _hiddenScrapMPIDs(ObservableSet<int> value) {
-    _$_hiddenScrapMPIDsAtom.reportWrite(value, super._hiddenScrapMPIDs, () {
-      super._hiddenScrapMPIDs = value;
-    });
-  }
-
-  late final _$_hiddenElementMPIDsAtom = Atom(
-    name: 'TH2FileEditControllerBase._hiddenElementMPIDs',
-    context: context,
-  );
-
-  ObservableSet<int> get hiddenElementMPIDs {
-    _$_hiddenElementMPIDsAtom.reportRead();
-    return super._hiddenElementMPIDs;
-  }
-
-  @override
-  ObservableSet<int> get _hiddenElementMPIDs => hiddenElementMPIDs;
-
-  @override
-  set _hiddenElementMPIDs(ObservableSet<int> value) {
-    _$_hiddenElementMPIDsAtom.reportWrite(value, super._hiddenElementMPIDs, () {
-      super._hiddenElementMPIDs = value;
     });
   }
 
@@ -1528,43 +1466,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
-  void toggleAllScrapsVisibility() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditControllerBase.toggleAllScrapsVisibility',
-        );
-    try {
-      return super.toggleAllScrapsVisibility();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void toggleScrapVisibility(int scrapMPID) {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.toggleScrapVisibility');
-    try {
-      return super.toggleScrapVisibility(scrapMPID);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void performHideSelectedOrClearHidden() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditControllerBase.performHideSelectedOrClearHidden',
-        );
-    try {
-      return super.performHideSelectedOrClearHidden();
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void toggleToNextAvailableScrap() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(
@@ -1952,10 +1853,7 @@ scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
-visibleScrapCount: ${visibleScrapCount},
-allScrapsVisible: ${allScrapsVisible},
-allElementsVisible: ${allElementsVisible}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
     ''';
   }
 }

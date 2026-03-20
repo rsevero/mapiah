@@ -110,7 +110,9 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
             continue;
           }
 
-          if (!th2FileEditController.isScrapVisible(scrap.mpID)) {
+          if (!th2FileEditController.hideElementController.isScrapVisible(
+            scrap.mpID,
+          )) {
             continue;
           }
 
