@@ -286,13 +286,13 @@ mixin _$TH2FileEditOverlayWindowController
   }
 
   @override
-  void clearOverlayWindows() {
+  void clearOverlayWindows({Set<MPWindowType> except = const {}}) {
     final _$actionInfo =
         _$TH2FileEditOverlayWindowControllerBaseActionController.startAction(
           name: 'TH2FileEditOverlayWindowControllerBase.clearOverlayWindows',
         );
     try {
-      return super.clearOverlayWindows();
+      return super.clearOverlayWindows(except: except);
     } finally {
       _$TH2FileEditOverlayWindowControllerBaseActionController.endAction(
         _$actionInfo,

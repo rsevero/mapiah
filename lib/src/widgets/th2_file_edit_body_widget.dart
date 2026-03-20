@@ -485,6 +485,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   void onRemovePressed() {
+    widget.th2FileEditController.overlayWindowController.clearOverlayWindows();
     widget.th2FileEditController.stateController.onButtonPressed(
       MPButtonType.remove,
     );
@@ -537,6 +538,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.th2FileEditPageSearchSelectButton,
                 onPressed: () {
+                  widget.th2FileEditController.overlayWindowController
+                      .clearOverlayWindows();
                   MPModalOverlayWidget.show(
                     context: context,
                     childBuilder: (VoidCallback onPressedClose) =>
@@ -560,6 +563,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.th2FileEditPageSnapButton,
                 onPressed: () {
+                  widget.th2FileEditController.overlayWindowController
+                      .clearOverlayWindows(except: {MPWindowType.snapTargets});
                   widget.th2FileEditController.overlayWindowController
                       .toggleOverlayWindow(MPWindowType.snapTargets);
                   widget.th2FileEditController.triggerSnapTargetsWindowRedraw();

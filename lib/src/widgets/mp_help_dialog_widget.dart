@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 
 enum MPHelpPageSource { asset, githubRaw }
@@ -147,7 +148,6 @@ class MPHelpDialogWidget extends StatelessWidget {
                   ],
                 );
               }
-              final ThemeData theme = Theme.of(context);
 
               return SizedBox(
                 width: dialogWidth,
@@ -173,32 +173,12 @@ class MPHelpDialogWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: Divider(height: 1),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceContainerHighest
-                            .withValues(alpha: 0.35),
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(
-                            mpOverlayWindowCornerRadius,
-                          ),
-                          bottomRight: Radius.circular(
-                            mpOverlayWindowCornerRadius,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: onPressedClose,
-                            child: Text(mpLocator.appLocalizations.buttonClose),
-                          ),
+                    MPDialogBottomWidget(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: onPressedClose,
+                          child: Text(mpLocator.appLocalizations.buttonClose),
                         ),
                       ),
                     ),

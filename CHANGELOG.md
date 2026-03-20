@@ -12,6 +12,12 @@
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
   * Added public getAllSupportedPointOptions/LineOptions/AreaOptions getters to MPCommandOptionAux.
   * Removed the legacy TH2FileEditPage entry point, standardized widget tests on TH2FileTabsPage with a shared test helper, and made MPGeneralController.reset clear tab state for isolated tabbed-page tests.
+  * Extracted MPDialogBottomWidget: shared widget for the dialog button area (divider + tinted background + rounded bottom corners), used by both the help dialog and the search and select dialog.
+  * Removed duplicate TH2FileEditOverlayWindowController.close() method; unified callers to use clearOverlayWindows().
+  * clearOverlayWindows() now accepts an optional except parameter to preserve specific window types.
+  * Added no-op guard to setShowOverlayWindow() to skip MobX notifications when the window state is unchanged.
+  * Search and select dialog: consolidated duplicated option row/subsection builder methods into unified helpers parameterized by option list and state map.
+  * Search controller: extracted _matchesOptionStates() helper to eliminate duplicated logic between _matchesOptions() and _matchesLineSegmentOptions().
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

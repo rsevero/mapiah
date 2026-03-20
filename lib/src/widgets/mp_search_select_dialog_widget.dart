@@ -9,6 +9,7 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
+import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -203,11 +204,16 @@ class _MPSearchSelectDialogWidgetState
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final int matchingCount = _searchController.matchingCount;
+    final Size screenSize = MediaQuery.sizeOf(context);
+    final double maxDialogHeight =
+        screenSize.height -
+        (mpOverlayWindowOutsidePadding * 2) -
+        (mpOverlayWindowPadding * 2);
 
     return SizedBox(
       width: 720,
+      height: maxDialogHeight,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
@@ -233,60 +239,72 @@ class _MPSearchSelectDialogWidgetState
 
           const SizedBox(height: mpButtonSpace),
 
-          _buildSection(
-            title: _appLocalizations.th2FileEditPageSearchSelectPoints,
-            section: _criteria.points,
-            plaCategory: 'point',
-          ),
-          _buildSection(
-            title: _appLocalizations.th2FileEditPageSearchSelectLines,
-            section: _criteria.lines,
-            plaCategory: 'line',
-          ),
-          _buildSection(
-            title: _appLocalizations.th2FileEditPageSearchSelectAreas,
-            section: _criteria.areas,
-            plaCategory: 'area',
+          // Sections — scrollable
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildSection(
+                    title: _appLocalizations.th2FileEditPageSearchSelectPoints,
+                    section: _criteria.points,
+                    plaCategory: 'point',
+                  ),
+                  _buildSection(
+                    title: _appLocalizations.th2FileEditPageSearchSelectLines,
+                    section: _criteria.lines,
+                    plaCategory: 'line',
+                  ),
+                  _buildSection(
+                    title: _appLocalizations.th2FileEditPageSearchSelectAreas,
+                    section: _criteria.areas,
+                    plaCategory: 'area',
+                  ),
+                ],
+              ),
+            ),
           ),
 
-          const SizedBox(height: mpButtonSpace),
-
-          // Action buttons
-          Wrap(
-            spacing: mpButtonSpace,
-            runSpacing: mpButtonSpace,
-            alignment: WrapAlignment.end,
-            children: [
-              TextButton(
-                onPressed: _onReset,
-                child: Text(_appLocalizations.th2FileEditPageSearchSelectReset),
-              ),
-              TextButton(
-                onPressed: _onCancel,
-                child: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectCancel,
+          // Action buttons — always visible
+          MPDialogBottomWidget(
+            child: Wrap(
+              spacing: mpButtonSpace,
+              runSpacing: mpButtonSpace,
+              alignment: WrapAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _onReset,
+                  child: Text(
+                    _appLocalizations.th2FileEditPageSearchSelectReset,
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: matchingCount > 0 ? _onRemoveFromSelection : null,
-                child: Text(
-                  _appLocalizations
-                      .th2FileEditPageSearchSelectRemoveFromSelection,
+                TextButton(
+                  onPressed: _onCancel,
+                  child: Text(
+                    _appLocalizations.th2FileEditPageSearchSelectCancel,
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: matchingCount > 0 ? _onAddToSelection : null,
-                child: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectAddToSelection,
+                ElevatedButton(
+                  onPressed: matchingCount > 0 ? _onRemoveFromSelection : null,
+                  child: Text(
+                    _appLocalizations
+                        .th2FileEditPageSearchSelectRemoveFromSelection,
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: matchingCount > 0 ? _onSetSelection : null,
-                child: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectSetSelection,
+                ElevatedButton(
+                  onPressed: matchingCount > 0 ? _onAddToSelection : null,
+                  child: Text(
+                    _appLocalizations.th2FileEditPageSearchSelectAddToSelection,
+                  ),
                 ),
-              ),
-            ],
+                ElevatedButton(
+                  onPressed: matchingCount > 0 ? _onSetSelection : null,
+                  child: Text(
+                    _appLocalizations.th2FileEditPageSearchSelectSetSelection,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -408,7 +426,11 @@ class _MPSearchSelectDialogWidgetState
                   },
           ),
           if (section.byOption && !section.selectAll)
-            _buildOptionSubsection(section, plaCategory),
+            _buildOptionSubsection(section, switch (plaCategory) {
+              'point' => _sortedPointOptions,
+              'line' => _sortedLineOptions,
+              _ => _sortedAreaOptions,
+            }, section.optionStates),
 
           // By line segment option checkbox (lines only)
           if (plaCategory == 'line')
@@ -430,7 +452,11 @@ class _MPSearchSelectDialogWidgetState
           if (plaCategory == 'line' &&
               section.byLineSegmentOption &&
               !section.selectAll)
-            _buildLineSegmentOptionSubsection(section),
+            _buildOptionSubsection(
+              section,
+              _sortedLineSegmentOptions,
+              section.lineSegmentOptionStates,
+            ),
         ],
       ),
     );
@@ -671,92 +697,18 @@ class _MPSearchSelectDialogWidgetState
     );
   }
 
-  Widget _buildLineSegmentOptionSubsection(
-    MPSearchSelectSectionCriteria section,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final THCommandOptionType optionType
-              in _sortedLineSegmentOptions)
-            _buildLineSegmentOptionRow(section, optionType),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLineSegmentOptionRow(
-    MPSearchSelectSectionCriteria section,
-    THCommandOptionType optionType,
-  ) {
-    final MPOptionSearchState currentState =
-        section.lineSegmentOptionStates[optionType] ??
-        MPOptionSearchState.undefined;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 160,
-            child: Text(MPTextToUser.getCommandOptionType(optionType)),
-          ),
-          SegmentedButton<MPOptionSearchState>(
-            segments: [
-              ButtonSegment<MPOptionSearchState>(
-                value: MPOptionSearchState.undefined,
-                label: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectOptionUndefined,
-                ),
-              ),
-              ButtonSegment<MPOptionSearchState>(
-                value: MPOptionSearchState.set,
-                label: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectOptionSet,
-                ),
-              ),
-              ButtonSegment<MPOptionSearchState>(
-                value: MPOptionSearchState.unset,
-                label: Text(
-                  _appLocalizations.th2FileEditPageSearchSelectOptionUnset,
-                ),
-              ),
-            ],
-            selected: {currentState},
-            onSelectionChanged: (Set<MPOptionSearchState> newSelection) {
-              section.lineSegmentOptionStates[optionType] = newSelection.first;
-              _onCriteriaChanged();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildOptionSubsection(
     MPSearchSelectSectionCriteria section,
-    String plaCategory,
+    List<THCommandOptionType> sortedOptions,
+    Map<THCommandOptionType, MPOptionSearchState> stateMap,
   ) {
-    final List<THCommandOptionType> sortedOptions;
-
-    switch (plaCategory) {
-      case 'point':
-        sortedOptions = _sortedPointOptions;
-      case 'line':
-        sortedOptions = _sortedLineOptions;
-      default:
-        sortedOptions = _sortedAreaOptions;
-    }
-
     return Padding(
       padding: const EdgeInsets.only(left: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (final THCommandOptionType optionType in sortedOptions)
-            _buildOptionRow(section, optionType),
+            _buildOptionRow(section, optionType, stateMap),
         ],
       ),
     );
@@ -765,9 +717,10 @@ class _MPSearchSelectDialogWidgetState
   Widget _buildOptionRow(
     MPSearchSelectSectionCriteria section,
     THCommandOptionType optionType,
+    Map<THCommandOptionType, MPOptionSearchState> stateMap,
   ) {
     final MPOptionSearchState currentState =
-        section.optionStates[optionType] ?? MPOptionSearchState.undefined;
+        stateMap[optionType] ?? MPOptionSearchState.undefined;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -800,7 +753,7 @@ class _MPSearchSelectDialogWidgetState
             ],
             selected: {currentState},
             onSelectionChanged: (Set<MPOptionSearchState> newSelection) {
-              section.optionStates[optionType] = newSelection.first;
+              stateMap[optionType] = newSelection.first;
               _onCriteriaChanged();
             },
           ),

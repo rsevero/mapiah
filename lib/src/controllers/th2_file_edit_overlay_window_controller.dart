@@ -84,12 +84,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
         secondLevelOptionOpenedOverlayWindow;
   }
 
-  void close() {
-    for (MPWindowType type in MPWindowType.values) {
-      setShowOverlayWindow(type, false);
-    }
-  }
-
   void toggleOverlayWindow(MPWindowType type) {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
@@ -247,6 +241,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     Offset? outerAnchorPosition,
     MPWidgetPositionType? innerAnchorType,
   }) {
+    if (_isOverlayWindowShown[type] == show && outerAnchorPosition == null) {
+      return;
+    }
+
     _isOverlayWindowShown[type] = show;
 
     if (show) {
@@ -304,9 +302,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }
 
   @action
-  void clearOverlayWindows() {
-    for (final type in MPWindowType.values) {
-      setShowOverlayWindow(type, false);
+  void clearOverlayWindows({Set<MPWindowType> except = const {}}) {
+    for (final MPWindowType type in MPWindowType.values) {
+      if (!except.contains(type)) {
+        setShowOverlayWindow(type, false);
+      }
     }
   }
 

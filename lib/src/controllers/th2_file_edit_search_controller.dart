@@ -318,51 +318,17 @@ abstract class TH2FileEditSearchControllerBase with Store {
     return true;
   }
 
-  bool _matchesLineSegmentOptions(
-    THLine line,
-    MPSearchSelectSectionCriteria section,
+  bool _matchesOptionStates(
+    Map<THCommandOptionType, MPOptionSearchState> stateMap,
+    bool Function(THCommandOptionType) hasOption,
   ) {
-    final List<THLineSegment> segments = line.getLineSegments(_th2File);
-
     for (final MapEntry<THCommandOptionType, MPOptionSearchState> entry
-        in section.lineSegmentOptionStates.entries) {
+        in stateMap.entries) {
       if (entry.value == MPOptionSearchState.undefined) {
         continue;
       }
 
-      final bool anySegmentHasOption = segments.any(
-        (THLineSegment segment) => segment.hasOption(entry.key),
-      );
-
-      if (entry.value == MPOptionSearchState.set) {
-        if (!anySegmentHasOption) {
-          return false;
-        }
-      } else if (entry.value == MPOptionSearchState.unset) {
-        if (anySegmentHasOption) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  }
-
-  bool _matchesOptions(
-    THElement element,
-    MPSearchSelectSectionCriteria section,
-  ) {
-    if (element is! THHasOptionsMixin) {
-      return false;
-    }
-
-    for (final MapEntry<THCommandOptionType, MPOptionSearchState> entry
-        in section.optionStates.entries) {
-      if (entry.value == MPOptionSearchState.undefined) {
-        continue;
-      }
-
-      final bool elementHasOption = element.hasOption(entry.key);
+      final bool elementHasOption = hasOption(entry.key);
 
       if (entry.value == MPOptionSearchState.set) {
         if (!elementHasOption) {
@@ -376,6 +342,31 @@ abstract class TH2FileEditSearchControllerBase with Store {
     }
 
     return true;
+  }
+
+  bool _matchesLineSegmentOptions(
+    THLine line,
+    MPSearchSelectSectionCriteria section,
+  ) {
+    final List<THLineSegment> segments = line.getLineSegments(_th2File);
+
+    return _matchesOptionStates(
+      section.lineSegmentOptionStates,
+      (THCommandOptionType optionType) => segments.any(
+        (THLineSegment segment) => segment.hasOption(optionType),
+      ),
+    );
+  }
+
+  bool _matchesOptions(
+    THElement element,
+    MPSearchSelectSectionCriteria section,
+  ) {
+    if (element is! THHasOptionsMixin) {
+      return false;
+    }
+
+    return _matchesOptionStates(section.optionStates, element.hasOption);
   }
 
   Set<String> getUnknownPointTypesInScrap() {
