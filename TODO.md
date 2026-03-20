@@ -194,7 +194,7 @@
 [ ] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
 [ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
-[ ] - Allow the user to choose if the grid of a XVI file should be visible or not.
+[X] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
 [ ] - Show current position during drag in status bar.

@@ -74,11 +74,13 @@ class MPXVIImageWidget extends StatelessWidget {
     final Offset imageOffset =
         imageGridOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
-    setXVIGridPainters(
-      xviFile: xviFile,
-      imageOffset: imageGridOffset,
-      painters: painters,
-    );
+    if (image.isGridVisible) {
+      setXVIGridPainters(
+        xviFile: xviFile,
+        imageOffset: imageGridOffset,
+        painters: painters,
+      );
+    }
     setXVIShotsPainters(
       xviFile: xviFile,
       imageGridOffset: imageOffset,

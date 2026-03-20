@@ -118,6 +118,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 final THXTherionImageInsertConfig image =
                                     indexedEntry.value;
                                 final bool isVisible = image.isVisible;
+                                final bool isGridVisible = image.isGridVisible;
                                 final String name = p.basename(image.filename);
                                 final bool isDragTarget =
                                     (_dragTargetImageMPID == image.mpID) &&
@@ -217,6 +218,38 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                   .surfaceContainerHighest,
                                                             ),
                                                       ),
+                                                      if (image.isXVI)
+                                                        Tooltip(
+                                                          message: appLocalizations
+                                                              .th2FileEditPageImageGridVisibilityTooltip,
+                                                          child: Checkbox(
+                                                            value: isGridVisible,
+                                                            onChanged: (
+                                                              bool? value,
+                                                            ) {
+                                                              if (value ==
+                                                                  null) {
+                                                                return;
+                                                              }
+                                                              _imageGridVisibilityChanged(
+                                                                image.mpID,
+                                                                value,
+                                                              );
+                                                            },
+                                                            checkColor:
+                                                                colorScheme
+                                                                    .onSurface,
+                                                            side: BorderSide(
+                                                              color: colorScheme
+                                                                  .onSurface,
+                                                              width: 2,
+                                                            ),
+                                                            fillColor: WidgetStateProperty.all(
+                                                              colorScheme
+                                                                  .surfaceContainerHighest,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       Expanded(
                                                         child: InkWell(
                                                           onTap: () =>
@@ -295,6 +328,27 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                             .surfaceContainerHighest,
                                                                       ),
                                                                     ),
+                                                                    if (image
+                                                                        .isXVI)
+                                                                      Checkbox(
+                                                                        value:
+                                                                            isGridVisible,
+                                                                        onChanged:
+                                                                            null,
+                                                                        checkColor:
+                                                                            colorScheme
+                                                                                .onSurface,
+                                                                        side: BorderSide(
+                                                                          color:
+                                                                              colorScheme.onSurface,
+                                                                          width:
+                                                                              2,
+                                                                        ),
+                                                                        fillColor: WidgetStateProperty.all(
+                                                                          colorScheme
+                                                                              .surfaceContainerHighest,
+                                                                        ),
+                                                                      ),
                                                                     Text(name),
                                                                     IconButton(
                                                                       icon: Icon(
@@ -444,6 +498,13 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     th2FileEditController.selectionController.setImageVisibility(
       imageMPID,
       newVisibility,
+    );
+  }
+
+  void _imageGridVisibilityChanged(int imageMPID, bool newGridVisibility) {
+    th2FileEditController.selectionController.setImageGridVisibility(
+      imageMPID,
+      newGridVisibility,
     );
   }
 

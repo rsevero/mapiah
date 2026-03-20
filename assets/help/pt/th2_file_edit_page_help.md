@@ -20,6 +20,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
 - [Opções do elemento](#opções-do-elemento)
 - [Imagens](#imagens)
   - [Visibilidade da imagem](#visibilidade-da-imagem)
+  - [Visibilidade da grade](#visibilidade-da-grade)
   - [Reordenação de imagens](#reordenação-de-imagens)
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
@@ -69,12 +70,16 @@ Um botão _alternar todas_ aparece acima da lista quando há imagens presentes. 
 
 Cada linha de imagem contém:
 * Uma caixa de seleção de visibilidade para mostrar ou ocultar a imagem no canvas
+* Uma caixa de seleção de visibilidade da grade (somente imagens XVI) para mostrar ou ocultar a grade do levantamento independentemente da imagem
 * O nome do arquivo da imagem
 * Um botão de exclusão para remover a imagem
 * Um identificador de arrasto (⣿) para reordenar as imagens
 
 ### Visibilidade da imagem
-Clicar na caixa de seleção alterna se a imagem é exibida no canvas. Imagens ocultas ainda são armazenadas no arquivo.
+Clicar na caixa de seleção de visibilidade alterna se a imagem é exibida no canvas. Imagens ocultas ainda são armazenadas no arquivo.
+
+### Visibilidade da grade
+Para imagens de fundo XVI, uma segunda caixa de seleção controla se a grade do levantamento é exibida. Ocultar a grade mantém as visadas, as estações e as linhas de esboço visíveis, removendo apenas as linhas da grade do canvas. O estado da visibilidade da grade é salvo com a sessão.
 
 ### Reordenação de imagens
 Clique e arraste o identificador de arrasto (⣿) de qualquer linha de imagem para alterar sua posição na lista. A ordem das imagens nesta lista determina a ordem de renderização no canvas: imagens listadas antes são desenhadas abaixo das imagens listadas depois. A reordenação pode ser desfeita com _Ctrl+Z_.
@@ -144,7 +149,7 @@ Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procu
 Caso existam operações no stack de refazer e uma nova operação de edição seja executada, o stack de refazer é migrado para o stack de desfazer, mantendo os “refazer” acessíveis.
 
 ### Canto inferior direito
-* ![Botão imagens](assets/help/images/buttonImages.png “Imagens”)  _Imagens_: abre a janela de imagens (overlay). Mostra todas as imagens inseridas no arquivo atual. Cada linha de imagem possui uma caixa de seleção de visibilidade, um botão de exclusão e um identificador de arrasto para reordenação. Também apresenta um botão “Add Image (I)”. (Alt+I)
+* ![Botão imagens](assets/help/images/buttonImages.png “Imagens”)  _Imagens_: abre a janela de imagens (overlay). Mostra todas as imagens inseridas no arquivo atual. Cada linha de imagem possui uma caixa de seleção de visibilidade, uma caixa de seleção de visibilidade da grade (somente imagens XVI), um botão de exclusão e um identificador de arrasto para reordenação. Também apresenta um botão “Add Image (I)”. (Alt+I)
 * ![Botão scraps](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: abre uma caixa de diálogo para mudar o scrap atual, excluir um scrap existente e adicionar um novo. A caixa de diálogo mostra todos os scraps disponíveis e permite selecionar um deles. A janela de opções do scrap (overlay) é apresentada ao clicar com o botão direito no scrap desejado. (Alt+C)
 * ![Botão selecionar elemento](assets/help/images/buttonSelectElement.png "Selecionar elemento")  _Selecionar elemento_: permite selecionar elementos no arquivo TH2. (C)
 * ![Botão editar linha](assets/help/images/buttonLineEdit.png "Editar linha")  _Editar linha_: permite editar linhas individuais no arquivo TH2. (N)

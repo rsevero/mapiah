@@ -2064,6 +2064,11 @@
     "description": "Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageImageGridVisibilityTooltip": "Toggle grid visibility",
+  "@th2FileEditPageImageGridVisibilityTooltip": {
+    "description": "Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Hide all but active",
   "@th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": {
     "description": "Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build",

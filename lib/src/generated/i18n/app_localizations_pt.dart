@@ -1331,6 +1331,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Mostrar todas as imagens';
 
   @override
+  String get th2FileEditPageImageGridVisibilityTooltip =>
+      'Alternar visibilidade da grade';
+
+  @override
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>
       'Ocultar todos exceto o ativo';
 

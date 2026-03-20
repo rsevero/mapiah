@@ -675,6 +675,21 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void setImageGridVisibility(int imageMPID, bool isGridVisible) {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.setImageGridVisibility',
+        );
+    try {
+      return super.setImageGridVisibility(imageMPID, isGridVisible);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleAllImagesVisibility() {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(

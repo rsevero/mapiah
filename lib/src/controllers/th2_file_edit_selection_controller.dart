@@ -1843,6 +1843,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
+  @action
+  void setImageGridVisibility(int imageMPID, bool isGridVisible) {
+    _th2FileEditController.th2File.imageByMPID(imageMPID).isGridVisible =
+        isGridVisible;
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
   /// If all images are visible, hides all of them.
   /// If any image is hidden, makes all images visible.
   @action

@@ -413,6 +413,7 @@
   "th2FileEditPageSnapButton": "Ajustar a pontos",
   "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Ocultar todas as imagens",
   "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Mostrar todas as imagens",
+  "th2FileEditPageImageGridVisibilityTooltip": "Alternar visibilidade da grade",
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Ocultar todos exceto o ativo",
   "th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": "Mostrar todos os croquis",
   "th2FileEditPageToggleScrapVisibilityTooltip": "Alternar visibilidade do croqui",

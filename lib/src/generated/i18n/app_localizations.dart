@@ -2482,6 +2482,12 @@ abstract class AppLocalizations {
   /// **'Show all images'**
   String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
 
+  /// Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle grid visibility'**
+  String get th2FileEditPageImageGridVisibilityTooltip;
+
   /// Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:

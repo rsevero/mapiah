@@ -22,6 +22,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   //   on load failure and adding 2 on load success.
   // In Mapiah it is converted to 'isVisible' as a simple bool.
   bool _isVisible;
+  bool _isGridVisible;
   THDoublePart igamma;
   THDoublePart yy;
   String xviRoot;
@@ -48,6 +49,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required this.filename,
     required this.xx,
     required bool isVisible,
+    required bool isGridVisible,
     required this.igamma,
     required this.yy,
     required this.xviRoot,
@@ -58,6 +60,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required this.isXVI,
     required super.originalLineInTH2File,
   }) : _isVisible = isVisible,
+       _isGridVisible = isGridVisible,
        super.forCWJM();
 
   THXTherionImageInsertConfig.fromString({
@@ -75,6 +78,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     super.originalLineInTH2File = '',
   }) : xx = THDoublePart.fromString(valueString: xx),
        _isVisible = (int.tryParse(vsb) ?? 1) > 0,
+       _isGridVisible = true,
        igamma = THDoublePart.fromString(valueString: igamma),
        yy = THDoublePart.fromString(valueString: yy),
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
@@ -85,6 +89,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required this.filename,
     required this.xx,
     bool isVisible = true,
+    bool isGridVisible = true,
     THDoublePart? igamma,
     required this.yy,
     this.xviRoot = '',
@@ -98,6 +103,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
        _isVisible = isVisible,
+       _isGridVisible = isGridVisible,
        super.getMPID();
 
   THXTherionImageInsertConfig.adjustPosition({
@@ -105,6 +111,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     required this.filename,
     required this.xx,
     bool isVisible = true,
+    bool isGridVisible = true,
     THDoublePart? igamma,
     required this.yy,
     this.xviRoot = '',
@@ -119,6 +126,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
            : igamma,
        isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
        _isVisible = isVisible,
+       _isGridVisible = isGridVisible,
        super.getMPID() {
     if (isXVI) {
       final XVIFile? xviFile = getXVIFile(th2FileEditController);
@@ -154,6 +162,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
       'filename': filename,
       'xx': xx.toMap(),
       'isVisible': _isVisible,
+      'isGridVisible': _isGridVisible,
       'igamma': igamma.toMap(),
       'yy': yy.toMap(),
       'xviRoot': xviRoot,
@@ -173,6 +182,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
       filename: map['filename'],
       xx: THDoublePart.fromMap(map['xx']),
       isVisible: map['isVisible'],
+      isGridVisible: map['isGridVisible'] ?? true,
       igamma: THDoublePart.fromMap(map['igamma']),
       yy: THDoublePart.fromMap(map['yy']),
       xviRoot: map['xviRoot'],
@@ -197,6 +207,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     String? filename,
     THDoublePart? xx,
     bool? isVisible,
+    bool? isGridVisible,
     THDoublePart? igamma,
     THDoublePart? yy,
     String? xviRoot,
@@ -216,6 +227,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
       filename: filename ?? this.filename,
       xx: xx ?? this.xx,
       isVisible: isVisible ?? this.isVisible,
+      isGridVisible: isGridVisible ?? this.isGridVisible,
       igamma: igamma ?? this.igamma,
       yy: yy ?? this.yy,
       xviRoot: xviRoot ?? this.xviRoot,
@@ -238,6 +250,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     return filename == other.filename &&
         xx == other.xx &&
         isVisible == other.isVisible &&
+        isGridVisible == other.isGridVisible &&
         igamma == other.igamma &&
         yy == other.yy &&
         xviRoot == other.xviRoot &&
@@ -255,6 +268,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
         filename,
         xx,
         isVisible,
+        isGridVisible,
         igamma,
         yy,
         xviRoot,
@@ -285,6 +299,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
       if (isSuccessful && (xviFile != null)) {
         _xviFile = xviFile;
+        _xviFile!.isGridVisible = _isGridVisible;
       } else {
         _xviFile = null;
 
@@ -421,6 +436,23 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     }
 
     _isVisible = isVisible;
+    clearBoundingBox();
+  }
+
+  bool get isGridVisible => _isGridVisible;
+
+  set isGridVisible(bool isGridVisible) {
+    if (_isGridVisible == isGridVisible) {
+      return;
+    }
+
+    _isGridVisible = isGridVisible;
+
+    if (_xviFile != null) {
+      _xviFile!.isGridVisible = isGridVisible;
+      _xviFile!.clearBoundingBox();
+    }
+
     clearBoundingBox();
   }
 }

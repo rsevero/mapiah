@@ -1319,6 +1319,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Show all images';
 
   @override
+  String get th2FileEditPageImageGridVisibilityTooltip =>
+      'Toggle grid visibility';
+
+  @override
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>
       'Hide all but active';
 

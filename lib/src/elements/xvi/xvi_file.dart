@@ -24,6 +24,11 @@ class XVIFile with MPTH2FileReferenceMixin, MPBoundingBoxMixin {
   List<XVISketchLine> sketchLines;
   XVIGrid grid;
 
+  /// Runtime-only flag driven by the parent THXTherionImageInsertConfig.
+  /// When false, the grid is excluded from bounding box calculations.
+  /// Not serialized — restored by syncing with the image config on load.
+  bool isGridVisible = true;
+
   static const _listEquality = ListEquality();
 
   XVIFile({
@@ -136,8 +141,9 @@ class XVIFile with MPTH2FileReferenceMixin, MPBoundingBoxMixin {
     grid,
   );
 
-  @override
-  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+  Rect calculateBoundingBoxWithoutGrid(
+    TH2FileEditController th2FileEditController,
+  ) {
     final List<Offset> points = [];
 
     for (final XVIStation station in stations) {
@@ -155,7 +161,19 @@ class XVIFile with MPTH2FileReferenceMixin, MPBoundingBoxMixin {
       }
     }
 
-    final Rect contentRect = MPNumericAux.boundingBoxFromOffsets(points);
+    return MPNumericAux.boundingBoxFromOffsets(points);
+  }
+
+  @override
+  Rect calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    final Rect contentRect = calculateBoundingBoxWithoutGrid(
+      th2FileEditController,
+    );
+
+    if (!isGridVisible) {
+      return MPNumericAux.orderedRectFromRect(contentRect);
+    }
+
     final Rect gridRect = grid.calculateBoundingBox(th2FileEditController);
 
     return MPNumericAux.orderedRectFromRect(

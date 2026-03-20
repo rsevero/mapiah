@@ -4,6 +4,7 @@
 
 ## 0.3.3 - not yet released
 * New features:
+  * XVI image grid visibility toggle: each XVI image row in the available images panel now has a second checkbox to show or hide the survey grid independently from the image itself. Hiding the grid removes the grid lines from the canvas while keeping shots, stations, and sketch lines visible. The grid visibility state is persisted in the session.
   * Search and select dialog: find and select elements in the current scrap by type, ID, subtype, and option presence. Supports set/add/remove selection actions with live matching count. Accessible via the search button in the top right corner.
   * Search and select dialog: added "By line segment option" filter in the Lines section, allowing lines to be selected based on whether any of their segments have specific options set or unset.
   * Ctrl+H shortcut: hides selected elements from the canvas (they are also deselected and no longer selectable); with no selection, clears all hidden elements and makes them visible again. Hidden elements are a temporary canvas-only state and are not saved to the file.
