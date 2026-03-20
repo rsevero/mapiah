@@ -73,7 +73,8 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     for (final int drawableChildMPID in drawableChildrenMPIDs) {
       if (isFromActiveScrap &&
           (selectionController.isElementSelectedByMPID(drawableChildMPID) ||
-              drawableChildMPID == newLineMPID)) {
+              drawableChildMPID == newLineMPID ||
+              !th2FileEditController.isElementVisible(drawableChildMPID))) {
         continue;
       }
 

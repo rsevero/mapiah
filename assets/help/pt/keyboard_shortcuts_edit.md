@@ -4,6 +4,7 @@
 | ------------------------------------------------------------- | ------------------------------------ |
 | Adicionar imagem                                              | I                                    |
 | Ajuda                                                         | F1                                   |
+| Esconder elementos selecionados / Mostrar todos os ocultos    | H                                    |
 | Alterar croqui ativo                                          | Alt+S                                |
 | Alterar imagens                                               | Alt+I                                |
 | Atalhos de teclado                                            | Ctrl+K                               |
@@ -13,7 +14,7 @@
 | Criar linha de conexão de mapa de ponto Corte para Base       | Ctrl+Alt+X                           |
 | Criar ponto                                                   | P                                    |
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
-| Copiar elementos selecionados                                | Ctrl+C                               |
+| Copiar elementos selecionados                                 | Ctrl+C                               |
 | Desfazer                                                      | Ctrl+Z                               |
 | Desselecionar tudo                                            | Escape                               |
 | Colar elementos                                               | Ctrl+V                               |
@@ -27,7 +28,7 @@
 | Inverter linha                                                | R                                    |
 | Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Refazer                                                       | Ctrl+Y                               |
-| Recortar elementos selecionados                              | Ctrl+X                               |
+| Recortar elementos selecionados                               | Ctrl+X                               |
 | Rodar o Therion                                               | T                                    |
 | Salvar arquivo                                                | Ctrl+S                               |
 | Salvar arquivo como                                           | Ctrl+Shift+S                         |

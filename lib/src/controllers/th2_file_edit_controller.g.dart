@@ -197,6 +197,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     () => super.allScrapsVisible,
     name: 'TH2FileEditControllerBase.allScrapsVisible',
   )).value;
+  Computed<bool>? _$allElementsVisibleComputed;
+
+  @override
+  bool get allElementsVisible =>
+      (_$allElementsVisibleComputed ??= Computed<bool>(
+        () => super.allElementsVisible,
+        name: 'TH2FileEditControllerBase.allElementsVisible',
+      )).value;
 
   late final _$_screenSizeAtom = Atom(
     name: 'TH2FileEditControllerBase._screenSize',
@@ -774,6 +782,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _hiddenScrapMPIDs(ObservableSet<int> value) {
     _$_hiddenScrapMPIDsAtom.reportWrite(value, super._hiddenScrapMPIDs, () {
       super._hiddenScrapMPIDs = value;
+    });
+  }
+
+  late final _$_hiddenElementMPIDsAtom = Atom(
+    name: 'TH2FileEditControllerBase._hiddenElementMPIDs',
+    context: context,
+  );
+
+  ObservableSet<int> get hiddenElementMPIDs {
+    _$_hiddenElementMPIDsAtom.reportRead();
+    return super._hiddenElementMPIDs;
+  }
+
+  @override
+  ObservableSet<int> get _hiddenElementMPIDs => hiddenElementMPIDs;
+
+  @override
+  set _hiddenElementMPIDs(ObservableSet<int> value) {
+    _$_hiddenElementMPIDsAtom.reportWrite(value, super._hiddenElementMPIDs, () {
+      super._hiddenElementMPIDs = value;
     });
   }
 
@@ -1524,6 +1552,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void performHideSelectedOrClearHidden() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.performHideSelectedOrClearHidden',
+        );
+    try {
+      return super.performHideSelectedOrClearHidden();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void toggleToNextAvailableScrap() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(
@@ -1913,7 +1954,8 @@ scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
 scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
 visibleScrapCount: ${visibleScrapCount},
-allScrapsVisible: ${allScrapsVisible}
+allScrapsVisible: ${allScrapsVisible},
+allElementsVisible: ${allElementsVisible}
     ''';
   }
 }

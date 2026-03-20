@@ -164,6 +164,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     );
 
     for (final int elementMPID in scrap.childrenMPIDs) {
+      if (!_th2FileEditController.isElementVisible(elementMPID)) {
+        continue;
+      }
+
       final THElement element = _th2File.elementByMPID(elementMPID);
 
       addUpdateSelectableElement(element);

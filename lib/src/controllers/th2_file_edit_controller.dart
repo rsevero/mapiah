@@ -175,6 +175,9 @@ abstract class TH2FileEditControllerBase with Store {
   ObservableSet<int> _hiddenScrapMPIDs = ObservableSet<int>();
 
   @readonly
+  ObservableSet<int> _hiddenElementMPIDs = ObservableSet<int>();
+
+  @readonly
   double _lineThicknessOnCanvas = mpLocator.mpSettingsController
       .getDoubleWithDefault(MPSettingID.TH2Edit_LineThickness);
 
@@ -896,6 +899,31 @@ abstract class TH2FileEditControllerBase with Store {
         setActiveScrap(0);
       }
     }
+  }
+
+  bool isElementVisible(int mpID) {
+    return !_hiddenElementMPIDs.contains(mpID);
+  }
+
+  @computed
+  bool get allElementsVisible => _hiddenElementMPIDs.isEmpty;
+
+  @action
+  void performHideSelectedOrClearHidden() {
+    final Set<int> selectedMPIDs = selectionController
+        .mpSelectedElementsLogical
+        .keys
+        .toSet();
+
+    if (selectedMPIDs.isNotEmpty) {
+      _hiddenElementMPIDs.addAll(selectedMPIDs);
+      selectionController.deselectAllElements();
+    } else {
+      _hiddenElementMPIDs.clear();
+    }
+
+    selectionController.resetSelectableElements();
+    triggerNonSelectedElementsRedraw();
   }
 
   Map<int, String> availableScraps() {
