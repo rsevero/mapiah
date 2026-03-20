@@ -249,13 +249,14 @@ Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an 
 ## Search and select
 The search and select dialog allows you to find and select elements in the current scrap based on their characteristics. Open it by clicking the ![Search button](assets/help/images/buttonSearch.png "Search and select") button in the top right corner.
 
-The dialog has three collapsible sections: **Points**, **Lines**, and **Areas**. Enable a section by checking its checkbox. Each enabled section offers five filtering criteria:
+The dialog has three collapsible sections: **Points**, **Lines**, and **Areas**. Enable a section by checking its checkbox. Each enabled section offers filtering criteria:
 
-* **All**: selects all elements of that type in the current scrap. Enabling this disables the other four criteria.
+* **All**: selects all elements of that type in the current scrap. Enabling this disables the other criteria.
 * **By ID**: filters elements whose Therion ID contains the entered text (case-insensitive partial match).
 * **By subtype**: filters elements by their subtype. Select known subtypes from chips and/or enter free text for unknown subtypes. Available for points and lines only.
 * **By type**: filters elements by their type. Select one or more types from the available chips. Unknown types found in the current scrap are also listed.
 * **By option**: filters elements by whether specific options are set or not. Each option can be set to _Undefined_ (ignored), _Set_ (element must have the option), or _Unset_ (element must not have the option).
+* **By line segment option** _(lines only)_: filters lines by whether any of their line segments have specific options set or not. Each option can be set to _Undefined_ (ignored), _Set_ (at least one segment of the line must have the option), or _Unset_ (no segment of the line may have the option).
 
 When multiple criteria are enabled within a section, an element must match **all** of them (AND logic). When multiple sections are enabled, matching elements from any section are included (OR logic).
 

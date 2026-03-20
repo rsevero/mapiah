@@ -1264,6 +1264,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSearchSelectByID => 'Por ID';
 
   @override
+  String get th2FileEditPageSearchSelectByLineSegmentOption =>
+      'Por opção de segmento de linha';
+
+  @override
   String get th2FileEditPageSearchSelectByOption => 'Por opção';
 
   @override

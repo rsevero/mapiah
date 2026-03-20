@@ -1252,6 +1252,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSearchSelectByID => 'By ID';
 
   @override
+  String get th2FileEditPageSearchSelectByLineSegmentOption =>
+      'By line segment option';
+
+  @override
   String get th2FileEditPageSearchSelectByOption => 'By option';
 
   @override

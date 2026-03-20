@@ -393,6 +393,7 @@
   "th2FileEditPageSearchSelectAreas": "Áreas",
   "th2FileEditPageSearchSelectButton": "Pesquisar e selecionar",
   "th2FileEditPageSearchSelectByID": "Por ID",
+  "th2FileEditPageSearchSelectByLineSegmentOption": "Por opção de segmento de linha",
   "th2FileEditPageSearchSelectByOption": "Por opção",
   "th2FileEditPageSearchSelectBySubtype": "Por subtipo",
   "th2FileEditPageSearchSelectByType": "Por tipo",

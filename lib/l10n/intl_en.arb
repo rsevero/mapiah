@@ -1962,6 +1962,11 @@
     "description": "By ID option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
     "type": "text"
   },
+  "th2FileEditPageSearchSelectByLineSegmentOption": "By line segment option",
+  "@th2FileEditPageSearchSelectByLineSegmentOption": {
+    "description": "By line segment option in the search and select dialog. Used on: MPSearchSelectDialogWidget",
+    "type": "text"
+  },
   "th2FileEditPageSearchSelectByOption": "By option",
   "@th2FileEditPageSearchSelectByOption": {
     "description": "By option option in the search and select dialog. Used on: MPSearchSelectDialogWidget",

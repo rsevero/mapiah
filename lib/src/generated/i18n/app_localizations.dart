@@ -2362,6 +2362,12 @@ abstract class AppLocalizations {
   /// **'By ID'**
   String get th2FileEditPageSearchSelectByID;
 
+  /// By line segment option in the search and select dialog. Used on: MPSearchSelectDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'By line segment option'**
+  String get th2FileEditPageSearchSelectByLineSegmentOption;
+
   /// By option option in the search and select dialog. Used on: MPSearchSelectDialogWidget
   ///
   /// In en, this message translates to:

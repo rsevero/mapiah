@@ -249,13 +249,14 @@ Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O
 ## Pesquisar e selecionar
 O diálogo de pesquisar e selecionar permite encontrar e selecionar elementos no croqui atual com base em suas características. Abra-o clicando no botão ![Botão Pesquisar](assets/help/images/buttonSearch.png "Pesquisar e selecionar") no canto superior direito.
 
-O diálogo tem três seções recolhíveis: **Pontos**, **Linhas** e **Áreas**. Ative uma seção marcando sua caixa de seleção. Cada seção ativada oferece cinco critérios de filtragem:
+O diálogo tem três seções recolhíveis: **Pontos**, **Linhas** e **Áreas**. Ative uma seção marcando sua caixa de seleção. Cada seção ativada oferece critérios de filtragem:
 
-* **Todos**: seleciona todos os elementos daquele tipo no croqui atual. Ativar esta opção desativa os outros quatro critérios.
+* **Todos**: seleciona todos os elementos daquele tipo no croqui atual. Ativar esta opção desativa os outros critérios.
 * **Por ID**: filtra elementos cujo ID do Therion contém o texto digitado (correspondência parcial, sem distinção de maiúsculas/minúsculas).
 * **Por subtipo**: filtra elementos pelo subtipo. Selecione subtipos conhecidos nos chips e/ou digite texto livre para subtipos desconhecidos. Disponível apenas para pontos e linhas.
 * **Por tipo**: filtra elementos pelo tipo. Selecione um ou mais tipos dos chips disponíveis. Tipos desconhecidos encontrados no croqui atual também são listados.
 * **Por opção**: filtra elementos por opções específicas estarem definidas ou não. Cada opção pode ser definida como _Indefinido_ (ignorado), _Definido_ (elemento deve ter a opção) ou _Não definido_ (elemento não deve ter a opção).
+* **Por opção de segmento de linha** _(apenas linhas)_: filtra linhas pela presença ou ausência de opções específicas em seus segmentos de linha. Cada opção pode ser definida como _Indefinido_ (ignorado), _Definido_ (pelo menos um segmento da linha deve ter a opção) ou _Não definido_ (nenhum segmento da linha pode ter a opção).
 
 Quando múltiplos critérios estão ativados dentro de uma seção, um elemento deve corresponder a **todos** eles (lógica E). Quando múltiplas seções estão ativadas, elementos correspondentes de qualquer seção são incluídos (lógica OU).
 

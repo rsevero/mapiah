@@ -5,6 +5,7 @@
 ## 0.3.3 - not yet released
 * New features:
   * Search and select dialog: find and select elements in the current scrap by type, ID, subtype, and option presence. Supports set/add/remove selection actions with live matching count. Accessible via the search button in the top right corner.
+  * Search and select dialog: added "By line segment option" filter in the Lines section, allowing lines to be selected based on whether any of their segments have specific options set or unset.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.

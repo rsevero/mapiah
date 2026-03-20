@@ -46,6 +46,7 @@ class _MPSearchSelectDialogWidgetState
 
   late final List<THCommandOptionType> _sortedPointOptions;
   late final List<THCommandOptionType> _sortedLineOptions;
+  late final List<THCommandOptionType> _sortedLineSegmentOptions;
   late final List<THCommandOptionType> _sortedAreaOptions;
 
   late final Map<String, Set<String>> _pointSubtypesByType;
@@ -99,6 +100,10 @@ class _MPSearchSelectDialogWidgetState
     _sortedLineOptions = MPCommandOptionAux.getTHCommandOptionTypeOrderedList(
       MPCommandOptionAux.getAllSupportedLineOptions(),
     );
+    _sortedLineSegmentOptions =
+        MPCommandOptionAux.getTHCommandOptionTypeOrderedList(
+          MPCommandOptionAux.getAllSupportedLineSegmentOptions(),
+        );
     _sortedAreaOptions = MPCommandOptionAux.getTHCommandOptionTypeOrderedList(
       MPCommandOptionAux.getAllSupportedAreaOptions(),
     );
@@ -404,6 +409,28 @@ class _MPSearchSelectDialogWidgetState
           ),
           if (section.byOption && !section.selectAll)
             _buildOptionSubsection(section, plaCategory),
+
+          // By line segment option checkbox (lines only)
+          if (plaCategory == 'line')
+            CheckboxListTile(
+              title: Text(
+                _appLocalizations
+                    .th2FileEditPageSearchSelectByLineSegmentOption,
+              ),
+              value: section.byLineSegmentOption,
+              dense: true,
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: section.selectAll
+                  ? null
+                  : (bool? value) {
+                      section.byLineSegmentOption = value ?? false;
+                      _onCriteriaChanged();
+                    },
+            ),
+          if (plaCategory == 'line' &&
+              section.byLineSegmentOption &&
+              !section.selectAll)
+            _buildLineSegmentOptionSubsection(section),
         ],
       ),
     );
@@ -641,6 +668,70 @@ class _MPSearchSelectDialogWidgetState
     return Padding(
       padding: const EdgeInsets.only(left: 32),
       child: Wrap(spacing: 4, runSpacing: 4, children: chips),
+    );
+  }
+
+  Widget _buildLineSegmentOptionSubsection(
+    MPSearchSelectSectionCriteria section,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final THCommandOptionType optionType
+              in _sortedLineSegmentOptions)
+            _buildLineSegmentOptionRow(section, optionType),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLineSegmentOptionRow(
+    MPSearchSelectSectionCriteria section,
+    THCommandOptionType optionType,
+  ) {
+    final MPOptionSearchState currentState =
+        section.lineSegmentOptionStates[optionType] ??
+        MPOptionSearchState.undefined;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 160,
+            child: Text(MPTextToUser.getCommandOptionType(optionType)),
+          ),
+          SegmentedButton<MPOptionSearchState>(
+            segments: [
+              ButtonSegment<MPOptionSearchState>(
+                value: MPOptionSearchState.undefined,
+                label: Text(
+                  _appLocalizations.th2FileEditPageSearchSelectOptionUndefined,
+                ),
+              ),
+              ButtonSegment<MPOptionSearchState>(
+                value: MPOptionSearchState.set,
+                label: Text(
+                  _appLocalizations.th2FileEditPageSearchSelectOptionSet,
+                ),
+              ),
+              ButtonSegment<MPOptionSearchState>(
+                value: MPOptionSearchState.unset,
+                label: Text(
+                  _appLocalizations.th2FileEditPageSearchSelectOptionUnset,
+                ),
+              ),
+            ],
+            selected: {currentState},
+            onSelectionChanged: (Set<MPOptionSearchState> newSelection) {
+              section.lineSegmentOptionStates[optionType] = newSelection.first;
+              _onCriteriaChanged();
+            },
+          ),
+        ],
+      ),
     );
   }
 

@@ -15,6 +15,7 @@ class MPSearchSelectSectionCriteria {
   bool bySubtype = false;
   bool byType = false;
   bool byOption = false;
+  bool byLineSegmentOption = false;
 
   String idSearchText = '';
   String subtypeSearchText = '';
@@ -25,6 +26,8 @@ class MPSearchSelectSectionCriteria {
   final Set<String> selectedUnknownTypes = {};
   final Set<String> selectedSubtypes = {};
   final Map<THCommandOptionType, MPOptionSearchState> optionStates = {};
+  final Map<THCommandOptionType, MPOptionSearchState> lineSegmentOptionStates =
+      {};
 
   void reset() {
     enabled = false;
@@ -33,6 +36,7 @@ class MPSearchSelectSectionCriteria {
     bySubtype = false;
     byType = false;
     byOption = false;
+    byLineSegmentOption = false;
     idSearchText = '';
     subtypeSearchText = '';
     selectedPointTypes.clear();
@@ -41,6 +45,7 @@ class MPSearchSelectSectionCriteria {
     selectedUnknownTypes.clear();
     selectedSubtypes.clear();
     optionStates.clear();
+    lineSegmentOptionStates.clear();
   }
 
   void setAllEnabled() {
@@ -49,6 +54,7 @@ class MPSearchSelectSectionCriteria {
     bySubtype = false;
     byType = false;
     byOption = false;
+    byLineSegmentOption = false;
   }
 
   void disableAll() {

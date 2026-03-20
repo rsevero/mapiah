@@ -213,6 +213,19 @@ class MPCommandOptionAux {
     return result;
   }
 
+  static Set<THCommandOptionType> getAllSupportedLineSegmentOptions() {
+    final Set<THCommandOptionType> result = {
+      ..._supportLineSegmentsOptionsForAll,
+    };
+
+    for (final List<THCommandOptionType> options
+        in _supportLineSegmentsOptions.values) {
+      result.addAll(options);
+    }
+
+    return result;
+  }
+
   static Set<THCommandOptionType> getAllSupportedAreaOptions() {
     final Set<THCommandOptionType> result = {..._supportAreaOptionsForAll};
 

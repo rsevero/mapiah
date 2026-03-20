@@ -215,6 +215,14 @@ abstract class TH2FileEditSearchControllerBase with Store {
       }
     }
 
+    if (section.byLineSegmentOption) {
+      hasAnyCriteria = true;
+
+      if (!_matchesLineSegmentOptions(line, section)) {
+        return false;
+      }
+    }
+
     return hasAnyCriteria;
   }
 
@@ -305,6 +313,36 @@ abstract class TH2FileEditSearchControllerBase with Store {
       return elementSubtype.toLowerCase().contains(
         section.subtypeSearchText.toLowerCase(),
       );
+    }
+
+    return true;
+  }
+
+  bool _matchesLineSegmentOptions(
+    THLine line,
+    MPSearchSelectSectionCriteria section,
+  ) {
+    final List<THLineSegment> segments = line.getLineSegments(_th2File);
+
+    for (final MapEntry<THCommandOptionType, MPOptionSearchState> entry
+        in section.lineSegmentOptionStates.entries) {
+      if (entry.value == MPOptionSearchState.undefined) {
+        continue;
+      }
+
+      final bool anySegmentHasOption = segments.any(
+        (THLineSegment segment) => segment.hasOption(entry.key),
+      );
+
+      if (entry.value == MPOptionSearchState.set) {
+        if (!anySegmentHasOption) {
+          return false;
+        }
+      } else if (entry.value == MPOptionSearchState.unset) {
+        if (anySegmentHasOption) {
+          return false;
+        }
+      }
     }
 
     return true;
