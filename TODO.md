@@ -173,7 +173,7 @@
 [X] - Config page.
 [X] - Drag overlay windows.
 [X] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]
-[ ] - Hide elements by type.
+[X] - Hide elements by type.
 [X] - Copy/Paste.
 [ ] - Show status message listing what's selected in 'single line edit' mode.
 [ ] - Highlight slope lines without at least one line point with l-size.
