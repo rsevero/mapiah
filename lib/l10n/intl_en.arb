@@ -2054,14 +2054,29 @@
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
-  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Hide all images",
+  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Hide all images (Ctrl+I)",
   "@th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": {
     "description": "Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
-  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Show all images",
+  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Show all images (Ctrl+I)",
   "@th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": {
     "description": "Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Hide all grids (Ctrl+G)",
+  "@th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": {
+    "description": "Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageToggleAllGridsVisibilityShowAllTooltip": "Show all grids (Ctrl+G)",
+  "@th2FileEditPageToggleAllGridsVisibilityShowAllTooltip": {
+    "description": "Tooltip for the toggle-all grid visibility button when any grid is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
+  "@th2FileEditPageImageVisibilityTooltip": {
+    "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
   "th2FileEditPageImageGridVisibilityTooltip": "Toggle grid visibility",

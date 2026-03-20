@@ -1481,6 +1481,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
+  /// If all XVI image grids are visible, hides all grids.
+  /// If any XVI image grid is hidden, makes all grids visible.
+  @action
+  void toggleAllGridsVisibility() {
+    final List<THXTherionImageInsertConfig> xviImages = _th2File
+        .getImages()
+        .where((THXTherionImageInsertConfig image) => image.isXVI)
+        .toList();
+
+    final bool allGridsVisible = xviImages.every(
+      (THXTherionImageInsertConfig image) => image.isGridVisible,
+    );
+
+    for (final THXTherionImageInsertConfig image in xviImages) {
+      image.isGridVisible = !allGridsVisible;
+    }
+
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
   @action
   void toggleSelectedLinePointsSmoothOption() {
     final Iterable<int> selectedLineSegmentMPIDs = _th2FileEditController

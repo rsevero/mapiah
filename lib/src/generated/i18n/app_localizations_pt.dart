@@ -1324,11 +1324,23 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
-      'Ocultar todas as imagens';
+      'Ocultar todas as imagens (Ctrl+I)';
 
   @override
   String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
-      'Mostrar todas as imagens';
+      'Mostrar todas as imagens (Ctrl+I)';
+
+  @override
+  String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>
+      'Ocultar todas as grades (Ctrl+G)';
+
+  @override
+  String get th2FileEditPageToggleAllGridsVisibilityShowAllTooltip =>
+      'Mostrar todas as grades (Ctrl+G)';
+
+  @override
+  String get th2FileEditPageImageVisibilityTooltip =>
+      'Alternar visibilidade da imagem';
 
   @override
   String get th2FileEditPageImageGridVisibilityTooltip =>

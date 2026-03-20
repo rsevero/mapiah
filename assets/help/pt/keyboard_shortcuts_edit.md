@@ -26,6 +26,7 @@
 | Ferramenta de seleção                                         | C                                    |
 | Forçar definição de opção em tipos não suportados             | Ctrl+clique na configuração da opção |
 | Inverter linha                                                | R                                    |
+| Inverter visibilidade de todas as grades                      | Ctrl+G                               |
 | Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Refazer                                                       | Ctrl+Y                               |
 | Recortar elementos selecionados                               | Ctrl+X                               |

@@ -72,6 +72,14 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
             keyProcessed = true;
           }
         }
+      case LogicalKeyboardKey.keyG:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleAllGridsVisibility();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyH:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&

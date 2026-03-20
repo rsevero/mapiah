@@ -586,6 +586,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void toggleAllGridsVisibility() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.toggleAllGridsVisibility',
+        );
+    try {
+      return super.toggleAllGridsVisibility();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleSelectedLinePointsSmoothOption() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

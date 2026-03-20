@@ -705,6 +705,21 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void toggleAllGridsVisibility() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.toggleAllGridsVisibility',
+        );
+    try {
+      return super.toggleAllGridsVisibility();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void setSelectedScrapByMPID(int scrapID) {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(

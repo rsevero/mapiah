@@ -47,7 +47,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   Widget build(BuildContext context) {
     final TH2File th2File = th2FileEditController.th2File;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final double checkboxSize = kMinInteractiveDimension +
+        theme.visualDensity.baseSizeAdjustment.dx;
 
     return MPOverlayWindowWidget(
       title: appLocalizations.th2FileEditPageChangeImageTitle,
@@ -68,6 +71,14 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
             final bool allImagesVisible = images.every(
               (THXTherionImageInsertConfig image) => image.isVisible,
             );
+            final List<THXTherionImageInsertConfig> xviImages = images
+                .where((THXTherionImageInsertConfig image) => image.isXVI)
+                .toList();
+            final bool hasXVIImages = xviImages.isNotEmpty;
+            final bool allXVIGridsVisible = hasXVIImages &&
+                xviImages.every(
+                  (THXTherionImageInsertConfig image) => image.isGridVisible,
+                );
             final int draggedImageIndex = (_draggedImageMPID == null)
                 ? -1
                 : images.indexWhere(
@@ -85,27 +96,60 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (images.isNotEmpty)
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Tooltip(
-                              message: allImagesVisible
-                                  ? appLocalizations
-                                        .th2FileEditPageToggleAllImagesVisibilityHideAllTooltip
-                                  : appLocalizations
-                                        .th2FileEditPageToggleAllImagesVisibilityShowAllTooltip,
-                              child: IconButton(
-                                icon: Icon(
-                                  allImagesVisible
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  color: colorScheme.onSecondary,
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: checkboxSize,
+                                child: Center(
+                                  child: Tooltip(
+                                    message: allImagesVisible
+                                        ? appLocalizations
+                                              .th2FileEditPageToggleAllImagesVisibilityHideAllTooltip
+                                        : appLocalizations
+                                              .th2FileEditPageToggleAllImagesVisibilityShowAllTooltip,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        allImagesVisible
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                        color: colorScheme.onSecondary,
+                                      ),
+                                      iconSize: mpSmallIconSize,
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      onPressed:
+                                          _onPressedToggleAllImagesVisibility,
+                                    ),
+                                  ),
                                 ),
-                                iconSize: mpSmallIconSize,
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                                onPressed: _onPressedToggleAllImagesVisibility,
                               ),
-                            ),
+                              if (hasXVIImages)
+                                SizedBox(
+                                  width: checkboxSize,
+                                  child: Center(
+                                    child: Tooltip(
+                                      message: allXVIGridsVisible
+                                          ? appLocalizations
+                                                .th2FileEditPageToggleAllGridsVisibilityHideAllTooltip
+                                          : appLocalizations
+                                                .th2FileEditPageToggleAllGridsVisibilityShowAllTooltip,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          allXVIGridsVisible
+                                              ? Icons.grid_off
+                                              : Icons.grid_on,
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                        iconSize: mpSmallIconSize,
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        onPressed:
+                                            _onPressedToggleAllGridsVisibility,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         if (images.isNotEmpty)
                           Column(
@@ -194,29 +238,35 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                   maintainState: true,
                                                   child: Row(
                                                     children: [
-                                                      Checkbox(
-                                                        value: isVisible,
-                                                        onChanged: (bool? value) {
-                                                          if (value == null) {
-                                                            return;
-                                                          }
-                                                          _imageVisibilityChanged(
-                                                            image.mpID,
-                                                            value,
-                                                          );
-                                                        },
-                                                        checkColor: colorScheme
-                                                            .onSurface,
-                                                        side: BorderSide(
-                                                          color: colorScheme
-                                                              .onSurface,
-                                                          width: 2,
-                                                        ),
-                                                        fillColor:
-                                                            WidgetStateProperty.all(
+                                                      Tooltip(
+                                                        message: appLocalizations
+                                                            .th2FileEditPageImageVisibilityTooltip,
+                                                        child: Checkbox(
+                                                          value: isVisible,
+                                                          onChanged: (
+                                                            bool? value,
+                                                          ) {
+                                                            if (value == null) {
+                                                              return;
+                                                            }
+                                                            _imageVisibilityChanged(
+                                                              image.mpID,
+                                                              value,
+                                                            );
+                                                          },
+                                                          checkColor:
                                                               colorScheme
-                                                                  .surfaceContainerHighest,
-                                                            ),
+                                                                  .onSurface,
+                                                          side: BorderSide(
+                                                            color: colorScheme
+                                                                .onSurface,
+                                                            width: 2,
+                                                          ),
+                                                          fillColor: WidgetStateProperty.all(
+                                                            colorScheme
+                                                                .surfaceContainerHighest,
+                                                          ),
+                                                        ),
                                                       ),
                                                       if (image.isXVI)
                                                         Tooltip(
@@ -492,6 +542,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   void _onPressedToggleAllImagesVisibility() {
     th2FileEditController.selectionController.toggleAllImagesVisibility();
+  }
+
+  void _onPressedToggleAllGridsVisibility() {
+    th2FileEditController.elementEditController.toggleAllGridsVisibility();
   }
 
   void _imageVisibilityChanged(int imageMPID, bool newVisibility) {

@@ -2473,14 +2473,32 @@ abstract class AppLocalizations {
   /// Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'Hide all images'**
+  /// **'Hide all images (Ctrl+I)'**
   String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip;
 
   /// Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'Show all images'**
+  /// **'Show all images (Ctrl+I)'**
   String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
+
+  /// Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Hide all grids (Ctrl+G)'**
+  String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip;
+
+  /// Tooltip for the toggle-all grid visibility button when any grid is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Show all grids (Ctrl+G)'**
+  String get th2FileEditPageToggleAllGridsVisibilityShowAllTooltip;
+
+  /// Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle image visibility'**
+  String get th2FileEditPageImageVisibilityTooltip;
 
   /// Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build
   ///
