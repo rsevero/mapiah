@@ -19,7 +19,7 @@
 | Duplicate selected elements                                | Ctrl+D                       |
 | Force option setting on non-supporting types               | Ctrl+click on option setting |
 | Help                                                       | F1                           |
-| Hide selected elements / Show all hidden elements          | H                            |
+| Hide selected elements / Show all hidden elements          | Ctrl+H                       |
 | Keyboard shortcuts                                         | Ctrl+K                       |
 | Line node edit                                             | N                            |
 | Options edit                                               | O                            |

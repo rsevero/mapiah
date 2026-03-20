@@ -73,9 +73,8 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyH:
-        if (!isAltPressed &&
-            !isCtrlPressed &&
-            !isMetaPressed &&
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
             !isShiftPressed) {
           th2FileEditController.hideElementController
               .performHideSelectedOrClearHidden();

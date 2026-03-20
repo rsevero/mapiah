@@ -4,7 +4,7 @@
 | ------------------------------------------------------------- | ------------------------------------ |
 | Adicionar imagem                                              | I                                    |
 | Ajuda                                                         | F1                                   |
-| Esconder elementos selecionados / Mostrar todos os ocultos    | H                                    |
+| Esconder elementos selecionados / Mostrar todos os ocultos    | Ctrl+H                               |
 | Alterar croqui ativo                                          | Alt+S                                |
 | Alterar imagens                                               | Alt+I                                |
 | Atalhos de teclado                                            | Ctrl+K                               |

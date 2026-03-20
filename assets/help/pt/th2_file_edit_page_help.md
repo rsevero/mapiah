@@ -246,6 +246,18 @@ Quando uma linha contém tanto segmentos em curva Bézier quanto segmentos retos
 ### Segmentos de linha reta
 Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O Mapiah usa uma versão interativa (não recursiva) do [algoritmo de Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) para simplificar segmentos de linha reta. Ele opera no espaço do canvas. A tolerância inicial (epsilon) equivale a 1,5 pixels de tela. Esse valor é convertido para coordenadas do canvas. Em cada execução subsequente, a tolerância é aumentada pelo mesmo valor inicial.
 
+## Esconder elementos
+Pressione _Ctrl+H_ para ocultar temporariamente elementos no canvas sem removê-los do arquivo.
+
+**Quando há elementos selecionados:**
+* Os elementos selecionados são adicionados à lista de ocultos e deselecionados.
+* Elementos ocultos não são desenhados no canvas e não podem ser clicados ou selecionados.
+
+**Quando não há elementos selecionados:**
+* Todos os elementos ocultos voltam a ser visíveis.
+
+Elementos ocultos são um estado temporário apenas do canvas: não são salvos no arquivo e são sempre restaurados quando o arquivo é reaberto.
+
 ## Pesquisar e selecionar
 O diálogo de pesquisar e selecionar permite encontrar e selecionar elementos no croqui atual com base em suas características. Abra-o clicando no botão ![Botão Pesquisar](assets/help/images/buttonSearch.png "Pesquisar e selecionar") no canto superior direito.
 

@@ -246,6 +246,18 @@ When a line contains both Bézier curve and straight line segments, Mapiah treat
 ### Straight line segments
 Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
 
+## Hide elements
+Press _Ctrl+H_ to temporarily hide elements on the canvas without removing them from the file.
+
+**When elements are selected:**
+* The selected elements are added to the hidden list and deselected.
+* Hidden elements are no longer drawn on the canvas and cannot be clicked or selected.
+
+**When no elements are selected:**
+* All hidden elements are made visible again.
+
+Hidden elements are a temporary canvas-only state: they are not saved to the file and are always restored when the file is reopened.
+
 ## Search and select
 The search and select dialog allows you to find and select elements in the current scrap based on their characteristics. Open it by clicking the ![Search button](assets/help/images/buttonSearch.png "Search and select") button in the top right corner.
 
