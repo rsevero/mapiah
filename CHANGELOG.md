@@ -24,6 +24,7 @@
   * Search controller: extracted _matchesOptionStates() helper to eliminate duplicated logic between _matchesOptions() and _matchesLineSegmentOptions().
   * Created TH2FileHideElementController: extracted all hide/show logic for both elements and scraps from TH2FileEditController into a dedicated controller, accessible as hideElementController.
   * Added tests for TH2FileEditSearchController (3680): 23 tests covering getMatchingElements, selectAll, byType, byID, byOption, byLineSegmentOption, resetCriteria, and all three selection actions (setSelection, addToSelection, removeFromSelection).
+  * flutter upgrade 3.41.5 and flutter pub upgrade --major-versions.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
