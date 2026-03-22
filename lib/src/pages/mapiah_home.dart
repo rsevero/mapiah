@@ -69,16 +69,14 @@ class _MapiahHomeState extends State<MapiahHome> {
       }
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      MPDialogAux.checkForUpdates();
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mpLocator.mpSettingsController.isBoolSet(
         MPSettingID.Main_TelemetryConsent,
       )) {
-        MPTelemetryConsentDialog.show(context);
+        await MPTelemetryConsentDialog.show(context);
       }
+
+      MPDialogAux.checkForUpdates();
     });
   }
 

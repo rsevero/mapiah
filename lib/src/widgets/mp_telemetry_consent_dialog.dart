@@ -10,21 +10,21 @@ class MPTelemetryConsentDialog extends StatelessWidget {
 
   static bool _isOpen = false;
 
-  static void show(BuildContext context) {
+  static Future<void> show(BuildContext context) async {
     if (_isOpen) {
       return;
     }
 
     _isOpen = true;
 
-    showDialog<void>(
+    await showDialog<void>(
       context: context,
       useRootNavigator: true,
       barrierDismissible: false,
       builder: (BuildContext ctx) => const MPTelemetryConsentDialog(),
-    ).whenComplete(() {
-      _isOpen = false;
-    });
+    );
+
+    _isOpen = false;
   }
 
   void _accept(BuildContext context) {
