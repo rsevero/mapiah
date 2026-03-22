@@ -55,6 +55,7 @@ abstract class MPTelemetryControllerBase with Store {
       _clearLocalData();
       unawaited(_sendOptOut());
     } else {
+      unawaited(_sendOptIn());
       await _tryRolloverAndSend();
       _startRetryTimerIfNeeded();
     }
@@ -262,6 +263,22 @@ abstract class MPTelemetryControllerBase with Store {
       }
     } on Object {
       // Silently ignore — retry timer will handle the next attempt.
+    }
+  }
+
+  Future<void> _sendOptIn() async {
+    try {
+      await http
+          .post(
+            Uri.parse(mpTelemetryOptInEndpoint),
+            headers: <String, String>{
+              HttpHeaders.contentTypeHeader: 'application/json',
+            },
+            body: '{}',
+          )
+          .timeout(Duration(seconds: mpTelemetryHttpTimeoutSeconds));
+    } on Object {
+      // Silently ignore — opt-in notification is best-effort.
     }
   }
 

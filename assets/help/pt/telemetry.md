@@ -36,8 +36,10 @@ A cada dia que você usa o Mapiah, um único registro agregado pode ser enviado 
 
 Os dados são coletados localmente ao longo do dia, e somente o registro agregado do dia anterior é transmitido. Nenhum dado parcial ou em tempo real sai do seu computador. Os registros são enviados via HTTPS para `api.mapiah.org`. Se o envio falhar (sem rede, servidor fora do ar), o Mapiah tenta novamente automaticamente a cada 15 minutos.
 
+Quando você aceita ou recusa a telemetria pela primeira vez, uma notificação imediata (sem nenhuma informação de identificação) é enviada ao servidor para incrementar o contador anônimo de adesões ou recusas. Isso permite que o Mapiah entenda as tendências gerais de consentimento sem qualquer rastreamento individual.
+
 ## Como alterar sua escolha
 
 Você pode ativar ou desativar a telemetria a qualquer momento na página de _Configurações_, na seção **Principal**. O botão de alternância "Compartilhar dados de uso anônimos" controla essa configuração. Você também pode clicar em "Revisar detalhes da telemetria e consentimento" na página de Configurações para ver este diálogo novamente.
 
-Ao optar por não participar, todos os dados de telemetria armazenados localmente são excluídos imediatamente e uma notificação (sem nenhuma informação de identificação) é enviada ao servidor para incrementar o contador anônimo de recusas.
+Ao optar por não participar, todos os dados de telemetria armazenados localmente são excluídos imediatamente e uma notificação anônima de recusa é enviada ao servidor. Ao optar por participar novamente, uma notificação anônima de adesão é enviada.

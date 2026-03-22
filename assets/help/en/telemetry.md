@@ -36,8 +36,10 @@ Each day that you use Mapiah, a single aggregated record may be sent containing:
 
 Data is collected locally throughout the day and only the previous day's aggregated record is ever transmitted. No partial or real-time data leaves your computer. Records are sent via HTTPS to `api.mapiah.org`. If a send fails (no network, server down), Mapiah retries automatically every 15 minutes.
 
+When you first accept or decline telemetry, an immediate notification (containing no identifying information) is sent to the server so the anonymous opt-in or opt-out counter can be incremented. This lets Mapiah understand overall consent trends without any user-level tracking.
+
 ## How to change your choice
 
 You can enable or disable telemetry at any time on the _Settings_ page under the **Main** section. The toggle labeled "Share anonymous usage data" controls this setting. You can also click "Review telemetry details and consent" on the Settings page to see this dialog again.
 
-When you opt out, all locally stored telemetry data is deleted immediately and a notification (containing no identifying information) is sent to the server so the anonymous opt-out counter can be incremented.
+When you opt out, all locally stored telemetry data is deleted immediately and an anonymous opt-out notification is sent to the server. When you opt back in, an anonymous opt-in notification is sent.

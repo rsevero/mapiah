@@ -596,6 +596,8 @@ const String mpTherionLinuxPathSearchFallbackMessage =
 // Telemetry server endpoints.
 const String mpTelemetryBaseURL = 'https://api.mapiah.org';
 const String mpTelemetrySubmitEndpoint = '$mpTelemetryBaseURL/v1/telemetry';
+const String mpTelemetryOptInEndpoint =
+    '$mpTelemetryBaseURL/v1/telemetry/opt-in';
 const String mpTelemetryOptOutEndpoint =
     '$mpTelemetryBaseURL/v1/telemetry/opt-out';
 const int mpTelemetryRetryIntervalMinutes = 15;

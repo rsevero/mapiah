@@ -24,6 +24,22 @@ paths:
         '200':
           description: Records accepted
 
+  /telemetry/opt-in:
+    post:
+      summary: Notify that a user has opted in
+      description: |
+        No identifying information is sent or stored. The server only
+        increments an anonymous opt-in counter.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Opt-in recorded (anonymous counter only)
+
   /telemetry/opt-out:
     post:
       summary: Notify that a user has opted out
