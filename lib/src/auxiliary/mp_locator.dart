@@ -5,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
+import 'package:mapiah/src/controllers/mp_telemetry_controller.dart';
 
 class MPLocator {
   static final MPLocator _instance = MPLocator._internal();
@@ -16,6 +17,7 @@ class MPLocator {
   MPLocator._internal();
 
   final MPGeneralController mpGeneralController = MPGeneralController();
+  final MPTelemetryController mpTelemetryController = MPTelemetryController();
 
   MPSettingsController? _mpSettingsController;
 

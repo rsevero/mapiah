@@ -1135,6 +1135,34 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String get telemetryConsentDialogAccept => 'Sim, participar';
+
+  @override
+  String get telemetryConsentDialogBody =>
+      'O Mapiah pode compartilhar dados de uso anônimos e agregados para ajudar a melhorar o aplicativo. Nenhuma informação pessoal, conteúdo de arquivos ou dados identificadores é coletado ou transmitido. Você pode alterar esta configuração a qualquer momento em Configurações.';
+
+  @override
+  String get telemetryConsentDialogDecline => 'Não, obrigado';
+
+  @override
+  String get telemetryConsentDialogLearnMore =>
+      'Saiba mais sobre o que é coletado';
+
+  @override
+  String get telemetryConsentDialogTitle => 'Ajude a melhorar o Mapiah';
+
+  @override
+  String get telemetrySettingsReviewLink =>
+      'Revisar detalhes de telemetria e consentimento';
+
+  @override
+  String get telemetrySettingsSectionTitle => 'Telemetria';
+
+  @override
+  String get telemetrySettingsToggleLabel =>
+      'Compartilhar dados de uso anônimos';
+
+  @override
   String get th2FileEditPageAddArea => 'Criar área (A)';
 
   @override
@@ -1201,6 +1229,14 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2FileEditPageHelpDialogTitle =>
       'Ajuda para edição de arquivo TH2';
+
+  @override
+  String get th2FileEditPageImageGridVisibilityTooltip =>
+      'Alternar visibilidade da grade';
+
+  @override
+  String get th2FileEditPageImageVisibilityTooltip =>
+      'Alternar visibilidade da imagem';
 
   @override
   String get th2FileEditPageLoadImageButton => 'Carregar imagem';
@@ -1323,14 +1359,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageSnapButton => 'Ajustar a pontos';
 
   @override
-  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
-      'Ocultar todas as imagens (Ctrl+I)';
-
-  @override
-  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
-      'Mostrar todas as imagens (Ctrl+I)';
-
-  @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>
       'Ocultar todas as grades (Ctrl+G)';
 
@@ -1339,12 +1367,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Mostrar todas as grades (Ctrl+G)';
 
   @override
-  String get th2FileEditPageImageVisibilityTooltip =>
-      'Alternar visibilidade da imagem';
+  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
+      'Ocultar todas as imagens (Ctrl+I)';
 
   @override
-  String get th2FileEditPageImageGridVisibilityTooltip =>
-      'Alternar visibilidade da grade';
+  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
+      'Mostrar todas as imagens (Ctrl+I)';
 
   @override
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>

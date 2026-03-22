@@ -2134,6 +2134,54 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// Accept button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, participate'**
+  String get telemetryConsentDialogAccept;
+
+  /// Body text of the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.'**
+  String get telemetryConsentDialogBody;
+
+  /// Decline button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
+  ///
+  /// In en, this message translates to:
+  /// **'No thanks'**
+  String get telemetryConsentDialogDecline;
+
+  /// Link text in the telemetry consent dialog that opens the full telemetry details page. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Learn more about what is collected'**
+  String get telemetryConsentDialogLearnMore;
+
+  /// Title of the telemetry consent dialog shown on first launch. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Help improve Mapiah'**
+  String get telemetryConsentDialogTitle;
+
+  /// Link text on the settings page that re-opens the telemetry consent dialog. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Review telemetry details and consent'**
+  String get telemetrySettingsReviewLink;
+
+  /// Section title for telemetry settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry'**
+  String get telemetrySettingsSectionTitle;
+
+  /// Label for the telemetry consent toggle on the settings page. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Share anonymous usage data'**
+  String get telemetrySettingsToggleLabel;
+
   /// The label for the add area button. Used on: lib/src/pages/th2_file_edit_page.dart
   ///
   /// In en, this message translates to:
@@ -2247,6 +2295,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TH2 File Edit Help'**
   String get th2FileEditPageHelpDialogTitle;
+
+  /// Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle grid visibility'**
+  String get th2FileEditPageImageGridVisibilityTooltip;
+
+  /// Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle image visibility'**
+  String get th2FileEditPageImageVisibilityTooltip;
 
   /// The label for the load image button. Used on: none
   ///
@@ -2470,18 +2530,6 @@ abstract class AppLocalizations {
   /// **'Snap'**
   String get th2FileEditPageSnapButton;
 
-  /// Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Hide all images (Ctrl+I)'**
-  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip;
-
-  /// Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Show all images (Ctrl+I)'**
-  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
-
   /// Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
@@ -2494,17 +2542,17 @@ abstract class AppLocalizations {
   /// **'Show all grids (Ctrl+G)'**
   String get th2FileEditPageToggleAllGridsVisibilityShowAllTooltip;
 
-  /// Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build
+  /// Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'Toggle image visibility'**
-  String get th2FileEditPageImageVisibilityTooltip;
+  /// **'Hide all images (Ctrl+I)'**
+  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip;
 
-  /// Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build
+  /// Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
-  /// **'Toggle grid visibility'**
-  String get th2FileEditPageImageGridVisibilityTooltip;
+  /// **'Show all images (Ctrl+I)'**
+  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
 
   /// Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build
   ///

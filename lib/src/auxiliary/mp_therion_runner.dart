@@ -181,6 +181,7 @@ class MPTherionRunner {
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
+    mpLocator.mpTelemetryController.recordTherionStarted(thConfigFilePath);
 
     try {
       final MPPlatformTherionRunner platformRunner = _createPlatformRunner();
@@ -210,6 +211,7 @@ class MPTherionRunner {
       _flushPendingLine();
       isRunningNotifier.value = false;
       _finalizeRunStatus(hasExecutionFailure: hasExecutionFailure);
+      mpLocator.mpTelemetryController.recordTherionStopped();
     }
   }
 

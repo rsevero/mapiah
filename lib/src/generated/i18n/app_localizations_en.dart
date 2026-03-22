@@ -1125,6 +1125,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String get telemetryConsentDialogAccept => 'Yes, participate';
+
+  @override
+  String get telemetryConsentDialogBody =>
+      'Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.';
+
+  @override
+  String get telemetryConsentDialogDecline => 'No thanks';
+
+  @override
+  String get telemetryConsentDialogLearnMore =>
+      'Learn more about what is collected';
+
+  @override
+  String get telemetryConsentDialogTitle => 'Help improve Mapiah';
+
+  @override
+  String get telemetrySettingsReviewLink =>
+      'Review telemetry details and consent';
+
+  @override
+  String get telemetrySettingsSectionTitle => 'Telemetry';
+
+  @override
+  String get telemetrySettingsToggleLabel => 'Share anonymous usage data';
+
+  @override
   String get th2FileEditPageAddArea => 'Add area (A)';
 
   @override
@@ -1189,6 +1216,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageHelpDialogTitle => 'TH2 File Edit Help';
+
+  @override
+  String get th2FileEditPageImageGridVisibilityTooltip =>
+      'Toggle grid visibility';
+
+  @override
+  String get th2FileEditPageImageVisibilityTooltip => 'Toggle image visibility';
 
   @override
   String get th2FileEditPageLoadImageButton => 'Load image';
@@ -1311,14 +1345,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSnapButton => 'Snap';
 
   @override
-  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
-      'Hide all images (Ctrl+I)';
-
-  @override
-  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
-      'Show all images (Ctrl+I)';
-
-  @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>
       'Hide all grids (Ctrl+G)';
 
@@ -1327,11 +1353,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Show all grids (Ctrl+G)';
 
   @override
-  String get th2FileEditPageImageVisibilityTooltip => 'Toggle image visibility';
+  String get th2FileEditPageToggleAllImagesVisibilityHideAllTooltip =>
+      'Hide all images (Ctrl+I)';
 
   @override
-  String get th2FileEditPageImageGridVisibilityTooltip =>
-      'Toggle grid visibility';
+  String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip =>
+      'Show all images (Ctrl+I)';
 
   @override
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip =>

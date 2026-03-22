@@ -78,9 +78,13 @@ abstract class MPGeneralControllerBase with Store {
   void addFileTab(String filename) {
     _clearActiveTabOverlayWindows();
 
-    if (!_openFileOrder.contains(filename)) {
+    final bool isNewFile = !_openFileOrder.contains(filename);
+
+    if (isNewFile) {
       _openFileOrder.add(filename);
+      MPLocator().mpTelemetryController.recordTH2Opened(filename);
     }
+
     _activeTabIndex = _openFileOrder.indexOf(filename);
   }
 
@@ -90,6 +94,7 @@ abstract class MPGeneralControllerBase with Store {
 
     if (indexToRemove != -1) {
       _openFileOrder.removeAt(indexToRemove);
+      MPLocator().mpTelemetryController.recordTH2Closed(filename);
       removeFileController(filename: filename);
 
       if (_openFileOrder.isEmpty) {

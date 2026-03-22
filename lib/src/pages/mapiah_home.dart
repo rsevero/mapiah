@@ -8,9 +8,11 @@ import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
+import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:window_size/window_size.dart';
@@ -69,6 +71,14 @@ class _MapiahHomeState extends State<MapiahHome> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       MPDialogAux.checkForUpdates();
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mpLocator.mpSettingsController.isBoolSet(
+        MPSettingID.Main_TelemetryConsent,
+      )) {
+        MPTelemetryConsentDialog.show(context);
+      }
     });
   }
 

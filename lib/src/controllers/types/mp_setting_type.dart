@@ -8,24 +8,43 @@ import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
 enum MPSettingID {
   Internal_LastCheckNumberOfNewerVersions,
   Internal_LastNewVersionCheckMS,
+  Internal_TelemetryCurrentDate,
+  Internal_TelemetryCurrentDayTH2Files,
+  Internal_TelemetryCurrentDayTH2OpenCount,
+  Internal_TelemetryCurrentDayTH2TimeSecs,
+  Internal_TelemetryCurrentDayTHConfigFiles,
+  Internal_TelemetryCurrentDayTherionRunCount,
+  Internal_TelemetryCurrentDayTherionTimeSecs,
+  Internal_TelemetryPendingRecords,
   Main_LocaleID,
+  Main_TelemetryConsent,
   Main_TherionExecutablePath,
   TH2Edit_LineThickness,
   TH2Edit_NewLineCreationMethod,
   TH2Edit_PointRadius,
   TH2Edit_SelectionTolerance;
 
-  static const Map<MPSettingID, MPSettingType> types =
-      <MPSettingID, MPSettingType>{
-        MPSettingID.Internal_LastCheckNumberOfNewerVersions: MPSettingType.int,
-        MPSettingID.Internal_LastNewVersionCheckMS: MPSettingType.int,
-        MPSettingID.Main_LocaleID: MPSettingType.string,
-        MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
-        MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
-        MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
-        MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
-        MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
-      };
+  static const Map<MPSettingID, MPSettingType>
+  types = <MPSettingID, MPSettingType>{
+    MPSettingID.Internal_LastCheckNumberOfNewerVersions: MPSettingType.int,
+    MPSettingID.Internal_LastNewVersionCheckMS: MPSettingType.int,
+    MPSettingID.Internal_TelemetryCurrentDate: MPSettingType.string,
+    MPSettingID.Internal_TelemetryCurrentDayTH2Files: MPSettingType.stringList,
+    MPSettingID.Internal_TelemetryCurrentDayTH2OpenCount: MPSettingType.int,
+    MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs: MPSettingType.int,
+    MPSettingID.Internal_TelemetryCurrentDayTHConfigFiles:
+        MPSettingType.stringList,
+    MPSettingID.Internal_TelemetryCurrentDayTherionRunCount: MPSettingType.int,
+    MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs: MPSettingType.int,
+    MPSettingID.Internal_TelemetryPendingRecords: MPSettingType.stringList,
+    MPSettingID.Main_LocaleID: MPSettingType.string,
+    MPSettingID.Main_TelemetryConsent: MPSettingType.bool,
+    MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
+    MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
+    MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
+    MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
+    MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
+  };
 
   static const Map<MPSettingID, String> filePickerExecNames =
       <MPSettingID, String>{

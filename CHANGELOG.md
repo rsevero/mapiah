@@ -4,6 +4,7 @@
 
 ## 0.3.3 - not yet released
 * New features:
+  * Anonymous telemetry: Mapiah can optionally collect aggregated, anonymous daily usage data (OS type/version, Mapiah version, TH2 open counts and time, Therion run counts and time). A consent dialog is shown on first launch; consent can be changed at any time in Settings. No file paths, personal data, or identifying information is ever collected or transmitted. Data is aggregated client-side before sending and only previous UTC days' records are ever transmitted.
   * XVI image grid visibility toggle: each XVI image row in the available images panel now has a second checkbox to show or hide the survey grid independently from the image itself. Hiding the grid removes the grid lines from the canvas while keeping shots, stations, and sketch lines visible. The grid visibility state is persisted in the session.
   * Toggle all grids visibility button (Ctrl+G): a new icon button in the available images panel header hides or shows all XVI survey grids at once; it is only shown when at least one XVI image is present. The existing toggle all images button tooltip now also displays the Ctrl+I shortcut hint.
   * Checkbox clarity in the available images panel: each image row now shows a small image icon beside the visibility checkbox and a small grid icon beside the grid-visibility checkbox, making it immediately clear which checkbox controls what without needing to hover for a tooltip.

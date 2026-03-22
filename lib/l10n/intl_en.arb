@@ -1754,6 +1754,46 @@
     "description": "The label for the parsing errors dialog. Used on: MPErrorDialog.build",
     "type": "text"
   },
+  "telemetryConsentDialogAccept": "Yes, participate",
+  "@telemetryConsentDialogAccept": {
+    "description": "Accept button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
+    "type": "text"
+  },
+  "telemetryConsentDialogBody": "Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.",
+  "@telemetryConsentDialogBody": {
+    "description": "Body text of the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
+    "type": "text"
+  },
+  "telemetryConsentDialogDecline": "No thanks",
+  "@telemetryConsentDialogDecline": {
+    "description": "Decline button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
+    "type": "text"
+  },
+  "telemetryConsentDialogLearnMore": "Learn more about what is collected",
+  "@telemetryConsentDialogLearnMore": {
+    "description": "Link text in the telemetry consent dialog that opens the full telemetry details page. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
+    "type": "text"
+  },
+  "telemetryConsentDialogTitle": "Help improve Mapiah",
+  "@telemetryConsentDialogTitle": {
+    "description": "Title of the telemetry consent dialog shown on first launch. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
+    "type": "text"
+  },
+  "telemetrySettingsReviewLink": "Review telemetry details and consent",
+  "@telemetrySettingsReviewLink": {
+    "description": "Link text on the settings page that re-opens the telemetry consent dialog. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "telemetrySettingsSectionTitle": "Telemetry",
+  "@telemetrySettingsSectionTitle": {
+    "description": "Section title for telemetry settings. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "telemetrySettingsToggleLabel": "Share anonymous usage data",
+  "@telemetrySettingsToggleLabel": {
+    "description": "Label for the telemetry consent toggle on the settings page. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "th2FileEditPageAddArea": "Add area (A)",
   "@th2FileEditPageAddArea": {
     "description": "The label for the add area button. Used on: lib/src/pages/th2_file_edit_page.dart",
@@ -1859,6 +1899,16 @@
   "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",
   "@th2FileEditPageHelpDialogTitle": {
     "description": "The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build",
+    "type": "text"
+  },
+  "th2FileEditPageImageGridVisibilityTooltip": "Toggle grid visibility",
+  "@th2FileEditPageImageGridVisibilityTooltip": {
+    "description": "Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
+  "@th2FileEditPageImageVisibilityTooltip": {
+    "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
   "th2FileEditPageLoadImageButton": "Load image",
@@ -2054,16 +2104,6 @@
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
-  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Hide all images (Ctrl+I)",
-  "@th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": {
-    "description": "Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
-    "type": "text"
-  },
-  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Show all images (Ctrl+I)",
-  "@th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": {
-    "description": "Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
-    "type": "text"
-  },
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Hide all grids (Ctrl+G)",
   "@th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": {
     "description": "Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
@@ -2074,14 +2114,14 @@
     "description": "Tooltip for the toggle-all grid visibility button when any grid is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
-  "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
-  "@th2FileEditPageImageVisibilityTooltip": {
-    "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
+  "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Hide all images (Ctrl+I)",
+  "@th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": {
+    "description": "Tooltip for the toggle-all image visibility button when all images are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
-  "th2FileEditPageImageGridVisibilityTooltip": "Toggle grid visibility",
-  "@th2FileEditPageImageGridVisibilityTooltip": {
-    "description": "Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build",
+  "th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": "Show all images (Ctrl+I)",
+  "@th2FileEditPageToggleAllImagesVisibilityShowAllTooltip": {
+    "description": "Tooltip for the toggle-all image visibility button when any image is hidden (clicking will show all). Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Hide all but active",

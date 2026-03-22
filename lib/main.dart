@@ -92,6 +92,7 @@ void main(List<String> arguments) {
       WidgetsFlutterBinding.ensureInitialized();
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
+      unawaited(mpLocator.mpTelemetryController.initialize());
 
       THBaseException.registerUnhandledReporter((error, stack) {
         MPDialogAux.showUnhandledErrorDialog(error, stack);

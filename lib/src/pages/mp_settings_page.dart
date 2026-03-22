@@ -8,6 +8,7 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
+import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 
 class MPSettingsPage extends StatefulWidget {
   const MPSettingsPage({super.key});
@@ -105,6 +106,13 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             for (final MPSettingID type in types) ...[
               _buildSettingField(appLocalizations, type),
               const SizedBox(height: mpSettingsPageFieldSpacing),
+              if (type == MPSettingID.Main_TelemetryConsent) ...[
+                TextButton(
+                  onPressed: () => MPTelemetryConsentDialog.show(context),
+                  child: Text(appLocalizations.telemetrySettingsReviewLink),
+                ),
+                const SizedBox(height: mpSettingsPageFieldSpacing),
+              ],
             ],
           ],
         ),
@@ -498,10 +506,13 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
       switch (type.type()) {
         case MPSettingType.bool:
-          settingsController.setBool(
-            type,
-            (_draftValues[type] as bool?) ?? false,
-          );
+          final bool boolValue = (_draftValues[type] as bool?) ?? false;
+
+          if (type == MPSettingID.Main_TelemetryConsent) {
+            mpLocator.mpTelemetryController.setConsent(boolValue);
+          } else {
+            settingsController.setBool(type, boolValue);
+          }
         case MPSettingType.double:
           final String raw = (_draftValues[type] as String?)?.trim() ?? '';
           final String? error = _validateTextDraftValue(
@@ -644,9 +655,19 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     switch (type) {
       case MPSettingID.Internal_LastCheckNumberOfNewerVersions:
       case MPSettingID.Internal_LastNewVersionCheckMS:
+      case MPSettingID.Internal_TelemetryCurrentDate:
+      case MPSettingID.Internal_TelemetryCurrentDayTH2Files:
+      case MPSettingID.Internal_TelemetryCurrentDayTH2OpenCount:
+      case MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs:
+      case MPSettingID.Internal_TelemetryCurrentDayTHConfigFiles:
+      case MPSettingID.Internal_TelemetryCurrentDayTherionRunCount:
+      case MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs:
+      case MPSettingID.Internal_TelemetryPendingRecords:
         return _camelCaseToLabel(type.id());
       case MPSettingID.Main_LocaleID:
         return appLocalizations.mpSettingsSettingMainLocaleID;
+      case MPSettingID.Main_TelemetryConsent:
+        return appLocalizations.telemetrySettingsToggleLabel;
       case MPSettingID.Main_TherionExecutablePath:
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.TH2Edit_LineThickness:

@@ -1,0 +1,108 @@
+openapi: "3.0.3"
+info:
+  title: Mapiah Telemetry API
+  version: "1.0.0"
+  description: |
+    Anonymous, aggregated usage telemetry for Mapiah.
+    No identifying information (IPs, device IDs, user IDs, file paths)
+    is stored server-side or transmitted by the client.
+
+servers:
+  - url: https://api.mapiah.org/v1
+
+paths:
+  /telemetry:
+    post:
+      summary: Submit aggregated daily usage records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetrySubmission'
+      responses:
+        '200':
+          description: Records accepted
+
+  /telemetry/opt-out:
+    post:
+      summary: Notify that a user has opted out
+      description: |
+        No identifying information is sent or stored. The server only
+        increments an anonymous opt-out counter.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Opt-out recorded (anonymous counter only)
+
+components:
+  schemas:
+    TelemetrySubmission:
+      type: object
+      required: [records]
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyRecord'
+
+    DailyRecord:
+      type: object
+      required:
+        - date
+        - osType
+        - osVersion
+        - mapiahVersion
+        - buildType
+        - th2DifferentFilesCount
+        - th2OpenCount
+        - th2TimeMinutes
+        - thConfigDifferentFilesCount
+        - therionRunCount
+        - therionTimeSecs
+      properties:
+        date:
+          type: string
+          format: date
+          description: UTC date (YYYY-MM-DD)
+        osType:
+          type: string
+          enum: [linux, macos, windows]
+        osVersion:
+          type: string
+        linuxDistro:
+          type: string
+          description: Only present when osType is linux
+        windowManager:
+          type: string
+          description: Only present when osType is linux
+        mapiahVersion:
+          type: string
+        buildType:
+          type: string
+          enum: [AppImage, Flatpak, Other]
+        th2DifferentFilesCount:
+          type: integer
+          minimum: 0
+        th2OpenCount:
+          type: integer
+          minimum: 0
+        th2TimeMinutes:
+          type: integer
+          minimum: 0
+          description: Total minutes with at least one TH2 file open (derived from seconds stored locally)
+        thConfigDifferentFilesCount:
+          type: integer
+          minimum: 0
+        therionRunCount:
+          type: integer
+          minimum: 0
+        therionTimeSecs:
+          type: integer
+          minimum: 0
+          description: Total seconds spent running Therion

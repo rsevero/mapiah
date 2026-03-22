@@ -29,6 +29,13 @@ const bool mpIsFlathub = bool.fromEnvironment('isFlathub', defaultValue: false);
 // `--dart-define=isFlatpak=true` when building). Defaults to false.
 const bool mpIsFlatpak = bool.fromEnvironment('isFlatpak', defaultValue: false);
 
+// Compile-time flag to indicate we built the app as an AppImage (set with
+// `--dart-define=isAppImage=true` when building). Defaults to false.
+const bool mpIsAppImage = bool.fromEnvironment(
+  'isAppImage',
+  defaultValue: false,
+);
+
 // Debug compile-time flag to force showing Flathub version info dialog even
 // when the remote version is not newer. Set with
 // `--dart-define=debugAlwaysShowVersions=true` for debugging.
@@ -585,3 +592,19 @@ const String mpTherionLinuxPathSearchCacheHitMessage =
     '$mpTherionLinuxDebugPrefix Using cached executable path.';
 const String mpTherionLinuxPathSearchFallbackMessage =
     '$mpTherionLinuxDebugPrefix Falling back to executable from PATH.';
+
+// Telemetry server endpoints.
+const String mpTelemetryBaseURL = 'https://api.mapiah.org';
+const String mpTelemetrySubmitEndpoint = '$mpTelemetryBaseURL/v1/telemetry';
+const String mpTelemetryOptOutEndpoint =
+    '$mpTelemetryBaseURL/v1/telemetry/opt-out';
+const int mpTelemetryRetryIntervalMinutes = 15;
+const int mpTelemetryHttpTimeoutSeconds = 15;
+
+// Telemetry build type identifiers.
+const String mpTelemetryBuildTypeAppImage = 'AppImage';
+const String mpTelemetryBuildTypeFlatpak = 'Flatpak';
+const String mpTelemetryBuildTypeOther = 'Other';
+
+// Telemetry help page asset name (without path or extension).
+const String mpHelpPageTelemetry = 'telemetry';
