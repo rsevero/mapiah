@@ -197,7 +197,9 @@ abstract class MPTelemetryControllerBase with Store {
     }
 
     final MPLocator locator = MPLocator();
-    final String today = _utcDateString(DateTime.now().toUtc());
+    final String today = mpDebugTelemetryOverrideDate.isNotEmpty
+        ? mpDebugTelemetryOverrideDate
+        : _utcDateString(DateTime.now().toUtc());
     final String storedDate = locator.mpSettingsController.getStringWithDefault(
       MPSettingID.Internal_TelemetryCurrentDate,
     );
@@ -242,6 +244,19 @@ abstract class MPTelemetryControllerBase with Store {
         .toList();
     final String body = jsonEncode(<String, dynamic>{'records': records});
 
+    if (mpDebugTelemetryLogOnly) {
+      locator.mpLog.d(
+        '[Telemetry DEBUG] Would POST to $mpTelemetrySubmitEndpoint:\n$body',
+      );
+      locator.mpSettingsController.setStringList(
+        MPSettingID.Internal_TelemetryPendingRecords,
+        const <String>[],
+      );
+      _cancelRetryTimer();
+
+      return;
+    }
+
     try {
       final http.Response response = await http
           .post(
@@ -267,6 +282,14 @@ abstract class MPTelemetryControllerBase with Store {
   }
 
   Future<void> _sendOptIn() async {
+    if (mpDebugTelemetryLogOnly) {
+      MPLocator().mpLog.d(
+        '[Telemetry DEBUG] Would POST to $mpTelemetryOptInEndpoint: {}',
+      );
+
+      return;
+    }
+
     try {
       await http
           .post(
@@ -283,6 +306,14 @@ abstract class MPTelemetryControllerBase with Store {
   }
 
   Future<void> _sendOptOut() async {
+    if (mpDebugTelemetryLogOnly) {
+      MPLocator().mpLog.d(
+        '[Telemetry DEBUG] Would POST to $mpTelemetryOptOutEndpoint: {}',
+      );
+
+      return;
+    }
+
     try {
       await http
           .post(

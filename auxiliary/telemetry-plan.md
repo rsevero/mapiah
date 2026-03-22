@@ -298,6 +298,45 @@ Opt-in and opt-out bodies are empty `{}`. No identifying information stored or t
 
 ---
 
+## Debug Mode
+
+### Core principle
+
+In production, telemetry is fully silent (no console output). In debug builds, the goal is
+**no network traffic, full visibility**: the complete pipeline can be exercised and inspected
+without touching the production server or polluting production counters.
+
+### Debug constants (`mp_constants.dart`)
+
+| Constant | Type | How to activate | Effect |
+|----------|------|-----------------|--------|
+| `mpDebugTelemetryLogOnly` | `bool` | `--dart-define=debugTelemetryLogOnly=true` | Replaces all HTTP sends with `mpLog.d` output; pending records are still cleared so the log doesn't repeat |
+| `mpDebugTelemetryAlwaysShowConsent` | `bool` | `--dart-define=debugTelemetryAlwaysShowConsent=true` | Consent dialog shown on every startup, regardless of stored setting |
+| `mpDebugTelemetryOverrideDate` | `String` | Edit source: `const String mpDebugTelemetryOverrideDate = '2000-01-01';` | `_tryRolloverAndSend` uses this date as "today", so the stored date is always old and rollover always fires |
+
+### What changes under `mpDebugTelemetryLogOnly`
+
+- `_sendPendingRecords`: logs the full JSON payload to console, clears pending records, cancels timer — no HTTP
+- `_sendOptIn`: logs `Would POST to …/opt-in: {}` — no HTTP
+- `_sendOptOut`: logs `Would POST to …/opt-out: {}` — no HTTP
+
+Data **collection** still works normally (`recordTH2Opened`, `recordTherionStarted`, etc.) so
+the full local pipeline is observable. The retry timer still starts and fires; it just logs.
+
+### Usage
+
+```bash
+# Observe full pipeline without any network traffic; dialog always visible
+flutter run -d linux \
+  --dart-define=debugTelemetryLogOnly=true \
+  --dart-define=debugTelemetryAlwaysShowConsent=true
+
+# Test rollover: edit mp_constants.dart to set mpDebugTelemetryOverrideDate = '2000-01-01',
+# then run with logOnly to see the aggregated record printed to console.
+```
+
+---
+
 ## Verification Checklist
 
 1. **First launch (consent not set):** Consent dialog appears before version-check dialog. "No
@@ -313,7 +352,12 @@ Opt-in and opt-out bodies are empty `{}`. No identifying information stored or t
 5. **Opt-out after consent:** Set to false → local data cleared, opt-out POST fired, timer cancelled.
 6. **Re-opt-in:** Set back to true → opt-in POST fired, rollover/send cycle restarts.
 7. **Privacy check:** Inspect HTTP payloads — no file paths, IPs, or user-identifiable data.
-8. **`flutter analyze`:** No new errors or warnings.
+8. **Debug log-only mode:** Run with `--dart-define=debugTelemetryLogOnly=true`; verify no HTTP
+   calls are made and payloads appear in the log. Set `mpDebugTelemetryOverrideDate = '2000-01-01'`
+   and verify rollover fires and the aggregated record is printed.
+9. **Debug consent dialog:** Run with `--dart-define=debugTelemetryAlwaysShowConsent=true`; verify
+   the dialog appears on every startup even after consent has been set.
+10. **`flutter analyze`:** No new errors or warnings.
 
 ---
 

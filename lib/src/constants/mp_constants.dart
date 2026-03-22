@@ -48,6 +48,30 @@ const bool mpDebugAlwaysShowVersions = bool.fromEnvironment(
 // newest version available. If empty, the actual current version is used.
 const String mpDebugNewVersionInterfaceCurrentVersion = '';
 
+// When true, telemetry HTTP calls (submit, opt-in, opt-out) are replaced by
+// console log output. No network traffic is produced. Useful for verifying the
+// full telemetry pipeline without touching the production server.
+// Set with `--dart-define=debugTelemetryLogOnly=true`.
+const bool mpDebugTelemetryLogOnly = bool.fromEnvironment(
+  'debugTelemetryLogOnly',
+  defaultValue: false,
+);
+
+// When true, the telemetry consent dialog is always shown on startup regardless
+// of whether the user has already made a choice. Useful for iterating on the
+// dialog UI without clearing SharedPreferences between runs.
+// Set with `--dart-define=debugTelemetryAlwaysShowConsent=true`.
+const bool mpDebugTelemetryAlwaysShowConsent = bool.fromEnvironment(
+  'debugTelemetryAlwaysShowConsent',
+  defaultValue: false,
+);
+
+// When non-empty, overrides the stored Internal_TelemetryCurrentDate with this
+// value on every _tryRolloverAndSend call so that day rollover always fires.
+// Use any date in the past, e.g. '2000-01-01'.
+// Change this value directly in source to activate; leave empty in production.
+const String mpDebugTelemetryOverrideDate = '';
+
 const String mpHelpPagePath = 'assets/help';
 const String mpHelpPageFlathubDisabled = 'flathub_disabled';
 

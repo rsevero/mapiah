@@ -70,9 +70,10 @@ class _MapiahHomeState extends State<MapiahHome> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mpLocator.mpSettingsController.isBoolSet(
-        MPSettingID.Main_TelemetryConsent,
-      )) {
+      if (mpDebugTelemetryAlwaysShowConsent ||
+          !mpLocator.mpSettingsController.isBoolSet(
+            MPSettingID.Main_TelemetryConsent,
+          )) {
         await MPTelemetryConsentDialog.show(context);
       }
 
