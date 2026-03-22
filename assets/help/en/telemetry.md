@@ -8,21 +8,21 @@ Mapiah can optionally collect anonymous, aggregated usage data to help prioritiz
 
 Each day that you use Mapiah, a single aggregated record may be sent containing:
 
-| Field | Description |
-|-------|-------------|
-| Date | UTC date (e.g. 2026-03-20) |
-| OS type | linux, macos, or windows |
-| OS version | raw version string from the operating system |
-| Linux distro | distribution name (Linux only, e.g. "Fedora Linux 43") |
-| Window manager | desktop environment (Linux only, e.g. "KDE") |
-| Mapiah version | the version of Mapiah you are running |
-| Build type | AppImage, Flatpak, or Other |
-| TH2 files (unique) | number of distinct TH2 files opened that day |
-| TH2 open count | total number of times a TH2 file was opened |
-| TH2 time (minutes) | total minutes with at least one TH2 file open |
-| THConfig files (unique) | number of distinct THConfig files used |
-| Therion run count | number of times Therion was run |
-| Therion time (seconds) | total seconds spent running Therion |
+| Field                   | Description                                            |
+| ----------------------- | ------------------------------------------------------ |
+| Date                    | UTC date (e.g. 2026-03-20)                             |
+| OS type                 | linux, macos, or windows                               |
+| OS version              | raw version string from the operating system           |
+| Linux distro            | distribution name (Linux only, e.g. "Fedora Linux 43") |
+| Window manager          | desktop environment (Linux only, e.g. "KDE")           |
+| Mapiah version          | the version of Mapiah you are running                  |
+| Build type              | AppImage, Flatpak, or Other                            |
+| TH2 files (unique)      | number of distinct TH2 files opened that day           |
+| TH2 open count          | total number of times a TH2 file was opened            |
+| TH2 time (minutes)      | total minutes with at least one TH2 file open          |
+| THConfig files (unique) | number of distinct THConfig files used                 |
+| Therion run count       | number of times Therion was run                        |
+| Therion time (seconds)  | total seconds spent running Therion                    |
 
 ## What is NOT collected
 
@@ -43,3 +43,11 @@ When you first accept or decline telemetry, an immediate notification (containin
 You can enable or disable telemetry at any time on the _Settings_ page under the **Main** section. The toggle labeled "Share anonymous usage data" controls this setting. You can also click "Review telemetry details and consent" on the Settings page to see this dialog again.
 
 When you opt out, all locally stored telemetry data is deleted immediately and an anonymous opt-out notification is sent to the server. When you opt back in, an anonymous opt-in notification is sent.
+
+## Open source transparency
+
+As with all open source software, you can review the source code to see exactly how telemetry works.
+
+The relevant code is in `src/telemetry/` and `src/controllers/MPTelemetryController.cpp`.
+
+Telemetry data is stored locally in Mapiah's internal settings file, and sent to the server via HTTPS POST requests to `https://api.mapiah.org/telemetry`.
