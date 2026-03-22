@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
@@ -27,6 +28,11 @@ void main() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
       await mpLocator.mpSettingsController.initialized;
+      // Suppress the telemetry consent dialog so it does not block the home UI.
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.Main_TelemetryConsent,
+        true,
+      );
     });
 
     testWidgets('tapping New file opens modal and OK navigates to editor', (
