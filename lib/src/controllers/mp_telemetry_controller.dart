@@ -253,6 +253,63 @@ abstract class MPTelemetryControllerBase with Store {
         locator.mpLog.d('[Telemetry] Rolling over $storedDate → $today');
       }
 
+      // Snapshot any active session time that belongs to the old day.
+      // Elapsed time up to midnight is credited to storedDate; the in-memory
+      // start time is rebased to midnight so the remaining time after midnight
+      // accumulates to the new day when the session eventually closes.
+      final DateTime now = DateTime.now().toUtc();
+      final DateTime midnightUtc = DateTime.utc(now.year, now.month, now.day);
+
+      if (_th2SessionStartedAt != null) {
+        final int elapsedBeforeMidnight = midnightUtc
+            .difference(_th2SessionStartedAt!)
+            .inSeconds
+            .clamp(0, 86400);
+        final int currentTH2Secs = locator.mpSettingsController
+            .getIntWithDefault(
+              MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs,
+            );
+
+        locator.mpSettingsController.setInt(
+          MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs,
+          currentTH2Secs + elapsedBeforeMidnight,
+        );
+        _th2SessionStartedAt = midnightUtc;
+
+        if (mpDebugTelemetryVerbose) {
+          locator.mpLog.d(
+            '[Telemetry] TH2 session crosses midnight: '
+            '${elapsedBeforeMidnight}s credited to $storedDate, '
+            'session rebased to midnight.',
+          );
+        }
+      }
+
+      if (_therionStartedAt != null) {
+        final int elapsedBeforeMidnight = midnightUtc
+            .difference(_therionStartedAt!)
+            .inSeconds
+            .clamp(0, 86400);
+        final int currentTherionSecs = locator.mpSettingsController
+            .getIntWithDefault(
+              MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs,
+            );
+
+        locator.mpSettingsController.setInt(
+          MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs,
+          currentTherionSecs + elapsedBeforeMidnight,
+        );
+        _therionStartedAt = midnightUtc;
+
+        if (mpDebugTelemetryVerbose) {
+          locator.mpLog.d(
+            '[Telemetry] Therion session crosses midnight: '
+            '${elapsedBeforeMidnight}s credited to $storedDate, '
+            'session rebased to midnight.',
+          );
+        }
+      }
+
       final Map<String, dynamic> record = await _buildAggregatedRecord(
         storedDate,
         locator,
