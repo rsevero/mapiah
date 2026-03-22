@@ -129,13 +129,16 @@ class _MPTelemetryConsentDialogState extends State<MPTelemetryConsentDialog> {
             children: <Widget>[
               bodyWidget,
               const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () => _openLearnMore(context),
-                child: Text(
-                  mpLocator.appLocalizations.telemetryConsentDialogLearnMore,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    decoration: TextDecoration.underline,
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => _openLearnMore(context),
+                  child: Text(
+                    mpLocator.appLocalizations.telemetryConsentDialogLearnMore,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),

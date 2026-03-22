@@ -14,6 +14,7 @@ class MPURLTextWidget extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        mouseCursor: SystemMouseCursors.click,
         onTap: () async {
           final Uri? uri = Uri.tryParse(url);
 
