@@ -53,7 +53,7 @@ jobs:
         set -x
         flutter --version
         flutter config --enable-linux-desktop
-        flutter build linux --release
+        flutter build linux --release --dart-define=isAppImage=true
 
     - name: Install appimage dependencies
       run: |
