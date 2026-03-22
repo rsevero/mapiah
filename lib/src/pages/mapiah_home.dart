@@ -206,7 +206,12 @@ class _MapiahHomeState extends State<MapiahHome> {
           ),
         ],
       ),
-      body: Center(child: Text(appLocalizations.initialPagePresentation)),
+      body: Center(
+        child: Text(
+          appLocalizations.initialPagePresentation,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+      ),
     );
 
     return _withShortcuts(scaffold);
