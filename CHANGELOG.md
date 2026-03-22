@@ -28,6 +28,7 @@
   * Added tests for TH2FileEditSearchController (3680): 23 tests covering getMatchingElements, selectAll, byType, byID, byOption, byLineSegmentOption, resetCriteria, and all three selection actions (setSelection, addToSelection, removeFromSelection).
   * flutter upgrade 3.41.5 and flutter pub upgrade --major-versions.
   * Separating current (0.3.X) changelog from previous versions.
+  * Added tests for MPTelemetryController (3690): 27 tests covering consent gating, TH2 open/close recording, Therion recording, day rollover, and midnight session snapshot.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
