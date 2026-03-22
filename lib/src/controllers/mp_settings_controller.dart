@@ -455,9 +455,14 @@ abstract class MPSettingsControllerBase with Store {
     final bool oldValue = getBoolWithDefault(id);
     final bool isChanged = (oldValue != value);
 
+    // Always record the explicit user choice, even when the value equals the
+    // implicit default. Without this, setBool(id, false) on a never-set bool
+    // that defaults to false would be a no-op, leaving isBoolSet() returning
+    // false as if the user had never been asked.
+    _boolSettings[id] = value;
+    prefs.setBool(id.name, value);
+
     if (isChanged) {
-      _boolSettings[id] = value;
-      prefs.setBool(id.name, value);
       trigger(id);
     }
 
@@ -492,9 +497,10 @@ abstract class MPSettingsControllerBase with Store {
     final double oldValue = getDoubleWithDefault(id);
     final bool isChanged = (oldValue != value);
 
+    _doubleSettings[id] = value;
+    prefs.setDouble(id.name, value);
+
     if (isChanged) {
-      _doubleSettings[id] = value;
-      prefs.setDouble(id.name, value);
       trigger(id);
     }
 
@@ -519,9 +525,10 @@ abstract class MPSettingsControllerBase with Store {
     final Enum oldValue = getEnumWithDefault(id);
     final bool isChanged = (oldValue != value);
 
+    _enumSettings[id] = value;
+    prefs.setString(id.name, id.enumDefinition().storedValue(value));
+
     if (isChanged) {
-      _enumSettings[id] = value;
-      prefs.setString(id.name, id.enumDefinition().storedValue(value));
       trigger(id);
     }
 
@@ -584,9 +591,10 @@ abstract class MPSettingsControllerBase with Store {
     final int oldValue = getIntWithDefault(id);
     final bool isChanged = (oldValue != value);
 
+    _intSettings[id] = value;
+    prefs.setInt(id.name, value);
+
     if (isChanged) {
-      _intSettings[id] = value;
-      prefs.setInt(id.name, value);
       trigger(id);
     }
 
@@ -623,9 +631,10 @@ abstract class MPSettingsControllerBase with Store {
     final String oldValue = getStringWithDefault(id);
     final bool isChanged = (oldValue != value);
 
+    _stringSettings[id] = value;
+    prefs.setString(id.name, value);
+
     if (isChanged) {
-      _stringSettings[id] = value;
-      prefs.setString(id.name, value);
       trigger(id);
       if (id == MPSettingID.Main_TherionExecutablePath) {
         // Clear cached probe and re-check availability asynchronously.
@@ -671,9 +680,10 @@ abstract class MPSettingsControllerBase with Store {
     final List<String> oldValue = getStringListWithDefault(id);
     final bool isChanged = !listEquals(oldValue, value);
 
+    _stringListSettings[id] = value;
+    prefs.setStringList(id.name, value);
+
     if (isChanged) {
-      _stringListSettings[id] = value;
-      prefs.setStringList(id.name, value);
       trigger(id);
     }
 

@@ -103,6 +103,35 @@ void main() {
 
       expect(openCount, 0);
     });
+
+    test('setConsent(false) writes the value to settings so the consent dialog '
+        'does not reappear on next launch', () async {
+      // Start with no consent recorded — simulates a fresh install.
+      expect(
+        locator.mpSettingsController.isBoolSet(
+          MPSettingID.Main_TelemetryConsent,
+        ),
+        isFalse,
+      );
+
+      await locator.mpTelemetryController.setConsent(false);
+
+      // The false value must be explicitly stored, not just left as the
+      // implicit default. Without this, isBoolSet returns false and the
+      // consent dialog keeps showing on every launch.
+      expect(
+        locator.mpSettingsController.isBoolSet(
+          MPSettingID.Main_TelemetryConsent,
+        ),
+        isTrue,
+      );
+      expect(
+        locator.mpSettingsController.getBoolIfSet(
+          MPSettingID.Main_TelemetryConsent,
+        ),
+        isFalse,
+      );
+    });
   });
 
   // ---------------------------------------------------------------------------

@@ -13,6 +13,7 @@
   * Ctrl+H shortcut: hides selected elements from the canvas (they are also deselected and no longer selectable); with no selection, clears all hidden elements and makes them visible again. Hidden elements are a temporary canvas-only state and are not saved to the file.
 * Fixed bugs:
   * Test 3100 (new file dialog): telemetry consent dialog was blocking the home UI because consent was unset in the test environment. Fixed by setting consent in setUp before pumping the app.
+  * MPSettingsController: all setter methods (setBool, setInt, setDouble, setString, setStringList, setEnum) now always write the value to storage, even when it matches the implicit default. Previously, setting a value equal to the default was a no-op, so isXxxSet() returned false as if the setting had never been touched — causing the telemetry consent dialog to reappear on every launch after a user had refused.
   * Telemetry: session time spanning midnight was fully attributed to the new day. The rollover now snapshots active TH2 and Therion session time up to midnight into the old day's record and resets the in-memory session baseline to midnight, so each day receives only the time that actually occurred within it. [suggested by Patrícia Finageiv]
 * Infrastructure maintenance:
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
