@@ -72,6 +72,16 @@ const bool mpDebugTelemetryAlwaysShowConsent = bool.fromEnvironment(
 // Change this value directly in source to activate; leave empty in production.
 const String mpDebugTelemetryOverrideDate = '';
 
+// When true, logs every step of the telemetry pipeline (rollover detection,
+// record building, HTTP request/response, timer events, and individual event
+// recording). Does NOT suppress real HTTP calls — combine with
+// debugTelemetryLogOnly=true to log everything without hitting the server.
+// Set with `--dart-define=debugTelemetryVerbose=true`.
+const bool mpDebugTelemetryVerbose = bool.fromEnvironment(
+  'debugTelemetryVerbose',
+  defaultValue: false,
+);
+
 const String mpHelpPagePath = 'assets/help';
 const String mpHelpPageFlathubDisabled = 'flathub_disabled';
 
@@ -618,7 +628,10 @@ const String mpTherionLinuxPathSearchFallbackMessage =
     '$mpTherionLinuxDebugPrefix Falling back to executable from PATH.';
 
 // Telemetry server endpoints.
-const String mpTelemetryBaseURL = 'https://api.mapiah.org';
+const String mpTelemetryBaseURL = String.fromEnvironment(
+  'telemetryBaseURL',
+  defaultValue: 'https://api.mapiah.org',
+);
 const String mpTelemetrySubmitEndpoint = '$mpTelemetryBaseURL/v1/telemetry';
 const String mpTelemetryOptInEndpoint =
     '$mpTelemetryBaseURL/v1/telemetry/opt-in';

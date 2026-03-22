@@ -34,6 +34,10 @@ abstract class MPTelemetryControllerBase with Store {
 
     consentState = consent;
 
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d('[Telemetry] initialize: consentState=$consentState');
+    }
+
     if (consent == true) {
       await _tryRolloverAndSend();
       _startRetryTimerIfNeeded();
@@ -49,6 +53,10 @@ abstract class MPTelemetryControllerBase with Store {
       MPSettingID.Main_TelemetryConsent,
       value,
     );
+
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d('[Telemetry] setConsent: value=$value');
+    }
 
     if (!value) {
       _cancelRetryTimer();
@@ -72,6 +80,12 @@ abstract class MPTelemetryControllerBase with Store {
 
     if (_openTH2Count == 1) {
       _th2SessionStartedAt = DateTime.now().toUtc();
+    }
+
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] recordTH2Opened: file=$filePath openCount=$_openTH2Count',
+      );
     }
 
     final int currentCount = locator.mpSettingsController.getIntWithDefault(
@@ -124,6 +138,18 @@ abstract class MPTelemetryControllerBase with Store {
         MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs,
         currentSecs + elapsedSecs,
       );
+
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d(
+          '[Telemetry] recordTH2Closed: file=$filePath elapsed=${elapsedSecs}s totalSecs=${currentSecs + elapsedSecs}',
+        );
+      }
+    } else {
+      if (mpDebugTelemetryVerbose) {
+        MPLocator().mpLog.d(
+          '[Telemetry] recordTH2Closed: file=$filePath openCount=$_openTH2Count (session still active)',
+        );
+      }
     }
   }
 
@@ -165,6 +191,12 @@ abstract class MPTelemetryControllerBase with Store {
       currentCount + 1,
     );
 
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] recordTherionStarted: config=$thConfigPath runCount=${currentCount + 1}',
+      );
+    }
+
     recordTHConfigOpened(thConfigPath);
   }
 
@@ -189,6 +221,12 @@ abstract class MPTelemetryControllerBase with Store {
       MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs,
       currentSecs + elapsedSecs,
     );
+
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] recordTherionStopped: elapsed=${elapsedSecs}s totalSecs=${currentSecs + elapsedSecs}',
+      );
+    }
   }
 
   Future<void> _tryRolloverAndSend() async {
@@ -204,12 +242,27 @@ abstract class MPTelemetryControllerBase with Store {
       MPSettingID.Internal_TelemetryCurrentDate,
     );
 
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] _tryRolloverAndSend: storedDate=$storedDate today=$today',
+      );
+    }
+
     if (storedDate.isNotEmpty && (storedDate != today)) {
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d('[Telemetry] Rolling over $storedDate → $today');
+      }
+
       final Map<String, dynamic> record = await _buildAggregatedRecord(
         storedDate,
         locator,
       );
       final String encoded = jsonEncode(record);
+
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d('[Telemetry] Aggregated record: $encoded');
+      }
+
       final List<String> pending = locator.mpSettingsController
           .getStringListWithDefault(
             MPSettingID.Internal_TelemetryPendingRecords,
@@ -221,6 +274,8 @@ abstract class MPTelemetryControllerBase with Store {
       );
 
       _clearCurrentDayData(locator);
+    } else if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d('[Telemetry] No rollover needed.');
     }
 
     locator.mpSettingsController.setString(
@@ -236,6 +291,10 @@ abstract class MPTelemetryControllerBase with Store {
         .getStringListWithDefault(MPSettingID.Internal_TelemetryPendingRecords);
 
     if (pending.isEmpty) {
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d('[Telemetry] _sendPendingRecords: nothing to send.');
+      }
+
       return;
     }
 
@@ -257,6 +316,12 @@ abstract class MPTelemetryControllerBase with Store {
       return;
     }
 
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] POSTing ${pending.length} record(s) to $mpTelemetrySubmitEndpoint',
+      );
+    }
+
     try {
       final http.Response response = await http
           .post(
@@ -269,14 +334,25 @@ abstract class MPTelemetryControllerBase with Store {
           )
           .timeout(Duration(seconds: mpTelemetryHttpTimeoutSeconds));
 
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d('[Telemetry] POST response: ${response.statusCode}');
+      }
+
       if (response.statusCode == mpHttpStatusOk) {
         locator.mpSettingsController.setStringList(
           MPSettingID.Internal_TelemetryPendingRecords,
           const <String>[],
         );
         _cancelRetryTimer();
+
+        if (mpDebugTelemetryVerbose) {
+          locator.mpLog.d('[Telemetry] Records sent and cleared.');
+        }
       }
-    } on Object {
+    } on Object catch (e) {
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d('[Telemetry] POST failed: $e');
+      }
       // Silently ignore — retry timer will handle the next attempt.
     }
   }
@@ -290,8 +366,14 @@ abstract class MPTelemetryControllerBase with Store {
       return;
     }
 
+    if (mpDebugTelemetryVerbose) {
+      MPLocator().mpLog.d(
+        '[Telemetry] POSTing opt-in to $mpTelemetryOptInEndpoint',
+      );
+    }
+
     try {
-      await http
+      final http.Response response = await http
           .post(
             Uri.parse(mpTelemetryOptInEndpoint),
             headers: <String, String>{
@@ -300,7 +382,16 @@ abstract class MPTelemetryControllerBase with Store {
             body: '{}',
           )
           .timeout(Duration(seconds: mpTelemetryHttpTimeoutSeconds));
-    } on Object {
+
+      if (mpDebugTelemetryVerbose) {
+        MPLocator().mpLog.d(
+          '[Telemetry] opt-in response: ${response.statusCode}',
+        );
+      }
+    } on Object catch (e) {
+      if (mpDebugTelemetryVerbose) {
+        MPLocator().mpLog.d('[Telemetry] opt-in POST failed: $e');
+      }
       // Silently ignore — opt-in notification is best-effort.
     }
   }
@@ -314,8 +405,14 @@ abstract class MPTelemetryControllerBase with Store {
       return;
     }
 
+    if (mpDebugTelemetryVerbose) {
+      MPLocator().mpLog.d(
+        '[Telemetry] POSTing opt-out to $mpTelemetryOptOutEndpoint',
+      );
+    }
+
     try {
-      await http
+      final http.Response response = await http
           .post(
             Uri.parse(mpTelemetryOptOutEndpoint),
             headers: <String, String>{
@@ -324,7 +421,16 @@ abstract class MPTelemetryControllerBase with Store {
             body: '{}',
           )
           .timeout(Duration(seconds: mpTelemetryHttpTimeoutSeconds));
-    } on Object {
+
+      if (mpDebugTelemetryVerbose) {
+        MPLocator().mpLog.d(
+          '[Telemetry] opt-out response: ${response.statusCode}',
+        );
+      }
+    } on Object catch (e) {
+      if (mpDebugTelemetryVerbose) {
+        MPLocator().mpLog.d('[Telemetry] opt-out POST failed: $e');
+      }
       // Silently ignore — opt-out is best-effort.
     }
   }
@@ -376,7 +482,20 @@ abstract class MPTelemetryControllerBase with Store {
         .getStringListWithDefault(MPSettingID.Internal_TelemetryPendingRecords);
 
     if (pending.isEmpty || (_retryTimer != null)) {
+      if (mpDebugTelemetryVerbose) {
+        locator.mpLog.d(
+          '[Telemetry] _startRetryTimerIfNeeded: skipped '
+          '(pending=${pending.length}, timerActive=${_retryTimer != null})',
+        );
+      }
+
       return;
+    }
+
+    if (mpDebugTelemetryVerbose) {
+      locator.mpLog.d(
+        '[Telemetry] Starting retry timer (${pending.length} pending record(s), interval=${mpTelemetryRetryIntervalMinutes}min)',
+      );
     }
 
     _retryTimer = Timer.periodic(
@@ -386,6 +505,10 @@ abstract class MPTelemetryControllerBase with Store {
   }
 
   void _cancelRetryTimer() {
+    if (mpDebugTelemetryVerbose && (_retryTimer != null)) {
+      MPLocator().mpLog.d('[Telemetry] Retry timer cancelled.');
+    }
+
     _retryTimer?.cancel();
     _retryTimer = null;
   }
