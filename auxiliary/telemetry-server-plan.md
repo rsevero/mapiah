@@ -5,8 +5,8 @@
 ## Overview
 
 A small PHP + MySQL server hosted at `api.mapiah.org` on Hostinger. Receives anonymous
-aggregated usage records from Mapiah clients, stores them in a tiered retention structure,
-and exposes a read-only admin dashboard.
+aggregated usage records from Mapiah clients, stores them in a two-tier retention structure
+(daily for 366 days, then monthly forever), and exposes a read-only admin dashboard.
 
 **Separate repository**: `mapiah-telemetry-server`
 **API contract**: `openapi/telemetry.yaml` in the Mapiah client repo is the source of truth.
@@ -66,30 +66,6 @@ CREATE TABLE daily_totals (
   versions_json     JSON NULL,   -- {"1.2.3": 5, "1.3.0": 2}
   distros_json      JSON NULL,   -- {"Fedora Linux 43": 4, "Ubuntu 24.04": 1}
   wm_json           JSON NULL    -- {"KDE": 3, "GNOME": 2}
-);
-```
-
-### `weekly_totals` — one row per ISO week (Mon–Sun); kept 53 weeks
-
-```sql
-CREATE TABLE weekly_totals (
-  week_start        DATE NOT NULL PRIMARY KEY,  -- Monday of the week
-  user_days         INT UNSIGNED NOT NULL DEFAULT 0,
-  linux_users       INT UNSIGNED NOT NULL DEFAULT 0,
-  macos_users       INT UNSIGNED NOT NULL DEFAULT 0,
-  windows_users     INT UNSIGNED NOT NULL DEFAULT 0,
-  appimage_users    INT UNSIGNED NOT NULL DEFAULT 0,
-  flatpak_users     INT UNSIGNED NOT NULL DEFAULT 0,
-  other_users       INT UNSIGNED NOT NULL DEFAULT 0,
-  th2_files         BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  th2_opens         BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  th2_minutes       BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  thconfig_files    BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  therion_runs      BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  therion_secs      BIGINT UNSIGNED NOT NULL DEFAULT 0,
-  versions_json     JSON NULL,
-  distros_json      JSON NULL,
-  wm_json           JSON NULL
 );
 ```
 
@@ -168,39 +144,34 @@ Insert one row into `consent_events`. Body is ignored. Always respond `200 {}`.
 
 Run once daily at **03:00 UTC** via Hostinger cron (`php /path/to/cron/rollup.php`).
 
-### Step 1 — Roll daily → weekly
+### Step 1 — Roll daily → monthly
 
-Condition: a daily row is eligible when its `day` is older than **366 days** AND its ISO week
-is fully complete (i.e., the Sunday of that week is also older than 366 days).
-
-```
-For each distinct ISO week_start where ALL 7 days exist in daily_totals
-  AND week_start < TODAY - 366 days:
-    Aggregate the 7 daily rows into one weekly row (SUM numerics, merge JSONs).
-    UPSERT into weekly_totals.
-    DELETE the 7 daily_totals rows.
-```
-
-Weeks that are only partially represented (e.g. data collection started mid-week, or some
-days had zero submissions and no row) are still rolled up with whatever days exist.
-
-### Step 2 — Roll weekly → monthly
-
-Condition: a weekly row is eligible when its `week_start` is older than **53 weeks** AND
-the calendar month it falls in is fully past 53 weeks.
+A calendar month is eligible for rollup when every recorded day in that month is older than
+**366 days** (condition: `HAVING MAX(day) <= cutoff`). This ensures no partial months are
+rolled up prematurely.
 
 ```
-For each distinct month_start where ALL weekly rows for that month
-  have week_start < TODAY - 53 weeks:
-    Aggregate the weekly rows into one monthly row (SUM numerics, merge JSONs).
+cutoff = TODAY - 366 days
+
+For each distinct month_start where MAX(day) <= cutoff:
+    SELECT all daily_totals rows for that month.
+    Aggregate them (SUM numerics, merge JSONs).
     UPSERT into monthly_totals.
-    DELETE the weekly_totals rows.
+    DELETE those daily_totals rows.
 ```
 
-### Step 3 — Purge orphan daily rows
+The table may temporarily hold up to ~397 rows (366 + up to 31 days while waiting for a
+month-end to cross the threshold). This is expected and harmless.
 
-Delete any `daily_totals` rows with `day < TODAY - 366 days` that were not rolled up
-(e.g. isolated days with no complete week partner). These are rare edge cases.
+### Step 2 — Purge orphan daily rows
+
+Delete any `daily_totals` rows with `day <= cutoff` that were not part of a complete month
+eligible for rollup (e.g. the very first days of data collection if data started mid-month
+and that partial month never filled in).
+
+```sql
+DELETE FROM daily_totals WHERE day <= cutoff;
+```
 
 ### JSON aggregation in cron
 
@@ -251,8 +222,9 @@ Single PHP-rendered HTML page. No framework. Chart.js loaded from CDN.
 - Net participants (opt-ins − opt-outs)
 - Opt-ins last 30 days / last 7 days
 
-**2. Active user-days over time** (bar chart)
-- Toggle: last 30 days (daily_totals) / last 52 weeks (weekly_totals) / all months (monthly_totals)
+**2. Active user-days over time** (two bar charts)
+- Last 30 days (from daily_totals)
+- All months (from monthly_totals)
 - Y-axis: user_days (count of submissions per period)
 
 **3. OS distribution** (doughnut chart)
@@ -265,10 +237,10 @@ Single PHP-rendered HTML page. No framework. Chart.js loaded from CDN.
 - Source: merge of `versions_json` from daily_totals for last 30 days
 - Shows top 10 versions
 
-**6. TH2 usage** (line chart — last 52 weeks)
+**6. TH2 usage** (line chart — last 30 days)
 - Lines: avg th2_minutes per user-day, avg th2_opens per user-day
 
-**7. Therion usage** (line chart — last 52 weeks)
+**7. Therion usage** (line chart — last 30 days)
 - Lines: avg therion_runs per user-day, avg therion_secs per user-day
 
 **8. Linux distros** (table, last 30 days)
