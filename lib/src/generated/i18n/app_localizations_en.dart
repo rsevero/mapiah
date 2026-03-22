@@ -1129,7 +1129,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get telemetryConsentDialogBody =>
-      'Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.';
+      'Mapiah can collect anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.';
 
   @override
   String get telemetryConsentDialogDecline => 'No thanks';

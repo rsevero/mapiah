@@ -32,6 +32,7 @@
   * Separating current (0.3.X) changelog from previous versions.
   * Added tests for MPTelemetryController (3690): 27 tests covering consent gating, TH2 open/close recording, Therion recording, day rollover, and midnight session snapshot.
   * Added tests for MPSettingsController always-persist behaviour (3692): 12 tests verifying that all setter types (bool, int, double, string, stringList, enum) record the value even when it equals the implicit default, and that the setter return value correctly reflects whether observers should fire.
+  * Telemetry consent dialog body is now loaded from locale-aware markdown assets (assets/help/{locale}/telemetry_consent.md) and rendered with MarkdownBlock, replacing the plain localization string. Falls back to the localization string if the asset cannot be loaded.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

@@ -1139,7 +1139,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get telemetryConsentDialogBody =>
-      'O Mapiah pode compartilhar dados de uso anônimos e agregados para ajudar a melhorar o aplicativo. Nenhuma informação pessoal, conteúdo de arquivos ou dados identificadores é coletado ou transmitido. Você pode alterar esta configuração a qualquer momento em Configurações.';
+      'O Mapiah pode coletar dados de uso anônimos e agregados para ajudar a melhorar o aplicativo. Nenhuma informação pessoal, conteúdo de arquivos ou dados identificadores é coletado ou transmitido. Você pode alterar esta configuração a qualquer momento em Configurações.';
 
   @override
   String get telemetryConsentDialogDecline => 'Não, obrigado';

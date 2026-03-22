@@ -1759,7 +1759,7 @@
     "description": "Accept button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
     "type": "text"
   },
-  "telemetryConsentDialogBody": "Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.",
+  "telemetryConsentDialogBody": "Mapiah can collect anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.",
   "@telemetryConsentDialogBody": {
     "description": "Body text of the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",
     "type": "text"

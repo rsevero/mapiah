@@ -55,6 +55,7 @@ flutter:
     - assets/help/en/mapiah_home_help.md
     - assets/help/en/mp_settings_page_help.md
     - assets/help/en/no_therion_found.md
+    - assets/help/en/telemetry_consent.md
     - assets/help/en/telemetry.md
     - assets/help/en/th2_file_edit_page_help.md
     - assets/help/images/buttonAddArea.png
@@ -95,6 +96,7 @@ flutter:
     - assets/help/pt/mapiah_home_help.md
     - assets/help/pt/mp_settings_page_help.md
     - assets/help/pt/no_therion_found.md
+    - assets/help/pt/telemetry_consent.md
     - assets/help/pt/telemetry.md
     - assets/help/pt/th2_file_edit_page_help.md
     - assets/icons/add_element-addArea.png

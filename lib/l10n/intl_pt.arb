@@ -356,7 +356,7 @@
   "mpUnrecognizedCommandOptionTextLabel": "Opção não reconhecida",
   "parsingErrors": "Erros na interpretação do arquivo",
   "telemetryConsentDialogAccept": "Sim, participar",
-  "telemetryConsentDialogBody": "O Mapiah pode compartilhar dados de uso anônimos e agregados para ajudar a melhorar o aplicativo. Nenhuma informação pessoal, conteúdo de arquivos ou dados identificadores é coletado ou transmitido. Você pode alterar esta configuração a qualquer momento em Configurações.",
+  "telemetryConsentDialogBody": "O Mapiah pode coletar dados de uso anônimos e agregados para ajudar a melhorar o aplicativo. Nenhuma informação pessoal, conteúdo de arquivos ou dados identificadores é coletado ou transmitido. Você pode alterar esta configuração a qualquer momento em Configurações.",
   "telemetryConsentDialogDecline": "Não, obrigado",
   "telemetryConsentDialogLearnMore": "Saiba mais sobre o que é coletado",
   "telemetryConsentDialogTitle": "Ajude a melhorar o Mapiah",

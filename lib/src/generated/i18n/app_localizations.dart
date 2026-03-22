@@ -2143,7 +2143,7 @@ abstract class AppLocalizations {
   /// Body text of the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
   ///
   /// In en, this message translates to:
-  /// **'Mapiah can share anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.'**
+  /// **'Mapiah can collect anonymous, aggregated usage data to help improve the app. No personal information, file contents or identifying data is ever collected or transmitted. You can change this setting at any time in Settings.'**
   String get telemetryConsentDialogBody;
 
   /// Decline button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
