@@ -9,12 +9,12 @@ import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
-import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 
 class MPSearchSelectDialogWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -273,7 +273,7 @@ class _MPSearchSelectDialogWidgetState
               alignment: WrapAlignment.end,
               children: [
                 TextButton(
-                  onPressed: _onReset,
+                  onPressed: _criteria.hasAnyConfiguration ? _onReset : null,
                   child: Text(
                     _appLocalizations.th2FileEditPageSearchSelectReset,
                   ),

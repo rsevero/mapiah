@@ -67,6 +67,9 @@ class MPSearchSelectCriteria {
   final MPSearchSelectSectionCriteria lines = MPSearchSelectSectionCriteria();
   final MPSearchSelectSectionCriteria areas = MPSearchSelectSectionCriteria();
 
+  bool get hasAnyConfiguration =>
+      points.enabled || lines.enabled || areas.enabled;
+
   void reset() {
     points.reset();
     lines.reset();

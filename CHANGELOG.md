@@ -18,6 +18,7 @@
   * Test 3100 (new file dialog): telemetry consent dialog was blocking the home UI because consent was unset in the test environment. Fixed by setting consent in setUp before pumping the app.
   * MPSettingsController: all setter methods (setBool, setInt, setDouble, setString, setStringList, setEnum) now always write the value to storage, even when it matches the implicit default. Previously, setting a value equal to the default was a no-op, so isXxxSet() returned false as if the setting had never been touched — causing the telemetry consent dialog to reappear on every launch after a user had refused.
   * Telemetry: session time spanning midnight was fully attributed to the new day. The rollover now snapshots active TH2 and Therion session time up to midnight into the old day's record and resets the in-memory session baseline to midnight, so each day receives only the time that actually occurred within it. [suggested by Patrícia Finageiv]
+  * "Reset" button in search and select dialog is enabled when there is no active filter configuration.
 * Infrastructure maintenance:
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
