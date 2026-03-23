@@ -35,6 +35,7 @@
   * Home page: increased font size of the initial page presentation text to headlineMedium. [requested by Patrícia Finageiv]
   * Cursor changes to a hand pointer when hovering over links in the telemetry consent dialog and in the about dialog (MPURLTextWidget). [requested by Patrícia Finageiv]
   * Telemetry consent dialog body is now loaded from locale-aware markdown assets (assets/help/{locale}/telemetry_consent.md) and rendered with MarkdownBlock, replacing the plain localization string. Falls back to the localization string if the asset cannot be loaded. [requested by Patrícia Finageiv]
+  * Canvas cursor now changes to reflect the current editing state: crosshair when adding points or lines, grabbing when moving elements or control points, and the default arrow cursor in select mode.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

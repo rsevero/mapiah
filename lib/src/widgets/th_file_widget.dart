@@ -48,170 +48,181 @@ class TH2FileWidget extends StatelessWidget {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         }
 
-        return MPListenerWidget(
-          key: ValueKey("MPListenerWidget|$thFileMPID"),
-          actuator: th2FileEditController.stateController,
-          th2FileEditController: th2FileEditController,
-          child: Container(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black
-                : Colors.white,
-            child: Stack(
-              key: ValueKey("TH2FileWidgetStack|$thFileMPID"),
-              children: [
-                if (th2FileEditController.showImages)
-                  MPImagesWidget(
-                    key: ValueKey("MPImagesWidget|$thFileMPID"),
-                    th2FileEditController: th2FileEditController,
-                  ),
-                MPNonSelectedScrapsWidget(
-                  key: ValueKey("MPNonSelectedScrapsWidget|$thFileMPID"),
-                  th2FileEditController: th2FileEditController,
-                ),
-                MPNonSelectedElementsWidget(
-                  key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
-                  th2FileEditController: th2FileEditController,
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showScrapScale) {
-                      return MPScrapScaleWidget(
-                        key: ValueKey("MPScrapScaleWidget|$thFileMPID"),
+        return Observer(
+          builder: (_) => MouseRegion(
+            cursor: th2FileEditController.canvasCursor,
+            child: MPListenerWidget(
+              key: ValueKey("MPListenerWidget|$thFileMPID"),
+              actuator: th2FileEditController.stateController,
+              th2FileEditController: th2FileEditController,
+              child: Container(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black
+                    : Colors.white,
+                child: Stack(
+                  key: ValueKey("TH2FileWidgetStack|$thFileMPID"),
+                  children: [
+                    if (th2FileEditController.showImages)
+                      MPImagesWidget(
+                        key: ValueKey("MPImagesWidget|$thFileMPID"),
                         th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showSelectedElements) {
-                      return MPSelectedElementsWidget(
-                        key: ValueKey("MPSelectedElementsWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showAddLine) {
-                      return MPAddLineWidget(
-                        key: ValueKey("MPAddLineWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showEditLineSegment) {
-                      return MPLineEditWidget(
-                        key: ValueKey("MPEditLineWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showSelectionHandles) {
-                      return MPSelectionHandlesWidget(
-                        key: ValueKey("MPSelectionHandlesWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController.showSelectionWindow) {
-                      return MPSelectionWindowWidget(
-                        key: ValueKey("MPSelectionWindowWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController
-                        .showMultipleElementsClickedHighlight) {
-                      return MPMultipleElementsClickedHighlightWidget(
-                        key: ValueKey(
-                          "MPMultipleElementsClickedHighlightWidget|$thFileMPID",
-                        ),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                Observer(
-                  builder: (_) {
-                    if (th2FileEditController
-                        .showMultipleEndControlPointsClickedHighlight) {
-                      return MPMultipleEndControlPointsClickedHighlightWidget(
-                        key: ValueKey(
-                          "MPMultipleEndControlPointsClickedHighlightWidget|$thFileMPID",
-                        ),
-                        th2FileEditController: th2FileEditController,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
-                if (mpDebugMousePosition)
-                  Positioned(
-                    bottom: 32,
-                    left: 16,
-                    child: Observer(
+                      ),
+                    MPNonSelectedScrapsWidget(
+                      key: ValueKey("MPNonSelectedScrapsWidget|$thFileMPID"),
+                      th2FileEditController: th2FileEditController,
+                    ),
+                    MPNonSelectedElementsWidget(
+                      key: ValueKey("MPNonSelectedElementsWidget|$thFileMPID"),
+                      th2FileEditController: th2FileEditController,
+                    ),
+                    Observer(
                       builder: (_) {
-                        final Offset screenPosition =
-                            th2FileEditController.mousePosition;
-                        final Offset canvasPosition = th2FileEditController
-                            .offsetScreenToCanvas(screenPosition);
-
-                        th2FileEditController.redrawTriggerAllElements;
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Mouse Screen Position: (x: ${screenPosition.dx.toStringAsFixed(1)}, y: ${screenPosition.dy.toStringAsFixed(1)})',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Mouse Canvas Position: (x: ${canvasPosition.dx.toStringAsFixed(2)}, y: ${canvasPosition.dy.toStringAsFixed(2)})',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        );
+                        if (th2FileEditController.showScrapScale) {
+                          return MPScrapScaleWidget(
+                            key: ValueKey("MPScrapScaleWidget|$thFileMPID"),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
                       },
                     ),
-                  ),
-              ],
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showSelectedElements) {
+                          return MPSelectedElementsWidget(
+                            key: ValueKey(
+                              "MPSelectedElementsWidget|$thFileMPID",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showAddLine) {
+                          return MPAddLineWidget(
+                            key: ValueKey("MPAddLineWidget|$thFileMPID"),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showEditLineSegment) {
+                          return MPLineEditWidget(
+                            key: ValueKey("MPEditLineWidget|$thFileMPID"),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showSelectionHandles) {
+                          return MPSelectionHandlesWidget(
+                            key: ValueKey(
+                              "MPSelectionHandlesWidget|$thFileMPID",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showSelectionWindow) {
+                          return MPSelectionWindowWidget(
+                            key: ValueKey(
+                              "MPSelectionWindowWidget|$thFileMPID",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController
+                            .showMultipleElementsClickedHighlight) {
+                          return MPMultipleElementsClickedHighlightWidget(
+                            key: ValueKey(
+                              "MPMultipleElementsClickedHighlightWidget|$thFileMPID",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController
+                            .showMultipleEndControlPointsClickedHighlight) {
+                          return MPMultipleEndControlPointsClickedHighlightWidget(
+                            key: ValueKey(
+                              "MPMultipleEndControlPointsClickedHighlightWidget|$thFileMPID",
+                            ),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    if (mpDebugMousePosition)
+                      Positioned(
+                        bottom: 32,
+                        left: 16,
+                        child: Observer(
+                          builder: (_) {
+                            final Offset screenPosition =
+                                th2FileEditController.mousePosition;
+                            final Offset canvasPosition = th2FileEditController
+                                .offsetScreenToCanvas(screenPosition);
+
+                            th2FileEditController.redrawTriggerAllElements;
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Mouse Screen Position: (x: ${screenPosition.dx.toStringAsFixed(1)}, y: ${screenPosition.dy.toStringAsFixed(1)})',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Mouse Canvas Position: (x: ${canvasPosition.dx.toStringAsFixed(2)}, y: ${canvasPosition.dy.toStringAsFixed(2)})',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         );

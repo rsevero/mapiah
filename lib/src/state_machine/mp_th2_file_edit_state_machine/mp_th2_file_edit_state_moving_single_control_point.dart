@@ -11,6 +11,11 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
   });
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
       th2FileEditController.elementEditController

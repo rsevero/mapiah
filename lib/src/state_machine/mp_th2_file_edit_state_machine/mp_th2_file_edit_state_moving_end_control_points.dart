@@ -13,6 +13,11 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
   }) : snapController = th2FileEditController.snapController;
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     updateStatusBarMessage();
   }

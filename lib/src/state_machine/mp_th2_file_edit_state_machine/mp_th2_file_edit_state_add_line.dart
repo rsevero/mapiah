@@ -7,6 +7,11 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   MPTH2FileEditStateAddLine({required super.th2FileEditController});
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.precise);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddLineStatusBarMessage(
@@ -36,6 +41,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
     th2FileEditController.areaLineCreationController.updateBezierLineSegment(
       event.localPosition,
     );
@@ -43,6 +49,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
+    setCursor();
     th2FileEditController.areaLineCreationController.endNewLineDrag();
   }
 

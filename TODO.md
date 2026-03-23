@@ -169,7 +169,7 @@
 [X] - Allow copy/paste between scraps.
 [X] - Allow copy/paste between files.
 [X] - Search/select elements by characteristics.
-[ ] - Change cursors to show current status.
+[X] - Change cursors to show current status.
 [X] - Config page.
 [X] - Drag overlay windows.
 [X] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]

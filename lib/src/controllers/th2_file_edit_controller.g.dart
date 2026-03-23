@@ -630,6 +630,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_canvasCursorAtom = Atom(
+    name: 'TH2FileEditControllerBase._canvasCursor',
+    context: context,
+  );
+
+  MouseCursor get canvasCursor {
+    _$_canvasCursorAtom.reportRead();
+    return super._canvasCursor;
+  }
+
+  @override
+  MouseCursor get _canvasCursor => canvasCursor;
+
+  @override
+  set _canvasCursor(MouseCursor value) {
+    _$_canvasCursorAtom.reportWrite(value, super._canvasCursor, () {
+      super._canvasCursor = value;
+    });
+  }
+
   late final _$_currentDecimalPositionsAtom = Atom(
     name: 'TH2FileEditControllerBase._currentDecimalPositions',
     context: context,
@@ -1438,6 +1458,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         );
     try {
       return super.performSetAddElementButtonsHovered(isHovered);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCanvasCursor(MouseCursor cursor) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setCanvasCursor');
+    try {
+      return super.setCanvasCursor(cursor);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

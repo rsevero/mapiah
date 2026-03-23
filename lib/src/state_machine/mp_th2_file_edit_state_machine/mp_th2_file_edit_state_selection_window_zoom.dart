@@ -14,6 +14,11 @@ class MPTH2FileEditStateSelectionWindowZoom extends MPTH2FileEditState
   late final MPTH2FileEditStateType _previousStateType;
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.precise);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     _previousStateType = previousState.type;
     updateStatusBarMessage();

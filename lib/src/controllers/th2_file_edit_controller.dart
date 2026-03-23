@@ -142,6 +142,9 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   bool _isAddElementButtonsHovered = false;
 
+  @readonly
+  MouseCursor _canvasCursor = SystemMouseCursors.basic;
+
   @computed
   MPButtonType get activeAddElementButton {
     switch (stateController.state) {
@@ -734,6 +737,11 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void performSetAddElementButtonsHovered(bool isHovered) {
     _isAddElementButtonsHovered = isHovered;
+  }
+
+  @action
+  void setCanvasCursor(MouseCursor cursor) {
+    _canvasCursor = cursor;
   }
 
   @action

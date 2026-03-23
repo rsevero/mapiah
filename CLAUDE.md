@@ -166,6 +166,8 @@ In addition to General Guidelines, follow these app-specific rules:
 7. Update the appropriate help page (both in English and Portuguese) when adding new features or changing existing ones. Help pages are in `assets/help/` and are written in markdown.
 8. Update the appropriate keyboard shortcuts page in `assets/help/` when adding new features or changing existing ones. They are written in markdown.
 9. When adding a new features, suggest the creation of a test file in `test/` with tests covering the new feature. Follow the existing test file naming convention (numerical prefix for ordering, descriptive name, `_test.dart` suffix).
+10. URLs should preferably be presented with MPURLTextWidget. 
+11. Don´t worry about code formating, indenting and the like: code is automatcally formatted on commit.
 
 ### When writing scripts (command-line tools)
 

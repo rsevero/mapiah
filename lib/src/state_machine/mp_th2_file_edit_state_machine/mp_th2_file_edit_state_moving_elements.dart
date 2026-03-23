@@ -13,6 +13,11 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   MPTH2FileEditStateMovingElements({required super.th2FileEditController});
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     updateStatusBarMessage();
   }

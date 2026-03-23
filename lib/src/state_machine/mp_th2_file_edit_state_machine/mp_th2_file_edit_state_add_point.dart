@@ -7,6 +7,11 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   MPTH2FileEditStateAddPoint({required super.th2FileEditController});
 
   @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.precise);
+  }
+
+  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddPointStatusBarMessage(

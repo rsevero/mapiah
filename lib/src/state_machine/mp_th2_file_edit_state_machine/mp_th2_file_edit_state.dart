@@ -130,7 +130,9 @@ abstract class MPTH2FileEditState {
     }
   }
 
-  void setCursor() {}
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
+  }
 
   void updateStatusBarMessage() {}
 
