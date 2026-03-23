@@ -31,11 +31,6 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
-  void setCursor() {
-    th2FileEditController.setCanvasCursor(SystemMouseCursors.precise);
-  }
-
-  @override
   void onStateEnter(MPTH2FileEditState previousState) {
     if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
       setClickedElementAtSingleLineEditPointerDown(null);
@@ -53,7 +48,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     th2FileEditController.setStatusBarMessage(
       _isLSizeOrientationEdit
           ? _getLSizeOrientationStatusBarMessage()
-          : _getStatusBarMessageForSingleSelectedElement(),
+          : _getSingleLineEditStatusBarMessage(),
     );
   }
 
@@ -389,6 +384,11 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         (clickedElement as THLineSegment).endPoint.coordinates,
       );
     }
+  }
+
+  @override
+  void setCursor() {
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.precise);
   }
 
   @override

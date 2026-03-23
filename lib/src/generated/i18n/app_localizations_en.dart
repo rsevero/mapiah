@@ -1072,6 +1072,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mpStatusBarMessageSingleSelectedElementSelectedControlPoint =>
+      ' - selected: control point';
+
+  @override
+  String mpStatusBarMessageSingleSelectedElementSelectedEndPoints(
+    Object count,
+  ) {
+    return ' - selected: $count end point(s)';
+  }
+
+  @override
   String mpStatusBarMessageSingleSelectedElementSubtype(Object subtype) {
     return ', subtype $subtype';
   }

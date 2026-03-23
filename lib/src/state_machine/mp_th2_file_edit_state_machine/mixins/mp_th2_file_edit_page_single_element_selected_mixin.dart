@@ -3,6 +3,30 @@
 part of '../mp_th2_file_edit_state.dart';
 
 mixin MPTH2FileEditPageSingleElementSelectedMixin on MPTH2FileEditState {
+  String _getSingleLineEditStatusBarMessage() {
+    final MPSelectedEndControlPointPointType endControlPointType =
+        selectionController.getCurrentSelectedEndControlPointPointType();
+    final int selectedEndControlPointsCount =
+        selectionController.selectedEndControlPoints.length;
+
+    String statusBarMessage = _getStatusBarMessageForSingleSelectedElement();
+
+    switch (endControlPointType) {
+      case MPSelectedEndControlPointPointType.controlPoint:
+        statusBarMessage += mpLocator
+            .appLocalizations
+            .mpStatusBarMessageSingleSelectedElementSelectedControlPoint;
+      case MPSelectedEndControlPointPointType.endPoint:
+        statusBarMessage += mpLocator.appLocalizations
+            .mpStatusBarMessageSingleSelectedElementSelectedEndPoints(
+              selectedEndControlPointsCount,
+            );
+      default:
+    }
+
+    return statusBarMessage;
+  }
+
   String _getStatusBarMessageForSingleSelectedElement() {
     final THElement element = getSingleSelectedElement();
 

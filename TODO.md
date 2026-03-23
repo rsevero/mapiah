@@ -176,6 +176,7 @@
 [X] - Hide elements by type.
 [X] - Copy/Paste.
 [ ] - Show status message listing what's selected in 'single line edit' mode.
+[ ] - When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
 [ ] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.
 [X] - Include options and point/line count in multiple elements clicked dialog box.
@@ -186,7 +187,7 @@
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...).
-[ ] - Visually close lines with command option close set to on or auto (for line types automatcally closed).
+[ ] - Visually close lines with command option close set to on or auto (for line types automatically closed).
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.
 [ ] - Split one line in two.
 [ ] - Join 2 lines.

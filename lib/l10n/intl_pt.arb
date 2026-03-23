@@ -343,6 +343,8 @@
   "mpStatusBarMessageSingleSelectedAreaNoAreaBorders": "sem bordas definidas",
   "mpStatusBarMessageSingleSelectedAreaType": "Área {areaType}",
   "mpStatusBarMessageSingleSelectedElementID": ", ID: {elementID}",
+  "mpStatusBarMessageSingleSelectedElementSelectedControlPoint": " - selecionado: ponto de controle",
+  "mpStatusBarMessageSingleSelectedElementSelectedEndPoints": " - selecionado(s): {count} ponto(s) final(is)",
   "mpStatusBarMessageSingleSelectedElementSubtype": ", subtipo {subtype}",
   "mpStatusBarMessageSingleSelectedLineLineSegmentsCount": " - {lineSegmentsCount} segmento(s) ({straightLineSegmentsCount} reto(s), {bezierLineSegmentsCount} Bézier)",
   "mpStatusBarMessageSingleSelectedLineNoLineSegments": " - sem segmentos",

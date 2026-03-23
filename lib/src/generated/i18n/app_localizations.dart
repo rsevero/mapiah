@@ -2058,6 +2058,18 @@ abstract class AppLocalizations {
   /// **', ID: {elementID}'**
   String mpStatusBarMessageSingleSelectedElementID(Object elementID);
 
+  /// Appended to the status bar message when a control point is selected in single line edit mode. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart
+  ///
+  /// In en, this message translates to:
+  /// **' - selected: control point'**
+  String get mpStatusBarMessageSingleSelectedElementSelectedControlPoint;
+
+  /// Appended to the status bar message showing how many end points are selected in single line edit mode. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart
+  ///
+  /// In en, this message translates to:
+  /// **' - selected: {count} end point(s)'**
+  String mpStatusBarMessageSingleSelectedElementSelectedEndPoints(Object count);
+
   /// The status bar message when a single element with subtype is selected. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart
   ///
   /// In en, this message translates to:
