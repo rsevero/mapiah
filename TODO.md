@@ -175,7 +175,7 @@
 [X] - Prevent (or at least try harder to prevent) overlay windows being opened with parts of it outside the available canvas [requested by Marco Corvi]
 [X] - Hide elements by type.
 [X] - Copy/Paste.
-[ ] - Show status message listing what's selected in 'single line edit' mode.
+[X] - Show status message listing what's selected in 'single line edit' mode.
 [ ] - When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
 [ ] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.

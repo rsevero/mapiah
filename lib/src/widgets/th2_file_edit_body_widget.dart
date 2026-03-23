@@ -29,17 +29,27 @@ class TH2FileEditBodyWidget extends StatefulWidget {
 }
 
 class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
+  late final TH2FileEditController th2FileEditController;
+  late AppLocalizations appLocalizations;
   late ColorScheme colorScheme;
+
   bool isSelectMode = false;
   bool enableSelectedButton = false;
 
   @override
-  Widget build(BuildContext context) {
-    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+  void initState() {
+    super.initState();
 
+    th2FileEditController = widget.th2FileEditController;
+    appLocalizations = mpLocator.appLocalizations;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final String heroPrefix = th2FileEditController.th2FileMPID.toString();
+
+    appLocalizations = mpLocator.appLocalizations;
     colorScheme = Theme.of(context).colorScheme;
-    final String heroPrefix = widget.th2FileEditController.th2FileMPID
-        .toString();
 
     return Column(
       children: [
@@ -55,7 +65,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                     return Center(
                       child: Text(
                         appLocalizations.th2FileEditPageLoadingFile(
-                          widget.th2FileEditController.currentScrapName,
+                          th2FileEditController.currentScrapName,
                         ),
                       ),
                     );
@@ -67,15 +77,14 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                     if (snapshot.data!.isSuccessful) {
                       if (mpDebugMousePosition) {
                         return MouseRegion(
-                          onHover: (event) => widget.th2FileEditController
+                          onHover: (event) => th2FileEditController
                               .performSetMousePosition(event.localPosition),
                           child: Stack(
                             children: [
                               TH2FileWidget(
-                                key: widget.th2FileEditController
+                                key: th2FileEditController
                                     .getTH2FileWidgetGlobalKey(),
-                                th2FileEditController:
-                                    widget.th2FileEditController,
+                                th2FileEditController: th2FileEditController,
                               ),
                               _stateActionButtons(heroPrefix),
                               _actionButtons(heroPrefix),
@@ -86,10 +95,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                         return Stack(
                           children: [
                             TH2FileWidget(
-                              key: widget.th2FileEditController
+                              key: th2FileEditController
                                   .getTH2FileWidgetGlobalKey(),
-                              th2FileEditController:
-                                  widget.th2FileEditController,
+                              th2FileEditController: th2FileEditController,
                             ),
                             _stateActionButtons(heroPrefix),
                             _actionButtons(heroPrefix),
@@ -103,12 +111,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                           builder: (BuildContext context) {
                             return MPErrorDialog(
                               errorMessages: errorMessages,
-                              filename:
-                                  widget.th2FileEditController.th2File.filename,
+                              filename: th2FileEditController.th2File.filename,
                             );
                           },
                         ).then((_) {
-                          widget.th2FileEditController.close();
+                          th2FileEditController.close();
                         });
                       });
 
@@ -134,41 +141,56 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
               final TextStyle statusBarInfoStyle = TextStyle(
                 color: colorScheme.onSecondary,
               );
+              final String currentScrapName =
+                  th2FileEditController.currentScrapName;
+              final String statusBarMessage =
+                  th2FileEditController.statusBarMessage;
+              final String canvasScaleAsPercentageText =
+                  th2FileEditController.canvasScaleAsPercentageText;
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.th2FileEditController.currentScrapName,
-                      style: statusBarInfoStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: mpButtonMargin),
-                  Expanded(
-                    child: Text(
-                      widget.th2FileEditController.statusBarMessage,
-                      style: statusBarTextStyle,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: mpButtonMargin),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "🔍 ${widget.th2FileEditController.canvasScaleAsPercentageText}",
-                        style: statusBarInfoStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+              return LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final double maxScrapNameWidth = constraints.maxWidth / 5;
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: maxScrapNameWidth,
+                        ),
+                        child: Text(
+                          currentScrapName,
+                          style: statusBarInfoStyle,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                      const SizedBox(width: mpButtonMargin),
+                      Expanded(
+                        child: Text(
+                          statusBarMessage,
+                          style: statusBarTextStyle,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: mpButtonMargin),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "🔍 $canvasScaleAsPercentageText",
+                          style: statusBarInfoStyle,
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),
@@ -182,8 +204,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
       builder: (context) {
         final List<Widget> generalActionButtons = [];
 
-        enableSelectedButton = widget.th2FileEditController.enableSelectButton;
-        isSelectMode = widget.th2FileEditController.isSelectMode;
+        enableSelectedButton = th2FileEditController.enableSelectButton;
+        isSelectMode = th2FileEditController.isSelectMode;
 
         generalActionButtons.addAll(_changeImageButton(heroPrefix));
         generalActionButtons.addAll(_changeScrapButton(heroPrefix));
@@ -213,18 +235,18 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     final String heroTag = '${heroPrefix}_add_element_$typeName';
     final String buttonIcon = 'assets/icons/add_element-$typeName.png';
     final bool isPressedButton =
-        widget.th2FileEditController.isAddElementMode && !isTypeButton;
+        th2FileEditController.isAddElementMode && !isTypeButton;
     late String tooltip;
 
     switch (type) {
       case MPButtonType.addArea:
-        tooltip = mpLocator.appLocalizations.th2FileEditPageAddArea;
+        tooltip = appLocalizations.th2FileEditPageAddArea;
       case MPButtonType.addElement:
-        tooltip = mpLocator.appLocalizations.th2FileEditPageAddElementOptions;
+        tooltip = appLocalizations.th2FileEditPageAddElementOptions;
       case MPButtonType.addLine:
-        tooltip = mpLocator.appLocalizations.th2FileEditPageAddLine;
+        tooltip = appLocalizations.th2FileEditPageAddLine;
       case MPButtonType.addPoint:
-        tooltip = mpLocator.appLocalizations.th2FileEditPageAddPoint;
+        tooltip = appLocalizations.th2FileEditPageAddPoint;
       default:
         return [SizedBox.shrink()];
     }
@@ -252,24 +274,20 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   List<Widget> _addElementButtons(String heroPrefix) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return [
       SizedBox(height: mpButtonSpace),
       MouseRegion(
-        onEnter: (_) => widget.th2FileEditController
-            .performSetAddElementButtonsHovered(true),
-        onExit: (_) => widget.th2FileEditController
-            .performSetAddElementButtonsHovered(false),
+        onEnter: (_) =>
+            th2FileEditController.performSetAddElementButtonsHovered(true),
+        onExit: (_) =>
+            th2FileEditController.performSetAddElementButtonsHovered(false),
         child: Observer(
           builder: (_) {
             return Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (widget
-                    .th2FileEditController
-                    .isAddElementButtonsHovered) ...[
+                if (th2FileEditController.isAddElementButtonsHovered) ...[
                   _imageAssetButton(
                     isPressed: false,
                     onPressed: _onAddImageButtonPressed,
@@ -301,7 +319,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   ),
                 ],
                 ..._addElementButton(
-                  type: widget.th2FileEditController.activeAddElementButton,
+                  type: th2FileEditController.activeAddElementButton,
                   isTypeButton: false,
                   heroPrefix: heroPrefix,
                 ),
@@ -318,20 +336,18 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
       SizedBox(height: mpButtonSpace),
       Observer(
         builder: (_) {
-          final bool isChangeImageButtonPressed = widget
-              .th2FileEditController
+          final bool isChangeImageButtonPressed = th2FileEditController
               .overlayWindowController
               .showChangeImageOverlayWindow;
 
           return _imageAssetButton(
             isPressed: isChangeImageButtonPressed,
             onPressed: _onChangeImageButtonPressed,
-            tooltip: mpLocator.appLocalizations.th2FileEditPageChangeImageTool,
+            tooltip: appLocalizations.th2FileEditPageChangeImageTool,
             imageAssetPath: mpXTherionImageInsertButtonImagePath,
             heroTag: '${heroPrefix}_change_image_tool',
             key:
-                widget
-                    .th2FileEditController
+                th2FileEditController
                     .overlayWindowController
                     .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
                     .changeImageButton]!,
@@ -387,13 +403,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
           return _imageAssetButton(
             isPressed: isChangeScrapButtonPressed,
             onPressed: _onChangeScrapButtonPressed,
-            tooltip:
-                mpLocator.appLocalizations.th2FileEditPageChangeActiveScrapTool,
+            tooltip: appLocalizations.th2FileEditPageChangeActiveScrapTool,
             imageAssetPath: mpScrapButtonImagePath,
             heroTag: '${heroPrefix}_change_active_scrap_tool',
             key:
-                widget
-                    .th2FileEditController
+                th2FileEditController
                     .overlayWindowController
                     .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
                     .changeScrapButton]!,
@@ -406,8 +420,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   List<Widget> _editElementButtons(String heroPrefix) {
     final bool isEditLineMode = widget.th2FileEditController.isEditLineMode;
     final bool enableNodeEditButton =
-        widget.th2FileEditController.enableNodeEditButton;
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+        th2FileEditController.enableNodeEditButton;
 
     return [
       SizedBox(height: mpButtonSpace),
@@ -457,76 +470,67 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   void _onAddElementButtonPressed(MPButtonType type) {
-    widget.th2FileEditController.stateController.onButtonPressed(type);
+    th2FileEditController.stateController.onButtonPressed(type);
   }
 
   void _onAddImageButtonPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addImage,
     );
   }
 
   void _onAddScrapButtonPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.addScrap,
     );
   }
 
   void _onChangeImageButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.toggleOverlayWindow(
+    th2FileEditController.overlayWindowController.toggleOverlayWindow(
       MPWindowType.changeImage,
     );
   }
 
   void _onChangeScrapButtonPressed() {
-    widget.th2FileEditController.overlayWindowController.toggleOverlayWindow(
+    th2FileEditController.overlayWindowController.toggleOverlayWindow(
       MPWindowType.availableScraps,
     );
   }
 
   void onRemovePressed() {
-    widget.th2FileEditController.overlayWindowController.clearOverlayWindows();
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.remove,
-    );
+    th2FileEditController.overlayWindowController.clearOverlayWindows();
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.remove);
   }
 
   void _onNodeEditToolPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.nodeEdit,
     );
   }
 
   void onRedoPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.redo,
-    );
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.redo);
   }
 
   void _onSelectToolPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.select,
-    );
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.select);
   }
 
   void onUndoPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.undo,
-    );
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.undo);
   }
 
   Widget _stateActionButtons(String heroPrefix) {
     return Observer(
       builder: (_) {
-        final bool hasUndo = widget.th2FileEditController.hasUndo;
-        final bool hasRedo = widget.th2FileEditController.hasRedo;
+        final bool hasUndo = th2FileEditController.hasUndo;
+        final bool hasRedo = th2FileEditController.hasRedo;
         final bool enableRemoveButton =
-            widget.th2FileEditController.enableRemoveButton;
+            th2FileEditController.enableRemoveButton;
         final bool isSomeSnapTargetActive =
-            widget.th2FileEditController.snapController.isSomeSnapTargetActive;
-        final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+            th2FileEditController.snapController.isSomeSnapTargetActive;
 
-        widget.th2FileEditController.redrawSnapTargetsWindow;
+        th2FileEditController.redrawSnapTargetsWindow;
 
         return Positioned(
           top: 16,
@@ -538,13 +542,13 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.th2FileEditPageSearchSelectButton,
                 onPressed: () {
-                  widget.th2FileEditController.overlayWindowController
+                  th2FileEditController.overlayWindowController
                       .clearOverlayWindows();
                   MPModalOverlayWidget.show(
                     context: context,
                     childBuilder: (VoidCallback onPressedClose) =>
                         MPSearchSelectDialogWidget(
-                          th2FileEditController: widget.th2FileEditController,
+                          th2FileEditController: th2FileEditController,
                           onPressedClose: onPressedClose,
                         ),
                   );
@@ -554,8 +558,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
               SizedBox(width: mpButtonSpace),
               FloatingActionButton(
                 key:
-                    widget
-                        .th2FileEditController
+                    th2FileEditController
                         .overlayWindowController
                         .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
                         .snapTargetsButton]!,
@@ -563,11 +566,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.th2FileEditPageSnapButton,
                 onPressed: () {
-                  widget.th2FileEditController.overlayWindowController
+                  th2FileEditController.overlayWindowController
                       .clearOverlayWindows(except: {MPWindowType.snapTargets});
-                  widget.th2FileEditController.overlayWindowController
+                  th2FileEditController.overlayWindowController
                       .toggleOverlayWindow(MPWindowType.snapTargets);
-                  widget.th2FileEditController.triggerSnapTargetsWindowRedraw();
+                  th2FileEditController.triggerSnapTargetsWindowRedraw();
                 },
                 backgroundColor: isSomeSnapTargetActive
                     ? null
@@ -585,7 +588,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                       : colorScheme.surfaceContainerHighest,
                 ),
               ),
-              if (widget.th2FileEditController.showRemoveButton) ...[
+              if (th2FileEditController.showRemoveButton) ...[
                 SizedBox(width: mpButtonSpace),
                 FloatingActionButton(
                   heroTag: '${heroPrefix}_remove',
@@ -602,13 +605,13 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   child: const Icon(Icons.delete_outlined),
                 ),
               ],
-              if (widget.th2FileEditController.showUndoRedoButtons) ...[
+              if (th2FileEditController.showUndoRedoButtons) ...[
                 SizedBox(width: mpButtonSpace),
                 FloatingActionButton(
                   heroTag: '${heroPrefix}_undo',
                   mini: true,
                   tooltip: hasUndo
-                      ? widget.th2FileEditController.undoDescription
+                      ? th2FileEditController.undoDescription
                       : appLocalizations.th2FileEditPageNoUndoAvailable,
                   backgroundColor: hasUndo
                       ? null
@@ -625,7 +628,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   heroTag: '${heroPrefix}_redo',
                   mini: true,
                   tooltip: hasRedo
-                      ? widget.th2FileEditController.redoDescription
+                      ? th2FileEditController.redoDescription
                       : appLocalizations.th2FileEditPageNoRedoAvailable,
                   backgroundColor: hasRedo
                       ? null
@@ -646,27 +649,24 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   List<Widget> _zoomButtonWithOptions(String heroPrefix) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
     return [
       SizedBox(height: mpButtonSpace),
       MouseRegion(
         onEnter: (_) =>
-            widget.th2FileEditController.performSetZoomButtonsHovered(true),
+            th2FileEditController.performSetZoomButtonsHovered(true),
         onExit: (_) =>
-            widget.th2FileEditController.performSetZoomButtonsHovered(false),
+            th2FileEditController.performSetZoomButtonsHovered(false),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Observer(
               builder: (_) {
-                if (!widget.th2FileEditController.isZoomButtonsHovered) {
+                if (!th2FileEditController.isZoomButtonsHovered) {
                   return const SizedBox();
                 }
 
-                final bool selectedElementsEmpty = widget
-                    .th2FileEditController
+                final bool selectedElementsEmpty = th2FileEditController
                     .selectionController
                     .mpSelectedElementsLogical
                     .isEmpty;
@@ -730,7 +730,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                     SizedBox(width: mpButtonSpace),
                     FloatingActionButton(
                       heroTag: '${heroPrefix}_zoom_out_scrap',
-                      onPressed: widget.th2FileEditController.hasMultipleScraps
+                      onPressed: th2FileEditController.hasMultipleScraps
                           ? zoomAllScrapPressed
                           : null,
                       tooltip: appLocalizations.th2FileEditPageZoomOutScrap,
@@ -738,7 +738,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                         'assets/icons/zoom_out_scrap.png',
                         width: mpFloatingActionZoomIconSize,
                         height: mpFloatingActionZoomIconSize,
-                        color: widget.th2FileEditController.hasMultipleScraps
+                        color: th2FileEditController.hasMultipleScraps
                             ? colorScheme.onSecondaryContainer
                             : Colors.grey,
                       ),
@@ -793,43 +793,39 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   void zoomInPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.zoomIn,
-    );
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.zoomIn);
   }
 
   void zoomAllFilePressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomAllFile,
     );
   }
 
   void zoomAllScrapPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomAllScrap,
     );
   }
 
   void zoomOutPressed() {
-    widget.th2FileEditController.stateController.onButtonPressed(
-      MPButtonType.zoomOut,
-    );
+    th2FileEditController.stateController.onButtonPressed(MPButtonType.zoomOut);
   }
 
   void zoomOneToOne() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomOneToOne,
     );
   }
 
   void zoomSelection() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomSelection,
     );
   }
 
   void zoomSelectionWindow() {
-    widget.th2FileEditController.stateController.onButtonPressed(
+    th2FileEditController.stateController.onButtonPressed(
       MPButtonType.zoomSelection,
     );
   }

@@ -12,6 +12,7 @@
   * Search and select dialog: added "By line segment option" filter in the Lines section, allowing lines to be selected based on whether any of their segments have specific options set or unset.
   * Ctrl+H shortcut: hides selected elements from the canvas (they are also deselected and no longer selectable); with no selection, clears all hidden elements and makes them visible again. Hidden elements are a temporary canvas-only state and are not saved to the file.
   * Showing selected elements on single line edit.
+  * Show status message listing what's selected in 'single line edit' mode.
 * Fixed bugs:
   * Test 3100 (new file dialog): telemetry consent dialog was blocking the home UI because consent was unset in the test environment. Fixed by setting consent in setUp before pumping the app.
   * MPSettingsController: all setter methods (setBool, setInt, setDouble, setString, setStringList, setEnum) now always write the value to storage, even when it matches the implicit default. Previously, setting a value equal to the default was a no-op, so isXxxSet() returned false as if the setting had never been touched — causing the telemetry consent dialog to reappear on every launch after a user had refused.
