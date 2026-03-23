@@ -147,6 +147,15 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   th2FileEditController.statusBarMessage;
               final String canvasScaleAsPercentageText =
                   th2FileEditController.canvasScaleAsPercentageText;
+              final Offset? movingMousePosition =
+                  th2FileEditController.movingMousePosition;
+              final String movingMousePositionText =
+                  (movingMousePosition == null)
+                  ? ''
+                  : appLocalizations.mpTH2FileEditPageMousePosition(
+                      movingMousePosition.dx.toStringAsFixed(1),
+                      movingMousePosition.dy.toStringAsFixed(1),
+                    );
 
               return LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
@@ -177,6 +186,16 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if (movingMousePositionText.isNotEmpty) ...[
+                        const SizedBox(width: mpButtonMargin),
+                        Text(
+                          movingMousePositionText,
+                          style: statusBarInfoStyle,
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                       const SizedBox(width: mpButtonMargin),
                       Align(
                         alignment: Alignment.centerRight,

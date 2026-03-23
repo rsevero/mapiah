@@ -176,7 +176,7 @@
 [X] - Hide elements by type.
 [X] - Copy/Paste.
 [X] - Show status message listing what's selected in 'single line edit' mode.
-[ ] - When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
+[X] - When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
 [ ] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.
 [X] - Include options and point/line count in multiple elements clicked dialog box.

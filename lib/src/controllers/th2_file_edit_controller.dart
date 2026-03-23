@@ -122,6 +122,9 @@ abstract class TH2FileEditControllerBase with Store {
   String _currentScrapName = '';
 
   @readonly
+  Offset? _movingMousePosition;
+
+  @readonly
   bool _isAddElementMode = false;
 
   @readonly
@@ -1383,6 +1386,11 @@ abstract class TH2FileEditControllerBase with Store {
     } else {
       _currentScrapName = '';
     }
+  }
+
+  @action
+  void setMovingMousePosition(Offset? position) {
+    _movingMousePosition = position;
   }
 
   @action

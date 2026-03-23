@@ -2110,6 +2110,12 @@ abstract class AppLocalizations {
   /// **'Point {pointType}'**
   String mpStatusBarMessageSingleSelectedPointType(Object pointType);
 
+  /// The mouse position shown in the TH2 edit status bar. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'x: {x}, y: {y}'**
+  String mpTH2FileEditPageMousePosition(Object x, Object y);
+
   /// The label for the text type. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart
   ///
   /// In en, this message translates to:

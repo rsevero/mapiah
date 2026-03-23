@@ -1734,6 +1734,15 @@
       "pointType": {}
     }
   },
+  "mpTH2FileEditPageMousePosition": "x: {x}, y: {y}",
+  "@mpTH2FileEditPageMousePosition": {
+    "description": "The mouse position shown in the TH2 edit status bar. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text",
+    "placeholders": {
+      "x": {},
+      "y": {}
+    }
+  },
   "mpTextTextLabel": "Text",
   "@mpTextTextLabel": {
     "description": "The label for the text type. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart",

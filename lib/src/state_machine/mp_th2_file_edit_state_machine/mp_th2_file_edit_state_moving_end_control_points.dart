@@ -65,6 +65,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
       snapedCanvasOffset,
     );
+    th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
   }
 
   @override
@@ -141,6 +142,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
       descriptionType: MPCommandDescriptionType.editLine,
     );
     th2FileEditController.execute(lineEditCommand);
+    th2FileEditController.setMovingMousePosition(null);
     elementEditController.updateControllersAfterElementEditPartial();
     elementEditController.updateControllersAfterElementEditFinal();
     th2FileEditController.stateController.setState(

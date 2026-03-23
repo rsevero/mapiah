@@ -50,9 +50,14 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    selectionController.moveSelectedControlPointToScreenCoordinates(
+    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
     );
+
+    selectionController.moveSelectedControlPointToCanvasCoordinates(
+      canvasOffset,
+    );
+    th2FileEditController.setMovingMousePosition(canvasOffset);
   }
 
   @override
@@ -103,6 +108,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     th2FileEditController.execute(lineEditCommand);
     elementEditController.updateControllersAfterElementEditPartial();
     elementEditController.updateControllersAfterElementEditFinal();
+    th2FileEditController.setMovingMousePosition(null);
     th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.editSingleLine,
     );

@@ -151,6 +151,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     selectionController.moveSelectedElementsToCanvasCoordinates(
       snapedCanvasOffset,
     );
+    th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
   }
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
@@ -179,41 +180,7 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       );
 
       return;
-    } else if (selectedCount == 1) {
-      final MPSelectedElement selected =
-          selectionController.mpSelectedElementsLogical.values.first;
-      final THElement selectedElement = selected.originalElementClone;
-
-      switch (selected) {
-        case MPSelectedPoint _:
-          moveCommand = MPMovePointCommand(
-            pointMPID: selectedElement.mpID,
-            fromPosition: (selectedElement as THPoint).position,
-            toPosition: snapedPosition,
-            fromOriginalLineInTH2File: selectedElement.originalLineInTH2File,
-            toOriginalLineInTH2File: '',
-          );
-        case MPSelectedLine _:
-          moveCommand = MPMoveLineCommand.fromLineSegmentExactPosition(
-            lineMPID: selectedElement.mpID,
-            fromLineSegmentsMap: selected.originalLineSegmentsMapClone,
-            referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
-            referenceLineSegmentFinalPosition: snapedPosition,
-          );
-        case MPSelectedArea _:
-          moveCommand = MPMoveAreaCommand.fromLineSegmentExactPosition(
-            areaMPID: selectedElement.mpID,
-            originalLines: selected.originalLines,
-            referenceLineSegment: _clickedElementAtPointerDown as THLineSegment,
-            referenceLineSegmentFinalPosition: snapedPosition,
-          );
-      }
-
-      th2FileEditController.execute(moveCommand);
-      selectionController.updateSelectedElementLogicalClone(
-        selectedElement.mpID,
-      );
-    } else if (selectedCount > 1) {
+    } else {
       moveCommand =
           MPCommandFactory.moveElementsFromReferenceElementExactPosition(
             mpSelectedElements:
@@ -221,8 +188,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
             referenceElement: _clickedElementAtPointerDown!,
             referenceElementFinalPosition: snapedPosition,
           );
-
       th2FileEditController.execute(moveCommand);
+      th2FileEditController.setMovingMousePosition(null);
       selectionController.updateAllSelectedElementsClones();
     }
 

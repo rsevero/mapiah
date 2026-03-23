@@ -1126,6 +1126,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String mpTH2FileEditPageMousePosition(Object x, Object y) {
+    return 'x: $x, y: $y';
+  }
+
+  @override
   String get mpTextTextLabel => 'Texto';
 
   @override

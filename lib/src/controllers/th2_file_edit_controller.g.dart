@@ -478,6 +478,30 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_movingMousePositionAtom = Atom(
+    name: 'TH2FileEditControllerBase._movingMousePosition',
+    context: context,
+  );
+
+  Offset? get movingMousePosition {
+    _$_movingMousePositionAtom.reportRead();
+    return super._movingMousePosition;
+  }
+
+  @override
+  Offset? get _movingMousePosition => movingMousePosition;
+
+  @override
+  set _movingMousePosition(Offset? value) {
+    _$_movingMousePositionAtom.reportWrite(
+      value,
+      super._movingMousePosition,
+      () {
+        super._movingMousePosition = value;
+      },
+    );
+  }
+
   late final _$_isAddElementModeAtom = Atom(
     name: 'TH2FileEditControllerBase._isAddElementMode',
     context: context,
@@ -1842,6 +1866,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.setFilename');
     try {
       return super.setFilename(filename);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMovingMousePosition(Offset? position) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.setMovingMousePosition');
+    try {
+      return super.setMovingMousePosition(position);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

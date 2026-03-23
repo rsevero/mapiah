@@ -351,6 +351,7 @@
   "mpStatusBarMessageSingleSelectedLineParentArea": " - borda de '{parentArea}'",
   "mpStatusBarMessageSingleSelectedLineType": "Linha {lineType}",
   "mpStatusBarMessageSingleSelectedPointType": "Ponto {pointType}",
+  "mpTH2FileEditPageMousePosition": "x: {x}, y: {y}",
   "mpTextTextLabel": "Texto",
   "mpTextTypeOptionWarning": "Texto não definido",
   "mpTherionCannotExecuteCommand": "Falha ao executar o comando: {commandLine}",
