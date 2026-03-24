@@ -36,9 +36,21 @@ abstract class TH2FilePropertiesControllerBase with Store {
     if (encodingElement != null) {
       final THEncoding updated = (encodingElement as THEncoding).copyWith(
         encoding: normalized,
+        originalLineInTH2File: '',
       );
 
       th2File.substituteElement(updated);
+    } else {
+      final THEncoding newEncodingElement = THEncoding(
+        parentMPID: th2File.mpID,
+        encoding: normalized,
+      );
+
+      th2File.addElement(newEncodingElement);
+      th2File.addElementToParent(
+        newEncodingElement,
+        elementPositionInParent: 0,
+      );
     }
   }
 

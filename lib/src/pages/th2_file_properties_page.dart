@@ -18,25 +18,17 @@ class TH2FilePropertiesPage extends StatefulWidget {
 
 class _TH2FilePropertiesPageState extends State<TH2FilePropertiesPage> {
   late final TH2FilePropertiesController _propertiesController;
-  late final TextEditingController _encodingController;
+  late String _selectedEncoding;
 
   @override
   void initState() {
     super.initState();
     _propertiesController = widget.th2FileEditController.propertiesController;
-    _encodingController = TextEditingController(
-      text: _propertiesController.encoding,
-    );
-  }
-
-  @override
-  void dispose() {
-    _encodingController.dispose();
-    super.dispose();
+    _selectedEncoding = _propertiesController.encoding;
   }
 
   void _save() {
-    _propertiesController.setEncoding(_encodingController.text);
+    _propertiesController.setEncoding(_selectedEncoding);
     Navigator.of(context).pop();
   }
 
@@ -47,6 +39,12 @@ class _TH2FilePropertiesPageState extends State<TH2FilePropertiesPage> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final List<String> availableEncodings = mpLocator.mpGeneralController
+        .getAvailableEncodings();
+
+    if (!availableEncodings.contains(_selectedEncoding)) {
+      availableEncodings.add(_selectedEncoding);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -63,14 +61,27 @@ class _TH2FilePropertiesPageState extends State<TH2FilePropertiesPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8.0),
-            TextField(
-              controller: _encodingController,
+            DropdownButtonFormField<String>(
+              initialValue: _selectedEncoding,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 helperText:
                     appLocalizations.th2FilePropertiesPageEncodingDescription,
                 helperMaxLines: 5,
               ),
+              items: availableEncodings
+                  .map(
+                    (String enc) =>
+                        DropdownMenuItem<String>(value: enc, child: Text(enc)),
+                  )
+                  .toList(),
+              onChanged: (String? value) {
+                if (value != null) {
+                  setState(() {
+                    _selectedEncoding = value;
+                  });
+                }
+              },
             ),
             const SizedBox(height: 24.0),
             Row(
