@@ -75,6 +75,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   int? _multipleElementsClickedHighlightedMPID;
 
+  int? _areaBorderCtrlMetaCycleAreaMPID;
+
+  int _areaBorderCtrlMetaCycleChoiceIndex = 0;
+
   Completer<void> multipleClickedSemaphore = Completer<void>();
 
   bool selectionCanBeMultiple = false;
@@ -716,6 +720,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
         MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlOrMetaOnlyPressed =
+        isCtrlOrMetaPressed && !isShiftPressed && !isAltPressed;
+
+    if (!isCtrlOrMetaOnlyPressed) {
+      resetAreaBorderCtrlMetaCycle();
+    }
 
     for (final MPSelectable selectableElement in selectableElements) {
       if (!selectableElement.contains(canvasCoordinates) ||
@@ -746,17 +756,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
               );
 
               if (areaMPID == null) {
+                resetAreaBorderCtrlMetaCycle();
                 clickedElementsMap[element.mpID] = element;
               } else {
-                if (isCtrlOrMetaPressed && !isAltPressed) {
-                  if (isShiftPressed) {
-                    clickedElementsMap[element.mpID] = element;
-                  } else {
-                    clickedElementsMap[areaMPID] = _th2File.elementByMPID(
-                      areaMPID,
-                    );
-                  }
+                if (isCtrlOrMetaOnlyPressed) {
+                  _addAreaBorderLineSelection(
+                    areaMPID: areaMPID,
+                    clickedLineMPID: element.mpID,
+                    clickedElementsMap: clickedElementsMap,
+                  );
+                } else if (isCtrlOrMetaPressed &&
+                    isAltPressed &&
+                    !isShiftPressed) {
+                  resetAreaBorderCtrlMetaCycle();
+                  clickedElementsMap[areaMPID] = _th2File.elementByMPID(
+                    areaMPID,
+                  );
                 } else {
+                  resetAreaBorderCtrlMetaCycle();
                   clickedElementsMap[element.mpID] = element;
                   clickedElementsMap[areaMPID] = _th2File.elementByMPID(
                     areaMPID,
@@ -768,6 +785,42 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     return clickedElementsMap;
+  }
+
+  void _addAreaBorderLineSelection({
+    required int areaMPID,
+    required int clickedLineMPID,
+    required Map<int, THElement> clickedElementsMap,
+  }) {
+    final THArea area = _th2File.areaByMPID(areaMPID);
+    final List<int> areaLineMPIDs = area.getLineMPIDs(_th2File);
+
+    if (areaLineMPIDs.length <= 1) {
+      _areaBorderCtrlMetaCycleAreaMPID = areaMPID;
+      _areaBorderCtrlMetaCycleChoiceIndex = 0;
+      clickedElementsMap[clickedLineMPID] = _th2File.elementByMPID(
+        clickedLineMPID,
+      );
+      return;
+    }
+
+    if (_areaBorderCtrlMetaCycleAreaMPID != areaMPID) {
+      _areaBorderCtrlMetaCycleAreaMPID = areaMPID;
+      _areaBorderCtrlMetaCycleChoiceIndex = 0;
+    }
+
+    if (_areaBorderCtrlMetaCycleChoiceIndex == 0) {
+      for (final int lineMPID in areaLineMPIDs) {
+        clickedElementsMap[lineMPID] = _th2File.elementByMPID(lineMPID);
+      }
+    } else {
+      final int lineMPID =
+          areaLineMPIDs[_areaBorderCtrlMetaCycleChoiceIndex - 1];
+      clickedElementsMap[lineMPID] = _th2File.elementByMPID(lineMPID);
+    }
+
+    _areaBorderCtrlMetaCycleChoiceIndex =
+        (_areaBorderCtrlMetaCycleChoiceIndex + 1) % (areaLineMPIDs.length + 1);
   }
 
   Future<Map<int, THElement>> getSelectableLineSegmentsOfLineClickedWithDialog({
@@ -1769,6 +1822,11 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void setMultipleElementsClickedChoice(int choiceID) {
     _multipleElementsClickedChoice = choiceID;
+  }
+
+  void resetAreaBorderCtrlMetaCycle() {
+    _areaBorderCtrlMetaCycleAreaMPID = null;
+    _areaBorderCtrlMetaCycleChoiceIndex = 0;
   }
 
   void performMultipleElementsClickedChoosen(int choiceID) {

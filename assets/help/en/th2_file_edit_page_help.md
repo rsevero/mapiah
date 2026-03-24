@@ -112,8 +112,8 @@ Its also possible to select elements by dragging a selection window with the mou
 When clicking on a line that defines an area border, the behavior depends on which modifier keys are held:
 
 1. **No modifier (or modifiers other than Ctrl/Meta+Shift)**: both the area and the line are candidates for selection. If exactly one is already selected the other is added; otherwise a "Multiple elements clicked" dialog is shown so you can choose which element(s) to add to the selection.
-2. **Ctrl+click or Meta+click (Shift not pressed)**: only the area is added to the selection directly, without showing the dialog.
-3. **Ctrl+Shift+click or Meta+Shift+click**: only the line is added to the selection directly, without showing the dialog.
+2. **Ctrl+click or Meta+click (without Alt or Shift)**: only border lines are added to the selection directly, without showing the dialog. If the area has more than one border line, the first click selects all of its border lines. Additional Ctrl/Meta clicks, while you keep Ctrl/Meta held, cycle through the same area's border lines in the order they appear in the area's `THAreaBorderTHIDs`, then return to selecting all border lines again.
+3. **Ctrl+Alt+click or Meta+Alt+click (without Shift)**: only the area is added to the selection directly, without showing the dialog.
 
 ## Element operations
 

@@ -172,7 +172,22 @@ abstract class MPTH2FileEditState {
 
   void onKeyRepeatEvent(KeyRepeatEvent event) {}
 
-  void onKeyUpEvent(KeyUpEvent event) {}
+  void onKeyUpEvent(KeyUpEvent event) {
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.altLeft:
+      case LogicalKeyboardKey.altRight:
+      case LogicalKeyboardKey.altGraph:
+      case LogicalKeyboardKey.controlLeft:
+      case LogicalKeyboardKey.controlRight:
+      case LogicalKeyboardKey.metaLeft:
+      case LogicalKeyboardKey.metaRight:
+      case LogicalKeyboardKey.shiftLeft:
+      case LogicalKeyboardKey.shiftRight:
+        selectionController.resetAreaBorderCtrlMetaCycle();
+      default:
+        break;
+    }
+  }
 
   void onSelectAll() {}
 

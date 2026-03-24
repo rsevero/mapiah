@@ -212,8 +212,8 @@ Também é possível selecionar elementos arrastando uma janela de seleção com
 Ao clicar em uma linha que define a borda de uma área, o comportamento depende das teclas modificadoras pressionadas:
 
 1. **Sem modificador (ou modificadores diferentes de Ctrl/Meta+Shift)**: tanto a área quanto a linha são candidatas à seleção. Se exatamente uma delas já estiver selecionada, a outra é adicionada; caso contrário, a caixa de diálogo "Vários elementos clicados" é exibida para que você escolha qual(is) elemento(s) adicionar à seleção.
-2. **Ctrl+clique ou Meta+clique (Shift não pressionado)**: apenas a área é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
-3. **Ctrl+Shift+clique ou Meta+Shift+clique**: apenas a linha é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
+2. **Ctrl+clique ou Meta+clique (sem Alt nem Shift)**: apenas linhas de borda são adicionadas à seleção diretamente, sem exibir a caixa de diálogo. Se a área tiver mais de uma linha de borda, o primeiro clique seleciona todas as linhas de borda dessa área. Cliques adicionais com Ctrl/Meta, enquanto você mantiver Ctrl/Meta pressionado, percorrem as linhas de borda da mesma área na ordem em que aparecem nos `THAreaBorderTHIDs` da área e depois voltam a selecionar todas as linhas de borda.
+3. **Ctrl+Alt+clique ou Meta+Alt+clique (sem Shift)**: apenas a área é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
 
 ## Operações com elementos
 

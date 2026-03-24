@@ -4,6 +4,7 @@
 
 ## 0.3.3 - not yet released
 * New features:
+  * Area-border selection shortcuts updated: Ctrl/Meta+click now cycles border-line selection for areas with multiple border lines (all lines → each line in THAreaBorderTHIDs order → all lines again while Ctrl/Meta stays pressed [requested by Marco Corvi]). Area-only selection changed from Ctrl/Meta+Shift+click to Ctrl/Meta+Alt+click.
   * Show direction ticks on non-selected lines: new Settings toggle (TH2Edit_ShowDirectionTicksOnNonSelectedLines, default off). When off, only selected lines show direction ticks (previous behaviour). When on, all lines in the active scrap show direction ticks regardless of selection. Also togglable via Ctrl+Alt+R.  [requested by Marco Corvi]
   * Default option values: pressing 'O' with no elements selected (or clicking the new tune button in the top right corner) opens a "Default options" overlay with Points / Lines / Areas tabs. Options set there are automatically applied to every newly created element of the matching type. A Reset button clears all defaults for the current category.
   * Anonymous telemetry: Mapiah can optionally collect aggregated, anonymous daily usage data (OS type/version, Mapiah version, TH2 open counts and time, Therion run counts and time). A consent dialog is shown on first launch; consent can be changed at any time in Settings. No file paths, personal data, or identifying information is ever collected or transmitted. Data is aggregated client-side before sending and only previous UTC days' records are ever transmitted.
@@ -24,6 +25,7 @@
   * Fixed crash when adding a point with default options configured: option commands (subtype + defaults) are now placed in the posCommand of MPAddPointCommand instead of alongside it in MPMultipleElementsCommand, so they run after the point is in the file and the MPID lookup succeeds. Added regression tests (1305).
   * Reset button in the default options overlay window was invisible when enabled because TextButton defaults to colorScheme.primary for its text, which matched the block's primary background. Fixed by explicitly setting foregroundColor to colorScheme.onPrimary.
 * Infrastructure maintenance:
+  * Added widget regression tests for area-border selection shortcuts (3710), including Ctrl/Meta cycling, Ctrl/Meta+Alt area-only selection, and checks that Ctrl/Meta+Shift is no longer area-only.
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
   * Added public getAllSupportedPointOptions/LineOptions/AreaOptions getters to MPCommandOptionAux.
