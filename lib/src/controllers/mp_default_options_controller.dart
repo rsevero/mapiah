@@ -129,7 +129,10 @@ class MPDefaultOptionsController {
     }
 
     return supportedOptions
-        .where((type) => stored.containsKey(type))
+        .where(
+          (type) =>
+              (type != THCommandOptionType.id) && stored.containsKey(type),
+        )
         .map((type) => stored[type]!)
         .toList();
   }

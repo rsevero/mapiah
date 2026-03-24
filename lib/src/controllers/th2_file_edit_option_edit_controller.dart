@@ -377,6 +377,10 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     }
 
     for (final THCommandOptionType optionType in allOptions) {
+      if (optionType == THCommandOptionType.id) {
+        continue;
+      }
+
       final bool isSet = storedDefaults.containsKey(optionType);
 
       optionsInfo[optionType] = MPOptionInfo(
