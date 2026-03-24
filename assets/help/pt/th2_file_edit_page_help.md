@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Aqui é onde toda a edição de arquivos TH2 é feita.
 
+_Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
+
 ## Índice
 - [Índice](#índice)
 - [Barra superior](#barra-superior)
@@ -211,9 +213,9 @@ Também é possível selecionar elementos arrastando uma janela de seleção com
 
 Ao clicar em uma linha que define a borda de uma área, o comportamento depende das teclas modificadoras pressionadas:
 
-1. **Sem modificador (ou modificadores diferentes de Ctrl/Meta+Shift)**: tanto a área quanto a linha são candidatas à seleção. Se exatamente uma delas já estiver selecionada, a outra é adicionada; caso contrário, a caixa de diálogo "Vários elementos clicados" é exibida para que você escolha qual(is) elemento(s) adicionar à seleção.
-2. **Ctrl+clique ou Meta+clique (sem Alt nem Shift)**: apenas linhas de borda são adicionadas à seleção diretamente, sem exibir a caixa de diálogo. Se a área tiver mais de uma linha de borda, o primeiro clique seleciona todas as linhas de borda dessa área. Cliques adicionais com Ctrl/Meta, enquanto você mantiver Ctrl/Meta pressionado, percorrem as linhas de borda da mesma área na ordem em que aparecem nos `THAreaBorderTHIDs` da área e depois voltam a selecionar todas as linhas de borda.
-3. **Ctrl+Alt+clique ou Meta+Alt+clique (sem Shift)**: apenas a área é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
+1. **Sem modificador (ou modificadores diferentes de Ctrl+Shift)**: tanto a área quanto a linha são candidatas à seleção. Se exatamente uma delas já estiver selecionada, a outra é adicionada; caso contrário, a caixa de diálogo "Vários elementos clicados" é exibida para que você escolha qual(is) elemento(s) adicionar à seleção.
+2. **Ctrl+clique (sem Alt nem Shift)**: apenas linhas de borda são adicionadas à seleção diretamente, sem exibir a caixa de diálogo. Se a área tiver mais de uma linha de borda, o primeiro clique seleciona todas as linhas de borda dessa área. Cliques adicionais com Ctrl, enquanto você mantiver Ctrl pressionado, percorrem as linhas de borda da mesma área na ordem em que aparecem nos `THAreaBorderTHIDs` da área e depois voltam a selecionar todas as linhas de borda.
+3. **Ctrl+Alt+clique (sem Shift)**: apenas a área é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
 
 ## Operações com elementos
 
@@ -221,11 +223,11 @@ Ao clicar em uma linha que define a borda de uma área, o comportamento depende 
 Elementos selecionados podem ser copiados para uma área de transferência (clipboard) e colados no arquivo atual ou em outro arquivo aberto.
 
 **Para copiar elementos selecionados:**
-- Pressione _Ctrl+C_ (ou _Meta+C_ no macOS)
+- Pressione _Ctrl+C_
 - Pelo menos um elemento deve estar selecionado
 
 **Para colar elementos copiados:**
-- Pressione _Ctrl+V_ (ou _Meta+V_ no macOS)
+- Pressione _Ctrl+V_
 - Os elementos colados aparecem no croqui atual
 - Todos os elementos filhos (segmentos de linha, bordas de área, etc.) são automaticamente incluídos na colagem
 - As referências de THID são automaticamente resolvidas para evitar conflitos: se o THID de um elemento colado já existe no arquivo de destino, um novo THID exclusivo é automaticamente gerado
@@ -250,7 +252,7 @@ Elementos selecionados podem ser rapidamente duplicados no mesmo lugar.
 Elementos selecionados podem ser recortados (copiados para a área de transferência e imediatamente removidos do arquivo).
 
 **Para recortar elementos selecionados:**
-- Pressione _Ctrl+X_ (ou _Meta+X_ no macOS)
+- Pressione _Ctrl+X_
 - Pelo menos um elemento deve estar selecionado
 - Os elementos são copiados para a área de transferência e então removidos do arquivo
 - O conteúdo da área de transferência pode ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto

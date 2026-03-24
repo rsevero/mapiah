@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 This page allows you to configure Mapiah's settings. Settings are grouped into sections displayed as cards.
 
+_Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeable. Shortcut mentions below use "Ctrl" for brevity._
+
 ## Index
 - [Index](#index)
 - [Using settings](#using-settings)

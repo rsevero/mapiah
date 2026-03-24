@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 This is where all TH2 file editing is done.
 
+_Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeable. Shortcut mentions below use "Ctrl" for brevity._
+
 ## Index
 - [Index](#index)
 - [Top bar](#top-bar)
@@ -35,6 +37,7 @@ This is where all TH2 file editing is done.
   - [Bézier curve line segments](#bézier-curve-line-segments)
   - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
+- [Hide elements](#hide-elements)
 - [Search and select](#search-and-select)
 - [Snap](#snap)
 - [Zoom and panning](#zoom-and-panning)
@@ -111,9 +114,9 @@ Its also possible to select elements by dragging a selection window with the mou
 
 When clicking on a line that defines an area border, the behavior depends on which modifier keys are held:
 
-1. **No modifier (or modifiers other than Ctrl/Meta+Shift)**: both the area and the line are candidates for selection. If exactly one is already selected the other is added; otherwise a "Multiple elements clicked" dialog is shown so you can choose which element(s) to add to the selection.
-2. **Ctrl+click or Meta+click (without Alt or Shift)**: only border lines are added to the selection directly, without showing the dialog. If the area has more than one border line, the first click selects all of its border lines. Additional Ctrl/Meta clicks, while you keep Ctrl/Meta held, cycle through the same area's border lines in the order they appear in the area's `THAreaBorderTHIDs`, then return to selecting all border lines again.
-3. **Ctrl+Alt+click or Meta+Alt+click (without Shift)**: only the area is added to the selection directly, without showing the dialog.
+1. **No modifier (or modifiers other than Ctrl+Shift)**: both the area and the line are candidates for selection. If exactly one is already selected the other is added; otherwise a "Multiple elements clicked" dialog is shown so you can choose which element(s) to add to the selection.
+2. **Ctrl+click (without Alt or Shift)**: only border lines are added to the selection directly, without showing the dialog. If the area has more than one border line, the first click selects all of its border lines. Additional Ctrl clicks, while you keep Ctrl held, cycle through the same area's border lines in the order they appear in the area's `THAreaBorderTHIDs`, then return to selecting all border lines again.
+3. **Ctrl+Alt+click (without Shift)**: only the area is added to the selection directly, without showing the dialog.
 
 ## Element operations
 
@@ -121,11 +124,11 @@ When clicking on a line that defines an area border, the behavior depends on whi
 Selected elements can be copied to a clipboard and pasted into the current file or another open file.
 
 **To copy selected elements:**
-- Press _Ctrl+C_ (or _Meta+C_ on macOS)
+- Press _Ctrl+C_
 - At least one element must be selected
 
-**To paste copied elements:**
-- Press _Ctrl+V_ (or _Meta+V_ on macOS)
+- **To paste copied elements:**
+- Press _Ctrl+V_
 - Pasted elements appear in the current scrap
 - All child elements (line segments, area borders, etc.) are automatically included in the paste
 - THID references are automatically resolved to avoid conflicts: if a pasted element's THID already exists in the target file, a new unique THID is automatically generated
@@ -138,8 +141,8 @@ When you have multiple files open in tabs, you can copy elements from one file a
 ### Cut
 Selected elements can be cut (copied to clipboard and immediately removed from the file).
 
-**To cut selected elements:**
-- Press _Ctrl+X_ (or _Meta+X_ on macOS)
+- **To cut selected elements:**
+- Press _Ctrl+X_
 - At least one element must be selected
 - The elements are copied to the clipboard and then removed from the file
 - The clipboard content can be pasted with _Ctrl+V_ into the same or another open file

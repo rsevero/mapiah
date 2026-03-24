@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Página inicial do aplicativo, onde são apresentadas as principais funções.
 
+_Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
+
 ## Barra superior
 * ![Ícone novo arquivo](assets/help/images/iconNewFile.png "Novo arquivo") _Novo arquivo_: cria um novo projeto.
 * ![Ícone abrir arquivo](assets/help/images/iconOpenFile.png "Abrir arquivo")  _Abrir arquivo_: mostra a caixa de diálogo do sistema para escolher qual arquivo(s) será(ão) aberto(s). Você pode selecionar múltiplos arquivos de uma vez (usando Ctrl+Clique ou Shift+Clique) para abri-los simultaneamente em abas separadas.

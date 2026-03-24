@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Initial app page where its main functions are presented.
 
+_Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeable. Shortcut mentions below use "Ctrl" for brevity._
+
 ## Top bar
 * ![New file icon](assets/help/images/iconNewFile.png "New file") _New file_: creates new project.
 * ![File open icon](assets/help/images/iconOpenFile.png "File open")  _File open_: shows system dialog where its possible to choose which file(s) should be opened. You can select multiple files at once (using Ctrl+Click or Shift+Click) to open them all simultaneously in separate tabs.

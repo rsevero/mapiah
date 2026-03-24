@@ -1,5 +1,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
+_Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nos atalhos abaixo usa-se "Ctrl" por brevidade._
+ 
 | Ação                                                                   | Atalho                               |
 | ---------------------------------------------------------------------- | ------------------------------------ |
 | Adicionar imagem                                                       | I                                    |
@@ -9,8 +11,8 @@
 | Alternar direção da linha                                              | R                                    |
 | Alternar marcas de direção em linhas não selecionadas                  | Ctrl+Alt+R                           |
 | Atalhos de teclado                                                     | Ctrl+K                               |
-| Clicar em linha de borda de área: alternar seleção das linhas de borda | Ctrl+clique ou Meta+clique           |
-| Clicar em linha de borda de área: selecionar apenas a área             | Ctrl+Alt+clique ou Meta+Alt+clique   |
+| Clicar em linha de borda de área: alternar seleção das linhas de borda | Ctrl+clique                          |
+| Clicar em linha de borda de área: selecionar apenas a área             | Ctrl+Alt+clique                      |
 | Colar elementos                                                        | Ctrl+V                               |
 | Copiar elementos selecionados                                          | Ctrl+C                               |
 | Criar área                                                             | A                                    |

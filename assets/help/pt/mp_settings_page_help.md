@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Esta página permite configurar as preferências do Mapiah. As configurações são agrupadas em seções exibidas como cartões.
 
+_Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
+
 ## Índice
 - [Índice](#índice)
 - [Usando as configurações](#usando-as-configurações)

@@ -1,5 +1,7 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
+_Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nos atalhos abaixo usa-se "Ctrl" por brevidade._
+
 | Ação                                         | Atalho                 |
 | -------------------------------------------- | ---------------------- |
 | Abrir arquivo                                | Ctrl+O ou Ctrl+Shift+O |
