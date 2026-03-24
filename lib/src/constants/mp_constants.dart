@@ -308,6 +308,7 @@ const int mpDefaultMaxCharsForTextFields = 20;
 const double mpTabBarHeight = 46.0;
 const double mpTabCloseIconSize = 14.0;
 const double mpTabLabelMaxWidth = 160.0;
+const double mpFilePropertiesEncodingDropdownWidth = 200.0;
 
 const int mpETRSMin = 28;
 const int mpETRSMax = 37;

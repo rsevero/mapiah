@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_properties_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -61,27 +62,34 @@ class _TH2FilePropertiesPageState extends State<TH2FilePropertiesPage> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8.0),
-            DropdownButtonFormField<String>(
-              initialValue: _selectedEncoding,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                helperText:
-                    appLocalizations.th2FilePropertiesPageEncodingDescription,
-                helperMaxLines: 5,
+            SizedBox(
+              width: mpFilePropertiesEncodingDropdownWidth,
+              child: DropdownButtonFormField<String>(
+                initialValue: _selectedEncoding,
+                decoration: const InputDecoration(border: OutlineInputBorder()),
+                items: availableEncodings
+                    .map(
+                      (String enc) => DropdownMenuItem<String>(
+                        value: enc,
+                        child: Text(enc),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (String? value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedEncoding = value;
+                    });
+                  }
+                },
               ),
-              items: availableEncodings
-                  .map(
-                    (String enc) =>
-                        DropdownMenuItem<String>(value: enc, child: Text(enc)),
-                  )
-                  .toList(),
-              onChanged: (String? value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedEncoding = value;
-                  });
-                }
-              },
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              appLocalizations.th2FilePropertiesPageEncodingDescription,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 24.0),
             Row(
