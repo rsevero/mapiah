@@ -9,6 +9,8 @@
 | Alternar direção da linha                                     | R                                    |
 | Alternar marcas de direção em linhas não selecionadas         | Ctrl+Alt+R                           |
 | Atalhos de teclado                                            | Ctrl+K                               |
+| Clicar em linha de borda de área: selecionar apenas a área    | Ctrl+clique ou Meta+clique           |
+| Clicar em linha de borda de área: selecionar apenas a linha   | Ctrl+Shift+clique                    |
 | Colar elementos                                               | Ctrl+V                               |
 | Copiar elementos selecionados                                 | Ctrl+C                               |
 | Criar área                                                    | A                                    |

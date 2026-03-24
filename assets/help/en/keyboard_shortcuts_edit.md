@@ -7,6 +7,8 @@
 | Change active scrap                                        | Alt+S                        |
 | Change images                                              | Alt+I                        |
 | Choose THConfig file and run Therion                       | Ctrl+T                       |
+| Click area-border line: select area only                   | Ctrl+click or Meta+click     |
+| Click area-border line: select line only                   | Ctrl+Shift+click             |
 | Copy selected elements                                     | Ctrl+C                       |
 | Create area                                                | A                            |
 | Create line                                                | L                            |
