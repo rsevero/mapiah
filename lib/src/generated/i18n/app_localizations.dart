@@ -1894,6 +1894,12 @@ abstract class AppLocalizations {
   /// **'Selection tolerance'**
   String get mpSettingsSettingTH2EditSelectionTolerance;
 
+  /// Label for TH2 show direction ticks on non-selected lines setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Show direction ticks on non-selected lines'**
+  String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
+
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:

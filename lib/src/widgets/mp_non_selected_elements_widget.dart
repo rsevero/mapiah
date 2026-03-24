@@ -2,12 +2,14 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -39,12 +41,18 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
         th2FileEditController.activeScrapID;
 
+        final bool showDirectionTicksOnNonSelected = mpLocator
+            .mpSettingsController
+            .getBoolWithDefault(
+              MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+            );
         final List<CustomPainter> painters = [];
 
         addChildrenPainters(
           parent: th2File.scrapByMPID(th2FileEditController.activeScrapID),
           painters: painters,
           isFromActiveScrap: true,
+          showDirectionTicks: showDirectionTicksOnNonSelected,
         );
 
         return RepaintBoundary(
@@ -64,6 +72,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
     required THIsParentMixin parent,
     required List<CustomPainter> painters,
     required bool isFromActiveScrap,
+    required bool showDirectionTicks,
   }) {
     final Iterable<int> drawableChildrenMPIDs = parent
         .getDrawableChildrenMPIDs();
@@ -102,7 +111,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             getLinePainters(
               line: line,
               isLineSelected: false,
-              showLineDirectionTicks: false,
+              showLineDirectionTicks: showDirectionTicks,
               isFromActiveScrap: isFromActiveScrap,
               th2FileEditController: th2FileEditController,
             ),
@@ -129,6 +138,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             parent: scrap,
             painters: painters,
             isFromActiveScrap: false,
+            showDirectionTicks: showDirectionTicks,
           );
       }
     }

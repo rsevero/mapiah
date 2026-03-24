@@ -1528,6 +1528,11 @@
     "description": "Label for TH2 selection tolerance setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": "Show direction ticks on non-selected lines",
+  "@mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": {
+    "description": "Label for TH2 show direction ticks on non-selected lines setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSketchChooseFileButtonLabel": "Choose file",
   "@mpSketchChooseFileButtonLabel": {
     "description": "The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart",

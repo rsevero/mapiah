@@ -673,6 +673,9 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
       case MPSettingID.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
+      case MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
+        return appLocalizations
+            .mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
       default:
         throw UnimplementedError(
           'At MPSettingsPage._localizedSettingName(): no localized name defined for setting type "$type"',

@@ -183,7 +183,6 @@
 [X] - Implement default option values.
 [X] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
 [X] - Control which scraps are visible in Mapiah (that is not a Therion setting).
-[ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]
 [ ] - When an area defined by more than one line is selected, allow the user to refine the selection by selecting only one line. [requested by Marco Corvi]
 [ ] - Easily turn on/off the direction ticks. [requested by Marco Corvi]
 [ ] - Edit file properties (encoding and?...).
@@ -218,3 +217,4 @@
 [ ] - Open/edit/save thconfig files.
 [X] - Run Therion using the opened thconfig file.
 [X] - Show Therion output log while running Therion from Mapiah.
+[ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]

@@ -25,7 +25,8 @@ enum MPSettingID {
   TH2Edit_LineThickness,
   TH2Edit_NewLineCreationMethod,
   TH2Edit_PointRadius,
-  TH2Edit_SelectionTolerance;
+  TH2Edit_SelectionTolerance,
+  TH2Edit_ShowDirectionTicksOnNonSelectedLines;
 
   static const Map<MPSettingID, MPSettingType>
   types = <MPSettingID, MPSettingType>{
@@ -50,6 +51,8 @@ enum MPSettingID {
     MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
     MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
     MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
+    MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
+        MPSettingType.bool,
   };
 
   static const Map<MPSettingID, String> filePickerExecNames =

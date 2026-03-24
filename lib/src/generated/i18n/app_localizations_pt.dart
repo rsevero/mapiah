@@ -985,6 +985,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Tolerância de seleção';
 
   @override
+  String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines =>
+      'Mostrar marcas de direção em linhas não selecionadas';
+
+  @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
 
   @override
