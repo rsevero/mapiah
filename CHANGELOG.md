@@ -48,6 +48,7 @@
   * Removed id from default options: id is now excluded from the default options UI and from getApplicableDefaults, since there is no meaningful default value for a unique identifier. The search/select dialog is unaffected.
   * Default options overlay window now auto-closes on canvas click, consistent with all other overlay windows.
   * Added regression tests for line and area creation with default options (1205, 1255): verify no exception is thrown, that the default option is present on the created element, and that undo restores the original state.
+  * Overlay windows now auto-close when any action button is pressed (add point, add line, undo, redo, remove, etc.); zoom buttons are excluded as zooming does not imply dismissing a panel.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

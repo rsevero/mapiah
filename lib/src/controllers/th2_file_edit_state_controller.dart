@@ -146,7 +146,22 @@ abstract class TH2FileEditStateControllerBase
     _state.onKeyUpEvent(event);
   }
 
+  static const Set<MPButtonType> _noAutoCloseButtonTypes = {
+    MPButtonType.zoomAllFile,
+    MPButtonType.zoomAllScrap,
+    MPButtonType.zoomIn,
+    MPButtonType.zoomOneToOne,
+    MPButtonType.zoomOptions,
+    MPButtonType.zoomOut,
+    MPButtonType.zoomSelection,
+    MPButtonType.zoomSelectionWindow,
+  };
+
   void onButtonPressed(MPButtonType buttonType) {
+    if (!_noAutoCloseButtonTypes.contains(buttonType)) {
+      _th2FileEditController.overlayWindowController
+          .closeAutoDismissOverlayWindows();
+    }
     _state.onButtonPressed(buttonType);
   }
 }
