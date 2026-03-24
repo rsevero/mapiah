@@ -147,6 +147,7 @@ abstract class TH2FileEditStateControllerBase
   }
 
   static const Set<MPButtonType> _noAutoCloseButtonTypes = {
+    MPButtonType.addLineToArea,
     MPButtonType.zoomAllFile,
     MPButtonType.zoomAllScrap,
     MPButtonType.zoomIn,

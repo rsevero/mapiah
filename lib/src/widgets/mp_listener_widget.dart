@@ -114,7 +114,11 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
-        if (overlayWindowController.isAutoDismissWindowOpen) {
+        if (overlayWindowController.isAutoDismissWindowOpen &&
+            !th2FileEditController
+                .stateController
+                .state
+                .keepOverlayOpenOnCanvasClick) {
           overlayWindowController.closeAutoDismissOverlayWindows();
         }
 

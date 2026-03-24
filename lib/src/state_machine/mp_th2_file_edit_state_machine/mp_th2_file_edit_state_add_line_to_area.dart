@@ -57,6 +57,10 @@ class MPTH2FileEditStateAddLineToArea extends MPTH2FileEditState
         );
 
     if (addLineToAreaRecord.command == null) {
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectNonEmptySelection,
+      );
+
       return Future.value();
     }
 
@@ -65,6 +69,9 @@ class MPTH2FileEditStateAddLineToArea extends MPTH2FileEditState
 
     return Future.value();
   }
+
+  @override
+  bool get keepOverlayOpenOnCanvasClick => true;
 
   @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.addLineToArea;

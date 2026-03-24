@@ -138,6 +138,8 @@ abstract class MPTH2FileEditState {
     th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
   }
 
+  bool get keepOverlayOpenOnCanvasClick => false;
+
   void updateStatusBarMessage() {}
 
   void onPrimaryButtonPointerDown(PointerDownEvent event) {}
