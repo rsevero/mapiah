@@ -504,6 +504,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     );
   }
 
+  void _onDefaultOptionsButtonPressed() {
+    th2FileEditController.optionEditController
+        .showDefaultOptionsOverlayWindow();
+  }
+
   void _onChangeImageButtonPressed() {
     th2FileEditController.overlayWindowController.toggleOverlayWindow(
       MPWindowType.changeImage,
@@ -548,6 +553,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             th2FileEditController.enableRemoveButton;
         final bool isSomeSnapTargetActive =
             th2FileEditController.snapController.isSomeSnapTargetActive;
+        final bool isDefaultOptionsShown = th2FileEditController
+            .overlayWindowController
+            .showDefaultOptionsOverlayWindow;
 
         th2FileEditController.redrawSnapTargetsWindow;
 
@@ -606,6 +614,21 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                       ? null
                       : colorScheme.surfaceContainerHighest,
                 ),
+              ),
+              SizedBox(width: mpButtonSpace),
+              FloatingActionButton(
+                heroTag: '${heroPrefix}_default_options',
+                mini: true,
+                tooltip: appLocalizations.mpDefaultOptionsToolbarTooltip,
+                onPressed: _onDefaultOptionsButtonPressed,
+                backgroundColor: isDefaultOptionsShown
+                    ? null
+                    : colorScheme.surfaceContainerLowest,
+                foregroundColor: isDefaultOptionsShown
+                    ? null
+                    : colorScheme.surfaceContainerHighest,
+                elevation: isDefaultOptionsShown ? 6.0 : 3.0,
+                child: const Icon(Icons.tune),
               ),
               if (th2FileEditController.showRemoveButton) ...[
                 SizedBox(width: mpButtonSpace),

@@ -22,7 +22,8 @@
 | Hide selected elements / Show all hidden elements          | Ctrl+H                       |
 | Keyboard shortcuts                                         | Ctrl+K                       |
 | Line node edit                                             | N                            |
-| Options edit                                               | O                            |
+| Default options (no elements selected)                     | O                            |
+| Options edit (elements selected)                           | O                            |
 | Paste elements                                             | Ctrl+V                       |
 | Redo                                                       | Ctrl+Y                       |
 | Reverse line                                               | R                            |

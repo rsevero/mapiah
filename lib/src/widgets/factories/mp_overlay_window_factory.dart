@@ -18,6 +18,7 @@ import 'package:mapiah/src/widgets/mp_line_segment_options_edit_overlay_window_w
 import 'package:mapiah/src/widgets/mp_line_segment_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget.dart';
+import 'package:mapiah/src/widgets/mp_default_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
@@ -75,6 +76,14 @@ class MPOverlayWindowFactory {
           key: ValueKey("MPAvailableScrapsWidget|$thFileMPID"),
           th2FileEditController: th2FileEditController,
           outerAnchorPosition: outerAnchorPosition,
+        );
+      case MPWindowType.defaultOptions:
+        outerAnchorPosition = th2FileEditController.screenBoundingBox.center;
+        overlayWindowWidget = MPDefaultOptionsOverlayWindowWidget(
+          key: ValueKey("MPDefaultOptionsOverlayWindowWidget|$thFileMPID"),
+          th2FileEditController: th2FileEditController,
+          outerAnchorPosition: outerAnchorPosition,
+          innerAnchorType: innerAnchorType ?? MPWidgetPositionType.center,
         );
       case MPWindowType.changeImage:
         outerAnchorPosition = MPInteractionAux.getButtonOuterAnchor(

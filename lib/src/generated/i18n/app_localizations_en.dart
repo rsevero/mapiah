@@ -503,6 +503,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpDateValueInvalidValueErrorMessage => 'Invalid date/interval';
 
   @override
+  String get mpDefaultOptionsAreasTab => 'Areas';
+
+  @override
+  String get mpDefaultOptionsLinesTab => 'Lines';
+
+  @override
+  String get mpDefaultOptionsPointsTab => 'Points';
+
+  @override
+  String get mpDefaultOptionsReset => 'Reset';
+
+  @override
+  String get mpDefaultOptionsTitle => 'Default options';
+
+  @override
+  String get mpDefaultOptionsToolbarTooltip => 'Default options';
+
+  @override
   String get mpDimensionsAboveLabel => 'Above';
 
   @override

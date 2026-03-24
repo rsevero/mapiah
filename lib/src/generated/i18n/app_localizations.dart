@@ -1004,6 +1004,42 @@ abstract class AppLocalizations {
   /// **'Invalid date/interval'**
   String get mpDateValueInvalidValueErrorMessage;
 
+  /// Label for the Areas tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Areas'**
+  String get mpDefaultOptionsAreasTab;
+
+  /// Label for the Lines tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Lines'**
+  String get mpDefaultOptionsLinesTab;
+
+  /// Label for the Points tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get mpDefaultOptionsPointsTab;
+
+  /// Label for the Reset button in the default options overlay. Clears all stored defaults for the current element type. Used on: MPDefaultOptionsOverlayWindowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get mpDefaultOptionsReset;
+
+  /// Title for the default options overlay window. Used on: MPDefaultOptionsOverlayWindowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Default options'**
+  String get mpDefaultOptionsTitle;
+
+  /// Tooltip for the default options toolbar button. Used on: TH2FileEditBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Default options'**
+  String get mpDefaultOptionsToolbarTooltip;
+
   /// The label for the above dimension type. Used on: lib/src/widgets/options/mp_dimensions_option_widget.dart
   ///
   /// In en, this message translates to:

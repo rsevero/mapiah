@@ -10,6 +10,7 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_default_options_controller.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
@@ -47,6 +48,7 @@ class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
 abstract class TH2FileEditControllerBase with Store {
+  late final MPDefaultOptionsController defaultOptionsController;
   late final TH2FileEditAreaLineCreationController areaLineCreationController;
   late final TH2FileHideElementController hideElementController;
   late final MPUndoRedoController undoRedoController;
@@ -440,6 +442,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   void _basicInitialization(TH2File file) {
     _th2File = file;
+    defaultOptionsController = MPDefaultOptionsController()..loadFromSettings();
     areaLineCreationController = TH2FileEditAreaLineCreationController(
       this as TH2FileEditController,
     );

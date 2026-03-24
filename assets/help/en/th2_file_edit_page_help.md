@@ -17,6 +17,7 @@ This is where all TH2 file editing is done.
   - [Cut](#cut)
   - [Duplicate](#duplicate)
 - [Element options](#element-options)
+- [Default options](#default-options)
 - [Save](#save)
   - [Original file format](#original-file-format)
 - [Images](#images)
@@ -64,7 +65,9 @@ The currently active file's tab is highlighted, making it easy to see which file
 ## Edit window
 
 ### Top right corner
+* _Search_: opens the search and select dialog. (See [Search and select](#search-and-select))
 * ![Snap button](assets/help/images/buttonSnap.png "Snap")  _Snap_: toggles the snap window where are presented the snap options. (Ctrl+L)
+* _Default options_: opens the default options overlay window where default option values can be set for new points, lines, and areas. (O with no elements selected)
 * ![Delete button](assets/help/images/buttonDelete.png "Delete")  _Delete_: deletes the currently selected elements. Only enabled if there is at least one element selected. (Delete/Backspace)
 * ![Undo button](assets/help/images/buttonUndo.png "Undo")  _Undo_: undos the last executed edit operation. Only enabled if there is at elast one edit operation to be undone. (Ctrl+Z)
 * ![Redo button](assets/help/images/buttonRedo.png "Redo")  _Redo_: redoes the last undone edit operation. Only enabled if there is at least one edit operation to be redone. (Ctrl+Y)
@@ -150,12 +153,28 @@ Selected elements can be quickly duplicated in place.
 - The duplicate operation can be undone with _Ctrl+Z_
 
 ## Element options
-Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be openned by using the 'O' keyboard shortcut when there is at least one element selected.
+Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be opened by using the 'O' keyboard shortcut when there is at least one element selected.
 The options available depend on the type of element selected.
 
 To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
+
+## Default options
+
+Default options are option values that are automatically applied to newly created points, lines, or areas of matching types. They are set once and reused across all subsequent element creations until changed or removed.
+
+Open the default options overlay window by:
+* Pressing 'O' with no elements selected, or
+* Clicking the _Default options_ button (tune icon) in the top right corner.
+
+The overlay window contains three tabs: **Points**, **Lines**, and **Areas**. Select the tab for the element category whose defaults you want to configure.
+
+Within each tab, the available options work identically to the regular element options editor. Setting an option stores it as a default for the selected category. Unsetting an option removes it from the defaults.
+
+Only options applicable to the specific type of the newly created element are applied. For example, if a default "clip" option is set for lines, it will only be applied when creating line types that support the "clip" option.
+
+A **Reset** button at the top of the overlay clears all defaults for the currently shown tab. The button is disabled when no defaults are set for that category.
 
 ## Save
 

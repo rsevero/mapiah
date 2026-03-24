@@ -6,6 +6,9 @@ import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
 
 enum MPSettingID {
+  Internal_DefaultAreaOptions,
+  Internal_DefaultLineOptions,
+  Internal_DefaultPointOptions,
   Internal_LastCheckNumberOfNewerVersions,
   Internal_LastNewVersionCheckMS,
   Internal_TelemetryCurrentDate,
@@ -26,6 +29,9 @@ enum MPSettingID {
 
   static const Map<MPSettingID, MPSettingType>
   types = <MPSettingID, MPSettingType>{
+    MPSettingID.Internal_DefaultAreaOptions: MPSettingType.stringList,
+    MPSettingID.Internal_DefaultLineOptions: MPSettingType.stringList,
+    MPSettingID.Internal_DefaultPointOptions: MPSettingType.stringList,
     MPSettingID.Internal_LastCheckNumberOfNewerVersions: MPSettingType.int,
     MPSettingID.Internal_LastNewVersionCheckMS: MPSettingType.int,
     MPSettingID.Internal_TelemetryCurrentDate: MPSettingType.string,

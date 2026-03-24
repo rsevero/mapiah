@@ -4,6 +4,7 @@ enum MPWindowType {
   availableScraps,
   changeImage,
   commandOptions,
+  defaultOptions,
   lineSegmentOptions,
   lineSegmentTypes,
   mainTH2FileEditWindow,

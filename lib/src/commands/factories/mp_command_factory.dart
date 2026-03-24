@@ -561,6 +561,24 @@ class MPCommandFactory {
       commandsList.add(setPointSubtypeCommand);
     }
 
+    final List<THCommandOption> defaultOptions = th2FileEditController
+        .defaultOptionsController
+        .getApplicableDefaults(
+          elementType: THElementType.point,
+          typeString: pointTypeString,
+        );
+
+    for (final THCommandOption defaultOption in defaultOptions) {
+      if (defaultOption.type == THCommandOptionType.subtype) {
+        continue;
+      }
+      commandsList.add(
+        MPSetOptionToElementCommand(
+          toOption: defaultOption.copyWith(parentMPID: newPoint.mpID),
+        ),
+      );
+    }
+
     return MPCommandFactory.multipleCommandsFromList(
       commandsList: commandsList,
       descriptionType: MPCommandDescriptionType.addPoint,

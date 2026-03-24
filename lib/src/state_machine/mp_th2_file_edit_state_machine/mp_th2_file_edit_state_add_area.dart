@@ -55,7 +55,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
           elementEditController.lastUsedAreaType,
         );
 
-    MPCommand? posCommand;
+    final List<MPCommand> posCommands = [];
 
     if (typeSubtype.subtype != '') {
       final THCommandOption toSubtypeOption = THSubtypeCommandOption(
@@ -63,12 +63,46 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
         subtype: typeSubtype.subtype,
       );
 
-      posCommand = MPCommandFactory.setOptionOnElements(
-        toOption: toSubtypeOption,
-        elements: [area],
-        th2File: th2File,
+      posCommands.add(
+        MPCommandFactory.setOptionOnElements(
+          toOption: toSubtypeOption,
+          elements: [area],
+          th2File: th2File,
+        ),
       );
     }
+
+    final List<THCommandOption> defaultOptions = th2FileEditController
+        .defaultOptionsController
+        .getApplicableDefaults(
+          elementType: THElementType.area,
+          typeString: typeSubtype.type,
+        );
+
+    for (final THCommandOption defaultOption in defaultOptions) {
+      if (defaultOption.type == THCommandOptionType.subtype) {
+        continue;
+      }
+      posCommands.add(
+        MPCommandFactory.setOptionOnElements(
+          toOption: defaultOption.copyWith(
+            parentMPID: area.mpID,
+            originalLineInTH2File: '',
+          ),
+          elements: [area],
+          th2File: th2File,
+        ),
+      );
+    }
+
+    final MPCommand? posCommand = posCommands.isEmpty
+        ? null
+        : MPCommandFactory.multipleCommandsFromList(
+            commandsList: posCommands,
+            descriptionType: MPCommandDescriptionType.addArea,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          );
 
     final List<THElement> areaChildren = area.getChildren(th2File).toList();
     final MPCommand addAreaCommand = MPAddAreaCommand.forCWJM(

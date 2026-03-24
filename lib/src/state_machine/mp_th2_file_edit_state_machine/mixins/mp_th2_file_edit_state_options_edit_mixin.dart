@@ -13,7 +13,10 @@ mixin MPTH2FileEditStateOptionsEditMixin on MPTH2FileEditState {
         MPOptionElementType.lineSegment) {
       openLineSegmentOptionsOverlayWindow();
     } else {
-      if (selectionController.mpSelectedElementsLogical.isNotEmpty) {
+      if (selectionController.mpSelectedElementsLogical.isEmpty) {
+        th2FileEditController.optionEditController
+            .showDefaultOptionsOverlayWindow();
+      } else {
         openOptionEditOverlayWindow();
       }
     }

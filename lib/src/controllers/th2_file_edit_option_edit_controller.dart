@@ -40,6 +40,13 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   MPOptionElementType _currentOptionElementsType = MPOptionElementType.pla;
 
+  @readonly
+  THElementType _defaultOptionsElementType = THElementType.point;
+
+  bool _isDefaultOptionsMode = false;
+
+  bool get isDefaultOptionsMode => _isDefaultOptionsMode;
+
   @action
   void updateOptionStateMap() {
     final Iterable<MPSelectedElement> mpSelectedElements =
@@ -323,6 +330,10 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     _currentOptionType = null;
   }
 
+  void exitDefaultOptionsMode() {
+    _isDefaultOptionsMode = false;
+  }
+
   @action
   void showOptionsOverlayWindow() {
     if (_th2FileEditController
@@ -338,12 +349,74 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     );
   }
 
+  @action
+  void setDefaultOptionsElementType(THElementType elementType) {
+    _defaultOptionsElementType = elementType;
+    if (_isDefaultOptionsMode) {
+      updateDefaultOptionsStateMap();
+    }
+  }
+
+  @action
+  void updateDefaultOptionsStateMap() {
+    final Map<THCommandOptionType, MPOptionInfo> optionsInfo = {};
+    final Map<THCommandOptionType, THCommandOption> storedDefaults =
+        _th2FileEditController.defaultOptionsController
+            .getDefaultsForElementType(_defaultOptionsElementType);
+    final Set<THCommandOptionType> allOptions;
+
+    switch (_defaultOptionsElementType) {
+      case THElementType.point:
+        allOptions = MPCommandOptionAux.getAllSupportedPointOptions();
+      case THElementType.line:
+        allOptions = MPCommandOptionAux.getAllSupportedLineOptions();
+      case THElementType.area:
+        allOptions = MPCommandOptionAux.getAllSupportedAreaOptions();
+      default:
+        allOptions = {};
+    }
+
+    for (final THCommandOptionType optionType in allOptions) {
+      final bool isSet = storedDefaults.containsKey(optionType);
+
+      optionsInfo[optionType] = MPOptionInfo(
+        type: optionType,
+        state: isSet ? MPOptionStateType.set : MPOptionStateType.unset,
+        defaultChoice: THCommandOption.getDefaultChoice(optionType),
+        currentChoice: isSet ? storedDefaults[optionType]!.specToFile() : null,
+        option: isSet ? storedDefaults[optionType] : null,
+      );
+    }
+
+    final List<THCommandOptionType> orderedList =
+        MPCommandOptionAux.getTHCommandOptionTypeOrderedList(optionsInfo.keys);
+
+    _optionStateMap.clear();
+    for (final THCommandOptionType optionType in orderedList) {
+      _optionStateMap[optionType] = optionsInfo[optionType]!;
+    }
+    _optionAttrStateMap.clear();
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
+
+  @action
+  void showDefaultOptionsOverlayWindow() {
+    _isDefaultOptionsMode = true;
+    _defaultOptionsElementType = THElementType.point;
+    updateDefaultOptionsStateMap();
+    _th2FileEditController.overlayWindowController.toggleOverlayWindow(
+      MPWindowType.defaultOptions,
+    );
+  }
+
   void setOptionElementsType(MPOptionElementType type) {
     _currentOptionElementsType = type;
   }
 
   MPOptionElementType get currentOptionElementsType =>
       _currentOptionElementsType;
+
+  THElementType get defaultOptionsElementType => _defaultOptionsElementType;
 }
 
 class MPOptionInfo {

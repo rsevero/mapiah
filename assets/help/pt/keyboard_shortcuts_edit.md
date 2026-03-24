@@ -20,7 +20,8 @@
 | Colar elementos                                               | Ctrl+V                               |
 | Duplicar elementos selecionados                               | Ctrl+D                               |
 | Editar nó de linha                                            | N                                    |
-| Editar opções                                                 | O                                    |
+| Opções padrão (sem elementos selecionados)                    | O                                    |
+| Editar opções (com elementos selecionados)                    | O                                    |
 | Escolher arquivo THConfig e executar Therion                  | Ctrl+T                               |
 | Excluir ponto, linha, área ou segmento de linha               | Del ou Backspace                     |
 | Ferramenta de seleção                                         | C                                    |

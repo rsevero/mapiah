@@ -18,6 +18,7 @@ Aqui é onde toda a edição de arquivos TH2 é feita.
   - [Canto superior direito](#canto-superior-direito)
   - [Canto inferior direito](#canto-inferior-direito)
 - [Opções do elemento](#opções-do-elemento)
+- [Opções padrão](#opções-padrão)
 - [Imagens](#imagens)
   - [Visibilidade da imagem](#visibilidade-da-imagem)
   - [Visibilidade da grade](#visibilidade-da-grade)
@@ -141,7 +142,9 @@ Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procu
 ## Janela de edição
 
 ### Canto superior direito
+* _Pesquisar_: abre a caixa de diálogo de pesquisa e seleção. (Ver [Pesquisar e selecionar](#pesquisar-e-selecionar))
 * ![Botão Snap](assets/help/images/buttonSnap.png "Snap")  _Snap_: alterna a janela de snap, onde são apresentadas as opções de snap. (Ctrl+L)
+* _Opções padrão_: abre a janela de opções padrão, onde é possível configurar valores padrão de opções para novos pontos, linhas e áreas. (O sem elementos selecionados)
 * ![Botão deletar](assets/help/images/buttonDelete.png "Deletar")  _Deletar_: apaga os elementos atualmente selecionados. Só fica habilitado se houver pelo menos um elemento selecionado. (Delete/Backspace)
 * ![Botão desfazer](assets/help/images/buttonUndo.png "Desfazer")  _Desfazer_: desfaz a última operação de edição executada. Só fica habilitado se houver pelo menos uma operação a desfazer. (Ctrl+Z)
 * ![Botão refazer](assets/help/images/buttonRedo.png "Refazer")  _Refazer_: refaz a última operação desfeita. Só fica habilitado se houver pelo menos uma operação a refazer. (Ctrl+Y)
@@ -173,6 +176,22 @@ As opções disponíveis dependem do tipo de elemento selecionado.
 Para editar opções do scrap, clique com o botão direito em:
 * o botão de seleção de scrap no canto inferior direito, caso exista apenas um scrap no arquivo, ou
 * o nome do scrap na caixa de diálogo de seleção de scrap apresentada ao clicar no botão de seleção de scrap, caso existam múltiplos scraps no arquivo.
+
+## Opções padrão
+
+Opções padrão são valores de opção que são automaticamente aplicados a novos pontos, linhas ou áreas do tipo correspondente. São definidas uma vez e reutilizadas em todas as criações subsequentes de elementos até serem alteradas ou removidas.
+
+Abra a janela de opções padrão:
+* Pressionando 'O' sem nenhum elemento selecionado, ou
+* Clicando no botão _Opções padrão_ (ícone de ajuste) no canto superior direito.
+
+A janela contém três abas: **Pontos**, **Linhas** e **Áreas**. Selecione a aba da categoria do elemento para a qual deseja configurar os padrões.
+
+Dentro de cada aba, as opções disponíveis funcionam de forma idêntica ao editor de opções do elemento. Definir uma opção a armazena como padrão para a categoria selecionada. Remover uma opção a exclui dos padrões.
+
+Apenas opções aplicáveis ao tipo específico do elemento recém-criado são aplicadas. Por exemplo, se uma opção "clip" padrão for definida para linhas, ela só será aplicada ao criar tipos de linha que suportam a opção "clip".
+
+O botão **Redefinir** no topo da janela limpa todos os padrões da aba atualmente exibida. O botão fica desabilitado quando nenhum padrão está definido para aquela categoria.
 
 ## Salvar
 

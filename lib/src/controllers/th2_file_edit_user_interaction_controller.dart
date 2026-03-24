@@ -80,7 +80,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     if (candidateElementsForNewOption.isEmpty) {
-      /// TODO: set per session option default values.
+      if (_th2FileEditController.optionEditController.isDefaultOptionsMode) {
+        final THElementType elementType = _th2FileEditController
+            .optionEditController
+            .defaultOptionsElementType;
+
+        _th2FileEditController.defaultOptionsController.setDefault(
+          elementType,
+          option.copyWith(parentMPID: -1, originalLineInTH2File: ''),
+        );
+        _th2FileEditController.optionEditController
+            .updateDefaultOptionsStateMap();
+      }
     } else {
       final List<THElement> actualElementsForNewOption = [];
 
@@ -225,7 +236,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     if (candidateElementsForNewOption.isEmpty) {
-      /// TODO: set per session option default values.
+      if (_th2FileEditController.optionEditController.isDefaultOptionsMode) {
+        final THElementType elementType = _th2FileEditController
+            .optionEditController
+            .defaultOptionsElementType;
+
+        _th2FileEditController.defaultOptionsController.removeDefault(
+          elementType,
+          optionType,
+        );
+        _th2FileEditController.optionEditController
+            .updateDefaultOptionsStateMap();
+      }
     } else {
       final List<int> parentMPIDs = [];
 
@@ -304,7 +326,23 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     List<MPCommand> addOptionCommands = [];
 
     if (selectedElements.isEmpty) {
-      /// TODO: set per session option default values.
+      if (_th2FileEditController.optionEditController.isDefaultOptionsMode) {
+        final THElementType elementType = _th2FileEditController
+            .optionEditController
+            .defaultOptionsElementType;
+        final THCommandOption option = THCommandOption.byType(
+          parentMPID: -1,
+          type: optionType,
+          value: choice,
+        );
+
+        _th2FileEditController.defaultOptionsController.setDefault(
+          elementType,
+          option.copyWith(originalLineInTH2File: ''),
+        );
+        _th2FileEditController.optionEditController
+            .updateDefaultOptionsStateMap();
+      }
     } else {
       final List<THElement> elements = [];
 
@@ -394,7 +432,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         : selectionController.mpSelectedElementsLogical.values;
 
     if (selectedElements.isEmpty) {
-      /// TODO: set per session option default values.
+      if (_th2FileEditController.optionEditController.isDefaultOptionsMode) {
+        final THElementType elementType = _th2FileEditController
+            .optionEditController
+            .defaultOptionsElementType;
+
+        _th2FileEditController.defaultOptionsController.removeDefault(
+          elementType,
+          optionType,
+        );
+        _th2FileEditController.optionEditController
+            .updateDefaultOptionsStateMap();
+      }
     } else {
       final List<int> parentMPIDs = [];
 

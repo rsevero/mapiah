@@ -134,6 +134,30 @@ mixin _$TH2FileEditOptionEditController
     });
   }
 
+  late final _$_defaultOptionsElementTypeAtom = Atom(
+    name: 'TH2FileEditOptionEditControllerBase._defaultOptionsElementType',
+    context: context,
+  );
+
+  THElementType get defaultOptionsElementType {
+    _$_defaultOptionsElementTypeAtom.reportRead();
+    return super._defaultOptionsElementType;
+  }
+
+  @override
+  THElementType get _defaultOptionsElementType => defaultOptionsElementType;
+
+  @override
+  set _defaultOptionsElementType(THElementType value) {
+    _$_defaultOptionsElementTypeAtom.reportWrite(
+      value,
+      super._defaultOptionsElementType,
+      () {
+        super._defaultOptionsElementType = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditOptionEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditOptionEditControllerBase',
@@ -215,6 +239,54 @@ mixin _$TH2FileEditOptionEditController
         );
     try {
       return super.showOptionsOverlayWindow();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void setDefaultOptionsElementType(THElementType elementType) {
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditOptionEditControllerBase.setDefaultOptionsElementType',
+        );
+    try {
+      return super.setDefaultOptionsElementType(elementType);
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void updateDefaultOptionsStateMap() {
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditOptionEditControllerBase.updateDefaultOptionsStateMap',
+        );
+    try {
+      return super.updateDefaultOptionsStateMap();
+    } finally {
+      _$TH2FileEditOptionEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void showDefaultOptionsOverlayWindow() {
+    final _$actionInfo = _$TH2FileEditOptionEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditOptionEditControllerBase.showDefaultOptionsOverlayWindow',
+        );
+    try {
+      return super.showDefaultOptionsOverlayWindow();
     } finally {
       _$TH2FileEditOptionEditControllerBaseActionController.endAction(
         _$actionInfo,

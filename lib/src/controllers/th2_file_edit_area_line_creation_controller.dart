@@ -452,7 +452,7 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
-        MPCommand? posCommandSetSubtype;
+        final List<MPCommand> posCommands = [];
 
         if (typeSubtype.subtype.isNotEmpty) {
           final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
@@ -460,19 +460,53 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
             subtype: typeSubtype.subtype,
           );
 
-          posCommandSetSubtype = MPCommandFactory.setOptionOnElements(
-            elements: [_newLine!],
-            th2File: _th2File,
-            toOption: lineSubtypeOption,
+          posCommands.add(
+            MPCommandFactory.setOptionOnElements(
+              elements: [_newLine!],
+              th2File: _th2File,
+              toOption: lineSubtypeOption,
+            ),
           );
         }
+
+        final List<THCommandOption> defaultOptions = _th2FileEditController
+            .defaultOptionsController
+            .getApplicableDefaults(
+              elementType: THElementType.line,
+              typeString: typeSubtype.type,
+            );
+
+        for (final THCommandOption defaultOption in defaultOptions) {
+          if (defaultOption.type == THCommandOptionType.subtype) {
+            continue;
+          }
+          posCommands.add(
+            MPCommandFactory.setOptionOnElements(
+              elements: [_newLine!],
+              th2File: _th2File,
+              toOption: defaultOption.copyWith(
+                parentMPID: _newLine!.mpID,
+                originalLineInTH2File: '',
+              ),
+            ),
+          );
+        }
+
+        final MPCommand? posCommand = posCommands.isEmpty
+            ? null
+            : MPCommandFactory.multipleCommandsFromList(
+                commandsList: posCommands,
+                descriptionType: MPCommandDescriptionType.addLine,
+                completionType:
+                    MPMultipleElementsCommandCompletionType.elementsListChanged,
+              );
 
         final MPAddLineCommand addLineCommand = MPAddLineCommand(
           newLine: _newLine!,
           lineChildren: lineChildren,
           lineStartScreenPosition: _lineStartScreenPosition,
           preCommand: null,
-          posCommand: posCommandSetSubtype,
+          posCommand: posCommand,
         );
 
         _th2FileEditController.elementEditController.setUsedLineType(

@@ -4,6 +4,7 @@
 
 ## 0.3.3 - not yet released
 * New features:
+  * Default option values: pressing 'O' with no elements selected (or clicking the new tune button in the top right corner) opens a "Default options" overlay with Points / Lines / Areas tabs. Options set there are automatically applied to every newly created element of the matching type. A Reset button clears all defaults for the current category.
   * Anonymous telemetry: Mapiah can optionally collect aggregated, anonymous daily usage data (OS type/version, Mapiah version, TH2 open counts and time, Therion run counts and time). A consent dialog is shown on first launch; consent can be changed at any time in Settings. No file paths, personal data, or identifying information is ever collected or transmitted. Data is aggregated client-side before sending and only previous UTC days' records are ever transmitted.
   * XVI image grid visibility toggle: each XVI image row in the available images panel now has a second checkbox to show or hide the survey grid independently from the image itself. Hiding the grid removes the grid lines from the canvas while keeping shots, stations, and sketch lines visible. The grid visibility state is persisted in the session.
   * Toggle all grids visibility button (Ctrl+G): a new icon button in the available images panel header hides or shows all XVI survey grids at once; it is only shown when at least one XVI image is present. The existing toggle all images button tooltip now also displays the Ctrl+I shortcut hint.
@@ -40,6 +41,9 @@
   * Cursor changes to a hand pointer when hovering over links in the telemetry consent dialog and in the about dialog (MPURLTextWidget). [requested by Patrícia Finageiv]
   * Telemetry consent dialog body is now loaded from locale-aware markdown assets (assets/help/{locale}/telemetry_consent.md) and rendered with MarkdownBlock, replacing the plain localization string. Falls back to the localization string if the asset cannot be loaded. [requested by Patrícia Finageiv]
   * Canvas cursor now changes to reflect the current editing state: crosshair when adding points or lines, grabbing when moving elements or control points, and the default arrow cursor in select mode.
+  * Added MPDefaultOptionsController: plain Dart class that stores default option values per element category (point/line/area), persists them via SharedPreferences (Internal settings), and filters applicable defaults at creation time using MPCommandOptionAux.getSupportedOptionsFor*.
+  * Extracted MPOptionsListBuilderMixin: shared mixin eliminating duplicated option-list building and option-selection handling between MPOptionsEditOverlayWindowWidget and the new MPDefaultOptionsOverlayWindowWidget.
+  * Added tests for default options (3700): 7 tests covering MPDefaultOptionsController unit behaviour (setDefault, getApplicableDefaults, removeDefault, clearForElementType, hasAnyDefaults) and area creation with clip and subtype posCommands.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

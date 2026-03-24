@@ -177,10 +177,10 @@
 [X] - Copy/Paste.
 [X] - Show status message listing what's selected in 'single line edit' mode.
 [X] - When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
-[ ] - Highlight slope lines without at least one line point with l-size.
+[X] - Highlight slope lines without at least one line point with l-size.
 [X] - Create shortcut to reverse line.
 [X] - Include options and point/line count in multiple elements clicked dialog box.
-[ ] - Implement default option values.
+[X] - Implement default option values.
 [X] - Preference option to choose between Mapiah Bezier Curve morphing style on creation and XTherion style.
 [X] - Control which scraps are visible in Mapiah (that is not a Therion setting).
 [ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]

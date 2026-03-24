@@ -512,6 +512,24 @@ class AppLocalizationsPt extends AppLocalizations {
       'Data ou intervalo inválidos';
 
   @override
+  String get mpDefaultOptionsAreasTab => 'Áreas';
+
+  @override
+  String get mpDefaultOptionsLinesTab => 'Linhas';
+
+  @override
+  String get mpDefaultOptionsPointsTab => 'Pontos';
+
+  @override
+  String get mpDefaultOptionsReset => 'Redefinir';
+
+  @override
+  String get mpDefaultOptionsTitle => 'Opções padrão';
+
+  @override
+  String get mpDefaultOptionsToolbarTooltip => 'Opções padrão';
+
+  @override
   String get mpDimensionsAboveLabel => 'Acima';
 
   @override

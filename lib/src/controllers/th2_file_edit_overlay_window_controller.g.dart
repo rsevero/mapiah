@@ -28,6 +28,15 @@ mixin _$TH2FileEditOverlayWindowController
         name:
             'TH2FileEditOverlayWindowControllerBase.showChangeImageOverlayWindow',
       )).value;
+  Computed<bool>? _$showDefaultOptionsOverlayWindowComputed;
+
+  @override
+  bool get showDefaultOptionsOverlayWindow =>
+      (_$showDefaultOptionsOverlayWindowComputed ??= Computed<bool>(
+        () => super.showDefaultOptionsOverlayWindow,
+        name:
+            'TH2FileEditOverlayWindowControllerBase.showDefaultOptionsOverlayWindow',
+      )).value;
 
   late final _$_th2FileAtom = Atom(
     name: 'TH2FileEditOverlayWindowControllerBase._th2File',
@@ -352,7 +361,8 @@ mixin _$TH2FileEditOverlayWindowController
   String toString() {
     return '''
 showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow},
-showChangeImageOverlayWindow: ${showChangeImageOverlayWindow}
+showChangeImageOverlayWindow: ${showChangeImageOverlayWindow},
+showDefaultOptionsOverlayWindow: ${showDefaultOptionsOverlayWindow}
     ''';
   }
 }

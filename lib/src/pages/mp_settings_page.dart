@@ -652,18 +652,13 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     AppLocalizations appLocalizations,
     MPSettingID type,
   ) {
+    final String name = type.name;
+
+    if (name.startsWith("${mpSettingsInternalSection}_")) {
+      return _camelCaseToLabel(type.id());
+    }
+
     switch (type) {
-      case MPSettingID.Internal_LastCheckNumberOfNewerVersions:
-      case MPSettingID.Internal_LastNewVersionCheckMS:
-      case MPSettingID.Internal_TelemetryCurrentDate:
-      case MPSettingID.Internal_TelemetryCurrentDayTH2Files:
-      case MPSettingID.Internal_TelemetryCurrentDayTH2OpenCount:
-      case MPSettingID.Internal_TelemetryCurrentDayTH2TimeSecs:
-      case MPSettingID.Internal_TelemetryCurrentDayTHConfigFiles:
-      case MPSettingID.Internal_TelemetryCurrentDayTherionRunCount:
-      case MPSettingID.Internal_TelemetryCurrentDayTherionTimeSecs:
-      case MPSettingID.Internal_TelemetryPendingRecords:
-        return _camelCaseToLabel(type.id());
       case MPSettingID.Main_LocaleID:
         return appLocalizations.mpSettingsSettingMainLocaleID;
       case MPSettingID.Main_TelemetryConsent:
@@ -678,6 +673,10 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
       case MPSettingID.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
+      default:
+        throw UnimplementedError(
+          'At MPSettingsPage._localizedSettingName(): no localized name defined for setting type "$type"',
+        );
     }
   }
 

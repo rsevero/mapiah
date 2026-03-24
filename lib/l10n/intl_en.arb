@@ -780,6 +780,36 @@
     "description": "The error message for invalid date value. Used on: lib/src/widgets/options/mp_date_value_option_widget.dart",
     "type": "text"
   },
+  "mpDefaultOptionsAreasTab": "Areas",
+  "@mpDefaultOptionsAreasTab": {
+    "description": "Label for the Areas tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget",
+    "type": "text"
+  },
+  "mpDefaultOptionsLinesTab": "Lines",
+  "@mpDefaultOptionsLinesTab": {
+    "description": "Label for the Lines tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget",
+    "type": "text"
+  },
+  "mpDefaultOptionsPointsTab": "Points",
+  "@mpDefaultOptionsPointsTab": {
+    "description": "Label for the Points tab in the default options overlay. Used on: MPDefaultOptionsOverlayWindowWidget",
+    "type": "text"
+  },
+  "mpDefaultOptionsReset": "Reset",
+  "@mpDefaultOptionsReset": {
+    "description": "Label for the Reset button in the default options overlay. Clears all stored defaults for the current element type. Used on: MPDefaultOptionsOverlayWindowWidget",
+    "type": "text"
+  },
+  "mpDefaultOptionsTitle": "Default options",
+  "@mpDefaultOptionsTitle": {
+    "description": "Title for the default options overlay window. Used on: MPDefaultOptionsOverlayWindowWidget",
+    "type": "text"
+  },
+  "mpDefaultOptionsToolbarTooltip": "Default options",
+  "@mpDefaultOptionsToolbarTooltip": {
+    "description": "Tooltip for the default options toolbar button. Used on: TH2FileEditBodyWidget",
+    "type": "text"
+  },
   "mpDimensionsAboveLabel": "Above",
   "@mpDimensionsAboveLabel": {
     "description": "The label for the above dimension type. Used on: lib/src/widgets/options/mp_dimensions_option_widget.dart",
