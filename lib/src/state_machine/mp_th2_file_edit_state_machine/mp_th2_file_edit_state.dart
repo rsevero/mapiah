@@ -50,6 +50,7 @@ part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_reset_area_border_ctrl_meta_cycle_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
@@ -172,22 +173,7 @@ abstract class MPTH2FileEditState {
 
   void onKeyRepeatEvent(KeyRepeatEvent event) {}
 
-  void onKeyUpEvent(KeyUpEvent event) {
-    switch (event.logicalKey) {
-      case LogicalKeyboardKey.altLeft:
-      case LogicalKeyboardKey.altRight:
-      case LogicalKeyboardKey.altGraph:
-      case LogicalKeyboardKey.controlLeft:
-      case LogicalKeyboardKey.controlRight:
-      case LogicalKeyboardKey.metaLeft:
-      case LogicalKeyboardKey.metaRight:
-      case LogicalKeyboardKey.shiftLeft:
-      case LogicalKeyboardKey.shiftRight:
-        selectionController.resetAreaBorderCtrlMetaCycle();
-      default:
-        break;
-    }
-  }
+  void onKeyUpEvent(KeyUpEvent event) {}
 
   void onSelectAll() {}
 

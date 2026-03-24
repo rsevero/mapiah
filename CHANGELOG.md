@@ -25,6 +25,7 @@
   * Fixed crash when adding a point with default options configured: option commands (subtype + defaults) are now placed in the posCommand of MPAddPointCommand instead of alongside it in MPMultipleElementsCommand, so they run after the point is in the file and the MPID lookup succeeds. Added regression tests (1305).
   * Reset button in the default options overlay window was invisible when enabled because TextButton defaults to colorScheme.primary for its text, which matched the block's primary background. Fixed by explicitly setting foregroundColor to colorScheme.onPrimary.
 * Infrastructure maintenance:
+  * Moved resetAreaBorderCtrlMetaCycle key-up handling from the base MPTH2FileEditState into a dedicated shared mixin applied only to MPTH2FileEditStateSelectEmptySelection and MPTH2FileEditStateSelectNonEmptySelection, limiting the behavior to selection modes.
   * Added widget regression tests for area-border selection shortcuts (3710), including Ctrl/Meta cycling, Ctrl/Meta+Alt area-only selection, and checks that Ctrl/Meta+Shift is no longer area-only.
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.
