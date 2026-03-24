@@ -70,6 +70,7 @@ class MPFileTabWidget extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 4.0),
           SizedBox(
             width: mpTabCloseIconSize + 8.0,
             height: mpTabCloseIconSize + 8.0,
