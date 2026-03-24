@@ -10,6 +10,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateOptionsEditMixin,
         MPTH2FileEditStateResetAreaBorderCtrlMetaCycleMixin {
   MPTH2FileEditStateSelectNonEmptySelection({

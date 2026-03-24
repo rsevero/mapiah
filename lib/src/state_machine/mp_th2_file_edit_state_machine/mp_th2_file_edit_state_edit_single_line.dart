@@ -11,6 +11,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateLineSegmentOptionsEditMixin,
         MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateOptionsEditMixin {
   bool _dragShouldMovePoints = false;
   bool _isLSizeOrientationEdit = false;

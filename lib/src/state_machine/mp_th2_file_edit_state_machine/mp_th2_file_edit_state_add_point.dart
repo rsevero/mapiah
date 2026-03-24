@@ -3,7 +3,10 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
-    with MPTH2FileEditPageAltClickMixin, MPTH2FileEditStateMoveCanvasMixin {
+    with
+        MPTH2FileEditPageAltClickMixin,
+        MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin {
   MPTH2FileEditStateAddPoint({required super.th2FileEditController});
 
   @override

@@ -59,6 +59,7 @@
   * 'O' shortcut with no selection now opens the default options window (previously the call was commented out with a TODO).
   * Default options toolbar button now shows four distinct visual states: pressed+active (primaryContainer, low elevation), pressed+no-defaults (dim, low elevation), unpressed+active (default FAB colors, high elevation), and unpressed+no-defaults (dim, medium elevation). Fixed showDefaultOptionsOverlayWindow reactivity: the previous @readonly Map mutation was invisible to MobX; replaced with a dedicated @observable bool _isDefaultOptionsWindowShown that is kept in sync in setShowOverlayWindow.
   * TH2 file properties page: a settings icon button in each file tab opens a dedicated page to edit per-file properties. Currently exposes the file encoding (THEncoding). Changes are applied immediately on save. If no THEncoding element exists in the file, one is created and prepended as the first child. Introduced TH2FilePropertiesController (MobX) to manage file-level properties editing.
+  * Extracted MPTH2FileEditStateKeyDownMixin: keyboard shortcut handling (onKeyDownEvent/_onKeyDownEvent) moved from MPTH2FileEditStateMoveCanvasMixin into a new dedicated mixin, applied to all editing states that previously included MoveCanvasMixin.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

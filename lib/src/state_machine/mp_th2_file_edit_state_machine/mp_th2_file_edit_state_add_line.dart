@@ -3,7 +3,7 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddLine extends MPTH2FileEditState
-    with MPTH2FileEditStateMoveCanvasMixin {
+    with MPTH2FileEditStateMoveCanvasMixin, MPTH2FileEditStateKeyDownMixin {
   MPTH2FileEditStateAddLine({required super.th2FileEditController});
 
   @override

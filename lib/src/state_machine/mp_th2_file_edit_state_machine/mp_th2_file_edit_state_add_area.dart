@@ -6,7 +6,8 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     with
         MPTH2FileEditPageAltClickMixin,
         MPTH2FileEditPageStateAddLineToAreaMixin,
-        MPTH2FileEditStateMoveCanvasMixin {
+        MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin {
   MPTH2FileEditStateAddArea({required super.th2FileEditController});
 
   @override

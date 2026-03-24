@@ -5,6 +5,7 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   final TH2FileEditSnapController snapController;
 

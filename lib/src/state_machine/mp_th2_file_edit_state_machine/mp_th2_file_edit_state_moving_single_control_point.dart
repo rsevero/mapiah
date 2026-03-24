@@ -5,6 +5,7 @@ part of 'mp_th2_file_edit_state.dart';
 class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
   MPTH2FileEditStateMovingSingleControlPoint({
     required super.th2FileEditController,
