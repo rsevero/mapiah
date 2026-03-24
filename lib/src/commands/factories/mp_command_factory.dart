@@ -531,8 +531,6 @@ class MPCommandFactory {
     required String pointSubtypeString,
     required TH2FileEditController th2FileEditController,
   }) {
-    final List<MPCommand> commandsList = [];
-
     final THPoint newPoint = THPoint.pointTypeFromString(
       parentMPID: th2FileEditController.activeScrapID,
       pointTypeString:
@@ -542,23 +540,22 @@ class MPCommandFactory {
         decimalPositions: th2FileEditController.currentDecimalPositions,
       ),
     );
-    final MPAddPointCommand addPointCommand = MPAddPointCommand(
-      newPoint: newPoint,
-      posCommand: null,
-    );
 
-    commandsList.add(addPointCommand);
+    // Option commands (subtype + defaults) must run AFTER the point is added
+    // to the file, so they are placed in posCommand rather than alongside the
+    // add command inside MPMultipleElementsCommand.  posCommand is executed via
+    // _execPreCreateUndoRedoCommand, which runs after _actualExecute.
+    final List<MPCommand> optionCommandsList = [];
 
     if (pointSubtypeString.trim().isNotEmpty) {
       final THCommandOption pointSubtypeOption = THSubtypeCommandOption(
         parentMPID: newPoint.mpID,
         subtype: pointSubtypeString.trim(),
       );
-      final MPCommand setPointSubtypeCommand = MPSetOptionToElementCommand(
-        toOption: pointSubtypeOption,
-      );
 
-      commandsList.add(setPointSubtypeCommand);
+      optionCommandsList.add(
+        MPSetOptionToElementCommand(toOption: pointSubtypeOption),
+      );
     }
 
     final List<THCommandOption> defaultOptions = th2FileEditController
@@ -572,18 +569,26 @@ class MPCommandFactory {
       if (defaultOption.type == THCommandOptionType.subtype) {
         continue;
       }
-      commandsList.add(
+      optionCommandsList.add(
         MPSetOptionToElementCommand(
           toOption: defaultOption.copyWith(parentMPID: newPoint.mpID),
         ),
       );
     }
 
-    return MPCommandFactory.multipleCommandsFromList(
-      commandsList: commandsList,
+    final MPCommand? posCommand = optionCommandsList.isEmpty
+        ? null
+        : multipleCommandsFromList(
+            commandsList: optionCommandsList,
+            descriptionType: MPCommandDescriptionType.addPoint,
+            completionType:
+                MPMultipleElementsCommandCompletionType.optionsEdited,
+          );
+
+    return MPAddPointCommand(
+      newPoint: newPoint,
+      posCommand: posCommand,
       descriptionType: MPCommandDescriptionType.addPoint,
-      completionType:
-          MPMultipleElementsCommandCompletionType.elementsListChanged,
     );
   }
 
