@@ -75,7 +75,7 @@ class MPFileTabWidget extends StatelessWidget {
             height: mpTabCloseIconSize + 8.0,
             child: IconButton(
               icon: Icon(
-                Icons.settings_outlined,
+                Icons.info_outline,
                 size: mpTabCloseIconSize,
                 color: textColor,
               ),
