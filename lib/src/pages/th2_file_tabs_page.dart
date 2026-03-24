@@ -13,6 +13,7 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
+import 'package:mapiah/src/pages/th2_file_properties_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
@@ -464,6 +465,23 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                         .mpGeneralController
                         .getTH2FileEditControllerIfExists(filename);
                     controller?.close();
+                  },
+                  onProperties: () {
+                    final TH2FileEditController? controller = mpLocator
+                        .mpGeneralController
+                        .getTH2FileEditControllerIfExists(filename);
+
+                    if (controller == null) {
+                      return;
+                    }
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => TH2FilePropertiesPage(
+                          th2FileEditController: controller,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),

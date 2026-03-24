@@ -2254,9 +2254,34 @@
     "description": "The label for the TH2 file selection dialog. Used on: MPDialogAux.pickTH2File",
     "type": "text"
   },
+  "th2FilePropertiesPageClose": "Close",
+  "@th2FilePropertiesPageClose": {
+    "description": "Label for the Close button on the file properties page. Used on: TH2FilePropertiesPage",
+    "type": "text"
+  },
+  "th2FilePropertiesPageEncodingDescription": "The character encoding used when saving the file. Changing this does not re-encode existing content; it only affects how the file is written.",
+  "@th2FilePropertiesPageEncodingDescription": {
+    "description": "Description text for the encoding field on the file properties page. Used on: TH2FilePropertiesPage",
+    "type": "text"
+  },
+  "th2FilePropertiesPageEncodingLabel": "Encoding",
+  "@th2FilePropertiesPageEncodingLabel": {
+    "description": "Label for the encoding field on the file properties page. Used on: TH2FilePropertiesPage",
+    "type": "text"
+  },
+  "th2FilePropertiesPageTitle": "File properties",
+  "@th2FilePropertiesPageTitle": {
+    "description": "Title of the TH2 file properties page. Used on: TH2FilePropertiesPage",
+    "type": "text"
+  },
   "th2FileTabsPageCloseTabTooltip": "Close file",
   "@th2FileTabsPageCloseTabTooltip": {
     "description": "Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button",
+    "type": "text"
+  },
+  "th2FileTabsPagePropertiesTabTooltip": "File properties",
+  "@th2FileTabsPagePropertiesTabTooltip": {
+    "description": "Tooltip for the file properties button on a file tab. Used on: MPFileTabWidget properties button",
     "type": "text"
   },
   "thAreaBedrock": "Bedrock",

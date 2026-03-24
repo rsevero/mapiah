@@ -2698,11 +2698,41 @@ abstract class AppLocalizations {
   /// **'Select a TH2 file'**
   String get th2FilePickSelectTH2File;
 
+  /// Label for the Close button on the file properties page. Used on: TH2FilePropertiesPage
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get th2FilePropertiesPageClose;
+
+  /// Description text for the encoding field on the file properties page. Used on: TH2FilePropertiesPage
+  ///
+  /// In en, this message translates to:
+  /// **'The character encoding used when saving the file. Changing this does not re-encode existing content; it only affects how the file is written.'**
+  String get th2FilePropertiesPageEncodingDescription;
+
+  /// Label for the encoding field on the file properties page. Used on: TH2FilePropertiesPage
+  ///
+  /// In en, this message translates to:
+  /// **'Encoding'**
+  String get th2FilePropertiesPageEncodingLabel;
+
+  /// Title of the TH2 file properties page. Used on: TH2FilePropertiesPage
+  ///
+  /// In en, this message translates to:
+  /// **'File properties'**
+  String get th2FilePropertiesPageTitle;
+
   /// Tooltip for the close button on a file tab in the multi-file editor. Used on: TH2FileTabsPage tab close button
   ///
   /// In en, this message translates to:
   /// **'Close file'**
   String get th2FileTabsPageCloseTabTooltip;
+
+  /// Tooltip for the file properties button on a file tab. Used on: MPFileTabWidget properties button
+  ///
+  /// In en, this message translates to:
+  /// **'File properties'**
+  String get th2FileTabsPagePropertiesTabTooltip;
 
   /// The label for the bedrock area type. Used on: MPTextToUser._initializeAreaTypeAsString
   ///

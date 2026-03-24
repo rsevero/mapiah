@@ -1461,7 +1461,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
 
   @override
+  String get th2FilePropertiesPageClose => 'Fechar';
+
+  @override
+  String get th2FilePropertiesPageEncodingDescription =>
+      'A codificação de caracteres usada ao salvar o arquivo. Alterar isso não re-codifica o conteúdo existente; afeta apenas como o arquivo é escrito.';
+
+  @override
+  String get th2FilePropertiesPageEncodingLabel => 'Codificação';
+
+  @override
+  String get th2FilePropertiesPageTitle => 'Propriedades do arquivo';
+
+  @override
   String get th2FileTabsPageCloseTabTooltip => 'Fechar arquivo';
+
+  @override
+  String get th2FileTabsPagePropertiesTabTooltip => 'Propriedades do arquivo';
 
   @override
   String get thAreaBedrock => 'Rocha matriz';

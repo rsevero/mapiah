@@ -449,9 +449,34 @@
   "th2FileEditPageZoomToSelectionWindow": "Zoom na área de seleção (5)",
   "th2FilePickSelectImageFile": "Selecione um arquivo de imagem",
   "th2FilePickSelectTH2File": "Selecione um arquivo TH2",
+  "th2FilePropertiesPageClose": "Fechar",
+  "@th2FilePropertiesPageClose": {
+    "description": "Rótulo do botão de fechar na página de propriedades do arquivo.",
+    "type": "text"
+  },
+  "th2FilePropertiesPageEncodingDescription": "A codificação de caracteres usada ao salvar o arquivo. Alterar isso não re-codifica o conteúdo existente; afeta apenas como o arquivo é escrito.",
+  "@th2FilePropertiesPageEncodingDescription": {
+    "description": "Descrição do campo de codificação na página de propriedades do arquivo.",
+    "type": "text"
+  },
+  "th2FilePropertiesPageEncodingLabel": "Codificação",
+  "@th2FilePropertiesPageEncodingLabel": {
+    "description": "Rótulo para o campo de codificação na página de propriedades do arquivo.",
+    "type": "text"
+  },
+  "th2FilePropertiesPageTitle": "Propriedades do arquivo",
+  "@th2FilePropertiesPageTitle": {
+    "description": "Título da página de propriedades do arquivo TH2.",
+    "type": "text"
+  },
   "th2FileTabsPageCloseTabTooltip": "Fechar arquivo",
   "@th2FileTabsPageCloseTabTooltip": {
     "description": "Dica de ferramenta para o botão de fechamento em uma aba de arquivo no editor multi-arquivo. Usado em: TH2FileTabsPage botão de fechamento de aba",
+    "type": "text"
+  },
+  "th2FileTabsPagePropertiesTabTooltip": "Propriedades do arquivo",
+  "@th2FileTabsPagePropertiesTabTooltip": {
+    "description": "Dica de ferramenta para o botão de propriedades em uma aba de arquivo no editor multi-arquivo.",
     "type": "text"
   },
   "thAreaBedrock": "Rocha matriz",

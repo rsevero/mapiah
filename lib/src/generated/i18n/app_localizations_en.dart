@@ -1447,7 +1447,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FilePickSelectTH2File => 'Select a TH2 file';
 
   @override
+  String get th2FilePropertiesPageClose => 'Close';
+
+  @override
+  String get th2FilePropertiesPageEncodingDescription =>
+      'The character encoding used when saving the file. Changing this does not re-encode existing content; it only affects how the file is written.';
+
+  @override
+  String get th2FilePropertiesPageEncodingLabel => 'Encoding';
+
+  @override
+  String get th2FilePropertiesPageTitle => 'File properties';
+
+  @override
   String get th2FileTabsPageCloseTabTooltip => 'Close file';
+
+  @override
+  String get th2FileTabsPagePropertiesTabTooltip => 'File properties';
 
   @override
   String get thAreaBedrock => 'Bedrock';
