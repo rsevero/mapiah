@@ -85,6 +85,14 @@ void main() {
         final String asFileChanged = writer.serialize(controller.th2File);
 
         expect(asFileChanged, contains('clip off'));
+
+        // The line element itself must carry the clip option.
+        final THLine newLine = controller.th2File.getLines().first;
+        final THClipCommandOption? clipOption =
+            newLine.getOption(THCommandOptionType.clip) as THClipCommandOption?;
+
+        expect(clipOption, isNotNull);
+        expect(clipOption!.choice, THOptionChoicesOnOffType.off);
       },
     );
 

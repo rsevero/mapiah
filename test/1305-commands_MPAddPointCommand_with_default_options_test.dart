@@ -84,6 +84,15 @@ void main() {
         final String asFileChanged = writer.serialize(controller.th2File);
 
         expect(asFileChanged, contains('clip off'));
+
+        // The point element itself must carry the clip option.
+        final THPoint newPoint = controller.th2File.getPoints().first;
+        final THClipCommandOption? clipOption =
+            newPoint.getOption(THCommandOptionType.clip)
+                as THClipCommandOption?;
+
+        expect(clipOption, isNotNull);
+        expect(clipOption!.choice, THOptionChoicesOnOffType.off);
       },
     );
 

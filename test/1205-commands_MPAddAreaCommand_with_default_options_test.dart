@@ -143,6 +143,14 @@ void main() {
 
         expect(asFileChanged, contains('area water'));
         expect(asFileChanged, contains('clip off'));
+
+        // The area element itself must carry the clip option.
+        final THArea newArea = controller.th2File.getAreas().first;
+        final THClipCommandOption? clipOption =
+            newArea.getOption(THCommandOptionType.clip) as THClipCommandOption?;
+
+        expect(clipOption, isNotNull);
+        expect(clipOption!.choice, THOptionChoicesOnOffType.off);
       },
     );
 
