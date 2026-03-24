@@ -2317,7 +2317,7 @@ abstract class AppLocalizations {
   /// The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton
   ///
   /// In en, this message translates to:
-  /// **'Change active scrap (Alt+S)'**
+  /// **'Change active scrap (Alt+K)'**
   String get th2FileEditPageChangeActiveScrapTool;
 
   /// The title for the change image dialog. Used on: _MPAvailableImagesWidgetState.build

@@ -385,7 +385,7 @@
   "th2FileEditPageAddPointStatusBarMessage": "Clique para criar um ponto do tipo {type}",
   "th2FileEditPageAddScrapButton": "Adicionar croqui (K)",
   "th2FileEditPageChangeActiveScrapTitle": "Alterar croqui ativo",
-  "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+S)",
+  "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+K)",
   "th2FileEditPageChangeImageTitle": "Alterar imagens",
   "th2FileEditPageChangeImageTool": "Alterar imagem (Alt+I)",
   "th2FileEditPageCopyScrapButton": "Copiar croqui",

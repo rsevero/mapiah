@@ -1235,7 +1235,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageChangeActiveScrapTool =>
-      'Change active scrap (Alt+S)';
+      'Change active scrap (Alt+K)';
 
   @override
   String get th2FileEditPageChangeImageTitle => 'Change images';

@@ -4,7 +4,7 @@
 | ---------------------------------------------------------- | -------------------------------- |
 | Add image                                                  | I                                |
 | Add line segment between selected line segments            | /                                |
-| Change active scrap                                        | Alt+S                            |
+| Change active scrap                                        | Alt+K                            |
 | Change images                                              | Alt+I                            |
 | Choose THConfig file and run Therion                       | Ctrl+T                           |
 | Click area-border line: cycle border-line selection        | Ctrl+click or Meta+click         |

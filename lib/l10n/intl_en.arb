@@ -1923,7 +1923,7 @@
     "description": "The title for the change active scrap dialog. Used on: _MPAvailableScrapsWidgetState.build",
     "type": "text"
   },
-  "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+S)",
+  "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+K)",
   "@th2FileEditPageChangeActiveScrapTool": {
     "description": "The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton",
     "type": "text"

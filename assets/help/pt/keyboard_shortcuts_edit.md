@@ -4,7 +4,7 @@
 | ---------------------------------------------------------------------- | ------------------------------------ |
 | Adicionar imagem                                                       | I                                    |
 | Ajuda                                                                  | F1                                   |
-| Alterar croqui ativo                                                   | Alt+S                                |
+| Alterar croqui ativo                                                   | Alt+K                                |
 | Alterar imagens                                                        | Alt+I                                |
 | Alternar direção da linha                                              | R                                    |
 | Alternar marcas de direção em linhas não selecionadas                  | Ctrl+Alt+R                           |
