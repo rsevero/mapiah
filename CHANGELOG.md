@@ -46,6 +46,7 @@
   * Extracted MPOptionsListBuilderMixin: shared mixin eliminating duplicated option-list building and option-selection handling between MPOptionsEditOverlayWindowWidget and the new MPDefaultOptionsOverlayWindowWidget.
   * Added tests for default options (3700): 7 tests covering MPDefaultOptionsController unit behaviour (setDefault, getApplicableDefaults, removeDefault, clearForElementType, hasAnyDefaults) and area creation with clip and subtype posCommands.
   * Removed id from default options: id is now excluded from the default options UI and from getApplicableDefaults, since there is no meaningful default value for a unique identifier. The search/select dialog is unaffected.
+  * Default options overlay window now auto-closes on canvas click, consistent with all other overlay windows.
   * Added regression tests for line and area creation with default options (1205, 1255): verify no exception is thrown, that the default option is present on the created element, and that undo restores the original state.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release

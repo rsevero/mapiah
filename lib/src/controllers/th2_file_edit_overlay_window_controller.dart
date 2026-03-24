@@ -70,6 +70,7 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     MPWindowType.availableScraps,
     MPWindowType.changeImage,
     MPWindowType.commandOptions,
+    MPWindowType.defaultOptions,
     MPWindowType.lineSegmentOptions,
     MPWindowType.lineSegmentTypes,
     MPWindowType.multipleElementsClicked,
