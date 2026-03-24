@@ -623,15 +623,23 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.mpDefaultOptionsToolbarTooltip,
                 onPressed: _onDefaultOptionsButtonPressed,
-                backgroundColor: (isDefaultOptionsShown || hasAnyDefaultOptions)
-                    ? null
-                    : colorScheme.surfaceContainerLowest,
-                foregroundColor: (isDefaultOptionsShown || hasAnyDefaultOptions)
-                    ? null
-                    : colorScheme.surfaceContainerHighest,
-                elevation: (isDefaultOptionsShown || hasAnyDefaultOptions)
-                    ? 6.0
-                    : 3.0,
+                backgroundColor: isDefaultOptionsShown
+                    ? (hasAnyDefaultOptions
+                          ? colorScheme.primaryContainer
+                          : colorScheme.surfaceContainerLowest)
+                    : (hasAnyDefaultOptions
+                          ? null
+                          : colorScheme.surfaceContainerLowest),
+                foregroundColor: isDefaultOptionsShown
+                    ? (hasAnyDefaultOptions
+                          ? colorScheme.onPrimaryContainer
+                          : colorScheme.surfaceContainerHighest)
+                    : (hasAnyDefaultOptions
+                          ? null
+                          : colorScheme.surfaceContainerHighest),
+                elevation: isDefaultOptionsShown
+                    ? 1.0
+                    : (hasAnyDefaultOptions ? 6.0 : 3.0),
                 child: const Icon(Icons.auto_fix_high),
               ),
               if (th2FileEditController.showRemoveButton) ...[

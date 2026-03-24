@@ -59,9 +59,11 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool get showChangeImageOverlayWindow =>
       _isOverlayWindowShown[MPWindowType.changeImage]!;
 
+  @readonly
+  bool _isDefaultOptionsWindowShown = false;
+
   @computed
-  bool get showDefaultOptionsOverlayWindow =>
-      _isOverlayWindowShown[MPWindowType.defaultOptions]!;
+  bool get showDefaultOptionsOverlayWindow => _isDefaultOptionsWindowShown;
 
   @readonly
   bool _isAutoDismissWindowOpen = false;
@@ -254,6 +256,10 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     }
 
     _isOverlayWindowShown[type] = show;
+
+    if (type == MPWindowType.defaultOptions) {
+      _isDefaultOptionsWindowShown = show;
+    }
 
     if (show) {
       _showOverlayWindow(

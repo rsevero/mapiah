@@ -201,6 +201,30 @@ mixin _$TH2FileEditOverlayWindowController
     );
   }
 
+  late final _$_isDefaultOptionsWindowShownAtom = Atom(
+    name: 'TH2FileEditOverlayWindowControllerBase._isDefaultOptionsWindowShown',
+    context: context,
+  );
+
+  bool get isDefaultOptionsWindowShown {
+    _$_isDefaultOptionsWindowShownAtom.reportRead();
+    return super._isDefaultOptionsWindowShown;
+  }
+
+  @override
+  bool get _isDefaultOptionsWindowShown => isDefaultOptionsWindowShown;
+
+  @override
+  set _isDefaultOptionsWindowShown(bool value) {
+    _$_isDefaultOptionsWindowShownAtom.reportWrite(
+      value,
+      super._isDefaultOptionsWindowShown,
+      () {
+        super._isDefaultOptionsWindowShown = value;
+      },
+    );
+  }
+
   late final _$_isAutoDismissWindowOpenAtom = Atom(
     name: 'TH2FileEditOverlayWindowControllerBase._isAutoDismissWindowOpen',
     context: context,
