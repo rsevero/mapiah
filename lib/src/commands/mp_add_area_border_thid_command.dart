@@ -38,8 +38,13 @@ class MPAddAreaBorderTHIDCommand extends MPCommand with MPPosCommandMixin {
       childPositionInParent: areaBorderTHIDPositionInParent,
     );
 
+    th2FileEditController.elementEditController.addOutdatedCloneMPID(
+      newAreaBorderTHID.mpID,
+    );
+
     th2FileEditController.triggerNonSelectedElementsRedraw();
     th2FileEditController.triggerSelectedElementsRedraw();
+    th2FileEditController.triggerOptionsListRedraw();
   }
 
   @override

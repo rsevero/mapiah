@@ -62,6 +62,7 @@
   * Extracted MPTH2FileEditStateKeyDownMixin: keyboard shortcut handling (onKeyDownEvent/_onKeyDownEvent) moved from MPTH2FileEditStateMoveCanvasMixin into a new dedicated mixin, applied to all editing states that previously included MoveCanvasMixin.
   * Change active scrap shortcut corrected to Alt+K (was incorrectly implemented as Alt+S); tooltip and help pages updated.
   * Options edit overlay stays open when pressing "Add area border" button and while clicking lines in addLineToArea state: added keepOverlayOpenOnCanvasClick virtual property to base state (default false), overridden to true in MPTH2FileEditStateAddLineToArea; MPButtonType.addLineToArea added to _noAutoCloseButtonTypes.
+  * Area borders panel now refreshes after every border addition: MPAddAreaBorderTHIDCommand._actualExecute calls addOutdatedCloneMPID and triggerOptionsListRedraw so the selection clone and overlay update for both lines with and without pre-existing THIDs.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
