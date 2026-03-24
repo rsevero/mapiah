@@ -24,11 +24,17 @@ mixin _$TH2FilePropertiesController on TH2FilePropertiesControllerBase, Store {
       );
 
   @override
-  void setEncoding(String newEncoding) {
+  void applySetEncoding({
+    required String fromEncoding,
+    required String toEncoding,
+  }) {
     final _$actionInfo = _$TH2FilePropertiesControllerBaseActionController
-        .startAction(name: 'TH2FilePropertiesControllerBase.setEncoding');
+        .startAction(name: 'TH2FilePropertiesControllerBase.applySetEncoding');
     try {
-      return super.setEncoding(newEncoding);
+      return super.applySetEncoding(
+        fromEncoding: fromEncoding,
+        toEncoding: toEncoding,
+      );
     } finally {
       _$TH2FilePropertiesControllerBaseActionController.endAction(_$actionInfo);
     }

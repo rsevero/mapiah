@@ -426,6 +426,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionReorderScraps => 'Reorder scraps';
 
   @override
+  String get mpCommandDescriptionSetFileEncoding => 'Set file encoding';
+
+  @override
   String get mpCommandDescriptionSetOptionToElement => 'Set option';
 
   @override

@@ -58,6 +58,7 @@ part 'mp_reorder_images_command.dart';
 part 'mp_reorder_scraps_command.dart';
 part 'mp_replace_line_segments_command.dart';
 part 'mp_set_attr_option_to_element_command.dart';
+part 'mp_set_file_encoding_command.dart';
 part 'mp_set_option_to_element_command.dart';
 part 'types/mp_command_type.dart';
 
@@ -232,6 +233,8 @@ abstract class MPCommand {
         return MPReplaceLineSegmentsCommand.fromMap(map);
       case MPCommandType.setAttrOptionToElement:
         return MPSetAttrOptionToElementCommand.fromMap(map);
+      case MPCommandType.setFileEncoding:
+        return MPSetFileEncodingCommand.fromMap(map);
       case MPCommandType.setOptionToElement:
         return MPSetOptionToElementCommand.fromMap(map);
     }

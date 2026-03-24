@@ -37,5 +37,6 @@ enum MPCommandType {
   reorderScraps,
   replaceLineSegments,
   setAttrOptionToElement,
+  setFileEncoding,
   setOptionToElement,
 }

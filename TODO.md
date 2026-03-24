@@ -205,7 +205,7 @@
 [X] - BUG: flatpak version does not open URLs.
 [ ] - Create rotate, scale, mirror and screw modes.
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
-[ ] - Show full file name at file tab.
+[X] - Show full file name at file tab.
 
 ## Version 1.0
 [ ] - Raster images tracing.

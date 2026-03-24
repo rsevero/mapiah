@@ -431,6 +431,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpCommandDescriptionReorderScraps => 'Reordenar croquis';
 
   @override
+  String get mpCommandDescriptionSetFileEncoding =>
+      'Definir codificação do arquivo';
+
+  @override
   String get mpCommandDescriptionSetOptionToElement => 'Definir opção';
 
   @override

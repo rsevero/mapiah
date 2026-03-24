@@ -28,7 +28,7 @@ class _TH2FilePropertiesPageState extends State<TH2FilePropertiesPage> {
   }
 
   void _save() {
-    _propertiesController.setEncoding(_selectedEncoding);
+    _propertiesController.prepareSetEncoding(_selectedEncoding);
     Navigator.of(context).pop();
   }
 

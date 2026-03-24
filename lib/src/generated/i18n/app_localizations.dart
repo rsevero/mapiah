@@ -866,6 +866,12 @@ abstract class AppLocalizations {
   /// **'Reorder scraps'**
   String get mpCommandDescriptionReorderScraps;
 
+  /// Undo/redo description for changing the file encoding. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Set file encoding'**
+  String get mpCommandDescriptionSetFileEncoding;
+
   /// The description for the set option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

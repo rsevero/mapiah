@@ -665,6 +665,11 @@
     "description": "The description for the reorder scraps command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionSetFileEncoding": "Set file encoding",
+  "@mpCommandDescriptionSetFileEncoding": {
+    "description": "Undo/redo description for changing the file encoding. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionSetOptionToElement": "Set option",
   "@mpCommandDescriptionSetOptionToElement": {
     "description": "The description for the set option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",

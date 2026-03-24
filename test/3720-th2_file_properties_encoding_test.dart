@@ -60,13 +60,13 @@ void main() {
       });
 
       test('setEncoding updates TH2File.encoding field', () {
-        propertiesController.setEncoding('ISO8859-1');
+        propertiesController.prepareSetEncoding('ISO8859-1');
 
         expect(th2Controller.th2File.encoding, 'ISO8859-1');
       });
 
       test('setEncoding updates the THEncoding element value', () {
-        propertiesController.setEncoding('ISO8859-2');
+        propertiesController.prepareSetEncoding('ISO8859-2');
 
         final TH2File th2File = th2Controller.th2File;
         final THElement firstChild = th2File.elementByMPID(
@@ -80,7 +80,7 @@ void main() {
       test(
         'setEncoding writes new encoding to file output (useOriginalRepresentation: true)',
         () {
-          propertiesController.setEncoding('ISO8859-1');
+          propertiesController.prepareSetEncoding('ISO8859-1');
 
           final String output = writer.serialize(
             th2Controller.th2File,
@@ -95,13 +95,13 @@ void main() {
       test('setEncoding is a no-op when value is the same', () {
         final String originalEncoding = th2Controller.th2File.encoding;
 
-        propertiesController.setEncoding(originalEncoding);
+        propertiesController.prepareSetEncoding(originalEncoding);
 
         expect(th2Controller.th2File.encoding, originalEncoding);
       });
 
       test('setEncoding normalizes input to uppercase', () {
-        propertiesController.setEncoding('iso8859-1');
+        propertiesController.prepareSetEncoding('iso8859-1');
 
         expect(th2Controller.th2File.encoding, 'ISO8859-1');
       });
@@ -146,7 +146,7 @@ void main() {
       });
 
       test('setEncoding creates a THEncoding element at position 0', () {
-        propertiesController.setEncoding('ISO8859-1');
+        propertiesController.prepareSetEncoding('ISO8859-1');
 
         final TH2File th2File = th2Controller.th2File;
         final THElement firstChild = th2File.elementByMPID(
@@ -160,7 +160,7 @@ void main() {
       test(
         'setEncoding writes new encoding to file output when no THEncoding element existed (useOriginalRepresentation: true)',
         () {
-          propertiesController.setEncoding('ISO8859-1');
+          propertiesController.prepareSetEncoding('ISO8859-1');
 
           final String output = writer.serialize(
             th2Controller.th2File,
