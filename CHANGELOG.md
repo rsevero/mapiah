@@ -21,6 +21,7 @@
   * Telemetry: session time spanning midnight was fully attributed to the new day. The rollover now snapshots active TH2 and Therion session time up to midnight into the old day's record and resets the in-memory session baseline to midnight, so each day receives only the time that actually occurred within it. [suggested by Patrícia Finageiv]
   * "Reset" button in search and select dialog is enabled when there is no active filter configuration.
   * Fixed crash when adding a point with default options configured: option commands (subtype + defaults) are now placed in the posCommand of MPAddPointCommand instead of alongside it in MPMultipleElementsCommand, so they run after the point is in the file and the MPID lookup succeeds. Added regression tests (1305).
+  * Reset button in the default options overlay window was invisible when enabled because TextButton defaults to colorScheme.primary for its text, which matched the block's primary background. Fixed by explicitly setting foregroundColor to colorScheme.onPrimary.
 * Infrastructure maintenance:
   * Extracted TH2FileEditAreaLineCreationController: separated all area and line creation logic from TH2FileEditElementEditController into a dedicated MobX controller for better separation of concerns.
   * Created TH2FileEditSearchController: new MobX controller for search and select functionality.

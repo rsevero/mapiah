@@ -68,6 +68,9 @@ class _MPDefaultOptionsOverlayWindowWidgetState
                 children: [
                   TextButton(
                     onPressed: hasDefaultsForCurrentType ? _onReset : null,
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
                     child: Text(appLocalizations.mpDefaultOptionsReset),
                   ),
                   const SizedBox(width: mpButtonSpace),
