@@ -69,6 +69,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           presentMultipleElementsClickedWidget: true,
         )).values.toList();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
+    final bool ctrlOrMetaOnlyPressed =
+        (MPInteractionAux.isCtrlPressed() ||
+            MPInteractionAux.isMetaPressed()) &&
+        !shiftPressed &&
+        !MPInteractionAux.isAltPressed();
 
     selectionController.clearClickedElementsAtPointerDown();
 
@@ -85,6 +90,11 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       if (clickedElementAlreadySelected) {
         if (shiftPressed) {
           selectionController.removeSelectedElementsByElements(clickedElements);
+        } else if (ctrlOrMetaOnlyPressed) {
+          selectionController.setSelectedElements(
+            clickedElements,
+            setState: true,
+          );
         }
 
         return Future.value();
@@ -133,17 +143,28 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
-
-    Map<int, THElement> clickedElements = selectionController
-        .getSelectableElementsClickedWithoutDialog(
-          screenCoordinates: event.localPosition,
-          selectionType: THSelectionType.pla,
-        );
+    final bool ctrlOrMetaOnlyPressed =
+        (MPInteractionAux.isCtrlPressed() ||
+            MPInteractionAux.isMetaPressed()) &&
+        !shiftPressed &&
+        !MPInteractionAux.isAltPressed();
 
     elementEditController.resetOriginalFileForLineSimplification();
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
+
+    // When cycling area-border lines, skip drag-start detection to avoid
+    // advancing the cycle index twice (pointer-down + pointer-up).
+    if (ctrlOrMetaOnlyPressed) {
+      return;
+    }
+
+    final Map<int, THElement> clickedElements = selectionController
+        .getSelectableElementsClickedWithoutDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.pla,
+        );
 
     if (clickedElements.isNotEmpty) {
       if (!shiftPressed) {

@@ -77,7 +77,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   int? _areaBorderCtrlMetaCycleAreaMPID;
 
-  int _areaBorderCtrlMetaCycleChoiceIndex = 0;
+  // -1 means "all border lines"; 0..N-1 mean individual border line at that index.
+  int _areaBorderCtrlMetaCycleChoiceIndex = -1;
+
+  bool _suppressMultipleClickedDialog = false;
 
   Completer<void> multipleClickedSemaphore = Completer<void>();
 
@@ -793,11 +796,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     required Map<int, THElement> clickedElementsMap,
   }) {
     final THArea area = _th2File.areaByMPID(areaMPID);
-    final List<int> areaLineMPIDs = area.getLineMPIDs(_th2File);
+    final List<THAreaBorderTHID> areaBorderTHIDs = area.getAreaBorderTHIDs(
+      _th2File,
+    );
 
-    if (areaLineMPIDs.length <= 1) {
+    if (areaBorderTHIDs.length <= 1) {
       _areaBorderCtrlMetaCycleAreaMPID = areaMPID;
-      _areaBorderCtrlMetaCycleChoiceIndex = 0;
+      _areaBorderCtrlMetaCycleChoiceIndex = -1;
       clickedElementsMap[clickedLineMPID] = _th2File.elementByMPID(
         clickedLineMPID,
       );
@@ -806,21 +811,35 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     if (_areaBorderCtrlMetaCycleAreaMPID != areaMPID) {
       _areaBorderCtrlMetaCycleAreaMPID = areaMPID;
-      _areaBorderCtrlMetaCycleChoiceIndex = 0;
+      _areaBorderCtrlMetaCycleChoiceIndex = -1;
     }
 
-    if (_areaBorderCtrlMetaCycleChoiceIndex == 0) {
-      for (final int lineMPID in areaLineMPIDs) {
+    if (_areaBorderCtrlMetaCycleChoiceIndex == -1) {
+      _suppressMultipleClickedDialog = true;
+
+      for (final THAreaBorderTHID borderTHID in areaBorderTHIDs) {
+        final int? lineMPID = _th2File.mpIDByTHID(borderTHID.thID);
+
+        if (lineMPID != null) {
+          clickedElementsMap[lineMPID] = _th2File.elementByMPID(lineMPID);
+        }
+      }
+
+      _areaBorderCtrlMetaCycleChoiceIndex = 0;
+    } else {
+      final THAreaBorderTHID borderTHID =
+          areaBorderTHIDs[_areaBorderCtrlMetaCycleChoiceIndex];
+      final int? lineMPID = _th2File.mpIDByTHID(borderTHID.thID);
+
+      if (lineMPID != null) {
         clickedElementsMap[lineMPID] = _th2File.elementByMPID(lineMPID);
       }
-    } else {
-      final int lineMPID =
-          areaLineMPIDs[_areaBorderCtrlMetaCycleChoiceIndex - 1];
-      clickedElementsMap[lineMPID] = _th2File.elementByMPID(lineMPID);
-    }
 
-    _areaBorderCtrlMetaCycleChoiceIndex =
-        (_areaBorderCtrlMetaCycleChoiceIndex + 1) % (areaLineMPIDs.length + 1);
+      _areaBorderCtrlMetaCycleChoiceIndex =
+          _areaBorderCtrlMetaCycleChoiceIndex + 1 < areaBorderTHIDs.length
+          ? _areaBorderCtrlMetaCycleChoiceIndex + 1
+          : -1;
+    }
   }
 
   Future<Map<int, THElement>> getSelectableLineSegmentsOfLineClickedWithDialog({
@@ -884,7 +903,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     clickedElements.clear();
     clickedElements.addAll(clicked);
 
-    if (presentMultipleElementsClickedWidget && (clickedElements.length > 1)) {
+    final bool suppress = _suppressMultipleClickedDialog;
+
+    _suppressMultipleClickedDialog = false;
+
+    if (presentMultipleElementsClickedWidget &&
+        (clickedElements.length > 1) &&
+        !suppress) {
       selectionCanBeMultiple = canBeMultiple;
       _th2FileEditController.overlayWindowController.setShowOverlayWindow(
         MPWindowType.multipleElementsClicked,
@@ -1826,7 +1851,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void resetAreaBorderCtrlMetaCycle() {
     _areaBorderCtrlMetaCycleAreaMPID = null;
-    _areaBorderCtrlMetaCycleChoiceIndex = 0;
+    _areaBorderCtrlMetaCycleChoiceIndex = -1;
+    _suppressMultipleClickedDialog = false;
   }
 
   void performMultipleElementsClickedChoosen(int choiceID) {
