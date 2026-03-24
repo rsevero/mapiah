@@ -168,6 +168,7 @@ In addition to General Guidelines, follow these app-specific rules:
 9. When adding a new features, suggest the creation of a test file in `test/` with tests covering the new feature. Follow the existing test file naming convention (numerical prefix for ordering, descriptive name, `_test.dart` suffix).
 10. URLs should preferably be presented with MPURLTextWidget. 
 11. Don´t worry about code formating, indenting and the like: code is automatcally formatted on commit.
+12. keyboard_shortcuts_* pages should always have its content ordered in alphabetically.
 
 ### When writing scripts (command-line tools)
 

@@ -4,33 +4,34 @@
 | ------------------------------------------------------------- | ------------------------------------ |
 | Adicionar imagem                                              | I                                    |
 | Ajuda                                                         | F1                                   |
-| Esconder elementos selecionados / Mostrar todos os ocultos    | Ctrl+H                               |
 | Alterar croqui ativo                                          | Alt+S                                |
 | Alterar imagens                                               | Alt+I                                |
+| Alternar marcas de direção em linhas não selecionadas         | Ctrl+Alt+R                           |
 | Atalhos de teclado                                            | Ctrl+K                               |
+| Colar elementos                                               | Ctrl+V                               |
+| Copiar elementos selecionados                                 | Ctrl+C                               |
 | Criar área                                                    | A                                    |
 | Criar croqui                                                  | K                                    |
 | Criar linha                                                   | L                                    |
 | Criar linha de conexão de mapa de ponto Corte para Base       | Ctrl+Alt+X                           |
 | Criar ponto                                                   | P                                    |
 | Criar segmento de linha entre segmentos de linha selecionados | /                                    |
-| Copiar elementos selecionados                                 | Ctrl+C                               |
 | Desfazer                                                      | Ctrl+Z                               |
 | Desselecionar tudo                                            | Escape                               |
-| Colar elementos                                               | Ctrl+V                               |
 | Duplicar elementos selecionados                               | Ctrl+D                               |
 | Editar nó de linha                                            | N                                    |
-| Opções padrão (sem elementos selecionados)                    | O                                    |
 | Editar opções (com elementos selecionados)                    | O                                    |
 | Escolher arquivo THConfig e executar Therion                  | Ctrl+T                               |
+| Esconder elementos selecionados / Mostrar todos os ocultos    | Ctrl+H                               |
 | Excluir ponto, linha, área ou segmento de linha               | Del ou Backspace                     |
 | Ferramenta de seleção                                         | C                                    |
 | Forçar definição de opção em tipos não suportados             | Ctrl+clique na configuração da opção |
 | Inverter linha                                                | R                                    |
 | Inverter visibilidade de todas as grades                      | Ctrl+G                               |
 | Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
-| Refazer                                                       | Ctrl+Y                               |
+| Opções padrão (sem elementos selecionados)                    | O                                    |
 | Recortar elementos selecionados                               | Ctrl+X                               |
+| Refazer                                                       | Ctrl+Y                               |
 | Rodar o Therion                                               | T                                    |
 | Salvar arquivo                                                | Ctrl+S                               |
 | Salvar arquivo como                                           | Ctrl+Shift+S                         |

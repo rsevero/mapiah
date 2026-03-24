@@ -15,6 +15,7 @@ This page allows you to configure Mapiah's settings. Settings are grouped into s
   - [New line creation method](#new-line-creation-method)
   - [Point radius](#point-radius)
   - [Selection tolerance](#selection-tolerance)
+  - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
 
 ## Using settings
 
@@ -52,3 +53,6 @@ Controls the visual radius (in pixels) of points drawn on the canvas. This is a 
 
 ### Selection tolerance
 Controls how close the mouse cursor must be to an element (in pixels) for it to be considered clicked and selected. Increasing this value makes elements easier to click.
+
+### Show direction ticks on non-selected lines
+When enabled, direction ticks are drawn on all lines in the active scrap, regardless of selection. When disabled (default), only selected lines show direction ticks. Can also be toggled with **Ctrl+Alt+R**.

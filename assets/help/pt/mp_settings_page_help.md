@@ -15,6 +15,7 @@ Esta página permite configurar as preferências do Mapiah. As configurações s
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
   - [Raio do ponto](#raio-do-ponto)
   - [Tolerância de seleção](#tolerância-de-seleção)
+  - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
 
 ## Usando as configurações
 
@@ -52,3 +53,6 @@ Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma 
 
 ### Tolerância de seleção
 Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.
+
+### Mostrar marcas de direção em linhas não selecionadas
+Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.

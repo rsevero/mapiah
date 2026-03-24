@@ -149,6 +149,23 @@ mixin MPTH2FileEditStateMoveCanvasMixin on MPTH2FileEditState {
           );
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyR:
+        if ((isCtrlPressed || isMetaPressed) &&
+            isAltPressed &&
+            !isShiftPressed) {
+          final MPSettingsController settingsController =
+              mpLocator.mpSettingsController;
+          final bool current = settingsController.getBoolWithDefault(
+            MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+          );
+
+          settingsController.setBool(
+            MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+            !current,
+          );
+          th2FileEditController.triggerNonSelectedElementsRedraw();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyS:
         if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
           if (th2FileEditController.enableSaveButton) {

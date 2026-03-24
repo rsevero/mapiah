@@ -7,13 +7,14 @@
 | Change active scrap                                        | Alt+S                        |
 | Change images                                              | Alt+I                        |
 | Choose THConfig file and run Therion                       | Ctrl+T                       |
+| Copy selected elements                                     | Ctrl+C                       |
 | Create area                                                | A                            |
 | Create line                                                | L                            |
 | Create map connection line from point X-Section to Station | Ctrl+Alt+X                   |
 | Create point                                               | P                            |
 | Create scrap                                               | K                            |
-| Copy selected elements                                     | Ctrl+C                       |
 | Cut selected elements                                      | Ctrl+X                       |
+| Default options (no elements selected)                     | O                            |
 | Delete point, line, area or line segment                   | Del or Backspace             |
 | Deselect all                                               | Escape                       |
 | Duplicate selected elements                                | Ctrl+D                       |
@@ -22,7 +23,6 @@
 | Hide selected elements / Show all hidden elements          | Ctrl+H                       |
 | Keyboard shortcuts                                         | Ctrl+K                       |
 | Line node edit                                             | N                            |
-| Default options (no elements selected)                     | O                            |
 | Options edit (elements selected)                           | O                            |
 | Paste elements                                             | Ctrl+V                       |
 | Redo                                                       | Ctrl+Y                       |
@@ -39,6 +39,7 @@
 | Smooth line point                                          | S                            |
 | Toggle all grids visibility                                | Ctrl+G                       |
 | Toggle all images visibility                               | Ctrl+I                       |
+| Toggle direction ticks on non-selected lines               | Ctrl+Alt+R                   |
 | Undo                                                       | Ctrl+Z                       |
 | Zoom 1:1                                                   | 1                            |
 | Zoom file                                                  | 4                            |
