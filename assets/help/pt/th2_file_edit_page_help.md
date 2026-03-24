@@ -209,7 +209,11 @@ Para selecionar um elemento, clique nele com a ferramenta _Selecionar elemento_ 
 
 Também é possível selecionar elementos arrastando uma janela de seleção com o mouse. Para fazer isso, clique e segure o botão esquerdo do mouse em uma área vazia do canvas e arraste o mouse. Todos os elementos que estão total ou parcialmente dentro da janela de seleção serão selecionados. Para adicionar elementos à seleção, mantenha a tecla _Shift_ pressionada enquanto arrasta a janela de seleção.
 
-Quando clicar em uma linha que define uma área, o usuário será apresentado com uma caixa de diálogo "Vários elementos clicados", onde poderá escolher qual elemento selecionar. As opções são a própria linha e a área definida pela linha. Se você Ctrl+Clicar (ou Meta+Clicar) em uma linha que define uma área, a área será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados". Se você Shift+Ctrl+Clicar (ou Shift+Meta+Clicar) em uma linha que define uma área, a linha será selecionada diretamente sem mostrar a caixa de diálogo "Vários elementos clicados".
+Ao clicar em uma linha que define a borda de uma área, o comportamento depende das teclas modificadoras pressionadas:
+
+1. **Sem modificador (ou modificadores diferentes de Ctrl/Meta+Shift)**: tanto a área quanto a linha são candidatas à seleção. Se exatamente uma delas já estiver selecionada, a outra é adicionada; caso contrário, a caixa de diálogo "Vários elementos clicados" é exibida para que você escolha qual(is) elemento(s) adicionar à seleção.
+2. **Ctrl+clique ou Meta+clique (Shift não pressionado)**: apenas a área é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
+3. **Ctrl+Shift+clique ou Meta+Shift+clique**: apenas a linha é adicionada à seleção diretamente, sem exibir a caixa de diálogo.
 
 ## Operações com elementos
 

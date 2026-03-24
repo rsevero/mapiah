@@ -26,7 +26,6 @@
 | Options edit (elements selected)                           | O                            |
 | Paste elements                                             | Ctrl+V                       |
 | Redo                                                       | Ctrl+Y                       |
-| Reverse line                                               | R                            |
 | Run Therion                                                | T                            |
 | Save file                                                  | Ctrl+S                       |
 | Save file as                                               | Ctrl+Shift+S                 |
@@ -40,6 +39,7 @@
 | Toggle all grids visibility                                | Ctrl+G                       |
 | Toggle all images visibility                               | Ctrl+I                       |
 | Toggle direction ticks on non-selected lines               | Ctrl+Alt+R                   |
+| Toggle reverse line option                                 | R                            |
 | Undo                                                       | Ctrl+Z                       |
 | Zoom 1:1                                                   | 1                            |
 | Zoom file                                                  | 4                            |

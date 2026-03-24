@@ -6,6 +6,7 @@
 | Ajuda                                                         | F1                                   |
 | Alterar croqui ativo                                          | Alt+S                                |
 | Alterar imagens                                               | Alt+I                                |
+| Alternar direção da linha                                     | R                                    |
 | Alternar marcas de direção em linhas não selecionadas         | Ctrl+Alt+R                           |
 | Atalhos de teclado                                            | Ctrl+K                               |
 | Colar elementos                                               | Ctrl+V                               |
@@ -26,7 +27,6 @@
 | Excluir ponto, linha, área ou segmento de linha               | Del ou Backspace                     |
 | Ferramenta de seleção                                         | C                                    |
 | Forçar definição de opção em tipos não suportados             | Ctrl+clique na configuração da opção |
-| Inverter linha                                                | R                                    |
 | Inverter visibilidade de todas as grades                      | Ctrl+G                               |
 | Inverter visibilidade de todas as imagens                     | Ctrl+I                               |
 | Opções padrão (sem elementos selecionados)                    | O                                    |

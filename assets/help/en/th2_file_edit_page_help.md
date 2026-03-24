@@ -109,7 +109,11 @@ To select an element, click on it with the _Select element_ tool active. To sele
 
 Its also possible to select elements by dragging a selection window with the mouse. To do that, click and hold the left mouse button on an empty area of the canvas and drag the mouse. All elements that are fully or partially inside the selection window will be selected. To add elements to the selection, hold the _Shift_ key while dragging the selection window.
 
-When cliking on a line that defines an area, the the user will be presented with a "Multiple clicked elements" dialog box where the user can choose which element to select. The options are the line itself and the area defined by the line. It you Ctrl+Click (or Meta+Click) on a line that defines an area, the area will be selected directly without showing the "Multiple clicked elements" dialog box. If you Shift+Ctrl+Click (or Shift+Meta+Click) on a line that defines an area, the line will be selected directly without showing the "Multiple clicked elements" dialog box.
+When clicking on a line that defines an area border, the behavior depends on which modifier keys are held:
+
+1. **No modifier (or modifiers other than Ctrl/Meta+Shift)**: both the area and the line are candidates for selection. If exactly one is already selected the other is added; otherwise a "Multiple elements clicked" dialog is shown so you can choose which element(s) to add to the selection.
+2. **Ctrl+click or Meta+click (Shift not pressed)**: only the area is added to the selection directly, without showing the dialog.
+3. **Ctrl+Shift+click or Meta+Shift+click**: only the line is added to the selection directly, without showing the dialog.
 
 ## Element operations
 
