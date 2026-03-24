@@ -52,6 +52,7 @@
   * Overlay windows now auto-close when any action button is pressed (add point, add line, undo, redo, remove, etc.); zoom buttons are excluded as zooming does not imply dismissing a panel.
   * Default options toolbar button is now painted in the active (full-color) style whenever any default option is set, giving a persistent visual cue even when the panel is closed. MPDefaultOptionsController converted to a MobX store so hasAnyDefaults is reactive.
   * Default options toolbar button icon changed from tune to auto_fix_high to better represent the concept of preset/initial configuration values.
+  * 'O' shortcut with no selection now opens the default options window (previously the call was commented out with a TODO).
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:

@@ -65,8 +65,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
             !isCtrlPressed &&
             !isMetaPressed &&
             !isShiftPressed) {
-          /// TODO: set default options.
-          // openOptionEditOverlayWindow();
+          openOptionEditOverlayWindowOnSelected();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyV:
