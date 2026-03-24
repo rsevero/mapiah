@@ -556,6 +556,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         final bool isDefaultOptionsShown = th2FileEditController
             .overlayWindowController
             .showDefaultOptionsOverlayWindow;
+        final bool hasAnyDefaultOptions =
+            th2FileEditController.defaultOptionsController.hasAnyDefaults;
 
         th2FileEditController.redrawSnapTargetsWindow;
 
@@ -621,13 +623,15 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 mini: true,
                 tooltip: appLocalizations.mpDefaultOptionsToolbarTooltip,
                 onPressed: _onDefaultOptionsButtonPressed,
-                backgroundColor: isDefaultOptionsShown
+                backgroundColor: (isDefaultOptionsShown || hasAnyDefaultOptions)
                     ? null
                     : colorScheme.surfaceContainerLowest,
-                foregroundColor: isDefaultOptionsShown
+                foregroundColor: (isDefaultOptionsShown || hasAnyDefaultOptions)
                     ? null
                     : colorScheme.surfaceContainerHighest,
-                elevation: isDefaultOptionsShown ? 6.0 : 3.0,
+                elevation: (isDefaultOptionsShown || hasAnyDefaultOptions)
+                    ? 6.0
+                    : 3.0,
                 child: const Icon(Icons.tune),
               ),
               if (th2FileEditController.showRemoveButton) ...[

@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'dart:convert';
-
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -11,14 +10,31 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mobx/mobx.dart';
 
-class MPDefaultOptionsController {
+part 'mp_default_options_controller.g.dart';
+
+class MPDefaultOptionsController = MPDefaultOptionsControllerBase
+    with _$MPDefaultOptionsController;
+
+abstract class MPDefaultOptionsControllerBase with Store {
   final Map<THElementType, Map<THCommandOptionType, THCommandOption>>
   _defaultOptionsMap = {
     THElementType.point: {},
     THElementType.line: {},
     THElementType.area: {},
   };
+
+  // Incremented by every mutating action so @computed getters react to changes.
+  @observable
+  int _defaultOptionsVersion = 0;
+
+  @computed
+  bool get hasAnyDefaults {
+    // ignore: unnecessary_statements — read to register MobX dependency
+    _defaultOptionsVersion;
+    return _defaultOptionsMap.values.any((map) => map.isNotEmpty);
+  }
 
   void loadFromSettings() {
     _loadForType(THElementType.point, MPSettingID.Internal_DefaultPointOptions);
@@ -54,36 +70,41 @@ class MPDefaultOptionsController {
     mpLocator.mpSettingsController.setStringList(settingID, jsonList);
   }
 
+  @action
   void setDefault(THElementType elementType, THCommandOption option) {
     _defaultOptionsMap[elementType]![option.type] = option;
     _saveForType(elementType, _settingIDFor(elementType));
+    _defaultOptionsVersion++;
   }
 
+  @action
   void removeDefault(
     THElementType elementType,
     THCommandOptionType optionType,
   ) {
     _defaultOptionsMap[elementType]!.remove(optionType);
     _saveForType(elementType, _settingIDFor(elementType));
+    _defaultOptionsVersion++;
   }
 
+  @action
   void clearAll() {
     for (final THElementType type in _defaultOptionsMap.keys) {
       _defaultOptionsMap[type] = {};
       mpLocator.mpSettingsController.setStringList(_settingIDFor(type), []);
     }
+    _defaultOptionsVersion++;
   }
 
+  @action
   void clearForElementType(THElementType elementType) {
     _defaultOptionsMap[elementType] = {};
     mpLocator.mpSettingsController.setStringList(
       _settingIDFor(elementType),
       [],
     );
+    _defaultOptionsVersion++;
   }
-
-  bool get hasAnyDefaults =>
-      _defaultOptionsMap.values.any((map) => map.isNotEmpty);
 
   bool hasDefaultsForType(THElementType elementType) =>
       _defaultOptionsMap[elementType]!.isNotEmpty;
