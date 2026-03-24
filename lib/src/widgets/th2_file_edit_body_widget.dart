@@ -632,7 +632,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 elevation: (isDefaultOptionsShown || hasAnyDefaultOptions)
                     ? 6.0
                     : 3.0,
-                child: const Icon(Icons.tune),
+                child: const Icon(Icons.auto_fix_high),
               ),
               if (th2FileEditController.showRemoveButton) ...[
                 SizedBox(width: mpButtonSpace),
