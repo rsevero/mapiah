@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get buttonClose;
 
+  /// Error message shown when the user tries to split a line that belongs to an area border. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot split a line that is part of an area border'**
+  String get cannotSplitAreaBorderLine;
+
   /// The title for the file edit window. Used on: _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:

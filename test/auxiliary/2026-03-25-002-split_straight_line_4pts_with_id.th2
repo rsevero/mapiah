@@ -1,0 +1,9 @@
+encoding UTF-8
+scrap test
+  line contour -id blaus
+    0 0
+    100 0
+    200 0
+    300 0
+  endline
+endscrap

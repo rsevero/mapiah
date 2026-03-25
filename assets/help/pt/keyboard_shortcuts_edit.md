@@ -23,6 +23,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar segmento de linha entre segmentos de linha selecionados          | /                                    |
 | Desfazer                                                               | Ctrl+Z                               |
 | Desselecionar tudo                                                     | Escape                               |
+| Dividir linha nos pontos de linha selecionados                         | Ctrl+Shift+P                         |
+<!-- | Dividir linhas selecionadas nos cruzamentos de linhas                  | Ctrl+Shift+X                         | -->
 | Duplicar elementos selecionados                                        | Ctrl+D                               |
 | Editar nó de linha                                                     | N                                    |
 | Editar opções (com elementos selecionados)                             | O                                    |
@@ -33,6 +35,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Forçar definição de opção em tipos não suportados                      | Ctrl+clique na configuração da opção |
 | Inverter visibilidade de todas as grades                               | Ctrl+G                               |
 | Inverter visibilidade de todas as imagens                              | Ctrl+I                               |
+<!-- | Juntar linhas em pontos de início/fim coincidentes                     | Ctrl+J                               | -->
+<!-- | Mesclar linhas fechadas em nova linha fechada                          | Ctrl+Shift+M                         | -->
 | Opções padrão (sem elementos selecionados)                             | O                                    |
 | Recortar elementos selecionados                                        | Ctrl+X                               |
 | Refazer                                                                | Ctrl+Y                               |

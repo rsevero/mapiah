@@ -17,6 +17,7 @@
   * Showing selected elements on single line edit.
   * Show status message listing what's selected in 'single line edit' mode.
   * When moving an object of end/control point, show mouse position in canvas coordinates on status bar.
+  * Split line at selected points (Ctrl+Shift+P): in single-line-edit mode, select one or more non-last line points and press Ctrl+Shift+P to split the line at those points. Each resulting sub-line preserves all options of the original; if the original had an -id, sub-lines receive -id suffixed with -1, -2, etc. Area border lines are protected (a message is shown and no split occurs). After splitting, all sub-lines are selected. The operation is fully undoable.
 * Fixed bugs:
   * Test 3100 (new file dialog): telemetry consent dialog was blocking the home UI because consent was unset in the test environment. Fixed by setting consent in setUp before pumping the app.
   * MPSettingsController: all setter methods (setBool, setInt, setDouble, setString, setStringList, setEnum) now always write the value to storage, even when it matches the implicit default. Previously, setting a value equal to the default was a no-op, so isXxxSet() returned false as if the setting had never been touched — causing the telemetry consent dialog to reappear on every launch after a user had refused.

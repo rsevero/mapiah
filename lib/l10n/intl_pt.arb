@@ -28,6 +28,7 @@
   "aboutMapiahDialogWindowTitle": "Sobre o Mapiah",
   "appTitle": "Mapiah",
   "buttonClose": "Fechar",
+  "cannotSplitAreaBorderLine": "Não é possível dividir uma linha que faz parte da borda de uma área",
   "fileEditWindowWindowTitle": "Edição de arquivo",
   "helpDialogFailureToLoad": "Falha ao carregar o conteúdo de ajuda",
   "helpDialogTooltip": "Ajuda (F1)",

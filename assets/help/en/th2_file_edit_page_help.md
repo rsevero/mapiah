@@ -37,6 +37,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Bézier curve line segments](#bézier-curve-line-segments)
   - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
+- [Split line at selected points](#split-line-at-selected-points)
 - [Hide elements](#hide-elements)
 - [Search and select](#search-and-select)
 - [Snap](#snap)
@@ -276,6 +277,20 @@ When a line contains both Bézier curve and straight line segments, Mapiah treat
 
 ### Straight line segments
 Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
+
+## Split line at selected points
+
+While in line edit mode (_N_), select one or more internal line points and press _Ctrl+Shift+P_ to split the line into multiple lines at those points.
+
+**How it works:**
+- The first new line contains all segments from the original line's start up to and including the first selected point.
+- Each subsequent new line begins with a new straight segment whose endpoint is a copy of the last selected split point's position, followed by the original segments up to the next selected split point (or the end of the line).
+- After the split, all newly created lines are selected.
+- The operation can be undone with _Ctrl+Z_.
+
+**IDs:** If the original line had an `-id` option (e.g. `wall1`), each new line receives a derived ID: `wall1-1`, `wall1-2`, and so on.
+
+**Limitation:** Lines that are part of an area border cannot be split. A message is shown if you attempt to do so.
 
 ## Hide elements
 Press _Ctrl+H_ to temporarily hide elements on the canvas without removing them from the file.

@@ -55,6 +55,11 @@
     "description": "The label for the close button. Used on: MPErrorDialog.build, MPHelpDialogWidget.build, _MPRunTherionDialogWidgetState.build, _MPSnapTargetsWidgetState.build, _MapiahHomeState.showAboutDialog, lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text"
   },
+  "cannotSplitAreaBorderLine": "Cannot split a line that is part of an area border",
+  "@cannotSplitAreaBorderLine": {
+    "description": "Error message shown when the user tries to split a line that belongs to an area border. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
+    "type": "text"
+  },
   "fileEditWindowWindowTitle": "File edit",
   "@fileEditWindowWindowTitle": {
     "description": "The title for the file edit window. Used on: _TH2FileEditPageState.build",

@@ -24,9 +24,11 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Duplicate selected elements                                | Ctrl+D                       |
 | Force option setting on non-supporting types               | Ctrl+click on option setting |
 | Help                                                       | F1                           |
+<!-- | Join lines at coincident start/end line points             | Ctrl+J                       | -->
 | Hide selected elements / Show all hidden elements          | Ctrl+H                       |
 | Keyboard shortcuts                                         | Ctrl+K                       |
 | Line node edit                                             | N                            |
+<!-- | Merge closed lines into new closed line                    | Ctrl+Shift+M                 | -->
 | Options edit (elements selected)                           | O                            |
 | Paste elements                                             | Ctrl+V                       |
 | Redo                                                       | Ctrl+Y                       |
@@ -40,6 +42,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Simplify line - to Bézier curve line segments              | Ctrl+Alt+L                   |
 | Simplify line - to straight line segments                  | Ctrl+Shift+L                 |
 | Smooth line point                                          | S                            |
+| Split line at selected line points                         | Ctrl+Shift+P                 |
+<!-- | Split selected lines at line crossings                     | Ctrl+Shift+X                 | -->
 | Toggle all grids visibility                                | Ctrl+G                       |
 | Toggle all images visibility                               | Ctrl+I                       |
 | Toggle direction ticks on non-selected lines               | Ctrl+Alt+R                   |

@@ -35,6 +35,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
+- [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
   - [Segmentos de linha mistos](#segmentos-de-linha-mistos)
   - [Segmentos de linha reta](#segmentos-de-linha-reta)
 - [Pesquisar e selecionar](#pesquisar-e-selecionar)
@@ -275,6 +276,20 @@ Quando uma linha contém tanto segmentos em curva Bézier quanto segmentos retos
 
 ### Segmentos de linha reta
 Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O Mapiah usa uma versão interativa (não recursiva) do [algoritmo de Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) para simplificar segmentos de linha reta. Ele opera no espaço do canvas. A tolerância inicial (epsilon) equivale a 1,5 pixels de tela. Esse valor é convertido para coordenadas do canvas. Em cada execução subsequente, a tolerância é aumentada pelo mesmo valor inicial.
+
+## Dividir linha nos pontos selecionados
+
+No modo de edição de linha (_N_), selecione um ou mais pontos internos da linha e pressione _Ctrl+Shift+P_ para dividir a linha em múltiplas linhas nesses pontos.
+
+**Como funciona:**
+- A primeira nova linha contém todos os segmentos desde o início da linha original até o primeiro ponto selecionado (inclusive).
+- Cada linha subsequente começa com um novo segmento reto cujo ponto final é uma cópia da posição do último ponto de divisão selecionado, seguido pelos segmentos originais até o próximo ponto selecionado (ou o fim da linha).
+- Após a divisão, todas as novas linhas criadas ficam selecionadas.
+- A operação pode ser desfeita com _Ctrl+Z_.
+
+**IDs:** Se a linha original possuía a opção `-id` (por exemplo, `parede1`), cada nova linha recebe um ID derivado: `parede1-1`, `parede1-2`, e assim por diante.
+
+**Limitação:** Linhas que fazem parte da borda de uma área não podem ser divididas. Uma mensagem é exibida caso isso seja tentado.
 
 ## Esconder elementos
 Pressione _Ctrl+H_ para ocultar temporariamente elementos no canvas sem removê-los do arquivo.

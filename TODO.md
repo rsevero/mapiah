@@ -188,12 +188,12 @@
 [X] - Edit file properties (encoding and?...).
 [ ] - Visually close lines with command option close set to on or auto (for line types automatically closed).
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.
-[ ] - Split one line in two.
+[X] - Split one line in two.
 [ ] - Join 2 lines.
 [ ] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
-[ ] - Create a 'split line at selected end point' action in 'single line edit' mode.
+[X] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [X] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
@@ -206,6 +206,7 @@
 [ ] - Create rotate, scale, mirror and screw modes.
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
 [X] - Show full file name at file tab.
+[ ] - Create a way to the user create perfectly 15° multiple angle line segments.
 
 ## Version 1.0
 [ ] - Raster images tracing.

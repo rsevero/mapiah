@@ -42,6 +42,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get buttonClose => 'Close';
 
   @override
+  String get cannotSplitAreaBorderLine =>
+      'Cannot split a line that is part of an area border';
+
+  @override
   String get fileEditWindowWindowTitle => 'File edit';
 
   @override
