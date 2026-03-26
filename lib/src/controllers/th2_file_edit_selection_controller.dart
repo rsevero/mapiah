@@ -372,6 +372,9 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void deselectAllElements() {
     _clearSelectedElementsWithoutResettingRedrawTriggers();
+    _th2FileEditController.stateController.setState(
+      MPTH2FileEditStateType.selectEmptySelection,
+    );
     _th2FileEditController.stateController.updateStatusBarMessage();
     _th2FileEditController.triggerSelectedListChanged();
   }
