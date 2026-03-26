@@ -1943,14 +1943,44 @@
     "description": "The label for the change image tool button. Used on: _TH2FileEditPageState._changeImageButton",
     "type": "text"
   },
+  "th2FileEditPageCopyElements": "Copy elements (Ctrl+C)",
+  "@th2FileEditPageCopyElements": {
+    "description": "Tooltip for the copy elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageCopyScrapButton": "Copy scrap",
   "@th2FileEditPageCopyScrapButton": {
     "description": "The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageCreateMapConnectionLines": "Create map connection lines",
+  "@th2FileEditPageCreateMapConnectionLines": {
+    "description": "Tooltip for the create map connection lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageCutElements": "Cut elements (Ctrl+X)",
+  "@th2FileEditPageCutElements": {
+    "description": "Tooltip for the cut elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageCutScrapButton": "Cut scrap",
   "@th2FileEditPageCutScrapButton": {
     "description": "The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageDeselectAllElements": "Deselect all elements (Ctrl+D)",
+  "@th2FileEditPageDeselectAllElements": {
+    "description": "Tooltip for the deselect all elements FAB (when all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageDeselectAllEndPoints": "Deselect all end points (Ctrl+D)",
+  "@th2FileEditPageDeselectAllEndPoints": {
+    "description": "Tooltip for the deselect all end points FAB (when all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageDuplicateElements": "Duplicate elements (Ctrl+Shift+D)",
+  "@th2FileEditPageDuplicateElements": {
+    "description": "Tooltip for the duplicate elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageDuplicateScrapButton": "Duplicate scrap",
@@ -2006,6 +2036,11 @@
     "description": "The label for the node edit tool button. Used on: _TH2FileEditPageState._editElementButtons",
     "type": "text"
   },
+  "th2FileEditPageOpenOptionWindow": "Open options window (O)",
+  "@th2FileEditPageOpenOptionWindow": {
+    "description": "Tooltip for the open option window FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageOptionTool": "Option edit (O)",
   "@th2FileEditPageOptionTool": {
     "description": "The label for the option tool button. Used on: none",
@@ -2014,6 +2049,11 @@
   "th2FileEditPagePanTool": "Pan",
   "@th2FileEditPagePanTool": {
     "description": "The label for the pan tool button. Used on: none",
+    "type": "text"
+  },
+  "th2FileEditPagePasteElements": "Paste elements (Ctrl+V)",
+  "@th2FileEditPagePasteElements": {
+    "description": "Tooltip for the paste elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
@@ -2037,6 +2077,11 @@
   "th2FileEditPageRemoveScrapButton": "Remove scrap",
   "@th2FileEditPageRemoveScrapButton": {
     "description": "The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageReverseLine": "Reverse line (Ctrl+Shift+R)",
+  "@th2FileEditPageReverseLine": {
+    "description": "Tooltip for the reverse line FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageSave": "Save (Ctrl+S)",
@@ -2156,6 +2201,16 @@
     "description": "Title for the search and select dialog. Used on: MPSearchSelectDialogWidget",
     "type": "text"
   },
+  "th2FileEditPageSelectAllElements": "Select all elements (Ctrl+A)",
+  "@th2FileEditPageSelectAllElements": {
+    "description": "Tooltip for the select all elements FAB (when not all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageSelectAllEndPoints": "Select all end points (Ctrl+A)",
+  "@th2FileEditPageSelectAllEndPoints": {
+    "description": "Tooltip for the select all end points FAB (when not all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageSelectTool": "Select (C)",
   "@th2FileEditPageSelectTool": {
     "description": "The label for the select tool button. Used on: _TH2FileEditPageState._editElementButtons",
@@ -2166,9 +2221,34 @@
     "description": "The status bar message for the selection window zoom tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_selection_window_zoom.dart",
     "type": "text"
   },
+  "th2FileEditPageSimplifyLines": "Simplify lines (Ctrl+L)",
+  "@th2FileEditPageSimplifyLines": {
+    "description": "Tooltip for the simplify lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageSimplifyLinesForcingBezier": "Simplify lines forcing Bézier (Ctrl+Alt+L)",
+  "@th2FileEditPageSimplifyLinesForcingBezier": {
+    "description": "Tooltip for the simplify lines forcing Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageSimplifyLinesForcingStraight": "Simplify lines forcing straight (Ctrl+Shift+L)",
+  "@th2FileEditPageSimplifyLinesForcingStraight": {
+    "description": "Tooltip for the simplify lines forcing straight FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageSmoothLineSegments": "Smooth line segments (Ctrl+Shift+S)",
+  "@th2FileEditPageSmoothLineSegments": {
+    "description": "Tooltip for the smooth line segments FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageSnapButton": "Snap",
   "@th2FileEditPageSnapButton": {
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
+    "type": "text"
+  },
+  "th2FileEditPageSplitLineAtSelectedEndPoints": "Split line at selected end points (Ctrl+Shift+P)",
+  "@th2FileEditPageSplitLineAtSelectedEndPoints": {
+    "description": "Tooltip for the split line at selected end points FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Hide all grids (Ctrl+G)",

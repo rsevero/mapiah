@@ -313,6 +313,59 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.mpSelectedElementsLogical.isNotEmpty;
 
   @computed
+  bool get isInEditSingleLineState =>
+      stateController.state is MPTH2FileEditStateEditSingleLine;
+
+  @computed
+  bool get isInSelectNonEmptySelectionState =>
+      stateController.state is MPTH2FileEditStateSelectNonEmptySelection;
+
+  @computed
+  bool get isInSelectEmptySelectionState =>
+      stateController.state is MPTH2FileEditStateSelectEmptySelection;
+
+  @computed
+  bool get hasSelectedEndPoints =>
+      selectionController.selectedEndControlPoints.isNotEmpty;
+
+  @computed
+  bool get areAllEndPointsSelected {
+    final int selectableCount =
+        selectionController.selectableEndControlPoints.length;
+
+    if (selectableCount == 0) {
+      return false;
+    }
+
+    return selectionController.selectedEndControlPoints.length ==
+        selectableCount;
+  }
+
+  @computed
+  bool get hasSelectedLines => selectionController
+      .mpSelectedElementsLogical
+      .values
+      .any((final MPSelectedElement e) => e is MPSelectedLine);
+
+  @computed
+  bool get areAllElementsSelected {
+    final int selectableCount = selectionController
+        .getMPSelectableElements()
+        .length;
+
+    if (selectableCount == 0) {
+      return false;
+    }
+
+    return selectionController.mpSelectedElementsLogical.length ==
+        selectableCount;
+  }
+
+  @computed
+  bool get hasClipboardContent =>
+      mpLocator.mpGeneralController.hasClipboardContent;
+
+  @computed
   bool get enableSaveButton => _hasUndo && !_th2File.isNewFile;
 
   @readonly

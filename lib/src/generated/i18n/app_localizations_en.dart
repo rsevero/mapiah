@@ -1248,10 +1248,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeImageTool => 'Change image (Alt+I)';
 
   @override
+  String get th2FileEditPageCopyElements => 'Copy elements (Ctrl+C)';
+
+  @override
   String get th2FileEditPageCopyScrapButton => 'Copy scrap';
 
   @override
+  String get th2FileEditPageCreateMapConnectionLines =>
+      'Create map connection lines';
+
+  @override
+  String get th2FileEditPageCutElements => 'Cut elements (Ctrl+X)';
+
+  @override
   String get th2FileEditPageCutScrapButton => 'Cut scrap';
+
+  @override
+  String get th2FileEditPageDeselectAllElements =>
+      'Deselect all elements (Ctrl+D)';
+
+  @override
+  String get th2FileEditPageDeselectAllEndPoints =>
+      'Deselect all end points (Ctrl+D)';
+
+  @override
+  String get th2FileEditPageDuplicateElements =>
+      'Duplicate elements (Ctrl+Shift+D)';
 
   @override
   String get th2FileEditPageDuplicateScrapButton => 'Duplicate scrap';
@@ -1287,10 +1309,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageNodeEditTool => 'Node edit (N)';
 
   @override
+  String get th2FileEditPageOpenOptionWindow => 'Open options window (O)';
+
+  @override
   String get th2FileEditPageOptionTool => 'Option edit (O)';
 
   @override
   String get th2FileEditPagePanTool => 'Pan';
+
+  @override
+  String get th2FileEditPagePasteElements => 'Paste elements (Ctrl+V)';
 
   @override
   String th2FileEditPageRedo(Object redoDescription) {
@@ -1305,6 +1333,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageRemoveScrapButton => 'Remove scrap';
+
+  @override
+  String get th2FileEditPageReverseLine => 'Reverse line (Ctrl+Shift+R)';
 
   @override
   String get th2FileEditPageSave => 'Save (Ctrl+S)';
@@ -1380,6 +1411,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageSearchSelectTitle => 'Search and select';
 
   @override
+  String get th2FileEditPageSelectAllElements => 'Select all elements (Ctrl+A)';
+
+  @override
+  String get th2FileEditPageSelectAllEndPoints =>
+      'Select all end points (Ctrl+A)';
+
+  @override
   String get th2FileEditPageSelectTool => 'Select (C)';
 
   @override
@@ -1387,7 +1425,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select a zoom area';
 
   @override
+  String get th2FileEditPageSimplifyLines => 'Simplify lines (Ctrl+L)';
+
+  @override
+  String get th2FileEditPageSimplifyLinesForcingBezier =>
+      'Simplify lines forcing Bézier (Ctrl+Alt+L)';
+
+  @override
+  String get th2FileEditPageSimplifyLinesForcingStraight =>
+      'Simplify lines forcing straight (Ctrl+Shift+L)';
+
+  @override
+  String get th2FileEditPageSmoothLineSegments =>
+      'Smooth line segments (Ctrl+Shift+S)';
+
+  @override
   String get th2FileEditPageSnapButton => 'Snap';
+
+  @override
+  String get th2FileEditPageSplitLineAtSelectedEndPoints =>
+      'Split line at selected end points (Ctrl+Shift+P)';
 
   @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>

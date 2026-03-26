@@ -225,16 +225,36 @@ abstract class MPTH2FileEditState {
           th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;
+      case MPButtonType.copyElements:
+        th2FileEditController.copyPasteController.copySelectedElements();
+        return true;
+      case MPButtonType.createMapConnectionLines:
+        return false;
+      case MPButtonType.cutElements:
+        th2FileEditController.copyPasteController.cutSelectedElements();
+        return true;
+      case MPButtonType.duplicateElements:
+        th2FileEditController.copyPasteController.duplicateSelectedElements();
+        return true;
       case MPButtonType.nodeEdit:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.editSingleLine,
         );
+        return true;
+      case MPButtonType.openOptionWindow:
+        th2FileEditController.optionEditController.showOptionsOverlayWindow();
+        return true;
+      case MPButtonType.pasteElements:
+        th2FileEditController.copyPasteController.pasteElements();
         return true;
       case MPButtonType.redo:
         th2FileEditController.redo();
         return true;
       case MPButtonType.remove:
         selectionController.removeSelected();
+        return true;
+      case MPButtonType.reverseLine:
+        elementEditController.toggleSelectedLinesReverseOption();
         return true;
       case MPButtonType.runTherion:
         MPDialogAux.runTherionWithLastTHConfig(
@@ -243,6 +263,49 @@ abstract class MPTH2FileEditState {
         return true;
       case MPButtonType.select:
         selectionController.setSelectionState();
+        return true;
+      case MPButtonType.selectAllElements:
+        if (th2FileEditController.areAllElementsSelected) {
+          selectionController.deselectAllElements();
+        } else {
+          selectionController.selectAllElements();
+        }
+        return true;
+      case MPButtonType.selectAllEndPoints:
+        if (th2FileEditController.areAllEndPointsSelected) {
+          selectionController.deselectAllEndPoints();
+        } else {
+          selectionController.selectAllEndPoints();
+        }
+        return true;
+      case MPButtonType.simplifyLines:
+        elementEditController.setLineSimplificationMethod(
+          MPLineSimplificationMethod.keepOriginalTypes,
+        );
+        elementEditController.simplifySelectedLines();
+        return true;
+      case MPButtonType.simplifyLinesForcingBezier:
+        elementEditController.setLineSimplificationMethod(
+          MPLineSimplificationMethod.forceBezier,
+        );
+        elementEditController.simplifySelectedLines();
+        return true;
+      case MPButtonType.simplifyLinesForcingStraight:
+        elementEditController.setLineSimplificationMethod(
+          MPLineSimplificationMethod.forceStraight,
+        );
+        elementEditController.simplifySelectedLines();
+        return true;
+      case MPButtonType.smoothLineSegments:
+        if (th2FileEditController.isInEditSingleLineState) {
+          elementEditController.toggleSelectedLinePointsSmoothOption();
+        } else {
+          elementEditController.toggleSelectedLinesSmoothOption();
+        }
+        return true;
+      case MPButtonType.splitLineAtSelectedEndPoints:
+        th2FileEditController.splitMergeController
+            .prepareSplitLineAtSelectedEndPoints();
         return true;
       case MPButtonType.undo:
         th2FileEditController.undo();

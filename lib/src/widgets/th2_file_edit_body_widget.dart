@@ -88,6 +88,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                               ),
                               _stateActionButtons(heroPrefix),
                               _actionButtons(heroPrefix),
+                              _stateContextFABs(heroPrefix),
                             ],
                           ),
                         );
@@ -101,6 +102,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                             ),
                             _stateActionButtons(heroPrefix),
                             _actionButtons(heroPrefix),
+                            _stateContextFABs(heroPrefix),
                           ],
                         );
                       }
@@ -542,6 +544,294 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
 
   void onUndoPressed() {
     th2FileEditController.stateController.onButtonPressed(MPButtonType.undo);
+  }
+
+  Widget _stateContextFABs(String heroPrefix) {
+    return Observer(
+      builder: (_) {
+        final List<Widget> buttons = [];
+
+        if (th2FileEditController.isInEditSingleLineState) {
+          buttons.addAll(_editSingleLineContextFABs(heroPrefix));
+        } else if (th2FileEditController.isInSelectNonEmptySelectionState) {
+          buttons.addAll(_selectNonEmptySelectionContextFABs(heroPrefix));
+        } else if (th2FileEditController.isInSelectEmptySelectionState) {
+          buttons.addAll(_selectEmptySelectionContextFABs(heroPrefix));
+        }
+
+        if (buttons.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return Positioned(
+          top: 16,
+          left: 16,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: buttons,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _stateContextFABButton({
+    required String heroTag,
+    required VoidCallback? onPressed,
+    required IconData icon,
+    required String tooltip,
+    bool isActive = false,
+  }) {
+    final bool isEnabled = onPressed != null;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: mpButtonSpace),
+      child: FloatingActionButton(
+        heroTag: heroTag,
+        mini: true,
+        tooltip: tooltip,
+        onPressed: onPressed,
+        backgroundColor: isActive
+            ? colorScheme.primary
+            : (isEnabled ? null : colorScheme.surfaceContainerLowest),
+        foregroundColor: isActive
+            ? colorScheme.onPrimary
+            : (isEnabled ? null : colorScheme.surfaceContainerHighest),
+        elevation: isActive ? 0 : (isEnabled ? 6.0 : 3.0),
+        child: Icon(icon, size: mpFloatingStateActionZoomIconSize),
+      ),
+    );
+  }
+
+  List<Widget> _editSingleLineContextFABs(String heroPrefix) {
+    final bool allEndPointsSelected =
+        th2FileEditController.areAllEndPointsSelected;
+    final bool hasSelectedEndPoints =
+        th2FileEditController.hasSelectedEndPoints;
+
+    return [
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_select_all_end_points',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.selectAllEndPoints,
+        ),
+        icon: allEndPointsSelected ? Icons.deselect : Icons.select_all,
+        tooltip: allEndPointsSelected
+            ? appLocalizations.th2FileEditPageDeselectAllEndPoints
+            : appLocalizations.th2FileEditPageSelectAllEndPoints,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.simplifyLines,
+        ),
+        icon: Icons.auto_fix_normal,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLines,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines_straight',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.simplifyLinesForcingStraight,
+        ),
+        icon: Icons.straighten,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingStraight,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines_bezier',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.simplifyLinesForcingBezier,
+        ),
+        icon: Icons.gesture,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_open_option_window',
+        onPressed: hasSelectedEndPoints
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.openOptionWindow,
+              )
+            : null,
+        icon: Icons.tune,
+        tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_split_line',
+        onPressed: hasSelectedEndPoints
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.splitLineAtSelectedEndPoints,
+              )
+            : null,
+        icon: Icons.call_split,
+        tooltip: appLocalizations.th2FileEditPageSplitLineAtSelectedEndPoints,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_reverse_line',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.reverseLine,
+        ),
+        icon: Icons.compare_arrows,
+        tooltip: appLocalizations.th2FileEditPageReverseLine,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_smooth_line_segments',
+        onPressed: hasSelectedEndPoints
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.smoothLineSegments,
+              )
+            : null,
+        icon: Icons.blur_on,
+        tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
+      ),
+    ];
+  }
+
+  List<Widget> _selectNonEmptySelectionContextFABs(String heroPrefix) {
+    final bool allElementsSelected =
+        th2FileEditController.areAllElementsSelected;
+    final bool hasSelectedLines = th2FileEditController.hasSelectedLines;
+
+    return [
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_select_all_elements',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.selectAllElements,
+        ),
+        icon: allElementsSelected ? Icons.deselect : Icons.select_all,
+        tooltip: allElementsSelected
+            ? appLocalizations.th2FileEditPageDeselectAllElements
+            : appLocalizations.th2FileEditPageSelectAllElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.simplifyLines,
+              )
+            : null,
+        icon: Icons.auto_fix_normal,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLines,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines_straight',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.simplifyLinesForcingStraight,
+              )
+            : null,
+        icon: Icons.straighten,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingStraight,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_simplify_lines_bezier',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.simplifyLinesForcingBezier,
+              )
+            : null,
+        icon: Icons.gesture,
+        tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_open_option_window',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.openOptionWindow,
+        ),
+        icon: Icons.tune,
+        tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_reverse_line',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.reverseLine,
+              )
+            : null,
+        icon: Icons.compare_arrows,
+        tooltip: appLocalizations.th2FileEditPageReverseLine,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_smooth_line_segments',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.smoothLineSegments,
+              )
+            : null,
+        icon: Icons.blur_on,
+        tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_copy_elements',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.copyElements,
+        ),
+        icon: Icons.content_copy,
+        tooltip: appLocalizations.th2FileEditPageCopyElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_cut_elements',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.cutElements,
+        ),
+        icon: Icons.content_cut,
+        tooltip: appLocalizations.th2FileEditPageCutElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_paste_elements',
+        onPressed: th2FileEditController.hasClipboardContent
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.pasteElements,
+              )
+            : null,
+        icon: Icons.content_paste,
+        tooltip: appLocalizations.th2FileEditPagePasteElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_duplicate_elements',
+        onPressed: () => th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.duplicateElements,
+        ),
+        icon: Icons.copy_all,
+        tooltip: appLocalizations.th2FileEditPageDuplicateElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_create_map_connection_lines',
+        onPressed: null,
+        icon: Icons.add_link,
+        tooltip: appLocalizations.th2FileEditPageCreateMapConnectionLines,
+      ),
+    ];
+  }
+
+  List<Widget> _selectEmptySelectionContextFABs(String heroPrefix) {
+    final bool allElementsSelected =
+        th2FileEditController.areAllElementsSelected;
+    final bool hasSelectableElements = th2FileEditController.enableSelectButton;
+
+    return [
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_select_all_elements',
+        onPressed: hasSelectableElements
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.selectAllElements,
+              )
+            : null,
+        icon: allElementsSelected ? Icons.deselect : Icons.select_all,
+        tooltip: allElementsSelected
+            ? appLocalizations.th2FileEditPageDeselectAllElements
+            : appLocalizations.th2FileEditPageSelectAllElements,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_paste_elements',
+        onPressed: th2FileEditController.hasClipboardContent
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.pasteElements,
+              )
+            : null,
+        icon: Icons.content_paste,
+        tooltip: appLocalizations.th2FileEditPagePasteElements,
+      ),
+    ];
   }
 
   Widget _stateActionButtons(String heroPrefix) {

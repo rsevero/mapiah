@@ -2338,17 +2338,53 @@ abstract class AppLocalizations {
   /// **'Change image (Alt+I)'**
   String get th2FileEditPageChangeImageTool;
 
+  /// Tooltip for the copy elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Copy elements (Ctrl+C)'**
+  String get th2FileEditPageCopyElements;
+
   /// The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Copy scrap'**
   String get th2FileEditPageCopyScrapButton;
 
+  /// Tooltip for the create map connection lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Create map connection lines'**
+  String get th2FileEditPageCreateMapConnectionLines;
+
+  /// Tooltip for the cut elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Cut elements (Ctrl+X)'**
+  String get th2FileEditPageCutElements;
+
   /// The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
   /// In en, this message translates to:
   /// **'Cut scrap'**
   String get th2FileEditPageCutScrapButton;
+
+  /// Tooltip for the deselect all elements FAB (when all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect all elements (Ctrl+D)'**
+  String get th2FileEditPageDeselectAllElements;
+
+  /// Tooltip for the deselect all end points FAB (when all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect all end points (Ctrl+D)'**
+  String get th2FileEditPageDeselectAllEndPoints;
+
+  /// Tooltip for the duplicate elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate elements (Ctrl+Shift+D)'**
+  String get th2FileEditPageDuplicateElements;
 
   /// The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build
   ///
@@ -2410,6 +2446,12 @@ abstract class AppLocalizations {
   /// **'Node edit (N)'**
   String get th2FileEditPageNodeEditTool;
 
+  /// Tooltip for the open option window FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Open options window (O)'**
+  String get th2FileEditPageOpenOptionWindow;
+
   /// The label for the option tool button. Used on: none
   ///
   /// In en, this message translates to:
@@ -2421,6 +2463,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pan'**
   String get th2FileEditPagePanTool;
+
+  /// Tooltip for the paste elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Paste elements (Ctrl+V)'**
+  String get th2FileEditPagePasteElements;
 
   /// The label for the redo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus
   ///
@@ -2445,6 +2493,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove scrap'**
   String get th2FileEditPageRemoveScrapButton;
+
+  /// Tooltip for the reverse line FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse line (Ctrl+Shift+R)'**
+  String get th2FileEditPageReverseLine;
 
   /// The label for the save button. Used on: _TH2FileEditPageState.build
   ///
@@ -2584,6 +2638,18 @@ abstract class AppLocalizations {
   /// **'Search and select'**
   String get th2FileEditPageSearchSelectTitle;
 
+  /// Tooltip for the select all elements FAB (when not all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Select all elements (Ctrl+A)'**
+  String get th2FileEditPageSelectAllElements;
+
+  /// Tooltip for the select all end points FAB (when not all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Select all end points (Ctrl+A)'**
+  String get th2FileEditPageSelectAllEndPoints;
+
   /// The label for the select tool button. Used on: _TH2FileEditPageState._editElementButtons
   ///
   /// In en, this message translates to:
@@ -2596,11 +2662,41 @@ abstract class AppLocalizations {
   /// **'Select a zoom area'**
   String get th2FileEditPageSelectionWindowZoomStatusBarMessage;
 
+  /// Tooltip for the simplify lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify lines (Ctrl+L)'**
+  String get th2FileEditPageSimplifyLines;
+
+  /// Tooltip for the simplify lines forcing Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify lines forcing Bézier (Ctrl+Alt+L)'**
+  String get th2FileEditPageSimplifyLinesForcingBezier;
+
+  /// Tooltip for the simplify lines forcing straight FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Simplify lines forcing straight (Ctrl+Shift+L)'**
+  String get th2FileEditPageSimplifyLinesForcingStraight;
+
+  /// Tooltip for the smooth line segments FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Smooth line segments (Ctrl+Shift+S)'**
+  String get th2FileEditPageSmoothLineSegments;
+
   /// The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons
   ///
   /// In en, this message translates to:
   /// **'Snap'**
   String get th2FileEditPageSnapButton;
+
+  /// Tooltip for the split line at selected end points FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Split line at selected end points (Ctrl+Shift+P)'**
+  String get th2FileEditPageSplitLineAtSelectedEndPoints;
 
   /// Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
