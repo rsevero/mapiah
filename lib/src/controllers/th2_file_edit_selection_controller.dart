@@ -283,12 +283,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void updateSelectedLineSegment(THLineSegment lineSegment) {
     if (_selectedEndControlPoints.containsKey(lineSegment.mpID)) {
-      _selectedEndControlPoints[lineSegment.mpID] = MPSelectedEndControlPoint(
-        originalLineSegment: lineSegment,
-        type: (lineSegment is THStraightLineSegment)
-            ? MPEndControlPointType.endPointStraight
-            : MPEndControlPointType.endPointBezierCurve,
-      );
+      _selectedEndControlPoints = {
+        ..._selectedEndControlPoints,
+        lineSegment.mpID: MPSelectedEndControlPoint(
+          originalLineSegment: lineSegment,
+          type: (lineSegment is THStraightLineSegment)
+              ? MPEndControlPointType.endPointStraight
+              : MPEndControlPointType.endPointBezierCurve,
+        ),
+      };
     }
   }
 
@@ -490,12 +493,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void setSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
-    _selectedEndControlPoints.clear();
-    _selectedEndControlPoints[endControlPoint.element.mpID] =
-        MPSelectedEndControlPoint(
-          originalLineSegment: endControlPoint.lineSegment,
-          type: endControlPoint.type,
-        );
+    _selectedEndControlPoints = {
+      endControlPoint.element.mpID: MPSelectedEndControlPoint(
+        originalLineSegment: endControlPoint.lineSegment,
+        type: endControlPoint.type,
+      ),
+    };
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
@@ -503,7 +506,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void clearSelectedEndControlPoints() {
-    _selectedEndControlPoints.clear();
+    _selectedEndControlPoints = {};
     _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
@@ -1158,12 +1161,12 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void setSelectedEndPoints(Iterable<THLineSegment> lineSegments) {
-    _selectedEndControlPoints.clear();
+    _selectedEndControlPoints = {};
     addSelectedEndPoints(lineSegments);
   }
 
   void setSelectedEndPointsByMPID(Iterable<int> lineSegmentMPIDs) {
-    _selectedEndControlPoints.clear();
+    _selectedEndControlPoints = {};
 
     final List<THLineSegment> lineSegments = [];
 
@@ -1177,12 +1180,14 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void clearSelectedLineSegments() {
-    _selectedEndControlPoints.clear();
+    _selectedEndControlPoints = {};
   }
 
   void addSelectedEndPoint(THLineSegment lineSegment) {
-    _selectedEndControlPoints[lineSegment.mpID] =
-        getNewMPSelectedEndControlPoint(lineSegment);
+    _selectedEndControlPoints = {
+      ..._selectedEndControlPoints,
+      lineSegment.mpID: getNewMPSelectedEndControlPoint(lineSegment),
+    };
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
@@ -1190,11 +1195,13 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void addSelectedEndControlPoint(MPSelectableEndControlPoint endControlPoint) {
-    _selectedEndControlPoints[endControlPoint.element.mpID] =
-        MPSelectedEndControlPoint(
-          originalLineSegment: endControlPoint.lineSegment,
-          type: endControlPoint.type,
-        );
+    _selectedEndControlPoints = {
+      ..._selectedEndControlPoints,
+      endControlPoint.element.mpID: MPSelectedEndControlPoint(
+        originalLineSegment: endControlPoint.lineSegment,
+        type: endControlPoint.type,
+      ),
+    };
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
@@ -1213,10 +1220,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void addSelectedEndPoints(Iterable<THLineSegment> lineSegments) {
+    final newMap = Map<int, MPSelectedEndControlPoint>.of(
+      _selectedEndControlPoints,
+    );
+
     for (final THLineSegment lineSegment in lineSegments) {
-      _selectedEndControlPoints[lineSegment.mpID] =
-          getNewMPSelectedEndControlPoint(lineSegment);
+      newMap[lineSegment.mpID] = getNewMPSelectedEndControlPoint(lineSegment);
     }
+
+    _selectedEndControlPoints = newMap;
     _th2FileEditController.optionEditController.setOptionElementsType(
       MPOptionElementType.lineSegment,
     );
@@ -1224,13 +1236,24 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }
 
   void removeSelectedLineSegment(int lineSegmentMPID) {
-    _selectedEndControlPoints.remove(lineSegmentMPID);
+    final newMap = Map<int, MPSelectedEndControlPoint>.of(
+      _selectedEndControlPoints,
+    );
+
+    newMap.remove(lineSegmentMPID);
+    _selectedEndControlPoints = newMap;
   }
 
   void removeSelectedEndControlPointsByMPID(List<int> lineSegmentMPIDs) {
+    final newMap = Map<int, MPSelectedEndControlPoint>.of(
+      _selectedEndControlPoints,
+    );
+
     for (final int lineSegmentMPID in lineSegmentMPIDs) {
-      _selectedEndControlPoints.remove(lineSegmentMPID);
+      newMap.remove(lineSegmentMPID);
     }
+
+    _selectedEndControlPoints = newMap;
   }
 
   bool getIsLineSegmentSelected(THLineSegment lineSegment) {
