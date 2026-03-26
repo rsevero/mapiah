@@ -350,8 +350,7 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   bool get areAllElementsSelected {
     final int selectableCount = selectionController
-        .getMPSelectableElements()
-        .length;
+        .getSelectableLogicalElementCount();
 
     if (selectableCount == 0) {
       return false;

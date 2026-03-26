@@ -155,6 +155,15 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     return _mpSelectableElements!;
   }
 
+  int getSelectableLogicalElementCount() {
+    return getMPSelectableElements().values
+        .where(
+          (final MPSelectable e) =>
+              (e is MPSelectablePoint) || (e is MPSelectableLine),
+        )
+        .length;
+  }
+
   Set<MPSelectableEndControlPoint> getMPSelectableEndControlPoints() {
     return _selectableEndControlPoints;
   }
