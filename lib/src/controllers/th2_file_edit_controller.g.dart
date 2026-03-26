@@ -136,6 +136,69 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.enableRemoveButton,
         name: 'TH2FileEditControllerBase.enableRemoveButton',
       )).value;
+  Computed<bool>? _$isInEditSingleLineStateComputed;
+
+  @override
+  bool get isInEditSingleLineState =>
+      (_$isInEditSingleLineStateComputed ??= Computed<bool>(
+        () => super.isInEditSingleLineState,
+        name: 'TH2FileEditControllerBase.isInEditSingleLineState',
+      )).value;
+  Computed<bool>? _$isInSelectNonEmptySelectionStateComputed;
+
+  @override
+  bool get isInSelectNonEmptySelectionState =>
+      (_$isInSelectNonEmptySelectionStateComputed ??= Computed<bool>(
+        () => super.isInSelectNonEmptySelectionState,
+        name: 'TH2FileEditControllerBase.isInSelectNonEmptySelectionState',
+      )).value;
+  Computed<bool>? _$isInSelectEmptySelectionStateComputed;
+
+  @override
+  bool get isInSelectEmptySelectionState =>
+      (_$isInSelectEmptySelectionStateComputed ??= Computed<bool>(
+        () => super.isInSelectEmptySelectionState,
+        name: 'TH2FileEditControllerBase.isInSelectEmptySelectionState',
+      )).value;
+  Computed<bool>? _$hasSelectedEndPointsComputed;
+
+  @override
+  bool get hasSelectedEndPoints =>
+      (_$hasSelectedEndPointsComputed ??= Computed<bool>(
+        () => super.hasSelectedEndPoints,
+        name: 'TH2FileEditControllerBase.hasSelectedEndPoints',
+      )).value;
+  Computed<bool>? _$areAllEndPointsSelectedComputed;
+
+  @override
+  bool get areAllEndPointsSelected =>
+      (_$areAllEndPointsSelectedComputed ??= Computed<bool>(
+        () => super.areAllEndPointsSelected,
+        name: 'TH2FileEditControllerBase.areAllEndPointsSelected',
+      )).value;
+  Computed<bool>? _$hasSelectedLinesComputed;
+
+  @override
+  bool get hasSelectedLines => (_$hasSelectedLinesComputed ??= Computed<bool>(
+    () => super.hasSelectedLines,
+    name: 'TH2FileEditControllerBase.hasSelectedLines',
+  )).value;
+  Computed<bool>? _$areAllElementsSelectedComputed;
+
+  @override
+  bool get areAllElementsSelected =>
+      (_$areAllElementsSelectedComputed ??= Computed<bool>(
+        () => super.areAllElementsSelected,
+        name: 'TH2FileEditControllerBase.areAllElementsSelected',
+      )).value;
+  Computed<bool>? _$hasClipboardContentComputed;
+
+  @override
+  bool get hasClipboardContent =>
+      (_$hasClipboardContentComputed ??= Computed<bool>(
+        () => super.hasClipboardContent,
+        name: 'TH2FileEditControllerBase.hasClipboardContent',
+      )).value;
   Computed<bool>? _$enableSaveButtonComputed;
 
   @override
@@ -1914,6 +1977,14 @@ showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
 showUndoRedoButtons: ${showUndoRedoButtons},
 enableRemoveButton: ${enableRemoveButton},
+isInEditSingleLineState: ${isInEditSingleLineState},
+isInSelectNonEmptySelectionState: ${isInSelectNonEmptySelectionState},
+isInSelectEmptySelectionState: ${isInSelectEmptySelectionState},
+hasSelectedEndPoints: ${hasSelectedEndPoints},
+areAllEndPointsSelected: ${areAllEndPointsSelected},
+hasSelectedLines: ${hasSelectedLines},
+areAllElementsSelected: ${areAllElementsSelected},
+hasClipboardContent: ${hasClipboardContent},
 enableSaveButton: ${enableSaveButton},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},

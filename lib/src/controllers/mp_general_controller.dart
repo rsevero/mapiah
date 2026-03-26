@@ -42,6 +42,7 @@ abstract class MPGeneralControllerBase with Store {
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
 
   /// Global clipboard for copy/paste operations.
+  @readonly
   List<MPCopyElementWithChildren>? _clipboard;
 
   MPGeneralControllerBase() {
@@ -166,11 +167,13 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   /// Set the clipboard content.
+  @action
   void setClipboard(List<MPCopyElementWithChildren>? copyResult) {
     _clipboard = copyResult;
   }
 
   /// Check if clipboard has content.
+  @computed
   bool get hasClipboardContent =>
       (_clipboard != null) && _clipboard!.isNotEmpty;
 
