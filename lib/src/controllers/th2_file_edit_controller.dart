@@ -349,8 +349,20 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get areAllElementsSelected {
-    final int selectableCount = selectionController
-        .getSelectableLogicalElementCount();
+    if (_activeScrapID <= 0) {
+      return false;
+    }
+
+    final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
+    int selectableCount = 0;
+
+    for (final int elementMPID in scrap.childrenMPIDs) {
+      final THElement element = _th2File.elementByMPID(elementMPID);
+
+      if ((element is THPoint) || (element is THLine)) {
+        selectableCount++;
+      }
+    }
 
     if (selectableCount == 0) {
       return false;
