@@ -1437,7 +1437,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageSmoothLineSegments =>
-      'Smooth line segments (Ctrl+Shift+S)';
+      'Turn on smooth option on line segments (Ctrl+Shift+S)';
 
   @override
   String get th2FileEditPageSnapButton => 'Snap';

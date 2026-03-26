@@ -2683,7 +2683,7 @@ abstract class AppLocalizations {
   /// Tooltip for the smooth line segments FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Smooth line segments (Ctrl+Shift+S)'**
+  /// **'Turn on smooth option on line segments (Ctrl+Shift+S)'**
   String get th2FileEditPageSmoothLineSegments;
 
   /// The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons

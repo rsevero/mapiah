@@ -1453,7 +1453,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2FileEditPageSmoothLineSegments =>
-      'Suavizar segmentos de linha (Ctrl+Shift+S)';
+      'Ativar a opção suavizar segments de linha (Ctrl+Shift+S)';
 
   @override
   String get th2FileEditPageSnapButton => 'Ajustar a pontos';

@@ -446,7 +446,7 @@
   "th2FileEditPageSimplifyLines": "Simplificar linhas (Ctrl+L)",
   "th2FileEditPageSimplifyLinesForcingBezier": "Simplificar linhas forçando Bézier (Ctrl+Alt+L)",
   "th2FileEditPageSimplifyLinesForcingStraight": "Simplificar linhas forçando reto (Ctrl+Shift+L)",
-  "th2FileEditPageSmoothLineSegments": "Suavizar segmentos de linha (Ctrl+Shift+S)",
+  "th2FileEditPageSmoothLineSegments": "Ativar a opção suavizar segments de linha (Ctrl+Shift+S)",
   "th2FileEditPageSnapButton": "Ajustar a pontos",
   "th2FileEditPageSplitLineAtSelectedEndPoints": "Dividir linha nos pontos finais selecionados (Ctrl+Shift+P)",
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Ocultar todas as grades (Ctrl+G)",
