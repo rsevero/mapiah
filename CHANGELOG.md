@@ -2,7 +2,16 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.3.3 - not yet released
+## 0.3.3 - 2026-03-27 - The [Subduction Retrieval](https://xkcd.com/3218) release
+* Highlights:
+  * **State-context FABs** bring the most-used actions directly onto the canvas, adapting to the current editing state (selection, single-line edit, empty selection).
+  * **Default options** let you pre-configure point, line, and area attributes that are automatically applied to every newly created element.
+  * **Search and select dialog** lets you find and select elements by type, ID, subtype, and option presence — including per-segment options on lines.
+  * **Split line at selected points** (Ctrl+Shift+P) in single-line-edit mode makes it easy to break a line into sub-lines while preserving options.
+  * **Hide elements** (Ctrl+H) temporarily removes selected elements from the canvas without saving the change, useful for uncluttering complex scraps.
+  * **XVI survey grid visibility** can now be toggled per-image or all at once (Ctrl+G), independently from the image itself.
+  * **TH2 file properties page** exposes per-file settings (currently file encoding) via a settings button in each file tab.
+  * **Anonymous opt-in telemetry** (daily aggregate usage data — no personal information) with consent dialog on first launch and a Settings toggle.
 * New features:
   * Area-border selection shortcuts updated: Ctrl/Meta+click now cycles border-line selection for areas with multiple border lines (all lines → each line in THAreaBorderTHIDs order → all lines again while Ctrl/Meta stays pressed [requested by Marco Corvi]). Area-only selection changed from Ctrl/Meta+Shift+click to Ctrl/Meta+Alt+click.
   * Show direction ticks on non-selected lines: new Settings toggle (TH2Edit_ShowDirectionTicksOnNonSelectedLines, default off). When off, only selected lines show direction ticks (previous behaviour). When on, all lines in the active scrap show direction ticks regardless of selection. Also togglable via Ctrl+Alt+R.  [requested by Marco Corvi]
