@@ -256,7 +256,7 @@ Future<bool> updateReleaseConstants({
     (m) => "${m[1]}$releaseName${m[3]}",
   );
   newContent = newContent.replaceFirstMapped(
-    RegExp(r"(const String mpReleaseURL = ')(.*)(';)"),
+    RegExp(r"(const String mpReleaseURL =\s*')([^']*)(';)", dotAll: true),
     (m) => "${m[1]}$releaseURL${m[3]}",
   );
 
