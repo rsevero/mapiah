@@ -1124,11 +1124,13 @@ class MPDialogAux {
     BuildContext context,
     String thConfigFilePath,
   ) async {
-    if (mpLocator.mpSettingsController.isTherionAvailable) {
-      // Set the THConfig file path
-      mpLocator.mpGeneralController.setTHConfigFilePath(thConfigFilePath);
+    // Always store the path so 'Rerun Therion' is enabled even if Therion is
+    // currently unavailable (e.g. not yet configured). The user can fix the
+    // Therion path in settings and then use 'Rerun Therion' without having to
+    // pick the file again.
+    mpLocator.mpGeneralController.setTHConfigFilePath(thConfigFilePath);
 
-      // Show the run dialog
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
       await runTherion(context);
     } else {
       MPDialogAux.showHelpDialog(
