@@ -56,9 +56,9 @@ class _MapiahHomeState extends State<MapiahHome> {
       }
 
       // Handle positional argument (backward compatibility)
-      if (widget.mainFilePath != null &&
+      if ((widget.mainFilePath != null) &&
           widget.th2FilePaths.isEmpty &&
-          widget.thConfigFilePath == null) {
+          (widget.thConfigFilePath == null)) {
         if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
           // Open as TH2 file
           _openTH2FileFromPath(widget.mainFilePath!);

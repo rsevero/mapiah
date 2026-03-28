@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "Running pre-commit hook..."
+
 SPDX_IDENTIFIER="// SPDX-License-Identifier: GPL-3.0-or-later"
 COPYRIGHT_HEADER="// Copyright (C) 2023- Mapiah Ltda"
 
