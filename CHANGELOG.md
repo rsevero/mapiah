@@ -6,8 +6,11 @@
 * Highlights:
 * New features:
 * Fixed bugs:
+  * "Rerun Therion" toolbar button now enabled after running Therion (via button or command-line `--thconfig`) even when Therion reports an error or is unavailable; the THconfig path is now always stored so the user can fix settings and rerun without re-picking the file.
 * Infrastructure maintenance:
   * Included launch.json and pre-commit hook examples.
+  * Pre-commit hook ported to work on Windows (replaced `sed -i` with portable `mktemp`/`echo`/`cat`/`tail`/`mv` equivalents).
+  * Pre-commit hook now always prints "Running pre-commit hook…" so execution is easy to confirm.
 
 ## 0.3.3 - 2026-03-27 - The [Subduction Retrieval](https://xkcd.com/3218) release
 * Highlights:
