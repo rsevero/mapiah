@@ -26,17 +26,30 @@ add_dart_headers() {
     return 0
   fi
 
-  # Check if file has shebang (for scripts)
-  local first_line=$(head -n 1 "$file")
+  local first_line
+  first_line=$(head -n 1 "$file")
+
+  local tmpfile
+  tmpfile=$(mktemp)
+
   if [[ "$first_line" == "#!/"* ]]; then
-    # For scripts: shebang first, then headers
-    sed -i'' "1a $COPYRIGHT_HEADER" "$file"
-    sed -i'' "1a $SPDX_IDENTIFIER" "$file"
+    # For scripts: keep shebang on line 1, then insert headers
+    {
+      echo "$first_line"
+      echo "$SPDX_IDENTIFIER"
+      echo "$COPYRIGHT_HEADER"
+      tail -n +2 "$file"
+    } > "$tmpfile"
   else
     # For regular files: add headers at the beginning
-    sed -i'' "1i $SPDX_IDENTIFIER" "$file"
-    sed -i'' "1a $COPYRIGHT_HEADER" "$file"
+    {
+      echo "$SPDX_IDENTIFIER"
+      echo "$COPYRIGHT_HEADER"
+      cat "$file"
+    } > "$tmpfile"
   fi
+
+  mv "$tmpfile" "$file"
   echo "Added SPDX headers to: $file"
 }
 
@@ -49,8 +62,16 @@ add_markdown_headers() {
     return 0
   fi
 
-  sed -i'' "1i $SPDX_IDENTIFIER_MD" "$file"
-  sed -i'' "1a $COPYRIGHT_HEADER_MD" "$file"
+  local tmpfile
+  tmpfile=$(mktemp)
+
+  {
+    echo "$SPDX_IDENTIFIER_MD"
+    echo "$COPYRIGHT_HEADER_MD"
+    cat "$file"
+  } > "$tmpfile"
+
+  mv "$tmpfile" "$file"
   echo "Added SPDX headers to: $file"
 }
 
