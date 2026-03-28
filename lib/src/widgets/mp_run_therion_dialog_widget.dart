@@ -39,10 +39,13 @@ class MPRunTherionDialogWidget extends StatefulWidget {
 
 class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<Duration> _elapsedNotifier = ValueNotifier<Duration>(
+    Duration.zero,
+  );
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
-  Duration _elapsed = Duration.zero;
+  Timer? _elapsedTimer;
   DateTime? _startTime;
   VoidCallback? _statusListener;
   bool _hasAppendedPostRunOutput = false;
@@ -73,6 +76,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
 
     _therionRunner.start();
+    _startElapsedTimer();
 
     // Stop the timer only when the runner stops running (process exit).
     _statusListener = () {
@@ -146,11 +150,13 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       _therionRunner.appendOutputLines(postRunOutputLines);
     }
 
-    if (mounted && (_startTime != null)) {
-      setState(() {
-        final DateTime endTime = DateTime.now();
-        _elapsed = endTime.difference(_startTime!);
-      });
+    _elapsedTimer?.cancel();
+    _elapsedTimer = null;
+
+    final DateTime? startTime = _startTime;
+
+    if (startTime != null) {
+      _elapsedNotifier.value = DateTime.now().difference(startTime);
     }
   }
 
@@ -280,8 +286,21 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _startTime = baseTime.subtract(mpTherionLogOlderLimitDuration);
   }
 
+  void _startElapsedTimer() {
+    _elapsedTimer?.cancel();
+    _elapsedTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      final DateTime? startTime = _startTime;
+
+      if (startTime != null) {
+        _elapsedNotifier.value = DateTime.now().difference(startTime);
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _elapsedTimer?.cancel();
+    _elapsedNotifier.dispose();
     _outputSubscription?.cancel();
     if (_statusListener != null) {
       _therionRunner.isRunningNotifier.removeListener(_statusListener!);
@@ -312,14 +331,9 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _therionRunner.outputLinesNotifier.value = <String>[];
     _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
     _hasAppendedPostRunOutput = false;
-
-    if (mounted) {
-      setState(() {
-        _elapsed = Duration.zero;
-      });
-    }
-
+    _elapsedNotifier.value = Duration.zero;
     _therionRunner.start();
+    _startElapsedTimer();
   }
 
   void _closeDialog() {
@@ -470,15 +484,20 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                   ),
                   const SizedBox(height: mpTherionRunDialogSpacing),
                   // Elapsed time display (updates every second until run finishes)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        appLocalizations.mapiahTherionRunElapsedLabel(
-                          _formatDuration(_elapsed),
-                        ),
-                      ),
-                    ],
+                  ValueListenableBuilder<Duration>(
+                    valueListenable: _elapsedNotifier,
+                    builder:
+                        (
+                          BuildContext context,
+                          Duration elapsed,
+                          Widget? child,
+                        ) {
+                          return Text(
+                            appLocalizations.mapiahTherionRunElapsedLabel(
+                              _formatDuration(elapsed),
+                            ),
+                          );
+                        },
                   ),
                   const SizedBox(height: mpTherionRunDialogSpacing),
 
