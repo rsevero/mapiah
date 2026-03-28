@@ -2,6 +2,13 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.3.4 - not yet released
+* Highlights:
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Included launch.json and pre-commit hook examples.
+
 ## 0.3.3 - 2026-03-27 - The [Subduction Retrieval](https://xkcd.com/3218) release
 * Highlights:
   * **State-context FABs** bring the most-used actions directly onto the canvas, adapting to the current editing state (selection, single-line edit, empty selection).

@@ -1,0 +1,89 @@
+#!/bin/bash
+set -e
+
+SPDX_IDENTIFIER="// SPDX-License-Identifier: GPL-3.0-or-later"
+COPYRIGHT_HEADER="// Copyright (C) 2023- Mapiah Ltda"
+
+SPDX_IDENTIFIER_MD="<!-- SPDX-License-Identifier: GPL-3.0-or-later -->"
+COPYRIGHT_HEADER_MD="<!-- Copyright (C) 2023- Mapiah Ltda -->"
+
+# Get staged files that are Dart, Markdown, or ARB files
+DART_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' || true)
+MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
+ARB_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.arb$' || true)
+
+# Function to add SPDX headers to Dart files
+add_dart_headers() {
+  local file="$1"
+
+  # Skip auto-generated files (MobX .g.dart and files under any generated/ directory)
+  if [[ "$file" == *.g.dart ]] || [[ "$file" == */generated/* ]]; then
+    return 0
+  fi
+
+  # Skip if file already has SPDX identifier
+  if grep -q "SPDX-License-Identifier" "$file"; then
+    return 0
+  fi
+
+  # Check if file has shebang (for scripts)
+  local first_line=$(head -n 1 "$file")
+  if [[ "$first_line" == "#!/"* ]]; then
+    # For scripts: shebang first, then headers
+    sed -i'' "1a $COPYRIGHT_HEADER" "$file"
+    sed -i'' "1a $SPDX_IDENTIFIER" "$file"
+  else
+    # For regular files: add headers at the beginning
+    sed -i'' "1i $SPDX_IDENTIFIER" "$file"
+    sed -i'' "1a $COPYRIGHT_HEADER" "$file"
+  fi
+  echo "Added SPDX headers to: $file"
+}
+
+# Function to add SPDX headers to Markdown files
+add_markdown_headers() {
+  local file="$1"
+
+  # Skip if file already has SPDX identifier
+  if grep -q "SPDX-License-Identifier" "$file"; then
+    return 0
+  fi
+
+  sed -i'' "1i $SPDX_IDENTIFIER_MD" "$file"
+  sed -i'' "1a $COPYRIGHT_HEADER_MD" "$file"
+  echo "Added SPDX headers to: $file"
+}
+
+# Step 1: Add headers to Dart files if needed
+if [[ -n "$DART_FILES" ]]; then
+  for file in $DART_FILES; do
+    add_dart_headers "$file"
+  done
+fi
+
+# Step 2: Add headers to Markdown files if needed
+if [[ -n "$MD_FILES" ]]; then
+  for file in $MD_FILES; do
+    add_markdown_headers "$file"
+  done
+fi
+
+# Step 3: Sort ARB localization files and regenerate l10n if any ARB file is staged
+if [[ -n "$ARB_FILES" ]]; then
+  dart run scripts/sort_arb_files.dart
+  git add lib/l10n/intl_en.arb lib/l10n/intl_pt.arb lib/src/generated/i18n/
+fi
+
+# Step 4: Format Dart files (after headers have been added)
+if [[ -n "$DART_FILES" ]]; then
+  dart format $DART_FILES
+fi
+
+# Step 5: Re-stage all modified files
+if [[ -n "$DART_FILES" ]]; then
+  git add $DART_FILES
+fi
+
+if [[ -n "$MD_FILES" ]]; then
+  git add $MD_FILES
+fi

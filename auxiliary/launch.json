@@ -1,0 +1,59 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter: Debug (Normal)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=debugTelemetryLogOnly=true"
+            ]
+        },
+        {
+            "name": "Flutter: Debug (Flathub)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                // "--dart-define=isFlathub=true",
+                // "--dart-define=debugAlwaysShowVersions=true"
+            ]
+        },
+        {
+            "name": "Flutter: Debug (Telemetry consent UI)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=debugTelemetryLogOnly=true",
+                "--dart-define=debugTelemetryAlwaysShowConsent=true"
+            ]
+        },
+        {
+            "name": "Flutter: Debug (Telemetry verbose, no HTTP)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=debugTelemetryLogOnly=true",
+                "--dart-define=debugTelemetryVerbose=true"
+            ]
+        },
+        {
+            "name": "Flutter: Debug (Telemetry verbose, real HTTP)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define=debugTelemetryVerbose=true"
+            ]
+        },
+        {
+            "name": "Dart: Run Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/"
+        }
+    ]
+}
