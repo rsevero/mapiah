@@ -12,6 +12,7 @@
   * Elapsed time in the Run Therion dialog now updates live every second via a `Timer.periodic` + `ValueNotifier<Duration>`, so only the elapsed time text rebuilds — not the whole dialog.
   * Added EN/PT help pages (`run_therion_help`) for the Run Therion dialog, and a help icon button in the dialog actions row. Updated to document the `--therion_run_parameters` CLI argument.
   * Updated EN/PT help pages (`mapiah_home_help`) to document the `--therion_run_parameters` command-line argument.
+  * Updated EN/PT settings help pages (`mp_settings_page_help`) to document the `Main_TherionRunParameters` setting.
   * Included launch.json and pre-commit hook examples.
   * Pre-commit hook ported to work on Windows (replaced `sed -i` with portable `mktemp`/`echo`/`cat`/`tail`/`mv` equivalents).
   * Pre-commit hook now always prints "Running pre-commit hook…" so execution is easy to confirm.
