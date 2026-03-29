@@ -53,4 +53,16 @@ abstract class MPPlatformTherionRunner {
 
     return userDefinedPath;
   }
+
+  static List<String> getTherionRunParameters() {
+    final String raw = mpLocator.mpSettingsController
+        .getStringWithDefault(MPSettingID.Main_TherionRunParameters)
+        .trim();
+
+    if (raw.isEmpty) {
+      return const <String>[];
+    }
+
+    return raw.split(RegExp(r'\s+'));
+  }
 }

@@ -5,10 +5,11 @@
 ## 0.3.4 - not yet released
 * Highlights:
 * New features:
+  * Therion run parameters: a new text field in the Run Therion dialog lets users enter extra Therion command-line options (e.g. `-d` for debug) that are passed to Therion on every run. The value is persisted as the `Main_TherionRunParameters` setting and can also be set via the `--therion_run_parameters` command-line argument. Closes [#20](https://github.com/rsevero/mapiah/issues/20).
 * Fixed bugs:
   * "Rerun Therion" toolbar button now enabled after running Therion (via button or command-line `--thconfig`) even when Therion reports an error or is unavailable; the THconfig path is now always stored so the user can fix settings and rerun without re-picking the file.
 * Infrastructure maintenance:
-  * Elapsed time in the Run Therion dialog now updates live every second via a `Timer.periodic` + `ValueNotifier<Duration>`, so only the elapsed time text rebuilds — not the whole dialog. Partially addresses [#20](https://github.com/rsevero/mapiah/issues/20).
+  * Elapsed time in the Run Therion dialog now updates live every second via a `Timer.periodic` + `ValueNotifier<Duration>`, so only the elapsed time text rebuilds — not the whole dialog.
   * Included launch.json and pre-commit hook examples.
   * Pre-commit hook ported to work on Windows (replaced `sed -i` with portable `mktemp`/`echo`/`cat`/`tail`/`mv` equivalents).
   * Pre-commit hook now always prints "Running pre-commit hook…" so execution is easy to confirm.

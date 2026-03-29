@@ -22,6 +22,7 @@ MPLocator get mpLocator => _mpLocator ??= MPLocator();
 void main(List<String> arguments) {
   String? fileToRead;
   String? thConfigFile;
+  String? therionRunParametersArg;
   final List<String> th2Files = <String>[];
 
   // Parse command line arguments
@@ -48,6 +49,14 @@ void main(List<String> arguments) {
         i++; // Skip next argument as it's the value
       } else {
         print('Error: --th2 requires a file path.');
+        exit(1);
+      }
+    } else if (arg == '--therion_run_parameters') {
+      if ((i + 1) < arguments.length) {
+        therionRunParametersArg = arguments[i + 1];
+        i++; // Skip next argument as it's the value
+      } else {
+        print('Error: --therion_run_parameters requires a value.');
         exit(1);
       }
     } else if (!arg.startsWith('-')) {
@@ -92,6 +101,14 @@ void main(List<String> arguments) {
       WidgetsFlutterBinding.ensureInitialized();
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
+
+      if (therionRunParametersArg != null) {
+        mpLocator.mpSettingsController.setString(
+          MPSettingID.Main_TherionRunParameters,
+          therionRunParametersArg,
+        );
+      }
+
       unawaited(mpLocator.mpTelemetryController.initialize());
 
       THBaseException.registerUnhandledReporter((error, stack) {

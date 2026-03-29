@@ -9,6 +9,7 @@ import 'package:charset/charset.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:path/path.dart' as p;
 
@@ -42,6 +43,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   final ValueNotifier<Duration> _elapsedNotifier = ValueNotifier<Duration>(
     Duration.zero,
   );
+  late final TextEditingController _runParametersController;
 
   late final MPTherionRunner _therionRunner;
   StreamSubscription<String>? _outputSubscription;
@@ -53,6 +55,12 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   @override
   void initState() {
     super.initState();
+
+    _runParametersController = TextEditingController(
+      text: mpLocator.mpSettingsController.getStringWithDefault(
+        MPSettingID.Main_TherionRunParameters,
+      ),
+    );
 
     _updateStartTime(DateTime.now());
 
@@ -301,6 +309,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   void dispose() {
     _elapsedTimer?.cancel();
     _elapsedNotifier.dispose();
+    _runParametersController.dispose();
     _outputSubscription?.cancel();
     if (_statusListener != null) {
       _therionRunner.isRunningNotifier.removeListener(_statusListener!);
@@ -435,6 +444,22 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                             ],
                           );
                         },
+                  ),
+                  const SizedBox(height: mpTherionRunDialogSpacing),
+                  Text(appLocalizations.mapiahTherionRunParametersLabel),
+                  const SizedBox(height: mpSettingsPageFieldSpacing),
+                  TextField(
+                    controller: _runParametersController,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (String value) {
+                      mpLocator.mpSettingsController.setString(
+                        MPSettingID.Main_TherionRunParameters,
+                        value,
+                      );
+                    },
                   ),
                   const SizedBox(height: mpTherionRunDialogSpacing),
                   Text(appLocalizations.mapiahTherionRunOutputLabel),

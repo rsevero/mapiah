@@ -169,6 +169,11 @@
     "description": "Label for Therion output area. Used on: _MPRunTherionDialogWidgetState.build",
     "type": "text"
   },
+  "mapiahTherionRunParametersLabel": "Run parameters:",
+  "@mapiahTherionRunParametersLabel": {
+    "description": "Label for the run parameters field in the Therion run dialog. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart",
+    "type": "text"
+  },
   "mapiahTherionRunStartTime": "Start: {time}",
   "@mapiahTherionRunStartTime": {
     "description": "Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished",
@@ -1516,6 +1521,11 @@
   "mpSettingsSettingMainTherionExecutablePath": "Therion executable path",
   "@mpSettingsSettingMainTherionExecutablePath": {
     "description": "Label for Therion executable path setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "mpSettingsSettingMainTherionRunParameters": "Therion run parameters",
+  "@mpSettingsSettingMainTherionRunParameters": {
+    "description": "Label for Therion run parameters setting. Used on: lib/src/pages/mp_settings_page.dart, lib/src/widgets/mp_run_therion_dialog_widget.dart",
     "type": "text"
   },
   "mpSettingsSettingTH2EditLineThickness": "Line thickness",

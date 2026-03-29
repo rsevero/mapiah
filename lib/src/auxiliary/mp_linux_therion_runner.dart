@@ -71,9 +71,15 @@ class MPLinuxTherionRunner extends MPPlatformTherionRunner {
   ({String commandLine, String executablePath, List<String> processArguments})
   _buildCompileInvocation({required String therionFileName}) {
     final String therionExecutablePath = _resolveTherionExecutablePath();
-    final List<String> processArguments = <String>[therionFileName];
+    final List<String> runParameters =
+        MPPlatformTherionRunner.getTherionRunParameters();
+    final List<String> processArguments = <String>[
+      ...runParameters,
+      therionFileName,
+    ];
     final String commandLine = joinNonEmptyParts(<String>[
       therionExecutablePath,
+      ...runParameters,
       therionFileName,
     ]);
 

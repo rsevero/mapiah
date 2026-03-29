@@ -122,6 +122,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunOutputLabel => 'Saída:';
 
   @override
+  String get mapiahTherionRunParametersLabel => 'Parâmetros de execução:';
+
+  @override
   String mapiahTherionRunStartTime(Object time) {
     return 'Início: $time';
   }
@@ -977,6 +980,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get mpSettingsSettingMainTherionExecutablePath =>
       'Caminho do executável do Therion';
+
+  @override
+  String get mpSettingsSettingMainTherionRunParameters =>
+      'Parâmetros de execução do Therion';
 
   @override
   String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';

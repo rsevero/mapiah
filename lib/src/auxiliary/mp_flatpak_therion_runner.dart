@@ -81,10 +81,13 @@ class MPFlatpakTherionRunner extends MPPlatformTherionRunner {
     final String therionExecutablePath = _resolveTherionExecutablePath();
     final String directoryArgument =
         '$mpFlatpakSpawnDirectoryFlag=$workingDirectory';
+    final List<String> runParameters =
+        MPPlatformTherionRunner.getTherionRunParameters();
     final List<String> processArguments = <String>[
       mpFlatpakSpawnHostArgument,
       directoryArgument,
       therionExecutablePath,
+      ...runParameters,
       therionFileName,
     ];
     final String commandLine = joinNonEmptyParts(<String>[
@@ -92,6 +95,7 @@ class MPFlatpakTherionRunner extends MPPlatformTherionRunner {
       mpFlatpakSpawnHostArgument,
       directoryArgument,
       therionExecutablePath,
+      ...runParameters,
       therionFileName,
     ]);
 

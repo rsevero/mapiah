@@ -400,22 +400,17 @@ class MPWindowsTherionRunner extends MPPlatformTherionRunner {
     compilerCommandWithDiagnostics =
         _buildCompilerCommandWithRegistryDiagnostics();
     final String quotedFileName = quoteValue(therionFileName);
-    final List<String> processArguments = <String>[];
-    final String trimmedTherionOptions = therionOptions.trim();
-    final bool hasTherionOptions = trimmedTherionOptions.isNotEmpty;
-
-    processArguments.add(mpTherionCompileFlag);
-
-    if (hasTherionOptions) {
-      processArguments.add(trimmedTherionOptions);
-    }
-
-    processArguments.add(therionFileName);
-
+    final List<String> runParameters =
+        MPPlatformTherionRunner.getTherionRunParameters();
+    final List<String> processArguments = <String>[
+      mpTherionCompileFlag,
+      ...runParameters,
+      therionFileName,
+    ];
     final String compileInvocation = joinNonEmptyParts(<String>[
       compilerCommandWithDiagnostics.commandLine,
       mpTherionCompileFlag,
-      therionOptions,
+      ...runParameters,
       quotedFileName,
     ]);
 

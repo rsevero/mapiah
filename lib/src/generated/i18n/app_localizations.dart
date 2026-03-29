@@ -278,6 +278,12 @@ abstract class AppLocalizations {
   /// **'Output:'**
   String get mapiahTherionRunOutputLabel;
 
+  /// Label for the run parameters field in the Therion run dialog. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Run parameters:'**
+  String get mapiahTherionRunParametersLabel;
+
   /// Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:
@@ -1881,6 +1887,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Therion executable path'**
   String get mpSettingsSettingMainTherionExecutablePath;
+
+  /// Label for Therion run parameters setting. Used on: lib/src/pages/mp_settings_page.dart, lib/src/widgets/mp_run_therion_dialog_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Therion run parameters'**
+  String get mpSettingsSettingMainTherionRunParameters;
 
   /// Label for TH2 line thickness setting. Used on: lib/src/pages/mp_settings_page.dart
   ///

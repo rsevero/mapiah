@@ -92,22 +92,17 @@ class MPMacOSTherionRunner extends MPPlatformTherionRunner {
     executableResolution = _resolveTherionExecutablePathWithDiagnostics();
     final String executablePath = executableResolution.executablePath;
     final String quotedFileName = quoteValue(therionFileName);
-    final List<String> processArguments = <String>[];
-    final String trimmedTherionOptions = therionOptions.trim();
-    final bool hasTherionOptions = trimmedTherionOptions.isNotEmpty;
-
-    processArguments.add(mpTherionCompileFlag);
-
-    if (hasTherionOptions) {
-      processArguments.add(trimmedTherionOptions);
-    }
-
-    processArguments.add(therionFileName);
-
+    final List<String> runParameters =
+        MPPlatformTherionRunner.getTherionRunParameters();
+    final List<String> processArguments = <String>[
+      mpTherionCompileFlag,
+      ...runParameters,
+      therionFileName,
+    ];
     final String commandLine = joinNonEmptyParts(<String>[
       executablePath,
       mpTherionCompileFlag,
-      therionOptions,
+      ...runParameters,
       quotedFileName,
     ]);
 
