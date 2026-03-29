@@ -242,6 +242,12 @@ abstract class AppLocalizations {
   /// **'Run Therion (T)'**
   String get mapiahRunTherionButtonTooltip;
 
+  /// Title for the Run Therion help dialog. Used on: _MPRunTherionDialogWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Run Therion dialog'**
+  String get mapiahRunTherionHelpDialogTitle;
+
   /// Tooltip for the Close button in the Run Therion dialog, indicating the Escape keyboard shortcut. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:

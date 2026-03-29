@@ -506,6 +506,7 @@ const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
 const String mpHelpPageKeyboardShortcutsMain = 'keyboard_shortcuts_main';
 const String mpHelpPageKeyboardShortcutsEdit = 'keyboard_shortcuts_edit';
 const String mpHelpPageMapiahHome = 'mapiah_home_help';
+const String mpHelpPageRunTherion = 'run_therion_help';
 const String mpHelpPageSettings = 'mp_settings_page_help';
 const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
 

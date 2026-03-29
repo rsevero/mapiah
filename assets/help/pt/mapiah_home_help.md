@@ -59,7 +59,7 @@ mapiah --thconfig /caminho/para/therion.cfg
 #### --therion_run_parameters: Definir opções de linha de comando do Therion
 - Define opções extras passadas ao Therion na compilação (ex.: `-d` para modo de depuração)
 - O valor é persistido como a configuração `Main_TherionRunParameters` (o mesmo campo do diálogo Executar Therion)
-- Múltiplas opções podem ser fornecidas separadas por espaço
+- Se houver um espaço na(s) opção(ões), a string inteira deve ser envolvida em aspas para ser passada como um único argumento
 
 ```bash
 mapiah --therion_run_parameters "-d"

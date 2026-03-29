@@ -99,6 +99,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
 
   @override
+  String get mapiahRunTherionHelpDialogTitle => 'Diálogo executar Therion';
+
+  @override
   String get mapiahTherionRunCloseButtonTooltip => 'Fechar (Esc)';
 
   @override

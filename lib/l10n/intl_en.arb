@@ -133,6 +133,11 @@
     "description": "The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
+  "mapiahRunTherionHelpDialogTitle": "Run Therion dialog",
+  "@mapiahRunTherionHelpDialogTitle": {
+    "description": "Title for the Run Therion help dialog. Used on: _MPRunTherionDialogWidgetState.build",
+    "type": "text"
+  },
   "mapiahTherionRunCloseButtonTooltip": "Close (Esc)",
   "@mapiahTherionRunCloseButtonTooltip": {
     "description": "Tooltip for the Close button in the Run Therion dialog, indicating the Escape keyboard shortcut. Used on: _MPRunTherionDialogWidgetState.build",

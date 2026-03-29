@@ -11,6 +11,7 @@ import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:path/path.dart' as p;
 
 class _RerunTherionIntent extends Intent {
@@ -579,6 +580,12 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
               ),
             ),
             actions: [
+              MPHelpButtonWidget(
+                context,
+                mpHelpPageRunTherion,
+                appLocalizations.mapiahRunTherionHelpDialogTitle,
+              ),
+              const Spacer(),
               ValueListenableBuilder<bool>(
                 valueListenable: _therionRunner.isRunningNotifier,
                 builder: (BuildContext context, bool isRunning, Widget? child) {
