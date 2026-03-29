@@ -56,6 +56,17 @@ mapiah --thconfig projeto.cfg
 mapiah --thconfig /caminho/para/therion.cfg
 ```
 
+#### --therion_run_parameters: Definir opções de linha de comando do Therion
+- Define opções extras passadas ao Therion na compilação (ex.: `-d` para modo de depuração)
+- O valor é persistido como a configuração `Main_TherionRunParameters` (o mesmo campo do diálogo Executar Therion)
+- Múltiplas opções podem ser fornecidas separadas por espaço
+
+```bash
+mapiah --therion_run_parameters "-d"
+mapiah --therion_run_parameters "-d -q"
+mapiah --thconfig projeto.cfg --therion_run_parameters "-d"
+```
+
 #### Combinando Argumentos
 ```bash
 # Abrir múltiplos arquivos TH2 E executar Therion com config
@@ -64,4 +75,4 @@ mapiah --th2 arquivo1.th2 --th2 arquivo2.th2 --thconfig projeto.cfg
 
 ### Tratamento de Erros
 - Se múltiplos argumentos `--thconfig` forem fornecidos, Mapiah sairá com uma mensagem de erro
-- Se a flag `--th2` ou `--thconfig` for fornecida sem um caminho de arquivo, Mapiah sairá com uma mensagem de erro
+- Se a flag `--th2`, `--thconfig` ou `--therion_run_parameters` for fornecida sem um valor, Mapiah sairá com uma mensagem de erro
