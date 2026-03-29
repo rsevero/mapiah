@@ -13,7 +13,10 @@ Shows the current state of the Therion run:
 
 ## Therion run parameters
 
-Optional extra command-line options passed to Therion on every run (e.g. `-d` for debug mode). The value is saved as a persistent setting and is also editable on the Settings page.
+Optional extra command-line options passed to Therion on every run (e.g. `-d` for debug mode). The value is saved as a persistent setting and can also be set via:
+
+* The **Settings page** (`Main_TherionRunParameters` field).
+* The Mapiah `--therion_run_parameters` command-line argument (see the [Main page help](mapiah_home_help) for details).
 
 ## Output
 

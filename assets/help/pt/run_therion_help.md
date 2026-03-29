@@ -13,7 +13,10 @@ Mostra o estado atual da execução do Therion:
 
 ## Parâmetros de execução do Therion
 
-Opções extras opcionais de linha de comando passadas ao Therion a cada execução (ex.: `-d` para modo de depuração). O valor é salvo como uma configuração persistente e também pode ser editado na página de Configurações.
+Opções extras opcionais de linha de comando passadas ao Therion a cada execução (ex.: `-d` para modo de depuração). O valor é salvo como uma configuração persistente e também pode ser definido via:
+
+* A **página de Configurações** (campo `Main_TherionRunParameters`).
+* O argumento de linha de comando `--therion_run_parameters` do Mapiah (veja a [ajuda da página principal](mapiah_home_help) para detalhes).
 
 ## Saída
 

@@ -10,7 +10,7 @@
   * "Rerun Therion" toolbar button now enabled after running Therion (via button or command-line `--thconfig`) even when Therion reports an error or is unavailable; the THconfig path is now always stored so the user can fix settings and rerun without re-picking the file.
 * Infrastructure maintenance:
   * Elapsed time in the Run Therion dialog now updates live every second via a `Timer.periodic` + `ValueNotifier<Duration>`, so only the elapsed time text rebuilds — not the whole dialog.
-  * Added EN/PT help pages (`run_therion_help`) for the Run Therion dialog, and a help icon button in the dialog actions row.
+  * Added EN/PT help pages (`run_therion_help`) for the Run Therion dialog, and a help icon button in the dialog actions row. Updated to document the `--therion_run_parameters` CLI argument.
   * Updated EN/PT help pages (`mapiah_home_help`) to document the `--therion_run_parameters` command-line argument.
   * Included launch.json and pre-commit hook examples.
   * Pre-commit hook ported to work on Windows (replaced `sed -i` with portable `mktemp`/`echo`/`cat`/`tail`/`mv` equivalents).
