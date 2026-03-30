@@ -1177,6 +1177,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpUnrecognizedCommandOptionTextLabel => 'Unrecognized option';
 
   @override
+  String get noCoincidingLineExtremitiesFound =>
+      'No coinciding extremities found between selected lines';
+
+  @override
   String get noLinesAtCrossingsFound =>
       'No crossings found between selected lines';
 
@@ -1304,6 +1308,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageImageVisibilityTooltip => 'Toggle image visibility';
+
+  @override
+  String get th2FileEditPageJoinLinesAtCoincidingExtremities =>
+      'Join lines at coinciding extremities (Ctrl+J)';
 
   @override
   String get th2FileEditPageLoadImageButton => 'Load image';

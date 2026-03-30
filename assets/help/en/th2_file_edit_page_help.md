@@ -39,6 +39,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Straight line segments](#straight-line-segments)
 - [Split line at selected points](#split-line-at-selected-points)
 - [Split lines at crossings](#split-lines-at-crossings)
+- [Join lines at coinciding extremities](#join-lines-at-coinciding-extremities)
 - [Hide elements](#hide-elements)
 - [Search and select](#search-and-select)
 - [Snap](#snap)
@@ -304,6 +305,20 @@ Press `Ctrl+Shift+X` to split the selected lines at every intersection with othe
 - After the split, all newly created lines are selected.
 - The operation can be undone with `Ctrl+Z`.
 - **Limitation:** Lines that are part of an area border cannot be split. A message is shown if you attempt to do so.
+
+## Join lines at coinciding extremities
+
+Press `Ctrl+J` to join selected lines whose start/end extremities coincide.
+
+**How it works:**
+- The operation checks selected lines for extremities that coincide using a tolerance equivalent to 3 screen pixels (converted to canvas coordinates at execution time according to current zoom).
+- A single run can produce multiple joined lines when selected lines form multiple independent groups.
+- For each resulting joined line, the line type and options from the first selected line in that group are preserved.
+- Line segments are reoriented as needed so the joined geometry is continuous; Bézier segments are reversed preserving their visual shape.
+- The resulting joined lines are selected.
+- The operation can be undone with _Ctrl+Z_.
+
+If no coinciding extremities are found, Mapiah shows a message and performs no changes.
 
 ## Hide elements
 Press _Ctrl+H_ to temporarily hide elements on the canvas without removing them from the file.

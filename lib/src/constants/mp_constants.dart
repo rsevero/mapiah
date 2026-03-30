@@ -181,6 +181,7 @@ const double mp1OverPi = 1 / math.pi;
 const double mpDegreesInCircle = 360.0;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
+const double mpJoinLineExtremityToleranceOnScreen = 3.0;
 
 const double mpMinimumSizeForDrawing = 10.0;
 

@@ -1831,6 +1831,11 @@
     "description": "The label for the unrecognized command option. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart",
     "type": "text"
   },
+  "noCoincidingLineExtremitiesFound": "No coinciding extremities found between selected lines",
+  "@noCoincidingLineExtremitiesFound": {
+    "description": "Snackbar message shown when joining lines at coinciding extremities finds no joinable extremities. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
+    "type": "text"
+  },
   "noLinesAtCrossingsFound": "No crossings found between selected lines",
   "@noLinesAtCrossingsFound": {
     "description": "Snackbar message shown when split lines at crossings finds no intersections. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
@@ -2026,6 +2031,11 @@
   "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
   "@th2FileEditPageImageVisibilityTooltip": {
     "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageJoinLinesAtCoincidingExtremities": "Join lines at coinciding extremities (Ctrl+J)",
+  "@th2FileEditPageJoinLinesAtCoincidingExtremities": {
+    "description": "Tooltip for the join lines at coinciding extremities FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageLoadImageButton": "Load image",

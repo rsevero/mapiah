@@ -1,0 +1,19 @@
+encoding UTF-8
+scrap scrap1
+	line wall -id a1
+		0 0
+		100 0
+	endline
+	line wall -id a2
+		100 0
+		200 0
+	endline
+	line contour -id b1
+		0 100
+		100 100
+	endline
+	line contour -id b2
+		100 100
+		200 100
+	endline
+endscrap

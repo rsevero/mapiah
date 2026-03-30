@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap scrap1
+	line wall -id left -close on
+		0 0
+		100 0
+	endline
+	line contour -id right -visibility off
+		100 0
+		200 0
+	endline
+endscrap

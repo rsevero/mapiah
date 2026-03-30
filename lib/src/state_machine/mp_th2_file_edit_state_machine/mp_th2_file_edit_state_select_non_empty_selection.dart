@@ -332,6 +332,15 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           th2FileEditController.copyPasteController.duplicateSelectedElements();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyJ:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.stateController.onButtonPressed(
+            MPButtonType.joinLinesAtCoincidingExtremities,
+          );
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
       case LogicalKeyboardKey.keyO:

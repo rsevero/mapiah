@@ -8,6 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_geometry_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -29,6 +30,25 @@ typedef _BezierSplitInfo = ({
   Offset endPoint,
 });
 
+enum _LineExtremityType { start, end }
+
+typedef _ExtremityCoincidence = ({
+  int lineAMPID,
+  _LineExtremityType lineAExtremity,
+  int lineBMPID,
+  _LineExtremityType lineBExtremity,
+  double distance,
+});
+
+typedef _LineAdjacency = ({
+  int otherLineMPID,
+  _LineExtremityType thisExtremity,
+  _LineExtremityType otherExtremity,
+  double distance,
+});
+
+typedef _OrientedLine = ({THLine line, bool reversed});
+
 class TH2FileEditSplitMergeController = TH2FileEditSplitMergeControllerBase
     with _$TH2FileEditSplitMergeController;
 
@@ -41,6 +61,593 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
   TH2FileEditSplitMergeControllerBase(this._th2FileEditController)
     : _th2File = _th2FileEditController.th2File;
+
+  Offset _lineStartPoint(THLine line) {
+    return line.getLineSegments(_th2File).first.endPoint.coordinates;
+  }
+
+  Offset _lineEndPoint(THLine line) {
+    return line.getLineSegments(_th2File).last.endPoint.coordinates;
+  }
+
+  List<_ExtremityCoincidence> _computeExtremityCoincidences(
+    List<THLine> selectedLines,
+    double toleranceOnCanvas,
+  ) {
+    final List<_ExtremityCoincidence> coincidences = <_ExtremityCoincidence>[];
+
+    for (int i = 0; i < selectedLines.length; i++) {
+      final THLine lineA = selectedLines[i];
+      final Offset lineAStart = _lineStartPoint(lineA);
+      final Offset lineAEnd = _lineEndPoint(lineA);
+
+      for (int j = i + 1; j < selectedLines.length; j++) {
+        final THLine lineB = selectedLines[j];
+        final Offset lineBStart = _lineStartPoint(lineB);
+        final Offset lineBEnd = _lineEndPoint(lineB);
+
+        final List<(_LineExtremityType, Offset, _LineExtremityType, Offset)>
+        candidates = <(_LineExtremityType, Offset, _LineExtremityType, Offset)>[
+          (
+            _LineExtremityType.start,
+            lineAStart,
+            _LineExtremityType.start,
+            lineBStart,
+          ),
+          (
+            _LineExtremityType.start,
+            lineAStart,
+            _LineExtremityType.end,
+            lineBEnd,
+          ),
+          (
+            _LineExtremityType.end,
+            lineAEnd,
+            _LineExtremityType.start,
+            lineBStart,
+          ),
+          (_LineExtremityType.end, lineAEnd, _LineExtremityType.end, lineBEnd),
+        ];
+
+        for (final (
+              _LineExtremityType lineAExtremity,
+              Offset lineAPosition,
+              _LineExtremityType lineBExtremity,
+              Offset lineBPosition,
+            )
+            in candidates) {
+          final double distance = (lineAPosition - lineBPosition).distance;
+
+          if (distance <= toleranceOnCanvas) {
+            coincidences.add((
+              lineAMPID: lineA.mpID,
+              lineAExtremity: lineAExtremity,
+              lineBMPID: lineB.mpID,
+              lineBExtremity: lineBExtremity,
+              distance: distance,
+            ));
+          }
+        }
+      }
+    }
+
+    return coincidences;
+  }
+
+  Map<int, List<_LineAdjacency>> _buildAdjacency(
+    List<_ExtremityCoincidence> coincidences,
+  ) {
+    final Map<int, List<_LineAdjacency>> adjacency =
+        <int, List<_LineAdjacency>>{};
+
+    for (final _ExtremityCoincidence coincidence in coincidences) {
+      adjacency
+          .putIfAbsent(coincidence.lineAMPID, () => <_LineAdjacency>[])
+          .add((
+            otherLineMPID: coincidence.lineBMPID,
+            thisExtremity: coincidence.lineAExtremity,
+            otherExtremity: coincidence.lineBExtremity,
+            distance: coincidence.distance,
+          ));
+
+      adjacency
+          .putIfAbsent(coincidence.lineBMPID, () => <_LineAdjacency>[])
+          .add((
+            otherLineMPID: coincidence.lineAMPID,
+            thisExtremity: coincidence.lineBExtremity,
+            otherExtremity: coincidence.lineAExtremity,
+            distance: coincidence.distance,
+          ));
+    }
+
+    return adjacency;
+  }
+
+  _LineAdjacency? _bestAdjacencyBetween(
+    int thisLineMPID,
+    int otherLineMPID,
+    Map<int, List<_LineAdjacency>> adjacency,
+  ) {
+    final List<_LineAdjacency> candidates =
+        adjacency[thisLineMPID]
+            ?.where((a) => a.otherLineMPID == otherLineMPID)
+            .toList() ??
+        <_LineAdjacency>[];
+
+    if (candidates.isEmpty) {
+      return null;
+    }
+
+    candidates.sort((a, b) => a.distance.compareTo(b.distance));
+    return candidates.first;
+  }
+
+  Set<int> _collectConnectedComponent(
+    int seedLineMPID,
+    Map<int, List<_LineAdjacency>> adjacency,
+  ) {
+    final Set<int> component = <int>{};
+    final List<int> stack = <int>[seedLineMPID];
+
+    while (stack.isNotEmpty) {
+      final int current = stack.removeLast();
+
+      if (component.contains(current)) {
+        continue;
+      }
+
+      component.add(current);
+
+      for (final _LineAdjacency next
+          in adjacency[current] ?? <_LineAdjacency>[]) {
+        if (!component.contains(next.otherLineMPID)) {
+          stack.add(next.otherLineMPID);
+        }
+      }
+    }
+
+    return component;
+  }
+
+  List<List<int>> _buildJoinPathsForComponent({
+    required Set<int> componentLineMPIDs,
+    required Map<int, List<_LineAdjacency>> adjacency,
+    required Map<int, int> selectionOrder,
+  }) {
+    final List<List<int>> paths = <List<int>>[];
+    final Set<int> unvisited = Set<int>.from(componentLineMPIDs);
+
+    while (unvisited.isNotEmpty) {
+      final List<int> degreeOneCandidates = unvisited.where((lineMPID) {
+        final int degreeInUnvisited =
+            (adjacency[lineMPID] ?? <_LineAdjacency>[])
+                .where((a) => unvisited.contains(a.otherLineMPID))
+                .length;
+        return degreeInUnvisited <= 1;
+      }).toList();
+
+      final List<int> startCandidates = degreeOneCandidates.isNotEmpty
+          ? degreeOneCandidates
+          : unvisited.toList();
+
+      startCandidates.sort((a, b) {
+        return (selectionOrder[a] ?? mpMaximumInt).compareTo(
+          selectionOrder[b] ?? mpMaximumInt,
+        );
+      });
+
+      final int start = startCandidates.first;
+      final List<int> path = <int>[];
+      int current = start;
+      int? previous;
+
+      while (true) {
+        path.add(current);
+        unvisited.remove(current);
+
+        final List<int> nextCandidates =
+            (adjacency[current] ?? <_LineAdjacency>[])
+                .map((a) => a.otherLineMPID)
+                .where((lineMPID) => unvisited.contains(lineMPID))
+                .where((lineMPID) => lineMPID != previous)
+                .toSet()
+                .toList();
+
+        if (nextCandidates.isEmpty) {
+          break;
+        }
+
+        nextCandidates.sort((a, b) {
+          return (selectionOrder[a] ?? mpMaximumInt).compareTo(
+            selectionOrder[b] ?? mpMaximumInt,
+          );
+        });
+
+        previous = current;
+        current = nextCandidates.first;
+      }
+
+      if (path.length >= 2) {
+        paths.add(path);
+      }
+    }
+
+    return paths;
+  }
+
+  List<_OrientedLine> _buildOrientedPathLines({
+    required List<int> pathLineMPIDs,
+    required Map<int, List<_LineAdjacency>> adjacency,
+  }) {
+    final List<_OrientedLine> orientedLines = <_OrientedLine>[];
+
+    for (int i = 0; i < pathLineMPIDs.length; i++) {
+      final THLine currentLine = _th2File.lineByMPID(pathLineMPIDs[i]);
+      bool reversed = false;
+
+      if (i == 0) {
+        if (pathLineMPIDs.length >= 2) {
+          final _LineAdjacency? firstToNext = _bestAdjacencyBetween(
+            pathLineMPIDs[i],
+            pathLineMPIDs[i + 1],
+            adjacency,
+          );
+
+          if (firstToNext != null) {
+            reversed = (firstToNext.thisExtremity == _LineExtremityType.start);
+          }
+        }
+      } else {
+        final _LineAdjacency? previousToCurrent = _bestAdjacencyBetween(
+          pathLineMPIDs[i],
+          pathLineMPIDs[i - 1],
+          adjacency,
+        );
+
+        if (previousToCurrent != null) {
+          reversed =
+              (previousToCurrent.thisExtremity == _LineExtremityType.end);
+        }
+      }
+
+      orientedLines.add((line: currentLine, reversed: reversed));
+    }
+
+    return orientedLines;
+  }
+
+  List<THLineSegment> _copyLineSegmentsForOrientation({
+    required THLine line,
+    required bool reversed,
+    required int newParentMPID,
+  }) {
+    final List<THLineSegment> originalSegments = line.getLineSegments(_th2File);
+
+    if (!reversed) {
+      return originalSegments
+          .map((segment) => _copySegment(segment, newParentMPID))
+          .toList();
+    }
+
+    final List<THLineSegment> reversedSegments = <THLineSegment>[];
+
+    reversedSegments.add(
+      THStraightLineSegment(
+        parentMPID: newParentMPID,
+        endPoint: originalSegments.last.endPoint.copyWith(),
+      ),
+    );
+
+    for (int i = originalSegments.length - 1; i >= 1; i--) {
+      final THLineSegment originalSegment = originalSegments[i];
+      final THLineSegment previousOriginalSegment = originalSegments[i - 1];
+
+      switch (originalSegment) {
+        case THBezierCurveLineSegment _:
+          reversedSegments.add(
+            THBezierCurveLineSegment(
+              parentMPID: newParentMPID,
+              controlPoint1: originalSegment.controlPoint2.copyWith(),
+              controlPoint2: originalSegment.controlPoint1.copyWith(),
+              endPoint: previousOriginalSegment.endPoint.copyWith(),
+              optionsMap:
+                  SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+                    originalSegment.optionsMap,
+                  ),
+              attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>.from(
+                originalSegment.attrOptionsMap,
+              ),
+            ),
+          );
+        case THStraightLineSegment _:
+          reversedSegments.add(
+            THStraightLineSegment(
+              parentMPID: newParentMPID,
+              endPoint: previousOriginalSegment.endPoint.copyWith(),
+              optionsMap:
+                  SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+                    originalSegment.optionsMap,
+                  ),
+              attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>.from(
+                originalSegment.attrOptionsMap,
+              ),
+            ),
+          );
+        default:
+          throw StateError(
+            'Unknown THLineSegment subtype at TH2FileEditSplitMergeController._copyLineSegmentsForOrientation: ${originalSegment.runtimeType}',
+          );
+      }
+    }
+
+    return reversedSegments;
+  }
+
+  void _buildJoinPathCommand({
+    required List<int> pathLineMPIDs,
+    required Map<int, int> selectionOrder,
+    required Map<int, List<_LineAdjacency>> adjacency,
+    required THIsParentMixin parentScrap,
+    required int adjustedInsertionPosition,
+    required List<MPCommand> outerCommands,
+    required List<int> createdJoinedLineMPIDs,
+  }) {
+    if (pathLineMPIDs.length < 2) {
+      return;
+    }
+
+    final List<_OrientedLine> orientedLines = _buildOrientedPathLines(
+      pathLineMPIDs: pathLineMPIDs,
+      adjacency: adjacency,
+    );
+
+    final List<int> orderedBySelection = List<int>.from(pathLineMPIDs)
+      ..sort((a, b) {
+        return (selectionOrder[a] ?? mpMaximumInt).compareTo(
+          selectionOrder[b] ?? mpMaximumInt,
+        );
+      });
+    final THLine canonicalLine = _th2File.lineByMPID(orderedBySelection.first);
+
+    final int newLineMPID = mpLocator.mpGeneralController.nextMPIDForElements();
+    final THLine newJoinedLine = canonicalLine.copyWith(
+      mpID: newLineMPID,
+      childrenMPIDs: <int>[],
+      originalLineInTH2File: '',
+      makeSameLineCommentNull: true,
+    );
+
+    final List<THLineSegment> joinedSegments = <THLineSegment>[];
+
+    for (int i = 0; i < orientedLines.length; i++) {
+      final _OrientedLine oriented = orientedLines[i];
+      final List<THLineSegment> lineSegments = _copyLineSegmentsForOrientation(
+        line: oriented.line,
+        reversed: oriented.reversed,
+        newParentMPID: newLineMPID,
+      );
+
+      if (i == 0) {
+        joinedSegments.addAll(lineSegments);
+      } else {
+        joinedSegments.addAll(lineSegments.skip(1));
+      }
+    }
+
+    final List<MPCommand> segmentCommands = joinedSegments
+        .map(
+          (segment) => MPAddLineSegmentCommand(
+            newLineSegment: segment,
+            posCommand: null,
+            descriptionType:
+                MPCommandDescriptionType.joinLinesAtCoincidingExtremities,
+          ),
+        )
+        .toList();
+
+    final MPCommand posCommand = (segmentCommands.length == 1)
+        ? segmentCommands.first
+        : MPMultipleElementsCommand.forCWJM(
+            commandsList: segmentCommands,
+            completionType:
+                MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+            descriptionType:
+                MPCommandDescriptionType.joinLinesAtCoincidingExtremities,
+          );
+
+    for (final int lineMPID in pathLineMPIDs) {
+      outerCommands.add(
+        MPCommandFactory.removeLineFromExisting(
+          existingLineMPID: lineMPID,
+          isInteractiveLineCreation: false,
+          th2File: _th2File,
+          descriptionType:
+              MPCommandDescriptionType.joinLinesAtCoincidingExtremities,
+        ),
+      );
+    }
+
+    outerCommands.add(
+      MPAddLineCommand(
+        newLine: newJoinedLine,
+        lineChildren: <THEndline>[THEndline(parentMPID: newLineMPID)],
+        linePositionInParent: adjustedInsertionPosition,
+        posCommand: posCommand,
+        preCommand: null,
+        descriptionType:
+            MPCommandDescriptionType.joinLinesAtCoincidingExtremities,
+      ),
+    );
+
+    createdJoinedLineMPIDs.add(newLineMPID);
+  }
+
+  @action
+  void prepareJoinLinesAtCoincidingExtremities() {
+    final List<MPSelectedLine> selectedLogicalLines = _th2FileEditController
+        .selectionController
+        .mpSelectedElementsLogical
+        .values
+        .whereType<MPSelectedLine>()
+        .toList();
+
+    if (selectedLogicalLines.length < 2) {
+      return;
+    }
+
+    final List<THLine> selectedLines = selectedLogicalLines
+        .map((selectedLine) => _th2File.lineByMPID(selectedLine.mpID))
+        .toList();
+
+    final Map<int, int> selectionOrderByMPID = <int, int>{};
+    for (int i = 0; i < selectedLines.length; i++) {
+      selectionOrderByMPID[selectedLines[i].mpID] = i;
+    }
+
+    final double toleranceOnCanvas = _th2FileEditController.scaleScreenToCanvas(
+      mpJoinLineExtremityToleranceOnScreen,
+    );
+    final List<_ExtremityCoincidence> coincidences =
+        _computeExtremityCoincidences(selectedLines, toleranceOnCanvas);
+
+    if (coincidences.isEmpty) {
+      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+
+    final Map<int, List<_LineAdjacency>> adjacency = _buildAdjacency(
+      coincidences,
+    );
+    final Set<int> joinableLineMPIDs = adjacency.keys.toSet();
+
+    if (joinableLineMPIDs.length < 2) {
+      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+
+    final THIsParentMixin parentScrap = _th2File
+        .lineByMPID(joinableLineMPIDs.first)
+        .parent(th2File: _th2File);
+
+    final Set<int> remaining = Set<int>.from(joinableLineMPIDs);
+    final List<List<int>> allJoinPaths = <List<int>>[];
+
+    while (remaining.isNotEmpty) {
+      final int seed = remaining.first;
+      final Set<int> component = _collectConnectedComponent(seed, adjacency);
+      remaining.removeAll(component);
+
+      final List<List<int>> componentPaths = _buildJoinPathsForComponent(
+        componentLineMPIDs: component,
+        adjacency: adjacency,
+        selectionOrder: selectionOrderByMPID,
+      );
+
+      allJoinPaths.addAll(componentPaths.where((path) => path.length >= 2));
+    }
+
+    if (allJoinPaths.isEmpty) {
+      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+      if (context != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+
+    allJoinPaths.sort((pathA, pathB) {
+      final int minPositionA = pathA
+          .map(
+            (lineMPID) =>
+                parentScrap.getChildPosition(_th2File.lineByMPID(lineMPID)),
+          )
+          .reduce((a, b) => a < b ? a : b);
+      final int minPositionB = pathB
+          .map(
+            (lineMPID) =>
+                parentScrap.getChildPosition(_th2File.lineByMPID(lineMPID)),
+          )
+          .reduce((a, b) => a < b ? a : b);
+      return minPositionA.compareTo(minPositionB);
+    });
+
+    final List<MPCommand> outerCommands = <MPCommand>[];
+    final List<int> createdJoinedLineMPIDs = <int>[];
+    int cumulativeOffset = 0;
+
+    for (final List<int> path in allJoinPaths) {
+      final int minOriginalPosition = path
+          .map(
+            (lineMPID) =>
+                parentScrap.getChildPosition(_th2File.lineByMPID(lineMPID)),
+          )
+          .reduce((a, b) => a < b ? a : b);
+
+      _buildJoinPathCommand(
+        pathLineMPIDs: path,
+        selectionOrder: selectionOrderByMPID,
+        adjacency: adjacency,
+        parentScrap: parentScrap,
+        adjustedInsertionPosition: minOriginalPosition + cumulativeOffset,
+        outerCommands: outerCommands,
+        createdJoinedLineMPIDs: createdJoinedLineMPIDs,
+      );
+
+      cumulativeOffset += 1 - path.length;
+    }
+
+    final MPMultipleElementsCommand joinCommand =
+        MPMultipleElementsCommand.forCWJM(
+          commandsList: outerCommands,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsListChanged,
+          descriptionType:
+              MPCommandDescriptionType.joinLinesAtCoincidingExtremities,
+        );
+
+    _th2FileEditController.execute(joinCommand);
+    _th2FileEditController.stateController.setState(
+      MPTH2FileEditStateType.selectNonEmptySelection,
+    );
+
+    final List<THLine> joinedLines = createdJoinedLineMPIDs
+        .map((lineMPID) => _th2File.lineByMPID(lineMPID))
+        .toList();
+
+    _th2FileEditController.selectionController.setSelectedElements(
+      joinedLines,
+      setState: false,
+    );
+  }
 
   Map<int, List<_CrossingData>> _computeCrossings(List<THLine> lines) {
     final Map<int, List<_CrossingData>> result = {};

@@ -15,6 +15,7 @@ enum MPButtonType {
   createMapConnectionLines,
   cutElements,
   duplicateElements,
+  joinLinesAtCoincidingExtremities,
   nodeEdit,
   openOptionWindow,
   optionsEdit,

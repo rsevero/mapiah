@@ -753,6 +753,17 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         tooltip: appLocalizations.th2FileEditPageSplitLinesAtCrossings,
       ),
       _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_join_lines_at_coinciding_extremities',
+        onPressed: th2FileEditController.hasAtLeastTwoSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.joinLinesAtCoincidingExtremities,
+              )
+            : null,
+        icon: Icons.merge,
+        tooltip:
+            appLocalizations.th2FileEditPageJoinLinesAtCoincidingExtremities,
+      ),
+      _stateContextFABButton(
         heroTag: '${heroPrefix}_ctx_reverse_line',
         onPressed: hasSelectedLines
             ? () => th2FileEditController.stateController.onButtonPressed(

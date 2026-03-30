@@ -2218,6 +2218,12 @@ abstract class AppLocalizations {
   /// **'Unrecognized option'**
   String get mpUnrecognizedCommandOptionTextLabel;
 
+  /// Snackbar message shown when joining lines at coinciding extremities finds no joinable extremities. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
+  ///
+  /// In en, this message translates to:
+  /// **'No coinciding extremities found between selected lines'**
+  String get noCoincidingLineExtremitiesFound;
+
   /// Snackbar message shown when split lines at crossings finds no intersections. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
   ///
   /// In en, this message translates to:
@@ -2439,6 +2445,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Toggle image visibility'**
   String get th2FileEditPageImageVisibilityTooltip;
+
+  /// Tooltip for the join lines at coinciding extremities FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Join lines at coinciding extremities (Ctrl+J)'**
+  String get th2FileEditPageJoinLinesAtCoincidingExtremities;
 
   /// The label for the load image button. Used on: none
   ///

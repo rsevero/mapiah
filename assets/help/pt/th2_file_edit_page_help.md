@@ -39,6 +39,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Segmentos de linha reta](#segmentos-de-linha-reta)
 - [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
 - [Dividir linhas em cruzamentos](#dividir-linhas-em-cruzamentos)
+- [Juntar linhas em extremidades coincidentes](#juntar-linhas-em-extremidades-coincidentes)
 - [Esconder elementos](#esconder-elementos)
 - [Pesquisar e selecionar](#pesquisar-e-selecionar)
 - [Snap](#snap)
@@ -304,6 +305,20 @@ Pressione `Ctrl+Shift+X` para dividir as linhas selecionadas em cada interseçã
 - Após a divisão, todas as linhas recém-criadas ficam selecionadas.
 - A operação pode ser desfeita com `Ctrl+Z`.
 - **Limitação:** Linhas que fazem parte da borda de uma área não podem ser divididas. Uma mensagem é exibida caso isso seja tentado.
+
+## Juntar linhas em extremidades coincidentes
+
+Pressione `Ctrl+J` para juntar linhas selecionadas cujas extremidades de início/fim coincidam.
+
+**Como funciona:**
+- A operação verifica as linhas selecionadas em busca de extremidades coincidentes usando tolerância equivalente a 3 pixels de tela (convertida para coordenadas de canvas no momento da execução, conforme o zoom atual).
+- Uma única execução pode produzir múltiplas linhas finais quando as linhas selecionadas formam grupos independentes.
+- Para cada linha final criada, prevalecem o tipo e as opções da primeira linha selecionada naquele grupo.
+- Os segmentos são reorientados quando necessário para manter continuidade geométrica; segmentos Bézier invertidos preservam a mesma forma visual.
+- As linhas finais criadas ficam selecionadas.
+- A operação pode ser desfeita com _Ctrl+Z_.
+
+Se não houver extremidades coincidentes, o Mapiah exibe uma mensagem e não altera o arquivo.
 
 ## Esconder elementos
 Pressione _Ctrl+H_ para ocultar temporariamente elementos no canvas sem removê-los do arquivo.

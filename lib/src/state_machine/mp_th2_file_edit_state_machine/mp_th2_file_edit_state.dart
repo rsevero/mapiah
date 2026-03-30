@@ -236,6 +236,10 @@ abstract class MPTH2FileEditState {
       case MPButtonType.duplicateElements:
         th2FileEditController.copyPasteController.duplicateSelectedElements();
         return true;
+      case MPButtonType.joinLinesAtCoincidingExtremities:
+        th2FileEditController.splitMergeController
+            .prepareJoinLinesAtCoincidingExtremities();
+        return true;
       case MPButtonType.nodeEdit:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.editSingleLine,

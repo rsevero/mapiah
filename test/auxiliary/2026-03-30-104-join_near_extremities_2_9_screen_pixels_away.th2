@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap scrap1
+	line wall -id near1
+		0 0
+		100 0
+	endline
+	line wall -id near2
+		102.9 0
+		200 0
+	endline
+endscrap

@@ -61,6 +61,22 @@ mixin _$TH2FileEditSplitMergeController
       );
 
   @override
+  void prepareJoinLinesAtCoincidingExtremities() {
+    final _$actionInfo = _$TH2FileEditSplitMergeControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditSplitMergeControllerBase.prepareJoinLinesAtCoincidingExtremities',
+        );
+    try {
+      return super.prepareJoinLinesAtCoincidingExtremities();
+    } finally {
+      _$TH2FileEditSplitMergeControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void prepareSplitLineAtSelectedEndPoints() {
     final _$actionInfo = _$TH2FileEditSplitMergeControllerBaseActionController
         .startAction(

@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap scrap1
+	line wall -id straight
+		0 0
+		50 0
+	endline
+	line contour -id bez
+		100 0
+		90 20 60 20 50 0
+	endline
+endscrap
