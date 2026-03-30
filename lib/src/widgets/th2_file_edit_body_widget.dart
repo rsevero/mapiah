@@ -827,6 +827,16 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         icon: Icons.select_all,
         tooltip: appLocalizations.th2FileEditPageSelectAllElements,
       ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_paste_elements',
+        onPressed: th2FileEditController.hasClipboardContent
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.pasteElements,
+              )
+            : null,
+        icon: Icons.content_paste,
+        tooltip: appLocalizations.th2FileEditPagePasteElements,
+      ),
     ];
   }
 

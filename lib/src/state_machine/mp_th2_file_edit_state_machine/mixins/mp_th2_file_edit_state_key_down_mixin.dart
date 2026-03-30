@@ -189,6 +189,13 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
           }
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyV:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.copyPasteController.pasteElements();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyY:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
