@@ -183,6 +183,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     () => super.hasSelectedLines,
     name: 'TH2FileEditControllerBase.hasSelectedLines',
   )).value;
+  Computed<bool>? _$hasAtLeastTwoSelectedLinesComputed;
+
+  @override
+  bool get hasAtLeastTwoSelectedLines =>
+      (_$hasAtLeastTwoSelectedLinesComputed ??= Computed<bool>(
+        () => super.hasAtLeastTwoSelectedLines,
+        name: 'TH2FileEditControllerBase.hasAtLeastTwoSelectedLines',
+      )).value;
   Computed<bool>? _$areAllElementsSelectedComputed;
 
   @override
@@ -1983,6 +1991,7 @@ isInSelectEmptySelectionState: ${isInSelectEmptySelectionState},
 hasSelectedEndPoints: ${hasSelectedEndPoints},
 areAllEndPointsSelected: ${areAllEndPointsSelected},
 hasSelectedLines: ${hasSelectedLines},
+hasAtLeastTwoSelectedLines: ${hasAtLeastTwoSelectedLines},
 areAllElementsSelected: ${areAllElementsSelected},
 hasClipboardContent: ${hasClipboardContent},
 enableSaveButton: ${enableSaveButton},

@@ -69,6 +69,7 @@ enum MPCommandDescriptionType {
   simplifyToBezier,
   simplifyToStraight,
   splitLineAtSelectedPoints,
+  splitLinesAtCrossings,
   toggleReverseOption,
   toggleSmoothOption;
 

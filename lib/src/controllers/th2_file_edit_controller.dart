@@ -348,6 +348,23 @@ abstract class TH2FileEditControllerBase with Store {
       .any((final MPSelectedElement e) => e is MPSelectedLine);
 
   @computed
+  bool get hasAtLeastTwoSelectedLines {
+    int lineCount = 0;
+
+    for (final MPSelectedElement element
+        in selectionController.mpSelectedElementsLogical.values) {
+      if (element is MPSelectedLine) {
+        lineCount++;
+        if (lineCount >= 2) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  @computed
   bool get areAllElementsSelected {
     if (_activeScrapID <= 0) {
       return false;

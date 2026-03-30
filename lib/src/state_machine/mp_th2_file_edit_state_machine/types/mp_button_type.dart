@@ -32,6 +32,7 @@ enum MPButtonType {
   simplifyLinesForcingStraight,
   smoothLineSegments,
   splitLineAtSelectedEndPoints,
+  splitLinesAtCrossings,
   undo,
   zoomAllFile,
   zoomAllScrap,
