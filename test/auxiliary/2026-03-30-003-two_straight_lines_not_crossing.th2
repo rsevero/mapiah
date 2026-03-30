@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap scrap1
+  line wall -id lineA
+    0 0
+    100 0
+  endline
+  line wall -id lineB
+    0 10
+    100 10
+  endline
+endscrap
