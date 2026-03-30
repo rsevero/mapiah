@@ -53,6 +53,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   DateTime? _startTime;
   VoidCallback? _statusListener;
   bool _hasAppendedPostRunOutput = false;
+  bool _isProcessingPostRun = false;
 
   @override
   void initState() {
@@ -93,7 +94,17 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       final bool isRunning = _therionRunner.isRunningNotifier.value;
 
       if (!isRunning) {
-        _onTherionRunFinished();
+        setState(() {
+          _isProcessingPostRun = true;
+        });
+
+        _onTherionRunFinished().whenComplete(() {
+          if (mounted) {
+            setState(() {
+              _isProcessingPostRun = false;
+            });
+          }
+        });
       }
     };
 
@@ -406,51 +417,76 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ValueListenableBuilder<MPTherionRunStatus>(
-                          valueListenable: _therionRunner.statusNotifier,
+                        ValueListenableBuilder<bool>(
+                          valueListenable: _therionRunner.isRunningNotifier,
                           builder:
                               (
                                 BuildContext context,
-                                MPTherionRunStatus runStatus,
+                                bool isRunning,
                                 Widget? child,
                               ) {
-                                final String statusText = _statusText(
-                                  appLocalizations,
-                                  runStatus,
-                                );
-                                final Color statusBackgroundColor =
-                                    _statusBackgroundColor(runStatus);
+                                return ValueListenableBuilder<
+                                  MPTherionRunStatus
+                                >(
+                                  valueListenable:
+                                      _therionRunner.statusNotifier,
+                                  builder:
+                                      (
+                                        BuildContext context,
+                                        MPTherionRunStatus runStatus,
+                                        Widget? child,
+                                      ) {
+                                        final MPTherionRunStatus displayStatus =
+                                            (isRunning || _isProcessingPostRun)
+                                            ? MPTherionRunStatus.running
+                                            : runStatus;
+                                        final String statusText = _statusText(
+                                          appLocalizations,
+                                          displayStatus,
+                                        );
+                                        final Color statusBackgroundColor =
+                                            _statusBackgroundColor(
+                                              displayStatus,
+                                            );
 
-                                return Row(
-                                  children: [
-                                    Text(
-                                      appLocalizations
-                                          .mapiahTherionRunStatusLabel,
-                                    ),
-                                    const SizedBox(
-                                      width: mpTherionRunDialogSpacing,
-                                    ),
-                                    Container(
-                                      constraints: const BoxConstraints(
-                                        minWidth: mpTherionRunStatusBoxMinWidth,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: mpSettingsPageFieldSpacing,
-                                        horizontal: mpSettingsPageCardPadding,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: statusBackgroundColor,
-                                        border: Border.all(
-                                          color: theme.colorScheme.outline,
-                                          width: mpTherionRunOutputBorderWidth,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          mpDefaultButtonRadius,
-                                        ),
-                                      ),
-                                      child: Text(statusText),
-                                    ),
-                                  ],
+                                        return Row(
+                                          children: [
+                                            Text(
+                                              appLocalizations
+                                                  .mapiahTherionRunStatusLabel,
+                                            ),
+                                            const SizedBox(
+                                              width: mpTherionRunDialogSpacing,
+                                            ),
+                                            Container(
+                                              constraints: const BoxConstraints(
+                                                minWidth:
+                                                    mpTherionRunStatusBoxMinWidth,
+                                              ),
+                                              padding: const EdgeInsets.symmetric(
+                                                vertical:
+                                                    mpSettingsPageFieldSpacing,
+                                                horizontal:
+                                                    mpSettingsPageCardPadding,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: statusBackgroundColor,
+                                                border: Border.all(
+                                                  color:
+                                                      theme.colorScheme.outline,
+                                                  width:
+                                                      mpTherionRunOutputBorderWidth,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      mpDefaultButtonRadius,
+                                                    ),
+                                              ),
+                                              child: Text(statusText),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                 );
                               },
                         ),

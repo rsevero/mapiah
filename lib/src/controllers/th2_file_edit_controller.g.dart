@@ -160,6 +160,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.isInSelectEmptySelectionState,
         name: 'TH2FileEditControllerBase.isInSelectEmptySelectionState',
       )).value;
+  Computed<bool>? _$isInAddElementStateComputed;
+
+  @override
+  bool get isInAddElementState =>
+      (_$isInAddElementStateComputed ??= Computed<bool>(
+        () => super.isInAddElementState,
+        name: 'TH2FileEditControllerBase.isInAddElementState',
+      )).value;
   Computed<bool>? _$hasSelectedEndPointsComputed;
 
   @override
@@ -1988,6 +1996,7 @@ enableRemoveButton: ${enableRemoveButton},
 isInEditSingleLineState: ${isInEditSingleLineState},
 isInSelectNonEmptySelectionState: ${isInSelectNonEmptySelectionState},
 isInSelectEmptySelectionState: ${isInSelectEmptySelectionState},
+isInAddElementState: ${isInAddElementState},
 hasSelectedEndPoints: ${hasSelectedEndPoints},
 areAllEndPointsSelected: ${areAllEndPointsSelected},
 hasSelectedLines: ${hasSelectedLines},
