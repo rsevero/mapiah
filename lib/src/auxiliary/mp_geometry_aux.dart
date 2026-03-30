@@ -2,6 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:ui';
 
+import 'package:mapiah/src/constants/mp_constants.dart';
+
 /// Geometric intersection result for two straight segments.
 typedef MPSegmentIntersection = ({Offset point, double tA, double tB});
 
@@ -19,7 +21,7 @@ class MPGeometryAux {
     Offset p1,
     Offset p2,
     Offset p3, {
-    double epsilon = 1e-10,
+    double epsilon = mpDoubleComparisonEpsilon,
   }) {
     final double dx1 = p1.dx - p0.dx;
     final double dy1 = p1.dy - p0.dy;
