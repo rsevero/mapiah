@@ -741,6 +741,16 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
       ),
       _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_split_lines_at_crossings',
+        onPressed: th2FileEditController.hasAtLeastTwoSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.splitLinesAtCrossings,
+              )
+            : null,
+        icon: Icons.call_split,
+        tooltip: appLocalizations.th2FileEditPageSplitLinesAtCrossings,
+      ),
+      _stateContextFABButton(
         heroTag: '${heroPrefix}_ctx_reverse_line',
         onPressed: hasSelectedLines
             ? () => th2FileEditController.stateController.onButtonPressed(

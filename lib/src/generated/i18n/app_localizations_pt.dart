@@ -1477,6 +1477,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Dividir linha nos pontos finais selecionados (Ctrl+Shift+P)';
 
   @override
+  String get th2FileEditPageSplitLinesAtCrossings =>
+      'Dividir linhas selecionadas nos cruzamentos (Ctrl+Shift+X)';
+
+  @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>
       'Ocultar todas as grades (Ctrl+G)';
 

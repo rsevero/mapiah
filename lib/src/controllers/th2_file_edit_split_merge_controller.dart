@@ -104,6 +104,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     required List<_CrossingData> crossings,
     required int adjustedLinePosition,
     required List<MPCommand> outerCommands,
+    required List<int> newSubLineMPIDs,
   }) {
     final List<int> lineSegMPIDs = originalLine.getLineSegmentMPIDs(_th2File);
     final String? originalID = originalLine.hasOption(THCommandOptionType.id)
@@ -222,6 +223,8 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
           descriptionType: MPCommandDescriptionType.splitLinesAtCrossings,
         ),
       );
+
+      newSubLineMPIDs.add(newLineMPID);
 
       vSegStart = vSegEnd + 1;
     }
@@ -471,6 +474,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       );
 
     final List<MPCommand> outerCommands = [];
+    final List<int> newSubLineMPIDs = [];
     int cumulativeOffset = 0;
 
     for (final int lineMPID in sortedLineMPIDs) {
@@ -485,6 +489,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         crossings: crossings,
         adjustedLinePosition: originalLinePosition + cumulativeOffset,
         outerCommands: outerCommands,
+        newSubLineMPIDs: newSubLineMPIDs,
       );
 
       cumulativeOffset += crossings.length;
@@ -504,9 +509,8 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       MPTH2FileEditStateType.selectNonEmptySelection,
     );
 
-    final List<THLine> newSubLines = _th2File
-        .getLines()
-        .where((final THLine line) => !selectedLines.contains(line))
+    final List<THLine> newSubLines = newSubLineMPIDs
+        .map((final int mpID) => _th2File.lineByMPID(mpID))
         .toList();
 
     _th2FileEditController.selectionController.setSelectedElements(

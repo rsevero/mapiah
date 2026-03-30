@@ -1461,6 +1461,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Split line at selected end points (Ctrl+Shift+P)';
 
   @override
+  String get th2FileEditPageSplitLinesAtCrossings =>
+      'Split selected lines at crossings (Ctrl+Shift+X)';
+
+  @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>
       'Hide all grids (Ctrl+G)';
 

@@ -453,6 +453,7 @@
   "th2FileEditPageSmoothLineSegments": "Ativar a opção suavizar segments de linha (Ctrl+Shift+S)",
   "th2FileEditPageSnapButton": "Ajustar a pontos",
   "th2FileEditPageSplitLineAtSelectedEndPoints": "Dividir linha nos pontos finais selecionados (Ctrl+Shift+P)",
+  "th2FileEditPageSplitLinesAtCrossings": "Dividir linhas selecionadas nos cruzamentos (Ctrl+Shift+X)",
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Ocultar todas as grades (Ctrl+G)",
   "th2FileEditPageToggleAllGridsVisibilityShowAllTooltip": "Mostrar todas as grades (Ctrl+G)",
   "th2FileEditPageToggleAllImagesVisibilityHideAllTooltip": "Ocultar todas as imagens (Ctrl+I)",

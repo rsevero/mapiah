@@ -2271,6 +2271,11 @@
     "description": "Tooltip for the split line at selected end points FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
+  "th2FileEditPageSplitLinesAtCrossings": "Split selected lines at crossings (Ctrl+Shift+X)",
+  "@th2FileEditPageSplitLinesAtCrossings": {
+    "description": "Tooltip for the split selected lines at crossings FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Hide all grids (Ctrl+G)",
   "@th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": {
     "description": "Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build",

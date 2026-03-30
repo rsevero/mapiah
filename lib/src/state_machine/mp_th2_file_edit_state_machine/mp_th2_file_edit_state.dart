@@ -307,6 +307,10 @@ abstract class MPTH2FileEditState {
         th2FileEditController.splitMergeController
             .prepareSplitLineAtSelectedEndPoints();
         return true;
+      case MPButtonType.splitLinesAtCrossings:
+        th2FileEditController.splitMergeController
+            .prepareSplitLinesAtCrossings();
+        return true;
       case MPButtonType.undo:
         th2FileEditController.undo();
         return true;

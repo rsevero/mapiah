@@ -2722,6 +2722,12 @@ abstract class AppLocalizations {
   /// **'Split line at selected end points (Ctrl+Shift+P)'**
   String get th2FileEditPageSplitLineAtSelectedEndPoints;
 
+  /// Tooltip for the split selected lines at crossings FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Split selected lines at crossings (Ctrl+Shift+X)'**
+  String get th2FileEditPageSplitLinesAtCrossings;
+
   /// Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:
