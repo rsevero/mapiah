@@ -38,6 +38,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
 - [Split line at selected points](#split-line-at-selected-points)
+- [Split lines at crossings](#split-lines-at-crossings)
 - [Hide elements](#hide-elements)
 - [Search and select](#search-and-select)
 - [Snap](#snap)
@@ -291,6 +292,18 @@ While in line edit mode (_N_), select one or more internal line points and press
 **IDs:** If the original line had an `-id` option (e.g. `wall1`), each new line receives a derived ID: `wall1-1`, `wall1-2`, and so on.
 
 **Limitation:** Lines that are part of an area border cannot be split. A message is shown if you attempt to do so.
+
+## Split lines at crossings
+
+Press `Ctrl+Shift+X` to split the selected lines at every intersection with other selected lines in the same scrap.
+
+**How it works:**
+- For each selected line, every crossing point with any other selected lines is computed.
+- Each crossing becomes a split point, producing multiple lines.
+- New lines inherit options from the original; if the original line had an `-id` option (e.g. `wall1`), each new line receives a derived ID: `wall1-1`, `wall1-2`, and so on.
+- After the split, all newly created lines are selected.
+- The operation can be undone with `Ctrl+Z`.
+- **Limitation:** Lines that are part of an area border cannot be split. A message is shown if you attempt to do so.
 
 ## Hide elements
 Press _Ctrl+H_ to temporarily hide elements on the canvas without removing them from the file.

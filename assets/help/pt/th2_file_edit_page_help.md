@@ -8,6 +8,10 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Índice](#índice)
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
+- [Imagens](#imagens)
+  - [Visibilidade da imagem](#visibilidade-da-imagem)
+  - [Visibilidade da grade](#visibilidade-da-grade)
+  - [Reordenação de imagens](#reordenação-de-imagens)
 - [Croquis](#croquis)
   - [Copiar croqui](#copiar-croqui)
   - [Recortar croqui](#recortar-croqui)
@@ -21,10 +25,6 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Canto inferior direito](#canto-inferior-direito)
 - [Opções do elemento](#opções-do-elemento)
 - [Opções padrão](#opções-padrão)
-- [Imagens](#imagens)
-  - [Visibilidade da imagem](#visibilidade-da-imagem)
-  - [Visibilidade da grade](#visibilidade-da-grade)
-  - [Reordenação de imagens](#reordenação-de-imagens)
 - [Salvar](#salvar)
   - [Formato original do arquivo](#formato-original-do-arquivo)
 - [Selecionando elementos](#selecionando-elementos)
@@ -35,9 +35,11 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Simplificar linhas](#simplificar-linhas)
   - [Métodos de simplificação](#métodos-de-simplificação)
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
-- [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
   - [Segmentos de linha mistos](#segmentos-de-linha-mistos)
   - [Segmentos de linha reta](#segmentos-de-linha-reta)
+- [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
+- [Dividir linhas em cruzamentos](#dividir-linhas-em-cruzamentos)
+- [Esconder elementos](#esconder-elementos)
 - [Pesquisar e selecionar](#pesquisar-e-selecionar)
 - [Snap](#snap)
 - [Zoom e pan](#zoom-e-pan)
@@ -290,6 +292,18 @@ No modo de edição de linha (_N_), selecione um ou mais pontos internos da linh
 **IDs:** Se a linha original possuía a opção `-id` (por exemplo, `parede1`), cada nova linha recebe um ID derivado: `parede1-1`, `parede1-2`, e assim por diante.
 
 **Limitação:** Linhas que fazem parte da borda de uma área não podem ser divididas. Uma mensagem é exibida caso isso seja tentado.
+
+## Dividir linhas em cruzamentos
+
+Pressione `Ctrl+Shift+X` para dividir as linhas selecionadas em cada interseção com outras linhas selecionadas no mesmo croqui.
+
+**Como funciona:**
+- Para cada linha selecionada, cada ponto de cruzamento com qualquer outra linha selecionada é calculado.
+- Cada cruzamento vira um ponto de divisão, produzindo múltiplas linhas.
+- As novas linhas herdam as opções da original; se a linha original possuía a opção `-id` (por exemplo, `parede1`), cada nova linha recebe um ID derivado: `parede1-1`, `parede1-2`, e assim por diante.
+- Após a divisão, todas as linhas recém-criadas ficam selecionadas.
+- A operação pode ser desfeita com `Ctrl+Z`.
+- **Limitação:** Linhas que fazem parte da borda de uma área não podem ser divididas. Uma mensagem é exibida caso isso seja tentado.
 
 ## Esconder elementos
 Pressione _Ctrl+H_ para ocultar temporariamente elementos no canvas sem removê-los do arquivo.
