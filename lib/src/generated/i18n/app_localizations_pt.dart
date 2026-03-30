@@ -1188,6 +1188,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpUnrecognizedCommandOptionTextLabel => 'Opção não reconhecida';
 
   @override
+  String get noLinesAtCrossingsFound =>
+      'Nenhum cruzamento encontrado entre as linhas selecionadas';
+
+  @override
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override

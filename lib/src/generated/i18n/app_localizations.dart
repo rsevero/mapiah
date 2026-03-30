@@ -2218,6 +2218,12 @@ abstract class AppLocalizations {
   /// **'Unrecognized option'**
   String get mpUnrecognizedCommandOptionTextLabel;
 
+  /// Snackbar message shown when split lines at crossings finds no intersections. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
+  ///
+  /// In en, this message translates to:
+  /// **'No crossings found between selected lines'**
+  String get noLinesAtCrossingsFound;
+
   /// The label for the parsing errors dialog. Used on: MPErrorDialog.build
   ///
   /// In en, this message translates to:

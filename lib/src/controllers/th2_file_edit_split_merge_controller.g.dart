@@ -77,6 +77,22 @@ mixin _$TH2FileEditSplitMergeController
   }
 
   @override
+  void prepareSplitLinesAtCrossings() {
+    final _$actionInfo = _$TH2FileEditSplitMergeControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditSplitMergeControllerBase.prepareSplitLinesAtCrossings',
+        );
+    try {
+      return super.prepareSplitLinesAtCrossings();
+    } finally {
+      _$TH2FileEditSplitMergeControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

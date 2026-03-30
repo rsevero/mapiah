@@ -1831,6 +1831,11 @@
     "description": "The label for the unrecognized command option. Used on: lib/src/widgets/options/mp_text_type_option_widget.dart",
     "type": "text"
   },
+  "noLinesAtCrossingsFound": "No crossings found between selected lines",
+  "@noLinesAtCrossingsFound": {
+    "description": "Snackbar message shown when split lines at crossings finds no intersections. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
+    "type": "text"
+  },
   "parsingErrors": "Parsing errors",
   "@parsingErrors": {
     "description": "The label for the parsing errors dialog. Used on: MPErrorDialog.build",
