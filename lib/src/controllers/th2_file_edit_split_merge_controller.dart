@@ -23,6 +23,12 @@ part 'th2_file_edit_split_merge_controller.g.dart';
 
 typedef _CrossingData = ({int geoSegIdx, Offset crossPoint, double tOnSeg});
 
+typedef _BezierSplitInfo = ({
+  Offset controlPoint1,
+  Offset controlPoint2,
+  Offset endPoint,
+});
+
 class TH2FileEditSplitMergeController = TH2FileEditSplitMergeControllerBase
     with _$TH2FileEditSplitMergeController;
 
@@ -47,38 +53,105 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         final List<THLineSegment> segsB = lineB.getLineSegments(_th2File);
 
         for (int k = 0; k < segsA.length - 1; k++) {
-          if (segsA[k + 1] is THBezierCurveLineSegment) {
-            continue;
-          }
-
-          final Offset p0 = segsA[k].endPoint.coordinates;
-          final Offset p1 = segsA[k + 1].endPoint.coordinates;
+          final THLineSegment segA = segsA[k + 1];
 
           for (int m = 0; m < segsB.length - 1; m++) {
-            if (segsB[m + 1] is THBezierCurveLineSegment) {
-              continue;
+            final THLineSegment segB = segsB[m + 1];
+
+            // Case 1: Both segments are straight
+            if ((segA is! THBezierCurveLineSegment) &&
+                (segB is! THBezierCurveLineSegment)) {
+              final Offset p0 = segsA[k].endPoint.coordinates;
+              final Offset p1 = segA.endPoint.coordinates;
+              final Offset p2 = segsB[m].endPoint.coordinates;
+              final Offset p3 = segB.endPoint.coordinates;
+
+              final MPSegmentIntersection? hit =
+                  MPGeometryAux.straightSegmentIntersection(p0, p1, p2, p3);
+
+              if (hit != null) {
+                result.putIfAbsent(lineA.mpID, () => []).add((
+                  geoSegIdx: k,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tA,
+                ));
+                result.putIfAbsent(lineB.mpID, () => []).add((
+                  geoSegIdx: m,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tB,
+                ));
+              }
+            }
+            // Case 2: Bézier A vs Straight B
+            else if ((segA is THBezierCurveLineSegment) &&
+                (segB is! THBezierCurveLineSegment)) {
+              final THBezierCurveLineSegment bezierSegA = segA;
+              final Offset p0 = segsA[k].endPoint.coordinates;
+              final Offset p3 = bezierSegA.endPoint.coordinates;
+              final Offset lineStart = segsB[m].endPoint.coordinates;
+              final Offset lineEnd = segB.endPoint.coordinates;
+
+              final List<BezierStraightIntersection> hits =
+                  MPGeometryAux.bezierSegmentStraightSegmentIntersection(
+                    p0,
+                    bezierSegA.controlPoint1.coordinates,
+                    bezierSegA.controlPoint2.coordinates,
+                    p3,
+                    lineStart,
+                    lineEnd,
+                  );
+
+              for (final BezierStraightIntersection hit in hits) {
+                result.putIfAbsent(lineA.mpID, () => []).add((
+                  geoSegIdx: k,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tBezier,
+                ));
+                result.putIfAbsent(lineB.mpID, () => []).add((
+                  geoSegIdx: m,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tLine,
+                ));
+              }
+            }
+            // Case 3: Straight A vs Bézier B
+            else if ((segA is! THBezierCurveLineSegment) &&
+                (segB is THBezierCurveLineSegment)) {
+              final THBezierCurveLineSegment bezierSegB = segB;
+              final Offset lineStart = segsA[k].endPoint.coordinates;
+              final Offset lineEnd = segA.endPoint.coordinates;
+              final Offset p0 = segsB[m].endPoint.coordinates;
+              final Offset p3 = bezierSegB.endPoint.coordinates;
+
+              final List<BezierStraightIntersection> hits =
+                  MPGeometryAux.bezierSegmentStraightSegmentIntersection(
+                    p0,
+                    bezierSegB.controlPoint1.coordinates,
+                    bezierSegB.controlPoint2.coordinates,
+                    p3,
+                    lineStart,
+                    lineEnd,
+                  );
+
+              for (final BezierStraightIntersection hit in hits) {
+                result.putIfAbsent(lineA.mpID, () => []).add((
+                  geoSegIdx: k,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tLine,
+                ));
+                result.putIfAbsent(lineB.mpID, () => []).add((
+                  geoSegIdx: m,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tBezier,
+                ));
+              }
             }
 
-            final Offset p2 = segsB[m].endPoint.coordinates;
-            final Offset p3 = segsB[m + 1].endPoint.coordinates;
-
-            final MPSegmentIntersection? hit =
-                MPGeometryAux.straightSegmentIntersection(p0, p1, p2, p3);
-
-            if (hit == null) {
-              continue;
-            }
-
-            result.putIfAbsent(lineA.mpID, () => []).add((
-              geoSegIdx: k,
-              crossPoint: hit.point,
-              tOnSeg: hit.tA,
-            ));
-            result.putIfAbsent(lineB.mpID, () => []).add((
-              geoSegIdx: m,
-              crossPoint: hit.point,
-              tOnSeg: hit.tB,
-            ));
+            // Case 4: Both Bézier (skip for Phase 1)
+            // else if ((segA is THBezierCurveLineSegment) &&
+            //     (segB is THBezierCurveLineSegment)) {
+            //   // TODO: Bézier-Bézier intersection (Phase 2)
+            // }
           }
         }
       }
@@ -99,6 +172,39 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     return result;
   }
 
+  /// Subdivides a cubic Bézier curve at parameter t using de Casteljau's algorithm.
+  /// Returns a tuple of (left piece, right piece) where each piece is a complete Bézier control point set.
+  ({_BezierSplitInfo left, _BezierSplitInfo right}) _subdivideBezierAtT(
+    Offset start,
+    Offset cp1,
+    Offset cp2,
+    Offset end,
+    double t,
+  ) {
+    // de Casteljau's algorithm: compute intermediate points on the Bézier hierarchy
+    final Offset m01 = Offset.lerp(start, cp1, t)!;
+    final Offset m12 = Offset.lerp(cp1, cp2, t)!;
+    final Offset m23 = Offset.lerp(cp2, end, t)!;
+
+    final Offset m012 = Offset.lerp(m01, m12, t)!;
+    final Offset m123 = Offset.lerp(m12, m23, t)!;
+
+    final Offset split = Offset.lerp(m012, m123, t)!;
+
+    return (
+      left: (controlPoint1: m01, controlPoint2: m012, endPoint: split),
+      right: (controlPoint1: m123, controlPoint2: m23, endPoint: end),
+    );
+  }
+
+  Offset _splitMarkerPoint(dynamic splitMarker) {
+    if (splitMarker is _BezierSplitInfo) {
+      return splitMarker.endPoint;
+    }
+
+    return splitMarker as Offset;
+  }
+
   void _buildSubLineCommandsForLine({
     required THLine originalLine,
     required List<_CrossingData> crossings,
@@ -107,13 +213,14 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     required List<int> newSubLineMPIDs,
   }) {
     final List<int> lineSegMPIDs = originalLine.getLineSegmentMPIDs(_th2File);
+    final List<THLineSegment> lineSegs = originalLine.getLineSegments(_th2File);
     final String? originalID = originalLine.hasOption(THCommandOptionType.id)
         ? (originalLine.getOption(THCommandOptionType.id)! as THIDCommandOption)
               .thID
         : null;
 
-    // Build virtual segment list: items are either int (index into lineSegMPIDs)
-    // or Offset (crossing point to insert as new straight segment).
+    // Build virtual segment list: items are int (segment index), Offset (straight crossing),
+    // or _BezierSplitInfo (subdivided Bézier piece).
     // Track split indices in the virtual list.
     final List<dynamic> virtualSegs = [];
     final List<int> splitVirtualIndices = [];
@@ -122,11 +229,55 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
     for (int i = 0; i < lineSegMPIDs.length; i++) {
       virtualSegs.add(i);
+      double previousSplitTOnOriginalSegment = 0.0;
+      Offset currentSegmentStart = lineSegs[i].endPoint.coordinates;
 
       while ((crossingIdx < crossings.length) &&
           (crossings[crossingIdx].geoSegIdx == i)) {
         splitVirtualIndices.add(virtualSegs.length);
-        virtualSegs.add(crossings[crossingIdx].crossPoint);
+        final double tOnOriginalSegment = crossings[crossingIdx].tOnSeg;
+        final THLineSegment seg = lineSegs[i + 1];
+
+        // Check if this segment is Bézier
+        if (seg is THBezierCurveLineSegment) {
+          final double remainingSegmentFraction =
+              1.0 - previousSplitTOnOriginalSegment;
+          final double tOnCurrentSegment =
+              (tOnOriginalSegment - previousSplitTOnOriginalSegment) /
+              remainingSegmentFraction;
+
+          // Subdivide the Bézier at parameter t on the current remainder.
+          final (
+            :_BezierSplitInfo left,
+            :_BezierSplitInfo right,
+          ) = _subdivideBezierAtT(
+            currentSegmentStart,
+            seg.controlPoint1.coordinates,
+            seg.controlPoint2.coordinates,
+            seg.endPoint.coordinates,
+            tOnCurrentSegment,
+          );
+
+          // Add left Bézier piece
+          virtualSegs.add(left);
+
+          // Replace the original segment with the right piece for processing next crossing
+          // (update lineSegs locally for next iteration)
+          lineSegs[i + 1] = THBezierCurveLineSegment(
+            parentMPID: seg.parentMPID,
+            controlPoint1: THPositionPart(coordinates: right.controlPoint1),
+            controlPoint2: THPositionPart(coordinates: right.controlPoint2),
+            endPoint: THPositionPart(coordinates: right.endPoint),
+            optionsMap: seg.optionsMap,
+            attrOptionsMap: seg.attrOptionsMap,
+          );
+          currentSegmentStart = left.endPoint;
+        } else {
+          // For straight segments, just add the crossing point
+          virtualSegs.add(crossings[crossingIdx].crossPoint);
+        }
+
+        previousSplitTOnOriginalSegment = tOnOriginalSegment;
         crossingIdx++;
       }
     }
@@ -161,7 +312,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
       if (subLineI > 0) {
         final int prevSplitVIdx = splitVirtualIndices[subLineI - 1];
-        final Offset prevCrossPoint = virtualSegs[prevSplitVIdx] as Offset;
+        final Offset prevCrossPoint = _splitMarkerPoint(
+          virtualSegs[prevSplitVIdx],
+        );
         final THStraightLineSegment bridgeSegment = THStraightLineSegment(
           parentMPID: newLineMPID,
           endPoint: THPositionPart(coordinates: prevCrossPoint),
@@ -181,12 +334,21 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         final THLineSegment newSeg;
 
         if (vSeg is int) {
-          final THLineSegment origSeg = _th2File.lineSegmentByMPID(
-            lineSegMPIDs[vSeg],
-          );
+          // Original segment index
+          final THLineSegment origSeg = lineSegs[vSeg];
 
           newSeg = _copySegment(origSeg, newLineMPID);
+        } else if (vSeg is _BezierSplitInfo) {
+          // Subdivided Bézier piece
+          final _BezierSplitInfo info = vSeg;
+          newSeg = THBezierCurveLineSegment(
+            parentMPID: newLineMPID,
+            controlPoint1: THPositionPart(coordinates: info.controlPoint1),
+            controlPoint2: THPositionPart(coordinates: info.controlPoint2),
+            endPoint: THPositionPart(coordinates: info.endPoint),
+          );
         } else {
+          // Crossing point (straight segment end)
           newSeg = THStraightLineSegment(
             parentMPID: newLineMPID,
             endPoint: THPositionPart(coordinates: vSeg as Offset),

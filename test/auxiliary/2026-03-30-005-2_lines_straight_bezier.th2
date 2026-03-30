@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap scrap1
+  line wall
+    257.8 -44.6
+    73.03068 124.52242 -86.15096 128.265544 -219.8 -33.4
+  endline
+  line wall
+    289.5 14.5
+    -261.8 33.5
+  endline
+endscrap

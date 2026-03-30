@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_geometry_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -50,6 +53,29 @@ void _selectAllLines(TH2FileEditController controller) {
   for (final THLine line in controller.th2File.getLines()) {
     controller.selectionController.addSelectedElement(line);
   }
+}
+
+void _expectOffsetCloseTo(Offset actual, Offset expected) {
+  expect(actual.dx, closeTo(expected.dx, 1e-6));
+  expect(actual.dy, closeTo(expected.dy, 1e-6));
+}
+
+void _expectBezierSegmentCloseTo(
+  THBezierCurveLineSegment actual,
+  THBezierCurveLineSegment expected,
+) {
+  _expectOffsetCloseTo(
+    actual.controlPoint1.coordinates,
+    expected.controlPoint1.coordinates,
+  );
+  _expectOffsetCloseTo(
+    actual.controlPoint2.coordinates,
+    expected.controlPoint2.coordinates,
+  );
+  _expectOffsetCloseTo(
+    actual.endPoint.coordinates,
+    expected.endPoint.coordinates,
+  );
 }
 
 void main() {
@@ -177,6 +203,115 @@ void main() {
         controller.undo();
 
         expect(th2File.getLines().length, 3);
+        expect(th2File == snapshotOriginal, isTrue);
+        expect(identical(th2File, snapshotOriginal), isFalse);
+      },
+    );
+
+    test(
+      'straight line crossing Bézier curve -> splits and undo restores',
+      () async {
+        final TH2FileEditController controller = await _loadController(
+          '2026-03-30-005-2_lines_straight_bezier.th2',
+          mpLocator,
+        );
+
+        final TH2File th2File = controller.th2File;
+        final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+        final List<THLine> originalLines = th2File.getLines().toList();
+        final THLine originalBezierLine = originalLines.firstWhere(
+          (final THLine line) => line
+              .getLineSegments(th2File)
+              .whereType<THBezierCurveLineSegment>()
+              .isNotEmpty,
+        );
+        final THLine originalStraightLine = originalLines.firstWhere(
+          (final THLine line) => line
+              .getLineSegments(th2File)
+              .whereType<THBezierCurveLineSegment>()
+              .isEmpty,
+        );
+        final List<THLineSegment> originalBezierLineSegments =
+            originalBezierLine.getLineSegments(th2File);
+        final List<THLineSegment> originalStraightLineSegments =
+            originalStraightLine.getLineSegments(th2File);
+        final Offset bezierStart =
+            originalBezierLineSegments.first.endPoint.coordinates;
+        final THBezierCurveLineSegment originalBezierSegment =
+            originalBezierLineSegments
+                .whereType<THBezierCurveLineSegment>()
+                .single;
+        final List<BezierStraightIntersection> intersections =
+            MPGeometryAux.bezierSegmentStraightSegmentIntersection(
+              bezierStart,
+              originalBezierSegment.controlPoint1.coordinates,
+              originalBezierSegment.controlPoint2.coordinates,
+              originalBezierSegment.endPoint.coordinates,
+              originalStraightLineSegments.first.endPoint.coordinates,
+              originalStraightLineSegments[1].endPoint.coordinates,
+            );
+
+        expect(intersections.length, 2);
+
+        final List<THBezierCurveLineSegment> firstSplit =
+            MPNumericAux.splitBezierCurveTHLineSegment(
+              startPoint: bezierStart,
+              lineSegment: originalBezierSegment,
+              t: intersections.first.tBezier,
+            );
+        final double secondRelativeT =
+            (intersections[1].tBezier - intersections.first.tBezier) /
+            (1.0 - intersections.first.tBezier);
+        final List<THBezierCurveLineSegment> secondSplit =
+            MPNumericAux.splitBezierCurveTHLineSegment(
+              startPoint: firstSplit.first.endPoint.coordinates,
+              lineSegment: firstSplit.last,
+              t: secondRelativeT,
+            );
+        final List<THBezierCurveLineSegment> expectedBezierSegments = [
+          firstSplit.first,
+          secondSplit.first,
+          secondSplit.last,
+        ];
+
+        expect(th2File.getLines().length, 2);
+
+        _selectAllLines(controller);
+
+        controller.splitMergeController.prepareSplitLinesAtCrossings();
+
+        final List<THLine> splitLines = th2File.getLines().toList();
+
+        expect(splitLines.length, 6);
+
+        final Iterable<THLine> linesWithBezierSegments = splitLines.where(
+          (final THLine line) => line
+              .getLineSegments(th2File)
+              .whereType<THBezierCurveLineSegment>()
+              .isNotEmpty,
+        );
+        final List<THBezierCurveLineSegment> actualBezierSegments =
+            linesWithBezierSegments
+                .map(
+                  (final THLine line) => line
+                      .getLineSegments(th2File)
+                      .whereType<THBezierCurveLineSegment>()
+                      .single,
+                )
+                .toList();
+
+        expect(linesWithBezierSegments.length, 3);
+
+        for (int i = 0; i < actualBezierSegments.length; i++) {
+          _expectBezierSegmentCloseTo(
+            actualBezierSegments[i],
+            expectedBezierSegments[i],
+          );
+        }
+
+        controller.undo();
+
+        expect(th2File.getLines().length, 2);
         expect(th2File == snapshotOriginal, isTrue);
         expect(identical(th2File, snapshotOriginal), isFalse);
       },
