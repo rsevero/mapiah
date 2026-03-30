@@ -146,12 +146,37 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
                 ));
               }
             }
+            // Case 4: Both Bézier
+            else if ((segA is THBezierCurveLineSegment) &&
+                (segB is THBezierCurveLineSegment)) {
+              final Offset p0A = segsA[k].endPoint.coordinates;
+              final Offset p0B = segsB[m].endPoint.coordinates;
 
-            // Case 4: Both Bézier (skip for Phase 1)
-            // else if ((segA is THBezierCurveLineSegment) &&
-            //     (segB is THBezierCurveLineSegment)) {
-            //   // TODO: Bézier-Bézier intersection (Phase 2)
-            // }
+              final List<BezierBezierIntersection> hits =
+                  MPGeometryAux.bezierBezierIntersection(
+                    p0A,
+                    segA.controlPoint1.coordinates,
+                    segA.controlPoint2.coordinates,
+                    segA.endPoint.coordinates,
+                    p0B,
+                    segB.controlPoint1.coordinates,
+                    segB.controlPoint2.coordinates,
+                    segB.endPoint.coordinates,
+                  );
+
+              for (final BezierBezierIntersection hit in hits) {
+                result.putIfAbsent(lineA.mpID, () => []).add((
+                  geoSegIdx: k,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tA,
+                ));
+                result.putIfAbsent(lineB.mpID, () => []).add((
+                  geoSegIdx: m,
+                  crossPoint: hit.point,
+                  tOnSeg: hit.tB,
+                ));
+              }
+            }
           }
         }
       }

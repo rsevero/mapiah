@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
@@ -308,6 +309,162 @@ void main() {
             expectedBezierSegments[i],
           );
         }
+
+        controller.undo();
+
+        expect(th2File.getLines().length, 2);
+        expect(th2File == snapshotOriginal, isTrue);
+        expect(identical(th2File, snapshotOriginal), isFalse);
+      },
+    );
+
+    test(
+      'two Bézier curves crossing once -> each splits into 2 sub-lines, undo restores',
+      () async {
+        final TH2FileEditController controller = await _loadController(
+          '2026-03-30-006-two_bezier_lines_crossing_once.th2',
+          mpLocator,
+        );
+        final TH2File th2File = controller.th2File;
+        final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+
+        _selectAllLines(controller);
+
+        controller.splitMergeController.prepareSplitLinesAtCrossings();
+
+        expect(th2File.getLines().length, 4);
+
+        final Map<String?, THLine> byID = _linesByID(th2File);
+
+        expect(byID.containsKey('line1-1'), isTrue);
+        expect(byID.containsKey('line1-2'), isTrue);
+        expect(byID.containsKey('line2-1'), isTrue);
+        expect(byID.containsKey('line2-2'), isTrue);
+
+        // Each sub-line: first segment (anchor) + one Bézier piece = 2 segments.
+        expect(byID['line1-1']!.getLineSegmentMPIDs(th2File).length, 2);
+        expect(byID['line1-2']!.getLineSegmentMPIDs(th2File).length, 2);
+        expect(byID['line2-1']!.getLineSegmentMPIDs(th2File).length, 2);
+        expect(byID['line2-2']!.getLineSegmentMPIDs(th2File).length, 2);
+
+        // Verify that the crossing point is near (150, 0), which is t=0.5 on
+        // both original curves. The end of sub-line 1 for each original line
+        // should be at approximately (150, 0).
+        // Tolerance is 1e-3: the subdivision algorithm converges to ~1e-6 AABB
+        // size, but coordinate error may be slightly larger.
+        final THLine line11 = byID['line1-1']!;
+        final List<THLineSegment> segs11 = line11.getLineSegments(th2File);
+        expect(segs11.last.endPoint.coordinates.dx, closeTo(150.0, 1e-3));
+        expect(segs11.last.endPoint.coordinates.dy, closeTo(0.0, 1e-3));
+
+        final THLine line21 = byID['line2-1']!;
+        final List<THLineSegment> segs21 = line21.getLineSegments(th2File);
+        expect(segs21.last.endPoint.coordinates.dx, closeTo(150.0, 1e-3));
+        expect(segs21.last.endPoint.coordinates.dy, closeTo(0.0, 1e-3));
+
+        controller.undo();
+
+        expect(th2File.getLines().length, 2);
+        expect(th2File == snapshotOriginal, isTrue);
+        expect(identical(th2File, snapshotOriginal), isFalse);
+      },
+    );
+
+    test(
+      'two Bézier curves crossing twice -> each splits into 3 sub-lines, undo restores',
+      () async {
+        // Fixture: line1 is an upward arch, line2 is a downward arch, both with
+        // x(t)=300t. Setting y_A(t)=y_B(t) gives t(1-t)=1/9, which has two
+        // solutions t1=(1-√5/3)/2 and t2=(1+√5/3)/2. Both crossings lie at y=100
+        // and x = 150 ∓ 50√5.
+        final TH2FileEditController controller = await _loadController(
+          '2026-03-30-007-two_bezier_lines_crossing_twice.th2',
+          mpLocator,
+        );
+        final TH2File th2File = controller.th2File;
+        final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+
+        _selectAllLines(controller);
+
+        controller.splitMergeController.prepareSplitLinesAtCrossings();
+
+        expect(th2File.getLines().length, 6);
+
+        final Map<String?, THLine> byID = _linesByID(th2File);
+
+        expect(byID.containsKey('line1-1'), isTrue);
+        expect(byID.containsKey('line1-2'), isTrue);
+        expect(byID.containsKey('line1-3'), isTrue);
+        expect(byID.containsKey('line2-1'), isTrue);
+        expect(byID.containsKey('line2-2'), isTrue);
+        expect(byID.containsKey('line2-3'), isTrue);
+
+        // Each sub-line: anchor + one Bézier piece = 2 segments.
+        for (final String id in [
+          'line1-1',
+          'line1-2',
+          'line1-3',
+          'line2-1',
+          'line2-2',
+          'line2-3',
+        ]) {
+          expect(byID[id]!.getLineSegmentMPIDs(th2File).length, 2, reason: id);
+        }
+
+        // Verify crossing points. By the analytical solution:
+        //   x1 = 150 - 50√5 ≈ 38.197,  x2 = 150 + 50√5 ≈ 261.803,  y = 100.
+        final double x1 = 150.0 - 50.0 * sqrt(5.0);
+        final double x2 = 150.0 + 50.0 * sqrt(5.0);
+        const double crossY = 100.0;
+        const double crossTolerance = 1e-2;
+
+        final List<THLineSegment> segs11 = byID['line1-1']!.getLineSegments(
+          th2File,
+        );
+        expect(
+          segs11.last.endPoint.coordinates.dx,
+          closeTo(x1, crossTolerance),
+        );
+        expect(
+          segs11.last.endPoint.coordinates.dy,
+          closeTo(crossY, crossTolerance),
+        );
+
+        final List<THLineSegment> segs12 = byID['line1-2']!.getLineSegments(
+          th2File,
+        );
+        expect(
+          segs12.last.endPoint.coordinates.dx,
+          closeTo(x2, crossTolerance),
+        );
+        expect(
+          segs12.last.endPoint.coordinates.dy,
+          closeTo(crossY, crossTolerance),
+        );
+
+        final List<THLineSegment> segs21 = byID['line2-1']!.getLineSegments(
+          th2File,
+        );
+        expect(
+          segs21.last.endPoint.coordinates.dx,
+          closeTo(x1, crossTolerance),
+        );
+        expect(
+          segs21.last.endPoint.coordinates.dy,
+          closeTo(crossY, crossTolerance),
+        );
+
+        final List<THLineSegment> segs22 = byID['line2-2']!.getLineSegments(
+          th2File,
+        );
+        expect(
+          segs22.last.endPoint.coordinates.dx,
+          closeTo(x2, crossTolerance),
+        );
+        expect(
+          segs22.last.endPoint.coordinates.dy,
+          closeTo(crossY, crossTolerance),
+        );
 
         controller.undo();
 

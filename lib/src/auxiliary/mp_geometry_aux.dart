@@ -14,6 +14,13 @@ typedef BezierStraightIntersection = ({
   Offset point, // Actual intersection point
 });
 
+/// Geometric intersection result for two cubic Bézier curves.
+typedef BezierBezierIntersection = ({
+  double tA, // Parameter on first Bézier curve (0–1)
+  double tB, // Parameter on second Bézier curve (0–1)
+  Offset point, // Intersection point
+});
+
 /// Static geometry utilities used by Mapiah.
 class MPGeometryAux {
   MPGeometryAux._();
@@ -177,6 +184,252 @@ class MPGeometryAux {
     );
 
     return results;
+  }
+
+  /// Finds intersections between two cubic Bézier curves using recursive AABB
+  /// subdivision (de Casteljau).
+  ///
+  /// Returns a list of intersections sorted by tA, where both tA and tB are
+  /// strictly in the interior (epsilon, 1-epsilon).
+  /// Returns an empty list when the curves do not intersect.
+  static List<BezierBezierIntersection> bezierBezierIntersection(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    Offset q0,
+    Offset q1,
+    Offset q2,
+    Offset q3, {
+    double epsilon = mpDoubleComparisonEpsilon,
+  }) {
+    final List<BezierBezierIntersection> raw = [];
+
+    _bezierBezierSubdivide(
+      p0,
+      p1,
+      p2,
+      p3,
+      0.0,
+      1.0,
+      q0,
+      q1,
+      q2,
+      q3,
+      0.0,
+      1.0,
+      raw,
+      0,
+    );
+
+    // Deduplicate results that converged to the same intersection point.
+    final List<BezierBezierIntersection> deduped = [];
+
+    for (final BezierBezierIntersection r in raw) {
+      final bool isDuplicate = deduped.any(
+        (final BezierBezierIntersection e) =>
+            ((r.tA - e.tA).abs() < mpBezierBezierDeduplicationEpsilon) &&
+            ((r.tB - e.tB).abs() < mpBezierBezierDeduplicationEpsilon),
+      );
+
+      if (!isDuplicate) {
+        deduped.add(r);
+      }
+    }
+
+    // Remove endpoint-only touches (both parameters must be interior).
+    deduped.removeWhere(
+      (final BezierBezierIntersection r) =>
+          (r.tA <= epsilon) ||
+          (r.tA >= 1.0 - epsilon) ||
+          (r.tB <= epsilon) ||
+          (r.tB >= 1.0 - epsilon),
+    );
+
+    deduped.sort(
+      (final BezierBezierIntersection a, final BezierBezierIntersection b) =>
+          a.tA.compareTo(b.tA),
+    );
+
+    return deduped;
+  }
+
+  static void _bezierBezierSubdivide(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    double tAMin,
+    double tAMax,
+    Offset q0,
+    Offset q1,
+    Offset q2,
+    Offset q3,
+    double tBMin,
+    double tBMax,
+    List<BezierBezierIntersection> results,
+    int depth,
+  ) {
+    if (!_bezierAABBsOverlap(p0, p1, p2, p3, q0, q1, q2, q3)) {
+      return;
+    }
+
+    final double sizeA = _bezierAABBSize(p0, p1, p2, p3);
+    final double sizeB = _bezierAABBSize(q0, q1, q2, q3);
+
+    if ((max(sizeA, sizeB) < mpBezierBezierConvergenceThreshold) ||
+        (depth >= mpBezierBezierMaxDepth)) {
+      final double tA = (tAMin + tAMax) / 2.0;
+      final double tB = (tBMin + tBMax) / 2.0;
+      final Offset point = _evalBezier(p0, p1, p2, p3, 0.5);
+
+      results.add((tA: tA, tB: tB, point: point));
+
+      return;
+    }
+
+    // Split the larger curve first to minimise recursion depth.
+    if (sizeA >= sizeB) {
+      final double tAMid = (tAMin + tAMax) / 2.0;
+      final Offset m01 = Offset.lerp(p0, p1, 0.5)!;
+      final Offset m12 = Offset.lerp(p1, p2, 0.5)!;
+      final Offset m23 = Offset.lerp(p2, p3, 0.5)!;
+      final Offset m012 = Offset.lerp(m01, m12, 0.5)!;
+      final Offset m123 = Offset.lerp(m12, m23, 0.5)!;
+      final Offset split = Offset.lerp(m012, m123, 0.5)!;
+
+      _bezierBezierSubdivide(
+        p0,
+        m01,
+        m012,
+        split,
+        tAMin,
+        tAMid,
+        q0,
+        q1,
+        q2,
+        q3,
+        tBMin,
+        tBMax,
+        results,
+        depth + 1,
+      );
+      _bezierBezierSubdivide(
+        split,
+        m123,
+        m23,
+        p3,
+        tAMid,
+        tAMax,
+        q0,
+        q1,
+        q2,
+        q3,
+        tBMin,
+        tBMax,
+        results,
+        depth + 1,
+      );
+    } else {
+      final double tBMid = (tBMin + tBMax) / 2.0;
+      final Offset m01 = Offset.lerp(q0, q1, 0.5)!;
+      final Offset m12 = Offset.lerp(q1, q2, 0.5)!;
+      final Offset m23 = Offset.lerp(q2, q3, 0.5)!;
+      final Offset m012 = Offset.lerp(m01, m12, 0.5)!;
+      final Offset m123 = Offset.lerp(m12, m23, 0.5)!;
+      final Offset split = Offset.lerp(m012, m123, 0.5)!;
+
+      _bezierBezierSubdivide(
+        p0,
+        p1,
+        p2,
+        p3,
+        tAMin,
+        tAMax,
+        q0,
+        m01,
+        m012,
+        split,
+        tBMin,
+        tBMid,
+        results,
+        depth + 1,
+      );
+      _bezierBezierSubdivide(
+        p0,
+        p1,
+        p2,
+        p3,
+        tAMin,
+        tAMax,
+        split,
+        m123,
+        m23,
+        q3,
+        tBMid,
+        tBMax,
+        results,
+        depth + 1,
+      );
+    }
+  }
+
+  static bool _bezierAABBsOverlap(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    Offset q0,
+    Offset q1,
+    Offset q2,
+    Offset q3,
+  ) {
+    final double aMinX = min(min(p0.dx, p1.dx), min(p2.dx, p3.dx));
+    final double aMaxX = max(max(p0.dx, p1.dx), max(p2.dx, p3.dx));
+    final double aMinY = min(min(p0.dy, p1.dy), min(p2.dy, p3.dy));
+    final double aMaxY = max(max(p0.dy, p1.dy), max(p2.dy, p3.dy));
+
+    final double bMinX = min(min(q0.dx, q1.dx), min(q2.dx, q3.dx));
+    final double bMaxX = max(max(q0.dx, q1.dx), max(q2.dx, q3.dx));
+    final double bMinY = min(min(q0.dy, q1.dy), min(q2.dy, q3.dy));
+    final double bMaxY = max(max(q0.dy, q1.dy), max(q2.dy, q3.dy));
+
+    return (aMinX <= bMaxX) &&
+        (aMaxX >= bMinX) &&
+        (aMinY <= bMaxY) &&
+        (aMaxY >= bMinY);
+  }
+
+  static double _bezierAABBSize(Offset p0, Offset p1, Offset p2, Offset p3) {
+    final double minX = min(min(p0.dx, p1.dx), min(p2.dx, p3.dx));
+    final double maxX = max(max(p0.dx, p1.dx), max(p2.dx, p3.dx));
+    final double minY = min(min(p0.dy, p1.dy), min(p2.dy, p3.dy));
+    final double maxY = max(max(p0.dy, p1.dy), max(p2.dy, p3.dy));
+
+    return max(maxX - minX, maxY - minY);
+  }
+
+  static Offset _evalBezier(
+    Offset p0,
+    Offset p1,
+    Offset p2,
+    Offset p3,
+    double t,
+  ) {
+    final double oneMinusT = 1.0 - t;
+    final double oneMinusT2 = oneMinusT * oneMinusT;
+    final double t2 = t * t;
+
+    return Offset(
+      (oneMinusT2 * oneMinusT * p0.dx) +
+          (3.0 * oneMinusT2 * t * p1.dx) +
+          (3.0 * oneMinusT * t2 * p2.dx) +
+          (t2 * t * p3.dx),
+      (oneMinusT2 * oneMinusT * p0.dy) +
+          (3.0 * oneMinusT2 * t * p1.dy) +
+          (3.0 * oneMinusT * t2 * p2.dy) +
+          (t2 * t * p3.dy),
+    );
   }
 
   /// Solves cubic polynomial: a*t³ + b*t² + c*t + d = 0.

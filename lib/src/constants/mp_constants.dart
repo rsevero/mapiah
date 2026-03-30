@@ -136,6 +136,17 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
+/// Maximum recursion depth for the Bézier-Bézier AABB subdivision algorithm.
+const int mpBezierBezierMaxDepth = 50;
+
+/// AABB size threshold below which the Bézier-Bézier subdivision is considered
+/// converged and an intersection point is reported.
+const double mpBezierBezierConvergenceThreshold = 1e-6;
+
+/// t-parameter tolerance used to deduplicate intersection results that converged
+/// to the same point via different subdivision paths.
+const double mpBezierBezierDeduplicationEpsilon = 1e-6;
+
 /// Fraction used to inset connection lines from endpoints (e.g., 1/20).
 const double mpConnectionLineInsetFraction = 1.0 / 20.0;
 

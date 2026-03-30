@@ -215,4 +215,119 @@ void main() {
       }
     });
   });
+
+  group('MPGeometryAux.bezierBezierIntersection', () {
+    // Two symmetric S-curves that cross at exactly (150, 0) at t=0.5 for both.
+    // Curve A: (0,100) → cp(100,200) cp(200,-200) → (300,-100)
+    // Curve B: (0,-100) → cp(100,-200) cp(200,200) → (300,100)
+    // At t=0.5 both evaluate to (150, 0).
+    const Offset aStart = Offset(0, 100);
+    const Offset aCp1 = Offset(100, 200);
+    const Offset aCp2 = Offset(200, -200);
+    const Offset aEnd = Offset(300, -100);
+
+    const Offset bStart = Offset(0, -100);
+    const Offset bCp1 = Offset(100, -200);
+    const Offset bCp2 = Offset(200, 200);
+    const Offset bEnd = Offset(300, 100);
+
+    test(
+      'two S-curves crossing once: finds intersection near t=0.5 for both',
+      () {
+        final List<BezierBezierIntersection> results =
+            MPGeometryAux.bezierBezierIntersection(
+              aStart,
+              aCp1,
+              aCp2,
+              aEnd,
+              bStart,
+              bCp1,
+              bCp2,
+              bEnd,
+            );
+
+        expect(results.length, 1);
+        expect(results[0].tA, closeTo(0.5, 1e-4));
+        expect(results[0].tB, closeTo(0.5, 1e-4));
+        expect(results[0].point.dx, closeTo(150.0, 1e-3));
+        expect(results[0].point.dy, closeTo(0.0, 1e-3));
+      },
+    );
+
+    test('results are sorted by tA', () {
+      // S-curve A that crosses a simple arc B twice.
+      // A: (0,-5) → cp(3,10) cp(7,-10) → (10,5)   [S-shape]
+      // B: (0,5) → cp(5,-10) cp(5,-10) → (10,5)   [downward arc]
+      final List<BezierBezierIntersection> results =
+          MPGeometryAux.bezierBezierIntersection(
+            const Offset(0, -5),
+            const Offset(3, 10),
+            const Offset(7, -10),
+            const Offset(10, 5),
+            const Offset(0, 5),
+            const Offset(5, -10),
+            const Offset(5, -10),
+            const Offset(10, -5),
+          );
+
+      for (int i = 1; i < results.length; i++) {
+        expect(results[i].tA, greaterThanOrEqualTo(results[i - 1].tA));
+      }
+    });
+
+    test('non-overlapping curves return empty list', () {
+      final List<BezierBezierIntersection> results =
+          MPGeometryAux.bezierBezierIntersection(
+            const Offset(0, 0),
+            const Offset(10, 0),
+            const Offset(20, 0),
+            const Offset(30, 0),
+            const Offset(0, 100),
+            const Offset(10, 100),
+            const Offset(20, 100),
+            const Offset(30, 100),
+          );
+
+      expect(results, isEmpty);
+    });
+
+    test('two arcs side by side (no crossing) return empty list', () {
+      // Curve A arches upward on the left; curve B arches upward on the right.
+      // Their AABBs do not overlap.
+      final List<BezierBezierIntersection> results =
+          MPGeometryAux.bezierBezierIntersection(
+            const Offset(0, 0),
+            const Offset(5, 50),
+            const Offset(10, 50),
+            const Offset(15, 0),
+            const Offset(100, 0),
+            const Offset(105, 50),
+            const Offset(110, 50),
+            const Offset(115, 0),
+          );
+
+      expect(results, isEmpty);
+    });
+
+    test('all returned tA and tB values are strictly interior', () {
+      final List<BezierBezierIntersection> results =
+          MPGeometryAux.bezierBezierIntersection(
+            aStart,
+            aCp1,
+            aCp2,
+            aEnd,
+            bStart,
+            bCp1,
+            bCp2,
+            bEnd,
+          );
+
+      for (final BezierBezierIntersection r in results) {
+        expect(r.tA, greaterThan(eps));
+        expect(r.tA, lessThan(1.0 - eps));
+        expect(r.tB, greaterThan(eps));
+        expect(r.tB, lessThan(1.0 - eps));
+      }
+    });
+  });
 }
