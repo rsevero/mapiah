@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 
 class MPHelpButtonWidget extends StatelessWidget {
-  final BuildContext context;
+  final BuildContext parentContext;
   final String helpPage;
   final String title;
   final IconData? iconData;
   final String? tooltip;
 
   MPHelpButtonWidget(
-    this.context,
+    this.parentContext,
     this.helpPage,
     this.title, {
     this.iconData,
@@ -25,8 +25,9 @@ class MPHelpButtonWidget extends StatelessWidget {
       key: ValueKey('$helpPage HelpPageButton'),
       icon: Icon(iconData ?? Icons.help_outline),
       color: Theme.of(context).colorScheme.onSecondaryContainer,
-      onPressed: () => MPDialogAux.showHelpDialog(context, helpPage, title),
-      tooltip: tooltip ?? AppLocalizations.of(context).helpDialogTooltip,
+      onPressed: () =>
+          MPDialogAux.showHelpDialog(parentContext, helpPage, title),
+      tooltip: tooltip ?? mpLocator.appLocalizations.helpDialogTooltip,
     );
   }
 }

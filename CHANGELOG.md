@@ -9,6 +9,7 @@
   * Split selected lines at crossings: when two or more lines are selected, pressing Ctrl+Shift+X (or using the new state-context FAB action) splits the selected lines at detected straight-segment intersections, preserving options and generating sub-line IDs with numeric suffixes (for lines that already have IDs). The action is fully undoable.
 * Fixed bugs:
   * "Rerun Therion" toolbar button now enabled after running Therion (via button or command-line `--thconfig`) even when Therion reports an error or is unavailable; the THconfig path is now always stored so the user can fix settings and rerun without re-picking the file.
+  * MPHelpButtonWidget now uses `mpLocator.appLocalizations` directly instead of attempting to retrieve localizations from context, ensuring consistent localization access across the app.
 * Infrastructure maintenance:
   * Elapsed time in the Run Therion dialog now updates live every second via a `Timer.periodic` + `ValueNotifier<Duration>`, so only the elapsed time text rebuilds — not the whole dialog.
   * Added EN/PT help pages (`run_therion_help`) for the Run Therion dialog, and a help icon button in the dialog actions row. Updated to document the `--therion_run_parameters` CLI argument.
