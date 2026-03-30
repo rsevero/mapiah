@@ -325,6 +325,12 @@ abstract class TH2FileEditControllerBase with Store {
       stateController.state is MPTH2FileEditStateSelectEmptySelection;
 
   @computed
+  bool get isInAddElementState =>
+      (stateController.state is MPTH2FileEditStateAddArea) ||
+      (stateController.state is MPTH2FileEditStateAddLine) ||
+      (stateController.state is MPTH2FileEditStateAddPoint);
+
+  @computed
   bool get hasSelectedEndPoints =>
       selectionController.selectedEndControlPoints.isNotEmpty;
 

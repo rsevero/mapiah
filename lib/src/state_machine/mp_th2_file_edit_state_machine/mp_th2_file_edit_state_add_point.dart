@@ -49,5 +49,10 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
   }
 
   @override
+  void onSelectAll() {
+    selectionController.selectAllElements();
+  }
+
+  @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.addPoint;
 }

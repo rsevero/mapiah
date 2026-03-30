@@ -557,6 +557,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
           buttons.addAll(_selectNonEmptySelectionContextFABs(heroPrefix));
         } else if (th2FileEditController.isInSelectEmptySelectionState) {
           buttons.addAll(_selectEmptySelectionContextFABs(heroPrefix));
+        } else if (th2FileEditController.isInAddElementState) {
+          buttons.addAll(_addElementContextFABs(heroPrefix));
         }
 
         if (buttons.isEmpty) {
@@ -809,6 +811,21 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         onPressed: null,
         icon: Icons.add_link,
         tooltip: appLocalizations.th2FileEditPageCreateMapConnectionLines,
+      ),
+    ];
+  }
+
+  List<Widget> _addElementContextFABs(String heroPrefix) {
+    return [
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_select_all_elements',
+        onPressed: th2FileEditController.enableSelectButton
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.selectAllElements,
+              )
+            : null,
+        icon: Icons.select_all,
+        tooltip: appLocalizations.th2FileEditPageSelectAllElements,
       ),
     ];
   }

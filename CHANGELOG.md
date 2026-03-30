@@ -5,6 +5,7 @@
 ## 0.3.4 - not yet released
 * Highlights:
 * New features:
+  * Select all (Ctrl+A) now works in add-element states (add area, add line, add point): pressing Ctrl+A or clicking the new select-all FAB selects all elements and exits the add mode. For add-line, any in-progress line is finalized first (same as pressing Enter) before selecting all.
   * Therion run parameters: a new text field in the Run Therion dialog lets users enter extra Therion command-line options (e.g. `-d` for debug) that are passed to Therion on every run. The value is persisted as the `Main_TherionRunParameters` setting and can also be set via the `--therion_run_parameters` command-line argument. Closes [#20](https://github.com/rsevero/mapiah/issues/20).
   * Split selected lines at crossings: when two or more lines are selected, pressing Ctrl+Shift+X (or using the new state-context FAB action) splits the selected lines at detected intersection points, preserving options and generating sub-line IDs with numeric suffixes (for lines that already have IDs). Now supports all segment-pair combinations: straight–straight, Bézier–straight, and Bézier–Bézier. Bézier–Bézier intersection is found via recursive AABB subdivision (de Casteljau), and the resulting sub-curves are correctly split using the same de Casteljau algorithm. The action is fully undoable.
 * Fixed bugs:

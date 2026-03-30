@@ -26,6 +26,11 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
             MPTH2FileEditStateType.addArea,
           );
           keyProcessed = true;
+        } else if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          onSelectAll();
+          keyProcessed = true;
         }
       case LogicalKeyboardKey.keyC:
         if (!isAltPressed &&
