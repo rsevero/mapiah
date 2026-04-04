@@ -207,6 +207,8 @@
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
 [X] - Show full file name at file tab.
 [ ] - Create a way to the user create perfectly 15° multiple angle line segments.
+[ ] - Move background images
+[ ] - Resize background images
 
 ## Version 1.0
 [ ] - Raster images tracing.
