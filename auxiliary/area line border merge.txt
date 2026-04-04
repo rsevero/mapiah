@@ -1,0 +1,23 @@
+Present a plan to implement closed lines merging.
+
+The lines to be merged can come either from:
+
+1. Areas with more than one THAreaBorderTHID;
+2. More than one area selected.
+
+The new FAB button for area border merging will be enabled when there are more than one THAreaBorderTHID selected (either because of situation 1 or 2 before).
+
+All lines referenced by THAreaBorderTHIDs from selected areas (LTSA) will be processed during "Area line border merge". The indicated shortcut available on keyboard_shortcut help page can also be used to activate this action.
+
+All LTSA will be treated as closed lines.
+
+The single final area with all merged lines will have the same options as the first area on the selected elements list. If it already has a THID, use it.
+
+All final merged lines will have the same options as the first line on the list of LTSAs. If it already has a THID, use it.
+
+Steps:
+
+1. For each LTSA: if end point != start point, create a straight line segment from end point to start point.
+2. Get all LTSAs and split them at all crossings. Even internal corssings should result in split, i.e., if a line segment crosses any line segment from the same line or from other selected lines, there should be a split. Even in case the same Bezier curve line segment crossed itself.
+
+
