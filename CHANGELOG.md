@@ -2,8 +2,11 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.3.4 - not yet released
+## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:
+  * **Ctrl+A and Ctrl+V in add-element states** let you select all elements or paste clipboard content without first cancelling the add operation; an in-progress line is auto-finalized first.
+  * **Extra Therion run parameters** can be typed directly in the Run Therion dialog (persisted as `Main_TherionRunParameters`) and passed via the new `--therion_run_parameters` CLI argument.
+  * **Bézier–Bézier line splitting** completes full crossing-split support: all segment-pair combinations (straight–straight, Bézier–straight, Bézier–Bézier) are now handled when splitting selected lines at intersections (Ctrl+Shift+X).
 * New features:
   * Select all (Ctrl+A) and paste (Ctrl+V) now work in add-element states (add area, add line, add point): pressing Ctrl+A or clicking the new select-all FAB selects all elements and exits the add mode; pressing Ctrl+V or clicking the paste FAB pastes clipboard content. For add-line, any in-progress line is finalized first (same as pressing Enter) before the action is performed.
   * Therion run parameters: a new text field in the Run Therion dialog lets users enter extra Therion command-line options (e.g. `-d` for debug) that are passed to Therion on every run. The value is persisted as the `Main_TherionRunParameters` setting and can also be set via the `--therion_run_parameters` command-line argument. Closes [#20](https://github.com/rsevero/mapiah/issues/20).
