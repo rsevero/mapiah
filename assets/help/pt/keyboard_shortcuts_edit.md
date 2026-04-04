@@ -23,7 +23,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar segmento de linha entre segmentos de linha selecionados          | /                                             |
 | Desfazer                                                               | Ctrl+Z                                        |
 | Desselecionar tudo                                                     | Escape                                        |
-| Dividir linha nos pontos de linha selecionados                         | Ctrl+Shift+P                                  |
+| Dividir linha nos pontos de linha selecionados                         | Ctrl+P                                        |
 | Dividir linhas selecionadas nos cruzamentos de linhas                  | Ctrl+Shift+X                                  |
 | Duplicar elementos selecionados                                        | Ctrl+D                                        |
 | Editar nó de linha                                                     | N                                             |

@@ -1466,7 +1466,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageSplitLineAtSelectedEndPoints =>
-      'Split line at selected end points (Ctrl+Shift+P)';
+      'Split line at selected end points (Ctrl+P)';
 
   @override
   String get th2FileEditPageSplitLinesAtCrossings =>

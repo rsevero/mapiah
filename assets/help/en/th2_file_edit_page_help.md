@@ -282,7 +282,7 @@ Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an 
 
 ## Split line at selected points
 
-While in line edit mode (_N_), select one or more internal line points and press _Ctrl+Shift+P_ to split the line into multiple lines at those points.
+While in line edit mode (_N_), select one or more internal line points and press _Ctrl+P_ to split the line into multiple lines at those points.
 
 **How it works:**
 - The first new line contains all segments from the original line's start up to and including the first selected point.

@@ -193,7 +193,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         keyProcessed = onKeyODownEvent(event);
       case LogicalKeyboardKey.keyP:
         if ((isCtrlPressed || isMetaPressed) &&
-            isShiftPressed &&
+            !isShiftPressed &&
             !isAltPressed) {
           th2FileEditController.splitMergeController
               .prepareSplitLineAtSelectedEndPoints();

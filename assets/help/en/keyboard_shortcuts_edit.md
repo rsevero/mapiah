@@ -42,7 +42,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Simplify line - to Bézier curve line segments              | Ctrl+Alt+L                              |
 | Simplify line - to straight line segments                  | Ctrl+Shift+L                            |
 | Smooth line point                                          | S                                       |
-| Split line at selected line points                         | Ctrl+Shift+P                            |
+| Split line at selected line points                         | Ctrl+P                                  |
 | Split selected lines at crossings                          | Ctrl+Shift+X                            |
 | Toggle all grids visibility                                | Ctrl+G                                  |
 | Toggle all images visibility                               | Ctrl+I                                  |

@@ -282,7 +282,7 @@ Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O
 
 ## Dividir linha nos pontos selecionados
 
-No modo de edição de linha (_N_), selecione um ou mais pontos internos da linha e pressione _Ctrl+Shift+P_ para dividir a linha em múltiplas linhas nesses pontos.
+No modo de edição de linha (_N_), selecione um ou mais pontos internos da linha e pressione _Ctrl+P_ para dividir a linha em múltiplas linhas nesses pontos.
 
 **Como funciona:**
 - A primeira nova linha contém todos os segmentos desde o início da linha original até o primeiro ponto selecionado (inclusive).

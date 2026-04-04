@@ -2731,7 +2731,7 @@ abstract class AppLocalizations {
   /// Tooltip for the split line at selected end points FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Split line at selected end points (Ctrl+Shift+P)'**
+  /// **'Split line at selected end points (Ctrl+P)'**
   String get th2FileEditPageSplitLineAtSelectedEndPoints;
 
   /// Tooltip for the split selected lines at crossings FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart

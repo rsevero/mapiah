@@ -2276,7 +2276,7 @@
     "description": "The label for the snap tool button. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
-  "th2FileEditPageSplitLineAtSelectedEndPoints": "Split line at selected end points (Ctrl+Shift+P)",
+  "th2FileEditPageSplitLineAtSelectedEndPoints": "Split line at selected end points (Ctrl+P)",
   "@th2FileEditPageSplitLineAtSelectedEndPoints": {
     "description": "Tooltip for the split line at selected end points FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
