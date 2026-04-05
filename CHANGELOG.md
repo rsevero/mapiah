@@ -13,6 +13,7 @@
   * Add area by clicking existing lines: when clicked lines had no THID yet, only the last clicked line ended up referenced by the new area. The add-area flow now wraps the area creation command only on the first clicked border and keeps later clicks as pure border additions, so all clicked lines remain attached to the area.
 * Infrastructure maintenance:
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
+  * TH2FileEditSplitMergeController now routes its snackbar messages through the local `_showSnackbar()` helper instead of repeating the same `ScaffoldMessenger` boilerplate at each call site.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:

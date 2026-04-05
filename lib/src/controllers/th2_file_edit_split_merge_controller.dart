@@ -515,17 +515,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         _computeExtremityCoincidences(selectedLines, toleranceOnCanvas);
 
     if (coincidences.isEmpty) {
-      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
-            ),
-          ),
-        );
-      }
+      _showSnackbar(
+        mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+      );
 
       return;
     }
@@ -536,17 +528,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     final Set<int> joinableLineMPIDs = adjacency.keys.toSet();
 
     if (joinableLineMPIDs.length < 2) {
-      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
-            ),
-          ),
-        );
-      }
+      _showSnackbar(
+        mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+      );
 
       return;
     }
@@ -573,17 +557,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     }
 
     if (allJoinPaths.isEmpty) {
-      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
-            ),
-          ),
-        );
-      }
+      _showSnackbar(
+        mpLocator.appLocalizations.noCoincidingLineExtremitiesFound,
+      );
 
       return;
     }
@@ -1197,15 +1173,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     final THLine originalLine = _th2File.lineByMPID(lineMPID);
 
     if (_th2File.getAreaMPIDByLineMPID(lineMPID) != null) {
-      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(mpLocator.appLocalizations.cannotSplitAreaBorderLine),
-          ),
-        );
-      }
+      _showSnackbar(mpLocator.appLocalizations.cannotSplitAreaBorderLine);
 
       return;
     }
@@ -1386,15 +1354,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     );
 
     if (crossingsPerLine.isEmpty) {
-      final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
-
-      if (context != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(mpLocator.appLocalizations.noLinesAtCrossingsFound),
-          ),
-        );
-      }
+      _showSnackbar(mpLocator.appLocalizations.noLinesAtCrossingsFound);
 
       return;
     }
