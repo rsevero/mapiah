@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey, rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
@@ -26,6 +26,47 @@ class MPHelpDialogWidget extends StatelessWidget {
     required this.onPressedClose,
     this.source = MPHelpPageSource.asset,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return _MPHelpDialogBody(
+      helpPage: helpPage,
+      title: title,
+      onPressedClose: onPressedClose,
+      source: source,
+    );
+  }
+}
+
+class _MPHelpDialogLoadResult {
+  final String markdown;
+  final Map<String, int> headingAnchorToIndex;
+
+  const _MPHelpDialogLoadResult({
+    required this.markdown,
+    required this.headingAnchorToIndex,
+  });
+}
+
+class _MPHelpDialogBody extends StatefulWidget {
+  final String helpPage;
+  final String title;
+  final VoidCallback onPressedClose;
+  final MPHelpPageSource source;
+
+  const _MPHelpDialogBody({
+    required this.helpPage,
+    required this.title,
+    required this.onPressedClose,
+    required this.source,
+  });
+
+  @override
+  State<_MPHelpDialogBody> createState() => _MPHelpDialogBodyState();
+}
+
+class _MPHelpDialogBodyState extends State<_MPHelpDialogBody> {
+  final TocController _tocController = TocController();
 
   String _getLocaleID(BuildContext context) {
     final String localIDSetting = mpLocator.mpSettingsController
@@ -51,7 +92,7 @@ class MPHelpDialogWidget extends StatelessWidget {
 
     for (final String preferredLocaleID in preferredLocaleIDs) {
       final String helpPageAssetPath =
-          '$mpHelpPagePath/$preferredLocaleID/$helpPage.md';
+          '$mpHelpPagePath/$preferredLocaleID/${widget.helpPage}.md';
 
       try {
         return await rootBundle.loadString(helpPageAssetPath);
@@ -60,7 +101,8 @@ class MPHelpDialogWidget extends StatelessWidget {
       }
     }
 
-    throw lastError ?? StateError('Unable to load help page $helpPage.');
+    throw lastError ??
+        StateError('Unable to load help page ${widget.helpPage}.');
   }
 
   Future<String?> _loadMarkdownFromWeb(String localeID) async {
@@ -68,7 +110,7 @@ class MPHelpDialogWidget extends StatelessWidget {
 
     for (final String preferredLocaleID in preferredLocaleIDs) {
       final Uri helpPageUri = Uri.parse(
-        '$mpMapiahGithubHelpPagesURLPrefix/$preferredLocaleID/$helpPage.md',
+        '$mpMapiahGithubHelpPagesURLPrefix/$preferredLocaleID/${widget.helpPage}.md',
       );
 
       try {
@@ -85,11 +127,11 @@ class MPHelpDialogWidget extends StatelessWidget {
     return null;
   }
 
-  Future<String> _loadMarkdown(BuildContext context) async {
+  Future<_MPHelpDialogLoadResult> _loadMarkdown(BuildContext context) async {
     final String localeID = _getLocaleID(context);
     final String raw;
 
-    if (source == MPHelpPageSource.githubRaw) {
+    if (widget.source == MPHelpPageSource.githubRaw) {
       final String? remoteMarkdown = await _loadMarkdownFromWeb(localeID);
 
       raw = remoteMarkdown ?? await _loadMarkdownFromAssets(localeID);
@@ -97,7 +139,55 @@ class MPHelpDialogWidget extends StatelessWidget {
       raw = await _loadMarkdownFromAssets(localeID);
     }
 
-    return raw.replaceAll(RegExp(r'<!--.*?-->', dotAll: true), '').trim();
+    final String markdown = raw
+        .replaceAll(RegExp(r'<!--.*?-->', dotAll: true), '')
+        .trim();
+
+    return _MPHelpDialogLoadResult(
+      markdown: markdown,
+      headingAnchorToIndex: mpBuildHelpHeadingAnchorToIndexMap(markdown),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tocController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLinkTap(
+    String url,
+    Map<String, int> headingAnchorToIndex,
+  ) async {
+    final String trimmedUrl = url.trim();
+
+    if (trimmedUrl.isEmpty) {
+      return;
+    }
+
+    final Uri? uri = Uri.tryParse(trimmedUrl);
+    final String fragment = (uri?.fragment ?? '').trim();
+    final bool isInternalFragment = trimmedUrl.startsWith('#');
+
+    if (isInternalFragment && fragment.isNotEmpty) {
+      final String normalizedFragment = Uri.decodeComponent(
+        fragment,
+      ).toLowerCase();
+      final int? headingIndex = headingAnchorToIndex[normalizedFragment];
+
+      if ((headingIndex != null) &&
+          (_tocController.tocList.length > headingIndex)) {
+        _tocController.jumpToIndex(
+          _tocController.tocList[headingIndex].widgetIndex,
+        );
+      }
+
+      return;
+    }
+
+    if (uri != null) {
+      await MPUrlLauncher.openUrl(uri);
+    }
   }
 
   @override
@@ -121,14 +211,14 @@ class MPHelpDialogWidget extends StatelessWidget {
         actions: <Type, Action<Intent>>{
           ActivateIntent: CallbackAction<ActivateIntent>(
             onInvoke: (intent) {
-              onPressedClose();
+              widget.onPressedClose();
               return null;
             },
           ),
         },
         child: Focus(
           autofocus: true,
-          child: FutureBuilder<String>(
+          child: FutureBuilder<_MPHelpDialogLoadResult>(
             future: _loadMarkdown(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
@@ -136,18 +226,20 @@ class MPHelpDialogWidget extends StatelessWidget {
               }
               if (snapshot.hasError) {
                 return AlertDialog(
-                  title: Text(title),
+                  title: Text(widget.title),
                   content: Text(
                     mpLocator.appLocalizations.helpDialogFailureToLoad,
                   ),
                   actions: <Widget>[
                     TextButton(
-                      onPressed: onPressedClose,
+                      onPressed: widget.onPressedClose,
                       child: Text(mpLocator.appLocalizations.buttonClose),
                     ),
                   ],
                 );
               }
+
+              final _MPHelpDialogLoadResult loadResult = snapshot.data!;
 
               return SizedBox(
                 width: dialogWidth,
@@ -158,17 +250,28 @@ class MPHelpDialogWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
                       child: Text(
-                        title,
+                        widget.title,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: SingleChildScrollView(
-                          child: MarkdownBlock(
-                            data: snapshot.data ?? '',
-                            selectable: false,
+                        child: MarkdownWidget(
+                          data: loadResult.markdown,
+                          selectable: false,
+                          tocController: _tocController,
+                          config: MarkdownConfig(
+                            configs: <WidgetConfig>[
+                              LinkConfig(
+                                onTap: (String url) {
+                                  _handleLinkTap(
+                                    url,
+                                    loadResult.headingAnchorToIndex,
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -177,7 +280,7 @@ class MPHelpDialogWidget extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: onPressedClose,
+                          onPressed: widget.onPressedClose,
                           child: Text(mpLocator.appLocalizations.buttonClose),
                         ),
                       ),
@@ -191,4 +294,78 @@ class MPHelpDialogWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+@visibleForTesting
+Map<String, int> mpBuildHelpHeadingAnchorToIndexMap(String markdown) {
+  final Map<String, int> headingAnchorToIndex = <String, int>{};
+  final Map<String, int> slugCounts = <String, int>{};
+  final List<String> lines = markdown.split('\n');
+  int headingIndex = 0;
+
+  for (final String line in lines) {
+    final RegExpMatch? match = RegExp(
+      r'^\s{0,3}#{1,6}\s+(.+?)\s*$',
+    ).firstMatch(line);
+
+    if (match == null) {
+      continue;
+    }
+
+    final String headingText = mpStripMarkdownFormattingFromHeading(
+      match.group(1)!,
+    );
+    final String baseSlug = mpSlugifyHelpHeading(headingText);
+
+    if (baseSlug.isEmpty) {
+      continue;
+    }
+
+    final int duplicateCount = slugCounts[baseSlug] ?? 0;
+    slugCounts[baseSlug] = duplicateCount + 1;
+
+    final String fullSlug = (duplicateCount == 0)
+        ? baseSlug
+        : '$baseSlug-$duplicateCount';
+
+    headingAnchorToIndex[fullSlug] = headingIndex;
+    headingIndex++;
+  }
+
+  return headingAnchorToIndex;
+}
+
+@visibleForTesting
+String mpStripMarkdownFormattingFromHeading(String text) {
+  String stripped = text.trim();
+
+  stripped = stripped.replaceAll(RegExp(r'\s+#+\s*$'), '');
+  stripped = stripped.replaceAllMapped(
+    RegExp(r'!\[([^\]]*)\]\([^)]+\)'),
+    (Match match) => match.group(1) ?? '',
+  );
+  stripped = stripped.replaceAllMapped(
+    RegExp(r'\[([^\]]+)\]\([^)]+\)'),
+    (Match match) => match.group(1) ?? '',
+  );
+  stripped = stripped.replaceAll(RegExp(r'[`*_~]'), '');
+
+  return stripped.trim();
+}
+
+@visibleForTesting
+String mpSlugifyHelpHeading(String text) {
+  final String lowerCased = text.toLowerCase();
+  final String withoutPunctuation = lowerCased.replaceAll(
+    RegExp(r'[^\p{L}\p{N}\s-]', unicode: true),
+    '',
+  );
+  final String normalizedWhitespace = withoutPunctuation.replaceAll(
+    RegExp(r'\s+'),
+    '-',
+  );
+
+  return normalizedWhitespace
+      .replaceAll(RegExp(r'-+'), '-')
+      .replaceAll(RegExp(r'^-|-$'), '');
 }

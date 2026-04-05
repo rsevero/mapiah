@@ -14,6 +14,7 @@
   * Select all (Ctrl+A) now works while the editor is in the "add line border to area" state, so you can leave that mode by selecting all elements without cancelling the flow first.
   * Renamed the "Node edit" tool/button to "Node/line edit" to reflect that the same mode is used to edit both line nodes and line-level geometry.
   * Scrap `-stations` options now preserve bracketed station lists in memory, so fixtures like `[1.35 1.36 1.37]` are parsed into individual stations instead of being dropped or collapsed into one string. [reported by Axel Hack]
+  * Internal links inside help pages now jump to the correct section within the same document, including headings with accents such as `Bézier curve line segments`. [reported by Axel Hack]
 * Infrastructure maintenance:
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
   * TH2FileEditSplitMergeController now routes its snackbar messages through the local `_showSnackbar()` helper instead of repeating the same `ScaffoldMessenger` boilerplate at each call site.
