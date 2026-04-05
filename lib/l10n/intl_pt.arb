@@ -415,7 +415,7 @@
   "th2FileEditPageMergeAreas": "Mesclar áreas (Ctrl+M)",
   "th2FileEditPageNoRedoAvailable": "Nenhuma ação para refazer",
   "th2FileEditPageNoUndoAvailable": "Nenhuma ação para desfazer",
-  "th2FileEditPageNodeEditTool": "Editar nós (N)",
+  "th2FileEditPageNodeEditTool": "Editar nó/linha (N)",
   "th2FileEditPageOpenOptionWindow": "Abrir janela de opções (O)",
   "th2FileEditPageOptionTool": "Opções (O)",
   "th2FileEditPagePanTool": "Mover ponto de vista",

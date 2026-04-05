@@ -2497,7 +2497,7 @@ abstract class AppLocalizations {
   /// The label for the node edit tool button. Used on: _TH2FileEditPageState._editElementButtons
   ///
   /// In en, this message translates to:
-  /// **'Node edit (N)'**
+  /// **'Node/line edit (N)'**
   String get th2FileEditPageNodeEditTool;
 
   /// Tooltip for the open option window FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart

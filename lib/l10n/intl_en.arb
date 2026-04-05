@@ -2076,7 +2076,7 @@
     "description": "The label for the no undo available message. Used on: _TH2FileEditPageState._stateActionButtons",
     "type": "text"
   },
-  "th2FileEditPageNodeEditTool": "Node edit (N)",
+  "th2FileEditPageNodeEditTool": "Node/line edit (N)",
   "@th2FileEditPageNodeEditTool": {
     "description": "The label for the node edit tool button. Used on: _TH2FileEditPageState._editElementButtons",
     "type": "text"

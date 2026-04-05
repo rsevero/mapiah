@@ -27,7 +27,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Hide selected elements / Show all hidden elements          | Ctrl+H                                  |
 | Join lines at coincident start/end line points             | Ctrl+J                                  |
 | Keyboard shortcuts                                         | Ctrl+K                                  |
-| Line node edit                                             | N                                       |
+| Node/line edit                                             | N                                       |
 | Merge areas                                                | Ctrl+M                                  |
 | Options edit (elements selected)                           | O                                       |
 | Paste elements                                             | Ctrl+V                                  |

@@ -1354,7 +1354,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageNoUndoAvailable => 'Nenhuma ação para desfazer';
 
   @override
-  String get th2FileEditPageNodeEditTool => 'Editar nós (N)';
+  String get th2FileEditPageNodeEditTool => 'Editar nó/linha (N)';
 
   @override
   String get th2FileEditPageOpenOptionWindow => 'Abrir janela de opções (O)';

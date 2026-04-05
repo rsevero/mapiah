@@ -12,6 +12,7 @@
   * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
   * Add area by clicking existing lines: when clicked lines had no THID yet, only the last clicked line ended up referenced by the new area. The add-area flow now wraps the area creation command only on the first clicked border and keeps later clicks as pure border additions, so all clicked lines remain attached to the area.
   * Select all (Ctrl+A) now works while the editor is in the "add line border to area" state, so you can leave that mode by selecting all elements without cancelling the flow first.
+  * Renamed the "Node edit" tool/button to "Node/line edit" to reflect that the same mode is used to edit both line nodes and line-level geometry.
 * Infrastructure maintenance:
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
   * TH2FileEditSplitMergeController now routes its snackbar messages through the local `_showSnackbar()` helper instead of repeating the same `ScaffoldMessenger` boilerplate at each call site.

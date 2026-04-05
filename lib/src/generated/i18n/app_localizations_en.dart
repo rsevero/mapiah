@@ -1338,7 +1338,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageNoUndoAvailable => 'No undo available';
 
   @override
-  String get th2FileEditPageNodeEditTool => 'Node edit (N)';
+  String get th2FileEditPageNodeEditTool => 'Node/line edit (N)';
 
   @override
   String get th2FileEditPageOpenOptionWindow => 'Open options window (O)';
