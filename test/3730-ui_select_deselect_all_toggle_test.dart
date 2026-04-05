@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
+import 'dart:ui' show Size;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -38,8 +39,9 @@ void main() {
       mpLocator.mpGeneralController.reset();
     });
 
-    Future<({TH2File th2File, TH2FileEditController th2Controller})>
-    pumpEditor(WidgetTester tester) async {
+    Future<({TH2File th2File, TH2FileEditController th2Controller})> pumpEditor(
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(1280, 720);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -47,8 +49,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final TH2FileEditController th2Controller = mpLocator
-          .mpGeneralController
+      final TH2FileEditController th2Controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: THTestAux.testPath(testFile));
 
       await tester.runAsync(() async {
@@ -72,10 +73,8 @@ void main() {
     testWidgets(
       'from empty selection: select all toggles to deselect all and back',
       (WidgetTester tester) async {
-        final ({
-          TH2File th2File,
-          TH2FileEditController th2Controller,
-        }) editor = await pumpEditor(tester);
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await pumpEditor(tester);
         final TH2FileEditController th2Controller = editor.th2Controller;
 
         // Initial state: nothing selected.
@@ -84,14 +83,15 @@ void main() {
         expect(find.byTooltip(loc.th2FileEditPageSelectAllElements), findsOne);
 
         // Click 1: select all → all selected, state → selectNonEmptySelection.
-        await tester.tap(
-          find.byTooltip(loc.th2FileEditPageSelectAllElements),
-        );
+        await tester.tap(find.byTooltip(loc.th2FileEditPageSelectAllElements));
         await tester.pumpAndSettle();
 
         expect(th2Controller.isInSelectNonEmptySelectionState, isTrue);
         expect(th2Controller.areAllElementsSelected, isTrue);
-        expect(find.byTooltip(loc.th2FileEditPageDeselectAllElements), findsOne);
+        expect(
+          find.byTooltip(loc.th2FileEditPageDeselectAllElements),
+          findsOne,
+        );
 
         // Click 2: deselect all → nothing selected, state → selectEmptySelection.
         await tester.tap(
@@ -104,24 +104,23 @@ void main() {
         expect(find.byTooltip(loc.th2FileEditPageSelectAllElements), findsOne);
 
         // Click 3: select all again.
-        await tester.tap(
-          find.byTooltip(loc.th2FileEditPageSelectAllElements),
-        );
+        await tester.tap(find.byTooltip(loc.th2FileEditPageSelectAllElements));
         await tester.pumpAndSettle();
 
         expect(th2Controller.isInSelectNonEmptySelectionState, isTrue);
         expect(th2Controller.areAllElementsSelected, isTrue);
-        expect(find.byTooltip(loc.th2FileEditPageDeselectAllElements), findsOne);
+        expect(
+          find.byTooltip(loc.th2FileEditPageDeselectAllElements),
+          findsOne,
+        );
       },
     );
 
     testWidgets(
       'starting with some selected: first click selects all, subsequent clicks toggle',
       (WidgetTester tester) async {
-        final ({
-          TH2File th2File,
-          TH2FileEditController th2Controller,
-        }) editor = await pumpEditor(tester);
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await pumpEditor(tester);
         final TH2FileEditController th2Controller = editor.th2Controller;
         final TH2FileEditSelectionController selectionController =
             th2Controller.selectionController;
@@ -129,10 +128,7 @@ void main() {
         // Select one element (the first point) to start in non-empty selection.
         final THPoint firstPoint = editor.th2File.getPoints().first;
 
-        selectionController.addSelectedElement(
-          firstPoint,
-          setState: true,
-        );
+        selectionController.addSelectedElement(firstPoint, setState: true);
         await tester.pumpAndSettle();
 
         // Some (not all) elements are selected.
@@ -141,14 +137,15 @@ void main() {
         expect(find.byTooltip(loc.th2FileEditPageSelectAllElements), findsOne);
 
         // Click 1: select all → all selected.
-        await tester.tap(
-          find.byTooltip(loc.th2FileEditPageSelectAllElements),
-        );
+        await tester.tap(find.byTooltip(loc.th2FileEditPageSelectAllElements));
         await tester.pumpAndSettle();
 
         expect(th2Controller.isInSelectNonEmptySelectionState, isTrue);
         expect(th2Controller.areAllElementsSelected, isTrue);
-        expect(find.byTooltip(loc.th2FileEditPageDeselectAllElements), findsOne);
+        expect(
+          find.byTooltip(loc.th2FileEditPageDeselectAllElements),
+          findsOne,
+        );
 
         // Click 2: deselect all → nothing selected.
         await tester.tap(
@@ -161,15 +158,45 @@ void main() {
         expect(find.byTooltip(loc.th2FileEditPageSelectAllElements), findsOne);
 
         // Click 3: select all again.
-        await tester.tap(
-          find.byTooltip(loc.th2FileEditPageSelectAllElements),
-        );
+        await tester.tap(find.byTooltip(loc.th2FileEditPageSelectAllElements));
         await tester.pumpAndSettle();
 
         expect(th2Controller.isInSelectNonEmptySelectionState, isTrue);
         expect(th2Controller.areAllElementsSelected, isTrue);
-        expect(find.byTooltip(loc.th2FileEditPageDeselectAllElements), findsOne);
+        expect(
+          find.byTooltip(loc.th2FileEditPageDeselectAllElements),
+          findsOne,
+        );
       },
     );
+
+    testWidgets('select all action works from add line border to area state', (
+      WidgetTester tester,
+    ) async {
+      final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+          await pumpEditor(tester);
+      final TH2FileEditController th2Controller = editor.th2Controller;
+      final TH2FileEditSelectionController selectionController =
+          th2Controller.selectionController;
+      final THArea area = editor.th2File.getAreas().first;
+
+      selectionController.setSelectedElements(<THElement>[
+        area,
+      ], setState: true);
+      await tester.pumpAndSettle();
+
+      th2Controller.userInteractionController.prepareAddAreaBorderTHID();
+      await tester.pumpAndSettle();
+
+      expect(th2Controller.statusBarMessage, isNotEmpty);
+      expect(th2Controller.areAllElementsSelected, isFalse);
+
+      th2Controller.stateController.onSelectAll();
+      await tester.pumpAndSettle();
+
+      expect(th2Controller.isInSelectNonEmptySelectionState, isTrue);
+      expect(th2Controller.areAllElementsSelected, isTrue);
+      expect(find.byTooltip(loc.th2FileEditPageDeselectAllElements), findsOne);
+    });
   });
 }

@@ -74,5 +74,11 @@ class MPTH2FileEditStateAddLineToArea extends MPTH2FileEditState
   bool get keepOverlayOpenOnCanvasClick => true;
 
   @override
+  void onSelectAll() {
+    selectionController.deselectAllElements();
+    selectionController.selectAllElements();
+  }
+
+  @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.addLineToArea;
 }
