@@ -51,6 +51,17 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     }
 
     final THArea area = addLineToAreaRecord.area!;
+    final bool isFirstClickedBorder = area
+        .getAreaBorderTHIDMPIDs(th2File)
+        .isEmpty;
+
+    if (!isFirstClickedBorder) {
+      th2FileEditController.execute(addLineToAreaRecord.command!);
+      th2FileEditController.triggerAllElementsRedraw();
+
+      return Future.value();
+    }
+
     final ({String subtype, String type}) typeSubtype =
         MPCommandOptionAux.getPLATypeSubtypeRecord(
           elementEditController.lastUsedAreaType,

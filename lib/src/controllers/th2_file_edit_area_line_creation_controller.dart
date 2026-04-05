@@ -72,6 +72,14 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
   THArea getNewArea() {
     _newArea ??= _createNewArea();
 
+    final THElement? currentAreaElement = _th2File.tryElementByMPID(
+      _newArea!.mpID,
+    );
+
+    if (currentAreaElement is THArea) {
+      _newArea = currentAreaElement;
+    }
+
     return _newArea!;
   }
 

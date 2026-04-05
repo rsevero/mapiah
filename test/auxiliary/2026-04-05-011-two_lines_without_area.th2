@@ -1,0 +1,11 @@
+encoding UTF-8
+scrap test
+  line wall -id line1
+    0 0
+    10 0
+  endline
+  line wall -id line2
+    10 0
+    10 10
+  endline
+endscrap

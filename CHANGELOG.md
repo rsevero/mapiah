@@ -11,6 +11,7 @@
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
 * Fixed bugs:
   * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
+  * Add area by clicking existing lines: when clicked lines had no THID yet, only the last clicked line ended up referenced by the new area. The add-area flow now wraps the area creation command only on the first clicked border and keeps later clicks as pure border additions, so all clicked lines remain attached to the area.
 * Infrastructure maintenance:
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release

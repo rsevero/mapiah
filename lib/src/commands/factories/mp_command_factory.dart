@@ -471,19 +471,20 @@ class MPCommandFactory {
         MPCommandDescriptionType.addAreaBorderTHID,
   }) {
     final List<MPCommand> commandsList = [];
+    final THArea effectiveArea = th2File.areaByMPID(area.mpID);
 
     String? lineTHID = MPCommandOptionAux.getID(line);
 
     if (lineTHID == null) {
-      String? areaTHID = MPCommandOptionAux.getID(area);
+      String? areaTHID = MPCommandOptionAux.getID(effectiveArea);
 
       if (areaTHID == null) {
         final String newAreaTHID = th2File.getNewTHID(
-          element: area,
+          element: effectiveArea,
           prefix: mpAreaTHIDPrefix,
         );
         final MPCommand addAreaTHIDCommand = addTHIDToElement(
-          element: area,
+          element: effectiveArea,
           th2File: th2File,
           newTHID: newAreaTHID,
         );
@@ -508,7 +509,7 @@ class MPCommandFactory {
     }
 
     final THAreaBorderTHID areaBorderTHID = THAreaBorderTHID(
-      parentMPID: area.mpID,
+      parentMPID: effectiveArea.mpID,
       thID: lineTHID,
     );
     final MPCommand addAreaBorderTHIDCommand = MPAddAreaBorderTHIDCommand(
