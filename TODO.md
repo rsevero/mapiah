@@ -42,12 +42,11 @@
 [ ] - Create a easy way to find slope lines without lsize.
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
 [X] - BUG: flatpak version does not open URLs.
-[ ] - Create rotate, scale, mirror and screw modes.
+[ ] - Create rotate, scale, mirror and screw scraps modes.
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
 [X] - Show full file name at file tab.
 [ ] - Create a way to the user create perfectly 15° multiple angle line segments.
-[ ] - Move background images
-[ ] - Resize background images
+[ ] - Create rotate, scale, mirror and screw background modes.
 [ ] - Create shortcuts to change straight line segments to Bézier curve segments and vice versa. These shortcuts should work either on complete line level when non empty selection state or on line segment level when in single line edit mode. [request by Axel Hack]
 [ ] - Create 10 PLA with type and subtype last used create elements FAB buttons. They should be ordered in last used order. Use the same existing infra structure of the last used elements. [request by Axel Hack]
 [ ] - Support graphic tablet. [request by Axel Hack]
