@@ -197,42 +197,42 @@ void main() {
   );
 
   // Scenario 3: Non-intersecting groups (two completely separate rectangles)
-  // → two new areas, each with one border line.
+  // → one area with two border lines (each group keeps its own line).
   group(
-    'two areas with non-connected border lines produce two separate areas',
+    'two areas with non-connected border lines produce one area with two borders',
     () {
-      test('area count=2, each with one border, undo restores', () async {
-        final TH2FileEditController controller = await _loadController(
-          '2026-04-05-004-two_areas_two_non_connected_borders.th2',
-          mpLocator,
-        );
-        final TH2File th2File = controller.th2File;
-        final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+      test(
+        'area count=1, line count=2, one area with two borders, undo restores',
+        () async {
+          final TH2FileEditController controller = await _loadController(
+            '2026-04-05-004-two_areas_two_non_connected_borders.th2',
+            mpLocator,
+          );
+          final TH2File th2File = controller.th2File;
+          final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
 
-        expect(th2File.getAreas().length, 2);
-        expect(th2File.getLines().length, 2);
+          expect(th2File.getAreas().length, 2);
+          expect(th2File.getLines().length, 2);
 
-        _selectAllAreas(controller);
+          _selectAllAreas(controller);
 
-        expect(controller.canMergeAreas, isTrue);
+          expect(controller.canMergeAreas, isTrue);
 
-        controller.splitMergeController.prepareMergeAreas();
+          controller.splitMergeController.prepareMergeAreas();
 
-        expect(th2File.getAreas().length, 2);
-        expect(th2File.getLines().length, 2);
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 2);
+          expect(th2File.getAreas().first.getLineMPIDs(th2File).length, 2);
 
-        for (final THArea area in th2File.getAreas()) {
-          expect(area.getLineMPIDs(th2File).length, 1);
-        }
+          // Undo restores original state.
+          controller.undo();
 
-        // Undo restores original state.
-        controller.undo();
-
-        expect(th2File.getAreas().length, 2);
-        expect(th2File.getLines().length, 2);
-        expect(th2File == snapshotOriginal, isTrue);
-        expect(identical(th2File, snapshotOriginal), isFalse);
-      });
+          expect(th2File.getAreas().length, 2);
+          expect(th2File.getLines().length, 2);
+          expect(th2File == snapshotOriginal, isTrue);
+          expect(identical(th2File, snapshotOriginal), isFalse);
+        },
+      );
     },
   );
 
@@ -336,10 +336,10 @@ void main() {
 
   // Scenario 8: Bézier-only border lines are handled correctly.
   // Two non-connected Bézier closed ovals in one area → 2 separate groups →
-  // 2 merged areas, each with one Bézier border line.
+  // 1 merged area with two Bézier border lines.
   group('bezier border lines merge correctly', () {
     test(
-      'one area two non-connected bezier borders produces two areas two lines',
+      'one area two non-connected bezier borders produces one area two lines',
       () async {
         final TH2FileEditController controller = await _loadController(
           '2026-04-05-006-one_area_two_bezier_borders.th2',
@@ -357,14 +357,10 @@ void main() {
 
         controller.splitMergeController.prepareMergeAreas();
 
-        // Non-connected ovals → 2 groups → 2 areas.
-        expect(th2File.getAreas().length, 2);
+        // Non-connected ovals → 2 groups → 1 area with 2 border lines.
+        expect(th2File.getAreas().length, 1);
         expect(th2File.getLines().length, 2);
-
-        // Each area has exactly one border line.
-        for (final THArea area in th2File.getAreas()) {
-          expect(area.getLineMPIDs(th2File).length, 1);
-        }
+        expect(th2File.getAreas().first.getLineMPIDs(th2File).length, 2);
 
         // Each merged line contains Bézier segments.
         for (final THLine line in th2File.getLines()) {

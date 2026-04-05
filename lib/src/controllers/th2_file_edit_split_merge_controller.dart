@@ -1694,19 +1694,11 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     final List<THArea> selectedAreas = selections.selectedAreas;
     final List<THLine> allLTSAs = selections.allLTSAs;
 
-    // 2. Use the first selected area and first LTSA as canonical sources for
-    // options and IDs.
+    // 2. Use the first selected area as canonical source for options and IDs.
     final THArea canonicalArea = selectedAreas.first;
-    final THLine canonicalLine = allLTSAs.first;
     final String? canonicalAreaTHID =
         canonicalArea.hasOption(THCommandOptionType.id)
         ? (canonicalArea.getOption(THCommandOptionType.id)!
-                  as THIDCommandOption)
-              .thID
-        : null;
-    final String? canonicalLineTHID =
-        canonicalLine.hasOption(THCommandOptionType.id)
-        ? (canonicalLine.getOption(THCommandOptionType.id)!
                   as THIDCommandOption)
               .thID
         : null;
@@ -1757,10 +1749,11 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       ),
     );
 
-    // 6b. For each group, create a merged line + new area.
-    // Offset insertion position to account for the removed elements.
+    // 6b. For each group, create a merged line. Collect all line THIDs to
+    // build a single area with multiple borders afterwards.
     int lineInsertOffset = 0;
-    int areaInsertOffset = 0;
+
+    final List<String> allLineTHIDs = [];
 
     for (int g = 0; g < groups.length; g++) {
       // Build merged line command.
@@ -1768,8 +1761,6 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       lineResult = _buildMergedLineCommandForGroup(
         groupLines: groups[g],
         allLTSAs: allLTSAs,
-        g: g,
-        canonicalLineTHID: canonicalLineTHID,
         effectiveAreaTHID: effectiveAreaTHID,
         reservedTHIDs: reservedTHIDs,
         insertPosition: insertPosition,
@@ -1782,25 +1773,22 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
       outerCommands.add(lineResult.command);
       newLineMPIDs.add(lineResult.newLineMPID);
+      allLineTHIDs.add(lineResult.lineTHIDForGroup);
       lineInsertOffset++;
-
-      // Build new area command.
-      final ({MPCommand command, int newAreaMPID}) areaResult =
-          _buildNewAreaCommandForGroup(
-            canonicalArea: canonicalArea,
-            g: g,
-            effectiveAreaTHID: effectiveAreaTHID,
-            lineTHIDForGroup: lineResult.lineTHIDForGroup,
-            reservedTHIDs: reservedTHIDs,
-            insertPosition: insertPosition,
-            lineInsertOffset: lineInsertOffset,
-            areaInsertOffset: areaInsertOffset,
-          );
-
-      outerCommands.add(areaResult.command);
-      newAreaMPIDs.add(areaResult.newAreaMPID);
-      areaInsertOffset++;
     }
+
+    // Build a single area command referencing all merged lines as borders.
+    final ({MPCommand command, int newAreaMPID}) areaResult =
+        _buildMergedAreaCommand(
+          canonicalArea: canonicalArea,
+          effectiveAreaTHID: effectiveAreaTHID,
+          lineTHIDs: allLineTHIDs,
+          insertPosition: insertPosition,
+          lineInsertOffset: lineInsertOffset,
+        );
+
+    outerCommands.add(areaResult.command);
+    newAreaMPIDs.add(areaResult.newAreaMPID);
 
     // 7. Execute and update selection.
     final MPMultipleElementsCommand mergeCommand =
@@ -1904,14 +1892,14 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
   }
 
   /// Builds the [MPAddLineCommand] for the merged border line of one group.
-  /// Reserves [lineTHIDForGroup] in [reservedTHIDs].
+  /// The canonical line for the group is the first in [allLTSAs] order that
+  /// belongs to [groupLines]. Its existing THID (if any) is reused; otherwise
+  /// a new one is generated. Reserves [lineTHIDForGroup] in [reservedTHIDs].
   /// Returns null (and shows a snackbar) if segment geometry is invalid.
   ({MPCommand command, int newLineMPID, String lineTHIDForGroup})?
   _buildMergedLineCommandForGroup({
     required List<THLine> groupLines,
     required List<THLine> allLTSAs,
-    required int g,
-    required String? canonicalLineTHID,
     required String effectiveAreaTHID,
     required Set<String> reservedTHIDs,
     required int insertPosition,
@@ -1925,14 +1913,19 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
     final int newLineMPID = mpLocator.mpGeneralController.nextMPIDForElements();
 
-    // Determine the THID for the merged line.
-    // First group: reuse canonical line THID if it had one, otherwise
+    // Reuse the canonical line's existing THID if it has one; otherwise
     // auto-generate one based on the area THID prefix.
-    // Subsequent groups: always auto-generate.
+    final String? groupCanonicalLineTHID =
+        groupCanonicalLine.hasOption(THCommandOptionType.id)
+        ? (groupCanonicalLine.getOption(THCommandOptionType.id)!
+                  as THIDCommandOption)
+              .thID
+        : null;
     final String lineTHIDForGroup;
 
-    if ((g == 0) && (canonicalLineTHID != null)) {
-      lineTHIDForGroup = canonicalLineTHID;
+    if ((groupCanonicalLineTHID != null) &&
+        !reservedTHIDs.contains(groupCanonicalLineTHID)) {
+      lineTHIDForGroup = groupCanonicalLineTHID;
     } else {
       // Generate a unique ID not already used in the file or in this pass.
       final String prefix = '$effectiveAreaTHID-$mpLineTHIDPrefix';
@@ -2027,18 +2020,15 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     );
   }
 
-  /// Builds the [MPAddAreaCommand] for the new area of one group.
-  /// Reserves [areaTHIDForGroup] in [reservedTHIDs] for groups after the
-  /// first.
-  ({MPCommand command, int newAreaMPID}) _buildNewAreaCommandForGroup({
+  /// Builds the single [MPAddAreaCommand] for the merged operation.
+  /// The new area references all [lineTHIDs] as border lines, giving one area
+  /// with potentially multiple borders.
+  ({MPCommand command, int newAreaMPID}) _buildMergedAreaCommand({
     required THArea canonicalArea,
-    required int g,
     required String effectiveAreaTHID,
-    required String lineTHIDForGroup,
-    required Set<String> reservedTHIDs,
+    required List<String> lineTHIDs,
     required int insertPosition,
     required int lineInsertOffset,
-    required int areaInsertOffset,
   }) {
     final int newAreaMPID = mpLocator.mpGeneralController.nextMPIDForElements();
     final SplayTreeMap<THCommandOptionType, THCommandOption> areaOptionsMap =
@@ -2047,30 +2037,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         );
 
     areaOptionsMap.remove(THCommandOptionType.id);
-
-    // First group inherits the canonical area THID (original or generated).
-    // Subsequent groups get a new unique ID.
-    final String areaTHIDForGroup;
-
-    if (g == 0) {
-      areaTHIDForGroup = effectiveAreaTHID;
-    } else {
-      int counter = 1;
-      String candidate = '$mpAreaTHIDPrefix$counter';
-
-      while (_th2File.hasElementByTHID(candidate) ||
-          reservedTHIDs.contains(candidate)) {
-        counter++;
-        candidate = '$mpAreaTHIDPrefix$counter';
-      }
-
-      areaTHIDForGroup = candidate;
-      reservedTHIDs.add(areaTHIDForGroup);
-    }
-
     areaOptionsMap[THCommandOptionType.id] = THIDCommandOption(
       parentMPID: newAreaMPID,
-      thID: areaTHIDForGroup,
+      thID: effectiveAreaTHID,
     );
 
     final THArea newArea = canonicalArea.copyWith(
@@ -2081,17 +2050,16 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       makeSameLineCommentNull: true,
     );
 
-    final THAreaBorderTHID borderTHID = THAreaBorderTHID(
-      parentMPID: newAreaMPID,
-      thID: lineTHIDForGroup,
-    );
-    final THEndarea endarea = THEndarea(parentMPID: newAreaMPID);
+    final List<THElement> areaChildren = [
+      for (final String thID in lineTHIDs)
+        THAreaBorderTHID(parentMPID: newAreaMPID, thID: thID),
+      THEndarea(parentMPID: newAreaMPID),
+    ];
 
     final MPCommand command = MPAddAreaCommand.forCWJM(
       newArea: newArea,
-      areaPositionInParent:
-          insertPosition + lineInsertOffset + areaInsertOffset,
-      areaChildren: [borderTHID, endarea],
+      areaPositionInParent: insertPosition + lineInsertOffset,
+      areaChildren: areaChildren,
       posCommand: null,
       descriptionType: MPCommandDescriptionType.mergeAreas,
     );
