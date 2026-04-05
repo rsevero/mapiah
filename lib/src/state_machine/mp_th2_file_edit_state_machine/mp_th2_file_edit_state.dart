@@ -240,6 +240,9 @@ abstract class MPTH2FileEditState {
         th2FileEditController.splitMergeController
             .prepareJoinLinesAtCoincidingExtremities();
         return true;
+      case MPButtonType.mergeAreas:
+        th2FileEditController.splitMergeController.prepareMergeAreas();
+        return true;
       case MPButtonType.nodeEdit:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.editSingleLine,

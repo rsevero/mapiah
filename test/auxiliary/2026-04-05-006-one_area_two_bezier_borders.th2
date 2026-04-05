@@ -1,0 +1,19 @@
+encoding UTF-8
+scrap test
+	area clay -id myarea
+	leftbez
+	rightbez
+	endarea
+
+	line border -id leftbez -close on
+		0 0
+		20 50 80 50 100 0
+		80 -50 20 -50 0 0
+	endline
+
+	line border -id rightbez -close on
+		200 0
+		220 50 280 50 300 0
+		280 -50 220 -50 200 0
+	endline
+endscrap

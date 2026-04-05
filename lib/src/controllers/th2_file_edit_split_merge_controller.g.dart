@@ -109,6 +109,21 @@ mixin _$TH2FileEditSplitMergeController
   }
 
   @override
+  void prepareMergeAreas() {
+    final _$actionInfo = _$TH2FileEditSplitMergeControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSplitMergeControllerBase.prepareMergeAreas',
+        );
+    try {
+      return super.prepareMergeAreas();
+    } finally {
+      _$TH2FileEditSplitMergeControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

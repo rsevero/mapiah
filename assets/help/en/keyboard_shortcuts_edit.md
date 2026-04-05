@@ -28,7 +28,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Join lines at coincident start/end line points             | Ctrl+J                                  |
 | Keyboard shortcuts                                         | Ctrl+K                                  |
 | Line node edit                                             | N                                       |
-<!--                                                       | Merge closed lines into new closed line | Ctrl+Shift+M | --> 
+| Merge areas                                                | Ctrl+M                                  |
 | Options edit (elements selected)                           | O                                       |
 | Paste elements                                             | Ctrl+V                                  |
 | Redo                                                       | Ctrl+Y                                  |

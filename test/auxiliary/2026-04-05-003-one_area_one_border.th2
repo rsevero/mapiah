@@ -1,0 +1,14 @@
+encoding UTF-8
+scrap test
+	area clay -id myarea
+	myline
+	endarea
+
+	line border -id myline -close on
+		0 0
+		100 0
+		100 100
+		0 100
+		0 0
+	endline
+endscrap

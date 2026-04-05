@@ -371,6 +371,25 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   @computed
+  bool get canMergeAreas {
+    int totalBorderCount = 0;
+
+    for (final MPSelectedElement element
+        in selectionController.mpSelectedElementsLogical.values) {
+      if (element is MPSelectedArea) {
+        final THArea area = _th2File.areaByMPID(element.mpID);
+
+        totalBorderCount += area.getLineMPIDs(_th2File).length;
+        if (totalBorderCount >= 2) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  @computed
   bool get areAllElementsSelected {
     if (_activeScrapID <= 0) {
       return false;

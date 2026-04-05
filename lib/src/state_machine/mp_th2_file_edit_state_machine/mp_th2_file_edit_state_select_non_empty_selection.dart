@@ -341,6 +341,15 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           );
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyM:
+        if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.stateController.onButtonPressed(
+            MPButtonType.mergeAreas,
+          );
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyL:
         keyProcessed = onKeyLDownEvent(event);
       case LogicalKeyboardKey.keyO:

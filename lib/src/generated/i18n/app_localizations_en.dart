@@ -162,6 +162,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionSelectTHConfigDialogTitle => 'Select THConfig file';
 
   @override
+  String get mergeAreasLineSegmentsOutsideBoundary =>
+      'Merge areas: line segments outside the outer boundary were found — merge aborted';
+
+  @override
+  String get mergeAreasNoSelectedAreas => 'No areas selected for merging';
+
+  @override
   String get mpAltitudeInvalidValueErrorMessage => 'Invalid altitude';
 
   @override
@@ -1320,6 +1327,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Loading file $filename ...';
   }
+
+  @override
+  String get th2FileEditPageMergeAreas => 'Merge areas (Ctrl+M)';
 
   @override
   String get th2FileEditPageNoRedoAvailable => 'No redo available';

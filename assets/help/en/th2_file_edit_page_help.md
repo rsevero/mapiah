@@ -320,6 +320,31 @@ Press `Ctrl+J` to join selected lines whose start/end extremities coincide.
 
 If no coinciding extremities are found, Mapiah shows a message and performs no changes.
 
+## Merge areas
+
+Press _Ctrl+M_ (or click the **Merge areas** button) to merge all border lines from the selected areas into the fewest possible closed lines, replacing all selected areas with a single area per group.
+
+**When is it available:**
+The action is enabled when the total number of distinct border lines across all selected areas is two or more. This covers two scenarios:
+- One area that already has more than one border line (THAreaBorderTHID).
+- Two or more areas selected (each with at least one border line).
+
+**How it works:**
+1. All border lines from the selected areas are collected (LTSAs — Lines To be merged from Selected Areas).
+2. Any LTSA that is not already closed (last point ≠ first point) is automatically closed with a straight segment.
+3. The LTSAs are grouped by shared endpoints. Lines whose endpoints coincide form one group; isolated lines form singleton groups.
+4. For each group containing more than one line, all segments are assembled into a single merged line using a bounding-path algorithm that traces the outer boundary.
+5. A single new area is created per group, referencing the merged line as its border.
+6. The resulting merged area(s) are selected after the operation.
+7. The operation can be undone with _Ctrl+Z_.
+
+**Options and IDs:**
+- The new area inherits all options (type, subtype, etc.) from the first selected area.
+- The first merged line inherits all options from the first LTSA.
+- Explicit Therion IDs (`-id`) are preserved where they existed on the canonical area and line. Lines and areas without explicit IDs receive auto-generated IDs so they can be properly referenced as area borders.
+
+If segments outside the outer boundary are detected during the merge, Mapiah shows an error message and performs no changes.
+
 ## Hide elements
 Press _Ctrl+H_ to temporarily hide elements on the canvas without removing them from the file.
 

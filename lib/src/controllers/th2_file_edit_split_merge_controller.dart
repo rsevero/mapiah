@@ -37,14 +37,14 @@ typedef _ExtremityCoincidence = ({
   _LineExtremityType lineAExtremity,
   int lineBMPID,
   _LineExtremityType lineBExtremity,
-  double distance,
+  double distanceSquared,
 });
 
 typedef _LineAdjacency = ({
   int otherLineMPID,
   _LineExtremityType thisExtremity,
   _LineExtremityType otherExtremity,
-  double distance,
+  double distanceSquared,
 });
 
 typedef _OrientedLine = ({THLine line, bool reversed});
@@ -75,6 +75,8 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     double toleranceOnCanvas,
   ) {
     final List<_ExtremityCoincidence> coincidences = <_ExtremityCoincidence>[];
+    final double toleranceOnCanvasSquared =
+        toleranceOnCanvas * toleranceOnCanvas;
 
     for (int i = 0; i < selectedLines.length; i++) {
       final THLine lineA = selectedLines[i];
@@ -116,15 +118,15 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
               Offset lineBPosition,
             )
             in candidates) {
-          final double distance = (lineAPosition - lineBPosition).distance;
+          final double distSq = (lineAPosition - lineBPosition).distanceSquared;
 
-          if (distance <= toleranceOnCanvas) {
+          if (distSq <= toleranceOnCanvasSquared) {
             coincidences.add((
               lineAMPID: lineA.mpID,
               lineAExtremity: lineAExtremity,
               lineBMPID: lineB.mpID,
               lineBExtremity: lineBExtremity,
-              distance: distance,
+              distanceSquared: distSq,
             ));
           }
         }
@@ -147,7 +149,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
             otherLineMPID: coincidence.lineBMPID,
             thisExtremity: coincidence.lineAExtremity,
             otherExtremity: coincidence.lineBExtremity,
-            distance: coincidence.distance,
+            distanceSquared: coincidence.distanceSquared,
           ));
 
       adjacency
@@ -156,7 +158,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
             otherLineMPID: coincidence.lineAMPID,
             thisExtremity: coincidence.lineBExtremity,
             otherExtremity: coincidence.lineAExtremity,
-            distance: coincidence.distance,
+            distanceSquared: coincidence.distanceSquared,
           ));
     }
 
@@ -178,7 +180,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       return null;
     }
 
-    candidates.sort((a, b) => a.distance.compareTo(b.distance));
+    candidates.sort((a, b) => a.distanceSquared.compareTo(b.distanceSquared));
     return candidates.first;
   }
 
@@ -1334,6 +1336,822 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     }
 
     return newOptionsMap;
+  }
+
+  /// Appends a straight closing segment to [segments] if the line is not
+  /// already closed (i.e. last segment's endPoint != first segment's endPoint).
+  List<THLineSegment> _ensureClosed({
+    required List<THLineSegment> segments,
+    required int newParentMPID,
+  }) {
+    if (segments.length < 2) {
+      return segments;
+    }
+
+    final Offset firstPoint = segments.first.endPoint.coordinates;
+    final Offset lastPoint = segments.last.endPoint.coordinates;
+    final double gapSquared = (firstPoint - lastPoint).distanceSquared;
+
+    if (gapSquared <= mpDoubleComparisonEpsilonSquared) {
+      return segments;
+    }
+
+    return [
+      ...segments,
+      THStraightLineSegment(
+        parentMPID: newParentMPID,
+        endPoint: THPositionPart(coordinates: firstPoint),
+      ),
+    ];
+  }
+
+  /// Computes the 2-D cross product of vectors a and b.
+  double _cross2D(Offset a, Offset b) => (a.dx * b.dy) - (a.dy * b.dx);
+
+  /// Returns the departure tangent at the start (t=0) of [seg], given that
+  /// the segment starts at [segStart].
+  Offset _departureTangent(THLineSegment seg, Offset segStart) {
+    switch (seg) {
+      case THBezierCurveLineSegment _:
+        final Offset d = seg.controlPoint1.coordinates - segStart;
+
+        if (d.distanceSquared > mpDoubleComparisonEpsilonSquared) {
+          return d;
+        }
+
+        final Offset d2 = seg.controlPoint2.coordinates - segStart;
+
+        if (d2.distanceSquared > mpDoubleComparisonEpsilonSquared) {
+          return d2;
+        }
+
+        return seg.endPoint.coordinates - segStart;
+      default:
+        return seg.endPoint.coordinates - segStart;
+    }
+  }
+
+  /// Returns the arrival tangent at the end (t=1) of [seg], given that
+  /// the segment starts at [segStart].
+  Offset _arrivalTangent(THLineSegment seg, Offset segStart) {
+    switch (seg) {
+      case THBezierCurveLineSegment _:
+        final Offset d =
+            seg.endPoint.coordinates - seg.controlPoint2.coordinates;
+
+        if (d.distanceSquared > mpDoubleComparisonEpsilonSquared) {
+          return d;
+        }
+
+        final Offset d2 =
+            seg.endPoint.coordinates - seg.controlPoint1.coordinates;
+
+        if (d2.distanceSquared > mpDoubleComparisonEpsilonSquared) {
+          return d2;
+        }
+
+        return seg.endPoint.coordinates - segStart;
+      default:
+        return seg.endPoint.coordinates - segStart;
+    }
+  }
+
+  /// Groups [lines] by shared vertices (union-find on coordinate equality).
+  /// Lines whose vertices don't coincide with any other line form singleton
+  /// groups. Uses [tolerance] for point proximity.
+  List<List<THLine>> _groupBySharedEndpoints(
+    List<THLine> lines,
+    double tolerance,
+  ) {
+    final int n = lines.length;
+    final double toleranceSquared = tolerance * tolerance;
+    final List<int> parent = List<int>.generate(n, (i) => i);
+
+    int find(int x) {
+      while (parent[x] != x) {
+        parent[x] = parent[parent[x]];
+        x = parent[x];
+      }
+
+      return x;
+    }
+
+    void union(int a, int b) {
+      final int ra = find(a);
+      final int rb = find(b);
+
+      if (ra != rb) {
+        parent[ra] = rb;
+      }
+    }
+
+    // Collect all vertex coordinates per line. Using only the first and last
+    // stored points misses closed borders whose shared geometry is expressed by
+    // intermediate vertices, such as adjacent rectangles sharing one edge.
+    final List<List<Offset>> endpoints = lines.map((line) {
+      final List<THLineSegment> segs = line.getLineSegments(_th2File);
+
+      return segs
+          .map((final THLineSegment seg) => seg.endPoint.coordinates)
+          .toList();
+    }).toList();
+
+    for (int i = 0; i < n; i++) {
+      for (int j = i + 1; j < n; j++) {
+        for (final Offset pi in endpoints[i]) {
+          for (final Offset pj in endpoints[j]) {
+            if ((pi - pj).distanceSquared <= toleranceSquared) {
+              union(i, j);
+            }
+          }
+        }
+      }
+    }
+
+    final Map<int, List<THLine>> groups = {};
+
+    for (int i = 0; i < n; i++) {
+      groups.putIfAbsent(find(i), () => []).add(lines[i]);
+    }
+
+    return groups.values.toList();
+  }
+
+  /// Given a list of [allSegs] (flat list of atomic segments after splitting at
+  /// crossings), [startIdx] is the index of the starting segment, traces a
+  /// path by always taking the [pickLeft] turn at each junction.
+  ///
+  /// Returns the ordered list of segment indices forming the path, or null if
+  /// the path cannot be closed.
+  List<int>? _traceBoundaryPath({
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+    required List<List<int>> adjacency,
+    required int startIdx,
+    required bool pickLeft,
+  }) {
+    final List<int> path = [startIdx];
+    final Set<int> used = {startIdx};
+    final Offset targetEnd = allSegs[startIdx].endPoint.coordinates;
+
+    int current = startIdx;
+
+    while (true) {
+      final Offset currentEnd = allSegs[current].endPoint.coordinates;
+
+      // Check if we have returned to the start of the first segment.
+      if ((path.length > 1) &&
+          ((currentEnd - targetEnd).distanceSquared <=
+              mpDoubleComparisonEpsilonSquared)) {
+        break;
+      }
+
+      final Offset arrDir = _arrivalTangent(
+        allSegs[current],
+        segStarts[current],
+      );
+      final List<int> candidates = adjacency[current]
+          .where((idx) => !used.contains(idx))
+          .where(
+            (idx) =>
+                (segStarts[idx] - currentEnd).distanceSquared <=
+                mpDoubleComparisonEpsilonSquared,
+          )
+          .toList();
+
+      if (candidates.isEmpty) {
+        // Dead end — path cannot be closed this way.
+        return null;
+      }
+
+      // Sort candidates by turn angle relative to incoming direction.
+      // pickLeft → most counter-clockwise (largest positive cross product);
+      // pickRight → most clockwise (most negative).
+      candidates.sort((a, b) {
+        final double crossA = _cross2D(
+          arrDir,
+          _departureTangent(allSegs[a], segStarts[a]),
+        );
+        final double crossB = _cross2D(
+          arrDir,
+          _departureTangent(allSegs[b], segStarts[b]),
+        );
+
+        return pickLeft ? crossB.compareTo(crossA) : crossA.compareTo(crossB);
+      });
+
+      current = candidates.first;
+      path.add(current);
+      used.add(current);
+
+      if (path.length > allSegs.length + 1) {
+        // Cycle detection guard.
+        return null;
+      }
+    }
+
+    return path;
+  }
+
+  /// Builds a bounding box for a segment given its start point.
+  Rect _segBoundingBox(THLineSegment seg, Offset start) {
+    return seg.getBoundingBox(start);
+  }
+
+  /// Returns true when [segI] (from [startI]) and [segJ] (from [startJ])
+  /// represent the same geometric edge — either in the same direction or
+  /// reversed.
+  ///
+  /// For Bézier curves, reversal swaps the control points: cp1 ↔ cp2.
+  /// Mixed segment types (straight vs Bézier) are never duplicates.
+  bool _segmentsAreGeometricDuplicates({
+    required THLineSegment segI,
+    required Offset startI,
+    required THLineSegment segJ,
+    required Offset startJ,
+  }) {
+    final Offset endI = segI.endPoint.coordinates;
+    final Offset endJ = segJ.endPoint.coordinates;
+
+    final bool endpointsSameDir =
+        ((startI - startJ).distanceSquared <=
+            mpDoubleComparisonEpsilonSquared) &&
+        ((endI - endJ).distanceSquared <= mpDoubleComparisonEpsilonSquared);
+    final bool endpointsReversed =
+        ((startI - endJ).distanceSquared <= mpDoubleComparisonEpsilonSquared) &&
+        ((endI - startJ).distanceSquared <= mpDoubleComparisonEpsilonSquared);
+
+    if (!endpointsSameDir && !endpointsReversed) {
+      return false;
+    }
+
+    switch ((segI, segJ)) {
+      case (THStraightLineSegment _, THStraightLineSegment _):
+        return true;
+
+      case (THBezierCurveLineSegment bezI, THBezierCurveLineSegment bezJ):
+        final Offset cp1I = bezI.controlPoint1.coordinates;
+        final Offset cp2I = bezI.controlPoint2.coordinates;
+        final Offset cp1J = bezJ.controlPoint1.coordinates;
+        final Offset cp2J = bezJ.controlPoint2.coordinates;
+
+        if (endpointsSameDir) {
+          return ((cp1I - cp1J).distanceSquared <=
+                  mpDoubleComparisonEpsilonSquared) &&
+              ((cp2I - cp2J).distanceSquared <=
+                  mpDoubleComparisonEpsilonSquared);
+        } else {
+          // Reversed Bézier: cp1 of reversed = cp2 of original, and vice versa.
+          return ((cp1I - cp2J).distanceSquared <=
+                  mpDoubleComparisonEpsilonSquared) &&
+              ((cp2I - cp1J).distanceSquared <=
+                  mpDoubleComparisonEpsilonSquared);
+        }
+
+      default:
+        // Mixed types cannot be duplicates.
+        return false;
+    }
+  }
+
+  /// Collects all THLine objects referenced by the THAreaBorderTHIDs of
+  /// [selectedAreas], deduplicated by MPID.
+  List<THLine> _collectLTSAs(List<THArea> selectedAreas) {
+    final Set<int> seen = {};
+    final List<THLine> ltsa = [];
+
+    for (final THArea area in selectedAreas) {
+      for (final int lineMPID in area.getLineMPIDs(_th2File)) {
+        if (seen.add(lineMPID)) {
+          ltsa.add(_th2File.lineByMPID(lineMPID));
+        }
+      }
+    }
+
+    return ltsa;
+  }
+
+  void _showSnackbar(String message) {
+    final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+    if (context != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+
+  @action
+  void prepareMergeAreas() {
+    // Collect selected areas in logical selection order.
+    final List<THArea> selectedAreas = _th2FileEditController
+        .selectionController
+        .mpSelectedElementsLogical
+        .values
+        .whereType<MPSelectedArea>()
+        .map((final MPSelectedArea sel) => _th2File.areaByMPID(sel.mpID))
+        .toList();
+
+    if (selectedAreas.isEmpty) {
+      _showSnackbar(mpLocator.appLocalizations.mergeAreasNoSelectedAreas);
+
+      return;
+    }
+
+    // Count total border lines; need at least two across all selected areas.
+    final List<THLine> allLTSAs = _collectLTSAs(selectedAreas);
+
+    if (allLTSAs.length < 2) {
+      _showSnackbar(mpLocator.appLocalizations.mergeAreasNoSelectedAreas);
+
+      return;
+    }
+
+    // Use the first selected area and first LTSA as canonical sources for
+    // options and IDs.
+    final THArea canonicalArea = selectedAreas.first;
+    final THLine canonicalLine = allLTSAs.first;
+    final String? canonicalAreaTHID =
+        canonicalArea.hasOption(THCommandOptionType.id)
+        ? (canonicalArea.getOption(THCommandOptionType.id)!
+                  as THIDCommandOption)
+              .thID
+        : null;
+    final String? canonicalLineTHID =
+        canonicalLine.hasOption(THCommandOptionType.id)
+        ? (canonicalLine.getOption(THCommandOptionType.id)!
+                  as THIDCommandOption)
+              .thID
+        : null;
+
+    // Determine insert position: earliest position among all selected areas in
+    // their parent scrap.
+    final THIsParentMixin parentScrap = canonicalArea.parent(th2File: _th2File);
+
+    int insertPosition = parentScrap.getChildPosition(canonicalArea);
+
+    for (final THArea area in selectedAreas) {
+      final int pos = parentScrap.getChildPosition(area);
+
+      if (pos < insertPosition) {
+        insertPosition = pos;
+      }
+    }
+
+    // Group LTSAs by shared endpoints (lines that touch each other end-to-end
+    // form one group; isolated lines are singleton groups).
+    final double tolerance = _th2FileEditController.scaleScreenToCanvas(
+      mpJoinLineExtremityToleranceOnScreen,
+    );
+    final List<List<THLine>> groups = _groupBySharedEndpoints(
+      allLTSAs,
+      tolerance,
+    );
+
+    // Pre-compute canonical area THID. If the canonical area has no explicit
+    // ID we generate one now, before any commands execute, so it can be used
+    // as a prefix for line IDs.
+    final String effectiveAreaTHID =
+        canonicalAreaTHID ??
+        _th2File.getNewTHID(element: canonicalArea, prefix: mpAreaTHIDPrefix);
+
+    // Track IDs reserved during this build pass so getNewTHID does not
+    // collide across groups (IDs are not in the file yet at this point).
+    final Set<String> reservedTHIDs = {};
+
+    if (canonicalAreaTHID == null) {
+      reservedTHIDs.add(effectiveAreaTHID);
+    }
+
+    // Build outer command list.
+    final List<MPCommand> outerCommands = [];
+    final List<int> newLineMPIDs = [];
+    final List<int> newAreaMPIDs = [];
+
+    // --- Remove all selected areas (and their area-border records). ---
+    for (final THArea area in selectedAreas) {
+      outerCommands.add(
+        MPCommandFactory.removeAreaFromExisting(
+          existingAreaMPID: area.mpID,
+          th2File: _th2File,
+          descriptionType: MPCommandDescriptionType.mergeAreas,
+        ),
+      );
+    }
+
+    // --- Remove all original border lines. ---
+    // We do NOT use removeLineFromExisting here because that factory method
+    // adds a posCommand to also remove the associated area border THID. The
+    // areas and their border THIDs are already removed by the area removal
+    // commands above, so we only need to remove the line itself (plus any
+    // trailing empty lines).
+    for (final THLine line in allLTSAs) {
+      final MPCommand? preCommand =
+          MPCommandFactory.removeEmptyLinesAfterCommand(
+            elementMPID: line.mpID,
+            th2File: _th2File,
+            descriptionType: MPCommandDescriptionType.mergeAreas,
+          );
+
+      outerCommands.add(
+        MPRemoveLineCommand.forCWJM(
+          lineMPID: line.mpID,
+          isInteractiveLineCreation: false,
+          preCommand: preCommand,
+          posCommand: null,
+          descriptionType: MPCommandDescriptionType.mergeAreas,
+        ),
+      );
+    }
+
+    // --- For each group, create a merged line + new area. ---
+    // Offset insertion position to account for the removed elements.
+    int lineInsertOffset = 0;
+    int areaInsertOffset = 0;
+
+    for (int g = 0; g < groups.length; g++) {
+      final List<THLine> groupLines = groups[g];
+
+      // Determine canonical line for this group (first in allLTSAs order).
+      final THLine groupCanonicalLine = allLTSAs.firstWhere(
+        (l) => groupLines.contains(l),
+        orElse: () => groupLines.first,
+      );
+
+      final int newLineMPID = mpLocator.mpGeneralController
+          .nextMPIDForElements();
+
+      // Determine the THID for the merged line.
+      // First group: reuse canonical line THID if it had one, otherwise
+      // auto-generate one based on the area THID prefix.
+      // Subsequent groups: always auto-generate.
+      final String lineTHIDForGroup;
+
+      if ((g == 0) && (canonicalLineTHID != null)) {
+        lineTHIDForGroup = canonicalLineTHID;
+      } else {
+        // Generate a unique ID not already used in the file or in this pass.
+        final String prefix = '$effectiveAreaTHID-$mpLineTHIDPrefix';
+
+        int counter = 1;
+        String candidate = '$prefix$counter';
+
+        while (_th2File.hasElementByTHID(candidate) ||
+            reservedTHIDs.contains(candidate)) {
+          counter++;
+          candidate = '$prefix$counter';
+        }
+
+        lineTHIDForGroup = candidate;
+      }
+
+      reservedTHIDs.add(lineTHIDForGroup);
+
+      final SplayTreeMap<THCommandOptionType, THCommandOption> lineOptionsMap =
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            groupCanonicalLine.optionsMap,
+          );
+
+      lineOptionsMap.remove(THCommandOptionType.id);
+      lineOptionsMap[THCommandOptionType.id] = THIDCommandOption(
+        parentMPID: newLineMPID,
+        thID: lineTHIDForGroup,
+      );
+
+      final THLine mergedLineWithOptions = groupCanonicalLine.copyWith(
+        mpID: newLineMPID,
+        childrenMPIDs: [],
+        optionsMap: lineOptionsMap,
+        originalLineInTH2File: '',
+        makeSameLineCommentNull: true,
+      );
+
+      final List<THElement> lineChildren = [];
+      final List<MPCommand> segmentCommands = [];
+      List<THLineSegment> mergedSegs;
+
+      try {
+        mergedSegs = _buildMergedSegmentsForGroup(
+          lines: groupLines,
+          newLineMPID: mergedLineWithOptions.mpID,
+        );
+      } on StateError catch (e) {
+        if (e.message == 'mergeAreasLineSegmentsOutsideBoundary') {
+          _showSnackbar(
+            mpLocator.appLocalizations.mergeAreasLineSegmentsOutsideBoundary,
+          );
+          return;
+        }
+        rethrow;
+      }
+
+      for (final THLineSegment seg in mergedSegs) {
+        segmentCommands.add(
+          MPAddLineSegmentCommand(
+            newLineSegment: seg,
+            posCommand: null,
+            descriptionType: MPCommandDescriptionType.mergeAreas,
+          ),
+        );
+      }
+
+      lineChildren.add(THEndline(parentMPID: mergedLineWithOptions.mpID));
+
+      final MPCommand posCommand = (segmentCommands.length == 1)
+          ? segmentCommands.first
+          : MPMultipleElementsCommand.forCWJM(
+              commandsList: segmentCommands,
+              completionType:
+                  MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+              descriptionType: MPCommandDescriptionType.mergeAreas,
+            );
+
+      outerCommands.add(
+        MPAddLineCommand(
+          newLine: mergedLineWithOptions,
+          lineChildren: lineChildren,
+          linePositionInParent: insertPosition + lineInsertOffset,
+          posCommand: posCommand,
+          preCommand: null,
+          descriptionType: MPCommandDescriptionType.mergeAreas,
+        ),
+      );
+
+      newLineMPIDs.add(mergedLineWithOptions.mpID);
+      lineInsertOffset++;
+
+      // Build the new area for this group.
+      final int newAreaMPID = mpLocator.mpGeneralController
+          .nextMPIDForElements();
+      final SplayTreeMap<THCommandOptionType, THCommandOption> areaOptionsMap =
+          SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            canonicalArea.optionsMap,
+          );
+
+      areaOptionsMap.remove(THCommandOptionType.id);
+
+      // First group inherits the canonical area THID (original or generated).
+      // Subsequent groups get a new unique ID.
+      final String areaTHIDForGroup;
+
+      if (g == 0) {
+        areaTHIDForGroup = effectiveAreaTHID;
+      } else {
+        int counter = 1;
+        String candidate = '$mpAreaTHIDPrefix$counter';
+
+        while (_th2File.hasElementByTHID(candidate) ||
+            reservedTHIDs.contains(candidate)) {
+          counter++;
+          candidate = '$mpAreaTHIDPrefix$counter';
+        }
+
+        areaTHIDForGroup = candidate;
+        reservedTHIDs.add(areaTHIDForGroup);
+      }
+
+      areaOptionsMap[THCommandOptionType.id] = THIDCommandOption(
+        parentMPID: newAreaMPID,
+        thID: areaTHIDForGroup,
+      );
+
+      final THArea newArea = canonicalArea.copyWith(
+        mpID: newAreaMPID,
+        childrenMPIDs: [],
+        optionsMap: areaOptionsMap,
+        originalLineInTH2File: '',
+        makeSameLineCommentNull: true,
+      );
+
+      final THAreaBorderTHID borderTHID = THAreaBorderTHID(
+        parentMPID: newAreaMPID,
+        thID: lineTHIDForGroup,
+      );
+      final THEndarea endarea = THEndarea(parentMPID: newAreaMPID);
+
+      outerCommands.add(
+        MPAddAreaCommand.forCWJM(
+          newArea: newArea,
+          areaPositionInParent:
+              insertPosition + lineInsertOffset + areaInsertOffset,
+          areaChildren: [borderTHID, endarea],
+          posCommand: null,
+          descriptionType: MPCommandDescriptionType.mergeAreas,
+        ),
+      );
+
+      newAreaMPIDs.add(newAreaMPID);
+      areaInsertOffset++;
+    }
+
+    final MPMultipleElementsCommand mergeCommand =
+        MPMultipleElementsCommand.forCWJM(
+          commandsList: outerCommands,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsListChanged,
+          descriptionType: MPCommandDescriptionType.mergeAreas,
+        );
+
+    _th2FileEditController.execute(mergeCommand);
+
+    _th2FileEditController.stateController.setState(
+      MPTH2FileEditStateType.selectNonEmptySelection,
+    );
+
+    final List<THArea> newAreas = newAreaMPIDs
+        .map((mpID) => _th2File.areaByMPID(mpID))
+        .toList();
+
+    _th2FileEditController.selectionController.setSelectedElements(
+      newAreas,
+      setState: false,
+    );
+  }
+
+  /// Builds the ordered merged segment list for a group of [lines] using the
+  /// bounding-path algorithm. This is a pure computation (no file mutation)
+  /// used by [prepareMergeAreas] to obtain the segment list for the new line.
+  List<THLineSegment> _buildMergedSegmentsForGroup({
+    required List<THLine> lines,
+    required int newLineMPID,
+  }) {
+    if (lines.length == 1) {
+      // Single line — just close it and return a copy.
+      final List<THLineSegment> rawSegs = lines.first.getLineSegments(_th2File);
+      final List<THLineSegment> copied = rawSegs
+          .map((s) => _copySegment(s, newLineMPID))
+          .toList();
+
+      return _ensureClosed(segments: copied, newParentMPID: newLineMPID);
+    }
+
+    // Flatten all segments from all lines (closed).
+    final List<THLineSegment> allSegs = [];
+    final List<Offset> segStarts = [];
+
+    for (final THLine line in lines) {
+      final List<THLineSegment> rawSegs = line.getLineSegments(_th2File);
+      final List<THLineSegment> closed = _ensureClosed(
+        segments: rawSegs.map((s) => _copySegment(s, newLineMPID)).toList(),
+        newParentMPID: newLineMPID,
+      );
+
+      if (closed.isEmpty) {
+        continue;
+      }
+
+      Offset prev = closed.first.endPoint.coordinates;
+
+      for (int i = 1; i < closed.length; i++) {
+        segStarts.add(prev);
+        allSegs.add(closed[i]);
+        prev = closed[i].endPoint.coordinates;
+      }
+    }
+
+    if (allSegs.isEmpty) {
+      return [];
+    }
+
+    // Remove shared inner edges: any segment that appears more than once
+    // (in either direction) is an interior boundary shared by two borders and
+    // must be dropped entirely.
+    final Set<int> sharedIndices = {};
+
+    for (int i = 0; i < allSegs.length; i++) {
+      if (sharedIndices.contains(i)) {
+        continue;
+      }
+
+      for (int j = i + 1; j < allSegs.length; j++) {
+        if (sharedIndices.contains(j)) {
+          continue;
+        }
+
+        if (_segmentsAreGeometricDuplicates(
+          segI: allSegs[i],
+          startI: segStarts[i],
+          segJ: allSegs[j],
+          startJ: segStarts[j],
+        )) {
+          sharedIndices.add(i);
+          sharedIndices.add(j);
+        }
+      }
+    }
+
+    if (sharedIndices.isNotEmpty) {
+      final List<THLineSegment> filteredSegs = [];
+      final List<Offset> filteredStarts = [];
+
+      for (int i = 0; i < allSegs.length; i++) {
+        if (!sharedIndices.contains(i)) {
+          filteredSegs.add(allSegs[i]);
+          filteredStarts.add(segStarts[i]);
+        }
+      }
+
+      allSegs
+        ..clear()
+        ..addAll(filteredSegs);
+      segStarts
+        ..clear()
+        ..addAll(filteredStarts);
+    }
+
+    if (allSegs.isEmpty) {
+      return [];
+    }
+
+    // Build adjacency.
+    final List<List<int>> adjacency = List.generate(allSegs.length, (_) => []);
+
+    for (int i = 0; i < allSegs.length; i++) {
+      final Offset iEnd = allSegs[i].endPoint.coordinates;
+
+      for (int j = 0; j < allSegs.length; j++) {
+        if (i == j) {
+          continue;
+        }
+
+        if ((segStarts[j] - iEnd).distanceSquared <=
+            mpDoubleComparisonEpsilonSquared) {
+          adjacency[i].add(j);
+        }
+      }
+    }
+
+    // Find starting segment (closest bounding-box top-left to group BB).
+    Rect groupBB = _segBoundingBox(allSegs[0], segStarts[0]);
+
+    for (int i = 1; i < allSegs.length; i++) {
+      groupBB = groupBB.expandToInclude(
+        _segBoundingBox(allSegs[i], segStarts[i]),
+      );
+    }
+
+    int startIdx = 0;
+    double bestDist = double.infinity;
+
+    for (int i = 0; i < allSegs.length; i++) {
+      final Rect bb = _segBoundingBox(allSegs[i], segStarts[i]);
+      final double dist =
+          (bb.left - groupBB.left).abs() + (bb.top - groupBB.top).abs();
+
+      if (dist < bestDist) {
+        bestDist = dist;
+        startIdx = i;
+      }
+    }
+
+    // Trace left and right paths.
+    final List<int>? leftPath = _traceBoundaryPath(
+      allSegs: allSegs,
+      segStarts: segStarts,
+      adjacency: adjacency,
+      startIdx: startIdx,
+      pickLeft: true,
+    );
+    final List<int>? rightPath = _traceBoundaryPath(
+      allSegs: allSegs,
+      segStarts: segStarts,
+      adjacency: adjacency,
+      startIdx: startIdx,
+      pickLeft: false,
+    );
+
+    final Set<int> leftSet = leftPath?.toSet() ?? {};
+    final Set<int> rightSet = rightPath?.toSet() ?? {};
+    final int leftOutside = allSegs.length - leftSet.length;
+    final int rightOutside = allSegs.length - rightSet.length;
+
+    final List<int> chosenPath;
+
+    if (leftPath != null &&
+        (rightPath == null || leftOutside <= rightOutside)) {
+      chosenPath = leftPath;
+    } else if (rightPath != null) {
+      chosenPath = rightPath;
+    } else {
+      chosenPath = List<int>.generate(allSegs.length, (i) => i);
+    }
+
+    final int outsideCount = allSegs.length - chosenPath.toSet().length;
+
+    if (outsideCount > 0) {
+      throw StateError('mergeAreasLineSegmentsOutsideBoundary');
+    }
+
+    // Assemble: pin segment + path segments.
+    final List<THLineSegment> result = [
+      THStraightLineSegment(
+        parentMPID: newLineMPID,
+        endPoint: THPositionPart(coordinates: segStarts[chosenPath.first]),
+      ),
+      ...chosenPath.map((idx) => allSegs[idx]),
+    ];
+
+    return result;
   }
 
   THLineSegment _copySegment(THLineSegment original, int newParentMPID) {

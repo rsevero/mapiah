@@ -237,6 +237,16 @@
     "description": "Title for THConfig file picker dialog. Used on: MPDialogAux.pickTHConfigFile",
     "type": "text"
   },
+  "mergeAreasLineSegmentsOutsideBoundary": "Merge areas: line segments outside the outer boundary were found — merge aborted",
+  "@mergeAreasLineSegmentsOutsideBoundary": {
+    "description": "Snackbar message shown when merge areas finds segments outside the chosen bounding path. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
+    "type": "text"
+  },
+  "mergeAreasNoSelectedAreas": "No areas selected for merging",
+  "@mergeAreasNoSelectedAreas": {
+    "description": "Snackbar message shown when merge areas is triggered but no areas are selected. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart",
+    "type": "text"
+  },
   "mpAltitudeInvalidValueErrorMessage": "Invalid altitude",
   "@mpAltitudeInvalidValueErrorMessage": {
     "description": "The error message for invalid altitude value. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart",
@@ -2050,6 +2060,11 @@
     "placeholders": {
       "filename": {}
     }
+  },
+  "th2FileEditPageMergeAreas": "Merge areas (Ctrl+M)",
+  "@th2FileEditPageMergeAreas": {
+    "description": "Tooltip for the merge areas FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
   },
   "th2FileEditPageNoRedoAvailable": "No redo available",
   "@th2FileEditPageNoRedoAvailable": {

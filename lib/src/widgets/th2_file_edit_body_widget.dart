@@ -764,6 +764,16 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             appLocalizations.th2FileEditPageJoinLinesAtCoincidingExtremities,
       ),
       _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_merge_areas',
+        onPressed: th2FileEditController.canMergeAreas
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.mergeAreas,
+              )
+            : null,
+        icon: Icons.join_inner,
+        tooltip: appLocalizations.th2FileEditPageMergeAreas,
+      ),
+      _stateContextFABButton(
         heroTag: '${heroPrefix}_ctx_reverse_line',
         onPressed: hasSelectedLines
             ? () => th2FileEditController.stateController.onButtonPressed(

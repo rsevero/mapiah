@@ -125,6 +125,8 @@ const double mpDoubleNextEpsilon = 2.220446049250313e-16;
 const double mpDoubleUpEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
 const double mpDoubleDownEpsilonFactor = 1.0 - mpDoubleNextEpsilon;
 const double mpDoubleComparisonEpsilon = 1e-9;
+const double mpDoubleComparisonEpsilonSquared =
+    mpDoubleComparisonEpsilon * mpDoubleComparisonEpsilon;
 
 /// Smallest *normalized* positive double (DBL_MIN). Note this is different
 /// from `double.minPositive` (the smallest positive subnormal value).
@@ -182,6 +184,8 @@ const double mpDegreesInCircle = 360.0;
 
 const double mpLineSimplifyEpsilonOnScreen = 1.0;
 const double mpJoinLineExtremityToleranceOnScreen = 3.0;
+const double mpJoinLineExtremityToleranceOnScreenSquared =
+    mpJoinLineExtremityToleranceOnScreen * mpJoinLineExtremityToleranceOnScreen;
 
 const double mpMinimumSizeForDrawing = 10.0;
 

@@ -356,6 +356,18 @@ abstract class AppLocalizations {
   /// **'Select THConfig file'**
   String get mapiahTherionSelectTHConfigDialogTitle;
 
+  /// Snackbar message shown when merge areas finds segments outside the chosen bounding path. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Merge areas: line segments outside the outer boundary were found — merge aborted'**
+  String get mergeAreasLineSegmentsOutsideBoundary;
+
+  /// Snackbar message shown when merge areas is triggered but no areas are selected. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
+  ///
+  /// In en, this message translates to:
+  /// **'No areas selected for merging'**
+  String get mergeAreasNoSelectedAreas;
+
   /// The error message for invalid altitude value. Used on: lib/src/widgets/options/mp_altitude_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2463,6 +2475,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading file {filename} ...'**
   String th2FileEditPageLoadingFile(Object filename);
+
+  /// Tooltip for the merge areas FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Merge areas (Ctrl+M)'**
+  String get th2FileEditPageMergeAreas;
 
   /// The label for the no redo available message. Used on: _TH2FileEditPageState._stateActionButtons
   ///

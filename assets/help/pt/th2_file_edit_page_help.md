@@ -320,6 +320,31 @@ Pressione `Ctrl+J` para juntar linhas selecionadas cujas extremidades de início
 
 Se não houver extremidades coincidentes, o Mapiah exibe uma mensagem e não altera o arquivo.
 
+## Mesclar áreas
+
+Pressione _Ctrl+M_ (ou clique no botão **Mesclar áreas**) para mesclar todas as linhas de borda das áreas selecionadas no menor número possível de linhas fechadas, substituindo todas as áreas selecionadas por uma única área por grupo.
+
+**Quando está disponível:**
+A ação é habilitada quando o número total de linhas de borda distintas entre todas as áreas selecionadas for dois ou mais. Isso cobre dois cenários:
+- Uma área que já possui mais de uma linha de borda (THAreaBorderTHID).
+- Duas ou mais áreas selecionadas (cada uma com pelo menos uma linha de borda).
+
+**Como funciona:**
+1. Todas as linhas de borda das áreas selecionadas são coletadas (LTSAs — Linhas a Mesclar das Áreas Selecionadas).
+2. Qualquer LTSA que não esteja fechada (último ponto ≠ primeiro ponto) é automaticamente fechada com um segmento reto.
+3. As LTSAs são agrupadas por extremidades compartilhadas. Linhas cujas extremidades coincidem formam um grupo; linhas isoladas formam grupos individuais.
+4. Para cada grupo com mais de uma linha, todos os segmentos são montados em uma única linha mesclada usando um algoritmo de traçado do contorno externo.
+5. Uma nova área é criada por grupo, referenciando a linha mesclada como sua borda.
+6. A(s) área(s) mesclada(s) resultante(s) ficam selecionadas após a operação.
+7. A operação pode ser desfeita com _Ctrl+Z_.
+
+**Opções e IDs:**
+- A nova área herda todas as opções (tipo, subtipo etc.) da primeira área selecionada.
+- A primeira linha mesclada herda todas as opções da primeira LTSA.
+- IDs Therion explícitos (`-id`) são preservados quando existiam na área e linha canônicas. Linhas e áreas sem ID explícito recebem IDs gerados automaticamente para que possam ser corretamente referenciados como bordas de área.
+
+Se forem detectados segmentos fora do contorno externo durante a mesclagem, o Mapiah exibe uma mensagem de erro e não realiza alterações.
+
 ## Esconder elementos
 Pressione _Ctrl+H_ para ocultar temporariamente elementos no canvas sem removê-los do arquivo.
 

@@ -1,0 +1,21 @@
+encoding UTF-8
+scrap scrap1
+  line wall -id area1-line1
+    -233 180.5
+    -57.2 -31
+    58.5 190.8
+    -233 180.5
+  endline
+  line wall -id area2-line1
+    -65.6 93.8
+    -172.9 -146.1
+    74 -133.8
+    -65.6 93.8
+  endline
+  area water -id area2
+    area2-line1
+  endarea
+  area water
+    area1-line1
+  endarea
+endscrap

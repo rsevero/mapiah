@@ -199,6 +199,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.hasAtLeastTwoSelectedLines,
         name: 'TH2FileEditControllerBase.hasAtLeastTwoSelectedLines',
       )).value;
+  Computed<bool>? _$canMergeAreasComputed;
+
+  @override
+  bool get canMergeAreas => (_$canMergeAreasComputed ??= Computed<bool>(
+    () => super.canMergeAreas,
+    name: 'TH2FileEditControllerBase.canMergeAreas',
+  )).value;
   Computed<bool>? _$areAllElementsSelectedComputed;
 
   @override
@@ -2001,6 +2008,7 @@ hasSelectedEndPoints: ${hasSelectedEndPoints},
 areAllEndPointsSelected: ${areAllEndPointsSelected},
 hasSelectedLines: ${hasSelectedLines},
 hasAtLeastTwoSelectedLines: ${hasAtLeastTwoSelectedLines},
+canMergeAreas: ${canMergeAreas},
 areAllElementsSelected: ${areAllElementsSelected},
 hasClipboardContent: ${hasClipboardContent},
 enableSaveButton: ${enableSaveButton},

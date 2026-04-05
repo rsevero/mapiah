@@ -164,6 +164,14 @@ class AppLocalizationsPt extends AppLocalizations {
       'Selecionar arquivo THConfig';
 
   @override
+  String get mergeAreasLineSegmentsOutsideBoundary =>
+      'Mesclar áreas: segmentos de linha fora do contorno externo foram encontrados — mesclagem cancelada';
+
+  @override
+  String get mergeAreasNoSelectedAreas =>
+      'Nenhuma área selecionada para mesclagem';
+
+  @override
   String get mpAltitudeInvalidValueErrorMessage => 'Altitude inválida';
 
   @override
@@ -1335,6 +1343,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String th2FileEditPageLoadingFile(Object filename) {
     return 'Lendo arquivo $filename ...';
   }
+
+  @override
+  String get th2FileEditPageMergeAreas => 'Mesclar áreas (Ctrl+M)';
 
   @override
   String get th2FileEditPageNoRedoAvailable => 'Nenhuma ação para refazer';

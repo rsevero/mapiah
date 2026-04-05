@@ -33,6 +33,7 @@ enum MPCommandDescriptionType {
   editPointType,
   editPointTypeSubtype,
   joinLinesAtCoincidingExtremities,
+  mergeAreas,
   moveArea,
   moveBezierLineSegment,
   moveElements,
