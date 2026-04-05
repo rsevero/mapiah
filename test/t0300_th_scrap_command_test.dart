@@ -3,7 +3,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -677,6 +679,34 @@ endscrap
         expect(asFile, success['asFile']);
       });
     }
+  });
+
+  test('scrap keeps parsed stations option in memory', () async {
+    final TH2FileParser parser = TH2FileParser();
+
+    mpLocator.mpGeneralController.reset();
+
+    final (TH2File file, bool isSuccessful, List<String> errors) = await parser
+        .parse(
+          THTestAux.testPath('2026-04-05-015-scrap_with_stations_option.th2'),
+        );
+
+    expect(isSuccessful, true, reason: errors.join('\n\n'));
+
+    final List<THScrap> scraps = file.getScraps().toList();
+
+    expect(scraps.length, 1);
+
+    final THScrap scrap = scraps.first;
+
+    expect(scrap.optionsMap.length, 1);
+    expect(scrap.hasOption(THCommandOptionType.stations), true);
+
+    final THStationsCommandOption stationsOption =
+        scrap.getOption(THCommandOptionType.stations)!
+            as THStationsCommandOption;
+
+    expect(stationsOption.stations, ['1.35', '1.36', '1.37']);
   });
 
   group('scrap NO OPTIONS', () {

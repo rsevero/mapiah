@@ -48,6 +48,15 @@
 [ ] - Create a way to the user create perfectly 15° multiple angle line segments.
 [ ] - Move background images
 [ ] - Resize background images
+[ ] - Create shortcuts to change straight line segments to Bézier curve segments and vice versa. These shortcuts should work either on complete line level when non empty selection state or on line segment level when in single line edit mode. [request by Axel Hack]
+[ ] - Create 10 PLA with type and subtype last used create elements FAB buttons. They should be ordered in last used order. Use the same existing infra structure of the last used elements. [request by Axel Hack]
+[ ] - Support graphic tablet. [request by Axel Hack]
+[ ] - Include support for SVG background images. [request by Axel Hack]
+[ ] - Create "last used options" on top of option window. [request by Axel Hack]
+[ ] - Remove station option for general options. [request by Axel Hack]
+[ ] - When a station option is set, use it as reference for future "point station". [request by Axel Hack]
+[ ] - BUG: links inside help pages not working. [reported by Axel Hack]
+[X] - BUG: '-stations' with bracketed station lists not parsed correctly. [reported by Axel Hack]
 
 ## Version 1.0
 [ ] - Raster images tracing.

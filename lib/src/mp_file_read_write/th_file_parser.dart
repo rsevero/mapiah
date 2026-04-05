@@ -1842,7 +1842,23 @@ class TH2FileParser {
       );
     }
 
-    final List<String> stations = _currentSpec[0].toString().split(',');
+    final String stationsSpec = _currentSpec[0].toString().trim();
+
+    if (stationsSpec.isEmpty) {
+      throw THCreateObjectFromListWithWrongLengthException('> 0', _currentSpec);
+    }
+
+    final List<String> stations = stationsSpec.contains('')
+        ? stationsSpec
+              .split(RegExp(r'\s+'))
+              .map((String station) => station.trim())
+              .where((String station) => station.isNotEmpty)
+              .toList()
+        : stationsSpec
+              .split(',')
+              .map((String station) => station.trim())
+              .where((String station) => station.isNotEmpty)
+              .toList();
 
     if (stations.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException('> 0', stations);

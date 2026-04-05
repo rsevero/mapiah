@@ -1,0 +1,7 @@
+encoding  utf-8
+scrap BP_PlS5 -stations [1.35 1.36 1.37]
+	line arrow -scale l
+		1726.0 1816.0
+		1154.0 1324.0
+	endline
+endscrap

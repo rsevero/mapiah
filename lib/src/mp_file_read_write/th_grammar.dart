@@ -507,7 +507,7 @@ class THGrammar extends GrammarDefinition {
 
   /// scrap -stations
   Parser stationsOption() =>
-      stringIgnoreCase('stations') & csvKeyword().map((value) => [value]);
+      stringIgnoreCase('stations') & anyString().map((value) => [value]);
 
   /// scrap -title
   Parser titleOption() => stringIgnoreCase('title') & titleOptions();
