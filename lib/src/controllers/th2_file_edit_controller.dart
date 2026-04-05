@@ -372,17 +372,33 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get canMergeAreas {
-    int totalBorderCount = 0;
+    final Set<int> areaMPIDs = {};
 
     for (final MPSelectedElement element
         in selectionController.mpSelectedElementsLogical.values) {
       if (element is MPSelectedArea) {
-        final THArea area = _th2File.areaByMPID(element.mpID);
+        areaMPIDs.add(element.mpID);
+      } else if (element is MPSelectedLine) {
+        final int? areaMPID = _th2File.getAreaMPIDByLineMPID(element.mpID);
 
-        totalBorderCount += area.getLineMPIDs(_th2File).length;
-        if (totalBorderCount >= 2) {
-          return true;
+        if (areaMPID != null) {
+          areaMPIDs.add(areaMPID);
         }
+      }
+    }
+
+    if (areaMPIDs.length > 1) {
+      return true;
+    }
+
+    int totalBorderCount = 0;
+
+    for (final int areaMPID in areaMPIDs) {
+      final THArea area = _th2File.areaByMPID(areaMPID);
+
+      totalBorderCount += area.getLineMPIDs(_th2File).length;
+      if (totalBorderCount >= 2) {
+        return true;
       }
     }
 

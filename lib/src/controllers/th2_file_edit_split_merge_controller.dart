@@ -1818,21 +1818,39 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
   /// Collects selected areas and their border lines, validates that there are
   /// enough elements to merge. Returns null (and shows a snackbar) if
   /// validation fails.
+  ///
+  /// Areas are gathered from two sources:
+  /// 1. Directly selected areas.
+  /// 2. Areas whose border line is among the selected lines.
   ({List<THArea> selectedAreas, List<THLine> allLTSAs})?
   _collectAndValidateMergeSelections() {
-    final List<THArea> selectedAreas = _th2FileEditController
-        .selectionController
-        .mpSelectedElementsLogical
-        .values
-        .whereType<MPSelectedArea>()
-        .map((final MPSelectedArea sel) => _th2File.areaByMPID(sel.mpID))
-        .toList();
+    final Set<int> areaMPIDs = {};
 
-    if (selectedAreas.isEmpty) {
+    for (final MPSelectedElement element
+        in _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values) {
+      if (element is MPSelectedArea) {
+        areaMPIDs.add(element.mpID);
+      } else if (element is MPSelectedLine) {
+        final int? areaMPID = _th2File.getAreaMPIDByLineMPID(element.mpID);
+
+        if (areaMPID != null) {
+          areaMPIDs.add(areaMPID);
+        }
+      }
+    }
+
+    if (areaMPIDs.isEmpty) {
       _showSnackbar(mpLocator.appLocalizations.mergeAreasNoSelectedAreas);
 
       return null;
     }
+
+    final List<THArea> selectedAreas = areaMPIDs
+        .map((final int mpID) => _th2File.areaByMPID(mpID))
+        .toList();
 
     final List<THLine> allLTSAs = _collectLTSAs(selectedAreas);
 
