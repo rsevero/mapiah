@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// close <on/off/auto> . determines whether a line is closed or not. Default is
+/// close `on/off/auto` . determines whether a line is closed or not. Default is
 /// auto.
 class THCloseCommandOption extends THOnOffAutoCommandOption {
   THCloseCommandOption.forCWJM({

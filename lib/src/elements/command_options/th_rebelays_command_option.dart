@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// rebelays <on/off>. this option can be specified only with the ‘rope’ line
+/// rebelays `on/off`. this option can be specified only with the ‘rope’ line
 /// type. Default is |on|.
 class THRebelaysCommandOption extends THOnOffCommandOption {
   THRebelaysCommandOption.forCWJM({

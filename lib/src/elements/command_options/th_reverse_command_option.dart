@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// |reverse <on/off> - whether points are given in reverse order. Default is
+/// `reverse on/off` - whether points are given in reverse order. Default is
 /// off.
 class THReverseCommandOption extends THOnOffCommandOption {
   THReverseCommandOption.forCWJM({

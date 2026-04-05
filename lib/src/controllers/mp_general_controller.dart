@@ -63,8 +63,6 @@ abstract class MPGeneralControllerBase with Store {
     _thConfigFilePath = value.trim();
   }
 
-  String get thConfigFilePath => _thConfigFilePath;
-
   void _clearActiveTabOverlayWindows() {
     if ((_activeTabIndex >= 0) && (_activeTabIndex < _openFileOrder.length)) {
       final String outgoingFilename = _openFileOrder[_activeTabIndex];

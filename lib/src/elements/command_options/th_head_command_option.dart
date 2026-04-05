@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// head <begin/end/both/none> . can be used only with the arrow type and
+/// head `begin/end/both/none` . can be used only with the arrow type and
 /// indicates where to put an arrow head. Default is |end|.
 class THHeadCommandOption extends THArrowPositionCommandOption {
   THHeadCommandOption.forCWJM({

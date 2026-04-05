@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// outline <in/out/none> . determines whether the line serves as a border line
+/// outline `in/out/none` . determines whether the line serves as a border line
 /// for a scrap. Default value is ‘out’ for walls, ‘none’ for all other lines.
 /// Use -outline in for large pillars etc.
 class THOutlineCommandOption extends THMultipleChoiceCommandOption {

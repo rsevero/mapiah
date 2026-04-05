@@ -3,7 +3,7 @@
 part of 'th_command_option.dart';
 
 /// point, line and area:
-/// visibility <on/off> . displays/hides the symbol.
+/// visibility `on/off` . displays/hides the symbol.
 class THVisibilityCommandOption extends THOnOffCommandOption {
   THVisibilityCommandOption.forCWJM({
     required super.parentMPID,

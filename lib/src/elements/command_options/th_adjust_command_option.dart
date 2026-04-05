@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// adjust <horizontal/vertical> - shifts the line point to be aligned
+/// adjust `horizontal/vertical` - shifts the line point to be aligned
 /// horizontally/vertically with the previous point. It can't be set on the
 /// first point. The result is a horizontal/vertical line segment. This option
 /// is not allowed in the |plan| projection. Default is unset where the line

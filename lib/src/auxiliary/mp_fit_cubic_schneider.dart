@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-/// Dart port of "An Algorithm for Automatically Fitting Digitized Curves"
-/// by Philip J. Schneider (Graphics Gems, 1990).
-///
-/// This implementation follows the original algorithm but uses idiomatic Dart
-/// and the project's existing geometry types (Point, Vec2, CubicBez) from
-/// `mp_bezier_fit_aux.dart`.
-///
-/// Given a polyline and an error tolerance (squared distance), it returns a
-/// list of cubic Bezier segments that approximate the points.
+// Dart port of "An Algorithm for Automatically Fitting Digitized Curves"
+// by Philip J. Schneider (Graphics Gems, 1990).
+//
+// This implementation follows the original algorithm but uses idiomatic Dart
+// and the project's existing geometry types (Point, Vec2, CubicBez) from
+// `mp_bezier_fit_aux.dart`.
+//
+// Given a polyline and an error tolerance (squared distance), it returns a
+// list of cubic Bezier segments that approximate the points.
 
 import 'package:mapiah/src/auxiliary/mp_bezier_fit_aux.dart';
 

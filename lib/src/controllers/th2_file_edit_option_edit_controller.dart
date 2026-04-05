@@ -419,8 +419,6 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   MPOptionElementType get currentOptionElementsType =>
       _currentOptionElementsType;
-
-  THElementType get defaultOptionsElementType => _defaultOptionsElementType;
 }
 
 class MPOptionInfo {

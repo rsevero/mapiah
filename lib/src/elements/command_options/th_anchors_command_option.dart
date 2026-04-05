@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// anchors <on/off> - this option can be specified only with the ‘rope’ line
+/// anchors `on/off` - this option can be specified only with the ‘rope’ line
 /// type. Default is on.
 class THAnchorsCommandOption extends THOnOffCommandOption {
   THAnchorsCommandOption.forCWJM({

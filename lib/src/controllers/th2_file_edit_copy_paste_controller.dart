@@ -75,13 +75,13 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
       result.addAll(entries);
     }
 
-    /// Store as List<MPCopyElementWithChildren> in clipboard.
+    /// Store as `List<MPCopyElementWithChildren>` in clipboard.
     mpLocator.mpGeneralController.setClipboard(result);
   }
 
   /// Build copy result recursively for one element with its children.
   ///
-  /// Returns a List<MPCopyElementWithChildren> which may include pre-sibling
+  /// Returns a `List<MPCopyElementWithChildren>` which may include pre-sibling
   /// entries (e.g., border lines for areas, already duplicated lines).
   List<MPCopyElementWithChildren> _buildCopyResult(
     THElement element,

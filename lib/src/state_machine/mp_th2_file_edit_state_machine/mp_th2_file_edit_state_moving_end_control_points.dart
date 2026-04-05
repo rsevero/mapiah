@@ -7,11 +7,9 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin {
-  final TH2FileEditSnapController snapController;
-
   MPTH2FileEditStateMovingEndControlPoints({
     required super.th2FileEditController,
-  }) : snapController = th2FileEditController.snapController;
+  });
 
   @override
   void setCursor() {

@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// gradient <none/center/point> . can be used only with the contour type and in-
+/// gradient `none/center/point` . can be used only with the contour type and in-
 /// dicates where to put a gradient mark on the contour line. If there is no gradient
 /// specification, behaviour is symbol-set dependent (e.g. no tick in UIS, tick in the mid-
 /// dle in SKBB). The point option must be used inside [LINE DATA]. The others can

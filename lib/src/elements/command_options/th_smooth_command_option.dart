@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-/// smooth <on/off/auto> -> whether the line is smooth at the given point.
+/// smooth `on/off/auto` -> whether the line is smooth at the given point.
 /// Default is |auto|. This setting only has any effect if both segments that
 /// passes through the  point affected by the smooth setting are Bezier Curves
 /// (the one arriving at it and the one leaving it). On means that the line
