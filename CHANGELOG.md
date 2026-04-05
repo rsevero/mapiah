@@ -4,7 +4,6 @@
 
 ## 0.3.5 - not yet released
 * Highlights:
-  * **Merge areas** (Ctrl+M) now combines selected area borders into the fewest possible closed lines, including crossing borders and shared edges.
 * New features:
   * Join lines at coinciding extremities (Ctrl+J).
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
@@ -13,7 +12,7 @@
   * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
   * Add area by clicking existing lines: when clicked lines had no THID yet, only the last clicked line ended up referenced by the new area. The add-area flow now wraps the area creation command only on the first clicked border and keeps later clicks as pure border additions, so all clicked lines remain attached to the area.
 * Infrastructure maintenance:
-  * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging.
+  * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:

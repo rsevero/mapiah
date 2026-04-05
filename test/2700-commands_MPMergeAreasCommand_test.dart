@@ -608,6 +608,69 @@ void main() {
     },
   );
 
+  // Scenario 14: One area whose two open border lines include a Bézier line
+  // that crosses itself. Self-crossings must be treated the same way as other
+  // crossings during merge.
+  group(
+    'one area with crossing unclosed straight and self-crossing bezier borders produces one closed merged border',
+    () {
+      test(
+        'area count=1, line count=1, merged line is closed and mixed, undo restores',
+        () async {
+          final TH2FileEditController controller = await _loadController(
+            '2026-04-05-014-one_area_with_crossing_unclosed_straight_and_self_crossing_bezier_line_borders.th2',
+            mpLocator,
+          );
+          final TH2File th2File = controller.th2File;
+          final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 2);
+
+          _selectAllAreas(controller);
+
+          expect(controller.canMergeAreas, isTrue);
+
+          controller.splitMergeController.prepareMergeAreas();
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 1);
+
+          final THArea mergedArea = th2File.getAreas().first;
+
+          expect(mergedArea.getLineMPIDs(th2File).length, 1);
+
+          final THLine mergedLine = th2File.getLines().first;
+          final List<THLineSegment> segs = mergedLine.getLineSegments(th2File);
+          final THLineSegment pinSeg = segs.first;
+          final THLineSegment lastSeg = segs.last;
+
+          expect(segs.length, greaterThan(2));
+          expect(
+            segs.any((THLineSegment seg) => seg is THStraightLineSegment),
+            isTrue,
+          );
+          expect(
+            segs.any((THLineSegment seg) => seg is THBezierCurveLineSegment),
+            isTrue,
+          );
+          expect(
+            (pinSeg.endPoint.coordinates - lastSeg.endPoint.coordinates)
+                .distance,
+            lessThan(1e-6),
+          );
+
+          controller.undo();
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 2);
+          expect(th2File == snapshotOriginal, isTrue);
+          expect(identical(th2File, snapshotOriginal), isFalse);
+        },
+      );
+    },
+  );
+
   // Scenario 9: Shared straight edge is removed from merged line.
   // Two adjacent rectangles sharing one straight edge.
   // line1: (0,0)→(100,0)→(100,100)→(0,100)→(0,0) — 4 segments
