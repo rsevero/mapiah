@@ -49,6 +49,8 @@ typedef _LineAdjacency = ({
 
 typedef _OrientedLine = ({THLine line, bool reversed});
 
+typedef _OrientedSeg = ({int idx, bool reversed});
+
 class TH2FileEditSplitMergeController = TH2FileEditSplitMergeControllerBase
     with _$TH2FileEditSplitMergeController;
 
@@ -1477,46 +1479,50 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     return groups.values.toList();
   }
 
-  /// Given a list of [allSegs] (flat list of atomic segments after splitting at
-  /// crossings), [startIdx] is the index of the starting segment, traces a
-  /// path by always taking the [pickLeft] turn at each junction.
+  /// Traces a closed boundary path starting from [start], always taking the
+  /// [pickLeft] (or right) turn at each junction. Segments may be traversed in
+  /// either direction; each physical segment may appear at most once.
   ///
-  /// Returns the ordered list of segment indices forming the path, or null if
-  /// the path cannot be closed.
-  List<int>? _traceBoundaryPath({
+  /// Returns the ordered list of oriented segments forming the path, or null
+  /// if the path cannot be closed.
+  List<_OrientedSeg>? _traceBoundaryPath({
     required List<THLineSegment> allSegs,
     required List<Offset> segStarts,
-    required List<List<int>> adjacency,
-    required int startIdx,
+    required Map<_OrientedSeg, List<_OrientedSeg>> adjacency,
+    required _OrientedSeg start,
     required bool pickLeft,
   }) {
-    final List<int> path = [startIdx];
-    final Set<int> used = {startIdx};
-    final Offset targetEnd = allSegs[startIdx].endPoint.coordinates;
+    final List<_OrientedSeg> path = [start];
+    final Set<int> usedIndices = {start.idx};
 
-    int current = startIdx;
+    // The target is the effective start of the first oriented segment; we need
+    // to return to it to close the boundary loop.
+    final Offset targetStart = start.reversed
+        ? allSegs[start.idx].endPoint.coordinates
+        : segStarts[start.idx];
+
+    _OrientedSeg current = start;
 
     while (true) {
-      final Offset currentEnd = allSegs[current].endPoint.coordinates;
+      final Offset currentEnd = current.reversed
+          ? segStarts[current.idx]
+          : allSegs[current.idx].endPoint.coordinates;
 
       // Check if we have returned to the start of the first segment.
       if ((path.length > 1) &&
-          ((currentEnd - targetEnd).distanceSquared <=
+          ((currentEnd - targetStart).distanceSquared <=
               mpDoubleComparisonEpsilonSquared)) {
         break;
       }
 
-      final Offset arrDir = _arrivalTangent(
-        allSegs[current],
-        segStarts[current],
-      );
-      final List<int> candidates = adjacency[current]
-          .where((idx) => !used.contains(idx))
-          .where(
-            (idx) =>
-                (segStarts[idx] - currentEnd).distanceSquared <=
-                mpDoubleComparisonEpsilonSquared,
-          )
+      // Arrival tangent: for a reversed segment, it is the negated departure
+      // tangent of the forward segment.
+      final Offset arrDir = current.reversed
+          ? -_departureTangent(allSegs[current.idx], segStarts[current.idx])
+          : _arrivalTangent(allSegs[current.idx], segStarts[current.idx]);
+
+      final List<_OrientedSeg> candidates = (adjacency[current] ?? [])
+          .where((c) => !usedIndices.contains(c.idx))
           .toList();
 
       if (candidates.isEmpty) {
@@ -1527,22 +1533,25 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       // Sort candidates by turn angle relative to incoming direction.
       // pickLeft → most counter-clockwise (largest positive cross product);
       // pickRight → most clockwise (most negative).
+      // For a reversed candidate, its departure tangent is the negated arrival
+      // tangent of the forward segment.
       candidates.sort((a, b) {
-        final double crossA = _cross2D(
-          arrDir,
-          _departureTangent(allSegs[a], segStarts[a]),
-        );
-        final double crossB = _cross2D(
-          arrDir,
-          _departureTangent(allSegs[b], segStarts[b]),
-        );
+        final Offset aDep = a.reversed
+            ? -_arrivalTangent(allSegs[a.idx], segStarts[a.idx])
+            : _departureTangent(allSegs[a.idx], segStarts[a.idx]);
+        final Offset bDep = b.reversed
+            ? -_arrivalTangent(allSegs[b.idx], segStarts[b.idx])
+            : _departureTangent(allSegs[b.idx], segStarts[b.idx]);
+
+        final double crossA = _cross2D(arrDir, aDep);
+        final double crossB = _cross2D(arrDir, bDep);
 
         return pickLeft ? crossB.compareTo(crossA) : crossA.compareTo(crossB);
       });
 
       current = candidates.first;
       path.add(current);
-      used.add(current);
+      usedIndices.add(current.idx);
 
       if (path.length > allSegs.length + 1) {
         // Cycle detection guard.
@@ -2099,11 +2108,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       return [];
     }
 
-    // 3. Build adjacency list.
-    final List<List<int>> adjacency = _buildSegmentAdjacency(
-      allSegs: allSegs,
-      segStarts: segStarts,
-    );
+    // 3. Build adjacency map (supports both forward and reversed traversal).
+    final Map<_OrientedSeg, List<_OrientedSeg>> adjacency =
+        _buildSegmentAdjacency(allSegs: allSegs, segStarts: segStarts);
 
     // 4. Find the best starting segment.
     final int startIdx = _findBoundaryStartIndex(
@@ -2112,20 +2119,29 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     );
 
     // 5. Trace boundary paths and choose the one that covers all segments.
-    final List<int> chosenPath = _chooseBoundaryPath(
+    final List<_OrientedSeg> chosenPath = _chooseBoundaryPath(
       allSegs: allSegs,
       segStarts: segStarts,
       adjacency: adjacency,
       startIdx: startIdx,
     );
 
-    // 6. Assemble: pin segment + path segments.
+    // 6. Assemble: pin segment + path segments (reversed segments are flipped).
+    final _OrientedSeg firstSeg = chosenPath.first;
+    final Offset pinEnd = firstSeg.reversed
+        ? allSegs[firstSeg.idx].endPoint.coordinates
+        : segStarts[firstSeg.idx];
+
     return [
       THStraightLineSegment(
         parentMPID: newLineMPID,
-        endPoint: THPositionPart(coordinates: segStarts[chosenPath.first]),
+        endPoint: THPositionPart(coordinates: pinEnd),
       ),
-      ...chosenPath.map((idx) => allSegs[idx]),
+      ...chosenPath.map(
+        (os) => os.reversed
+            ? _reverseSegment(allSegs[os.idx], segStarts[os.idx], newLineMPID)
+            : allSegs[os.idx],
+      ),
     ];
   }
 
@@ -2216,26 +2232,48 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       ..addAll(filteredStarts);
   }
 
-  /// Builds an adjacency list for [allSegs]: `adjacency[i]` contains the
-  /// indices of every segment whose start point coincides with the end point
-  /// of segment [i].
-  List<List<int>> _buildSegmentAdjacency({
+  /// Builds an adjacency map for oriented segments. Each [_OrientedSeg]
+  /// `(idx, reversed)` maps to the list of oriented segments that can
+  /// immediately follow it — i.e., whose effective start point coincides with
+  /// the effective end point of `(idx, reversed)`.
+  ///
+  /// Both forward and backward traversal of every segment are considered,
+  /// which is necessary when border-line orientations are inconsistent across
+  /// the areas being merged.
+  Map<_OrientedSeg, List<_OrientedSeg>> _buildSegmentAdjacency({
     required List<THLineSegment> allSegs,
     required List<Offset> segStarts,
   }) {
-    final List<List<int>> adjacency = List.generate(allSegs.length, (_) => []);
+    final int n = allSegs.length;
+    final Map<_OrientedSeg, List<_OrientedSeg>> adjacency = {};
 
-    for (int i = 0; i < allSegs.length; i++) {
-      final Offset iEnd = allSegs[i].endPoint.coordinates;
+    for (int i = 0; i < n; i++) {
+      adjacency[(idx: i, reversed: false)] = [];
+      adjacency[(idx: i, reversed: true)] = [];
+    }
 
-      for (int j = 0; j < allSegs.length; j++) {
-        if (i == j) {
-          continue;
-        }
+    for (int i = 0; i < n; i++) {
+      for (final bool iRev in [false, true]) {
+        final Offset iEnd = iRev
+            ? segStarts[i]
+            : allSegs[i].endPoint.coordinates;
+        final _OrientedSeg key = (idx: i, reversed: iRev);
 
-        if ((segStarts[j] - iEnd).distanceSquared <=
-            mpDoubleComparisonEpsilonSquared) {
-          adjacency[i].add(j);
+        for (int j = 0; j < n; j++) {
+          if (j == i) {
+            continue;
+          }
+
+          for (final bool jRev in [false, true]) {
+            final Offset jStart = jRev
+                ? allSegs[j].endPoint.coordinates
+                : segStarts[j];
+
+            if ((jStart - iEnd).distanceSquared <=
+                mpDoubleComparisonEpsilonSquared) {
+              adjacency[key]!.add((idx: j, reversed: jRev));
+            }
+          }
         }
       }
     }
@@ -2274,54 +2312,98 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     return startIdx;
   }
 
-  /// Traces the left-turn and right-turn boundary paths from [startIdx] and
-  /// returns the one that covers all segments. Throws a [StateError] with
-  /// message `'mergeAreasLineSegmentsOutsideBoundary'` if both paths leave
-  /// segments uncovered.
-  List<int> _chooseBoundaryPath({
+  /// Tries all four combinations of left/right turn and forward/reversed start
+  /// orientation from [startIdx], and returns the path that covers all
+  /// segments with the fewest uncovered segments. Throws a [StateError] with
+  /// message `'mergeAreasLineSegmentsOutsideBoundary'` if no combination
+  /// covers every segment.
+  List<_OrientedSeg> _chooseBoundaryPath({
     required List<THLineSegment> allSegs,
     required List<Offset> segStarts,
-    required List<List<int>> adjacency,
+    required Map<_OrientedSeg, List<_OrientedSeg>> adjacency,
     required int startIdx,
   }) {
-    final List<int>? leftPath = _traceBoundaryPath(
-      allSegs: allSegs,
-      segStarts: segStarts,
-      adjacency: adjacency,
-      startIdx: startIdx,
-      pickLeft: true,
-    );
-    final List<int>? rightPath = _traceBoundaryPath(
-      allSegs: allSegs,
-      segStarts: segStarts,
-      adjacency: adjacency,
-      startIdx: startIdx,
-      pickLeft: false,
-    );
+    List<_OrientedSeg>? bestPath;
+    int bestOutside = allSegs.length + 1;
 
-    final Set<int> leftSet = leftPath?.toSet() ?? {};
-    final Set<int> rightSet = rightPath?.toSet() ?? {};
-    final int leftOutside = allSegs.length - leftSet.length;
-    final int rightOutside = allSegs.length - rightSet.length;
+    for (final bool pickLeft in [true, false]) {
+      for (final bool startReversed in [false, true]) {
+        final _OrientedSeg start = (idx: startIdx, reversed: startReversed);
+        final List<_OrientedSeg>? path = _traceBoundaryPath(
+          allSegs: allSegs,
+          segStarts: segStarts,
+          adjacency: adjacency,
+          start: start,
+          pickLeft: pickLeft,
+        );
 
-    final List<int> chosenPath;
+        if (path == null) {
+          continue;
+        }
 
-    if (leftPath != null &&
-        (rightPath == null || leftOutside <= rightOutside)) {
-      chosenPath = leftPath;
-    } else if (rightPath != null) {
-      chosenPath = rightPath;
-    } else {
-      chosenPath = List<int>.generate(allSegs.length, (i) => i);
+        final int outside =
+            allSegs.length - path.map((s) => s.idx).toSet().length;
+
+        if (outside < bestOutside) {
+          bestOutside = outside;
+          bestPath = path;
+
+          if (bestOutside == 0) {
+            break;
+          }
+        }
+      }
+
+      if (bestOutside == 0) {
+        break;
+      }
     }
 
-    final int outsideCount = allSegs.length - chosenPath.toSet().length;
-
-    if (outsideCount > 0) {
+    if (bestOutside > 0) {
       throw StateError('mergeAreasLineSegmentsOutsideBoundary');
     }
 
-    return chosenPath;
+    return bestPath!;
+  }
+
+  /// Returns a copy of [seg] traversed in the opposite direction. The new end
+  /// point is [segStart] (the original start). For Bézier curves the control
+  /// points are swapped so the curve shape is preserved.
+  THLineSegment _reverseSegment(
+    THLineSegment seg,
+    Offset segStart,
+    int newParentMPID,
+  ) {
+    switch (seg) {
+      case THStraightLineSegment _:
+        return THStraightLineSegment(
+          parentMPID: newParentMPID,
+          endPoint: THPositionPart(coordinates: segStart),
+          optionsMap: SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            seg.optionsMap,
+          ),
+          attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>.from(
+            seg.attrOptionsMap,
+          ),
+        );
+      case THBezierCurveLineSegment _:
+        return THBezierCurveLineSegment(
+          parentMPID: newParentMPID,
+          controlPoint1: seg.controlPoint2.copyWith(),
+          controlPoint2: seg.controlPoint1.copyWith(),
+          endPoint: THPositionPart(coordinates: segStart),
+          optionsMap: SplayTreeMap<THCommandOptionType, THCommandOption>.from(
+            seg.optionsMap,
+          ),
+          attrOptionsMap: SplayTreeMap<String, THAttrCommandOption>.from(
+            seg.attrOptionsMap,
+          ),
+        );
+      default:
+        throw StateError(
+          'Unknown THLineSegment subtype at TH2FileEditSplitMergeController._reverseSegment: ${seg.runtimeType}',
+        );
+    }
   }
 
   THLineSegment _copySegment(THLineSegment original, int newParentMPID) {
