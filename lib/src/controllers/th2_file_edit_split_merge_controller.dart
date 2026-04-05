@@ -1449,9 +1449,15 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    // Precompute segment lists and their start points for each line.
+    // Precompute closed segment lists and their start points for each line.
+    // _ensureClosed appends a synthetic straight closing segment when the last
+    // point does not coincide with the first, so the closing edge is included
+    // in the duplicate check just like any other segment.
     final List<List<THLineSegment>> allSegs = lines.map((line) {
-      return line.getLineSegments(_th2File);
+      return _ensureClosed(
+        segments: line.getLineSegments(_th2File),
+        newParentMPID: line.mpID,
+      );
     }).toList();
 
     final List<List<Offset>> allStarts = allSegs.map((segs) {
