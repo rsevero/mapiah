@@ -4,10 +4,13 @@
 
 ## 0.3.5 - not yet released
 * Highlights:
+  * **Merge areas** (Ctrl+M) now combines selected area borders into the fewest possible closed lines, including crossing borders and shared edges.
 * New features:
   * Join lines at coinciding extremities (Ctrl+J).
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
+  * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
 * Fixed bugs:
+  * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
 * Infrastructure maintenance:
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release

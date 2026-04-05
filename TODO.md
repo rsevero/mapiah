@@ -190,7 +190,7 @@
 [X] - When deleting an element, all imediate empty lines after it should also be deleted.
 [X] - Split one line in two.
 [X] - Join 2 lines.
-[ ] - Merge 2 areas.
+[X] - Merge 2 areas.
 [ ] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
 [X] - Create a 'split line at selected end point' action in 'single line edit' mode.

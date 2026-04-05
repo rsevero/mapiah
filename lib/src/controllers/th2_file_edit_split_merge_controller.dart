@@ -653,23 +653,31 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     );
   }
 
-  Map<int, List<_CrossingData>> _computeCrossings(List<THLine> lines) {
+  Map<int, List<_CrossingData>> _computeCrossings(
+    List<THLine> lines, {
+    bool treatLinesAsClosed = false,
+    bool includeSelfCrossings = false,
+  }) {
     final Map<int, List<_CrossingData>> result = {};
-    final Map<int, List<THLineSegment>> closedSegsByLine = {};
+    final Map<int, List<THLineSegment>> segsByLine = {};
 
     for (final THLine line in lines) {
-      closedSegsByLine[line.mpID] = _ensureClosed(
-        segments: line.getLineSegments(_th2File),
-        newParentMPID: line.mpID,
-      );
+      segsByLine[line.mpID] = treatLinesAsClosed
+          ? _ensureClosed(
+              segments: line.getLineSegments(_th2File),
+              newParentMPID: line.mpID,
+            )
+          : line.getLineSegments(_th2File);
     }
 
     for (int i = 0; i < lines.length; i++) {
-      for (int j = i; j < lines.length; j++) {
+      final int startJ = includeSelfCrossings ? i : i + 1;
+
+      for (int j = startJ; j < lines.length; j++) {
         final THLine lineA = lines[i];
         final THLine lineB = lines[j];
-        final List<THLineSegment> segsA = closedSegsByLine[lineA.mpID]!;
-        final List<THLineSegment> segsB = closedSegsByLine[lineB.mpID]!;
+        final List<THLineSegment> segsA = segsByLine[lineA.mpID]!;
+        final List<THLineSegment> segsB = segsByLine[lineB.mpID]!;
         final int numGeoSegsA = segsA.length - 1;
         final int numGeoSegsB = segsB.length - 1;
 
@@ -705,7 +713,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
             );
           }
 
-          if (i != j) {
+          if ((i != j) || !includeSelfCrossings) {
             continue;
           }
 
@@ -1604,7 +1612,10 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     for (int i = 0; i < n; i++) {
       for (int j = i + 1; j < n; j++) {
         // Criterion 1: lines cross each other (geometric intersection).
-        bool mergeable = _computeCrossings([lines[i], lines[j]]).isNotEmpty;
+        bool mergeable = _computeCrossings([
+          lines[i],
+          lines[j],
+        ], treatLinesAsClosed: true).isNotEmpty;
 
         // Criterion 2: shared segment — any segment of line i is a geometric
         // duplicate (same or reversed) of any segment of line j.
@@ -2231,7 +2242,11 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     required List<THLine> lines,
     required int newLineMPID,
   }) {
-    final Map<int, List<_CrossingData>> crossings = _computeCrossings(lines);
+    final Map<int, List<_CrossingData>> crossings = _computeCrossings(
+      lines,
+      treatLinesAsClosed: true,
+      includeSelfCrossings: true,
+    );
 
     // 1. Flatten all segments from all lines into a single list, splitting at
     //    crossing points when lines intersect geometrically.
