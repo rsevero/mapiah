@@ -655,139 +655,74 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
   Map<int, List<_CrossingData>> _computeCrossings(List<THLine> lines) {
     final Map<int, List<_CrossingData>> result = {};
+    final Map<int, List<THLineSegment>> closedSegsByLine = {};
+
+    for (final THLine line in lines) {
+      closedSegsByLine[line.mpID] = _ensureClosed(
+        segments: line.getLineSegments(_th2File),
+        newParentMPID: line.mpID,
+      );
+    }
 
     for (int i = 0; i < lines.length; i++) {
-      for (int j = i + 1; j < lines.length; j++) {
+      for (int j = i; j < lines.length; j++) {
         final THLine lineA = lines[i];
         final THLine lineB = lines[j];
-        final List<THLineSegment> segsA = lineA.getLineSegments(_th2File);
-        final List<THLineSegment> segsB = lineB.getLineSegments(_th2File);
+        final List<THLineSegment> segsA = closedSegsByLine[lineA.mpID]!;
+        final List<THLineSegment> segsB = closedSegsByLine[lineB.mpID]!;
+        final int numGeoSegsA = segsA.length - 1;
+        final int numGeoSegsB = segsB.length - 1;
 
-        for (int k = 0; k < segsA.length - 1; k++) {
+        for (int k = 0; k < numGeoSegsA; k++) {
           final THLineSegment segA = segsA[k + 1];
+          final Offset startA = segsA[k].endPoint.coordinates;
 
-          for (int m = 0; m < segsB.length - 1; m++) {
+          final int startM = (i == j) ? (k + 1) : 0;
+
+          for (int m = startM; m < numGeoSegsB; m++) {
             final THLineSegment segB = segsB[m + 1];
+            final Offset startB = segsB[m].endPoint.coordinates;
 
-            // Case 1: Both segments are straight
-            if ((segA is! THBezierCurveLineSegment) &&
-                (segB is! THBezierCurveLineSegment)) {
-              final Offset p0 = segsA[k].endPoint.coordinates;
-              final Offset p1 = segA.endPoint.coordinates;
-              final Offset p2 = segsB[m].endPoint.coordinates;
-              final Offset p3 = segB.endPoint.coordinates;
+            if (i == j) {
+              final bool sharesEndpoint =
+                  (m == k + 1) || ((k == 0) && (m == numGeoSegsA - 1));
 
-              final MPSegmentIntersection? hit =
-                  MPGeometryAux.straightSegmentIntersection(p0, p1, p2, p3);
-
-              if (hit != null) {
-                result.putIfAbsent(lineA.mpID, () => []).add((
-                  geoSegIdx: k,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tA,
-                ));
-                result.putIfAbsent(lineB.mpID, () => []).add((
-                  geoSegIdx: m,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tB,
-                ));
+              if (sharesEndpoint) {
+                continue;
               }
             }
-            // Case 2: Bézier A vs Straight B
-            else if ((segA is THBezierCurveLineSegment) &&
-                (segB is! THBezierCurveLineSegment)) {
-              final THBezierCurveLineSegment bezierSegA = segA;
-              final Offset p0 = segsA[k].endPoint.coordinates;
-              final Offset p3 = bezierSegA.endPoint.coordinates;
-              final Offset lineStart = segsB[m].endPoint.coordinates;
-              final Offset lineEnd = segB.endPoint.coordinates;
 
-              final List<BezierStraightIntersection> hits =
-                  MPGeometryAux.bezierSegmentStraightSegmentIntersection(
-                    p0,
-                    bezierSegA.controlPoint1.coordinates,
-                    bezierSegA.controlPoint2.coordinates,
-                    p3,
-                    lineStart,
-                    lineEnd,
-                  );
+            _collectCrossingsForSegmentPair(
+              lineAMPID: lineA.mpID,
+              lineBMPID: lineB.mpID,
+              geoSegIdxA: k,
+              geoSegIdxB: m,
+              segA: segA,
+              segB: segB,
+              startA: startA,
+              startB: startB,
+              result: result,
+            );
+          }
 
-              for (final BezierStraightIntersection hit in hits) {
-                result.putIfAbsent(lineA.mpID, () => []).add((
-                  geoSegIdx: k,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tBezier,
-                ));
-                result.putIfAbsent(lineB.mpID, () => []).add((
-                  geoSegIdx: m,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tLine,
-                ));
-              }
-            }
-            // Case 3: Straight A vs Bézier B
-            else if ((segA is! THBezierCurveLineSegment) &&
-                (segB is THBezierCurveLineSegment)) {
-              final THBezierCurveLineSegment bezierSegB = segB;
-              final Offset lineStart = segsA[k].endPoint.coordinates;
-              final Offset lineEnd = segA.endPoint.coordinates;
-              final Offset p0 = segsB[m].endPoint.coordinates;
-              final Offset p3 = bezierSegB.endPoint.coordinates;
+          if (i != j) {
+            continue;
+          }
 
-              final List<BezierStraightIntersection> hits =
-                  MPGeometryAux.bezierSegmentStraightSegmentIntersection(
-                    p0,
-                    bezierSegB.controlPoint1.coordinates,
-                    bezierSegB.controlPoint2.coordinates,
-                    p3,
-                    lineStart,
-                    lineEnd,
-                  );
+          final ({Offset point, double tA, double tB})? selfHit =
+              _computeBezierSelfIntersection(segA: segA, startA: startA);
 
-              for (final BezierStraightIntersection hit in hits) {
-                result.putIfAbsent(lineA.mpID, () => []).add((
-                  geoSegIdx: k,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tLine,
-                ));
-                result.putIfAbsent(lineB.mpID, () => []).add((
-                  geoSegIdx: m,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tBezier,
-                ));
-              }
-            }
-            // Case 4: Both Bézier
-            else if ((segA is THBezierCurveLineSegment) &&
-                (segB is THBezierCurveLineSegment)) {
-              final Offset p0A = segsA[k].endPoint.coordinates;
-              final Offset p0B = segsB[m].endPoint.coordinates;
-
-              final List<BezierBezierIntersection> hits =
-                  MPGeometryAux.bezierBezierIntersection(
-                    p0A,
-                    segA.controlPoint1.coordinates,
-                    segA.controlPoint2.coordinates,
-                    segA.endPoint.coordinates,
-                    p0B,
-                    segB.controlPoint1.coordinates,
-                    segB.controlPoint2.coordinates,
-                    segB.endPoint.coordinates,
-                  );
-
-              for (final BezierBezierIntersection hit in hits) {
-                result.putIfAbsent(lineA.mpID, () => []).add((
-                  geoSegIdx: k,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tA,
-                ));
-                result.putIfAbsent(lineB.mpID, () => []).add((
-                  geoSegIdx: m,
-                  crossPoint: hit.point,
-                  tOnSeg: hit.tB,
-                ));
-              }
-            }
+          if (selfHit != null) {
+            result.putIfAbsent(lineA.mpID, () => []).add((
+              geoSegIdx: k,
+              crossPoint: selfHit.point,
+              tOnSeg: selfHit.tA,
+            ));
+            result.putIfAbsent(lineA.mpID, () => []).add((
+              geoSegIdx: k,
+              crossPoint: selfHit.point,
+              tOnSeg: selfHit.tB,
+            ));
           }
         }
       }
@@ -803,9 +738,205 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
         return a.tOnSeg.compareTo(b.tOnSeg);
       });
+
+      final List<_CrossingData> deduped = [];
+
+      for (final _CrossingData crossing in crossings) {
+        final bool isDuplicate = deduped.any((final _CrossingData existing) {
+          return (existing.geoSegIdx == crossing.geoSegIdx) &&
+              ((existing.tOnSeg - crossing.tOnSeg).abs() <=
+                  mpDoubleComparisonEpsilon);
+        });
+
+        if (!isDuplicate) {
+          deduped.add(crossing);
+        }
+      }
+
+      crossings
+        ..clear()
+        ..addAll(deduped);
     }
 
     return result;
+  }
+
+  void _collectCrossingsForSegmentPair({
+    required int lineAMPID,
+    required int lineBMPID,
+    required int geoSegIdxA,
+    required int geoSegIdxB,
+    required THLineSegment segA,
+    required THLineSegment segB,
+    required Offset startA,
+    required Offset startB,
+    required Map<int, List<_CrossingData>> result,
+  }) {
+    if ((segA is! THBezierCurveLineSegment) &&
+        (segB is! THBezierCurveLineSegment)) {
+      final MPSegmentIntersection? hit =
+          MPGeometryAux.straightSegmentIntersection(
+            startA,
+            segA.endPoint.coordinates,
+            startB,
+            segB.endPoint.coordinates,
+          );
+
+      if (hit != null) {
+        result.putIfAbsent(lineAMPID, () => []).add((
+          geoSegIdx: geoSegIdxA,
+          crossPoint: hit.point,
+          tOnSeg: hit.tA,
+        ));
+        result.putIfAbsent(lineBMPID, () => []).add((
+          geoSegIdx: geoSegIdxB,
+          crossPoint: hit.point,
+          tOnSeg: hit.tB,
+        ));
+      }
+
+      return;
+    }
+
+    if ((segA is THBezierCurveLineSegment) &&
+        (segB is! THBezierCurveLineSegment)) {
+      final List<BezierStraightIntersection> hits =
+          MPGeometryAux.bezierSegmentStraightSegmentIntersection(
+            startA,
+            segA.controlPoint1.coordinates,
+            segA.controlPoint2.coordinates,
+            segA.endPoint.coordinates,
+            startB,
+            segB.endPoint.coordinates,
+          );
+
+      for (final BezierStraightIntersection hit in hits) {
+        result.putIfAbsent(lineAMPID, () => []).add((
+          geoSegIdx: geoSegIdxA,
+          crossPoint: hit.point,
+          tOnSeg: hit.tBezier,
+        ));
+        result.putIfAbsent(lineBMPID, () => []).add((
+          geoSegIdx: geoSegIdxB,
+          crossPoint: hit.point,
+          tOnSeg: hit.tLine,
+        ));
+      }
+
+      return;
+    }
+
+    if ((segA is! THBezierCurveLineSegment) &&
+        (segB is THBezierCurveLineSegment)) {
+      final List<BezierStraightIntersection> hits =
+          MPGeometryAux.bezierSegmentStraightSegmentIntersection(
+            startB,
+            segB.controlPoint1.coordinates,
+            segB.controlPoint2.coordinates,
+            segB.endPoint.coordinates,
+            startA,
+            segA.endPoint.coordinates,
+          );
+
+      for (final BezierStraightIntersection hit in hits) {
+        result.putIfAbsent(lineAMPID, () => []).add((
+          geoSegIdx: geoSegIdxA,
+          crossPoint: hit.point,
+          tOnSeg: hit.tLine,
+        ));
+        result.putIfAbsent(lineBMPID, () => []).add((
+          geoSegIdx: geoSegIdxB,
+          crossPoint: hit.point,
+          tOnSeg: hit.tBezier,
+        ));
+      }
+
+      return;
+    }
+
+    final THBezierCurveLineSegment bezA = segA as THBezierCurveLineSegment;
+    final THBezierCurveLineSegment bezB = segB as THBezierCurveLineSegment;
+    final List<BezierBezierIntersection> hits =
+        MPGeometryAux.bezierBezierIntersection(
+          startA,
+          bezA.controlPoint1.coordinates,
+          bezA.controlPoint2.coordinates,
+          bezA.endPoint.coordinates,
+          startB,
+          bezB.controlPoint1.coordinates,
+          bezB.controlPoint2.coordinates,
+          bezB.endPoint.coordinates,
+        );
+
+    for (final BezierBezierIntersection hit in hits) {
+      result.putIfAbsent(lineAMPID, () => []).add((
+        geoSegIdx: geoSegIdxA,
+        crossPoint: hit.point,
+        tOnSeg: hit.tA,
+      ));
+      result.putIfAbsent(lineBMPID, () => []).add((
+        geoSegIdx: geoSegIdxB,
+        crossPoint: hit.point,
+        tOnSeg: hit.tB,
+      ));
+    }
+  }
+
+  ({Offset point, double tA, double tB})? _computeBezierSelfIntersection({
+    required THLineSegment segA,
+    required Offset startA,
+  }) {
+    if (segA is! THBezierCurveLineSegment) {
+      return null;
+    }
+
+    const int sampleCount = 48;
+    final List<Offset> points = [];
+
+    for (int i = 0; i <= sampleCount; i++) {
+      final double t = i / sampleCount;
+      final double mt = 1.0 - t;
+
+      points.add(
+        Offset(
+          mt * mt * mt * startA.dx +
+              3.0 * mt * mt * t * segA.controlPoint1.coordinates.dx +
+              3.0 * mt * t * t * segA.controlPoint2.coordinates.dx +
+              t * t * t * segA.endPoint.coordinates.dx,
+          mt * mt * mt * startA.dy +
+              3.0 * mt * mt * t * segA.controlPoint1.coordinates.dy +
+              3.0 * mt * t * t * segA.controlPoint2.coordinates.dy +
+              t * t * t * segA.endPoint.coordinates.dy,
+        ),
+      );
+    }
+
+    for (int i = 0; i < sampleCount; i++) {
+      for (int j = i + 2; j < sampleCount; j++) {
+        final MPSegmentIntersection? hit =
+            MPGeometryAux.straightSegmentIntersection(
+              points[i],
+              points[i + 1],
+              points[j],
+              points[j + 1],
+            );
+
+        if (hit == null) {
+          continue;
+        }
+
+        final double tA = (i + hit.tA) / sampleCount;
+        final double tB = (j + hit.tB) / sampleCount;
+
+        if ((tB - tA).abs() <= mpDoubleComparisonEpsilon) {
+          continue;
+        }
+
+        return (point: hit.point, tA: tA, tB: tB);
+      }
+    }
+
+    return null;
   }
 
   /// Subdivides a cubic Bézier curve at parameter t using de Casteljau's algorithm.
@@ -1704,13 +1835,21 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
         : null;
 
     // 3. Determine insert position: earliest position among all selected areas
-    // in their parent scrap.
+    // and their referenced border lines in their parent scrap.
     final THIsParentMixin parentScrap = canonicalArea.parent(th2File: _th2File);
 
     int insertPosition = parentScrap.getChildPosition(canonicalArea);
 
     for (final THArea area in selectedAreas) {
       final int pos = parentScrap.getChildPosition(area);
+
+      if (pos < insertPosition) {
+        insertPosition = pos;
+      }
+    }
+
+    for (final THLine line in allLTSAs) {
+      final int pos = parentScrap.getChildPosition(line);
 
       if (pos < insertPosition) {
         insertPosition = pos;
@@ -2092,19 +2231,18 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     required List<THLine> lines,
     required int newLineMPID,
   }) {
-    if (lines.length == 1) {
-      // Single line — just close it and return a copy.
-      final List<THLineSegment> rawSegs = lines.first.getLineSegments(_th2File);
-      final List<THLineSegment> copied = rawSegs
-          .map((s) => _copySegment(s, newLineMPID))
-          .toList();
+    final Map<int, List<_CrossingData>> crossings = _computeCrossings(lines);
 
-      return _ensureClosed(segments: copied, newParentMPID: newLineMPID);
-    }
-
-    // 1. Flatten all segments from all lines into a single list.
+    // 1. Flatten all segments from all lines into a single list, splitting at
+    //    crossing points when lines intersect geometrically.
     final ({List<THLineSegment> segs, List<Offset> starts}) flat =
-        _flattenClosedSegments(lines: lines, newLineMPID: newLineMPID);
+        crossings.isNotEmpty
+        ? _flattenAndSplitAtCrossings(
+            lines: lines,
+            crossings: crossings,
+            newLineMPID: newLineMPID,
+          )
+        : _flattenClosedSegments(lines: lines, newLineMPID: newLineMPID);
     final List<THLineSegment> allSegs = flat.segs;
     final List<Offset> segStarts = flat.starts;
 
@@ -2112,7 +2250,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       return [];
     }
 
-    // 2. Remove shared inner edges.
+    // 2. Remove shared inner edges (e.g., coincident borders of adjacent areas).
     _removeSharedEdges(allSegs: allSegs, segStarts: segStarts);
 
     if (allSegs.isEmpty) {
@@ -2129,7 +2267,8 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       segStarts: segStarts,
     );
 
-    // 5. Trace boundary paths and choose the one that covers all segments.
+    // 5. Trace boundary paths and choose the outer one that leaves the fewest
+    //    remaining segments behind.
     final List<_OrientedSeg> chosenPath = _chooseBoundaryPath(
       allSegs: allSegs,
       segStarts: segStarts,
@@ -2137,23 +2276,23 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       startIdx: startIdx,
     );
 
-    // 6. Assemble: pin segment + path segments (reversed segments are flipped).
-    final _OrientedSeg firstSeg = chosenPath.first;
-    final Offset pinEnd = firstSeg.reversed
-        ? allSegs[firstSeg.idx].endPoint.coordinates
-        : segStarts[firstSeg.idx];
+    // 6. Assemble the chosen boundary and discard any remaining sub-segments
+    //    only when they are strictly internal to that boundary.
+    final List<THLineSegment> assembledSegments = _assembleBoundarySegments(
+      chosenPath: chosenPath,
+      allSegs: allSegs,
+      segStarts: segStarts,
+      newLineMPID: newLineMPID,
+    );
 
-    return [
-      THStraightLineSegment(
-        parentMPID: newLineMPID,
-        endPoint: THPositionPart(coordinates: pinEnd),
-      ),
-      ...chosenPath.map(
-        (os) => os.reversed
-            ? _reverseSegment(allSegs[os.idx], segStarts[os.idx], newLineMPID)
-            : allSegs[os.idx],
-      ),
-    ];
+    _throwIfBoundaryLeavesExternalSegments(
+      assembledSegments: assembledSegments,
+      chosenPath: chosenPath,
+      allSegs: allSegs,
+      segStarts: segStarts,
+    );
+
+    return assembledSegments;
   }
 
   /// Copies and closes each line's segments, then flattens them into a single
@@ -2187,6 +2326,300 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     }
 
     return (segs: segs, starts: starts);
+  }
+
+  /// Flattens all [lines] into a single segment list, splitting each segment
+  /// at the crossing points in [crossings] so that intersection points become
+  /// shared endpoints between sub-segments from different original lines.
+  ///
+  /// [crossings] maps each line's mpID to a list of [_CrossingData] records
+  /// sorted by (geoSegIdx, tOnSeg) — exactly the output of [_computeCrossings].
+  ///
+  /// Each line is first closed (via [_ensureClosed]) before splitting. A
+  /// crossing with geoSegIdx = k refers to the segment that runs from
+  /// `getLineSegments()[k].endPoint` to `getLineSegments()[k+1].endPoint`
+  /// (i.e., the segment at position k+1 in the closed list).
+  ({List<THLineSegment> segs, List<Offset> starts})
+  _flattenAndSplitAtCrossings({
+    required List<THLine> lines,
+    required Map<int, List<_CrossingData>> crossings,
+    required int newLineMPID,
+  }) {
+    final List<THLineSegment> resultSegs = [];
+    final List<Offset> resultStarts = [];
+
+    for (final THLine line in lines) {
+      final List<THLineSegment> rawSegs = line.getLineSegments(_th2File);
+      final List<THLineSegment> closedSegs = _ensureClosed(
+        segments: rawSegs.map((s) => _copySegment(s, newLineMPID)).toList(),
+        newParentMPID: newLineMPID,
+      );
+
+      if (closedSegs.isEmpty) {
+        continue;
+      }
+
+      final List<_CrossingData> lineCrossings = crossings[line.mpID] ?? [];
+      int crossingIdx = 0;
+
+      // closedSegs[0] is the pin (just the start point).
+      // Actual edge segments live at closedSegs[1..closedSegs.length-1].
+      // A crossing with geoSegIdx = k lies on the segment that goes from
+      // closedSegs[k].endPoint to closedSegs[k+1].endPoint, i.e. closedSegs[i]
+      // where i = k + 1 → k = i - 1.
+      for (int i = 1; i < closedSegs.length; i++) {
+        final int geoSegExpected = i - 1;
+        Offset segStart = closedSegs[i - 1].endPoint.coordinates;
+        THLineSegment currentSeg = closedSegs[i];
+        double prevT = 0.0;
+
+        while (crossingIdx < lineCrossings.length &&
+            lineCrossings[crossingIdx].geoSegIdx == geoSegExpected) {
+          final _CrossingData crossing = lineCrossings[crossingIdx];
+          crossingIdx++;
+
+          if (currentSeg is THBezierCurveLineSegment) {
+            // Rescale t to the remaining piece of the Bézier.
+            final double remainingFraction = 1.0 - prevT;
+            final double tOnCurrent =
+                (crossing.tOnSeg - prevT) / remainingFraction;
+
+            final ({_BezierSplitInfo left, _BezierSplitInfo right}) pieces =
+                _subdivideBezierAtT(
+                  segStart,
+                  currentSeg.controlPoint1.coordinates,
+                  currentSeg.controlPoint2.coordinates,
+                  currentSeg.endPoint.coordinates,
+                  tOnCurrent,
+                );
+
+            resultStarts.add(segStart);
+            resultSegs.add(
+              THBezierCurveLineSegment(
+                parentMPID: newLineMPID,
+                controlPoint1: THPositionPart(
+                  coordinates: pieces.left.controlPoint1,
+                ),
+                controlPoint2: THPositionPart(
+                  coordinates: pieces.left.controlPoint2,
+                ),
+                endPoint: THPositionPart(coordinates: pieces.left.endPoint),
+              ),
+            );
+
+            segStart = pieces.left.endPoint;
+            currentSeg = THBezierCurveLineSegment(
+              parentMPID: newLineMPID,
+              controlPoint1: THPositionPart(
+                coordinates: pieces.right.controlPoint1,
+              ),
+              controlPoint2: THPositionPart(
+                coordinates: pieces.right.controlPoint2,
+              ),
+              endPoint: currentSeg.endPoint,
+            );
+            prevT = crossing.tOnSeg;
+          } else {
+            // Straight segment: the crossing point is the split point.
+            resultStarts.add(segStart);
+            resultSegs.add(
+              THStraightLineSegment(
+                parentMPID: newLineMPID,
+                endPoint: THPositionPart(coordinates: crossing.crossPoint),
+              ),
+            );
+            segStart = crossing.crossPoint;
+            prevT = crossing.tOnSeg;
+          }
+        }
+
+        // Emit the remaining tail of the current segment.
+        resultStarts.add(segStart);
+        if (currentSeg is THBezierCurveLineSegment) {
+          resultSegs.add(currentSeg);
+        } else {
+          resultSegs.add(
+            THStraightLineSegment(
+              parentMPID: newLineMPID,
+              endPoint: closedSegs[i].endPoint,
+            ),
+          );
+        }
+      }
+    }
+
+    return (segs: resultSegs, starts: resultStarts);
+  }
+
+  /// Returns true if a horizontal ray cast rightward from [point] crosses the
+  /// segment from [p0] to [p1]. Used by [_isPointStrictlyInsidePolygon].
+  bool _rayCrossesSegment(Offset point, Offset p0, Offset p1) {
+    final double py = point.dy;
+    final double y0 = p0.dy;
+    final double y1 = p1.dy;
+
+    // Segment must straddle the ray's y-level (exclusive on the upper end to
+    // avoid double-counting shared vertices).
+    if ((y0 > py) == (y1 > py)) {
+      return false;
+    }
+
+    // x-coordinate where the segment crosses the ray's y-level.
+    final double xCross = p0.dx + (py - y0) / (y1 - y0) * (p1.dx - p0.dx);
+
+    return xCross > point.dx;
+  }
+
+  /// Returns true if [point] lies strictly inside the closed polygon described
+  /// by [closedSegs] (the output of [_ensureClosed]).
+  ///
+  /// Uses the ray-casting even-odd rule. For Bézier segments the curve is
+  /// approximated by linear samples (sufficient for the interior-discard test).
+  bool _isPointStrictlyInsidePolygon(
+    Offset point,
+    List<THLineSegment> closedSegs,
+  ) {
+    int crossings = 0;
+
+    for (int i = 1; i < closedSegs.length; i++) {
+      final Offset p0 = closedSegs[i - 1].endPoint.coordinates;
+      final Offset p1 = closedSegs[i].endPoint.coordinates;
+
+      if (closedSegs[i] is THBezierCurveLineSegment) {
+        final THBezierCurveLineSegment bez =
+            closedSegs[i] as THBezierCurveLineSegment;
+        final Offset cp1 = bez.controlPoint1.coordinates;
+        final Offset cp2 = bez.controlPoint2.coordinates;
+
+        // Sample the cubic Bézier at 16 intervals for the ray-crossing test.
+        const int kSamples = 16;
+        Offset prev = p0;
+
+        for (int s = 1; s <= kSamples; s++) {
+          final double t = s / kSamples;
+          final double mt = 1.0 - t;
+          final Offset curr = Offset(
+            mt * mt * mt * p0.dx +
+                3 * mt * mt * t * cp1.dx +
+                3 * mt * t * t * cp2.dx +
+                t * t * t * p1.dx,
+            mt * mt * mt * p0.dy +
+                3 * mt * mt * t * cp1.dy +
+                3 * mt * t * t * cp2.dy +
+                t * t * t * p1.dy,
+          );
+
+          if (_rayCrossesSegment(point, prev, curr)) {
+            crossings++;
+          }
+
+          prev = curr;
+        }
+      } else {
+        if (_rayCrossesSegment(point, p0, p1)) {
+          crossings++;
+        }
+      }
+    }
+
+    return crossings.isOdd;
+  }
+
+  THLineSegment _copySegmentForBoundary({
+    required _OrientedSeg orientedSeg,
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+    required int newLineMPID,
+  }) {
+    if (orientedSeg.reversed) {
+      return _reverseSegment(
+        allSegs[orientedSeg.idx],
+        segStarts[orientedSeg.idx],
+        newLineMPID,
+      );
+    }
+
+    return _copySegment(allSegs[orientedSeg.idx], newLineMPID);
+  }
+
+  List<THLineSegment> _assembleBoundarySegments({
+    required List<_OrientedSeg> chosenPath,
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+    required int newLineMPID,
+  }) {
+    final _OrientedSeg firstSeg = chosenPath.first;
+    final Offset pinEnd = firstSeg.reversed
+        ? allSegs[firstSeg.idx].endPoint.coordinates
+        : segStarts[firstSeg.idx];
+
+    return [
+      THStraightLineSegment(
+        parentMPID: newLineMPID,
+        endPoint: THPositionPart(coordinates: pinEnd),
+      ),
+      ...chosenPath.map(
+        (final _OrientedSeg orientedSeg) => _copySegmentForBoundary(
+          orientedSeg: orientedSeg,
+          allSegs: allSegs,
+          segStarts: segStarts,
+          newLineMPID: newLineMPID,
+        ),
+      ),
+    ];
+  }
+
+  Offset _representativePointForSegment({
+    required THLineSegment seg,
+    required Offset start,
+  }) {
+    switch (seg) {
+      case THBezierCurveLineSegment _:
+        const double t = 0.5;
+        const double mt = 1.0 - t;
+
+        return Offset(
+          mt * mt * mt * start.dx +
+              3.0 * mt * mt * t * seg.controlPoint1.coordinates.dx +
+              3.0 * mt * t * t * seg.controlPoint2.coordinates.dx +
+              t * t * t * seg.endPoint.coordinates.dx,
+          mt * mt * mt * start.dy +
+              3.0 * mt * mt * t * seg.controlPoint1.coordinates.dy +
+              3.0 * mt * t * t * seg.controlPoint2.coordinates.dy +
+              t * t * t * seg.endPoint.coordinates.dy,
+        );
+      default:
+        return Offset(
+          (start.dx + seg.endPoint.coordinates.dx) / 2.0,
+          (start.dy + seg.endPoint.coordinates.dy) / 2.0,
+        );
+    }
+  }
+
+  void _throwIfBoundaryLeavesExternalSegments({
+    required List<THLineSegment> assembledSegments,
+    required List<_OrientedSeg> chosenPath,
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+  }) {
+    final Set<int> pathIndices = chosenPath
+        .map((final _OrientedSeg orientedSeg) => orientedSeg.idx)
+        .toSet();
+
+    for (int i = 0; i < allSegs.length; i++) {
+      if (pathIndices.contains(i)) {
+        continue;
+      }
+
+      final Offset probePoint = _representativePointForSegment(
+        seg: allSegs[i],
+        start: segStarts[i],
+      );
+
+      if (!_isPointStrictlyInsidePolygon(probePoint, assembledSegments)) {
+        throw StateError('mergeAreasLineSegmentsOutsideBoundary');
+      }
+    }
   }
 
   /// Removes shared inner edges in place from [allSegs] and [segStarts].
@@ -2324,10 +2757,8 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
   }
 
   /// Tries all four combinations of left/right turn and forward/reversed start
-  /// orientation from [startIdx], and returns the path that covers all
-  /// segments with the fewest uncovered segments. Throws a [StateError] with
-  /// message `'mergeAreasLineSegmentsOutsideBoundary'` if no combination
-  /// covers every segment.
+  /// orientation from [startIdx], and returns the path that leaves the fewest
+  /// uncovered segments.
   List<_OrientedSeg> _chooseBoundaryPath({
     required List<THLineSegment> allSegs,
     required List<Offset> segStarts,
@@ -2370,11 +2801,11 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    if (bestOutside > 0) {
+    if (bestPath == null) {
       throw StateError('mergeAreasLineSegmentsOutsideBoundary');
     }
 
-    return bestPath!;
+    return bestPath;
   }
 
   /// Returns a copy of [seg] traversed in the opposite direction. The new end

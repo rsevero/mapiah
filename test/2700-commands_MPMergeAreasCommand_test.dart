@@ -381,6 +381,116 @@ void main() {
     );
   });
 
+  // Scenario 10: Two areas whose triangular borders cross each other →
+  // merged into one area with one closed border line forming a hexagon.
+  // Each triangle: 3 edges + 1 pin = 4 segments.
+  // After merging crossing triangles: 6 outer edges + 1 pin = 7 total.
+  group(
+    'two areas with crossing triangular borders produce one merged area',
+    () {
+      test(
+        'area count=1, line count=1, 6 outer segments, undo restores',
+        () async {
+          final TH2FileEditController controller = await _loadController(
+            '2026-04-05-008-two_areas_crossing_each_other.th2',
+            mpLocator,
+          );
+          final TH2File th2File = controller.th2File;
+          final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+
+          expect(th2File.getAreas().length, 2);
+          expect(th2File.getLines().length, 2);
+
+          _selectAllAreas(controller);
+
+          expect(controller.canMergeAreas, isTrue);
+
+          controller.splitMergeController.prepareMergeAreas();
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 1);
+
+          final THArea mergedArea = th2File.getAreas().first;
+
+          expect(mergedArea.getLineMPIDs(th2File).length, 1);
+
+          // 6 outer segments + 1 pin = 7 total.
+          final THLine mergedLine = th2File.getLines().first;
+
+          expect(mergedLine.getLineSegments(th2File).length, 7);
+
+          // All merged segments must be straight.
+          for (final THLineSegment seg in mergedLine.getLineSegments(th2File)) {
+            expect(seg, isA<THStraightLineSegment>());
+          }
+
+          // Undo restores original state.
+          controller.undo();
+
+          expect(th2File.getAreas().length, 2);
+          expect(th2File.getLines().length, 2);
+          expect(th2File == snapshotOriginal, isTrue);
+          expect(identical(th2File, snapshotOriginal), isFalse);
+        },
+      );
+    },
+  );
+
+  // Scenario 11: One area whose two triangular border lines cross each other →
+  // merged into one area with one closed border line forming a hexagon.
+  // Each triangle: 3 edges + 1 pin = 4 segments.
+  // After merging crossing triangles: 6 outer edges + 1 pin = 7 total.
+  group(
+    'one area with two crossing triangular borders produces one merged border',
+    () {
+      test(
+        'area count=1, line count=1, 6 outer segments, undo restores',
+        () async {
+          final TH2FileEditController controller = await _loadController(
+            '2026-04-05-009-one_area_with_crossing_line_borders.th2',
+            mpLocator,
+          );
+          final TH2File th2File = controller.th2File;
+          final TH2File snapshotOriginal = TH2File.fromMap(th2File.toMap());
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 2);
+
+          _selectAllAreas(controller);
+
+          expect(controller.canMergeAreas, isTrue);
+
+          controller.splitMergeController.prepareMergeAreas();
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 1);
+
+          final THArea mergedArea = th2File.getAreas().first;
+
+          expect(mergedArea.getLineMPIDs(th2File).length, 1);
+
+          // 6 outer segments + 1 pin = 7 total.
+          final THLine mergedLine = th2File.getLines().first;
+
+          expect(mergedLine.getLineSegments(th2File).length, 7);
+
+          // All merged segments must be straight.
+          for (final THLineSegment seg in mergedLine.getLineSegments(th2File)) {
+            expect(seg, isA<THStraightLineSegment>());
+          }
+
+          // Undo restores.
+          controller.undo();
+
+          expect(th2File.getAreas().length, 1);
+          expect(th2File.getLines().length, 2);
+          expect(th2File == snapshotOriginal, isTrue);
+          expect(identical(th2File, snapshotOriginal), isFalse);
+        },
+      );
+    },
+  );
+
   // Scenario 9: Shared straight edge is removed from merged line.
   // Two adjacent rectangles sharing one straight edge.
   // line1: (0,0)→(100,0)→(100,100)→(0,100)→(0,0) — 4 segments
