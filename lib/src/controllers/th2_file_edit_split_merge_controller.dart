@@ -2082,9 +2082,62 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       return _ensureClosed(segments: copied, newParentMPID: newLineMPID);
     }
 
-    // Flatten all segments from all lines (closed).
-    final List<THLineSegment> allSegs = [];
-    final List<Offset> segStarts = [];
+    // 1. Flatten all segments from all lines into a single list.
+    final ({List<THLineSegment> segs, List<Offset> starts}) flat =
+        _flattenClosedSegments(lines: lines, newLineMPID: newLineMPID);
+    final List<THLineSegment> allSegs = flat.segs;
+    final List<Offset> segStarts = flat.starts;
+
+    if (allSegs.isEmpty) {
+      return [];
+    }
+
+    // 2. Remove shared inner edges.
+    _removeSharedEdges(allSegs: allSegs, segStarts: segStarts);
+
+    if (allSegs.isEmpty) {
+      return [];
+    }
+
+    // 3. Build adjacency list.
+    final List<List<int>> adjacency = _buildSegmentAdjacency(
+      allSegs: allSegs,
+      segStarts: segStarts,
+    );
+
+    // 4. Find the best starting segment.
+    final int startIdx = _findBoundaryStartIndex(
+      allSegs: allSegs,
+      segStarts: segStarts,
+    );
+
+    // 5. Trace boundary paths and choose the one that covers all segments.
+    final List<int> chosenPath = _chooseBoundaryPath(
+      allSegs: allSegs,
+      segStarts: segStarts,
+      adjacency: adjacency,
+      startIdx: startIdx,
+    );
+
+    // 6. Assemble: pin segment + path segments.
+    return [
+      THStraightLineSegment(
+        parentMPID: newLineMPID,
+        endPoint: THPositionPart(coordinates: segStarts[chosenPath.first]),
+      ),
+      ...chosenPath.map((idx) => allSegs[idx]),
+    ];
+  }
+
+  /// Copies and closes each line's segments, then flattens them into a single
+  /// list ready for boundary tracing. Returns parallel [segs] and [starts]
+  /// lists where [starts[i]] is the start point of [segs[i]].
+  ({List<THLineSegment> segs, List<Offset> starts}) _flattenClosedSegments({
+    required List<THLine> lines,
+    required int newLineMPID,
+  }) {
+    final List<THLineSegment> segs = [];
+    final List<Offset> starts = [];
 
     for (final THLine line in lines) {
       final List<THLineSegment> rawSegs = line.getLineSegments(_th2File);
@@ -2100,19 +2153,23 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       Offset prev = closed.first.endPoint.coordinates;
 
       for (int i = 1; i < closed.length; i++) {
-        segStarts.add(prev);
-        allSegs.add(closed[i]);
+        starts.add(prev);
+        segs.add(closed[i]);
         prev = closed[i].endPoint.coordinates;
       }
     }
 
-    if (allSegs.isEmpty) {
-      return [];
-    }
+    return (segs: segs, starts: starts);
+  }
 
-    // Remove shared inner edges: any segment that appears more than once
-    // (in either direction) is an interior boundary shared by two borders and
-    // must be dropped entirely.
+  /// Removes shared inner edges in place from [allSegs] and [segStarts].
+  /// Any segment that appears geometrically more than once (in either
+  /// direction) is an interior boundary shared by two borders and must be
+  /// dropped entirely.
+  void _removeSharedEdges({
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+  }) {
     final Set<int> sharedIndices = {};
 
     for (int i = 0; i < allSegs.length; i++) {
@@ -2137,30 +2194,35 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    if (sharedIndices.isNotEmpty) {
-      final List<THLineSegment> filteredSegs = [];
-      final List<Offset> filteredStarts = [];
+    if (sharedIndices.isEmpty) {
+      return;
+    }
 
-      for (int i = 0; i < allSegs.length; i++) {
-        if (!sharedIndices.contains(i)) {
-          filteredSegs.add(allSegs[i]);
-          filteredStarts.add(segStarts[i]);
-        }
+    final List<THLineSegment> filteredSegs = [];
+    final List<Offset> filteredStarts = [];
+
+    for (int i = 0; i < allSegs.length; i++) {
+      if (!sharedIndices.contains(i)) {
+        filteredSegs.add(allSegs[i]);
+        filteredStarts.add(segStarts[i]);
       }
-
-      allSegs
-        ..clear()
-        ..addAll(filteredSegs);
-      segStarts
-        ..clear()
-        ..addAll(filteredStarts);
     }
 
-    if (allSegs.isEmpty) {
-      return [];
-    }
+    allSegs
+      ..clear()
+      ..addAll(filteredSegs);
+    segStarts
+      ..clear()
+      ..addAll(filteredStarts);
+  }
 
-    // Build adjacency.
+  /// Builds an adjacency list for [allSegs]: `adjacency[i]` contains the
+  /// indices of every segment whose start point coincides with the end point
+  /// of segment [i].
+  List<List<int>> _buildSegmentAdjacency({
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+  }) {
     final List<List<int>> adjacency = List.generate(allSegs.length, (_) => []);
 
     for (int i = 0; i < allSegs.length; i++) {
@@ -2178,7 +2240,16 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    // Find starting segment (closest bounding-box top-left to group BB).
+    return adjacency;
+  }
+
+  /// Returns the index of the segment whose bounding box is closest to the
+  /// top-left corner of the overall group bounding box. This gives a
+  /// consistent, deterministic starting point for boundary tracing.
+  int _findBoundaryStartIndex({
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+  }) {
     Rect groupBB = _segBoundingBox(allSegs[0], segStarts[0]);
 
     for (int i = 1; i < allSegs.length; i++) {
@@ -2192,8 +2263,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
 
     for (int i = 0; i < allSegs.length; i++) {
       final Rect bb = _segBoundingBox(allSegs[i], segStarts[i]);
-      final double dist =
-          (bb.left - groupBB.left).abs() + (bb.top - groupBB.top).abs();
+      final double dist = (bb.topLeft - groupBB.topLeft).distanceSquared;
 
       if (dist < bestDist) {
         bestDist = dist;
@@ -2201,7 +2271,19 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    // Trace left and right paths.
+    return startIdx;
+  }
+
+  /// Traces the left-turn and right-turn boundary paths from [startIdx] and
+  /// returns the one that covers all segments. Throws a [StateError] with
+  /// message `'mergeAreasLineSegmentsOutsideBoundary'` if both paths leave
+  /// segments uncovered.
+  List<int> _chooseBoundaryPath({
+    required List<THLineSegment> allSegs,
+    required List<Offset> segStarts,
+    required List<List<int>> adjacency,
+    required int startIdx,
+  }) {
     final List<int>? leftPath = _traceBoundaryPath(
       allSegs: allSegs,
       segStarts: segStarts,
@@ -2239,16 +2321,7 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       throw StateError('mergeAreasLineSegmentsOutsideBoundary');
     }
 
-    // Assemble: pin segment + path segments.
-    final List<THLineSegment> result = [
-      THStraightLineSegment(
-        parentMPID: newLineMPID,
-        endPoint: THPositionPart(coordinates: segStarts[chosenPath.first]),
-      ),
-      ...chosenPath.map((idx) => allSegs[idx]),
-    ];
-
-    return result;
+    return chosenPath;
   }
 
   THLineSegment _copySegment(THLineSegment original, int newParentMPID) {
