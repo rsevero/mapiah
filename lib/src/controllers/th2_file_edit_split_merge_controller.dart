@@ -1418,15 +1418,17 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
     }
   }
 
-  /// Groups [lines] by shared vertices (union-find on coordinate equality).
-  /// Lines whose vertices don't coincide with any other line form singleton
-  /// groups. Uses [tolerance] for point proximity.
-  List<List<THLine>> _groupBySharedEndpoints(
-    List<THLine> lines,
-    double tolerance,
-  ) {
+  /// Groups [lines] by mergeability for area merging (union-find).
+  ///
+  /// Two lines are placed in the same group when they:
+  ///   • share a common line segment — any segment from one line is
+  ///     geometrically identical (same type, same start/end/control points,
+  ///     considering the reversed version) to any segment from the other, or
+  ///   • cross each other (geometric intersection).
+  ///
+  /// Lines that meet neither criterion form singleton groups.
+  List<List<THLine>> _groupLTSAsByMergeability(List<THLine> lines) {
     final int n = lines.length;
-    final double toleranceSquared = tolerance * tolerance;
     final List<int> parent = List<int>.generate(n, (i) => i);
 
     int find(int x) {
@@ -1447,25 +1449,48 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    // Collect all vertex coordinates per line. Using only the first and last
-    // stored points misses closed borders whose shared geometry is expressed by
-    // intermediate vertices, such as adjacent rectangles sharing one edge.
-    final List<List<Offset>> endpoints = lines.map((line) {
-      final List<THLineSegment> segs = line.getLineSegments(_th2File);
+    // Precompute segment lists and their start points for each line.
+    final List<List<THLineSegment>> allSegs = lines.map((line) {
+      return line.getLineSegments(_th2File);
+    }).toList();
 
-      return segs
-          .map((final THLineSegment seg) => seg.endPoint.coordinates)
-          .toList();
+    final List<List<Offset>> allStarts = allSegs.map((segs) {
+      final List<Offset> starts = [];
+
+      for (int k = 0; k < segs.length - 1; k++) {
+        starts.add(segs[k].endPoint.coordinates);
+      }
+
+      return starts;
     }).toList();
 
     for (int i = 0; i < n; i++) {
       for (int j = i + 1; j < n; j++) {
-        for (final Offset pi in endpoints[i]) {
-          for (final Offset pj in endpoints[j]) {
-            if ((pi - pj).distanceSquared <= toleranceSquared) {
-              union(i, j);
+        // Criterion 1: lines cross each other (geometric intersection).
+        bool mergeable = _computeCrossings([lines[i], lines[j]]).isNotEmpty;
+
+        // Criterion 2: shared segment — any segment of line i is a geometric
+        // duplicate (same or reversed) of any segment of line j.
+        if (!mergeable) {
+          outer:
+          for (int si = 0; si < allStarts[i].length; si++) {
+            for (int sj = 0; sj < allStarts[j].length; sj++) {
+              if (_segmentsAreGeometricDuplicates(
+                segI: allSegs[i][si + 1],
+                startI: allStarts[i][si],
+                segJ: allSegs[j][sj + 1],
+                startJ: allStarts[j][sj],
+              )) {
+                mergeable = true;
+
+                break outer;
+              }
             }
           }
+        }
+
+        if (mergeable) {
+          union(i, j);
         }
       }
     }
@@ -1694,15 +1719,9 @@ abstract class TH2FileEditSplitMergeControllerBase with Store {
       }
     }
 
-    // 4. Group LTSAs by shared endpoints (lines that touch each other
-    // end-to-end form one group; isolated lines are singleton groups).
-    final double tolerance = _th2FileEditController.scaleScreenToCanvas(
-      mpJoinLineExtremityToleranceOnScreen,
-    );
-    final List<List<THLine>> groups = _groupBySharedEndpoints(
-      allLTSAs,
-      tolerance,
-    );
+    // 4. Group LTSAs by mergeability: lines that share a common segment or
+    // cross each other form one group; isolated lines are singleton groups.
+    final List<List<THLine>> groups = _groupLTSAsByMergeability(allLTSAs);
 
     // 5. Pre-compute canonical area THID. If the canonical area has no
     // explicit ID we generate one now, before any commands execute, so it can
