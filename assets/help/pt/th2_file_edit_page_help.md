@@ -40,6 +40,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
 - [Dividir linhas em cruzamentos](#dividir-linhas-em-cruzamentos)
 - [Juntar linhas em extremidades coincidentes](#juntar-linhas-em-extremidades-coincidentes)
+- [Mesclar áreas](#mesclar-áreas)
 - [Esconder elementos](#esconder-elementos)
 - [Pesquisar e selecionar](#pesquisar-e-selecionar)
 - [Snap](#snap)
@@ -308,7 +309,10 @@ Pressione `Ctrl+Shift+X` para dividir as linhas selecionadas em cada interseçã
 
 ## Juntar linhas em extremidades coincidentes
 
-Pressione `Ctrl+J` para juntar linhas selecionadas cujas extremidades de início/fim coincidam.
+Pressione `Ctrl+J` (ou clique no botão **Juntar linhas em extremidades coincidentes**) para juntar linhas selecionadas cujas extremidades de início/fim coincidam.
+
+**Quando está disponível:**
+A ação fica habilitada quando há pelo menos duas linhas selecionadas.
 
 **Como funciona:**
 - A operação verifica as linhas selecionadas em busca de extremidades coincidentes usando tolerância equivalente a 3 pixels de tela (convertida para coordenadas de canvas no momento da execução, conforme o zoom atual).
@@ -322,26 +326,26 @@ Se não houver extremidades coincidentes, o Mapiah exibe uma mensagem e não alt
 
 ## Mesclar áreas
 
-Pressione _Ctrl+M_ (ou clique no botão **Mesclar áreas**) para mesclar todas as linhas de borda das áreas selecionadas no menor número possível de linhas fechadas, substituindo todas as áreas selecionadas por uma única área por grupo.
+Pressione _Ctrl+M_ (ou clique no botão **Mesclar áreas**) para mesclar as linhas de borda das áreas selecionadas no menor número possível de linhas fechadas, substituindo as áreas selecionadas por uma única área mesclada.
 
 **Quando está disponível:**
-A ação é habilitada quando o número total de linhas de borda distintas entre todas as áreas selecionadas for dois ou mais. Isso cobre dois cenários:
-- Uma área que já possui mais de uma linha de borda (THAreaBorderTHID).
-- Duas ou mais áreas selecionadas (cada uma com pelo menos uma linha de borda).
+A ação é habilitada quando o número total de linhas de borda distintas entre as áreas selecionadas for dois ou mais. As áreas podem ser selecionadas diretamente, ou indiretamente pela seleção de uma ou mais de suas linhas de borda. Isso cobre dois cenários comuns:
+- Uma área que já possui mais de uma linha de borda (`THAreaBorderTHID`).
+- Duas ou mais áreas selecionadas, seja selecionando as próprias áreas ou suas linhas de borda.
 
 **Como funciona:**
-1. Todas as linhas de borda das áreas selecionadas são coletadas (LTSAs — Linhas a Mesclar das Áreas Selecionadas).
+1. O Mapiah coleta todas as áreas selecionadas, mais quaisquer áreas referenciadas por linhas de borda selecionadas, e então reúne suas linhas de borda distintas (LTSAs — Linhas a Mesclar das Áreas Selecionadas).
 2. Qualquer LTSA que não esteja fechada (último ponto ≠ primeiro ponto) é automaticamente fechada com um segmento reto.
-3. As LTSAs são agrupadas por extremidades compartilhadas. Linhas cujas extremidades coincidem formam um grupo; linhas isoladas formam grupos individuais.
+3. As LTSAs são agrupadas por possibilidade de mesclagem. Linhas pertencem ao mesmo grupo quando se cruzam ou compartilham um segmento geometricamente idêntico; linhas isoladas formam grupos individuais.
 4. Para cada grupo com mais de uma linha, todos os segmentos são montados em uma única linha mesclada usando um algoritmo de traçado do contorno externo.
-5. Uma nova área é criada por grupo, referenciando a linha mesclada como sua borda.
-6. A(s) área(s) mesclada(s) resultante(s) ficam selecionadas após a operação.
+5. Uma única nova área é criada, referenciando todas as linhas mescladas como suas bordas.
+6. A área mesclada resultante fica selecionada após a operação.
 7. A operação pode ser desfeita com _Ctrl+Z_.
 
 **Opções e IDs:**
 - A nova área herda todas as opções (tipo, subtipo etc.) da primeira área selecionada.
-- A primeira linha mesclada herda todas as opções da primeira LTSA.
-- IDs Therion explícitos (`-id`) são preservados quando existiam na área e linha canônicas. Linhas e áreas sem ID explícito recebem IDs gerados automaticamente para que possam ser corretamente referenciados como bordas de área.
+- Cada linha mesclada herda todas as opções da primeira LTSA do seu grupo.
+- IDs Therion explícitos (`-id`) são preservados quando existiam na área canônica e na linha canônica de cada grupo. Linhas e áreas sem ID explícito recebem IDs gerados automaticamente para que possam ser corretamente referenciados como bordas de área.
 
 Se forem detectados segmentos fora do contorno externo durante a mesclagem, o Mapiah exibe uma mensagem de erro e não realiza alterações.
 

@@ -40,6 +40,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Split line at selected points](#split-line-at-selected-points)
 - [Split lines at crossings](#split-lines-at-crossings)
 - [Join lines at coinciding extremities](#join-lines-at-coinciding-extremities)
+- [Merge areas](#merge-areas)
 - [Hide elements](#hide-elements)
 - [Search and select](#search-and-select)
 - [Snap](#snap)
@@ -308,7 +309,10 @@ Press `Ctrl+Shift+X` to split the selected lines at every intersection with othe
 
 ## Join lines at coinciding extremities
 
-Press `Ctrl+J` to join selected lines whose start/end extremities coincide.
+Press `Ctrl+J` (or click the **Join lines at coinciding extremities** button) to join selected lines whose start/end extremities coincide.
+
+**When is it available:**
+The action is enabled when at least two lines are selected.
 
 **How it works:**
 - The operation checks selected lines for extremities that coincide using a tolerance equivalent to 3 screen pixels (converted to canvas coordinates at execution time according to current zoom).
@@ -322,26 +326,26 @@ If no coinciding extremities are found, Mapiah shows a message and performs no c
 
 ## Merge areas
 
-Press _Ctrl+M_ (or click the **Merge areas** button) to merge all border lines from the selected areas into the fewest possible closed lines, replacing all selected areas with a single area per group.
+Press _Ctrl+M_ (or click the **Merge areas** button) to merge the border lines of the selected areas into the fewest possible closed lines, replacing the selected areas with a single merged area.
 
 **When is it available:**
-The action is enabled when the total number of distinct border lines across all selected areas is two or more. This covers two scenarios:
-- One area that already has more than one border line (THAreaBorderTHID).
-- Two or more areas selected (each with at least one border line).
+The action is enabled when the total number of distinct border lines across the selected areas is two or more. Areas can be selected directly, or indirectly by selecting one or more of their border lines. This covers two common scenarios:
+- One area that already has more than one border line (`THAreaBorderTHID`).
+- Two or more areas selected, whether by selecting the areas themselves or their border lines.
 
 **How it works:**
-1. All border lines from the selected areas are collected (LTSAs — Lines To be merged from Selected Areas).
+1. Mapiah collects all selected areas plus any areas referenced by selected border lines, then gathers their distinct border lines (LTSAs — Lines To be merged from Selected Areas).
 2. Any LTSA that is not already closed (last point ≠ first point) is automatically closed with a straight segment.
-3. The LTSAs are grouped by shared endpoints. Lines whose endpoints coincide form one group; isolated lines form singleton groups.
+3. The LTSAs are grouped by mergeability. Lines belong to the same group when they cross each other or share a geometrically identical segment; isolated lines form singleton groups.
 4. For each group containing more than one line, all segments are assembled into a single merged line using a bounding-path algorithm that traces the outer boundary.
-5. A single new area is created per group, referencing the merged line as its border.
-6. The resulting merged area(s) are selected after the operation.
+5. A single new area is created, referencing all merged lines as its borders.
+6. The resulting merged area is selected after the operation.
 7. The operation can be undone with _Ctrl+Z_.
 
 **Options and IDs:**
 - The new area inherits all options (type, subtype, etc.) from the first selected area.
-- The first merged line inherits all options from the first LTSA.
-- Explicit Therion IDs (`-id`) are preserved where they existed on the canonical area and line. Lines and areas without explicit IDs receive auto-generated IDs so they can be properly referenced as area borders.
+- Each merged line inherits all options from the first LTSA in its group.
+- Explicit Therion IDs (`-id`) are preserved where they existed on the canonical area and canonical line of a group. Lines and areas without explicit IDs receive auto-generated IDs so they can be properly referenced as area borders.
 
 If segments outside the outer boundary are detected during the merge, Mapiah shows an error message and performs no changes.
 

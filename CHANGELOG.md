@@ -14,6 +14,7 @@
 * Infrastructure maintenance:
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
   * TH2FileEditSplitMergeController now routes its snackbar messages through the local `_showSnackbar()` helper instead of repeating the same `ScaffoldMessenger` boilerplate at each call site.
+  * Updated TH2 file edit help pages (EN/PT) to document the join-lines-at-coinciding-extremities and merge-areas actions more accurately, including index entries and current selection/merge behavior.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:
