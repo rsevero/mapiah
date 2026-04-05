@@ -18,6 +18,7 @@
   * Updated TH2 file edit help pages (EN/PT) to document the join-lines-at-coinciding-extremities and merge-areas actions more accurately, including index entries and current selection/merge behavior.
   * Renamed top-level test files to analyzer-friendly lowercase underscore names (with a `t` prefix before numeric ordering keys), removing the `file_names` lint noise from `flutter analyze`.
   * Cleaned up the remaining analyzer infos by fixing doc comments, removing redundant source getters that duplicated MobX `@readonly` generated getters, and dropping a shadowing `snapController` field plus two unnecessary test imports so `flutter analyze` now reports no issues.
+  * Split the historical 0.2 and 0.3 TODO sections out of `TODO.md` into dedicated `TODO-0.2.md` and `TODO-0.3.md` files, leaving the main TODO focused on current and future roadmap items.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:
