@@ -112,7 +112,7 @@ class MPCommandOptionAux {
     THPointType.section: [THCommandOptionType.scrap],
     THPointType.station: [
       THCommandOptionType.extend,
-      THCommandOptionType.name,
+      THCommandOptionType.station,
       THCommandOptionType.subtype,
     ],
     THPointType.u: [THCommandOptionType.subtype],
@@ -421,8 +421,8 @@ class MPCommandOptionAux {
 
   static String? getName(THElement element) {
     return (element is THHasOptionsMixin) &&
-            element.hasOption(THCommandOptionType.name)
-        ? (element.getOption(THCommandOptionType.name)
+            element.hasOption(THCommandOptionType.station)
+        ? (element.getOption(THCommandOptionType.station)
                   as THStationNameCommandOption)
               .reference
         : null;

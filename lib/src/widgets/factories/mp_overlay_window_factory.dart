@@ -318,7 +318,7 @@ class MPOverlayWindowFactory {
           );
         case THCommandOptionType.extend:
         case THCommandOptionType.from:
-        case THCommandOptionType.name:
+        case THCommandOptionType.station:
           overlayWindowWidget = MPStationNameTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,

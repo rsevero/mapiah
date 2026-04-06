@@ -582,7 +582,7 @@ class MPCommandFactory {
 
     for (final THCommandOption defaultOption in defaultOptions) {
       if ((defaultOption.type == THCommandOptionType.subtype) ||
-          ((defaultOption.type == THCommandOptionType.name) &&
+          ((defaultOption.type == THCommandOptionType.station) &&
               (THPointType.fromString(pointTypeString) ==
                   THPointType.station))) {
         continue;

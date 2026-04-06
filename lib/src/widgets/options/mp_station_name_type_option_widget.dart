@@ -128,7 +128,7 @@ class _MPStationNameTypeOptionWidgetState
               parentMPID: mpParentMPIDPlaceholder,
               station: station,
             );
-          case THCommandOptionType.name:
+          case THCommandOptionType.station:
             newOption = THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: mpParentMPIDPlaceholder,
               reference: station,
@@ -260,7 +260,7 @@ class _MPStationNameTypeOptionWidgetState
         title = appLocalizations.thCommandOptionExtend;
       case THCommandOptionType.from:
         title = appLocalizations.thCommandOptionFrom;
-      case THCommandOptionType.name:
+      case THCommandOptionType.station:
         title = appLocalizations.thCommandOptionName;
       default:
         throw Exception(

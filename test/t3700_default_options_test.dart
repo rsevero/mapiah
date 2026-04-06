@@ -177,7 +177,7 @@ void main() {
 
       expect(
         th2Controller.optionEditController.optionStateMap.containsKey(
-          THCommandOptionType.name,
+          THCommandOptionType.station,
         ),
         isFalse,
       );

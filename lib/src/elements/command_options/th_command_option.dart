@@ -219,7 +219,7 @@ abstract class THCommandOption with MPTH2FileReferenceMixin {
         return THLSizeCommandOption.fromMap(map);
       case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
-      case THCommandOptionType.name:
+      case THCommandOptionType.station:
         return THStationNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:
         return THOrientationCommandOption.fromMap(map);
@@ -366,7 +366,7 @@ abstract class THCommandOption with MPTH2FileReferenceMixin {
       // return THLSizeCommandOption(value);
       case THCommandOptionType.mark:
       // return THMarkCommandOption(value);
-      case THCommandOptionType.name:
+      case THCommandOptionType.station:
       // return THNameCommandOption(value);
       case THCommandOptionType.orientation:
       // return THOrientationCommandOption(value);

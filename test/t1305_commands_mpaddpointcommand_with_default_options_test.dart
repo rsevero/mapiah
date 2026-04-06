@@ -186,7 +186,7 @@ void main() {
 
         final THPoint newPoint = controller.th2File.getPoints().first;
         final THStationNameCommandOption? nameOption =
-            newPoint.getOption(THCommandOptionType.name)
+            newPoint.getOption(THCommandOptionType.station)
                 as THStationNameCommandOption?;
 
         expect(nameOption, isNotNull);
@@ -299,7 +299,7 @@ void main() {
             .toList()
             .last;
         final THStationNameCommandOption? nameOption =
-            newStationPoint.getOption(THCommandOptionType.name)
+            newStationPoint.getOption(THCommandOptionType.station)
                 as THStationNameCommandOption?;
 
         expect(nameOption, isNotNull);

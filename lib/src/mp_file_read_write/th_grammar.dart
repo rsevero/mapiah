@@ -540,11 +540,11 @@ class THGrammar extends GrammarDefinition {
               exploredOption() |
               extendOption() |
               fromOption() |
-              nameOption() |
               orientationOption() |
               placeOption() |
               plScaleOption() |
               scrapOption() |
+              stationNameOption() |
               subtypeOption() |
               textOption() |
               valueOption() |
@@ -625,9 +625,11 @@ class THGrammar extends GrammarDefinition {
   Parser fromOption() => stringIgnoreCase('from') & fromOptions();
   Parser fromOptions() => extKeyword().trim().map((value) => [value]);
 
-  /// point -name
-  Parser nameOption() => stringIgnoreCase('name') & nameOptions();
-  Parser nameOptions() =>
+  /// point -name|-station
+  Parser stationNameOption() =>
+      (stringIgnoreCase('name') | stringIgnoreCase('station')) &
+      stationNameOptions();
+  Parser stationNameOptions() =>
       quotedString().trim().map((value) => [value]) |
       reference().trim().map((value) => [value]);
 

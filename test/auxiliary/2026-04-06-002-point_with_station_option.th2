@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point 782.0 -1740.0 station -subtype fixed -station A2@final_de_semana -id A2
+endscrap

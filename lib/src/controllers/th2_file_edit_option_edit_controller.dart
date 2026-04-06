@@ -18,7 +18,10 @@ class TH2FileEditOptionEditController = TH2FileEditOptionEditControllerBase
 
 abstract class TH2FileEditOptionEditControllerBase with Store {
   static const List<THCommandOptionType> _defaultOptionsExcludedOptionTypes =
-      <THCommandOptionType>[THCommandOptionType.id, THCommandOptionType.name];
+      <THCommandOptionType>[
+        THCommandOptionType.id,
+        THCommandOptionType.station,
+      ];
 
   @readonly
   TH2File _th2File;

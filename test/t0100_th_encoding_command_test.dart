@@ -73,7 +73,7 @@ void main() {
         'encoding': 'UTF-8',
         'asFile': '''encoding UTF-8
 scrap 343-plan1.1
-  point 980.2776 513.1133 station -name 1.6
+  point 980.2776 513.1133 station -station 1.6
 endscrap
 ''',
       },

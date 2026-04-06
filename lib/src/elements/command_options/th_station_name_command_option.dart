@@ -26,7 +26,7 @@ class THStationNameCommandOption extends THCommandOption {
   }) : super.forCWJM();
 
   @override
-  THCommandOptionType get type => THCommandOptionType.name;
+  THCommandOptionType get type => THCommandOptionType.station;
 
   @override
   Map<String, dynamic> toMap() {

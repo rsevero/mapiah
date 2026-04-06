@@ -28,6 +28,7 @@
   * Split the historical 0.2 and 0.3 TODO sections out of `TODO.md` into dedicated `TODO-0.2.md` and `TODO-0.3.md` files, leaving the main TODO focused on current and future roadmap items.
   * Fixing ext_keyword parsing.
   * Added regression coverage for controller-driven station-name generation, active-scrap station-name collision skipping, automatic station naming on point creation, and the separate undo steps when converting a point into a station.
+  * Added parser regression coverage for point station names written as `-station`, complementing the existing `-name` read tests while keeping normalized output on `-station`.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:

@@ -179,7 +179,7 @@ endscrap
 
         final THPoint stationPoint = controller.th2File.getPoints().first;
         final THStationNameCommandOption? nameOption =
-            stationPoint.getOption(THCommandOptionType.name)
+            stationPoint.getOption(THCommandOptionType.station)
                 as THStationNameCommandOption?;
 
         expect(stationPoint.pointType, THPointType.station);
@@ -194,7 +194,7 @@ endscrap
 
         expect(pointAfterFirstUndo.pointType, THPointType.station);
         expect(
-          pointAfterFirstUndo.hasOption(THCommandOptionType.name),
+          pointAfterFirstUndo.hasOption(THCommandOptionType.station),
           isFalse,
         );
 
@@ -206,7 +206,7 @@ endscrap
 
         expect(pointAfterSecondUndo.pointType, THPointType.anchor);
         expect(
-          pointAfterSecondUndo.hasOption(THCommandOptionType.name),
+          pointAfterSecondUndo.hasOption(THCommandOptionType.station),
           isFalse,
         );
         expect(
@@ -298,7 +298,7 @@ endscrap
         final THStationNameCommandOption? nameOption =
             controller.th2File
                     .pointByMPID(anchorPoint.mpID)
-                    .getOption(THCommandOptionType.name)
+                    .getOption(THCommandOptionType.station)
                 as THStationNameCommandOption?;
 
         expect(nameOption, isNotNull);

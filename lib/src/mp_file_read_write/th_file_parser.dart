@@ -1280,13 +1280,15 @@ class TH2FileParser {
       case 'from':
         _injectFromCommandOption();
       case 'name':
-        _injectNameCommandOption();
+      case 'station':
+        _injectStationNameCommandOption();
       case 'orientation':
         _injectOrientationCommandOption();
       case 'scale':
         _injectPointScaleCommandOption();
       case 'scrap':
         _injectScrapCommandOption();
+
       case 'subtype':
         _injectSubtypeCommandOption();
       case 'text':
@@ -1758,7 +1760,7 @@ class TH2FileParser {
     );
   }
 
-  void _injectNameCommandOption() {
+  void _injectStationNameCommandOption() {
     if (_currentSpec.isEmpty) {
       throw THCustomException(
         "One parameter required to create a 'name' option for a '${_currentHasOptions.elementType}'",

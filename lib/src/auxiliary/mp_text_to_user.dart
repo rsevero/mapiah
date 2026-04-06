@@ -1021,7 +1021,7 @@ class MPTextToUser {
         localizations.thCommandOptionLSize;
     _commandOptionTypeAsString[THCommandOptionType.mark] =
         localizations.thCommandOptionMark;
-    _commandOptionTypeAsString[THCommandOptionType.name] =
+    _commandOptionTypeAsString[THCommandOptionType.station] =
         localizations.thCommandOptionName;
     _commandOptionTypeAsString[THCommandOptionType.outline] =
         localizations.thCommandOptionOutline;
