@@ -290,6 +290,181 @@ class MPElementEditAux {
     return normalized;
   }
 
+  /// Returns the next station name derived from [referenceStationName].
+  ///
+  /// The station name is split into a unique part and an optional survey
+  /// suffix after `@`. The last incrementable token in the unique part is
+  /// incremented, preserving the survey suffix when present.
+  static String getNextStationName(String referenceStationName) {
+    if (referenceStationName.isEmpty) {
+      return '0';
+    }
+
+    final List<String> stationNameParts = referenceStationName.split('@');
+    final String uniquePart = stationNameParts.first;
+    final String surveyPart = stationNameParts.skip(1).join('@');
+
+    if (uniquePart.isEmpty) {
+      if (surveyPart.isEmpty) {
+        return '1';
+      }
+
+      return '1@$surveyPart';
+    }
+
+    final _MPIncrementablePart? lastIncrementablePart =
+        _getLastIncrementablePart(uniquePart);
+    final String incrementedUniquePart = (lastIncrementablePart == null)
+        ? '${uniquePart}1'
+        : _replaceIncrementablePart(
+            uniquePart: uniquePart,
+            incrementablePart: lastIncrementablePart,
+          );
+
+    if (surveyPart.isEmpty) {
+      return incrementedUniquePart;
+    }
+
+    return '$incrementedUniquePart@$surveyPart';
+  }
+
+  /// Returns the last incrementable token found in [uniquePart].
+  ///
+  /// If the unique part ends with letters or digits, the trailing token of the
+  /// same kind is used. Otherwise, there is no explicit incrementable token.
+  static _MPIncrementablePart? _getLastIncrementablePart(String uniquePart) {
+    assert(uniquePart.isNotEmpty);
+
+    final String lastChar = uniquePart[uniquePart.length - 1];
+    final _MPIncrementablePartType? trailingType = _getIncrementablePartType(
+      lastChar,
+    );
+
+    if (trailingType == null) {
+      return null;
+    }
+
+    return _getTrailingIncrementablePart(uniquePart, trailingType);
+  }
+
+  /// Returns the trailing incrementable token of [type] from [uniquePart].
+  static _MPIncrementablePart _getTrailingIncrementablePart(
+    String uniquePart,
+    _MPIncrementablePartType type,
+  ) {
+    assert(uniquePart.isNotEmpty);
+
+    int start = uniquePart.length - 1;
+
+    while ((start > 0) &&
+        (_getIncrementablePartType(uniquePart[start - 1]) == type)) {
+      start--;
+    }
+
+    final String value = uniquePart.substring(start);
+
+    return _MPIncrementablePart(start: start, value: value);
+  }
+
+  /// Replaces [incrementablePart] in [uniquePart] with its incremented value.
+  static String _replaceIncrementablePart({
+    required String uniquePart,
+    required _MPIncrementablePart incrementablePart,
+  }) {
+    final String incrementedValue = _incrementIncrementablePart(
+      incrementablePart.value,
+    );
+
+    final String prefix = uniquePart.substring(0, incrementablePart.start);
+    final int incrementablePartEnd =
+        incrementablePart.start + incrementablePart.value.length;
+    final String suffix = uniquePart.substring(incrementablePartEnd);
+
+    return '$prefix$incrementedValue$suffix';
+  }
+
+  /// Increments an incrementable [value].
+  static String _incrementIncrementablePart(String value) {
+    assert(value.isNotEmpty);
+
+    final _MPIncrementablePartType type = _getIncrementablePartType(value[0])!;
+
+    switch (type) {
+      case _MPIncrementablePartType.uppercase:
+        return _incrementAlphabeticPart(
+          value,
+          baseCodeUnit: 65,
+          maxCodeUnit: 90,
+        );
+      case _MPIncrementablePartType.lowercase:
+        return _incrementAlphabeticPart(
+          value,
+          baseCodeUnit: 97,
+          maxCodeUnit: 122,
+        );
+      case _MPIncrementablePartType.digits:
+        return _incrementNumericPart(value);
+    }
+  }
+
+  /// Increments the last alphabetic character of [value].
+  ///
+  /// When the last character reaches the maximum letter, the value grows by
+  /// appending the base letter instead of carrying to the left.
+  static String _incrementAlphabeticPart(
+    String value, {
+    required int baseCodeUnit,
+    required int maxCodeUnit,
+  }) {
+    assert(value.isNotEmpty);
+
+    final List<int> codeUnits = value.codeUnits.toList();
+    final int lastIndex = codeUnits.length - 1;
+
+    if (codeUnits[lastIndex] < maxCodeUnit) {
+      codeUnits[lastIndex]++;
+
+      return String.fromCharCodes(codeUnits);
+    }
+
+    return String.fromCharCodes(<int>[...codeUnits, baseCodeUnit]);
+  }
+
+  /// Increments a numeric [value] while preserving zero padding.
+  static String _incrementNumericPart(String value) {
+    assert(value.isNotEmpty);
+
+    final BigInt incrementedValue = BigInt.parse(value) + BigInt.one;
+    final String incrementedText = incrementedValue.toString();
+
+    if (incrementedText.length >= value.length) {
+      return incrementedText;
+    }
+
+    return incrementedText.padLeft(value.length, '0');
+  }
+
+  /// Returns the incrementable token type for [character], or null otherwise.
+  static _MPIncrementablePartType? _getIncrementablePartType(String character) {
+    assert(character.length == 1);
+
+    final int codeUnit = character.codeUnitAt(0);
+
+    if ((codeUnit >= 65) && (codeUnit <= 90)) {
+      return _MPIncrementablePartType.uppercase;
+    }
+
+    if ((codeUnit >= 97) && (codeUnit <= 122)) {
+      return _MPIncrementablePartType.lowercase;
+    }
+
+    if ((codeUnit >= 48) && (codeUnit <= 57)) {
+      return _MPIncrementablePartType.digits;
+    }
+
+    return null;
+  }
+
   /// Returns true if [input] matches extended keyword rules (th_is_extkeyword):
   /// - First char: letters A-Z/a-z, digits 0-9, underscore `_`, hyphen `-`, slash `/`.
   /// - Additionally (only after the first character): single quote `'`, dot `.`, plus `+`,
@@ -536,6 +711,20 @@ class MPAlignedBezierHandlesWeightedResult {
     required this.newCurrentControlPoint2,
     required this.newNextControlPoint1,
   });
+}
+
+enum _MPIncrementablePartType { uppercase, lowercase, digits }
+
+/// Stores one incrementable token slice extracted from a station unique part.
+class _MPIncrementablePart {
+  /// Zero-based index where the incrementable token starts in the original
+  /// unique-part string.
+  final int start;
+
+  /// The incrementable token text extracted from `substring(start, end)`.
+  final String value;
+
+  const _MPIncrementablePart({required this.start, required this.value});
 }
 
 class MPMoveControlPointSmoothInfo {

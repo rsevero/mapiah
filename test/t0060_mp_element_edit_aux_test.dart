@@ -4,6 +4,50 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 
 void main() {
+  group('MPElementEditAux.getNextStationName', () {
+    test('returns zero for empty names and one for empty unique parts', () {
+      expect(MPElementEditAux.getNextStationName(''), '0');
+      expect(MPElementEditAux.getNextStationName('@survey'), '1@survey');
+    });
+
+    test('increments trailing numeric parts preserving zero padding', () {
+      expect(MPElementEditAux.getNextStationName('1'), '2');
+      expect(MPElementEditAux.getNextStationName('009'), '010');
+      expect(MPElementEditAux.getNextStationName('A-099'), 'A-100');
+      expect(MPElementEditAux.getNextStationName('A-99'), 'A-100');
+    });
+
+    test('increments trailing alphabetic parts with rollover', () {
+      expect(MPElementEditAux.getNextStationName('A'), 'B');
+      expect(MPElementEditAux.getNextStationName('Z'), 'ZA');
+      expect(MPElementEditAux.getNextStationName('z'), 'za');
+      expect(MPElementEditAux.getNextStationName('sec-az'), 'sec-aza');
+      expect(MPElementEditAux.getNextStationName('001-TRZ'), '001-TRZA');
+    });
+
+    test(
+      'appends one when the unique part ends with non-incrementable chars',
+      () {
+        expect(MPElementEditAux.getNextStationName('A12-'), 'A12-1');
+        expect(MPElementEditAux.getNextStationName('foo-009.'), 'foo-009.1');
+      },
+    );
+
+    test('appends one when unique part has no incrementable token', () {
+      expect(MPElementEditAux.getNextStationName('--'), '--1');
+      expect(MPElementEditAux.getNextStationName('..@branch'), '..1@branch');
+    });
+
+    test('preserves the survey suffix when present', () {
+      expect(MPElementEditAux.getNextStationName('A12@main'), 'A13@main');
+      expect(MPElementEditAux.getNextStationName('Z@survey'), 'ZA@survey');
+      expect(
+        MPElementEditAux.getNextStationName('foo-009.@branch'),
+        'foo-009.1@branch',
+      );
+    });
+  });
+
   group('MPElementEditAux.isExtKeyword', () {
     test('valid simple cases', () {
       expect(MPElementEditAux.isExtKeyword('a'), isTrue);
