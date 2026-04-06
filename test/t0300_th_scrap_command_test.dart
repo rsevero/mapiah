@@ -530,7 +530,29 @@ endscrap
         'length': 3,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
-scrap araras2 -stations a2,c4
+scrap araras2 -stations a2
+endscrap
+''',
+      },
+      {
+        'file': '2026-04-05-015-scrap_with_stations_option.th2',
+        'length': 7,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap BP_PlS5 -stations [ 1.35 1.36 1.37 ]
+  line arrow -scale l
+    1726 1816
+    1154 1324
+  endline
+endscrap
+''',
+      },
+      {
+        'file': '2026-04-06-001-scrap_with_quoted_stations_option.th2',
+        'length': 3,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap quoted_stations -stations [ A1 A2 A3 ]
 endscrap
 ''',
       },
@@ -707,6 +729,28 @@ endscrap
             as THStationsCommandOption;
 
     expect(stationsOption.stations, ['1.35', '1.36', '1.37']);
+  });
+
+  test('scrap parses quoted stations lists as multiple stations', () async {
+    final TH2FileParser parser = TH2FileParser();
+
+    mpLocator.mpGeneralController.reset();
+
+    final (TH2File file, bool isSuccessful, List<String> errors) = await parser
+        .parse(
+          THTestAux.testPath(
+            '2026-04-06-001-scrap_with_quoted_stations_option.th2',
+          ),
+        );
+
+    expect(isSuccessful, true, reason: errors.join('\n\n'));
+
+    final THScrap scrap = file.getScraps().first;
+    final THStationsCommandOption stationsOption =
+        scrap.getOption(THCommandOptionType.stations)!
+            as THStationsCommandOption;
+
+    expect(stationsOption.stations, ['A1', 'A2', 'A3']);
   });
 
   group('scrap NO OPTIONS', () {

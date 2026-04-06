@@ -9,6 +9,7 @@
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
 * Fixed bugs:
+  * Scrap `-stations` now follows Therion's single-argument rule: a single station may stay bare, quoted or bracketed station lists are split on spaces, and Mapiah always writes multiple stations back as a bracketed list.
   * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
   * Add area by clicking existing lines: when clicked lines had no THID yet, only the last clicked line ended up referenced by the new area. The add-area flow now wraps the area creation command only on the first clicked border and keeps later clicks as pure border additions, so all clicked lines remain attached to the area.
   * Select all (Ctrl+A) now works while the editor is in the "add line border to area" state, so you can leave that mode by selecting all elements without cancelling the flow first.

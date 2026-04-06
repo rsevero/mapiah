@@ -1,0 +1,3 @@
+encoding utf-8
+scrap quoted_stations -stations "A1 A2 A3"
+endscrap

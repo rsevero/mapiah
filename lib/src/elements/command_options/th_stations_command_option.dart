@@ -74,16 +74,12 @@ class THStationsCommandOption extends THCommandOption {
 
   @override
   String specToFile() {
-    String asString = '';
-
-    for (final String station in stations) {
-      asString += ",$station";
+    if (stations.length <= 1) {
+      return stations.join(' ');
     }
 
-    if (asString.isNotEmpty) {
-      asString = asString.substring(1);
-    }
+    final String stationsList = stations.join(' ');
 
-    return asString;
+    return '[ $stationsList ]';
   }
 }

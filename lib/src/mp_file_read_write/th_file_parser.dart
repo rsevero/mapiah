@@ -1811,17 +1811,11 @@ class TH2FileParser {
       throw THCreateObjectFromListWithWrongLengthException('> 0', _currentSpec);
     }
 
-    final List<String> stations = stationsSpec.contains('')
-        ? stationsSpec
-              .split(RegExp(r'\s+'))
-              .map((String station) => station.trim())
-              .where((String station) => station.isNotEmpty)
-              .toList()
-        : stationsSpec
-              .split(',')
-              .map((String station) => station.trim())
-              .where((String station) => station.isNotEmpty)
-              .toList();
+    final List<String> stations = stationsSpec
+        .split(RegExp(r'\s+'))
+        .map((String station) => station.trim())
+        .where((String station) => station.isNotEmpty)
+        .toList();
 
     if (stations.isEmpty) {
       throw THCreateObjectFromListWithWrongLengthException('> 0', stations);
