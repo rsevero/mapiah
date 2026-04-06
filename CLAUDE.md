@@ -15,7 +15,7 @@ Mapiah: Flutter GUI for [Therion](https://therion.speleo.sk/) cave mapping. Read
 ```bash
 flutter run -d linux              # Run app
 flutter test                       # All tests
-flutter test test/1200-...        # Single test
+flutter test test/t1200_...        # Single test
 flutter build linux                # Build for Linux
 flutter analyze                    # Static analysis
 dart run build_runner build       # Generate MobX (only if watch not running)
@@ -91,7 +91,7 @@ MPLocator (global mpLocator) provides:
 * TH* — Therion data structures
 * MP* — Mapiah infrastructure
 * .g.dart — Generated, do not edit
-* Test files: numeric prefix for ordering (e.g., 1200-commands_MPAddAreaCommand_test.dart)
+* Test files: numeric prefix for ordering (e.g., t1200_commands_MPAddAreaCommand_test.dart)
 
 ### Prompt Abbreviations
 * cc: Update CHANGELOG.md + prepare commit with sign-off (Signed-off-by, Co-Authored-By)
