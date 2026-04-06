@@ -295,7 +295,7 @@ class MPElementEditAux {
   /// The station name is split into a unique part and an optional survey
   /// suffix after `@`. The last incrementable token in the unique part is
   /// incremented, preserving the survey suffix when present.
-  static String getNextStationName(String referenceStationName) {
+  static String createNextStationName(String referenceStationName) {
     if (referenceStationName.isEmpty) {
       return '0';
     }

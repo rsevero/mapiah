@@ -215,7 +215,7 @@ void main() {
         controller.setActiveScrap(parsedFile.getScraps().first.mpID);
 
         final String nextStationName = controller.elementEditController
-            .getNextStationName();
+            .getAndReserveNextAvailableStationName();
 
         expect(nextStationName, '0');
         expect(controller.elementEditController.lastUsedStationName, '0');

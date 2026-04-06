@@ -309,14 +309,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lastUsedPointType;
   }
 
-  String getNextStationName() {
+  String getAndReserveNextAvailableStationName() {
     final Set<String> usedStationNames = _getUsedStationNamesInActiveScrap();
     final int maxIterations = usedStationNames.length + 1;
 
     String nextStationName = _lastUsedStationName;
 
     for (int i = 0; i < maxIterations; i++) {
-      nextStationName = MPElementEditAux.getNextStationName(nextStationName);
+      nextStationName = MPElementEditAux.createNextStationName(nextStationName);
 
       if (!usedStationNames.contains(nextStationName)) {
         _lastUsedStationName = nextStationName;
@@ -368,7 +368,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       stationNameOptions.add(
         THNameCommandOption.fromStringWithParentMPID(
           parentMPID: parentMPID,
-          reference: getNextStationName(),
+          reference: getAndReserveNextAvailableStationName(),
         ),
       );
     }

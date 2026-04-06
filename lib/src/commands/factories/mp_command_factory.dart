@@ -550,7 +550,7 @@ class MPCommandFactory {
 
     if (THPointType.fromString(pointTypeString) == THPointType.station) {
       final String nextStationName = th2FileEditController.elementEditController
-          .getNextStationName();
+          .getAndReserveNextAvailableStationName();
       final THNameCommandOption stationNameOption =
           THNameCommandOption.fromStringWithParentMPID(
             parentMPID: newPoint.mpID,
