@@ -105,7 +105,6 @@ void main() {
     }
 
     const failures = [
-      '-point',
       '+secret*Keywork49/',
       '.st+range39',
       ',099.92',

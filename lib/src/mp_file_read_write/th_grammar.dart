@@ -134,9 +134,12 @@ class THGrammar extends GrammarDefinition {
       (keywordStartChar() & keywordNonStartChar().star()).flatten().trim();
 
   /// extkeyword
-  Parser extKeywordNonStartChar() => (keywordNonStartChar() | pattern("+*.,'"));
+  Parser extKeywordStartChar() => pattern('A-Za-z0-9_/-');
+  Parser extKeywordNonStartChar() => (extKeywordStartChar() | pattern("+*.,'"));
   Parser extKeyword() =>
-      (keywordStartChar() & extKeywordNonStartChar().star()).flatten().trim();
+      (extKeywordStartChar() & extKeywordNonStartChar().star())
+          .flatten()
+          .trim();
 
   /// reference
   Parser referenceNonStartChar() => (extKeywordNonStartChar() | char('@'));
