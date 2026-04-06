@@ -2,7 +2,21 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-// from <station> . valid for extra points, specifies reference station.
+// |from <station>| = specifies a reference station.
+//  This option is primarily intended for points of type |extra|. If omitted,
+//  Therion uses the nearest station, and if |-dist| is not specified,
+//  an appropriate value from LRUD data is used.
+//
+//  If the point type is |station| and the scrap projection is extended
+//  elevation, this option specifies the neighbouring survey station that
+//  should be used as origin (from station) when placing the station point on the
+//  extended centreline. This is useful at junctions, where the same survey station may
+//  be reached by more than one shot and the cartographer needs to choose which branch
+//  the point should follow. If |-from| is not given, Therion falls back to
+//  the nearest matching branch in the scrap.
+//
+//  Therion accepts this option also for other point types, but it has no
+//  defined effect there.
 class THFromCommandOption extends THCommandOption {
   final String station;
 
