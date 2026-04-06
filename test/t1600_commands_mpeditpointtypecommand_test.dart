@@ -5,6 +5,9 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -133,5 +136,84 @@ endscrap
         },
       );
     }
+
+    test(
+      'changing a point to station creates a separate undo step for the station name',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final writer = TH2FileWriter();
+        mpLocator.mpGeneralController.reset();
+
+        final String path = THTestAux.testPath('2025-10-06-002-scrap.th2');
+        final (parsedFile, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+        final THPoint anchorPoint = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'anchor',
+          position: THPositionPart(coordinates: const Offset(1, 2)),
+        );
+        final MPCommand addPointCommand = MPAddPointCommand(
+          newPoint: anchorPoint,
+          posCommand: null,
+        );
+
+        controller.execute(addPointCommand);
+        controller.undoRedoController.clearUndoRedoStack();
+
+        final THPoint point = controller.th2File.getPoints().first;
+
+        controller.selectionController.setSelectedElements([point]);
+        controller.userInteractionController.prepareSetPLAType(
+          elementType: THElementType.point,
+          newPLAType: 'station',
+        );
+
+        final THPoint stationPoint = controller.th2File.getPoints().first;
+        final THNameCommandOption? nameOption =
+            stationPoint.getOption(THCommandOptionType.name)
+                as THNameCommandOption?;
+
+        expect(stationPoint.pointType, THPointType.station);
+        expect(nameOption, isNotNull);
+        expect(nameOption!.reference, '0');
+
+        controller.undo();
+
+        final THPoint pointAfterFirstUndo = controller.th2File
+            .getPoints()
+            .first;
+
+        expect(pointAfterFirstUndo.pointType, THPointType.station);
+        expect(
+          pointAfterFirstUndo.hasOption(THCommandOptionType.name),
+          isFalse,
+        );
+
+        controller.undo();
+
+        final THPoint pointAfterSecondUndo = controller.th2File
+            .getPoints()
+            .first;
+
+        expect(pointAfterSecondUndo.pointType, THPointType.anchor);
+        expect(
+          pointAfterSecondUndo.hasOption(THCommandOptionType.name),
+          isFalse,
+        );
+        expect(
+          writer.serialize(controller.th2File),
+          contains('point 1 2 anchor'),
+        );
+      },
+    );
   });
 }

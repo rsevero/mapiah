@@ -15,6 +15,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mobx/mobx.dart';
@@ -651,6 +652,43 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           newPointTypeSubtype: newPLAType,
           th2File: _th2File,
         );
+
+        final bool willSetStationNames =
+            THPointType.fromString(typeSubtype.type) == THPointType.station;
+
+        _th2FileEditController.execute(setPLATypeCommand);
+
+        if (willSetStationNames) {
+          final List<THNameCommandOption> stationNameOptions =
+              elementEditController.getNextStationNameOptions(
+                parentMPIDs: mpIDs,
+              );
+          final List<MPCommand> setStationNameCommands = [];
+
+          for (final THNameCommandOption stationNameOption
+              in stationNameOptions) {
+            setStationNameCommands.add(
+              MPSetOptionToElementCommand(toOption: stationNameOption),
+            );
+          }
+
+          if (setStationNameCommands.isNotEmpty) {
+            final MPCommand setStationNamesCommand =
+                MPCommandFactory.multipleCommandsFromList(
+                  commandsList: setStationNameCommands,
+                  descriptionType: MPCommandDescriptionType.setOptionToElements,
+                  completionType:
+                      MPMultipleElementsCommandCompletionType.optionsEdited,
+                );
+
+            _th2FileEditController.execute(setStationNamesCommand);
+          }
+        }
+
+        _th2FileEditController.optionEditController.updateOptionStateMap();
+        _th2FileEditController.triggerSelectedElementsRedraw();
+
+        return;
       default:
         return;
     }

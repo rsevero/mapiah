@@ -16,6 +16,7 @@
   * Default options overlay no longer offers the point `-name` option, and its hidden-option exclusions are now maintained in one static list in the option edit controller.
   * Scrap `-stations` options now preserve bracketed station lists in memory, so fixtures like `[1.35 1.36 1.37]` are parsed into individual stations instead of being dropped or collapsed into one string. [reported by Axel Hack]
   * Internal links inside help pages now jump to the correct section within the same document, including headings with accents such as `Bézier curve line segments`. [reported by Axel Hack]
+  * Point stations now remember the last `-name` that was set, auto-assign the next station name when creating a station point or converting a point to type `station`, and keep the type change and auto-name assignment as two separate undo steps for point-to-station conversions. [request by Axel Hack]
 * Infrastructure maintenance:
   * Added `MPElementEditAux.getNextStationName()` plus unit tests covering station-name increment rules for numeric, alphabetic, separator-terminated, and survey-suffixed names.
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
@@ -25,6 +26,7 @@
   * Cleaned up the remaining analyzer infos by fixing doc comments, removing redundant source getters that duplicated MobX `@readonly` generated getters, and dropping a shadowing `snapController` field plus two unnecessary test imports so `flutter analyze` now reports no issues.
   * Split the historical 0.2 and 0.3 TODO sections out of `TODO.md` into dedicated `TODO-0.2.md` and `TODO-0.3.md` files, leaving the main TODO focused on current and future roadmap items.
   * Fixing ext_keyword parsing.
+  * Added regression coverage for automatic station naming on point creation and for the separate undo steps when converting a point into a station.
 
 ## 0.3.4 - 2026-04-04 - The [Back Pain](https://en.wikipedia.org/wiki/Back_pain) release
 * Highlights:

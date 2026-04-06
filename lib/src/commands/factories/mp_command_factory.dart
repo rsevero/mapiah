@@ -548,6 +548,21 @@ class MPCommandFactory {
     // _execPreCreateUndoRedoCommand, which runs after _actualExecute.
     final List<MPCommand> optionCommandsList = [];
 
+    if (THPointType.fromString(pointTypeString) == THPointType.station) {
+      final String nextStationName = MPElementEditAux.getNextStationName(
+        th2FileEditController.elementEditController.lastUsedStationName,
+      );
+      final THNameCommandOption stationNameOption =
+          THNameCommandOption.fromStringWithParentMPID(
+            parentMPID: newPoint.mpID,
+            reference: nextStationName,
+          );
+
+      optionCommandsList.add(
+        MPSetOptionToElementCommand(toOption: stationNameOption),
+      );
+    }
+
     if (pointSubtypeString.trim().isNotEmpty) {
       final THCommandOption pointSubtypeOption = THSubtypeCommandOption(
         parentMPID: newPoint.mpID,
@@ -567,7 +582,10 @@ class MPCommandFactory {
         );
 
     for (final THCommandOption defaultOption in defaultOptions) {
-      if (defaultOption.type == THCommandOptionType.subtype) {
+      if ((defaultOption.type == THCommandOptionType.subtype) ||
+          ((defaultOption.type == THCommandOptionType.name) &&
+              (THPointType.fromString(pointTypeString) ==
+                  THPointType.station))) {
         continue;
       }
       optionCommandsList.add(

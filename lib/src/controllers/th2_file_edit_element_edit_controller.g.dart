@@ -167,6 +167,30 @@ mixin _$TH2FileEditElementEditController
     });
   }
 
+  late final _$_lastUsedStationNameAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._lastUsedStationName',
+    context: context,
+  );
+
+  String get lastUsedStationName {
+    _$_lastUsedStationNameAtom.reportRead();
+    return super._lastUsedStationName;
+  }
+
+  @override
+  String get _lastUsedStationName => lastUsedStationName;
+
+  @override
+  set _lastUsedStationName(String value) {
+    _$_lastUsedStationNameAtom.reportWrite(
+      value,
+      super._lastUsedStationName,
+      () {
+        super._lastUsedStationName = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',

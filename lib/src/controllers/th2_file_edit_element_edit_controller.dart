@@ -66,6 +66,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   double? _linePointLSize;
 
+  @readonly
+  String _lastUsedStationName = '';
+
   THCommandOptionType? _currentOptionTypeBeingEdited;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
@@ -124,6 +127,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             pointType: element.pointType.name,
             pointSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
           );
+
+          final String? stationName = MPCommandOptionAux.getName(element);
+
+          if (stationName != null) {
+            _lastUsedStationName = stationName;
+          }
         default:
       }
     }
@@ -297,6 +306,28 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final String lastUsedPointType = _lastUsedPointTypes.first;
 
     return lastUsedPointType;
+  }
+
+  List<THNameCommandOption> getNextStationNameOptions({
+    required Iterable<int> parentMPIDs,
+  }) {
+    final List<THNameCommandOption> stationNameOptions = [];
+
+    String currentStationName = _lastUsedStationName;
+
+    for (final int parentMPID in parentMPIDs) {
+      currentStationName = MPElementEditAux.getNextStationName(
+        currentStationName,
+      );
+      stationNameOptions.add(
+        THNameCommandOption.fromStringWithParentMPID(
+          parentMPID: parentMPID,
+          reference: currentStationName,
+        ),
+      );
+    }
+
+    return stationNameOptions;
   }
 
   List<THLineSegment> getLineSegmentsList({
@@ -611,6 +642,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOption option,
     required String plaOriginalLineInTH2File,
   }) {
+    if (option is THNameCommandOption) {
+      _lastUsedStationName = option.reference;
+    }
+
     final int parentMPID = option.parentMPID;
     final THElement parentElement =
         _th2File

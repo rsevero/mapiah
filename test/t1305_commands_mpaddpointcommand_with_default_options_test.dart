@@ -153,5 +153,45 @@ void main() {
         expect(controller.th2File == snapshotOriginal, isTrue);
       },
     );
+
+    test(
+      'adding a station point assigns the next station name automatically',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        mpLocator.mpGeneralController.reset();
+
+        final String path = THTestAux.testPath('2025-10-06-002-scrap.th2');
+        final (parsedFile, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+        controller.setCanvasScale(0.5);
+
+        final MPCommand command = MPCommandFactory.addPoint(
+          screenPosition: const Offset(1, 2),
+          pointTypeString: 'station',
+          pointSubtypeString: '',
+          th2FileEditController: controller,
+        );
+
+        controller.execute(command);
+
+        final THPoint newPoint = controller.th2File.getPoints().first;
+        final THNameCommandOption? nameOption =
+            newPoint.getOption(THCommandOptionType.name)
+                as THNameCommandOption?;
+
+        expect(nameOption, isNotNull);
+        expect(nameOption!.reference, '0');
+        expect(controller.elementEditController.lastUsedStationName, '0');
+      },
+    );
   });
 }
