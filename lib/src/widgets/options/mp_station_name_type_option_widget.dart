@@ -118,11 +118,6 @@ class _MPStationNameTypeOptionWidgetState
 
       if (station.isNotEmpty) {
         switch (widget.optionInfo.type) {
-          case THCommandOptionType.extend:
-            newOption = THExtendCommandOption.fromStringWithParentMPID(
-              parentMPID: mpParentMPIDPlaceholder,
-              station: station,
-            );
           case THCommandOptionType.from:
             newOption = THFromCommandOption.fromStringWithParentMPID(
               parentMPID: mpParentMPIDPlaceholder,
@@ -199,8 +194,6 @@ class _MPStationNameTypeOptionWidgetState
 
   String _getStationValue(THCommandOption currentOption) {
     switch (currentOption) {
-      case THExtendCommandOption _:
-        return currentOption.station;
       case THFromCommandOption _:
         return currentOption.station;
       case THStationNameCommandOption _:
@@ -256,8 +249,6 @@ class _MPStationNameTypeOptionWidgetState
     final String title;
 
     switch (widget.optionInfo.type) {
-      case THCommandOptionType.extend:
-        title = appLocalizations.thCommandOptionExtend;
       case THCommandOptionType.from:
         title = appLocalizations.thCommandOptionFrom;
       case THCommandOptionType.station:

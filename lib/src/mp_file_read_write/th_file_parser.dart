@@ -1275,8 +1275,6 @@ class TH2FileParser {
         _injectIDCommandOption();
       case 'explored':
         _injectExploredCommandOption();
-      case 'extend':
-        _injectExtendCommandOption();
       case 'from':
         _injectFromCommandOption();
       case 'name':
@@ -1684,43 +1682,6 @@ class TH2FileParser {
       ),
       element: _currentHasOptions,
     );
-  }
-
-  void _injectExtendCommandOption() {
-    if (_currentSpec.isEmpty) {
-      throw THCustomException(
-        "One parameter required to create a 'extend' option for a '${_currentHasOptions.elementType}'",
-      );
-    }
-
-    final String station = (_currentSpec[0] == null)
-        ? ''
-        : (((_currentSpec[0] is List) &&
-                  (_currentSpec[0].length > 1) &&
-                  (_currentSpec[0][0] is String))
-              ? _currentSpec[0][0]
-              : _currentSpec[0]);
-    final String originalLine = station.isEmpty ? '' : _currentOriginalLine;
-    final bool changedOriginalLine =
-        ((_currentSpec[0] is List) &&
-            (_currentSpec[0].length > 1) &&
-            (_currentSpec[0][1] is bool))
-        ? _currentSpec[0][1] as bool
-        : false;
-    final THExtendCommandOption newOption = THExtendCommandOption(
-      parentMPID: _currentHasOptions.mpID,
-      station: station,
-      originalLineInTH2File: originalLine,
-    );
-
-    MPElementEditAux.addOptionToElement(
-      option: newOption,
-      element: _currentHasOptions,
-    );
-
-    if (changedOriginalLine) {
-      _addToMPIDsToCleanOriginalLine(_currentHasOptions.mpID);
-    }
   }
 
   void _addToMPIDsToCleanOriginalLine(int mpID) {

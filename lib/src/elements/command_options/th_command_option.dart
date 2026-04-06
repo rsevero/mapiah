@@ -41,7 +41,6 @@ part 'th_date_value_command_option.dart';
 part 'th_dimensions_value_command_option.dart';
 part 'th_dist_command_option.dart';
 part 'th_explored_command_option.dart';
-part 'th_extend_command_option.dart';
 part 'th_flip_command_option.dart';
 part 'th_from_command_option.dart';
 part 'th_has_altitude_mixin.dart';
@@ -193,8 +192,6 @@ abstract class THCommandOption with MPTH2FileReferenceMixin {
         return THDistCommandOption.fromMap(map);
       case THCommandOptionType.explored:
         return THExploredCommandOption.fromMap(map);
-      case THCommandOptionType.extend:
-        return THExtendCommandOption.fromMap(map);
       case THCommandOptionType.flip:
         return THFlipCommandOption.fromMap(map);
       case THCommandOptionType.from:
@@ -322,8 +319,6 @@ abstract class THCommandOption with MPTH2FileReferenceMixin {
       // return THDistCommandOption(value);
       case THCommandOptionType.explored:
       // return THExploredCommandOption(value);
-      case THCommandOptionType.extend:
-      // return THExtendCommandOption(value);
       case THCommandOptionType.flip:
         return THFlipCommandOption.fromString(
           parentMPID: parentMPID,

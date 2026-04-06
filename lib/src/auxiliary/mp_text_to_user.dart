@@ -997,8 +997,6 @@ class MPTextToUser {
         localizations.thCommandOptionDist;
     _commandOptionTypeAsString[THCommandOptionType.explored] =
         localizations.thCommandOptionExplored;
-    _commandOptionTypeAsString[THCommandOptionType.extend] =
-        localizations.thCommandOptionExtend;
     _commandOptionTypeAsString[THCommandOptionType.flip] =
         localizations.thCommandOptionFlip;
     _commandOptionTypeAsString[THCommandOptionType.from] =

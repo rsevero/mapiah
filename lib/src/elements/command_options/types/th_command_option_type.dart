@@ -20,7 +20,6 @@ enum THCommandOptionType implements Comparable<THCommandOptionType> {
   dimensionsValue,
   dist,
   explored,
-  extend,
   flip,
   from,
   head,

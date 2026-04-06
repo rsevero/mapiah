@@ -316,7 +316,6 @@ class MPOverlayWindowFactory {
             outerAnchorPosition: outerAnchorPosition,
             innerAnchorType: MPWidgetPositionType.centerLeft,
           );
-        case THCommandOptionType.extend:
         case THCommandOptionType.from:
         case THCommandOptionType.station:
           overlayWindowWidget = MPStationNameTypeOptionWidget(

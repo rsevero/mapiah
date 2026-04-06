@@ -538,7 +538,6 @@ class THGrammar extends GrammarDefinition {
               distOption() |
               idOption() |
               exploredOption() |
-              extendOption() |
               fromOption() |
               orientationOption() |
               placeOption() |
@@ -603,17 +602,6 @@ class THGrammar extends GrammarDefinition {
       (number().trim().map((value) => [value]) |
               bracketStringTemplate(number() & lengthUnit()))
           .trim();
-
-  /// point -extend
-  Parser extendOption() => stringIgnoreCase('extend') & extendOptions();
-  Parser extendOptions() =>
-      ((stringIgnoreCase('prev') & stringIgnoreCase('ious').optional())
-                  .flatten() &
-              reference())
-          .pick(1)
-          .optional()
-          .trim()
-          .map((value) => [value]);
 
   /// point/line -id
   Parser idOption() => stringIgnoreCase('id') & idOptions();

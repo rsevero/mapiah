@@ -111,7 +111,6 @@ class MPCommandOptionAux {
     THPointType.remark: [THCommandOptionType.text],
     THPointType.section: [THCommandOptionType.scrap],
     THPointType.station: [
-      THCommandOptionType.extend,
       THCommandOptionType.station,
       THCommandOptionType.subtype,
     ],

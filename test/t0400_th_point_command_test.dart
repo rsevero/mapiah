@@ -568,66 +568,13 @@ endscrap
     }
   });
 
-  group('point -extend', () {
-    final parser = TH2FileParser();
-    final writer = TH2FileWriter();
-
-    const successes = [
-      {
-        'file':
-            'th_file_parser-00160-point_with_extend_option_without_previous_station.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  point -2675 2206 station -extend
-endscrap
-''',
-      },
-      {
-        'file':
-            'th_file_parser-00161-point_with_extend_option_with_previous_station.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  point -3218 -2379 station -extend previous a12
-endscrap
-''',
-      },
-      {
-        'file':
-            'th_file_parser-00162-point_with_extend_option_with_alternate_previous_station.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  point -4747 -2577 station -extend previous c33
-endscrap
-''',
-      },
-    ];
-
-    for (var success in successes) {
-      test(success, () async {
-        final (file, isSuccessful, _) = await parser.parse(
-          THTestAux.testPath(success['file'] as String),
-        );
-        expect(isSuccessful, true);
-        expect(file, isA<TH2File>());
-        expect(file.encoding, (success['encoding'] as String));
-        expect(file.countElements(), success['length']);
-
-        final asFile = writer.serialize(file);
-        expect(asFile, success['asFile']);
-      });
-    }
-  });
-
   group('point -extend failures', () {
     final parser = TH2FileParser();
 
     const failures = [
+      'th_file_parser-00160-point_with_extend_option_without_previous_station.th2',
+      'th_file_parser-00161-point_with_extend_option_with_previous_station.th2',
+      'th_file_parser-00162-point_with_extend_option_with_alternate_previous_station.th2',
       'th_file_parser-00163-point_with_extend_option_with_alternate_previous_missing_station_failure.th2',
     ];
 
