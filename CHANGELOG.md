@@ -17,6 +17,7 @@
   * Scrap `-stations` options now preserve bracketed station lists in memory, so fixtures like `[1.35 1.36 1.37]` are parsed into individual stations instead of being dropped or collapsed into one string. [reported by Axel Hack]
   * Internal links inside help pages now jump to the correct section within the same document, including headings with accents such as `Bézier curve line segments`. [reported by Axel Hack]
   * Point stations now remember the last `-name` that was set, auto-assign the next unused station name within the active scrap when creating a station point or converting a point to type `station`, and keep the type change and auto-name assignment as two separate undo steps for point-to-station conversions. [request by Axel Hack]
+  * The `-extend`, `-from`, and `-name` option editor now splits station references into `station name` and optional `survey` fields, validates them with Therion keyword rules, and shows the encoded `@` separator explicitly in the UI.
 * Infrastructure maintenance:
   * Added `MPElementEditAux.getNextStationName()` plus unit tests covering station-name increment rules for numeric, alphabetic, separator-terminated, and survey-suffixed names.
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.

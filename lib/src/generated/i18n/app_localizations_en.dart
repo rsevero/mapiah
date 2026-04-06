@@ -1073,6 +1073,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpStationTypeOptionWarning => 'Station not set';
 
   @override
+  String get mpStationTypeSurveyInvalidWarning => 'Invalid survey';
+
+  @override
+  String get mpStationTypeSurveyLabel => 'Survey';
+
+  @override
+  String get mpStationTypeUniqueEmptyWarning => 'Station name not set';
+
+  @override
+  String get mpStationTypeUniqueInvalidWarning => 'Invalid station name';
+
+  @override
+  String get mpStationTypeUniqueLabel => 'Station name';
+
+  @override
   String get mpStationsAddField => 'Add field';
 
   @override

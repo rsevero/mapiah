@@ -2080,6 +2080,36 @@ abstract class AppLocalizations {
   /// **'Station not set'**
   String get mpStationTypeOptionWarning;
 
+  /// The warning message for invalid survey part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid survey'**
+  String get mpStationTypeSurveyInvalidWarning;
+
+  /// The label for the survey part field in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Survey'**
+  String get mpStationTypeSurveyLabel;
+
+  /// The warning message for empty unique part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Station name not set'**
+  String get mpStationTypeUniqueEmptyWarning;
+
+  /// The warning message for invalid unique part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid station name'**
+  String get mpStationTypeUniqueInvalidWarning;
+
+  /// The label for the unique part field in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Station name'**
+  String get mpStationTypeUniqueLabel;
+
   /// The label for the add field button. Used on: lib/src/widgets/options/mp_stations_option_widget.dart
   ///
   /// In en, this message translates to:

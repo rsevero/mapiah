@@ -2,28 +2,29 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_option_type_being_edited_tracking_mixin.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_type.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 
-class MPStationTypeOptionWidget extends StatefulWidget {
+class MPStationNameTypeOptionWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final MPOptionInfo optionInfo;
   final Offset outerAnchorPosition;
   final MPWidgetPositionType innerAnchorType;
 
-  const MPStationTypeOptionWidget({
+  const MPStationNameTypeOptionWidget({
     super.key,
     required this.th2FileEditController,
     required this.optionInfo,
@@ -32,22 +33,26 @@ class MPStationTypeOptionWidget extends StatefulWidget {
   });
 
   @override
-  State<MPStationTypeOptionWidget> createState() =>
-      _MPStationTypeOptionWidgetState();
+  State<MPStationNameTypeOptionWidget> createState() =>
+      _MPStationNameTypeOptionWidgetState();
 }
 
-class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
-    with MPOptionTypeBeingEditedTrackingMixin<MPStationTypeOptionWidget> {
-  late TextEditingController _stationController;
+class _MPStationNameTypeOptionWidgetState
+    extends State<MPStationNameTypeOptionWidget>
+    with MPOptionTypeBeingEditedTrackingMixin<MPStationNameTypeOptionWidget> {
+  late TextEditingController _uniquePartController;
+  late TextEditingController _surveyPartController;
   late String _selectedChoice;
-  final FocusNode _stationTextFieldFocusNode = FocusNode();
+  final FocusNode _uniquePartTextFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
-  late final String _initialStation;
+  late final String _initialUniquePart;
+  late final String _initialSurveyPart;
   late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
-  String? _warningMessage;
+  String? _uniquePartWarningMessage;
+  String? _surveyPartWarningMessage;
 
   @override
   void initState() {
@@ -56,37 +61,32 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
     switch (widget.optionInfo.state) {
       case MPOptionStateType.set:
         final THCommandOption currentOption = widget.optionInfo.option!;
+        final String station = _getStationValue(currentOption);
+        final ({String uniquePart, String surveyPart}) stationParts =
+            _splitStationParts(station);
 
-        switch (currentOption) {
-          case THExtendCommandOption _:
-            _stationController = TextEditingController(
-              text: currentOption.station,
-            );
-          case THFromCommandOption _:
-            _stationController = TextEditingController(
-              text: currentOption.station,
-            );
-          case THNameCommandOption _:
-            _stationController = TextEditingController(
-              text: currentOption.reference,
-            );
-          default:
-            throw Exception(
-              'Unsupported option type: ${widget.optionInfo..type} in _MPStationTypeOptionWidgetState.initState()',
-            );
-        }
+        _uniquePartController = TextEditingController(
+          text: stationParts.uniquePart,
+        );
+        _surveyPartController = TextEditingController(
+          text: stationParts.surveyPart,
+        );
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _stationController = TextEditingController(text: '');
+        _uniquePartController = TextEditingController(text: '');
+        _surveyPartController = TextEditingController(text: '');
         _selectedChoice = '';
       case MPOptionStateType.unset:
-        _stationController = TextEditingController(text: '');
+        _uniquePartController = TextEditingController(text: '');
+        _surveyPartController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
     }
 
-    _initialStation = _stationController.text;
+    _initialUniquePart = _uniquePartController.text;
+    _initialSurveyPart = _surveyPartController.text;
     _initialSelectedChoice = _selectedChoice;
+    _updateIsValid();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasExecutedSingleRunOfPostFrameCallback) {
@@ -98,14 +98,15 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
 
   @override
   void dispose() {
-    _stationController.dispose();
-    _stationTextFieldFocusNode.dispose();
+    _uniquePartController.dispose();
+    _surveyPartController.dispose();
+    _uniquePartTextFieldFocusNode.dispose();
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _stationTextFieldFocusNode.requestFocus();
+      _uniquePartTextFieldFocusNode.requestFocus();
     }
   }
 
@@ -113,7 +114,7 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      final String station = _stationController.text.trim();
+      final String station = _buildStationValue();
 
       if (station.isNotEmpty) {
         switch (widget.optionInfo.type) {
@@ -154,14 +155,31 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
   }
 
   void _updateIsValid() {
-    final String station = _stationController.text.trim();
+    switch (_selectedChoice) {
+      case mpUnsetOptionID:
+        _isValid = true;
+        _uniquePartWarningMessage = null;
+        _surveyPartWarningMessage = null;
+      case mpNonMultipleChoiceSetID:
+        final String uniquePart = _uniquePartController.text.trim();
+        final String surveyPart = _surveyPartController.text.trim();
+        final bool isUniquePartValid =
+            uniquePart.isNotEmpty && MPElementEditAux.isExtKeyword(uniquePart);
+        final bool isSurveyPartValid =
+            surveyPart.isEmpty || MPElementEditAux.isKeyword(surveyPart);
 
-    if (station.isNotEmpty) {
-      _isValid = true;
-      _warningMessage = null;
-    } else {
-      _isValid = false;
-      _warningMessage = appLocalizations.mpStationTypeOptionWarning;
+        _uniquePartWarningMessage = _getUniquePartWarningMessage(
+          uniquePart: uniquePart,
+          isUniquePartValid: isUniquePartValid,
+        );
+        _surveyPartWarningMessage = isSurveyPartValid
+            ? null
+            : appLocalizations.mpStationTypeSurveyInvalidWarning;
+        _isValid = isUniquePartValid && isSurveyPartValid;
+      default:
+        _isValid = false;
+        _uniquePartWarningMessage = null;
+        _surveyPartWarningMessage = null;
     }
 
     _updateIsOkButtonEnabled();
@@ -171,28 +189,79 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
     final bool isChanged =
         ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            (_stationController.text != _initialStation)));
+            ((_uniquePartController.text != _initialUniquePart) ||
+                (_surveyPartController.text != _initialSurveyPart))));
 
     setState(() {
       _isOkButtonEnabled = _isValid && isChanged;
     });
   }
 
+  String _getStationValue(THCommandOption currentOption) {
+    switch (currentOption) {
+      case THExtendCommandOption _:
+        return currentOption.station;
+      case THFromCommandOption _:
+        return currentOption.station;
+      case THNameCommandOption _:
+        return currentOption.reference;
+      default:
+        throw Exception(
+          'Unsupported option type: ${widget.optionInfo..type} in _MPStationTypeOptionWidgetState._getStationValue()',
+        );
+    }
+  }
+
+  ({String uniquePart, String surveyPart}) _splitStationParts(String station) {
+    final int separatorIndex = station.indexOf('@');
+
+    if (separatorIndex == -1) {
+      return (uniquePart: station.trim(), surveyPart: '');
+    }
+
+    final String uniquePart = station.substring(0, separatorIndex).trim();
+    final String surveyPart = station.substring(separatorIndex + 1).trim();
+
+    return (uniquePart: uniquePart, surveyPart: surveyPart);
+  }
+
+  String _buildStationValue() {
+    final String uniquePart = _uniquePartController.text.trim();
+    final String surveyPart = _surveyPartController.text.trim();
+
+    if (surveyPart.isEmpty) {
+      return uniquePart;
+    }
+
+    return '$uniquePart@$surveyPart';
+  }
+
+  String? _getUniquePartWarningMessage({
+    required String uniquePart,
+    required bool isUniquePartValid,
+  }) {
+    if (uniquePart.isEmpty) {
+      return appLocalizations.mpStationTypeUniqueEmptyWarning;
+    }
+
+    if (!isUniquePartValid) {
+      return appLocalizations.mpStationTypeUniqueInvalidWarning;
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final String title;
-    final String stationLabel;
 
     switch (widget.optionInfo.type) {
       case THCommandOptionType.extend:
         title = appLocalizations.thCommandOptionExtend;
-        stationLabel = appLocalizations.mpExtendStationLabel;
       case THCommandOptionType.from:
         title = appLocalizations.thCommandOptionFrom;
-        stationLabel = appLocalizations.mpExtendStationLabel;
       case THCommandOptionType.name:
         title = appLocalizations.thCommandOptionName;
-        stationLabel = appLocalizations.mpNameStationLabel;
       default:
         throw Exception(
           'Unsupported option type: ${widget.optionInfo.type} in _MPStationTypeOptionWidgetState.build()',
@@ -216,9 +285,10 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
               onChanged: (String? value) {
                 setState(() {
                   _selectedChoice = value!;
+                  _updateIsValid();
                 });
                 if (_selectedChoice == mpNonMultipleChoiceSetID) {
-                  _stationTextFieldFocusNode.requestFocus();
+                  _uniquePartTextFieldFocusNode.requestFocus();
                 }
               },
               child: Column(
@@ -246,20 +316,38 @@ class _MPStationTypeOptionWidgetState extends State<MPStationTypeOptionWidget>
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  MPTextFieldInputWidget(
-                    labelText: stationLabel,
-                    controller: _stationController,
-                    focusNode: _stationTextFieldFocusNode,
-                    autofocus: true,
-                    errorText: _warningMessage,
-                    keyboardType: TextInputType.text,
-                    onChanged: (String value) {
-                      _updateIsValid();
-                    },
+                  Expanded(
+                    child: MPTextFieldInputWidget(
+                      labelText: appLocalizations.mpStationTypeUniqueLabel,
+                      controller: _uniquePartController,
+                      focusNode: _uniquePartTextFieldFocusNode,
+                      autofocus: true,
+                      errorText: _uniquePartWarningMessage,
+                      keyboardType: TextInputType.text,
+                      onChanged: (String value) {
+                        _updateIsValid();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: mpButtonSpace),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('@'),
+                  ),
+                  const SizedBox(width: mpButtonSpace),
+                  Expanded(
+                    child: MPTextFieldInputWidget(
+                      labelText: appLocalizations.mpStationTypeSurveyLabel,
+                      controller: _surveyPartController,
+                      errorText: _surveyPartWarningMessage,
+                      keyboardType: TextInputType.text,
+                      onChanged: (String value) {
+                        _updateIsValid();
+                      },
+                    ),
                   ),
                 ],
               ),

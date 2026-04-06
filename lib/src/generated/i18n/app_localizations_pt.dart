@@ -1085,6 +1085,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpStationTypeOptionWarning => 'Base não definida';
 
   @override
+  String get mpStationTypeSurveyInvalidWarning => 'Topografia inválida';
+
+  @override
+  String get mpStationTypeSurveyLabel => 'Topografia';
+
+  @override
+  String get mpStationTypeUniqueEmptyWarning => 'Nome da base não definido';
+
+  @override
+  String get mpStationTypeUniqueInvalidWarning => 'Nome da base inválido';
+
+  @override
+  String get mpStationTypeUniqueLabel => 'Nome da base';
+
+  @override
   String get mpStationsAddField => 'Adicionar campo';
 
   @override

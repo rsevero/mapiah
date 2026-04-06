@@ -1683,6 +1683,31 @@
     "description": "The warning message for the station type option. Used on: lib/src/widgets/options/mp_station_type_option_widget.dart",
     "type": "text"
   },
+  "mpStationTypeSurveyInvalidWarning": "Invalid survey",
+  "@mpStationTypeSurveyInvalidWarning": {
+    "description": "The warning message for invalid survey part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart",
+    "type": "text"
+  },
+  "mpStationTypeSurveyLabel": "Survey",
+  "@mpStationTypeSurveyLabel": {
+    "description": "The label for the survey part field in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart",
+    "type": "text"
+  },
+  "mpStationTypeUniqueEmptyWarning": "Station name not set",
+  "@mpStationTypeUniqueEmptyWarning": {
+    "description": "The warning message for empty unique part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart",
+    "type": "text"
+  },
+  "mpStationTypeUniqueInvalidWarning": "Invalid station name",
+  "@mpStationTypeUniqueInvalidWarning": {
+    "description": "The warning message for invalid unique part in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart",
+    "type": "text"
+  },
+  "mpStationTypeUniqueLabel": "Station name",
+  "@mpStationTypeUniqueLabel": {
+    "description": "The label for the unique part field in station name type option. Used on: lib/src/widgets/options/mp_station_name_type_option_widget.dart",
+    "type": "text"
+  },
   "mpStationsAddField": "Add field",
   "@mpStationsAddField": {
     "description": "The label for the add field button. Used on: lib/src/widgets/options/mp_stations_option_widget.dart",

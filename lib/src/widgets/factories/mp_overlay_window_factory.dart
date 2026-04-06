@@ -14,11 +14,11 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_available_images_widget.dart';
 import 'package:mapiah/src/widgets/mp_available_scraps_widget.dart';
+import 'package:mapiah/src/widgets/mp_default_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_line_segment_options_edit_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_line_segment_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_widget.dart';
-import 'package:mapiah/src/widgets/mp_default_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_options_edit_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_pla_type_options_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_scrap_options_edit_widget.dart';
@@ -26,7 +26,6 @@ import 'package:mapiah/src/widgets/mp_snap_targets_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_altitude_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_attr_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_author_option_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_orientation_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_context_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_copyright_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_cs_option_widget.dart';
@@ -36,6 +35,7 @@ import 'package:mapiah/src/widgets/options/mp_distance_type_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_double_value_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_id_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_multiple_choices_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_orientation_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_passage_height_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_pl_scale_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_point_height_option_widget.dart';
@@ -43,8 +43,8 @@ import 'package:mapiah/src/widgets/options/mp_projection_option_overlay_window_w
 import 'package:mapiah/src/widgets/options/mp_scrap_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_scrap_scale_option_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_sketch_option_widget.dart';
+import 'package:mapiah/src/widgets/options/mp_station_name_type_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_station_names_option_widget.dart';
-import 'package:mapiah/src/widgets/options/mp_station_type_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_stations_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_subtype_option_widget.dart';
 import 'package:mapiah/src/widgets/options/mp_text_type_option_widget.dart';
@@ -319,7 +319,7 @@ class MPOverlayWindowFactory {
         case THCommandOptionType.extend:
         case THCommandOptionType.from:
         case THCommandOptionType.name:
-          overlayWindowWidget = MPStationTypeOptionWidget(
+          overlayWindowWidget = MPStationNameTypeOptionWidget(
             th2FileEditController: th2FileEditController,
             optionInfo: optionInfo,
             outerAnchorPosition: outerAnchorPosition,
