@@ -549,9 +549,8 @@ class MPCommandFactory {
     final List<MPCommand> optionCommandsList = [];
 
     if (THPointType.fromString(pointTypeString) == THPointType.station) {
-      final String nextStationName = MPElementEditAux.getNextStationName(
-        th2FileEditController.elementEditController.lastUsedStationName,
-      );
+      final String nextStationName = th2FileEditController.elementEditController
+          .getNextStationName();
       final THNameCommandOption stationNameOption =
           THNameCommandOption.fromStringWithParentMPID(
             parentMPID: newPoint.mpID,

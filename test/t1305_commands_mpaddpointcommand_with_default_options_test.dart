@@ -6,8 +6,9 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -191,6 +192,119 @@ void main() {
         expect(nameOption, isNotNull);
         expect(nameOption!.reference, '0');
         expect(controller.elementEditController.lastUsedStationName, '0');
+      },
+    );
+
+    test(
+      'getNextStationName updates lastUsedStationName with the returned value',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        mpLocator.mpGeneralController.reset();
+
+        final String path = THTestAux.testPath('2025-10-06-002-scrap.th2');
+        final (parsedFile, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+
+        final String nextStationName = controller.elementEditController
+            .getNextStationName();
+
+        expect(nextStationName, '0');
+        expect(controller.elementEditController.lastUsedStationName, '0');
+      },
+    );
+
+    test(
+      'adding a station point skips station names already used in the active scrap',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        mpLocator.mpGeneralController.reset();
+
+        final String path = THTestAux.testPath('2025-10-06-002-scrap.th2');
+        final (parsedFile, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+
+        final THPoint stationPoint0 = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'station',
+          position: THPositionPart(coordinates: const Offset(1, 2)),
+        );
+        final THPoint stationPoint1 = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'station',
+          position: THPositionPart(coordinates: const Offset(3, 4)),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: stationPoint0, posCommand: null),
+        );
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint0.mpID,
+              reference: '0',
+            ),
+          ),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: stationPoint1, posCommand: null),
+        );
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint1.mpID,
+              reference: '1',
+            ),
+          ),
+        );
+
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint0.mpID,
+              reference: '0',
+            ),
+          ),
+        );
+
+        final MPCommand addStationPointCommand = MPCommandFactory.addPoint(
+          screenPosition: const Offset(5, 6),
+          pointTypeString: 'station',
+          pointSubtypeString: '',
+          th2FileEditController: controller,
+        );
+
+        controller.execute(addStationPointCommand);
+
+        final THPoint newStationPoint = controller.th2File
+            .getPoints()
+            .toList()
+            .last;
+        final THNameCommandOption? nameOption =
+            newStationPoint.getOption(THCommandOptionType.name)
+                as THNameCommandOption?;
+
+        expect(nameOption, isNotNull);
+        expect(nameOption!.reference, '2');
+        expect(controller.elementEditController.lastUsedStationName, '2');
       },
     );
   });

@@ -215,5 +215,96 @@ endscrap
         );
       },
     );
+
+    test(
+      'changing a point to station skips station names already used in the active scrap',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        mpLocator.mpGeneralController.reset();
+
+        final String path = THTestAux.testPath('2025-10-06-002-scrap.th2');
+        final (parsedFile, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        controller.setActiveScrap(parsedFile.getScraps().first.mpID);
+
+        final THPoint stationPoint0 = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'station',
+          position: THPositionPart(coordinates: const Offset(1, 2)),
+        );
+        final THPoint stationPoint1 = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'station',
+          position: THPositionPart(coordinates: const Offset(3, 4)),
+        );
+        final THPoint anchorPoint = THPoint.pointTypeFromString(
+          parentMPID: parsedFile.getScraps().first.mpID,
+          pointTypeString: 'anchor',
+          position: THPositionPart(coordinates: const Offset(5, 6)),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: stationPoint0, posCommand: null),
+        );
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint0.mpID,
+              reference: '0',
+            ),
+          ),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: stationPoint1, posCommand: null),
+        );
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint1.mpID,
+              reference: '1',
+            ),
+          ),
+        );
+
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint0.mpID,
+              reference: '0',
+            ),
+          ),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: anchorPoint, posCommand: null),
+        );
+        controller.undoRedoController.clearUndoRedoStack();
+
+        controller.selectionController.setSelectedElements([anchorPoint]);
+        controller.userInteractionController.prepareSetPLAType(
+          elementType: THElementType.point,
+          newPLAType: 'station',
+        );
+
+        final THNameCommandOption? nameOption =
+            controller.th2File
+                    .pointByMPID(anchorPoint.mpID)
+                    .getOption(THCommandOptionType.name)
+                as THNameCommandOption?;
+
+        expect(nameOption, isNotNull);
+        expect(nameOption!.reference, '2');
+        expect(controller.elementEditController.lastUsedStationName, '2');
+      },
+    );
   });
 }

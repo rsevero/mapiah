@@ -23,6 +23,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
@@ -308,21 +309,66 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lastUsedPointType;
   }
 
+  String getNextStationName() {
+    final Set<String> usedStationNames = _getUsedStationNamesInActiveScrap();
+    final int maxIterations = usedStationNames.length + 1;
+
+    String nextStationName = _lastUsedStationName;
+
+    for (int i = 0; i < maxIterations; i++) {
+      nextStationName = MPElementEditAux.getNextStationName(nextStationName);
+
+      if (!usedStationNames.contains(nextStationName)) {
+        _lastUsedStationName = nextStationName;
+
+        return nextStationName;
+      }
+    }
+
+    throw Exception(
+      'Unable to find an unused station name in the active scrap at TH2FileEditElementEditController.getNextStationName().',
+    );
+  }
+
+  Set<String> _getUsedStationNamesInActiveScrap() {
+    if (_th2FileEditController.activeScrapID <= 0) {
+      return <String>{};
+    }
+
+    final THScrap activeScrap = _th2FileEditController.getActiveScrap();
+    final Set<String> usedStationNames = <String>{};
+
+    for (final int childMPID in activeScrap.childrenMPIDs) {
+      final THElement childElement = _th2File.elementByMPID(childMPID);
+
+      if (childElement is! THPoint) {
+        continue;
+      }
+
+      if (childElement.pointType != THPointType.station) {
+        continue;
+      }
+
+      final String? stationName = MPCommandOptionAux.getName(childElement);
+
+      if (stationName != null) {
+        usedStationNames.add(stationName);
+      }
+    }
+
+    return usedStationNames;
+  }
+
   List<THNameCommandOption> getNextStationNameOptions({
     required Iterable<int> parentMPIDs,
   }) {
     final List<THNameCommandOption> stationNameOptions = [];
 
-    String currentStationName = _lastUsedStationName;
-
     for (final int parentMPID in parentMPIDs) {
-      currentStationName = MPElementEditAux.getNextStationName(
-        currentStationName,
-      );
       stationNameOptions.add(
         THNameCommandOption.fromStringWithParentMPID(
           parentMPID: parentMPID,
-          reference: currentStationName,
+          reference: getNextStationName(),
         ),
       );
     }
