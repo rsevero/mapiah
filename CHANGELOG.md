@@ -19,6 +19,7 @@
   * Point stations now remember the last `-name` that was set, auto-assign the next unused station name within the active scrap when creating a station point or converting a point to type `station`, and keep the type change and auto-name assignment as two separate undo steps for point-to-station conversions. [request by Axel Hack]
   * The `-extend`, `-from`, and `-name` option editor now splits station references into `station name` and optional `survey` fields, validates them with Therion keyword rules, and shows the encoded `@` separator explicitly in the UI.
   * Removed the point `-extend` option from parsing and editing because Therion does not support it.
+  * Fixed flaky UI test `t3202_ui_open_file_then_new_file_test`: `TH2FileTabsPage` now ignores missing `window_size` plugin registrations in widget-test and unsupported-platform environments instead of relying on a brittle runtime-type check before calling `setWindowTitle()`.
 * Infrastructure maintenance:
   * Added `MPElementEditAux.getNextStationName()` plus unit tests covering station-name increment rules for numeric, alphabetic, separator-terminated, and survey-suffixed names.
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.

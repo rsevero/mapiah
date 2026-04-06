@@ -103,18 +103,14 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       ),
     );
 
-    final bool isWidgetTestEnvironment = WidgetsBinding.instance.runtimeType
-        .toString()
-        .contains('TestWidgetsFlutterBinding');
-
-    if (!isWidgetTestEnvironment) {
-      try {
-        setWindowTitle(appLocalizations.appTitle);
-      } on MissingPluginException {
-        // Ignore missing window-size plugin on unsupported platforms.
-      } on PlatformException {
-        // Ignore unsupported platform calls outside desktop environments.
-      }
+    try {
+      setWindowTitle(appLocalizations.appTitle);
+    } on MissingPluginException {
+      // In widget tests, desktop plugins (like window_size) may not be
+      // registered. Ignore the missing plugin so tests can run headless.
+    } on PlatformException {
+      // Also ignore other platform exceptions in non-desktop environments
+      // during tests.
     }
 
     final Scaffold scaffold = Scaffold(
