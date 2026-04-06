@@ -18,7 +18,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 
-class MPEditElementAux {
+class MPElementEditAux {
   static THStraightLineSegment createStraightLineSegmentFromCanvasCoordinates({
     required Offset endPointCanvasCoordinates,
     required int lineMPID,
@@ -389,7 +389,7 @@ class MPEditElementAux {
         );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>
     newLineSegments =
-        MPEditElementAux.convertTHLineSegmentListToLineSegmentWithPositionList(
+        MPElementEditAux.convertTHLineSegmentListToLineSegmentWithPositionList(
           bezierLineSegments,
         );
     final List<({THLineSegment lineSegment, int lineSegmentPosition})>

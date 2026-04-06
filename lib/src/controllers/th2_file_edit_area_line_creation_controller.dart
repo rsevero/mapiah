@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -445,14 +445,14 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         /// the file before creating a strange undo/redo command that would deal
         /// with an empty line which makes no sense for the user.
         lineChildren.add(
-          MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+          MPElementEditAux.createStraightLineSegmentFromScreenCoordinates(
             endPointScreenCoordinates: _lineStartScreenPosition!,
             lineMPID: newLineMPID,
             th2FileEditController: _th2FileEditController,
           ),
         );
         lineChildren.add(
-          MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+          MPElementEditAux.createStraightLineSegmentFromScreenCoordinates(
             endPointScreenCoordinates: endPointScreenCoordinates,
             lineMPID: newLineMPID,
             th2FileEditController: _th2FileEditController,
@@ -547,7 +547,7 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     required int lineMPID,
   }) {
     final THStraightLineSegment straightLineSegment =
-        MPEditElementAux.createStraightLineSegmentFromScreenCoordinates(
+        MPElementEditAux.createStraightLineSegmentFromScreenCoordinates(
           endPointScreenCoordinates: endPointScreenCoordinates,
           lineMPID: lineMPID,
           th2FileEditController: _th2FileEditController,

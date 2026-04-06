@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -121,7 +121,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     if (_selectedEndControlPoints.length > 1) {
       return MPSelectedEndControlPointPointType.endPoint;
     } else if (_selectedEndControlPoints.length == 1) {
-      return MPEditElementAux.isEndPoint(
+      return MPElementEditAux.isEndPoint(
             _selectedEndControlPoints.values.first.type,
           )
           ? MPSelectedEndControlPointPointType.endPoint
@@ -1000,10 +1000,10 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     for (final MPSelectableEndControlPoint endControlPoint
         in _selectableEndControlPoints) {
       if (endControlPoint.contains(canvasCoordinates)) {
-        if (MPEditElementAux.isEndPoint(endControlPoint.type)) {
+        if (MPElementEditAux.isEndPoint(endControlPoint.type)) {
           clickedEndControlPoints.add(endControlPoint);
         } else if (includeControlPoints &&
-            MPEditElementAux.isControlPoint(endControlPoint.type)) {
+            MPElementEditAux.isControlPoint(endControlPoint.type)) {
           clickedControlPoints.add(endControlPoint);
         }
       }
@@ -1046,7 +1046,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
     for (final MPSelectableEndControlPoint selectableEndControlPoint
         in _selectableEndControlPoints) {
-      if (MPEditElementAux.isEndPoint(selectableEndControlPoint.type)) {
+      if (MPElementEditAux.isEndPoint(selectableEndControlPoint.type)) {
         final THLineSegment element =
             selectableEndControlPoint.element as THLineSegment;
 
@@ -1618,7 +1618,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
         if (moveControlPointSmoothInfo.shouldSmooth &&
             moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset newPosition = MPEditElementAux.moveControlPointInLine(
+          final Offset newPosition = MPElementEditAux.moveControlPointInLine(
             moveControlPointSmoothInfo,
             canvasCoordinatesFinalPosition,
           );
@@ -1640,7 +1640,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
         if (moveControlPointSmoothInfo.shouldSmooth &&
             !moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset? newPosition = MPEditElementAux.moveMirrorControlPoint(
+          final Offset? newPosition = MPElementEditAux.moveMirrorControlPoint(
             moveControlPointSmoothInfo,
             canvasCoordinatesFinalPosition,
           );
@@ -1661,7 +1661,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
         if (moveControlPointSmoothInfo.shouldSmooth &&
             moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset newPosition = MPEditElementAux.moveControlPointInLine(
+          final Offset newPosition = MPElementEditAux.moveControlPointInLine(
             moveControlPointSmoothInfo,
             canvasCoordinatesFinalPosition,
           );
@@ -1684,7 +1684,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
         if (moveControlPointSmoothInfo.shouldSmooth &&
             !moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset? newPosition = MPEditElementAux.moveMirrorControlPoint(
+          final Offset? newPosition = MPElementEditAux.moveMirrorControlPoint(
             moveControlPointSmoothInfo,
             canvasCoordinatesFinalPosition,
           );

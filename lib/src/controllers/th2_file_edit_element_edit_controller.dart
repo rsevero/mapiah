@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
@@ -1033,10 +1033,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final String filename = MPEditElementAux.getFilenameFromPath(
+    final String filename = MPElementEditAux.getFilenameFromPath(
       _th2File.filename,
     );
-    final String normalizedFilename = MPEditElementAux.normalizeToTHID(
+    final String normalizedFilename = MPElementEditAux.normalizeToTHID(
       filename,
     );
     final String thIDPrefix = '$normalizedFilename-scrap';
@@ -1285,7 +1285,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         (!line.isFirstLineSegment(lineSegment, th2File))) {
       if (isLineSegmentBezier && isNextLineSegmentBezier) {
         final List<THBezierCurveLineSegment> smoothedBezierSegments =
-            MPEditElementAux.getSmoothedBezierLineSegments(
+            MPElementEditAux.getSmoothedBezierLineSegments(
               lineSegment: lineSegment as THBezierCurveLineSegment,
               nextLineSegment: nextLineSegment as THBezierCurveLineSegment,
               th2File: th2File,
@@ -1314,7 +1314,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           unalignedBezierLineSegment = lineSegment as THBezierCurveLineSegment;
 
           final Offset? alignedControlPoint =
-              MPEditElementAux.getControlPointAlignedToStraight(
+              MPElementEditAux.getControlPointAlignedToStraight(
                 controlPoint: lineSegment.controlPoint2.coordinates,
                 junction: lineSegment.endPoint.coordinates,
                 startStraightLineSegment: nextLineSegment.endPoint.coordinates,
@@ -1340,7 +1340,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
               nextLineSegment as THBezierCurveLineSegment;
 
           final Offset? alignedControlPoint =
-              MPEditElementAux.getControlPointAlignedToStraight(
+              MPElementEditAux.getControlPointAlignedToStraight(
                 controlPoint: nextLineSegment.controlPoint1.coordinates,
                 junction: lineSegment.endPoint.coordinates,
                 startStraightLineSegment:
@@ -1674,7 +1674,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             if (_lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceStraight) {
               simplifiedLineSegmentsList =
-                  MPEditElementAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
+                  MPElementEditAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
                     th2File: _originalFileForLineSimplification!,
                     originalLine: originalLine,
                     originalLineSegmentsList: originalPerTypeLineSegmentsList,
@@ -1743,7 +1743,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             (simplifiedLineSegmentsCompleteList.length <
                 originalLineSegmentsList.length)) {
           final MPCommand simplifyCommand =
-              MPEditElementAux.getReplaceLineSegmentsCommand(
+              MPElementEditAux.getReplaceLineSegmentsCommand(
                 originalLine: originalLine,
                 th2File: _originalFileForLineSimplification!,
                 newLineSegmentsList: simplifiedLineSegmentsCompleteList,

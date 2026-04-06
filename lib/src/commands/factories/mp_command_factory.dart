@@ -3,7 +3,7 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
-import 'package:mapiah/src/auxiliary/mp_edit_element_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -235,7 +235,7 @@ class MPCommandFactory {
     required int positionInParent,
     required MPCommandDescriptionType descriptionType,
   }) {
-    final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
+    final List<int> emptyLinesAfter = MPElementEditAux.getEmptyLinesAfter(
       th2File: th2File,
       parent: parent,
       positionInParent: positionInParent,
@@ -303,14 +303,14 @@ class MPCommandFactory {
     posCommands ??= [];
 
     lineChildren.add(
-      MPEditElementAux.createStraightLineSegmentFromCanvasCoordinates(
+      MPElementEditAux.createStraightLineSegmentFromCanvasCoordinates(
         endPointCanvasCoordinates: start,
         lineMPID: newLineMPID,
         th2FileEditController: th2FileEditController,
       ),
     );
     lineChildren.add(
-      MPEditElementAux.createStraightLineSegmentFromCanvasCoordinates(
+      MPElementEditAux.createStraightLineSegmentFromCanvasCoordinates(
         endPointCanvasCoordinates: end,
         lineMPID: newLineMPID,
         th2FileEditController: th2FileEditController,
@@ -1670,7 +1670,7 @@ class MPCommandFactory {
   }) {
     final THElement element = th2File.elementByMPID(elementMPID);
     final THIsParentMixin parent = element.parent(th2File: th2File);
-    final List<int> emptyLinesAfter = MPEditElementAux.getEmptyLinesAfter(
+    final List<int> emptyLinesAfter = MPElementEditAux.getEmptyLinesAfter(
       th2File: th2File,
       parent: parent,
       positionInParent: parent.getChildPosition(element),
@@ -1778,14 +1778,14 @@ class MPCommandFactory {
 
         final THBezierCurveLineSegment toRemoveLineSegmentAsBezier =
             toRemoveLineSegmentIsStraight
-            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+            ? MPElementEditAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: previousLineSegment.endPoint.coordinates,
                 straightLineSegment: toRemoveLineSegment,
               )
             : toRemoveLineSegment as THBezierCurveLineSegment;
         final THBezierCurveLineSegment nextLineSegmentBezier =
             nextLineSegmentIsStraight
-            ? MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+            ? MPElementEditAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: toRemoveLineSegment.endPoint.coordinates,
                 straightLineSegment: nextLineSegment,
               )
@@ -2067,7 +2067,7 @@ class MPCommandFactory {
           }
 
           final THBezierCurveLineSegment changedLineSegment =
-              MPEditElementAux.getBezierCurveLineSegmentFromStraightLineSegment(
+              MPElementEditAux.getBezierCurveLineSegmentFromStraightLineSegment(
                 start: previousLineSegment.endPoint.coordinates,
                 straightLineSegment: currentLineSegment,
               );

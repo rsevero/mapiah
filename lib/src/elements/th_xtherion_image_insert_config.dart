@@ -348,7 +348,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     TH2FileEditController th2FileEditController,
   ) {
     _rasterImage ??=
-        MPEditElementAux.getRasterImageFrameInfo(
+        MPElementEditAux.getRasterImageFrameInfo(
           th2FileEditController,
           filename,
         ).then((img) {
