@@ -57,7 +57,7 @@ part 'th_pl_scale_command_option.dart';
 part 'th_lsize_command_option.dart';
 part 'th_mark_command_option.dart';
 part 'th_multiple_choice_command_option.dart';
-part 'th_name_command_option.dart';
+part 'th_station_name_command_option.dart';
 part 'th_on_off_auto_command_option.dart';
 part 'th_on_off_command_option.dart';
 part 'th_orientation_command_option.dart';
@@ -220,7 +220,7 @@ abstract class THCommandOption with MPTH2FileReferenceMixin {
       case THCommandOptionType.mark:
         return THMarkCommandOption.fromMap(map);
       case THCommandOptionType.name:
-        return THNameCommandOption.fromMap(map);
+        return THStationNameCommandOption.fromMap(map);
       case THCommandOptionType.orientation:
         return THOrientationCommandOption.fromMap(map);
       case THCommandOptionType.outline:

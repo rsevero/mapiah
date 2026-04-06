@@ -659,13 +659,13 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         _th2FileEditController.execute(setPLATypeCommand);
 
         if (willSetStationNames) {
-          final List<THNameCommandOption> stationNameOptions =
+          final List<THStationNameCommandOption> stationNameOptions =
               elementEditController.getNextStationNameOptions(
                 parentMPIDs: mpIDs,
               );
           final List<MPCommand> setStationNameCommands = [];
 
-          for (final THNameCommandOption stationNameOption
+          for (final THStationNameCommandOption stationNameOption
               in stationNameOptions) {
             setStationNameCommands.add(
               MPSetOptionToElementCommand(toOption: stationNameOption),

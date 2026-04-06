@@ -4,22 +4,22 @@ part of 'th_command_option.dart';
 
 // name <reference> . if the point type is station, this option gives the
 // reference to the real survey station.
-class THNameCommandOption extends THCommandOption {
+class THStationNameCommandOption extends THCommandOption {
   late final String reference;
 
-  THNameCommandOption.forCWJM({
+  THStationNameCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
     required this.reference,
   }) : super.forCWJM();
 
-  THNameCommandOption({
+  THStationNameCommandOption({
     required super.parentMPID,
     required this.reference,
     super.originalLineInTH2File = '',
   }) : super();
 
-  THNameCommandOption.fromStringWithParentMPID({
+  THStationNameCommandOption.fromStringWithParentMPID({
     required super.parentMPID,
     required this.reference,
     super.originalLineInTH2File = '',
@@ -37,25 +37,25 @@ class THNameCommandOption extends THCommandOption {
     return map;
   }
 
-  factory THNameCommandOption.fromMap(Map<String, dynamic> map) {
-    return THNameCommandOption.forCWJM(
+  factory THStationNameCommandOption.fromMap(Map<String, dynamic> map) {
+    return THStationNameCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
       reference: map['reference'],
     );
   }
 
-  factory THNameCommandOption.fromJson(String jsonString) {
-    return THNameCommandOption.fromMap(jsonDecode(jsonString));
+  factory THStationNameCommandOption.fromJson(String jsonString) {
+    return THStationNameCommandOption.fromMap(jsonDecode(jsonString));
   }
 
   @override
-  THNameCommandOption copyWith({
+  THStationNameCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
     String? reference,
   }) {
-    return THNameCommandOption.forCWJM(
+    return THStationNameCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -66,7 +66,7 @@ class THNameCommandOption extends THCommandOption {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! THNameCommandOption) return false;
+    if (other is! THStationNameCommandOption) return false;
     if (!super.equalsBase(other)) return false;
 
     return other.reference == reference;

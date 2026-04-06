@@ -129,7 +129,7 @@ class _MPStationNameTypeOptionWidgetState
               station: station,
             );
           case THCommandOptionType.name:
-            newOption = THNameCommandOption.fromStringWithParentMPID(
+            newOption = THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: mpParentMPIDPlaceholder,
               reference: station,
             );
@@ -203,7 +203,7 @@ class _MPStationNameTypeOptionWidgetState
         return currentOption.station;
       case THFromCommandOption _:
         return currentOption.station;
-      case THNameCommandOption _:
+      case THStationNameCommandOption _:
         return currentOption.reference;
       default:
         throw Exception(

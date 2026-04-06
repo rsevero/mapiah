@@ -422,7 +422,8 @@ class MPCommandOptionAux {
   static String? getName(THElement element) {
     return (element is THHasOptionsMixin) &&
             element.hasOption(THCommandOptionType.name)
-        ? (element.getOption(THCommandOptionType.name) as THNameCommandOption)
+        ? (element.getOption(THCommandOptionType.name)
+                  as THStationNameCommandOption)
               .reference
         : null;
   }

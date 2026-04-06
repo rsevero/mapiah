@@ -178,9 +178,9 @@ endscrap
         );
 
         final THPoint stationPoint = controller.th2File.getPoints().first;
-        final THNameCommandOption? nameOption =
+        final THStationNameCommandOption? nameOption =
             stationPoint.getOption(THCommandOptionType.name)
-                as THNameCommandOption?;
+                as THStationNameCommandOption?;
 
         expect(stationPoint.pointType, THPointType.station);
         expect(nameOption, isNotNull);
@@ -256,7 +256,7 @@ endscrap
         );
         controller.execute(
           MPSetOptionToElementCommand(
-            toOption: THNameCommandOption.fromStringWithParentMPID(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint0.mpID,
               reference: '0',
             ),
@@ -268,7 +268,7 @@ endscrap
         );
         controller.execute(
           MPSetOptionToElementCommand(
-            toOption: THNameCommandOption.fromStringWithParentMPID(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint1.mpID,
               reference: '1',
             ),
@@ -277,7 +277,7 @@ endscrap
 
         controller.execute(
           MPSetOptionToElementCommand(
-            toOption: THNameCommandOption.fromStringWithParentMPID(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint0.mpID,
               reference: '0',
             ),
@@ -295,11 +295,11 @@ endscrap
           newPLAType: 'station',
         );
 
-        final THNameCommandOption? nameOption =
+        final THStationNameCommandOption? nameOption =
             controller.th2File
                     .pointByMPID(anchorPoint.mpID)
                     .getOption(THCommandOptionType.name)
-                as THNameCommandOption?;
+                as THStationNameCommandOption?;
 
         expect(nameOption, isNotNull);
         expect(nameOption!.reference, '2');

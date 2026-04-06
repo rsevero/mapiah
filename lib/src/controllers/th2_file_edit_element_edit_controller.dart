@@ -359,14 +359,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return usedStationNames;
   }
 
-  List<THNameCommandOption> getNextStationNameOptions({
+  List<THStationNameCommandOption> getNextStationNameOptions({
     required Iterable<int> parentMPIDs,
   }) {
-    final List<THNameCommandOption> stationNameOptions = [];
+    final List<THStationNameCommandOption> stationNameOptions = [];
 
     for (final int parentMPID in parentMPIDs) {
       stationNameOptions.add(
-        THNameCommandOption.fromStringWithParentMPID(
+        THStationNameCommandOption.fromStringWithParentMPID(
           parentMPID: parentMPID,
           reference: getAndReserveNextAvailableStationName(),
         ),
@@ -688,7 +688,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOption option,
     required String plaOriginalLineInTH2File,
   }) {
-    if (option is THNameCommandOption) {
+    if (option is THStationNameCommandOption) {
       _lastUsedStationName = option.reference;
     }
 
