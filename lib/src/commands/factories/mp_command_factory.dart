@@ -554,7 +554,7 @@ class MPCommandFactory {
       final THStationNameCommandOption stationNameOption =
           THStationNameCommandOption.fromStringWithParentMPID(
             parentMPID: newPoint.mpID,
-            reference: nextStationName,
+            name: nextStationName,
           );
 
       optionCommandsList.add(

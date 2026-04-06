@@ -368,7 +368,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       stationNameOptions.add(
         THStationNameCommandOption.fromStringWithParentMPID(
           parentMPID: parentMPID,
-          reference: getAndReserveNextAvailableStationName(),
+          name: getAndReserveNextAvailableStationName(),
         ),
       );
     }
@@ -689,7 +689,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String plaOriginalLineInTH2File,
   }) {
     if (option is THStationNameCommandOption) {
-      _lastUsedStationName = option.reference;
+      _lastUsedStationName = option.name;
     }
 
     final int parentMPID = option.parentMPID;

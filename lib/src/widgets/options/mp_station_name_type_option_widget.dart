@@ -126,7 +126,7 @@ class _MPStationNameTypeOptionWidgetState
           case THCommandOptionType.station:
             newOption = THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: mpParentMPIDPlaceholder,
-              reference: station,
+              name: station,
             );
           default:
             throw Exception(
@@ -197,7 +197,7 @@ class _MPStationNameTypeOptionWidgetState
       case THFromCommandOption _:
         return currentOption.station;
       case THStationNameCommandOption _:
-        return currentOption.reference;
+        return currentOption.name;
       default:
         throw Exception(
           'Unsupported option type: ${widget.optionInfo..type} in _MPStationTypeOptionWidgetState._getStationValue()',

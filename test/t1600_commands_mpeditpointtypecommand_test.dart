@@ -184,7 +184,7 @@ endscrap
 
         expect(stationPoint.pointType, THPointType.station);
         expect(nameOption, isNotNull);
-        expect(nameOption!.reference, '0');
+        expect(nameOption!.name, '0');
 
         controller.undo();
 
@@ -258,7 +258,7 @@ endscrap
           MPSetOptionToElementCommand(
             toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint0.mpID,
-              reference: '0',
+              name: '0',
             ),
           ),
         );
@@ -270,7 +270,7 @@ endscrap
           MPSetOptionToElementCommand(
             toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint1.mpID,
-              reference: '1',
+              name: '1',
             ),
           ),
         );
@@ -279,7 +279,7 @@ endscrap
           MPSetOptionToElementCommand(
             toOption: THStationNameCommandOption.fromStringWithParentMPID(
               parentMPID: stationPoint0.mpID,
-              reference: '0',
+              name: '0',
             ),
           ),
         );
@@ -302,7 +302,7 @@ endscrap
                 as THStationNameCommandOption?;
 
         expect(nameOption, isNotNull);
-        expect(nameOption!.reference, '2');
+        expect(nameOption!.name, '2');
         expect(controller.elementEditController.lastUsedStationName, '2');
       },
     );

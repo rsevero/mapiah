@@ -1740,7 +1740,7 @@ class TH2FileParser {
     MPElementEditAux.addOptionToElement(
       option: THStationNameCommandOption(
         parentMPID: _currentHasOptions.mpID,
-        reference: reference,
+        name: reference,
         originalLineInTH2File: _currentOriginalLine,
       ),
       element: _currentHasOptions,

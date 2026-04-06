@@ -423,7 +423,7 @@ class MPCommandOptionAux {
             element.hasOption(THCommandOptionType.station)
         ? (element.getOption(THCommandOptionType.station)
                   as THStationNameCommandOption)
-              .reference
+              .name
         : null;
   }
 

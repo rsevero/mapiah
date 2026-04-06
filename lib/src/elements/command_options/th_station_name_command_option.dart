@@ -2,26 +2,26 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_command_option.dart';
 
-// name <reference> . if the point type is station, this option gives the
-// reference to the real survey station.
+// name <name> . if the point type is station, this option gives the
+// name of the real survey station.
 class THStationNameCommandOption extends THCommandOption {
-  late final String reference;
+  late final String name;
 
   THStationNameCommandOption.forCWJM({
     required super.parentMPID,
     required super.originalLineInTH2File,
-    required this.reference,
+    required this.name,
   }) : super.forCWJM();
 
   THStationNameCommandOption({
     required super.parentMPID,
-    required this.reference,
+    required this.name,
     super.originalLineInTH2File = '',
   }) : super();
 
   THStationNameCommandOption.fromStringWithParentMPID({
     required super.parentMPID,
-    required this.reference,
+    required this.name,
     super.originalLineInTH2File = '',
   }) : super.forCWJM();
 
@@ -32,7 +32,7 @@ class THStationNameCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'reference': reference});
+    map.addAll({'name': name});
 
     return map;
   }
@@ -41,7 +41,7 @@ class THStationNameCommandOption extends THCommandOption {
     return THStationNameCommandOption.forCWJM(
       parentMPID: map['parentMPID'],
       originalLineInTH2File: map['originalLineInTH2File'],
-      reference: map['reference'],
+      name: map['name'],
     );
   }
 
@@ -53,13 +53,13 @@ class THStationNameCommandOption extends THCommandOption {
   THStationNameCommandOption copyWith({
     int? parentMPID,
     String? originalLineInTH2File,
-    String? reference,
+    String? name,
   }) {
     return THStationNameCommandOption.forCWJM(
       parentMPID: parentMPID ?? this.parentMPID,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
-      reference: reference ?? this.reference,
+      name: name ?? this.name,
     );
   }
 
@@ -69,14 +69,14 @@ class THStationNameCommandOption extends THCommandOption {
     if (other is! THStationNameCommandOption) return false;
     if (!super.equalsBase(other)) return false;
 
-    return other.reference == reference;
+    return other.name == name;
   }
 
   @override
-  int get hashCode => super.hashCode ^ reference.hashCode;
+  int get hashCode => super.hashCode ^ name.hashCode;
 
   @override
   String specToFile() {
-    return reference;
+    return name;
   }
 }
