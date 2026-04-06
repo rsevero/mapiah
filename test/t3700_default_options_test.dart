@@ -168,6 +168,20 @@ void main() {
       expect(controller.hasDefaultsForType(THElementType.area), isFalse);
       expect(controller.hasDefaultsForType(THElementType.line), isTrue);
     });
+
+    test('default options state map excludes point -name option', () {
+      th2Controller.optionEditController.setDefaultOptionsElementType(
+        THElementType.point,
+      );
+      th2Controller.optionEditController.updateDefaultOptionsStateMap();
+
+      expect(
+        th2Controller.optionEditController.optionStateMap.containsKey(
+          THCommandOptionType.name,
+        ),
+        isFalse,
+      );
+    });
   });
 
   group('Area creation with posCommand (subtype and default options)', () {

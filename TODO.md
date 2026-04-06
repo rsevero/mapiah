@@ -52,8 +52,8 @@
 [ ] - Support graphic tablet. [request by Axel Hack]
 [ ] - Include support for SVG background images. [request by Axel Hack]
 [ ] - Create "last used options" on top of option window. [request by Axel Hack]
-[ ] - Remove station option for general options. [request by Axel Hack]
-[ ] - When a station option is set, use it as reference for future "point station". [request by Axel Hack]
+[X] - Remove name option for general options.
+[ ] - When a name option is set on a "point station", use it as reference for future "point station". [request by Axel Hack]
 [X] - BUG: links inside help pages not working. [reported by Axel Hack]
 [X] - BUG: '-stations' with bracketed station lists not parsed correctly. [reported by Axel Hack]
 
