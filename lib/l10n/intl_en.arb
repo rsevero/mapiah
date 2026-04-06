@@ -2003,6 +2003,16 @@
     "description": "The label for the change image tool button. Used on: _TH2FileEditPageState._changeImageButton",
     "type": "text"
   },
+  "th2FileEditPageConvertLineSegmentsToBezier": "Convert line segments to Bézier (J)",
+  "@th2FileEditPageConvertLineSegmentsToBezier": {
+    "description": "Tooltip for the convert line segments to Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageConvertLineSegmentsToStraight": "Convert line segments to straight (Shift+J)",
+  "@th2FileEditPageConvertLineSegmentsToStraight": {
+    "description": "Tooltip for the convert line segments to straight FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageCopyElements": "Copy elements (Ctrl+C)",
   "@th2FileEditPageCopyElements": {
     "description": "Tooltip for the copy elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",

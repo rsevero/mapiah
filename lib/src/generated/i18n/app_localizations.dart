@@ -2410,6 +2410,18 @@ abstract class AppLocalizations {
   /// **'Change image (Alt+I)'**
   String get th2FileEditPageChangeImageTool;
 
+  /// Tooltip for the convert line segments to Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Convert line segments to Bézier (J)'**
+  String get th2FileEditPageConvertLineSegmentsToBezier;
+
+  /// Tooltip for the convert line segments to straight FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Convert line segments to straight (Shift+J)'**
+  String get th2FileEditPageConvertLineSegmentsToStraight;
+
   /// Tooltip for the copy elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:

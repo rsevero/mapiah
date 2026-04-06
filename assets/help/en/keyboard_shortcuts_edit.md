@@ -11,6 +11,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Choose THConfig file and run Therion                       | Ctrl+T                                  |
 | Click area-border line: cycle border-line selection        | Ctrl+click                              |
 | Click area-border line: select area only                   | Ctrl+Alt+click                          |
+| Convert selected line segments to Bézier curve             | J                                       |
+| Convert selected line segments to straight                 | Shift+J                                 |
 | Copy selected elements                                     | Ctrl+C                                  |
 | Create area                                                | A                                       |
 | Create line                                                | L                                       |

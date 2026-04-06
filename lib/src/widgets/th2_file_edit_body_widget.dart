@@ -611,6 +611,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         th2FileEditController.areAllEndPointsSelected;
     final bool hasSelectedEndPoints =
         th2FileEditController.hasSelectedEndPoints;
+    final bool hasSelectedNonStartEndPoints =
+        th2FileEditController.hasSelectedNonStartEndPoints;
 
     return [
       _stateContextFABButton(
@@ -646,6 +648,26 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         ),
         icon: Icons.gesture,
         tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_convert_line_segments_straight',
+        onPressed: hasSelectedNonStartEndPoints
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.convertLineSegmentsToStraight,
+              )
+            : null,
+        icon: Icons.linear_scale,
+        tooltip: appLocalizations.th2FileEditPageConvertLineSegmentsToStraight,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_convert_line_segments_bezier',
+        onPressed: hasSelectedNonStartEndPoints
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.convertLineSegmentsToBezier,
+              )
+            : null,
+        icon: Icons.draw,
+        tooltip: appLocalizations.th2FileEditPageConvertLineSegmentsToBezier,
       ),
       _stateContextFABButton(
         heroTag: '${heroPrefix}_ctx_open_option_window',
@@ -733,6 +755,26 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             : null,
         icon: Icons.gesture,
         tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_convert_line_segments_straight',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.convertLineSegmentsToStraight,
+              )
+            : null,
+        icon: Icons.linear_scale,
+        tooltip: appLocalizations.th2FileEditPageConvertLineSegmentsToStraight,
+      ),
+      _stateContextFABButton(
+        heroTag: '${heroPrefix}_ctx_convert_line_segments_bezier',
+        onPressed: hasSelectedLines
+            ? () => th2FileEditController.stateController.onButtonPressed(
+                MPButtonType.convertLineSegmentsToBezier,
+              )
+            : null,
+        icon: Icons.draw,
+        tooltip: appLocalizations.th2FileEditPageConvertLineSegmentsToBezier,
       ),
       _stateContextFABButton(
         heroTag: '${heroPrefix}_ctx_open_option_window',

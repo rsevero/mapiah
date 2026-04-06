@@ -333,7 +333,16 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyJ:
-        if ((isCtrlPressed || isMetaPressed) &&
+        if (!isCtrlPressed && !isMetaPressed && !isAltPressed) {
+          if (th2FileEditController.hasSelectedLines) {
+            th2FileEditController.stateController.onButtonPressed(
+              isShiftPressed
+                  ? MPButtonType.convertLineSegmentsToStraight
+                  : MPButtonType.convertLineSegmentsToBezier,
+            );
+          }
+          keyProcessed = true;
+        } else if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
           th2FileEditController.stateController.onButtonPressed(

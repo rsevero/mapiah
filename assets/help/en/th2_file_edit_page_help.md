@@ -37,6 +37,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Bézier curve line segments](#bézier-curve-line-segments)
   - [Mixed line segments](#mixed-line-segments)
   - [Straight line segments](#straight-line-segments)
+- [Convert line segments](#convert-line-segments)
 - [Split line at selected points](#split-line-at-selected-points)
 - [Split lines at crossings](#split-lines-at-crossings)
 - [Join lines at coinciding extremities](#join-lines-at-coinciding-extremities)
@@ -280,6 +281,25 @@ When a line contains both Bézier curve and straight line segments, Mapiah treat
 
 ### Straight line segments
 Each _Ctrl+[Shift]+L_ press runs a round of line simplification. Mapiah uses an interactive (non-recursive) version of the ![Ramer–Douglas–Peucker algorithm](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) to simplify straight line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
+
+## Convert line segments
+
+Mapiah can convert line segments between straight and Bézier types without changing the line selection itself.
+
+**Shortcuts and buttons:**
+- Press `J` or click the **Convert line segments to Bézier** button to convert to Bézier.
+- Press `Shift+J` or click the **Convert line segments to straight** button to convert to straight.
+
+**When is it available:**
+- In line edit mode (_N_), the action is enabled when at least one selected point is not the start point of the line.
+- In selection mode (_C_), the action is enabled when at least one line is selected.
+
+**How it works:**
+- In line edit mode, only the selected non-start line segments are converted.
+- In selection mode, all selected lines are processed and every non-start segment is converted to the requested type.
+- Segments that already match the requested type are left unchanged.
+- Mixed lines can be converted in either direction.
+- The operation can be undone with _Ctrl+Z_.
 
 ## Split line at selected points
 

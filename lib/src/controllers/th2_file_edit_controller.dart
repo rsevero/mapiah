@@ -11,22 +11,22 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_default_options_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_properties_controller.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_undo_redo_controller.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_split_merge_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
-import 'package:mapiah/src/controllers/th2_file_hide_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_split_merge_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_hide_element_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_properties_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -35,6 +35,7 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
@@ -333,6 +334,40 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   bool get hasSelectedEndPoints =>
       selectionController.selectedEndControlPoints.isNotEmpty;
+
+  bool get hasSelectedNonStartEndPoints {
+    if (selectionController.selectedEndControlPoints.isEmpty) {
+      return false;
+    }
+
+    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
+        selectionController.selectedEndControlPoints.values;
+    final THLine line = _th2File.lineByMPID(
+      selectedEndControlPoints.first.originalLineSegmentClone.parentMPID,
+    );
+    final Map<int, int> positionsByMPID = line
+        .getLineSegmentPositionsByLineSegmentMPID(_th2File);
+
+    for (final MPSelectedEndControlPoint selectedEndControlPoint
+        in selectedEndControlPoints) {
+      if ((selectedEndControlPoint.type ==
+              MPEndControlPointType.controlPoint1) ||
+          (selectedEndControlPoint.type ==
+              MPEndControlPointType.controlPoint2)) {
+        continue;
+      }
+
+      final THLineSegment lineSegment =
+          selectedEndControlPoint.originalLineSegmentClone;
+      final int? lineSegmentPosition = positionsByMPID[lineSegment.mpID];
+
+      if ((lineSegmentPosition != null) && (lineSegmentPosition > 0)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   @computed
   bool get areAllEndPointsSelected {

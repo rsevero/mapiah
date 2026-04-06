@@ -548,6 +548,93 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _th2FileEditController.triggerOptionsListRedraw();
   }
 
+  void prepareConvertLineSegmentsType({
+    required MPSelectedLineSegmentType selectedLineSegmentType,
+  }) {
+    if ((selectedLineSegmentType == MPSelectedLineSegmentType.mixed) ||
+        (selectedLineSegmentType == MPSelectedLineSegmentType.none)) {
+      return;
+    }
+
+    if (_th2FileEditController.isInEditSingleLineState) {
+      prepareSetLineSegmentType(
+        selectedLineSegmentType: selectedLineSegmentType,
+      );
+
+      return;
+    }
+
+    prepareSetSelectedLinesLineSegmentType(
+      selectedLineSegmentType: selectedLineSegmentType,
+    );
+  }
+
+  void prepareSetSelectedLinesLineSegmentType({
+    required MPSelectedLineSegmentType selectedLineSegmentType,
+  }) {
+    if ((selectedLineSegmentType == MPSelectedLineSegmentType.mixed) ||
+        (selectedLineSegmentType == MPSelectedLineSegmentType.none)) {
+      return;
+    }
+
+    final THElementType targetElementType =
+        selectedLineSegmentType ==
+            MPSelectedLineSegmentType.bezierCurveLineSegment
+        ? THElementType.bezierCurveLineSegment
+        : THElementType.straightLineSegment;
+    final List<MPCommand> conversionCommands = [];
+    final Iterable<MPSelectedElement> selectedElements = _th2FileEditController
+        .selectionController
+        .mpSelectedElementsLogical
+        .values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+
+      final THLine line = _th2File.lineByMPID(selectedElement.mpID);
+      final List<THLineSegment> lineSegments = line.getLineSegments(_th2File);
+      final List<THLineSegment> lineSegmentsToConvert = [];
+
+      for (final THLineSegment lineSegment in lineSegments.skip(1)) {
+        if (lineSegment.elementType == targetElementType) {
+          continue;
+        }
+
+        lineSegmentsToConvert.add(lineSegment);
+      }
+
+      if (lineSegmentsToConvert.isEmpty) {
+        continue;
+      }
+
+      conversionCommands.add(
+        MPCommandFactory.setLineSegmentsType(
+          selectedLineSegmentType: selectedLineSegmentType,
+          th2File: _th2File,
+          originalLineSegments: lineSegmentsToConvert,
+        ),
+      );
+    }
+
+    if (conversionCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand conversionCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: conversionCommands,
+          descriptionType: MPCommandDescriptionType.editLineSegmentsType,
+          completionType:
+              MPMultipleElementsCommandCompletionType.lineSegmentsEdited,
+        );
+
+    _th2FileEditController.execute(conversionCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerOptionsListRedraw();
+  }
+
   @action
   void prepareSetPLAType({
     required THElementType elementType,

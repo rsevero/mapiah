@@ -401,6 +401,8 @@
   "th2FileEditPageChangeActiveScrapTool": "Alterar croqui ativo (Alt+K)",
   "th2FileEditPageChangeImageTitle": "Alterar imagens",
   "th2FileEditPageChangeImageTool": "Alterar imagem (Alt+I)",
+  "th2FileEditPageConvertLineSegmentsToBezier": "Converter segmentos de linha para Bézier (J)",
+  "th2FileEditPageConvertLineSegmentsToStraight": "Converter segmentos de linha para reta (Shift+J)",
   "th2FileEditPageCopyElements": "Copiar elementos (Ctrl+C)",
   "th2FileEditPageCopyScrapButton": "Copiar croqui",
   "th2FileEditPageCreateMapConnectionLines": "Criar linhas de conexão de mapa",

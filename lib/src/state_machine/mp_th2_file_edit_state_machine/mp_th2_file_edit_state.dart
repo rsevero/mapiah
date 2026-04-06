@@ -225,6 +225,20 @@ abstract class MPTH2FileEditState {
           th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;
+      case MPButtonType.convertLineSegmentsToBezier:
+        th2FileEditController.userInteractionController
+            .prepareConvertLineSegmentsType(
+              selectedLineSegmentType:
+                  MPSelectedLineSegmentType.bezierCurveLineSegment,
+            );
+        return true;
+      case MPButtonType.convertLineSegmentsToStraight:
+        th2FileEditController.userInteractionController
+            .prepareConvertLineSegmentsType(
+              selectedLineSegmentType:
+                  MPSelectedLineSegmentType.straightLineSegment,
+            );
+        return true;
       case MPButtonType.copyElements:
         th2FileEditController.copyPasteController.copySelectedElements();
         return true;

@@ -281,6 +281,25 @@ Quando uma linha contém tanto segmentos em curva Bézier quanto segmentos retos
 ### Segmentos de linha reta
 Cada pressionamento de _Ctrl+[Shift]+L_ executa uma rodada de simplificação. O Mapiah usa uma versão interativa (não recursiva) do [algoritmo de Ramer–Douglas–Peucker](https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm) para simplificar segmentos de linha reta. Ele opera no espaço do canvas. A tolerância inicial (epsilon) equivale a 1,5 pixels de tela. Esse valor é convertido para coordenadas do canvas. Em cada execução subsequente, a tolerância é aumentada pelo mesmo valor inicial.
 
+## Converter segmentos de linha
+
+O Mapiah pode converter segmentos de linha entre os tipos reta e Bézier sem alterar a seleção da linha.
+
+**Atalhos e botões:**
+- Pressione `J` ou clique no botão **Converter segmentos de linha para Bézier** para converter para Bézier.
+- Pressione `Shift+J` ou clique no botão **Converter segmentos de linha para reta** para converter para reta.
+
+**Quando está disponível:**
+- No modo de edição de linha (_N_), a ação fica habilitada quando pelo menos um ponto selecionado não é o ponto inicial da linha.
+- No modo de seleção (_C_), a ação fica habilitada quando pelo menos uma linha está selecionada.
+
+**Como funciona:**
+- No modo de edição de linha, apenas os segmentos selecionados que não são o segmento inicial são convertidos.
+- No modo de seleção, todas as linhas selecionadas são processadas e cada segmento não inicial é convertido para o tipo solicitado.
+- Segmentos que já estão no tipo solicitado permanecem inalterados.
+- Linhas mistas podem ser convertidas em qualquer direção.
+- A operação pode ser desfeita com _Ctrl+Z_.
+
 ## Dividir linha nos pontos selecionados
 
 No modo de edição de linha (_N_), selecione um ou mais pontos internos da linha e pressione _Ctrl+P_ para dividir a linha em múltiplas linhas nesses pontos.

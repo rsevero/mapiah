@@ -1288,6 +1288,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeImageTool => 'Change image (Alt+I)';
 
   @override
+  String get th2FileEditPageConvertLineSegmentsToBezier =>
+      'Convert line segments to Bézier (J)';
+
+  @override
+  String get th2FileEditPageConvertLineSegmentsToStraight =>
+      'Convert line segments to straight (Shift+J)';
+
+  @override
   String get th2FileEditPageCopyElements => 'Copy elements (Ctrl+C)';
 
   @override

@@ -8,6 +8,7 @@
   * Join lines at coinciding extremities (Ctrl+J).
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
+  * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
 * Fixed bugs:
   * Scrap `-stations` now follows Therion's single-argument rule: a single station may stay bare, quoted or bracketed station lists are split on spaces, and Mapiah always writes multiple stations back as a bracketed list.
   * Merge areas: selected LTSA borders are now always treated as closed during merge, split at all crossings (including internal crossings and self-crossing Bézier segments), and validated so leftover segments are discarded only when they are strictly internal to the chosen outer boundary.
@@ -23,6 +24,7 @@
   * Fixed flaky UI test `t3202_ui_open_file_then_new_file_test`: `TH2FileTabsPage` now ignores missing `window_size` plugin registrations in widget-test and unsupported-platform environments instead of relying on a brittle runtime-type check before calling `setWindowTitle()`.
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
 * Infrastructure maintenance:
+  * Added regression coverage for line-segment type conversion, including mixed lines, same-type no-op conversions, multi-line selection conversion, keyboard shortcuts (`J` / `Shift+J`), and undo restoration. Updated EN/PT help pages and keyboard-shortcuts documentation for the new actions.
   * Added `MPElementEditAux.getNextStationName()` plus unit tests covering station-name increment rules for numeric, alphabetic, separator-terminated, and survey-suffixed names.
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.
   * TH2FileEditSplitMergeController now routes its snackbar messages through the local `_showSnackbar()` helper instead of repeating the same `ScaffoldMessenger` boilerplate at each call site.
