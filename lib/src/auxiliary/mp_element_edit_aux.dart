@@ -290,6 +290,32 @@ class MPElementEditAux {
     return normalized;
   }
 
+  /// Returns true if [input] matches extended keyword rules (th_is_extkeyword):
+  /// - First char: letters A-Z/a-z, digits 0-9, underscore `_`, hyphen `-`, slash `/`.
+  /// - Additionally (only after the first character): single quote `'`, dot `.`, plus `+`,
+  ///   asterisk `*`, comma `,` are allowed.
+  static bool isExtKeyword(String input) {
+    if (input.isEmpty) return false;
+
+    // Regex explanation:
+    // ^[A-Za-z0-9_\/-]                       -> first char allowed set
+    // [A-Za-z0-9_\/\-\'.\+\*,]*$         -> subsequent chars allow extra symbols
+    final RegExp re = RegExp(r"^[A-Za-z0-9_\/-][A-Za-z0-9_\/'\-.\+\*,]*$");
+
+    return re.hasMatch(input);
+  }
+
+  /// Returns true if [input] matches keyword rules (th_is_keyword):
+  /// - Letters A-Z/a-z, digits 0-9, underscore `_`, hyphen `-` (but not starting with `-`).
+  static bool isKeyword(String input) {
+    if (input.isEmpty) return false;
+
+    // ^[A-Za-z0-9_][A-Za-z0-9_\-]*$ ensures it doesn't start with '-' but allows '-' later
+    final RegExp re = RegExp(r'^[A-Za-z0-9_][A-Za-z0-9_\-]*$');
+
+    return re.hasMatch(input);
+  }
+
   static List<int> getEmptyLinesAfter({
     required TH2File th2File,
     required THIsParentMixin parent,
