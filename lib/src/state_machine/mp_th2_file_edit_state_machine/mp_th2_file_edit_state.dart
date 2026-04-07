@@ -47,8 +47,8 @@ part 'mixins/mp_th2_file_edit_page_single_element_selected_mixin.dart';
 part 'mixins/mp_th2_file_edit_page_state_add_line_to_area_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
-part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_key_down_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_reset_area_border_ctrl_meta_cycle_mixin.dart';
@@ -57,6 +57,10 @@ part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
+part 'mp_th2_file_edit_state_image_move.dart';
+part 'mp_th2_file_edit_state_image_operation.dart';
+part 'mp_th2_file_edit_state_image_rotate.dart';
+part 'mp_th2_file_edit_state_image_scale.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
@@ -85,6 +89,7 @@ abstract class MPTH2FileEditState {
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
     required TH2FileEditController th2FileEditController,
+    int? imageMPID,
   }) {
     switch (type) {
       case MPTH2FileEditStateType.addArea:
@@ -106,6 +111,21 @@ abstract class MPTH2FileEditState {
       case MPTH2FileEditStateType.editSingleLine:
         return MPTH2FileEditStateEditSingleLine(
           th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.imageMove:
+        return MPTH2FileEditStateImageMove(
+          th2FileEditController: th2FileEditController,
+          imageMPID: imageMPID!,
+        );
+      case MPTH2FileEditStateType.imageRotate:
+        return MPTH2FileEditStateImageRotate(
+          th2FileEditController: th2FileEditController,
+          imageMPID: imageMPID!,
+        );
+      case MPTH2FileEditStateType.imageScale:
+        return MPTH2FileEditStateImageScale(
+          th2FileEditController: th2FileEditController,
+          imageMPID: imageMPID!,
         );
       case MPTH2FileEditStateType.movingElements:
         return MPTH2FileEditStateMovingElements(
@@ -131,6 +151,17 @@ abstract class MPTH2FileEditState {
         return MPTH2FileEditStateSelectNonEmptySelection(
           th2FileEditController: th2FileEditController,
         );
+    }
+  }
+
+  static bool isImageOperationType(MPTH2FileEditStateType type) {
+    switch (type) {
+      case MPTH2FileEditStateType.imageMove:
+      case MPTH2FileEditStateType.imageRotate:
+      case MPTH2FileEditStateType.imageScale:
+        return true;
+      default:
+        return false;
     }
   }
 

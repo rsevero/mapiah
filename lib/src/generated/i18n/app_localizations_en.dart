@@ -1337,6 +1337,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Toggle grid visibility';
 
   @override
+  String get th2FileEditPageImageMoveStatusBarMessage => 'Image move mode';
+
+  @override
+  String get th2FileEditPageImageRotateStatusBarMessage => 'Image rotate mode';
+
+  @override
+  String get th2FileEditPageImageScaleStatusBarMessage => 'Image scale mode';
+
+  @override
   String get th2FileEditPageImageVisibilityTooltip => 'Toggle image visibility';
 
   @override

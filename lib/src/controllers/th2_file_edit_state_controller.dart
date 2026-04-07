@@ -16,6 +16,8 @@ class TH2FileEditStateController = TH2FileEditStateControllerBase
 abstract class TH2FileEditStateControllerBase
     with Store
     implements MPActuatorInterface {
+  int? _imageOperationImageMPID;
+
   @readonly
   TH2FileEditController _th2FileEditController;
 
@@ -28,17 +30,54 @@ abstract class TH2FileEditStateControllerBase
         th2FileEditController: _th2FileEditController,
       );
 
+  int? get imageOperationImageMPID => _imageOperationImageMPID;
+
   @action
   bool setState(MPTH2FileEditStateType type) {
+    assert(
+      !MPTH2FileEditState.isImageOperationType(type),
+      'Use setImageOperationState() for image operation states.',
+    );
+
+    return _setState(type: type);
+  }
+
+  @action
+  bool setImageOperationState({
+    required MPTH2FileEditStateType type,
+    required int imageMPID,
+  }) {
+    assert(
+      MPTH2FileEditState.isImageOperationType(type),
+      'setImageOperationState() only supports image operation states.',
+    );
+
+    return _setState(type: type, imageMPID: imageMPID);
+  }
+
+  bool _setState({required MPTH2FileEditStateType type, int? imageMPID}) {
+    final bool isImageOperationType = MPTH2FileEditState.isImageOperationType(
+      type,
+    );
+
     if (_state.type == type) {
-      return false;
+      if (!isImageOperationType) {
+        return false;
+      }
+
+      if (_imageOperationImageMPID == imageMPID) {
+        return false;
+      }
     }
 
     final MPTH2FileEditState previousState = _state;
 
+    _imageOperationImageMPID = isImageOperationType ? imageMPID : null;
+
     _state = MPTH2FileEditState.getState(
       type: type,
       th2FileEditController: _th2FileEditController,
+      imageMPID: _imageOperationImageMPID,
     );
 
     previousState.onStateExit(_state);

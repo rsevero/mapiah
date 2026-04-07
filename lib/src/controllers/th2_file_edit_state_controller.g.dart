@@ -71,6 +71,22 @@ mixin _$TH2FileEditStateController on TH2FileEditStateControllerBase, Store {
   }
 
   @override
+  bool setImageOperationState({
+    required MPTH2FileEditStateType type,
+    required int imageMPID,
+  }) {
+    final _$actionInfo = _$TH2FileEditStateControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditStateControllerBase.setImageOperationState',
+        );
+    try {
+      return super.setImageOperationState(type: type, imageMPID: imageMPID);
+    } finally {
+      _$TH2FileEditStateControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 

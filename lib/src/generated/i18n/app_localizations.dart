@@ -2494,6 +2494,24 @@ abstract class AppLocalizations {
   /// **'Toggle grid visibility'**
   String get th2FileEditPageImageGridVisibilityTooltip;
 
+  /// The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Image move mode'**
+  String get th2FileEditPageImageMoveStatusBarMessage;
+
+  /// The status bar message for the Mapiah image rotate preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_rotate.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Image rotate mode'**
+  String get th2FileEditPageImageRotateStatusBarMessage;
+
+  /// The status bar message for the Mapiah image scale preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_scale.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Image scale mode'**
+  String get th2FileEditPageImageScaleStatusBarMessage;
+
   /// Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build
   ///
   /// In en, this message translates to:

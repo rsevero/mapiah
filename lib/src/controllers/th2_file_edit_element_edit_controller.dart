@@ -1210,6 +1210,43 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
   }
 
+  MPImageInsertConfig prepareImageMoveState(int imageMPID) {
+    return _prepareImageOperationState(
+      imageMPID: imageMPID,
+      stateType: MPTH2FileEditStateType.imageMove,
+    );
+  }
+
+  MPImageInsertConfig prepareImageRotateState(int imageMPID) {
+    return _prepareImageOperationState(
+      imageMPID: imageMPID,
+      stateType: MPTH2FileEditStateType.imageRotate,
+    );
+  }
+
+  MPImageInsertConfig prepareImageScaleState(int imageMPID) {
+    return _prepareImageOperationState(
+      imageMPID: imageMPID,
+      stateType: MPTH2FileEditStateType.imageScale,
+    );
+  }
+
+  MPImageInsertConfig _prepareImageOperationState({
+    required int imageMPID,
+    required MPTH2FileEditStateType stateType,
+  }) {
+    final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
+      imageMPID,
+    );
+
+    _th2FileEditController.stateController.setImageOperationState(
+      type: stateType,
+      imageMPID: image.mpID,
+    );
+
+    return image;
+  }
+
   void reorderImages({required int oldIndex, required int newIndex}) {
     final MPReorderImagesCommand reorderImagesCommand =
         MPCommandFactory.reorderImages(oldIndex: oldIndex, newIndex: newIndex);

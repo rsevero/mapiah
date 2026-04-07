@@ -1352,6 +1352,17 @@ class AppLocalizationsPt extends AppLocalizations {
       'Alternar visibilidade da grade';
 
   @override
+  String get th2FileEditPageImageMoveStatusBarMessage => 'Modo de mover imagem';
+
+  @override
+  String get th2FileEditPageImageRotateStatusBarMessage =>
+      'Modo de girar imagem';
+
+  @override
+  String get th2FileEditPageImageScaleStatusBarMessage =>
+      'Modo de redimensionar imagem';
+
+  @override
   String get th2FileEditPageImageVisibilityTooltip =>
       'Alternar visibilidade da imagem';
 

@@ -2073,6 +2073,21 @@
     "description": "Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageImageMoveStatusBarMessage": "Image move mode",
+  "@th2FileEditPageImageMoveStatusBarMessage": {
+    "description": "The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart",
+    "type": "text"
+  },
+  "th2FileEditPageImageRotateStatusBarMessage": "Image rotate mode",
+  "@th2FileEditPageImageRotateStatusBarMessage": {
+    "description": "The status bar message for the Mapiah image rotate preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_rotate.dart",
+    "type": "text"
+  },
+  "th2FileEditPageImageScaleStatusBarMessage": "Image scale mode",
+  "@th2FileEditPageImageScaleStatusBarMessage": {
+    "description": "The status bar message for the Mapiah image scale preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_scale.dart",
+    "type": "text"
+  },
   "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
   "@th2FileEditPageImageVisibilityTooltip": {
     "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
