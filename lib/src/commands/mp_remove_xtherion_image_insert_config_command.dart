@@ -31,8 +31,8 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
     final TH2File th2File = th2FileEditController.th2File;
-    final THXTherionImageInsertConfig originalImageInsert = th2File
-        .xtherionImageInsertConfigByMPID(xtherionImageInsertConfigMPID);
+    final MPRuntimeImageInsertConfigMixin originalImageInsert = th2File
+        .imageByMPID(xtherionImageInsertConfigMPID);
     final THIsParentMixin imageInsertParent = originalImageInsert.parent(
       th2File: th2File,
     );
@@ -60,8 +60,7 @@ class MPRemoveXTherionImageInsertConfigCommand extends MPCommand
     final MPCommand oppositeCommand =
         MPAddXTherionImageInsertConfigCommand.forCWJM(
           newImageInsertConfig:
-              _undoRedoInfo!['removedImageInsert']
-                  as THXTherionImageInsertConfig,
+              _undoRedoInfo!['removedImageInsert'] as THElement,
           xTherionImageInsertConfigPositionInParent:
               _undoRedoInfo!['removedImageInsertPositionInParent'] as int,
           posCommand: preCommand

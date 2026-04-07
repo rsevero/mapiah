@@ -205,6 +205,7 @@ class MPCommandFactory {
             posCommand: null,
           );
         case THXTherionImageInsertConfig _:
+        case MPImageInsertConfig _:
           addCommand = MPAddXTherionImageInsertConfigCommand.forCWJM(
             newImageInsertConfig: element,
             xTherionImageInsertConfigPositionInParent: positionInParent,
@@ -777,6 +778,45 @@ class MPCommandFactory {
   }
 
   static MPAddXTherionImageInsertConfigCommand
+  addImageInsertConfigFromExisting({
+    required THElement existingImageInsertConfig,
+    required TH2File th2File,
+    int? imageInsertConfigPositionInParent,
+    MPCommandDescriptionType descriptionType =
+        MPAddXTherionImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    if ((existingImageInsertConfig is! THXTherionImageInsertConfig) &&
+        (existingImageInsertConfig is! MPImageInsertConfig)) {
+      throw ArgumentError(
+        'MPCommandFactory.addImageInsertConfigFromExisting only supports image insert configs.',
+      );
+    }
+
+    final THIsParentMixin parent = existingImageInsertConfig.parent(
+      th2File: th2File,
+    );
+
+    imageInsertConfigPositionInParent =
+        imageInsertConfigPositionInParent ??
+        parent.getChildPosition(existingImageInsertConfig);
+
+    final MPCommand? posCommand = addEmptyLinesAfterCommand(
+      th2File: th2File,
+      parent: parent,
+      positionInParent: imageInsertConfigPositionInParent,
+      descriptionType: descriptionType,
+    );
+
+    return MPAddXTherionImageInsertConfigCommand.forCWJM(
+      newImageInsertConfig: existingImageInsertConfig,
+      xTherionImageInsertConfigPositionInParent:
+          imageInsertConfigPositionInParent,
+      posCommand: posCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPAddXTherionImageInsertConfigCommand
   addXTherionImageInsertConfigFromExisting({
     required THXTherionImageInsertConfig existingImageInsertConfig,
     required TH2File th2File,
@@ -784,26 +824,11 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPAddXTherionImageInsertConfigCommand.defaultDescriptionType,
   }) {
-    final THIsParentMixin parent = existingImageInsertConfig.parent(
+    return addImageInsertConfigFromExisting(
+      existingImageInsertConfig: existingImageInsertConfig,
       th2File: th2File,
-    );
-
-    xTherionImageInsertConfigPositionInParent =
-        xTherionImageInsertConfigPositionInParent ??
-        parent.getChildPosition(existingImageInsertConfig);
-
-    final MPCommand? posCommand = addEmptyLinesAfterCommand(
-      th2File: th2File,
-      parent: parent,
-      positionInParent: xTherionImageInsertConfigPositionInParent,
-      descriptionType: descriptionType,
-    );
-
-    return MPAddXTherionImageInsertConfigCommand.forCWJM(
-      newImageInsertConfig: existingImageInsertConfig,
-      xTherionImageInsertConfigPositionInParent:
+      imageInsertConfigPositionInParent:
           xTherionImageInsertConfigPositionInParent,
-      posCommand: posCommand,
       descriptionType: descriptionType,
     );
   }
@@ -1655,6 +1680,7 @@ class MPCommandFactory {
             existingScrapMPID: mpID,
             th2File: th2File,
           );
+        case THElementType.mapiahImageInsertConfig:
         case THElementType.xTherionImageInsertConfig:
           removeCommand = removeXTherionImageInsertConfigFromExisting(
             existingXTherionImageInsertConfigMPID: mpID,
@@ -1974,22 +2000,74 @@ class MPCommandFactory {
   }
 
   static MPRemoveXTherionImageInsertConfigCommand
+  removeImageInsertConfigFromExisting({
+    required int existingImageInsertConfigMPID,
+    required TH2File th2File,
+    MPCommandDescriptionType descriptionType =
+        MPRemoveXTherionImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
+      elementMPID: existingImageInsertConfigMPID,
+      th2File: th2File,
+      descriptionType: descriptionType,
+    );
+
+    return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
+      xtherionImageInsertConfigMPID: existingImageInsertConfigMPID,
+      preCommand: preCommand,
+      descriptionType: descriptionType,
+    );
+  }
+
+  static MPRemoveXTherionImageInsertConfigCommand
   removeXTherionImageInsertConfigFromExisting({
     required int existingXTherionImageInsertConfigMPID,
     required TH2File th2File,
     MPCommandDescriptionType descriptionType =
         MPRemoveXTherionImageInsertConfigCommand.defaultDescriptionType,
   }) {
-    final MPCommand? preCommand = removeEmptyLinesAfterCommand(
-      elementMPID: existingXTherionImageInsertConfigMPID,
+    return removeImageInsertConfigFromExisting(
+      existingImageInsertConfigMPID: existingXTherionImageInsertConfigMPID,
       th2File: th2File,
       descriptionType: descriptionType,
     );
+  }
 
-    return MPRemoveXTherionImageInsertConfigCommand.forCWJM(
-      xtherionImageInsertConfigMPID: existingXTherionImageInsertConfigMPID,
-      preCommand: preCommand,
+  static MPCommand convertXTherionImageInsertConfigToMapiahImageInsertConfig({
+    required int existingXTherionImageInsertConfigMPID,
+    required TH2FileEditController th2FileEditController,
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.multipleElements,
+  }) {
+    final TH2File th2File = th2FileEditController.th2File;
+    final THXTherionImageInsertConfig existingImage = th2File
+        .xtherionImageInsertConfigByMPID(existingXTherionImageInsertConfigMPID);
+    final THIsParentMixin parent = existingImage.parent(th2File: th2File);
+    final int imagePositionInParent = parent.getChildPosition(existingImage);
+    final MPImageInsertConfig mapiahImage =
+        MPImageInsertConfig.fromXTherionImageInsertConfig(
+          xtherionImageInsertConfig: existingImage,
+          th2FileEditController: th2FileEditController,
+        );
+    final MPCommand removeImageCommand =
+        MPRemoveXTherionImageInsertConfigCommand.forCWJM(
+          xtherionImageInsertConfigMPID: existingImage.mpID,
+          preCommand: null,
+          descriptionType: descriptionType,
+        );
+    final MPCommand addImageCommand =
+        MPAddXTherionImageInsertConfigCommand.forCWJM(
+          newImageInsertConfig: mapiahImage,
+          xTherionImageInsertConfigPositionInParent: imagePositionInParent,
+          posCommand: null,
+          descriptionType: descriptionType,
+        );
+
+    return multipleCommandsFromList(
+      commandsList: <MPCommand>[removeImageCommand, addImageCommand],
       descriptionType: descriptionType,
+      completionType:
+          MPMultipleElementsCommandCompletionType.elementsListChanged,
     );
   }
 

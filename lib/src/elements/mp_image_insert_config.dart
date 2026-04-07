@@ -157,6 +157,61 @@ abstract class MPImageInsertConfig extends THElement
   static MPImageInsertConfig fromJson(String source) =>
       fromMap(jsonDecode(source));
 
+  static MPImageInsertConfig fromXTherionImageInsertConfig({
+    required THXTherionImageInsertConfig xtherionImageInsertConfig,
+    TH2FileEditController? th2FileEditController,
+  }) {
+    switch (xtherionImageInsertConfig) {
+      case THXVIXTherionImageInsertConfig xviImage:
+        final MPXVIImageInsertConfig convertedImage =
+            MPXVIImageInsertConfig.forCWJM(
+              mpID: xviImage.mpID,
+              parentMPID: xviImage.parentMPID,
+              sameLineComment: xviImage.sameLineComment,
+              filename: xviImage.filename,
+              xx: xviImage.xx,
+              yy: xviImage.yy,
+              xScale: THDoublePart(value: 1.0),
+              yScale: THDoublePart(value: 1.0),
+              rotationCenterDx: THDoublePart(value: 0.0),
+              rotationCenterDy: THDoublePart(value: 0.0),
+              rotationDeg: THDoublePart(value: 0.0),
+              isVisible: xviImage.isVisible,
+              isGridVisible: xviImage.isGridVisible,
+              xviRoot: xviImage.xviRoot,
+              originalLineInTH2File: '',
+            );
+
+        if (th2FileEditController != null) {
+          final XVIFile? xviFile = xviImage.getXVIFile(th2FileEditController);
+
+          convertedImage.setXVIFile(xviFile);
+        }
+
+        return convertedImage;
+      case THRasterXTherionImageInsertConfig rasterImage:
+        return MPRasterImageInsertConfig.forCWJM(
+          mpID: rasterImage.mpID,
+          parentMPID: rasterImage.parentMPID,
+          sameLineComment: rasterImage.sameLineComment,
+          filename: rasterImage.filename,
+          xx: rasterImage.xx,
+          yy: rasterImage.yy,
+          xScale: THDoublePart(value: 1.0),
+          yScale: THDoublePart(value: 1.0),
+          rotationCenterDx: THDoublePart(value: 0.0),
+          rotationCenterDy: THDoublePart(value: 0.0),
+          rotationDeg: THDoublePart(value: 0.0),
+          isVisible: rasterImage.isVisible,
+          originalLineInTH2File: '',
+        );
+    }
+
+    throw ArgumentError(
+      'Unsupported XTherion image insert config type: ${xtherionImageInsertConfig.runtimeType}',
+    );
+  }
+
   static MPImageInsertConfig fromMetadataString({
     required int parentMPID,
     required String metadata,

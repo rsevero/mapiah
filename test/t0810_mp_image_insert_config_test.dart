@@ -290,5 +290,53 @@ void main() {
 
       expect(xviFile.isGridVisible, isTrue);
     });
+
+    test('conversion from XTherion keeps runtime image semantics', () {
+      final THXTherionImageInsertConfig raster = THXTherionImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/legacy.png',
+        xx: THDoublePart(value: 12.0),
+        yy: THDoublePart(value: 34.0),
+        isVisible: false,
+      );
+      final THXTherionImageInsertConfig xvi = THXTherionImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/legacy.xvi',
+        xx: THDoublePart(value: 56.0),
+        yy: THDoublePart(value: 78.0),
+        isVisible: false,
+        isGridVisible: false,
+        xviRoot: 'station_A',
+      );
+
+      final MPImageInsertConfig convertedRaster =
+          MPImageInsertConfig.fromXTherionImageInsertConfig(
+            xtherionImageInsertConfig: raster,
+          );
+      final MPImageInsertConfig convertedXVI =
+          MPImageInsertConfig.fromXTherionImageInsertConfig(
+            xtherionImageInsertConfig: xvi,
+          );
+      final MPXVIImageInsertConfig convertedXVIAsXVI =
+          convertedXVI as MPXVIImageInsertConfig;
+
+      expect(convertedRaster, isA<MPRasterImageInsertConfig>());
+      expect(convertedRaster.mpID, raster.mpID);
+      expect(convertedRaster.filename, raster.filename);
+      expect(convertedRaster.xx, raster.xx);
+      expect(convertedRaster.yy, raster.yy);
+      expect(convertedRaster.isVisible, isFalse);
+      expect(convertedRaster.xScale.toString(), '1');
+      expect(convertedRaster.rotationDeg.toString(), '0');
+
+      expect(convertedXVI, isA<MPXVIImageInsertConfig>());
+      expect(convertedXVI.mpID, xvi.mpID);
+      expect(convertedXVI.filename, xvi.filename);
+      expect(convertedXVI.xx, xvi.xx);
+      expect(convertedXVI.yy, xvi.yy);
+      expect(convertedXVI.isVisible, isFalse);
+      expect(convertedXVIAsXVI.isGridVisible, isFalse);
+      expect(convertedXVIAsXVI.xviRoot, 'station_A');
+    });
   });
 }

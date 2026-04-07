@@ -4,7 +4,7 @@ part of 'mp_command.dart';
 
 class MPAddXTherionImageInsertConfigCommand extends MPCommand
     with MPPosCommandMixin {
-  final THXTherionImageInsertConfig newImageInsertConfig;
+  final THElement newImageInsertConfig;
   late final int xTherionImageInsertConfigPositionInParent;
 
   static const MPCommandDescriptionType defaultDescriptionType =
@@ -16,6 +16,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
+    _assertImageInsertConfig(newImageInsertConfig);
     this.posCommand = posCommand;
   }
 
@@ -25,6 +26,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {
+    _assertImageInsertConfig(newImageInsertConfig);
     this.posCommand = posCommand;
   }
 
@@ -56,9 +58,18 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     );
   }
 
+  static void _assertImageInsertConfig(THElement imageInsertConfig) {
+    if ((imageInsertConfig is! THXTherionImageInsertConfig) &&
+        (imageInsertConfig is! MPImageInsertConfig)) {
+      throw ArgumentError(
+        'MPAddXTherionImageInsertConfigCommand only supports image insert configs.',
+      );
+    }
+  }
+
   @override
   MPAddXTherionImageInsertConfigCommand copyWith({
-    THXTherionImageInsertConfig? newImageInsertConfig,
+    THElement? newImageInsertConfig,
     int? xTherionImageInsertConfigPositionInParent,
     MPCommand? posCommand,
     bool makePosCommandNull = false,
@@ -78,9 +89,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     Map<String, dynamic> map,
   ) {
     return MPAddXTherionImageInsertConfigCommand.forCWJM(
-      newImageInsertConfig: THXTherionImageInsertConfig.fromMap(
-        map['newImageInsertConfig'],
-      ),
+      newImageInsertConfig: THElement.fromMap(map['newImageInsertConfig']),
       xTherionImageInsertConfigPositionInParent:
           map['xTherionImageInsertConfigPositionInParent'],
       posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
@@ -98,7 +107,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
 
   @override
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = super.toMap();
+    final Map<String, dynamic> map = super.toMap();
 
     map.addAll({
       'newImageInsertConfig': newImageInsertConfig.toMap(),
@@ -112,7 +121,10 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
+
     if (!super.equalsBase(other)) return false;
 
     return other is MPAddXTherionImageInsertConfigCommand &&

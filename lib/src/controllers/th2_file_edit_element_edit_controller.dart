@@ -1163,13 +1163,52 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   void removeImage(int mpID) {
     final MPRemoveXTherionImageInsertConfigCommand removeImageCommand =
-        MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
-          existingXTherionImageInsertConfigMPID: mpID,
+        MPCommandFactory.removeImageInsertConfigFromExisting(
+          existingImageInsertConfigMPID: mpID,
           th2File: _th2FileEditController.th2File,
         );
 
     _th2FileEditController.execute(removeImageCommand);
     _th2FileEditController.triggerImagesRedraw();
+  }
+
+  /// Ensures [imageMPID] is backed by an [MPImageInsertConfig] before any
+  /// Mapiah-only image transform workflow starts.
+  ///
+  /// Phase 5 keeps regular image insertion in the legacy
+  /// `THXTherionImageInsertConfig` format for compatibility, but future
+  /// Mapiah-only operations such as scale, move, and rotate need the richer
+  /// [MPImageInsertConfig] runtime model. This method performs that lazy
+  /// migration on demand:
+  ///
+  /// - If the image is already an [MPImageInsertConfig], it returns it as-is.
+  /// - If the image is still an XTherion image insert, it executes a command
+  ///   that replaces it with the equivalent [MPImageInsertConfig] while keeping
+  ///   the same MPID and preserving undo/redo.
+  ///
+  /// The conversion also keeps the image filename, visibility, placement, and
+  /// current XVI root semantics intact so later transform states can operate on
+  /// the Mapiah representation without changing which image the rest of the app
+  /// refers to.
+  MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
+    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
+      imageMPID,
+    );
+
+    if (image is MPImageInsertConfig) {
+      return image;
+    }
+
+    final MPCommand convertImageCommand =
+        MPCommandFactory.convertXTherionImageInsertConfigToMapiahImageInsertConfig(
+          existingXTherionImageInsertConfigMPID: imageMPID,
+          th2FileEditController: _th2FileEditController,
+        );
+
+    _th2FileEditController.execute(convertImageCommand);
+    _th2FileEditController.triggerImagesRedraw();
+
+    return _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
   }
 
   void reorderImages({required int oldIndex, required int newIndex}) {
