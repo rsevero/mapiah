@@ -14,6 +14,7 @@ abstract class THXTherionImageInsertConfig extends THElement
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
+  @override
   THDoublePart xx;
   // vsb in xTherion is the per-image visibility/state flag:
   // * 1 shows and drives redraw/rescan;
@@ -25,6 +26,7 @@ abstract class THXTherionImageInsertConfig extends THElement
   // In Mapiah it is converted to 'isVisible' as a simple bool.
   bool _isVisible;
   THDoublePart igamma;
+  @override
   THDoublePart yy;
   int iidx;
   String imgx;
@@ -405,6 +407,23 @@ abstract class THXTherionImageInsertConfig extends THElement
     String? originalLineInTH2File,
   });
 
+  @override
+  THXTherionImageInsertConfig copyWithImageInsertConfigBase({
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      filename: filename,
+      xx: xx,
+      yy: yy,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
   @protected
   bool equalsTHXTherionImageInsertConfigBase(
     THXTherionImageInsertConfig other,
@@ -656,6 +675,7 @@ class THXVIXTherionImageInsertConfig extends THXTherionImageInsertConfig
   @override
   double get xviRootedYY => _xviRootedYY;
 
+  @override
   void setXVIFile(XVIFile? xviFile) {
     _xviFile = xviFile;
 
@@ -863,6 +883,10 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
     return _rasterImage!;
   }
 
+  @override
+  ui.Image? get decodedRasterImage => _decodedRasterImage;
+
+  @override
   void setRasterImage(ui.Image? image) {
     _decodedRasterImage = image;
     clearBoundingBox();

@@ -60,49 +60,19 @@ class MPMoveImageInsertConfigCommand extends MPCommand {
     final MPRuntimeImageInsertConfigMixin originalImage = th2FileEditController
         .th2File
         .imageByMPID(imageMPID);
-    late final THElement modifiedImage;
-
-    switch (originalImage) {
-      case THXVIXTherionImageInsertConfig _:
-        final THXVIXTherionImageInsertConfig modifiedXVIXTherionImage =
-            originalImage.copyWith(
-              xx: toXX,
-              yy: toYY,
-              originalLineInTH2File: toOriginalLineInTH2File,
-            );
-
-        modifiedXVIXTherionImage.setXVIFile(
-          originalImage.getXVIFile(th2FileEditController),
-        );
-        modifiedImage = modifiedXVIXTherionImage;
-      case THRasterXTherionImageInsertConfig _:
-        modifiedImage = originalImage.copyWith(
+    final MPRuntimeImageInsertConfigMixin modifiedImage = originalImage
+        .copyWithImageInsertConfigBase(
           xx: toXX,
           yy: toYY,
           originalLineInTH2File: toOriginalLineInTH2File,
         );
-      case MPXVIImageInsertConfig _:
-        final MPXVIImageInsertConfig originalXVIImage = originalImage;
-        final MPXVIImageInsertConfig modifiedXVIImage = originalXVIImage
-            .copyWith(
-              xx: toXX,
-              yy: toYY,
-              originalLineInTH2File: toOriginalLineInTH2File,
-            );
 
-        modifiedXVIImage.setXVIFile(
-          originalXVIImage.getXVIFile(th2FileEditController),
-        );
-        modifiedImage = modifiedXVIImage;
-      case MPRasterImageInsertConfig _:
-        modifiedImage = originalImage.copyWith(
-          xx: toXX,
-          yy: toYY,
-          originalLineInTH2File: toOriginalLineInTH2File,
-        );
-    }
+    originalImage.copyRuntimeImageCacheTo(
+      targetImage: modifiedImage,
+      th2FileEditController: th2FileEditController,
+    );
 
-    elementEditController.substituteElement(modifiedImage);
+    elementEditController.substituteElement(modifiedImage as THElement);
     elementEditController.addOutdatedCloneMPID(imageMPID);
     elementEditController.updateControllersAfterElementEditPartial();
     elementEditController.updateControllersAfterElementEditFinal();

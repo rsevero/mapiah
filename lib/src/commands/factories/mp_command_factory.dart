@@ -204,8 +204,7 @@ class MPCommandFactory {
             th2File: th2File,
             posCommand: null,
           );
-        case THXTherionImageInsertConfig _:
-        case MPImageInsertConfig _:
+        case MPRuntimeImageInsertConfigMixin _:
           addCommand = MPAddImageInsertConfigCommand.forCWJM(
             newImageInsertConfig: element,
             imageInsertConfigPositionInParent: positionInParent,
@@ -1249,20 +1248,9 @@ class MPCommandFactory {
     final MPRuntimeImageInsertConfigMixin image = th2File.imageByMPID(
       imageMPID,
     );
-    late final THDoublePart fromXX;
-    late final THDoublePart fromYY;
-    late final String fromOriginalLineInTH2File;
-
-    switch (image) {
-      case THXTherionImageInsertConfig _:
-        fromXX = image.xx;
-        fromYY = image.yy;
-        fromOriginalLineInTH2File = image.originalLineInTH2File;
-      case MPImageInsertConfig _:
-        fromXX = image.xx;
-        fromYY = image.yy;
-        fromOriginalLineInTH2File = image.originalLineInTH2File;
-    }
+    final THDoublePart fromXX = image.xx;
+    final THDoublePart fromYY = image.yy;
+    final String fromOriginalLineInTH2File = image.originalLineInTH2File;
 
     final int resolvedDecimalPositions =
         decimalPositions ??

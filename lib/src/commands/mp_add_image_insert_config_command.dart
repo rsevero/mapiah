@@ -58,8 +58,7 @@ class MPAddImageInsertConfigCommand extends MPCommand with MPPosCommandMixin {
   }
 
   static void _assertImageInsertConfig(THElement imageInsertConfig) {
-    if ((imageInsertConfig is! THXTherionImageInsertConfig) &&
-        (imageInsertConfig is! MPImageInsertConfig)) {
+    if (imageInsertConfig is! MPRuntimeImageInsertConfigMixin) {
       throw ArgumentError(
         'MPAddImageInsertConfigCommand only supports image insert configs.',
       );

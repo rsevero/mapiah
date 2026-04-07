@@ -6,7 +6,9 @@ abstract class MPImageInsertConfig extends THElement
     with MPBoundingBoxMixin, MPRuntimeImageInsertConfigMixin {
   @override
   final String filename;
+  @override
   THDoublePart xx;
+  @override
   THDoublePart yy;
   THDoublePart xScale;
   THDoublePart yScale;
@@ -91,6 +93,15 @@ abstract class MPImageInsertConfig extends THElement
 
   @override
   bool get isXVI;
+
+  @override
+  MPImageInsertConfig copyWithImageInsertConfigBase({
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  });
 
   @override
   Map<String, dynamic> toMap() {
@@ -580,6 +591,23 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
   }
 
   @override
+  MPXVIImageInsertConfig copyWithImageInsertConfigBase({
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      filename: filename,
+      xx: xx,
+      yy: yy,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
   Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
     if (!isVisible) {
       return null;
@@ -670,6 +698,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
   @override
   double get xviRootedYY => _xviRootedYY;
 
+  @override
   void setXVIFile(XVIFile? xviFile) {
     _xviFile = xviFile;
 
@@ -823,6 +852,23 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
   }
 
   @override
+  MPRasterImageInsertConfig copyWithImageInsertConfigBase({
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      filename: filename,
+      xx: xx,
+      yy: yy,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
   Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
     if (!isVisible) {
       return null;
@@ -884,6 +930,10 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     return _rasterImage!;
   }
 
+  @override
+  ui.Image? get decodedRasterImage => _decodedRasterImage;
+
+  @override
   void setRasterImage(ui.Image? image) {
     _decodedRasterImage = image;
     clearBoundingBox();
