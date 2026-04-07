@@ -37,7 +37,7 @@ void main() {
         'asFileOriginal': r'''encoding UTF-8
 ''',
         'asFileChanged': r'''encoding UTF-8
-##XTHERION## xth_me_image_insert {-0 1 1} {-433} "./xvi/2025-10-07-001-color_as_rgb_hex.xvi" 0 {}
+##XTHERION## xth_me_image_insert {-0 1 1} -433 "./xvi/2025-10-07-001-color_as_rgb_hex.xvi" 0 {}
 ''',
         'imageInsertFile':
             './test/auxiliary/xvi/2025-10-07-001-color_as_rgb_hex.xvi',
@@ -49,7 +49,7 @@ void main() {
         'asFileOriginal': r'''encoding UTF-8
 ''',
         'asFileChanged': r'''encoding UTF-8
-##XTHERION## xth_me_image_insert {-0 1 1} {0} "./jpg/2025-10-07-001.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-0 1 1} 0 "./jpg/2025-10-07-001.jpg" 0 {}
 ''',
         'imageInsertFile': './test/auxiliary/jpg/2025-10-07-001.jpg',
       },

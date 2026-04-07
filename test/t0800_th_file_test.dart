@@ -100,7 +100,7 @@ endscrap
         'file': 'th_file_parser-00035-xtherionimagesetting_only.th2',
         'countElements': 2,
         'asFile': """encoding UTF-8
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
 """,
       },
       {
@@ -109,8 +109,8 @@ endscrap
         'asFile': """encoding UTF-8
 ##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
 ##XTHERION## xth_me_area_zoom_to 100
-##XTHERION## xth_me_image_insert {1890 1 1} {1380 {}} "croquis/croqui-006.jpg" 0 {}
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {1890 1 1} 1380 "croquis/croqui-006.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
 """,
       },
     ];
@@ -280,7 +280,7 @@ endscrap
         final String asFile = writer.serialize(file);
 
         expect(asFile, """encoding UTF-8
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
 ##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=100;yy=200;xScale=1.5;yScale=0.5;rotationCenterDx=7;rotationCenterDy=8;rotationDeg=45;xviRoot=station_A}
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=2;rotationCenterDx=3;rotationCenterDy=4;rotationDeg=5}
 """);
@@ -335,7 +335,7 @@ endscrap
 
         expect(asFile, """encoding UTF-8
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0}
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
 scrap poco_surubim_SCP01
 endscrap
 """);
@@ -378,8 +378,8 @@ endscrap
       expect(asFile, """encoding UTF-8
 ##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
 ##XTHERION## xth_me_area_zoom_to 100
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
-##XTHERION## xth_me_image_insert {1890 1 1} {1380 {}} "croquis/croqui-006.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {1890 1 1} 1380 "croquis/croqui-006.jpg" 0 {}
 """);
     });
   });

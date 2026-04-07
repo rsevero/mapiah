@@ -63,8 +63,8 @@ void main() {
       expect(writer.serialize(controller.th2File), """encoding UTF-8
 ##XTHERION## xth_me_area_adjust -164 -2396 4206 1508
 ##XTHERION## xth_me_area_zoom_to 100
-##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
-##XTHERION## xth_me_image_insert {1890 1 1} {1380 {}} "croquis/croqui-006.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {1890 1 1} 1380 "croquis/croqui-006.jpg" 0 {}
 """);
 
       controller.undo();

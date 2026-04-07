@@ -197,16 +197,20 @@ class TH2FileWriter {
     if (asString.isEmpty) {
       final THXTherionImageInsertConfig xTIIC =
           thElement as THXTherionImageInsertConfig;
+
       final String xx =
           "${xTIIC.xx} ${xTIIC.isVisible ? '1' : '0'} ${xTIIC.igamma}";
-      final String xviRoot = (xTIIC.asXVIImage?.xviRoot ?? '').isEmpty
-          ? '{}'
-          : xTIIC.asXVIImage!.xviRoot;
-      final String yy = "${xTIIC.yy} $xviRoot";
+      final String xviRoot = xTIIC.asXVIImage?.xviRoot ?? '';
+      final String yy = xviRoot.isEmpty
+          ? "${xTIIC.yy}"
+          : "${xTIIC.yy} $xviRoot";
       final String imgx = "${xTIIC.imgx} ${xTIIC.xData}";
+      final String serializedYY = xviRoot.isEmpty
+          ? yy.trim()
+          : "{${yy.trim()}}";
 
       asString =
-          """$mpXTherionConfigID $mpXTherionImageInsertConfigID {${xx.trim()}} {${yy.trim()}} "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+          """$mpXTherionConfigID $mpXTherionImageInsertConfigID {${xx.trim()}} $serializedYY "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
     }
 
     return asString;

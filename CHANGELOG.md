@@ -24,6 +24,7 @@
   * Removed the point `-extend` option from parsing and editing because Therion does not support it.
   * Fixed flaky UI test `t3202_ui_open_file_then_new_file_test`: window-title updates now go through a safe async helper that ignores missing `window_size` plugin registrations in widget-test and unsupported-platform environments, avoiding uncaught plugin-channel failures from the package's `void async` API.
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
+  * Normalized freshly written `xth_me_image_insert` entries so simple `yy` values are emitted as bare numbers like `28` instead of single-value braces like `{28}`, while keeping wrapped output for composite `yy xviRoot` payloads.
 * Infrastructure maintenance:
   * Split the legacy XTherion image model into `THXVIXTherionImageInsertConfig` and `THRasterXTherionImageInsertConfig`, keeping the old `THXTherionImageInsertConfig` factory-style entry points while moving raster/XVI-specific runtime state into the matching subclasses and preserving legacy XTherion writer output.
   * Aligned the legacy XTherion image codec with the Mapiah image model by adding a `format` discriminator to `THXTherionImageInsertConfig`, moving `xviRoot` fully behind the XVI runtime interface, and routing `fromMap()` by subtype before reading XVI-only fields.
