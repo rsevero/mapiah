@@ -406,12 +406,23 @@ class TH2FileParser {
       return;
     }
 
-    final MPImageInsertConfig newElement =
-        MPImageInsertConfig.fromMetadataString(
-          parentMPID: _currentParentMPID,
-          metadata: metadata,
-          originalLineInTH2File: _currentOriginalLine,
-        );
+    late final MPImageInsertConfig newElement;
+
+    try {
+      newElement = MPImageInsertConfig.fromMetadataString(
+        parentMPID: _currentParentMPID,
+        metadata: metadata,
+        originalLineInTH2File: _currentOriginalLine,
+      );
+    } catch (e) {
+      _addError(
+        'Failed to parse Mapiah image insert config: $e',
+        '_injectMapiahSetting',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
+
+      return;
+    }
 
     _th2FileElementEditController.executeAddElement(
       newElement: newElement,

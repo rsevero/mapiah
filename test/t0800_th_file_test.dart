@@ -136,6 +136,40 @@ endscrap
   });
 
   group('mapiah config', () {
+    test(
+      'parses XTherion image inserts into THXTherionImageInsertConfig',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+
+        mpLocator.mpGeneralController.reset();
+
+        final (
+          TH2File file,
+          bool isSuccessful,
+          List<String> errors,
+        ) = await parser.parse(
+          THTestAux.testPath(
+            'th_file_parser-00035-xtherionimagesetting_only.th2',
+          ),
+        );
+
+        expect(isSuccessful, true, reason: 'Failed to parse file: $errors');
+        expect(file.countElements(), 2);
+
+        final THElement imageElement = file.elementByMPID(
+          file.childrenMPIDs[1],
+        );
+
+        expect(imageElement, isA<THXTherionImageInsertConfig>());
+        expect(
+          (imageElement as THXTherionImageInsertConfig).filename,
+          'croquis/croqui-007.jpg',
+        );
+        expect(imageElement.xx.toString(), '-36');
+        expect(imageElement.yy.toString(), '28');
+      },
+    );
+
     test('2026-04-07-001-mapiah_image_insert_only.th2', () async {
       final TH2FileParser parser = TH2FileParser();
       final TH2FileWriter writer = TH2FileWriter();
@@ -158,6 +192,26 @@ endscrap
       );
       expect(file.countElements(), 3);
 
+      final THElement rasterElement = file.elementByMPID(file.childrenMPIDs[1]);
+      final THElement xviElement = file.elementByMPID(file.childrenMPIDs[2]);
+
+      expect(rasterElement, isA<MPRasterImageInsertConfig>());
+      expect(
+        (rasterElement as MPRasterImageInsertConfig).filename,
+        'images/photo.png',
+      );
+      expect(rasterElement.xx.toString(), '10');
+      expect(rasterElement.yy.toString(), '20');
+
+      expect(xviElement, isA<MPXVIImageInsertConfig>());
+      expect(
+        (xviElement as MPXVIImageInsertConfig).filename,
+        'images/survey.xvi',
+      );
+      expect(xviElement.xviRoot, 'station_A');
+      expect(xviElement.xx.toString(), '-36');
+      expect(xviElement.yy.toString(), '28');
+
       final String asFile = writer.serialize(file);
 
       expect(asFile, """encoding UTF-8
@@ -165,6 +219,71 @@ endscrap
 ##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=-36;yy=28;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;xviRoot=station_A}
 """);
     });
+
+    test('malformed Mapiah image insert reports a parser error', () async {
+      final TH2FileParser parser = TH2FileParser();
+
+      mpLocator.mpGeneralController.reset();
+
+      final (
+        TH2File file,
+        bool isSuccessful,
+        List<String> errors,
+      ) = await parser.parse(
+        THTestAux.testPath('2026-04-07-002-mapiah_image_insert_malformed.th2'),
+      );
+
+      expect(isSuccessful, false);
+      expect(file.countElements(), 1);
+      expect(
+        errors.any(
+          (String error) =>
+              error.contains('Failed to parse Mapiah image insert config'),
+        ),
+        isTrue,
+      );
+    });
+
+    test(
+      'mixed files containing XTherion and Mapiah image inserts stay readable',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final TH2FileWriter writer = TH2FileWriter();
+
+        mpLocator.mpGeneralController.reset();
+
+        final (
+          TH2File file,
+          bool isSuccessful,
+          List<String> errors,
+        ) = await parser.parse(
+          THTestAux.testPath('2026-04-07-003-mixed_image_insert_styles.th2'),
+        );
+
+        expect(
+          isSuccessful,
+          true,
+          reason: 'Failed to parse mixed file: $errors',
+        );
+        expect(file.countElements(), 4);
+
+        final THElement firstImage = file.elementByMPID(file.childrenMPIDs[1]);
+        final THElement secondImage = file.elementByMPID(file.childrenMPIDs[2]);
+        final THElement thirdImage = file.elementByMPID(file.childrenMPIDs[3]);
+
+        expect(firstImage, isA<THXTherionImageInsertConfig>());
+        expect(secondImage, isA<MPXVIImageInsertConfig>());
+        expect(thirdImage, isA<MPRasterImageInsertConfig>());
+
+        final String asFile = writer.serialize(file);
+
+        expect(asFile, """encoding UTF-8
+##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
+##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=100;yy=200;xScale=1.5;yScale=0.5;rotationCenterDx=7;rotationCenterDy=8;rotationDeg=45;xviRoot=station_A}
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=2;rotationCenterDx=3;rotationCenterDy=4;rotationDeg=5}
+""");
+      },
+    );
   });
 
   group('xtherion image reorder', () {
