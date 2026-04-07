@@ -100,12 +100,12 @@ abstract class THXTherionImageInsertConfig extends THElement
     required String imgx,
     required String xData,
     required bool xImage,
-    bool? isXVI,
+    String? format,
     required String originalLineInTH2File,
   }) {
-    final bool resolvedIsXVI = isXVI ?? _filenameIsXVI(filename);
+    final String resolvedFormat = format ?? _resolveFormat(filename);
 
-    if (resolvedIsXVI) {
+    if (resolvedFormat == mpImageInsertFormatXVI) {
       return THXVIXTherionImageInsertConfig.forCWJM(
         mpID: mpID,
         parentMPID: parentMPID,
@@ -156,7 +156,7 @@ abstract class THXTherionImageInsertConfig extends THElement
     bool xImage = false,
     String originalLineInTH2File = '',
   }) {
-    if (_filenameIsXVI(filename)) {
+    if (_resolveFormat(filename) == mpImageInsertFormatXVI) {
       return THXVIXTherionImageInsertConfig.fromString(
         parentMPID: parentMPID,
         filename: filename,
@@ -203,7 +203,7 @@ abstract class THXTherionImageInsertConfig extends THElement
     bool xImage = false,
     String originalLineInTH2File = '',
   }) {
-    if (_filenameIsXVI(filename)) {
+    if (_resolveFormat(filename) == mpImageInsertFormatXVI) {
       return THXVIXTherionImageInsertConfig(
         parentMPID: parentMPID,
         filename: filename,
@@ -305,6 +305,7 @@ abstract class THXTherionImageInsertConfig extends THElement
   Map<String, dynamic> toMap() {
     return {
       ...super.toMap(),
+      'format': format,
       'filename': filename,
       'xx': xx.toMap(),
       'isVisible': _isVisible,
@@ -314,30 +315,58 @@ abstract class THXTherionImageInsertConfig extends THElement
       'imgx': imgx,
       'xData': xData,
       'xImage': xImage,
-      'isXVI': isXVI,
       ...extraToMap(),
     };
   }
 
   static THXTherionImageInsertConfig fromMap(Map<String, dynamic> map) {
-    return THXTherionImageInsertConfig.forCWJM(
-      mpID: map['mpID'],
-      parentMPID: map['parentMPID'],
-      sameLineComment: map['sameLineComment'],
-      filename: map['filename'],
-      xx: THDoublePart.fromMap(map['xx']),
-      isVisible: map['isVisible'],
-      isGridVisible: map['isGridVisible'] ?? true,
-      igamma: THDoublePart.fromMap(map['igamma']),
-      yy: THDoublePart.fromMap(map['yy']),
-      xviRoot: map['xviRoot'] ?? '',
-      iidx: map['iidx'].toInt(),
-      imgx: map['imgx'],
-      xData: map['xData'],
-      xImage: map['xImage'],
-      isXVI: map['isXVI'],
-      originalLineInTH2File: map['originalLineInTH2File'],
-    );
+    final String filename = map['filename'];
+    final String format =
+        map['format'] ??
+        (((map['isXVI'] ?? false) as bool)
+            ? mpImageInsertFormatXVI
+            : _resolveFormat(filename));
+
+    switch (format) {
+      case mpImageInsertFormatXVI:
+        return THXVIXTherionImageInsertConfig.forCWJM(
+          mpID: map['mpID'],
+          parentMPID: map['parentMPID'],
+          sameLineComment: map['sameLineComment'],
+          filename: filename,
+          xx: THDoublePart.fromMap(map['xx']),
+          isVisible: map['isVisible'],
+          isGridVisible: map['isGridVisible'] ?? true,
+          igamma: THDoublePart.fromMap(map['igamma']),
+          yy: THDoublePart.fromMap(map['yy']),
+          xviRoot: map['xviRoot'] ?? '',
+          iidx: map['iidx'].toInt(),
+          imgx: map['imgx'],
+          xData: map['xData'],
+          xImage: map['xImage'],
+          originalLineInTH2File: map['originalLineInTH2File'],
+        );
+      case mpImageInsertFormatRaster:
+        return THRasterXTherionImageInsertConfig.forCWJM(
+          mpID: map['mpID'],
+          parentMPID: map['parentMPID'],
+          sameLineComment: map['sameLineComment'],
+          filename: filename,
+          xx: THDoublePart.fromMap(map['xx']),
+          isVisible: map['isVisible'],
+          igamma: THDoublePart.fromMap(map['igamma']),
+          yy: THDoublePart.fromMap(map['yy']),
+          iidx: map['iidx'].toInt(),
+          imgx: map['imgx'],
+          xData: map['xData'],
+          xImage: map['xImage'],
+          originalLineInTH2File: map['originalLineInTH2File'],
+        );
+      default:
+        throw THCustomException(
+          "Unsupported THXTherionImageInsertConfig format '$format' in THXTherionImageInsertConfig.fromMap.",
+        );
+    }
   }
 
   static THXTherionImageInsertConfig fromJson(String source) =>
@@ -373,7 +402,6 @@ abstract class THXTherionImageInsertConfig extends THElement
     String? imgx,
     String? xData,
     bool? xImage,
-    bool? isXVI,
     String? originalLineInTH2File,
   });
 
@@ -411,8 +439,6 @@ abstract class THXTherionImageInsertConfig extends THElement
 
   Map<String, dynamic> extraToMap();
 
-  String get xviRoot => '';
-
   @override
   MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => null;
 
@@ -420,10 +446,12 @@ abstract class THXTherionImageInsertConfig extends THElement
   MPRuntimeRasterImageInsertConfigMixin? get asRasterImage => null;
 
   @override
-  bool get isXVI;
+  String get format;
 
-  static bool _filenameIsXVI(String filename) {
-    return filename.toLowerCase().endsWith(mpXVIExtension);
+  static String _resolveFormat(String filename) {
+    return filename.toLowerCase().endsWith(mpXVIExtension)
+        ? mpImageInsertFormatXVI
+        : mpImageInsertFormatRaster;
   }
 }
 
@@ -493,7 +521,7 @@ class THXVIXTherionImageInsertConfig extends THXTherionImageInsertConfig
        super._fromString();
 
   @override
-  bool get isXVI => true;
+  String get format => mpImageInsertFormatXVI;
 
   @override
   MPRuntimeXVIImageInsertConfigMixin get asXVIImage => this;
@@ -520,7 +548,6 @@ class THXVIXTherionImageInsertConfig extends THXTherionImageInsertConfig
     String? imgx,
     String? xData,
     bool? xImage,
-    bool? isXVI,
     String? originalLineInTH2File,
   }) {
     return THXVIXTherionImageInsertConfig.forCWJM(
@@ -729,7 +756,7 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
   }) : super._fromString();
 
   @override
-  bool get isXVI => false;
+  String get format => mpImageInsertFormatRaster;
 
   @override
   MPRuntimeRasterImageInsertConfigMixin get asRasterImage => this;
@@ -756,7 +783,6 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
     String? imgx,
     String? xData,
     bool? xImage,
-    bool? isXVI,
     String? originalLineInTH2File,
   }) {
     return THRasterXTherionImageInsertConfig.forCWJM(

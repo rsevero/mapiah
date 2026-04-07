@@ -5,11 +5,13 @@ part of '../th_element.dart';
 mixin MPRuntimeImageInsertConfigMixin on THElement {
   String get filename;
 
+  String get format;
+
   bool get isVisible;
 
   set isVisible(bool isVisible);
 
-  bool get isXVI;
+  bool get isXVI => format == mpImageInsertFormatXVI;
 
   MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => null;
 
@@ -18,6 +20,8 @@ mixin MPRuntimeImageInsertConfigMixin on THElement {
 
 mixin MPRuntimeXVIImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController);
+
+  String get xviRoot;
 
   double get xviRootedXX;
 

@@ -86,6 +86,7 @@ abstract class MPImageInsertConfig extends THElement
   @override
   THElementType get elementType => THElementType.mapiahImageInsertConfig;
 
+  @override
   String get format;
 
   @override
@@ -394,6 +395,7 @@ abstract class MPImageInsertConfig extends THElement
 
 class MPXVIImageInsertConfig extends MPImageInsertConfig
     with MPRuntimeXVIImageInsertConfigMixin {
+  @override
   String xviRoot;
   bool _isGridVisible;
 

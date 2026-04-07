@@ -199,7 +199,9 @@ class TH2FileWriter {
           thElement as THXTherionImageInsertConfig;
       final String xx =
           "${xTIIC.xx} ${xTIIC.isVisible ? '1' : '0'} ${xTIIC.igamma}";
-      final String xviRoot = xTIIC.xviRoot.isEmpty ? '{}' : xTIIC.xviRoot;
+      final String xviRoot = (xTIIC.asXVIImage?.xviRoot ?? '').isEmpty
+          ? '{}'
+          : xTIIC.asXVIImage!.xviRoot;
       final String yy = "${xTIIC.yy} $xviRoot";
       final String imgx = "${xTIIC.imgx} ${xTIIC.xData}";
 

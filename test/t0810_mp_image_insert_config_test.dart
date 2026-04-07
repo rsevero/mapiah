@@ -178,6 +178,56 @@ void main() {
       },
     );
 
+    test(
+      'XTherion fromMap routes by format before reading XVI-only fields',
+      () {
+        final THXTherionImageInsertConfig raster =
+            THXTherionImageInsertConfig.fromMap(<String, dynamic>{
+              'mpID': 100,
+              'parentMPID': mpParentMPIDPlaceholder,
+              'sameLineComment': null,
+              'format': mpImageInsertFormatRaster,
+              'filename': 'images/legacy.png',
+              'xx': const <String, dynamic>{'value': 1.0},
+              'isVisible': true,
+              'igamma': const <String, dynamic>{'value': 1.0},
+              'yy': const <String, dynamic>{'value': 2.0},
+              'xviRoot': 'should_be_ignored',
+              'isGridVisible': false,
+              'iidx': 0,
+              'imgx': '',
+              'xData': '',
+              'xImage': false,
+              'originalLineInTH2File': '',
+            });
+        final THXTherionImageInsertConfig xvi =
+            THXTherionImageInsertConfig.fromMap(<String, dynamic>{
+              'mpID': 101,
+              'parentMPID': mpParentMPIDPlaceholder,
+              'sameLineComment': null,
+              'format': mpImageInsertFormatXVI,
+              'filename': 'images/legacy.xvi',
+              'xx': const <String, dynamic>{'value': 3.0},
+              'isVisible': true,
+              'igamma': const <String, dynamic>{'value': 1.0},
+              'yy': const <String, dynamic>{'value': 4.0},
+              'xviRoot': 'station_A',
+              'isGridVisible': false,
+              'iidx': 0,
+              'imgx': '',
+              'xData': '',
+              'xImage': false,
+              'originalLineInTH2File': '',
+            });
+
+        expect(raster, isA<THRasterXTherionImageInsertConfig>());
+        expect(raster.asXVIImage, isNull);
+        expect(xvi, isA<THXVIXTherionImageInsertConfig>());
+        expect(xvi.asXVIImage!.xviRoot, 'station_A');
+        expect(xvi.asXVIImage!.isGridVisible, isFalse);
+      },
+    );
+
     test('TH2File image access includes XTherion and Mapiah image entries', () {
       final TH2File file = TH2File();
       final THXTherionImageInsertConfig xtherionImage =
