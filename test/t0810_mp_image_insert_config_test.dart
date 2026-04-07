@@ -71,6 +71,7 @@ void main() {
         filename: 'images/survey.xvi',
         xx: THDoublePart.fromString(valueString: '-36'),
         yy: THDoublePart.fromString(valueString: '28'),
+        isGridVisible: false,
         xviRoot: 'station_A',
       );
 
@@ -102,6 +103,7 @@ void main() {
         (fromMetadata as MPXVIImageInsertConfig).xviRoot,
         original.xviRoot,
       );
+      expect((fromMap as MPXVIImageInsertConfig).isGridVisible, isFalse);
       expect(fromMap.toMap(), original.toMap());
     });
   });

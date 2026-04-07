@@ -94,6 +94,7 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
           rotationCenterDy: THDoublePart.fromMap(map['rotationCenterDy']),
           rotationDeg: THDoublePart.fromMap(map['rotationDeg']),
           isVisible: map['isVisible'] ?? true,
+          isGridVisible: map['isGridVisible'] ?? true,
           xviRoot: map['xviRoot'] ?? '',
           originalLineInTH2File: map['originalLineInTH2File'],
         );
@@ -387,6 +388,7 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
 class MPXVIImageInsertConfig extends MPImageInsertConfig {
   String xviRoot;
+  bool _isGridVisible;
 
   XVIFile? _xviFile;
   bool _loadFailuredialogShown = false;
@@ -407,9 +409,11 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     required super.rotationCenterDy,
     required super.rotationDeg,
     required super.isVisible,
+    required bool isGridVisible,
     required this.xviRoot,
     required super.originalLineInTH2File,
-  }) : super.forCWJM();
+  }) : _isGridVisible = isGridVisible,
+       super.forCWJM();
 
   MPXVIImageInsertConfig({
     required super.parentMPID,
@@ -423,12 +427,23 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     super.rotationCenterDy,
     super.rotationDeg,
     super.isVisible,
+    bool isGridVisible = true,
     this.xviRoot = '',
     super.originalLineInTH2File,
-  }) : super.getMPID();
+  }) : _isGridVisible = isGridVisible,
+       super.getMPID();
 
   @override
   String get format => mpImageInsertFormatXVI;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      ...super.toMap(),
+      'isGridVisible': _isGridVisible,
+      'xviRoot': xviRoot,
+    };
+  }
 
   @override
   Map<String, String> extraMetadataPayload() {
@@ -450,6 +465,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
     bool? isVisible,
+    bool? isGridVisible,
     String? xviRoot,
     String? originalLineInTH2File,
   }) {
@@ -468,6 +484,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
       rotationCenterDy: rotationCenterDy ?? this.rotationCenterDy,
       rotationDeg: rotationDeg ?? this.rotationDeg,
       isVisible: isVisible ?? this.isVisible,
+      isGridVisible: isGridVisible ?? this.isGridVisible,
       xviRoot: xviRoot ?? this.xviRoot,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -510,11 +527,13 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
 
     return other is MPXVIImageInsertConfig &&
         equalsMPImageInsertConfigBase(other) &&
+        isGridVisible == other.isGridVisible &&
         xviRoot == other.xviRoot;
   }
 
   @override
-  int get hashCode => mpImageInsertConfigBaseHashCode ^ xviRoot.hashCode;
+  int get hashCode =>
+      mpImageInsertConfigBaseHashCode ^ Object.hash(isGridVisible, xviRoot);
 
   @override
   bool isSameClass(Object object) {
@@ -536,6 +555,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
 
       if (isSuccessful && (xviFile != null)) {
         _xviFile = xviFile;
+        _xviFile!.isGridVisible = _isGridVisible;
       } else {
         _xviFile = null;
 
@@ -561,7 +581,29 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
 
   void setXVIFile(XVIFile? xviFile) {
     _xviFile = xviFile;
+
+    if (_xviFile != null) {
+      _xviFile!.isGridVisible = _isGridVisible;
+    }
+
     _fixXVIRoot();
+  }
+
+  bool get isGridVisible => _isGridVisible;
+
+  set isGridVisible(bool isGridVisible) {
+    if (_isGridVisible == isGridVisible) {
+      return;
+    }
+
+    _isGridVisible = isGridVisible;
+
+    if (_xviFile != null) {
+      _xviFile!.isGridVisible = isGridVisible;
+      _xviFile!.clearBoundingBox();
+    }
+
+    clearBoundingBox();
   }
 
   void _fixXVIRoot() {
