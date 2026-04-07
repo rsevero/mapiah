@@ -11,6 +11,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
@@ -274,6 +275,64 @@ void main() {
         mpLocator.appLocalizations.th2FileEditPageImageMoveOverlayLabel,
       );
     });
+
+    test(
+      'image move keeps top-level image order in saved TH2 output',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          filename: 'th_file_parser-00040-adding_several_xtherionsettings.th2',
+        );
+        final TH2FileWriter writer = TH2FileWriter();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final THXTherionImageInsertConfig image =
+            controller.elementEditController.prepareImageMoveState(imageMPID)
+                as THXTherionImageInsertConfig;
+        final Rect originalBoundingBox = image.getBoundingBox(controller)!;
+        final Offset dragStartCanvasPosition = originalBoundingBox.center;
+        const Offset deltaOnCanvas = Offset(3.0, -4.0);
+        final Offset dragEndCanvasPosition =
+            dragStartCanvasPosition + deltaOnCanvas;
+        final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+          dragStartCanvasPosition,
+        );
+        final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+          dragEndCanvasPosition,
+        );
+
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+
+        final String serialized = writer.serialize(
+          controller.th2File,
+          includeEmptyLines: true,
+          useOriginalRepresentation: true,
+        );
+        final int firstImageIndex = serialized.indexOf(
+          'croquis/croqui-006.jpg',
+        );
+        final int secondImageIndex = serialized.indexOf(
+          'croquis/croqui-007.jpg',
+        );
+
+        expect(firstImageIndex, isNonNegative);
+        expect(secondImageIndex, isNonNegative);
+        expect(firstImageIndex, lessThan(secondImageIndex));
+      },
+    );
   });
 }
 
