@@ -327,28 +327,16 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                           child: Text(name),
                                                         ),
                                                       ),
-                                                      IconButton(
-                                                        icon: Icon(
-                                                          isImageEditing
-                                                              ? Icons
-                                                                    .open_with_outlined
-                                                              : Icons
-                                                                    .edit_outlined,
-                                                          color: isImageEditing
-                                                              ? colorScheme
-                                                                    .primary
-                                                              : colorScheme
-                                                                    .onSecondary,
-                                                        ),
-                                                        tooltip: isImageEditing
-                                                            ? appLocalizations
-                                                                  .th2FileEditPageDisableImageEditModeButton
-                                                            : appLocalizations
-                                                                  .th2FileEditPageEnableImageEditModeButton,
-                                                        onPressed: () =>
-                                                            _onPressedToggleImageEdit(
-                                                              image.mpID,
-                                                            ),
+                                                      const SizedBox(
+                                                        width: mpButtonSpace,
+                                                      ),
+                                                      _buildImageEditButton(
+                                                        colorScheme:
+                                                            colorScheme,
+                                                        imageMPID: image.mpID,
+                                                        isEnabled: true,
+                                                        isImageEditing:
+                                                            isImageEditing,
                                                       ),
                                                       IconButton(
                                                         icon: Icon(
@@ -440,18 +428,20 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                         ),
                                                                       ),
                                                                     Text(name),
-                                                                    IconButton(
-                                                                      icon: Icon(
-                                                                        isImageEditing
-                                                                            ? Icons.open_with_outlined
-                                                                            : Icons.edit_outlined,
-                                                                        color:
-                                                                            isImageEditing
-                                                                            ? colorScheme.primary
-                                                                            : colorScheme.onSecondary,
-                                                                      ),
-                                                                      onPressed:
-                                                                          null,
+                                                                    const SizedBox(
+                                                                      width:
+                                                                          mpButtonSpace,
+                                                                    ),
+                                                                    _buildImageEditButton(
+                                                                      colorScheme:
+                                                                          colorScheme,
+                                                                      imageMPID:
+                                                                          image
+                                                                              .mpID,
+                                                                      isEnabled:
+                                                                          false,
+                                                                      isImageEditing:
+                                                                          isImageEditing,
                                                                     ),
                                                                     IconButton(
                                                                       icon: Icon(
@@ -636,6 +626,37 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
     th2FileEditController.elementEditController.prepareImageMoveState(
       imageMPID,
+    );
+  }
+
+  Widget _buildImageEditButton({
+    required ColorScheme colorScheme,
+    required int imageMPID,
+    required bool isEnabled,
+    required bool isImageEditing,
+  }) {
+    final String tooltip = isImageEditing
+        ? mpLocator.appLocalizations.th2FileEditPageDisableImageEditModeButton
+        : mpLocator.appLocalizations.th2FileEditPageEnableImageEditModeButton;
+    final ButtonStyle buttonStyle;
+
+    if (isImageEditing) {
+      buttonStyle = IconButton.styleFrom(
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
+      );
+    } else {
+      buttonStyle = IconButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        foregroundColor: colorScheme.onSecondary,
+      );
+    }
+
+    return IconButton(
+      icon: const Icon(Icons.edit_outlined),
+      tooltip: tooltip,
+      style: buttonStyle,
+      onPressed: isEnabled ? () => _onPressedToggleImageEdit(imageMPID) : null,
     );
   }
 

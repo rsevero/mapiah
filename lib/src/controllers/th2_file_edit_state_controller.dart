@@ -56,6 +56,9 @@ abstract class TH2FileEditStateControllerBase
   }
 
   bool _setState({required MPTH2FileEditStateType type, int? imageMPID}) {
+    final bool previousIsImageOperationType =
+        MPTH2FileEditState.isImageOperationType(_state.type);
+    final int? previousImageOperationImageMPID = _imageOperationImageMPID;
     final bool isImageOperationType = MPTH2FileEditState.isImageOperationType(
       type,
     );
@@ -85,6 +88,12 @@ abstract class TH2FileEditStateControllerBase
     _state.onStateEnter(previousState);
     _state.setCursor();
     _state.updateStatusBarMessage();
+
+    if (previousIsImageOperationType ||
+        isImageOperationType ||
+        (previousImageOperationImageMPID != _imageOperationImageMPID)) {
+      _th2FileEditController.triggerImagesRedraw();
+    }
 
     return true;
   }
