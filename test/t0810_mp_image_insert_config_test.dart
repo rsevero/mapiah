@@ -151,6 +151,33 @@ void main() {
   });
 
   group('MPImageInsertConfig runtime preparation', () {
+    test(
+      'XTherion image config factories route raster and XVI to subclasses',
+      () {
+        final THXTherionImageInsertConfig raster =
+            THXTherionImageInsertConfig.fromString(
+              parentMPID: mpParentMPIDPlaceholder,
+              filename: 'images/legacy.png',
+              xx: '1',
+              yy: '2',
+            );
+        final THXTherionImageInsertConfig xvi = THXTherionImageInsertConfig(
+          parentMPID: mpParentMPIDPlaceholder,
+          filename: 'images/legacy.xvi',
+          xx: THDoublePart(value: 3.0),
+          yy: THDoublePart(value: 4.0),
+        );
+
+        expect(raster, isA<THRasterXTherionImageInsertConfig>());
+        expect(raster.asRasterImage, isNotNull);
+        expect(raster.asXVIImage, isNull);
+
+        expect(xvi, isA<THXVIXTherionImageInsertConfig>());
+        expect(xvi.asXVIImage, isNotNull);
+        expect(xvi.asRasterImage, isNull);
+      },
+    );
+
     test('TH2File image access includes XTherion and Mapiah image entries', () {
       final TH2File file = TH2File();
       final THXTherionImageInsertConfig xtherionImage =

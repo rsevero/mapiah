@@ -139,7 +139,7 @@ endscrap
 
   group('mapiah config', () {
     test(
-      'parses XTherion image inserts into THXTherionImageInsertConfig',
+      'parses XTherion raster image inserts into THRasterXTherionImageInsertConfig',
       () async {
         final TH2FileParser parser = TH2FileParser();
 
@@ -162,7 +162,7 @@ endscrap
           file.childrenMPIDs[1],
         );
 
-        expect(imageElement, isA<THXTherionImageInsertConfig>());
+        expect(imageElement, isA<THRasterXTherionImageInsertConfig>());
         expect(
           (imageElement as THXTherionImageInsertConfig).filename,
           'croquis/croqui-007.jpg',
@@ -335,7 +335,7 @@ endscrap
 
         expect(asFile, """encoding UTF-8
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0}
-##XTHERION## xth_me_image_insert {-36 1 1} {28} "croquis/croqui-007.jpg" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
 scrap poco_surubim_SCP01
 endscrap
 """);

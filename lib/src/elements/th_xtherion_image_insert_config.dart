@@ -8,17 +8,12 @@ part of 'th_element.dart';
 /// * GIF
 /// * PNM/PPM
 /// * XVI
-class THXTherionImageInsertConfig extends THElement
-    with
-        MPBoundingBoxMixin,
-        MPRuntimeImageInsertConfigMixin,
-        MPRuntimeXVIImageInsertConfigMixin,
-        MPRuntimeRasterImageInsertConfigMixin {
+abstract class THXTherionImageInsertConfig extends THElement
+    with MPBoundingBoxMixin, MPRuntimeImageInsertConfigMixin {
   @override
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
-  @override
   THDoublePart xx;
   // vsb in xTherion is the per-image visibility/state flag:
   // * 1 shows and drives redraw/rescan;
@@ -29,64 +24,56 @@ class THXTherionImageInsertConfig extends THElement
   //   on load failure and adding 2 on load success.
   // In Mapiah it is converted to 'isVisible' as a simple bool.
   bool _isVisible;
-  bool _isGridVisible;
   THDoublePart igamma;
-  @override
   THDoublePart yy;
-  String xviRoot;
   int iidx;
   String imgx;
   String xData;
   bool xImage;
-  @override
-  bool isXVI;
 
-  @override
-  MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => isXVI ? this : null;
-
-  @override
-  MPRuntimeRasterImageInsertConfigMixin? get asRasterImage =>
-      isXVI ? null : this;
-
-  /// Non-mapped support fileds
-  XVIFile? _xviFile;
-  Future<ui.Image>? _rasterImage;
-  ui.Image? _decodedRasterImage;
-
-  bool _loadFailuredialogShown = false;
-
-  double _xviRootedXX = 0.0;
-  double _xviRootedYY = 0.0;
-
-  THXTherionImageInsertConfig.forCWJM({
+  THXTherionImageInsertConfig._forCWJM({
     required super.mpID,
     required super.parentMPID,
     super.sameLineComment,
     required this.filename,
     required this.xx,
     required bool isVisible,
-    required bool isGridVisible,
     required this.igamma,
     required this.yy,
-    required this.xviRoot,
     required this.iidx,
     required this.imgx,
     required this.xData,
     required this.xImage,
-    required this.isXVI,
     required super.originalLineInTH2File,
   }) : _isVisible = isVisible,
-       _isGridVisible = isGridVisible,
        super.forCWJM();
 
-  THXTherionImageInsertConfig.fromString({
+  THXTherionImageInsertConfig._getMPID({
+    required super.parentMPID,
+    super.sameLineComment,
+    required this.filename,
+    required this.xx,
+    bool isVisible = true,
+    THDoublePart? igamma,
+    required this.yy,
+    this.iidx = 0,
+    this.imgx = '',
+    this.xData = '',
+    this.xImage = false,
+    super.originalLineInTH2File = '',
+  }) : igamma = (igamma == null)
+           ? THDoublePart.fromString(valueString: '1.0')
+           : igamma,
+       _isVisible = isVisible,
+       super.getMPID();
+
+  THXTherionImageInsertConfig._fromString({
     required super.parentMPID,
     required this.filename,
     required String xx,
     String vsb = '1',
     String igamma = '1.0',
     required String yy,
-    this.xviRoot = '',
     this.iidx = 0,
     this.imgx = '',
     this.xData = '',
@@ -94,78 +81,221 @@ class THXTherionImageInsertConfig extends THElement
     super.originalLineInTH2File = '',
   }) : xx = THDoublePart.fromString(valueString: xx),
        _isVisible = (int.tryParse(vsb) ?? 1) > 0,
-       _isGridVisible = true,
        igamma = THDoublePart.fromString(valueString: igamma),
        yy = THDoublePart.fromString(valueString: yy),
-       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
        super.getMPID();
 
-  THXTherionImageInsertConfig({
-    required super.parentMPID,
-    required this.filename,
-    required this.xx,
-    bool isVisible = true,
+  factory THXTherionImageInsertConfig.forCWJM({
+    required int mpID,
+    required int parentMPID,
+    String? sameLineComment,
+    required String filename,
+    required THDoublePart xx,
+    required bool isVisible,
     bool isGridVisible = true,
-    THDoublePart? igamma,
-    required this.yy,
-    this.xviRoot = '',
-    this.iidx = 0,
-    this.imgx = '',
-    this.xData = '',
-    this.xImage = false,
-    super.originalLineInTH2File = '',
-  }) : igamma = (igamma == null)
-           ? THDoublePart.fromString(valueString: '1.0')
-           : igamma,
-       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-       _isVisible = isVisible,
-       _isGridVisible = isGridVisible,
-       super.getMPID();
+    required THDoublePart igamma,
+    required THDoublePart yy,
+    String xviRoot = '',
+    required int iidx,
+    required String imgx,
+    required String xData,
+    required bool xImage,
+    bool? isXVI,
+    required String originalLineInTH2File,
+  }) {
+    final bool resolvedIsXVI = isXVI ?? _filenameIsXVI(filename);
 
-  THXTherionImageInsertConfig.adjustPosition({
-    required super.parentMPID,
-    required this.filename,
-    required this.xx,
-    bool isVisible = true,
-    bool isGridVisible = true,
-    THDoublePart? igamma,
-    required this.yy,
-    this.xviRoot = '',
-    this.iidx = 0,
-    this.imgx = '',
-    this.xData = '',
-    this.xImage = false,
-    super.originalLineInTH2File = '',
-    required TH2FileEditController th2FileEditController,
-  }) : igamma = (igamma == null)
-           ? THDoublePart.fromString(valueString: '1.0')
-           : igamma,
-       isXVI = filename.toLowerCase().endsWith(mpXVIExtension),
-       _isVisible = isVisible,
-       _isGridVisible = isGridVisible,
-       super.getMPID() {
-    if (asXVIImage != null) {
-      final XVIFile? xviFile = getXVIFile(th2FileEditController);
-
-      if (xviFile == null) {
-        throw Exception(
-          'THXTherionImageInsertConfig.adjustPosition: XVI file could not be loaded for image insert config: $filename',
-        );
-      }
-
-      final XVIGrid grid = xviFile.grid;
-
-      /// Not including:
-      ///
-      /// (grid.ngx.value * grid.gxy.value)
-      ///
-      /// in xviHeight so the top left corner of the grid always matches the top
-      /// left corner of the drawing even if the grid is vertically screwed.
-      final double xviHeight = grid.ngy.value * grid.gyy.value;
-
-      yy = yy.copyWith(value: yy.value - xviHeight);
-      _fixXVIRoot();
+    if (resolvedIsXVI) {
+      return THXVIXTherionImageInsertConfig.forCWJM(
+        mpID: mpID,
+        parentMPID: parentMPID,
+        sameLineComment: sameLineComment,
+        filename: filename,
+        xx: xx,
+        isVisible: isVisible,
+        isGridVisible: isGridVisible,
+        igamma: igamma,
+        yy: yy,
+        xviRoot: xviRoot,
+        iidx: iidx,
+        imgx: imgx,
+        xData: xData,
+        xImage: xImage,
+        originalLineInTH2File: originalLineInTH2File,
+      );
     }
+
+    return THRasterXTherionImageInsertConfig.forCWJM(
+      mpID: mpID,
+      parentMPID: parentMPID,
+      sameLineComment: sameLineComment,
+      filename: filename,
+      xx: xx,
+      isVisible: isVisible,
+      igamma: igamma,
+      yy: yy,
+      iidx: iidx,
+      imgx: imgx,
+      xData: xData,
+      xImage: xImage,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  factory THXTherionImageInsertConfig.fromString({
+    required int parentMPID,
+    required String filename,
+    required String xx,
+    String vsb = '1',
+    String igamma = '1.0',
+    required String yy,
+    String xviRoot = '',
+    int iidx = 0,
+    String imgx = '',
+    String xData = '',
+    bool xImage = false,
+    String originalLineInTH2File = '',
+  }) {
+    if (_filenameIsXVI(filename)) {
+      return THXVIXTherionImageInsertConfig.fromString(
+        parentMPID: parentMPID,
+        filename: filename,
+        xx: xx,
+        vsb: vsb,
+        igamma: igamma,
+        yy: yy,
+        xviRoot: xviRoot,
+        iidx: iidx,
+        imgx: imgx,
+        xData: xData,
+        xImage: xImage,
+        originalLineInTH2File: originalLineInTH2File,
+      );
+    }
+
+    return THRasterXTherionImageInsertConfig.fromString(
+      parentMPID: parentMPID,
+      filename: filename,
+      xx: xx,
+      vsb: vsb,
+      igamma: igamma,
+      yy: yy,
+      iidx: iidx,
+      imgx: imgx,
+      xData: xData,
+      xImage: xImage,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  factory THXTherionImageInsertConfig({
+    required int parentMPID,
+    required String filename,
+    required THDoublePart xx,
+    bool isVisible = true,
+    bool isGridVisible = true,
+    THDoublePart? igamma,
+    required THDoublePart yy,
+    String xviRoot = '',
+    int iidx = 0,
+    String imgx = '',
+    String xData = '',
+    bool xImage = false,
+    String originalLineInTH2File = '',
+  }) {
+    if (_filenameIsXVI(filename)) {
+      return THXVIXTherionImageInsertConfig(
+        parentMPID: parentMPID,
+        filename: filename,
+        xx: xx,
+        isVisible: isVisible,
+        isGridVisible: isGridVisible,
+        igamma: igamma,
+        yy: yy,
+        xviRoot: xviRoot,
+        iidx: iidx,
+        imgx: imgx,
+        xData: xData,
+        xImage: xImage,
+        originalLineInTH2File: originalLineInTH2File,
+      );
+    }
+
+    return THRasterXTherionImageInsertConfig(
+      parentMPID: parentMPID,
+      filename: filename,
+      xx: xx,
+      isVisible: isVisible,
+      igamma: igamma,
+      yy: yy,
+      iidx: iidx,
+      imgx: imgx,
+      xData: xData,
+      xImage: xImage,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  factory THXTherionImageInsertConfig.adjustPosition({
+    required int parentMPID,
+    required String filename,
+    required THDoublePart xx,
+    bool isVisible = true,
+    bool isGridVisible = true,
+    THDoublePart? igamma,
+    required THDoublePart yy,
+    String xviRoot = '',
+    int iidx = 0,
+    String imgx = '',
+    String xData = '',
+    bool xImage = false,
+    String originalLineInTH2File = '',
+    required TH2FileEditController th2FileEditController,
+  }) {
+    final THXTherionImageInsertConfig newImage = THXTherionImageInsertConfig(
+      parentMPID: parentMPID,
+      filename: filename,
+      xx: xx,
+      isVisible: isVisible,
+      isGridVisible: isGridVisible,
+      igamma: igamma,
+      yy: yy,
+      xviRoot: xviRoot,
+      iidx: iidx,
+      imgx: imgx,
+      xData: xData,
+      xImage: xImage,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+
+    final MPRuntimeXVIImageInsertConfigMixin? xviImage = newImage.asXVIImage;
+
+    if (xviImage == null) {
+      return newImage;
+    }
+
+    final XVIFile? xviFile = xviImage.getXVIFile(th2FileEditController);
+
+    if (xviFile == null) {
+      throw Exception(
+        'THXTherionImageInsertConfig.adjustPosition: XVI file could not be loaded for image insert config: $filename',
+      );
+    }
+
+    final XVIGrid grid = xviFile.grid;
+
+    /// Not including:
+    ///
+    /// (grid.ngx.value * grid.gxy.value)
+    ///
+    /// in xviHeight so the top left corner of the grid always matches the top
+    /// left corner of the drawing even if the grid is vertically screwed.
+    final double xviHeight = grid.ngy.value * grid.gyy.value;
+
+    newImage.yy = newImage.yy.copyWith(value: newImage.yy.value - xviHeight);
+    (newImage as THXVIXTherionImageInsertConfig).fixXVIRoot();
+
+    return newImage;
   }
 
   @override
@@ -178,15 +308,14 @@ class THXTherionImageInsertConfig extends THElement
       'filename': filename,
       'xx': xx.toMap(),
       'isVisible': _isVisible,
-      'isGridVisible': _isGridVisible,
       'igamma': igamma.toMap(),
       'yy': yy.toMap(),
-      'xviRoot': xviRoot,
       'iidx': iidx,
       'imgx': imgx,
       'xData': xData,
       'xImage': xImage,
       'isXVI': isXVI,
+      ...extraToMap(),
     };
   }
 
@@ -201,7 +330,7 @@ class THXTherionImageInsertConfig extends THElement
       isGridVisible: map['isGridVisible'] ?? true,
       igamma: THDoublePart.fromMap(map['igamma']),
       yy: THDoublePart.fromMap(map['yy']),
-      xviRoot: map['xviRoot'],
+      xviRoot: map['xviRoot'] ?? '',
       iidx: map['iidx'].toInt(),
       imgx: map['imgx'],
       xData: map['xData'],
@@ -213,6 +342,19 @@ class THXTherionImageInsertConfig extends THElement
 
   static THXTherionImageInsertConfig fromJson(String source) =>
       fromMap(jsonDecode(source));
+
+  @override
+  bool get isVisible => _isVisible;
+
+  @override
+  set isVisible(bool isVisible) {
+    if (_isVisible == isVisible) {
+      return;
+    }
+
+    _isVisible = isVisible;
+    clearBoundingBox();
+  }
 
   @override
   THXTherionImageInsertConfig copyWith({
@@ -233,8 +375,155 @@ class THXTherionImageInsertConfig extends THElement
     bool? xImage,
     bool? isXVI,
     String? originalLineInTH2File,
+  });
+
+  @protected
+  bool equalsTHXTherionImageInsertConfigBase(
+    THXTherionImageInsertConfig other,
+  ) {
+    return super.equalsBase(other) &&
+        filename == other.filename &&
+        xx == other.xx &&
+        isVisible == other.isVisible &&
+        igamma == other.igamma &&
+        yy == other.yy &&
+        iidx == other.iidx &&
+        imgx == other.imgx &&
+        xData == other.xData &&
+        xImage == other.xImage;
+  }
+
+  @protected
+  int get thXTherionImageInsertConfigBaseHashCode {
+    return super.hashCode ^
+        Object.hash(
+          filename,
+          xx,
+          isVisible,
+          igamma,
+          yy,
+          iidx,
+          imgx,
+          xData,
+          xImage,
+        );
+  }
+
+  Map<String, dynamic> extraToMap();
+
+  String get xviRoot => '';
+
+  @override
+  MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => null;
+
+  @override
+  MPRuntimeRasterImageInsertConfigMixin? get asRasterImage => null;
+
+  @override
+  bool get isXVI;
+
+  static bool _filenameIsXVI(String filename) {
+    return filename.toLowerCase().endsWith(mpXVIExtension);
+  }
+}
+
+class THXVIXTherionImageInsertConfig extends THXTherionImageInsertConfig
+    with MPRuntimeXVIImageInsertConfigMixin {
+  @override
+  String xviRoot;
+
+  bool _isGridVisible;
+
+  XVIFile? _xviFile;
+  bool _loadFailuredialogShown = false;
+
+  double _xviRootedXX = 0.0;
+  double _xviRootedYY = 0.0;
+
+  THXVIXTherionImageInsertConfig.forCWJM({
+    required super.mpID,
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.isVisible,
+    required bool isGridVisible,
+    required super.igamma,
+    required super.yy,
+    required this.xviRoot,
+    required super.iidx,
+    required super.imgx,
+    required super.xData,
+    required super.xImage,
+    required super.originalLineInTH2File,
+  }) : _isGridVisible = isGridVisible,
+       super._forCWJM();
+
+  THXVIXTherionImageInsertConfig({
+    required super.parentMPID,
+    required super.filename,
+    required super.xx,
+    super.isVisible = true,
+    bool isGridVisible = true,
+    super.igamma,
+    required super.yy,
+    this.xviRoot = '',
+    super.iidx = 0,
+    super.imgx = '',
+    super.xData = '',
+    super.xImage = false,
+    super.originalLineInTH2File = '',
+  }) : _isGridVisible = isGridVisible,
+       super._getMPID();
+
+  THXVIXTherionImageInsertConfig.fromString({
+    required super.parentMPID,
+    required super.filename,
+    required super.xx,
+    super.vsb = '1',
+    super.igamma = '1.0',
+    required super.yy,
+    this.xviRoot = '',
+    super.iidx = 0,
+    super.imgx = '',
+    super.xData = '',
+    super.xImage = false,
+    super.originalLineInTH2File = '',
+  }) : _isGridVisible = true,
+       super._fromString();
+
+  @override
+  bool get isXVI => true;
+
+  @override
+  MPRuntimeXVIImageInsertConfigMixin get asXVIImage => this;
+
+  @override
+  Map<String, dynamic> extraToMap() {
+    return {'xviRoot': xviRoot, 'isGridVisible': _isGridVisible};
+  }
+
+  @override
+  THXVIXTherionImageInsertConfig copyWith({
+    int? mpID,
+    int? parentMPID,
+    String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? filename,
+    THDoublePart? xx,
+    bool? isVisible,
+    bool? isGridVisible,
+    THDoublePart? igamma,
+    THDoublePart? yy,
+    String? xviRoot,
+    int? iidx,
+    String? imgx,
+    String? xData,
+    bool? xImage,
+    bool? isXVI,
+    String? originalLineInTH2File,
   }) {
-    return THXTherionImageInsertConfig.forCWJM(
+    return THXVIXTherionImageInsertConfig.forCWJM(
       mpID: mpID ?? this.mpID,
       parentMPID: parentMPID ?? this.parentMPID,
       sameLineComment: makeSameLineCommentNull
@@ -251,7 +540,6 @@ class THXTherionImageInsertConfig extends THElement
       imgx: imgx ?? this.imgx,
       xData: xData ?? this.xData,
       xImage: xImage ?? this.xImage,
-      isXVI: isXVI ?? this.isXVI,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
     );
@@ -259,50 +547,49 @@ class THXTherionImageInsertConfig extends THElement
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! THXTherionImageInsertConfig) return false;
-    if (!super.equalsBase(other)) return false;
+    if (identical(this, other)) {
+      return true;
+    }
 
-    return filename == other.filename &&
-        xx == other.xx &&
-        isVisible == other.isVisible &&
+    return other is THXVIXTherionImageInsertConfig &&
+        equalsTHXTherionImageInsertConfigBase(other) &&
         isGridVisible == other.isGridVisible &&
-        igamma == other.igamma &&
-        yy == other.yy &&
-        xviRoot == other.xviRoot &&
-        iidx == other.iidx &&
-        imgx == other.imgx &&
-        xData == other.xData &&
-        xImage == other.xImage &&
-        isXVI == other.isXVI;
+        xviRoot == other.xviRoot;
   }
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      Object.hash(
-        filename,
-        xx,
-        isVisible,
-        isGridVisible,
-        igamma,
-        yy,
-        xviRoot,
-        iidx,
-        imgx,
-        xData,
-        xImage,
-        isXVI,
-      );
+      thXTherionImageInsertConfigBaseHashCode ^
+      Object.hash(isGridVisible, xviRoot);
 
   @override
   bool isSameClass(Object object) {
-    return object is THXTherionImageInsertConfig;
+    return object is THXVIXTherionImageInsertConfig;
+  }
+
+  @override
+  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    if (!isVisible) {
+      return null;
+    }
+
+    final XVIFile? xviFile = getXVIFile(th2FileEditController);
+
+    if (xviFile == null) {
+      return null;
+    }
+
+    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController)!;
+    final Offset xviOffset =
+        Offset(xviRootedXX, xviRootedYY) -
+        Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+
+    return MPNumericAux.orderedRectFromRect(boundingBox.shift(xviOffset));
   }
 
   @override
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
-    if ((_xviFile == null) && (asXVIImage != null)) {
+    if (_xviFile == null) {
       final XVIFileParser parser = XVIFileParser();
       final XVIFile? xviFile;
       final bool isSuccessful;
@@ -330,31 +617,10 @@ class THXTherionImageInsertConfig extends THElement
         return null;
       }
 
-      _fixXVIRoot();
+      fixXVIRoot();
     }
 
     return _xviFile;
-  }
-
-  /// Implementation of xth_me_imgs_set_root from me_imgs.tcl xTherion.
-  void _fixXVIRoot() {
-    _xviRootedXX = xx.value;
-    _xviRootedYY = yy.value;
-
-    if ((asXVIImage == null) || xviRoot.isEmpty || (_xviFile == null)) {
-      return;
-    }
-
-    for (final XVIStation station in _xviFile!.stations) {
-      if (station.name == xviRoot) {
-        final THPositionPart stationPosition = station.position;
-
-        _xviRootedXX += _xviFile!.grid.gx.value - stationPosition.x;
-        _xviRootedYY += _xviFile!.grid.gy.value - stationPosition.y;
-
-        break;
-      }
-    }
   }
 
   @override
@@ -363,104 +629,14 @@ class THXTherionImageInsertConfig extends THElement
   @override
   double get xviRootedYY => _xviRootedYY;
 
-  @override
-  Future<ui.Image>? getRasterImageFrameInfo(
-    TH2FileEditController th2FileEditController,
-  ) {
-    _rasterImage ??=
-        MPElementEditAux.getRasterImageFrameInfo(
-          th2FileEditController,
-          filename,
-        ).then((img) {
-          _decodedRasterImage = img;
-
-          return img;
-        });
-
-    return _rasterImage!;
-  }
-
-  @override
-  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    if (asXVIImage != null) {
-      return _calculateXVIBoundingBox(th2FileEditController);
-    }
-
-    return _calculateRasterImageBoundingBox(th2FileEditController);
-  }
-
-  Rect? _calculateRasterImageBoundingBox(
-    TH2FileEditController th2FileEditController,
-  ) {
-    if (!isVisible) {
-      return null;
-    }
-
-    // Ensure loading has been triggered (will cache when done)
-    getRasterImageFrameInfo(th2FileEditController);
-
-    final ui.Image? rasterImage = _decodedRasterImage;
-
-    return (rasterImage == null)
-        ? MPNumericAux.orderedRectSmallestAroundPoint(
-            center: Offset(xx.value, yy.value),
-          )
-        : Rect.fromLTWH(
-            xx.value,
-            yy.value,
-            rasterImage.width.toDouble(),
-            rasterImage.height.toDouble(),
-          );
-  }
-
-  Rect? _calculateXVIBoundingBox(TH2FileEditController th2FileEditController) {
-    if (!isVisible) {
-      return null;
-    }
-
-    final XVIFile? xviFile = getXVIFile(th2FileEditController);
-
-    if (xviFile == null) {
-      return null;
-    }
-
-    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController)!;
-    final Offset xviOffset =
-        Offset(xviRootedXX, xviRootedYY) -
-        Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
-
-    return MPNumericAux.orderedRectFromRect(boundingBox.shift(xviOffset));
-  }
-
-  bool isLoaded(TH2FileEditController th2FileEditController) {
-    if (asXVIImage != null) {
-      return getXVIFile(th2FileEditController) != null;
-    }
-
-    return getRasterImageFrameInfo(th2FileEditController) != null;
-  }
-
   void setXVIFile(XVIFile? xviFile) {
     _xviFile = xviFile;
 
-    _fixXVIRoot();
-  }
-
-  void setRasterImage(ui.Image? image) {
-    _decodedRasterImage = image;
-  }
-
-  @override
-  bool get isVisible => _isVisible;
-
-  @override
-  set isVisible(bool isVisible) {
-    if (_isVisible == isVisible) {
-      return;
+    if (_xviFile != null) {
+      _xviFile!.isGridVisible = _isGridVisible;
     }
 
-    _isVisible = isVisible;
-    clearBoundingBox();
+    fixXVIRoot();
   }
 
   @override
@@ -480,5 +656,187 @@ class THXTherionImageInsertConfig extends THElement
     }
 
     clearBoundingBox();
+  }
+
+  void fixXVIRoot() {
+    _xviRootedXX = xx.value;
+    _xviRootedYY = yy.value;
+
+    if (xviRoot.isEmpty || (_xviFile == null)) {
+      return;
+    }
+
+    for (final XVIStation station in _xviFile!.stations) {
+      if (station.name == xviRoot) {
+        final THPositionPart stationPosition = station.position;
+
+        _xviRootedXX += _xviFile!.grid.gx.value - stationPosition.x;
+        _xviRootedYY += _xviFile!.grid.gy.value - stationPosition.y;
+
+        break;
+      }
+    }
+  }
+}
+
+class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
+    with MPRuntimeRasterImageInsertConfigMixin {
+  Future<ui.Image>? _rasterImage;
+  ui.Image? _decodedRasterImage;
+
+  THRasterXTherionImageInsertConfig.forCWJM({
+    required super.mpID,
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.isVisible,
+    required super.igamma,
+    required super.yy,
+    required super.iidx,
+    required super.imgx,
+    required super.xData,
+    required super.xImage,
+    required super.originalLineInTH2File,
+  }) : super._forCWJM();
+
+  THRasterXTherionImageInsertConfig({
+    required super.parentMPID,
+    required super.filename,
+    required super.xx,
+    super.isVisible = true,
+    super.igamma,
+    required super.yy,
+    super.iidx = 0,
+    super.imgx = '',
+    super.xData = '',
+    super.xImage = false,
+    super.originalLineInTH2File = '',
+  }) : super._getMPID();
+
+  THRasterXTherionImageInsertConfig.fromString({
+    required super.parentMPID,
+    required super.filename,
+    required super.xx,
+    super.vsb = '1',
+    super.igamma = '1.0',
+    required super.yy,
+    super.iidx = 0,
+    super.imgx = '',
+    super.xData = '',
+    super.xImage = false,
+    super.originalLineInTH2File = '',
+  }) : super._fromString();
+
+  @override
+  bool get isXVI => false;
+
+  @override
+  MPRuntimeRasterImageInsertConfigMixin get asRasterImage => this;
+
+  @override
+  Map<String, dynamic> extraToMap() {
+    return <String, dynamic>{};
+  }
+
+  @override
+  THRasterXTherionImageInsertConfig copyWith({
+    int? mpID,
+    int? parentMPID,
+    String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? filename,
+    THDoublePart? xx,
+    bool? isVisible,
+    bool? isGridVisible,
+    THDoublePart? igamma,
+    THDoublePart? yy,
+    String? xviRoot,
+    int? iidx,
+    String? imgx,
+    String? xData,
+    bool? xImage,
+    bool? isXVI,
+    String? originalLineInTH2File,
+  }) {
+    return THRasterXTherionImageInsertConfig.forCWJM(
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      filename: filename ?? this.filename,
+      xx: xx ?? this.xx,
+      isVisible: isVisible ?? this.isVisible,
+      igamma: igamma ?? this.igamma,
+      yy: yy ?? this.yy,
+      iidx: iidx ?? this.iidx,
+      imgx: imgx ?? this.imgx,
+      xData: xData ?? this.xData,
+      xImage: xImage ?? this.xImage,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is THRasterXTherionImageInsertConfig &&
+        equalsTHXTherionImageInsertConfigBase(other);
+  }
+
+  @override
+  int get hashCode => thXTherionImageInsertConfigBaseHashCode;
+
+  @override
+  bool isSameClass(Object object) {
+    return object is THRasterXTherionImageInsertConfig;
+  }
+
+  @override
+  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    if (!isVisible) {
+      return null;
+    }
+
+    getRasterImageFrameInfo(th2FileEditController);
+
+    final ui.Image? rasterImage = _decodedRasterImage;
+
+    return (rasterImage == null)
+        ? MPNumericAux.orderedRectSmallestAroundPoint(
+            center: Offset(xx.value, yy.value),
+          )
+        : Rect.fromLTWH(
+            xx.value,
+            yy.value,
+            rasterImage.width.toDouble(),
+            rasterImage.height.toDouble(),
+          );
+  }
+
+  @override
+  Future<ui.Image>? getRasterImageFrameInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
+    _rasterImage ??=
+        MPElementEditAux.getRasterImageFrameInfo(
+          th2FileEditController,
+          filename,
+        ).then((ui.Image img) {
+          _decodedRasterImage = img;
+
+          return img;
+        });
+
+    return _rasterImage!;
+  }
+
+  void setRasterImage(ui.Image? image) {
+    _decodedRasterImage = image;
   }
 }
