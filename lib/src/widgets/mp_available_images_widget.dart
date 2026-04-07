@@ -71,15 +71,18 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
             final bool allImagesVisible = images.every(
               (MPRuntimeImageInsertConfigMixin image) => image.isVisible,
             );
-            final List<MPRuntimeImageInsertConfigMixin> xviImages = images
-                .where((MPRuntimeImageInsertConfigMixin image) => image.isXVI)
+            final List<MPRuntimeXVIImageInsertConfigMixin> xviImages = images
+                .map(
+                  (MPRuntimeImageInsertConfigMixin image) => image.asXVIImage,
+                )
+                .nonNulls
                 .toList();
             final bool hasXVIImages = xviImages.isNotEmpty;
             final bool allXVIGridsVisible =
                 hasXVIImages &&
                 xviImages.every(
-                  (MPRuntimeImageInsertConfigMixin image) =>
-                      _isGridVisible(image),
+                  (MPRuntimeXVIImageInsertConfigMixin image) =>
+                      image.isGridVisible,
                 );
             final int draggedImageIndex = (_draggedImageMPID == null)
                 ? -1
@@ -164,9 +167,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 final MPRuntimeImageInsertConfigMixin image =
                                     indexedEntry.value;
                                 final bool isVisible = image.isVisible;
-                                final bool isGridVisible = _isGridVisible(
-                                  image,
-                                );
+                                final bool isGridVisible =
+                                    image.asXVIImage?.isGridVisible ?? false;
                                 final String name = p.basename(image.filename);
                                 final bool isDragTarget =
                                     (_dragTargetImageMPID == image.mpID) &&
@@ -636,16 +638,5 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
       _dragTargetImageMPID = null;
       _isDragTargetAfterLast = false;
     });
-  }
-
-  bool _isGridVisible(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.isGridVisible;
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.isGridVisible;
-      default:
-        return false;
-    }
   }
 }

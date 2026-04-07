@@ -10,4 +10,30 @@ mixin MPRuntimeImageInsertConfigMixin on THElement {
   set isVisible(bool isVisible);
 
   bool get isXVI;
+
+  MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => null;
+
+  MPRuntimeRasterImageInsertConfigMixin? get asRasterImage => null;
+}
+
+mixin MPRuntimeXVIImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
+  XVIFile? getXVIFile(TH2FileEditController th2FileEditController);
+
+  double get xviRootedXX;
+
+  double get xviRootedYY;
+
+  bool get isGridVisible;
+
+  set isGridVisible(bool isGridVisible);
+}
+
+mixin MPRuntimeRasterImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
+  THDoublePart get xx;
+
+  THDoublePart get yy;
+
+  Future<ui.Image>? getRasterImageFrameInfo(
+    TH2FileEditController th2FileEditController,
+  );
 }

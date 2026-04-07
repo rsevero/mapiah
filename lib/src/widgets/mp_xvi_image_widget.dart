@@ -20,7 +20,7 @@ import 'package:mapiah/src/painters/xvi_sketchline_painter.dart';
 
 class MPXVIImageWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
-  final MPRuntimeImageInsertConfigMixin image;
+  final MPRuntimeXVIImageInsertConfigMixin image;
 
   const MPXVIImageWidget({
     super.key,
@@ -30,7 +30,7 @@ class MPXVIImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!image.isXVI || !image.isVisible) {
+    if (!image.isVisible) {
       return SizedBox.shrink();
     }
 
@@ -55,17 +55,17 @@ class MPXVIImageWidget extends StatelessWidget {
   }
 
   void _drawXVIFile(
-    MPRuntimeImageInsertConfigMixin image,
+    MPRuntimeXVIImageInsertConfigMixin image,
     List<CustomPainter> painters,
   ) {
-    final XVIFile? xviFile = _getXVIFile(image);
+    final XVIFile? xviFile = image.getXVIFile(th2FileEditController);
 
     if (xviFile == null) {
       return;
     }
 
-    final double xx = _getXVIRootedXX(image);
-    final double yy = _getXVIRootedYY(image);
+    final double xx = image.xviRootedXX;
+    final double yy = image.xviRootedYY;
     final Offset imageGridOffset = Offset(xx, yy);
     // Understaing xTherion variables:
     // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
@@ -74,7 +74,7 @@ class MPXVIImageWidget extends StatelessWidget {
     final Offset imageOffset =
         imageGridOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
 
-    if (_isGridVisible(image)) {
+    if (image.isGridVisible) {
       setXVIGridPainters(
         xviFile: xviFile,
         imageOffset: imageGridOffset,
@@ -206,50 +206,6 @@ class MPXVIImageWidget extends StatelessWidget {
           linePaint: xviGridLinePaint,
         ),
       );
-    }
-  }
-
-  XVIFile? _getXVIFile(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.getXVIFile(th2FileEditController);
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.getXVIFile(th2FileEditController);
-      default:
-        return null;
-    }
-  }
-
-  double _getXVIRootedXX(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.xviRootedXX;
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.xviRootedXX;
-      default:
-        return 0.0;
-    }
-  }
-
-  double _getXVIRootedYY(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.xviRootedYY;
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.xviRootedYY;
-      default:
-        return 0.0;
-    }
-  }
-
-  bool _isGridVisible(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.isGridVisible;
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.isGridVisible;
-      default:
-        return false;
     }
   }
 }

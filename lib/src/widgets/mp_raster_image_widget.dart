@@ -9,7 +9,7 @@ import 'package:mapiah/src/painters/mp_raster_image_painter.dart';
 
 class MPRasterImageWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
-  final MPRuntimeImageInsertConfigMixin image;
+  final MPRuntimeRasterImageInsertConfigMixin image;
 
   const MPRasterImageWidget({
     super.key,
@@ -31,10 +31,9 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
     th2FileEditController = widget.th2FileEditController;
 
-    if (!widget.image.isXVI && widget.image.isVisible) {
-      final Future<ui.Image>? rasterImage = _getRasterImageFrameInfo(
-        widget.image,
-      );
+    if (widget.image.isVisible) {
+      final Future<ui.Image>? rasterImage = widget.image
+          .getRasterImageFrameInfo(th2FileEditController);
 
       rasterImage?.then((ui.Image img) {
         if (mounted) {
@@ -46,7 +45,7 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.image.isXVI || !widget.image.isVisible) {
+    if (!widget.image.isVisible) {
       return SizedBox.shrink();
     }
 
@@ -57,7 +56,10 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
         /// The Y coordinate is negated because in Therion's coordinate system,
         /// positive Y goes up, while in Flutter's canvas, positive Y goes down.
-        final Offset offset = _getRasterOffset(widget.image);
+        final Offset offset = Offset(
+          widget.image.xx.value,
+          -widget.image.yy.value,
+        );
 
         return _image == null
             ? CircularProgressIndicator()
@@ -73,29 +75,5 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
               );
       },
     );
-  }
-
-  Future<ui.Image>? _getRasterImageFrameInfo(
-    MPRuntimeImageInsertConfigMixin image,
-  ) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.getRasterImageFrameInfo(th2FileEditController);
-      case MPRasterImageInsertConfig mpImage:
-        return mpImage.getRasterImageFrameInfo(th2FileEditController);
-      default:
-        return null;
-    }
-  }
-
-  Offset _getRasterOffset(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return Offset(thImage.xx.value, -thImage.yy.value);
-      case MPRasterImageInsertConfig mpImage:
-        return Offset(mpImage.xx.value, -mpImage.yy.value);
-      default:
-        return Offset.zero;
-    }
   }
 }

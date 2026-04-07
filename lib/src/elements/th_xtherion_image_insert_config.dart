@@ -9,11 +9,16 @@ part of 'th_element.dart';
 /// * PNM/PPM
 /// * XVI
 class THXTherionImageInsertConfig extends THElement
-    with MPBoundingBoxMixin, MPRuntimeImageInsertConfigMixin {
+    with
+        MPBoundingBoxMixin,
+        MPRuntimeImageInsertConfigMixin,
+        MPRuntimeXVIImageInsertConfigMixin,
+        MPRuntimeRasterImageInsertConfigMixin {
   @override
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
+  @override
   THDoublePart xx;
   // vsb in xTherion is the per-image visibility/state flag:
   // * 1 shows and drives redraw/rescan;
@@ -26,6 +31,7 @@ class THXTherionImageInsertConfig extends THElement
   bool _isVisible;
   bool _isGridVisible;
   THDoublePart igamma;
+  @override
   THDoublePart yy;
   String xviRoot;
   int iidx;
@@ -34,6 +40,13 @@ class THXTherionImageInsertConfig extends THElement
   bool xImage;
   @override
   bool isXVI;
+
+  @override
+  MPRuntimeXVIImageInsertConfigMixin? get asXVIImage => isXVI ? this : null;
+
+  @override
+  MPRuntimeRasterImageInsertConfigMixin? get asRasterImage =>
+      isXVI ? null : this;
 
   /// Non-mapped support fileds
   XVIFile? _xviFile;
@@ -287,6 +300,7 @@ class THXTherionImageInsertConfig extends THElement
     return object is THXTherionImageInsertConfig;
   }
 
+  @override
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
     if ((_xviFile == null) && isXVI) {
       final XVIFileParser parser = XVIFileParser();
@@ -343,10 +357,13 @@ class THXTherionImageInsertConfig extends THElement
     }
   }
 
+  @override
   double get xviRootedXX => _xviRootedXX;
 
+  @override
   double get xviRootedYY => _xviRootedYY;
 
+  @override
   Future<ui.Image>? getRasterImageFrameInfo(
     TH2FileEditController th2FileEditController,
   ) {
@@ -444,8 +461,10 @@ class THXTherionImageInsertConfig extends THElement
     clearBoundingBox();
   }
 
+  @override
   bool get isGridVisible => _isGridVisible;
 
+  @override
   set isGridVisible(bool isGridVisible) {
     if (_isGridVisible == isGridVisible) {
       return;

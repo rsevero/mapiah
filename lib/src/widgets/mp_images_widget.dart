@@ -28,19 +28,27 @@ class MPImagesWidget extends StatelessWidget {
             continue;
           }
 
-          widgets.add(
-            image.isXVI
-                ? MPXVIImageWidget(
-                    key: ValueKey('xvi_image_${image.mpID}'),
-                    th2FileEditController: th2FileEditController,
-                    image: image,
-                  )
-                : MPRasterImageWidget(
-                    key: ValueKey('raster_image_${image.mpID}'),
-                    th2FileEditController: th2FileEditController,
-                    image: image,
-                  ),
-          );
+          final MPRuntimeXVIImageInsertConfigMixin? xviImage = image.asXVIImage;
+          final MPRuntimeRasterImageInsertConfigMixin? rasterImage =
+              image.asRasterImage;
+
+          if (xviImage != null) {
+            widgets.add(
+              MPXVIImageWidget(
+                key: ValueKey('xvi_image_${image.mpID}'),
+                th2FileEditController: th2FileEditController,
+                image: xviImage,
+              ),
+            );
+          } else if (rasterImage != null) {
+            widgets.add(
+              MPRasterImageWidget(
+                key: ValueKey('raster_image_${image.mpID}'),
+                th2FileEditController: th2FileEditController,
+                image: rasterImage,
+              ),
+            );
+          }
         }
 
         return RepaintBoundary(child: Stack(children: widgets));

@@ -392,7 +392,8 @@ abstract class MPImageInsertConfig extends THElement
   }
 }
 
-class MPXVIImageInsertConfig extends MPImageInsertConfig {
+class MPXVIImageInsertConfig extends MPImageInsertConfig
+    with MPRuntimeXVIImageInsertConfigMixin {
   String xviRoot;
   bool _isGridVisible;
 
@@ -462,6 +463,9 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
 
   @override
   bool get isXVI => true;
+
+  @override
+  MPRuntimeXVIImageInsertConfigMixin get asXVIImage => this;
 
   @override
   Map<String, dynamic> toMap() {
@@ -567,6 +571,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     return object is MPXVIImageInsertConfig;
   }
 
+  @override
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
     if (_xviFile == null) {
       final XVIFileParser parser = XVIFileParser();
@@ -602,8 +607,10 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     return _xviFile;
   }
 
+  @override
   double get xviRootedXX => _xviRootedXX;
 
+  @override
   double get xviRootedYY => _xviRootedYY;
 
   void setXVIFile(XVIFile? xviFile) {
@@ -616,8 +623,10 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
     _fixXVIRoot();
   }
 
+  @override
   bool get isGridVisible => _isGridVisible;
 
+  @override
   set isGridVisible(bool isGridVisible) {
     if (_isGridVisible == isGridVisible) {
       return;
@@ -654,7 +663,8 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
   }
 }
 
-class MPRasterImageInsertConfig extends MPImageInsertConfig {
+class MPRasterImageInsertConfig extends MPImageInsertConfig
+    with MPRuntimeRasterImageInsertConfigMixin {
   Future<ui.Image>? _rasterImage;
   ui.Image? _decodedRasterImage;
 
@@ -709,6 +719,9 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig {
 
   @override
   bool get isXVI => false;
+
+  @override
+  MPRuntimeRasterImageInsertConfigMixin get asRasterImage => this;
 
   @override
   Map<String, String> extraMetadataPayload() {
@@ -796,6 +809,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig {
     return object is MPRasterImageInsertConfig;
   }
 
+  @override
   Future<ui.Image>? getRasterImageFrameInfo(
     TH2FileEditController th2FileEditController,
   ) {

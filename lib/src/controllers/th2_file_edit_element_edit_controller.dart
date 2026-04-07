@@ -1566,17 +1566,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   /// If any XVI image grid is hidden, makes all grids visible.
   @action
   void toggleAllGridsVisibility() {
-    final List<MPRuntimeImageInsertConfigMixin> xviImages = _th2File
+    final List<MPRuntimeXVIImageInsertConfigMixin> xviImages = _th2File
         .getImages()
-        .where((MPRuntimeImageInsertConfigMixin image) => image.isXVI)
+        .map((MPRuntimeImageInsertConfigMixin image) => image.asXVIImage)
+        .nonNulls
         .toList();
 
     final bool allGridsVisible = xviImages.every(
-      (MPRuntimeImageInsertConfigMixin image) => _isGridVisible(image),
+      (MPRuntimeXVIImageInsertConfigMixin image) => image.isGridVisible,
     );
 
-    for (final MPRuntimeImageInsertConfigMixin image in xviImages) {
-      _setGridVisibility(image, !allGridsVisible);
+    for (final MPRuntimeXVIImageInsertConfigMixin image in xviImages) {
+      image.isGridVisible = !allGridsVisible;
     }
 
     _th2FileEditController.triggerImagesRedraw();
@@ -2089,31 +2090,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     return currentVisibility ?? _allImagesVisibility;
-  }
-
-  bool _isGridVisible(MPRuntimeImageInsertConfigMixin image) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        return thImage.isGridVisible;
-      case MPXVIImageInsertConfig mpImage:
-        return mpImage.isGridVisible;
-      default:
-        return false;
-    }
-  }
-
-  void _setGridVisibility(
-    MPRuntimeImageInsertConfigMixin image,
-    bool isGridVisible,
-  ) {
-    switch (image) {
-      case THXTherionImageInsertConfig thImage:
-        thImage.isGridVisible = isGridVisible;
-      case MPXVIImageInsertConfig mpImage:
-        mpImage.isGridVisible = isGridVisible;
-      default:
-        break;
-    }
   }
 
   THCommandOptionType? get currentOptionTypeBeingEdited {
