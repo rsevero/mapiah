@@ -127,6 +127,8 @@ Do not persist `isGridVisible` nor `isVisible`.
 
 `MPImageInsertConfig` lines must be self-sufficient, so they should persist top-left offset directly.
 
+`rotationCenterDx` and `rotationCenterDy` should be defined in the image's unrotated local coordinate system, measured from the unrotated top-left corner of the image.
+
 ## Proposed Domain Model
 
 ### Base class
@@ -149,6 +151,16 @@ Recommended base responsibilities:
 - helpers for transform matrix construction
 - common equality, `copyWith`, `toMap`, `fromMap`
 - common visibility invalidation and bounding-box clearing hooks
+
+Recommended transform pipeline:
+
+1. Start in unrotated image-local coordinates
+2. Apply `xScale` and `yScale`
+3. Compute the scaled pivot from `rotationCenterDx` and `rotationCenterDy`
+4. Translate by `xx` and `yy`
+5. Rotate around the resulting world-space pivot
+
+This means the rotation center is stored in local image space, before rotation, and is scaled together with the image before the final rotation is applied.
 
 ### XVI descendant
 
@@ -185,11 +197,13 @@ Recommended runtime model:
 
 1. Regular image insertion creates `THXTherionImageInsertConfig`
 2. SVG insertion creates `MPImageInsertConfig`
-3. Existing XTherion image inserts are converted to `MPImageInsertConfig` only when the user executes an `MPImageInsertConfig`-only action
-4. The first 2 such actions are expected to be:
+3. Existing XTherion image inserts are converted to `MPImageInsertConfig` only when the user enters an `MPImageInsertConfig`-only editing state
+4. The first 3 such states should be:
    - scale
+   - move
    - rotate
-5. That conversion replaces the original XTherion image entry instead of augmenting it
+5. The actual implementation of those 3 actions should be deferred to a later phase
+6. That conversion replaces the original XTherion image entry instead of augmenting it
 
 This keeps ordinary inserted images compatible by default while still enabling advanced transforms when the user actually needs them.
 
@@ -227,7 +241,7 @@ This keeps ordinary inserted images compatible by default while still enabling a
 - Add model tests for transform defaults and serialization
 - Add XVI-specific metadata tests
 - Add raster-specific metadata tests
-- Add bounding-box tests for scale and rotation
+- Add state-machine tests for the new image-operation states
 
 ## Implementation Phases
 
@@ -268,28 +282,40 @@ This keeps ordinary inserted images compatible by default while still enabling a
   - transform data survives save/load
   - mixed files remain readable
 
-## Phase 4: Runtime behavior
+## Phase 4: Runtime model preparation
 
 - [ ] Move raster loading and XVI loading logic to descendants
-- [ ] Update bounding-box calculations to honor scale and rotation
+- [ ] Keep the transform-capable runtime model ready for later scale, move, and rotate implementation
 - [ ] Keep `isVisible` invalidation behavior
-- [ ] Add focused tests for transformed bounds
+- [ ] Add focused tests for transform-field defaults and runtime preparation
 
 ## Phase 5: Command and controller migration
 
 - [ ] Update command factory methods to construct the new image insert classes
 - [ ] Update add/remove/edit commands
 - [ ] Update selection and visibility toggles
-- [ ] Add conversion from `THXTherionImageInsertConfig` to `MPImageInsertConfig` when the user first triggers scale or rotate on that image
+- [ ] Add conversion from `THXTherionImageInsertConfig` to `MPImageInsertConfig` when the user first enters scale, move, or rotate state for that image
 - [ ] Ensure the conversion preserves filename, visibility, position, and XVI root semantics
 - [ ] Keep undo/redo stable
 
-## Phase 6: UI rollout
+## Phase 6: State machine preparation
 
 - [ ] Keep existing UI working for XVI and raster
+- [ ] Create 3 new image-operation states:
+  - `scale`
+  - `move`
+  - `rotate`
+- [ ] Wire the state machine so these states can own future MP-only image operations
+- [ ] Do not implement the actual scale, move, or rotate behavior yet
+- [ ] Do not block XVI/raster rollout on SVG editing UI
+
+## Phase 7: Later UI and action rollout
+
+- [ ] Implement the actual scale action
+- [ ] Implement the actual move action
+- [ ] Implement the actual rotate action
 - [ ] Expose the new transform properties through the MP-only actions
 - [ ] Insert SVG images directly as `MPImageInsertConfig`
-- [ ] Do not block XVI/raster rollout on SVG editing UI
 
 ## XVI Root
 
@@ -336,7 +362,7 @@ Practical meaning:
 
 ### 1. Where should `format` come from?
 
-Recommended answer:
+Choosen answer:
 
 - derive it from the runtime class, not only from filename extension
 - still validate extension where useful
@@ -345,7 +371,7 @@ This avoids baking behavior into string matching once SVG arrives.
 
 ### 2. Should Mapiah metadata include `isVisible`?
 
-Recommended answer:
+Choosen answer:
 
 - yes
 
@@ -356,7 +382,7 @@ Reason:
 
 ### 3. Should metadata include top-left offset?
 
-Recommended answer:
+Choosen answer:
 
 - yes
 
@@ -367,7 +393,7 @@ Reason:
 
 ### 4. Should metadata be JSON?
 
-Recommended answer:
+Choosen answer:
 
 - avoid JSON in v1 unless escaping proves too painful
 
@@ -377,7 +403,7 @@ Reason:
 
 ### 5. Should `isGridVisible` be persisted?
 
-Recommended answer:
+Choosen answer:
 
 - no
 
@@ -385,7 +411,7 @@ Reason:
 
 - you explicitly do not want to persist it
 - it is editor-only state and should not define file compatibility
-1. Don´t implement UX for scale, rotation and move of MPImageInsertConfig yet. Just create the necessary methods and tests but no UI.
+1. Do not implement the actual scale, rotation, and move actions for `MPImageInsertConfig` yet. In this phase, only create the necessary states, methods, and tests, with no UI for those operations yet.
 2. For XVI images with XVIRoot, the rotation center will necessarily be the XVI root station position.
 
 
@@ -394,6 +420,7 @@ Reason:
 - Bounding-box math will become more complex once rotation is active
 - XVI root handling and rotation may interact in non-obvious ways
 - Converting from XTherion entries to Mapiah entries must be undo-safe
+- Deferring the actual scale, move, and rotate behavior means the new states must be introduced without regressing current selection flows
 - Existing code assumes `THXTherionImageInsertConfig` in several places, so migration should be incremental
 - `##MAPIAH##` grammar support will require parser updates beyond the current generic XTherion path
 
@@ -401,6 +428,7 @@ Reason:
 
 - Keep phase 1 and 2 narrowly focused on persistence and model shape
 - Keep conversion to `MPImageInsertConfig` lazy and action-driven
+- Keep the new image-operation states structurally present, but defer their concrete editing behavior to a later phase
 - Preserve unknown `##MAPIAH##` lines instead of dropping them
 - Delay SVG implementation until XVI and raster paths are stable
 - Add round-trip tests before broad refactors
@@ -411,10 +439,12 @@ Reason:
 - Parser test: `##MAPIAH## image_insert_v1` XVI entry loads as `MPXVIImageInsertConfig`
 - Parser test: `##MAPIAH## image_insert_v1` raster entry loads as `MPRasterImageInsertConfig`
 - Writer test: untouched XTherion image stays XTherion
-- Writer test: scaled or rotated image is rewritten as `##MAPIAH## image_insert_v1`
+- Writer test: an image already represented as `MPImageInsertConfig` is written back as `##MAPIAH## image_insert_v1`
 - Model test: descendant `copyWith`, equality, and `toMap` behave correctly
-- Bounds test: raster scale modifies size as expected
-- Conversion test: scale or rotate converts XTherion image entry into Mapiah image entry
+- State machine test: entering scale creates or activates the dedicated scale state
+- State machine test: entering move creates or activates the dedicated move state
+- State machine test: entering rotate creates or activates the dedicated rotate state
+- Conversion test: entering scale, move, or rotate state converts the XTherion image entry into a Mapiah image entry
 - XVI root test: reloaded file reanchors using saved root station and root offsets when the station still exists
 
 ## Final Recommendation
