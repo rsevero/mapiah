@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/auxiliary/mp_window_title.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -15,7 +17,6 @@ import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:window_size/window_size.dart';
 
 class MapiahHome extends StatefulWidget {
   final String? mainFilePath;
@@ -96,15 +97,7 @@ class _MapiahHomeState extends State<MapiahHome> {
       ),
     );
 
-    try {
-      setWindowTitle(appLocalizations.appTitle);
-    } on MissingPluginException {
-      // In widget tests, desktop plugins (like window_size) may not be
-      // registered. Ignore the missing plugin so tests can run headless.
-    } on PlatformException {
-      // Also ignore other platform exceptions in non-desktop environments
-      // during tests.
-    }
+    unawaited(mpSetWindowTitleIfAvailable(appLocalizations.appTitle));
 
     initializeMPCommandLocalizations(context);
 

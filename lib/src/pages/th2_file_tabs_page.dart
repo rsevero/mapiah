@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
+import 'package:mapiah/src/auxiliary/mp_window_title.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -18,7 +19,6 @@ import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
 import 'package:mobx/mobx.dart' hide Listener;
-import 'package:window_size/window_size.dart';
 
 class TH2FileTabsPage extends StatefulWidget {
   const TH2FileTabsPage({super.key});
@@ -103,15 +103,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       ),
     );
 
-    try {
-      setWindowTitle(appLocalizations.appTitle);
-    } on MissingPluginException {
-      // In widget tests, desktop plugins (like window_size) may not be
-      // registered. Ignore the missing plugin so tests can run headless.
-    } on PlatformException {
-      // Also ignore other platform exceptions in non-desktop environments
-      // during tests.
-    }
+    unawaited(mpSetWindowTitleIfAvailable(appLocalizations.appTitle));
 
     final Scaffold scaffold = Scaffold(
       appBar: AppBar(
