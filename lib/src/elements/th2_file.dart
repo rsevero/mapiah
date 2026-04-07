@@ -423,6 +423,10 @@ class TH2File
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();
+      case MPImageInsertConfig _:
+        mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(filename)
+            ?.resetShowImages();
     }
   }
 
@@ -513,6 +517,10 @@ class TH2File
         } else {
           _xtherionSettingMPIDs = null;
         }
+        mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(filename)
+            ?.resetShowImages();
+      case MPImageInsertConfig _:
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();

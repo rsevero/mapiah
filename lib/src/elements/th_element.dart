@@ -27,8 +27,8 @@ import 'package:mapiah/src/elements/mixins/th_calculate_children_bounding_box_mi
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -40,6 +40,7 @@ import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 
 part 'mixins/th_has_options_mixin.dart';
 part 'mixins/th_has_platype_mixin.dart';
+part 'mp_image_insert_config.dart';
 part 'th_area_border_thid.dart';
 part 'th_area.dart';
 part 'th_bezier_curve_line_segment.dart';
@@ -62,8 +63,8 @@ part 'th_xtherion_config.dart';
 part 'th_xtherion_image_insert_config.dart';
 
 enum THElementType {
-  areaBorderTHID,
   area,
+  areaBorderTHID,
   bezierCurveLineSegment,
   comment,
   emptyLine,
@@ -74,8 +75,9 @@ enum THElementType {
   endscrap,
   line,
   lineSegment,
-  multilineCommentContent,
+  mapiahImageInsertConfig,
   multilineComment,
+  multilineCommentContent,
   point,
   scrap,
   straightLineSegment,
@@ -210,10 +212,10 @@ abstract class THElement with MPTH2FileReferenceMixin {
     final THElementType type = THElementType.values.byName(map['elementType']);
 
     switch (type) {
-      case THElementType.areaBorderTHID:
-        return THAreaBorderTHID.fromMap(map);
       case THElementType.area:
         return THArea.fromMap(map);
+      case THElementType.areaBorderTHID:
+        return THAreaBorderTHID.fromMap(map);
       case THElementType.bezierCurveLineSegment:
         return THBezierCurveLineSegment.fromMap(map);
       case THElementType.comment:
@@ -236,6 +238,8 @@ abstract class THElement with MPTH2FileReferenceMixin {
         throw THCustomException(
           'THElementType.lineSegment should not by instantiated by THElementfromMap().',
         );
+      case THElementType.mapiahImageInsertConfig:
+        return MPImageInsertConfig.fromMap(map);
       case THElementType.multilineCommentContent:
         return THMultilineCommentContent.fromMap(map);
       case THElementType.multilineComment:

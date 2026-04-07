@@ -1,0 +1,3 @@
+encoding UTF-8
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0}
+##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=-36;yy=28;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;xviRoot=station_A}

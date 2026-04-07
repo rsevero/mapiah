@@ -24,6 +24,7 @@
   * Fixed flaky UI test `t3202_ui_open_file_then_new_file_test`: `TH2FileTabsPage` now ignores missing `window_size` plugin registrations in widget-test and unsupported-platform environments instead of relying on a brittle runtime-type check before calling `setWindowTitle()`.
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
 * Infrastructure maintenance:
+  * Added Phase 1 of the new Mapiah image-insert metadata model: `MPImageInsertConfig` base/XVI/raster classes, versioned `##MAPIAH## image_insert_v1` parser/writer support, and regression tests for codec and TH2 round-tripping.
   * Added regression coverage for line-segment type conversion, including mixed lines, same-type no-op conversions, multi-line selection conversion, keyboard shortcuts (`J` / `Shift+J`), and undo restoration. Updated EN/PT help pages and keyboard-shortcuts documentation for the new actions.
   * Added `MPElementEditAux.getNextStationName()` plus unit tests covering station-name increment rules for numeric, alphabetic, separator-terminated, and survey-suffixed names.
   * Added merge-area regression tests covering crossing mixed straight/Bézier border cases, including open borders that must be auto-closed before merging and a self-crossing Bézier border case that must be treated as an intersection during merge.

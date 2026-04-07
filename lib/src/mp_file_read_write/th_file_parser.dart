@@ -247,6 +247,8 @@ class TH2FileParser {
 
           /// Line data injects same line comment by themselves.
           continue;
+        case '##mapiah##':
+          _injectMapiahSetting(element);
         case '##xtherion##':
           _injectXTherionSetting(element);
         default:
@@ -355,6 +357,61 @@ class TH2FileParser {
       value: element[1][1],
       originalLineInTH2File: _currentOriginalLine,
     );
+
+    _th2FileElementEditController.executeAddElement(
+      newElement: newElement,
+      parent: _currentParent,
+      childPositionInParent: mpAddChildAtEndOfParentChildrenList,
+    );
+  }
+
+  void _injectMapiahSetting(List<dynamic> element) {
+    final int elementSize = element.length;
+
+    if (kDebugMode) {
+      assert(elementSize == 2);
+      assert(element[1] is List);
+      assert(element[1].length == 2);
+    }
+
+    final String mapiahConfigID = element[1][0].toLowerCase();
+
+    if (mapiahConfigID != mpMapiahImageInsertConfigID) {
+      _injectUnknown(element);
+
+      return;
+    }
+
+    _xTherionContent = element[1][1].toString().trim();
+
+    if (_xTherionContent.isEmpty) {
+      _addError(
+        'Content is empty',
+        '_injectMapiahSetting',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
+
+      return;
+    }
+
+    final String metadata = _getElement();
+
+    if (metadata.isEmpty) {
+      _addError(
+        'metadata is empty',
+        '_injectMapiahSetting',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
+
+      return;
+    }
+
+    final MPImageInsertConfig newElement =
+        MPImageInsertConfig.fromMetadataString(
+          parentMPID: _currentParentMPID,
+          metadata: metadata,
+          originalLineInTH2File: _currentOriginalLine,
+        );
 
     _th2FileElementEditController.executeAddElement(
       newElement: newElement,

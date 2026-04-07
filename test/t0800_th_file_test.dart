@@ -135,6 +135,38 @@ endscrap
     }
   });
 
+  group('mapiah config', () {
+    test('2026-04-07-001-mapiah_image_insert_only.th2', () async {
+      final TH2FileParser parser = TH2FileParser();
+      final TH2FileWriter writer = TH2FileWriter();
+
+      mpLocator.mpGeneralController.reset();
+
+      final (
+        TH2File file,
+        bool isSuccessful,
+        List<String> errors,
+      ) = await parser.parse(
+        THTestAux.testPath('2026-04-07-001-mapiah_image_insert_only.th2'),
+      );
+
+      expect(
+        isSuccessful,
+        true,
+        reason:
+            'Failed to parse 2026-04-07-001-mapiah_image_insert_only.th2: $errors',
+      );
+      expect(file.countElements(), 3);
+
+      final String asFile = writer.serialize(file);
+
+      expect(asFile, """encoding UTF-8
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0}
+##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=-36;yy=28;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;xviRoot=station_A}
+""");
+    });
+  });
+
   group('xtherion image reorder', () {
     test('reorders images through TH2File children order', () async {
       final TH2FileParser parser = TH2FileParser();

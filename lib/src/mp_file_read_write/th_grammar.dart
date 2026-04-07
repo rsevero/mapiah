@@ -30,7 +30,8 @@ class THGrammar extends GrammarDefinition {
 
   /// TH2 Structure
   Parser th2FileFirstLineStart() => (encoding() | th2Structure()).end();
-  Parser th2Structure() => xtherionConfig() | th2Command() | fullLineComment();
+  Parser th2Structure() =>
+      xtherionConfig() | mapiahConfig() | th2Command() | fullLineComment();
   Parser th2Command() => multiLineComment() | scrap();
 
   /// scrap contents
@@ -912,6 +913,12 @@ class THGrammar extends GrammarDefinition {
   /// xtherion config
   Parser xtherionConfig() =>
       (stringIgnoreCase(mpXTherionConfigID).trim() &
+              (keyword() & any().plus().flatten().trim()))
+          .map((value) => [value]);
+
+  /// mapiah config
+  Parser mapiahConfig() =>
+      (stringIgnoreCase(mpMapiahConfigID).trim() &
               (keyword() & any().plus().flatten().trim()))
           .map((value) => [value]);
 }

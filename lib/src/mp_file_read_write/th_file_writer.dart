@@ -193,6 +193,19 @@ class TH2FileWriter {
     return asString;
   }
 
+  String _serializeMapiahImageInsertConfig(THElement thElement) {
+    String asString = _elementOriginalLineRepresentation(thElement);
+
+    if (asString.isEmpty) {
+      final MPImageInsertConfig imageInsertConfig =
+          thElement as MPImageInsertConfig;
+
+      asString = "${imageInsertConfig.toMetadataLine()}$_lineEnding";
+    }
+
+    return asString;
+  }
+
   String serializeElement(THElement thElement) {
     final THElementType type = thElement.elementType;
 
@@ -245,6 +258,8 @@ class TH2FileWriter {
       case THElementType.lineSegment:
       case THElementType.straightLineSegment:
         asString += _serializeLineSegment(thElement);
+      case THElementType.mapiahImageInsertConfig:
+        asString += _serializeMapiahImageInsertConfig(thElement);
       case THElementType.multilineComment:
         asString += _prepareLineWithOriginalRepresentation(
           'comment',

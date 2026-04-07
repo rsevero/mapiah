@@ -511,8 +511,12 @@ const String mpLicenseURL =
 const String mpMapiahFlathubAppID = 'io.github.rsevero.mapiah';
 
 const String mpXTherionImageInsertConfigID = 'xth_me_image_insert';
+const String mpMapiahImageInsertConfigID = 'image_insert_v1';
 const String mpXVIExtension = '.xvi';
 const String mpXTherionConfigID = '##XTHERION##';
+const String mpMapiahConfigID = '##MAPIAH##';
+const String mpImageInsertFormatRaster = 'raster';
+const String mpImageInsertFormatXVI = 'xvi';
 
 const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
