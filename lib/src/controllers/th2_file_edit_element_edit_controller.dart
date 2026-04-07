@@ -1151,18 +1151,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final MPCommand addImageCommand =
-        MPCommandFactory.addXTherionInsertImageConfig(
-          imageFilename: imageResult.filename!,
-          th2FileEditController: _th2FileEditController,
-        );
+    final MPCommand addImageCommand = MPCommandFactory.addImageInsertConfig(
+      imageFilename: imageResult.filename!,
+      th2FileEditController: _th2FileEditController,
+    );
 
     _th2FileEditController.execute(addImageCommand);
     _th2FileEditController.triggerImagesRedraw();
   }
 
   void removeImage(int mpID) {
-    final MPRemoveXTherionImageInsertConfigCommand removeImageCommand =
+    final MPRemoveImageInsertConfigCommand removeImageCommand =
         MPCommandFactory.removeImageInsertConfigFromExisting(
           existingImageInsertConfigMPID: mpID,
           th2File: _th2FileEditController.th2File,

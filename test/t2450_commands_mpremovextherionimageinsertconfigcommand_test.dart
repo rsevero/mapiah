@@ -23,7 +23,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPRemoveXTherionImageInsertConfigCommand without empty lines', () {
+  group('command: MPRemoveImageInsertConfigCommand without empty lines', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -76,8 +76,8 @@ void main() {
 
             final int imageMPID = parsedFile.imageMPIDs.first;
             final MPCommand setCommand =
-                MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
-                  existingXTherionImageInsertConfigMPID: imageMPID,
+                MPCommandFactory.removeImageInsertConfigFromExisting(
+                  existingImageInsertConfigMPID: imageMPID,
                   th2File: parsedFile,
                 );
 
@@ -103,7 +103,7 @@ void main() {
     }
   });
 
-  group('command: MPRemoveXTherionImageInsertConfigCommand with empty lines', () {
+  group('command: MPRemoveImageInsertConfigCommand with empty lines', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -162,8 +162,8 @@ void main() {
 
             final int imageMPID = parsedFile.imageMPIDs.first;
             final MPCommand setCommand =
-                MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
-                  existingXTherionImageInsertConfigMPID: imageMPID,
+                MPCommandFactory.removeImageInsertConfigFromExisting(
+                  existingImageInsertConfigMPID: imageMPID,
                   th2File: parsedFile,
                 );
 

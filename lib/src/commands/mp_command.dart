@@ -28,11 +28,11 @@ part 'mp_add_area_border_thid_command.dart';
 part 'mp_add_area_command.dart';
 part 'mp_add_element_command.dart';
 part 'mp_add_empty_line_command.dart';
+part 'mp_add_image_insert_config_command.dart';
 part 'mp_add_line_command.dart';
 part 'mp_add_line_segment_command.dart';
 part 'mp_add_point_command.dart';
 part 'mp_add_scrap_command.dart';
-part 'mp_add_xtherion_image_insert_config_command.dart';
 part 'mp_edit_area_type_command.dart';
 part 'mp_edit_line_segment_command.dart';
 part 'mp_edit_line_type_command.dart';
@@ -48,12 +48,12 @@ part 'mp_remove_area_command.dart';
 part 'mp_remove_attr_option_from_element_command.dart';
 part 'mp_remove_element_command.dart';
 part 'mp_remove_empty_line_command.dart';
+part 'mp_remove_image_insert_config_command.dart';
 part 'mp_remove_line_command.dart';
 part 'mp_remove_line_segment_command.dart';
 part 'mp_remove_option_from_element_command.dart';
 part 'mp_remove_point_command.dart';
 part 'mp_remove_scrap_command.dart';
-part 'mp_remove_xtherion_image_insert_config_command.dart';
 part 'mp_reorder_images_command.dart';
 part 'mp_reorder_scraps_command.dart';
 part 'mp_replace_line_segments_command.dart';
@@ -182,7 +182,7 @@ abstract class MPCommand {
       case MPCommandType.addScrap:
         return MPAddScrapCommand.fromMap(map);
       case MPCommandType.addXTherionImageInsertConfig:
-        return MPAddXTherionImageInsertConfigCommand.fromMap(map);
+        return MPAddImageInsertConfigCommand.fromMap(map);
       case MPCommandType.editAreaType:
         return MPEditAreaTypeCommand.fromMap(map);
       case MPCommandType.editLineSegment:
@@ -228,7 +228,7 @@ abstract class MPCommand {
       case MPCommandType.removeScrap:
         return MPRemoveScrapCommand.fromMap(map);
       case MPCommandType.removeXTherionImageInsertConfig:
-        return MPRemoveXTherionImageInsertConfigCommand.fromMap(map);
+        return MPRemoveImageInsertConfigCommand.fromMap(map);
       case MPCommandType.replaceLineSegments:
         return MPReplaceLineSegmentsCommand.fromMap(map);
       case MPCommandType.setAttrOptionToElement:

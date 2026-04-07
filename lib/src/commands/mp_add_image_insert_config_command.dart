@@ -2,17 +2,17 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'mp_command.dart';
 
-class MPAddXTherionImageInsertConfigCommand extends MPCommand
+class MPAddImageInsertConfigCommand extends MPCommand
     with MPPosCommandMixin {
   final THElement newImageInsertConfig;
-  late final int xTherionImageInsertConfigPositionInParent;
+  late final int imageInsertConfigPositionInParent;
 
   static const MPCommandDescriptionType defaultDescriptionType =
       MPCommandDescriptionType.addXTherionImageInsertConfig;
 
-  MPAddXTherionImageInsertConfigCommand.forCWJM({
+  MPAddImageInsertConfigCommand.forCWJM({
     required this.newImageInsertConfig,
-    required this.xTherionImageInsertConfigPositionInParent,
+    required this.imageInsertConfigPositionInParent,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super.forCWJM() {
@@ -20,9 +20,9 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     this.posCommand = posCommand;
   }
 
-  MPAddXTherionImageInsertConfigCommand({
+  MPAddImageInsertConfigCommand({
     required this.newImageInsertConfig,
-    required this.xTherionImageInsertConfigPositionInParent,
+    required this.imageInsertConfigPositionInParent,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {
@@ -37,7 +37,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
   void _actualExecute(TH2FileEditController th2FileEditController) {
     th2FileEditController.elementEditController.executeAddElement(
       newElement: newImageInsertConfig,
-      childPositionInParent: xTherionImageInsertConfigPositionInParent,
+      childPositionInParent: imageInsertConfigPositionInParent,
     );
   }
 
@@ -46,8 +46,8 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     TH2FileEditController th2FileEditController,
   ) {
     final MPCommand oppositeCommand =
-        MPCommandFactory.removeXTherionImageInsertConfigFromExisting(
-          existingXTherionImageInsertConfigMPID: newImageInsertConfig.mpID,
+        MPCommandFactory.removeImageInsertConfigFromExisting(
+          existingImageInsertConfigMPID: newImageInsertConfig.mpID,
           th2File: th2FileEditController.th2File,
           descriptionType: descriptionType,
         );
@@ -62,35 +62,35 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     if ((imageInsertConfig is! THXTherionImageInsertConfig) &&
         (imageInsertConfig is! MPImageInsertConfig)) {
       throw ArgumentError(
-        'MPAddXTherionImageInsertConfigCommand only supports image insert configs.',
+        'MPAddImageInsertConfigCommand only supports image insert configs.',
       );
     }
   }
 
   @override
-  MPAddXTherionImageInsertConfigCommand copyWith({
+  MPAddImageInsertConfigCommand copyWith({
     THElement? newImageInsertConfig,
-    int? xTherionImageInsertConfigPositionInParent,
+    int? imageInsertConfigPositionInParent,
     MPCommand? posCommand,
     bool makePosCommandNull = false,
     MPCommandDescriptionType? descriptionType,
   }) {
-    return MPAddXTherionImageInsertConfigCommand.forCWJM(
+    return MPAddImageInsertConfigCommand.forCWJM(
       newImageInsertConfig: newImageInsertConfig ?? this.newImageInsertConfig,
-      xTherionImageInsertConfigPositionInParent:
-          xTherionImageInsertConfigPositionInParent ??
-          this.xTherionImageInsertConfigPositionInParent,
+      imageInsertConfigPositionInParent:
+          imageInsertConfigPositionInParent ??
+          this.imageInsertConfigPositionInParent,
       posCommand: makePosCommandNull ? null : (posCommand ?? this.posCommand),
       descriptionType: descriptionType ?? this.descriptionType,
     );
   }
 
-  factory MPAddXTherionImageInsertConfigCommand.fromMap(
+  factory MPAddImageInsertConfigCommand.fromMap(
     Map<String, dynamic> map,
   ) {
-    return MPAddXTherionImageInsertConfigCommand.forCWJM(
+    return MPAddImageInsertConfigCommand.forCWJM(
       newImageInsertConfig: THElement.fromMap(map['newImageInsertConfig']),
-      xTherionImageInsertConfigPositionInParent:
+      imageInsertConfigPositionInParent:
           map['xTherionImageInsertConfigPositionInParent'],
       posCommand: map.containsKey('posCommand') && (map['posCommand'] != null)
           ? MPCommand.fromMap(map['posCommand'])
@@ -101,8 +101,8 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     );
   }
 
-  factory MPAddXTherionImageInsertConfigCommand.fromJson(String source) {
-    return MPAddXTherionImageInsertConfigCommand.fromMap(jsonDecode(source));
+  factory MPAddImageInsertConfigCommand.fromJson(String source) {
+    return MPAddImageInsertConfigCommand.fromMap(jsonDecode(source));
   }
 
   @override
@@ -112,7 +112,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
     map.addAll({
       'newImageInsertConfig': newImageInsertConfig.toMap(),
       'xTherionImageInsertConfigPositionInParent':
-          xTherionImageInsertConfigPositionInParent,
+          imageInsertConfigPositionInParent,
       'posCommand': posCommand?.toMap(),
     });
 
@@ -127,10 +127,10 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
 
     if (!super.equalsBase(other)) return false;
 
-    return other is MPAddXTherionImageInsertConfigCommand &&
+    return other is MPAddImageInsertConfigCommand &&
         other.newImageInsertConfig == newImageInsertConfig &&
-        other.xTherionImageInsertConfigPositionInParent ==
-            xTherionImageInsertConfigPositionInParent &&
+        other.imageInsertConfigPositionInParent ==
+            imageInsertConfigPositionInParent &&
         other.posCommand == posCommand;
   }
 
@@ -138,7 +138,7 @@ class MPAddXTherionImageInsertConfigCommand extends MPCommand
   int get hashCode => Object.hash(
     super.hashCode,
     newImageInsertConfig,
-    xTherionImageInsertConfigPositionInParent,
+    imageInsertConfigPositionInParent,
     posCommand?.hashCode ?? 0,
   );
 }

@@ -23,7 +23,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
-  group('command: MPAddXTherionImageInsertConfigCommand', () {
+  group('command: MPAddImageInsertConfigCommand', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
@@ -89,7 +89,7 @@ void main() {
             controller.setCanvasScale(1);
 
             final MPCommand addImageCommand =
-                MPCommandFactory.addXTherionInsertImageConfig(
+                MPCommandFactory.addImageInsertConfig(
                   imageFilename: success['imageInsertFile'] as String,
                   th2FileEditController: controller,
                 );
