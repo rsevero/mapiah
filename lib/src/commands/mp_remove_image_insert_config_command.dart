@@ -7,7 +7,7 @@ class MPRemoveImageInsertConfigCommand extends MPCommand
   final int imageInsertConfigMPID;
 
   static const MPCommandDescriptionType defaultDescriptionType =
-      MPCommandDescriptionType.removeXTherionImageInsertConfig;
+      MPCommandDescriptionType.removeImageInsertConfig;
 
   MPRemoveImageInsertConfigCommand.forCWJM({
     required this.imageInsertConfigMPID,
@@ -26,7 +26,7 @@ class MPRemoveImageInsertConfigCommand extends MPCommand
   }
 
   @override
-  MPCommandType get type => MPCommandType.removeXTherionImageInsertConfig;
+  MPCommandType get type => MPCommandType.removeImageInsertConfig;
 
   @override
   void _prepareUndoRedoInfo(TH2FileEditController th2FileEditController) {
@@ -57,17 +57,15 @@ class MPRemoveImageInsertConfigCommand extends MPCommand
   MPUndoRedoCommand _createUndoRedoCommand(
     TH2FileEditController th2FileEditController,
   ) {
-    final MPCommand oppositeCommand =
-        MPAddImageInsertConfigCommand.forCWJM(
-          newImageInsertConfig:
-              _undoRedoInfo!['removedImageInsert'] as THElement,
-          imageInsertConfigPositionInParent:
-              _undoRedoInfo!['removedImageInsertPositionInParent'] as int,
-          posCommand: preCommand
-              ?.getUndoRedoCommand(th2FileEditController)
-              .undoCommand,
-          descriptionType: descriptionType,
-        );
+    final MPCommand oppositeCommand = MPAddImageInsertConfigCommand.forCWJM(
+      newImageInsertConfig: _undoRedoInfo!['removedImageInsert'] as THElement,
+      imageInsertConfigPositionInParent:
+          _undoRedoInfo!['removedImageInsertPositionInParent'] as int,
+      posCommand: preCommand
+          ?.getUndoRedoCommand(th2FileEditController)
+          .undoCommand,
+      descriptionType: descriptionType,
+    );
 
     return MPUndoRedoCommand(
       mapRedo: toMap(),
@@ -90,9 +88,7 @@ class MPRemoveImageInsertConfigCommand extends MPCommand
     );
   }
 
-  factory MPRemoveImageInsertConfigCommand.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory MPRemoveImageInsertConfigCommand.fromMap(Map<String, dynamic> map) {
     return MPRemoveImageInsertConfigCommand.forCWJM(
       imageInsertConfigMPID: map['xtherionImageInsertConfigMPID'],
       preCommand: map.containsKey('preCommand') && (map['preCommand'] != null)

@@ -350,6 +350,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addEmptyLine] =
         localizations.mpCommandDescriptionAddEmptyLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .addImageInsertConfig] =
+        localizations.mpCommandDescriptionAddXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLine] =
         localizations.mpCommandDescriptionAddLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addLines] =
@@ -360,9 +363,6 @@ class MPTextToUser {
         localizations.mpCommandDescriptionAddPoint;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.addScrap] =
         localizations.mpCommandDescriptionAddScrap;
-    _commandDescriptionTypeAsString[MPCommandDescriptionType
-            .addXTherionImageInsertConfig] =
-        localizations.mpCommandDescriptionAddXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .duplicateElements] =
         localizations.mpCommandDescriptionDuplicateElements;
@@ -423,6 +423,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemoveElements;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeEmptyLine] =
         localizations.mpCommandDescriptionRemoveEmptyLine;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .removeImageInsertConfig] =
+        localizations.mpCommandDescriptionRemoveXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLine] =
         localizations.mpCommandDescriptionRemoveLine;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeLines] =
@@ -443,9 +446,6 @@ class MPTextToUser {
         localizations.mpCommandDescriptionRemovePoint;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.removeScrap] =
         localizations.mpCommandDescriptionRemoveScrap;
-    _commandDescriptionTypeAsString[MPCommandDescriptionType
-            .removeXTherionImageInsertConfig] =
-        localizations.mpCommandDescriptionRemoveXTherionImageInsertConfig;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.reorderImages] =
         localizations.mpCommandDescriptionReorderImages;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.reorderScraps] =

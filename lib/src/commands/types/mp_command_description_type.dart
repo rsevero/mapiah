@@ -6,12 +6,12 @@ enum MPCommandDescriptionType {
   addElement,
   addElements,
   addEmptyLine,
+  addImageInsertConfig,
   addLine,
   addLines,
   addLineSegment,
   addPoint,
   addScrap,
-  addXTherionImageInsertConfig,
   copyElements,
   cutElements,
   duplicateElements,
@@ -49,6 +49,7 @@ enum MPCommandDescriptionType {
   removeElement,
   removeElements,
   removeEmptyLine,
+  removeImageInsertConfig,
   removeLine,
   removeLines,
   removeLineSegment,
@@ -57,7 +58,6 @@ enum MPCommandDescriptionType {
   removeOptionFromElements,
   removePoint,
   removeScrap,
-  removeXTherionImageInsertConfig,
   reorderImages,
   reorderScraps,
   replaceLineSegments,
@@ -87,6 +87,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removeElements;
       case MPCommandDescriptionType.addEmptyLine:
         return MPCommandDescriptionType.removeEmptyLine;
+      case MPCommandDescriptionType.addImageInsertConfig:
+        return MPCommandDescriptionType.removeImageInsertConfig;
       case MPCommandDescriptionType.addLine:
         return MPCommandDescriptionType.removeLine;
       case MPCommandDescriptionType.addLines:
@@ -97,8 +99,6 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.removePoint;
       case MPCommandDescriptionType.addScrap:
         return MPCommandDescriptionType.removeScrap;
-      case MPCommandDescriptionType.addXTherionImageInsertConfig:
-        return MPCommandDescriptionType.removeXTherionImageInsertConfig;
       case MPCommandDescriptionType.copyElements:
         return MPCommandDescriptionType.copyElements;
       case MPCommandDescriptionType.cutElements:
@@ -119,6 +119,8 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.addElements;
       case MPCommandDescriptionType.removeEmptyLine:
         return MPCommandDescriptionType.addEmptyLine;
+      case MPCommandDescriptionType.removeImageInsertConfig:
+        return MPCommandDescriptionType.addImageInsertConfig;
       case MPCommandDescriptionType.removeLine:
         return MPCommandDescriptionType.addLine;
       case MPCommandDescriptionType.removeLines:
@@ -133,8 +135,6 @@ enum MPCommandDescriptionType {
         return MPCommandDescriptionType.addPoint;
       case MPCommandDescriptionType.removeScrap:
         return MPCommandDescriptionType.addScrap;
-      case MPCommandDescriptionType.removeXTherionImageInsertConfig:
-        return MPCommandDescriptionType.addXTherionImageInsertConfig;
       case MPCommandDescriptionType.setOptionToElement:
         return MPCommandDescriptionType.removeOptionFromElement;
       default:

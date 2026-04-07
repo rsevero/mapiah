@@ -173,6 +173,8 @@ abstract class MPCommand {
         return MPAddElementCommand.fromMap(map);
       case MPCommandType.addEmptyLine:
         return MPAddEmptyLineCommand.fromMap(map);
+      case MPCommandType.addImageInsertConfig:
+        return MPAddImageInsertConfigCommand.fromMap(map);
       case MPCommandType.addLine:
         return MPAddLineCommand.fromMap(map);
       case MPCommandType.addLineSegment:
@@ -181,8 +183,6 @@ abstract class MPCommand {
         return MPAddPointCommand.fromMap(map);
       case MPCommandType.addScrap:
         return MPAddScrapCommand.fromMap(map);
-      case MPCommandType.addXTherionImageInsertConfig:
-        return MPAddImageInsertConfigCommand.fromMap(map);
       case MPCommandType.editAreaType:
         return MPEditAreaTypeCommand.fromMap(map);
       case MPCommandType.editLineSegment:
@@ -217,6 +217,8 @@ abstract class MPCommand {
         return MPRemoveElementCommand.fromMap(map);
       case MPCommandType.removeEmptyLine:
         return MPRemoveEmptyLineCommand.fromMap(map);
+      case MPCommandType.removeImageInsertConfig:
+        return MPRemoveImageInsertConfigCommand.fromMap(map);
       case MPCommandType.removeLine:
         return MPRemoveLineCommand.fromMap(map);
       case MPCommandType.removeLineSegment:
@@ -227,8 +229,6 @@ abstract class MPCommand {
         return MPRemovePointCommand.fromMap(map);
       case MPCommandType.removeScrap:
         return MPRemoveScrapCommand.fromMap(map);
-      case MPCommandType.removeXTherionImageInsertConfig:
-        return MPRemoveImageInsertConfigCommand.fromMap(map);
       case MPCommandType.replaceLineSegments:
         return MPReplaceLineSegmentsCommand.fromMap(map);
       case MPCommandType.setAttrOptionToElement:

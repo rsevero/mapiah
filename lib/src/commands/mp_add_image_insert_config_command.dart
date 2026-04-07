@@ -2,13 +2,12 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'mp_command.dart';
 
-class MPAddImageInsertConfigCommand extends MPCommand
-    with MPPosCommandMixin {
+class MPAddImageInsertConfigCommand extends MPCommand with MPPosCommandMixin {
   final THElement newImageInsertConfig;
   late final int imageInsertConfigPositionInParent;
 
   static const MPCommandDescriptionType defaultDescriptionType =
-      MPCommandDescriptionType.addXTherionImageInsertConfig;
+      MPCommandDescriptionType.addImageInsertConfig;
 
   MPAddImageInsertConfigCommand.forCWJM({
     required this.newImageInsertConfig,
@@ -31,7 +30,7 @@ class MPAddImageInsertConfigCommand extends MPCommand
   }
 
   @override
-  MPCommandType get type => MPCommandType.addXTherionImageInsertConfig;
+  MPCommandType get type => MPCommandType.addImageInsertConfig;
 
   @override
   void _actualExecute(TH2FileEditController th2FileEditController) {
@@ -85,9 +84,7 @@ class MPAddImageInsertConfigCommand extends MPCommand
     );
   }
 
-  factory MPAddImageInsertConfigCommand.fromMap(
-    Map<String, dynamic> map,
-  ) {
+  factory MPAddImageInsertConfigCommand.fromMap(Map<String, dynamic> map) {
     return MPAddImageInsertConfigCommand.forCWJM(
       newImageInsertConfig: THElement.fromMap(map['newImageInsertConfig']),
       imageInsertConfigPositionInParent:
