@@ -1210,11 +1210,17 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
   }
 
-  MPImageInsertConfig prepareImageMoveState(int imageMPID) {
-    return _prepareImageOperationState(
-      imageMPID: imageMPID,
-      stateType: MPTH2FileEditStateType.imageMove,
+  MPRuntimeImageInsertConfigMixin prepareImageMoveState(int imageMPID) {
+    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
+      imageMPID,
     );
+
+    _th2FileEditController.stateController.setImageOperationState(
+      type: MPTH2FileEditStateType.imageMove,
+      imageMPID: image.mpID,
+    );
+
+    return image;
   }
 
   MPImageInsertConfig prepareImageRotateState(int imageMPID) {

@@ -31,9 +31,18 @@ class MPTH2FileEditStateImageMove extends MPTH2FileEditStateImageOperation {
 
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
-    final Rect? imageBoundingBox = imageConfig.getBoundingBox(
-      th2FileEditController,
-    );
+    final MPRuntimeImageInsertConfigMixin currentImage = imageConfig;
+    final Rect? imageBoundingBox = switch (currentImage) {
+      THXTherionImageInsertConfig _ => currentImage.getBoundingBox(
+        th2FileEditController,
+      ),
+      MPImageInsertConfig _ => currentImage.getBoundingBox(
+        th2FileEditController,
+      ),
+      _ => throw StateError(
+        'Unsupported image type in MPTH2FileEditStateImageMove: ${currentImage.runtimeType}',
+      ),
+    };
 
     if (imageBoundingBox == null) {
       _resetDragPreview();

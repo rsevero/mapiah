@@ -1246,25 +1246,41 @@ class MPCommandFactory {
     MPCommandDescriptionType descriptionType =
         MPMoveImageInsertConfigCommand.defaultDescriptionType,
   }) {
-    final MPImageInsertConfig image =
-        th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+    final MPRuntimeImageInsertConfigMixin image = th2File.imageByMPID(
+      imageMPID,
+    );
+    late final THDoublePart fromXX;
+    late final THDoublePart fromYY;
+    late final String fromOriginalLineInTH2File;
+
+    switch (image) {
+      case THXTherionImageInsertConfig _:
+        fromXX = image.xx;
+        fromYY = image.yy;
+        fromOriginalLineInTH2File = image.originalLineInTH2File;
+      case MPImageInsertConfig _:
+        fromXX = image.xx;
+        fromYY = image.yy;
+        fromOriginalLineInTH2File = image.originalLineInTH2File;
+    }
+
     final int resolvedDecimalPositions =
         decimalPositions ??
-        image.xx.decimalPositions.clamp(0, mpMaxDecimalPositions);
+        fromXX.decimalPositions.clamp(0, mpMaxDecimalPositions);
 
     return MPMoveImageInsertConfigCommand.forCWJM(
       imageMPID: imageMPID,
-      fromXX: image.xx,
-      fromYY: image.yy,
-      toXX: image.xx.copyWith(
-        value: image.xx.value + deltaOnCanvas.dx,
+      fromXX: fromXX,
+      fromYY: fromYY,
+      toXX: fromXX.copyWith(
+        value: fromXX.value + deltaOnCanvas.dx,
         decimalPositions: resolvedDecimalPositions,
       ),
-      toYY: image.yy.copyWith(
-        value: image.yy.value + deltaOnCanvas.dy,
+      toYY: fromYY.copyWith(
+        value: fromYY.value + deltaOnCanvas.dy,
         decimalPositions: resolvedDecimalPositions,
       ),
-      fromOriginalLineInTH2File: image.originalLineInTH2File,
+      fromOriginalLineInTH2File: fromOriginalLineInTH2File,
       toOriginalLineInTH2File: '',
       descriptionType: descriptionType,
     );

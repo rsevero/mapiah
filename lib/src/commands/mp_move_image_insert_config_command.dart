@@ -57,12 +57,30 @@ class MPMoveImageInsertConfigCommand extends MPCommand {
   void _actualExecute(TH2FileEditController th2FileEditController) {
     final TH2FileEditElementEditController elementEditController =
         th2FileEditController.elementEditController;
-    final MPImageInsertConfig originalImage =
-        th2FileEditController.th2File.imageByMPID(imageMPID)
-            as MPImageInsertConfig;
-    late final MPImageInsertConfig modifiedImage;
+    final MPRuntimeImageInsertConfigMixin originalImage = th2FileEditController
+        .th2File
+        .imageByMPID(imageMPID);
+    late final THElement modifiedImage;
 
     switch (originalImage) {
+      case THXVIXTherionImageInsertConfig _:
+        final THXVIXTherionImageInsertConfig modifiedXVIXTherionImage =
+            originalImage.copyWith(
+              xx: toXX,
+              yy: toYY,
+              originalLineInTH2File: toOriginalLineInTH2File,
+            );
+
+        modifiedXVIXTherionImage.setXVIFile(
+          originalImage.getXVIFile(th2FileEditController),
+        );
+        modifiedImage = modifiedXVIXTherionImage;
+      case THRasterXTherionImageInsertConfig _:
+        modifiedImage = originalImage.copyWith(
+          xx: toXX,
+          yy: toYY,
+          originalLineInTH2File: toOriginalLineInTH2File,
+        );
       case MPXVIImageInsertConfig _:
         final MPXVIImageInsertConfig originalXVIImage = originalImage;
         final MPXVIImageInsertConfig modifiedXVIImage = originalXVIImage

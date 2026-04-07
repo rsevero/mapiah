@@ -33,9 +33,11 @@ void main() {
       mpLocator.mpGeneralController.reset();
     });
 
-    Future<TH2FileEditController> loadController() async {
+    Future<TH2FileEditController> loadController({
+      String filename = '2025-10-26-001-with_image.th2',
+    }) async {
       final TH2FileParser parser = TH2FileParser();
-      final String path = THTestAux.testPath('2025-10-26-001-with_image.th2');
+      final String path = THTestAux.testPath(filename);
       final (_, isSuccessful, errors) = await parser.parse(
         path,
         forceNewController: true,
@@ -49,16 +51,18 @@ void main() {
     }
 
     test(
-      'prepareImageMoveState enters image move state with Mapiah image',
+      'prepareImageMoveState preserves XTherion image for plain move',
       () async {
         final TH2FileEditController controller = await loadController();
         final int imageMPID = controller.th2File.imageMPIDs.first;
 
-        final MPImageInsertConfig image = controller.elementEditController
+        final MPRuntimeImageInsertConfigMixin image = controller
+            .elementEditController
             .prepareImageMoveState(imageMPID);
 
         expect(image.mpID, imageMPID);
         expect(controller.th2File.imageByMPID(imageMPID), same(image));
+        expect(image, isA<THXVIXTherionImageInsertConfig>());
         expect(
           controller.stateController.state.type,
           MPTH2FileEditStateType.imageMove,
@@ -73,13 +77,16 @@ void main() {
         final TH2FileEditController controller = await loadController();
         final int imageMPID = controller.th2File.imageMPIDs.first;
 
-        final MPImageInsertConfig movedImage = controller.elementEditController
+        final MPRuntimeImageInsertConfigMixin movedImage = controller
+            .elementEditController
             .prepareImageMoveState(imageMPID);
         final MPImageInsertConfig rotatedImage = controller
             .elementEditController
             .prepareImageRotateState(imageMPID);
 
-        expect(rotatedImage, same(movedImage));
+        expect(movedImage, isA<THXVIXTherionImageInsertConfig>());
+        expect(rotatedImage, isA<MPImageInsertConfig>());
+        expect(rotatedImage.mpID, movedImage.mpID);
         expect(
           controller.stateController.state.type,
           MPTH2FileEditStateType.imageRotate,
@@ -108,8 +115,9 @@ void main() {
     test('image move drag updates image position and is undoable', () async {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
-      final MPImageInsertConfig image = controller.elementEditController
-          .prepareImageMoveState(imageMPID);
+      final THXTherionImageInsertConfig image =
+          controller.elementEditController.prepareImageMoveState(imageMPID)
+              as THXTherionImageInsertConfig;
       final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final Offset dragStartCanvasPosition = originalBoundingBox.center;
       const Offset deltaOnCanvas = Offset(12.0, -8.0);
@@ -141,93 +149,92 @@ void main() {
         PointerUpEvent(position: dragEndScreenPosition),
       );
 
-      final MPImageInsertConfig movedImage =
-          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+      final THXTherionImageInsertConfig movedImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as THXTherionImageInsertConfig;
 
+      expect(movedImage, isA<THXVIXTherionImageInsertConfig>());
       expect(movedImage.xx.value, closeTo(originalXX + 12.0, 0.0001));
       expect(movedImage.yy.value, closeTo(originalYY - 8.0, 0.0001));
 
       controller.undo();
 
-      final MPImageInsertConfig undoneImage =
-          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+      final THXTherionImageInsertConfig undoneImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as THXTherionImageInsertConfig;
 
       expect(undoneImage.xx.value, originalXX);
       expect(undoneImage.yy.value, originalYY);
     });
 
-    test('image move drag starts from the visible raster image area', () async {
-      final TH2FileParser parser = TH2FileParser();
-      final String path = THTestAux.testPath(
-        '2026-04-07-001-mapiah_image_insert_only.th2',
-      );
-      final (_, isSuccessful, errors) = await parser.parse(
-        path,
-        forceNewController: true,
-      );
+    test(
+      'image move keeps XTherion raster image class when only moving',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          filename: '2026-04-07-003-mixed_image_insert_styles.th2',
+        );
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final THRasterXTherionImageInsertConfig image =
+            controller.elementEditController.prepareImageMoveState(imageMPID)
+                as THRasterXTherionImageInsertConfig;
+        final ui.Image decodedImage = await _createTestImage(
+          width: 40,
+          height: 20,
+        );
 
-      expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+        image.setRasterImage(decodedImage);
+        final Rect visibleBoundingBox = Rect.fromLTRB(
+          image.xx.value,
+          image.yy.value - decodedImage.height.toDouble(),
+          image.xx.value + decodedImage.width.toDouble(),
+          image.yy.value,
+        );
+        final Offset dragStartCanvasPosition = visibleBoundingBox.center;
+        const Offset deltaOnCanvas = Offset(7.0, -11.0);
+        final Offset dragEndCanvasPosition =
+            dragStartCanvasPosition + deltaOnCanvas;
+        final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+          dragStartCanvasPosition,
+        );
+        final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+          dragEndCanvasPosition,
+        );
+        final double originalXX = image.xx.value;
+        final double originalYY = image.yy.value;
 
-      final TH2FileEditController controller = mpLocator.mpGeneralController
-          .getTH2FileEditController(filename: path);
-      final int imageMPID = controller.th2File.imageMPIDs.first;
-      final MPRasterImageInsertConfig image =
-          controller.elementEditController.prepareImageMoveState(imageMPID)
-              as MPRasterImageInsertConfig;
-      final ui.Image decodedImage = await _createTestImage(
-        width: 40,
-        height: 20,
-      );
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
 
-      image.setRasterImage(decodedImage);
-      final Rect visibleBoundingBox = Rect.fromLTRB(
-        image.xx.value,
-        image.yy.value - decodedImage.height.toDouble(),
-        image.xx.value + decodedImage.width.toDouble(),
-        image.yy.value,
-      );
-      final Offset dragStartCanvasPosition = visibleBoundingBox.center;
-      const Offset deltaOnCanvas = Offset(7.0, -11.0);
-      final Offset dragEndCanvasPosition =
-          dragStartCanvasPosition + deltaOnCanvas;
-      final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
-        dragStartCanvasPosition,
-      );
-      final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
-        dragEndCanvasPosition,
-      );
-      final double originalXX = image.xx.value;
-      final double originalYY = image.yy.value;
+        final THRasterXTherionImageInsertConfig movedImage =
+            controller.th2File.imageByMPID(imageMPID)
+                as THRasterXTherionImageInsertConfig;
 
-      controller.stateController.onPrimaryButtonPointerDown(
-        PointerDownEvent(
-          position: dragStartScreenPosition,
-          buttons: kPrimaryButton,
-        ),
-      );
-      controller.stateController.onPrimaryButtonDragUpdate(
-        PointerMoveEvent(
-          position: dragEndScreenPosition,
-          delta: dragEndScreenPosition - dragStartScreenPosition,
-          buttons: kPrimaryButton,
-        ),
-      );
-      controller.stateController.onPrimaryButtonDragEnd(
-        PointerUpEvent(position: dragEndScreenPosition),
-      );
-
-      final MPImageInsertConfig movedImage =
-          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
-
-      expect(movedImage.xx.value, closeTo(originalXX + 7.0, 0.0001));
-      expect(movedImage.yy.value, closeTo(originalYY - 11.0, 0.0001));
-    });
+        expect(movedImage, isA<THRasterXTherionImageInsertConfig>());
+        expect(movedImage.xx.value, closeTo(originalXX + 7.0, 0.0001));
+        expect(movedImage.yy.value, closeTo(originalYY - 11.0, 0.0001));
+      },
+    );
 
     test('image move drag exposes preview offset before commit', () async {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
-      final MPImageInsertConfig image = controller.elementEditController
-          .prepareImageMoveState(imageMPID);
+      final THXTherionImageInsertConfig image =
+          controller.elementEditController.prepareImageMoveState(imageMPID)
+              as THXTherionImageInsertConfig;
       final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final Offset dragStartCanvasPosition = originalBoundingBox.center;
       const Offset deltaOnCanvas = Offset(-5.0, 9.0);

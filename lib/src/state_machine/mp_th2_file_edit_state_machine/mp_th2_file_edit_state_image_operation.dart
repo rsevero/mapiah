@@ -16,8 +16,8 @@ abstract class MPTH2FileEditStateImageOperation extends MPTH2FileEditState {
 
   Offset get previewOffset => Offset.zero;
 
-  MPImageInsertConfig get imageConfig =>
-      th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+  MPRuntimeImageInsertConfigMixin get imageConfig =>
+      th2File.imageByMPID(imageMPID);
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
