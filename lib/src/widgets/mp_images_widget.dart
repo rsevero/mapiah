@@ -20,10 +20,10 @@ class MPImagesWidget extends StatelessWidget {
         th2FileEditController.redrawTriggerImages;
 
         final List<Widget> widgets = [];
-        final Iterable<THXTherionImageInsertConfig> images =
+        final Iterable<MPRuntimeImageInsertConfigMixin> images =
             th2FileEditController.th2File.getImages();
 
-        for (final THXTherionImageInsertConfig image in images) {
+        for (final MPRuntimeImageInsertConfigMixin image in images) {
           if (!image.isVisible) {
             continue;
           }

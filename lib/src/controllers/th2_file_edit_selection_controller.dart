@@ -1968,8 +1968,18 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void setImageGridVisibility(int imageMPID, bool isGridVisible) {
-    _th2FileEditController.th2File.imageByMPID(imageMPID).isGridVisible =
-        isGridVisible;
+    final MPRuntimeImageInsertConfigMixin image = _th2FileEditController.th2File
+        .imageByMPID(imageMPID);
+
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        thImage.isGridVisible = isGridVisible;
+      case MPXVIImageInsertConfig mpImage:
+        mpImage.isGridVisible = isGridVisible;
+      default:
+        break;
+    }
+
     _th2FileEditController.triggerImagesRedraw();
   }
 
@@ -1977,16 +1987,16 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   /// If any image is hidden, makes all images visible.
   @action
   void toggleAllImagesVisibility() {
-    final List<THXTherionImageInsertConfig> images = _th2FileEditController
+    final List<MPRuntimeImageInsertConfigMixin> images = _th2FileEditController
         .th2File
         .getImages()
         .toList();
 
     final bool allVisible = images.every(
-      (THXTherionImageInsertConfig image) => image.isVisible,
+      (MPRuntimeImageInsertConfigMixin image) => image.isVisible,
     );
 
-    for (final THXTherionImageInsertConfig image in images) {
+    for (final MPRuntimeImageInsertConfigMixin image in images) {
       image.isVisible = !allVisible;
     }
 
@@ -1997,18 +2007,34 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   /// If any XVI image grid is hidden, makes all grids visible.
   @action
   void toggleAllGridsVisibility() {
-    final List<THXTherionImageInsertConfig> xviImages = _th2FileEditController
-        .th2File
-        .getImages()
-        .where((THXTherionImageInsertConfig image) => image.isXVI)
-        .toList();
+    final List<MPRuntimeImageInsertConfigMixin> xviImages =
+        _th2FileEditController.th2File
+            .getImages()
+            .where((MPRuntimeImageInsertConfigMixin image) => image.isXVI)
+            .toList();
 
-    final bool allGridsVisible = xviImages.every(
-      (THXTherionImageInsertConfig image) => image.isGridVisible,
-    );
+    final bool allGridsVisible = xviImages.every((
+      MPRuntimeImageInsertConfigMixin image,
+    ) {
+      switch (image) {
+        case THXTherionImageInsertConfig thImage:
+          return thImage.isGridVisible;
+        case MPXVIImageInsertConfig mpImage:
+          return mpImage.isGridVisible;
+        default:
+          return false;
+      }
+    });
 
-    for (final THXTherionImageInsertConfig image in xviImages) {
-      image.isGridVisible = !allGridsVisible;
+    for (final MPRuntimeImageInsertConfigMixin image in xviImages) {
+      switch (image) {
+        case THXTherionImageInsertConfig thImage:
+          thImage.isGridVisible = !allGridsVisible;
+        case MPXVIImageInsertConfig mpImage:
+          mpImage.isGridVisible = !allGridsVisible;
+        default:
+          break;
+      }
     }
 
     _th2FileEditController.triggerImagesRedraw();

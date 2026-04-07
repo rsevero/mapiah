@@ -1,18 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:io' show File;
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/mp_raster_image_painter.dart';
 
 class MPRasterImageWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
-  final THXTherionImageInsertConfig image;
+  final MPRuntimeImageInsertConfigMixin image;
 
   const MPRasterImageWidget({
     super.key,
@@ -35,8 +32,14 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
     th2FileEditController = widget.th2FileEditController;
 
     if (!widget.image.isXVI && widget.image.isVisible) {
-      loadUIImage(widget.image.filename).then((img) {
-        setState(() => _image = img);
+      final Future<ui.Image>? rasterImage = _getRasterImageFrameInfo(
+        widget.image,
+      );
+
+      rasterImage?.then((ui.Image img) {
+        if (mounted) {
+          setState(() => _image = img);
+        }
       });
     }
   }
@@ -54,10 +57,7 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
 
         /// The Y coordinate is negated because in Therion's coordinate system,
         /// positive Y goes up, while in Flutter's canvas, positive Y goes down.
-        final Offset offset = Offset(
-          widget.image.xx.value,
-          -widget.image.yy.value,
-        );
+        final Offset offset = _getRasterOffset(widget.image);
 
         return _image == null
             ? CircularProgressIndicator()
@@ -75,28 +75,27 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
     );
   }
 
-  Future<ui.Image> loadUIImage(String imagePath) async {
-    final String resolvedPath = MPDirectoryAux.getResolvedPath(
-      th2FileEditController.th2File.filename,
-      imagePath,
-    );
-
-    final File file = File(resolvedPath);
-
-    Uint8List bytes;
-    if (await file.exists()) {
-      bytes = await file.readAsBytes();
-    } else {
-      final ByteData assetData = await rootBundle.load(
-        'assets/images/image_not_found.png',
-      );
-
-      bytes = assetData.buffer.asUint8List();
+  Future<ui.Image>? _getRasterImageFrameInfo(
+    MPRuntimeImageInsertConfigMixin image,
+  ) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return thImage.getRasterImageFrameInfo(th2FileEditController);
+      case MPRasterImageInsertConfig mpImage:
+        return mpImage.getRasterImageFrameInfo(th2FileEditController);
+      default:
+        return null;
     }
+  }
 
-    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-    final ui.FrameInfo frame = await codec.getNextFrame();
-
-    return frame.image;
+  Offset _getRasterOffset(MPRuntimeImageInsertConfigMixin image) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return Offset(thImage.xx.value, -thImage.yy.value);
+      case MPRasterImageInsertConfig mpImage:
+        return Offset(mpImage.xx.value, -mpImage.yy.value);
+      default:
+        return Offset.zero;
+    }
   }
 }

@@ -2,7 +2,9 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'th_element.dart';
 
-abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
+abstract class MPImageInsertConfig extends THElement
+    with MPBoundingBoxMixin, MPRuntimeImageInsertConfigMixin {
+  @override
   final String filename;
   THDoublePart xx;
   THDoublePart yy;
@@ -85,6 +87,9 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
   THElementType get elementType => THElementType.mapiahImageInsertConfig;
 
   String get format;
+
+  @override
+  bool get isXVI;
 
   @override
   Map<String, dynamic> toMap() {
@@ -295,8 +300,10 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
     );
   }
 
+  @override
   bool get isVisible => _isVisible;
 
+  @override
   set isVisible(bool isVisible) {
     if (_isVisible == isVisible) {
       return;
@@ -452,6 +459,9 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
 
   @override
   String get format => mpImageInsertFormatXVI;
+
+  @override
+  bool get isXVI => true;
 
   @override
   Map<String, dynamic> toMap() {
@@ -696,6 +706,9 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig {
 
   @override
   String get format => mpImageInsertFormatRaster;
+
+  @override
+  bool get isXVI => false;
 
   @override
   Map<String, String> extraMetadataPayload() {

@@ -8,7 +8,9 @@ part of 'th_element.dart';
 /// * GIF
 /// * PNM/PPM
 /// * XVI
-class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
+class THXTherionImageInsertConfig extends THElement
+    with MPBoundingBoxMixin, MPRuntimeImageInsertConfigMixin {
+  @override
   final String filename;
 
   // Field names gotten from XTherion me.imgs.tcl file
@@ -30,6 +32,7 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
   String imgx;
   String xData;
   bool xImage;
+  @override
   bool isXVI;
 
   /// Non-mapped support fileds
@@ -428,8 +431,10 @@ class THXTherionImageInsertConfig extends THElement with MPBoundingBoxMixin {
     _decodedRasterImage = image;
   }
 
+  @override
   bool get isVisible => _isVisible;
 
+  @override
   set isVisible(bool isVisible) {
     if (_isVisible == isVisible) {
       return;

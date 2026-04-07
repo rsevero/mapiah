@@ -424,6 +424,7 @@ class TH2File
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();
       case MPImageInsertConfig _:
+        _imageMPIDs = null;
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();
@@ -521,6 +522,11 @@ class TH2File
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();
       case MPImageInsertConfig _:
+        if ((_imageMPIDs != null) && _imageMPIDs!.contains(elementMPID)) {
+          _imageMPIDs!.remove(elementMPID);
+        } else {
+          _imageMPIDs = null;
+        }
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
             ?.resetShowImages();
@@ -616,20 +622,21 @@ class TH2File
     return element;
   }
 
-  THXTherionImageInsertConfig imageByMPID(int mpID) {
+  MPRuntimeImageInsertConfigMixin imageByMPID(int mpID) {
     if (!_elementByMPID.containsKey(mpID)) {
       throw THNoElementByMPIDException(filename, mpID);
     }
 
     final THElement element = _elementByMPID[mpID]!;
 
-    if (element is! THXTherionImageInsertConfig) {
+    if ((element is! THXTherionImageInsertConfig) &&
+        (element is! MPImageInsertConfig)) {
       throw THCustomException(
         "Element with MPID '$mpID' is not an image in TH2File.imageByMPID.",
       );
     }
 
-    return element;
+    return element as MPRuntimeImageInsertConfigMixin;
   }
 
   THArea areaByMPID(int mpID) {
@@ -848,7 +855,11 @@ class TH2File
   /// return a List.
   List<int> get imageMPIDs {
     _imageMPIDs ??= childrenMPIDs
-        .where((int mpID) => elementByMPID(mpID) is THXTherionImageInsertConfig)
+        .where(
+          (int mpID) =>
+              (elementByMPID(mpID) is THXTherionImageInsertConfig) ||
+              (elementByMPID(mpID) is MPImageInsertConfig),
+        )
         .toList();
 
     return _imageMPIDs!;
@@ -935,7 +946,8 @@ class TH2File
     for (final int childMPID in childrenMPIDs) {
       final THElement childElement = elementByMPID(childMPID);
 
-      if (childElement is THXTherionImageInsertConfig) {
+      if ((childElement is THXTherionImageInsertConfig) ||
+          (childElement is MPImageInsertConfig)) {
         reorderedChildrenMPIDs.add(reorderedImageMPIDs[reorderedImageIndex]);
         reorderedImageIndex++;
       } else {
@@ -982,7 +994,7 @@ class TH2File
     return pointsMPIDs.map((int mpID) => pointByMPID(mpID));
   }
 
-  Iterable<THXTherionImageInsertConfig> getImages() {
+  Iterable<MPRuntimeImageInsertConfigMixin> getImages() {
     return imageMPIDs.map((int mpID) => imageByMPID(mpID));
   }
 

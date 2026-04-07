@@ -49,8 +49,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
-    final double checkboxSize = kMinInteractiveDimension +
-        theme.visualDensity.baseSizeAdjustment.dx;
+    final double checkboxSize =
+        kMinInteractiveDimension + theme.visualDensity.baseSizeAdjustment.dx;
 
     return MPOverlayWindowWidget(
       title: appLocalizations.th2FileEditPageChangeImageTitle,
@@ -64,25 +64,27 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
 
-            final List<THXTherionImageInsertConfig> images = th2File
+            final List<MPRuntimeImageInsertConfigMixin> images = th2File
                 .getImages()
                 .toList();
 
             final bool allImagesVisible = images.every(
-              (THXTherionImageInsertConfig image) => image.isVisible,
+              (MPRuntimeImageInsertConfigMixin image) => image.isVisible,
             );
-            final List<THXTherionImageInsertConfig> xviImages = images
-                .where((THXTherionImageInsertConfig image) => image.isXVI)
+            final List<MPRuntimeImageInsertConfigMixin> xviImages = images
+                .where((MPRuntimeImageInsertConfigMixin image) => image.isXVI)
                 .toList();
             final bool hasXVIImages = xviImages.isNotEmpty;
-            final bool allXVIGridsVisible = hasXVIImages &&
+            final bool allXVIGridsVisible =
+                hasXVIImages &&
                 xviImages.every(
-                  (THXTherionImageInsertConfig image) => image.isGridVisible,
+                  (MPRuntimeImageInsertConfigMixin image) =>
+                      _isGridVisible(image),
                 );
             final int draggedImageIndex = (_draggedImageMPID == null)
                 ? -1
                 : images.indexWhere(
-                    (THXTherionImageInsertConfig img) =>
+                    (MPRuntimeImageInsertConfigMixin img) =>
                         img.mpID == _draggedImageMPID,
                   );
 
@@ -155,14 +157,16 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                           Column(
                             children: [
                               ...images.asMap().entries.map((
-                                MapEntry<int, THXTherionImageInsertConfig>
+                                MapEntry<int, MPRuntimeImageInsertConfigMixin>
                                 indexedEntry,
                               ) {
                                 final int entryIndex = indexedEntry.key;
-                                final THXTherionImageInsertConfig image =
+                                final MPRuntimeImageInsertConfigMixin image =
                                     indexedEntry.value;
                                 final bool isVisible = image.isVisible;
-                                final bool isGridVisible = image.isGridVisible;
+                                final bool isGridVisible = _isGridVisible(
+                                  image,
+                                );
                                 final String name = p.basename(image.filename);
                                 final bool isDragTarget =
                                     (_dragTargetImageMPID == image.mpID) &&
@@ -243,9 +247,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                             .th2FileEditPageImageVisibilityTooltip,
                                                         child: Checkbox(
                                                           value: isVisible,
-                                                          onChanged: (
-                                                            bool? value,
-                                                          ) {
+                                                          onChanged: (bool? value) {
                                                             if (value == null) {
                                                               return;
                                                             }
@@ -262,10 +264,11 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                 .onSurface,
                                                             width: 2,
                                                           ),
-                                                          fillColor: WidgetStateProperty.all(
-                                                            colorScheme
-                                                                .surfaceContainerHighest,
-                                                          ),
+                                                          fillColor:
+                                                              WidgetStateProperty.all(
+                                                                colorScheme
+                                                                    .surfaceContainerHighest,
+                                                              ),
                                                         ),
                                                       ),
                                                       if (image.isXVI)
@@ -273,19 +276,19 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                           message: appLocalizations
                                                               .th2FileEditPageImageGridVisibilityTooltip,
                                                           child: Checkbox(
-                                                            value: isGridVisible,
-                                                            onChanged: (
-                                                              bool? value,
-                                                            ) {
-                                                              if (value ==
-                                                                  null) {
-                                                                return;
-                                                              }
-                                                              _imageGridVisibilityChanged(
-                                                                image.mpID,
-                                                                value,
-                                                              );
-                                                            },
+                                                            value:
+                                                                isGridVisible,
+                                                            onChanged:
+                                                                (bool? value) {
+                                                                  if (value ==
+                                                                      null) {
+                                                                    return;
+                                                                  }
+                                                                  _imageGridVisibilityChanged(
+                                                                    image.mpID,
+                                                                    value,
+                                                                  );
+                                                                },
                                                             checkColor:
                                                                 colorScheme
                                                                     .onSurface,
@@ -294,10 +297,11 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                   .onSurface,
                                                               width: 2,
                                                             ),
-                                                            fillColor: WidgetStateProperty.all(
-                                                              colorScheme
-                                                                  .surfaceContainerHighest,
-                                                            ),
+                                                            fillColor:
+                                                                WidgetStateProperty.all(
+                                                                  colorScheme
+                                                                      .surfaceContainerHighest,
+                                                                ),
                                                           ),
                                                         ),
                                                       Expanded(
@@ -386,8 +390,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                         onChanged:
                                                                             null,
                                                                         checkColor:
-                                                                            colorScheme
-                                                                                .onSurface,
+                                                                            colorScheme.onSurface,
                                                                         side: BorderSide(
                                                                           color:
                                                                               colorScheme.onSurface,
@@ -575,13 +578,13 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   void _onAcceptReorderedImage({
     required int draggedImageMPID,
     required int targetImageMPID,
-    required List<THXTherionImageInsertConfig> images,
+    required List<MPRuntimeImageInsertConfigMixin> images,
   }) {
     final int oldIndex = images.indexWhere(
-      (THXTherionImageInsertConfig image) => image.mpID == draggedImageMPID,
+      (MPRuntimeImageInsertConfigMixin image) => image.mpID == draggedImageMPID,
     );
     int newIndex = images.indexWhere(
-      (THXTherionImageInsertConfig image) => image.mpID == targetImageMPID,
+      (MPRuntimeImageInsertConfigMixin image) => image.mpID == targetImageMPID,
     );
 
     // When dragging downward the removeAt shifts later indices by -1, so the
@@ -604,10 +607,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   void _onAcceptReorderedImageAtEnd({
     required int draggedImageMPID,
-    required List<THXTherionImageInsertConfig> images,
+    required List<MPRuntimeImageInsertConfigMixin> images,
   }) {
     final int oldIndex = images.indexWhere(
-      (THXTherionImageInsertConfig image) => image.mpID == draggedImageMPID,
+      (MPRuntimeImageInsertConfigMixin image) => image.mpID == draggedImageMPID,
     );
     final int newIndex = images.length - 1;
 
@@ -633,5 +636,16 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
       _dragTargetImageMPID = null;
       _isDragTargetAfterLast = false;
     });
+  }
+
+  bool _isGridVisible(MPRuntimeImageInsertConfigMixin image) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return thImage.isGridVisible;
+      case MPXVIImageInsertConfig mpImage:
+        return mpImage.isGridVisible;
+      default:
+        return false;
+    }
   }
 }

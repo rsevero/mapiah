@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -45,6 +49,23 @@ void main() {
       expect(xvi.xScale.toString(), '1');
       expect(xvi.rotationDeg.toString(), '0');
       expect(xvi.isGridVisible, isTrue);
+    });
+
+    test('transform helpers keep runtime scaling and translation ready', () {
+      final MPRasterImageInsertConfig config = MPRasterImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/photo.png',
+        xx: 5.0,
+        yy: 7.0,
+        xScale: 2.0,
+        yScale: 3.0,
+      );
+
+      expect(
+        config.transformLocalRect(const Rect.fromLTWH(0.0, 0.0, 4.0, 5.0)),
+        const Rect.fromLTRB(5.0, 7.0, 13.0, 22.0),
+      );
+      expect(config.scaledRotationCenter, Offset.zero);
     });
   });
 
@@ -126,6 +147,71 @@ void main() {
       );
       expect((fromMap as MPXVIImageInsertConfig).isGridVisible, isFalse);
       expect(fromMap.toMap(), original.toMap());
+    });
+  });
+
+  group('MPImageInsertConfig runtime preparation', () {
+    test('TH2File image access includes XTherion and Mapiah image entries', () {
+      final TH2File file = TH2File();
+      final THXTherionImageInsertConfig xtherionImage =
+          THXTherionImageInsertConfig(
+            parentMPID: mpParentMPIDPlaceholder,
+            filename: 'images/legacy.png',
+            xx: THDoublePart(value: 1.0),
+            yy: THDoublePart(value: 2.0),
+          );
+      final MPRasterImageInsertConfig mapiahImage = MPRasterImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/runtime.png',
+        xx: 3.0,
+        yy: 4.0,
+      );
+
+      file.addElement(xtherionImage);
+      file.addElementToParent(
+        xtherionImage,
+        elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+      file.addElement(mapiahImage);
+      file.addElementToParent(
+        mapiahImage,
+        elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
+      );
+
+      expect(
+        file.getImages().map((MPRuntimeImageInsertConfigMixin image) {
+          return image.filename;
+        }).toList(),
+        <String>['images/legacy.png', 'images/runtime.png'],
+      );
+
+      file.reorderImageMPIDs(oldIndex: 0, newIndex: 1);
+
+      expect(
+        file.getImages().map((MPRuntimeImageInsertConfigMixin image) {
+          return image.filename;
+        }).toList(),
+        <String>['images/runtime.png', 'images/legacy.png'],
+      );
+    });
+
+    test('XVI descendants keep grid visibility in synced runtime cache', () {
+      final MPXVIImageInsertConfig config = MPXVIImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/survey.xvi',
+        xx: 0.0,
+        yy: 0.0,
+        isGridVisible: false,
+      );
+      final XVIFile xviFile = XVIFile();
+
+      config.setXVIFile(xviFile);
+
+      expect(xviFile.isGridVisible, isFalse);
+
+      config.isGridVisible = true;
+
+      expect(xviFile.isGridVisible, isTrue);
     });
   });
 }

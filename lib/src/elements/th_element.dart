@@ -40,6 +40,7 @@ import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 
 part 'mixins/th_has_options_mixin.dart';
 part 'mixins/th_has_platype_mixin.dart';
+part 'mixins/mp_runtime_image_insert_config_mixin.dart';
 part 'mp_image_insert_config.dart';
 part 'th_area_border_thid.dart';
 part 'th_area.dart';

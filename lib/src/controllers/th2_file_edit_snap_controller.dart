@@ -204,23 +204,21 @@ abstract class TH2FileEditSnapControllerBase with Store {
       final List<int> imageInsetConfigMPIDs = _th2File.imageMPIDs;
 
       for (final int imageInsertConfigMPID in imageInsetConfigMPIDs) {
-        final THXTherionImageInsertConfig imageInsertConfig = _th2File
+        final MPRuntimeImageInsertConfigMixin imageInsertConfig = _th2File
             .imageByMPID(imageInsertConfigMPID);
 
         if (!imageInsertConfig.isXVI) {
           continue;
         }
 
-        final XVIFile? xviFile = imageInsertConfig.getXVIFile(
-          _th2FileEditController,
-        );
+        final XVIFile? xviFile = _getXVIFile(imageInsertConfig);
 
         if (xviFile == null) {
           continue;
         }
 
-        final double xx = imageInsertConfig.xviRootedXX;
-        final double yy = imageInsertConfig.xviRootedYY;
+        final double xx = _getXVIRootedXX(imageInsertConfig);
+        final double yy = _getXVIRootedYY(imageInsertConfig);
         final Offset imageBaseOffset = Offset(xx, yy);
         // Understanding xTherion variables:
         // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
@@ -342,6 +340,39 @@ abstract class TH2FileEditSnapControllerBase with Store {
         _snapLineTargetsGrid.putIfAbsent(cell, () => []);
         _snapLineTargetsGrid[cell]!.add(snapLineTarget);
       }
+    }
+  }
+
+  XVIFile? _getXVIFile(MPRuntimeImageInsertConfigMixin image) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return thImage.getXVIFile(_th2FileEditController);
+      case MPXVIImageInsertConfig mpImage:
+        return mpImage.getXVIFile(_th2FileEditController);
+      default:
+        return null;
+    }
+  }
+
+  double _getXVIRootedXX(MPRuntimeImageInsertConfigMixin image) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return thImage.xviRootedXX;
+      case MPXVIImageInsertConfig mpImage:
+        return mpImage.xviRootedXX;
+      default:
+        return 0.0;
+    }
+  }
+
+  double _getXVIRootedYY(MPRuntimeImageInsertConfigMixin image) {
+    switch (image) {
+      case THXTherionImageInsertConfig thImage:
+        return thImage.xviRootedYY;
+      case MPXVIImageInsertConfig mpImage:
+        return mpImage.xviRootedYY;
+      default:
+        return 0.0;
     }
   }
 
