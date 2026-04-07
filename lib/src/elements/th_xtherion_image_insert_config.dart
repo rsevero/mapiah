@@ -144,7 +144,7 @@ class THXTherionImageInsertConfig extends THElement
        _isVisible = isVisible,
        _isGridVisible = isGridVisible,
        super.getMPID() {
-    if (isXVI) {
+    if (asXVIImage != null) {
       final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
       if (xviFile == null) {
@@ -302,7 +302,7 @@ class THXTherionImageInsertConfig extends THElement
 
   @override
   XVIFile? getXVIFile(TH2FileEditController th2FileEditController) {
-    if ((_xviFile == null) && isXVI) {
+    if ((_xviFile == null) && (asXVIImage != null)) {
       final XVIFileParser parser = XVIFileParser();
       final XVIFile? xviFile;
       final bool isSuccessful;
@@ -341,7 +341,7 @@ class THXTherionImageInsertConfig extends THElement
     _xviRootedXX = xx.value;
     _xviRootedYY = yy.value;
 
-    if (!isXVI || xviRoot.isEmpty || (_xviFile == null)) {
+    if ((asXVIImage == null) || xviRoot.isEmpty || (_xviFile == null)) {
       return;
     }
 
@@ -382,9 +382,11 @@ class THXTherionImageInsertConfig extends THElement
 
   @override
   Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    return isXVI
-        ? _calculateXVIBoundingBox(th2FileEditController)
-        : _calculateRasterImageBoundingBox(th2FileEditController);
+    if (asXVIImage != null) {
+      return _calculateXVIBoundingBox(th2FileEditController);
+    }
+
+    return _calculateRasterImageBoundingBox(th2FileEditController);
   }
 
   Rect? _calculateRasterImageBoundingBox(
@@ -431,7 +433,7 @@ class THXTherionImageInsertConfig extends THElement
   }
 
   bool isLoaded(TH2FileEditController th2FileEditController) {
-    if (isXVI) {
+    if (asXVIImage != null) {
       return getXVIFile(th2FileEditController) != null;
     }
 

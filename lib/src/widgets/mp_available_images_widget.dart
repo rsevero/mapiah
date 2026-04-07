@@ -273,7 +273,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                               ),
                                                         ),
                                                       ),
-                                                      if (image.isXVI)
+                                                      if (image.asXVIImage !=
+                                                          null)
                                                         Tooltip(
                                                           message: appLocalizations
                                                               .th2FileEditPageImageGridVisibilityTooltip,
@@ -385,7 +386,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                       ),
                                                                     ),
                                                                     if (image
-                                                                        .isXVI)
+                                                                            .asXVIImage !=
+                                                                        null)
                                                                       Checkbox(
                                                                         value:
                                                                             isGridVisible,
