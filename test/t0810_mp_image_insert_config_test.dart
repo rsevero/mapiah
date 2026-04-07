@@ -1,16 +1,32 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
+
+class FakePathProviderPlatform extends PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp';
+  }
+}
 
 void main() {
   THTestAux.ensureTestEnvironment();
+  PathProviderPlatform.instance = FakePathProviderPlatform();
+  final MPLocator mpLocator = MPLocator();
 
   group('MPImageInsertConfig defaults', () {
     test('raster defaults match phase 1 plan', () {
@@ -151,6 +167,11 @@ void main() {
   });
 
   group('MPImageInsertConfig runtime preparation', () {
+    setUp(() {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+      mpLocator.mpGeneralController.reset();
+    });
+
     test(
       'XTherion image config factories route raster and XVI to subclasses',
       () {
@@ -338,5 +359,67 @@ void main() {
       expect(convertedXVIAsXVI.isGridVisible, isFalse);
       expect(convertedXVIAsXVI.xviRoot, 'station_A');
     });
+
+    test(
+      'raster bounding box is refreshed after decoded raster image becomes available',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final String path = THTestAux.testPath('2025-10-26-001-with_image.th2');
+        final (_, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+        final MPRasterImageInsertConfig config = MPRasterImageInsertConfig(
+          parentMPID: mpParentMPIDPlaceholder,
+          filename: './jpg/2025-10-07-001.jpg',
+          xx: 10.0,
+          yy: 20.0,
+        );
+        final Rect initialBoundingBox = config.getBoundingBox(controller)!;
+        final Image decodedImage = await _createTestImage(
+          width: 40,
+          height: 20,
+        );
+
+        config.setRasterImage(decodedImage);
+
+        final Rect refreshedBoundingBox = config.getBoundingBox(controller)!;
+
+        expect(initialBoundingBox.width, lessThan(1.0));
+        expect(initialBoundingBox.height, lessThan(1.0));
+        expect(refreshedBoundingBox.width, 40.0);
+        expect(refreshedBoundingBox.height, 20.0);
+      },
+    );
   });
+}
+
+Future<Image> _createTestImage({
+  required int width,
+  required int height,
+}) async {
+  final Completer<Image> completer = Completer<Image>();
+  final Uint8List pixels = Uint8List(width * height * 4);
+
+  for (int i = 0; i < pixels.length; i += 4) {
+    pixels[i] = 0xFF;
+    pixels[i + 1] = 0x00;
+    pixels[i + 2] = 0x00;
+    pixels[i + 3] = 0xFF;
+  }
+
+  decodeImageFromPixels(
+    pixels,
+    width,
+    height,
+    PixelFormat.rgba8888,
+    completer.complete,
+  );
+
+  return completer.future;
 }

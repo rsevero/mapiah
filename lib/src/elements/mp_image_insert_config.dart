@@ -839,11 +839,11 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     }
 
     return transformLocalRect(
-      Rect.fromLTWH(
+      Rect.fromLTRB(
         0.0,
-        0.0,
+        -rasterImage.height.toDouble(),
         rasterImage.width.toDouble(),
-        rasterImage.height.toDouble(),
+        0.0,
       ),
     );
   }
@@ -876,6 +876,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
           filename,
         ).then((ui.Image img) {
           _decodedRasterImage = img;
+          clearBoundingBox();
 
           return img;
         });
@@ -885,5 +886,6 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
 
   void setRasterImage(ui.Image? image) {
     _decodedRasterImage = image;
+    clearBoundingBox();
   }
 }

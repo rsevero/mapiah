@@ -837,11 +837,11 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
         ? MPNumericAux.orderedRectSmallestAroundPoint(
             center: Offset(xx.value, yy.value),
           )
-        : Rect.fromLTWH(
-            xx.value,
-            yy.value,
-            rasterImage.width.toDouble(),
-            rasterImage.height.toDouble(),
+        : MPNumericAux.orderedRectFromLTRB(
+            left: xx.value,
+            top: yy.value - rasterImage.height.toDouble(),
+            right: xx.value + rasterImage.width.toDouble(),
+            bottom: yy.value,
           );
   }
 
@@ -855,6 +855,7 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
           filename,
         ).then((ui.Image img) {
           _decodedRasterImage = img;
+          clearBoundingBox();
 
           return img;
         });
@@ -864,5 +865,6 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
 
   void setRasterImage(ui.Image? image) {
     _decodedRasterImage = image;
+    clearBoundingBox();
   }
 }

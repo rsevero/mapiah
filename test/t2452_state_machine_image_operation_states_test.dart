@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -153,6 +156,73 @@ void main() {
       expect(undoneImage.yy.value, originalYY);
     });
 
+    test('image move drag starts from the visible raster image area', () async {
+      final TH2FileParser parser = TH2FileParser();
+      final String path = THTestAux.testPath(
+        '2026-04-07-001-mapiah_image_insert_only.th2',
+      );
+      final (_, isSuccessful, errors) = await parser.parse(
+        path,
+        forceNewController: true,
+      );
+
+      expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+      final TH2FileEditController controller = mpLocator.mpGeneralController
+          .getTH2FileEditController(filename: path);
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final MPRasterImageInsertConfig image =
+          controller.elementEditController.prepareImageMoveState(imageMPID)
+              as MPRasterImageInsertConfig;
+      final ui.Image decodedImage = await _createTestImage(
+        width: 40,
+        height: 20,
+      );
+
+      image.setRasterImage(decodedImage);
+      final Rect visibleBoundingBox = Rect.fromLTRB(
+        image.xx.value,
+        image.yy.value - decodedImage.height.toDouble(),
+        image.xx.value + decodedImage.width.toDouble(),
+        image.yy.value,
+      );
+      final Offset dragStartCanvasPosition = visibleBoundingBox.center;
+      const Offset deltaOnCanvas = Offset(7.0, -11.0);
+      final Offset dragEndCanvasPosition =
+          dragStartCanvasPosition + deltaOnCanvas;
+      final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+        dragStartCanvasPosition,
+      );
+      final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+        dragEndCanvasPosition,
+      );
+      final double originalXX = image.xx.value;
+      final double originalYY = image.yy.value;
+
+      controller.stateController.onPrimaryButtonPointerDown(
+        PointerDownEvent(
+          position: dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragUpdate(
+        PointerMoveEvent(
+          position: dragEndScreenPosition,
+          delta: dragEndScreenPosition - dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragEnd(
+        PointerUpEvent(position: dragEndScreenPosition),
+      );
+
+      final MPImageInsertConfig movedImage =
+          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+      expect(movedImage.xx.value, closeTo(originalXX + 7.0, 0.0001));
+      expect(movedImage.yy.value, closeTo(originalYY - 11.0, 0.0001));
+    });
+
     test('image move drag exposes preview offset before commit', () async {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
@@ -198,4 +268,29 @@ void main() {
       );
     });
   });
+}
+
+Future<ui.Image> _createTestImage({
+  required int width,
+  required int height,
+}) async {
+  final Completer<ui.Image> completer = Completer<ui.Image>();
+  final Uint8List pixels = Uint8List(width * height * 4);
+
+  for (int i = 0; i < pixels.length; i += 4) {
+    pixels[i] = 0xFF;
+    pixels[i + 1] = 0x00;
+    pixels[i + 2] = 0x00;
+    pixels[i + 3] = 0xFF;
+  }
+
+  ui.decodeImageFromPixels(
+    pixels,
+    width,
+    height,
+    ui.PixelFormat.rgba8888,
+    completer.complete,
+  );
+
+  return completer.future;
 }
