@@ -3,7 +3,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -14,8 +13,8 @@ void main() {
       final MPRasterImageInsertConfig config = MPRasterImageInsertConfig(
         parentMPID: mpParentMPIDPlaceholder,
         filename: 'images/photo.png',
-        xx: THDoublePart.fromString(valueString: '10'),
-        yy: THDoublePart.fromString(valueString: '20'),
+        xx: 10.0,
+        yy: 20.0,
       );
 
       expect(config.xScale.toString(), '1');
@@ -54,13 +53,13 @@ void main() {
       final MPRasterImageInsertConfig original = MPRasterImageInsertConfig(
         parentMPID: mpParentMPIDPlaceholder,
         filename: 'images/photo 01;v1.png',
-        xx: THDoublePart.fromString(valueString: '10.5'),
-        yy: THDoublePart.fromString(valueString: '-20'),
-        xScale: THDoublePart.fromString(valueString: '2'),
-        yScale: THDoublePart.fromString(valueString: '3'),
-        rotationCenterDx: THDoublePart.fromString(valueString: '4'),
-        rotationCenterDy: THDoublePart.fromString(valueString: '5'),
-        rotationDeg: THDoublePart.fromString(valueString: '6'),
+        xx: 10.5,
+        yy: -20.0,
+        xScale: 2.0,
+        yScale: 3.0,
+        rotationCenterDx: 4.0,
+        rotationCenterDy: 5.0,
+        rotationDeg: 6.0,
         isVisible: false,
       );
 
@@ -91,8 +90,8 @@ void main() {
       final MPXVIImageInsertConfig original = MPXVIImageInsertConfig(
         parentMPID: mpParentMPIDPlaceholder,
         filename: 'images/survey.xvi',
-        xx: THDoublePart.fromString(valueString: '-36'),
-        yy: THDoublePart.fromString(valueString: '28'),
+        xx: -36.0,
+        yy: 28.0,
         isGridVisible: false,
         xviRoot: 'station_A',
       );
