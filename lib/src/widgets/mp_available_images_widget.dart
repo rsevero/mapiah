@@ -3,6 +3,7 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_reversed_list_index_helper.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -64,19 +65,23 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
           builder: (_) {
             th2FileEditController.redrawTriggerImages;
 
-            final List<MPRuntimeImageInsertConfigMixin> images = th2File
+            final List<MPRuntimeImageInsertConfigMixin> storedImages = th2File
                 .getImages()
                 .toList();
+            final List<MPRuntimeImageInsertConfigMixin> displayedImages =
+                storedImages.reversed.toList();
 
-            final bool allImagesVisible = images.every(
+            final bool allImagesVisible = storedImages.every(
               (MPRuntimeImageInsertConfigMixin image) => image.isVisible,
             );
-            final List<MPRuntimeXVIImageInsertConfigMixin> xviImages = images
-                .map(
-                  (MPRuntimeImageInsertConfigMixin image) => image.asXVIImage,
-                )
-                .nonNulls
-                .toList();
+            final List<MPRuntimeXVIImageInsertConfigMixin> xviImages =
+                storedImages
+                    .map(
+                      (MPRuntimeImageInsertConfigMixin image) =>
+                          image.asXVIImage,
+                    )
+                    .nonNulls
+                    .toList();
             final bool hasXVIImages = xviImages.isNotEmpty;
             final bool allXVIGridsVisible =
                 hasXVIImages &&
@@ -86,7 +91,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                 );
             final int draggedImageIndex = (_draggedImageMPID == null)
                 ? -1
-                : images.indexWhere(
+                : displayedImages.indexWhere(
                     (MPRuntimeImageInsertConfigMixin img) =>
                         img.mpID == _draggedImageMPID,
                   );
@@ -100,7 +105,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (images.isNotEmpty)
+                        if (displayedImages.isNotEmpty)
                           Row(
                             children: [
                               SizedBox(
@@ -156,10 +161,10 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 ),
                             ],
                           ),
-                        if (images.isNotEmpty)
+                        if (displayedImages.isNotEmpty)
                           Column(
                             children: [
-                              ...images.asMap().entries.map((
+                              ...displayedImages.asMap().entries.map((
                                 MapEntry<int, MPRuntimeImageInsertConfigMixin>
                                 indexedEntry,
                               ) {
@@ -205,7 +210,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                         _onAcceptReorderedImage(
                                           draggedImageMPID: details.data,
                                           targetImageMPID: image.mpID,
-                                          images: images,
+                                          displayedImages: displayedImages,
                                         );
                                       },
                                   builder:
@@ -477,7 +482,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                 onWillAcceptWithDetails:
                                     (DragTargetDetails<int> details) {
                                       final int lastImageMPID =
-                                          images.last.mpID;
+                                          displayedImages.last.mpID;
 
                                       if (details.data == lastImageMPID) {
                                         return false;
@@ -498,7 +503,7 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                     (DragTargetDetails<int> details) {
                                       _onAcceptReorderedImageAtEnd(
                                         draggedImageMPID: details.data,
-                                        images: images,
+                                        displayedImages: displayedImages,
                                       );
                                     },
                                 builder:
@@ -582,51 +587,72 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
   void _onAcceptReorderedImage({
     required int draggedImageMPID,
     required int targetImageMPID,
-    required List<MPRuntimeImageInsertConfigMixin> images,
+    required List<MPRuntimeImageInsertConfigMixin> displayedImages,
   }) {
-    final int oldIndex = images.indexWhere(
+    final int oldDisplayedIndex = displayedImages.indexWhere(
       (MPRuntimeImageInsertConfigMixin image) => image.mpID == draggedImageMPID,
     );
-    int newIndex = images.indexWhere(
+    final int targetDisplayedIndex = displayedImages.indexWhere(
       (MPRuntimeImageInsertConfigMixin image) => image.mpID == targetImageMPID,
     );
 
-    // When dragging downward the removeAt shifts later indices by -1, so the
-    // item would land one position below the visual indicator without this fix.
-    if (oldIndex < newIndex) {
-      newIndex--;
-    }
-
     _clearDragState();
 
-    if ((oldIndex < 0) || (newIndex < 0) || (oldIndex == newIndex)) {
+    if ((oldDisplayedIndex < 0) || (targetDisplayedIndex < 0)) {
+      return;
+    }
+
+    final int finalDisplayedIndex =
+        MPReversedListIndexHelper.finalDisplayedIndexForDropBefore(
+          oldDisplayedIndex: oldDisplayedIndex,
+          targetDisplayedIndex: targetDisplayedIndex,
+        );
+    final int oldStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: oldDisplayedIndex,
+      listLength: displayedImages.length,
+    );
+    final int newStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: finalDisplayedIndex,
+      listLength: displayedImages.length,
+    );
+
+    if (oldStoredIndex == newStoredIndex) {
       return;
     }
 
     th2FileEditController.elementEditController.reorderImages(
-      oldIndex: oldIndex,
-      newIndex: newIndex,
+      oldIndex: oldStoredIndex,
+      newIndex: newStoredIndex,
     );
   }
 
   void _onAcceptReorderedImageAtEnd({
     required int draggedImageMPID,
-    required List<MPRuntimeImageInsertConfigMixin> images,
+    required List<MPRuntimeImageInsertConfigMixin> displayedImages,
   }) {
-    final int oldIndex = images.indexWhere(
+    final int oldDisplayedIndex = displayedImages.indexWhere(
       (MPRuntimeImageInsertConfigMixin image) => image.mpID == draggedImageMPID,
     );
-    final int newIndex = images.length - 1;
 
     _clearDragState();
 
-    if ((oldIndex < 0) || (oldIndex == newIndex)) {
+    if (oldDisplayedIndex < 0) {
+      return;
+    }
+
+    final int oldStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: oldDisplayedIndex,
+      listLength: displayedImages.length,
+    );
+    const int newStoredIndex = 0;
+
+    if (oldStoredIndex == newStoredIndex) {
       return;
     }
 
     th2FileEditController.elementEditController.reorderImages(
-      oldIndex: oldIndex,
-      newIndex: newIndex,
+      oldIndex: oldStoredIndex,
+      newIndex: newStoredIndex,
     );
   }
 
