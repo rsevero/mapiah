@@ -2,6 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -281,6 +283,61 @@ endscrap
 ##XTHERION## xth_me_image_insert {-36 1 1} {28 {}} "croquis/croqui-007.jpg" 0 {}
 ##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=100;yy=200;xScale=1.5;yScale=0.5;rotationCenterDx=7;rotationCenterDy=8;rotationDeg=45;xviRoot=station_A}
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=2;rotationCenterDx=3;rotationCenterDy=4;rotationDeg=5}
+""");
+      },
+    );
+
+    test(
+      'serializes Mapiah and XTherion image inserts in one ordered config block',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final TH2FileWriter writer = TH2FileWriter();
+
+        mpLocator.mpGeneralController.reset();
+
+        final (
+          TH2File file,
+          bool isSuccessful,
+          List<String> errors,
+        ) = await parser.parse(
+          THTestAux.testPath('th_file_parser-00000-line_breaks.th2'),
+        );
+
+        expect(
+          isSuccessful,
+          true,
+          reason: 'Failed to parse base file: $errors',
+        );
+
+        final MPRasterImageInsertConfig mapiahImage = MPRasterImageInsertConfig(
+          parentMPID: file.mpID,
+          filename: 'images/photo.png',
+          xx: 10.0,
+          yy: 20.0,
+        );
+        final THXTherionImageInsertConfig xtherionImage =
+            THXTherionImageInsertConfig(
+              parentMPID: file.mpID,
+              filename: 'croquis/croqui-007.jpg',
+              xx: THDoublePart(value: -36.0),
+              yy: THDoublePart(value: 28.0),
+            );
+
+        file.addElement(mapiahImage);
+        file.addElementToParent(mapiahImage, elementPositionInParent: 1);
+        file.addElement(xtherionImage);
+        file.addElementToParent(
+          xtherionImage,
+          elementPositionInParent: mpAddChildAtEndOfParentChildrenList,
+        );
+
+        final String asFile = writer.serialize(file);
+
+        expect(asFile, """encoding UTF-8
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0}
+##XTHERION## xth_me_image_insert {-36 1 1} {28} "croquis/croqui-007.jpg" 0 {}
+scrap poco_surubim_SCP01
+endscrap
 """);
       },
     );

@@ -276,6 +276,7 @@ This keeps ordinary inserted images compatible by default while still enabling a
 - [ ] Write `THXTherionImageInsertConfig` objects as standard XTherion image insert lines
 - [ ] Write `MPImageInsertConfig` objects as `##MAPIAH## image_insert_v1` lines
 - [ ] Ensure only one persisted entry exists per image
+- [ ] `##MAPIAH##`entries should beserialized in the same block as `##XTHERION##`entries so they keep their internal order.
 - [ ] Add writer round-trip tests proving that:
   - XTherion image inserts stay XTherion when untouched
   - converted images are saved only as `##MAPIAH##` entries

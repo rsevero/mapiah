@@ -13,6 +13,12 @@ import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 
 class TH2FileWriter {
+  static const List<THElementType> configBlockElementTypes = <THElementType>[
+    THElementType.xTherionConfig,
+    THElementType.xTherionImageInsertConfig,
+    THElementType.mapiahImageInsertConfig,
+  ];
+
   String _prefix = '';
 
   final RegExp _doubleQuotePairEncodedRegex = RegExp(mpDoubleQuotePairEncoded);
@@ -60,18 +66,18 @@ class TH2FileWriter {
       return '';
     }
 
-    bool onlyNewXTherionConfigs = true;
+    final Iterable<THElement> configBlockElements = _configBlockElements();
 
-    for (final int xtherionSettingMPID in _th2File.xtherionSettingMPIDs) {
-      final THElement element = _th2File.elementByMPID(xtherionSettingMPID);
+    bool onlyNewConfigBlockElements = true;
 
+    for (final THElement element in configBlockElements) {
       if (element.originalLineInTH2File.isNotEmpty) {
-        onlyNewXTherionConfigs = false;
+        onlyNewConfigBlockElements = false;
         break;
       }
     }
 
-    if (!onlyNewXTherionConfigs) {
+    if (!onlyNewConfigBlockElements) {
       return '';
     }
 
@@ -85,16 +91,16 @@ class TH2FileWriter {
 
     String asString = '';
 
-    for (final int xtherionSettingMPID in _th2File.xtherionSettingMPIDs) {
-      final THElement thElement = _th2File.elementByMPID(xtherionSettingMPID);
-
+    for (final THElement thElement in _configBlockElements()) {
       if (thElement is THXTherionConfig) {
         asString += _serializeXTherionConfig(thElement);
       } else if (thElement is THXTherionImageInsertConfig) {
         asString += _serializeXTherionImageInsertConfig(thElement);
+      } else if (thElement is MPImageInsertConfig) {
+        asString += _serializeMapiahImageInsertConfig(thElement);
       } else {
         throw THCustomException(
-          "At TH2FileWriter._serializeAllXTherionConfigs: thElement with MPID '$xtherionSettingMPID' is not a Therion config.",
+          "At TH2FileWriter._serializeAllXTherionConfigs: thElement with MPID '${thElement.mpID}' is not part of the top-level config block.",
         );
       }
     }
@@ -102,6 +108,16 @@ class TH2FileWriter {
     _xTherionConfigWritten = true;
 
     return asString;
+  }
+
+  Iterable<THElement> _configBlockElements() {
+    return _th2File.childrenMPIDs
+        .map((int childMPID) => _th2File.elementByMPID(childMPID))
+        .where(_isConfigBlockElement);
+  }
+
+  bool _isConfigBlockElement(THElement element) {
+    return configBlockElementTypes.contains(element.elementType);
   }
 
   String _prepareLineWithOriginalRepresentation(
@@ -259,7 +275,9 @@ class TH2FileWriter {
       case THElementType.straightLineSegment:
         asString += _serializeLineSegment(thElement);
       case THElementType.mapiahImageInsertConfig:
-        asString += _serializeMapiahImageInsertConfig(thElement);
+      case THElementType.xTherionConfig:
+      case THElementType.xTherionImageInsertConfig:
+        asString += _serializeAllXTherionConfigs();
       case THElementType.multilineComment:
         asString += _prepareLineWithOriginalRepresentation(
           'comment',
@@ -274,9 +292,6 @@ class TH2FileWriter {
         asString += _serializePoint(thElement);
       case THElementType.scrap:
         asString += _serializeScrap(thElement);
-      case THElementType.xTherionConfig:
-      case THElementType.xTherionImageInsertConfig:
-        asString += _serializeAllXTherionConfigs();
       case THElementType.unrecognizedCommand:
         final String newLine = "Unrecognized element: '$thElement'";
 
