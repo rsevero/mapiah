@@ -12,6 +12,10 @@ abstract class MPTH2FileEditStateImageOperation extends MPTH2FileEditState {
 
   String get statusBarMessage;
 
+  String get overlayLabel;
+
+  Offset get previewOffset => Offset.zero;
+
   MPImageInsertConfig get imageConfig =>
       th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
 
@@ -29,6 +33,9 @@ abstract class MPTH2FileEditStateImageOperation extends MPTH2FileEditState {
   void updateStatusBarMessage() {
     th2FileEditController.setStatusBarMessage(statusBarMessage);
   }
+
+  @override
+  bool get keepOverlayOpenOnCanvasClick => true;
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {

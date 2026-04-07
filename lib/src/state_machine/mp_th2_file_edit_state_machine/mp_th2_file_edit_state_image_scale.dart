@@ -9,6 +9,10 @@ class MPTH2FileEditStateImageScale extends MPTH2FileEditStateImageOperation {
   });
 
   @override
+  String get overlayLabel =>
+      mpLocator.appLocalizations.th2FileEditPageImageScaleOverlayLabel;
+
+  @override
   String get statusBarMessage =>
       mpLocator.appLocalizations.th2FileEditPageImageScaleStatusBarMessage;
 

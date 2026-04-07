@@ -66,7 +66,9 @@ class MPXVIImageWidget extends StatelessWidget {
 
     final double xx = image.xviRootedXX;
     final double yy = image.xviRootedYY;
-    final Offset imageGridOffset = Offset(xx, yy);
+    final Offset previewOffset = th2FileEditController.stateController
+        .getImageOperationPreviewOffsetForImage(image.mpID);
+    final Offset imageGridOffset = Offset(xx, yy) + previewOffset;
     // Understaing xTherion variables:
     // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
     // shy: The vertical offset between the image’s position (py) and the grid origin (gy).

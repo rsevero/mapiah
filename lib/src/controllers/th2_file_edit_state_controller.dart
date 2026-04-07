@@ -93,6 +93,46 @@ abstract class TH2FileEditStateControllerBase
     _state.updateStatusBarMessage();
   }
 
+  bool isImageOperationActiveForImage(int imageMPID) {
+    if (!MPTH2FileEditState.isImageOperationType(_state.type)) {
+      return false;
+    }
+
+    return _imageOperationImageMPID == imageMPID;
+  }
+
+  Offset getImageOperationPreviewOffsetForImage(int imageMPID) {
+    if (!isImageOperationActiveForImage(imageMPID)) {
+      return Offset.zero;
+    }
+
+    final MPTH2FileEditState currentState = _state;
+
+    if (currentState is! MPTH2FileEditStateImageOperation) {
+      return Offset.zero;
+    }
+
+    return currentState.previewOffset;
+  }
+
+  String? getImageOperationOverlayLabelForImage(int imageMPID) {
+    if (!isImageOperationActiveForImage(imageMPID)) {
+      return null;
+    }
+
+    final MPTH2FileEditState currentState = _state;
+
+    if (currentState is! MPTH2FileEditStateImageOperation) {
+      return null;
+    }
+
+    return currentState.overlayLabel;
+  }
+
+  void clearImageOperationState() {
+    setState(MPTH2FileEditStateType.selectEmptySelection);
+  }
+
   @override
   Future<void> onPrimaryButtonPointerDown(PointerDownEvent event) {
     _state.onPrimaryButtonPointerDown(event);

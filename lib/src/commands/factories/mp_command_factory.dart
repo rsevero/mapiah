@@ -1238,6 +1238,38 @@ class MPCommandFactory {
     );
   }
 
+  static MPMoveImageInsertConfigCommand moveImageInsertConfig({
+    required int imageMPID,
+    required Offset deltaOnCanvas,
+    required TH2File th2File,
+    int? decimalPositions,
+    MPCommandDescriptionType descriptionType =
+        MPMoveImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final MPImageInsertConfig image =
+        th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+    final int resolvedDecimalPositions =
+        decimalPositions ??
+        image.xx.decimalPositions.clamp(0, mpMaxDecimalPositions);
+
+    return MPMoveImageInsertConfigCommand(
+      imageMPID: imageMPID,
+      fromXX: image.xx,
+      fromYY: image.yy,
+      toXX: image.xx.copyWith(
+        value: image.xx.value + deltaOnCanvas.dx,
+        decimalPositions: resolvedDecimalPositions,
+      ),
+      toYY: image.yy.copyWith(
+        value: image.yy.value + deltaOnCanvas.dy,
+        decimalPositions: resolvedDecimalPositions,
+      ),
+      fromOriginalLineInTH2File: image.originalLineInTH2File,
+      toOriginalLineInTH2File: '',
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand moveLineSegments({
     required Map<int, THLineSegment> fromLineSegmentsMap,
     required Map<int, THLineSegment> toLineSegmentsMap,

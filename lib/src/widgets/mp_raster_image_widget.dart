@@ -57,8 +57,14 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
         /// The Y coordinate is negated because in Therion's coordinate system,
         /// positive Y goes up, while in Flutter's canvas, positive Y goes down.
         final Offset offset = Offset(
-          widget.image.xx.value,
-          -widget.image.yy.value,
+          widget.image.xx.value +
+              th2FileEditController.stateController
+                  .getImageOperationPreviewOffsetForImage(widget.image.mpID)
+                  .dx,
+          -(widget.image.yy.value +
+              th2FileEditController.stateController
+                  .getImageOperationPreviewOffsetForImage(widget.image.mpID)
+                  .dy),
         );
 
         return _image == null

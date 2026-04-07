@@ -181,6 +181,11 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                     (entryIndex != draggedImageIndex + 1);
                                 final bool isDragged =
                                     _draggedImageMPID == image.mpID;
+                                final bool isImageEditing =
+                                    th2FileEditController.stateController
+                                        .isImageOperationActiveForImage(
+                                          image.mpID,
+                                        );
 
                                 return DragTarget<int>(
                                   key: ValueKey(
@@ -324,6 +329,29 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                       ),
                                                       IconButton(
                                                         icon: Icon(
+                                                          isImageEditing
+                                                              ? Icons
+                                                                    .open_with_outlined
+                                                              : Icons
+                                                                    .edit_outlined,
+                                                          color: isImageEditing
+                                                              ? colorScheme
+                                                                    .primary
+                                                              : colorScheme
+                                                                    .onSecondary,
+                                                        ),
+                                                        tooltip: isImageEditing
+                                                            ? appLocalizations
+                                                                  .th2FileEditPageDisableImageEditModeButton
+                                                            : appLocalizations
+                                                                  .th2FileEditPageEnableImageEditModeButton,
+                                                        onPressed: () =>
+                                                            _onPressedToggleImageEdit(
+                                                              image.mpID,
+                                                            ),
+                                                      ),
+                                                      IconButton(
+                                                        icon: Icon(
                                                           Icons
                                                               .delete_outline_rounded,
                                                           color: colorScheme
@@ -412,6 +440,19 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                         ),
                                                                       ),
                                                                     Text(name),
+                                                                    IconButton(
+                                                                      icon: Icon(
+                                                                        isImageEditing
+                                                                            ? Icons.open_with_outlined
+                                                                            : Icons.edit_outlined,
+                                                                        color:
+                                                                            isImageEditing
+                                                                            ? colorScheme.primary
+                                                                            : colorScheme.onSecondary,
+                                                                      ),
+                                                                      onPressed:
+                                                                          null,
+                                                                    ),
                                                                     IconButton(
                                                                       icon: Icon(
                                                                         Icons
@@ -582,6 +623,20 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
 
   void _onPressedRemoveImage(int imageMPID) {
     th2FileEditController.elementEditController.removeImage(imageMPID);
+  }
+
+  void _onPressedToggleImageEdit(int imageMPID) {
+    final bool isImageEditing = th2FileEditController.stateController
+        .isImageOperationActiveForImage(imageMPID);
+
+    if (isImageEditing) {
+      th2FileEditController.stateController.clearImageOperationState();
+      return;
+    }
+
+    th2FileEditController.elementEditController.prepareImageMoveState(
+      imageMPID,
+    );
   }
 
   void _onAcceptReorderedImage({

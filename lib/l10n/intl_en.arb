@@ -2048,6 +2048,11 @@
     "description": "Tooltip for the deselect all end points FAB (when all are selected). Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
+  "th2FileEditPageDisableImageEditModeButton": "Stop editing image",
+  "@th2FileEditPageDisableImageEditModeButton": {
+    "description": "Tooltip for disabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageDuplicateElements": "Duplicate elements (Ctrl+Shift+D)",
   "@th2FileEditPageDuplicateElements": {
     "description": "Tooltip for the duplicate elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
@@ -2063,6 +2068,11 @@
     "description": "The status bar message for the empty selection. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_empty_selection.dart",
     "type": "text"
   },
+  "th2FileEditPageEnableImageEditModeButton": "Edit image",
+  "@th2FileEditPageEnableImageEditModeButton": {
+    "description": "Tooltip for enabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",
   "@th2FileEditPageHelpDialogTitle": {
     "description": "The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build",
@@ -2073,14 +2083,29 @@
     "description": "Tooltip for the grid visibility checkbox on each XVI image row. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageImageMoveOverlayLabel": "Move",
+  "@th2FileEditPageImageMoveOverlayLabel": {
+    "description": "The label shown on the image while move edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageImageMoveStatusBarMessage": "Image move mode",
   "@th2FileEditPageImageMoveStatusBarMessage": {
     "description": "The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart",
     "type": "text"
   },
+  "th2FileEditPageImageRotateOverlayLabel": "Rotate",
+  "@th2FileEditPageImageRotateOverlayLabel": {
+    "description": "The label shown on the image while rotate edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageImageRotateStatusBarMessage": "Image rotate mode",
   "@th2FileEditPageImageRotateStatusBarMessage": {
     "description": "The status bar message for the Mapiah image rotate preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_rotate.dart",
+    "type": "text"
+  },
+  "th2FileEditPageImageScaleOverlayLabel": "Scale",
+  "@th2FileEditPageImageScaleOverlayLabel": {
+    "description": "The label shown on the image while scale edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart",
     "type": "text"
   },
   "th2FileEditPageImageScaleStatusBarMessage": "Image scale mode",

@@ -9,6 +9,10 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
   });
 
   @override
+  String get overlayLabel =>
+      mpLocator.appLocalizations.th2FileEditPageImageRotateOverlayLabel;
+
+  @override
   String get statusBarMessage =>
       mpLocator.appLocalizations.th2FileEditPageImageRotateStatusBarMessage;
 

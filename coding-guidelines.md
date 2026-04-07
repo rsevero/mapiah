@@ -52,6 +52,8 @@ All code (app, scripts, tests) must follow these rules.
 
 23. **Tests first** — Write tests before or alongside implementation. Cover edge cases and failure modes.
 
+24. **Don´t create default constructors equal to forCWJM constructors** - the default ones should try to receive parameters in a way that is more intuitive for the user. For example, for a THDoublePart parameter, it should accept a double and then use the default THDoublePart constructor to create the THDoublePart instance. Check other default command constructors for details.
+
 ## App-Specific Rules
 
 - **Localizations**: Use `mpLocator.appLocalizations`. Exception: `MapiahHome` uses `AppLocalizations.of(context)`.

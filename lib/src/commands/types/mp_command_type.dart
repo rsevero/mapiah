@@ -18,6 +18,7 @@ enum MPCommandType {
   editPointType,
   moveArea,
   moveBezierLineSegment,
+  moveImageInsertConfig,
   moveLine,
   movePoint,
   moveStraightLineSegment,

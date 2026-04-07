@@ -10,6 +10,7 @@
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
   * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
 * Fixed bugs:
+  * Background image editing now has a first dedicated image-move workflow: each image row exposes an edit toggle before delete, entering move mode highlights the active image on the canvas with a mode label, dragging follows current snap targets from the image's top-left anchor, and the resulting move stays undoable for both legacy-converted and Mapiah-backed image inserts.
   * Available images now lists backgrounds in the reverse order of TH2 storage so the top row matches the topmost image on the canvas, while drag-and-drop still reorders the stored TH2 image sequence correctly.
   * `MPXVIImageInsertConfig` now preserves `isGridVisible` through `toMap()`/`fromMap()`, so Mapiah-side XVI image metadata no longer drops the grid-visibility state when cloned or deserialized.
   * Scrap `-stations` now follows Therion's single-argument rule: a single station may stay bare, quoted or bracketed station lists are split on spaces, and Mapiah always writes multiple stations back as a bracketed list.

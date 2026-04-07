@@ -2464,6 +2464,12 @@ abstract class AppLocalizations {
   /// **'Deselect all end points (Ctrl+D)'**
   String get th2FileEditPageDeselectAllEndPoints;
 
+  /// Tooltip for disabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Stop editing image'**
+  String get th2FileEditPageDisableImageEditModeButton;
+
   /// Tooltip for the duplicate elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
@@ -2482,6 +2488,12 @@ abstract class AppLocalizations {
   /// **'Empty selection'**
   String get th2FileEditPageEmptySelectionStatusBarMessage;
 
+  /// Tooltip for enabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Edit image'**
+  String get th2FileEditPageEnableImageEditModeButton;
+
   /// The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
@@ -2494,17 +2506,35 @@ abstract class AppLocalizations {
   /// **'Toggle grid visibility'**
   String get th2FileEditPageImageGridVisibilityTooltip;
 
+  /// The label shown on the image while move edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Move'**
+  String get th2FileEditPageImageMoveOverlayLabel;
+
   /// The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart
   ///
   /// In en, this message translates to:
   /// **'Image move mode'**
   String get th2FileEditPageImageMoveStatusBarMessage;
 
+  /// The label shown on the image while rotate edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate'**
+  String get th2FileEditPageImageRotateOverlayLabel;
+
   /// The status bar message for the Mapiah image rotate preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_rotate.dart
   ///
   /// In en, this message translates to:
   /// **'Image rotate mode'**
   String get th2FileEditPageImageRotateStatusBarMessage;
+
+  /// The label shown on the image while scale edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get th2FileEditPageImageScaleOverlayLabel;
 
   /// The status bar message for the Mapiah image scale preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_scale.dart
   ///

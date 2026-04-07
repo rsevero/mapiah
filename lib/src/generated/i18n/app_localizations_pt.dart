@@ -1333,6 +1333,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Desselecionar todos os pontos finais (Ctrl+D)';
 
   @override
+  String get th2FileEditPageDisableImageEditModeButton =>
+      'Parar de editar imagem';
+
+  @override
   String get th2FileEditPageDuplicateElements =>
       'Duplicar elementos (Ctrl+Shift+D)';
 
@@ -1344,6 +1348,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhum elemento selecionado';
 
   @override
+  String get th2FileEditPageEnableImageEditModeButton => 'Editar imagem';
+
+  @override
   String get th2FileEditPageHelpDialogTitle =>
       'Ajuda para edição de arquivo TH2';
 
@@ -1352,11 +1359,20 @@ class AppLocalizationsPt extends AppLocalizations {
       'Alternar visibilidade da grade';
 
   @override
+  String get th2FileEditPageImageMoveOverlayLabel => 'Mover';
+
+  @override
   String get th2FileEditPageImageMoveStatusBarMessage => 'Modo de mover imagem';
+
+  @override
+  String get th2FileEditPageImageRotateOverlayLabel => 'Girar';
 
   @override
   String get th2FileEditPageImageRotateStatusBarMessage =>
       'Modo de girar imagem';
+
+  @override
+  String get th2FileEditPageImageScaleOverlayLabel => 'Redimensionar';
 
   @override
   String get th2FileEditPageImageScaleStatusBarMessage =>

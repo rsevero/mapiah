@@ -14,6 +14,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -39,6 +40,7 @@ part 'mp_edit_line_type_command.dart';
 part 'mp_edit_point_type_command.dart';
 part 'mp_move_area_command.dart';
 part 'mp_move_bezier_line_segment_command.dart';
+part 'mp_move_image_insert_config_command.dart';
 part 'mp_move_line_command.dart';
 part 'mp_move_point_command.dart';
 part 'mp_move_straight_line_segment_command.dart';
@@ -195,6 +197,8 @@ abstract class MPCommand {
         return MPMoveAreaCommand.fromMap(map);
       case MPCommandType.moveBezierLineSegment:
         return MPMoveBezierLineSegmentCommand.fromMap(map);
+      case MPCommandType.moveImageInsertConfig:
+        return MPMoveImageInsertConfigCommand.fromMap(map);
       case MPCommandType.moveLine:
         return MPMoveLineCommand.fromMap(map);
       case MPCommandType.movePoint:
