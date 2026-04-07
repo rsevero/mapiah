@@ -27,14 +27,28 @@ class MPMoveImageInsertConfigCommand extends MPCommand {
 
   MPMoveImageInsertConfigCommand({
     required this.imageMPID,
-    required this.fromXX,
-    required this.fromYY,
-    required this.toXX,
-    required this.toYY,
+    required double fromXX,
+    required double fromYY,
+    required double toXX,
+    required double toYY,
+    int? fromXXDecimalPositions,
+    int? fromYYDecimalPositions,
+    int? toXXDecimalPositions,
+    int? toYYDecimalPositions,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
     super.descriptionType = defaultDescriptionType,
-  }) : super();
+  }) : fromXX = THDoublePart(
+         value: fromXX,
+         decimalPositions: fromXXDecimalPositions,
+       ),
+       fromYY = THDoublePart(
+         value: fromYY,
+         decimalPositions: fromYYDecimalPositions,
+       ),
+       toXX = THDoublePart(value: toXX, decimalPositions: toXXDecimalPositions),
+       toYY = THDoublePart(value: toYY, decimalPositions: toYYDecimalPositions),
+       super();
 
   @override
   MPCommandType get type => MPCommandType.moveImageInsertConfig;

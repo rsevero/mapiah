@@ -1252,7 +1252,7 @@ class MPCommandFactory {
         decimalPositions ??
         image.xx.decimalPositions.clamp(0, mpMaxDecimalPositions);
 
-    return MPMoveImageInsertConfigCommand(
+    return MPMoveImageInsertConfigCommand.forCWJM(
       imageMPID: imageMPID,
       fromXX: image.xx,
       fromYY: image.yy,
