@@ -54,6 +54,33 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
        _isVisible = isVisible,
        super.getMPID();
 
+  MPImageInsertConfig.fromString({
+    required super.parentMPID,
+    super.sameLineComment,
+    required this.filename,
+    required String xx,
+    required String yy,
+    String xScale = '1.0',
+    String yScale = '1.0',
+    String rotationCenterDx = '0.0',
+    String rotationCenterDy = '0.0',
+    String rotationDeg = '0.0',
+    bool isVisible = true,
+    super.originalLineInTH2File = '',
+  }) : xx = THDoublePart.fromString(valueString: xx),
+       yy = THDoublePart.fromString(valueString: yy),
+       xScale = THDoublePart.fromString(valueString: xScale),
+       yScale = THDoublePart.fromString(valueString: yScale),
+       rotationCenterDx = THDoublePart.fromString(
+         valueString: rotationCenterDx,
+       ),
+       rotationCenterDy = THDoublePart.fromString(
+         valueString: rotationCenterDy,
+       ),
+       rotationDeg = THDoublePart.fromString(valueString: rotationDeg),
+       _isVisible = isVisible,
+       super.getMPID();
+
   @override
   THElementType get elementType => THElementType.mapiahImageInsertConfig;
 
@@ -140,58 +167,30 @@ abstract class MPImageInsertConfig extends THElement with MPBoundingBoxMixin {
 
     switch (format) {
       case mpImageInsertFormatXVI:
-        return MPXVIImageInsertConfig(
+        return MPXVIImageInsertConfig.fromString(
           parentMPID: parentMPID,
           filename: _requiredPayloadValue(payload, 'filename'),
-          xx: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'xx'),
-          ),
-          yy: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'yy'),
-          ),
-          xScale: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'xScale'),
-          ),
-          yScale: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'yScale'),
-          ),
-          rotationCenterDx: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationCenterDx'),
-          ),
-          rotationCenterDy: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationCenterDy'),
-          ),
-          rotationDeg: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationDeg'),
-          ),
+          xx: _requiredPayloadValue(payload, 'xx'),
+          yy: _requiredPayloadValue(payload, 'yy'),
+          xScale: _requiredPayloadValue(payload, 'xScale'),
+          yScale: _requiredPayloadValue(payload, 'yScale'),
+          rotationCenterDx: _requiredPayloadValue(payload, 'rotationCenterDx'),
+          rotationCenterDy: _requiredPayloadValue(payload, 'rotationCenterDy'),
+          rotationDeg: _requiredPayloadValue(payload, 'rotationDeg'),
           xviRoot: payload['xviRoot'] ?? '',
           originalLineInTH2File: originalLineInTH2File,
         );
       case mpImageInsertFormatRaster:
-        return MPRasterImageInsertConfig(
+        return MPRasterImageInsertConfig.fromString(
           parentMPID: parentMPID,
           filename: _requiredPayloadValue(payload, 'filename'),
-          xx: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'xx'),
-          ),
-          yy: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'yy'),
-          ),
-          xScale: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'xScale'),
-          ),
-          yScale: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'yScale'),
-          ),
-          rotationCenterDx: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationCenterDx'),
-          ),
-          rotationCenterDy: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationCenterDy'),
-          ),
-          rotationDeg: THDoublePart.fromString(
-            valueString: _requiredPayloadValue(payload, 'rotationDeg'),
-          ),
+          xx: _requiredPayloadValue(payload, 'xx'),
+          yy: _requiredPayloadValue(payload, 'yy'),
+          xScale: _requiredPayloadValue(payload, 'xScale'),
+          yScale: _requiredPayloadValue(payload, 'yScale'),
+          rotationCenterDx: _requiredPayloadValue(payload, 'rotationCenterDx'),
+          rotationCenterDy: _requiredPayloadValue(payload, 'rotationCenterDy'),
+          rotationDeg: _requiredPayloadValue(payload, 'rotationDeg'),
           originalLineInTH2File: originalLineInTH2File,
         );
       default:
@@ -433,6 +432,24 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig {
   }) : _isGridVisible = isGridVisible,
        super.getMPID();
 
+  MPXVIImageInsertConfig.fromString({
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.yy,
+    super.xScale = '1.0',
+    super.yScale = '1.0',
+    super.rotationCenterDx = '0.0',
+    super.rotationCenterDy = '0.0',
+    super.rotationDeg = '0.0',
+    super.isVisible = true,
+    bool isGridVisible = true,
+    this.xviRoot = '',
+    super.originalLineInTH2File = '',
+  }) : _isGridVisible = isGridVisible,
+       super.fromString();
+
   @override
   String get format => mpImageInsertFormatXVI;
 
@@ -661,6 +678,21 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig {
     super.isVisible,
     super.originalLineInTH2File,
   }) : super.getMPID();
+
+  MPRasterImageInsertConfig.fromString({
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.yy,
+    super.xScale = '1.0',
+    super.yScale = '1.0',
+    super.rotationCenterDx = '0.0',
+    super.rotationCenterDy = '0.0',
+    super.rotationDeg = '0.0',
+    super.isVisible = true,
+    super.originalLineInTH2File = '',
+  }) : super.fromString();
 
   @override
   String get format => mpImageInsertFormatRaster;

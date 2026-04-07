@@ -25,6 +25,28 @@ void main() {
       expect(config.rotationDeg.toString(), '0');
       expect(config.isVisible, isTrue);
     });
+
+    test('fromString constructors apply string defaults', () {
+      final MPRasterImageInsertConfig raster =
+          MPRasterImageInsertConfig.fromString(
+            parentMPID: mpParentMPIDPlaceholder,
+            filename: 'images/photo.png',
+            xx: '10',
+            yy: '20',
+          );
+      final MPXVIImageInsertConfig xvi = MPXVIImageInsertConfig.fromString(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/survey.xvi',
+        xx: '-36',
+        yy: '28',
+      );
+
+      expect(raster.xScale.toString(), '1');
+      expect(raster.rotationDeg.toString(), '0');
+      expect(xvi.xScale.toString(), '1');
+      expect(xvi.rotationDeg.toString(), '0');
+      expect(xvi.isGridVisible, isTrue);
+    });
   });
 
   group('MPImageInsertConfig codec', () {
