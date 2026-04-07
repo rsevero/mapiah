@@ -84,38 +84,44 @@ class _MPImageOperationOverlayPainter extends CustomPainter {
       ..color = colorScheme.primary
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0 / th2FileEditController.canvasScale;
-    final double padding = 6.0 / th2FileEditController.canvasScale;
+    const double labelPadding = 6.0;
     final TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: label,
         style: TextStyle(
           color: colorScheme.onPrimary,
-          fontSize: 12.0 / th2FileEditController.canvasScale,
+          fontSize: 12.0,
           fontWeight: FontWeight.w700,
         ),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
+    final Offset labelTopLeftOnScreen = th2FileEditController
+        .offsetCanvasToScreen(adjustedBoundingBox.topLeft)
+        .translate(0.0, -(textPainter.height + (labelPadding * 2)));
     final Rect labelRect = Rect.fromLTWH(
-      adjustedBoundingBox.left,
-      adjustedBoundingBox.top - textPainter.height - (padding * 2),
-      textPainter.width + (padding * 2),
-      textPainter.height + (padding * 2),
+      labelTopLeftOnScreen.dx,
+      labelTopLeftOnScreen.dy,
+      textPainter.width + (labelPadding * 2),
+      textPainter.height + (labelPadding * 2),
     );
     final RRect labelRRect = RRect.fromRectAndRadius(
       labelRect,
-      Radius.circular(8.0 / th2FileEditController.canvasScale),
+      const Radius.circular(8.0),
     );
     final Paint labelPaint = Paint()
       ..color = colorScheme.primary
       ..style = PaintingStyle.fill;
 
+    canvas.save();
     th2FileEditController.transformCanvas(canvas);
     canvas.drawRect(adjustedBoundingBox, borderPaint);
+    canvas.restore();
+
     canvas.drawRRect(labelRRect, labelPaint);
     textPainter.paint(
       canvas,
-      Offset(labelRect.left + padding, labelRect.top + padding),
+      Offset(labelRect.left + labelPadding, labelRect.top + labelPadding),
     );
   }
 
