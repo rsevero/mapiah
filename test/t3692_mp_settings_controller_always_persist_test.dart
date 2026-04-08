@@ -159,6 +159,19 @@ void main() {
 
   group('MPSettingsController — setDouble always persists', () {
     test(
+      'new TH2 edit nudge factor uses its explicit default before any write',
+      () async {
+        final MPSettingsController ctrl = await freshController();
+
+        expect(ctrl.isDoubleSet(MPSettingID.TH2Edit_NudgeFactor), isFalse);
+        expect(
+          ctrl.getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor),
+          mpDefaultNudgeFactor,
+        );
+      },
+    );
+
+    test(
       'setting a double to its explicit default marks it as explicitly set',
       () async {
         final MPSettingsController ctrl = await freshController();

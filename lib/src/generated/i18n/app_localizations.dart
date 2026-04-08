@@ -1924,6 +1924,12 @@ abstract class AppLocalizations {
   /// **'New line creation method'**
   String get mpSettingsSettingTH2EditNewLineCreationMethod;
 
+  /// Label for TH2 edit nudge factor setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Nudge factor'**
+  String get mpSettingsSettingTH2EditNudgeFactor;
+
   /// Label for TH2 point radius setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

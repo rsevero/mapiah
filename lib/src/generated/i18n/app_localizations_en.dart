@@ -992,6 +992,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'New line creation method';
 
   @override
+  String get mpSettingsSettingTH2EditNudgeFactor => 'Nudge factor';
+
+  @override
   String get mpSettingsSettingTH2EditPointRadius => 'Point radius';
 
   @override

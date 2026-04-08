@@ -671,6 +671,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.Main_TherionRunParameters:
         return appLocalizations.mpSettingsSettingMainTherionRunParameters;
+      case MPSettingID.TH2Edit_NudgeFactor:
+        return appLocalizations.mpSettingsSettingTH2EditNudgeFactor;
       case MPSettingID.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
       case MPSettingID.TH2Edit_NewLineCreationMethod:

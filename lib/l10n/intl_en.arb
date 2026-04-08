@@ -1553,6 +1553,11 @@
     "description": "Label for the TH2 new line creation method setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditNudgeFactor": "Nudge factor",
+  "@mpSettingsSettingTH2EditNudgeFactor": {
+    "description": "Label for TH2 edit nudge factor setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSettingTH2EditPointRadius": "Point radius",
   "@mpSettingsSettingTH2EditPointRadius": {
     "description": "Label for TH2 point radius setting. Used on: lib/src/pages/mp_settings_page.dart",

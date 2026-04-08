@@ -351,6 +351,7 @@ const double mpClickDragThreshold = 2.0;
 const double mpClickDragThresholdSquared =
     mpClickDragThreshold * mpClickDragThreshold;
 const double mpDefaultSelectionTolerance = 7.0;
+const double mpDefaultNudgeFactor = 2.0;
 const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
 const double mpDefaultSnapAngle = 15.0;

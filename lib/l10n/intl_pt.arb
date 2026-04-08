@@ -322,6 +322,7 @@
   "mpSettingsSettingMainTherionRunParameters": "Parâmetros de execução do Therion",
   "mpSettingsSettingTH2EditLineThickness": "Espessura da linha",
   "mpSettingsSettingTH2EditNewLineCreationMethod": "Método de criação de nova linha",
+  "mpSettingsSettingTH2EditNudgeFactor": "Fator de ajuste",
   "mpSettingsSettingTH2EditPointRadius": "Raio do ponto",
   "mpSettingsSettingTH2EditSelectionTolerance": "Tolerância de seleção",
   "mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": "Mostrar marcas de direção em linhas não selecionadas",

@@ -1004,6 +1004,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Método de criação de nova linha';
 
   @override
+  String get mpSettingsSettingTH2EditNudgeFactor => 'Fator de ajuste';
+
+  @override
   String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
 
   @override
