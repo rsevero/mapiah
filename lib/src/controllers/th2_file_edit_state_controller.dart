@@ -90,6 +90,20 @@ abstract class TH2FileEditStateControllerBase
     _state.setCursor();
     _state.updateStatusBarMessage();
 
+    if (_shouldTriggerSelectedElementsRedraw(
+      previousStateType: previousState.type,
+      nextStateType: _state.type,
+    )) {
+      _th2FileEditController.triggerSelectedElementsRedraw();
+    }
+
+    if (_shouldTriggerEditLineRedraw(
+      previousStateType: previousState.type,
+      nextStateType: _state.type,
+    )) {
+      _th2FileEditController.triggerEditLineRedraw();
+    }
+
     if (previousIsImageOperationType ||
         isImageOperationType ||
         (previousImageOperationImageMPID != _imageOperationImageMPID)) {
@@ -97,6 +111,32 @@ abstract class TH2FileEditStateControllerBase
     }
 
     return true;
+  }
+
+  bool _shouldTriggerSelectedElementsRedraw({
+    required MPTH2FileEditStateType previousStateType,
+    required MPTH2FileEditStateType nextStateType,
+  }) {
+    const Set<MPTH2FileEditStateType> selectedElementMovementStates =
+        <MPTH2FileEditStateType>{
+          MPTH2FileEditStateType.selectNonEmptySelection,
+          MPTH2FileEditStateType.movingElements,
+        };
+
+    return selectedElementMovementStates.contains(previousStateType) ||
+        selectedElementMovementStates.contains(nextStateType);
+  }
+
+  bool _shouldTriggerEditLineRedraw({
+    required MPTH2FileEditStateType previousStateType,
+    required MPTH2FileEditStateType nextStateType,
+  }) {
+    return MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+          previousStateType,
+        ) ||
+        MPTH2FileEditStateEditSingleLine.singleLineEditModes.contains(
+          nextStateType,
+        );
   }
 
   void updateStatusBarMessage() {

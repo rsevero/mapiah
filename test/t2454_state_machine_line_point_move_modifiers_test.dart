@@ -146,6 +146,37 @@ void main() {
       },
     );
 
+    test(
+      'entering moving end control points triggers immediate line-edit redraw',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          '2025-10-05-001-line.th2',
+        );
+        final THLine line = controller.th2File.getLines().first;
+
+        prepareSingleLineState(controller, line);
+
+        final THLineSegment selectedSegment = line
+            .getLineSegments(controller.th2File)
+            .first;
+        final int redrawBefore = controller.redrawTriggerEditLine;
+
+        controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+          selectedSegment,
+        ]);
+        controller.selectionController.updateSelectableEndAndControlPoints();
+        controller.selectionController
+            .setDragStartCoordinatesFromCanvasCoordinates(
+              selectedSegment.endPoint.coordinates,
+            );
+        controller.stateController.setState(
+          MPTH2FileEditStateType.movingEndControlPoints,
+        );
+
+        expect(controller.redrawTriggerEditLine, greaterThan(redrawBefore));
+      },
+    );
+
     test('Ctrl drag constrains selected control point to one axis', () async {
       final TH2FileEditController controller = await loadController(
         '2025-10-27-002-bezier_line.th2',

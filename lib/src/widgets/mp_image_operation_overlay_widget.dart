@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/mp_image_operation_overlay_painter.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 
 /// Paints the transient UI that explains which image is currently being edited.
 ///
@@ -40,6 +41,9 @@ class MPImageOperationOverlayWidget extends StatelessWidget {
               th2FileEditController: th2FileEditController,
               image: image,
               hoverScreenPosition: hoverScreenPosition,
+              isRotateMode:
+                  th2FileEditController.stateController.state.type ==
+                  MPTH2FileEditStateType.imageRotate,
             ),
             size: th2FileEditController.screenSize,
           ),

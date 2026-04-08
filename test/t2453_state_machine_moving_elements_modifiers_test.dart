@@ -130,6 +130,39 @@ void main() {
       },
     );
 
+    test(
+      'entering moving elements triggers immediate selected-element redraw',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final THPoint point = controller.th2File.getPoints().first;
+
+        controller.selectionController.setSelectedElements(<THElement>[point]);
+
+        final int redrawBeforeSelection =
+            controller.redrawTriggerSelectedElements;
+
+        controller.stateController.setState(
+          MPTH2FileEditStateType.selectNonEmptySelection,
+        );
+
+        final int redrawBeforeMove = controller.redrawTriggerSelectedElements;
+
+        controller.selectionController
+            .setDragStartCoordinatesFromCanvasCoordinates(
+              point.position.coordinates,
+            );
+        controller.stateController.setState(
+          MPTH2FileEditStateType.movingElements,
+        );
+
+        expect(redrawBeforeMove, greaterThan(redrawBeforeSelection));
+        expect(
+          controller.redrawTriggerSelectedElements,
+          greaterThan(redrawBeforeMove),
+        );
+      },
+    );
+
     test('Ctrl drag constrains selected elements to one axis', () async {
       final TH2FileEditController controller = await loadController();
       final THPoint point = controller.th2File.getPoints().first;

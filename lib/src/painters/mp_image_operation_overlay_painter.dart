@@ -13,18 +13,17 @@ class MPImageOperationOverlayPainter extends CustomPainter {
   final TH2FileEditController th2FileEditController;
   final MPRuntimeImageInsertConfigMixin image;
   final Offset hoverScreenPosition;
+  final bool isRotateMode;
 
   const MPImageOperationOverlayPainter({
     required this.th2FileEditController,
     required this.image,
     required this.hoverScreenPosition,
+    required this.isRotateMode,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final String stateTypeName =
-        th2FileEditController.stateController.state.type.name;
-
     final Paint defaultHandlePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
@@ -36,7 +35,7 @@ class MPImageOperationOverlayPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
-    if (stateTypeName == 'imageRotate') {
+    if (isRotateMode) {
       _paintRotationOverlay(
         canvas: canvas,
         defaultHandlePaint: defaultHandlePaint,
@@ -143,6 +142,7 @@ class MPImageOperationOverlayPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant MPImageOperationOverlayPainter oldDelegate) {
     return oldDelegate.image != image ||
-        oldDelegate.hoverScreenPosition != hoverScreenPosition;
+        oldDelegate.hoverScreenPosition != hoverScreenPosition ||
+        oldDelegate.isRotateMode != isRotateMode;
   }
 }

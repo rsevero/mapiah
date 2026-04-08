@@ -19,6 +19,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
+import 'package:mapiah/src/painters/mp_image_operation_overlay_painter.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
@@ -178,6 +179,40 @@ void main() {
           controller.stateController.state.type,
           MPTH2FileEditStateType.imageMoveScale,
         );
+      },
+    );
+
+    test(
+      'image overlay painter repaints when transform state changes without mouse movement',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+
+        controller.moveScaleRotateElementController.prepareImageMoveState(
+          imageMPID,
+        );
+
+        final MPImageOperationOverlayPainter movePainter =
+            MPImageOperationOverlayPainter(
+              th2FileEditController: controller,
+              image: controller.th2File.imageByMPID(imageMPID),
+              hoverScreenPosition: Offset.zero,
+              isRotateMode: false,
+            );
+
+        controller.moveScaleRotateElementController.prepareImageRotateState(
+          imageMPID,
+        );
+
+        final MPImageOperationOverlayPainter rotatePainter =
+            MPImageOperationOverlayPainter(
+              th2FileEditController: controller,
+              image: controller.th2File.imageByMPID(imageMPID),
+              hoverScreenPosition: Offset.zero,
+              isRotateMode: true,
+            );
+
+        expect(rotatePainter.shouldRepaint(movePainter), isTrue);
       },
     );
 
