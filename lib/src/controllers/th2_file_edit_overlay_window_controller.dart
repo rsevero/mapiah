@@ -95,6 +95,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     setShowOverlayWindow(type, !_isOverlayWindowShown[type]!);
   }
 
+  Set<MPWindowType> _getMutuallyExclusiveOverlayWindowTypes(MPWindowType type) {
+    switch (type) {
+      case MPWindowType.availableScraps:
+        return <MPWindowType>{MPWindowType.changeImage};
+      case MPWindowType.changeImage:
+        return <MPWindowType>{MPWindowType.availableScraps};
+      default:
+        return <MPWindowType>{};
+    }
+  }
+
   void _showOverlayWindow(
     MPWindowType type, {
     Offset? outerAnchorPosition,
@@ -253,6 +264,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   }) {
     if (_isOverlayWindowShown[type] == show && outerAnchorPosition == null) {
       return;
+    }
+
+    if (show) {
+      final Set<MPWindowType> mutuallyExclusiveTypes =
+          _getMutuallyExclusiveOverlayWindowTypes(type);
+
+      for (final MPWindowType exclusiveType in mutuallyExclusiveTypes) {
+        if (_isOverlayWindowShown[exclusiveType]!) {
+          setShowOverlayWindow(exclusiveType, false);
+        }
+      }
     }
 
     _isOverlayWindowShown[type] = show;
