@@ -344,6 +344,7 @@ void main() {
       final MPRuntimeImageInsertConfigMixin image = controller
           .moveScaleRotateElementController
           .prepareImageMoveState(imageMPID);
+      final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final double originalXX = image.xx.value;
       final double originalYY = image.yy.value;
 
@@ -360,8 +361,16 @@ void main() {
 
       expect(flippedImage.xScale.value, closeTo(-1.0, 0.0001));
       expect(flippedImage.yScale.value, closeTo(1.0, 0.0001));
-      expect(flippedImage.xx.value, closeTo(originalXX, 0.0001));
+      expect(flippedImage.xx.value, isNot(closeTo(originalXX, 0.0001)));
       expect(flippedImage.yy.value, closeTo(originalYY, 0.0001));
+      expect(
+        flippedImage.getBoundingBox(controller)!.center.dx,
+        closeTo(originalBoundingBox.center.dx, 0.0001),
+      );
+      expect(
+        flippedImage.getBoundingBox(controller)!.center.dy,
+        closeTo(originalBoundingBox.center.dy, 0.0001),
+      );
 
       controller.undo();
 
@@ -385,6 +394,7 @@ void main() {
       final MPRuntimeImageInsertConfigMixin image = controller
           .moveScaleRotateElementController
           .prepareImageMoveState(imageMPID);
+      final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final double originalXX = image.xx.value;
       final double originalYY = image.yy.value;
 
@@ -402,7 +412,15 @@ void main() {
       expect(flippedImage.xScale.value, closeTo(1.0, 0.0001));
       expect(flippedImage.yScale.value, closeTo(-1.0, 0.0001));
       expect(flippedImage.xx.value, closeTo(originalXX, 0.0001));
-      expect(flippedImage.yy.value, closeTo(originalYY, 0.0001));
+      expect(flippedImage.yy.value, isNot(closeTo(originalYY, 0.0001)));
+      expect(
+        flippedImage.getBoundingBox(controller)!.center.dx,
+        closeTo(originalBoundingBox.center.dx, 0.0001),
+      );
+      expect(
+        flippedImage.getBoundingBox(controller)!.center.dy,
+        closeTo(originalBoundingBox.center.dy, 0.0001),
+      );
 
       controller.undo();
 

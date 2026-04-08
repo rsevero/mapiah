@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -190,6 +192,14 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
       imageMPID,
     );
+    final Rect? localBounds = image.getLocalBounds(_th2FileEditController);
+
+    if (localBounds == null) {
+      return;
+    }
+
+    final Offset anchorLocal = localBounds.center;
+    final Offset anchorCanvas = image.transformLocalPoint(anchorLocal);
     final THDoublePart toXScale = image.xScale.copyWith(
       value: flipX ? -image.xScale.value : image.xScale.value,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
@@ -198,17 +208,66 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
       value: flipY ? -image.yScale.value : image.yScale.value,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
     );
+    final Offset translation = _translationForAnchor(
+      startImage: image,
+      anchorLocal: anchorLocal,
+      anchorCanvas: anchorCanvas,
+      xScale: toXScale.value,
+      yScale: toYScale.value,
+    );
+    final THDoublePart toXX = image.xx.copyWith(
+      value: translation.dx,
+      decimalPositions: _th2FileEditController.currentDecimalPositions,
+    );
+    final THDoublePart toYY = image.yy.copyWith(
+      value: translation.dy,
+      decimalPositions: _th2FileEditController.currentDecimalPositions,
+    );
     final MPScaleImageInsertConfigCommand flipCommand =
         MPCommandFactory.scaleImageInsertConfig(
           imageMPID: imageMPID,
-          toXX: image.xx,
-          toYY: image.yy,
+          toXX: toXX,
+          toYY: toYY,
           toXScale: toXScale,
           toYScale: toYScale,
           th2File: _th2File,
         );
 
     _th2FileEditController.execute(flipCommand);
+  }
+
+  Offset _translationForAnchor({
+    required MPImageInsertConfig startImage,
+    required Offset anchorLocal,
+    required Offset anchorCanvas,
+    required double xScale,
+    required double yScale,
+  }) {
+    final Offset scaledAnchor = Offset(
+      anchorLocal.dx * xScale,
+      anchorLocal.dy * yScale,
+    );
+    final Offset localPivot = startImage.localRotationCenter;
+    final Offset scaledPivot = Offset(
+      localPivot.dx * xScale,
+      localPivot.dy * yScale,
+    );
+    final Offset rotatedDelta = _rotateOffset(
+      scaledAnchor - scaledPivot,
+      startImage.rotationDeg.value * mp1DegreeInRads,
+    );
+
+    return anchorCanvas - rotatedDelta - scaledPivot;
+  }
+
+  Offset _rotateOffset(Offset offset, double angleInRad) {
+    final double cosValue = cos(angleInRad);
+    final double sinValue = sin(angleInRad);
+
+    return Offset(
+      offset.dx * cosValue - offset.dy * sinValue,
+      offset.dx * sinValue + offset.dy * cosValue,
+    );
   }
 
   void moveSelectedElementsToScreenCoordinates(

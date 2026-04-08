@@ -49,6 +49,12 @@ void main() {
       });
 
       final int imageMPID = th2Controller.th2File.imageMPIDs.first;
+      final MPRuntimeImageInsertConfigMixin originalImage = th2Controller
+          .th2File
+          .imageByMPID(imageMPID);
+      final Rect originalBoundingBox = originalImage.getBoundingBox(
+        th2Controller,
+      )!;
 
       th2Controller.moveScaleRotateElementController.prepareImageMoveState(
         imageMPID,
@@ -70,6 +76,14 @@ void main() {
 
       expect(flippedHorizontally.xScale.value, closeTo(-1.0, 0.0001));
       expect(flippedHorizontally.yScale.value, closeTo(1.0, 0.0001));
+      expect(
+        flippedHorizontally.getBoundingBox(th2Controller)!.center.dx,
+        closeTo(originalBoundingBox.center.dx, 0.0001),
+      );
+      expect(
+        flippedHorizontally.getBoundingBox(th2Controller)!.center.dy,
+        closeTo(originalBoundingBox.center.dy, 0.0001),
+      );
 
       await tester.tap(find.byTooltip('Flip image vertically (V)'));
       await tester.pumpAndSettle();
@@ -79,6 +93,14 @@ void main() {
 
       expect(flippedBothAxes.xScale.value, closeTo(-1.0, 0.0001));
       expect(flippedBothAxes.yScale.value, closeTo(-1.0, 0.0001));
+      expect(
+        flippedBothAxes.getBoundingBox(th2Controller)!.center.dx,
+        closeTo(originalBoundingBox.center.dx, 0.0001),
+      );
+      expect(
+        flippedBothAxes.getBoundingBox(th2Controller)!.center.dy,
+        closeTo(originalBoundingBox.center.dy, 0.0001),
+      );
     });
   });
 }
