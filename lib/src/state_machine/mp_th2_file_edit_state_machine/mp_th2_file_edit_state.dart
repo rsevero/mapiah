@@ -52,6 +52,7 @@ part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_key_down_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_move_modifiers_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_reset_area_border_ctrl_meta_cycle_mixin.dart';

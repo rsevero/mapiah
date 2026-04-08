@@ -6,7 +6,8 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     with
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateKeyDownMixin,
-        MPTH2FileEditStateClearSelectionOnExitMixin {
+        MPTH2FileEditStateClearSelectionOnExitMixin,
+        MPTH2FileEditStateMoveModifiersMixin {
   MPTH2FileEditStateMovingSingleControlPoint({
     required super.th2FileEditController,
   });
@@ -136,22 +137,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
         _selectedControlPointCanvasPosition(selectedControlPoint);
     final Offset unconstrainedCanvasOffset =
         startControlPointPosition + dragDelta;
-    final bool ctrlOrMetaPressed =
-        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    final Offset constrainedCanvasOffset = ctrlOrMetaPressed
-        ? _constrainCanvasOffset(
-            unconstrainedCanvasOffset,
-            startControlPointPosition,
-          )
-        : unconstrainedCanvasOffset;
-
-    if (shiftPressed) {
-      return constrainedCanvasOffset;
-    }
-
-    return snapController.getCanvasSnapedOffsetFromCanvasOffset(
-      constrainedCanvasOffset,
+    return resolveMoveCanvasOffset(
+      canvasOffset: unconstrainedCanvasOffset,
+      dragStartCanvasCoordinates: startControlPointPosition,
     );
   }
 
@@ -172,24 +160,5 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
           'Unsupported selected control point type ${selectedControlPoint.type} in MPTH2FileEditStateMovingSingleControlPoint._selectedControlPointCanvasPosition().',
         );
     }
-  }
-
-  Offset _constrainCanvasOffset(
-    Offset canvasOffset,
-    Offset startControlPointPosition,
-  ) {
-    final Offset dragDelta = canvasOffset - startControlPointPosition;
-
-    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
-      return Offset(
-        startControlPointPosition.dx + dragDelta.dx,
-        startControlPointPosition.dy,
-      );
-    }
-
-    return Offset(
-      startControlPointPosition.dx,
-      startControlPointPosition.dy + dragDelta.dy,
-    );
   }
 }

@@ -6,7 +6,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     with
         MPTH2FileEditPageAltClickMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
-        MPTH2FileEditStateGetSelectedElementsMixin {
+        MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateMoveModifiersMixin {
   THElement? _clickedElementAtPointerDown;
   bool _searchedForClickedElementAtPointerDown = false;
 
@@ -202,36 +203,10 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.movingElements;
 
   Offset _resolvedMoveCanvasPosition(Offset canvasOffset) {
-    final bool ctrlOrMetaPressed =
-        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    final Offset constrainedCanvasOffset = ctrlOrMetaPressed
-        ? _constrainCanvasOffset(canvasOffset)
-        : canvasOffset;
-
-    if (shiftPressed) {
-      return constrainedCanvasOffset;
-    }
-
-    return snapController.getCanvasSnapedOffsetFromCanvasOffset(
-      constrainedCanvasOffset,
-    );
-  }
-
-  Offset _constrainCanvasOffset(Offset canvasOffset) {
-    final Offset dragDelta =
-        canvasOffset - selectionController.dragStartCanvasCoordinates;
-
-    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
-      return Offset(
-        selectionController.dragStartCanvasCoordinates.dx + dragDelta.dx,
-        selectionController.dragStartCanvasCoordinates.dy,
-      );
-    }
-
-    return Offset(
-      selectionController.dragStartCanvasCoordinates.dx,
-      selectionController.dragStartCanvasCoordinates.dy + dragDelta.dy,
+    return resolveMoveCanvasOffset(
+      canvasOffset: canvasOffset,
+      dragStartCanvasCoordinates:
+          selectionController.dragStartCanvasCoordinates,
     );
   }
 

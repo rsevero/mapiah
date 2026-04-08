@@ -4,8 +4,8 @@ part of 'mp_th2_file_edit_state.dart';
 
 enum _MPImageTransformDragMode { none, move, scale }
 
-class MPTH2FileEditStateImageMoveScale
-    extends MPTH2FileEditStateImageOperation {
+class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
+    with MPTH2FileEditStateMoveModifiersMixin {
   _MPImageTransformDragMode _dragMode = _MPImageTransformDragMode.none;
   Offset? _dragStartCanvasPosition;
   Offset? _dragStartImageTopLeft;
@@ -235,30 +235,19 @@ class MPTH2FileEditStateImageMoveScale
       return;
     }
 
-    final bool isCtrlOrMetaPressed =
-        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
-    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
     );
     final Offset dragDelta = canvasPosition - _dragStartCanvasPosition!;
-    final Offset constrainedDragDelta = isCtrlOrMetaPressed
-        ? _constrainMoveDelta(dragDelta)
+    final Offset constrainedDragDelta = isMoveAxisConstraintEnabled
+        ? constrainCanvasDeltaToDominantAxis(dragDelta)
         : dragDelta;
     final Offset unsnappedTopLeft =
         _dragStartImageTopLeft! + constrainedDragDelta;
-    final THPositionPart snappedTopLeft = isShiftPressed
-        ? THPositionPart(
-            coordinates: unsnappedTopLeft,
-            decimalPositions: th2FileEditController.currentDecimalPositions,
-          )
-        : snapController.getCanvasSnapedPositionFromCanvasOffset(
-                unsnappedTopLeft,
-              ) ??
-              THPositionPart(
-                coordinates: unsnappedTopLeft,
-                decimalPositions: th2FileEditController.currentDecimalPositions,
-              );
+    final THPositionPart snappedTopLeft = resolveMoveCanvasPosition(
+      canvasOffset: unsnappedTopLeft,
+      decimalPositions: th2FileEditController.currentDecimalPositions,
+    );
     final Offset previewOffset =
         snappedTopLeft.coordinates - _dragStartImageTopLeft!;
     final THDoublePart previewXX = imageConfig.xx.copyWith(
@@ -292,14 +281,6 @@ class MPTH2FileEditStateImageMoveScale
     return initialGeometry.containsCanvasPosition(canvasPosition);
   }
 
-  Offset _constrainMoveDelta(Offset dragDelta) {
-    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
-      return Offset(dragDelta.dx, 0.0);
-    }
-
-    return Offset(0.0, dragDelta.dy);
-  }
-
   void _updateScalePreview(PointerMoveEvent event) {
     final MPImageInsertConfig? startImage = _scaleStartImage;
     final Rect? startLocalBounds = _scaleStartLocalBounds;
@@ -315,8 +296,6 @@ class MPTH2FileEditStateImageMoveScale
       return;
     }
 
-    final bool isCtrlOrMetaPressed =
-        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final Offset dragDeltaOnScreen =
@@ -345,7 +324,7 @@ class MPTH2FileEditStateImageMoveScale
       anchorLocal: anchorLocal,
       handleLocal: handleLocal,
       rotatedDelta: rotatedDelta,
-      preserveAspectRatio: isCtrlOrMetaPressed,
+      preserveAspectRatio: isMoveAxisConstraintEnabled,
     );
     final Offset translation = _translationForAnchor(
       startImage: startImage,
