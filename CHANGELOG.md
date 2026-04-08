@@ -47,6 +47,7 @@
 * Infrastructure maintenance:
   * Moved the available-images reset workflow out of `MPAvailableImagesWidget` and into `TH2FileEditMoveScaleRotateElementController`, keeping the widget as a thin UI trigger and centralizing image-transform business logic with the other move/scale/rotate actions.
   * Replaced remaining image-transform helper magic numbers with shared constants, including handle sizing, overlay border width, and named handle-group sets used by the resize-axis logic.
+  * Extracted the pure image-rotation preview calculations out of `MPTH2FileEditStateImageRotate` into `mp_image_transform_aux.dart`, keeping the state focused on interaction flow while shared transform math now lives beside the other image geometry helpers.
   * Updated EN/PT image-edit help and keyboard-shortcut pages for the new transform workflow, and brought both TH2 edit help-page indexes back in sync with their actual section headings.
   * Extracted TH2FileEditMoveScaleRotateElementController: moved move, scale, and rotate-related element/image workflow code out of the generic element-edit controller so transform logic now lives in its own MobX store, instantiated directly by TH2FileEditController.
   * Completed Phase 6 state-machine preparation for Mapiah image inserts: the editor now has dedicated `imageScale`, `imageMove`, and `imageRotate` states, image-edit controller entry points lazily convert legacy XTherion images before entering those states, and the state controller now tracks which image each MP-only image state owns for future transform actions.

@@ -49,6 +49,26 @@ void main() {
 
       expect(angleInRad, closeTo(mp45DegreesInRad, 0.0001));
     });
+
+    test('rotation preview math resolves angle delta from drag vectors', () {
+      final double? angleDeltaInDeg =
+          MPImageRotationPreviewMath.rotationDeltaDeg(
+            pivotCanvas: Offset.zero,
+            dragStartCanvasPosition: const Offset(1.0, 0.0),
+            currentCanvasPosition: const Offset(0.0, 1.0),
+          );
+
+      expect(angleDeltaInDeg, closeTo(90.0, 0.0001));
+    });
+
+    test('rotation preview math snaps rotation to configured angle', () {
+      final double snappedRotation = MPImageRotationPreviewMath.snapRotationDeg(
+        rotationDeg: 13.0,
+        snapAngleDeg: 15.0,
+      );
+
+      expect(snappedRotation, closeTo(15.0, 0.0001));
+    });
   });
 
   group('state machine image operation preparation', () {

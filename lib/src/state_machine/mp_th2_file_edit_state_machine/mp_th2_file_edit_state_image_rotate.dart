@@ -238,27 +238,26 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     );
     final Offset currentCanvasPosition = th2FileEditController
         .offsetScreenToCanvas(event.localPosition);
-    final Offset startVector = dragStartCanvasPosition - pivotCanvas;
-    final Offset currentVector = currentCanvasPosition - pivotCanvas;
+    final double? angleDeltaInDeg = MPImageRotationPreviewMath.rotationDeltaDeg(
+      pivotCanvas: pivotCanvas,
+      dragStartCanvasPosition: dragStartCanvasPosition,
+      currentCanvasPosition: currentCanvasPosition,
+    );
 
-    if ((startVector.distance < mpDoubleComparisonEpsilon) ||
-        (currentVector.distance < mpDoubleComparisonEpsilon)) {
+    if (angleDeltaInDeg == null) {
       return;
     }
 
-    final double startAngleInRad = atan2(startVector.dy, startVector.dx);
-    final double currentAngleInRad = atan2(currentVector.dy, currentVector.dx);
-    final double angleDeltaInDeg =
-        (currentAngleInRad - startAngleInRad) / mp1DegreeInRads;
     double targetRotationDeg = startImage.rotationDeg.value + angleDeltaInDeg;
 
     if (MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed()) {
       final double snapAngle = mpLocator.mpSettingsController
           .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
 
-      if (snapAngle.abs() >= mpDoubleComparisonEpsilon) {
-        targetRotationDeg = (targetRotationDeg / snapAngle).round() * snapAngle;
-      }
+      targetRotationDeg = MPImageRotationPreviewMath.snapRotationDeg(
+        rotationDeg: targetRotationDeg,
+        snapAngleDeg: snapAngle,
+      );
     }
 
     THDoublePart previewXX = startImage.xx;
@@ -272,17 +271,19 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
           );
 
       if (geometry != null) {
-        final Offset anchorLocal = _oppositeCornerLocalPoint(
-          geometry.localBounds,
-          handleType,
-        );
+        final Offset anchorLocal =
+            MPImageRotationPreviewMath.oppositeCornerLocalPoint(
+              geometry.localBounds,
+              handleType,
+            );
         final Offset anchorCanvas = startImage.transformLocalPoint(anchorLocal);
-        final Offset translation = _translationForAnchorAfterRotation(
-          startImage: startImage,
-          anchorLocal: anchorLocal,
-          anchorCanvas: anchorCanvas,
-          rotationDeg: targetRotationDeg,
-        );
+        final Offset translation =
+            MPImageRotationPreviewMath.translationForAnchorAfterRotation(
+              startImage: startImage,
+              anchorLocal: anchorLocal,
+              anchorCanvas: anchorCanvas,
+              rotationDeg: targetRotationDeg,
+            );
 
         previewXX = startImage.xx.copyWith(
           value: translation.dx,
@@ -317,30 +318,18 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       return;
     }
 
-    final Offset targetPivotCanvas = th2FileEditController.offsetScreenToCanvas(
-      event.localPosition,
-    );
-    final Offset startTranslation = Offset(
-      startImage.xx.value,
-      startImage.yy.value,
-    );
-    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
-    final Offset scaledPivot = startImage.scaledRotationCenter;
-    final Offset rotatedScaledPivot = _rotateOffset(scaledPivot, angleInRad);
-    final Offset rotatedScaledTargetPivot = _rotateOffset(
-      targetPivotCanvas - startTranslation - scaledPivot + rotatedScaledPivot,
-      -angleInRad,
-    );
-    final double resolvedXScale = _avoidZeroScale(startImage.xScale.value);
-    final double resolvedYScale = _avoidZeroScale(startImage.yScale.value);
-    final Offset targetLocalPivot = Offset(
-      rotatedScaledTargetPivot.dx / resolvedXScale,
-      rotatedScaledTargetPivot.dy / resolvedYScale,
-    );
-    final Offset translation = _translationForPreservedImageAfterPivotMove(
-      startImage: startImage,
-      targetLocalPivot: targetLocalPivot,
-    );
+    final Offset targetLocalPivot =
+        MPImageRotationPreviewMath.targetLocalPivotFromCanvas(
+          startImage: startImage,
+          targetPivotCanvas: th2FileEditController.offsetScreenToCanvas(
+            event.localPosition,
+          ),
+        );
+    final Offset translation =
+        MPImageRotationPreviewMath.translationForPreservedImageAfterPivotMove(
+          startImage: startImage,
+          targetLocalPivot: targetLocalPivot,
+        );
 
     _previewImage = _copyImage(
       startImage: startImage,
@@ -429,85 +418,6 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     );
 
     return previewImage;
-  }
-
-  Offset _translationForAnchorAfterRotation({
-    required MPImageInsertConfig startImage,
-    required Offset anchorLocal,
-    required Offset anchorCanvas,
-    required double rotationDeg,
-  }) {
-    final Offset scaledAnchor = Offset(
-      anchorLocal.dx * startImage.xScale.value,
-      anchorLocal.dy * startImage.yScale.value,
-    );
-    final Offset scaledPivot = startImage.scaledRotationCenter;
-    final Offset rotatedDelta = _rotateOffset(
-      scaledAnchor - scaledPivot,
-      rotationDeg * mp1DegreeInRads,
-    );
-
-    return anchorCanvas - scaledPivot - rotatedDelta;
-  }
-
-  Offset _translationForPreservedImageAfterPivotMove({
-    required MPImageInsertConfig startImage,
-    required Offset targetLocalPivot,
-  }) {
-    final Offset currentScaledPivot = startImage.scaledRotationCenter;
-    final Offset targetScaledPivot = Offset(
-      targetLocalPivot.dx * startImage.xScale.value,
-      targetLocalPivot.dy * startImage.yScale.value,
-    );
-    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
-    final Offset rotatedCurrentScaledPivot = _rotateOffset(
-      currentScaledPivot,
-      angleInRad,
-    );
-    final Offset rotatedTargetScaledPivot = _rotateOffset(
-      targetScaledPivot,
-      angleInRad,
-    );
-
-    return Offset(startImage.xx.value, startImage.yy.value) +
-        currentScaledPivot -
-        rotatedCurrentScaledPivot -
-        targetScaledPivot +
-        rotatedTargetScaledPivot;
-  }
-
-  Offset _oppositeCornerLocalPoint(
-    Rect localBounds,
-    MPImageRotationHandleType handleType,
-  ) {
-    switch (handleType) {
-      case MPImageRotationHandleType.topLeft:
-        return localBounds.bottomRight;
-      case MPImageRotationHandleType.topRight:
-        return localBounds.bottomLeft;
-      case MPImageRotationHandleType.bottomLeft:
-        return localBounds.topRight;
-      case MPImageRotationHandleType.bottomRight:
-        return localBounds.topLeft;
-    }
-  }
-
-  Offset _rotateOffset(Offset offset, double angleInRad) {
-    final double cosValue = cos(angleInRad);
-    final double sinValue = sin(angleInRad);
-
-    return Offset(
-      offset.dx * cosValue - offset.dy * sinValue,
-      offset.dx * sinValue + offset.dy * cosValue,
-    );
-  }
-
-  double _avoidZeroScale(double scale) {
-    if (scale.abs() >= mpDoubleMinNormalized) {
-      return scale;
-    }
-
-    return (scale.isNegative ? -1.0 : 1.0) * mpDoubleMinNormalized;
   }
 
   bool _isPivotDraggable(MPRuntimeImageInsertConfigMixin runtimeImage) {

@@ -779,3 +779,142 @@ class MPImageRotationGeometry {
     return centeredPath.transform(matrix);
   }
 }
+
+/// Resolves pure geometry for image rotation previews and pivot moves.
+class MPImageRotationPreviewMath {
+  static double? rotationDeltaDeg({
+    required Offset pivotCanvas,
+    required Offset dragStartCanvasPosition,
+    required Offset currentCanvasPosition,
+  }) {
+    final Offset startVector = dragStartCanvasPosition - pivotCanvas;
+    final Offset currentVector = currentCanvasPosition - pivotCanvas;
+
+    if ((startVector.distance < mpDoubleComparisonEpsilon) ||
+        (currentVector.distance < mpDoubleComparisonEpsilon)) {
+      return null;
+    }
+
+    final double startAngleInRad = math.atan2(startVector.dy, startVector.dx);
+    final double currentAngleInRad = math.atan2(
+      currentVector.dy,
+      currentVector.dx,
+    );
+
+    return (currentAngleInRad - startAngleInRad) / mp1DegreeInRads;
+  }
+
+  static double snapRotationDeg({
+    required double rotationDeg,
+    required double snapAngleDeg,
+  }) {
+    if (snapAngleDeg.abs() < mpDoubleComparisonEpsilon) {
+      return rotationDeg;
+    }
+
+    return (rotationDeg / snapAngleDeg).round() * snapAngleDeg;
+  }
+
+  static Offset translationForAnchorAfterRotation({
+    required MPImageInsertConfig startImage,
+    required Offset anchorLocal,
+    required Offset anchorCanvas,
+    required double rotationDeg,
+  }) {
+    final Offset scaledAnchor = Offset(
+      anchorLocal.dx * startImage.xScale.value,
+      anchorLocal.dy * startImage.yScale.value,
+    );
+    final Offset scaledPivot = startImage.scaledRotationCenter;
+    final Offset rotatedDelta = rotateOffset(
+      scaledAnchor - scaledPivot,
+      rotationDeg * mp1DegreeInRads,
+    );
+
+    return anchorCanvas - scaledPivot - rotatedDelta;
+  }
+
+  static Offset targetLocalPivotFromCanvas({
+    required MPImageInsertConfig startImage,
+    required Offset targetPivotCanvas,
+  }) {
+    final Offset startTranslation = Offset(
+      startImage.xx.value,
+      startImage.yy.value,
+    );
+    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
+    final Offset scaledPivot = startImage.scaledRotationCenter;
+    final Offset rotatedScaledPivot = rotateOffset(scaledPivot, angleInRad);
+    final Offset rotatedScaledTargetPivot = rotateOffset(
+      targetPivotCanvas - startTranslation - scaledPivot + rotatedScaledPivot,
+      -angleInRad,
+    );
+    final double resolvedXScale = avoidZeroScale(startImage.xScale.value);
+    final double resolvedYScale = avoidZeroScale(startImage.yScale.value);
+
+    return Offset(
+      rotatedScaledTargetPivot.dx / resolvedXScale,
+      rotatedScaledTargetPivot.dy / resolvedYScale,
+    );
+  }
+
+  static Offset translationForPreservedImageAfterPivotMove({
+    required MPImageInsertConfig startImage,
+    required Offset targetLocalPivot,
+  }) {
+    final Offset currentScaledPivot = startImage.scaledRotationCenter;
+    final Offset targetScaledPivot = Offset(
+      targetLocalPivot.dx * startImage.xScale.value,
+      targetLocalPivot.dy * startImage.yScale.value,
+    );
+    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
+    final Offset rotatedCurrentScaledPivot = rotateOffset(
+      currentScaledPivot,
+      angleInRad,
+    );
+    final Offset rotatedTargetScaledPivot = rotateOffset(
+      targetScaledPivot,
+      angleInRad,
+    );
+
+    return Offset(startImage.xx.value, startImage.yy.value) +
+        currentScaledPivot -
+        rotatedCurrentScaledPivot -
+        targetScaledPivot +
+        rotatedTargetScaledPivot;
+  }
+
+  static Offset oppositeCornerLocalPoint(
+    Rect localBounds,
+    MPImageRotationHandleType handleType,
+  ) {
+    switch (handleType) {
+      case MPImageRotationHandleType.topLeft:
+        return localBounds.bottomRight;
+      case MPImageRotationHandleType.topRight:
+        return localBounds.bottomLeft;
+      case MPImageRotationHandleType.bottomLeft:
+        return localBounds.topRight;
+      case MPImageRotationHandleType.bottomRight:
+        return localBounds.topLeft;
+    }
+  }
+
+  static Offset rotateOffset(Offset offset, double angleInRad) {
+    final double cosValue = math.cos(angleInRad);
+    final double sinValue = math.sin(angleInRad);
+
+    return Offset(
+      offset.dx * cosValue - offset.dy * sinValue,
+      offset.dx * sinValue + offset.dy * cosValue,
+    );
+  }
+
+  static double avoidZeroScale(double scale) {
+    if (scale.abs() >= mpDoubleMinNormalized) {
+      return scale;
+    }
+
+    return (scale.isNegative ? -1.0 : 1.0) * mpDoubleMinNormalized;
+  }
+}
