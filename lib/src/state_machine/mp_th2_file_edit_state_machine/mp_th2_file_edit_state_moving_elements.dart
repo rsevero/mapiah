@@ -121,18 +121,17 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   /// 1. Moves all selected objects by the distance indicated by [event].
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
-      event.localPosition,
+    final Offset canvasOffset = _resolvedMoveCanvasPosition(
+      th2FileEditController.offsetScreenToCanvas(event.localPosition),
     );
-    final Offset snapedCanvasOffset = snapController
-        .getCanvasSnapedOffsetFromCanvasOffset(canvasOffset);
 
     if (!_searchedForClickedElementAtPointerDown) {
       _searchedForClickedElementAtPointerDown = true;
       _clickedElementAtPointerDown = snapController.getNearerSelectedElement(
-        canvasOffset,
+        selectionController.dragStartCanvasCoordinates,
       );
-      if (_clickedElementAtPointerDown != null) {
+      if ((_clickedElementAtPointerDown != null) &&
+          !MPInteractionAux.isAltPressed()) {
         switch (_clickedElementAtPointerDown) {
           case THPoint _:
             selectionController.setDragStartCoordinatesFromCanvasCoordinates(
@@ -149,8 +148,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
     }
 
     th2FileEditController.moveScaleRotateElementController
-        .moveSelectedElementsToCanvasCoordinates(snapedCanvasOffset);
-    th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
+        .moveSelectedElementsToCanvasCoordinates(canvasOffset);
+    th2FileEditController.setMovingMousePosition(canvasOffset);
   }
 
   /// 1. Records an MPCommand that moves the entire selection by the distance
@@ -162,15 +161,9 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     final int selectedCount =
         selectionController.mpSelectedElementsLogical.length;
-    final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
-      event.localPosition,
+    final Offset canvasOffset = _resolvedMoveCanvasPosition(
+      th2FileEditController.offsetScreenToCanvas(event.localPosition),
     );
-    final THPositionPart snapedPosition =
-        snapController.getCanvasSnapedPositionFromCanvasOffset(canvasOffset) ??
-        THPositionPart(
-          coordinates: canvasOffset,
-          decimalPositions: th2FileEditController.currentDecimalPositions,
-        );
     late MPCommand moveCommand;
 
     if (selectedCount == 0) {
@@ -180,12 +173,22 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
       return;
     } else {
+      final THElement referenceElement = _clickedElementAtPointerDown!;
+      final Offset referenceElementStartPosition =
+          _referenceElementCanvasPosition(referenceElement);
+      final Offset dragDelta =
+          canvasOffset - selectionController.dragStartCanvasCoordinates;
+      final THPositionPart finalPosition = THPositionPart(
+        coordinates: referenceElementStartPosition + dragDelta,
+        decimalPositions: th2FileEditController.currentDecimalPositions,
+      );
+
       moveCommand =
           MPCommandFactory.moveElementsFromReferenceElementExactPosition(
             mpSelectedElements:
                 selectionController.mpSelectedElementsLogical.values,
-            referenceElement: _clickedElementAtPointerDown!,
-            referenceElementFinalPosition: snapedPosition,
+            referenceElement: referenceElement,
+            referenceElementFinalPosition: finalPosition,
           );
       th2FileEditController.execute(moveCommand);
       th2FileEditController.setMovingMousePosition(null);
@@ -197,4 +200,51 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
 
   @override
   MPTH2FileEditStateType get type => MPTH2FileEditStateType.movingElements;
+
+  Offset _resolvedMoveCanvasPosition(Offset canvasOffset) {
+    final bool ctrlOrMetaPressed =
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+    final Offset constrainedCanvasOffset = ctrlOrMetaPressed
+        ? _constrainCanvasOffset(canvasOffset)
+        : canvasOffset;
+
+    if (shiftPressed) {
+      return constrainedCanvasOffset;
+    }
+
+    return snapController.getCanvasSnapedOffsetFromCanvasOffset(
+      constrainedCanvasOffset,
+    );
+  }
+
+  Offset _constrainCanvasOffset(Offset canvasOffset) {
+    final Offset dragDelta =
+        canvasOffset - selectionController.dragStartCanvasCoordinates;
+
+    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
+      return Offset(
+        selectionController.dragStartCanvasCoordinates.dx + dragDelta.dx,
+        selectionController.dragStartCanvasCoordinates.dy,
+      );
+    }
+
+    return Offset(
+      selectionController.dragStartCanvasCoordinates.dx,
+      selectionController.dragStartCanvasCoordinates.dy + dragDelta.dy,
+    );
+  }
+
+  Offset _referenceElementCanvasPosition(THElement referenceElement) {
+    switch (referenceElement) {
+      case THPoint point:
+        return point.position.coordinates;
+      case THLineSegment lineSegment:
+        return lineSegment.endPoint.coordinates;
+      default:
+        throw Exception(
+          'Unsupported reference element ${referenceElement.runtimeType} in MPTH2FileEditStateMovingElements._referenceElementCanvasPosition().',
+        );
+    }
+  }
 }

@@ -142,21 +142,23 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// 2.2. No. Do nothing.
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
+    final bool altPressed = MPInteractionAux.isAltPressed();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final bool ctrlOrMetaOnlyPressed =
         (MPInteractionAux.isCtrlPressed() ||
             MPInteractionAux.isMetaPressed()) &&
         !shiftPressed &&
-        !MPInteractionAux.isAltPressed();
+        !altPressed;
 
     elementEditController.resetOriginalFileForLineSimplification();
     selectionController.setDragStartCoordinatesFromScreenCoordinates(
       event.localPosition,
     );
+    selectionController.clearClickedElementsAtPointerDown();
 
     // When cycling area-border lines, skip drag-start detection to avoid
     // advancing the cycle index twice (pointer-down + pointer-up).
-    if (ctrlOrMetaOnlyPressed) {
+    if (ctrlOrMetaOnlyPressed || altPressed) {
       return;
     }
 
@@ -190,6 +192,15 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     selectionController.setSelectionWindowScreenEndCoordinates(
       event.localPosition,
     );
+    final bool altPressed = MPInteractionAux.isAltPressed();
+
+    if (altPressed) {
+      selectionController.clearSelectionWindow();
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.movingElements,
+      );
+      return;
+    }
 
     if (selectionController.clickedElementsAtPointerDown.isNotEmpty) {
       selectionController.substituteSelectedElementsByClickedElements();
