@@ -167,6 +167,13 @@ abstract class MPTH2FileEditState {
 
   bool get keepOverlayOpenOnCanvasClick => false;
 
+  bool shouldKeepOverlayOpenOnCanvasPointerUp(
+    PointerUpEvent event, {
+    required bool wasDragging,
+  }) {
+    return keepOverlayOpenOnCanvasClick;
+  }
+
   void updateStatusBarMessage() {}
 
   void onPrimaryButtonPointerDown(PointerDownEvent event) {}

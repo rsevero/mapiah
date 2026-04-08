@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
 
 class MPListenerWidget extends StatefulWidget {
@@ -114,11 +115,30 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         }
       },
       onPointerUp: (PointerUpEvent event) {
+        final bool wasDragging =
+            isPrimaryButtonDragging ||
+            isSecondaryButtonDragging ||
+            isTertiaryButtonDragging;
+        final bool shouldKeepOverlayOpen = th2FileEditController
+            .stateController
+            .state
+            .shouldKeepOverlayOpenOnCanvasPointerUp(
+              event,
+              wasDragging: wasDragging,
+            );
+
         if (overlayWindowController.isAutoDismissWindowOpen &&
-            !th2FileEditController
-                .stateController
-                .state
-                .keepOverlayOpenOnCanvasClick) {
+            !shouldKeepOverlayOpen) {
+          if (overlayWindowController.getIsOverlayWindowShown(
+                MPWindowType.changeImage,
+              ) &&
+              th2FileEditController
+                  .stateController
+                  .state
+                  .keepOverlayOpenOnCanvasClick) {
+            th2FileEditController.stateController.clearImageOperationState();
+          }
+
           overlayWindowController.closeAutoDismissOverlayWindows();
         }
 

@@ -40,6 +40,36 @@ abstract class MPTH2FileEditStateImageOperation extends MPTH2FileEditState {
   bool get keepOverlayOpenOnCanvasClick => true;
 
   @override
+  bool shouldKeepOverlayOpenOnCanvasPointerUp(
+    PointerUpEvent event, {
+    required bool wasDragging,
+  }) {
+    if (wasDragging) {
+      return true;
+    }
+
+    final MPImageTransformGeometry? geometry =
+        MPImageTransformGeometry.forImage(
+          th2FileEditController: th2FileEditController,
+          image: imageConfig,
+        );
+
+    if (geometry == null) {
+      return false;
+    }
+
+    if (geometry.hitTestHandle(event.localPosition) != null) {
+      return true;
+    }
+
+    final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
+      event.localPosition,
+    );
+
+    return geometry.containsCanvasPosition(canvasPosition);
+  }
+
+  @override
   void onKeyDownEvent(KeyDownEvent event) {
     if (event.logicalKey == LogicalKeyboardKey.escape) {
       th2FileEditController.stateController.setState(
