@@ -42,6 +42,7 @@ void main() {
       expect(config.rotationCenterDx.toString(), '0');
       expect(config.rotationCenterDy.toString(), '0');
       expect(config.rotationDeg.toString(), '0');
+      expect(config.pivotSet, isFalse);
       expect(config.isVisible, isTrue);
     });
 
@@ -62,8 +63,10 @@ void main() {
 
       expect(raster.xScale.toString(), '1');
       expect(raster.rotationDeg.toString(), '0');
+      expect(raster.pivotSet, isFalse);
       expect(xvi.xScale.toString(), '1');
       expect(xvi.rotationDeg.toString(), '0');
+      expect(xvi.pivotSet, isTrue);
       expect(xvi.isGridVisible, isTrue);
     });
 
@@ -82,6 +85,7 @@ void main() {
         const Rect.fromLTRB(5.0, 7.0, 13.0, 22.0),
       );
       expect(config.scaledRotationCenter, Offset.zero);
+      expect(config.pivotSet, isFalse);
     });
   });
 
@@ -116,6 +120,7 @@ void main() {
       expect(decoded.rotationCenterDx, original.rotationCenterDx);
       expect(decoded.rotationCenterDy, original.rotationCenterDy);
       expect(decoded.rotationDeg, original.rotationDeg);
+      expect(decoded.pivotSet, original.pivotSet);
       expect(decoded.isVisible, isTrue);
       expect(
         decoded.toMetadataLine(),
@@ -157,6 +162,7 @@ void main() {
         original.rotationCenterDy.value,
       );
       expect(fromMetadata.rotationDeg.value, original.rotationDeg.value);
+      expect(fromMetadata.pivotSet, isTrue);
       expect(
         (fromMetadata as MPXVIImageInsertConfig).xviRoot,
         original.xviRoot,
@@ -349,6 +355,7 @@ void main() {
       expect(convertedRaster.isVisible, isFalse);
       expect(convertedRaster.xScale.toString(), '1');
       expect(convertedRaster.rotationDeg.toString(), '0');
+      expect(convertedRaster.pivotSet, isFalse);
 
       expect(convertedXVI, isA<MPXVIImageInsertConfig>());
       expect(convertedXVI.mpID, xvi.mpID);
@@ -356,6 +363,7 @@ void main() {
       expect(convertedXVI.xx, xvi.xx);
       expect(convertedXVI.yy, xvi.yy);
       expect(convertedXVI.isVisible, isFalse);
+      expect(convertedXVI.pivotSet, isTrue);
       expect(convertedXVIAsXVI.isGridVisible, isFalse);
       expect(convertedXVIAsXVI.xviRoot, 'station_A');
     });
@@ -394,6 +402,28 @@ void main() {
         expect(initialBoundingBox.height, lessThan(1.0));
         expect(refreshedBoundingBox.width, 40.0);
         expect(refreshedBoundingBox.height, 20.0);
+      },
+    );
+
+    test(
+      'raster pivot defaults to image center until explicitly set',
+      () async {
+        final MPRasterImageInsertConfig config = MPRasterImageInsertConfig(
+          parentMPID: mpParentMPIDPlaceholder,
+          filename: 'images/photo.png',
+          xx: 10.0,
+          yy: 20.0,
+        );
+        final Image decodedImage = await _createTestImage(
+          width: 40,
+          height: 20,
+        );
+
+        config.setRasterImage(decodedImage);
+
+        expect(config.pivotSet, isFalse);
+        expect(config.localRotationCenter, const Offset(20.0, -10.0));
+        expect(config.scaledRotationCenter, const Offset(20.0, -10.0));
       },
     );
   });

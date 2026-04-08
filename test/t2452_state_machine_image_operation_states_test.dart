@@ -47,7 +47,7 @@ void main() {
             const Offset(1.0, 0.0),
           );
 
-      expect(angleInRad, closeTo(-mp45DegreesInRad, 0.0001));
+      expect(angleInRad, closeTo(mp45DegreesInRad, 0.0001));
     });
   });
 
@@ -532,6 +532,7 @@ void main() {
       final MPRasterImageInsertConfig startImage =
           controller.th2File.imageByMPID(imageMPID)
               as MPRasterImageInsertConfig;
+      expect(startImage.pivotSet, isFalse);
       final MPImageRotationGeometry geometry = MPImageRotationGeometry.forImage(
         th2FileEditController: controller,
         image: startImage,
@@ -561,6 +562,8 @@ void main() {
           controller.th2File.imageByMPID(imageMPID)
               as MPRasterImageInsertConfig;
 
+      expect(movedPivotImage.pivotSet, isTrue);
+
       expect(
         movedPivotImage.rotationCenterDx.value,
         isNot(closeTo(startImage.rotationCenterDx.value, 0.0001)),
@@ -575,6 +578,8 @@ void main() {
       final MPRasterImageInsertConfig undonePivot =
           controller.th2File.imageByMPID(imageMPID)
               as MPRasterImageInsertConfig;
+
+      expect(undonePivot.pivotSet, isFalse);
 
       expect(
         undonePivot.rotationCenterDx.value,
@@ -608,6 +613,7 @@ void main() {
 
       final MPXVIImageInsertConfig startImage =
           controller.th2File.imageByMPID(imageMPID) as MPXVIImageInsertConfig;
+      expect(startImage.pivotSet, isTrue);
       final MPImageRotationGeometry geometry = MPImageRotationGeometry.forImage(
         th2FileEditController: controller,
         image: startImage,

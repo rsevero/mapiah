@@ -567,7 +567,7 @@ class MPImageRotationGeometry {
     }
 
     final Offset canvasPivotCenter = image.transformLocalPoint(
-      Offset(image.rotationCenterDx.value, image.rotationCenterDy.value),
+      image.localRotationCenter,
     );
     final Offset screenPivotCenter = th2FileEditController.offsetCanvasToScreen(
       canvasPivotCenter,

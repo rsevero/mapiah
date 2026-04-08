@@ -485,9 +485,10 @@ class MPTH2FileEditStateImageMoveScale
       anchorLocal.dx * xScale,
       anchorLocal.dy * yScale,
     );
+    final Offset localPivot = startImage.localRotationCenter;
     final Offset scaledPivot = Offset(
-      startImage.rotationCenterDx.value * xScale,
-      startImage.rotationCenterDy.value * yScale,
+      localPivot.dx * xScale,
+      localPivot.dy * yScale,
     );
     final Offset rotatedDelta = _rotateOffset(
       scaledAnchor - scaledPivot,

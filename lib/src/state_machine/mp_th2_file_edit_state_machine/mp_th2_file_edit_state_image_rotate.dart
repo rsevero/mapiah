@@ -234,10 +234,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     }
 
     final Offset pivotCanvas = startImage.transformLocalPoint(
-      Offset(
-        startImage.rotationCenterDx.value,
-        startImage.rotationCenterDy.value,
-      ),
+      startImage.localRotationCenter,
     );
     final Offset currentCanvasPosition = th2FileEditController
         .offsetScreenToCanvas(event.localPosition);
@@ -308,6 +305,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
         value: targetRotationDeg,
         decimalPositions: th2FileEditController.currentDecimalPositions,
       ),
+      pivotSet: startImage.pivotSet,
     );
     th2FileEditController.triggerImagesRedraw();
   }
@@ -363,6 +361,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
         decimalPositions: th2FileEditController.currentDecimalPositions,
       ),
       rotationDeg: startImage.rotationDeg,
+      pivotSet: true,
     );
     th2FileEditController.triggerImagesRedraw();
   }
@@ -383,7 +382,8 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
         (startImage.yy == previewImage.yy) &&
         (startImage.rotationCenterDx == previewImage.rotationCenterDx) &&
         (startImage.rotationCenterDy == previewImage.rotationCenterDy) &&
-        (startImage.rotationDeg == previewImage.rotationDeg)) {
+        (startImage.rotationDeg == previewImage.rotationDeg) &&
+        (startImage.pivotSet == previewImage.pivotSet)) {
       th2FileEditController.triggerImagesRedraw();
 
       return;
@@ -397,6 +397,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
           toRotationCenterDx: previewImage.rotationCenterDx,
           toRotationCenterDy: previewImage.rotationCenterDy,
           toRotationDeg: previewImage.rotationDeg,
+          toPivotSet: previewImage.pivotSet,
           th2File: th2File,
         );
 
@@ -410,6 +411,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     required THDoublePart rotationCenterDx,
     required THDoublePart rotationCenterDy,
     required THDoublePart rotationDeg,
+    required bool pivotSet,
   }) {
     final MPImageInsertConfig previewImage = startImage.copyWithImageTransform(
       xx: xx,
@@ -417,6 +419,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       rotationCenterDx: rotationCenterDx,
       rotationCenterDy: rotationCenterDy,
       rotationDeg: rotationDeg,
+      pivotSet: pivotSet,
       originalLineInTH2File: '',
     );
 

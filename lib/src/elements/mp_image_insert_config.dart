@@ -15,6 +15,7 @@ abstract class MPImageInsertConfig extends THElement
   THDoublePart rotationCenterDx;
   THDoublePart rotationCenterDy;
   THDoublePart rotationDeg;
+  bool pivotSet;
 
   bool _isVisible;
 
@@ -30,6 +31,7 @@ abstract class MPImageInsertConfig extends THElement
     required this.rotationCenterDx,
     required this.rotationCenterDy,
     required this.rotationDeg,
+    required this.pivotSet,
     required bool isVisible,
     required super.originalLineInTH2File,
   }) : _isVisible = isVisible,
@@ -46,6 +48,7 @@ abstract class MPImageInsertConfig extends THElement
     double rotationCenterDx = 0.0,
     double rotationCenterDy = 0.0,
     double rotationDeg = 0.0,
+    this.pivotSet = true,
     bool isVisible = true,
     super.originalLineInTH2File = '',
   }) : xx = THDoublePart(value: xx),
@@ -69,6 +72,7 @@ abstract class MPImageInsertConfig extends THElement
     String rotationCenterDx = '0.0',
     String rotationCenterDy = '0.0',
     String rotationDeg = '0.0',
+    this.pivotSet = true,
     bool isVisible = true,
     super.originalLineInTH2File = '',
   }) : xx = THDoublePart.fromString(valueString: xx),
@@ -102,6 +106,7 @@ abstract class MPImageInsertConfig extends THElement
     THDoublePart? rotationCenterDx,
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
+    bool? pivotSet,
     bool? isVisible,
     String? originalLineInTH2File,
   });
@@ -119,6 +124,7 @@ abstract class MPImageInsertConfig extends THElement
       'rotationCenterDx': rotationCenterDx.toMap(),
       'rotationCenterDy': rotationCenterDy.toMap(),
       'rotationDeg': rotationDeg.toMap(),
+      'pivotSet': pivotSet,
       'isVisible': _isVisible,
     };
   }
@@ -140,6 +146,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx: THDoublePart.fromMap(map['rotationCenterDx']),
           rotationCenterDy: THDoublePart.fromMap(map['rotationCenterDy']),
           rotationDeg: THDoublePart.fromMap(map['rotationDeg']),
+          pivotSet: map['pivotSet'] ?? true,
           isVisible: map['isVisible'] ?? true,
           isGridVisible: map['isGridVisible'] ?? true,
           xviRoot: map['xviRoot'] ?? '',
@@ -158,6 +165,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx: THDoublePart.fromMap(map['rotationCenterDx']),
           rotationCenterDy: THDoublePart.fromMap(map['rotationCenterDy']),
           rotationDeg: THDoublePart.fromMap(map['rotationDeg']),
+          pivotSet: map['pivotSet'] ?? false,
           isVisible: map['isVisible'] ?? true,
           originalLineInTH2File: map['originalLineInTH2File'],
         );
@@ -190,6 +198,7 @@ abstract class MPImageInsertConfig extends THElement
               rotationCenterDx: THDoublePart(value: 0.0),
               rotationCenterDy: THDoublePart(value: 0.0),
               rotationDeg: THDoublePart(value: 0.0),
+              pivotSet: true,
               isVisible: xviImage.isVisible,
               isGridVisible: xviImage.isGridVisible,
               xviRoot: xviImage.xviRoot,
@@ -216,6 +225,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx: THDoublePart(value: 0.0),
           rotationCenterDy: THDoublePart(value: 0.0),
           rotationDeg: THDoublePart(value: 0.0),
+          pivotSet: false,
           isVisible: rasterImage.isVisible,
           originalLineInTH2File: '',
         );
@@ -252,6 +262,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx: _requiredPayloadValue(payload, 'rotationCenterDx'),
           rotationCenterDy: _requiredPayloadValue(payload, 'rotationCenterDy'),
           rotationDeg: _requiredPayloadValue(payload, 'rotationDeg'),
+          pivotSet: payload['pivotSet'] != 'false',
           xviRoot: payload['xviRoot'] ?? '',
           originalLineInTH2File: originalLineInTH2File,
         );
@@ -266,6 +277,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx: _requiredPayloadValue(payload, 'rotationCenterDx'),
           rotationCenterDy: _requiredPayloadValue(payload, 'rotationCenterDy'),
           rotationDeg: _requiredPayloadValue(payload, 'rotationDeg'),
+          pivotSet: payload['pivotSet'] == 'true',
           originalLineInTH2File: originalLineInTH2File,
         );
       default:
@@ -304,16 +316,39 @@ abstract class MPImageInsertConfig extends THElement
       'rotationCenterDx': rotationCenterDx.toString(),
       'rotationCenterDy': rotationCenterDy.toString(),
       'rotationDeg': rotationDeg.toString(),
+      'pivotSet': pivotSet.toString(),
       ...extraMetadataPayload(),
     };
   }
 
   Map<String, String> extraMetadataPayload();
 
+  Offset get localRotationCenter {
+    if (!pivotSet) {
+      return _resolvedDefaultRotationCenter;
+    }
+
+    return Offset(rotationCenterDx.value, rotationCenterDy.value);
+  }
+
   Offset get scaledRotationCenter => Offset(
-    rotationCenterDx.value * xScale.value,
-    rotationCenterDy.value * yScale.value,
+    localRotationCenter.dx * xScale.value,
+    localRotationCenter.dy * yScale.value,
   );
+
+  Offset get _resolvedDefaultRotationCenter {
+    final MPRuntimeRasterImageInsertConfigMixin? rasterImage = asRasterImage;
+    final ui.Image? decodedRasterImage = rasterImage?.decodedRasterImage;
+
+    if (decodedRasterImage == null) {
+      return Offset.zero;
+    }
+
+    return Offset(
+      decodedRasterImage.width.toDouble() / 2.0,
+      -decodedRasterImage.height.toDouble() / 2.0,
+    );
+  }
 
   @override
   Offset transformWorldPointFromBaseWorldPoint(Offset worldPoint) {
@@ -401,6 +436,7 @@ abstract class MPImageInsertConfig extends THElement
         rotationCenterDx == other.rotationCenterDx &&
         rotationCenterDy == other.rotationCenterDy &&
         rotationDeg == other.rotationDeg &&
+        pivotSet == other.pivotSet &&
         isVisible == other.isVisible;
   }
 
@@ -416,6 +452,7 @@ abstract class MPImageInsertConfig extends THElement
           rotationCenterDx,
           rotationCenterDy,
           rotationDeg,
+          pivotSet,
           isVisible,
         );
   }
@@ -493,6 +530,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
     required super.rotationCenterDx,
     required super.rotationCenterDy,
     required super.rotationDeg,
+    required super.pivotSet,
     required super.isVisible,
     required bool isGridVisible,
     required this.xviRoot,
@@ -511,6 +549,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
     super.rotationCenterDx = 0.0,
     super.rotationCenterDy = 0.0,
     super.rotationDeg = 0.0,
+    super.pivotSet = true,
     super.isVisible,
     bool isGridVisible = true,
     this.xviRoot = '',
@@ -529,6 +568,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
     super.rotationCenterDx = '0.0',
     super.rotationCenterDy = '0.0',
     super.rotationDeg = '0.0',
+    super.pivotSet = true,
     super.isVisible = true,
     bool isGridVisible = true,
     this.xviRoot = '',
@@ -573,6 +613,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
     THDoublePart? rotationCenterDx,
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
+    bool? pivotSet,
     bool? isVisible,
     bool? isGridVisible,
     String? xviRoot,
@@ -592,6 +633,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
       rotationCenterDx: rotationCenterDx ?? this.rotationCenterDx,
       rotationCenterDy: rotationCenterDy ?? this.rotationCenterDy,
       rotationDeg: rotationDeg ?? this.rotationDeg,
+      pivotSet: pivotSet ?? this.pivotSet,
       isVisible: isVisible ?? this.isVisible,
       isGridVisible: isGridVisible ?? this.isGridVisible,
       xviRoot: xviRoot ?? this.xviRoot,
@@ -626,6 +668,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
     THDoublePart? rotationCenterDx,
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
+    bool? pivotSet,
     bool? isVisible,
     String? originalLineInTH2File,
   }) {
@@ -637,6 +680,7 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
       rotationCenterDx: rotationCenterDx,
       rotationCenterDy: rotationCenterDy,
       rotationDeg: rotationDeg,
+      pivotSet: pivotSet,
       isVisible: isVisible,
       originalLineInTH2File: originalLineInTH2File,
     );
@@ -812,6 +856,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     required super.rotationCenterDx,
     required super.rotationCenterDy,
     required super.rotationDeg,
+    required super.pivotSet,
     required super.isVisible,
     required super.originalLineInTH2File,
   }) : super.forCWJM();
@@ -827,6 +872,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     super.rotationCenterDx = 0.0,
     super.rotationCenterDy = 0.0,
     super.rotationDeg = 0.0,
+    super.pivotSet = false,
     super.isVisible,
     super.originalLineInTH2File,
   }) : super.getMPID();
@@ -842,6 +888,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     super.rotationCenterDx = '0.0',
     super.rotationCenterDy = '0.0',
     super.rotationDeg = '0.0',
+    super.pivotSet = false,
     super.isVisible = true,
     super.originalLineInTH2File = '',
   }) : super.fromString();
@@ -874,6 +921,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     THDoublePart? rotationCenterDx,
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
+    bool? pivotSet,
     bool? isVisible,
     String? originalLineInTH2File,
   }) {
@@ -891,6 +939,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
       rotationCenterDx: rotationCenterDx ?? this.rotationCenterDx,
       rotationCenterDy: rotationCenterDy ?? this.rotationCenterDy,
       rotationDeg: rotationDeg ?? this.rotationDeg,
+      pivotSet: pivotSet ?? this.pivotSet,
       isVisible: isVisible ?? this.isVisible,
       originalLineInTH2File:
           originalLineInTH2File ?? this.originalLineInTH2File,
@@ -923,6 +972,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
     THDoublePart? rotationCenterDx,
     THDoublePart? rotationCenterDy,
     THDoublePart? rotationDeg,
+    bool? pivotSet,
     bool? isVisible,
     String? originalLineInTH2File,
   }) {
@@ -934,6 +984,7 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
       rotationCenterDx: rotationCenterDx,
       rotationCenterDy: rotationCenterDy,
       rotationDeg: rotationDeg,
+      pivotSet: pivotSet,
       isVisible: isVisible,
       originalLineInTH2File: originalLineInTH2File,
     );

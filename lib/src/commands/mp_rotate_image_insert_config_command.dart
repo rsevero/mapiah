@@ -9,11 +9,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
   final THDoublePart fromRotationCenterDx;
   final THDoublePart fromRotationCenterDy;
   final THDoublePart fromRotationDeg;
+  final bool fromPivotSet;
   final THDoublePart toXX;
   final THDoublePart toYY;
   final THDoublePart toRotationCenterDx;
   final THDoublePart toRotationCenterDy;
   final THDoublePart toRotationDeg;
+  final bool toPivotSet;
   final String fromOriginalLineInTH2File;
   final String toOriginalLineInTH2File;
 
@@ -27,11 +29,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
     required this.fromRotationCenterDx,
     required this.fromRotationCenterDy,
     required this.fromRotationDeg,
+    required this.fromPivotSet,
     required this.toXX,
     required this.toYY,
     required this.toRotationCenterDx,
     required this.toRotationCenterDy,
     required this.toRotationDeg,
+    required this.toPivotSet,
     required this.fromOriginalLineInTH2File,
     required this.toOriginalLineInTH2File,
     super.descriptionType = defaultDescriptionType,
@@ -61,6 +65,7 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
           rotationCenterDx: toRotationCenterDx,
           rotationCenterDy: toRotationCenterDy,
           rotationDeg: toRotationDeg,
+          pivotSet: toPivotSet,
           originalLineInTH2File: toOriginalLineInTH2File,
         );
 
@@ -88,11 +93,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
           fromRotationCenterDx: toRotationCenterDx,
           fromRotationCenterDy: toRotationCenterDy,
           fromRotationDeg: toRotationDeg,
+          fromPivotSet: toPivotSet,
           toXX: fromXX,
           toYY: fromYY,
           toRotationCenterDx: fromRotationCenterDx,
           toRotationCenterDy: fromRotationCenterDy,
           toRotationDeg: fromRotationDeg,
+          toPivotSet: fromPivotSet,
           fromOriginalLineInTH2File: toOriginalLineInTH2File,
           toOriginalLineInTH2File: fromOriginalLineInTH2File,
           descriptionType: descriptionType,
@@ -115,11 +122,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
       'fromRotationCenterDx': fromRotationCenterDx.toMap(),
       'fromRotationCenterDy': fromRotationCenterDy.toMap(),
       'fromRotationDeg': fromRotationDeg.toMap(),
+      'fromPivotSet': fromPivotSet,
       'toXX': toXX.toMap(),
       'toYY': toYY.toMap(),
       'toRotationCenterDx': toRotationCenterDx.toMap(),
       'toRotationCenterDy': toRotationCenterDy.toMap(),
       'toRotationDeg': toRotationDeg.toMap(),
+      'toPivotSet': toPivotSet,
       'fromOriginalLineInTH2File': fromOriginalLineInTH2File,
       'toOriginalLineInTH2File': toOriginalLineInTH2File,
     });
@@ -135,11 +144,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
       fromRotationCenterDx: THDoublePart.fromMap(map['fromRotationCenterDx']),
       fromRotationCenterDy: THDoublePart.fromMap(map['fromRotationCenterDy']),
       fromRotationDeg: THDoublePart.fromMap(map['fromRotationDeg']),
+      fromPivotSet: map['fromPivotSet'],
       toXX: THDoublePart.fromMap(map['toXX']),
       toYY: THDoublePart.fromMap(map['toYY']),
       toRotationCenterDx: THDoublePart.fromMap(map['toRotationCenterDx']),
       toRotationCenterDy: THDoublePart.fromMap(map['toRotationCenterDy']),
       toRotationDeg: THDoublePart.fromMap(map['toRotationDeg']),
+      toPivotSet: map['toPivotSet'],
       fromOriginalLineInTH2File: map['fromOriginalLineInTH2File'],
       toOriginalLineInTH2File: map['toOriginalLineInTH2File'],
       descriptionType: MPCommandDescriptionType.values.byName(
@@ -156,11 +167,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
     THDoublePart? fromRotationCenterDx,
     THDoublePart? fromRotationCenterDy,
     THDoublePart? fromRotationDeg,
+    bool? fromPivotSet,
     THDoublePart? toXX,
     THDoublePart? toYY,
     THDoublePart? toRotationCenterDx,
     THDoublePart? toRotationCenterDy,
     THDoublePart? toRotationDeg,
+    bool? toPivotSet,
     String? fromOriginalLineInTH2File,
     String? toOriginalLineInTH2File,
     MPCommandDescriptionType? descriptionType,
@@ -172,11 +185,13 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
       fromRotationCenterDx: fromRotationCenterDx ?? this.fromRotationCenterDx,
       fromRotationCenterDy: fromRotationCenterDy ?? this.fromRotationCenterDy,
       fromRotationDeg: fromRotationDeg ?? this.fromRotationDeg,
+      fromPivotSet: fromPivotSet ?? this.fromPivotSet,
       toXX: toXX ?? this.toXX,
       toYY: toYY ?? this.toYY,
       toRotationCenterDx: toRotationCenterDx ?? this.toRotationCenterDx,
       toRotationCenterDy: toRotationCenterDy ?? this.toRotationCenterDy,
       toRotationDeg: toRotationDeg ?? this.toRotationDeg,
+      toPivotSet: toPivotSet ?? this.toPivotSet,
       fromOriginalLineInTH2File:
           fromOriginalLineInTH2File ?? this.fromOriginalLineInTH2File,
       toOriginalLineInTH2File:
