@@ -36,7 +36,7 @@
 [X] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
-[ ] - Show current position during drag in status bar.
+[X] - Show current position during drag in status bar.
 [ ] - Convert multiline comment into a single element.
 [X] - Reorder images.
 [ ] - Create a easy way to find slope lines without lsize.

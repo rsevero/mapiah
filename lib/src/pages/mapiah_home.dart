@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +44,12 @@ class _MapiahHomeState extends State<MapiahHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Handle --th2 files (named argument)
       if (widget.th2FilePaths.isNotEmpty) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix opening TH2 files from startup '
+          'arguments: ${widget.th2FilePaths.join(' | ')} '
+          'currentDirectory=${Directory.current.path}',
+        );
+
         for (final String filePath in widget.th2FilePaths) {
           _openTH2FileFromPath(filePath);
         }
@@ -50,6 +57,11 @@ class _MapiahHomeState extends State<MapiahHome> {
 
       // Handle --thconfig file (named argument)
       if (widget.thConfigFilePath != null) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix startup launch mode=--thconfig '
+          'path=${widget.thConfigFilePath} '
+          'currentDirectory=${Directory.current.path}',
+        );
         MPDialogAux.runTherionWithTHConfigFile(
           context,
           widget.thConfigFilePath!,
@@ -61,9 +73,20 @@ class _MapiahHomeState extends State<MapiahHome> {
           widget.th2FilePaths.isEmpty &&
           (widget.thConfigFilePath == null)) {
         if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix startup launch mode=positional-th2 '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
           // Open as TH2 file
           _openTH2FileFromPath(widget.mainFilePath!);
         } else {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix '
+            'startup launch mode=positional-thconfig '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
           // Treat as THConfig file and run Therion
           MPDialogAux.runTherionWithTHConfigFile(context, widget.mainFilePath!);
         }

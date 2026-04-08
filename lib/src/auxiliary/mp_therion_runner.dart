@@ -12,6 +12,7 @@ import 'package:mapiah/src/auxiliary/mp_platform_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 
 import 'package:path/path.dart' as p;
 
@@ -134,6 +135,7 @@ class MPTherionRunner {
   StreamSubscription<String>? _stderrSubscription;
   String _pendingLine = '';
   bool _isInsideLoopErrorsSection = false;
+  int _runAttemptCount = 0;
 
   static final RegExp _warningRegex = RegExp(
     '\\b$mpTherionWarningWord\\b',
@@ -175,13 +177,26 @@ class MPTherionRunner {
   }
 
   Future<void> start() async {
+    _runAttemptCount++;
+
     final String workingDirectory = p.dirname(thConfigFilePath);
+    final String absoluteThConfigFilePath = p.absolute(thConfigFilePath);
+    final String configuredRunParameters = mpLocator.mpSettingsController
+        .getStringWithDefault(MPSettingID.Main_TherionRunParameters)
+        .trim();
+    final List<String> diagnosticLines = _buildRunDiagnosticLines(
+      workingDirectory: workingDirectory,
+      absoluteThConfigFilePath: absoluteThConfigFilePath,
+      configuredRunParameters: configuredRunParameters,
+    );
 
     bool hasExecutionFailure = false;
 
     isRunningNotifier.value = true;
     statusNotifier.value = MPTherionRunStatus.running;
     mpLocator.mpTelemetryController.recordTherionStarted(thConfigFilePath);
+    appendOutputLines(diagnosticLines);
+    _logRunDiagnostics(diagnosticLines);
 
     try {
       final MPPlatformTherionRunner platformRunner = _createPlatformRunner();
@@ -212,6 +227,34 @@ class MPTherionRunner {
       isRunningNotifier.value = false;
       _finalizeRunStatus(hasExecutionFailure: hasExecutionFailure);
       mpLocator.mpTelemetryController.recordTherionStopped();
+    }
+  }
+
+  List<String> _buildRunDiagnosticLines({
+    required String workingDirectory,
+    required String absoluteThConfigFilePath,
+    required String configuredRunParameters,
+  }) {
+    final List<String> diagnosticLines = <String>[
+      '$mpTherionRunDebugPrefix attempt=$_runAttemptCount '
+          'platform=${Platform.operatingSystem}',
+      '$mpTherionRunDebugPrefix thConfigFilePath=$thConfigFilePath',
+      '$mpTherionRunDebugPrefix absoluteThConfigFilePath='
+          '$absoluteThConfigFilePath',
+      '$mpTherionRunDebugPrefix processWorkingDirectory=$workingDirectory',
+      '$mpTherionRunDebugPrefix appCurrentDirectory=${Directory.current.path}',
+      '$mpTherionRunDebugPrefix configuredTherionExecutablePath='
+          '${MPPlatformTherionRunner.getUserDefinedTherionExecutablePath()}',
+      '$mpTherionRunDebugPrefix configuredRunParameters='
+          '$configuredRunParameters',
+    ];
+
+    return diagnosticLines;
+  }
+
+  void _logRunDiagnostics(List<String> diagnosticLines) {
+    for (final String diagnosticLine in diagnosticLines) {
+      mpLocator.mpLog.i(diagnosticLine);
     }
   }
 

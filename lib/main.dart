@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -101,6 +102,16 @@ void main(List<String> arguments) {
       WidgetsFlutterBinding.ensureInitialized();
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
+
+      mpLocator.mpLog.i(
+        '$mpTherionStartupDebugPrefix rawArguments=${arguments.join(' | ')}',
+      );
+      mpLocator.mpLog.i(
+        '$mpTherionStartupDebugPrefix parsed mainFilePath=$fileToRead '
+        'thConfigFilePath=$thConfigFile '
+        'th2Files=${th2Files.join(' | ')} '
+        'currentDirectory=${Directory.current.path}',
+      );
 
       if (therionRunParametersArg != null) {
         mpLocator.mpSettingsController.setString(

@@ -57,6 +57,7 @@
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
   * Normalized freshly written `xth_me_image_insert` entries so simple `yy` values are emitted as bare numbers like `28` instead of single-value braces like `{28}`, while keeping wrapped output for composite `yy xviRoot` payloads.
 * Infrastructure maintenance:
+  * Added Therion startup/run diagnostics for Windows command-line troubleshooting: Mapiah now logs the raw startup arguments, parsed launch mode, current directory, run attempt number, resolved THConfig path, process working directory, configured Therion executable path, and configured run parameters to help compare the initial automatic run with `Rerun Therion`.
   * Moved the available-images reset workflow out of `MPAvailableImagesWidget` and into `TH2FileEditMoveScaleRotateElementController`, keeping the widget as a thin UI trigger and centralizing image-transform business logic with the other move/scale/rotate actions.
   * Replaced remaining image-transform helper magic numbers with shared constants, including handle sizing, overlay border width, and named handle-group sets used by the resize-axis logic.
   * Extracted the pure image-rotation preview calculations out of `MPTH2FileEditStateImageRotate` into `mp_image_transform_aux.dart`, keeping the state focused on interaction flow while shared transform math now lives beside the other image geometry helpers.

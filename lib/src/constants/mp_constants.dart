@@ -613,6 +613,9 @@ const String mpWindowsSystemRootEnvironmentVariable = 'SystemRoot';
 const String mpWindowsSystem32Directory = 'System32';
 
 const String mpTherionWindowsDebugPrefix = '[Mapiah][Therion][Debug]';
+const String mpTherionRunDebugPrefix = '$mpTherionWindowsDebugPrefix[Run]';
+const String mpTherionStartupDebugPrefix =
+    '$mpTherionWindowsDebugPrefix[Startup]';
 const String mpTherionWindowsRegistryLookupHeader =
     '$mpTherionWindowsDebugPrefix Registry lookup results:';
 const String mpTherionWindowsRegistryLookupStatusFound = 'FOUND';
