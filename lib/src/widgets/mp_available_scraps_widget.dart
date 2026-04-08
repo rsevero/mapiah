@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_reversed_list_index_helper.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -60,13 +61,16 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
             final int activeScrapID = th2FileEditController.activeScrapID;
             final Map<int, String> scraps = th2FileEditController
                 .availableScraps();
-            final List<MapEntry<int, String>> scrapEntries = scraps.entries
+            final List<MapEntry<int, String>> storedScrapEntries = scraps
+                .entries
                 .toList();
+            final List<MapEntry<int, String>> displayedScrapEntries =
+                storedScrapEntries.reversed.toList();
             final bool showVisibilityCheckboxes = scraps.length > 1;
             final bool showDragHandles = scraps.length > 1;
             final int draggedScrapIndex = (_draggedScrapMPID == null)
                 ? -1
-                : scrapEntries.indexWhere(
+                : displayedScrapEntries.indexWhere(
                     (MapEntry<int, String> e) => e.key == _draggedScrapMPID,
                   );
 
@@ -119,7 +123,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                           },
                           child: Column(
                             children: [
-                              ...scrapEntries.asMap().entries.map((
+                              ...displayedScrapEntries.asMap().entries.map((
                                 MapEntry<int, MapEntry<int, String>>
                                 indexedEntry,
                               ) {
@@ -174,7 +178,8 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                         _onAcceptReorderedScrap(
                                           draggedScrapMPID: details.data,
                                           targetScrapMPID: scrapID,
-                                          scrapEntries: scrapEntries,
+                                          displayedScrapEntries:
+                                              displayedScrapEntries,
                                         );
                                       },
                                   builder:
@@ -514,7 +519,7 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                   onWillAcceptWithDetails:
                                       (DragTargetDetails<int> details) {
                                         final int lastScrapMPID =
-                                            scrapEntries.last.key;
+                                            displayedScrapEntries.last.key;
 
                                         if (details.data == lastScrapMPID) {
                                           return false;
@@ -535,7 +540,8 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
                                       (DragTargetDetails<int> details) {
                                         _onAcceptReorderedScrapAtEnd(
                                           draggedScrapMPID: details.data,
-                                          scrapEntries: scrapEntries,
+                                          displayedScrapEntries:
+                                              displayedScrapEntries,
                                         );
                                       },
                                   builder:
@@ -649,67 +655,70 @@ class _MPAvailableScrapsWidgetState extends State<MPAvailableScrapsWidget> {
   void _onAcceptReorderedScrap({
     required int draggedScrapMPID,
     required int targetScrapMPID,
-    required List<MapEntry<int, String>> scrapEntries,
+    required List<MapEntry<int, String>> displayedScrapEntries,
   }) {
-    final int oldIndex = scrapEntries.indexWhere(
+    final int oldDisplayedIndex = displayedScrapEntries.indexWhere(
       (MapEntry<int, String> entry) => entry.key == draggedScrapMPID,
     );
-    int newIndex = scrapEntries.indexWhere(
+    final int targetDisplayedIndex = displayedScrapEntries.indexWhere(
       (MapEntry<int, String> entry) => entry.key == targetScrapMPID,
     );
+    _clearDragState();
 
-    // When dragging downward the removeAt shifts later indices by -1, so the
-    // item would land one position below the visual indicator without this fix.
-    if (oldIndex < newIndex) {
-      newIndex--;
+    if ((oldDisplayedIndex < 0) || (targetDisplayedIndex < 0)) {
+      return;
     }
 
-    // Clear drag state BEFORE the MobX action so the Observer sees null values
-    // when it rebuilds in response to the reorder — preventing the row from
-    // staying hidden after the drag completes.
-    _draggedScrapMPID = null;
-    _dragTargetScrapMPID = null;
-    _isDragTargetAfterLast = false;
+    final int finalDisplayedIndex =
+        MPReversedListIndexHelper.finalDisplayedIndexForDropBefore(
+          oldDisplayedIndex: oldDisplayedIndex,
+          targetDisplayedIndex: targetDisplayedIndex,
+        );
+    final int oldStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: oldDisplayedIndex,
+      listLength: displayedScrapEntries.length,
+    );
+    final int newStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: finalDisplayedIndex,
+      listLength: displayedScrapEntries.length,
+    );
 
-    if ((oldIndex < 0) || (newIndex < 0) || (oldIndex == newIndex)) {
-      if (mounted) {
-        setState(() {});
-      }
-
+    if (oldStoredIndex == newStoredIndex) {
       return;
     }
 
     th2FileEditController.elementEditController.reorderScraps(
-      oldIndex: oldIndex,
-      newIndex: newIndex,
+      oldIndex: oldStoredIndex,
+      newIndex: newStoredIndex,
     );
   }
 
   void _onAcceptReorderedScrapAtEnd({
     required int draggedScrapMPID,
-    required List<MapEntry<int, String>> scrapEntries,
+    required List<MapEntry<int, String>> displayedScrapEntries,
   }) {
-    final int oldIndex = scrapEntries.indexWhere(
+    final int oldDisplayedIndex = displayedScrapEntries.indexWhere(
       (MapEntry<int, String> entry) => entry.key == draggedScrapMPID,
     );
-    final int newIndex = scrapEntries.length - 1;
+    _clearDragState();
 
-    // Clear drag state BEFORE the MobX action (same timing fix as above).
-    _draggedScrapMPID = null;
-    _dragTargetScrapMPID = null;
-    _isDragTargetAfterLast = false;
+    if (oldDisplayedIndex < 0) {
+      return;
+    }
 
-    if ((oldIndex < 0) || (oldIndex == newIndex)) {
-      if (mounted) {
-        setState(() {});
-      }
+    final int oldStoredIndex = MPReversedListIndexHelper.displayedToStoredIndex(
+      displayedIndex: oldDisplayedIndex,
+      listLength: displayedScrapEntries.length,
+    );
+    const int newStoredIndex = 0;
 
+    if (oldStoredIndex == newStoredIndex) {
       return;
     }
 
     th2FileEditController.elementEditController.reorderScraps(
-      oldIndex: oldIndex,
-      newIndex: newIndex,
+      oldIndex: oldStoredIndex,
+      newIndex: newStoredIndex,
     );
   }
 

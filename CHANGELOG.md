@@ -10,6 +10,7 @@
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
   * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
 * Fixed bugs:
+  * Available scraps now lists scraps in the reverse order of TH2 storage so the top row matches the topmost scrap on the canvas, while drag-and-drop still reorders the stored TH2 scrap sequence correctly.
   * Background image editing now uses one combined transform mode instead of separate move/scale states: the active image shows Inkscape-style black resize handles, dragging the image still moves it, dragging handles scales it with `Ctrl` aspect-ratio lock, `Shift` symmetric scaling, and `Alt` fine control, and the first true scale action converts legacy XTherion images to `MPImageInsertConfig` while preserving undo/redo and runtime image caches.
   * Background image edit overlays now match Inkscape more closely by drawing the resize handles as outward black scale arrows and removing the brown editable-image border.
   * Background image corner scale handles now keep a true 45-degree orientation relative to the image box instead of drifting with the image aspect ratio.
