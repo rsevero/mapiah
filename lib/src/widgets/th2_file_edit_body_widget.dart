@@ -1108,6 +1108,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         final bool hasRedo = th2FileEditController.hasRedo;
         final bool enableRemoveButton =
             th2FileEditController.enableRemoveButton;
+        final bool showSnapButton = th2FileEditController.showSnapButton;
         final bool isSomeSnapTargetActive =
             th2FileEditController.snapController.isSomeSnapTargetActive;
         final bool isDefaultOptionsShown = th2FileEditController
@@ -1141,39 +1142,43 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 },
                 child: const Icon(Icons.search),
               ),
-              SizedBox(width: mpButtonSpace),
-              FloatingActionButton(
-                key:
-                    th2FileEditController
-                        .overlayWindowController
-                        .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
-                        .snapTargetsButton]!,
-                heroTag: '${heroPrefix}_snap',
-                mini: true,
-                tooltip: appLocalizations.th2FileEditPageSnapButton,
-                onPressed: () {
-                  th2FileEditController.overlayWindowController
-                      .clearOverlayWindows(except: {MPWindowType.snapTargets});
-                  th2FileEditController.overlayWindowController
-                      .toggleOverlayWindow(MPWindowType.snapTargets);
-                  th2FileEditController.triggerSnapTargetsWindowRedraw();
-                },
-                backgroundColor: isSomeSnapTargetActive
-                    ? null
-                    : colorScheme.surfaceContainerLowest,
-                foregroundColor: isSomeSnapTargetActive
-                    ? null
-                    : colorScheme.surfaceContainerHighest,
-                elevation: isSomeSnapTargetActive ? 6.0 : 3.0,
-                child: Image.asset(
-                  'assets/icons/snap-tool.png',
-                  width: mpFloatingStateActionZoomIconSize,
-                  height: mpFloatingStateActionZoomIconSize,
-                  color: isSomeSnapTargetActive
+              if (showSnapButton) ...[
+                SizedBox(width: mpButtonSpace),
+                FloatingActionButton(
+                  key:
+                      th2FileEditController
+                          .overlayWindowController
+                          .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
+                          .snapTargetsButton]!,
+                  heroTag: '${heroPrefix}_snap',
+                  mini: true,
+                  tooltip: appLocalizations.th2FileEditPageSnapButton,
+                  onPressed: () {
+                    th2FileEditController.overlayWindowController
+                        .clearOverlayWindows(
+                          except: {MPWindowType.snapTargets},
+                        );
+                    th2FileEditController.overlayWindowController
+                        .toggleOverlayWindow(MPWindowType.snapTargets);
+                    th2FileEditController.triggerSnapTargetsWindowRedraw();
+                  },
+                  backgroundColor: isSomeSnapTargetActive
+                      ? null
+                      : colorScheme.surfaceContainerLowest,
+                  foregroundColor: isSomeSnapTargetActive
                       ? null
                       : colorScheme.surfaceContainerHighest,
+                  elevation: isSomeSnapTargetActive ? 6.0 : 3.0,
+                  child: Image.asset(
+                    'assets/icons/snap-tool.png',
+                    width: mpFloatingStateActionZoomIconSize,
+                    height: mpFloatingStateActionZoomIconSize,
+                    color: isSomeSnapTargetActive
+                        ? null
+                        : colorScheme.surfaceContainerHighest,
+                  ),
                 ),
-              ),
+              ],
               SizedBox(width: mpButtonSpace),
               FloatingActionButton(
                 heroTag: '${heroPrefix}_default_options',

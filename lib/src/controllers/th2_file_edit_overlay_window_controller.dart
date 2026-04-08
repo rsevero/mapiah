@@ -51,13 +51,17 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   @readonly
   MPWindowType? _secondLevelOptionOpenedOverlayWindow;
 
-  @computed
-  bool get showChangeScrapOverlayWindow =>
-      _isOverlayWindowShown[MPWindowType.availableScraps]!;
+  @readonly
+  bool _isChangeScrapWindowShown = false;
 
   @computed
-  bool get showChangeImageOverlayWindow =>
-      _isOverlayWindowShown[MPWindowType.changeImage]!;
+  bool get showChangeScrapOverlayWindow => _isChangeScrapWindowShown;
+
+  @readonly
+  bool _isChangeImageWindowShown = false;
+
+  @computed
+  bool get showChangeImageOverlayWindow => _isChangeImageWindowShown;
 
   @readonly
   bool _isDefaultOptionsWindowShown = false;
@@ -281,6 +285,14 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
     if (type == MPWindowType.defaultOptions) {
       _isDefaultOptionsWindowShown = show;
+    }
+
+    if (type == MPWindowType.availableScraps) {
+      _isChangeScrapWindowShown = show;
+    }
+
+    if (type == MPWindowType.changeImage) {
+      _isChangeImageWindowShown = show;
     }
 
     if (show) {

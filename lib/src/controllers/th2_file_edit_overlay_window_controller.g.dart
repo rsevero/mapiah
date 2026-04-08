@@ -201,6 +201,54 @@ mixin _$TH2FileEditOverlayWindowController
     );
   }
 
+  late final _$_isChangeScrapWindowShownAtom = Atom(
+    name: 'TH2FileEditOverlayWindowControllerBase._isChangeScrapWindowShown',
+    context: context,
+  );
+
+  bool get isChangeScrapWindowShown {
+    _$_isChangeScrapWindowShownAtom.reportRead();
+    return super._isChangeScrapWindowShown;
+  }
+
+  @override
+  bool get _isChangeScrapWindowShown => isChangeScrapWindowShown;
+
+  @override
+  set _isChangeScrapWindowShown(bool value) {
+    _$_isChangeScrapWindowShownAtom.reportWrite(
+      value,
+      super._isChangeScrapWindowShown,
+      () {
+        super._isChangeScrapWindowShown = value;
+      },
+    );
+  }
+
+  late final _$_isChangeImageWindowShownAtom = Atom(
+    name: 'TH2FileEditOverlayWindowControllerBase._isChangeImageWindowShown',
+    context: context,
+  );
+
+  bool get isChangeImageWindowShown {
+    _$_isChangeImageWindowShownAtom.reportRead();
+    return super._isChangeImageWindowShown;
+  }
+
+  @override
+  bool get _isChangeImageWindowShown => isChangeImageWindowShown;
+
+  @override
+  set _isChangeImageWindowShown(bool value) {
+    _$_isChangeImageWindowShownAtom.reportWrite(
+      value,
+      super._isChangeImageWindowShown,
+      () {
+        super._isChangeImageWindowShown = value;
+      },
+    );
+  }
+
   late final _$_isDefaultOptionsWindowShownAtom = Atom(
     name: 'TH2FileEditOverlayWindowControllerBase._isDefaultOptionsWindowShown',
     context: context,

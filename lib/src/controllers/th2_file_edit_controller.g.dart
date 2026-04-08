@@ -128,6 +128,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.showUndoRedoButtons,
         name: 'TH2FileEditControllerBase.showUndoRedoButtons',
       )).value;
+  Computed<bool>? _$showSnapButtonComputed;
+
+  @override
+  bool get showSnapButton => (_$showSnapButtonComputed ??= Computed<bool>(
+    () => super.showSnapButton,
+    name: 'TH2FileEditControllerBase.showSnapButton',
+  )).value;
   Computed<bool>? _$enableRemoveButtonComputed;
 
   @override
@@ -1999,6 +2006,7 @@ showSelectedElements: ${showSelectedElements},
 showSelectionHandles: ${showSelectionHandles},
 showSelectionWindow: ${showSelectionWindow},
 showUndoRedoButtons: ${showUndoRedoButtons},
+showSnapButton: ${showSnapButton},
 enableRemoveButton: ${enableRemoveButton},
 isInEditSingleLineState: ${isInEditSingleLineState},
 isInSelectNonEmptySelectionState: ${isInSelectNonEmptySelectionState},

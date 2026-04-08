@@ -286,9 +286,12 @@ abstract class TH2FileEditControllerBase with Store {
   @computed
   bool get showRemoveButton {
     final MPTH2FileEditState state = stateController.state;
+    final bool isChangeImageOverlayOpen =
+        overlayWindowController.showChangeImageOverlayWindow;
 
-    return ((state is MPTH2FileEditStateSelectEmptySelection) ||
-        (state is MPTH2FileEditStateSelectNonEmptySelection));
+    return !isChangeImageOverlayOpen &&
+        ((state is MPTH2FileEditStateSelectEmptySelection) ||
+            (state is MPTH2FileEditStateSelectNonEmptySelection));
   }
 
   @computed
@@ -309,8 +312,18 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.selectionWindowCanvasRect.value != Rect.zero;
 
   @computed
-  bool get showUndoRedoButtons =>
-      _isAddElementMode || _isSelectMode || _isEditLineMode;
+  bool get showUndoRedoButtons {
+    final MPTH2FileEditStateType stateType = stateController.state.type;
+
+    return _isAddElementMode ||
+        _isSelectMode ||
+        _isEditLineMode ||
+        MPTH2FileEditState.isImageOperationType(stateType);
+  }
+
+  @computed
+  bool get showSnapButton =>
+      !overlayWindowController.showChangeImageOverlayWindow;
 
   @computed
   bool get enableRemoveButton =>

@@ -176,6 +176,21 @@ void main() {
       expect(undoneImage.yy.value, originalYY);
     });
 
+    test('image move state keeps undo redo buttons visible', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+
+      controller.moveScaleRotateElementController.prepareImageMoveState(
+        imageMPID,
+      );
+
+      expect(
+        controller.stateController.state.type,
+        MPTH2FileEditStateType.imageMoveScale,
+      );
+      expect(controller.showUndoRedoButtons, isTrue);
+    });
+
     test(
       'image move keeps XTherion raster image class when only moving',
       () async {
