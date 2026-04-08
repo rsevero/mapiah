@@ -673,8 +673,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditNewLineCreationMethod;
       case MPSettingID.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
-      case MPSettingID.TH2Edit_RotationSnapAngle:
-        return appLocalizations.mpSettingsSettingTH2EditRotationSnapAngle;
+      case MPSettingID.TH2Edit_SnapAngle:
+        return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
       case MPSettingID.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
       case MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:

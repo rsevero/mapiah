@@ -17,6 +17,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
   - [Raio do ponto](#raio-do-ponto)
+  - [Ângulo preferencial](#ângulo-preferencial)
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
 
@@ -56,6 +57,9 @@ Controla o comportamento ao criar um novo segmento de linha clicando e arrastand
 
 ### Raio do ponto
 Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
+
+### Ângulo preferencial
+Controla o incremento angular (em graus) usado no ajuste da rotação da imagem. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com _Ctrl_ pressionado.
 
 ### Tolerância de seleção
 Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.

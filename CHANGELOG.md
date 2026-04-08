@@ -9,7 +9,7 @@
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
   * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
-  * Added the `TH2Edit_RotationSnapAngle` setting to the settings page as a persisted double value with a default of 15 degrees, preparing the UI/configuration side for future rotation snapping behavior.
+  * Renamed the image-rotation snap setting to `TH2Edit_SnapAngle`, updated the default constant name to `mpDefaultSnapAngle`, changed the UI label to "Snap angle" / "Ângulo preferencial", and documented the setting in the EN/PT settings help pages.
 * Fixed bugs:
   * The available-scraps and available-images overlays are now mutually exclusive: opening one closes the other first, so the two panels can no longer stay open at the same time.
   * During background image edit mode, clicking elsewhere on the canvas now closes the available-images overlay and exits the image-edit state only for that outside-canvas dismissal path, while clicks on the image, its scale handles, or overlay buttons keep the edit state unchanged.

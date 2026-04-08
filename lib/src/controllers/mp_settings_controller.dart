@@ -46,7 +46,7 @@ abstract class MPSettingsControllerBase with Store {
   static const Map<MPSettingID, double> _doubleDefaultSettings = {
     MPSettingID.TH2Edit_LineThickness: mpDefaultLineThickness,
     MPSettingID.TH2Edit_PointRadius: mpDefaultPointRadius,
-    MPSettingID.TH2Edit_RotationSnapAngle: mpDefaultRotationSnapAngle,
+    MPSettingID.TH2Edit_SnapAngle: mpDefaultSnapAngle,
     MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
   };
 

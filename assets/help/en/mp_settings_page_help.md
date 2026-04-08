@@ -17,6 +17,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
   - [Point radius](#point-radius)
+  - [Snap angle](#snap-angle)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
 
@@ -56,6 +57,9 @@ Controls the behavior when creating a new line segment by clicking and dragging:
 
 ### Point radius
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.
+
+### Snap angle
+Controls the angular increment (in degrees) used when snapping image rotation. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. Set it to `0` to disable snapping even while _Ctrl_ is held.
 
 ### Selection tolerance
 Controls how close the mouse cursor must be to an element (in pixels) for it to be considered clicked and selected. Increasing this value makes elements easier to click.

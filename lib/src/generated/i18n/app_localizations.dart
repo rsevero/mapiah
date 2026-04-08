@@ -1930,12 +1930,6 @@ abstract class AppLocalizations {
   /// **'Point radius'**
   String get mpSettingsSettingTH2EditPointRadius;
 
-  /// Label for TH2 rotation snap angle setting. Used on: lib/src/pages/mp_settings_page.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Rotation snap angle'**
-  String get mpSettingsSettingTH2EditRotationSnapAngle;
-
   /// Label for TH2 selection tolerance setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:
@@ -1947,6 +1941,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show direction ticks on non-selected lines'**
   String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
+
+  /// Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Snap angle'**
+  String get mpSettingsSettingTH2EditSnapAngle;
 
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///

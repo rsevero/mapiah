@@ -1007,16 +1007,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
 
   @override
-  String get mpSettingsSettingTH2EditRotationSnapAngle =>
-      'Ângulo preferencial de rotação';
-
-  @override
   String get mpSettingsSettingTH2EditSelectionTolerance =>
       'Tolerância de seleção';
 
   @override
   String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines =>
       'Mostrar marcas de direção em linhas não selecionadas';
+
+  @override
+  String get mpSettingsSettingTH2EditSnapAngle => 'Ângulo preferencial';
 
   @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';

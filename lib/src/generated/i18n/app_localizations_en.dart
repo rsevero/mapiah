@@ -995,15 +995,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditPointRadius => 'Point radius';
 
   @override
-  String get mpSettingsSettingTH2EditRotationSnapAngle => 'Rotation snap angle';
-
-  @override
   String get mpSettingsSettingTH2EditSelectionTolerance =>
       'Selection tolerance';
 
   @override
   String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines =>
       'Show direction ticks on non-selected lines';
+
+  @override
+  String get mpSettingsSettingTH2EditSnapAngle => 'Snap angle';
 
   @override
   String get mpSketchChooseFileButtonLabel => 'Choose file';

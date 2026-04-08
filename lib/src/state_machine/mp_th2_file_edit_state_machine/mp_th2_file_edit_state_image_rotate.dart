@@ -257,7 +257,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
 
     if (MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed()) {
       final double snapAngle = mpLocator.mpSettingsController
-          .getDoubleWithDefault(MPSettingID.TH2Edit_RotationSnapAngle);
+          .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
 
       if (snapAngle.abs() >= mpDoubleComparisonEpsilon) {
         targetRotationDeg = (targetRotationDeg / snapAngle).round() * snapAngle;
