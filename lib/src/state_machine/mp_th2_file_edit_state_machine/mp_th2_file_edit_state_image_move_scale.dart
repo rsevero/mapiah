@@ -23,7 +23,53 @@ class MPTH2FileEditStateImageMoveScale
 
   @override
   void setCursor() {
-    th2FileEditController.setCanvasCursor(SystemMouseCursors.grab);
+    switch (_dragMode) {
+      case _MPImageTransformDragMode.move:
+        th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
+        return;
+      case _MPImageTransformDragMode.scale:
+        th2FileEditController.setCanvasCursor(
+          _cursorForScaleHandle(_scaleHandleType) ?? SystemMouseCursors.grab,
+        );
+        return;
+      case _MPImageTransformDragMode.none:
+        break;
+    }
+
+    final MPImageTransformGeometry? geometry =
+        MPImageTransformGeometry.forImage(
+          th2FileEditController: th2FileEditController,
+          image: imageConfig,
+        );
+
+    if (geometry == null) {
+      th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
+
+      return;
+    }
+
+    final Offset screenPosition = th2FileEditController.mousePosition;
+    final MPImageTransformHandleType? hoveredHandle = geometry.hitTestHandle(
+      screenPosition,
+    );
+
+    if (hoveredHandle != null) {
+      th2FileEditController.setCanvasCursor(
+        _cursorForScaleHandle(hoveredHandle) ?? SystemMouseCursors.basic,
+      );
+
+      return;
+    }
+
+    final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
+      screenPosition,
+    );
+
+    if (geometry.containsCanvasPosition(canvasPosition)) {
+      th2FileEditController.setCanvasCursor(SystemMouseCursors.grab);
+    } else {
+      th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
+    }
   }
 
   @override
@@ -84,6 +130,7 @@ class MPTH2FileEditStateImageMoveScale
     _dragMode = _MPImageTransformDragMode.move;
     _dragStartCanvasPosition = canvasPosition;
     _dragStartImageTopLeft = imageBoundingBox.topLeft;
+    setCursor();
   }
 
   @override
@@ -144,6 +191,7 @@ class MPTH2FileEditStateImageMoveScale
       geometry.handleLocalPoint(handleType),
     );
     _scaleStartScreenHandleCenter = geometry.screenHandleCenters[handleType];
+    setCursor();
   }
 
   void _updateMovePreview(PointerMoveEvent event) {
@@ -544,6 +592,27 @@ class MPTH2FileEditStateImageMoveScale
 
     if (updateRedraw) {
       th2FileEditController.triggerImagesRedraw();
+    }
+
+    setCursor();
+  }
+
+  MouseCursor? _cursorForScaleHandle(MPImageTransformHandleType? handleType) {
+    switch (handleType) {
+      case MPImageTransformHandleType.topLeft:
+      case MPImageTransformHandleType.bottomRight:
+        return SystemMouseCursors.resizeUpRightDownLeft;
+      case MPImageTransformHandleType.topRight:
+      case MPImageTransformHandleType.bottomLeft:
+        return SystemMouseCursors.resizeUpLeftDownRight;
+      case MPImageTransformHandleType.topCenter:
+      case MPImageTransformHandleType.bottomCenter:
+        return SystemMouseCursors.resizeUpDown;
+      case MPImageTransformHandleType.centerLeft:
+      case MPImageTransformHandleType.centerRight:
+        return SystemMouseCursors.resizeLeftRight;
+      case null:
+        return null;
     }
   }
 

@@ -1533,6 +1533,7 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void performSetMousePosition(Offset position) {
     _mousePosition = position;
+    stateController.state.setCursor();
   }
 
   @action
