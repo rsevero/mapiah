@@ -614,23 +614,44 @@ class THXVIXTherionImageInsertConfig extends THXTherionImageInsertConfig
   }
 
   @override
-  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
-    if (!isVisible) {
-      return null;
-    }
-
+  Rect? getLocalBounds(TH2FileEditController th2FileEditController) {
     final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
     if (xviFile == null) {
       return null;
     }
 
-    final Rect boundingBox = xviFile.getBoundingBox(th2FileEditController)!;
+    final Rect? boundingBox = xviFile.getBoundingBox(th2FileEditController);
+
+    if (boundingBox == null) {
+      return null;
+    }
+
     final Offset xviOffset =
         Offset(xviRootedXX, xviRootedYY) -
         Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+    final Rect shiftedBoundingBox = MPNumericAux.orderedRectFromRect(
+      boundingBox.shift(xviOffset),
+    );
 
-    return MPNumericAux.orderedRectFromRect(boundingBox.shift(xviOffset));
+    return shiftedBoundingBox.shift(Offset(-xx.value, -yy.value));
+  }
+
+  @override
+  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    if (!isVisible) {
+      return null;
+    }
+
+    final Rect? localBounds = getLocalBounds(th2FileEditController);
+
+    if (localBounds == null) {
+      return null;
+    }
+
+    return MPNumericAux.orderedRectFromRect(
+      localBounds.shift(Offset(xx.value, yy.value)),
+    );
   }
 
   @override
@@ -844,24 +865,37 @@ class THRasterXTherionImageInsertConfig extends THXTherionImageInsertConfig
   }
 
   @override
+  Rect? getLocalBounds(TH2FileEditController th2FileEditController) {
+    getRasterImageFrameInfo(th2FileEditController);
+
+    final ui.Image? rasterImage = _decodedRasterImage;
+
+    if (rasterImage == null) {
+      return null;
+    }
+
+    return Rect.fromLTRB(
+      0.0,
+      -rasterImage.height.toDouble(),
+      rasterImage.width.toDouble(),
+      0.0,
+    );
+  }
+
+  @override
   Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
     if (!isVisible) {
       return null;
     }
 
-    getRasterImageFrameInfo(th2FileEditController);
+    final Rect? localBounds = getLocalBounds(th2FileEditController);
 
-    final ui.Image? rasterImage = _decodedRasterImage;
-
-    return (rasterImage == null)
+    return (localBounds == null)
         ? MPNumericAux.orderedRectSmallestAroundPoint(
             center: Offset(xx.value, yy.value),
           )
-        : MPNumericAux.orderedRectFromLTRB(
-            left: xx.value,
-            top: yy.value - rasterImage.height.toDouble(),
-            right: xx.value + rasterImage.width.toDouble(),
-            bottom: yy.value,
+        : MPNumericAux.orderedRectFromRect(
+            localBounds.shift(Offset(xx.value, yy.value)),
           );
   }
 

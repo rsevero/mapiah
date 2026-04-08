@@ -25,13 +25,19 @@ class MPImagesWidget extends StatelessWidget {
             th2FileEditController.th2File.getImages();
 
         for (final MPRuntimeImageInsertConfigMixin image in images) {
-          if (!image.isVisible) {
+          final MPRuntimeImageInsertConfigMixin renderedImage =
+              th2FileEditController.stateController
+                  .getImageOperationRenderedImageForImage(image.mpID) ??
+              image;
+
+          if (!renderedImage.isVisible) {
             continue;
           }
 
-          final MPRuntimeXVIImageInsertConfigMixin? xviImage = image.asXVIImage;
+          final MPRuntimeXVIImageInsertConfigMixin? xviImage =
+              renderedImage.asXVIImage;
           final MPRuntimeRasterImageInsertConfigMixin? rasterImage =
-              image.asRasterImage;
+              renderedImage.asRasterImage;
 
           if (xviImage != null) {
             widgets.add(
@@ -57,22 +63,17 @@ class MPImagesWidget extends StatelessWidget {
 
         if (activeImageMPID != null) {
           final MPRuntimeImageInsertConfigMixin activeImage =
+              th2FileEditController.stateController
+                  .getImageOperationRenderedImageForImage(activeImageMPID) ??
               th2FileEditController.th2File.imageByMPID(activeImageMPID);
-          final String? overlayLabel = th2FileEditController.stateController
-              .getImageOperationOverlayLabelForImage(activeImageMPID);
 
-          if (overlayLabel != null) {
-            widgets.add(
-              MPImageOperationOverlayWidget(
-                key: ValueKey('image_operation_overlay_$activeImageMPID'),
-                th2FileEditController: th2FileEditController,
-                image: activeImage,
-                label: overlayLabel,
-                previewOffset: th2FileEditController.stateController
-                    .getImageOperationPreviewOffsetForImage(activeImageMPID),
-              ),
-            );
-          }
+          widgets.add(
+            MPImageOperationOverlayWidget(
+              key: ValueKey('image_operation_overlay_$activeImageMPID'),
+              th2FileEditController: th2FileEditController,
+              image: activeImage,
+            ),
+          );
         }
 
         return RepaintBoundary(child: Stack(children: widgets));

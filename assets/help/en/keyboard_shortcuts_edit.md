@@ -33,6 +33,9 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Merge areas                                                | Ctrl+M                                  |
 | Options edit (elements selected)                           | O                                       |
 | Paste elements                                             | Ctrl+V                                  |
+| Scale image from handle symmetrically                      | Shift+drag image handle                 |
+| Scale image from handle with aspect ratio preserved        | Ctrl+drag image handle                  |
+| Scale image from handle with finer control                 | Alt+drag image handle                   |
 | Redo                                                       | Ctrl+Y                                  |
 | Run Therion                                                | T                                       |
 | Save file                                                  | Ctrl+S                                  |

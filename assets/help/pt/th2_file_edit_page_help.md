@@ -9,6 +9,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
 - [Imagens](#imagens)
+  - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
   - [Visibilidade da imagem](#visibilidade-da-imagem)
   - [Visibilidade da grade](#visibilidade-da-grade)
   - [Reordenação de imagens](#reordenação-de-imagens)
@@ -37,6 +38,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Segmentos de linha em curva Bézier](#segmentos-de-linha-em-curva-bézier)
   - [Segmentos de linha mistos](#segmentos-de-linha-mistos)
   - [Segmentos de linha reta](#segmentos-de-linha-reta)
+- [Converter segmentos de linha](#converter-segmentos-de-linha)
 - [Dividir linha nos pontos selecionados](#dividir-linha-nos-pontos-selecionados)
 - [Dividir linhas em cruzamentos](#dividir-linhas-em-cruzamentos)
 - [Juntar linhas em extremidades coincidentes](#juntar-linhas-em-extremidades-coincidentes)
@@ -80,11 +82,23 @@ Cada linha de imagem contém:
 * Uma caixa de seleção de visibilidade para mostrar ou ocultar a imagem no canvas
 * Uma caixa de seleção de visibilidade da grade (somente imagens XVI) para mostrar ou ocultar a grade do levantamento independentemente da imagem
 * O nome do arquivo da imagem
+* Um botão de edição para entrar no modo de transformação da imagem no canvas
 * Um botão de exclusão para remover a imagem
 * Um identificador de arrasto (⣿) para reordenar as imagens
 
 ### Visibilidade da imagem
 Clicar na caixa de seleção de visibilidade alterna se a imagem é exibida no canvas. Imagens ocultas ainda são armazenadas no arquivo.
+
+### Modo de transformação da imagem
+Clique no botão de editar de uma linha de imagem para entrar no modo de transformação dessa imagem. A imagem passa a ser destacada no canvas com pequenas alças pretas nos cantos e no meio de cada lado.
+
+Enquanto o modo de transformação da imagem estiver ativo:
+* Arraste a própria imagem para movê-la
+* Arraste qualquer alça preta para redimensioná-la
+* Mantenha _Ctrl_ pressionado ao arrastar uma alça para preservar a proporção da imagem
+* Mantenha _Shift_ pressionado ao arrastar uma alça para redimensionar de forma simétrica em torno do centro da imagem
+* Mantenha _Alt_ pressionado ao arrastar uma alça para fazer um redimensionamento mais fino e lento
+* Pressione _Esc_ para sair do modo de transformação da imagem
 
 ### Visibilidade da grade
 Para imagens de fundo XVI, uma segunda caixa de seleção controla se a grade do levantamento é exibida. Ocultar a grade mantém as visadas, as estações e as linhas de esboço visíveis, removendo apenas as linhas da grade do canvas. O estado da visibilidade da grade é salvo com a sessão.

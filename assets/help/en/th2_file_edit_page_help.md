@@ -23,6 +23,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Save](#save)
   - [Original file format](#original-file-format)
 - [Images](#images)
+  - [Image transform mode](#image-transform-mode)
   - [Image visibility](#image-visibility)
   - [Grid visibility](#grid-visibility)
   - [Image reordering](#image-reordering)
@@ -210,11 +211,23 @@ Each image row contains:
 * A visibility checkbox to show or hide the image on the canvas
 * A grid visibility checkbox (XVI images only) to show or hide the survey grid independently from the image itself
 * The image filename
+* An edit button to enter image transform mode on the canvas
 * A delete button to remove the image
 * A drag handle (⣿) to reorder images
 
 ### Image visibility
 Clicking the visibility checkbox toggles whether the image is displayed on the canvas. Hidden images are still stored in the file.
+
+### Image transform mode
+Click the edit button on an image row to enter image transform mode for that image. The image is outlined on the canvas with small black handles on the corners and on the middle of each side.
+
+While image transform mode is active:
+* Drag the image itself to move it
+* Drag any black handle to scale it
+* Hold _Ctrl_ while dragging a handle to preserve the image aspect ratio
+* Hold _Shift_ while dragging a handle to scale symmetrically around the image center
+* Hold _Alt_ while dragging a handle for finer, slower scaling
+* Press _Esc_ to leave image transform mode
 
 ### Grid visibility
 For XVI survey background images, a second checkbox controls whether the survey grid is displayed. Hiding the grid leaves the shots, stations, and sketch lines visible while removing the grid lines from the canvas. The grid visibility state is saved with the session.

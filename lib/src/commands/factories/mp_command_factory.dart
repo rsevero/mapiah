@@ -1274,6 +1274,42 @@ class MPCommandFactory {
     );
   }
 
+  static MPScaleImageInsertConfigCommand scaleImageInsertConfig({
+    required int imageMPID,
+    required THDoublePart toXX,
+    required THDoublePart toYY,
+    required THDoublePart toXScale,
+    required THDoublePart toYScale,
+    required TH2File th2File,
+    MPCommandDescriptionType descriptionType =
+        MPScaleImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final MPRuntimeImageInsertConfigMixin image = th2File.imageByMPID(
+      imageMPID,
+    );
+
+    if (image is! MPImageInsertConfig) {
+      throw ArgumentError(
+        'MPCommandFactory.scaleImageInsertConfig only supports MPImageInsertConfig instances.',
+      );
+    }
+
+    return MPScaleImageInsertConfigCommand.forCWJM(
+      imageMPID: imageMPID,
+      fromXX: image.xx,
+      fromYY: image.yy,
+      fromXScale: image.xScale,
+      fromYScale: image.yScale,
+      toXX: toXX,
+      toYY: toYY,
+      toXScale: toXScale,
+      toYScale: toYScale,
+      fromOriginalLineInTH2File: image.originalLineInTH2File,
+      toOriginalLineInTH2File: '',
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand moveLineSegments({
     required Map<int, THLineSegment> fromLineSegmentsMap,
     required Map<int, THLineSegment> toLineSegmentsMap,

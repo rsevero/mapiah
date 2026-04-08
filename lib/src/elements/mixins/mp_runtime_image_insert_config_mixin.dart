@@ -18,6 +18,8 @@ mixin MPRuntimeImageInsertConfigMixin on THElement, MPBoundingBoxMixin {
   @override
   Rect? getBoundingBox(TH2FileEditController th2FileEditController);
 
+  Rect? getLocalBounds(TH2FileEditController th2FileEditController);
+
   MPRuntimeImageInsertConfigMixin copyWithImageInsertConfigBase({
     String? filename,
     THDoublePart? xx,
@@ -25,6 +27,10 @@ mixin MPRuntimeImageInsertConfigMixin on THElement, MPBoundingBoxMixin {
     bool? isVisible,
     String? originalLineInTH2File,
   });
+
+  Offset transformWorldPointFromBaseWorldPoint(Offset worldPoint) {
+    return worldPoint;
+  }
 
   bool get isXVI => format == mpImageInsertFormatXVI;
 

@@ -54,25 +54,12 @@ class _MPRasterImageWidgetState extends State<MPRasterImageWidget> {
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerImages;
 
-        /// The Y coordinate is negated because in Therion's coordinate system,
-        /// positive Y goes up, while in Flutter's canvas, positive Y goes down.
-        final Offset offset = Offset(
-          widget.image.xx.value +
-              th2FileEditController.stateController
-                  .getImageOperationPreviewOffsetForImage(widget.image.mpID)
-                  .dx,
-          -(widget.image.yy.value +
-              th2FileEditController.stateController
-                  .getImageOperationPreviewOffsetForImage(widget.image.mpID)
-                  .dy),
-        );
-
         return _image == null
             ? CircularProgressIndicator()
             : CustomPaint(
                 painter: MPRasterImagePainter(
                   uiImage: _image!,
-                  offset: offset,
+                  image: widget.image,
                   th2FileEditController: th2FileEditController,
                   canvasScale: th2FileEditController.canvasScale,
                   canvasTranslation: th2FileEditController.canvasTranslation,

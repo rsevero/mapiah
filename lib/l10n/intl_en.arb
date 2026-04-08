@@ -2088,7 +2088,7 @@
     "description": "The label shown on the image while move edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageImageMoveStatusBarMessage": "Image move mode",
+  "th2FileEditPageImageMoveStatusBarMessage": "Image transform mode",
   "@th2FileEditPageImageMoveStatusBarMessage": {
     "description": "The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart",
     "type": "text"

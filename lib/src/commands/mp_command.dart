@@ -59,6 +59,7 @@ part 'mp_remove_scrap_command.dart';
 part 'mp_reorder_images_command.dart';
 part 'mp_reorder_scraps_command.dart';
 part 'mp_replace_line_segments_command.dart';
+part 'mp_scale_image_insert_config_command.dart';
 part 'mp_set_attr_option_to_element_command.dart';
 part 'mp_set_file_encoding_command.dart';
 part 'mp_set_option_to_element_command.dart';
@@ -235,6 +236,8 @@ abstract class MPCommand {
         return MPRemoveScrapCommand.fromMap(map);
       case MPCommandType.replaceLineSegments:
         return MPReplaceLineSegmentsCommand.fromMap(map);
+      case MPCommandType.scaleImageInsertConfig:
+        return MPScaleImageInsertConfigCommand.fromMap(map);
       case MPCommandType.setAttrOptionToElement:
         return MPSetAttrOptionToElementCommand.fromMap(map);
       case MPCommandType.setFileEncoding:

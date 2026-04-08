@@ -41,6 +41,9 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Mesclar áreas                                                          | Ctrl+M                                        |
 | Opções padrão (sem elementos selecionados)                             | O                                             |
 | Recortar elementos selecionados                                        | Ctrl+X                                        |
+| Redimensionar imagem pela alça com controle fino                       | Alt+arrastar alça da imagem                   |
+| Redimensionar imagem pela alça de forma simétrica                      | Shift+arrastar alça da imagem                 |
+| Redimensionar imagem pela alça preservando a proporção                 | Ctrl+arrastar alça da imagem                  |
 | Refazer                                                                | Ctrl+Y                                        |
 | Rodar o Therion                                                        | T                                             |
 | Salvar arquivo                                                         | Ctrl+S                                        |

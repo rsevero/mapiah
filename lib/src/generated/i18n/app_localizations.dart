@@ -2515,7 +2515,7 @@ abstract class AppLocalizations {
   /// The status bar message for the Mapiah image move preparation state. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_image_move.dart
   ///
   /// In en, this message translates to:
-  /// **'Image move mode'**
+  /// **'Image transform mode'**
   String get th2FileEditPageImageMoveStatusBarMessage;
 
   /// The label shown on the image while rotate edit mode is active. Used on: lib/src/widgets/mp_image_operation_overlay_widget.dart

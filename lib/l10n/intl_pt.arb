@@ -418,7 +418,7 @@
   "th2FileEditPageHelpDialogTitle": "Ajuda para edição de arquivo TH2",
   "th2FileEditPageImageGridVisibilityTooltip": "Alternar visibilidade da grade",
   "th2FileEditPageImageMoveOverlayLabel": "Mover",
-  "th2FileEditPageImageMoveStatusBarMessage": "Modo de mover imagem",
+  "th2FileEditPageImageMoveStatusBarMessage": "Modo de transformar imagem",
   "th2FileEditPageImageRotateOverlayLabel": "Girar",
   "th2FileEditPageImageRotateStatusBarMessage": "Modo de girar imagem",
   "th2FileEditPageImageScaleOverlayLabel": "Redimensionar",

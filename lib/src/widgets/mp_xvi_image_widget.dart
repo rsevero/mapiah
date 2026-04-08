@@ -66,9 +66,7 @@ class MPXVIImageWidget extends StatelessWidget {
 
     final double xx = image.xviRootedXX;
     final double yy = image.xviRootedYY;
-    final Offset previewOffset = th2FileEditController.stateController
-        .getImageOperationPreviewOffsetForImage(image.mpID);
-    final Offset imageGridOffset = Offset(xx, yy) + previewOffset;
+    final Offset imageGridOffset = Offset(xx, yy);
     // Understaing xTherion variables:
     // shx: The horizontal offset between the image’s position (px) and the grid origin (gx).
     // shy: The vertical offset between the image’s position (py) and the grid origin (gy).
@@ -112,13 +110,15 @@ class MPXVIImageWidget extends StatelessWidget {
 
     for (final XVISketchLine sketchLine in xviFile.sketchLines) {
       final List<Offset> coordinates = [
-        sketchLine.start.coordinates + imageGridOffset,
+        _transformCanvasPoint(sketchLine.start.coordinates + imageGridOffset),
       ];
       THLinePaint sketchLinePaint;
       THPointPaint pointPaint;
 
       for (final THPositionPart point in sketchLine.points) {
-        coordinates.add(point.coordinates + imageGridOffset);
+        coordinates.add(
+          _transformCanvasPoint(point.coordinates + imageGridOffset),
+        );
       }
 
       if (xviSketchLinesPaints.containsKey(sketchLine.color)) {
@@ -156,8 +156,9 @@ class MPXVIImageWidget extends StatelessWidget {
         .getXVIStationPointPaint();
 
     for (final XVIStation station in xviFile.stations) {
-      final Offset stationPosition =
-          station.position.coordinates + imageGridOffset;
+      final Offset stationPosition = _transformCanvasPoint(
+        station.position.coordinates + imageGridOffset,
+      );
 
       painters.add(
         THPointPainter(
@@ -178,8 +179,12 @@ class MPXVIImageWidget extends StatelessWidget {
         .getXVIShotLinePaint();
 
     for (final XVIShot shot in xviFile.shots) {
-      final Offset start = shot.start.coordinates + imageGridOffset;
-      final Offset end = shot.end.coordinates + imageGridOffset;
+      final Offset start = _transformCanvasPoint(
+        shot.start.coordinates + imageGridOffset,
+      );
+      final Offset end = _transformCanvasPoint(
+        shot.end.coordinates + imageGridOffset,
+      );
 
       painters.add(
         XVILinePainter(start: start, end: end, linePaint: xviShotPaint),
@@ -203,11 +208,15 @@ class MPXVIImageWidget extends StatelessWidget {
     for (final ({Offset end, Offset start}) line in lines) {
       painters.add(
         XVILinePainter(
-          start: line.start,
-          end: line.end,
+          start: _transformCanvasPoint(line.start),
+          end: _transformCanvasPoint(line.end),
           linePaint: xviGridLinePaint,
         ),
       );
     }
+  }
+
+  Offset _transformCanvasPoint(Offset canvasPoint) {
+    return image.transformWorldPointFromBaseWorldPoint(canvasPoint);
   }
 }

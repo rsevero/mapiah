@@ -55,7 +55,15 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     _th2FileEditController.execute(convertImageCommand);
     _th2FileEditController.triggerImagesRedraw();
 
-    return _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+    final MPImageInsertConfig convertedImage =
+        _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+    image.copyRuntimeImageCacheTo(
+      targetImage: convertedImage,
+      th2FileEditController: _th2FileEditController,
+    );
+
+    return convertedImage;
   }
 
   MPRuntimeImageInsertConfigMixin prepareImageMoveState(int imageMPID) {
@@ -64,7 +72,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
 
     _th2FileEditController.stateController.setImageOperationState(
-      type: MPTH2FileEditStateType.imageMove,
+      type: MPTH2FileEditStateType.imageMoveScale,
       imageMPID: image.mpID,
     );
 
@@ -78,11 +86,8 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
   }
 
-  MPImageInsertConfig prepareImageScaleState(int imageMPID) {
-    return _prepareImageOperationState(
-      imageMPID: imageMPID,
-      stateType: MPTH2FileEditStateType.imageScale,
-    );
+  MPRuntimeImageInsertConfigMixin prepareImageScaleState(int imageMPID) {
+    return prepareImageMoveState(imageMPID);
   }
 
   MPImageInsertConfig _prepareImageOperationState({

@@ -3,6 +3,7 @@
 library;
 
 import 'dart:collection';
+import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_lsize_orientation_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
@@ -29,6 +31,7 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -57,10 +60,9 @@ part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
-part 'mp_th2_file_edit_state_image_move.dart';
+part 'mp_th2_file_edit_state_image_move_scale.dart';
 part 'mp_th2_file_edit_state_image_operation.dart';
 part 'mp_th2_file_edit_state_image_rotate.dart';
-part 'mp_th2_file_edit_state_image_scale.dart';
 part 'mp_th2_file_edit_state_moving_elements.dart';
 part 'mp_th2_file_edit_state_moving_end_control_points.dart';
 part 'mp_th2_file_edit_state_moving_single_control_point.dart';
@@ -112,18 +114,13 @@ abstract class MPTH2FileEditState {
         return MPTH2FileEditStateEditSingleLine(
           th2FileEditController: th2FileEditController,
         );
-      case MPTH2FileEditStateType.imageMove:
-        return MPTH2FileEditStateImageMove(
+      case MPTH2FileEditStateType.imageMoveScale:
+        return MPTH2FileEditStateImageMoveScale(
           th2FileEditController: th2FileEditController,
           imageMPID: imageMPID!,
         );
       case MPTH2FileEditStateType.imageRotate:
         return MPTH2FileEditStateImageRotate(
-          th2FileEditController: th2FileEditController,
-          imageMPID: imageMPID!,
-        );
-      case MPTH2FileEditStateType.imageScale:
-        return MPTH2FileEditStateImageScale(
           th2FileEditController: th2FileEditController,
           imageMPID: imageMPID!,
         );
@@ -156,9 +153,8 @@ abstract class MPTH2FileEditState {
 
   static bool isImageOperationType(MPTH2FileEditStateType type) {
     switch (type) {
-      case MPTH2FileEditStateType.imageMove:
+      case MPTH2FileEditStateType.imageMoveScale:
       case MPTH2FileEditStateType.imageRotate:
-      case MPTH2FileEditStateType.imageScale:
         return true;
       default:
         return false;

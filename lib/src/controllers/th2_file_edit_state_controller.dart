@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/interfaces/mp_actuator_interface.dart';
@@ -122,6 +123,22 @@ abstract class TH2FileEditStateControllerBase
     }
 
     return currentState.previewOffset;
+  }
+
+  MPRuntimeImageInsertConfigMixin? getImageOperationRenderedImageForImage(
+    int imageMPID,
+  ) {
+    if (!isImageOperationActiveForImage(imageMPID)) {
+      return null;
+    }
+
+    final MPTH2FileEditState currentState = _state;
+
+    if (currentState is! MPTH2FileEditStateImageOperation) {
+      return null;
+    }
+
+    return currentState.renderedImageConfig;
   }
 
   String? getImageOperationOverlayLabelForImage(int imageMPID) {

@@ -97,6 +97,10 @@ MPLocator (global mpLocator) provides:
 * cc: Update CHANGELOG.md + prepare commit with sign-off (Signed-off-by, Co-Authored-By)
 * hpcc: Update help pages (EN/PT) + keyboard shortcuts + cc above
 
+### Canvas Orientation
+
+Therion and Flutter Y-axes are opposite. Mapiah uses Therion's convention (Y increases downwards) for intuitive mapping to .th2 files. All canvas transformations account for this.
+
 ### Coding Rules Summary
 
 Full rules in coding-guidelines.md. Critical rules:

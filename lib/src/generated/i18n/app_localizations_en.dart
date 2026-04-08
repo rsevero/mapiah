@@ -1346,7 +1346,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageImageMoveOverlayLabel => 'Move';
 
   @override
-  String get th2FileEditPageImageMoveStatusBarMessage => 'Image move mode';
+  String get th2FileEditPageImageMoveStatusBarMessage => 'Image transform mode';
 
   @override
   String get th2FileEditPageImageRotateOverlayLabel => 'Rotate';

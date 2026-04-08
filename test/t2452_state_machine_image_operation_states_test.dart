@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -66,7 +67,7 @@ void main() {
         expect(image, isA<THXVIXTherionImageInsertConfig>());
         expect(
           controller.stateController.state.type,
-          MPTH2FileEditStateType.imageMove,
+          MPTH2FileEditStateType.imageMoveScale,
         );
         expect(controller.stateController.imageOperationImageMPID, imageMPID);
       },
@@ -96,24 +97,27 @@ void main() {
       },
     );
 
-    test('prepareImageScaleState enters image scale state', () async {
-      final TH2FileEditController controller = await loadController();
-      final int imageMPID = controller.th2File.imageMPIDs.first;
+    test(
+      'prepareImageScaleState enters merged image transform state',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
 
-      controller.moveScaleRotateElementController.prepareImageScaleState(
-        imageMPID,
-      );
+        controller.moveScaleRotateElementController.prepareImageScaleState(
+          imageMPID,
+        );
 
-      expect(
-        controller.stateController.state.type,
-        MPTH2FileEditStateType.imageScale,
-      );
-      expect(controller.stateController.imageOperationImageMPID, imageMPID);
-      expect(
-        controller.th2File.imageByMPID(imageMPID),
-        isA<MPImageInsertConfig>(),
-      );
-    });
+        expect(
+          controller.stateController.state.type,
+          MPTH2FileEditStateType.imageMoveScale,
+        );
+        expect(controller.stateController.imageOperationImageMPID, imageMPID);
+        expect(
+          controller.th2File.imageByMPID(imageMPID),
+          isA<THXVIXTherionImageInsertConfig>(),
+        );
+      },
+    );
 
     test('image move drag updates image position and is undoable', () async {
       final TH2FileEditController controller = await loadController();
@@ -280,9 +284,86 @@ void main() {
         controller.stateController.getImageOperationOverlayLabelForImage(
           imageMPID,
         ),
-        mpLocator.appLocalizations.th2FileEditPageImageMoveOverlayLabel,
+        '',
       );
     });
+
+    test(
+      'image scale handle drag converts legacy raster image and is undoable',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          filename: '2026-04-07-003-mixed_image_insert_styles.th2',
+        );
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final THRasterXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THRasterXTherionImageInsertConfig;
+        final ui.Image decodedImage = await _createTestImage(
+          width: 40,
+          height: 20,
+        );
+
+        image.setRasterImage(decodedImage);
+
+        final MPImageTransformGeometry geometry =
+            MPImageTransformGeometry.forImage(
+              th2FileEditController: controller,
+              image: image,
+            )!;
+        final Offset dragStartScreenPosition = geometry
+            .screenHandleRects[MPImageTransformHandleType.centerRight]!
+            .center;
+        final Offset dragStartCanvasPosition = geometry
+            .canvasHandleCenters[MPImageTransformHandleType.centerRight]!;
+        final Offset dragEndCanvasPosition =
+            dragStartCanvasPosition + const Offset(20.0, 0.0);
+        final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+          dragEndCanvasPosition,
+        );
+
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+
+        final MPImageInsertConfig scaledImage =
+            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+        expect(scaledImage, isA<MPRasterImageInsertConfig>());
+        expect(scaledImage.xScale.value, closeTo(1.5, 0.0001));
+        expect(scaledImage.yScale.value, closeTo(1.0, 0.0001));
+        expect(scaledImage.xx.value, closeTo(image.xx.value, 0.0001));
+
+        controller.undo();
+
+        final MPImageInsertConfig undoneScale =
+            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+        expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
+        expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
+
+        controller.undo();
+
+        expect(
+          controller.th2File.imageByMPID(imageMPID),
+          isA<THRasterXTherionImageInsertConfig>(),
+        );
+      },
+    );
 
     test(
       'image move keeps top-level image order in saved TH2 output',
