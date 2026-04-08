@@ -245,10 +245,12 @@ class MPImageTransformGeometry {
         <MPImageTransformHandleType, Rect>{};
     final Map<MPImageTransformHandleType, Path> screenHandlePaths =
         <MPImageTransformHandleType, Path>{};
-    final Offset screenBoundsCenter = Rect.fromPoints(
-      screenBorderCorners[0],
-      screenBorderCorners[2],
-    ).center;
+    final Offset topLeftToTopRight =
+        screenBorderCorners[1] - screenBorderCorners[0];
+    final Offset topLeftToBottomLeft =
+        screenBorderCorners[3] - screenBorderCorners[0];
+    final Offset xAxisDirection = _normalizeOffset(topLeftToTopRight);
+    final Offset yAxisDirection = _normalizeOffset(topLeftToBottomLeft);
 
     for (final MPImageTransformHandleType handleType
         in MPImageTransformHandleType.values) {
@@ -260,8 +262,8 @@ class MPImageTransformGeometry {
           .offsetCanvasToScreen(canvasBorderCenter);
       final Offset outwardDirection = _resolveOutwardDirection(
         handleType: handleType,
-        screenBorderCorners: screenBorderCorners,
-        screenBoundsCenter: screenBoundsCenter,
+        xAxisDirection: xAxisDirection,
+        yAxisDirection: yAxisDirection,
       );
       final Offset screenHandleCenter =
           screenBorderCenter +
@@ -361,38 +363,26 @@ class MPImageTransformGeometry {
 
   static Offset _resolveOutwardDirection({
     required MPImageTransformHandleType handleType,
-    required List<Offset> screenBorderCorners,
-    required Offset screenBoundsCenter,
+    required Offset xAxisDirection,
+    required Offset yAxisDirection,
   }) {
     switch (handleType) {
       case MPImageTransformHandleType.topLeft:
-        return _normalizeOffset(screenBorderCorners[0] - screenBoundsCenter);
+        return _normalizeOffset(-xAxisDirection - yAxisDirection);
       case MPImageTransformHandleType.topCenter:
-        return _normalizeOffset(
-          ((screenBorderCorners[0] + screenBorderCorners[1]) / 2) -
-              screenBoundsCenter,
-        );
+        return _normalizeOffset(-yAxisDirection);
       case MPImageTransformHandleType.topRight:
-        return _normalizeOffset(screenBorderCorners[1] - screenBoundsCenter);
+        return _normalizeOffset(xAxisDirection - yAxisDirection);
       case MPImageTransformHandleType.centerLeft:
-        return _normalizeOffset(
-          ((screenBorderCorners[0] + screenBorderCorners[3]) / 2) -
-              screenBoundsCenter,
-        );
+        return _normalizeOffset(-xAxisDirection);
       case MPImageTransformHandleType.centerRight:
-        return _normalizeOffset(
-          ((screenBorderCorners[1] + screenBorderCorners[2]) / 2) -
-              screenBoundsCenter,
-        );
+        return _normalizeOffset(xAxisDirection);
       case MPImageTransformHandleType.bottomLeft:
-        return _normalizeOffset(screenBorderCorners[3] - screenBoundsCenter);
+        return _normalizeOffset(-xAxisDirection + yAxisDirection);
       case MPImageTransformHandleType.bottomCenter:
-        return _normalizeOffset(
-          ((screenBorderCorners[3] + screenBorderCorners[2]) / 2) -
-              screenBoundsCenter,
-        );
+        return _normalizeOffset(yAxisDirection);
       case MPImageTransformHandleType.bottomRight:
-        return _normalizeOffset(screenBorderCorners[2] - screenBoundsCenter);
+        return _normalizeOffset(xAxisDirection + yAxisDirection);
     }
   }
 
