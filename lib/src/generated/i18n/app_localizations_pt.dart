@@ -1007,6 +1007,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTH2EditPointRadius => 'Raio do ponto';
 
   @override
+  String get mpSettingsSettingTH2EditRotationSnapAngle =>
+      'Ângulo preferencial de rotação';
+
+  @override
   String get mpSettingsSettingTH2EditSelectionTolerance =>
       'Tolerância de seleção';
 

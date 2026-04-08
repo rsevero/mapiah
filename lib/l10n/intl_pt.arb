@@ -323,6 +323,7 @@
   "mpSettingsSettingTH2EditLineThickness": "Espessura da linha",
   "mpSettingsSettingTH2EditNewLineCreationMethod": "Método de criação de nova linha",
   "mpSettingsSettingTH2EditPointRadius": "Raio do ponto",
+  "mpSettingsSettingTH2EditRotationSnapAngle": "Ângulo preferencial de rotação",
   "mpSettingsSettingTH2EditSelectionTolerance": "Tolerância de seleção",
   "mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": "Mostrar marcas de direção em linhas não selecionadas",
   "mpSketchChooseFileButtonLabel": "Escolher arquivo",

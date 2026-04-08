@@ -77,7 +77,7 @@ Editing modes:
 
 ### Localization
 
-.arb files in lib/src/generated/i18n/ → Run flutter gen-l10n → Access via mpLocator.appLocalizations
+.arb editable files in lib/l10n/ and generated files in lib/src/generated/i18n/ → Run flutter gen-l10n → Access via mpLocator.appLocalizations
 
 ### Service Locator
 

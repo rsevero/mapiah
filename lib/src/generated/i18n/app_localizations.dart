@@ -1930,6 +1930,12 @@ abstract class AppLocalizations {
   /// **'Point radius'**
   String get mpSettingsSettingTH2EditPointRadius;
 
+  /// Label for TH2 rotation snap angle setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation snap angle'**
+  String get mpSettingsSettingTH2EditRotationSnapAngle;
+
   /// Label for TH2 selection tolerance setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

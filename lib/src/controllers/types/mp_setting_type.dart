@@ -26,6 +26,7 @@ enum MPSettingID {
   TH2Edit_LineThickness,
   TH2Edit_NewLineCreationMethod,
   TH2Edit_PointRadius,
+  TH2Edit_RotationSnapAngle,
   TH2Edit_SelectionTolerance,
   TH2Edit_ShowDirectionTicksOnNonSelectedLines;
 
@@ -52,6 +53,7 @@ enum MPSettingID {
     MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
     MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
     MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
+    MPSettingID.TH2Edit_RotationSnapAngle: MPSettingType.double,
     MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
     MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         MPSettingType.bool,

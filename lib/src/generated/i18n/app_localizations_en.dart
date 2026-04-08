@@ -995,6 +995,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditPointRadius => 'Point radius';
 
   @override
+  String get mpSettingsSettingTH2EditRotationSnapAngle => 'Rotation snap angle';
+
+  @override
   String get mpSettingsSettingTH2EditSelectionTolerance =>
       'Selection tolerance';
 

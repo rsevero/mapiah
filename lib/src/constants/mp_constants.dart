@@ -353,6 +353,7 @@ const double mpClickDragThresholdSquared =
 const double mpDefaultSelectionTolerance = 7.0;
 const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
+const double mpDefaultRotationSnapAngle = 15.0;
 const double mpControlLineThicknessFactor = 0.5;
 const double mpControlPointRadiusFactor = 1.5;
 const double mpSelectedEndControlPointFactor = 1.25;
