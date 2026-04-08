@@ -441,35 +441,21 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       MPTH2FileEditStateType.selectNonEmptySelection;
 
   bool _handleArrowMoveKey(LogicalKeyboardKey logicalKey) {
-    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    return handleArrowMoveKey(
+      logicalKey: logicalKey,
+      onMove: (Offset deltaOnCanvas) {
+        final MPCommand moveCommand =
+            MPCommandFactory.moveElementsFromDeltaOnCanvas(
+              mpSelectedElements:
+                  selectionController.mpSelectedElementsLogical.values,
+              deltaOnCanvas: deltaOnCanvas,
+              decimalPositions: th2FileEditController.currentDecimalPositions,
+            );
 
-    if (isCtrlPressed || isMetaPressed) {
-      return false;
-    }
-
-    final Offset? deltaOnCanvas = deltaOnCanvasForArrowKey(logicalKey);
-
-    if (deltaOnCanvas == null) {
-      return false;
-    }
-
-    if (deltaOnCanvas == Offset.zero) {
-      return true;
-    }
-
-    final MPCommand moveCommand =
-        MPCommandFactory.moveElementsFromDeltaOnCanvas(
-          mpSelectedElements:
-              selectionController.mpSelectedElementsLogical.values,
-          deltaOnCanvas: deltaOnCanvas,
-          decimalPositions: th2FileEditController.currentDecimalPositions,
-        );
-
-    th2FileEditController.execute(moveCommand);
-    selectionController.updateAllSelectedElementsClones();
-    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
-
-    return true;
+        th2FileEditController.execute(moveCommand);
+        selectionController.updateAllSelectedElementsClones();
+        th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+      },
+    );
   }
 }

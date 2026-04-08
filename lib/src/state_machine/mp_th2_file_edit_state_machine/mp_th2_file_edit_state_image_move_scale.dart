@@ -406,34 +406,20 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
       return false;
     }
 
-    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    return handleArrowMoveKey(
+      logicalKey: logicalKey,
+      onMove: (Offset deltaOnCanvas) {
+        final MPMoveImageInsertConfigCommand moveCommand =
+            MPCommandFactory.moveImageInsertConfig(
+              imageMPID: imageMPID,
+              deltaOnCanvas: deltaOnCanvas,
+              th2File: th2File,
+              decimalPositions: th2FileEditController.currentDecimalPositions,
+            );
 
-    if (isCtrlPressed || isMetaPressed) {
-      return false;
-    }
-
-    final Offset? deltaOnCanvas = deltaOnCanvasForArrowKey(logicalKey);
-
-    if (deltaOnCanvas == null) {
-      return false;
-    }
-
-    if (deltaOnCanvas == Offset.zero) {
-      return true;
-    }
-
-    final MPMoveImageInsertConfigCommand moveCommand =
-        MPCommandFactory.moveImageInsertConfig(
-          imageMPID: imageMPID,
-          deltaOnCanvas: deltaOnCanvas,
-          th2File: th2File,
-          decimalPositions: th2FileEditController.currentDecimalPositions,
-        );
-
-    th2FileEditController.execute(moveCommand);
-
-    return true;
+        th2FileEditController.execute(moveCommand);
+      },
+    );
   }
 
   void _commitScalePreview() {

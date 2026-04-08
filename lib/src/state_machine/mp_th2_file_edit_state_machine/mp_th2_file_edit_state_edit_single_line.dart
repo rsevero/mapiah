@@ -10,6 +10,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
         MPTH2FileEditStateLineSegmentOptionsEditMixin,
+        MPTH2FileEditStateMoveModifiersMixin,
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateOptionsEditMixin {
@@ -150,6 +151,10 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (_handleArrowMoveKey(event.logicalKey)) {
+      return;
+    }
+
     if (_isLSizeOrientationEdit) {
       updateStatusBarMessage();
     }
@@ -250,12 +255,34 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   }
 
   @override
+  void onKeyRepeatEvent(KeyRepeatEvent event) {
+    _handleArrowMoveKey(event.logicalKey);
+  }
+
+  @override
   void onKeyUpEvent(KeyUpEvent event) {
     if (_isLSizeOrientationEdit) {
       updateStatusBarMessage();
     }
 
     super.onKeyUpEvent(event);
+  }
+
+  bool _handleArrowMoveKey(LogicalKeyboardKey logicalKey) {
+    if (selectionController.selectedEndControlPoints.isEmpty ||
+        _isLSizeOrientationEdit) {
+      return false;
+    }
+
+    return handleArrowMoveKey(
+      logicalKey: logicalKey,
+      onMove: (Offset deltaOnCanvas) {
+        th2FileEditController.moveScaleRotateElementController
+            .nudgeSelectedLinePointByDeltaOnCanvas(deltaOnCanvas);
+        selectionController.updateAllSelectedElementsClones();
+        th2FileEditController.triggerEditLineRedraw();
+      },
+    );
   }
 
   @override

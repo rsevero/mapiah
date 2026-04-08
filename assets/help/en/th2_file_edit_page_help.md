@@ -295,6 +295,10 @@ When one or more elements are selected in selection mode:
 
 ### Single-line end/control points
 When one or more end/control points are selected in line edit mode:
+* Press an _Arrow_ key to move the selected point or points by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
+* Press _Shift+Arrow_ to move by ten times the nudge factor
+* Press _Alt+Arrow_ to move by 1 screen pixel
+* Press _Alt+Shift+Arrow_ to move by 10 screen pixels
 * Drag the selected point or points to move them normally
 * Hold _Alt_ and drag anywhere on the canvas to move the current point selection without changing the selection
 * Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction

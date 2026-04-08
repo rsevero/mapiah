@@ -8,6 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
@@ -65,6 +66,32 @@ void main() {
       controller.stateController.setState(
         MPTH2FileEditStateType.editSingleLine,
       );
+    }
+
+    void sendArrowKeyDown({
+      required TH2FileEditController controller,
+      required PhysicalKeyboardKey physicalKey,
+      required LogicalKeyboardKey logicalKey,
+    }) {
+      controller.stateController.onKeyDownEvent(
+        KeyDownEvent(
+          physicalKey: physicalKey,
+          logicalKey: logicalKey,
+          timeStamp: Duration.zero,
+        ),
+      );
+    }
+
+    MPSelectableEndControlPoint getControlPoint1Selectable({
+      required TH2FileEditController controller,
+      required THBezierCurveLineSegment bezierSegment,
+    }) {
+      return controller.selectionController.selectableEndControlPoints
+          .firstWhere(
+            (MPSelectableEndControlPoint selectablePoint) =>
+                (selectablePoint.lineSegment.mpID == bezierSegment.mpID) &&
+                (selectablePoint.type == MPEndControlPointType.controlPoint1),
+          );
     }
 
     test(
@@ -321,6 +348,284 @@ void main() {
           movedSegment.endPoint.coordinates.dy,
           closeTo(desiredUnsnappedPosition.dy, 0.0001),
         );
+      },
+    );
+
+    test(
+      'Arrow moves selected end point by the configured nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          '2025-10-05-001-line.th2',
+        );
+        final THLine line = controller.th2File.getLines().first;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 3.0;
+
+        prepareSingleLineState(controller, line);
+
+        final THLineSegment selectedSegment = line
+            .getLineSegments(controller.th2File)
+            .first;
+        final Offset originalEndPoint = selectedSegment.endPoint.coordinates;
+
+        controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+          selectedSegment,
+        ]);
+        controller.selectionController.updateSelectableEndAndControlPoints();
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowRight,
+            logicalKey: LogicalKeyboardKey.arrowRight,
+          );
+
+          final THLineSegment movedSegment = controller.th2File
+              .lineByMPID(line.mpID)
+              .getLineSegments(controller.th2File)
+              .first;
+
+          expect(
+            movedSegment.endPoint.coordinates.dx,
+            closeTo(originalEndPoint.dx + nudgeFactor, 0.0001),
+          );
+          expect(
+            movedSegment.endPoint.coordinates.dy,
+            closeTo(originalEndPoint.dy, 0.0001),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
+      },
+    );
+
+    test(
+      'Shift+Arrow moves selected end point by ten times the nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          '2025-10-05-001-line.th2',
+        );
+        final THLine line = controller.th2File.getLines().first;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 4.0;
+
+        prepareSingleLineState(controller, line);
+
+        final THLineSegment selectedSegment = line
+            .getLineSegments(controller.th2File)
+            .first;
+        final Offset originalEndPoint = selectedSegment.endPoint.coordinates;
+
+        controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+          selectedSegment,
+        ]);
+        controller.selectionController.updateSelectableEndAndControlPoints();
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+        MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+          LogicalKeyboardKey.shiftLeft,
+        };
+
+        try {
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowDown,
+            logicalKey: LogicalKeyboardKey.arrowDown,
+          );
+
+          final THLineSegment movedSegment = controller.th2File
+              .lineByMPID(line.mpID)
+              .getLineSegments(controller.th2File)
+              .first;
+
+          expect(
+            movedSegment.endPoint.coordinates.dx,
+            closeTo(originalEndPoint.dx, 0.0001),
+          );
+          expect(
+            movedSegment.endPoint.coordinates.dy,
+            closeTo(originalEndPoint.dy - (nudgeFactor * 10.0), 0.0001),
+          );
+        } finally {
+          MPInteractionAux.debugPressedKeysOverride = null;
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
+      },
+    );
+
+    test('Alt+Arrow moves selected end point by one screen pixel', () async {
+      final TH2FileEditController controller = await loadController(
+        '2025-10-05-001-line.th2',
+      );
+      final THLine line = controller.th2File.getLines().first;
+
+      prepareSingleLineState(controller, line);
+
+      final THLineSegment selectedSegment = line
+          .getLineSegments(controller.th2File)
+          .first;
+      final Offset originalEndPoint = selectedSegment.endPoint.coordinates;
+      final double expectedCanvasStep = controller.scaleScreenToCanvas(1.0);
+
+      controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+        selectedSegment,
+      ]);
+      controller.selectionController.updateSelectableEndAndControlPoints();
+      MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+        LogicalKeyboardKey.altLeft,
+      };
+
+      try {
+        sendArrowKeyDown(
+          controller: controller,
+          physicalKey: PhysicalKeyboardKey.arrowLeft,
+          logicalKey: LogicalKeyboardKey.arrowLeft,
+        );
+
+        final THLineSegment movedSegment = controller.th2File
+            .lineByMPID(line.mpID)
+            .getLineSegments(controller.th2File)
+            .first;
+
+        expect(
+          movedSegment.endPoint.coordinates.dx,
+          closeTo(originalEndPoint.dx - expectedCanvasStep, 0.0001),
+        );
+        expect(
+          movedSegment.endPoint.coordinates.dy,
+          closeTo(originalEndPoint.dy, 0.0001),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+    });
+
+    test(
+      'Alt+Shift+Arrow moves selected end point by ten screen pixels',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          '2025-10-05-001-line.th2',
+        );
+        final THLine line = controller.th2File.getLines().first;
+
+        prepareSingleLineState(controller, line);
+
+        final THLineSegment selectedSegment = line
+            .getLineSegments(controller.th2File)
+            .first;
+        final Offset originalEndPoint = selectedSegment.endPoint.coordinates;
+        final double expectedCanvasStep = controller.scaleScreenToCanvas(10.0);
+
+        controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+          selectedSegment,
+        ]);
+        controller.selectionController.updateSelectableEndAndControlPoints();
+        MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+          LogicalKeyboardKey.altLeft,
+          LogicalKeyboardKey.shiftLeft,
+        };
+
+        try {
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowUp,
+            logicalKey: LogicalKeyboardKey.arrowUp,
+          );
+
+          final THLineSegment movedSegment = controller.th2File
+              .lineByMPID(line.mpID)
+              .getLineSegments(controller.th2File)
+              .first;
+
+          expect(
+            movedSegment.endPoint.coordinates.dx,
+            closeTo(originalEndPoint.dx, 0.0001),
+          );
+          expect(
+            movedSegment.endPoint.coordinates.dy,
+            closeTo(originalEndPoint.dy + expectedCanvasStep, 0.0001),
+          );
+        } finally {
+          MPInteractionAux.debugPressedKeysOverride = null;
+        }
+      },
+    );
+
+    test(
+      'Arrow moves selected control point by the configured nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController(
+          '2025-10-27-002-bezier_line.th2',
+        );
+        final THLine line = controller.th2File.getLines().first;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 2.5;
+
+        prepareSingleLineState(controller, line);
+
+        final THBezierCurveLineSegment bezierSegment = line
+            .getLineSegments(controller.th2File)
+            .whereType<THBezierCurveLineSegment>()
+            .first;
+
+        controller.selectionController.addSelectedEndPoint(bezierSegment);
+        controller.selectionController.updateSelectableEndAndControlPoints();
+
+        final MPSelectableEndControlPoint controlPoint =
+            getControlPoint1Selectable(
+              controller: controller,
+              bezierSegment: bezierSegment,
+            );
+        final Offset originalControlPoint = controlPoint.position;
+
+        controller.selectionController.setSelectedEndControlPoint(controlPoint);
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowRight,
+            logicalKey: LogicalKeyboardKey.arrowRight,
+          );
+
+          final THBezierCurveLineSegment movedSegment = controller.th2File
+              .lineByMPID(line.mpID)
+              .getLineSegments(controller.th2File)
+              .whereType<THBezierCurveLineSegment>()
+              .first;
+
+          expect(
+            movedSegment.controlPoint1.coordinates.dx,
+            closeTo(originalControlPoint.dx + nudgeFactor, 0.0001),
+          );
+          expect(
+            movedSegment.controlPoint1.coordinates.dy,
+            closeTo(originalControlPoint.dy, 0.0001),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
       },
     );
   });

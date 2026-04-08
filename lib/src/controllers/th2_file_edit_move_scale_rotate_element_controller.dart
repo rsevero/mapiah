@@ -6,6 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -336,6 +337,65 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     _th2FileEditController.triggerEditLineRedraw();
   }
 
+  void finalizeSelectedEndControlPointsMove() {
+    final MPSelectedLine mpSelectedLine = _selectionController
+        .getMPSelectedLine();
+    final THLine selectedLine = _selectionController.getSelectedLine();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
+        mpSelectedLine.originalLineSegmentsMapClone;
+    final List<int> lineLineSegmentsMPIDs = _selectionController
+        .getSelectedLineLineSegmentsMPIDs();
+    final List<int> selectedLineSegmentMPIDs = _selectionController
+        .selectedEndControlPoints
+        .keys
+        .toList();
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
+      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = _th2File
+            .lineSegmentByMPID(selectedLineSegmentMPID);
+        originalLineSegmentsMap[selectedLineSegmentMPID] =
+            originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
+      }
+
+      final int? nextLineSegmentMPID = _selectionController
+          .getNextLineSegmentMPID(
+            selectedLineSegmentMPID,
+            lineLineSegmentsMPIDs,
+          );
+
+      if ((nextLineSegmentMPID != null) &&
+          !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
+        final THLineSegment nextLineSegment = _th2File.lineSegmentByMPID(
+          nextLineSegmentMPID,
+        );
+
+        if (nextLineSegment is THBezierCurveLineSegment) {
+          modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
+          originalLineSegmentsMap[nextLineSegmentMPID] =
+              originalLineSegmentsMapClone[nextLineSegmentMPID]!;
+        }
+      }
+    }
+
+    final MPCommand lineEditCommand = MPMoveLineCommand(
+      lineMPID: selectedLine.mpID,
+      fromLineSegmentsMap: originalLineSegmentsMap,
+      toLineSegmentsMap: modifiedLineSegmentsMap,
+      descriptionType: MPCommandDescriptionType.editLine,
+    );
+
+    _th2FileEditController.execute(lineEditCommand);
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementEditPartial();
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementEditFinal();
+  }
+
   void moveSelectedControlPointToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
@@ -471,6 +531,110 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     _selectionController.updateSelectableEndAndControlPoints();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  void finalizeSelectedControlPointMove() {
+    final MPSelectedLine mpSelectedLine = _selectionController
+        .getMPSelectedLine();
+    final THLine selectedLine = _selectionController.getSelectedLine();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
+        mpSelectedLine.originalLineSegmentsMapClone;
+    final Iterable<int> selectedControlPointLineSegmentMPIDs =
+        _selectionController.selectedEndControlPoints.keys;
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final int selectedLineSegmentMPID
+        in selectedControlPointLineSegmentMPIDs) {
+      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = _th2File
+            .lineSegmentByMPID(selectedLineSegmentMPID);
+        originalLineSegmentsMap[selectedLineSegmentMPID] =
+            originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
+      }
+    }
+
+    final MPMoveControlPointSmoothInfo smoothInfo = moveControlPointSmoothInfo;
+
+    if (smoothInfo.shouldSmooth && !smoothInfo.isAdjacentStraight!) {
+      final int smoothedLineSegmentMPID = smoothInfo.adjacentLineSegment!.mpID;
+
+      modifiedLineSegmentsMap[smoothedLineSegmentMPID] = _th2File
+          .lineSegmentByMPID(smoothedLineSegmentMPID);
+      originalLineSegmentsMap[smoothedLineSegmentMPID] =
+          originalLineSegmentsMapClone[smoothedLineSegmentMPID]!;
+    }
+
+    final MPCommand lineEditCommand = MPMoveLineCommand(
+      lineMPID: selectedLine.mpID,
+      fromLineSegmentsMap: originalLineSegmentsMap,
+      toLineSegmentsMap: modifiedLineSegmentsMap,
+      descriptionType: MPCommandDescriptionType.editBezierCurve,
+    );
+
+    _th2FileEditController.execute(lineEditCommand);
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementEditPartial();
+    _th2FileEditController.elementEditController
+        .updateControllersAfterElementEditFinal();
+  }
+
+  void nudgeSelectedLinePointByDeltaOnCanvas(Offset deltaOnCanvas) {
+    switch (_selectionController.getCurrentSelectedEndControlPointPointType()) {
+      case MPSelectedEndControlPointPointType.endPoint:
+        final THLineSegment selectedSegment = _selectionController
+            .selectedEndControlPoints
+            .values
+            .first
+            .originalLineSegmentClone;
+        final Offset startCanvasPosition = selectedSegment.endPoint.coordinates;
+
+        _selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+          startCanvasPosition,
+        );
+        moveSelectedEndControlPointsToCanvasCoordinates(
+          startCanvasPosition + deltaOnCanvas,
+        );
+        finalizeSelectedEndControlPointsMove();
+      case MPSelectedEndControlPointPointType.controlPoint:
+        final MPSelectedEndControlPoint selectedControlPoint =
+            _selectionController.selectedEndControlPoints.values.first;
+        final Offset startCanvasPosition = _selectedControlPointCanvasPosition(
+          selectedControlPoint,
+        );
+
+        updateControlPointSmoothInfo();
+        _selectionController.setDragStartCoordinatesFromCanvasCoordinates(
+          startCanvasPosition,
+        );
+        moveSelectedControlPointToCanvasCoordinates(
+          startCanvasPosition + deltaOnCanvas,
+        );
+        finalizeSelectedControlPointMove();
+      case MPSelectedEndControlPointPointType.none:
+        return;
+    }
+  }
+
+  Offset _selectedControlPointCanvasPosition(
+    MPSelectedEndControlPoint selectedControlPoint,
+  ) {
+    final THBezierCurveLineSegment lineSegment =
+        selectedControlPoint.originalLineSegmentClone
+            as THBezierCurveLineSegment;
+
+    switch (selectedControlPoint.type) {
+      case MPEndControlPointType.controlPoint1:
+        return lineSegment.controlPoint1.coordinates;
+      case MPEndControlPointType.controlPoint2:
+        return lineSegment.controlPoint2.coordinates;
+      default:
+        throw Exception(
+          'Unsupported selected control point type ${selectedControlPoint.type} in TH2FileEditMoveScaleRotateElementControllerBase._selectedControlPointCanvasPosition().',
+        );
+    }
   }
 
   void updateControlPointSmoothInfo() {

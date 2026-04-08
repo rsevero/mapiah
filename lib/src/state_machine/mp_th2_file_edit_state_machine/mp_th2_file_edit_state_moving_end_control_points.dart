@@ -70,62 +70,10 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
-    final MPSelectedLine mpSelectedLine = selectionController
-        .getMPSelectedLine();
-    final THLine selectedLine = selectionController.getSelectedLine();
-    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMapClone =
-        mpSelectedLine.originalLineSegmentsMapClone;
-    final List<int> lineLineSegmentsMPIDs = selectionController
-        .getSelectedLineLineSegmentsMPIDs();
-    final List<int> selectedLineSegmentMPIDs = selectionController
-        .selectedEndControlPoints
-        .keys
-        .toList();
-    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
-        LinkedHashMap<int, THLineSegment>();
-    final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
-        LinkedHashMap<int, THLineSegment>();
-
     updateStatusBarMessage();
-
-    for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
-      if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] = th2File
-            .lineSegmentByMPID(selectedLineSegmentMPID);
-        originalLineSegmentsMap[selectedLineSegmentMPID] =
-            originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
-      }
-
-      final int? nextLineSegmentMPID = selectionController
-          .getNextLineSegmentMPID(
-            selectedLineSegmentMPID,
-            lineLineSegmentsMPIDs,
-          );
-
-      if ((nextLineSegmentMPID != null) &&
-          !modifiedLineSegmentsMap.containsKey(nextLineSegmentMPID)) {
-        final THLineSegment nextLineSegment = th2File.lineSegmentByMPID(
-          nextLineSegmentMPID,
-        );
-
-        if (nextLineSegment is THBezierCurveLineSegment) {
-          modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
-          originalLineSegmentsMap[nextLineSegmentMPID] =
-              originalLineSegmentsMapClone[nextLineSegmentMPID]!;
-        }
-      }
-    }
-
-    final MPCommand lineEditCommand = MPMoveLineCommand(
-      lineMPID: selectedLine.mpID,
-      fromLineSegmentsMap: originalLineSegmentsMap,
-      toLineSegmentsMap: modifiedLineSegmentsMap,
-      descriptionType: MPCommandDescriptionType.editLine,
-    );
-    th2FileEditController.execute(lineEditCommand);
+    th2FileEditController.moveScaleRotateElementController
+        .finalizeSelectedEndControlPointsMove();
     th2FileEditController.setMovingMousePosition(null);
-    elementEditController.updateControllersAfterElementEditPartial();
-    elementEditController.updateControllersAfterElementEditFinal();
     th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.editSingleLine,
     );

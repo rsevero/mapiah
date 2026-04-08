@@ -48,6 +48,32 @@ mixin MPTH2FileEditStateMoveModifiersMixin on MPTH2FileEditState {
     }
   }
 
+  bool handleArrowMoveKey({
+    required LogicalKeyboardKey logicalKey,
+    required void Function(Offset deltaOnCanvas) onMove,
+  }) {
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+
+    if (isCtrlPressed || isMetaPressed) {
+      return false;
+    }
+
+    final Offset? deltaOnCanvas = deltaOnCanvasForArrowKey(logicalKey);
+
+    if (deltaOnCanvas == null) {
+      return false;
+    }
+
+    if (deltaOnCanvas == Offset.zero) {
+      return true;
+    }
+
+    onMove(deltaOnCanvas);
+
+    return true;
+  }
+
   Offset constrainCanvasOffsetToDominantAxis({
     required Offset canvasOffset,
     required Offset dragStartCanvasCoordinates,
