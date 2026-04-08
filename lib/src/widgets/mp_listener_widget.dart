@@ -178,18 +178,35 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         autofocus: true,
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
+          final bool isArrowKey = _isArrowKey(event.logicalKey);
+
           if (event is KeyDownEvent) {
             logicalKeyPressed = event.logicalKey;
             widget.actuator.onKeyDownEvent(event);
+          } else if (event is KeyRepeatEvent) {
+            logicalKeyPressed = event.logicalKey;
+            widget.actuator.onKeyRepeatEvent(event);
           } else if (event is KeyUpEvent) {
             logicalKeyPressed = null;
             widget.actuator.onKeyUpEvent(event);
           }
 
-          return KeyEventResult.ignored;
+          return isArrowKey ? KeyEventResult.handled : KeyEventResult.ignored;
         },
         child: widget.child,
       ),
     );
+  }
+
+  bool _isArrowKey(LogicalKeyboardKey key) {
+    switch (key) {
+      case LogicalKeyboardKey.arrowLeft:
+      case LogicalKeyboardKey.arrowRight:
+      case LogicalKeyboardKey.arrowUp:
+      case LogicalKeyboardKey.arrowDown:
+        return true;
+      default:
+        return false;
+    }
   }
 }

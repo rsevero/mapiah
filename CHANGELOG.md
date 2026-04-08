@@ -13,6 +13,7 @@
   * Added the `TH2Edit_NudgeFactor` setting as a persisted double with default `2.0`, including settings-page labels and regression coverage for the default-value path. It is not used by editing actions yet.
   * Image move mode now supports keyboard nudging: `Arrow` moves the selected image by `TH2Edit_NudgeFactor`, `Shift+Arrow` by 10x that value, `Alt+Arrow` by 1 screen pixel, and `Alt+Shift+Arrow` by 10 screen pixels. Updated the EN/PT file-edit help pages and keyboard-shortcuts pages, with regression tests for all four shortcut variants.
 * Fixed bugs:
+  * Arrow-key image nudging now repeats correctly in all directions, including `ArrowUp`: the canvas key listener now forwards `KeyRepeatEvent`s and marks arrow keys as handled so Flutter focus/navigation does not steal them after the first move.
   * Settings page: boolean setting labels now use the same text style as the other setting labels, so "Show direction ticks on non-selected lines" no longer appears larger than the rest.
   * The available-scraps and available-images overlays are now mutually exclusive: opening one closes the other first, so the two panels can no longer stay open at the same time.
   * During background image edit mode, clicking elsewhere on the canvas now closes the available-images overlay and exits the image-edit state only for that outside-canvas dismissal path, while clicks on the image, its scale handles, or overlay buttons keep the edit state unchanged.
