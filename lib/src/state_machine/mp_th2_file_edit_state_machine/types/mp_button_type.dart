@@ -17,6 +17,8 @@ enum MPButtonType {
   createMapConnectionLines,
   cutElements,
   duplicateElements,
+  flipImageHorizontally,
+  flipImageVertically,
   joinLinesAtCoincidingExtremities,
   mergeAreas,
   nodeEdit,

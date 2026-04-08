@@ -232,6 +232,9 @@ While image transform mode is active:
 * Drag the image itself to move it
 * Drag any black handle to scale it
 * Click the selected image to toggle between move/scale mode and rotate mode
+* Press _H_ to flip the image horizontally
+* Press _V_ to flip the image vertically
+* Use the two flip buttons shown on the left side of the canvas to trigger the same actions with the mouse
 * Press _Esc_ to leave image transform mode
 
 Click the reset button on an image row to set `xx`, `yy`, and the rotation angle back to `0`, `xScale` and `yScale` back to `1`, and image visibility and XVI grid visibility back to their default visible state. The reset keeps the XVI root unchanged.
@@ -252,6 +255,11 @@ The following modifiers can be combined while moving:
 
 ### Image scaling
 In image transform mode, drag any black handle to scale the selected image.
+
+You can also flip the image instantly without dragging:
+* Press _H_ to negate `xScale`
+* Press _V_ to negate `yScale`
+* The flip actions are undoable with _Ctrl+Z_
 
 Scaling modifiers:
 * Hold _Ctrl_ while dragging a handle to preserve the image aspect ratio

@@ -29,6 +29,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Dividir linha nos pontos de linha selecionados                         | Ctrl+P                                        |
 | Dividir linhas selecionadas nos cruzamentos de linhas                  | Ctrl+Shift+X                                  |
 | Duplicar elementos selecionados                                        | Ctrl+D                                        |
+| Espelhar imagem horizontalmente                                        | H                                             |
+| Espelhar imagem verticalmente                                          | V                                             |
 | Editar nó/linha                                                        | N                                             |
 | Editar opções (com elementos selecionados)                             | O                                             |
 | Escolher arquivo THConfig e executar Therion                           | Ctrl+T                                        |

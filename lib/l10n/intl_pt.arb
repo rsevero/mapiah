@@ -417,6 +417,8 @@
   "th2FileEditPageDuplicateScrapButton": "Duplicar croqui",
   "th2FileEditPageEmptySelectionStatusBarMessage": "Nenhum elemento selecionado",
   "th2FileEditPageEnableImageEditModeButton": "Editar imagem",
+  "th2FileEditPageFlipImageHorizontally": "Espelhar imagem horizontalmente (H)",
+  "th2FileEditPageFlipImageVertically": "Espelhar imagem verticalmente (V)",
   "th2FileEditPageHelpDialogTitle": "Ajuda para edição de arquivo TH2",
   "th2FileEditPageImageGridVisibilityTooltip": "Alternar visibilidade da grade",
   "th2FileEditPageImageMoveOverlayLabel": "Mover",

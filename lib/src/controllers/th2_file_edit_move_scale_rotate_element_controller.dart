@@ -93,6 +93,14 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     return prepareImageMoveState(imageMPID);
   }
 
+  void flipImageHorizontally(int imageMPID) {
+    _flipImage(imageMPID: imageMPID, flipX: true, flipY: false);
+  }
+
+  void flipImageVertically(int imageMPID) {
+    _flipImage(imageMPID: imageMPID, flipX: false, flipY: true);
+  }
+
   void resetImageTransform(int imageMPID) {
     final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
       imageMPID,
@@ -170,6 +178,37 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
 
     return image;
+  }
+
+  void _flipImage({
+    required int imageMPID,
+    required bool flipX,
+    required bool flipY,
+  }) {
+    assert(flipX != flipY, 'Exactly one flip axis must be enabled.');
+
+    final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
+      imageMPID,
+    );
+    final THDoublePart toXScale = image.xScale.copyWith(
+      value: flipX ? -image.xScale.value : image.xScale.value,
+      decimalPositions: _th2FileEditController.currentDecimalPositions,
+    );
+    final THDoublePart toYScale = image.yScale.copyWith(
+      value: flipY ? -image.yScale.value : image.yScale.value,
+      decimalPositions: _th2FileEditController.currentDecimalPositions,
+    );
+    final MPScaleImageInsertConfigCommand flipCommand =
+        MPCommandFactory.scaleImageInsertConfig(
+          imageMPID: imageMPID,
+          toXX: image.xx,
+          toYY: image.yy,
+          toXScale: toXScale,
+          toYScale: toYScale,
+          th2File: _th2File,
+        );
+
+    _th2FileEditController.execute(flipCommand);
   }
 
   void moveSelectedElementsToScreenCoordinates(

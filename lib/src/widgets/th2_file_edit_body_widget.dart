@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_search_select_dialog_widget.dart';
@@ -569,6 +570,10 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
           buttonRows.addAll(_selectEmptySelectionContextFABs(heroPrefix));
         } else if (th2FileEditController.isInAddElementState) {
           buttonRows.addAll(_addElementContextFABs(heroPrefix));
+        } else if (MPTH2FileEditState.isImageOperationType(
+          th2FileEditController.stateController.state.type,
+        )) {
+          buttonRows.addAll(_imageOperationContextFABs(heroPrefix));
         }
 
         if (buttonRows.isEmpty) {
@@ -1054,6 +1059,31 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             category: _StateContextFABCategory.clipboard,
             icon: Icons.content_paste,
             tooltip: appLocalizations.th2FileEditPagePasteElements,
+          ),
+        ],
+      ),
+    ];
+  }
+
+  List<Widget> _imageOperationContextFABs(String heroPrefix) {
+    return [
+      _stateContextFABCategoryRow(
+        buttons: [
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_flip_image_horizontally',
+            onPressed: () => th2FileEditController.stateController
+                .onButtonPressed(MPButtonType.flipImageHorizontally),
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.flip,
+            tooltip: appLocalizations.th2FileEditPageFlipImageHorizontally,
+          ),
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_flip_image_vertically',
+            onPressed: () => th2FileEditController.stateController
+                .onButtonPressed(MPButtonType.flipImageVertically),
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.flip_camera_android,
+            tooltip: appLocalizations.th2FileEditPageFlipImageVertically,
           ),
         ],
       ),

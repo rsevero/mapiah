@@ -103,6 +103,9 @@ Enquanto o modo de transformação da imagem estiver ativo:
 * Arraste a própria imagem para movê-la
 * Arraste qualquer alça preta para redimensioná-la
 * Clique na imagem selecionada para alternar entre o modo mover/redimensionar e o modo de rotação
+* Pressione _H_ para espelhar a imagem horizontalmente
+* Pressione _V_ para espelhar a imagem verticalmente
+* Use os dois botões de espelhamento mostrados no lado esquerdo do canvas para executar as mesmas ações com o mouse
 * Pressione _Esc_ para sair do modo de transformação da imagem
 
 Clique no botão de redefinição em uma linha de imagem para voltar `xx`, `yy` e o ângulo de rotação para `0`, `xScale` e `yScale` para `1`, e a visibilidade da imagem e da grade XVI para o estado padrão visível. A redefinição mantém o XVI root inalterado.
@@ -123,6 +126,11 @@ Os seguintes modificadores podem ser combinados durante o movimento:
 
 ### Redimensionamento da imagem
 No modo de transformação da imagem, arraste qualquer alça preta para redimensionar a imagem selecionada.
+
+Você também pode espelhar a imagem instantaneamente sem arrastar:
+* Pressione _H_ para negar `xScale`
+* Pressione _V_ para negar `yScale`
+* As ações de espelhamento podem ser desfeitas com _Ctrl+Z_
 
 Modificadores de redimensionamento:
 * Mantenha _Ctrl_ pressionado ao arrastar uma alça para preservar a proporção da imagem

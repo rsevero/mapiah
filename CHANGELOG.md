@@ -5,6 +5,7 @@
 ## 0.3.5 - not yet released
 * Highlights:
 * New features:
+  * Background image transform mode now supports direct flipping with `H` / `V`, negating `xScale` or `yScale` respectively for the active image, with matching state-context FAB buttons and undo support.
   * Join lines at coinciding extremities (Ctrl+J).
   * Change 'Split line' shortcut from Ctrl+Shift+P to Ctrl+P.
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.

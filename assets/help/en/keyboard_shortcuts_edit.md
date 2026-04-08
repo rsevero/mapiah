@@ -25,6 +25,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Delete point, line, area or line segment                   | Del or Backspace                        |
 | Deselect all                                               | Escape                                  |
 | Duplicate selected elements                                | Ctrl+D                                  |
+| Flip image horizontally                                    | H                                       |
+| Flip image vertically                                      | V                                       |
 | Force option setting on non-supporting types               | Ctrl+click on option setting            |
 | Help                                                       | F1                                      |
 | Hide selected elements / Show all hidden elements          | Ctrl+H                                  |

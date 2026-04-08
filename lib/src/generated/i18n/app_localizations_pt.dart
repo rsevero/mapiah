@@ -1357,6 +1357,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageEnableImageEditModeButton => 'Editar imagem';
 
   @override
+  String get th2FileEditPageFlipImageHorizontally =>
+      'Espelhar imagem horizontalmente (H)';
+
+  @override
+  String get th2FileEditPageFlipImageVertically =>
+      'Espelhar imagem verticalmente (V)';
+
+  @override
   String get th2FileEditPageHelpDialogTitle =>
       'Ajuda para edição de arquivo TH2';
 

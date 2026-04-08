@@ -2083,6 +2083,16 @@
     "description": "Tooltip for enabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageFlipImageHorizontally": "Flip image horizontally (H)",
+  "@th2FileEditPageFlipImageHorizontally": {
+    "description": "Tooltip for the flip image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageFlipImageVertically": "Flip image vertically (V)",
+  "@th2FileEditPageFlipImageVertically": {
+    "description": "Tooltip for the flip image vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",
   "@th2FileEditPageHelpDialogTitle": {
     "description": "The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build",

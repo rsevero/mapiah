@@ -284,6 +284,22 @@ abstract class MPTH2FileEditState {
       case MPButtonType.duplicateElements:
         th2FileEditController.copyPasteController.duplicateSelectedElements();
         return true;
+      case MPButtonType.flipImageHorizontally:
+        th2FileEditController.moveScaleRotateElementController
+            .flipImageHorizontally(
+              (th2FileEditController.stateController.state
+                      as MPTH2FileEditStateImageOperation)
+                  .imageMPID,
+            );
+        return true;
+      case MPButtonType.flipImageVertically:
+        th2FileEditController.moveScaleRotateElementController
+            .flipImageVertically(
+              (th2FileEditController.stateController.state
+                      as MPTH2FileEditStateImageOperation)
+                  .imageMPID,
+            );
+        return true;
       case MPButtonType.joinLinesAtCoincidingExtremities:
         th2FileEditController.splitMergeController
             .prepareJoinLinesAtCoincidingExtremities();

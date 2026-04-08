@@ -338,6 +338,88 @@ void main() {
       }
     });
 
+    test('H flips selected image horizontally', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final MPRuntimeImageInsertConfigMixin image = controller
+          .moveScaleRotateElementController
+          .prepareImageMoveState(imageMPID);
+      final double originalXX = image.xx.value;
+      final double originalYY = image.yy.value;
+
+      controller.stateController.onKeyDownEvent(
+        const KeyDownEvent(
+          physicalKey: PhysicalKeyboardKey.keyH,
+          logicalKey: LogicalKeyboardKey.keyH,
+          timeStamp: Duration.zero,
+        ),
+      );
+
+      final MPImageInsertConfig flippedImage =
+          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+      expect(flippedImage.xScale.value, closeTo(-1.0, 0.0001));
+      expect(flippedImage.yScale.value, closeTo(1.0, 0.0001));
+      expect(flippedImage.xx.value, closeTo(originalXX, 0.0001));
+      expect(flippedImage.yy.value, closeTo(originalYY, 0.0001));
+
+      controller.undo();
+
+      final MPImageInsertConfig undoneScale =
+          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+      expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
+      expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
+
+      controller.undo();
+
+      expect(
+        controller.th2File.imageByMPID(imageMPID),
+        isA<THXVIXTherionImageInsertConfig>(),
+      );
+    });
+
+    test('V flips selected image vertically', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final MPRuntimeImageInsertConfigMixin image = controller
+          .moveScaleRotateElementController
+          .prepareImageMoveState(imageMPID);
+      final double originalXX = image.xx.value;
+      final double originalYY = image.yy.value;
+
+      controller.stateController.onKeyDownEvent(
+        const KeyDownEvent(
+          physicalKey: PhysicalKeyboardKey.keyV,
+          logicalKey: LogicalKeyboardKey.keyV,
+          timeStamp: Duration.zero,
+        ),
+      );
+
+      final MPImageInsertConfig flippedImage =
+          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+      expect(flippedImage.xScale.value, closeTo(1.0, 0.0001));
+      expect(flippedImage.yScale.value, closeTo(-1.0, 0.0001));
+      expect(flippedImage.xx.value, closeTo(originalXX, 0.0001));
+      expect(flippedImage.yy.value, closeTo(originalYY, 0.0001));
+
+      controller.undo();
+
+      final MPImageInsertConfig undoneScale =
+          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+      expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
+      expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
+
+      controller.undo();
+
+      expect(
+        controller.th2File.imageByMPID(imageMPID),
+        isA<THXVIXTherionImageInsertConfig>(),
+      );
+    });
+
     test(
       'Shift+Arrow moves selected image by ten times the nudge factor',
       () async {
