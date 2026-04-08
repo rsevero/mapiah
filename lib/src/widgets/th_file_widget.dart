@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
@@ -51,6 +52,16 @@ class TH2FileWidget extends StatelessWidget {
         return Observer(
           builder: (_) => MouseRegion(
             cursor: th2FileEditController.canvasCursor,
+            onHover: (PointerHoverEvent event) {
+              th2FileEditController.performSetMousePosition(
+                event.localPosition,
+              );
+            },
+            onExit: (PointerExitEvent event) {
+              th2FileEditController.performSetMousePosition(
+                const Offset(-1000000.0, -1000000.0),
+              );
+            },
             child: MPListenerWidget(
               key: ValueKey("MPListenerWidget|$thFileMPID"),
               actuator: th2FileEditController.stateController,

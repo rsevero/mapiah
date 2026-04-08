@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/mp_image_operation_overlay_painter.dart';
@@ -29,14 +30,21 @@ class MPImageOperationOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: CustomPaint(
-        painter: MPImageOperationOverlayPainter(
-          th2FileEditController: th2FileEditController,
-          image: image,
-        ),
-        size: th2FileEditController.screenSize,
-      ),
+    return Observer(
+      builder: (_) {
+        final Offset hoverScreenPosition = th2FileEditController.mousePosition;
+
+        return IgnorePointer(
+          child: CustomPaint(
+            painter: MPImageOperationOverlayPainter(
+              th2FileEditController: th2FileEditController,
+              image: image,
+              hoverScreenPosition: hoverScreenPosition,
+            ),
+            size: th2FileEditController.screenSize,
+          ),
+        );
+      },
     );
   }
 }

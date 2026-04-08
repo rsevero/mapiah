@@ -12,10 +12,12 @@ import 'package:mapiah/src/elements/th_element.dart';
 class MPImageOperationOverlayPainter extends CustomPainter {
   final TH2FileEditController th2FileEditController;
   final MPRuntimeImageInsertConfigMixin image;
+  final Offset hoverScreenPosition;
 
   const MPImageOperationOverlayPainter({
     required this.th2FileEditController,
     required this.image,
+    required this.hoverScreenPosition,
   });
 
   @override
@@ -30,16 +32,34 @@ class MPImageOperationOverlayPainter extends CustomPainter {
       return;
     }
 
-    final Paint handlePaint = Paint()
+    final MPImageTransformHandleType? hoveredHandle = geometry.hitTestHandle(
+      hoverScreenPosition,
+    );
+    final Paint defaultHandlePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
-    for (final Path handlePath in geometry.screenHandlePaths.values) {
-      canvas.drawPath(handlePath, handlePaint);
+    final Paint hoveredHandleFillPaint = Paint()
+      ..color = Colors.cyan
+      ..style = PaintingStyle.fill;
+    final Paint hoveredHandleOutlinePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+
+    for (final MapEntry<MPImageTransformHandleType, Path> entry
+        in geometry.screenHandlePaths.entries) {
+      if (entry.key == hoveredHandle) {
+        canvas.drawPath(entry.value, hoveredHandleFillPaint);
+        canvas.drawPath(entry.value, hoveredHandleOutlinePaint);
+      } else {
+        canvas.drawPath(entry.value, defaultHandlePaint);
+      }
     }
   }
 
   @override
   bool shouldRepaint(covariant MPImageOperationOverlayPainter oldDelegate) {
-    return oldDelegate.image != image;
+    return oldDelegate.image != image ||
+        oldDelegate.hoverScreenPosition != hoverScreenPosition;
   }
 }
