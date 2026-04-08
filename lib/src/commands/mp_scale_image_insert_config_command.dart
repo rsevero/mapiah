@@ -50,30 +50,14 @@ class MPScaleImageInsertConfigCommand extends MPCommand {
       );
     }
 
-    final MPImageInsertConfig modifiedImage;
-
-    switch (originalImage) {
-      case MPXVIImageInsertConfig image:
-        modifiedImage = image.copyWith(
+    final MPImageInsertConfig modifiedImage = originalImage
+        .copyWithImageTransform(
           xx: toXX,
           yy: toYY,
           xScale: toXScale,
           yScale: toYScale,
           originalLineInTH2File: toOriginalLineInTH2File,
         );
-      case MPRasterImageInsertConfig image:
-        modifiedImage = image.copyWith(
-          xx: toXX,
-          yy: toYY,
-          xScale: toXScale,
-          yScale: toYScale,
-          originalLineInTH2File: toOriginalLineInTH2File,
-        );
-      default:
-        throw ArgumentError(
-          'Unsupported MPImageInsertConfig type: ${originalImage.runtimeType}',
-        );
-    }
 
     originalImage.copyRuntimeImageCacheTo(
       targetImage: modifiedImage,

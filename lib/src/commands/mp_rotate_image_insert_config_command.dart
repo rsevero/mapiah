@@ -54,11 +54,8 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
       );
     }
 
-    final MPImageInsertConfig modifiedImage;
-
-    switch (originalImage) {
-      case MPXVIImageInsertConfig image:
-        modifiedImage = image.copyWith(
+    final MPImageInsertConfig modifiedImage = originalImage
+        .copyWithImageTransform(
           xx: toXX,
           yy: toYY,
           rotationCenterDx: toRotationCenterDx,
@@ -66,20 +63,6 @@ class MPRotateImageInsertConfigCommand extends MPCommand {
           rotationDeg: toRotationDeg,
           originalLineInTH2File: toOriginalLineInTH2File,
         );
-      case MPRasterImageInsertConfig image:
-        modifiedImage = image.copyWith(
-          xx: toXX,
-          yy: toYY,
-          rotationCenterDx: toRotationCenterDx,
-          rotationCenterDy: toRotationCenterDy,
-          rotationDeg: toRotationDeg,
-          originalLineInTH2File: toOriginalLineInTH2File,
-        );
-      default:
-        throw ArgumentError(
-          'Unsupported MPImageInsertConfig type: ${originalImage.runtimeType}',
-        );
-    }
 
     originalImage.copyRuntimeImageCacheTo(
       targetImage: modifiedImage,

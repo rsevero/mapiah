@@ -513,16 +513,8 @@ class MPTH2FileEditStateImageMoveScale
           yy: yy,
           originalLineInTH2File: '',
         );
-      case MPXVIImageInsertConfig image:
-        previewImage = image.copyWith(
-          xx: xx,
-          yy: yy,
-          xScale: xScale,
-          yScale: yScale,
-          originalLineInTH2File: '',
-        );
-      case MPRasterImageInsertConfig image:
-        previewImage = image.copyWith(
+      case MPImageInsertConfig image:
+        previewImage = image.copyWithImageTransform(
           xx: xx,
           yy: yy,
           xScale: xScale,

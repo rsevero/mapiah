@@ -411,28 +411,14 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     required THDoublePart rotationCenterDy,
     required THDoublePart rotationDeg,
   }) {
-    late final MPImageInsertConfig previewImage;
-
-    switch (startImage) {
-      case MPXVIImageInsertConfig image:
-        previewImage = image.copyWith(
-          xx: xx,
-          yy: yy,
-          rotationCenterDx: rotationCenterDx,
-          rotationCenterDy: rotationCenterDy,
-          rotationDeg: rotationDeg,
-          originalLineInTH2File: '',
-        );
-      case MPRasterImageInsertConfig image:
-        previewImage = image.copyWith(
-          xx: xx,
-          yy: yy,
-          rotationCenterDx: rotationCenterDx,
-          rotationCenterDy: rotationCenterDy,
-          rotationDeg: rotationDeg,
-          originalLineInTH2File: '',
-        );
-    }
+    final MPImageInsertConfig previewImage = startImage.copyWithImageTransform(
+      xx: xx,
+      yy: yy,
+      rotationCenterDx: rotationCenterDx,
+      rotationCenterDy: rotationCenterDy,
+      rotationDeg: rotationDeg,
+      originalLineInTH2File: '',
+    );
 
     startImage.copyRuntimeImageCacheTo(
       targetImage: previewImage,

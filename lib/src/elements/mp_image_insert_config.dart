@@ -94,11 +94,14 @@ abstract class MPImageInsertConfig extends THElement
   @override
   bool get isXVI;
 
-  @override
-  MPImageInsertConfig copyWithImageInsertConfigBase({
-    String? filename,
+  MPImageInsertConfig copyWithImageTransform({
     THDoublePart? xx,
     THDoublePart? yy,
+    THDoublePart? xScale,
+    THDoublePart? yScale,
+    THDoublePart? rotationCenterDx,
+    THDoublePart? rotationCenterDy,
+    THDoublePart? rotationDeg,
     bool? isVisible,
     String? originalLineInTH2File,
   });
@@ -615,6 +618,31 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
   }
 
   @override
+  MPXVIImageInsertConfig copyWithImageTransform({
+    THDoublePart? xx,
+    THDoublePart? yy,
+    THDoublePart? xScale,
+    THDoublePart? yScale,
+    THDoublePart? rotationCenterDx,
+    THDoublePart? rotationCenterDy,
+    THDoublePart? rotationDeg,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      xx: xx,
+      yy: yy,
+      xScale: xScale,
+      yScale: yScale,
+      rotationCenterDx: rotationCenterDx,
+      rotationCenterDy: rotationCenterDy,
+      rotationDeg: rotationDeg,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
   Rect? getLocalBounds(TH2FileEditController th2FileEditController) {
     final XVIFile? xviFile = getXVIFile(th2FileEditController);
 
@@ -881,6 +909,31 @@ class MPRasterImageInsertConfig extends MPImageInsertConfig
       filename: filename,
       xx: xx,
       yy: yy,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
+  MPRasterImageInsertConfig copyWithImageTransform({
+    THDoublePart? xx,
+    THDoublePart? yy,
+    THDoublePart? xScale,
+    THDoublePart? yScale,
+    THDoublePart? rotationCenterDx,
+    THDoublePart? rotationCenterDy,
+    THDoublePart? rotationDeg,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      xx: xx,
+      yy: yy,
+      xScale: xScale,
+      yScale: yScale,
+      rotationCenterDx: rotationCenterDx,
+      rotationCenterDy: rotationCenterDy,
+      rotationDeg: rotationDeg,
       isVisible: isVisible,
       originalLineInTH2File: originalLineInTH2File,
     );
