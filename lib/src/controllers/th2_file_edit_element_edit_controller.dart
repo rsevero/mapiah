@@ -22,7 +22,6 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
-import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
@@ -76,8 +75,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   final Set<int> _mpIDsOutdatedLineSegmentClones = {};
 
   bool _allImagesVisibility = true;
-
-  late MPMoveControlPointSmoothInfo moveControlPointSmoothInfo;
 
   final List<String> _lastUsedAreaTypes = [];
   final List<String> _lastUsedLineTypes = [];
@@ -1190,67 +1187,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   /// the Mapiah representation without changing which image the rest of the app
   /// refers to.
   MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
-    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
-      imageMPID,
-    );
-
-    if (image is MPImageInsertConfig) {
-      return image;
-    }
-
-    final MPCommand convertImageCommand =
-        MPCommandFactory.convertXTherionImageInsertConfigToMapiahImageInsertConfig(
-          existingXTherionImageInsertConfigMPID: imageMPID,
-          th2FileEditController: _th2FileEditController,
-        );
-
-    _th2FileEditController.execute(convertImageCommand);
-    _th2FileEditController.triggerImagesRedraw();
-
-    return _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+    return _th2FileEditController.moveScaleRotateElementController
+        .prepareImageForMPOnlyTransformActions(imageMPID);
   }
 
   MPRuntimeImageInsertConfigMixin prepareImageMoveState(int imageMPID) {
-    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
-      imageMPID,
-    );
-
-    _th2FileEditController.stateController.setImageOperationState(
-      type: MPTH2FileEditStateType.imageMove,
-      imageMPID: image.mpID,
-    );
-
-    return image;
+    return _th2FileEditController.moveScaleRotateElementController
+        .prepareImageMoveState(imageMPID);
   }
 
   MPImageInsertConfig prepareImageRotateState(int imageMPID) {
-    return _prepareImageOperationState(
-      imageMPID: imageMPID,
-      stateType: MPTH2FileEditStateType.imageRotate,
-    );
+    return _th2FileEditController.moveScaleRotateElementController
+        .prepareImageRotateState(imageMPID);
   }
 
   MPImageInsertConfig prepareImageScaleState(int imageMPID) {
-    return _prepareImageOperationState(
-      imageMPID: imageMPID,
-      stateType: MPTH2FileEditStateType.imageScale,
-    );
-  }
-
-  MPImageInsertConfig _prepareImageOperationState({
-    required int imageMPID,
-    required MPTH2FileEditStateType stateType,
-  }) {
-    final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
-      imageMPID,
-    );
-
-    _th2FileEditController.stateController.setImageOperationState(
-      type: stateType,
-      imageMPID: image.mpID,
-    );
-
-    return image;
+    return _th2FileEditController.moveScaleRotateElementController
+        .prepareImageScaleState(imageMPID);
   }
 
   void reorderImages({required int oldIndex, required int newIndex}) {
@@ -1292,142 +1245,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void updateControlPointSmoothInfo() {
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final LinkedHashMap<int, THLineSegment> originalLineSegments =
-        (selectionController.mpSelectedElementsLogical.values.first
-                as MPSelectedLine)
-            .originalLineSegmentsMapClone;
-    final MPSelectedEndControlPoint selectedControlPoint =
-        selectionController.selectedEndControlPoints.values.first;
-    final THBezierCurveLineSegment controlPointLineSegment =
-        selectedControlPoint.originalElementClone as THBezierCurveLineSegment;
-    final int controlPointLineSegmentMPID = controlPointLineSegment.mpID;
-    final THBezierCurveLineSegment originalControlPointLineSegment =
-        originalLineSegments[controlPointLineSegmentMPID]
-            as THBezierCurveLineSegment;
-    final THLine line = _th2File.lineByMPID(controlPointLineSegment.parentMPID);
+    _th2FileEditController.moveScaleRotateElementController
+        .updateControlPointSmoothInfo();
+  }
 
-    switch (selectedControlPoint.type) {
-      case MPEndControlPointType.controlPoint1:
-        final THLineSegment? originalPreviousLineSegment = line
-            .getPreviousLineSegment(controlPointLineSegment, _th2File);
-
-        if ((originalPreviousLineSegment != null) &&
-            MPCommandOptionAux.isSmooth(originalPreviousLineSegment) &&
-            !line.isFirstLineSegment(originalPreviousLineSegment, _th2File)) {
-          final Offset junction =
-              originalPreviousLineSegment.endPoint.coordinates;
-
-          if (originalPreviousLineSegment is THStraightLineSegment) {
-            final THLineSegment? originalSecondPreviousLineSegment = line
-                .getPreviousLineSegment(originalPreviousLineSegment, _th2File);
-
-            if (originalSecondPreviousLineSegment == null) {
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: false,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint1,
-              );
-            } else {
-              final Offset segmentStart =
-                  originalSecondPreviousLineSegment.endPoint.coordinates;
-              final Offset segment = junction - segmentStart;
-
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: true,
-                isAdjacentStraight: true,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint1,
-                straightStart: segmentStart,
-                junction: junction,
-                straightLine: segment,
-              );
-            }
-          } else if (originalPreviousLineSegment is THBezierCurveLineSegment) {
-            final double currentLengthMirrorControlPoint =
-                (originalPreviousLineSegment.controlPoint2.coordinates -
-                        junction)
-                    .distance;
-
-            if (currentLengthMirrorControlPoint == 0) {
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: false,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint1,
-              );
-            } else {
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: true,
-                isAdjacentStraight: false,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint1,
-                adjacentLineSegment: originalPreviousLineSegment,
-                adjacentControlPointLength: currentLengthMirrorControlPoint,
-                junction: junction,
-              );
-            }
-          }
-        } else {
-          moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-            shouldSmooth: false,
-            lineSegment: originalControlPointLineSegment,
-            controlPointType: MPEndControlPointType.controlPoint1,
-          );
-        }
-      case MPEndControlPointType.controlPoint2:
-        if (MPCommandOptionAux.isSmooth(controlPointLineSegment) &&
-            !line.isLastLineSegment(controlPointLineSegment, _th2File)) {
-          final THLineSegment? originalNextLineSegment = line
-              .getNextLineSegment(controlPointLineSegment, _th2File);
-          final Offset junction = controlPointLineSegment.endPoint.coordinates;
-
-          if (originalNextLineSegment is THStraightLineSegment) {
-            final Offset segmentStart =
-                originalNextLineSegment.endPoint.coordinates;
-            final Offset segment = junction - segmentStart;
-
-            moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-              shouldSmooth: true,
-              isAdjacentStraight: true,
-              lineSegment: originalControlPointLineSegment,
-              controlPointType: MPEndControlPointType.controlPoint2,
-              straightStart: segmentStart,
-              junction: junction,
-              straightLine: segment,
-            );
-          } else if (originalNextLineSegment is THBezierCurveLineSegment) {
-            final double currentLengthMirrorControlPoint =
-                (originalNextLineSegment.controlPoint1.coordinates - junction)
-                    .distance;
-
-            if (currentLengthMirrorControlPoint == 0) {
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: false,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint2,
-              );
-            } else {
-              moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-                shouldSmooth: true,
-                isAdjacentStraight: false,
-                lineSegment: originalControlPointLineSegment,
-                controlPointType: MPEndControlPointType.controlPoint2,
-                adjacentLineSegment: originalNextLineSegment,
-                adjacentControlPointLength: currentLengthMirrorControlPoint,
-                junction: junction,
-              );
-            }
-          }
-        } else {
-          moveControlPointSmoothInfo = MPMoveControlPointSmoothInfo(
-            shouldSmooth: false,
-            lineSegment: originalControlPointLineSegment,
-            controlPointType: MPEndControlPointType.controlPoint2,
-          );
-        }
-      default:
-    }
+  MPMoveControlPointSmoothInfo get moveControlPointSmoothInfo {
+    return _th2FileEditController
+        .moveScaleRotateElementController
+        .moveControlPointSmoothInfo;
   }
 
   MPCommand? getSmoothLineSegmentsCommand(THLineSegment lineSegment) {

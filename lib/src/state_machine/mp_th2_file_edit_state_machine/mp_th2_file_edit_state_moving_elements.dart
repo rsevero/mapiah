@@ -148,9 +148,8 @@ class MPTH2FileEditStateMovingElements extends MPTH2FileEditState
       }
     }
 
-    selectionController.moveSelectedElementsToCanvasCoordinates(
-      snapedCanvasOffset,
-    );
+    th2FileEditController.moveScaleRotateElementController
+        .moveSelectedElementsToCanvasCoordinates(snapedCanvasOffset);
     th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
   }
 

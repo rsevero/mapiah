@@ -17,6 +17,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_move_scale_rotate_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_search_controller.dart';
@@ -59,6 +60,8 @@ abstract class TH2FileEditControllerBase with Store {
   late final MPVisualController visualController;
   late final TH2FileEditCopyPasteController copyPasteController;
   late final TH2FileEditElementEditController elementEditController;
+  late final TH2FileEditMoveScaleRotateElementController
+  moveScaleRotateElementController;
   late final TH2FileEditSplitMergeController splitMergeController;
   late final TH2FileEditOptionEditController optionEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
@@ -619,6 +622,10 @@ abstract class TH2FileEditControllerBase with Store {
     elementEditController = TH2FileEditElementEditController(
       this as TH2FileEditController,
     );
+    moveScaleRotateElementController =
+        TH2FileEditMoveScaleRotateElementController(
+          this as TH2FileEditController,
+        );
     splitMergeController = TH2FileEditSplitMergeController(
       this as TH2FileEditController,
     );

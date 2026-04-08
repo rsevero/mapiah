@@ -61,9 +61,8 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
     updateStatusBarMessage();
 
-    selectionController.moveSelectedEndControlPointsToCanvasCoordinates(
-      snapedCanvasOffset,
-    );
+    th2FileEditController.moveScaleRotateElementController
+        .moveSelectedEndControlPointsToCanvasCoordinates(snapedCanvasOffset);
     th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
   }
 

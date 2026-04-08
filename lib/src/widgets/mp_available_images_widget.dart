@@ -624,9 +624,8 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
       return;
     }
 
-    th2FileEditController.elementEditController.prepareImageMoveState(
-      imageMPID,
-    );
+    th2FileEditController.moveScaleRotateElementController
+        .prepareImageMoveState(imageMPID);
   }
 
   Widget _buildImageEditButton({

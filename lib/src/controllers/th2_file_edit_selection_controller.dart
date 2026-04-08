@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
@@ -14,7 +13,6 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
-import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
@@ -1331,387 +1329,58 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   void moveSelectedElementsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
-    final Offset canvasCoordinatesFinalPosition = _th2FileEditController
-        .offsetScreenToCanvas(screenCoordinatesFinalPosition);
-
-    moveSelectedElementsToCanvasCoordinates(canvasCoordinatesFinalPosition);
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedElementsToScreenCoordinates(
+          screenCoordinatesFinalPosition,
+        );
   }
 
   @action
   void moveSelectedElementsToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if ((_mpSelectedElementsLogical.isEmpty) ||
-        !_th2FileEditController.isSelectMode) {
-      return;
-    }
-
-    final Offset localDeltaPositionOnCanvas =
-        canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
-    final Iterable<MPSelectedElement> mpSelectedElements =
-        _mpSelectedElementsLogical.values;
-
-    for (final MPSelectedElement selectedElement in mpSelectedElements) {
-      switch (selectedElement) {
-        case MPSelectedPoint _:
-          _updateTHPointPosition(selectedElement, localDeltaPositionOnCanvas);
-        case MPSelectedLine _:
-          _updateTHLinePosition(selectedElement, localDeltaPositionOnCanvas);
-        case MPSelectedArea _:
-          _updateTHAreaPosition(selectedElement, localDeltaPositionOnCanvas);
-      }
-    }
-
-    _th2FileEditController.triggerSelectedElementsRedraw();
-  }
-
-  void _updateTHPointPosition(
-    MPSelectedPoint selectedPoint,
-    Offset localDeltaPositionOnCanvas,
-  ) {
-    final THPoint originalPoint = selectedPoint.originalPointClone;
-    final THPoint modifiedPoint = originalPoint.copyWith(
-      position: originalPoint.position.copyWith(
-        coordinates:
-            originalPoint.position.coordinates + localDeltaPositionOnCanvas,
-      ),
-      originalLineInTH2File: '',
-      makeSameLineCommentNull: true,
-    );
-    _th2FileEditController.elementEditController
-        .substituteElementWithoutAddSelectableElement(modifiedPoint);
-  }
-
-  void _updateTHLinePosition(
-    MPSelectedLine selectedLine,
-    Offset localDeltaPositionOnCanvas,
-  ) {
-    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
-        LinkedHashMap<int, THLineSegment>();
-
-    for (final MapEntry<int, THLineSegment> lineSegmentEntry
-        in selectedLine.originalLineSegmentsMapClone.entries) {
-      final THElement lineChild = lineSegmentEntry.value;
-
-      if (lineChild is! THLineSegment) {
-        continue;
-      }
-
-      late THLineSegment modifiedLineSegment;
-
-      switch (lineChild) {
-        case THStraightLineSegment _:
-          modifiedLineSegment = lineChild.copyWith(
-            endPoint: lineChild.endPoint.copyWith(
-              coordinates:
-                  lineChild.endPoint.coordinates + localDeltaPositionOnCanvas,
-            ),
-            originalLineInTH2File: '',
-            makeSameLineCommentNull: true,
-          );
-        case THBezierCurveLineSegment _:
-          modifiedLineSegment = lineChild.copyWith(
-            endPoint: lineChild.endPoint.copyWith(
-              coordinates:
-                  lineChild.endPoint.coordinates + localDeltaPositionOnCanvas,
-            ),
-            controlPoint1: lineChild.controlPoint1.copyWith(
-              coordinates:
-                  lineChild.controlPoint1.coordinates +
-                  localDeltaPositionOnCanvas,
-            ),
-            controlPoint2: lineChild.controlPoint2.copyWith(
-              coordinates:
-                  lineChild.controlPoint2.coordinates +
-                  localDeltaPositionOnCanvas,
-            ),
-            originalLineInTH2File: '',
-            makeSameLineCommentNull: true,
-          );
-        default:
-          throw Exception('Unknown line segment type');
-      }
-
-      modifiedLineSegmentsMap[lineChild.mpID] = modifiedLineSegment;
-    }
-
-    _th2FileEditController.elementEditController.substituteLineSegments(
-      modifiedLineSegmentsMap,
-    );
-  }
-
-  void _updateTHAreaPosition(
-    MPSelectedArea selectedArea,
-    Offset localDeltaPositionOnCanvas,
-  ) {
-    final mpAreaLines = selectedArea.originalLines;
-
-    for (final mpAreaLine in mpAreaLines) {
-      _updateTHLinePosition(mpAreaLine, localDeltaPositionOnCanvas);
-    }
-
-    _th2File.areaByMPID(selectedArea.mpID).clearBoundingBox();
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedElementsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition,
+        );
   }
 
   void moveSelectedEndControlPointsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
-    final Offset canvasCoordinatesFinalPosition = _th2FileEditController
-        .offsetScreenToCanvas(screenCoordinatesFinalPosition);
-
-    moveSelectedEndControlPointsToCanvasCoordinates(
-      canvasCoordinatesFinalPosition,
-    );
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedEndControlPointsToScreenCoordinates(
+          screenCoordinatesFinalPosition,
+        );
   }
 
   @action
   void moveSelectedEndControlPointsToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if (getCurrentSelectedEndControlPointPointType() !=
-        MPSelectedEndControlPointPointType.endPoint) {
-      return;
-    }
-
-    final Offset localDeltaPositionOnCanvas =
-        canvasCoordinatesFinalPosition - dragStartCanvasCoordinates;
-    final LinkedHashMap<int, THLineSegment> originalLineSegments =
-        (_mpSelectedElementsLogical.values.first as MPSelectedLine)
-            .originalLineSegmentsMapClone;
-    final List<int> lineLineSegmentsMPIDs = getSelectedLineLineSegmentsMPIDs();
-    final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
-        LinkedHashMap<int, THLineSegment>();
-    final int currentDecimalPositions =
-        _th2FileEditController.currentDecimalPositions;
-    final Iterable<MPSelectedEndControlPoint> selectedEndControlPoints =
-        _selectedEndControlPoints.values;
-
-    for (final MPSelectedEndControlPoint selectedEndControlPoint
-        in selectedEndControlPoints) {
-      final THLineSegment selectedLineSegment =
-          selectedEndControlPoint.originalLineSegmentClone;
-      final int selectedLineSegmentMPID = selectedLineSegment.mpID;
-      final THLineSegment originalLineSegment =
-          originalLineSegments[selectedLineSegmentMPID]!;
-
-      switch (originalLineSegment) {
-        case THStraightLineSegment _:
-          modifiedLineSegments[selectedLineSegmentMPID] = originalLineSegment
-              .copyWith(
-                endPoint: THPositionPart(
-                  coordinates:
-                      originalLineSegment.endPoint.coordinates +
-                      localDeltaPositionOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                ),
-                originalLineInTH2File: '',
-                makeSameLineCommentNull: true,
-              );
-        case THBezierCurveLineSegment _:
-          final THBezierCurveLineSegment referenceLineSegment =
-              modifiedLineSegments.containsKey(selectedLineSegmentMPID)
-              ? modifiedLineSegments[selectedLineSegmentMPID]
-                    as THBezierCurveLineSegment
-              : originalLineSegment;
-
-          modifiedLineSegments[selectedLineSegmentMPID] = referenceLineSegment
-              .copyWith(
-                endPoint: THPositionPart(
-                  coordinates:
-                      originalLineSegment.endPoint.coordinates +
-                      localDeltaPositionOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                ),
-                controlPoint2: THPositionPart(
-                  coordinates:
-                      originalLineSegment.controlPoint2.coordinates +
-                      localDeltaPositionOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                ),
-                originalLineInTH2File: '',
-                makeSameLineCommentNull: true,
-              );
-      }
-
-      final int? nextLineSegmentMPID = getNextLineSegmentMPID(
-        selectedLineSegmentMPID,
-        lineLineSegmentsMPIDs,
-      );
-
-      if (nextLineSegmentMPID != null) {
-        final THLineSegment nextLineSegment = _th2File.lineSegmentByMPID(
-          nextLineSegmentMPID,
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedEndControlPointsToCanvasCoordinates(
+          canvasCoordinatesFinalPosition,
         );
-
-        if (nextLineSegment is THBezierCurveLineSegment) {
-          final THBezierCurveLineSegment originalNextLineSegment =
-              originalLineSegments[nextLineSegmentMPID]
-                  as THBezierCurveLineSegment;
-          final THBezierCurveLineSegment referenceNextLineSegment =
-              (modifiedLineSegments.containsKey(nextLineSegmentMPID)
-                      ? modifiedLineSegments[nextLineSegmentMPID]
-                      : originalNextLineSegment)
-                  as THBezierCurveLineSegment;
-
-          modifiedLineSegments[nextLineSegmentMPID] = referenceNextLineSegment
-              .copyWith(
-                controlPoint1: THPositionPart(
-                  coordinates:
-                      originalNextLineSegment.controlPoint1.coordinates +
-                      localDeltaPositionOnCanvas,
-                  decimalPositions: currentDecimalPositions,
-                ),
-                originalLineInTH2File: '',
-                makeSameLineCommentNull: true,
-              );
-        }
-      }
-    }
-
-    _th2FileEditController.elementEditController.substituteLineSegments(
-      modifiedLineSegments,
-    );
-    updateSelectableEndAndControlPoints();
-    _th2FileEditController.triggerSelectedElementsRedraw();
-    _th2FileEditController.triggerEditLineRedraw();
   }
 
   void moveSelectedControlPointToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
-    final Offset canvasCoordinatesFinalPosition = _th2FileEditController
-        .offsetScreenToCanvas(screenCoordinatesFinalPosition);
-
-    moveSelectedControlPointToCanvasCoordinates(canvasCoordinatesFinalPosition);
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedControlPointToScreenCoordinates(
+          screenCoordinatesFinalPosition,
+        );
   }
 
   @action
   void moveSelectedControlPointToCanvasCoordinates(
     Offset canvasCoordinatesFinalPosition,
   ) {
-    if (getCurrentSelectedEndControlPointPointType() !=
-        MPSelectedEndControlPointPointType.controlPoint) {
-      return;
-    }
-
-    final LinkedHashMap<int, THLineSegment> originalLineSegments =
-        (_mpSelectedElementsLogical.values.first as MPSelectedLine)
-            .originalLineSegmentsMapClone;
-    final MPSelectedEndControlPoint selectedControlPoint =
-        _selectedEndControlPoints.values.first;
-    final THBezierCurveLineSegment controlPointLineSegment =
-        selectedControlPoint.originalElementClone as THBezierCurveLineSegment;
-    final int controlPointLineSegmentMPID = controlPointLineSegment.mpID;
-    final THBezierCurveLineSegment originalControlPointLineSegment =
-        originalLineSegments[controlPointLineSegmentMPID]
-            as THBezierCurveLineSegment;
-    final LinkedHashMap<int, THLineSegment> modifiedLineSegments =
-        LinkedHashMap<int, THLineSegment>();
-    final int currentDecimalPositions =
-        _th2FileEditController.currentDecimalPositions;
-    final MPMoveControlPointSmoothInfo moveControlPointSmoothInfo =
-        _th2FileEditController.elementEditController.moveControlPointSmoothInfo;
-
-    switch (selectedControlPoint.type) {
-      case MPEndControlPointType.controlPoint1:
-        THBezierCurveLineSegment modifiedLineSegment;
-
-        if (moveControlPointSmoothInfo.shouldSmooth &&
-            moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset newPosition = MPElementEditAux.moveControlPointInLine(
-            moveControlPointSmoothInfo,
-            canvasCoordinatesFinalPosition,
-          );
-
-          modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint1: THPositionPart(coordinates: newPosition),
-            originalLineInTH2File: '',
-          );
-        } else {
-          modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint1: THPositionPart(
-              coordinates: canvasCoordinatesFinalPosition,
-            ),
-            originalLineInTH2File: '',
-          );
-        }
-
-        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
-
-        if (moveControlPointSmoothInfo.shouldSmooth &&
-            !moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset? newPosition = MPElementEditAux.moveMirrorControlPoint(
-            moveControlPointSmoothInfo,
-            canvasCoordinatesFinalPosition,
-          );
-
-          if (newPosition != null) {
-            final THBezierCurveLineSegment newMirrorLineSegment =
-                moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
-                  controlPoint2: THPositionPart(coordinates: newPosition),
-                  originalLineInTH2File: '',
-                );
-
-            modifiedLineSegments[newMirrorLineSegment.mpID] =
-                newMirrorLineSegment;
-          }
-        }
-      case MPEndControlPointType.controlPoint2:
-        THBezierCurveLineSegment modifiedLineSegment;
-
-        if (moveControlPointSmoothInfo.shouldSmooth &&
-            moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset newPosition = MPElementEditAux.moveControlPointInLine(
-            moveControlPointSmoothInfo,
-            canvasCoordinatesFinalPosition,
-          );
-
-          modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint2: THPositionPart(coordinates: newPosition),
-            originalLineInTH2File: '',
-          );
-        } else {
-          modifiedLineSegment = originalControlPointLineSegment.copyWith(
-            controlPoint2: THPositionPart(
-              coordinates: canvasCoordinatesFinalPosition,
-              decimalPositions: currentDecimalPositions,
-            ),
-            originalLineInTH2File: '',
-          );
-        }
-
-        modifiedLineSegments[controlPointLineSegmentMPID] = modifiedLineSegment;
-
-        if (moveControlPointSmoothInfo.shouldSmooth &&
-            !moveControlPointSmoothInfo.isAdjacentStraight!) {
-          final Offset? newPosition = MPElementEditAux.moveMirrorControlPoint(
-            moveControlPointSmoothInfo,
-            canvasCoordinatesFinalPosition,
-          );
-
-          if (newPosition != null) {
-            final THBezierCurveLineSegment newMirrorLineSegment =
-                moveControlPointSmoothInfo.adjacentLineSegment!.copyWith(
-                  controlPoint1: THPositionPart(coordinates: newPosition),
-                  originalLineInTH2File: '',
-                );
-
-            modifiedLineSegments[newMirrorLineSegment.mpID] =
-                newMirrorLineSegment;
-          }
-        }
-      default:
-        throw Exception(
-          'TH2FileEditSelectionController.moveSelectedControlPointToCanvasCoordinates() called with invalid end/control point type: ${selectedControlPoint.type}',
+    _th2FileEditController.moveScaleRotateElementController
+        .moveSelectedControlPointToCanvasCoordinates(
+          canvasCoordinatesFinalPosition,
         );
-    }
-
-    _th2FileEditController.elementEditController.substituteLineSegments(
-      modifiedLineSegments,
-    );
-    updateSelectableEndAndControlPoints();
-    _th2FileEditController.triggerSelectedElementsRedraw();
-    _th2FileEditController.triggerEditLineRedraw();
   }
 
   MPSelectedLine getMPSelectedLine() {

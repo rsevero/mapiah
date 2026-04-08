@@ -19,7 +19,7 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
     if (previousState.type != MPTH2FileEditStateType.selectionWindowZoom) {
-      th2FileEditController.elementEditController
+      th2FileEditController.moveScaleRotateElementController
           .updateControlPointSmoothInfo();
     }
     th2FileEditController.setStatusBarMessage(
@@ -55,9 +55,8 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
       event.localPosition,
     );
 
-    selectionController.moveSelectedControlPointToCanvasCoordinates(
-      canvasOffset,
-    );
+    th2FileEditController.moveScaleRotateElementController
+        .moveSelectedControlPointToCanvasCoordinates(canvasOffset);
     th2FileEditController.setMovingMousePosition(canvasOffset);
   }
 
@@ -86,7 +85,9 @@ class MPTH2FileEditStateMovingSingleControlPoint extends MPTH2FileEditState
     }
 
     final MPMoveControlPointSmoothInfo moveControlPointSmoothInfo =
-        elementEditController.moveControlPointSmoothInfo;
+        th2FileEditController
+            .moveScaleRotateElementController
+            .moveControlPointSmoothInfo;
 
     if (moveControlPointSmoothInfo.shouldSmooth &&
         !moveControlPointSmoothInfo.isAdjacentStraight!) {
