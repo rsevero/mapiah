@@ -32,13 +32,13 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Keyboard shortcuts                                         | Ctrl+K                                  |
 | Node/line edit                                             | N                                       |
 | Merge areas                                                | Ctrl+M                                  |
-| Move selected image by 1 screen pixel                     | Alt+Arrow                               |
-| Move selected image by 10 screen pixels                   | Alt+Shift+Arrow                         |
+| Move selected image / elements by 1 screen pixel         | Alt+Arrow                               |
+| Move selected image / elements by 10 screen pixels       | Alt+Shift+Arrow                         |
 | Move selected image / elements / end-control points from anywhere | Alt+drag                          |
 | Move selected image / elements / end-control points constrained   | Ctrl+drag                         |
 | Move selected image / elements / end-control points without snap  | Shift+drag                        |
-| Move selected image by nudge factor                       | Arrow                                   |
-| Move selected image by 10 times the nudge factor          | Shift+Arrow                             |
+| Move selected image / elements by nudge factor           | Arrow                                   |
+| Move selected image / elements by 10 times the nudge factor | Shift+Arrow                          |
 | Options edit (elements selected)                           | O                                       |
 | Paste elements                                             | Ctrl+V                                  |
 | Rotate image                                               | drag image rotate handle                |

@@ -11,6 +11,43 @@ mixin MPTH2FileEditStateMoveModifiersMixin on MPTH2FileEditState {
     return MPInteractionAux.isShiftPressed();
   }
 
+  double getArrowMoveBaseStepOnCanvas() {
+    if (MPInteractionAux.isAltPressed()) {
+      return th2FileEditController.scaleScreenToCanvas(1.0);
+    }
+
+    return mpLocator.mpSettingsController.getDoubleWithDefault(
+      MPSettingID.TH2Edit_NudgeFactor,
+    );
+  }
+
+  double getArrowMoveStepOnCanvas() {
+    final double baseStep = getArrowMoveBaseStepOnCanvas();
+
+    if (MPInteractionAux.isShiftPressed()) {
+      return baseStep * 10.0;
+    }
+
+    return baseStep;
+  }
+
+  Offset? deltaOnCanvasForArrowKey(LogicalKeyboardKey logicalKey) {
+    final double step = getArrowMoveStepOnCanvas();
+
+    switch (logicalKey) {
+      case LogicalKeyboardKey.arrowLeft:
+        return Offset(-step, 0.0);
+      case LogicalKeyboardKey.arrowRight:
+        return Offset(step, 0.0);
+      case LogicalKeyboardKey.arrowUp:
+        return Offset(0.0, step);
+      case LogicalKeyboardKey.arrowDown:
+        return Offset(0.0, -step);
+      default:
+        return null;
+    }
+  }
+
   Offset constrainCanvasOffsetToDominantAxis({
     required Offset canvasOffset,
     required Offset dragStartCanvasCoordinates,

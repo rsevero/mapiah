@@ -8,6 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -58,6 +59,30 @@ void main() {
       controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
 
       return controller;
+    }
+
+    void setSinglePointSelection({
+      required TH2FileEditController controller,
+      required THPoint point,
+    }) {
+      controller.selectionController.setSelectedElements(<THElement>[point]);
+      controller.stateController.setState(
+        MPTH2FileEditStateType.selectNonEmptySelection,
+      );
+    }
+
+    void sendArrowKeyDown({
+      required TH2FileEditController controller,
+      required PhysicalKeyboardKey physicalKey,
+      required LogicalKeyboardKey logicalKey,
+    }) {
+      controller.stateController.onKeyDownEvent(
+        KeyDownEvent(
+          physicalKey: physicalKey,
+          logicalKey: logicalKey,
+          timeStamp: Duration.zero,
+        ),
+      );
     }
 
     test(
@@ -271,6 +296,168 @@ void main() {
           movedPoint.position.coordinates.dy,
           closeTo(desiredUnsnappedPosition.dy, 0.0001),
         );
+      },
+    );
+
+    test(
+      'Arrow moves selected elements by the configured nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final THPoint point = controller.th2File.getPoints().first;
+        final Offset originalPosition = point.position.coordinates;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 3.0;
+
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          setSinglePointSelection(controller: controller, point: point);
+
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowRight,
+            logicalKey: LogicalKeyboardKey.arrowRight,
+          );
+
+          final THPoint movedPoint = controller.th2File.pointByMPID(point.mpID);
+
+          expect(
+            movedPoint.position.coordinates.dx,
+            closeTo(originalPosition.dx + nudgeFactor, 0.0001),
+          );
+          expect(
+            movedPoint.position.coordinates.dy,
+            closeTo(originalPosition.dy, 0.0001),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
+      },
+    );
+
+    test(
+      'Shift+Arrow moves selected elements by ten times the nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final THPoint point = controller.th2File.getPoints().first;
+        final Offset originalPosition = point.position.coordinates;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 4.0;
+
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+        MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+          LogicalKeyboardKey.shiftLeft,
+        };
+
+        try {
+          setSinglePointSelection(controller: controller, point: point);
+
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowDown,
+            logicalKey: LogicalKeyboardKey.arrowDown,
+          );
+
+          final THPoint movedPoint = controller.th2File.pointByMPID(point.mpID);
+
+          expect(
+            movedPoint.position.coordinates.dx,
+            closeTo(originalPosition.dx, 0.0001),
+          );
+          expect(
+            movedPoint.position.coordinates.dy,
+            closeTo(originalPosition.dy - (nudgeFactor * 10.0), 0.0001),
+          );
+        } finally {
+          MPInteractionAux.debugPressedKeysOverride = null;
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
+      },
+    );
+
+    test('Alt+Arrow moves selected elements by one screen pixel', () async {
+      final TH2FileEditController controller = await loadController();
+      final THPoint point = controller.th2File.getPoints().first;
+      final Offset originalPosition = point.position.coordinates;
+      final double expectedCanvasStep = controller.scaleScreenToCanvas(1.0);
+
+      MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+        LogicalKeyboardKey.altLeft,
+      };
+
+      try {
+        setSinglePointSelection(controller: controller, point: point);
+
+        sendArrowKeyDown(
+          controller: controller,
+          physicalKey: PhysicalKeyboardKey.arrowLeft,
+          logicalKey: LogicalKeyboardKey.arrowLeft,
+        );
+
+        final THPoint movedPoint = controller.th2File.pointByMPID(point.mpID);
+
+        expect(
+          movedPoint.position.coordinates.dx,
+          closeTo(originalPosition.dx - expectedCanvasStep, 0.0001),
+        );
+        expect(
+          movedPoint.position.coordinates.dy,
+          closeTo(originalPosition.dy, 0.0001),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+    });
+
+    test(
+      'Alt+Shift+Arrow moves selected elements by ten screen pixels',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final THPoint point = controller.th2File.getPoints().first;
+        final Offset originalPosition = point.position.coordinates;
+        final double expectedCanvasStep = controller.scaleScreenToCanvas(10.0);
+
+        MPInteractionAux.debugPressedKeysOverride = <LogicalKeyboardKey>{
+          LogicalKeyboardKey.altLeft,
+          LogicalKeyboardKey.shiftLeft,
+        };
+
+        try {
+          setSinglePointSelection(controller: controller, point: point);
+
+          sendArrowKeyDown(
+            controller: controller,
+            physicalKey: PhysicalKeyboardKey.arrowUp,
+            logicalKey: LogicalKeyboardKey.arrowUp,
+          );
+
+          final THPoint movedPoint = controller.th2File.pointByMPID(point.mpID);
+
+          expect(
+            movedPoint.position.coordinates.dx,
+            closeTo(originalPosition.dx, 0.0001),
+          );
+          expect(
+            movedPoint.position.coordinates.dy,
+            closeTo(originalPosition.dy + expectedCanvasStep, 0.0001),
+          );
+        } finally {
+          MPInteractionAux.debugPressedKeysOverride = null;
+        }
       },
     );
   });

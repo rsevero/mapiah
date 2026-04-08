@@ -1123,6 +1123,13 @@ class MPCommandFactory {
             deltaOnCanvas: deltaOnCanvas,
             decimalPositions: decimalPositions,
           );
+        case THArea _:
+          moveCommand = MPMoveAreaCommand.fromDeltaOnCanvas(
+            areaMPID: element.mpID,
+            originalLines: (mpSelectedElement as MPSelectedArea).originalLines,
+            deltaOnCanvas: deltaOnCanvas,
+            decimalPositions: decimalPositions,
+          );
         default:
           throw ArgumentError(
             'Unsupported MPSelectedElement type in MPMultipleElementsCommand.moveElementsFromDelta',

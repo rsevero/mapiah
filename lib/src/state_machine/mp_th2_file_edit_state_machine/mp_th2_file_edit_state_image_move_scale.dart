@@ -406,25 +406,14 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
       return false;
     }
 
-    final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
-    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     if (isCtrlPressed || isMetaPressed) {
       return false;
     }
 
-    final double baseStep = isAltPressed
-        ? th2FileEditController.scaleScreenToCanvas(1.0)
-        : mpLocator.mpSettingsController.getDoubleWithDefault(
-            MPSettingID.TH2Edit_NudgeFactor,
-          );
-    final double step = isShiftPressed ? baseStep * 10.0 : baseStep;
-    final Offset? deltaOnCanvas = _deltaOnCanvasForArrow(
-      logicalKey: logicalKey,
-      step: step,
-    );
+    final Offset? deltaOnCanvas = deltaOnCanvasForArrowKey(logicalKey);
 
     if (deltaOnCanvas == null) {
       return false;
@@ -445,24 +434,6 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
     th2FileEditController.execute(moveCommand);
 
     return true;
-  }
-
-  Offset? _deltaOnCanvasForArrow({
-    required LogicalKeyboardKey logicalKey,
-    required double step,
-  }) {
-    switch (logicalKey) {
-      case LogicalKeyboardKey.arrowLeft:
-        return Offset(-step, 0.0);
-      case LogicalKeyboardKey.arrowRight:
-        return Offset(step, 0.0);
-      case LogicalKeyboardKey.arrowUp:
-        return Offset(0.0, step);
-      case LogicalKeyboardKey.arrowDown:
-        return Offset(0.0, -step);
-      default:
-        return null;
-    }
   }
 
   void _commitScalePreview() {

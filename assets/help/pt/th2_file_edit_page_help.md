@@ -155,6 +155,10 @@ O Mapiah usa os mesmos modificadores de movimento para imagens de fundo, element
 
 ### Elementos selecionados
 Quando um ou mais elementos estão selecionados no modo de seleção:
+* Pressione uma tecla de _Seta_ para mover os elementos selecionados pelo fator de ajuste configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
+* Pressione _Shift+Seta_ para mover por dez vezes o fator de ajuste
+* Pressione _Alt+Seta_ para mover por 1 pixel de tela
+* Pressione _Alt+Shift+Seta_ para mover por 10 pixels de tela
 * Arraste os elementos selecionados para movê-los normalmente
 * Mantenha _Alt_ pressionado e arraste em qualquer lugar do canvas para mover a seleção atual sem alterar a seleção
 * Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante

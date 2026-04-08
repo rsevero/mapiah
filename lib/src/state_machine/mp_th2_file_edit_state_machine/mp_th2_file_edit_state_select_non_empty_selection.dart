@@ -9,6 +9,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         MPTH2FileEditPageSingleElementSelectedMixin,
         MPTH2FileEditStateClearSelectionOnExitMixin,
         MPTH2FileEditStateGetSelectedElementsMixin,
+        MPTH2FileEditStateMoveModifiersMixin,
         MPTH2FileEditStateMoveCanvasMixin,
         MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateOptionsEditMixin,
@@ -314,6 +315,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (_handleArrowMoveKey(event.logicalKey)) {
+      return;
+    }
+
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
@@ -427,6 +432,44 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   }
 
   @override
+  void onKeyRepeatEvent(KeyRepeatEvent event) {
+    _handleArrowMoveKey(event.logicalKey);
+  }
+
+  @override
   MPTH2FileEditStateType get type =>
       MPTH2FileEditStateType.selectNonEmptySelection;
+
+  bool _handleArrowMoveKey(LogicalKeyboardKey logicalKey) {
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+
+    if (isCtrlPressed || isMetaPressed) {
+      return false;
+    }
+
+    final Offset? deltaOnCanvas = deltaOnCanvasForArrowKey(logicalKey);
+
+    if (deltaOnCanvas == null) {
+      return false;
+    }
+
+    if (deltaOnCanvas == Offset.zero) {
+      return true;
+    }
+
+    final MPCommand moveCommand =
+        MPCommandFactory.moveElementsFromDeltaOnCanvas(
+          mpSelectedElements:
+              selectionController.mpSelectedElementsLogical.values,
+          deltaOnCanvas: deltaOnCanvas,
+          decimalPositions: th2FileEditController.currentDecimalPositions,
+        );
+
+    th2FileEditController.execute(moveCommand);
+    selectionController.updateAllSelectedElementsClones();
+    th2FileEditController.triggerSelectedElementsRedraw(setState: true);
+
+    return true;
+  }
 }
