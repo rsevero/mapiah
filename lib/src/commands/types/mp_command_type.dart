@@ -23,6 +23,7 @@ enum MPCommandType {
   movePoint,
   moveStraightLineSegment,
   scaleImageInsertConfig,
+  rotateImageInsertConfig,
   multipleElements,
   removeArea,
   removeAreaBorderTHID,

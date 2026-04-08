@@ -18,6 +18,8 @@ enum MPImageTransformHandleType {
   topRight,
 }
 
+enum MPImageRotationHandleType { bottomLeft, bottomRight, topLeft, topRight }
+
 extension MPImageTransformHandleTypeExtension on MPImageTransformHandleType {
   bool get affectsX {
     return !mpImageTransformHandleTypesWithoutXScaling.contains(name);
@@ -429,5 +431,325 @@ class MPImageTransformGeometry {
       case MPImageTransformHandleType.bottomRight:
         return localBounds.bottomRight;
     }
+  }
+}
+
+class MPImageRotationGeometry {
+  final Rect localBounds;
+  final Map<MPImageRotationHandleType, Offset> canvasHandleCorners;
+  final Map<MPImageRotationHandleType, Offset> screenHandleCenters;
+  final Map<MPImageRotationHandleType, Rect> screenHandleRects;
+  final Map<MPImageRotationHandleType, Path> screenHandlePaths;
+  final Offset canvasPivotCenter;
+  final Offset screenPivotCenter;
+  final Rect screenPivotRect;
+  final Path screenPivotPath;
+  static final Path _baseRotationHandlePath = _buildBaseRotationHandlePath();
+  static final Path _basePivotPath = _buildBasePivotPath();
+
+  const MPImageRotationGeometry({
+    required this.localBounds,
+    required this.canvasHandleCorners,
+    required this.screenHandleCenters,
+    required this.screenHandleRects,
+    required this.screenHandlePaths,
+    required this.canvasPivotCenter,
+    required this.screenPivotCenter,
+    required this.screenPivotRect,
+    required this.screenPivotPath,
+  });
+
+  Offset handleLocalPoint(MPImageRotationHandleType handleType) {
+    switch (handleType) {
+      case MPImageRotationHandleType.topLeft:
+        return localBounds.topLeft;
+      case MPImageRotationHandleType.topRight:
+        return localBounds.topRight;
+      case MPImageRotationHandleType.bottomLeft:
+        return localBounds.bottomLeft;
+      case MPImageRotationHandleType.bottomRight:
+        return localBounds.bottomRight;
+    }
+  }
+
+  MPImageRotationHandleType? hitTestHandle(Offset screenPosition) {
+    for (final MPImageRotationHandleType handleType
+        in MPImageRotationHandleType.values) {
+      final Path? handlePath = screenHandlePaths[handleType];
+      final Rect? handleRect = screenHandleRects[handleType];
+
+      if ((handlePath != null) &&
+          handlePath
+              .getBounds()
+              .inflate(mpImageTransformHandleHitBoxSizeOnScreen / 2.0)
+              .contains(screenPosition)) {
+        return handleType;
+      }
+
+      if ((handleRect != null) && handleRect.contains(screenPosition)) {
+        return handleType;
+      }
+    }
+
+    return null;
+  }
+
+  bool hitTestPivot(Offset screenPosition) {
+    return screenPivotRect.contains(screenPosition);
+  }
+
+  static MPImageRotationGeometry? forImage({
+    required TH2FileEditController th2FileEditController,
+    required MPRuntimeImageInsertConfigMixin image,
+  }) {
+    if (image is! MPImageInsertConfig) {
+      return null;
+    }
+
+    final MPImageTransformGeometry? transformGeometry =
+        MPImageTransformGeometry.forImage(
+          th2FileEditController: th2FileEditController,
+          image: image,
+        );
+
+    if (transformGeometry == null) {
+      return null;
+    }
+
+    final Rect localBounds = transformGeometry.localBounds;
+    final List<Offset> screenBorderCorners =
+        transformGeometry.screenBorderCorners;
+    final Offset topLeftToTopRight =
+        screenBorderCorners[1] - screenBorderCorners[0];
+    final Offset topLeftToBottomLeft =
+        screenBorderCorners[3] - screenBorderCorners[0];
+    final Offset xAxisDirection = _normalizeOffset(topLeftToTopRight);
+    final Offset yAxisDirection = _normalizeOffset(topLeftToBottomLeft);
+    final Map<MPImageRotationHandleType, Offset> canvasHandleCorners =
+        <MPImageRotationHandleType, Offset>{};
+    final Map<MPImageRotationHandleType, Offset> screenHandleCenters =
+        <MPImageRotationHandleType, Offset>{};
+    final Map<MPImageRotationHandleType, Rect> screenHandleRects =
+        <MPImageRotationHandleType, Rect>{};
+    final Map<MPImageRotationHandleType, Path> screenHandlePaths =
+        <MPImageRotationHandleType, Path>{};
+
+    for (final MPImageRotationHandleType handleType
+        in MPImageRotationHandleType.values) {
+      final Offset localHandlePoint = _rotationHandleLocalPoint(
+        localBounds,
+        handleType,
+      );
+      final Offset canvasCorner = image.transformLocalPoint(localHandlePoint);
+      final Offset screenCorner = th2FileEditController.offsetCanvasToScreen(
+        canvasCorner,
+      );
+      final Offset outwardDirection = _resolveRotationOutwardDirection(
+        handleType: handleType,
+        xAxisDirection: xAxisDirection,
+        yAxisDirection: yAxisDirection,
+      );
+      final Offset screenHandleCenter =
+          screenCorner +
+          (outwardDirection * mpImageTransformHandleOffsetOnScreen);
+
+      canvasHandleCorners[handleType] = canvasCorner;
+      screenHandleCenters[handleType] = screenHandleCenter;
+      screenHandleRects[handleType] = Rect.fromCenter(
+        center: screenHandleCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      );
+      screenHandlePaths[handleType] = _buildRotationHandlePath(
+        center: screenHandleCenter,
+        direction: outwardDirection,
+      );
+    }
+
+    final Offset canvasPivotCenter = image.transformLocalPoint(
+      Offset(image.rotationCenterDx.value, image.rotationCenterDy.value),
+    );
+    final Offset screenPivotCenter = th2FileEditController.offsetCanvasToScreen(
+      canvasPivotCenter,
+    );
+    final Path screenPivotPath = _buildPivotPath(screenPivotCenter);
+
+    return MPImageRotationGeometry(
+      localBounds: localBounds,
+      canvasHandleCorners: canvasHandleCorners,
+      screenHandleCenters: screenHandleCenters,
+      screenHandleRects: screenHandleRects,
+      screenHandlePaths: screenHandlePaths,
+      canvasPivotCenter: canvasPivotCenter,
+      screenPivotCenter: screenPivotCenter,
+      screenPivotRect: Rect.fromCenter(
+        center: screenPivotCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      ),
+      screenPivotPath: screenPivotPath,
+    );
+  }
+
+  static Path _buildRotationHandlePath({
+    required Offset center,
+    required Offset direction,
+  }) {
+    final Offset normalizedDirection = _normalizeOffset(direction);
+    final double angleInRad = math.atan2(
+      normalizedDirection.dy,
+      normalizedDirection.dx,
+    );
+    final double cosValue = math.cos(angleInRad);
+    final double sinValue = math.sin(angleInRad);
+    final Float64List matrix = Float64List.fromList(<double>[
+      cosValue,
+      sinValue,
+      0.0,
+      0.0,
+      -sinValue,
+      cosValue,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      center.dx,
+      center.dy,
+      0.0,
+      1.0,
+    ]);
+
+    return _baseRotationHandlePath.transform(matrix);
+  }
+
+  static Path _buildPivotPath(Offset center) {
+    final Float64List matrix = Float64List.fromList(<double>[
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      center.dx,
+      center.dy,
+      0.0,
+      1.0,
+    ]);
+
+    return _basePivotPath.transform(matrix);
+  }
+
+  static Path _buildBaseRotationHandlePath() {
+    final Path centeredPath = MPInkscapeHandlePaths.centeredCurvedArrow(
+      mpImageTransformHandleBaseSizeOnScreen,
+    );
+    final Rect bounds = centeredPath.getBounds();
+    final double xScale = mpImageTransformHandleLengthOnScreen / bounds.width;
+    final double yScale =
+        mpImageTransformHandleThicknessOnScreen / bounds.height;
+    final Float64List matrix = Float64List.fromList(<double>[
+      xScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      yScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+    ]);
+
+    assert(bounds.width > 0.0);
+    assert(bounds.height > 0.0);
+
+    return centeredPath.transform(matrix);
+  }
+
+  static Path _buildBasePivotPath() {
+    const double size = mpImageTransformHandleBaseSizeOnScreen;
+    final double delta4 = (size - 5.0) / 4.0;
+    final double delta8 = delta4 / 2.0;
+    final double center = size / 2.0;
+    final Path path = Path()
+      ..moveTo(center - delta8, center - 2 * delta4 - delta8)
+      ..relativeLineTo(delta4, 0)
+      ..relativeLineTo(0, delta4)
+      ..relativeLineTo(delta4, delta4)
+      ..relativeLineTo(delta4, 0)
+      ..relativeLineTo(0, delta4)
+      ..relativeLineTo(-delta4, 0)
+      ..relativeLineTo(-delta4, delta4)
+      ..relativeLineTo(0, delta4)
+      ..relativeLineTo(-delta4, 0)
+      ..relativeLineTo(0, -delta4)
+      ..relativeLineTo(-delta4, -delta4)
+      ..relativeLineTo(-delta4, 0)
+      ..relativeLineTo(0, -delta4)
+      ..relativeLineTo(delta4, 0)
+      ..relativeLineTo(delta4, -delta4)
+      ..close()
+      ..addOval(
+        Rect.fromCircle(center: Offset(center, center), radius: delta4),
+      );
+
+    return path.shift(Offset(-center, -center));
+  }
+
+  static Offset _rotationHandleLocalPoint(
+    Rect localBounds,
+    MPImageRotationHandleType handleType,
+  ) {
+    switch (handleType) {
+      case MPImageRotationHandleType.topLeft:
+        return localBounds.topLeft;
+      case MPImageRotationHandleType.topRight:
+        return localBounds.topRight;
+      case MPImageRotationHandleType.bottomLeft:
+        return localBounds.bottomLeft;
+      case MPImageRotationHandleType.bottomRight:
+        return localBounds.bottomRight;
+    }
+  }
+
+  static Offset _resolveRotationOutwardDirection({
+    required MPImageRotationHandleType handleType,
+    required Offset xAxisDirection,
+    required Offset yAxisDirection,
+  }) {
+    switch (handleType) {
+      case MPImageRotationHandleType.topLeft:
+        return _normalizeOffset(-xAxisDirection - yAxisDirection);
+      case MPImageRotationHandleType.topRight:
+        return _normalizeOffset(xAxisDirection - yAxisDirection);
+      case MPImageRotationHandleType.bottomLeft:
+        return _normalizeOffset(-xAxisDirection + yAxisDirection);
+      case MPImageRotationHandleType.bottomRight:
+        return _normalizeOffset(xAxisDirection + yAxisDirection);
+    }
+  }
+
+  static Offset _normalizeOffset(Offset offset) {
+    final double distance = offset.distance;
+
+    if (distance < mpDoubleComparisonEpsilon) {
+      return const Offset(0.0, -1.0);
+    }
+
+    return offset / distance;
   }
 }

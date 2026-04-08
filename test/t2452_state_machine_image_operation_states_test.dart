@@ -10,9 +10,11 @@ import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
@@ -94,6 +96,45 @@ void main() {
           MPTH2FileEditStateType.imageRotate,
         );
         expect(controller.stateController.imageOperationImageMPID, imageMPID);
+      },
+    );
+
+    test(
+      'clicking image toggles between move scale and rotate states',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final THXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THXTherionImageInsertConfig;
+        final Rect boundingBox = image.getBoundingBox(controller)!;
+        final Offset clickScreenPosition = controller.offsetCanvasToScreen(
+          boundingBox.center,
+        );
+
+        await controller.stateController.onPrimaryButtonClick(
+          PointerUpEvent(position: clickScreenPosition),
+        );
+
+        expect(
+          controller.stateController.state.type,
+          MPTH2FileEditStateType.imageRotate,
+        );
+        expect(
+          controller.th2File.imageByMPID(imageMPID),
+          isA<MPImageInsertConfig>(),
+        );
+
+        await controller.stateController.onPrimaryButtonClick(
+          PointerUpEvent(position: clickScreenPosition),
+        );
+
+        expect(
+          controller.stateController.state.type,
+          MPTH2FileEditStateType.imageMoveScale,
+        );
       },
     );
 
@@ -379,6 +420,211 @@ void main() {
         );
       },
     );
+
+    test(
+      'image rotate handle drag converts legacy image and is undoable',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final THXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THXTherionImageInsertConfig;
+        final Rect originalBoundingBox = image.getBoundingBox(controller)!;
+        final Offset clickScreenPosition = controller.offsetCanvasToScreen(
+          originalBoundingBox.center,
+        );
+
+        await controller.stateController.onPrimaryButtonClick(
+          PointerUpEvent(position: clickScreenPosition),
+        );
+
+        final MPImageInsertConfig rotatedImage =
+            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+        final MPImageRotationGeometry geometry =
+            MPImageRotationGeometry.forImage(
+              th2FileEditController: controller,
+              image: rotatedImage,
+            )!;
+        final Offset dragStartScreenPosition = geometry
+            .screenHandleRects[MPImageRotationHandleType.topRight]!
+            .center;
+        final Offset dragEndScreenPosition =
+            dragStartScreenPosition + const Offset(0.0, 40.0);
+
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+
+        final MPImageInsertConfig committedImage =
+            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+        expect(committedImage.rotationDeg.value.abs(), greaterThan(1.0));
+
+        controller.undo();
+
+        final MPImageInsertConfig undoneRotation =
+            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+
+        expect(undoneRotation.rotationDeg.value, closeTo(0.0, 0.0001));
+
+        controller.undo();
+
+        expect(
+          controller.th2File.imageByMPID(imageMPID),
+          isA<THXVIXTherionImageInsertConfig>(),
+        );
+      },
+    );
+
+    test('image rotation pivot drag is undoable', () async {
+      final TH2FileEditController controller = await loadController(
+        filename: '2026-04-07-003-mixed_image_insert_styles.th2',
+      );
+      final int imageMPID = controller.th2File.imageMPIDs[2];
+      final MPRasterImageInsertConfig image =
+          controller.th2File.imageByMPID(imageMPID)
+              as MPRasterImageInsertConfig;
+      final ui.Image decodedImage = await _createTestImage(
+        width: 40,
+        height: 20,
+      );
+
+      image.setRasterImage(decodedImage);
+      controller.moveScaleRotateElementController.prepareImageRotateState(
+        imageMPID,
+      );
+
+      final MPRasterImageInsertConfig startImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as MPRasterImageInsertConfig;
+      final MPImageRotationGeometry geometry = MPImageRotationGeometry.forImage(
+        th2FileEditController: controller,
+        image: startImage,
+      )!;
+      final Offset dragStartScreenPosition = geometry.screenPivotCenter;
+      final Offset dragEndScreenPosition =
+          dragStartScreenPosition + const Offset(16.0, -12.0);
+
+      controller.stateController.onPrimaryButtonPointerDown(
+        PointerDownEvent(
+          position: dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragUpdate(
+        PointerMoveEvent(
+          position: dragEndScreenPosition,
+          delta: dragEndScreenPosition - dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragEnd(
+        PointerUpEvent(position: dragEndScreenPosition),
+      );
+
+      final MPRasterImageInsertConfig movedPivotImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as MPRasterImageInsertConfig;
+
+      expect(
+        movedPivotImage.rotationCenterDx.value,
+        isNot(closeTo(startImage.rotationCenterDx.value, 0.0001)),
+      );
+      expect(
+        movedPivotImage.rotationCenterDy.value,
+        isNot(closeTo(startImage.rotationCenterDy.value, 0.0001)),
+      );
+
+      controller.undo();
+
+      final MPRasterImageInsertConfig undonePivot =
+          controller.th2File.imageByMPID(imageMPID)
+              as MPRasterImageInsertConfig;
+
+      expect(
+        undonePivot.rotationCenterDx.value,
+        closeTo(startImage.rotationCenterDx.value, 0.0001),
+      );
+      expect(
+        undonePivot.rotationCenterDy.value,
+        closeTo(startImage.rotationCenterDy.value, 0.0001),
+      );
+    });
+
+    test('xvi image with xviRoot keeps pivot fixed on drag attempt', () async {
+      final TH2FileEditController controller = await loadController(
+        filename: '2026-04-07-003-mixed_image_insert_styles.th2',
+      );
+      final int imageMPID = controller.th2File.imageMPIDs[1];
+      final MPXVIImageInsertConfig image =
+          controller.th2File.imageByMPID(imageMPID) as MPXVIImageInsertConfig;
+      final XVIFileParser parser = XVIFileParser();
+      final (XVIFile? xviFile, bool isSuccessful, List<String> errors) = parser
+          .parse(THTestAux.testPath('xvi/2025-07-09-002-xvi-xvistations.xvi'));
+
+      expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+      expect(xviFile, isNotNull);
+
+      image.setXVIFile(xviFile);
+      image.xviRoot = 'A1';
+      controller.moveScaleRotateElementController.prepareImageRotateState(
+        imageMPID,
+      );
+
+      final MPXVIImageInsertConfig startImage =
+          controller.th2File.imageByMPID(imageMPID) as MPXVIImageInsertConfig;
+      final MPImageRotationGeometry geometry = MPImageRotationGeometry.forImage(
+        th2FileEditController: controller,
+        image: startImage,
+      )!;
+      final Offset dragStartScreenPosition = geometry.screenPivotCenter;
+      final Offset dragEndScreenPosition =
+          dragStartScreenPosition + const Offset(20.0, 10.0);
+
+      controller.stateController.onPrimaryButtonPointerDown(
+        PointerDownEvent(
+          position: dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragUpdate(
+        PointerMoveEvent(
+          position: dragEndScreenPosition,
+          delta: dragEndScreenPosition - dragStartScreenPosition,
+          buttons: kPrimaryButton,
+        ),
+      );
+      controller.stateController.onPrimaryButtonDragEnd(
+        PointerUpEvent(position: dragEndScreenPosition),
+      );
+
+      final MPXVIImageInsertConfig unchangedImage =
+          controller.th2File.imageByMPID(imageMPID) as MPXVIImageInsertConfig;
+
+      expect(
+        unchangedImage.rotationCenterDx.value,
+        closeTo(startImage.rotationCenterDx.value, 0.0001),
+      );
+      expect(
+        unchangedImage.rotationCenterDy.value,
+        closeTo(startImage.rotationCenterDy.value, 0.0001),
+      );
+    });
 
     test(
       'image move keeps top-level image order in saved TH2 output',

@@ -158,6 +158,36 @@ class MPTH2FileEditStateImageMoveScale
   }
 
   @override
+  Future<void> onPrimaryButtonClick(PointerUpEvent event) {
+    final MPImageTransformGeometry? geometry =
+        MPImageTransformGeometry.forImage(
+          th2FileEditController: th2FileEditController,
+          image: imageConfig,
+        );
+
+    if (geometry == null) {
+      return Future.value();
+    }
+
+    if (geometry.hitTestHandle(event.localPosition) != null) {
+      return Future.value();
+    }
+
+    final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
+      event.localPosition,
+    );
+
+    if (!geometry.containsCanvasPosition(canvasPosition)) {
+      return Future.value();
+    }
+
+    th2FileEditController.moveScaleRotateElementController
+        .prepareImageRotateState(imageMPID);
+
+    return Future.value();
+  }
+
+  @override
   void onStateExit(MPTH2FileEditState nextState) {
     _resetDragPreview(updateRedraw: false);
     th2FileEditController.setMovingMousePosition(null);

@@ -22,6 +22,31 @@ class MPImageOperationOverlayPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final String stateTypeName =
+        th2FileEditController.stateController.state.type.name;
+
+    final Paint defaultHandlePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    final Paint hoveredHandleFillPaint = Paint()
+      ..color = Colors.cyan
+      ..style = PaintingStyle.fill;
+    final Paint hoveredHandleOutlinePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+
+    if (stateTypeName == 'imageRotate') {
+      _paintRotationOverlay(
+        canvas: canvas,
+        defaultHandlePaint: defaultHandlePaint,
+        hoveredHandleFillPaint: hoveredHandleFillPaint,
+        hoveredHandleOutlinePaint: hoveredHandleOutlinePaint,
+      );
+
+      return;
+    }
+
     final MPImageTransformGeometry? geometry =
         MPImageTransformGeometry.forImage(
           th2FileEditController: th2FileEditController,
@@ -35,16 +60,6 @@ class MPImageOperationOverlayPainter extends CustomPainter {
     final MPImageTransformHandleType? hoveredHandle = geometry.hitTestHandle(
       hoverScreenPosition,
     );
-    final Paint defaultHandlePaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-    final Paint hoveredHandleFillPaint = Paint()
-      ..color = Colors.cyan
-      ..style = PaintingStyle.fill;
-    final Paint hoveredHandleOutlinePaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
 
     for (final MapEntry<MPImageTransformHandleType, Path> entry
         in geometry.screenHandlePaths.entries) {
@@ -55,6 +70,74 @@ class MPImageOperationOverlayPainter extends CustomPainter {
         canvas.drawPath(entry.value, defaultHandlePaint);
       }
     }
+  }
+
+  void _paintRotationOverlay({
+    required Canvas canvas,
+    required Paint defaultHandlePaint,
+    required Paint hoveredHandleFillPaint,
+    required Paint hoveredHandleOutlinePaint,
+  }) {
+    final MPImageRotationGeometry? geometry = MPImageRotationGeometry.forImage(
+      th2FileEditController: th2FileEditController,
+      image: image,
+    );
+
+    if (geometry == null) {
+      return;
+    }
+
+    final MPImageRotationHandleType? hoveredHandle = geometry.hitTestHandle(
+      hoverScreenPosition,
+    );
+    final bool isPivotHovered = geometry.hitTestPivot(hoverScreenPosition);
+    final bool isPivotDraggable = _isPivotDraggable(image);
+    final Paint disabledPivotFillPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.25)
+      ..style = PaintingStyle.fill;
+    final Paint defaultPivotStrokePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    final Paint disabledPivotStrokePaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.45)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+
+    for (final MapEntry<MPImageRotationHandleType, Path> entry
+        in geometry.screenHandlePaths.entries) {
+      if (entry.key == hoveredHandle) {
+        canvas.drawPath(entry.value, hoveredHandleFillPaint);
+        canvas.drawPath(entry.value, hoveredHandleOutlinePaint);
+      } else {
+        canvas.drawPath(entry.value, defaultHandlePaint);
+      }
+    }
+
+    if (!isPivotDraggable) {
+      canvas.drawPath(geometry.screenPivotPath, disabledPivotFillPaint);
+      canvas.drawPath(geometry.screenPivotPath, disabledPivotStrokePaint);
+      return;
+    }
+
+    if (isPivotHovered) {
+      canvas.drawPath(geometry.screenPivotPath, hoveredHandleFillPaint);
+      canvas.drawPath(geometry.screenPivotPath, hoveredHandleOutlinePaint);
+    } else {
+      canvas.drawPath(geometry.screenPivotPath, defaultHandlePaint);
+      canvas.drawPath(geometry.screenPivotPath, defaultPivotStrokePaint);
+    }
+  }
+
+  bool _isPivotDraggable(MPRuntimeImageInsertConfigMixin runtimeImage) {
+    final MPRuntimeXVIImageInsertConfigMixin? xviImage =
+        runtimeImage.asXVIImage;
+
+    if (xviImage == null) {
+      return true;
+    }
+
+    return xviImage.xviRoot.isEmpty;
   }
 
   @override

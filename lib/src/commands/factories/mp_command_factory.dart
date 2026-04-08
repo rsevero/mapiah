@@ -1310,6 +1310,45 @@ class MPCommandFactory {
     );
   }
 
+  static MPRotateImageInsertConfigCommand rotateImageInsertConfig({
+    required int imageMPID,
+    required THDoublePart toXX,
+    required THDoublePart toYY,
+    required THDoublePart toRotationCenterDx,
+    required THDoublePart toRotationCenterDy,
+    required THDoublePart toRotationDeg,
+    required TH2File th2File,
+    MPCommandDescriptionType descriptionType =
+        MPRotateImageInsertConfigCommand.defaultDescriptionType,
+  }) {
+    final MPRuntimeImageInsertConfigMixin image = th2File.imageByMPID(
+      imageMPID,
+    );
+
+    if (image is! MPImageInsertConfig) {
+      throw ArgumentError(
+        'MPCommandFactory.rotateImageInsertConfig only supports MPImageInsertConfig instances.',
+      );
+    }
+
+    return MPRotateImageInsertConfigCommand.forCWJM(
+      imageMPID: imageMPID,
+      fromXX: image.xx,
+      fromYY: image.yy,
+      fromRotationCenterDx: image.rotationCenterDx,
+      fromRotationCenterDy: image.rotationCenterDy,
+      fromRotationDeg: image.rotationDeg,
+      toXX: toXX,
+      toYY: toYY,
+      toRotationCenterDx: toRotationCenterDx,
+      toRotationCenterDy: toRotationCenterDy,
+      toRotationDeg: toRotationDeg,
+      fromOriginalLineInTH2File: image.originalLineInTH2File,
+      toOriginalLineInTH2File: '',
+      descriptionType: descriptionType,
+    );
+  }
+
   static MPCommand moveLineSegments({
     required Map<int, THLineSegment> fromLineSegmentsMap,
     required Map<int, THLineSegment> toLineSegmentsMap,
