@@ -620,6 +620,15 @@ void main() {
             movedSegment.controlPoint1.coordinates.dy,
             closeTo(originalControlPoint.dy, 0.0001),
           );
+          expect(
+            controller
+                .selectionController
+                .selectedEndControlPoints
+                .values
+                .first
+                .type,
+            MPEndControlPointType.controlPoint1,
+          );
         } finally {
           mpLocator.mpSettingsController.setDouble(
             MPSettingID.TH2Edit_NudgeFactor,

@@ -281,13 +281,20 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   void updateSelectedLineSegment(THLineSegment lineSegment) {
     if (_selectedEndControlPoints.containsKey(lineSegment.mpID)) {
+      final MPSelectedEndControlPoint previousSelection =
+          _selectedEndControlPoints[lineSegment.mpID]!;
+      final MPEndControlPointType preservedType =
+          MPElementEditAux.isEndPoint(previousSelection.type)
+          ? (lineSegment is THStraightLineSegment)
+                ? MPEndControlPointType.endPointStraight
+                : MPEndControlPointType.endPointBezierCurve
+          : previousSelection.type;
+
       _selectedEndControlPoints = {
         ..._selectedEndControlPoints,
         lineSegment.mpID: MPSelectedEndControlPoint(
           originalLineSegment: lineSegment,
-          type: (lineSegment is THStraightLineSegment)
-              ? MPEndControlPointType.endPointStraight
-              : MPEndControlPointType.endPointBezierCurve,
+          type: preservedType,
         ),
       };
     }
