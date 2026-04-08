@@ -53,7 +53,7 @@ void main() {
           final String originalFile = writer.serialize(controller.th2File);
 
           final MPImageInsertConfig convertedImage = controller
-              .elementEditController
+              .moveScaleRotateElementController
               .prepareImageForMPOnlyTransformActions(imageMPID);
 
           expect(convertedImage.mpID, imageMPID);

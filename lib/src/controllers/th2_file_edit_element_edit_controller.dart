@@ -1177,35 +1177,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   /// [MPImageInsertConfig] runtime model. This method performs that lazy
   /// migration on demand:
   ///
-  /// - If the image is already an [MPImageInsertConfig], it returns it as-is.
-  /// - If the image is still an XTherion image insert, it executes a command
-  ///   that replaces it with the equivalent [MPImageInsertConfig] while keeping
-  ///   the same MPID and preserving undo/redo.
-  ///
-  /// The conversion also keeps the image filename, visibility, placement, and
-  /// current XVI root semantics intact so later transform states can operate on
-  /// the Mapiah representation without changing which image the rest of the app
-  /// refers to.
-  MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
-    return _th2FileEditController.moveScaleRotateElementController
-        .prepareImageForMPOnlyTransformActions(imageMPID);
-  }
-
-  MPRuntimeImageInsertConfigMixin prepareImageMoveState(int imageMPID) {
-    return _th2FileEditController.moveScaleRotateElementController
-        .prepareImageMoveState(imageMPID);
-  }
-
-  MPImageInsertConfig prepareImageRotateState(int imageMPID) {
-    return _th2FileEditController.moveScaleRotateElementController
-        .prepareImageRotateState(imageMPID);
-  }
-
-  MPImageInsertConfig prepareImageScaleState(int imageMPID) {
-    return _th2FileEditController.moveScaleRotateElementController
-        .prepareImageScaleState(imageMPID);
-  }
-
   void reorderImages({required int oldIndex, required int newIndex}) {
     final MPReorderImagesCommand reorderImagesCommand =
         MPCommandFactory.reorderImages(oldIndex: oldIndex, newIndex: newIndex);
@@ -1242,17 +1213,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     _th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
     _th2FileEditController.execute(removeScrapCommand);
-  }
-
-  void updateControlPointSmoothInfo() {
-    _th2FileEditController.moveScaleRotateElementController
-        .updateControlPointSmoothInfo();
-  }
-
-  MPMoveControlPointSmoothInfo get moveControlPointSmoothInfo {
-    return _th2FileEditController
-        .moveScaleRotateElementController
-        .moveControlPointSmoothInfo;
   }
 
   MPCommand? getSmoothLineSegmentsCommand(THLineSegment lineSegment) {

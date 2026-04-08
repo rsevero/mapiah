@@ -1326,63 +1326,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
-  void moveSelectedElementsToScreenCoordinates(
-    Offset screenCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedElementsToScreenCoordinates(
-          screenCoordinatesFinalPosition,
-        );
-  }
-
-  @action
-  void moveSelectedElementsToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedElementsToCanvasCoordinates(
-          canvasCoordinatesFinalPosition,
-        );
-  }
-
-  void moveSelectedEndControlPointsToScreenCoordinates(
-    Offset screenCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedEndControlPointsToScreenCoordinates(
-          screenCoordinatesFinalPosition,
-        );
-  }
-
-  @action
-  void moveSelectedEndControlPointsToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedEndControlPointsToCanvasCoordinates(
-          canvasCoordinatesFinalPosition,
-        );
-  }
-
-  void moveSelectedControlPointToScreenCoordinates(
-    Offset screenCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedControlPointToScreenCoordinates(
-          screenCoordinatesFinalPosition,
-        );
-  }
-
-  @action
-  void moveSelectedControlPointToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    _th2FileEditController.moveScaleRotateElementController
-        .moveSelectedControlPointToCanvasCoordinates(
-          canvasCoordinatesFinalPosition,
-        );
-  }
-
   MPSelectedLine getMPSelectedLine() {
     if (!isSingleLineSelected()) {
       throw Exception(

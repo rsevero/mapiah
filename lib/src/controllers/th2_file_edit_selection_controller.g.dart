@@ -517,66 +517,6 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void moveSelectedElementsToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditSelectionControllerBase.moveSelectedElementsToCanvasCoordinates',
-        );
-    try {
-      return super.moveSelectedElementsToCanvasCoordinates(
-        canvasCoordinatesFinalPosition,
-      );
-    } finally {
-      _$TH2FileEditSelectionControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
-  void moveSelectedEndControlPointsToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditSelectionControllerBase.moveSelectedEndControlPointsToCanvasCoordinates',
-        );
-    try {
-      return super.moveSelectedEndControlPointsToCanvasCoordinates(
-        canvasCoordinatesFinalPosition,
-      );
-    } finally {
-      _$TH2FileEditSelectionControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
-  void moveSelectedControlPointToCanvasCoordinates(
-    Offset canvasCoordinatesFinalPosition,
-  ) {
-    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
-        .startAction(
-          name:
-              'TH2FileEditSelectionControllerBase.moveSelectedControlPointToCanvasCoordinates',
-        );
-    try {
-      return super.moveSelectedControlPointToCanvasCoordinates(
-        canvasCoordinatesFinalPosition,
-      );
-    } finally {
-      _$TH2FileEditSelectionControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
   void setSelectionWindowCanvasRect({
     required Offset point1,
     required Offset point2,

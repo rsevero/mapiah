@@ -58,7 +58,7 @@ void main() {
         final int imageMPID = controller.th2File.imageMPIDs.first;
 
         final MPRuntimeImageInsertConfigMixin image = controller
-            .elementEditController
+            .moveScaleRotateElementController
             .prepareImageMoveState(imageMPID);
 
         expect(image.mpID, imageMPID);
@@ -79,10 +79,10 @@ void main() {
         final int imageMPID = controller.th2File.imageMPIDs.first;
 
         final MPRuntimeImageInsertConfigMixin movedImage = controller
-            .elementEditController
+            .moveScaleRotateElementController
             .prepareImageMoveState(imageMPID);
         final MPImageInsertConfig rotatedImage = controller
-            .elementEditController
+            .moveScaleRotateElementController
             .prepareImageRotateState(imageMPID);
 
         expect(movedImage, isA<THXVIXTherionImageInsertConfig>());
@@ -100,7 +100,9 @@ void main() {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
 
-      controller.elementEditController.prepareImageScaleState(imageMPID);
+      controller.moveScaleRotateElementController.prepareImageScaleState(
+        imageMPID,
+      );
 
       expect(
         controller.stateController.state.type,
@@ -117,7 +119,9 @@ void main() {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
       final THXTherionImageInsertConfig image =
-          controller.elementEditController.prepareImageMoveState(imageMPID)
+          controller.moveScaleRotateElementController.prepareImageMoveState(
+                imageMPID,
+              )
               as THXTherionImageInsertConfig;
       final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final Offset dragStartCanvasPosition = originalBoundingBox.center;
@@ -176,7 +180,9 @@ void main() {
         );
         final int imageMPID = controller.th2File.imageMPIDs.first;
         final THRasterXTherionImageInsertConfig image =
-            controller.elementEditController.prepareImageMoveState(imageMPID)
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
                 as THRasterXTherionImageInsertConfig;
         final ui.Image decodedImage = await _createTestImage(
           width: 40,
@@ -234,7 +240,9 @@ void main() {
       final TH2FileEditController controller = await loadController();
       final int imageMPID = controller.th2File.imageMPIDs.first;
       final THXTherionImageInsertConfig image =
-          controller.elementEditController.prepareImageMoveState(imageMPID)
+          controller.moveScaleRotateElementController.prepareImageMoveState(
+                imageMPID,
+              )
               as THXTherionImageInsertConfig;
       final Rect originalBoundingBox = image.getBoundingBox(controller)!;
       final Offset dragStartCanvasPosition = originalBoundingBox.center;
@@ -285,7 +293,9 @@ void main() {
         final TH2FileWriter writer = TH2FileWriter();
         final int imageMPID = controller.th2File.imageMPIDs.first;
         final THXTherionImageInsertConfig image =
-            controller.elementEditController.prepareImageMoveState(imageMPID)
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
                 as THXTherionImageInsertConfig;
         final Rect originalBoundingBox = image.getBoundingBox(controller)!;
         final Offset dragStartCanvasPosition = originalBoundingBox.center;
