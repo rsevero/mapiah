@@ -7,6 +7,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Adicionar imagem                                                       | I                                             |
 | Ajuda                                                                  | F1                                            |
 | Alterar croqui ativo                                                   | Alt+K                                         |
+| Alterar croqui ativo clicando em croqui inativo                        | Alt+clique em croqui inativo                  |
 | Alterar imagens                                                        | Alt+I                                         |
 | Alternar direção da linha                                              | R                                             |
 | Alternar marcas de direção em linhas não selecionadas                  | Ctrl+Alt+R                                    |

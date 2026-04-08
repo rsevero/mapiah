@@ -7,6 +7,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Add image                                                  | I                                       |
 | Add line segment between selected line segments            | /                                       |
 | Change active scrap                                        | Alt+K                                   |
+| Change active scrap by clicking inactive scrap             | Alt+click inactive scrap                |
 | Change images                                              | Alt+I                                   |
 | Choose THConfig file and run Therion                       | Ctrl+T                                  |
 | Click area-border line: cycle border-line selection        | Ctrl+click                              |
