@@ -121,9 +121,7 @@ const double mpFineZoomFactor = mpRoundToFactor / 2 + 1;
 const double mpCanvasMovementFactor = 0.1;
 const double mpCanvasRoundFactor = 25.0;
 const double mpImageTransformHandleHitBoxSizeOnScreen = 18.0;
-const double mpImageTransformHandleArrowLengthOnScreen = 14.0;
-const double mpImageTransformHandleArrowHeadWidthOnScreen = 8.0;
-const double mpImageTransformHandleArrowShaftWidthOnScreen = 3.0;
+const double mpImageTransformHandleSizeOnScreen = 15.0;
 const double mpImageTransformHandleOffsetOnScreen = 10.0;
 
 const double mpDoubleNextEpsilon = 2.220446049250313e-16;

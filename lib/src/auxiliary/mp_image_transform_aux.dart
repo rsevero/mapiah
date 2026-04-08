@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:math' as math;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -26,6 +28,125 @@ extension MPImageTransformHandleTypeExtension on MPImageTransformHandleType {
   }
 }
 
+/// Builds reusable handle paths based on Inkscape control-handle geometry.
+class MPInkscapeHandlePaths {
+  static const double _doubleArrowTipInset = 0.5;
+  static const double _curvedArrowBaseInset = 1.5;
+  static const double _curvedArrowSizeOffset = 3.0;
+
+  /// Returns Inkscape's resize handle path in local coordinates.
+  static Path doubleArrow(double size) {
+    final double delta = (size - 1.0) / 4.0;
+    final double tipX = _doubleArrowTipInset;
+    final double tipY = size / 2.0;
+    final double outerX = tipX + delta;
+    final double outerY = tipY - delta;
+    final double innerX = outerX;
+    final double innerY = outerY + delta / 2.0;
+    final double x0 = tipX;
+    final double y0 = tipY;
+    final double x1 = outerX;
+    final double y1 = outerY;
+    final double x2 = innerX;
+    final double y2 = innerY;
+    final double x3 = size - innerX;
+    final double y3 = innerY;
+    final double x4 = size - outerX;
+    final double y4 = outerY;
+    final double x5 = size - tipX;
+    final double y5 = tipY;
+    final double x6 = size - outerX;
+    final double y6 = size - outerY;
+    final double x7 = size - innerX;
+    final double y7 = size - innerY;
+    final double x8 = innerX;
+    final double y8 = size - innerY;
+    final double x9 = outerX;
+    final double y9 = size - outerY;
+
+    return Path()
+      ..moveTo(x0, y0)
+      ..lineTo(x1, y1)
+      ..lineTo(x2, y2)
+      ..lineTo(x3, y3)
+      ..lineTo(x4, y4)
+      ..lineTo(x5, y5)
+      ..lineTo(x6, y6)
+      ..lineTo(x7, y7)
+      ..lineTo(x8, y8)
+      ..lineTo(x9, y9)
+      ..close();
+  }
+
+  /// Returns Inkscape's curved rotation handle path in local coordinates.
+  static Path curvedArrow(double size) {
+    final double delta = (size - _curvedArrowSizeOffset) / 4.0;
+    final double tipX = _curvedArrowBaseInset;
+    final double tipY = delta + _curvedArrowBaseInset;
+    final double outerX = tipX + delta;
+    final double outerY = tipY - delta;
+    final double innerX = outerX;
+    final double innerY = outerY + delta / 2.0;
+    final double x0 = tipX;
+    final double y0 = tipY;
+    final double x1 = outerX;
+    final double y1 = outerY;
+    final double x2 = innerX;
+    final double y2 = innerY;
+    final double x3 = size - innerY;
+    final double y3 = y2;
+    final double x4 = size - outerY;
+    final double y4 = size - outerX;
+    final double x5 = size - tipY;
+    final double y5 = size - tipX;
+    final double x6 = x5 - delta;
+    final double y6 = y4;
+    final double x7 = x5 - delta / 2.0;
+    final double y7 = y4;
+    final double x8 = x1;
+    final double x9 = x1;
+    final double y9 = y0 + delta;
+    final double radiusOuter = x3 - x2;
+    final double radiusInner = x7 - x8;
+    final Rect outerRect = Rect.fromCircle(
+      center: Offset(x1, y4),
+      radius: radiusOuter,
+    );
+    final Rect innerRect = Rect.fromCircle(
+      center: Offset(x1, y4),
+      radius: radiusInner,
+    );
+    final Path path = Path()
+      ..moveTo(x0, y0)
+      ..lineTo(x1, y1)
+      ..lineTo(x2, y2)
+      ..arcTo(outerRect, 3.0 * math.pi / 2.0, math.pi / 2.0, false)
+      ..lineTo(x4, y4)
+      ..lineTo(x5, y5)
+      ..lineTo(x6, y6)
+      ..lineTo(x7, y7)
+      ..arcTo(innerRect, 0.0, -math.pi / 2.0, false)
+      ..lineTo(x9, y9)
+      ..close();
+
+    assert(radiusOuter > 0.0);
+    assert(radiusInner > 0.0);
+    assert(y3 == y2);
+
+    return path;
+  }
+
+  /// Returns a centered resize handle ready for later transforms.
+  static Path centeredDoubleArrow(double size) {
+    return doubleArrow(size).shift(Offset(-size / 2.0, -size / 2.0));
+  }
+
+  /// Returns a centered curved rotation handle ready for later transforms.
+  static Path centeredCurvedArrow(double size) {
+    return curvedArrow(size).shift(Offset(-size / 2.0, -size / 2.0));
+  }
+}
+
 class MPImageTransformGeometry {
   final Rect localBounds;
   final Map<MPImageTransformHandleType, Offset> canvasHandleCenters;
@@ -34,6 +155,10 @@ class MPImageTransformGeometry {
   final Map<MPImageTransformHandleType, Path> screenHandlePaths;
   final List<Offset> canvasBorderCorners;
   final List<Offset> screenBorderCorners;
+  static final Path _baseScaleHandlePath =
+      MPInkscapeHandlePaths.centeredDoubleArrow(
+        mpImageTransformHandleSizeOnScreen,
+      );
 
   const MPImageTransformGeometry({
     required this.localBounds,
@@ -175,96 +300,33 @@ class MPImageTransformGeometry {
     required Offset center,
     required Offset direction,
   }) {
-    final Offset axisDirection = _normalizeOffset(direction);
-    final Offset perpendicularDirection = Offset(
-      -axisDirection.dy,
-      axisDirection.dx,
+    final Offset normalizedDirection = _normalizeOffset(direction);
+    final double angleInRad = math.atan2(
+      normalizedDirection.dy,
+      normalizedDirection.dx,
     );
-    final double halfArrowLength =
-        mpImageTransformHandleArrowLengthOnScreen / 2;
-    final double halfArrowHeadWidth =
-        mpImageTransformHandleArrowHeadWidthOnScreen / 2;
-    final double halfArrowShaftWidth =
-        mpImageTransformHandleArrowShaftWidthOnScreen / 2;
-    final double halfShaftLength = (halfArrowLength - halfArrowHeadWidth).clamp(
+    final double cosValue = math.cos(angleInRad);
+    final double sinValue = math.sin(angleInRad);
+    final Float64List matrix = Float64List.fromList(<double>[
+      cosValue,
+      sinValue,
       0.0,
-      halfArrowLength,
-    );
+      0.0,
+      -sinValue,
+      cosValue,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      center.dx,
+      center.dy,
+      0.0,
+      1.0,
+    ]);
 
-    return Path()
-      ..moveTo(
-        center.dx - axisDirection.dx * halfArrowLength,
-        center.dy - axisDirection.dy * halfArrowLength,
-      )
-      ..lineTo(
-        center.dx -
-            axisDirection.dx * halfShaftLength -
-            perpendicularDirection.dx * halfArrowHeadWidth,
-        center.dy -
-            axisDirection.dy * halfShaftLength -
-            perpendicularDirection.dy * halfArrowHeadWidth,
-      )
-      ..lineTo(
-        center.dx -
-            axisDirection.dx * halfShaftLength -
-            perpendicularDirection.dx * halfArrowShaftWidth,
-        center.dy -
-            axisDirection.dy * halfShaftLength -
-            perpendicularDirection.dy * halfArrowShaftWidth,
-      )
-      ..lineTo(
-        center.dx +
-            axisDirection.dx * halfShaftLength -
-            perpendicularDirection.dx * halfArrowShaftWidth,
-        center.dy +
-            axisDirection.dy * halfShaftLength -
-            perpendicularDirection.dy * halfArrowShaftWidth,
-      )
-      ..lineTo(
-        center.dx +
-            axisDirection.dx * halfShaftLength -
-            perpendicularDirection.dx * halfArrowHeadWidth,
-        center.dy +
-            axisDirection.dy * halfShaftLength -
-            perpendicularDirection.dy * halfArrowHeadWidth,
-      )
-      ..lineTo(
-        center.dx + axisDirection.dx * halfArrowLength,
-        center.dy + axisDirection.dy * halfArrowLength,
-      )
-      ..lineTo(
-        center.dx +
-            axisDirection.dx * halfShaftLength +
-            perpendicularDirection.dx * halfArrowHeadWidth,
-        center.dy +
-            axisDirection.dy * halfShaftLength +
-            perpendicularDirection.dy * halfArrowHeadWidth,
-      )
-      ..lineTo(
-        center.dx +
-            axisDirection.dx * halfShaftLength +
-            perpendicularDirection.dx * halfArrowShaftWidth,
-        center.dy +
-            axisDirection.dy * halfShaftLength +
-            perpendicularDirection.dy * halfArrowShaftWidth,
-      )
-      ..lineTo(
-        center.dx -
-            axisDirection.dx * halfShaftLength +
-            perpendicularDirection.dx * halfArrowShaftWidth,
-        center.dy -
-            axisDirection.dy * halfShaftLength +
-            perpendicularDirection.dy * halfArrowShaftWidth,
-      )
-      ..lineTo(
-        center.dx -
-            axisDirection.dx * halfShaftLength +
-            perpendicularDirection.dx * halfArrowHeadWidth,
-        center.dy -
-            axisDirection.dy * halfShaftLength +
-            perpendicularDirection.dy * halfArrowHeadWidth,
-      )
-      ..close();
+    return _baseScaleHandlePath.transform(matrix);
   }
 
   static Offset _resolveOutwardDirection({
