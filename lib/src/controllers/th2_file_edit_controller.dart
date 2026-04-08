@@ -1102,7 +1102,7 @@ abstract class TH2FileEditControllerBase with Store {
   void onAltClickSelectScrap(PointerUpEvent event) {
     final List<int> scrapMPIDs = _th2File.scrapMPIDs;
 
-    if (scrapMPIDs.length <= 2) {
+    if (scrapMPIDs.length < 2) {
       return;
     }
 
