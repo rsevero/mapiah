@@ -53,6 +53,8 @@ class MPRasterImagePainter extends CustomPainter {
 
     canvas.save();
     canvas.transform(matrix);
+    canvas.translate(0.0, uiImage.height.toDouble());
+    canvas.scale(1.0, -1.0);
     canvas.drawImage(uiImage, Offset.zero, Paint());
     canvas.restore();
   }
