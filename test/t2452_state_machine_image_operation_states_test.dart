@@ -2,14 +2,16 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:ui' as ui;
-import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -381,6 +383,206 @@ void main() {
           imageMPID,
         ),
         '',
+      );
+    });
+
+    test('Alt drag moves image even when drag starts outside image', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final THXTherionImageInsertConfig image =
+          controller.moveScaleRotateElementController.prepareImageMoveState(
+                imageMPID,
+              )
+              as THXTherionImageInsertConfig;
+      final Rect originalBoundingBox = image.getBoundingBox(controller)!;
+      final Offset dragStartCanvasPosition =
+          originalBoundingBox.center + const Offset(120.0, 90.0);
+      const Offset deltaOnCanvas = Offset(14.0, -9.0);
+      final Offset dragEndCanvasPosition =
+          dragStartCanvasPosition + deltaOnCanvas;
+      final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+        dragStartCanvasPosition,
+      );
+      final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+        dragEndCanvasPosition,
+      );
+      final double originalXX = image.xx.value;
+      final double originalYY = image.yy.value;
+
+      MPInteractionAux.debugPressedKeysOverride = {LogicalKeyboardKey.altLeft};
+
+      try {
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+
+      final THXTherionImageInsertConfig movedImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as THXTherionImageInsertConfig;
+
+      expect(movedImage.xx.value, closeTo(originalXX + 14.0, 0.0001));
+      expect(movedImage.yy.value, closeTo(originalYY - 9.0, 0.0001));
+    });
+
+    test('Ctrl drag constrains image move to one axis', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final THXTherionImageInsertConfig image =
+          controller.moveScaleRotateElementController.prepareImageMoveState(
+                imageMPID,
+              )
+              as THXTherionImageInsertConfig;
+      final Rect originalBoundingBox = image.getBoundingBox(controller)!;
+      final Offset dragStartCanvasPosition = originalBoundingBox.center;
+      const Offset deltaOnCanvas = Offset(12.0, -8.0);
+      final Offset dragEndCanvasPosition =
+          dragStartCanvasPosition + deltaOnCanvas;
+      final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+        dragStartCanvasPosition,
+      );
+      final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+        dragEndCanvasPosition,
+      );
+      final double originalXX = image.xx.value;
+      final double originalYY = image.yy.value;
+
+      MPInteractionAux.debugPressedKeysOverride = {
+        LogicalKeyboardKey.controlLeft,
+      };
+
+      try {
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+
+      final THXTherionImageInsertConfig movedImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as THXTherionImageInsertConfig;
+
+      expect(movedImage.xx.value, closeTo(originalXX + 12.0, 0.0001));
+      expect(movedImage.yy.value, closeTo(originalYY, 0.0001));
+    });
+
+    test('Shift drag disables snapping while moving image', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final THXVIXTherionImageInsertConfig image =
+          controller.moveScaleRotateElementController.prepareImageMoveState(
+                imageMPID,
+              )
+              as THXVIXTherionImageInsertConfig;
+      final Rect originalBoundingBox = image.getBoundingBox(controller)!;
+      final Offset originalTopLeft = originalBoundingBox.topLeft;
+      final MPRuntimeXVIImageInsertConfigMixin xviImage = image.asXVIImage;
+      final XVIFile xviFile = xviImage.getXVIFile(controller)!;
+      final Offset imageOffset =
+          Offset(xviImage.xviRootedXX, xviImage.xviRootedYY) -
+          Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+      final Offset snapTargetCanvas =
+          xviFile.shots.first.start.coordinates + imageOffset;
+      final Offset desiredUnsnappedTopLeft =
+          snapTargetCanvas + const Offset(1.0, 1.0);
+      final Offset dragStartCanvasPosition = originalBoundingBox.center;
+      final Offset dragEndCanvasPosition =
+          dragStartCanvasPosition + (desiredUnsnappedTopLeft - originalTopLeft);
+      final Offset dragStartScreenPosition = controller.offsetCanvasToScreen(
+        dragStartCanvasPosition,
+      );
+      final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
+        dragEndCanvasPosition,
+      );
+
+      controller.elementEditController.createScrap(thID: 'snap_test');
+      controller.snapController.setSnapTargets(
+        pointTarget: MPSnapPointTarget.none,
+        linePointTarget: MPSnapLinePointTarget.none,
+        xviTargets: <MPSnapXVIFileTarget>[MPSnapXVIFileTarget.shot],
+      );
+
+      expect(
+        controller.snapController
+            .getCanvasSnapedPositionFromCanvasOffset(desiredUnsnappedTopLeft)
+            ?.coordinates,
+        snapTargetCanvas,
+      );
+
+      MPInteractionAux.debugPressedKeysOverride = {
+        LogicalKeyboardKey.shiftLeft,
+      };
+
+      try {
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragUpdate(
+          PointerMoveEvent(
+            position: dragEndScreenPosition,
+            delta: dragEndScreenPosition - dragStartScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: dragEndScreenPosition),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+
+      final THXTherionImageInsertConfig movedImage =
+          controller.th2File.imageByMPID(imageMPID)
+              as THXTherionImageInsertConfig;
+      final Rect movedBoundingBox = movedImage.getBoundingBox(controller)!;
+
+      expect(
+        movedBoundingBox.topLeft.dx,
+        closeTo(desiredUnsnappedTopLeft.dx, 0.0001),
+      );
+      expect(
+        movedBoundingBox.topLeft.dy,
+        closeTo(desiredUnsnappedTopLeft.dy, 0.0001),
+      );
+      expect(
+        movedBoundingBox.topLeft.dx,
+        isNot(closeTo(snapTargetCanvas.dx, 0.0001)),
+      );
+      expect(
+        movedBoundingBox.topLeft.dy,
+        isNot(closeTo(snapTargetCanvas.dy, 0.0001)),
       );
     });
 

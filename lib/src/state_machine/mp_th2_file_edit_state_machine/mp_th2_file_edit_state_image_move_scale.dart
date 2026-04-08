@@ -87,6 +87,7 @@ class MPTH2FileEditStateImageMoveScale
 
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
     final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
     );
@@ -111,7 +112,11 @@ class MPTH2FileEditStateImageMoveScale
       return;
     }
 
-    if (!initialGeometry.containsCanvasPosition(canvasPosition)) {
+    if (!_shouldStartMoveDrag(
+      canvasPosition: canvasPosition,
+      initialGeometry: initialGeometry,
+      isAltPressed: isAltPressed,
+    )) {
       _resetDragPreview();
 
       return;
@@ -230,19 +235,30 @@ class MPTH2FileEditStateImageMoveScale
       return;
     }
 
+    final bool isCtrlOrMetaPressed =
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
       event.localPosition,
     );
+    final Offset dragDelta = canvasPosition - _dragStartCanvasPosition!;
+    final Offset constrainedDragDelta = isCtrlOrMetaPressed
+        ? _constrainMoveDelta(dragDelta)
+        : dragDelta;
     final Offset unsnappedTopLeft =
-        _dragStartImageTopLeft! + (canvasPosition - _dragStartCanvasPosition!);
-    final THPositionPart snappedTopLeft =
-        snapController.getCanvasSnapedPositionFromCanvasOffset(
-          unsnappedTopLeft,
-        ) ??
-        THPositionPart(
-          coordinates: unsnappedTopLeft,
-          decimalPositions: th2FileEditController.currentDecimalPositions,
-        );
+        _dragStartImageTopLeft! + constrainedDragDelta;
+    final THPositionPart snappedTopLeft = isShiftPressed
+        ? THPositionPart(
+            coordinates: unsnappedTopLeft,
+            decimalPositions: th2FileEditController.currentDecimalPositions,
+          )
+        : snapController.getCanvasSnapedPositionFromCanvasOffset(
+                unsnappedTopLeft,
+              ) ??
+              THPositionPart(
+                coordinates: unsnappedTopLeft,
+                decimalPositions: th2FileEditController.currentDecimalPositions,
+              );
     final Offset previewOffset =
         snappedTopLeft.coordinates - _dragStartImageTopLeft!;
     final THDoublePart previewXX = imageConfig.xx.copyWith(
@@ -262,6 +278,26 @@ class MPTH2FileEditStateImageMoveScale
     );
     th2FileEditController.setMovingMousePosition(snappedTopLeft.coordinates);
     th2FileEditController.triggerImagesRedraw();
+  }
+
+  bool _shouldStartMoveDrag({
+    required Offset canvasPosition,
+    required MPImageTransformGeometry initialGeometry,
+    required bool isAltPressed,
+  }) {
+    if (isAltPressed) {
+      return true;
+    }
+
+    return initialGeometry.containsCanvasPosition(canvasPosition);
+  }
+
+  Offset _constrainMoveDelta(Offset dragDelta) {
+    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
+      return Offset(dragDelta.dx, 0.0);
+    }
+
+    return Offset(0.0, dragDelta.dy);
   }
 
   void _updateScalePreview(PointerMoveEvent event) {

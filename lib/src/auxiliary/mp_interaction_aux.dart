@@ -14,6 +14,8 @@ import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
 class MPInteractionAux {
+  static Set<LogicalKeyboardKey>? debugPressedKeysOverride;
+
   static const Map<
     MPPointShapeType,
     void Function(Canvas, Offset, double, Paint)
@@ -38,8 +40,7 @@ class MPInteractionAux {
   };
 
   static bool isAltPressed() {
-    final Set<LogicalKeyboardKey> pressed =
-        HardwareKeyboard.instance.logicalKeysPressed;
+    final Set<LogicalKeyboardKey> pressed = _logicalKeysPressed();
 
     return pressed.contains(LogicalKeyboardKey.altLeft) ||
         pressed.contains(LogicalKeyboardKey.altRight) ||
@@ -47,27 +48,29 @@ class MPInteractionAux {
   }
 
   static bool isCtrlPressed() {
-    final Set<LogicalKeyboardKey> pressed =
-        HardwareKeyboard.instance.logicalKeysPressed;
+    final Set<LogicalKeyboardKey> pressed = _logicalKeysPressed();
 
     return pressed.contains(LogicalKeyboardKey.controlLeft) ||
         pressed.contains(LogicalKeyboardKey.controlRight);
   }
 
   static bool isMetaPressed() {
-    final Set<LogicalKeyboardKey> pressed =
-        HardwareKeyboard.instance.logicalKeysPressed;
+    final Set<LogicalKeyboardKey> pressed = _logicalKeysPressed();
 
     return pressed.contains(LogicalKeyboardKey.metaLeft) ||
         pressed.contains(LogicalKeyboardKey.metaRight);
   }
 
   static bool isShiftPressed() {
-    final Set<LogicalKeyboardKey> pressed =
-        HardwareKeyboard.instance.logicalKeysPressed;
+    final Set<LogicalKeyboardKey> pressed = _logicalKeysPressed();
 
     return pressed.contains(LogicalKeyboardKey.shiftLeft) ||
         pressed.contains(LogicalKeyboardKey.shiftRight);
+  }
+
+  static Set<LogicalKeyboardKey> _logicalKeysPressed() {
+    return debugPressedKeysOverride ??
+        HardwareKeyboard.instance.logicalKeysPressed;
   }
 
   static Rect? getWidgetRectFromGlobalKey({
