@@ -29,14 +29,18 @@ extension MPImageTransformHandleTypeExtension on MPImageTransformHandleType {
 class MPImageTransformGeometry {
   final Rect localBounds;
   final Map<MPImageTransformHandleType, Offset> canvasHandleCenters;
+  final Map<MPImageTransformHandleType, Offset> screenHandleCenters;
   final Map<MPImageTransformHandleType, Rect> screenHandleRects;
+  final Map<MPImageTransformHandleType, Path> screenHandlePaths;
   final List<Offset> canvasBorderCorners;
   final List<Offset> screenBorderCorners;
 
   const MPImageTransformGeometry({
     required this.localBounds,
     required this.canvasHandleCenters,
+    required this.screenHandleCenters,
     required this.screenHandleRects,
+    required this.screenHandlePaths,
     required this.canvasBorderCorners,
     required this.screenBorderCorners,
   });
@@ -113,33 +117,201 @@ class MPImageTransformGeometry {
         .toList(growable: false);
     final Map<MPImageTransformHandleType, Offset> canvasHandleCenters =
         <MPImageTransformHandleType, Offset>{};
+    final Map<MPImageTransformHandleType, Offset> screenHandleCenters =
+        <MPImageTransformHandleType, Offset>{};
     final Map<MPImageTransformHandleType, Rect> screenHandleRects =
         <MPImageTransformHandleType, Rect>{};
+    final Map<MPImageTransformHandleType, Path> screenHandlePaths =
+        <MPImageTransformHandleType, Path>{};
+    final Offset screenBoundsCenter = Rect.fromPoints(
+      screenBorderCorners[0],
+      screenBorderCorners[2],
+    ).center;
 
     for (final MPImageTransformHandleType handleType
         in MPImageTransformHandleType.values) {
-      final Offset canvasCenter = image.transformWorldPointFromBaseWorldPoint(
-        imageOrigin + _handleLocalPoint(localBounds, handleType),
+      final Offset canvasBorderCenter = image
+          .transformWorldPointFromBaseWorldPoint(
+            imageOrigin + _handleLocalPoint(localBounds, handleType),
+          );
+      final Offset screenBorderCenter = th2FileEditController
+          .offsetCanvasToScreen(canvasBorderCenter);
+      final Offset outwardDirection = _resolveOutwardDirection(
+        handleType: handleType,
+        screenBorderCorners: screenBorderCorners,
+        screenBoundsCenter: screenBoundsCenter,
       );
-      final Offset screenCenter = th2FileEditController.offsetCanvasToScreen(
-        canvasCenter,
-      );
+      final Offset screenHandleCenter =
+          screenBorderCenter +
+          (outwardDirection * mpImageTransformHandleOffsetOnScreen);
+      final Offset canvasHandleCenter = th2FileEditController
+          .offsetScreenToCanvas(screenHandleCenter);
 
-      canvasHandleCenters[handleType] = canvasCenter;
+      canvasHandleCenters[handleType] = canvasHandleCenter;
+      screenHandleCenters[handleType] = screenHandleCenter;
       screenHandleRects[handleType] = Rect.fromCenter(
-        center: screenCenter,
-        width: mpImageTransformHandleSizeOnScreen,
-        height: mpImageTransformHandleSizeOnScreen,
+        center: screenHandleCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      );
+      screenHandlePaths[handleType] = _buildScaleHandlePath(
+        center: screenHandleCenter,
+        direction: outwardDirection,
       );
     }
 
     return MPImageTransformGeometry(
       localBounds: localBounds,
       canvasHandleCenters: canvasHandleCenters,
+      screenHandleCenters: screenHandleCenters,
       screenHandleRects: screenHandleRects,
+      screenHandlePaths: screenHandlePaths,
       canvasBorderCorners: canvasBorderCorners,
       screenBorderCorners: screenBorderCorners,
     );
+  }
+
+  static Path _buildScaleHandlePath({
+    required Offset center,
+    required Offset direction,
+  }) {
+    final Offset axisDirection = _normalizeOffset(direction);
+    final Offset perpendicularDirection = Offset(
+      -axisDirection.dy,
+      axisDirection.dx,
+    );
+    final double halfArrowLength =
+        mpImageTransformHandleArrowLengthOnScreen / 2;
+    final double halfArrowHeadWidth =
+        mpImageTransformHandleArrowHeadWidthOnScreen / 2;
+    final double halfArrowShaftWidth =
+        mpImageTransformHandleArrowShaftWidthOnScreen / 2;
+    final double halfShaftLength = (halfArrowLength - halfArrowHeadWidth).clamp(
+      0.0,
+      halfArrowLength,
+    );
+
+    return Path()
+      ..moveTo(
+        center.dx - axisDirection.dx * halfArrowLength,
+        center.dy - axisDirection.dy * halfArrowLength,
+      )
+      ..lineTo(
+        center.dx -
+            axisDirection.dx * halfShaftLength -
+            perpendicularDirection.dx * halfArrowHeadWidth,
+        center.dy -
+            axisDirection.dy * halfShaftLength -
+            perpendicularDirection.dy * halfArrowHeadWidth,
+      )
+      ..lineTo(
+        center.dx -
+            axisDirection.dx * halfShaftLength -
+            perpendicularDirection.dx * halfArrowShaftWidth,
+        center.dy -
+            axisDirection.dy * halfShaftLength -
+            perpendicularDirection.dy * halfArrowShaftWidth,
+      )
+      ..lineTo(
+        center.dx +
+            axisDirection.dx * halfShaftLength -
+            perpendicularDirection.dx * halfArrowShaftWidth,
+        center.dy +
+            axisDirection.dy * halfShaftLength -
+            perpendicularDirection.dy * halfArrowShaftWidth,
+      )
+      ..lineTo(
+        center.dx +
+            axisDirection.dx * halfShaftLength -
+            perpendicularDirection.dx * halfArrowHeadWidth,
+        center.dy +
+            axisDirection.dy * halfShaftLength -
+            perpendicularDirection.dy * halfArrowHeadWidth,
+      )
+      ..lineTo(
+        center.dx + axisDirection.dx * halfArrowLength,
+        center.dy + axisDirection.dy * halfArrowLength,
+      )
+      ..lineTo(
+        center.dx +
+            axisDirection.dx * halfShaftLength +
+            perpendicularDirection.dx * halfArrowHeadWidth,
+        center.dy +
+            axisDirection.dy * halfShaftLength +
+            perpendicularDirection.dy * halfArrowHeadWidth,
+      )
+      ..lineTo(
+        center.dx +
+            axisDirection.dx * halfShaftLength +
+            perpendicularDirection.dx * halfArrowShaftWidth,
+        center.dy +
+            axisDirection.dy * halfShaftLength +
+            perpendicularDirection.dy * halfArrowShaftWidth,
+      )
+      ..lineTo(
+        center.dx -
+            axisDirection.dx * halfShaftLength +
+            perpendicularDirection.dx * halfArrowShaftWidth,
+        center.dy -
+            axisDirection.dy * halfShaftLength +
+            perpendicularDirection.dy * halfArrowShaftWidth,
+      )
+      ..lineTo(
+        center.dx -
+            axisDirection.dx * halfShaftLength +
+            perpendicularDirection.dx * halfArrowHeadWidth,
+        center.dy -
+            axisDirection.dy * halfShaftLength +
+            perpendicularDirection.dy * halfArrowHeadWidth,
+      )
+      ..close();
+  }
+
+  static Offset _resolveOutwardDirection({
+    required MPImageTransformHandleType handleType,
+    required List<Offset> screenBorderCorners,
+    required Offset screenBoundsCenter,
+  }) {
+    switch (handleType) {
+      case MPImageTransformHandleType.topLeft:
+        return _normalizeOffset(screenBorderCorners[0] - screenBoundsCenter);
+      case MPImageTransformHandleType.topCenter:
+        return _normalizeOffset(
+          ((screenBorderCorners[0] + screenBorderCorners[1]) / 2) -
+              screenBoundsCenter,
+        );
+      case MPImageTransformHandleType.topRight:
+        return _normalizeOffset(screenBorderCorners[1] - screenBoundsCenter);
+      case MPImageTransformHandleType.centerLeft:
+        return _normalizeOffset(
+          ((screenBorderCorners[0] + screenBorderCorners[3]) / 2) -
+              screenBoundsCenter,
+        );
+      case MPImageTransformHandleType.centerRight:
+        return _normalizeOffset(
+          ((screenBorderCorners[1] + screenBorderCorners[2]) / 2) -
+              screenBoundsCenter,
+        );
+      case MPImageTransformHandleType.bottomLeft:
+        return _normalizeOffset(screenBorderCorners[3] - screenBoundsCenter);
+      case MPImageTransformHandleType.bottomCenter:
+        return _normalizeOffset(
+          ((screenBorderCorners[3] + screenBorderCorners[2]) / 2) -
+              screenBoundsCenter,
+        );
+      case MPImageTransformHandleType.bottomRight:
+        return _normalizeOffset(screenBorderCorners[2] - screenBoundsCenter);
+    }
+  }
+
+  static Offset _normalizeOffset(Offset offset) {
+    final double distance = offset.distance;
+
+    if (distance < mpDoubleComparisonEpsilon) {
+      return Offset(0.0, -1.0);
+    }
+
+    return offset / distance;
   }
 
   static Offset _handleLocalPoint(

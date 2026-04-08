@@ -7,8 +7,8 @@ import 'package:mapiah/src/painters/mp_image_operation_overlay_painter.dart';
 
 /// Paints the transient UI that explains which image is currently being edited.
 ///
-/// This widget does not render the image itself. Instead, it draws the active
-/// image outline plus the scale handles used by the combined move/scale mode.
+/// This widget does not render the image itself. Instead, it draws the scale
+/// handles used by the combined move/scale mode for the active image.
 ///
 /// Its role in the image-edit flow is purely communicative:
 /// - identify the image currently bound to the image-operation state
@@ -29,14 +29,11 @@ class MPImageOperationOverlayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-
     return IgnorePointer(
       child: CustomPaint(
         painter: MPImageOperationOverlayPainter(
           th2FileEditController: th2FileEditController,
           image: image,
-          colorScheme: colorScheme,
         ),
         size: th2FileEditController.screenSize,
       ),
