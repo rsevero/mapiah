@@ -155,10 +155,7 @@ class MPImageTransformGeometry {
   final Map<MPImageTransformHandleType, Path> screenHandlePaths;
   final List<Offset> canvasBorderCorners;
   final List<Offset> screenBorderCorners;
-  static final Path _baseScaleHandlePath =
-      MPInkscapeHandlePaths.centeredDoubleArrow(
-        mpImageTransformHandleSizeOnScreen,
-      );
+  static final Path _baseScaleHandlePath = _buildBaseScaleHandlePath();
 
   const MPImageTransformGeometry({
     required this.localBounds,
@@ -327,6 +324,39 @@ class MPImageTransformGeometry {
     ]);
 
     return _baseScaleHandlePath.transform(matrix);
+  }
+
+  static Path _buildBaseScaleHandlePath() {
+    final Path centeredPath = MPInkscapeHandlePaths.centeredDoubleArrow(
+      mpImageTransformHandleBaseSizeOnScreen,
+    );
+    final Rect bounds = centeredPath.getBounds();
+    final double xScale = mpImageTransformHandleLengthOnScreen / bounds.width;
+    final double yScale =
+        mpImageTransformHandleThicknessOnScreen / bounds.height;
+    final Float64List matrix = Float64List.fromList(<double>[
+      xScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      yScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+    ]);
+
+    assert(bounds.width > 0.0);
+    assert(bounds.height > 0.0);
+
+    return centeredPath.transform(matrix);
   }
 
   static Offset _resolveOutwardDirection({
