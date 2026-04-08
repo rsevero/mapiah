@@ -1414,6 +1414,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageRemoveScrapButton => 'Remove scrap';
 
   @override
+  String get th2FileEditPageResetImageButton => 'Reset image transform';
+
+  @override
   String get th2FileEditPageReverseLine => 'Reverse line (Ctrl+Shift+R)';
 
   @override

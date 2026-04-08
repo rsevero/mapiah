@@ -212,6 +212,7 @@ Each image row contains:
 * A grid visibility checkbox (XVI images only) to show or hide the survey grid independently from the image itself
 * The image filename
 * An edit button to enter image transform mode on the canvas
+* A reset button to restore image translation, scale, and rotation to their defaults
 * A delete button to remove the image
 * A drag handle (⣿) to reorder images
 
@@ -228,6 +229,8 @@ While image transform mode is active:
 * Hold _Shift_ while dragging a handle to scale symmetrically around the image center
 * Hold _Alt_ while dragging a handle for finer, slower scaling
 * Press _Esc_ to leave image transform mode
+
+Click the reset button on an image row to set `xx`, `yy`, and the rotation angle back to `0`, `xScale` and `yScale` back to `1`, and image visibility and XVI grid visibility back to their default visible state. The reset keeps the XVI root unchanged.
 
 ### Grid visibility
 For XVI survey background images, a second checkbox controls whether the survey grid is displayed. Hiding the grid leaves the shots, stations, and sketch lines visible while removing the grid lines from the canvas. The grid visibility state is saved with the session.

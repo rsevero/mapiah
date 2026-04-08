@@ -83,6 +83,7 @@ Cada linha de imagem contém:
 * Uma caixa de seleção de visibilidade da grade (somente imagens XVI) para mostrar ou ocultar a grade do levantamento independentemente da imagem
 * O nome do arquivo da imagem
 * Um botão de edição para entrar no modo de transformação da imagem no canvas
+* Um botão de redefinição para restaurar o deslocamento, a escala e a rotação da imagem aos valores padrão
 * Um botão de exclusão para remover a imagem
 * Um identificador de arrasto (⣿) para reordenar as imagens
 
@@ -99,6 +100,8 @@ Enquanto o modo de transformação da imagem estiver ativo:
 * Mantenha _Shift_ pressionado ao arrastar uma alça para redimensionar de forma simétrica em torno do centro da imagem
 * Mantenha _Alt_ pressionado ao arrastar uma alça para fazer um redimensionamento mais fino e lento
 * Pressione _Esc_ para sair do modo de transformação da imagem
+
+Clique no botão de redefinição em uma linha de imagem para voltar `xx`, `yy` e o ângulo de rotação para `0`, `xScale` e `yScale` para `1`, e a visibilidade da imagem e da grade XVI para o estado padrão visível. A redefinição mantém o XVI root inalterado.
 
 ### Visibilidade da grade
 Para imagens de fundo XVI, uma segunda caixa de seleção controla se a grade do levantamento é exibida. Ocultar a grade mantém as visadas, as estações e as linhas de esboço visíveis, removendo apenas as linhas da grade do canvas. O estado da visibilidade da grade é salvo com a sessão.

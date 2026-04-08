@@ -1434,6 +1434,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageRemoveScrapButton => 'Remover croqui';
 
   @override
+  String get th2FileEditPageResetImageButton =>
+      'Redefinir transformação da imagem';
+
+  @override
   String get th2FileEditPageReverseLine => 'Inverter linha (Ctrl+Shift+R)';
 
   @override

@@ -2199,6 +2199,11 @@
     "description": "The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageResetImageButton": "Reset image transform",
+  "@th2FileEditPageResetImageButton": {
+    "description": "Tooltip for resetting image translation, scale and rotation from the available images list. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
   "th2FileEditPageReverseLine": "Reverse line (Ctrl+Shift+R)",
   "@th2FileEditPageReverseLine": {
     "description": "Tooltip for the reverse line FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",

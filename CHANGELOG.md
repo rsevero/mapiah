@@ -10,6 +10,7 @@
   * Merge areas (Ctrl+M): when multiple selected areas or border lines belong to the same area set, Mapiah now merges their LTSA borders into the minimum number of closed output lines and replaces them with a single area referencing those merged borders.
   * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
 * Fixed bugs:
+  * Background images now have a reset action in the available-images list: the new button sits next to edit, restores translation/scale/rotation plus image and XVI-grid visibility to their default state, preserves the XVI root, and converts the reset result back to a `THXTherionImageInsertConfig`.
   * Available scraps now lists scraps in the reverse order of TH2 storage so the top row matches the topmost scrap on the canvas, while drag-and-drop still reorders the stored TH2 scrap sequence correctly.
   * Background image editing now uses one combined transform mode instead of separate move/scale states: the active image shows Inkscape-style black resize handles, dragging the image still moves it, dragging handles scales it with `Ctrl` aspect-ratio lock, `Shift` symmetric scaling, and `Alt` fine control, and the first true scale action converts legacy XTherion images to `MPImageInsertConfig` while preserving undo/redo and runtime image caches.
   * Background image edit overlays now match Inkscape more closely by drawing the resize handles as outward black scale arrows and removing the brown editable-image border.
@@ -36,6 +37,7 @@
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
   * Normalized freshly written `xth_me_image_insert` entries so simple `yy` values are emitted as bare numbers like `28` instead of single-value braces like `{28}`, while keeping wrapped output for composite `yy xviRoot` payloads.
 * Infrastructure maintenance:
+  * Moved the available-images reset workflow out of `MPAvailableImagesWidget` and into `TH2FileEditMoveScaleRotateElementController`, keeping the widget as a thin UI trigger and centralizing image-transform business logic with the other move/scale/rotate actions.
   * Replaced remaining image-transform helper magic numbers with shared constants, including handle sizing, overlay border width, and named handle-group sets used by the resize-axis logic.
   * Updated EN/PT image-edit help and keyboard-shortcut pages for the new transform workflow, and brought both TH2 edit help-page indexes back in sync with their actual section headings.
   * Extracted TH2FileEditMoveScaleRotateElementController: moved move, scale, and rotate-related element/image workflow code out of the generic element-edit controller so transform logic now lives in its own MobX store, instantiated directly by TH2FileEditController.

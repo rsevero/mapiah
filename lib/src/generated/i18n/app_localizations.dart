@@ -2638,6 +2638,12 @@ abstract class AppLocalizations {
   /// **'Remove scrap'**
   String get th2FileEditPageRemoveScrapButton;
 
+  /// Tooltip for resetting image translation, scale and rotation from the available images list. Used on: _MPAvailableImagesWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Reset image transform'**
+  String get th2FileEditPageResetImageButton;
+
   /// Tooltip for the reverse line FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:

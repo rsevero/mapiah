@@ -8,6 +8,8 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -88,6 +90,69 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
 
   MPRuntimeImageInsertConfigMixin prepareImageScaleState(int imageMPID) {
     return prepareImageMoveState(imageMPID);
+  }
+
+  void resetImageTransform(int imageMPID) {
+    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
+      imageMPID,
+    );
+    final THIsParentMixin parent = image.parent(th2File: _th2File);
+    final int imagePositionInParent = parent.getChildPosition(image);
+    final THXTherionImageInsertConfig resetImage =
+        _buildResetXTherionImageInsertConfig(image);
+    final MPCommand removeImageCommand =
+        MPCommandFactory.removeImageInsertConfigFromExisting(
+          existingImageInsertConfigMPID: imageMPID,
+          th2File: _th2File,
+        );
+    final MPCommand addImageCommand =
+        MPCommandFactory.addImageInsertConfigFromExisting(
+          existingImageInsertConfig: resetImage,
+          th2File: _th2File,
+          imageInsertConfigPositionInParent: imagePositionInParent,
+        );
+    final MPCommand resetImageCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: <MPCommand>[removeImageCommand, addImageCommand],
+          descriptionType: removeImageCommand.descriptionType,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsListChanged,
+        );
+
+    _th2FileEditController.stateController.clearImageOperationState();
+    _th2FileEditController.execute(resetImageCommand);
+    _th2FileEditController.triggerImagesRedraw();
+  }
+
+  THXTherionImageInsertConfig _buildResetXTherionImageInsertConfig(
+    MPRuntimeImageInsertConfigMixin image,
+  ) {
+    final THXTherionImageInsertConfig resetImage =
+        THXTherionImageInsertConfig(
+          parentMPID: image.parentMPID,
+          filename: image.filename,
+          xx: THDoublePart(value: 0.0),
+          yy: THDoublePart(value: 0.0),
+          isVisible: true,
+          isGridVisible: true,
+          xviRoot: image.asXVIImage?.xviRoot ?? '',
+          originalLineInTH2File: '',
+        ).copyWith(
+          mpID: image.mpID,
+          sameLineComment: image.sameLineComment,
+          iidx: (image is THXTherionImageInsertConfig) ? image.iidx : 0,
+          imgx: (image is THXTherionImageInsertConfig) ? image.imgx : '',
+          xData: (image is THXTherionImageInsertConfig) ? image.xData : '',
+          xImage: (image is THXTherionImageInsertConfig) ? image.xImage : false,
+          igamma: (image is THXTherionImageInsertConfig) ? image.igamma : null,
+        );
+
+    image.copyRuntimeImageCacheTo(
+      targetImage: resetImage,
+      th2FileEditController: _th2FileEditController,
+    );
+
+    return resetImage;
   }
 
   MPImageInsertConfig _prepareImageOperationState({

@@ -439,6 +439,7 @@
   "th2FileEditPageRemoveButton": "Apagar (Del)",
   "th2FileEditPageRemoveImageButton": "Remover imagem",
   "th2FileEditPageRemoveScrapButton": "Remover croqui",
+  "th2FileEditPageResetImageButton": "Redefinir transformação da imagem",
   "th2FileEditPageReverseLine": "Inverter linha (Ctrl+Shift+R)",
   "th2FileEditPageSave": "Salvar (Ctrl+S)",
   "th2FileEditPageSaveAs": "Salvar como (Shift+Ctrl+S)",

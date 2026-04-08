@@ -338,6 +338,12 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                         isImageEditing:
                                                             isImageEditing,
                                                       ),
+                                                      _buildResetImageButton(
+                                                        colorScheme:
+                                                            colorScheme,
+                                                        imageMPID: image.mpID,
+                                                        isEnabled: true,
+                                                      ),
                                                       IconButton(
                                                         icon: Icon(
                                                           Icons
@@ -442,6 +448,15 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
                                                                           false,
                                                                       isImageEditing:
                                                                           isImageEditing,
+                                                                    ),
+                                                                    _buildResetImageButton(
+                                                                      colorScheme:
+                                                                          colorScheme,
+                                                                      imageMPID:
+                                                                          image
+                                                                              .mpID,
+                                                                      isEnabled:
+                                                                          false,
                                                                     ),
                                                                     IconButton(
                                                                       icon: Icon(
@@ -656,6 +671,28 @@ class _MPAvailableImagesWidgetState extends State<MPAvailableImagesWidget> {
       tooltip: tooltip,
       style: buttonStyle,
       onPressed: isEnabled ? () => _onPressedToggleImageEdit(imageMPID) : null,
+    );
+  }
+
+  Widget _buildResetImageButton({
+    required ColorScheme colorScheme,
+    required int imageMPID,
+    required bool isEnabled,
+  }) {
+    return IconButton(
+      icon: const Icon(Icons.restart_alt_outlined),
+      tooltip: mpLocator.appLocalizations.th2FileEditPageResetImageButton,
+      style: IconButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        foregroundColor: colorScheme.onSecondary,
+      ),
+      onPressed: isEnabled ? () => _onPressedResetImage(imageMPID) : null,
+    );
+  }
+
+  void _onPressedResetImage(int imageMPID) {
+    th2FileEditController.moveScaleRotateElementController.resetImageTransform(
+      imageMPID,
     );
   }
 
