@@ -600,6 +600,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     required String tooltip,
     required _StateContextFABCategory category,
     bool isActive = false,
+    Widget? child,
   }) {
     final bool isEnabled = onPressed != null;
     final Color categoryBackgroundColor = _getStateContextFABCategoryColor(
@@ -626,7 +627,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   ? categoryForegroundColor
                   : colorScheme.surfaceContainerHighest),
         elevation: isActive ? 0 : (isEnabled ? 6.0 : 3.0),
-        child: Icon(icon, size: mpFloatingStateActionZoomIconSize),
+        child: child ?? Icon(icon, size: mpFloatingStateActionZoomIconSize),
       ),
     );
   }
@@ -1083,6 +1084,10 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 .onButtonPressed(MPButtonType.flipImageVertically),
             category: _StateContextFABCategory.editTools,
             icon: Icons.flip_camera_android,
+            child: RotatedBox(
+              quarterTurns: 1,
+              child: Icon(Icons.flip, size: mpFloatingStateActionZoomIconSize),
+            ),
             tooltip: appLocalizations.th2FileEditPageFlipImageVertically,
           ),
         ],
