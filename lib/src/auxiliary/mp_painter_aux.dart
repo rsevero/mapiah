@@ -32,7 +32,7 @@ class MPPainterAux {
       arrowSide,
       arrowTip.dy - arrowSideInsetFromTip,
     );
-    final double azimuthRadians = azimuth * mp1DegreeInRad;
+    final double azimuthRadians = azimuth * mp1DegreeInRads;
     final double cosAzimuth = math.cos(azimuthRadians);
     final double sinAzimuth = math.sin(azimuthRadians);
 

@@ -301,7 +301,7 @@ class MPTH2FileEditStateImageMoveScale
     final Offset anchorCanvas = startImage.transformLocalPoint(anchorLocal);
     final Offset rotatedDelta = _rotateOffset(
       canvasPosition - anchorCanvas,
-      -startImage.rotationDeg.value * mp1DegreeInRad,
+      -startImage.rotationDeg.value * mp1DegreeInRads,
     );
     final ({double xScale, double yScale}) resolvedScales = _resolveScales(
       startImage: startImage,
@@ -491,7 +491,7 @@ class MPTH2FileEditStateImageMoveScale
     );
     final Offset rotatedDelta = _rotateOffset(
       scaledAnchor - scaledPivot,
-      startImage.rotationDeg.value * mp1DegreeInRad,
+      startImage.rotationDeg.value * mp1DegreeInRads,
     );
 
     return anchorCanvas - rotatedDelta - scaledPivot;

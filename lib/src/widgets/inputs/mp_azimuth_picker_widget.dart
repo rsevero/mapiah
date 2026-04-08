@@ -100,7 +100,7 @@ class _MPAzimuthPickerWidgetState extends State<MPAzimuthPickerWidget> {
   double _calculateAngle({required Offset center, required Offset position}) {
     final Offset delta = position - center;
     // Convert cartesian to polar coordinates (with y inverted)
-    final double angle = math.atan2(delta.dx, -delta.dy) * mp1RadInDegree;
+    final double angle = math.atan2(delta.dx, -delta.dy) * mp1RadInDegrees;
 
     return angle;
   }

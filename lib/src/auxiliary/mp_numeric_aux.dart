@@ -704,7 +704,7 @@ class MPNumericAux {
     }
 
     final double radians = math.atan2(x, y);
-    final double degrees = radians * mp1RadInDegree;
+    final double degrees = radians * mp1RadInDegrees;
 
     return normalizeAngle(degrees);
   }

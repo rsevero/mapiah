@@ -113,7 +113,7 @@ class MPCubicChainSource implements MPParamCurveFit {
     final double angle = math.acos(clamped);
 
     // Threshold: treat as cusp when turn exceeds 60 degrees.
-    const double cuspAngleThreshold = mp60DegreeInRad;
+    const double cuspAngleThreshold = mp60DegreesInRad;
 
     return angle > cuspAngleThreshold;
   }

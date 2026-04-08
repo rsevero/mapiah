@@ -64,7 +64,7 @@ class MPCompassPainter extends CustomPainter {
       const List<double> rightAngles = [0.0, 90.0, 180.0, 270.0];
 
       for (int i = 0; i < directions.length; i++) {
-        final double angleRad = rightAngles[i] * mp1DegreeInRad;
+        final double angleRad = rightAngles[i] * mp1DegreeInRads;
         final Offset textOffset = Offset(
           center.dx +
               math.sin(angleRad) *

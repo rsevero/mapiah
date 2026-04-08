@@ -330,7 +330,7 @@ abstract class MPImageInsertConfig extends THElement
     final Offset translation = Offset(xx.value, yy.value);
     final Offset pivot = translation + scaledRotationCenter;
     final Offset translatedPoint = scaledPoint + translation;
-    final double angleInRad = rotationDeg.value * mp1DegreeInRad;
+    final double angleInRad = rotationDeg.value * mp1DegreeInRads;
     final double cosValue = cos(angleInRad);
     final double sinValue = sin(angleInRad);
     final Offset delta = translatedPoint - pivot;

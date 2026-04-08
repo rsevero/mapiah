@@ -252,7 +252,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     final double startAngleInRad = atan2(startVector.dy, startVector.dx);
     final double currentAngleInRad = atan2(currentVector.dy, currentVector.dx);
     final double angleDeltaInDeg =
-        (currentAngleInRad - startAngleInRad) / mp1DegreeInRad;
+        (currentAngleInRad - startAngleInRad) / mp1DegreeInRads;
     double targetRotationDeg = startImage.rotationDeg.value + angleDeltaInDeg;
 
     if (MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed()) {
@@ -326,7 +326,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       startImage.xx.value,
       startImage.yy.value,
     );
-    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRad;
+    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
     final Offset scaledPivot = startImage.scaledRotationCenter;
     final Offset rotatedScaledPivot = _rotateOffset(scaledPivot, angleInRad);
     final Offset rotatedScaledTargetPivot = _rotateOffset(
@@ -441,7 +441,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     final Offset scaledPivot = startImage.scaledRotationCenter;
     final Offset rotatedDelta = _rotateOffset(
       scaledAnchor - scaledPivot,
-      rotationDeg * mp1DegreeInRad,
+      rotationDeg * mp1DegreeInRads,
     );
 
     return anchorCanvas - scaledPivot - rotatedDelta;
@@ -456,7 +456,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       targetLocalPivot.dx * startImage.xScale.value,
       targetLocalPivot.dy * startImage.yScale.value,
     );
-    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRad;
+    final double angleInRad = startImage.rotationDeg.value * mp1DegreeInRads;
     final Offset rotatedCurrentScaledPivot = _rotateOffset(
       currentScaledPivot,
       angleInRad,

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -596,9 +596,8 @@ class MPImageRotationGeometry {
     required Offset direction,
   }) {
     final Offset normalizedDirection = _normalizeOffset(direction);
-    final double angleInRad = math.atan2(
-      normalizedDirection.dy,
-      normalizedDirection.dx,
+    final double angleInRad = rotationHandleAngleForTesting(
+      normalizedDirection,
     );
     final double cosValue = math.cos(angleInRad);
     final double sinValue = math.sin(angleInRad);
@@ -651,33 +650,11 @@ class MPImageRotationGeometry {
     final Path centeredPath = MPInkscapeHandlePaths.centeredCurvedArrow(
       mpImageTransformHandleBaseSizeOnScreen,
     );
-    final Rect bounds = centeredPath.getBounds();
-    final double xScale = mpImageTransformHandleLengthOnScreen / bounds.width;
-    final double yScale =
-        mpImageTransformHandleThicknessOnScreen / bounds.height;
-    final Float64List matrix = Float64List.fromList(<double>[
-      xScale,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      yScale,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0,
-    ]);
 
-    assert(bounds.width > 0.0);
-    assert(bounds.height > 0.0);
-
-    return centeredPath.transform(matrix);
+    return _buildUniformlyScaledPath(
+      centeredPath: centeredPath,
+      targetSize: mpImageTransformHandleLengthOnScreen,
+    );
   }
 
   static Path _buildBasePivotPath() {
@@ -751,5 +728,54 @@ class MPImageRotationGeometry {
     }
 
     return offset / distance;
+  }
+
+  @visibleForTesting
+  static double rotationHandleAngleForTesting(Offset direction) {
+    final Offset normalizedDirection = _normalizeOffset(direction);
+    final double directionAngleInRad = math.atan2(
+      normalizedDirection.dy,
+      normalizedDirection.dx,
+    );
+
+    return directionAngleInRad + mp45DegreesInRad;
+  }
+
+  @visibleForTesting
+  static Path baseRotationHandlePathForTesting() {
+    return _baseRotationHandlePath;
+  }
+
+  static Path _buildUniformlyScaledPath({
+    required Path centeredPath,
+    required double targetSize,
+  }) {
+    final Rect bounds = centeredPath.getBounds();
+    final double maxDimension = math.max(bounds.width, bounds.height);
+    final double uniformScale = targetSize / maxDimension;
+    final Float64List matrix = Float64List.fromList(<double>[
+      uniformScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      uniformScale,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+    ]);
+
+    assert(bounds.width > 0.0);
+    assert(bounds.height > 0.0);
+    assert(maxDimension > 0.0);
+
+    return centeredPath.transform(matrix);
   }
 }

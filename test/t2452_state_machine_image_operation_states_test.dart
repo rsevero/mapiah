@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -30,6 +31,25 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
   final MPLocator mpLocator = MPLocator();
+
+  group('image rotation handle geometry', () {
+    test('rotation handle base path keeps square proportions', () {
+      final Path basePath =
+          MPImageRotationGeometry.baseRotationHandlePathForTesting();
+      final Rect bounds = basePath.getBounds();
+
+      expect(bounds.width, closeTo(bounds.height, 0.0001));
+    });
+
+    test('rotation handle angle compensates curved arrow orientation', () {
+      final double angleInRad =
+          MPImageRotationGeometry.rotationHandleAngleForTesting(
+            const Offset(1.0, 0.0),
+          );
+
+      expect(angleInRad, closeTo(-mp45DegreesInRad, 0.0001));
+    });
+  });
 
   group('state machine image operation preparation', () {
     setUp(() {

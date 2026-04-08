@@ -155,7 +155,7 @@ class MPLSizeOrientationAux {
       rotFromDefault = true;
     }
 
-    final double rotRad = rotDeg * mp1DegreeInRad;
+    final double rotRad = rotDeg * mp1DegreeInRads;
 
     final double lsPixels = (leftSize != null)
         ? th2fileEditController.scaleCanvasToScreen(leftSize)
