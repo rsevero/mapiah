@@ -29,6 +29,7 @@
   * Point stations now expose the `-from` option in the option list, matching Therion's support for choosing the origin branch for station points in extended-elevation scraps.
   * Normalized freshly written `xth_me_image_insert` entries so simple `yy` values are emitted as bare numbers like `28` instead of single-value braces like `{28}`, while keeping wrapped output for composite `yy xviRoot` payloads.
 * Infrastructure maintenance:
+  * Replaced remaining image-transform helper magic numbers with shared constants, including handle sizing, overlay border width, and named handle-group sets used by the resize-axis logic.
   * Updated EN/PT image-edit help and keyboard-shortcut pages for the new transform workflow, and brought both TH2 edit help-page indexes back in sync with their actual section headings.
   * Extracted TH2FileEditMoveScaleRotateElementController: moved move, scale, and rotate-related element/image workflow code out of the generic element-edit controller so transform logic now lives in its own MobX store, instantiated directly by TH2FileEditController.
   * Completed Phase 6 state-machine preparation for Mapiah image inserts: the editor now has dedicated `imageScale`, `imageMove`, and `imageRotate` states, image-edit controller entry points lazily convert legacy XTherion images before entering those states, and the state controller now tracks which image each MP-only image state owns for future transform actions.

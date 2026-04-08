@@ -120,6 +120,8 @@ const double mpRoundToFactor = mpRegularZoomFactor - 1;
 const double mpFineZoomFactor = mpRoundToFactor / 2 + 1;
 const double mpCanvasMovementFactor = 0.1;
 const double mpCanvasRoundFactor = 25.0;
+const double mpImageTransformHandleSizeOnScreen = 8.0;
+const double mpImageTransformOverlayBorderWidth = 1.5;
 
 const double mpDoubleNextEpsilon = 2.220446049250313e-16;
 const double mpDoubleUpEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
@@ -193,6 +195,16 @@ const int mpFirstMPIDForTH2Files = -1;
 const int mpFirstMPIDForElements = 1;
 
 const double mpDesiredSegmentLengthOnScreen = 15.0;
+
+const Set<String> mpImageTransformHandleTypesWithoutXScaling = <String>{
+  'topCenter',
+  'bottomCenter',
+};
+
+const Set<String> mpImageTransformHandleTypesWithoutYScaling = <String>{
+  'centerLeft',
+  'centerRight',
+};
 
 const double mpDesiredGraphicalScaleScreenPointLength = 200.0;
 const double mpGraphicalScalePadding = 20.0;

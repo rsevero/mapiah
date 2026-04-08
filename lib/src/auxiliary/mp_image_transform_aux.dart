@@ -1,45 +1,32 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
 enum MPImageTransformHandleType {
-  topLeft,
-  topCenter,
-  topRight,
+  bottomCenter,
+  bottomLeft,
+  bottomRight,
   centerLeft,
   centerRight,
-  bottomLeft,
-  bottomCenter,
-  bottomRight,
+  topCenter,
+  topLeft,
+  topRight,
 }
 
 extension MPImageTransformHandleTypeExtension on MPImageTransformHandleType {
   bool get affectsX {
-    switch (this) {
-      case MPImageTransformHandleType.topCenter:
-      case MPImageTransformHandleType.bottomCenter:
-        return false;
-      default:
-        return true;
-    }
+    return !mpImageTransformHandleTypesWithoutXScaling.contains(name);
   }
 
   bool get affectsY {
-    switch (this) {
-      case MPImageTransformHandleType.centerLeft:
-      case MPImageTransformHandleType.centerRight:
-        return false;
-      default:
-        return true;
-    }
+    return !mpImageTransformHandleTypesWithoutYScaling.contains(name);
   }
 }
 
 class MPImageTransformGeometry {
-  static const double handleSizeOnScreen = 8.0;
-
   final Rect localBounds;
   final Map<MPImageTransformHandleType, Offset> canvasHandleCenters;
   final Map<MPImageTransformHandleType, Rect> screenHandleRects;
@@ -141,8 +128,8 @@ class MPImageTransformGeometry {
       canvasHandleCenters[handleType] = canvasCenter;
       screenHandleRects[handleType] = Rect.fromCenter(
         center: screenCenter,
-        width: handleSizeOnScreen,
-        height: handleSizeOnScreen,
+        width: mpImageTransformHandleSizeOnScreen,
+        height: mpImageTransformHandleSizeOnScreen,
       );
     }
 

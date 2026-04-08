@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 
@@ -35,7 +36,7 @@ class MPImageOperationOverlayPainter extends CustomPainter {
     final Paint borderPaint = Paint()
       ..color = colorScheme.primary
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = mpImageTransformOverlayBorderWidth;
     final Paint handlePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
