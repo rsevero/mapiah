@@ -24,9 +24,15 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Original file format](#original-file-format)
 - [Images](#images)
   - [Image transform mode](#image-transform-mode)
+  - [Image moving](#image-moving)
+  - [Image scaling](#image-scaling)
+  - [Image rotation](#image-rotation)
   - [Image visibility](#image-visibility)
   - [Grid visibility](#grid-visibility)
   - [Image reordering](#image-reordering)
+- [Drag modifiers](#drag-modifiers)
+  - [Selected elements](#selected-elements)
+  - [Single-line end/control points](#single-line-endcontrol-points)
 - [Scraps](#scraps)
   - [Scrap copy](#scrap-copy)
   - [Scrap cut](#scrap-cut)
@@ -220,17 +226,42 @@ Each image row contains:
 Clicking the visibility checkbox toggles whether the image is displayed on the canvas. Hidden images are still stored in the file.
 
 ### Image transform mode
-Click the edit button on an image row to enter image transform mode for that image. The image is outlined on the canvas with small black handles on the corners and on the middle of each side.
+Click the edit button on an image row to enter image transform mode for that image. The image is outlined on the canvas with small black handles on the corners and on the middle of each side. Clicking the selected image again while transform mode is active switches to image rotation mode, where the corner handles become curved rotation handles and a pivot marker is shown.
 
 While image transform mode is active:
 * Drag the image itself to move it
 * Drag any black handle to scale it
-* Hold _Ctrl_ while dragging a handle to preserve the image aspect ratio
-* Hold _Shift_ while dragging a handle to scale symmetrically around the image center
-* Hold _Alt_ while dragging a handle for finer, slower scaling
+* Click the selected image to toggle between move/scale mode and rotate mode
 * Press _Esc_ to leave image transform mode
 
 Click the reset button on an image row to set `xx`, `yy`, and the rotation angle back to `0`, `xScale` and `yScale` back to `1`, and image visibility and XVI grid visibility back to their default visible state. The reset keeps the XVI root unchanged.
+
+### Image moving
+In image transform mode, drag the image body to move the selected image.
+
+The following modifiers can be combined while moving:
+* Hold _Alt_ and drag anywhere on the canvas to move the selected image without needing to start on the image body
+* Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction
+* Hold _Shift_ while dragging to temporarily disable snapping
+
+### Image scaling
+In image transform mode, drag any black handle to scale the selected image.
+
+Scaling modifiers:
+* Hold _Ctrl_ while dragging a handle to preserve the image aspect ratio
+* Hold _Shift_ while dragging a handle to scale symmetrically around the image center
+* Hold _Alt_ while dragging a handle for finer, slower scaling
+
+### Image rotation
+While image transform mode is active, click the selected image to enter rotation mode. The corner handles change to curved rotation handles and a pivot marker appears.
+
+In rotation mode:
+* Drag a curved corner handle to rotate the image
+* Drag the pivot marker to change the rotation center
+* Hold _Ctrl_ while rotating to snap the angle to the configured snap angle
+* Hold _Shift_ while rotating to keep the opposite corner fixed in place
+
+For XVI images with an `xviRoot`, the pivot marker is shown but cannot be moved.
 
 ### Grid visibility
 For XVI survey background images, a second checkbox controls whether the survey grid is displayed. Hiding the grid leaves the shots, stations, and sketch lines visible while removing the grid lines from the canvas. The grid visibility state is saved with the session.
@@ -241,6 +272,23 @@ Click and drag the drag handle (⣿) of any image row to change its position in 
 While dragging:
 * The dragged row disappears from the list and a semi-transparent preview of it follows the cursor.
 * A colored bar appears above the row where the dragged image will be inserted when released.
+
+## Drag modifiers
+Mapiah uses the same movement modifiers for background images, selected elements, and selected end/control points in single-line edit mode. These modifiers can be combined.
+
+### Selected elements
+When one or more elements are selected in selection mode:
+* Drag the selected elements to move them normally
+* Hold _Alt_ and drag anywhere on the canvas to move the current selection without changing the selection
+* Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction
+* Hold _Shift_ while dragging to temporarily disable snapping
+
+### Single-line end/control points
+When one or more end/control points are selected in line edit mode:
+* Drag the selected point or points to move them normally
+* Hold _Alt_ and drag anywhere on the canvas to move the current point selection without changing the selection
+* Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction
+* Hold _Shift_ while dragging to temporarily disable snapping
 
 ## Scraps
 It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.

@@ -39,8 +39,14 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Inverter visibilidade de todas as imagens                              | Ctrl+I                                        |
 | Juntar linhas em pontos de início/fim coincidentes                     | Ctrl+J                                        |
 | Mesclar áreas                                                          | Ctrl+M                                        |
+| Mover imagem / elementos / pontos finais-controle selecionados de qualquer lugar | Alt+arrastar                        |
+| Mover imagem / elementos / pontos finais-controle selecionados com restrição      | Ctrl+arrastar                       |
+| Mover imagem / elementos / pontos finais-controle selecionados sem snap           | Shift+arrastar                      |
 | Opções padrão (sem elementos selecionados)                             | O                                             |
 | Recortar elementos selecionados                                        | Ctrl+X                                        |
+| Rotacionar imagem                                                      | arrastar alça de rotação da imagem            |
+| Rotacionar imagem com snap de ângulo                                   | Ctrl+arrastar alça de rotação da imagem       |
+| Rotacionar imagem mantendo o canto oposto fixo                         | Shift+arrastar alça de rotação da imagem      |
 | Redimensionar imagem pela alça com controle fino                       | Alt+arrastar alça da imagem                   |
 | Redimensionar imagem pela alça de forma simétrica                      | Shift+arrastar alça da imagem                 |
 | Redimensionar imagem pela alça preservando a proporção                 | Ctrl+arrastar alça da imagem                  |

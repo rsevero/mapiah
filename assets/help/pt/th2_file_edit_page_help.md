@@ -10,9 +10,15 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Abas de arquivo](#abas-de-arquivo)
 - [Imagens](#imagens)
   - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
+  - [Movimento da imagem](#movimento-da-imagem)
+  - [Redimensionamento da imagem](#redimensionamento-da-imagem)
+  - [Rotação da imagem](#rotação-da-imagem)
   - [Visibilidade da imagem](#visibilidade-da-imagem)
   - [Visibilidade da grade](#visibilidade-da-grade)
   - [Reordenação de imagens](#reordenação-de-imagens)
+- [Modificadores de arrasto](#modificadores-de-arrasto)
+  - [Elementos selecionados](#elementos-selecionados)
+  - [Pontos finais/controle em edição de linha](#pontos-finaiscontrole-em-edição-de-linha)
 - [Croquis](#croquis)
   - [Copiar croqui](#copiar-croqui)
   - [Recortar croqui](#recortar-croqui)
@@ -91,17 +97,42 @@ Cada linha de imagem contém:
 Clicar na caixa de seleção de visibilidade alterna se a imagem é exibida no canvas. Imagens ocultas ainda são armazenadas no arquivo.
 
 ### Modo de transformação da imagem
-Clique no botão de editar de uma linha de imagem para entrar no modo de transformação dessa imagem. A imagem passa a ser destacada no canvas com pequenas alças pretas nos cantos e no meio de cada lado.
+Clique no botão de editar de uma linha de imagem para entrar no modo de transformação dessa imagem. A imagem passa a ser destacada no canvas com pequenas alças pretas nos cantos e no meio de cada lado. Clicar novamente na imagem já selecionada enquanto esse modo está ativo alterna para o modo de rotação da imagem, onde as alças dos cantos passam a ser alças curvas de rotação e um marcador de pivô é exibido.
 
 Enquanto o modo de transformação da imagem estiver ativo:
 * Arraste a própria imagem para movê-la
 * Arraste qualquer alça preta para redimensioná-la
-* Mantenha _Ctrl_ pressionado ao arrastar uma alça para preservar a proporção da imagem
-* Mantenha _Shift_ pressionado ao arrastar uma alça para redimensionar de forma simétrica em torno do centro da imagem
-* Mantenha _Alt_ pressionado ao arrastar uma alça para fazer um redimensionamento mais fino e lento
+* Clique na imagem selecionada para alternar entre o modo mover/redimensionar e o modo de rotação
 * Pressione _Esc_ para sair do modo de transformação da imagem
 
 Clique no botão de redefinição em uma linha de imagem para voltar `xx`, `yy` e o ângulo de rotação para `0`, `xScale` e `yScale` para `1`, e a visibilidade da imagem e da grade XVI para o estado padrão visível. A redefinição mantém o XVI root inalterado.
+
+### Movimento da imagem
+No modo de transformação da imagem, arraste o corpo da imagem para mover a imagem selecionada.
+
+Os seguintes modificadores podem ser combinados durante o movimento:
+* Mantenha _Alt_ pressionado e arraste em qualquer lugar do canvas para mover a imagem selecionada sem precisar começar sobre o corpo da imagem
+* Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante
+* Mantenha _Shift_ pressionado enquanto arrasta para desativar temporariamente o snap
+
+### Redimensionamento da imagem
+No modo de transformação da imagem, arraste qualquer alça preta para redimensionar a imagem selecionada.
+
+Modificadores de redimensionamento:
+* Mantenha _Ctrl_ pressionado ao arrastar uma alça para preservar a proporção da imagem
+* Mantenha _Shift_ pressionado ao arrastar uma alça para redimensionar de forma simétrica em torno do centro da imagem
+* Mantenha _Alt_ pressionado ao arrastar uma alça para fazer um redimensionamento mais fino e lento
+
+### Rotação da imagem
+Enquanto o modo de transformação da imagem estiver ativo, clique na imagem selecionada para entrar no modo de rotação. As alças dos cantos mudam para alças curvas de rotação e um marcador de pivô aparece.
+
+No modo de rotação:
+* Arraste uma alça curva de canto para rotacionar a imagem
+* Arraste o marcador de pivô para alterar o centro de rotação
+* Mantenha _Ctrl_ pressionado ao rotacionar para aplicar snap do ângulo ao valor configurado
+* Mantenha _Shift_ pressionado ao rotacionar para manter o canto oposto fixo
+
+Para imagens XVI com `xviRoot`, o marcador de pivô é mostrado, mas não pode ser movido.
 
 ### Visibilidade da grade
 Para imagens de fundo XVI, uma segunda caixa de seleção controla se a grade do levantamento é exibida. Ocultar a grade mantém as visadas, as estações e as linhas de esboço visíveis, removendo apenas as linhas da grade do canvas. O estado da visibilidade da grade é salvo com a sessão.
@@ -112,6 +143,23 @@ Clique e arraste o identificador de arrasto (⣿) de qualquer linha de imagem pa
 Durante o arrasto:
 * A linha arrastada desaparece da lista e uma prévia semitransparente dela segue o cursor.
 * Uma barra colorida aparece acima da linha onde a imagem arrastada será inserida ao soltar o botão do mouse.
+
+## Modificadores de arrasto
+O Mapiah usa os mesmos modificadores de movimento para imagens de fundo, elementos selecionados e pontos finais/controle selecionados no modo de edição de linha. Esses modificadores podem ser combinados.
+
+### Elementos selecionados
+Quando um ou mais elementos estão selecionados no modo de seleção:
+* Arraste os elementos selecionados para movê-los normalmente
+* Mantenha _Alt_ pressionado e arraste em qualquer lugar do canvas para mover a seleção atual sem alterar a seleção
+* Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante
+* Mantenha _Shift_ pressionado enquanto arrasta para desativar temporariamente o snap
+
+### Pontos finais/controle em edição de linha
+Quando um ou mais pontos finais/controle estão selecionados no modo de edição de linha:
+* Arraste o ponto ou os pontos selecionados para movê-los normalmente
+* Mantenha _Alt_ pressionado e arraste em qualquer lugar do canvas para mover a seleção atual de pontos sem alterar a seleção
+* Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante
+* Mantenha _Shift_ pressionado enquanto arrasta para desativar temporariamente o snap
 
 ## Croquis
 Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
