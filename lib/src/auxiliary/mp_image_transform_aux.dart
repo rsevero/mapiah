@@ -189,10 +189,21 @@ class MPImageTransformGeometry {
   }
 
   MPImageTransformHandleType? hitTestHandle(Offset screenPosition) {
-    for (final MapEntry<MPImageTransformHandleType, Rect> entry
-        in screenHandleRects.entries) {
-      if (entry.value.contains(screenPosition)) {
-        return entry.key;
+    for (final MPImageTransformHandleType handleType
+        in MPImageTransformHandleType.values) {
+      final Path? handlePath = screenHandlePaths[handleType];
+      final Rect? handleRect = screenHandleRects[handleType];
+
+      if ((handlePath != null) &&
+          handlePath
+              .getBounds()
+              .inflate(mpImageTransformHandleHitBoxSizeOnScreen / 2.0)
+              .contains(screenPosition)) {
+        return handleType;
+      }
+
+      if ((handleRect != null) && handleRect.contains(screenPosition)) {
+        return handleType;
       }
     }
 

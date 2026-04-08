@@ -9,6 +9,7 @@ class MPTH2FileEditStateImageMoveScale
   _MPImageTransformDragMode _dragMode = _MPImageTransformDragMode.none;
   Offset? _dragStartCanvasPosition;
   Offset? _dragStartImageTopLeft;
+  Offset? _scaleStartScreenHandleCenter;
   MPRuntimeImageInsertConfigMixin? _previewImage;
   Offset _previewOffset = Offset.zero;
   MPImageInsertConfig? _scaleStartImage;
@@ -139,7 +140,10 @@ class MPTH2FileEditStateImageMoveScale
     _scaleStartImage = editableImage;
     _scaleStartLocalBounds = geometry.localBounds;
     _scaleHandleType = handleType;
-    _dragStartCanvasPosition = geometry.canvasHandleCenters[handleType];
+    _dragStartCanvasPosition = editableImage.transformLocalPoint(
+      geometry.handleLocalPoint(handleType),
+    );
+    _scaleStartScreenHandleCenter = geometry.screenHandleCenters[handleType];
   }
 
   void _updateMovePreview(PointerMoveEvent event) {
@@ -187,11 +191,13 @@ class MPTH2FileEditStateImageMoveScale
     final Rect? startLocalBounds = _scaleStartLocalBounds;
     final MPImageTransformHandleType? handleType = _scaleHandleType;
     final Offset? dragStartCanvasPosition = _dragStartCanvasPosition;
+    final Offset? scaleStartScreenHandleCenter = _scaleStartScreenHandleCenter;
 
     if ((startImage == null) ||
         (startLocalBounds == null) ||
         (handleType == null) ||
-        (dragStartCanvasPosition == null)) {
+        (dragStartCanvasPosition == null) ||
+        (scaleStartScreenHandleCenter == null)) {
       return;
     }
 
@@ -199,9 +205,12 @@ class MPTH2FileEditStateImageMoveScale
         MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
     final bool isAltPressed = MPInteractionAux.isAltPressed();
-    final Offset rawCanvasPosition = th2FileEditController.offsetScreenToCanvas(
-      event.localPosition,
-    );
+    final Offset dragDeltaOnScreen =
+        event.localPosition - scaleStartScreenHandleCenter;
+    final Offset rawCanvasPosition =
+        dragStartCanvasPosition +
+        (th2FileEditController.offsetScreenToCanvas(dragDeltaOnScreen) -
+            th2FileEditController.offsetScreenToCanvas(Offset.zero));
     final Offset canvasPosition = isAltPressed
         ? dragStartCanvasPosition +
               ((rawCanvasPosition - dragStartCanvasPosition) *
@@ -526,6 +535,7 @@ class MPTH2FileEditStateImageMoveScale
     _dragMode = _MPImageTransformDragMode.none;
     _dragStartCanvasPosition = null;
     _dragStartImageTopLeft = null;
+    _scaleStartScreenHandleCenter = null;
     _previewImage = null;
     _previewOffset = Offset.zero;
     _scaleStartImage = null;
