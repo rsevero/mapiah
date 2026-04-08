@@ -128,13 +128,17 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
 
     switch (type.type()) {
       case MPSettingType.bool:
+        final TextStyle? switchLabelStyle = Theme.of(
+          context,
+        ).inputDecorationTheme.labelStyle;
+
         return _buildSettingFieldWithReset(
           appLocalizations: appLocalizations,
           type: type,
           field: _constrainedEditableField(
             SwitchListTile(
               value: (_draftValues[type] as bool?) ?? false,
-              title: Text(settingLabel),
+              title: Text(settingLabel, style: switchLabelStyle),
               onChanged: (bool value) {
                 setState(() {
                   _draftValues[type] = value;
