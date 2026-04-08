@@ -56,14 +56,15 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
-    final Offset snapedCanvasOffset = snapController
-        .getCanvasSnapedOffsetFromScreenOffset(event.localPosition);
+    final Offset resolvedCanvasOffset = _resolvedMoveCanvasPosition(
+      th2FileEditController.offsetScreenToCanvas(event.localPosition),
+    );
 
     updateStatusBarMessage();
 
     th2FileEditController.moveScaleRotateElementController
-        .moveSelectedEndControlPointsToCanvasCoordinates(snapedCanvasOffset);
-    th2FileEditController.setMovingMousePosition(snapedCanvasOffset);
+        .moveSelectedEndControlPointsToCanvasCoordinates(resolvedCanvasOffset);
+    th2FileEditController.setMovingMousePosition(resolvedCanvasOffset);
   }
 
   @override
@@ -83,29 +84,13 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         LinkedHashMap<int, THLineSegment>();
     final LinkedHashMap<int, THLineSegment> originalLineSegmentsMap =
         LinkedHashMap<int, THLineSegment>();
-    final int referenceLineSegmentMPID =
-        selectionController.clickedElementAtSingleLineEditPointerDown!.mpID;
-    final THPositionPart snapedPosition =
-        snapController.getCanvasSnapedPositionFromScreenOffset(
-          event.localPosition,
-        ) ??
-        THPositionPart(
-          coordinates: th2FileEditController.offsetScreenToCanvas(
-            event.localPosition,
-          ),
-          decimalPositions: th2FileEditController.currentDecimalPositions,
-        );
 
     updateStatusBarMessage();
 
     for (final int selectedLineSegmentMPID in selectedLineSegmentMPIDs) {
       if (!modifiedLineSegmentsMap.containsKey(selectedLineSegmentMPID)) {
-        modifiedLineSegmentsMap[selectedLineSegmentMPID] =
-            (selectedLineSegmentMPID == referenceLineSegmentMPID)
-            ? th2File
-                  .lineSegmentByMPID(selectedLineSegmentMPID)
-                  .copyWith(endPoint: snapedPosition)
-            : th2File.lineSegmentByMPID(selectedLineSegmentMPID);
+        modifiedLineSegmentsMap[selectedLineSegmentMPID] = th2File
+            .lineSegmentByMPID(selectedLineSegmentMPID);
         originalLineSegmentsMap[selectedLineSegmentMPID] =
             originalLineSegmentsMapClone[selectedLineSegmentMPID]!;
       }
@@ -123,10 +108,7 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
         );
 
         if (nextLineSegment is THBezierCurveLineSegment) {
-          modifiedLineSegmentsMap[nextLineSegmentMPID] =
-              (nextLineSegmentMPID == referenceLineSegmentMPID)
-              ? nextLineSegment.copyWith(endPoint: snapedPosition)
-              : nextLineSegment;
+          modifiedLineSegmentsMap[nextLineSegmentMPID] = nextLineSegment;
           originalLineSegmentsMap[nextLineSegmentMPID] =
               originalLineSegmentsMapClone[nextLineSegmentMPID]!;
         }
@@ -145,6 +127,40 @@ class MPTH2FileEditStateMovingEndControlPoints extends MPTH2FileEditState
     elementEditController.updateControllersAfterElementEditFinal();
     th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.editSingleLine,
+    );
+  }
+
+  Offset _resolvedMoveCanvasPosition(Offset canvasOffset) {
+    final bool ctrlOrMetaPressed =
+        MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed();
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+    final Offset constrainedCanvasOffset = ctrlOrMetaPressed
+        ? _constrainCanvasOffset(canvasOffset)
+        : canvasOffset;
+
+    if (shiftPressed) {
+      return constrainedCanvasOffset;
+    }
+
+    return snapController.getCanvasSnapedOffsetFromCanvasOffset(
+      constrainedCanvasOffset,
+    );
+  }
+
+  Offset _constrainCanvasOffset(Offset canvasOffset) {
+    final Offset dragDelta =
+        canvasOffset - selectionController.dragStartCanvasCoordinates;
+
+    if (dragDelta.dx.abs() >= dragDelta.dy.abs()) {
+      return Offset(
+        selectionController.dragStartCanvasCoordinates.dx + dragDelta.dx,
+        selectionController.dragStartCanvasCoordinates.dy,
+      );
+    }
+
+    return Offset(
+      selectionController.dragStartCanvasCoordinates.dx,
+      selectionController.dragStartCanvasCoordinates.dy + dragDelta.dy,
     );
   }
 

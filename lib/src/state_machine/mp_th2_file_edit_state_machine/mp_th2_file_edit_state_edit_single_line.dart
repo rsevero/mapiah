@@ -398,10 +398,17 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
   void setClickedElementAtSingleLineEditPointerDown(THElement? clickedElement) {
     selectionController.clickedElementAtSingleLineEditPointerDown =
         clickedElement;
+  }
 
-    if (clickedElement != null) {
+  void _setSingleLineDragContext({
+    required THElement? clickedElement,
+    Offset? dragStartCanvasCoordinates,
+  }) {
+    setClickedElementAtSingleLineEditPointerDown(clickedElement);
+
+    if (dragStartCanvasCoordinates != null) {
       selectionController.setDragStartCoordinatesFromCanvasCoordinates(
-        (clickedElement as THLineSegment).endPoint.coordinates,
+        dragStartCanvasCoordinates,
       );
     }
   }
@@ -425,6 +432,7 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
 
     elementEditController.resetOriginalFileForLineSimplification();
 
+    final bool altPressed = MPInteractionAux.isAltPressed();
     final bool shiftPressed = MPInteractionAux.isShiftPressed();
     final List<MPSelectableEndControlPoint> clickedEndControlPoints =
         await selectionController.selectableEndControlPointsClicked(
@@ -440,8 +448,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
       final MPSelectableEndControlPoint clickedEndControlPoint =
           clickedEndControlPoints.first;
 
-      setClickedElementAtSingleLineEditPointerDown(
-        clickedEndControlPoint.element,
+      _setSingleLineDragContext(
+        clickedElement: clickedEndControlPoint.element,
+        dragStartCanvasCoordinates: clickedEndControlPoint.position,
       );
 
       if (!shiftPressed) {
@@ -466,8 +475,18 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           }
         }
       }
+      _setSingleLineDragContext(
+        clickedElement: clickedEndControlPoints.first.element,
+        dragStartCanvasCoordinates: clickedEndControlPoints.first.position,
+      );
+    } else if (altPressed &&
+        selectionController.selectedEndControlPoints.isNotEmpty) {
+      final MPSelectedEndControlPoint selectedEndControlPoint =
+          selectionController.selectedEndControlPoints.values.first;
+
+      _dragShouldMovePoints = true;
       setClickedElementAtSingleLineEditPointerDown(
-        clickedEndControlPoints.first.element,
+        selectedEndControlPoint.originalLineSegmentClone,
       );
     }
 
