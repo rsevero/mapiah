@@ -239,6 +239,12 @@ Click the reset button on an image row to set `xx`, `yy`, and the rotation angle
 ### Image moving
 In image transform mode, drag the image body to move the selected image.
 
+Keyboard movement:
+* Press an _Arrow_ key to move the selected image by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
+* Press _Shift+Arrow_ to move by ten times the nudge factor
+* Press _Alt+Arrow_ to move by 1 screen pixel
+* Press _Alt+Shift+Arrow_ to move by 10 screen pixels
+
 The following modifiers can be combined while moving:
 * Hold _Alt_ and drag anywhere on the canvas to move the selected image without needing to start on the image body
 * Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction

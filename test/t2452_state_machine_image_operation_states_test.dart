@@ -12,6 +12,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -257,6 +258,181 @@ void main() {
 
       expect(undoneImage.xx.value, originalXX);
       expect(undoneImage.yy.value, originalYY);
+    });
+
+    test('Arrow moves selected image by the configured nudge factor', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+      final double originalSetting = mpLocator.mpSettingsController
+          .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+      const double nudgeFactor = 3.0;
+
+      mpLocator.mpSettingsController.setDouble(
+        MPSettingID.TH2Edit_NudgeFactor,
+        nudgeFactor,
+      );
+
+      try {
+        final THXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THXTherionImageInsertConfig;
+        final double originalXX = image.xx.value;
+        final double originalYY = image.yy.value;
+
+        controller.stateController.onKeyDownEvent(
+          const KeyDownEvent(
+            physicalKey: PhysicalKeyboardKey.arrowRight,
+            logicalKey: LogicalKeyboardKey.arrowRight,
+            timeStamp: Duration.zero,
+          ),
+        );
+
+        final THXTherionImageInsertConfig movedImage =
+            controller.th2File.imageByMPID(imageMPID)
+                as THXTherionImageInsertConfig;
+
+        expect(movedImage.xx.value, closeTo(originalXX + nudgeFactor, 0.0001));
+        expect(movedImage.yy.value, closeTo(originalYY, 0.0001));
+      } finally {
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          originalSetting,
+        );
+      }
+    });
+
+    test(
+      'Shift+Arrow moves selected image by ten times the nudge factor',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final double originalSetting = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 4.0;
+
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+        MPInteractionAux.debugPressedKeysOverride = {
+          LogicalKeyboardKey.shiftLeft,
+        };
+
+        try {
+          final THXTherionImageInsertConfig image =
+              controller.moveScaleRotateElementController.prepareImageMoveState(
+                    imageMPID,
+                  )
+                  as THXTherionImageInsertConfig;
+          final double originalXX = image.xx.value;
+          final double originalYY = image.yy.value;
+
+          controller.stateController.onKeyDownEvent(
+            const KeyDownEvent(
+              physicalKey: PhysicalKeyboardKey.arrowDown,
+              logicalKey: LogicalKeyboardKey.arrowDown,
+              timeStamp: Duration.zero,
+            ),
+          );
+
+          final THXTherionImageInsertConfig movedImage =
+              controller.th2File.imageByMPID(imageMPID)
+                  as THXTherionImageInsertConfig;
+
+          expect(movedImage.xx.value, closeTo(originalXX, 0.0001));
+          expect(
+            movedImage.yy.value,
+            closeTo(originalYY - (nudgeFactor * 10.0), 0.0001),
+          );
+        } finally {
+          MPInteractionAux.debugPressedKeysOverride = null;
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalSetting,
+          );
+        }
+      },
+    );
+
+    test('Alt+Arrow moves selected image by one screen pixel', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+
+      MPInteractionAux.debugPressedKeysOverride = {LogicalKeyboardKey.altLeft};
+
+      try {
+        final THXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THXTherionImageInsertConfig;
+        final double originalXX = image.xx.value;
+        final double originalYY = image.yy.value;
+        final double expectedCanvasStep = controller.scaleScreenToCanvas(1.0);
+
+        controller.stateController.onKeyDownEvent(
+          const KeyDownEvent(
+            physicalKey: PhysicalKeyboardKey.arrowLeft,
+            logicalKey: LogicalKeyboardKey.arrowLeft,
+            timeStamp: Duration.zero,
+          ),
+        );
+
+        final THXTherionImageInsertConfig movedImage =
+            controller.th2File.imageByMPID(imageMPID)
+                as THXTherionImageInsertConfig;
+
+        expect(
+          movedImage.xx.value,
+          closeTo(originalXX - expectedCanvasStep, 0.0001),
+        );
+        expect(movedImage.yy.value, closeTo(originalYY, 0.0001));
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
+    });
+
+    test('Alt+Shift+Arrow moves selected image by ten screen pixels', () async {
+      final TH2FileEditController controller = await loadController();
+      final int imageMPID = controller.th2File.imageMPIDs.first;
+
+      MPInteractionAux.debugPressedKeysOverride = {
+        LogicalKeyboardKey.altLeft,
+        LogicalKeyboardKey.shiftLeft,
+      };
+
+      try {
+        final THXTherionImageInsertConfig image =
+            controller.moveScaleRotateElementController.prepareImageMoveState(
+                  imageMPID,
+                )
+                as THXTherionImageInsertConfig;
+        final double originalXX = image.xx.value;
+        final double originalYY = image.yy.value;
+        final double expectedCanvasStep = controller.scaleScreenToCanvas(10.0);
+
+        controller.stateController.onKeyDownEvent(
+          const KeyDownEvent(
+            physicalKey: PhysicalKeyboardKey.arrowUp,
+            logicalKey: LogicalKeyboardKey.arrowUp,
+            timeStamp: Duration.zero,
+          ),
+        );
+
+        final THXTherionImageInsertConfig movedImage =
+            controller.th2File.imageByMPID(imageMPID)
+                as THXTherionImageInsertConfig;
+
+        expect(movedImage.xx.value, closeTo(originalXX, 0.0001));
+        expect(
+          movedImage.yy.value,
+          closeTo(originalYY + expectedCanvasStep, 0.0001),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
     });
 
     test('image move state keeps undo redo buttons visible', () async {

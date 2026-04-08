@@ -193,6 +193,20 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
   }
 
   @override
+  void onKeyDownEvent(KeyDownEvent event) {
+    if (_handleArrowMoveKey(event.logicalKey)) {
+      return;
+    }
+
+    super.onKeyDownEvent(event);
+  }
+
+  @override
+  void onKeyRepeatEvent(KeyRepeatEvent event) {
+    _handleArrowMoveKey(event.logicalKey);
+  }
+
+  @override
   void onStateExit(MPTH2FileEditState nextState) {
     _resetDragPreview(updateRedraw: false);
     th2FileEditController.setMovingMousePosition(null);
@@ -385,6 +399,70 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
         );
 
     th2FileEditController.execute(moveCommand);
+  }
+
+  bool _handleArrowMoveKey(LogicalKeyboardKey logicalKey) {
+    if (_dragMode != _MPImageTransformDragMode.none) {
+      return false;
+    }
+
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
+    final bool isMetaPressed = MPInteractionAux.isMetaPressed();
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+
+    if (isCtrlPressed || isMetaPressed) {
+      return false;
+    }
+
+    final double baseStep = isAltPressed
+        ? th2FileEditController.scaleScreenToCanvas(1.0)
+        : mpLocator.mpSettingsController.getDoubleWithDefault(
+            MPSettingID.TH2Edit_NudgeFactor,
+          );
+    final double step = isShiftPressed ? baseStep * 10.0 : baseStep;
+    final Offset? deltaOnCanvas = _deltaOnCanvasForArrow(
+      logicalKey: logicalKey,
+      step: step,
+    );
+
+    if (deltaOnCanvas == null) {
+      return false;
+    }
+
+    if (deltaOnCanvas == Offset.zero) {
+      return true;
+    }
+
+    final MPMoveImageInsertConfigCommand moveCommand =
+        MPCommandFactory.moveImageInsertConfig(
+          imageMPID: imageMPID,
+          deltaOnCanvas: deltaOnCanvas,
+          th2File: th2File,
+          decimalPositions: th2FileEditController.currentDecimalPositions,
+        );
+
+    th2FileEditController.execute(moveCommand);
+
+    return true;
+  }
+
+  Offset? _deltaOnCanvasForArrow({
+    required LogicalKeyboardKey logicalKey,
+    required double step,
+  }) {
+    switch (logicalKey) {
+      case LogicalKeyboardKey.arrowLeft:
+        return Offset(-step, 0.0);
+      case LogicalKeyboardKey.arrowRight:
+        return Offset(step, 0.0);
+      case LogicalKeyboardKey.arrowUp:
+        return Offset(0.0, step);
+      case LogicalKeyboardKey.arrowDown:
+        return Offset(0.0, -step);
+      default:
+        return null;
+    }
   }
 
   void _commitScalePreview() {

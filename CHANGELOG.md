@@ -11,6 +11,7 @@
   * Convert line segments between straight and Bézier types with `J` / `Shift+J`, available both for selected whole lines in selection mode and for selected non-start line segments in single-line-edit mode, with matching state-context FAB actions and undo support. [request by Axel Hack]
   * Renamed the image-rotation snap setting to `TH2Edit_SnapAngle`, updated the default constant name to `mpDefaultSnapAngle`, changed the UI label to "Snap angle" / "Ângulo preferencial", and documented the setting in the EN/PT settings help pages.
   * Added the `TH2Edit_NudgeFactor` setting as a persisted double with default `2.0`, including settings-page labels and regression coverage for the default-value path. It is not used by editing actions yet.
+  * Image move mode now supports keyboard nudging: `Arrow` moves the selected image by `TH2Edit_NudgeFactor`, `Shift+Arrow` by 10x that value, `Alt+Arrow` by 1 screen pixel, and `Alt+Shift+Arrow` by 10 screen pixels. Updated the EN/PT file-edit help pages and keyboard-shortcuts pages, with regression tests for all four shortcut variants.
 * Fixed bugs:
   * Settings page: boolean setting labels now use the same text style as the other setting labels, so "Show direction ticks on non-selected lines" no longer appears larger than the rest.
   * The available-scraps and available-images overlays are now mutually exclusive: opening one closes the other first, so the two panels can no longer stay open at the same time.

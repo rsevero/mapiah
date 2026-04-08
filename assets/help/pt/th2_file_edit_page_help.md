@@ -110,6 +110,12 @@ Clique no botão de redefinição em uma linha de imagem para voltar `xx`, `yy` 
 ### Movimento da imagem
 No modo de transformação da imagem, arraste o corpo da imagem para mover a imagem selecionada.
 
+Movimentação pelo teclado:
+* Pressione uma tecla de _Seta_ para mover a imagem selecionada pelo fator de ajuste configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
+* Pressione _Shift+Seta_ para mover por dez vezes o fator de ajuste
+* Pressione _Alt+Seta_ para mover por 1 pixel de tela
+* Pressione _Alt+Shift+Seta_ para mover por 10 pixels de tela
+
 Os seguintes modificadores podem ser combinados durante o movimento:
 * Mantenha _Alt_ pressionado e arraste em qualquer lugar do canvas para mover a imagem selecionada sem precisar começar sobre o corpo da imagem
 * Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante
