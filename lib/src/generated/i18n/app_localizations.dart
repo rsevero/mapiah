@@ -1960,6 +1960,12 @@ abstract class AppLocalizations {
   /// **'Snap angle'**
   String get mpSettingsSettingTH2EditSnapAngle;
 
+  /// Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Debug log 1'**
+  String get mpSettingsSettingTherionDebugLog1;
+
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:

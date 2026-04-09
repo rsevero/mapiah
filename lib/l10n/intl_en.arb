@@ -1583,6 +1583,11 @@
     "description": "Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTherionDebugLog1": "Debug log 1",
+  "@mpSettingsSettingTherionDebugLog1": {
+    "description": "Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSketchChooseFileButtonLabel": "Choose file",
   "@mpSketchChooseFileButtonLabel": {
     "description": "The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart",

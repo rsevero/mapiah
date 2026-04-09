@@ -28,6 +28,7 @@ enum MPSettingID {
   TH2Edit_SelectionTolerance,
   TH2Edit_ShowDirectionTicksOnNonSelectedLines,
   TH2Edit_SnapAngle,
+  Therion_DebugLog1,
   Therion_ExecutablePath,
   Therion_RunParameters;
 
@@ -57,6 +58,7 @@ enum MPSettingID {
     MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         MPSettingType.bool,
     MPSettingID.TH2Edit_SnapAngle: MPSettingType.double,
+    MPSettingID.Therion_DebugLog1: MPSettingType.bool,
     MPSettingID.Therion_ExecutablePath: MPSettingType.filePickerExec,
     MPSettingID.Therion_RunParameters: MPSettingType.string,
   };

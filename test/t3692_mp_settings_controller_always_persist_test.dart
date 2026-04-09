@@ -44,6 +44,16 @@ void main() {
 
   group('MPSettingsController — setBool always persists', () {
     test(
+      'Therion_DebugLog1 defaults to false before any explicit write',
+      () async {
+        final MPSettingsController ctrl = await freshController();
+
+        expect(ctrl.isBoolSet(MPSettingID.Therion_DebugLog1), isFalse);
+        expect(ctrl.getBoolWithDefault(MPSettingID.Therion_DebugLog1), isFalse);
+      },
+    );
+
+    test(
       'setting a bool to its implicit default (false) marks it as explicitly set',
       () async {
         final MPSettingsController ctrl = await freshController();
@@ -90,6 +100,22 @@ void main() {
         expect(ctrl.isBoolSet(MPSettingID.Main_TelemetryConsent), isTrue);
         expect(ctrl.getBoolIfSet(MPSettingID.Main_TelemetryConsent), isTrue);
         expect(isChanged, isTrue);
+      },
+    );
+
+    test(
+      'setting Therion_DebugLog1 to false still marks it as explicitly set',
+      () async {
+        final MPSettingsController ctrl = await freshController();
+
+        final bool isChanged = ctrl.setBool(
+          MPSettingID.Therion_DebugLog1,
+          false,
+        );
+
+        expect(ctrl.isBoolSet(MPSettingID.Therion_DebugLog1), isTrue);
+        expect(ctrl.getBoolIfSet(MPSettingID.Therion_DebugLog1), isFalse);
+        expect(isChanged, isFalse);
       },
     );
   });

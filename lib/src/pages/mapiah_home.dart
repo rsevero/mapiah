@@ -36,6 +36,12 @@ class MapiahHome extends StatefulWidget {
 }
 
 class _MapiahHomeState extends State<MapiahHome> {
+  bool get _isTherionDebugLog1Enabled {
+    return mpLocator.mpSettingsController.getBoolWithDefault(
+      MPSettingID.Therion_DebugLog1,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -61,11 +67,13 @@ class _MapiahHomeState extends State<MapiahHome> {
   Future<void> _runStartupFileActions() async {
     // Handle --th2 files (named argument)
     if (widget.th2FilePaths.isNotEmpty) {
-      mpLocator.mpLog.i(
-        '$mpTherionStartupDebugPrefix opening TH2 files from startup '
-        'arguments: ${widget.th2FilePaths.join(' | ')} '
-        'currentDirectory=${Directory.current.path}',
-      );
+      if (_isTherionDebugLog1Enabled) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix opening TH2 files from startup '
+          'arguments: ${widget.th2FilePaths.join(' | ')} '
+          'currentDirectory=${Directory.current.path}',
+        );
+      }
 
       for (final String filePath in widget.th2FilePaths) {
         await _openTH2FileFromPath(filePath);
@@ -74,11 +82,13 @@ class _MapiahHomeState extends State<MapiahHome> {
 
     // Handle --thconfig file (named argument)
     if (widget.thConfigFilePath != null) {
-      mpLocator.mpLog.i(
-        '$mpTherionStartupDebugPrefix startup launch mode=--thconfig '
-        'path=${widget.thConfigFilePath} '
-        'currentDirectory=${Directory.current.path}',
-      );
+      if (_isTherionDebugLog1Enabled) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix startup launch mode=--thconfig '
+          'path=${widget.thConfigFilePath} '
+          'currentDirectory=${Directory.current.path}',
+        );
+      }
       await MPDialogAux.runTherionWithTHConfigFile(
         context,
         widget.thConfigFilePath!,
@@ -90,19 +100,23 @@ class _MapiahHomeState extends State<MapiahHome> {
     // Handle positional argument (backward compatibility)
     if ((widget.mainFilePath != null) && widget.th2FilePaths.isEmpty) {
       if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
-        mpLocator.mpLog.i(
-          '$mpTherionStartupDebugPrefix startup launch mode=positional-th2 '
-          'path=${widget.mainFilePath} '
-          'currentDirectory=${Directory.current.path}',
-        );
+        if (_isTherionDebugLog1Enabled) {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix startup launch mode=positional-th2 '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
+        }
         await _openTH2FileFromPath(widget.mainFilePath!);
       } else {
-        mpLocator.mpLog.i(
-          '$mpTherionStartupDebugPrefix '
-          'startup launch mode=positional-thconfig '
-          'path=${widget.mainFilePath} '
-          'currentDirectory=${Directory.current.path}',
-        );
+        if (_isTherionDebugLog1Enabled) {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix '
+            'startup launch mode=positional-thconfig '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
+        }
         await MPDialogAux.runTherionWithTHConfigFile(
           context,
           widget.mainFilePath!,

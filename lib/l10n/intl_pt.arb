@@ -328,6 +328,7 @@
   "mpSettingsSettingTH2EditSelectionTolerance": "Tolerância de seleção",
   "mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": "Mostrar marcas de direção em linhas não selecionadas",
   "mpSettingsSettingTH2EditSnapAngle": "Ângulo preferencial",
+  "mpSettingsSettingTherionDebugLog1": "Debug log 1",
   "mpSketchChooseFileButtonLabel": "Escolher arquivo",
   "mpSketchCoordinateInvalid": "Coordenada inválida",
   "mpSketchFilenameLabel": "Arquivo",

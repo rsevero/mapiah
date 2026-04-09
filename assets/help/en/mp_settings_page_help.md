@@ -19,6 +19,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
 - [Therion section](#therion-section)
+  - [Debug log 1](#debug-log-1)
   - [Therion executable path](#therion-executable-path)
   - [Therion run parameters](#therion-run-parameters)
 
@@ -63,6 +64,9 @@ Controls how close the mouse cursor must be to an element (in pixels) for it to 
 When enabled, direction ticks are drawn on all lines in the active scrap, regardless of selection. When disabled (default), only selected lines show direction ticks. Can also be toggled with **Ctrl+Alt+R**.
 
 ## Therion section
+
+### Debug log 1
+When enabled, Mapiah shows extra Therion startup and run diagnostics. The default is disabled (`false`).
 
 ### Therion executable path
 The full path to the Therion executable on your system. Required for the _Run Therion_ feature to work. Click the folder icon or tap the field to open a file picker and navigate to the Therion binary.

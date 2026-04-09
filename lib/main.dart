@@ -103,15 +103,20 @@ void main(List<String> arguments) {
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
 
-      mpLocator.mpLog.i(
-        '$mpTherionStartupDebugPrefix rawArguments=${arguments.join(' | ')}',
-      );
-      mpLocator.mpLog.i(
-        '$mpTherionStartupDebugPrefix parsed mainFilePath=$fileToRead '
-        'thConfigFilePath=$thConfigFile '
-        'th2Files=${th2Files.join(' | ')} '
-        'currentDirectory=${Directory.current.path}',
-      );
+      final bool therionDebugLog1Enabled = mpLocator.mpSettingsController
+          .getBoolWithDefault(MPSettingID.Therion_DebugLog1);
+
+      if (therionDebugLog1Enabled) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix rawArguments=${arguments.join(' | ')}',
+        );
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix parsed mainFilePath=$fileToRead '
+          'thConfigFilePath=$thConfigFile '
+          'th2Files=${th2Files.join(' | ')} '
+          'currentDirectory=${Directory.current.path}',
+        );
+      }
 
       if (therionRunParametersArg != null) {
         mpLocator.mpSettingsController.setString(

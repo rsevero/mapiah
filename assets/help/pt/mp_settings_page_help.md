@@ -19,6 +19,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
 - [Seção Therion](#seção-therion)
+  - [Debug log 1](#debug-log-1)
   - [Caminho do executável do Therion](#caminho-do-executável-do-therion)
   - [Parâmetros de execução do Therion](#parâmetros-de-execução-do-therion)
 
@@ -63,6 +64,9 @@ Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels
 Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.
 
 ## Seção Therion
+
+### Debug log 1
+Quando ativado, o Mapiah mostra diagnósticos extras de inicialização e execução do Therion. O padrão é desativado (`false`).
 
 ### Caminho do executável do Therion
 O caminho completo para o executável do Therion no seu sistema. Necessário para que o recurso _Executar Therion_ funcione. Clique no ícone de pasta ou toque no campo para abrir um seletor de arquivo e navegar até o binário do Therion.

@@ -669,6 +669,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainLocaleID;
       case MPSettingID.Main_TelemetryConsent:
         return appLocalizations.telemetrySettingsToggleLabel;
+      case MPSettingID.Therion_DebugLog1:
+        return appLocalizations.mpSettingsSettingTherionDebugLog1;
       case MPSettingID.Therion_ExecutablePath:
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.Therion_RunParameters:

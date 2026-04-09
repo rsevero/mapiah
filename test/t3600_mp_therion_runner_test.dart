@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -52,7 +53,106 @@ void main() {
         MPSettingID.Therion_ExecutablePath,
         _dartCommandForPlatform(),
       );
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.Therion_DebugLog1,
+        false,
+      );
     });
+
+    test(
+      'does not prepend diagnostic debug lines when Therion_DebugLog1 is disabled',
+      () async {
+        final String scriptSource = '''
+void main(List<String> arguments) {
+  print('line one');
+}
+''';
+
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_runner_test_',
+        );
+
+        try {
+          final String scriptPath = await _createScriptFile(
+            directory: tempDirectory,
+            filename: 'runner_debug_log_disabled.dart',
+            source: scriptSource,
+          );
+
+          final MPTherionRunner runner = MPTherionRunner(
+            thConfigFilePath: scriptPath,
+          );
+
+          try {
+            await runner.start();
+
+            final List<String> outputLines = runner.outputLinesNotifier.value;
+
+            expect(
+              outputLines.where(
+                (String line) => line.startsWith(mpTherionRunDebugPrefix),
+              ),
+              isEmpty,
+            );
+            expect(outputLines, contains('line one'));
+          } finally {
+            runner.dispose();
+          }
+        } finally {
+          await tempDirectory.delete(recursive: true);
+        }
+      },
+    );
+
+    test(
+      'prepends diagnostic debug lines when Therion_DebugLog1 is enabled',
+      () async {
+        final String scriptSource = '''
+void main(List<String> arguments) {
+  print('line one');
+}
+''';
+
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_runner_test_',
+        );
+
+        try {
+          mpLocator.mpSettingsController.setBool(
+            MPSettingID.Therion_DebugLog1,
+            true,
+          );
+
+          final String scriptPath = await _createScriptFile(
+            directory: tempDirectory,
+            filename: 'runner_debug_log_enabled.dart',
+            source: scriptSource,
+          );
+
+          final MPTherionRunner runner = MPTherionRunner(
+            thConfigFilePath: scriptPath,
+          );
+
+          try {
+            await runner.start();
+
+            final List<String> outputLines = runner.outputLinesNotifier.value;
+
+            expect(
+              outputLines.where(
+                (String line) => line.startsWith(mpTherionRunDebugPrefix),
+              ),
+              isNotEmpty,
+            );
+            expect(outputLines, contains('line one'));
+          } finally {
+            runner.dispose();
+          }
+        } finally {
+          await tempDirectory.delete(recursive: true);
+        }
+      },
+    );
 
     test('escalates status from warning to error and records issues', () async {
       final String scriptSource = '''

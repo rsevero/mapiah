@@ -1012,6 +1012,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditSnapAngle => 'Snap angle';
 
   @override
+  String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
+
+  @override
   String get mpSketchChooseFileButtonLabel => 'Choose file';
 
   @override

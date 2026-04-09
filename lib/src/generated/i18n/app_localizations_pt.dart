@@ -1024,6 +1024,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTH2EditSnapAngle => 'Ângulo preferencial';
 
   @override
+  String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
+
+  @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
 
   @override
