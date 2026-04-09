@@ -166,12 +166,6 @@ class MPTherionRunner {
 
   Stream<String> get outputStream => _outputController.stream;
 
-  bool get _isDebugLog1Enabled {
-    return mpLocator.mpSettingsController.getBoolWithDefault(
-      MPSettingID.Therion_DebugLog1,
-    );
-  }
-
   void appendOutputLines(List<String> lines) {
     if (lines.isEmpty) {
       return;
@@ -190,8 +184,9 @@ class MPTherionRunner {
     final String configuredRunParameters = mpLocator.mpSettingsController
         .getStringWithDefault(MPSettingID.Therion_RunParameters)
         .trim();
-    final bool isDebugLog1Enabled = _isDebugLog1Enabled;
-    final List<String> diagnosticLines = isDebugLog1Enabled
+    final bool isTherionDebugLog1Enabled =
+        mpLocator.mpSettingsController.isTherionDebugLog1Enabled;
+    final List<String> diagnosticLines = isTherionDebugLog1Enabled
         ? _buildRunDiagnosticLines(
             workingDirectory: workingDirectory,
             absoluteThConfigFilePath: absoluteThConfigFilePath,
@@ -205,7 +200,7 @@ class MPTherionRunner {
     statusNotifier.value = MPTherionRunStatus.running;
     mpLocator.mpTelemetryController.recordTherionStarted(thConfigFilePath);
 
-    if (isDebugLog1Enabled) {
+    if (isTherionDebugLog1Enabled) {
       appendOutputLines(diagnosticLines);
       _logRunDiagnostics(diagnosticLines);
     }

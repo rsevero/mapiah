@@ -36,12 +36,6 @@ class MapiahHome extends StatefulWidget {
 }
 
 class _MapiahHomeState extends State<MapiahHome> {
-  bool get _isTherionDebugLog1Enabled {
-    return mpLocator.mpSettingsController.getBoolWithDefault(
-      MPSettingID.Therion_DebugLog1,
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -65,9 +59,12 @@ class _MapiahHomeState extends State<MapiahHome> {
   }
 
   Future<void> _runStartupFileActions() async {
+    final bool isTherionDebugLog1Enabled =
+        mpLocator.mpSettingsController.isTherionDebugLog1Enabled;
+
     // Handle --th2 files (named argument)
     if (widget.th2FilePaths.isNotEmpty) {
-      if (_isTherionDebugLog1Enabled) {
+      if (isTherionDebugLog1Enabled) {
         mpLocator.mpLog.i(
           '$mpTherionStartupDebugPrefix opening TH2 files from startup '
           'arguments: ${widget.th2FilePaths.join(' | ')} '
@@ -82,7 +79,7 @@ class _MapiahHomeState extends State<MapiahHome> {
 
     // Handle --thconfig file (named argument)
     if (widget.thConfigFilePath != null) {
-      if (_isTherionDebugLog1Enabled) {
+      if (isTherionDebugLog1Enabled) {
         mpLocator.mpLog.i(
           '$mpTherionStartupDebugPrefix startup launch mode=--thconfig '
           'path=${widget.thConfigFilePath} '
@@ -100,7 +97,7 @@ class _MapiahHomeState extends State<MapiahHome> {
     // Handle positional argument (backward compatibility)
     if ((widget.mainFilePath != null) && widget.th2FilePaths.isEmpty) {
       if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
-        if (_isTherionDebugLog1Enabled) {
+        if (isTherionDebugLog1Enabled) {
           mpLocator.mpLog.i(
             '$mpTherionStartupDebugPrefix startup launch mode=positional-th2 '
             'path=${widget.mainFilePath} '
@@ -109,7 +106,7 @@ class _MapiahHomeState extends State<MapiahHome> {
         }
         await _openTH2FileFromPath(widget.mainFilePath!);
       } else {
-        if (_isTherionDebugLog1Enabled) {
+        if (isTherionDebugLog1Enabled) {
           mpLocator.mpLog.i(
             '$mpTherionStartupDebugPrefix '
             'startup launch mode=positional-thconfig '

@@ -41,6 +41,10 @@ abstract class MPSettingsControllerBase with Store {
   /// settings that differ from that should be included here.
   static const Map<MPSettingID, bool> _boolDefaultSettings = {};
 
+  bool get isTherionDebugLog1Enabled {
+    return getBoolWithDefault(MPSettingID.Therion_DebugLog1);
+  }
+
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
   static const Map<MPSettingID, double> _doubleDefaultSettings = {

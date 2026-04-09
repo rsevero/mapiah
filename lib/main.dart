@@ -103,10 +103,10 @@ void main(List<String> arguments) {
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
 
-      final bool therionDebugLog1Enabled = mpLocator.mpSettingsController
-          .getBoolWithDefault(MPSettingID.Therion_DebugLog1);
+      final bool isTherionDebugLog1Enabled =
+          mpLocator.mpSettingsController.isTherionDebugLog1Enabled;
 
-      if (therionDebugLog1Enabled) {
+      if (isTherionDebugLog1Enabled) {
         mpLocator.mpLog.i(
           '$mpTherionStartupDebugPrefix rawArguments=${arguments.join(' | ')}',
         );
