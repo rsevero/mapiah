@@ -2,8 +2,12 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.3.5 - not yet released
+## 0.3.5 - 2026-04-09 - the [Dental Nerve](https://xkcd.com/846/) release
 * Highlights:
+  * Background image editing was rebuilt into an Inkscape-style transform workflow with move, scale, rotate, flip, reset, keyboard nudging, and much better on-canvas handles, cursors, and undo/redo behavior.
+  * Drawing and editing got several new productivity tools: merge areas (`Ctrl+M`), join lines at coinciding extremities (`Ctrl+J`), convert line segments between straight and Bézier (`J` / `Shift+J`), and keyboard nudging for images, selected elements, and single-line points.
+  * Therion and editor settings were cleaned up with a dedicated Therion section, backward-compatible setting renames, configurable snap angle and nudge factor, optional extra debug logging, and better startup/run diagnostics.
+  * Many workflow polish fixes landed across startup, overlays, scrap/image panels, and image editing, making mode switches, dragging, handle feedback, and file-opening behavior more reliable.
 * New features:
   * Background image transform mode now supports direct flipping with `H` / `V`, negating `xScale` or `yScale` respectively for the active image, with matching state-context FAB buttons and undo support.
   * Join lines at coinciding extremities (Ctrl+J).
