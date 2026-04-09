@@ -1528,6 +1528,11 @@
     "description": "Section title for TH2 edit settings. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSectionTherion": "Therion",
+  "@mpSettingsSectionTherion": {
+    "description": "Section title for Therion settings. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSettingMainLocaleID": "Language",
   "@mpSettingsSettingMainLocaleID": {
     "description": "Label for locale setting. Used on: lib/src/pages/mp_settings_page.dart",

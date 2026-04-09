@@ -974,6 +974,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSectionTH2Edit => 'TH2 edit';
 
   @override
+  String get mpSettingsSectionTherion => 'Therion';
+
+  @override
   String get mpSettingsSettingMainLocaleID => 'Language';
 
   @override

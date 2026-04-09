@@ -11,8 +11,6 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Botões](#botões)
 - [Seção Principal](#seção-principal)
   - [Idioma](#idioma)
-  - [Caminho do executável do Therion](#caminho-do-executável-do-therion)
-  - [Parâmetros de execução do Therion](#parâmetros-de-execução-do-therion)
 - [Seção Edição TH2](#seção-edição-th2)
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
@@ -20,6 +18,9 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Ângulo preferencial](#ângulo-preferencial)
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
+- [Seção Therion](#seção-therion)
+  - [Caminho do executável do Therion](#caminho-do-executável-do-therion)
+  - [Parâmetros de execução do Therion](#parâmetros-de-execução-do-therion)
 
 ## Usando as configurações
 
@@ -38,12 +39,6 @@ Cada configuração possui um botão de redefinição (↺) à sua direita. Clic
 
 ### Idioma
 Seleciona o idioma usado em toda a interface do aplicativo. A opção padrão segue o idioma do sistema. A alteração desta configuração tem efeito após aplicar e reabrir as páginas atualmente abertas.
-
-### Caminho do executável do Therion
-O caminho completo para o executável do Therion no seu sistema. Necessário para que o recurso _Executar Therion_ funcione. Clique no ícone de pasta ou toque no campo para abrir um seletor de arquivo e navegar até o binário do Therion.
-
-### Parâmetros de execução do Therion
-Opções extras opcionais de linha de comando passadas ao Therion a cada execução (ex.: `-d` para modo de depuração, `-q` para modo silencioso). Múltiplas opções podem ser inseridas separadas por espaço. O valor também pode ser editado diretamente no diálogo Executar Therion e pode ser predefinido pelo argumento de linha de comando `--therion_run_parameters` do Mapiah. O padrão é vazio (sem opções extras).
 
 ## Seção Edição TH2
 
@@ -66,3 +61,11 @@ Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels
 
 ### Mostrar marcas de direção em linhas não selecionadas
 Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.
+
+## Seção Therion
+
+### Caminho do executável do Therion
+O caminho completo para o executável do Therion no seu sistema. Necessário para que o recurso _Executar Therion_ funcione. Clique no ícone de pasta ou toque no campo para abrir um seletor de arquivo e navegar até o binário do Therion.
+
+### Parâmetros de execução do Therion
+Opções extras opcionais de linha de comando passadas ao Therion a cada execução (ex.: `-d` para modo de depuração, `-q` para modo silencioso). Múltiplas opções podem ser inseridas separadas por espaço. O valor também pode ser editado diretamente no diálogo Executar Therion e pode ser predefinido pelo argumento de linha de comando `--therion_run_parameters` do Mapiah. O padrão é vazio (sem opções extras).

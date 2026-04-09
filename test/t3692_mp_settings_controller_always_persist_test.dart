@@ -254,6 +254,59 @@ void main() {
     );
   });
 
+  group('MPSettingsController — legacy Therion setting names', () {
+    test('reads legacy executable-path key into renamed setting', () async {
+      final Map<String, Object> initialValues = <String, Object>{
+        'Main_TherionExecutablePath': '/legacy/therion',
+      };
+
+      SharedPreferences.setMockInitialValues(initialValues);
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.withData(initialValues);
+
+      final MPSettingsController ctrl = await freshController();
+
+      expect(ctrl.isStringSet(MPSettingID.Therion_ExecutablePath), isTrue);
+      expect(
+        ctrl.getStringIfSet(MPSettingID.Therion_ExecutablePath),
+        '/legacy/therion',
+      );
+    });
+
+    test('reads legacy run-parameters key into renamed setting', () async {
+      final Map<String, Object> initialValues = <String, Object>{
+        'Main_TherionRunParameters': '-d -q',
+      };
+
+      SharedPreferences.setMockInitialValues(initialValues);
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.withData(initialValues);
+
+      final MPSettingsController ctrl = await freshController();
+
+      expect(ctrl.isStringSet(MPSettingID.Therion_RunParameters), isTrue);
+      expect(ctrl.getStringIfSet(MPSettingID.Therion_RunParameters), '-d -q');
+    });
+
+    test(
+      'prefers renamed key when both renamed and legacy keys exist',
+      () async {
+        final Map<String, Object> initialValues = <String, Object>{
+          'Therion_RunParameters': '-new',
+          'Main_TherionRunParameters': '-old',
+        };
+
+        SharedPreferences.setMockInitialValues(initialValues);
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.withData(initialValues);
+
+        final MPSettingsController ctrl = await freshController();
+
+        expect(ctrl.getStringIfSet(MPSettingID.Therion_RunParameters), '-new');
+      },
+    );
+  });
+
   // ---------------------------------------------------------------------------
   // StringList
   // ---------------------------------------------------------------------------

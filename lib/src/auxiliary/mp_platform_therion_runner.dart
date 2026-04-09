@@ -47,7 +47,7 @@ abstract class MPPlatformTherionRunner {
   static String getUserDefinedTherionExecutablePath() {
     final String userDefinedPath =
         mpLocator.mpSettingsController
-            .getStringIfSet(MPSettingID.Main_TherionExecutablePath)
+            .getStringIfSet(MPSettingID.Therion_ExecutablePath)
             ?.trim() ??
         '';
 
@@ -56,7 +56,7 @@ abstract class MPPlatformTherionRunner {
 
   static List<String> getTherionRunParameters() {
     final String raw = mpLocator.mpSettingsController
-        .getStringWithDefault(MPSettingID.Main_TherionRunParameters)
+        .getStringWithDefault(MPSettingID.Therion_RunParameters)
         .trim();
 
     if (raw.isEmpty) {

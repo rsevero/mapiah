@@ -261,6 +261,7 @@ const String mpFlatpakSpawnDirectoryFlag = '--directory';
 const String mpFlatpakSandboxSafeWorkingDirectory = '/';
 const String mpTherionVersionArgument = '--version';
 const String mpSettingsMainSection = 'Main';
+const String mpSettingsTherionSection = 'Therion';
 const String mpSettingsTH2EditSection = 'TH2Edit';
 const String mpSettingsInternalSection = 'Internal';
 const String mpSettingsStringListSeparator = ', ';

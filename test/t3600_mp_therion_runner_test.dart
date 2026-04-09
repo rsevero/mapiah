@@ -49,7 +49,7 @@ void main() {
   group('MPTherionRunner monitoring', () {
     setUp(() {
       mpLocator.mpSettingsController.setString(
-        MPSettingID.Main_TherionExecutablePath,
+        MPSettingID.Therion_ExecutablePath,
         _dartCommandForPlatform(),
       );
     });

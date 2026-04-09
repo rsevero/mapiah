@@ -1025,7 +1025,7 @@ class MPDialogAux {
     }
 
     final String configuredExecutablePath = mpLocator.mpSettingsController
-        .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
+        .getStringWithDefault(MPSettingID.Therion_ExecutablePath)
         .trim();
 
     final bool? shouldChooseTHConfig = await showDialog<bool>(

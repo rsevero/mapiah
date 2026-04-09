@@ -182,7 +182,7 @@ class MPTherionRunner {
     final String workingDirectory = p.dirname(thConfigFilePath);
     final String absoluteThConfigFilePath = p.absolute(thConfigFilePath);
     final String configuredRunParameters = mpLocator.mpSettingsController
-        .getStringWithDefault(MPSettingID.Main_TherionRunParameters)
+        .getStringWithDefault(MPSettingID.Therion_RunParameters)
         .trim();
     final List<String> diagnosticLines = _buildRunDiagnosticLines(
       workingDirectory: workingDirectory,

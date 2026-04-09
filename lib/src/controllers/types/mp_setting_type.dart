@@ -21,15 +21,15 @@ enum MPSettingID {
   Internal_TelemetryPendingRecords,
   Main_LocaleID,
   Main_TelemetryConsent,
-  Main_TherionExecutablePath,
-  Main_TherionRunParameters,
-  TH2Edit_NudgeFactor,
   TH2Edit_LineThickness,
   TH2Edit_NewLineCreationMethod,
+  TH2Edit_NudgeFactor,
   TH2Edit_PointRadius,
-  TH2Edit_SnapAngle,
   TH2Edit_SelectionTolerance,
-  TH2Edit_ShowDirectionTicksOnNonSelectedLines;
+  TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+  TH2Edit_SnapAngle,
+  Therion_ExecutablePath,
+  Therion_RunParameters;
 
   static const Map<MPSettingID, MPSettingType>
   types = <MPSettingID, MPSettingType>{
@@ -49,21 +49,21 @@ enum MPSettingID {
     MPSettingID.Internal_TelemetryPendingRecords: MPSettingType.stringList,
     MPSettingID.Main_LocaleID: MPSettingType.string,
     MPSettingID.Main_TelemetryConsent: MPSettingType.bool,
-    MPSettingID.Main_TherionExecutablePath: MPSettingType.filePickerExec,
-    MPSettingID.Main_TherionRunParameters: MPSettingType.string,
-    MPSettingID.TH2Edit_NudgeFactor: MPSettingType.double,
     MPSettingID.TH2Edit_LineThickness: MPSettingType.double,
     MPSettingID.TH2Edit_NewLineCreationMethod: MPSettingType.enumeration,
+    MPSettingID.TH2Edit_NudgeFactor: MPSettingType.double,
     MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
-    MPSettingID.TH2Edit_SnapAngle: MPSettingType.double,
     MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
     MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         MPSettingType.bool,
+    MPSettingID.TH2Edit_SnapAngle: MPSettingType.double,
+    MPSettingID.Therion_ExecutablePath: MPSettingType.filePickerExec,
+    MPSettingID.Therion_RunParameters: MPSettingType.string,
   };
 
   static const Map<MPSettingID, String> filePickerExecNames =
       <MPSettingID, String>{
-        MPSettingID.Main_TherionExecutablePath: mpTherionExecutableName,
+        MPSettingID.Therion_ExecutablePath: mpTherionExecutableName,
       };
 
   static final Map<MPSettingID, MPSettingEnumDefinition>

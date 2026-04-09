@@ -74,6 +74,12 @@ abstract class MPSettingsControllerBase with Store {
       t: Observable<int>(mpMinimumInt),
   };
 
+  static const Map<MPSettingID, List<String>>
+  _legacyStorageKeys = <MPSettingID, List<String>>{
+    MPSettingID.Therion_ExecutablePath: <String>['Main_TherionExecutablePath'],
+    MPSettingID.Therion_RunParameters: <String>['Main_TherionRunParameters'],
+  };
+
   late final SharedPreferencesWithCache prefs;
   late final Future<void> initialized;
 
@@ -108,25 +114,28 @@ abstract class MPSettingsControllerBase with Store {
         InMemorySharedPreferencesAsync.empty();
     prefs = await SharedPreferencesWithCache.create(
       cacheOptions: SharedPreferencesWithCacheOptions(
-        allowList: MPSettingID.values.map((e) => e.name).toSet(),
+        allowList: <String>{
+          ...MPSettingID.values.map((MPSettingID id) => id.name),
+          ..._legacyStorageKeys.values.expand((List<String> ids) => ids),
+        },
       ),
     );
     for (final MPSettingID id in MPSettingID.values) {
       switch (id.type()) {
         case MPSettingType.bool:
-          final bool? value = prefs.getBool(id.name);
+          final bool? value = _getBoolFromStorage(id);
 
           if (value != null) {
             setBool(id, value);
           }
         case MPSettingType.double:
-          final double? value = prefs.getDouble(id.name);
+          final double? value = _getDoubleFromStorage(id);
 
           if (value != null) {
             setDouble(id, value);
           }
         case MPSettingType.enumeration:
-          final String? storedValue = prefs.getString(id.name);
+          final String? storedValue = _getStringFromStorage(id);
 
           if (storedValue != null) {
             final Enum? value = id.enumDefinition().tryParseStoredValue(
@@ -140,25 +149,25 @@ abstract class MPSettingsControllerBase with Store {
             }
           }
         case MPSettingType.int:
-          final int? value = prefs.getInt(id.name);
+          final int? value = _getIntFromStorage(id);
 
           if (value != null) {
             setInt(id, value);
           }
         case MPSettingType.string:
-          final String? value = prefs.getString(id.name);
+          final String? value = _getStringFromStorage(id);
 
           if (value != null) {
             setString(id, value);
           }
         case MPSettingType.stringList:
-          final List<String>? value = prefs.getStringList(id.name);
+          final List<String>? value = _getStringListFromStorage(id);
 
           if (value != null) {
             setStringList(id, value);
           }
         case MPSettingType.filePickerExec:
-          final String? value = prefs.getString(id.name);
+          final String? value = _getStringFromStorage(id);
 
           if (value != null) {
             setString(id, value);
@@ -170,6 +179,71 @@ abstract class MPSettingsControllerBase with Store {
   bool _isStringBackedType(MPSettingType type) {
     return ((type == MPSettingType.string) ||
         (type == MPSettingType.filePickerExec));
+  }
+
+  Iterable<String> _storageKeysForReading(MPSettingID id) sync* {
+    yield id.name;
+    yield* _legacyStorageKeys[id] ?? const <String>[];
+  }
+
+  bool? _getBoolFromStorage(MPSettingID id) {
+    for (final String storageKey in _storageKeysForReading(id)) {
+      final bool? value = prefs.getBool(storageKey);
+
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  double? _getDoubleFromStorage(MPSettingID id) {
+    for (final String storageKey in _storageKeysForReading(id)) {
+      final double? value = prefs.getDouble(storageKey);
+
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  int? _getIntFromStorage(MPSettingID id) {
+    for (final String storageKey in _storageKeysForReading(id)) {
+      final int? value = prefs.getInt(storageKey);
+
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  String? _getStringFromStorage(MPSettingID id) {
+    for (final String storageKey in _storageKeysForReading(id)) {
+      final String? value = prefs.getString(storageKey);
+
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  List<String>? _getStringListFromStorage(MPSettingID id) {
+    for (final String storageKey in _storageKeysForReading(id)) {
+      final List<String>? value = prefs.getStringList(storageKey);
+
+      if (value != null) {
+        return value;
+      }
+    }
+
+    return null;
   }
 
   String _getSystemLocaleID() {
@@ -638,7 +712,7 @@ abstract class MPSettingsControllerBase with Store {
 
     if (isChanged) {
       trigger(id);
-      if (id == MPSettingID.Main_TherionExecutablePath) {
+      if (id == MPSettingID.Therion_ExecutablePath) {
         // Clear cached probe and re-check availability asynchronously.
         MPTherionRunner.clearSearchedTherionExecutablePathCache();
         _updateTherionAvailability();

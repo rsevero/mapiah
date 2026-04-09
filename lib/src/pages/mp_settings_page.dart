@@ -645,6 +645,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
     switch (section) {
       case mpSettingsMainSection:
         return appLocalizations.mpSettingsSectionMain;
+      case mpSettingsTherionSection:
+        return appLocalizations.mpSettingsSectionTherion;
       case mpSettingsTH2EditSection:
         return appLocalizations.mpSettingsSectionTH2Edit;
       default:
@@ -667,9 +669,9 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainLocaleID;
       case MPSettingID.Main_TelemetryConsent:
         return appLocalizations.telemetrySettingsToggleLabel;
-      case MPSettingID.Main_TherionExecutablePath:
+      case MPSettingID.Therion_ExecutablePath:
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
-      case MPSettingID.Main_TherionRunParameters:
+      case MPSettingID.Therion_RunParameters:
         return appLocalizations.mpSettingsSettingMainTherionRunParameters;
       case MPSettingID.TH2Edit_NudgeFactor:
         return appLocalizations.mpSettingsSettingTH2EditNudgeFactor;

@@ -115,7 +115,7 @@ void main(List<String> arguments) {
 
       if (therionRunParametersArg != null) {
         mpLocator.mpSettingsController.setString(
-          MPSettingID.Main_TherionRunParameters,
+          MPSettingID.Therion_RunParameters,
           therionRunParametersArg,
         );
       }

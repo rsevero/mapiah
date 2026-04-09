@@ -317,6 +317,7 @@
   "mpSettingsPageTitle": "Configurações",
   "mpSettingsSectionMain": "Principal",
   "mpSettingsSectionTH2Edit": "Edição TH2",
+  "mpSettingsSectionTherion": "Therion",
   "mpSettingsSettingMainLocaleID": "Idioma",
   "mpSettingsSettingMainTherionExecutablePath": "Caminho do executável do Therion",
   "mpSettingsSettingMainTherionRunParameters": "Parâmetros de execução do Therion",

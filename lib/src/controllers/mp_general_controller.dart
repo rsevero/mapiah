@@ -360,7 +360,7 @@ abstract class MPGeneralControllerBase with Store {
     final MPLocator mpLocator = MPLocator();
     final String configuredTherionExecutablePath = mpLocator
         .mpSettingsController
-        .getStringWithDefault(MPSettingID.Main_TherionExecutablePath)
+        .getStringWithDefault(MPSettingID.Therion_ExecutablePath)
         .trim();
 
     return configuredTherionExecutablePath;

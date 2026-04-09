@@ -117,7 +117,7 @@ void main() {
           r'D:\custom\therion\therion.exe';
 
       mpLocator.mpSettingsController.setString(
-        MPSettingID.Main_TherionExecutablePath,
+        MPSettingID.Therion_ExecutablePath,
         preferredTherionExecutablePath,
       );
 

@@ -61,7 +61,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     _runParametersController = TextEditingController(
       text: mpLocator.mpSettingsController.getStringWithDefault(
-        MPSettingID.Main_TherionRunParameters,
+        MPSettingID.Therion_RunParameters,
       ),
     );
 
@@ -501,7 +501,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                           ),
                           onChanged: (String value) {
                             mpLocator.mpSettingsController.setString(
-                              MPSettingID.Main_TherionRunParameters,
+                              MPSettingID.Therion_RunParameters,
                               value,
                             );
                           },

@@ -1894,6 +1894,12 @@ abstract class AppLocalizations {
   /// **'TH2 edit'**
   String get mpSettingsSectionTH2Edit;
 
+  /// Section title for Therion settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Therion'**
+  String get mpSettingsSectionTherion;
+
   /// Label for locale setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

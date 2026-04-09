@@ -11,8 +11,6 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Buttons](#buttons)
 - [Main section](#main-section)
   - [Language](#language)
-  - [Therion executable path](#therion-executable-path)
-  - [Therion run parameters](#therion-run-parameters)
 - [TH2 edit section](#th2-edit-section)
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
@@ -20,6 +18,9 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Snap angle](#snap-angle)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
+- [Therion section](#therion-section)
+  - [Therion executable path](#therion-executable-path)
+  - [Therion run parameters](#therion-run-parameters)
 
 ## Using settings
 
@@ -38,12 +39,6 @@ Each setting has a reset button (↺) on its right side. Clicking it reverts tha
 
 ### Language
 Selects the language used throughout the app interface. The default option follows the system locale. Changing this setting takes effect after applying and reopening any currently open pages.
-
-### Therion executable path
-The full path to the Therion executable on your system. Required for the _Run Therion_ feature to work. Click the folder icon or tap the field to open a file picker and navigate to the Therion binary.
-
-### Therion run parameters
-Optional extra command-line options passed to Therion on every run (e.g. `-d` for debug mode, `-q` for quiet mode). Multiple options can be entered space-separated. The value is also editable directly in the Run Therion dialog and can be preset via the `--therion_run_parameters` Mapiah command-line argument. Default is empty (no extra options).
 
 ## TH2 edit section
 
@@ -66,3 +61,11 @@ Controls how close the mouse cursor must be to an element (in pixels) for it to 
 
 ### Show direction ticks on non-selected lines
 When enabled, direction ticks are drawn on all lines in the active scrap, regardless of selection. When disabled (default), only selected lines show direction ticks. Can also be toggled with **Ctrl+Alt+R**.
+
+## Therion section
+
+### Therion executable path
+The full path to the Therion executable on your system. Required for the _Run Therion_ feature to work. Click the folder icon or tap the field to open a file picker and navigate to the Therion binary.
+
+### Therion run parameters
+Optional extra command-line options passed to Therion on every run (e.g. `-d` for debug mode, `-q` for quiet mode). Multiple options can be entered space-separated. The value is also editable directly in the Run Therion dialog and can be preset via the `--therion_run_parameters` Mapiah command-line argument. Default is empty (no extra options).
