@@ -1930,8 +1930,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (_originalFileForLineSimplification!.hasElementByMPID(lineMPID)) {
         final THLine originalLine = _originalFileForLineSimplification!
             .lineByMPID(lineMPID);
-        final List<THLineSegment> originalSegments = originalLine
-            .getLineSegments(_originalFileForLineSimplification!);
+        final Iterable<THLineSegment> originalSegments = originalLine
+            .getLineSegments(_originalFileForLineSimplification!)
+            .skip(1);
 
         for (final THLineSegment seg in originalSegments) {
           beforeTotal++;
@@ -1946,9 +1947,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
       if (_th2File.hasElementByMPID(lineMPID)) {
         final THLine currentLine = _th2File.lineByMPID(lineMPID);
-        final List<THLineSegment> currentSegments = currentLine.getLineSegments(
-          _th2File,
-        );
+        final Iterable<THLineSegment> currentSegments = currentLine
+            .getLineSegments(_th2File)
+            .skip(1);
 
         for (final THLineSegment seg in currentSegments) {
           afterTotal++;
