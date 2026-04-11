@@ -785,6 +785,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     _dragStartCanvasPosition = null;
     _scaleStartScreenHandleCenter = null;
     _scaleHandleType = null;
+    _ignoreNextClick = false;
     setCursor();
   }
 }

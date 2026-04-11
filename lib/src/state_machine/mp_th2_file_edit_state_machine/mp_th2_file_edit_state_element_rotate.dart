@@ -229,6 +229,7 @@ class MPTH2FileEditStateElementRotate extends MPTH2FileEditState {
     _startBounds = null;
     _rotationHandleType = null;
     _dragStartCanvasPosition = null;
+    _ignoreNextClick = false;
     setCursor();
   }
 }
