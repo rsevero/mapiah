@@ -40,6 +40,8 @@ class MPSubtypeOptionWidget extends StatefulWidget {
 
 class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
     with MPOptionTypeBeingEditedTrackingMixin<MPSubtypeOptionWidget> {
+  static const String _unsetDropdownValue = mpUnsetOptionID;
+
   late String _selectedChoice;
   late TextEditingController _subtypeController;
   final FocusNode _subtypeFieldFocusNode = FocusNode();
@@ -51,6 +53,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
   String? _defaultSubtype;
+  Map<String, String>? _dropdownSubtypeOptions;
 
   @override
   void initState() {
@@ -193,6 +196,7 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
       }
 
       if (plaTypeTypeAsString == 'u') {
+        _dropdownSubtypeOptions = null;
         return _buildTextFieldInput();
       } else {
         final Map<String, Object> allowedSubtypesInfo = MPCommandOptionAux
@@ -217,34 +221,54 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
           );
         });
 
-        return DropdownMenu<String>(
-          initialSelection: _subtypeController.text,
-          dropdownMenuEntries: orderedOptions.map((value) {
-            final String label = options[value] ?? value;
+        _dropdownSubtypeOptions = options;
 
-            return DropdownMenuEntry<String>(
-              value: value,
-              label: label,
-              labelWidget: value == _defaultSubtype
-                  ? Row(
-                      children: [
-                        Text(label),
-                        const Text(
-                          ' *',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Text(label),
-            );
-          }).toList(),
+        final String? initialSelection = _selectedChoice == mpUnsetOptionID
+            ? _unsetDropdownValue
+            : (_subtypeController.text.isEmpty
+                  ? null
+                  : _subtypeController.text);
+
+        return DropdownMenu<String>(
+          initialSelection: initialSelection,
+          dropdownMenuEntries:
+              orderedOptions.map((value) {
+                final String label = options[value] ?? value;
+
+                return DropdownMenuEntry<String>(
+                  value: value,
+                  label: label,
+                  labelWidget: value == _defaultSubtype
+                      ? Row(
+                          children: [
+                            Text(label),
+                            const Text(
+                              ' *',
+                              style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Text(label),
+                );
+              }).toList()..insert(
+                0,
+                DropdownMenuEntry<String>(
+                  value: _unsetDropdownValue,
+                  label: appLocalizations.mpChoiceUnset,
+                ),
+              ),
           onSelected: (String? value) {
             if (value != null) {
               setState(() {
-                _subtypeController.text = value;
+                _selectedChoice = value == _unsetDropdownValue
+                    ? mpUnsetOptionID
+                    : mpNonMultipleChoiceSetID;
+                _subtypeController.text = value == _unsetDropdownValue
+                    ? ''
+                    : value;
                 _updateIsValid();
               });
             }
@@ -252,9 +276,12 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
         );
       }
     } else {
+      _dropdownSubtypeOptions = null;
       return _buildTextFieldInput();
     }
   }
+
+  bool get _usesDropdownOnlyEditor => _dropdownSubtypeOptions != null;
 
   @override
   Widget build(BuildContext context) {
@@ -270,43 +297,55 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
           overlayWindowBlockType: MPOverlayWindowBlockType.secondary,
           padding: mpOverlayWindowBlockEdgeInsets,
           children: [
-            RadioGroup<String>(
-              groupValue: _selectedChoice,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                  _updateIsValid();
-                });
-                if (_selectedChoice == mpNonMultipleChoiceSetID) {
-                  _subtypeFieldFocusNode.requestFocus();
-                }
-              },
-              child: Column(
-                children: [
-                  RadioListTile<String>(
-                    key: ValueKey(
-                      "MPSubtypeOptionWidget|RadioListTile|$mpUnsetOptionID",
-                    ),
-                    title: Text(appLocalizations.mpChoiceUnset),
-                    value: mpUnsetOptionID,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  RadioListTile<String>(
-                    key: ValueKey(
-                      "MPSubtypeOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
-                    ),
-                    title: Text(appLocalizations.mpChoiceSet),
-                    value: mpNonMultipleChoiceSetID,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                ],
-              ),
-            ),
+            Builder(
+              builder: (BuildContext context) {
+                final Widget optionInput = _buildOptionInput();
 
-            // Additional Inputs for "Set" Option
-            if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              _buildOptionInput(),
-            ],
+                if (_usesDropdownOnlyEditor) {
+                  return optionInput;
+                }
+
+                return Column(
+                  children: [
+                    RadioGroup<String>(
+                      groupValue: _selectedChoice,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _selectedChoice = value!;
+                          _updateIsValid();
+                        });
+                        if (_selectedChoice == mpNonMultipleChoiceSetID) {
+                          _subtypeFieldFocusNode.requestFocus();
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          RadioListTile<String>(
+                            key: ValueKey(
+                              "MPSubtypeOptionWidget|RadioListTile|$mpUnsetOptionID",
+                            ),
+                            title: Text(appLocalizations.mpChoiceUnset),
+                            value: mpUnsetOptionID,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                          RadioListTile<String>(
+                            key: ValueKey(
+                              "MPSubtypeOptionWidget|RadioListTile|$mpNonMultipleChoiceSetID",
+                            ),
+                            title: Text(appLocalizations.mpChoiceSet),
+                            value: mpNonMultipleChoiceSetID,
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+                      optionInput,
+                    ],
+                  ],
+                );
+              },
+            ),
           ],
         ),
         const SizedBox(height: mpButtonSpace),

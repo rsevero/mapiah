@@ -34,7 +34,7 @@
 [X] - When a single element is selected, show its properties in the status bar.
 [X] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [X] - Allow the user to choose if the grid of a XVI file should be visible or not.
-[ ] - Command options that are a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
+[x] - Command options that are only a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [ ] - When deleting line points, adjust control points so curve is changed as little as possible.
 [X] - Show current position during drag in status bar.
 [ ] - Convert multiline comment into a single element.
