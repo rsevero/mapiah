@@ -1607,11 +1607,15 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  void finishInteractiveLineSimplification({required bool saveParameters}) {
-    if (saveParameters) {
-      _lineSimplificationMethod = _interactiveLineSimplificationMethod;
-    }
+  void commitInteractiveLineSimplification() {
+    _lineSimplificationMethod = _interactiveLineSimplificationMethod;
+    _originalFileForLineSimplification = _th2File.copyWith();
+    _interactiveLineSimplificationUndoCountAtStart =
+        _th2FileEditController.undoCount;
+    _isFirstLineSimplification = true;
+  }
 
+  void finishInteractiveLineSimplification() {
     _interactiveLineSimplificationUndoCountAtStart = null;
     resetOriginalFileForLineSimplification();
   }

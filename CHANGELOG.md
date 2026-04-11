@@ -7,6 +7,7 @@
 * New features:
   * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage. [request by Axel Hack]
   * Added an interactive line simplification dialog (`Ctrl+Alt+Shift+L`) with a dedicated state-context FAB, live preview for method and intensity changes, close/save/cancel handling with single-step undo semantics, EN/PT help updates, and regression coverage.
+  * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
 * Fixed bugs:
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.
   * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.

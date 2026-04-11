@@ -8,7 +8,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 
-enum MPInteractiveLineSimplificationDialogResult { close, save, cancel }
+enum MPInteractiveLineSimplificationDialogResult { close, cancel }
 
 class MPInteractiveLineSimplificationDialogWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
@@ -197,9 +197,8 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).pop(MPInteractiveLineSimplificationDialogResult.save);
+                      _elementEditController
+                          .commitInteractiveLineSimplification();
                     },
                     child: Text(_appLocalizations.mpButtonSave),
                   ),

@@ -1635,13 +1635,7 @@ abstract class TH2FileEditControllerBase with Store {
 
     switch (finalResult) {
       case MPInteractiveLineSimplificationDialogResult.close:
-        elementEditController.finishInteractiveLineSimplification(
-          saveParameters: false,
-        );
-      case MPInteractiveLineSimplificationDialogResult.save:
-        elementEditController.finishInteractiveLineSimplification(
-          saveParameters: true,
-        );
+        elementEditController.finishInteractiveLineSimplification();
       case MPInteractiveLineSimplificationDialogResult.cancel:
         elementEditController.cancelInteractiveLineSimplification();
     }
