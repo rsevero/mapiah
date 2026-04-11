@@ -37,7 +37,6 @@
 [x] - Command options that are only a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
 [X] - When deleting line points, adjust control points so curve is changed as little as possible.
 [X] - Show current position during drag in status bar.
-[ ] - Convert multiline comment into a single element.
 [X] - Reorder images.
 [ ] - Create a easy way to find slope lines without lsize.
 [ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]

@@ -1109,6 +1109,7 @@ abstract class MPVisualControllerBase with Store {
   List<Paint> getHighlightBorders({
     required bool isTHInvisible,
     required bool hasID,
+    bool isSlopeWithoutLSize = false,
   }) {
     final List<Paint> highlightBorders = [];
 
@@ -1125,6 +1126,15 @@ abstract class MPVisualControllerBase with Store {
       highlightBorders.add(
         Paint.from(
           THPaint.thPaint17
+            ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
+        ),
+      );
+    }
+
+    if (isSlopeWithoutLSize) {
+      highlightBorders.add(
+        Paint.from(
+          THPaint.thPaint18
             ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
         ),
       );
@@ -1374,6 +1384,7 @@ abstract class MPVisualControllerBase with Store {
     String? subtype,
     bool lineIsTHInvisible = false,
     bool lineHasID = false,
+    bool lineIsSlopeWithoutLSize = false,
     required bool isFromActiveScrap,
     THScrapPaint? parentScrapPaint,
   }) {
@@ -1383,10 +1394,12 @@ abstract class MPVisualControllerBase with Store {
     );
 
     if (isFromActiveScrap) {
-      final List<Paint> highlightBorders = (lineIsTHInvisible || lineHasID)
+      final List<Paint> highlightBorders =
+          (lineIsTHInvisible || lineHasID || lineIsSlopeWithoutLSize)
           ? getHighlightBorders(
               isTHInvisible: lineIsTHInvisible,
               hasID: lineHasID,
+              isSlopeWithoutLSize: lineIsSlopeWithoutLSize,
             )
           : const [];
       final THLinePaint linePaintCopy = linePaintDefault.copyWith(

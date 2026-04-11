@@ -110,6 +110,9 @@ mixin MPLinePaintingMixin {
     final bool lineHasID = isLineSelected
         ? false
         : MPCommandOptionAux.hasID(line);
+    final bool lineIsSlopeWithoutLSize = isLineSelected
+        ? false
+        : line.isSlopeWithoutLSize;
 
     if (line.subtypeLineSegmentMPIDsByLineSegmentIndex.isEmpty) {
       final THLinePaint linePaint;
@@ -128,6 +131,7 @@ mixin MPLinePaintingMixin {
                 lineIsTHInvisible: lineIsTHInvisible,
                 isFromActiveScrap: isFromActiveScrap,
                 lineHasID: lineHasID,
+                lineIsSlopeWithoutLSize: lineIsSlopeWithoutLSize,
                 parentScrapPaint: parentScrapPaint,
               );
       } else {
@@ -192,6 +196,7 @@ mixin MPLinePaintingMixin {
                   subtype: subtype,
                   lineIsTHInvisible: lineIsTHInvisible,
                   lineHasID: lineHasID,
+                  lineIsSlopeWithoutLSize: lineIsSlopeWithoutLSize,
                   isFromActiveScrap: isFromActiveScrap,
                   parentScrapPaint: parentScrapPaint,
                 );

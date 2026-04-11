@@ -609,6 +609,28 @@ class THLine extends THElement
     return lineSegmentWithSizeOrientation;
   }
 
+  bool get hasLineSegmentWithLSize {
+    if (th2File == null) {
+      throw THCustomException(
+        "At THLine.hasLineSegmentWithLSize: TH2File is null.",
+      );
+    }
+
+    final List<THLineSegment> lineSegments = getLineSegments(th2File!);
+
+    for (final THLineSegment lineSegment in lineSegments) {
+      if (lineSegment.hasOption(THCommandOptionType.lSize)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool get isSlopeWithoutLSize {
+    return (lineType == THLineType.slope) && !hasLineSegmentWithLSize;
+  }
+
   void clearLineSegmentsWithMarkCache() {
     _lineSegmentsWithMark = null;
   }
