@@ -38,6 +38,8 @@ mixin MPRuntimeImageInsertConfigMixin on THElement, MPBoundingBoxMixin {
 
   MPRuntimeRasterImageInsertConfigMixin? get asRasterImage => null;
 
+  MPRuntimeSVGImageInsertConfigMixin? get asSVGImage => null;
+
   void copyRuntimeImageCacheTo({
     required MPRuntimeImageInsertConfigMixin targetImage,
     required TH2FileEditController th2FileEditController,
@@ -59,6 +61,14 @@ mixin MPRuntimeImageInsertConfigMixin on THElement, MPBoundingBoxMixin {
 
     if ((sourceRasterImage != null) && (targetRasterImage != null)) {
       targetRasterImage.setRasterImage(sourceRasterImage.decodedRasterImage);
+    }
+
+    final MPRuntimeSVGImageInsertConfigMixin? sourceSVGImage = asSVGImage;
+    final MPRuntimeSVGImageInsertConfigMixin? targetSVGImage =
+        targetImage.asSVGImage;
+
+    if ((sourceSVGImage != null) && (targetSVGImage != null)) {
+      targetSVGImage.setSVGPictureInfo(sourceSVGImage.decodedSVGPictureInfo);
     }
   }
 }
@@ -87,4 +97,14 @@ mixin MPRuntimeRasterImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
   ui.Image? get decodedRasterImage;
 
   void setRasterImage(ui.Image? image);
+}
+
+mixin MPRuntimeSVGImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
+  Future<svg.PictureInfo>? getSVGPictureInfo(
+    TH2FileEditController th2FileEditController,
+  );
+
+  svg.PictureInfo? get decodedSVGPictureInfo;
+
+  void setSVGPictureInfo(svg.PictureInfo? pictureInfo);
 }

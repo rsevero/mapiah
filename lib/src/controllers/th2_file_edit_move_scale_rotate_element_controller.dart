@@ -109,8 +109,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
     final THIsParentMixin parent = image.parent(th2File: _th2File);
     final int imagePositionInParent = parent.getChildPosition(image);
-    final THXTherionImageInsertConfig resetImage =
-        _buildResetXTherionImageInsertConfig(image);
+    final THElement resetImage = _buildResetImageInsertConfig(image);
     final MPCommand removeImageCommand =
         MPCommandFactory.removeImageInsertConfigFromExisting(
           existingImageInsertConfigMPID: imageMPID,
@@ -135,9 +134,32 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
-  THXTherionImageInsertConfig _buildResetXTherionImageInsertConfig(
+  THElement _buildResetImageInsertConfig(
     MPRuntimeImageInsertConfigMixin image,
   ) {
+    final MPSVGImageInsertConfig? svgImage = (image is MPSVGImageInsertConfig)
+        ? image
+        : null;
+
+    if (svgImage != null) {
+      final MPSVGImageInsertConfig resetImage = MPSVGImageInsertConfig(
+        parentMPID: image.parentMPID,
+        filename: image.filename,
+        xx: 0.0,
+        yy: 0.0,
+        isVisible: true,
+        intrinsicSizeInfo: svgImage.intrinsicSizeInfo,
+        originalLineInTH2File: '',
+      ).copyWith(mpID: image.mpID, sameLineComment: image.sameLineComment);
+
+      image.copyRuntimeImageCacheTo(
+        targetImage: resetImage,
+        th2FileEditController: _th2FileEditController,
+      );
+
+      return resetImage;
+    }
+
     final THXTherionImageInsertConfig resetImage =
         THXTherionImageInsertConfig(
           parentMPID: image.parentMPID,

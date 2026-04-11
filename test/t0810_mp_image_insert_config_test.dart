@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
@@ -169,6 +170,45 @@ void main() {
       );
       expect((fromMap as MPXVIImageInsertConfig).isGridVisible, isFalse);
       expect(fromMap.toMap(), original.toMap());
+    });
+
+    test('svg metadata round-trips through toMap and fromMap', () {
+      final MPSVGImageInsertConfig original = MPSVGImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/plan.svg',
+        xx: 12.0,
+        yy: 30.0,
+        xScale: -2.0,
+        yScale: 3.0,
+        rotationCenterDx: 4.0,
+        rotationCenterDy: -5.0,
+        rotationDeg: 25.0,
+        intrinsicSizeInfo: const MPSVGIntrinsicSizeInfo(
+          width: 120.0,
+          height: 60.0,
+          sourceViewBox: Rect.fromLTWH(-10.0, 5.0, 120.0, 60.0),
+        ),
+      );
+
+      final MPImageInsertConfig fromMetadata =
+          MPImageInsertConfig.fromMetadataString(
+            parentMPID: mpParentMPIDPlaceholder,
+            metadata: original.toMetadataString(),
+          );
+      final MPImageInsertConfig fromMap = MPImageInsertConfig.fromMap(
+        original.toMap(),
+      );
+      final MPSVGImageInsertConfig fromMetadataSVG =
+          fromMetadata as MPSVGImageInsertConfig;
+
+      expect(fromMetadata, isA<MPSVGImageInsertConfig>());
+      expect(fromMetadataSVG.intrinsicSizeInfo.width, 120.0);
+      expect(fromMetadataSVG.intrinsicSizeInfo.height, 60.0);
+      expect(
+        fromMetadataSVG.intrinsicSizeInfo.sourceViewBox,
+        Rect.fromLTWH(-10.0, 5.0, 120.0, 60.0),
+      );
+      expect((fromMap as MPSVGImageInsertConfig).toMap(), original.toMap());
     });
   });
 

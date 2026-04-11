@@ -6,6 +6,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/widgets/mp_image_operation_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_raster_image_widget.dart';
+import 'package:mapiah/src/widgets/mp_svg_image_widget.dart';
 import 'package:mapiah/src/widgets/mp_xvi_image_widget.dart';
 
 class MPImagesWidget extends StatelessWidget {
@@ -38,6 +39,8 @@ class MPImagesWidget extends StatelessWidget {
               renderedImage.asXVIImage;
           final MPRuntimeRasterImageInsertConfigMixin? rasterImage =
               renderedImage.asRasterImage;
+          final MPRuntimeSVGImageInsertConfigMixin? svgImage =
+              renderedImage.asSVGImage;
 
           if (xviImage != null) {
             widgets.add(
@@ -53,6 +56,14 @@ class MPImagesWidget extends StatelessWidget {
                 key: ValueKey('raster_image_${image.mpID}'),
                 th2FileEditController: th2FileEditController,
                 image: rasterImage,
+              ),
+            );
+          } else if (svgImage != null) {
+            widgets.add(
+              MPSVGImageWidget(
+                key: ValueKey('svg_image_${image.mpID}'),
+                th2FileEditController: th2FileEditController,
+                image: svgImage as MPSVGImageInsertConfig,
               ),
             );
           }

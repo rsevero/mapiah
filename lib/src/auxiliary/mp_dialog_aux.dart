@@ -12,6 +12,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
+import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/auxiliary/mp_version_check_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -32,6 +33,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MPDialogAux {
   // Prevent multiple stacked error dialogs
   static bool _isXVIErrorDialogOpen = false;
+  static bool _isSVGErrorDialogOpen = false;
   static bool _isUnhandledErrorDialogOpen = false;
   static bool _isUpdateDialogOpen = false;
   static bool _isUpdateCheckRunning = false;
@@ -70,6 +72,7 @@ class MPDialogAux {
               'jpeg',
               'jpg',
               'png',
+              'svg',
 
               /// PNM and PPM are not supported by dart:ui package.
               // 'pnm',
@@ -159,6 +162,37 @@ class MPDialogAux {
             stackTrace: st,
           );
           await showXVIParsingErrorsDialog(context, [e.toString()]);
+
+          return PickImageFileReturn(type: PickImageFileReturnType.empty);
+        }
+      }
+
+      if (lowerName.endsWith(mpSVGExtension)) {
+        try {
+          final String svgText = utf8.decode(bytes);
+          final MPSVGIntrinsicSizeInfo? intrinsicSizeInfo =
+              MPSVGAux.parseIntrinsicSizeInfo(svgText);
+
+          if (intrinsicSizeInfo == null) {
+            await showSVGImportErrorsDialog(context, <String>[
+              mpLocator.appLocalizations.th2FilePickSVGMissingIntrinsicSize,
+            ]);
+
+            return PickImageFileReturn(type: PickImageFileReturnType.empty);
+          }
+
+          return PickImageFileReturn(
+            type: PickImageFileReturnType.svgImage,
+            svgIntrinsicSizeInfo: intrinsicSizeInfo,
+            filename: filename,
+          );
+        } catch (e, st) {
+          mpLocator.mpLog.e(
+            'Failed to parse SVG file',
+            error: e,
+            stackTrace: st,
+          );
+          await showSVGImportErrorsDialog(context, <String>[e.toString()]);
 
           return PickImageFileReturn(type: PickImageFileReturnType.empty);
         }
@@ -875,6 +909,53 @@ class MPDialogAux {
     return completer.future;
   }
 
+  static Future<void> showSVGImportErrorsDialog(
+    BuildContext context,
+    List<String> errors,
+  ) async {
+    if (errors.isEmpty) {
+      return;
+    }
+
+    if (_isSVGErrorDialogOpen) {
+      return;
+    }
+
+    _isSVGErrorDialogOpen = true;
+
+    final Completer<void> completer = Completer<void>();
+
+    void showNow() {
+      final BuildContext ctx =
+          mpLocator.mpNavigatorKey.currentContext ?? context;
+
+      showDialog<void>(
+        context: ctx,
+        useRootNavigator: true,
+        barrierDismissible: true,
+        builder: (ctx2) => MPErrorDialog(
+          title: mpLocator.appLocalizations.th2FilePickSVGImportErrorTitle,
+          errorMessages: errors,
+        ),
+      ).whenComplete(() {
+        _isSVGErrorDialogOpen = false;
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
+      });
+    }
+
+    final SchedulerPhase phase = SchedulerBinding.instance.schedulerPhase;
+
+    if (phase == SchedulerPhase.idle) {
+      showNow();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) => showNow());
+    }
+
+    return completer.future;
+  }
+
   static Future<void> pickTH2File(BuildContext context) async {
     if (_isFilePickerOpen[MPFilePickerType.th2] == true) {
       return;
@@ -1165,17 +1246,19 @@ enum MPFilePickerType { image, th2, thconfig, executable }
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 
-enum PickImageFileReturnType { empty, rasterImage, xviFile }
+enum PickImageFileReturnType { empty, rasterImage, svgImage, xviFile }
 
 class PickImageFileReturn {
   final PickImageFileReturnType type;
   final ui.Image? image;
+  final MPSVGIntrinsicSizeInfo? svgIntrinsicSizeInfo;
   final XVIFile? xviFile;
   final String? filename;
 
   PickImageFileReturn({
     required this.type,
     this.image,
+    this.svgIntrinsicSizeInfo,
     this.xviFile,
     this.filename,
   });

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -53,6 +55,17 @@ void main() {
 ''',
         'imageInsertFile': './test/auxiliary/jpg/2025-10-07-001.jpg',
       },
+      {
+        'file': '2025-10-06-004-only_encoding.th2',
+        'length': 1,
+        'encoding': 'UTF-8',
+        'asFileOriginal': r'''encoding UTF-8
+''',
+        'asFileChanged': r'''encoding UTF-8
+##MAPIAH## image_insert_v1 {format=svg;filename=.%2Fsvg%2F2026-04-11-001-sized.svg;xx=-0;yy=0;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false;intrinsicWidth=120.0;intrinsicHeight=60.0;sourceViewBoxLeft=0.0;sourceViewBoxTop=0.0;sourceViewBoxWidth=120.0;sourceViewBoxHeight=60.0}
+''',
+        'imageInsertFile': './test/auxiliary/svg/2026-04-11-001-sized.svg',
+      },
     ];
 
     for (var success in successes) {
@@ -92,6 +105,14 @@ void main() {
                 MPCommandFactory.addImageInsertConfig(
                   imageFilename: success['imageInsertFile'] as String,
                   th2FileEditController: controller,
+                  svgIntrinsicSizeInfo:
+                      (success['imageInsertFile'] as String).endsWith('.svg')
+                      ? MPSVGAux.parseIntrinsicSizeInfo(
+                          File(
+                            success['imageInsertFile']! as String,
+                          ).readAsStringSync(),
+                        )
+                      : null,
                 );
 
             controller.execute(addImageCommand);

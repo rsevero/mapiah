@@ -1151,6 +1151,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     final MPCommand addImageCommand = MPCommandFactory.addImageInsertConfig(
       imageFilename: imageResult.filename!,
       th2FileEditController: _th2FileEditController,
+      svgIntrinsicSizeInfo: imageResult.svgIntrinsicSizeInfo,
     );
 
     _th2FileEditController.execute(addImageCommand);

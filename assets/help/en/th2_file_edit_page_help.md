@@ -207,7 +207,9 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 * Subtype options defined before the first line point or on the first one are transformed to line subtype.
 
 ## Images
-The images overlay window is opened with the ![Images button](assets/help/images/buttonImages.png "Images") button (Alt+I) in the bottom right corner. It lists all images (XVI survey backgrounds and raster images) inserted in the current file.
+The images overlay window is opened with the ![Images button](assets/help/images/buttonImages.png "Images") button (Alt+I) in the bottom right corner. It lists all images (XVI survey backgrounds, raster images, and Mapiah-only SVG images) inserted in the current file.
+
+SVG images are always stored as Mapiah-only image inserts. To import an SVG, the file must define either a `viewBox` or numeric `width` and `height`. If neither is available, Mapiah shows an import error and does not insert the image.
 
 A _toggle all_ button appears above the list when images are present. Its tooltip and icon reflect what the button will do:
 * _Hide all images_ (eye-off icon): shown when all images are visible; clicking hides all images.

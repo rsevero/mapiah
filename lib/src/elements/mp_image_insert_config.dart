@@ -169,6 +169,26 @@ abstract class MPImageInsertConfig extends THElement
           isVisible: map['isVisible'] ?? true,
           originalLineInTH2File: map['originalLineInTH2File'],
         );
+      case mpImageInsertFormatSVG:
+        return MPSVGImageInsertConfig.forCWJM(
+          mpID: map['mpID'],
+          parentMPID: map['parentMPID'],
+          sameLineComment: map['sameLineComment'],
+          filename: map['filename'],
+          xx: THDoublePart.fromMap(map['xx']),
+          yy: THDoublePart.fromMap(map['yy']),
+          xScale: THDoublePart.fromMap(map['xScale']),
+          yScale: THDoublePart.fromMap(map['yScale']),
+          rotationCenterDx: THDoublePart.fromMap(map['rotationCenterDx']),
+          rotationCenterDy: THDoublePart.fromMap(map['rotationCenterDy']),
+          rotationDeg: THDoublePart.fromMap(map['rotationDeg']),
+          pivotSet: map['pivotSet'] ?? false,
+          isVisible: map['isVisible'] ?? true,
+          intrinsicSizeInfo: MPSVGIntrinsicSizeInfo.fromMap(
+            map['intrinsicSizeInfo'] as Map<String, dynamic>,
+          ),
+          originalLineInTH2File: map['originalLineInTH2File'],
+        );
       default:
         throw THCustomException(
           "Unsupported MPImageInsertConfig format '$format' in MPImageInsertConfig.fromMap.",
@@ -280,6 +300,35 @@ abstract class MPImageInsertConfig extends THElement
           pivotSet: payload['pivotSet'] == 'true',
           originalLineInTH2File: originalLineInTH2File,
         );
+      case mpImageInsertFormatSVG:
+        return MPSVGImageInsertConfig.fromString(
+          parentMPID: parentMPID,
+          filename: _requiredPayloadValue(payload, 'filename'),
+          xx: _requiredPayloadValue(payload, 'xx'),
+          yy: _requiredPayloadValue(payload, 'yy'),
+          xScale: _requiredPayloadValue(payload, 'xScale'),
+          yScale: _requiredPayloadValue(payload, 'yScale'),
+          rotationCenterDx: _requiredPayloadValue(payload, 'rotationCenterDx'),
+          rotationCenterDy: _requiredPayloadValue(payload, 'rotationCenterDy'),
+          rotationDeg: _requiredPayloadValue(payload, 'rotationDeg'),
+          pivotSet: payload['pivotSet'] == 'true',
+          intrinsicWidth: _requiredPayloadValue(payload, 'intrinsicWidth'),
+          intrinsicHeight: _requiredPayloadValue(payload, 'intrinsicHeight'),
+          sourceViewBoxLeft: _requiredPayloadValue(
+            payload,
+            'sourceViewBoxLeft',
+          ),
+          sourceViewBoxTop: _requiredPayloadValue(payload, 'sourceViewBoxTop'),
+          sourceViewBoxWidth: _requiredPayloadValue(
+            payload,
+            'sourceViewBoxWidth',
+          ),
+          sourceViewBoxHeight: _requiredPayloadValue(
+            payload,
+            'sourceViewBoxHeight',
+          ),
+          originalLineInTH2File: originalLineInTH2File,
+        );
       default:
         throw THCustomException(
           "Unsupported MPImageInsertConfig format '$format' in MPImageInsertConfig.fromMetadataString.",
@@ -341,7 +390,18 @@ abstract class MPImageInsertConfig extends THElement
     final ui.Image? decodedRasterImage = rasterImage?.decodedRasterImage;
 
     if (decodedRasterImage == null) {
-      return Offset.zero;
+      final MPSVGImageInsertConfig? svgImage = (this is MPSVGImageInsertConfig)
+          ? this as MPSVGImageInsertConfig
+          : null;
+
+      if (svgImage == null) {
+        return Offset.zero;
+      }
+
+      return Offset(
+        svgImage.intrinsicSizeInfo.width / 2.0,
+        -svgImage.intrinsicSizeInfo.height / 2.0,
+      );
     }
 
     return Offset(
@@ -836,6 +896,267 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
         break;
       }
     }
+  }
+}
+
+class MPSVGImageInsertConfig extends MPImageInsertConfig
+    with MPRuntimeSVGImageInsertConfigMixin {
+  final MPSVGIntrinsicSizeInfo intrinsicSizeInfo;
+  Future<svg.PictureInfo>? _svgPictureInfoFuture;
+  svg.PictureInfo? _decodedSVGPictureInfo;
+
+  MPSVGImageInsertConfig.forCWJM({
+    required super.mpID,
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.yy,
+    required super.xScale,
+    required super.yScale,
+    required super.rotationCenterDx,
+    required super.rotationCenterDy,
+    required super.rotationDeg,
+    required super.pivotSet,
+    required super.isVisible,
+    required this.intrinsicSizeInfo,
+    required super.originalLineInTH2File,
+  }) : super.forCWJM();
+
+  MPSVGImageInsertConfig({
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.yy,
+    super.xScale = 1.0,
+    super.yScale = 1.0,
+    super.rotationCenterDx = 0.0,
+    super.rotationCenterDy = 0.0,
+    super.rotationDeg = 0.0,
+    super.pivotSet = false,
+    super.isVisible,
+    required this.intrinsicSizeInfo,
+    super.originalLineInTH2File,
+  }) : super.getMPID();
+
+  MPSVGImageInsertConfig.fromString({
+    required super.parentMPID,
+    super.sameLineComment,
+    required super.filename,
+    required super.xx,
+    required super.yy,
+    super.xScale = '1.0',
+    super.yScale = '1.0',
+    super.rotationCenterDx = '0.0',
+    super.rotationCenterDy = '0.0',
+    super.rotationDeg = '0.0',
+    super.pivotSet = false,
+    super.isVisible = true,
+    required String intrinsicWidth,
+    required String intrinsicHeight,
+    required String sourceViewBoxLeft,
+    required String sourceViewBoxTop,
+    required String sourceViewBoxWidth,
+    required String sourceViewBoxHeight,
+    super.originalLineInTH2File = '',
+  }) : intrinsicSizeInfo = MPSVGIntrinsicSizeInfo(
+         width: double.parse(intrinsicWidth),
+         height: double.parse(intrinsicHeight),
+         sourceViewBox: Rect.fromLTWH(
+           double.parse(sourceViewBoxLeft),
+           double.parse(sourceViewBoxTop),
+           double.parse(sourceViewBoxWidth),
+           double.parse(sourceViewBoxHeight),
+         ),
+       ),
+       super.fromString();
+
+  @override
+  String get format => mpImageInsertFormatSVG;
+
+  @override
+  bool get isXVI => false;
+
+  @override
+  MPRuntimeSVGImageInsertConfigMixin get asSVGImage => this;
+
+  @override
+  Map<String, String> extraMetadataPayload() {
+    return <String, String>{
+      'intrinsicWidth': intrinsicSizeInfo.width.toString(),
+      'intrinsicHeight': intrinsicSizeInfo.height.toString(),
+      'sourceViewBoxLeft': intrinsicSizeInfo.sourceViewBox.left.toString(),
+      'sourceViewBoxTop': intrinsicSizeInfo.sourceViewBox.top.toString(),
+      'sourceViewBoxWidth': intrinsicSizeInfo.sourceViewBox.width.toString(),
+      'sourceViewBoxHeight': intrinsicSizeInfo.sourceViewBox.height.toString(),
+    };
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      ...super.toMap(),
+      'intrinsicSizeInfo': intrinsicSizeInfo.toMap(),
+    };
+  }
+
+  @override
+  MPSVGImageInsertConfig copyWith({
+    int? mpID,
+    int? parentMPID,
+    String? sameLineComment,
+    bool makeSameLineCommentNull = false,
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    THDoublePart? xScale,
+    THDoublePart? yScale,
+    THDoublePart? rotationCenterDx,
+    THDoublePart? rotationCenterDy,
+    THDoublePart? rotationDeg,
+    bool? pivotSet,
+    bool? isVisible,
+    MPSVGIntrinsicSizeInfo? intrinsicSizeInfo,
+    String? originalLineInTH2File,
+  }) {
+    return MPSVGImageInsertConfig.forCWJM(
+      mpID: mpID ?? this.mpID,
+      parentMPID: parentMPID ?? this.parentMPID,
+      sameLineComment: makeSameLineCommentNull
+          ? null
+          : (sameLineComment ?? this.sameLineComment),
+      filename: filename ?? this.filename,
+      xx: xx ?? this.xx,
+      yy: yy ?? this.yy,
+      xScale: xScale ?? this.xScale,
+      yScale: yScale ?? this.yScale,
+      rotationCenterDx: rotationCenterDx ?? this.rotationCenterDx,
+      rotationCenterDy: rotationCenterDy ?? this.rotationCenterDy,
+      rotationDeg: rotationDeg ?? this.rotationDeg,
+      pivotSet: pivotSet ?? this.pivotSet,
+      isVisible: isVisible ?? this.isVisible,
+      intrinsicSizeInfo: intrinsicSizeInfo ?? this.intrinsicSizeInfo,
+      originalLineInTH2File:
+          originalLineInTH2File ?? this.originalLineInTH2File,
+    );
+  }
+
+  @override
+  MPSVGImageInsertConfig copyWithImageInsertConfigBase({
+    String? filename,
+    THDoublePart? xx,
+    THDoublePart? yy,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      filename: filename,
+      xx: xx,
+      yy: yy,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
+  MPSVGImageInsertConfig copyWithImageTransform({
+    THDoublePart? xx,
+    THDoublePart? yy,
+    THDoublePart? xScale,
+    THDoublePart? yScale,
+    THDoublePart? rotationCenterDx,
+    THDoublePart? rotationCenterDy,
+    THDoublePart? rotationDeg,
+    bool? pivotSet,
+    bool? isVisible,
+    String? originalLineInTH2File,
+  }) {
+    return copyWith(
+      xx: xx,
+      yy: yy,
+      xScale: xScale,
+      yScale: yScale,
+      rotationCenterDx: rotationCenterDx,
+      rotationCenterDy: rotationCenterDy,
+      rotationDeg: rotationDeg,
+      pivotSet: pivotSet,
+      isVisible: isVisible,
+      originalLineInTH2File: originalLineInTH2File,
+    );
+  }
+
+  @override
+  Rect getLocalBounds(TH2FileEditController th2FileEditController) {
+    return Rect.fromLTRB(
+      0.0,
+      -intrinsicSizeInfo.height,
+      intrinsicSizeInfo.width,
+      0.0,
+    );
+  }
+
+  @override
+  Rect? calculateBoundingBox(TH2FileEditController th2FileEditController) {
+    if (!isVisible) {
+      return null;
+    }
+
+    return transformLocalRect(getLocalBounds(th2FileEditController));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is MPSVGImageInsertConfig &&
+        equalsMPImageInsertConfigBase(other) &&
+        intrinsicSizeInfo.width == other.intrinsicSizeInfo.width &&
+        intrinsicSizeInfo.height == other.intrinsicSizeInfo.height &&
+        intrinsicSizeInfo.sourceViewBox ==
+            other.intrinsicSizeInfo.sourceViewBox;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    mpImageInsertConfigBaseHashCode,
+    intrinsicSizeInfo.width,
+    intrinsicSizeInfo.height,
+    intrinsicSizeInfo.sourceViewBox,
+  );
+
+  @override
+  bool isSameClass(Object object) {
+    return object is MPSVGImageInsertConfig;
+  }
+
+  @override
+  Future<svg.PictureInfo>? getSVGPictureInfo(
+    TH2FileEditController th2FileEditController,
+  ) {
+    _svgPictureInfoFuture ??=
+        MPSVGAux.loadPictureInfo(
+          th2FileEditController: th2FileEditController,
+          imageFilename: filename,
+        ).then((svg.PictureInfo pictureInfo) {
+          _decodedSVGPictureInfo = pictureInfo;
+          clearBoundingBox();
+
+          return pictureInfo;
+        });
+
+    return _svgPictureInfoFuture!;
+  }
+
+  @override
+  svg.PictureInfo? get decodedSVGPictureInfo => _decodedSVGPictureInfo;
+
+  @override
+  void setSVGPictureInfo(svg.PictureInfo? pictureInfo) {
+    _decodedSVGPictureInfo = pictureInfo;
+    clearBoundingBox();
   }
 }
 

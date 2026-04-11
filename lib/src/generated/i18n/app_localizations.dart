@@ -2986,6 +2986,18 @@ abstract class AppLocalizations {
   /// **'Zoom selection window (5)'**
   String get th2FileEditPageZoomToSelectionWindow;
 
+  /// Title for the SVG import error dialog. Used on: MPDialogAux.showSVGImportErrorsDialog
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to import SVG image'**
+  String get th2FilePickSVGImportErrorTitle;
+
+  /// Error shown when importing an SVG file that lacks both a usable viewBox and usable width/height. Used on: MPDialogAux.pickImageFile
+  ///
+  /// In en, this message translates to:
+  /// **'SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.'**
+  String get th2FilePickSVGMissingIntrinsicSize;
+
   /// The label for the image file selection dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
   ///
   /// In en, this message translates to:

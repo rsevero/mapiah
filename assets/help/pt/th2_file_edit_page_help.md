@@ -78,7 +78,9 @@ Quando múltiplos arquivos estão abertos, cada arquivo aparece como uma aba no 
 A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo você está editando. Todos os arquivos abertos mantêm seu estado de edição, para que você possa alternar entre eles sem perder seu trabalho.
 
 ## Imagens
-A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI e imagens raster) inseridas no arquivo atual.
+A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI, imagens raster e imagens SVG exclusivas do Mapiah) inseridas no arquivo atual.
+
+Imagens SVG são sempre armazenadas como inserções de imagem exclusivas do Mapiah. Para importar um SVG, o arquivo precisa definir um `viewBox` ou valores numéricos de `width` e `height`. Se nenhum deles estiver disponível, o Mapiah mostra um erro de importação e não insere a imagem.
 
 Um botão _alternar todas_ aparece acima da lista quando há imagens presentes. Seu tooltip e ícone refletem o que o botão fará:
 * _Ocultar todas as imagens_ (ícone de olho fechado): exibido quando todas as imagens estão visíveis; clicar oculta todas as imagens.

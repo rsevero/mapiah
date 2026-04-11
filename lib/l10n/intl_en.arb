@@ -2494,6 +2494,16 @@
     "description": "The label for the zoom selection window button. Used on: _TH2FileEditPageState._zoomButtonWithOptions",
     "type": "text"
   },
+  "th2FilePickSVGImportErrorTitle": "Unable to import SVG image",
+  "@th2FilePickSVGImportErrorTitle": {
+    "description": "Title for the SVG import error dialog. Used on: MPDialogAux.showSVGImportErrorsDialog",
+    "type": "text"
+  },
+  "th2FilePickSVGMissingIntrinsicSize": "SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.",
+  "@th2FilePickSVGMissingIntrinsicSize": {
+    "description": "Error shown when importing an SVG file that lacks both a usable viewBox and usable width/height. Used on: MPDialogAux.pickImageFile",
+    "type": "text"
+  },
   "th2FilePickSelectImageFile": "Select an image file",
   "@th2FilePickSelectImageFile": {
     "description": "The label for the image file selection dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart",

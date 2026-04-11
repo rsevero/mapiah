@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -731,6 +732,7 @@ class MPCommandFactory {
   static MPCommand addImageInsertConfig({
     required String imageFilename,
     required TH2FileEditController th2FileEditController,
+    MPSVGIntrinsicSizeInfo? svgIntrinsicSizeInfo,
   }) {
     final TH2File th2File = th2FileEditController.th2File;
     final String fromPath = p.dirname(th2File.filename);
@@ -752,19 +754,26 @@ class MPCommandFactory {
         ? rawRelativeImagePath
         : './$rawRelativeImagePath';
     final Rect fileBoundingBox = th2File.getBoundingBox(th2FileEditController)!;
-    final THXTherionImageInsertConfig
-    newImage = THXTherionImageInsertConfig.adjustPosition(
-      parentMPID: th2File.mpID,
-      filename: relativeImagePath,
-      xx: THDoublePart(value: fileBoundingBox.left),
-      // For Flutter's canvas, the top is 0 and positive values of Y go down but
-      // in the TH2 format, the top is the maximum Y value.
-      // That's why Flutter calls the maximum Y value "bottom" and despite being
-      // called *bottom*, we use it to align the new image to the *top* left
-      // point of the current drawing.
-      yy: THDoublePart(value: fileBoundingBox.bottom),
-      th2FileEditController: th2FileEditController,
-    );
+    final THElement newImage = (svgIntrinsicSizeInfo == null)
+        ? THXTherionImageInsertConfig.adjustPosition(
+            parentMPID: th2File.mpID,
+            filename: relativeImagePath,
+            xx: THDoublePart(value: fileBoundingBox.left),
+            // For Flutter's canvas, the top is 0 and positive values of Y go
+            // down but in the TH2 format, the top is the maximum Y value.
+            // That's why Flutter calls the maximum Y value "bottom" and
+            // despite being called *bottom*, we use it to align the new image
+            // to the *top* left point of the current drawing.
+            yy: THDoublePart(value: fileBoundingBox.bottom),
+            th2FileEditController: th2FileEditController,
+          )
+        : MPSVGImageInsertConfig(
+            parentMPID: th2File.mpID,
+            filename: relativeImagePath,
+            xx: fileBoundingBox.left,
+            yy: fileBoundingBox.bottom,
+            intrinsicSizeInfo: svgIntrinsicSizeInfo,
+          );
     final MPAddImageInsertConfigCommand addImageCommand =
         MPAddImageInsertConfigCommand(
           newImageInsertConfig: newImage,
