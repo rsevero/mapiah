@@ -24,6 +24,7 @@ class MPSVGImageWidget extends StatefulWidget {
 
 class _MPSVGImageWidgetState extends State<MPSVGImageWidget> {
   svg.PictureInfo? _pictureInfo;
+  bool _loadFailed = false;
   late final TH2FileEditController th2FileEditController;
 
   @override
@@ -53,7 +54,9 @@ class _MPSVGImageWidgetState extends State<MPSVGImageWidget> {
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerImages;
 
-        return _pictureInfo == null
+        return _loadFailed
+            ? SizedBox.shrink()
+            : _pictureInfo == null
             ? CircularProgressIndicator()
             : CustomPaint(
                 painter: MPSVGImagePainter(
@@ -70,12 +73,14 @@ class _MPSVGImageWidgetState extends State<MPSVGImageWidget> {
   }
 
   void _loadPictureInfo() {
+    _loadFailed = false;
     widget.image
         .getSVGPictureInfo(th2FileEditController)
         ?.then((svg.PictureInfo pictureInfo) {
           if (mounted) {
             setState(() {
               _pictureInfo = pictureInfo;
+              _loadFailed = false;
             });
           }
         })
@@ -85,6 +90,13 @@ class _MPSVGImageWidgetState extends State<MPSVGImageWidget> {
             error: error,
             stackTrace: stackTrace,
           );
+
+          if (mounted) {
+            setState(() {
+              _pictureInfo = null;
+              _loadFailed = true;
+            });
+          }
         });
   }
 }

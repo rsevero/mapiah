@@ -1140,6 +1140,7 @@ class MPSVGImageInsertConfig extends MPImageInsertConfig
         MPSVGAux.loadPictureInfo(
           th2FileEditController: th2FileEditController,
           imageFilename: filename,
+          intrinsicSizeInfo: intrinsicSizeInfo,
         ).then((svg.PictureInfo pictureInfo) {
           _decodedSVGPictureInfo = pictureInfo;
           clearBoundingBox();

@@ -121,14 +121,52 @@ class MPSVGAux {
   static Future<svg.PictureInfo> loadPictureInfo({
     required TH2FileEditController th2FileEditController,
     required String imageFilename,
+    required MPSVGIntrinsicSizeInfo intrinsicSizeInfo,
   }) async {
     final String resolvedPath = MPDirectoryAux.getResolvedPath(
       th2FileEditController.th2File.filename,
       imageFilename,
     );
     final String svgText = await File(resolvedPath).readAsString();
+    final String normalizedSVGText = ensureRenderableSVGRootMetadata(
+      svgText: svgText,
+      intrinsicSizeInfo: intrinsicSizeInfo,
+    );
 
-    return svg.vg.loadPicture(svg.SvgStringLoader(svgText), null);
+    return svg.vg.loadPicture(svg.SvgStringLoader(normalizedSVGText), null);
+  }
+
+  static String ensureRenderableSVGRootMetadata({
+    required String svgText,
+    required MPSVGIntrinsicSizeInfo intrinsicSizeInfo,
+  }) {
+    final XmlDocument document = XmlDocument.parse(svgText);
+    final Iterable<XmlElement> svgElements = document.findAllElements('svg');
+
+    if (svgElements.isEmpty) {
+      return svgText;
+    }
+
+    final XmlElement svgElement = svgElements.first;
+
+    if (svgElement.getAttribute('width') == null) {
+      svgElement.setAttribute('width', intrinsicSizeInfo.width.toString());
+    }
+
+    if (svgElement.getAttribute('height') == null) {
+      svgElement.setAttribute('height', intrinsicSizeInfo.height.toString());
+    }
+
+    if (svgElement.getAttribute('viewBox') == null) {
+      final Rect viewBox = intrinsicSizeInfo.sourceViewBox;
+
+      svgElement.setAttribute(
+        'viewBox',
+        '${viewBox.left} ${viewBox.top} ${viewBox.width} ${viewBox.height}',
+      );
+    }
+
+    return document.toXmlString();
   }
 
   static double? _parseLength(String? text) {

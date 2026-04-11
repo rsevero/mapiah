@@ -61,5 +61,20 @@ void main() {
         Rect.fromLTWH(0.0, 0.0, 200.0, 80.0),
       );
     });
+
+    test('injects missing root metadata for rendering', () {
+      final String normalizedSVG = MPSVGAux.ensureRenderableSVGRootMetadata(
+        svgText: '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+        intrinsicSizeInfo: const MPSVGIntrinsicSizeInfo(
+          width: 200.0,
+          height: 80.0,
+          sourceViewBox: Rect.fromLTWH(0.0, 0.0, 200.0, 80.0),
+        ),
+      );
+
+      expect(normalizedSVG, contains('width="200.0"'));
+      expect(normalizedSVG, contains('height="80.0"'));
+      expect(normalizedSVG, contains('viewBox="0.0 0.0 200.0 80.0"'));
+    });
   });
 }
