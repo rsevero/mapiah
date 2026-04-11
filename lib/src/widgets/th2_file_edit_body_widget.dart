@@ -567,7 +567,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
 
           if (th2FileEditController.isInEditSingleLineState) {
             buttonRows.addAll(_editSingleLineContextFABs(heroPrefix));
-          } else if (th2FileEditController.isInSelectNonEmptySelectionState) {
+          } else if (th2FileEditController.isInSelectNonEmptySelectionState ||
+              th2FileEditController.isInElementRotateState) {
             buttonRows.addAll(_selectNonEmptySelectionContextFABs(heroPrefix));
           } else if (th2FileEditController.isInSelectEmptySelectionState) {
             buttonRows.addAll(_selectEmptySelectionContextFABs(heroPrefix));

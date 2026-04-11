@@ -342,6 +342,10 @@ abstract class TH2FileEditControllerBase with Store {
       stateController.state is MPTH2FileEditStateSelectNonEmptySelection;
 
   @computed
+  bool get isInElementRotateState =>
+      stateController.state is MPTH2FileEditStateElementRotate;
+
+  @computed
   bool get isInSelectEmptySelectionState =>
       stateController.state is MPTH2FileEditStateSelectEmptySelection;
 

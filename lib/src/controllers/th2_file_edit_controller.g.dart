@@ -159,6 +159,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.isInSelectNonEmptySelectionState,
         name: 'TH2FileEditControllerBase.isInSelectNonEmptySelectionState',
       )).value;
+  Computed<bool>? _$isInElementRotateStateComputed;
+
+  @override
+  bool get isInElementRotateState =>
+      (_$isInElementRotateStateComputed ??= Computed<bool>(
+        () => super.isInElementRotateState,
+        name: 'TH2FileEditControllerBase.isInElementRotateState',
+      )).value;
   Computed<bool>? _$isInSelectEmptySelectionStateComputed;
 
   @override
@@ -2010,6 +2018,7 @@ showSnapButton: ${showSnapButton},
 enableRemoveButton: ${enableRemoveButton},
 isInEditSingleLineState: ${isInEditSingleLineState},
 isInSelectNonEmptySelectionState: ${isInSelectNonEmptySelectionState},
+isInElementRotateState: ${isInElementRotateState},
 isInSelectEmptySelectionState: ${isInSelectEmptySelectionState},
 isInAddElementState: ${isInAddElementState},
 hasSelectedEndPoints: ${hasSelectedEndPoints},
