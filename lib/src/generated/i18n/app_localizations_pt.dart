@@ -1445,6 +1445,29 @@ class AppLocalizationsPt extends AppLocalizations {
       'Equivalente de tolerância na tela';
 
   @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel =>
+      'Depois';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel =>
+      'Antes';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel =>
+      'Bézier';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusLabel =>
+      'Contagem de segmentos';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel =>
+      'Reto';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel => 'Total';
+
+  @override
   String get th2FileEditPageInteractiveSimplifyLinesTitle =>
       'Simplificar linhas interativamente';
 

@@ -2203,6 +2203,36 @@
     "description": "Label for the screen tolerance preview in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
     "type": "text"
   },
+  "th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel": "After",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel": {
+    "description": "Column header for the 'after simplification' count in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel": "Before",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel": {
+    "description": "Column header for the 'before simplification' count in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel": "Bézier",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel": {
+    "description": "Row label for Bézier segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesStatusLabel": "Segment counts",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusLabel": {
+    "description": "Section header for the before/after segment count table in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel": "Straight",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel": {
+    "description": "Row label for straight segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel": "Total",
+  "@th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel": {
+    "description": "Row label for total segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
   "th2FileEditPageInteractiveSimplifyLinesTitle": "Interactive simplify lines",
   "@th2FileEditPageInteractiveSimplifyLinesTitle": {
     "description": "Title of the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",

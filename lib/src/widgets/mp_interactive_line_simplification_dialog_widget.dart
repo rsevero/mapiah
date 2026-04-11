@@ -52,6 +52,108 @@ class _MPInteractiveLineSimplificationDialogWidgetState
     _intensity = _elementEditController.interactiveLineSimplificationIntensity;
   }
 
+  Widget _buildSegmentCountsTable(ThemeData theme) {
+    final counts = _elementEditController
+        .getInteractiveLineSimplificationCounts();
+
+    if (counts == null) {
+      return const SizedBox.shrink();
+    }
+
+    final TextStyle? headerStyle = theme.textTheme.bodyMedium?.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+    final TextStyle? bodyStyle = theme.textTheme.bodyMedium;
+
+    TableRow buildRow(String label, int before, int after) {
+      return TableRow(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Text(label, style: bodyStyle),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Text(
+              before.toString(),
+              style: bodyStyle,
+              textAlign: TextAlign.right,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Text(
+              after.toString(),
+              style: bodyStyle,
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          _appLocalizations.th2FileEditPageInteractiveSimplifyLinesStatusLabel,
+          style: theme.textTheme.titleSmall,
+        ),
+        const SizedBox(height: 4),
+        Table(
+          columnWidths: const {
+            0: FlexColumnWidth(),
+            1: FixedColumnWidth(64),
+            2: FixedColumnWidth(64),
+          },
+          children: [
+            TableRow(
+              children: [
+                const SizedBox.shrink(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    _appLocalizations
+                        .th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel,
+                    style: headerStyle,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    _appLocalizations
+                        .th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel,
+                    style: headerStyle,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+            buildRow(
+              _appLocalizations
+                  .th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel,
+              counts.beforeTotal,
+              counts.afterTotal,
+            ),
+            buildRow(
+              _appLocalizations
+                  .th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel,
+              counts.beforeBezier,
+              counts.afterBezier,
+            ),
+            buildRow(
+              _appLocalizations
+                  .th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel,
+              counts.beforeStraight,
+              counts.afterStraight,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   void _updatePreview() {
     _elementEditController.previewInteractiveLineSimplification(
       lineSimplificationMethod: _lineSimplificationMethod,
@@ -265,6 +367,8 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                       '${_appLocalizations.th2FileEditPageInteractiveSimplifyLinesCanvasToleranceLabel}: ${canvasTolerance.toStringAsFixed(3)}',
                       style: theme.textTheme.bodyMedium,
                     ),
+                    const SizedBox(height: mpButtonSpace),
+                    _buildSegmentCountsTable(theme),
                   ],
                 ),
               ),

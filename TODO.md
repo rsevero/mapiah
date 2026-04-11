@@ -56,6 +56,7 @@
 [X] - When a name option is set on a "point station", use it as reference for future "point station". [request by Axel Hack]
 [X] - BUG: links inside help pages not working. [reported by Axel Hack]
 [X] - BUG: '-stations' with bracketed station lists not parsed correctly. [reported by Axel Hack]
+[ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 
 ## Version 1.0
 [ ] - Raster images tracing.

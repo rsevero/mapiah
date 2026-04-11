@@ -1896,6 +1896,82 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _isFirstLineSimplification = true;
   }
 
+  ({
+    int beforeTotal,
+    int beforeBezier,
+    int beforeStraight,
+    int afterTotal,
+    int afterBezier,
+    int afterStraight,
+  })?
+  getInteractiveLineSimplificationCounts() {
+    if (_originalFileForLineSimplification == null) {
+      return null;
+    }
+
+    int beforeTotal = 0;
+    int beforeBezier = 0;
+    int beforeStraight = 0;
+    int afterTotal = 0;
+    int afterBezier = 0;
+    int afterStraight = 0;
+
+    for (final MPSelectedElement selectedElement
+        in _th2FileEditController
+            .selectionController
+            .mpSelectedElementsLogical
+            .values) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+
+      final int lineMPID = selectedElement.mpID;
+
+      if (_originalFileForLineSimplification!.hasElementByMPID(lineMPID)) {
+        final THLine originalLine = _originalFileForLineSimplification!
+            .lineByMPID(lineMPID);
+        final List<THLineSegment> originalSegments = originalLine
+            .getLineSegments(_originalFileForLineSimplification!);
+
+        for (final THLineSegment seg in originalSegments) {
+          beforeTotal++;
+
+          if (seg is THBezierCurveLineSegment) {
+            beforeBezier++;
+          } else if (seg is THStraightLineSegment) {
+            beforeStraight++;
+          }
+        }
+      }
+
+      if (_th2File.hasElementByMPID(lineMPID)) {
+        final THLine currentLine = _th2File.lineByMPID(lineMPID);
+        final List<THLineSegment> currentSegments = currentLine.getLineSegments(
+          _th2File,
+        );
+
+        for (final THLineSegment seg in currentSegments) {
+          afterTotal++;
+
+          if (seg is THBezierCurveLineSegment) {
+            afterBezier++;
+          } else if (seg is THStraightLineSegment) {
+            afterStraight++;
+          }
+        }
+      }
+    }
+
+    return (
+      beforeTotal: beforeTotal,
+      beforeBezier: beforeBezier,
+      beforeStraight: beforeStraight,
+      afterTotal: afterTotal,
+      afterBezier: afterBezier,
+      afterStraight: afterStraight,
+    );
+  }
+
   double getLineSimplifyEpsilonOnCanvasIncrease() {
     return mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
   }

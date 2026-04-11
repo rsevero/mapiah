@@ -1424,6 +1424,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Screen tolerance equivalent';
 
   @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel => 'After';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel =>
+      'Before';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel =>
+      'Bézier';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusLabel =>
+      'Segment counts';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel =>
+      'Straight';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel => 'Total';
+
+  @override
   String get th2FileEditPageInteractiveSimplifyLinesTitle =>
       'Interactive simplify lines';
 

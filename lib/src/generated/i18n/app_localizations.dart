@@ -2650,6 +2650,42 @@ abstract class AppLocalizations {
   /// **'Screen tolerance equivalent'**
   String get th2FileEditPageInteractiveSimplifyLinesScreenToleranceLabel;
 
+  /// Column header for the 'after simplification' count in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusAfterLabel;
+
+  /// Column header for the 'before simplification' count in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBeforeLabel;
+
+  /// Row label for Bézier segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Bézier'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusBezierLabel;
+
+  /// Section header for the before/after segment count table in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Segment counts'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusLabel;
+
+  /// Row label for straight segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Straight'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusStraightLabel;
+
+  /// Row label for total segment counts in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get th2FileEditPageInteractiveSimplifyLinesStatusTotalLabel;
+
   /// Title of the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
   ///
   /// In en, this message translates to:
