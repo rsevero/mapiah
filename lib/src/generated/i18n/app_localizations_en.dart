@@ -251,6 +251,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpButtonOK => 'OK';
 
   @override
+  String get mpButtonReset => 'Reset';
+
+  @override
   String get mpButtonResetAllSettings => 'Reset all settings';
 
   @override

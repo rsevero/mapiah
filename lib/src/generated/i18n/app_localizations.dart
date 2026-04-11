@@ -530,6 +530,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mpButtonOK;
 
+  /// The label for the reset button. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get mpButtonReset;
+
   /// The label for the reset all settings button. Used on: _MPSettingsPageState.build
   ///
   /// In en, this message translates to:

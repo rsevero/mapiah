@@ -31,13 +31,20 @@ class _MPInteractiveLineSimplificationDialogWidgetState
   late MPLineSimplificationMethod _lineSimplificationMethod;
   late int _intensity;
 
+  late final MPLineSimplificationMethod _initialLineSimplificationMethod;
+  late final int _initialIntensity;
+
   @override
   void initState() {
     super.initState();
     _elementEditController = widget.th2FileEditController.elementEditController;
     _appLocalizations = mpLocator.appLocalizations;
-    _lineSimplificationMethod = _elementEditController.lineSimplificationMethod;
-    _intensity = _elementEditController.interactiveLineSimplificationIntensity;
+    _initialLineSimplificationMethod =
+        _elementEditController.lineSimplificationMethod;
+    _initialIntensity =
+        _elementEditController.interactiveLineSimplificationIntensity;
+    _lineSimplificationMethod = _initialLineSimplificationMethod;
+    _intensity = _initialIntensity;
   }
 
   void _updatePreview() {
@@ -187,6 +194,17 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                 runSpacing: mpButtonSpace,
                 alignment: WrapAlignment.end,
                 children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _lineSimplificationMethod =
+                            _initialLineSimplificationMethod;
+                        _intensity = _initialIntensity;
+                      });
+                      _updatePreview();
+                    },
+                    child: Text(_appLocalizations.mpButtonReset),
+                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(

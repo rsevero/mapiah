@@ -1616,6 +1616,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   void finishInteractiveLineSimplification() {
+    _lineSimplificationMethod = _interactiveLineSimplificationMethod;
     _interactiveLineSimplificationUndoCountAtStart = null;
     resetOriginalFileForLineSimplification();
   }
