@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/painters/mp_element_transform_handles_painter.dart';
 import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 
 class MPSelectionHandlesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
@@ -27,6 +29,31 @@ class MPSelectionHandlesWidget extends StatelessWidget {
           th2FileEditController.redrawTriggerAllElements;
           th2FileEditController.redrawTriggerSelectedElements;
           th2FileEditController.redrawTriggerSelectedElementsListChanged;
+
+          final bool isElementTransformsEnabled = th2FileEditController
+              .moveScaleRotateElementController
+              .isElementTransformsEnabled;
+
+          if (isElementTransformsEnabled) {
+            final Offset hoverScreenPosition =
+                th2FileEditController.mousePosition;
+            final MPTH2FileEditStateType stateType =
+                th2FileEditController.stateController.state.type;
+            final bool isRotateMode =
+                stateType == MPTH2FileEditStateType.elementRotate;
+            final Rect canvasBoundingBox =
+                selectionController.selectedElementsBoundingBox;
+
+            return CustomPaint(
+              painter: MPElementTransformHandlesPainter(
+                th2FileEditController: th2FileEditController,
+                canvasBoundingBox: canvasBoundingBox,
+                hoverScreenPosition: hoverScreenPosition,
+                isRotateMode: isRotateMode,
+              ),
+              size: th2FileEditController.screenSize,
+            );
+          }
 
           final Map<MPSelectionHandleType, Offset> handleCenters =
               selectionController.getSelectionHandleCenters();

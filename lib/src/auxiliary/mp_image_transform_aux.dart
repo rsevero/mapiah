@@ -223,6 +223,91 @@ class MPImageTransformGeometry {
     return borderPath.contains(canvasPosition);
   }
 
+  /// Computes handle geometry for an axis-aligned selection bounding box in
+  /// canvas coordinates.  Unlike [forImage], no image rotation is involved, so
+  /// [xAxisDirection] and [yAxisDirection] are always canonical screen-space
+  /// axes.
+  static MPImageTransformGeometry forCanvasBoundingBox({
+    required TH2FileEditController th2FileEditController,
+    required Rect canvasBoundingBox,
+  }) {
+    final List<Offset> canvasBorderCorners = <Offset>[
+      canvasBoundingBox.topLeft,
+      canvasBoundingBox.topRight,
+      canvasBoundingBox.bottomRight,
+      canvasBoundingBox.bottomLeft,
+    ];
+    final List<Offset> screenBorderCorners = canvasBorderCorners
+        .map(th2FileEditController.offsetCanvasToScreen)
+        .toList(growable: false);
+    final Map<MPImageTransformHandleType, Offset> canvasHandleCenters =
+        <MPImageTransformHandleType, Offset>{};
+    final Map<MPImageTransformHandleType, Offset> screenHandleCenters =
+        <MPImageTransformHandleType, Offset>{};
+    final Map<MPImageTransformHandleType, Rect> screenHandleRects =
+        <MPImageTransformHandleType, Rect>{};
+    final Map<MPImageTransformHandleType, Path> screenHandlePaths =
+        <MPImageTransformHandleType, Path>{};
+    final Offset topLeftToTopRight =
+        screenBorderCorners[1] - screenBorderCorners[0];
+    final Offset topLeftToBottomLeft =
+        screenBorderCorners[3] - screenBorderCorners[0];
+    final Offset xAxisDirection = _normalizeOffset(topLeftToTopRight);
+    final Offset yAxisDirection = _normalizeOffset(topLeftToBottomLeft);
+
+    final Map<MPImageTransformHandleType, Offset> canvasBorderPositions =
+        <MPImageTransformHandleType, Offset>{
+          MPImageTransformHandleType.topLeft: canvasBoundingBox.topLeft,
+          MPImageTransformHandleType.topCenter: canvasBoundingBox.topCenter,
+          MPImageTransformHandleType.topRight: canvasBoundingBox.topRight,
+          MPImageTransformHandleType.centerLeft: canvasBoundingBox.centerLeft,
+          MPImageTransformHandleType.centerRight: canvasBoundingBox.centerRight,
+          MPImageTransformHandleType.bottomLeft: canvasBoundingBox.bottomLeft,
+          MPImageTransformHandleType.bottomCenter:
+              canvasBoundingBox.bottomCenter,
+          MPImageTransformHandleType.bottomRight: canvasBoundingBox.bottomRight,
+        };
+
+    for (final MPImageTransformHandleType handleType
+        in MPImageTransformHandleType.values) {
+      final Offset canvasBorderCenter = canvasBorderPositions[handleType]!;
+      final Offset screenBorderCenter = th2FileEditController
+          .offsetCanvasToScreen(canvasBorderCenter);
+      final Offset outwardDirection = _resolveOutwardDirection(
+        handleType: handleType,
+        xAxisDirection: xAxisDirection,
+        yAxisDirection: yAxisDirection,
+      );
+      final Offset screenHandleCenter =
+          screenBorderCenter +
+          (outwardDirection * mpImageTransformHandleOffsetOnScreen);
+      final Offset canvasHandleCenter = th2FileEditController
+          .offsetScreenToCanvas(screenHandleCenter);
+
+      canvasHandleCenters[handleType] = canvasHandleCenter;
+      screenHandleCenters[handleType] = screenHandleCenter;
+      screenHandleRects[handleType] = Rect.fromCenter(
+        center: screenHandleCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      );
+      screenHandlePaths[handleType] = _buildScaleHandlePath(
+        center: screenHandleCenter,
+        direction: outwardDirection,
+      );
+    }
+
+    return MPImageTransformGeometry(
+      localBounds: canvasBoundingBox,
+      canvasHandleCenters: canvasHandleCenters,
+      screenHandleCenters: screenHandleCenters,
+      screenHandleRects: screenHandleRects,
+      screenHandlePaths: screenHandlePaths,
+      canvasBorderCorners: canvasBorderCorners,
+      screenBorderCorners: screenBorderCorners,
+    );
+  }
+
   static MPImageTransformGeometry? forImage({
     required TH2FileEditController th2FileEditController,
     required MPRuntimeImageInsertConfigMixin image,
@@ -496,6 +581,96 @@ class MPImageRotationGeometry {
 
   bool hitTestPivot(Offset screenPosition) {
     return screenPivotRect.contains(screenPosition);
+  }
+
+  /// Computes rotation handle geometry for an axis-aligned selection bounding
+  /// box in canvas coordinates.  There is no draggable pivot for element
+  /// rotation, so the pivot is placed at the bounding-box center and marked
+  /// non-interactive by the painter.
+  static MPImageRotationGeometry forCanvasBoundingBox({
+    required TH2FileEditController th2FileEditController,
+    required Rect canvasBoundingBox,
+  }) {
+    final MPImageTransformGeometry transformGeometry =
+        MPImageTransformGeometry.forCanvasBoundingBox(
+          th2FileEditController: th2FileEditController,
+          canvasBoundingBox: canvasBoundingBox,
+        );
+
+    final List<Offset> screenBorderCorners =
+        transformGeometry.screenBorderCorners;
+    final Offset topLeftToTopRight =
+        screenBorderCorners[1] - screenBorderCorners[0];
+    final Offset topLeftToBottomLeft =
+        screenBorderCorners[3] - screenBorderCorners[0];
+    final Offset xAxisDirection = _normalizeOffset(topLeftToTopRight);
+    final Offset yAxisDirection = _normalizeOffset(topLeftToBottomLeft);
+    final Map<MPImageRotationHandleType, Offset> canvasHandleCorners =
+        <MPImageRotationHandleType, Offset>{};
+    final Map<MPImageRotationHandleType, Offset> screenHandleCenters =
+        <MPImageRotationHandleType, Offset>{};
+    final Map<MPImageRotationHandleType, Rect> screenHandleRects =
+        <MPImageRotationHandleType, Rect>{};
+    final Map<MPImageRotationHandleType, Path> screenHandlePaths =
+        <MPImageRotationHandleType, Path>{};
+
+    final Map<MPImageRotationHandleType, Offset> canvasCornerPositions =
+        <MPImageRotationHandleType, Offset>{
+          MPImageRotationHandleType.topLeft: canvasBoundingBox.topLeft,
+          MPImageRotationHandleType.topRight: canvasBoundingBox.topRight,
+          MPImageRotationHandleType.bottomLeft: canvasBoundingBox.bottomLeft,
+          MPImageRotationHandleType.bottomRight: canvasBoundingBox.bottomRight,
+        };
+
+    for (final MPImageRotationHandleType handleType
+        in MPImageRotationHandleType.values) {
+      final Offset canvasCorner = canvasCornerPositions[handleType]!;
+      final Offset screenCorner = th2FileEditController.offsetCanvasToScreen(
+        canvasCorner,
+      );
+      final Offset outwardDirection = _resolveRotationOutwardDirection(
+        handleType: handleType,
+        xAxisDirection: xAxisDirection,
+        yAxisDirection: yAxisDirection,
+      );
+      final Offset screenHandleCenter =
+          screenCorner +
+          (outwardDirection * mpImageTransformHandleOffsetOnScreen);
+
+      canvasHandleCorners[handleType] = canvasCorner;
+      screenHandleCenters[handleType] = screenHandleCenter;
+      screenHandleRects[handleType] = Rect.fromCenter(
+        center: screenHandleCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      );
+      screenHandlePaths[handleType] = _buildRotationHandlePath(
+        center: screenHandleCenter,
+        direction: outwardDirection,
+      );
+    }
+
+    final Offset canvasPivotCenter = canvasBoundingBox.center;
+    final Offset screenPivotCenter = th2FileEditController.offsetCanvasToScreen(
+      canvasPivotCenter,
+    );
+    final Path screenPivotPath = _buildPivotPath(screenPivotCenter);
+
+    return MPImageRotationGeometry(
+      localBounds: canvasBoundingBox,
+      canvasHandleCorners: canvasHandleCorners,
+      screenHandleCenters: screenHandleCenters,
+      screenHandleRects: screenHandleRects,
+      screenHandlePaths: screenHandlePaths,
+      canvasPivotCenter: canvasPivotCenter,
+      screenPivotCenter: screenPivotCenter,
+      screenPivotRect: Rect.fromCenter(
+        center: screenPivotCenter,
+        width: mpImageTransformHandleHitBoxSizeOnScreen,
+        height: mpImageTransformHandleHitBoxSizeOnScreen,
+      ),
+      screenPivotPath: screenPivotPath,
+    );
   }
 
   static MPImageRotationGeometry? forImage({
