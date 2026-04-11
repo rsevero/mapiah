@@ -2494,14 +2494,44 @@
     "description": "The label for the zoom selection window button. Used on: _TH2FileEditPageState._zoomButtonWithOptions",
     "type": "text"
   },
+  "th2FilePickSVGHeightLabel": "Height",
+  "@th2FilePickSVGHeightLabel": {
+    "description": "Label for the height field in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize",
+    "type": "text"
+  },
   "th2FilePickSVGImportErrorTitle": "Unable to import SVG image",
   "@th2FilePickSVGImportErrorTitle": {
     "description": "Title for the SVG import error dialog. Used on: MPDialogAux.showSVGImportErrorsDialog",
     "type": "text"
   },
-  "th2FilePickSVGMissingIntrinsicSize": "SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.",
-  "@th2FilePickSVGMissingIntrinsicSize": {
-    "description": "Error shown when importing an SVG file that lacks both a usable viewBox and usable width/height. Used on: MPDialogAux.pickImageFile",
+  "th2FilePickSVGInvalidDimensionError": "Enter a value greater than zero",
+  "@th2FilePickSVGInvalidDimensionError": {
+    "description": "Validation error for width/height fields in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize",
+    "type": "text"
+  },
+  "th2FilePickSVGMissingMetadataBody": "This SVG file has neither a viewBox nor width/height metadata. Enter the image width and height to continue importing it.",
+  "@th2FilePickSVGMissingMetadataBody": {
+    "description": "Body text shown in the SVG import size dialog when both viewBox and width/height metadata are missing. Used on: MPDialogAux.promptSVGImportSize",
+    "type": "text"
+  },
+  "th2FilePickSVGMissingMetadataLabel": "Missing metadata",
+  "@th2FilePickSVGMissingMetadataLabel": {
+    "description": "Label shown before the list of missing SVG metadata fields. Used on: MPDialogAux.promptSVGImportSize",
+    "type": "text"
+  },
+  "th2FilePickSVGViewBoxLabel": "viewBox",
+  "@th2FilePickSVGViewBoxLabel": {
+    "description": "Label used when telling the user that the SVG file is missing a viewBox. Used on: MPDialogAux._describeMissingSVGMetadata",
+    "type": "text"
+  },
+  "th2FilePickSVGWidthHeightLabel": "width/height",
+  "@th2FilePickSVGWidthHeightLabel": {
+    "description": "Label used when telling the user that the SVG file is missing width and height metadata. Used on: MPDialogAux._describeMissingSVGMetadata",
+    "type": "text"
+  },
+  "th2FilePickSVGWidthLabel": "Width",
+  "@th2FilePickSVGWidthLabel": {
+    "description": "Label for the width field in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize",
     "type": "text"
   },
   "th2FilePickSelectImageFile": "Select an image file",

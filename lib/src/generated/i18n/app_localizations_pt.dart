@@ -1633,12 +1633,31 @@ class AppLocalizationsPt extends AppLocalizations {
       'Zoom na área de seleção (5)';
 
   @override
+  String get th2FilePickSVGHeightLabel => 'Altura';
+
+  @override
   String get th2FilePickSVGImportErrorTitle =>
       'Não foi possível importar a imagem SVG';
 
   @override
-  String get th2FilePickSVGMissingIntrinsicSize =>
-      'O arquivo SVG não tem tamanho intrínseco. Adicione um viewBox ou width/height, ou escolha dimensões de importação no Mapiah.';
+  String get th2FilePickSVGInvalidDimensionError =>
+      'Informe um valor maior que zero';
+
+  @override
+  String get th2FilePickSVGMissingMetadataBody =>
+      'Este arquivo SVG não tem nem viewBox nem metadados de width/height. Informe a largura e a altura da imagem para continuar a importação.';
+
+  @override
+  String get th2FilePickSVGMissingMetadataLabel => 'Metadados ausentes';
+
+  @override
+  String get th2FilePickSVGViewBoxLabel => 'viewBox';
+
+  @override
+  String get th2FilePickSVGWidthHeightLabel => 'width/height';
+
+  @override
+  String get th2FilePickSVGWidthLabel => 'Largura';
 
   @override
   String get th2FilePickSelectImageFile => 'Selecione um arquivo de imagem';

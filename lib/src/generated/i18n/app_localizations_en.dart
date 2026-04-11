@@ -1610,11 +1610,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Zoom selection window (5)';
 
   @override
+  String get th2FilePickSVGHeightLabel => 'Height';
+
+  @override
   String get th2FilePickSVGImportErrorTitle => 'Unable to import SVG image';
 
   @override
-  String get th2FilePickSVGMissingIntrinsicSize =>
-      'SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.';
+  String get th2FilePickSVGInvalidDimensionError =>
+      'Enter a value greater than zero';
+
+  @override
+  String get th2FilePickSVGMissingMetadataBody =>
+      'This SVG file has neither a viewBox nor width/height metadata. Enter the image width and height to continue importing it.';
+
+  @override
+  String get th2FilePickSVGMissingMetadataLabel => 'Missing metadata';
+
+  @override
+  String get th2FilePickSVGViewBoxLabel => 'viewBox';
+
+  @override
+  String get th2FilePickSVGWidthHeightLabel => 'width/height';
+
+  @override
+  String get th2FilePickSVGWidthLabel => 'Width';
 
   @override
   String get th2FilePickSelectImageFile => 'Select an image file';

@@ -170,14 +170,18 @@ class MPDialogAux {
       if (lowerName.endsWith(mpSVGExtension)) {
         try {
           final String svgText = utf8.decode(bytes);
+          final MPSVGMetadataInfo metadataInfo = MPSVGAux.parseMetadataInfo(
+            svgText,
+          );
           final MPSVGIntrinsicSizeInfo? intrinsicSizeInfo =
-              MPSVGAux.parseIntrinsicSizeInfo(svgText);
+              metadataInfo.hasViewBox || metadataInfo.hasWidthAndHeight
+              ? metadataInfo.resolveIntrinsicSizeInfo()
+              : await promptSVGImportSize(
+                  context: context,
+                  metadataInfo: metadataInfo,
+                );
 
           if (intrinsicSizeInfo == null) {
-            await showSVGImportErrorsDialog(context, <String>[
-              mpLocator.appLocalizations.th2FilePickSVGMissingIntrinsicSize,
-            ]);
-
             return PickImageFileReturn(type: PickImageFileReturnType.empty);
           }
 
@@ -954,6 +958,149 @@ class MPDialogAux {
     }
 
     return completer.future;
+  }
+
+  static Future<MPSVGIntrinsicSizeInfo?> promptSVGImportSize({
+    required BuildContext context,
+    required MPSVGMetadataInfo metadataInfo,
+  }) async {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final TextEditingController widthController = TextEditingController(
+      text: metadataInfo.width?.toString() ?? '',
+    );
+    final TextEditingController heightController = TextEditingController(
+      text: metadataInfo.height?.toString() ?? '',
+    );
+    final String missingInfo = _describeMissingSVGMetadata(
+      metadataInfo: metadataInfo,
+      appLocalizations: appLocalizations,
+    );
+
+    MPSVGIntrinsicSizeInfo? result;
+    String? widthError;
+    String? heightError;
+
+    await showDialog<void>(
+      context: mpLocator.mpNavigatorKey.currentContext ?? context,
+      useRootNavigator: true,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(appLocalizations.th2FilePickSVGImportErrorTitle),
+              content: SizedBox(
+                width: 420.0,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(appLocalizations.th2FilePickSVGMissingMetadataBody),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        '${appLocalizations.th2FilePickSVGMissingMetadataLabel}: $missingInfo',
+                      ),
+                      const SizedBox(height: 16.0),
+                      TextField(
+                        controller: widthController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                          signed: false,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: appLocalizations.th2FilePickSVGWidthLabel,
+                          errorText: widthError,
+                        ),
+                      ),
+                      const SizedBox(height: 12.0),
+                      TextField(
+                        controller: heightController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                          signed: false,
+                        ),
+                        decoration: InputDecoration(
+                          labelText: appLocalizations.th2FilePickSVGHeightLabel,
+                          errorText: heightError,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext, rootNavigator: true).pop();
+                  },
+                  child: Text(appLocalizations.mpButtonCancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    final double? parsedWidth = double.tryParse(
+                      widthController.text.trim(),
+                    );
+                    final double? parsedHeight = double.tryParse(
+                      heightController.text.trim(),
+                    );
+                    final bool isWidthValid =
+                        (parsedWidth != null) && (parsedWidth > 0.0);
+                    final bool isHeightValid =
+                        (parsedHeight != null) && (parsedHeight > 0.0);
+
+                    if (!isWidthValid || !isHeightValid) {
+                      setState(() {
+                        widthError = isWidthValid
+                            ? null
+                            : appLocalizations
+                                  .th2FilePickSVGInvalidDimensionError;
+                        heightError = isHeightValid
+                            ? null
+                            : appLocalizations
+                                  .th2FilePickSVGInvalidDimensionError;
+                      });
+
+                      return;
+                    }
+
+                    result = metadataInfo.resolveIntrinsicSizeInfo(
+                      fallbackWidth: parsedWidth,
+                      fallbackHeight: parsedHeight,
+                    );
+
+                    Navigator.of(dialogContext, rootNavigator: true).pop();
+                  },
+                  child: Text(appLocalizations.mpButtonOK),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    widthController.dispose();
+    heightController.dispose();
+
+    return result;
+  }
+
+  static String _describeMissingSVGMetadata({
+    required MPSVGMetadataInfo metadataInfo,
+    required AppLocalizations appLocalizations,
+  }) {
+    final List<String> missingItems = <String>[];
+
+    if (!metadataInfo.hasViewBox) {
+      missingItems.add(appLocalizations.th2FilePickSVGViewBoxLabel);
+    }
+
+    if (!metadataInfo.hasWidthAndHeight) {
+      missingItems.add(appLocalizations.th2FilePickSVGWidthHeightLabel);
+    }
+
+    return missingItems.join(', ');
   }
 
   static Future<void> pickTH2File(BuildContext context) async {

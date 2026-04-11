@@ -5,35 +5,61 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 
 void main() {
-  group('MPSVGAux.parseIntrinsicSizeInfo', () {
+  group('MPSVGAux.parseMetadataInfo', () {
     test('uses explicit width and height when available', () {
-      final MPSVGIntrinsicSizeInfo? info = MPSVGAux.parseIntrinsicSizeInfo(
+      final MPSVGMetadataInfo info = MPSVGAux.parseMetadataInfo(
         '<svg width="120" height="60" xmlns="http://www.w3.org/2000/svg"></svg>',
       );
 
-      expect(info, isNotNull);
-      expect(info!.width, 120.0);
+      expect(info.width, 120.0);
       expect(info.height, 60.0);
-      expect(info.sourceViewBox, Rect.fromLTWH(0.0, 0.0, 120.0, 60.0));
+      expect(info.sourceViewBox, isNull);
+      expect(
+        info.resolveIntrinsicSizeInfo()!.sourceViewBox,
+        Rect.fromLTWH(0.0, 0.0, 120.0, 60.0),
+      );
     });
 
     test('uses viewBox when width and height are missing', () {
-      final MPSVGIntrinsicSizeInfo? info = MPSVGAux.parseIntrinsicSizeInfo(
+      final MPSVGMetadataInfo info = MPSVGAux.parseMetadataInfo(
         '<svg viewBox="-5 10 80 40" xmlns="http://www.w3.org/2000/svg"></svg>',
       );
 
-      expect(info, isNotNull);
-      expect(info!.width, 80.0);
-      expect(info.height, 40.0);
+      expect(info.width, isNull);
+      expect(info.height, isNull);
       expect(info.sourceViewBox, Rect.fromLTWH(-5.0, 10.0, 80.0, 40.0));
+      expect(info.resolveIntrinsicSizeInfo()!.width, 80.0);
+      expect(info.resolveIntrinsicSizeInfo()!.height, 40.0);
     });
 
-    test('returns null when intrinsic size is missing', () {
-      final MPSVGIntrinsicSizeInfo? info = MPSVGAux.parseIntrinsicSizeInfo(
-        '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>',
-      );
+    test(
+      'returns metadata with missing values when intrinsic size is missing',
+      () {
+        final MPSVGMetadataInfo info = MPSVGAux.parseMetadataInfo(
+          '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>',
+        );
 
-      expect(info, isNull);
+        expect(info.width, isNull);
+        expect(info.height, isNull);
+        expect(info.sourceViewBox, isNull);
+        expect(info.resolveIntrinsicSizeInfo(), isNull);
+      },
+    );
+
+    test('accepts manual width and height fallback values', () {
+      final MPSVGMetadataInfo info = MPSVGAux.parseMetadataInfo(
+        '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+      );
+      final MPSVGIntrinsicSizeInfo? intrinsicSizeInfo = info
+          .resolveIntrinsicSizeInfo(fallbackWidth: 200.0, fallbackHeight: 80.0);
+
+      expect(intrinsicSizeInfo, isNotNull);
+      expect(intrinsicSizeInfo!.width, 200.0);
+      expect(intrinsicSizeInfo.height, 80.0);
+      expect(
+        intrinsicSizeInfo.sourceViewBox,
+        Rect.fromLTWH(0.0, 0.0, 200.0, 80.0),
+      );
     });
   });
 }

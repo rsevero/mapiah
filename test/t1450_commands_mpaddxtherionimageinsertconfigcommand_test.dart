@@ -107,11 +107,11 @@ void main() {
                   th2FileEditController: controller,
                   svgIntrinsicSizeInfo:
                       (success['imageInsertFile'] as String).endsWith('.svg')
-                      ? MPSVGAux.parseIntrinsicSizeInfo(
+                      ? MPSVGAux.parseMetadataInfo(
                           File(
                             success['imageInsertFile']! as String,
                           ).readAsStringSync(),
-                        )
+                        ).resolveIntrinsicSizeInfo()
                       : null,
                 );
 

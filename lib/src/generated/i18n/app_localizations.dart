@@ -2986,17 +2986,53 @@ abstract class AppLocalizations {
   /// **'Zoom selection window (5)'**
   String get th2FileEditPageZoomToSelectionWindow;
 
+  /// Label for the height field in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get th2FilePickSVGHeightLabel;
+
   /// Title for the SVG import error dialog. Used on: MPDialogAux.showSVGImportErrorsDialog
   ///
   /// In en, this message translates to:
   /// **'Unable to import SVG image'**
   String get th2FilePickSVGImportErrorTitle;
 
-  /// Error shown when importing an SVG file that lacks both a usable viewBox and usable width/height. Used on: MPDialogAux.pickImageFile
+  /// Validation error for width/height fields in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize
   ///
   /// In en, this message translates to:
-  /// **'SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.'**
-  String get th2FilePickSVGMissingIntrinsicSize;
+  /// **'Enter a value greater than zero'**
+  String get th2FilePickSVGInvalidDimensionError;
+
+  /// Body text shown in the SVG import size dialog when both viewBox and width/height metadata are missing. Used on: MPDialogAux.promptSVGImportSize
+  ///
+  /// In en, this message translates to:
+  /// **'This SVG file has neither a viewBox nor width/height metadata. Enter the image width and height to continue importing it.'**
+  String get th2FilePickSVGMissingMetadataBody;
+
+  /// Label shown before the list of missing SVG metadata fields. Used on: MPDialogAux.promptSVGImportSize
+  ///
+  /// In en, this message translates to:
+  /// **'Missing metadata'**
+  String get th2FilePickSVGMissingMetadataLabel;
+
+  /// Label used when telling the user that the SVG file is missing a viewBox. Used on: MPDialogAux._describeMissingSVGMetadata
+  ///
+  /// In en, this message translates to:
+  /// **'viewBox'**
+  String get th2FilePickSVGViewBoxLabel;
+
+  /// Label used when telling the user that the SVG file is missing width and height metadata. Used on: MPDialogAux._describeMissingSVGMetadata
+  ///
+  /// In en, this message translates to:
+  /// **'width/height'**
+  String get th2FilePickSVGWidthHeightLabel;
+
+  /// Label for the width field in the SVG import size dialog. Used on: MPDialogAux.promptSVGImportSize
+  ///
+  /// In en, this message translates to:
+  /// **'Width'**
+  String get th2FilePickSVGWidthLabel;
 
   /// The label for the image file selection dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart
   ///

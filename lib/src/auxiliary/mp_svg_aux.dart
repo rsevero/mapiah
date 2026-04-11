@@ -48,16 +48,59 @@ class MPSVGIntrinsicSizeInfo {
   }
 }
 
-class MPSVGAux {
-  static const String noIntrinsicSizeMessage =
-      'SVG file has no intrinsic size. Add a viewBox or width/height, or choose import dimensions in Mapiah.';
+class MPSVGMetadataInfo {
+  final double? width;
+  final double? height;
+  final Rect? sourceViewBox;
 
-  static MPSVGIntrinsicSizeInfo? parseIntrinsicSizeInfo(String svgText) {
+  const MPSVGMetadataInfo({
+    required this.width,
+    required this.height,
+    required this.sourceViewBox,
+  });
+
+  bool get hasWidthAndHeight => (width != null) && (height != null);
+
+  bool get hasViewBox => sourceViewBox != null;
+
+  MPSVGIntrinsicSizeInfo? resolveIntrinsicSizeInfo({
+    double? fallbackWidth,
+    double? fallbackHeight,
+  }) {
+    final double? resolvedWidth =
+        width ?? fallbackWidth ?? sourceViewBox?.width;
+    final double? resolvedHeight =
+        height ?? fallbackHeight ?? sourceViewBox?.height;
+
+    if ((resolvedWidth == null) ||
+        (resolvedHeight == null) ||
+        (resolvedWidth <= 0.0) ||
+        (resolvedHeight <= 0.0)) {
+      return null;
+    }
+
+    final Rect resolvedViewBox =
+        sourceViewBox ?? Rect.fromLTWH(0.0, 0.0, resolvedWidth, resolvedHeight);
+
+    return MPSVGIntrinsicSizeInfo(
+      width: resolvedWidth,
+      height: resolvedHeight,
+      sourceViewBox: resolvedViewBox,
+    );
+  }
+}
+
+class MPSVGAux {
+  static MPSVGMetadataInfo parseMetadataInfo(String svgText) {
     final XmlDocument document = XmlDocument.parse(svgText);
     final Iterable<XmlElement> svgElements = document.findAllElements('svg');
 
     if (svgElements.isEmpty) {
-      return null;
+      return const MPSVGMetadataInfo(
+        width: null,
+        height: null,
+        sourceViewBox: null,
+      );
     }
 
     final XmlElement svgElement = svgElements.first;
@@ -68,20 +111,10 @@ class MPSVGAux {
     final double? parsedHeight = _parseLength(heightText);
     final Rect? parsedViewBox = _parseViewBox(viewBoxText);
 
-    if (parsedViewBox == null &&
-        ((parsedWidth == null) || (parsedHeight == null))) {
-      return null;
-    }
-
-    final double resolvedWidth = parsedWidth ?? parsedViewBox!.width;
-    final double resolvedHeight = parsedHeight ?? parsedViewBox!.height;
-    final Rect sourceViewBox =
-        parsedViewBox ?? Rect.fromLTWH(0.0, 0.0, resolvedWidth, resolvedHeight);
-
-    return MPSVGIntrinsicSizeInfo(
-      width: resolvedWidth,
-      height: resolvedHeight,
-      sourceViewBox: sourceViewBox,
+    return MPSVGMetadataInfo(
+      width: parsedWidth,
+      height: parsedHeight,
+      sourceViewBox: parsedViewBox,
     );
   }
 
