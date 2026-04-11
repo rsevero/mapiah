@@ -968,6 +968,7 @@ class MPDialogAux {
     final TextEditingController widthController = TextEditingController(
       text: metadataInfo.width?.toString() ?? '',
     );
+    final FocusNode widthFocusNode = FocusNode();
     final TextEditingController heightController = TextEditingController(
       text: metadataInfo.height?.toString() ?? '',
     );
@@ -985,6 +986,12 @@ class MPDialogAux {
       useRootNavigator: true,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (widthFocusNode.canRequestFocus) {
+            widthFocusNode.requestFocus();
+          }
+        });
+
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
@@ -1004,6 +1011,7 @@ class MPDialogAux {
                       const SizedBox(height: 16.0),
                       TextField(
                         controller: widthController,
+                        focusNode: widthFocusNode,
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                           signed: false,
@@ -1081,6 +1089,7 @@ class MPDialogAux {
     );
 
     widthController.dispose();
+    widthFocusNode.dispose();
     heightController.dispose();
 
     return result;
