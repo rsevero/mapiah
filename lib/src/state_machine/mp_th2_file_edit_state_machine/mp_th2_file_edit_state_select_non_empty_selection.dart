@@ -140,6 +140,40 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
       return Future.value();
     }
 
+    final bool shiftPressed = MPInteractionAux.isShiftPressed();
+    final bool ctrlOrMetaOnlyPressed =
+        (MPInteractionAux.isCtrlPressed() ||
+            MPInteractionAux.isMetaPressed()) &&
+        !shiftPressed &&
+        !MPInteractionAux.isAltPressed();
+
+    // Fast path: if transforms are enabled and no modifiers are pressed, check
+    // without a dialog whether all elements at this position are already
+    // selected. If so, switch to rotate mode immediately — no dialog needed.
+    if (th2FileEditController
+            .moveScaleRotateElementController
+            .isElementTransformsEnabled &&
+        !shiftPressed &&
+        !ctrlOrMetaOnlyPressed) {
+      final List<THElement> quickClicked = selectionController
+          .getSelectableElementsClickedWithoutDialog(
+            screenCoordinates: event.localPosition,
+            selectionType: THSelectionType.pla,
+          )
+          .values
+          .toList();
+
+      if (quickClicked.isNotEmpty &&
+          quickClicked.every(selectionController.isElementSelected)) {
+        selectionController.clearClickedElementsAtPointerDown();
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.elementRotate,
+        );
+
+        return Future.value();
+      }
+    }
+
     final List<THElement> clickedElements =
         (await selectionController.getSelectableElementsClickedWithDialog(
           screenCoordinates: event.localPosition,
@@ -147,12 +181,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           canBeMultiple: true,
           presentMultipleElementsClickedWidget: true,
         )).values.toList();
-    final bool shiftPressed = MPInteractionAux.isShiftPressed();
-    final bool ctrlOrMetaOnlyPressed =
-        (MPInteractionAux.isCtrlPressed() ||
-            MPInteractionAux.isMetaPressed()) &&
-        !shiftPressed &&
-        !MPInteractionAux.isAltPressed();
 
     selectionController.clearClickedElementsAtPointerDown();
 
@@ -173,12 +201,6 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           selectionController.setSelectedElements(
             clickedElements,
             setState: true,
-          );
-        } else if (th2FileEditController
-            .moveScaleRotateElementController
-            .isElementTransformsEnabled) {
-          th2FileEditController.stateController.setState(
-            MPTH2FileEditStateType.elementRotate,
           );
         }
 
