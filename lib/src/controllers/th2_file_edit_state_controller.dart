@@ -252,6 +252,11 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
+  Future<void> onPrimaryButtonDoubleClick(PointerUpEvent event) async {
+    await _state.onPrimaryButtonDoubleClick(event);
+  }
+
+  @override
   void onSecondaryButtonClick(PointerUpEvent event) {
     _state.onSecondaryButtonClick(event);
   }

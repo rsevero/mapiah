@@ -132,6 +132,49 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     return Future.value();
   }
 
+  @override
+  Future<void> onPrimaryButtonDoubleClick(PointerUpEvent event) async {
+    final Map<int, THElement> clickedLineSegments = selectionController
+        .getSelectableElementsClickedWithoutDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.lineSegment,
+        );
+
+    if (clickedLineSegments.isNotEmpty) {
+      final THLineSegment clickedLineSegment =
+          clickedLineSegments.values.first as THLineSegment;
+      final THLine parentLine = th2File.lineByMPID(
+        clickedLineSegment.parentMPID,
+      );
+
+      selectionController.setSelectedElements(<THElement>[parentLine]);
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.editSingleLine,
+      );
+
+      return;
+    }
+
+    final Map<int, THElement> clickedElements = selectionController
+        .getSelectableElementsClickedWithoutDialog(
+          screenCoordinates: event.localPosition,
+          selectionType: THSelectionType.pla,
+        );
+
+    for (final THElement clickedElement in clickedElements.values) {
+      if (clickedElement is! THLine) {
+        continue;
+      }
+
+      selectionController.setSelectedElements(<THElement>[clickedElement]);
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.editSingleLine,
+      );
+
+      return;
+    }
+  }
+
   /// 1. Mark the start point of the pan.
   /// 2. Did the pan start click on an object?
   /// 2.1. Yes. Is Shift pressed?

@@ -94,6 +94,7 @@ In case there are available redoes when a new edit operation is performed, the r
 * ![Scraps button](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: opens a dialog box to change the current scrap, delete an existing scrap and add a new one. The dialog box shows all available scraps and allows to select one of them. The scrap options overlay window is presented when right clicking on the desired scrap. (Alt+C)
 * ![Select element button](assets/help/images/buttonSelectElement.png "Select element")  _Select element_: allows to select elements in the TH2 file. (C)
 * ![Line edit button](assets/help/images/buttonLineEdit.png "Line edit")  _Line edit_: allows to edit individual lines in the TH2 file. (N)
+  * Double-clicking a line or one of its visible line segments while using the _Select element_ tool also enters _Line edit_ mode for that line.
 * ![Add element button](assets/help/images/buttonAddElement.png "Add element")  _Add element_: allows to add new elements to the TH2 file. On mouse over the following buttons are shown:
   * ![Add point button](assets/help/images/buttonAddPoint.png "Add point")  _Add point_: adds a new point to the TH2 file. (P)
   * ![Add line button](assets/help/images/buttonAddLine.png "Add line")  _Add line_: adds a new line to the TH2 file. (L)

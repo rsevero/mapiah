@@ -198,6 +198,10 @@ abstract class MPTH2FileEditState {
     return Future.value();
   }
 
+  Future<void> onPrimaryButtonDoubleClick(PointerUpEvent event) {
+    return Future.value();
+  }
+
   void onSecondaryButtonClick(PointerUpEvent event) {}
 
   void onTertiaryButtonClick(PointerUpEvent event) {}

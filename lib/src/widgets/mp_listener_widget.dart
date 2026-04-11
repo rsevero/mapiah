@@ -29,6 +29,8 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
   late final TH2FileEditController th2FileEditController;
   late final TH2FileEditOverlayWindowController overlayWindowController;
   late final FocusNode _focusNode;
+  Duration? _lastPrimaryClickTimeStamp;
+  Offset? _lastPrimaryClickPosition;
   int currentPressedMouseButton = 0;
   Offset primaryButtonDragStartScreenCoordinates = Offset.zero;
   Offset secondaryButtonDragStartScreenCoordinates = Offset.zero;
@@ -114,7 +116,7 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
             }
         }
       },
-      onPointerUp: (PointerUpEvent event) {
+      onPointerUp: (PointerUpEvent event) async {
         final bool wasDragging =
             isPrimaryButtonDragging ||
             isSecondaryButtonDragging ||
@@ -149,7 +151,11 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
               widget.actuator.onPrimaryButtonDragEnd(event);
               isPrimaryButtonDragging = false;
             } else {
-              widget.actuator.onPrimaryButtonClick(event);
+              await widget.actuator.onPrimaryButtonClick(event);
+              if (_isPrimaryButtonDoubleClick(event)) {
+                await widget.actuator.onPrimaryButtonDoubleClick(event);
+              }
+              _storePrimaryButtonClick(event);
             }
           case kSecondaryButton:
             currentPressedMouseButton = 0;
@@ -208,5 +214,28 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
       default:
         return false;
     }
+  }
+
+  bool _isPrimaryButtonDoubleClick(PointerUpEvent event) {
+    if ((_lastPrimaryClickTimeStamp == null) ||
+        (_lastPrimaryClickPosition == null)) {
+      return false;
+    }
+
+    final Duration elapsed = event.timeStamp - _lastPrimaryClickTimeStamp!;
+
+    if (elapsed > kDoubleTapTimeout) {
+      return false;
+    }
+
+    final double distance =
+        (event.localPosition - _lastPrimaryClickPosition!).distance;
+
+    return distance <= kDoubleTapSlop;
+  }
+
+  void _storePrimaryButtonClick(PointerUpEvent event) {
+    _lastPrimaryClickTimeStamp = event.timeStamp;
+    _lastPrimaryClickPosition = event.localPosition;
   }
 }

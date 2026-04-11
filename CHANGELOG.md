@@ -10,6 +10,7 @@
   * The interactive line simplification dialog is now draggable: right-click-drag on the title bar repositions it anywhere on screen, clamped to screen bounds, consistent with overlay window behaviour.
   * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
   * Added a Reset button to the interactive line simplification dialog that restores method and intensity to their hardcoded defaults (`keepOriginalTypes` / intensity 1) and re-applies the preview. Close and Save both now persist the selected method for next use.
+  * Double-clicking a line or one of its visible line segments on the canvas now enters single-line edit mode, with widget coverage for both hit paths.
 * Fixed bugs:
   * Slope lines whose line segments do not define any `l-size` are now painted with a dedicated special border, matching the existing visual treatment used for invisible elements and elements with THID set. Added dedicated TH2 edit settings to enable or disable each supported special-border type (`visibility off`, `ID set`, and slope without `l-size`), updated the EN/PT settings help pages, and added regression coverage.
   * Deleting a middle line segment in single-line edit mode now preserves the surrounding curve much more closely by rebuilding the merged Bézier segment from the original entry and exit tangents, with regression coverage for the split-curve case.

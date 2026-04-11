@@ -252,6 +252,7 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
 * ![Botão scraps](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: abre uma caixa de diálogo para mudar o scrap atual, excluir um scrap existente e adicionar um novo. A caixa de diálogo mostra todos os scraps disponíveis e permite selecionar um deles. A janela de opções do scrap (overlay) é apresentada ao clicar com o botão direito no scrap desejado. (Alt+C)
 * ![Botão selecionar elemento](assets/help/images/buttonSelectElement.png "Selecionar elemento")  _Selecionar elemento_: permite selecionar elementos no arquivo TH2. (C)
 * ![Botão editar linha](assets/help/images/buttonLineEdit.png "Editar linha")  _Editar linha_: permite editar linhas individuais no arquivo TH2. (N)
+  * Um clique duplo em uma linha ou em um de seus segmentos de linha visíveis, usando a ferramenta _Selecionar elemento_, também entra no modo _Editar linha_ para aquela linha.
 * ![Botão adicionar elemento](assets/help/images/buttonAddElement.png "Adicionar elemento")  _Adicionar elemento_: permite adicionar novos elementos ao arquivo TH2. Ao passar o mouse, os botões abaixo são mostrados:
   * ![Botão adicionar ponto](assets/help/images/buttonAddPoint.png "Adicionar ponto")  _Adicionar ponto_: adiciona um novo ponto ao arquivo TH2. (P)
   * ![Botão adicionar linha](assets/help/images/buttonAddLine.png "Adicionar linha")  _Adicionar linha_: adiciona uma nova linha ao arquivo TH2. (L)

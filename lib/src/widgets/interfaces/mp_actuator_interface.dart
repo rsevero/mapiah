@@ -29,6 +29,10 @@ abstract interface class MPActuatorInterface {
 
   Future<void> onPrimaryButtonClick(PointerUpEvent event);
 
+  Future<void> onPrimaryButtonDoubleClick(PointerUpEvent event) {
+    return Future.value();
+  }
+
   void onSecondaryButtonClick(PointerUpEvent event);
 
   void onSelectAll();

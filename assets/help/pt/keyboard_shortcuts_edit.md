@@ -29,6 +29,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Dividir linha nos pontos de linha selecionados                         | Ctrl+P                                        |
 | Dividir linhas selecionadas nos cruzamentos de linhas                  | Ctrl+Shift+X                                  |
 | Duplicar elementos selecionados                                        | Ctrl+D                                        |
+| Entrar em editar linha por linha ou segmento de linha                  | Clique duplo                                  |
 | Espelhar imagem horizontalmente                                        | H                                             |
 | Espelhar imagem verticalmente                                          | V                                             |
 | Editar nó/linha                                                        | N                                             |

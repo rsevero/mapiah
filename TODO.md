@@ -38,8 +38,7 @@
 [X] - When deleting line points, adjust control points so curve is changed as little as possible.
 [X] - Show current position during drag in status bar.
 [X] - Reorder images.
-[ ] - Create a easy way to find slope lines without lsize.
-[ ] - When double clicking on a line, select all lines of the same type that share a start/end point with the double clicked line. [requested by Edvard]
+[X] - Create a easy way to find slope lines without lsize.
 [X] - BUG: flatpak version does not open URLs.
 [ ] - Create rotate, scale, mirror and screw scraps modes.
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
