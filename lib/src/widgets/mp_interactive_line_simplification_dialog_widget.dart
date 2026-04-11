@@ -31,20 +31,13 @@ class _MPInteractiveLineSimplificationDialogWidgetState
   late MPLineSimplificationMethod _lineSimplificationMethod;
   late int _intensity;
 
-  late final MPLineSimplificationMethod _initialLineSimplificationMethod;
-  late final int _initialIntensity;
-
   @override
   void initState() {
     super.initState();
     _elementEditController = widget.th2FileEditController.elementEditController;
     _appLocalizations = mpLocator.appLocalizations;
-    _initialLineSimplificationMethod =
-        _elementEditController.lineSimplificationMethod;
-    _initialIntensity =
-        _elementEditController.interactiveLineSimplificationIntensity;
-    _lineSimplificationMethod = _initialLineSimplificationMethod;
-    _intensity = _initialIntensity;
+    _lineSimplificationMethod = _elementEditController.lineSimplificationMethod;
+    _intensity = _elementEditController.interactiveLineSimplificationIntensity;
   }
 
   void _updatePreview() {
@@ -198,8 +191,9 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                     onPressed: () {
                       setState(() {
                         _lineSimplificationMethod =
-                            _initialLineSimplificationMethod;
-                        _intensity = _initialIntensity;
+                            MPLineSimplificationMethod.keepOriginalTypes;
+                        _intensity =
+                            mpInteractiveLineSimplificationInitialIntensity;
                       });
                       _updatePreview();
                     },
