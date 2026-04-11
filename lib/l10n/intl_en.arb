@@ -2481,7 +2481,7 @@
     "description": "Tooltip for the simplify lines forcing straight FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageSmoothLineSegments": "Turn on smooth option on line segments (Ctrl+Shift+S)",
+  "th2FileEditPageSmoothLineSegments": "Turn on smooth option on line segments (S)",
   "@th2FileEditPageSmoothLineSegments": {
     "description": "Tooltip for the smooth line segments FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
