@@ -994,6 +994,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Therion run parameters';
 
   @override
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForIDSet =>
+      'Enable special border for ID set';
+
+  @override
+  String
+  get mpSettingsSettingTH2EditEnableSpecialBorderForSlopeLineWithoutLSize =>
+      'Enable special border for slope line without l-size';
+
+  @override
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForVisibilityOff =>
+      'Enable special border for visibility off';
+
+  @override
   String get mpSettingsSettingTH2EditLineThickness => 'Line thickness';
 
   @override

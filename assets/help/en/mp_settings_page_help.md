@@ -12,6 +12,9 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Main section](#main-section)
   - [Language](#language)
 - [TH2 edit section](#th2-edit-section)
+  - [Enable special border for ID set](#enable-special-border-for-id-set)
+  - [Enable special border for slope line without l-size](#enable-special-border-for-slope-line-without-l-size)
+  - [Enable special border for visibility off](#enable-special-border-for-visibility-off)
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
   - [Point radius](#point-radius)
@@ -42,6 +45,15 @@ Each setting has a reset button (↺) on its right side. Clicking it reverts tha
 Selects the language used throughout the app interface. The default option follows the system locale. Changing this setting takes effect after applying and reopening any currently open pages.
 
 ## TH2 edit section
+
+### Enable special border for ID set
+When enabled (default), elements with THID/ID set are painted with a dedicated special border on the canvas. Disable this if you prefer those elements to use only their normal symbol styling.
+
+### Enable special border for slope line without l-size
+When enabled (default), slope lines whose line segments do not define any `l-size` are painted with a dedicated special border on the canvas. This can help you spot slope lines that still need `l-size` information.
+
+### Enable special border for visibility off
+When enabled (default), elements with `visibility off` are painted with a dedicated special border on the canvas. Disable this if you prefer invisible elements not to receive extra visual emphasis while editing.
 
 ### Line thickness
 Controls the visual thickness (in pixels) of lines drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.

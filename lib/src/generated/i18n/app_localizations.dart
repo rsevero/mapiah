@@ -1930,6 +1930,25 @@ abstract class AppLocalizations {
   /// **'Therion run parameters'**
   String get mpSettingsSettingMainTherionRunParameters;
 
+  /// Label for enabling the special border used when an element has ID set. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Enable special border for ID set'**
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForIDSet;
+
+  /// Label for enabling the special border used on slope lines with no l-size on any line segment. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Enable special border for slope line without l-size'**
+  String
+  get mpSettingsSettingTH2EditEnableSpecialBorderForSlopeLineWithoutLSize;
+
+  /// Label for enabling the special border used when an element has visibility off. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Enable special border for visibility off'**
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForVisibilityOff;
+
   /// Label for TH2 line thickness setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

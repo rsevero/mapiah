@@ -1006,6 +1006,19 @@ class AppLocalizationsPt extends AppLocalizations {
       'Parâmetros de execução do Therion';
 
   @override
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForIDSet =>
+      'Ativar borda especial para ID definido';
+
+  @override
+  String
+  get mpSettingsSettingTH2EditEnableSpecialBorderForSlopeLineWithoutLSize =>
+      'Ativar borda especial para linha slope sem l-size';
+
+  @override
+  String get mpSettingsSettingTH2EditEnableSpecialBorderForVisibilityOff =>
+      'Ativar borda especial para visibility off';
+
+  @override
   String get mpSettingsSettingTH2EditLineThickness => 'Espessura da linha';
 
   @override

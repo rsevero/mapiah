@@ -685,21 +685,30 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.Therion_RunParameters:
         return appLocalizations.mpSettingsSettingMainTherionRunParameters;
-      case MPSettingID.TH2Edit_NudgeFactor:
-        return appLocalizations.mpSettingsSettingTH2EditNudgeFactor;
+      case MPSettingID.TH2Edit_EnableSpecialBorderForIDSet:
+        return appLocalizations
+            .mpSettingsSettingTH2EditEnableSpecialBorderForIDSet;
+      case MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize:
+        return appLocalizations
+            .mpSettingsSettingTH2EditEnableSpecialBorderForSlopeLineWithoutLSize;
+      case MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff:
+        return appLocalizations
+            .mpSettingsSettingTH2EditEnableSpecialBorderForVisibilityOff;
       case MPSettingID.TH2Edit_LineThickness:
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
       case MPSettingID.TH2Edit_NewLineCreationMethod:
         return appLocalizations.mpSettingsSettingTH2EditNewLineCreationMethod;
+      case MPSettingID.TH2Edit_NudgeFactor:
+        return appLocalizations.mpSettingsSettingTH2EditNudgeFactor;
       case MPSettingID.TH2Edit_PointRadius:
         return appLocalizations.mpSettingsSettingTH2EditPointRadius;
-      case MPSettingID.TH2Edit_SnapAngle:
-        return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
       case MPSettingID.TH2Edit_SelectionTolerance:
         return appLocalizations.mpSettingsSettingTH2EditSelectionTolerance;
       case MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         return appLocalizations
             .mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
+      case MPSettingID.TH2Edit_SnapAngle:
+        return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
       default:
         throw UnimplementedError(
           'At MPSettingsPage._localizedSettingName(): no localized name defined for setting type "$type"',

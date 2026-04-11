@@ -39,10 +39,30 @@ abstract class MPSettingsControllerBase with Store {
 
   /// The default default value for bools is mpDefaultDefaultBoolSetting. Only
   /// settings that differ from that should be included here.
-  static const Map<MPSettingID, bool> _boolDefaultSettings = {};
+  static const Map<MPSettingID, bool> _boolDefaultSettings = {
+    MPSettingID.TH2Edit_EnableSpecialBorderForIDSet: true,
+    MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize: true,
+    MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff: true,
+  };
 
   bool get isTherionDebugLog1Enabled {
     return getBoolWithDefault(MPSettingID.Therion_DebugLog1);
+  }
+
+  bool get isTH2EditSpecialBorderForIDSetEnabled {
+    return getBoolWithDefault(MPSettingID.TH2Edit_EnableSpecialBorderForIDSet);
+  }
+
+  bool get isTH2EditSpecialBorderForSlopeLineWithoutLSizeEnabled {
+    return getBoolWithDefault(
+      MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
+    );
+  }
+
+  bool get isTH2EditSpecialBorderForVisibilityOffEnabled {
+    return getBoolWithDefault(
+      MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+    );
   }
 
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.

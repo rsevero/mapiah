@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
@@ -1112,8 +1113,16 @@ abstract class MPVisualControllerBase with Store {
     bool isSlopeWithoutLSize = false,
   }) {
     final List<Paint> highlightBorders = [];
+    final bool isSpecialBorderForVisibilityOffEnabled = mpLocator
+        .mpSettingsController
+        .isTH2EditSpecialBorderForVisibilityOffEnabled;
+    final bool isSpecialBorderForIDSetEnabled =
+        mpLocator.mpSettingsController.isTH2EditSpecialBorderForIDSetEnabled;
+    final bool isSpecialBorderForSlopeLineWithoutLSizeEnabled = mpLocator
+        .mpSettingsController
+        .isTH2EditSpecialBorderForSlopeLineWithoutLSizeEnabled;
 
-    if (isTHInvisible) {
+    if (isTHInvisible && isSpecialBorderForVisibilityOffEnabled) {
       highlightBorders.add(
         Paint.from(
           THPaint.thPaint16
@@ -1122,7 +1131,7 @@ abstract class MPVisualControllerBase with Store {
       );
     }
 
-    if (hasID) {
+    if (hasID && isSpecialBorderForIDSetEnabled) {
       highlightBorders.add(
         Paint.from(
           THPaint.thPaint17
@@ -1131,7 +1140,7 @@ abstract class MPVisualControllerBase with Store {
       );
     }
 
-    if (isSlopeWithoutLSize) {
+    if (isSlopeWithoutLSize && isSpecialBorderForSlopeLineWithoutLSizeEnabled) {
       highlightBorders.add(
         Paint.from(
           THPaint.thPaint18

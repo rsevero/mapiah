@@ -54,6 +54,36 @@ void main() {
     );
 
     test(
+      'special border bool settings default to true before any explicit write',
+      () async {
+        final MPSettingsController ctrl = await freshController();
+
+        expect(
+          ctrl.isBoolSet(MPSettingID.TH2Edit_EnableSpecialBorderForIDSet),
+          isFalse,
+        );
+        expect(
+          ctrl.getBoolWithDefault(
+            MPSettingID.TH2Edit_EnableSpecialBorderForIDSet,
+          ),
+          isTrue,
+        );
+        expect(
+          ctrl.getBoolWithDefault(
+            MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
+          ),
+          isTrue,
+        );
+        expect(
+          ctrl.getBoolWithDefault(
+            MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test(
       'setting a bool to its implicit default (false) marks it as explicitly set',
       () async {
         final MPSettingsController ctrl = await freshController();
@@ -116,6 +146,32 @@ void main() {
         expect(ctrl.isBoolSet(MPSettingID.Therion_DebugLog1), isTrue);
         expect(ctrl.getBoolIfSet(MPSettingID.Therion_DebugLog1), isFalse);
         expect(isChanged, isFalse);
+      },
+    );
+
+    test(
+      'setting special border bool to false updates an explicit true-default setting',
+      () async {
+        final MPSettingsController ctrl = await freshController();
+
+        final bool isChanged = ctrl.setBool(
+          MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+          false,
+        );
+
+        expect(
+          ctrl.isBoolSet(
+            MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+          ),
+          isTrue,
+        );
+        expect(
+          ctrl.getBoolIfSet(
+            MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+          ),
+          isFalse,
+        );
+        expect(isChanged, isTrue);
       },
     );
   });

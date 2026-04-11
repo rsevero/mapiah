@@ -5,7 +5,9 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
@@ -75,5 +77,69 @@ void main() {
 
       expect(linePaint.highlightBorders, isEmpty);
     });
+
+    test('visibility-off special border can be disabled by setting', () async {
+      final TH2FileEditController th2Controller = await loadController(
+        '2026-03-18-002-two_scraps_with_point_line_area.th2',
+      );
+
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
+        false,
+      );
+
+      final THLinePaint linePaint = th2Controller.visualController
+          .getUnselectedLinePaint(
+            lineType: THLineType.border,
+            lineIsTHInvisible: true,
+            isFromActiveScrap: true,
+          );
+
+      expect(linePaint.highlightBorders, isEmpty);
+    });
+
+    test('ID-set special border can be disabled by setting', () async {
+      final TH2FileEditController th2Controller = await loadController(
+        '2026-03-18-002-two_scraps_with_point_line_area.th2',
+      );
+
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.TH2Edit_EnableSpecialBorderForIDSet,
+        false,
+      );
+
+      final THLinePaint linePaint = th2Controller.visualController
+          .getUnselectedLinePaint(
+            lineType: THLineType.border,
+            lineHasID: true,
+            isFromActiveScrap: true,
+          );
+
+      expect(linePaint.highlightBorders, isEmpty);
+    });
+
+    test(
+      'slope-without-l-size special border can be disabled by setting',
+      () async {
+        final TH2FileEditController th2Controller = await loadController(
+          '2026-02-17-001-slope_straight_line.th2',
+        );
+        final THLine line = th2Controller.th2File.getLines().single;
+
+        mpLocator.mpSettingsController.setBool(
+          MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
+          false,
+        );
+
+        final THLinePaint linePaint = th2Controller.visualController
+            .getUnselectedLinePaint(
+              lineType: line.lineType,
+              lineIsSlopeWithoutLSize: line.isSlopeWithoutLSize,
+              isFromActiveScrap: true,
+            );
+
+        expect(linePaint.highlightBorders, isEmpty);
+      },
+    );
   });
 }

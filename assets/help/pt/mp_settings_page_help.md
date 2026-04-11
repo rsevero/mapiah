@@ -12,6 +12,9 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Seção Principal](#seção-principal)
   - [Idioma](#idioma)
 - [Seção Edição TH2](#seção-edição-th2)
+  - [Ativar borda especial para ID definido](#ativar-borda-especial-para-id-definido)
+  - [Ativar borda especial para linha slope sem l-size](#ativar-borda-especial-para-linha-slope-sem-l-size)
+  - [Ativar borda especial para visibility off](#ativar-borda-especial-para-visibility-off)
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
   - [Raio do ponto](#raio-do-ponto)
@@ -42,6 +45,15 @@ Cada configuração possui um botão de redefinição (↺) à sua direita. Clic
 Seleciona o idioma usado em toda a interface do aplicativo. A opção padrão segue o idioma do sistema. A alteração desta configuração tem efeito após aplicar e reabrir as páginas atualmente abertas.
 
 ## Seção Edição TH2
+
+### Ativar borda especial para ID definido
+Quando ativado (padrão), elementos com THID/ID definido são pintados com uma borda especial dedicada no canvas. Desative isto se preferir que esses elementos usem apenas sua simbologia normal.
+
+### Ativar borda especial para linha slope sem l-size
+Quando ativado (padrão), linhas do tipo slope cujos segmentos de linha não definem nenhum `l-size` são pintadas com uma borda especial dedicada no canvas. Isto pode ajudar a localizar linhas slope que ainda precisam de informação de `l-size`.
+
+### Ativar borda especial para visibility off
+Quando ativado (padrão), elementos com `visibility off` são pintados com uma borda especial dedicada no canvas. Desative isto se preferir que elementos invisíveis não recebam ênfase visual extra durante a edição.
 
 ### Espessura da linha
 Controla a espessura visual (em pixels) das linhas desenhadas no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
