@@ -30,7 +30,7 @@
 [X] - Split one line in two.
 [X] - Join 2 lines.
 [X] - Merge 2 areas.
-[ ] - Implement simplify lines interactive dialog box.
+[x] - Implement simplify lines interactive dialog box.
 [X] - When a single element is selected, show its properties in the status bar.
 [X] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [X] - Allow the user to choose if the grid of a XVI file should be visible or not.

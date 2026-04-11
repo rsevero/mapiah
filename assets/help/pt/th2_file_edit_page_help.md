@@ -361,6 +361,8 @@ Há três métodos de simplificação de linha disponíveis:
 * __Forçar Bézier (Ctrl+Alt+L)__: todos os segmentos de linha são, se necessário, primeiro convertidos para curvas Bézier e então simplificados usando o algoritmo de simplificação de Bézier.
 * __Forçar reta (Ctrl+Shift+L)__: todos os segmentos de linha são, se necessário, primeiro convertidos para retas e então simplificados usando o algoritmo de simplificação de reta.
 
+O __diálogo de simplificação interativa de linhas (Ctrl+Alt+Shift+L)__ expõe esses mesmos parâmetros com uma visualização imediata. Use-o para alternar entre os três métodos e ajustar a intensidade da simplificação antes de confirmar o resultado final. Fechar o diálogo, salvá-lo ou clicar fora dele mantém a visualização atual como uma única ação desfazível. Cancelar restaura as linhas selecionadas originais sem criar uma entrada de desfazer.
+
 ### Segmentos de linha em curva Bézier
 Cada pressionamento de _Ctrl+[Alt]+L_ executa uma rodada de simplificação. O Mapiah usa um algoritmo interativo para simplificar segmentos em curva Bézier. Ele opera no espaço do canvas. A tolerância inicial (epsilon) equivale a 1,5 pixels de tela. Esse valor é convertido para coordenadas do canvas. Em cada execução subsequente, a tolerância é aumentada pelo mesmo valor inicial.
 

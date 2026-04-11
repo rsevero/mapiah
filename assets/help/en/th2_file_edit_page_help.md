@@ -361,6 +361,8 @@ There are three line simplification methods available:
 * __Force Bézier (Ctrl+Alt+L)__: all line segments are, if necessary, first converted to Bézier curves and then simplified using the Bézier curve simplification algorithm.
 * __Force straight (Ctrl+Shift+L)__: all line segments are, if necessary, first converted to straight lines and then simplified using the straight line simplification algorithm.
 
+The __Interactive simplify lines dialog (Ctrl+Alt+Shift+L)__ exposes the same parameters through a live preview. Use it to switch between the three methods and adjust the simplification intensity before committing the final result. Closing the dialog, saving it, or clicking outside the dialog keeps the current preview as a single undoable action. Cancelling restores the original selected lines without creating an undo entry.
+
 ### Bézier curve line segments
 Each _Ctrl+[Alt]+L_ press runs a round of line simplification. Mapiah uses an interactive algorithm to simplify Bézier curve line segments. It operates on canvas space. The initial tolerance (epsilon) is equivalent to 1.5 screen pixels. This value is converted to canvas coordinates. At each subsequent run the tolerance is increased by the same initial value.
 

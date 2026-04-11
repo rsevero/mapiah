@@ -56,6 +56,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Select all                                                 | Ctrl+A                                  |
 | Select none                                                | Esc                                     |
 | Select tool                                                | C                                       |
+| Simplify line - interactive dialog                         | Ctrl+Alt+Shift+L                        |
 | Simplify line                                              | Ctrl+L                                  |
 | Simplify line - to Bézier curve line segments              | Ctrl+Alt+L                              |
 | Simplify line - to straight line segments                  | Ctrl+Shift+L                            |

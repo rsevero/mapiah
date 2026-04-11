@@ -536,6 +536,12 @@ abstract class AppLocalizations {
   /// **'Reset all settings'**
   String get mpButtonResetAllSettings;
 
+  /// The label for the save button. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get mpButtonSave;
+
   /// The label for the save and close button. Used on: _MPSettingsPageState.build
   ///
   /// In en, this message translates to:
@@ -2583,6 +2589,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Toggle image visibility'**
   String get th2FileEditPageImageVisibilityTooltip;
+
+  /// Tooltip for the interactive simplify lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive simplify lines (Ctrl+Alt+Shift+L)'**
+  String get th2FileEditPageInteractiveSimplifyLines;
+
+  /// Label for the canvas tolerance preview in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas tolerance'**
+  String get th2FileEditPageInteractiveSimplifyLinesCanvasToleranceLabel;
+
+  /// Description shown in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Preview the selected lines while adjusting the simplification method and intensity.'**
+  String get th2FileEditPageInteractiveSimplifyLinesDescription;
+
+  /// Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Force Bézier curves'**
+  String get th2FileEditPageInteractiveSimplifyLinesForceBezier;
+
+  /// Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Force straight segments'**
+  String get th2FileEditPageInteractiveSimplifyLinesForceStraight;
+
+  /// Label for the intensity slider in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Intensity'**
+  String get th2FileEditPageInteractiveSimplifyLinesIntensityLabel;
+
+  /// Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Keep original segment types'**
+  String get th2FileEditPageInteractiveSimplifyLinesKeepOriginal;
+
+  /// Label above the method options in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get th2FileEditPageInteractiveSimplifyLinesMethodLabel;
+
+  /// Label for the screen tolerance preview in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Screen tolerance equivalent'**
+  String get th2FileEditPageInteractiveSimplifyLinesScreenToleranceLabel;
+
+  /// Title of the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive simplify lines'**
+  String get th2FileEditPageInteractiveSimplifyLinesTitle;
 
   /// Tooltip for the join lines at coinciding extremities FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///

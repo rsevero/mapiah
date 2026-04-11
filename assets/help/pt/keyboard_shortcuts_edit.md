@@ -63,6 +63,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Salvar arquivo como                                                    | Ctrl+Shift+S                                  |
 | Selecionar nada                                                        | Esc                                           |
 | Selecionar tudo                                                        | Ctrl+A                                        |
+| Simplificar linha - diálogo interativo                                 | Ctrl+Alt+Shift+L                              |
 | Simplificar linha                                                      | Ctrl+L                                        |
 | Simplificar linha - para segmentos de linha curva de Bézier            | Ctrl+Alt+L                                    |
 | Simplificar linha - para segmentos de linha reta                       | Ctrl+Shift+L                                  |

@@ -558,38 +558,42 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   Widget _stateContextFABs(String heroPrefix) {
-    return Observer(
-      builder: (_) {
-        final List<Widget> buttonRows = [];
+    return ValueListenableBuilder<bool>(
+      valueListenable:
+          th2FileEditController.isInteractiveLineSimplificationDialogOpen,
+      builder: (context, isDialogOpen, child) => Observer(
+        builder: (_) {
+          final List<Widget> buttonRows = [];
 
-        if (th2FileEditController.isInEditSingleLineState) {
-          buttonRows.addAll(_editSingleLineContextFABs(heroPrefix));
-        } else if (th2FileEditController.isInSelectNonEmptySelectionState) {
-          buttonRows.addAll(_selectNonEmptySelectionContextFABs(heroPrefix));
-        } else if (th2FileEditController.isInSelectEmptySelectionState) {
-          buttonRows.addAll(_selectEmptySelectionContextFABs(heroPrefix));
-        } else if (th2FileEditController.isInAddElementState) {
-          buttonRows.addAll(_addElementContextFABs(heroPrefix));
-        } else if (MPTH2FileEditState.isImageOperationType(
-          th2FileEditController.stateController.state.type,
-        )) {
-          buttonRows.addAll(_imageOperationContextFABs(heroPrefix));
-        }
+          if (th2FileEditController.isInEditSingleLineState) {
+            buttonRows.addAll(_editSingleLineContextFABs(heroPrefix));
+          } else if (th2FileEditController.isInSelectNonEmptySelectionState) {
+            buttonRows.addAll(_selectNonEmptySelectionContextFABs(heroPrefix));
+          } else if (th2FileEditController.isInSelectEmptySelectionState) {
+            buttonRows.addAll(_selectEmptySelectionContextFABs(heroPrefix));
+          } else if (th2FileEditController.isInAddElementState) {
+            buttonRows.addAll(_addElementContextFABs(heroPrefix));
+          } else if (MPTH2FileEditState.isImageOperationType(
+            th2FileEditController.stateController.state.type,
+          )) {
+            buttonRows.addAll(_imageOperationContextFABs(heroPrefix));
+          }
 
-        if (buttonRows.isEmpty) {
-          return const SizedBox.shrink();
-        }
+          if (buttonRows.isEmpty) {
+            return const SizedBox.shrink();
+          }
 
-        return Positioned(
-          top: 16,
-          left: 16,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: buttonRows,
-          ),
-        );
-      },
+          return Positioned(
+            top: 16,
+            left: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: buttonRows,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -694,6 +698,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         th2FileEditController.hasSelectedEndPoints;
     final bool hasSelectedNonStartEndPoints =
         th2FileEditController.hasSelectedNonStartEndPoints;
+    final bool isInteractiveLineSimplificationDialogOpen =
+        th2FileEditController.isInteractiveLineSimplificationDialogOpen.value;
 
     return [
       _stateContextFABCategoryRow(
@@ -736,6 +742,16 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             category: _StateContextFABCategory.simplification,
             icon: Icons.gesture,
             tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+          ),
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_simplify_lines_interactive',
+            onPressed: () {
+              th2FileEditController.openInteractiveLineSimplificationDialog();
+            },
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.tune,
+            tooltip: appLocalizations.th2FileEditPageInteractiveSimplifyLines,
+            isActive: isInteractiveLineSimplificationDialogOpen,
           ),
         ],
       ),
@@ -824,6 +840,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     final bool allElementsSelected =
         th2FileEditController.areAllElementsSelected;
     final bool hasSelectedLines = th2FileEditController.hasSelectedLines;
+    final bool isInteractiveLineSimplificationDialogOpen =
+        th2FileEditController.isInteractiveLineSimplificationDialogOpen.value;
 
     return [
       _stateContextFABCategoryRow(
@@ -875,6 +893,19 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             category: _StateContextFABCategory.simplification,
             icon: Icons.gesture,
             tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+          ),
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_simplify_lines_interactive',
+            onPressed: hasSelectedLines
+                ? () {
+                    th2FileEditController
+                        .openInteractiveLineSimplificationDialog();
+                  }
+                : null,
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.tune,
+            tooltip: appLocalizations.th2FileEditPageInteractiveSimplifyLines,
+            isActive: isInteractiveLineSimplificationDialogOpen,
           ),
         ],
       ),

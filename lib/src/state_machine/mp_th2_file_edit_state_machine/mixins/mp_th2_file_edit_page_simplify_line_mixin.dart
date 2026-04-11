@@ -17,7 +17,7 @@ mixin MPTH2FileEditPageSimplifyLineMixin on MPTH2FileEditState {
         if (isCtrlPressed || isMetaPressed) {
           cleanOriginalSimplifiedLines = false;
           if (isAltPressed && isShiftPressed) {
-            /// TODO open line simplification dialog box.
+            th2FileEditController.openInteractiveLineSimplificationDialog();
           } else {
             final MPLineSimplificationMethod newLineSimplificationMethod;
 

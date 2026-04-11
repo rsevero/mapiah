@@ -387,6 +387,11 @@
     "description": "The label for the reset all settings button. Used on: _MPSettingsPageState.build",
     "type": "text"
   },
+  "mpButtonSave": "Save",
+  "@mpButtonSave": {
+    "description": "The label for the save button. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
   "mpButtonSaveAndClose": "Save & Close",
   "@mpButtonSaveAndClose": {
     "description": "The label for the save and close button. Used on: _MPSettingsPageState.build",
@@ -2146,6 +2151,56 @@
   "th2FileEditPageImageVisibilityTooltip": "Toggle image visibility",
   "@th2FileEditPageImageVisibilityTooltip": {
     "description": "Tooltip for the visibility checkbox on each image row. Used on: _MPAvailableImagesWidgetState.build",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLines": "Interactive simplify lines (Ctrl+Alt+Shift+L)",
+  "@th2FileEditPageInteractiveSimplifyLines": {
+    "description": "Tooltip for the interactive simplify lines FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesCanvasToleranceLabel": "Canvas tolerance",
+  "@th2FileEditPageInteractiveSimplifyLinesCanvasToleranceLabel": {
+    "description": "Label for the canvas tolerance preview in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesDescription": "Preview the selected lines while adjusting the simplification method and intensity.",
+  "@th2FileEditPageInteractiveSimplifyLinesDescription": {
+    "description": "Description shown in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesForceBezier": "Force Bézier curves",
+  "@th2FileEditPageInteractiveSimplifyLinesForceBezier": {
+    "description": "Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesForceStraight": "Force straight segments",
+  "@th2FileEditPageInteractiveSimplifyLinesForceStraight": {
+    "description": "Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesIntensityLabel": "Intensity",
+  "@th2FileEditPageInteractiveSimplifyLinesIntensityLabel": {
+    "description": "Label for the intensity slider in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesKeepOriginal": "Keep original segment types",
+  "@th2FileEditPageInteractiveSimplifyLinesKeepOriginal": {
+    "description": "Method label in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesMethodLabel": "Method",
+  "@th2FileEditPageInteractiveSimplifyLinesMethodLabel": {
+    "description": "Label above the method options in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesScreenToleranceLabel": "Screen tolerance equivalent",
+  "@th2FileEditPageInteractiveSimplifyLinesScreenToleranceLabel": {
+    "description": "Label for the screen tolerance preview in the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
+    "type": "text"
+  },
+  "th2FileEditPageInteractiveSimplifyLinesTitle": "Interactive simplify lines",
+  "@th2FileEditPageInteractiveSimplifyLinesTitle": {
+    "description": "Title of the interactive line simplification dialog. Used on: MPInteractiveLineSimplificationDialogWidget",
     "type": "text"
   },
   "th2FileEditPageJoinLinesAtCoincidingExtremities": "Join lines at coinciding extremities (Ctrl+J)",

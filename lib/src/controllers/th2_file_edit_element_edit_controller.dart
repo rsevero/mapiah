@@ -60,6 +60,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPLineSimplificationMethod _lineSimplificationMethod =
       MPLineSimplificationMethod.keepOriginalTypes;
 
+  int _interactiveLineSimplificationIntensity =
+      mpInteractiveLineSimplificationInitialIntensity;
+
+  MPLineSimplificationMethod _interactiveLineSimplificationMethod =
+      MPLineSimplificationMethod.keepOriginalTypes;
+
+  int? _interactiveLineSimplificationUndoCountAtStart;
+
   @readonly
   double? _linePointOrientation;
 
@@ -103,6 +111,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   List<String> get mostUsedPointTypes {
     return _getMostUsedTypes(_mostUsedPointTypes);
+  }
+
+  int get interactiveLineSimplificationIntensity {
+    return _interactiveLineSimplificationIntensity;
   }
 
   void initializeMostUsedTypes() {
@@ -1545,6 +1557,83 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void simplifySelectedLines() {
+    prepareLineSimplificationInfo();
+
+    _simplifySelectedLinesWithParameters(
+      lineSimplificationMethod: _lineSimplificationMethod,
+      lineSimplifyEpsilonOnCanvas: _lineSimplifyEpsilonOnCanvas,
+    );
+  }
+
+  void startInteractiveLineSimplification() {
+    _originalFileForLineSimplification = _th2File.copyWith();
+    _isFirstLineSimplification = true;
+    _interactiveLineSimplificationUndoCountAtStart =
+        _th2FileEditController.undoCount;
+
+    previewInteractiveLineSimplification(
+      lineSimplificationMethod: _lineSimplificationMethod,
+      intensity: _interactiveLineSimplificationIntensity,
+    );
+  }
+
+  void previewInteractiveLineSimplification({
+    required MPLineSimplificationMethod lineSimplificationMethod,
+    required int intensity,
+  }) {
+    assert(
+      _interactiveLineSimplificationUndoCountAtStart != null,
+      'Interactive line simplification must be started before preview.',
+    );
+
+    _interactiveLineSimplificationMethod = lineSimplificationMethod;
+    _interactiveLineSimplificationIntensity = intensity;
+
+    final double lineSimplifyEpsilonOnCanvas =
+        getLineSimplifyEpsilonOnCanvasIncrease() * intensity;
+    final bool didApplyPreview = _simplifySelectedLinesWithParameters(
+      lineSimplificationMethod: lineSimplificationMethod,
+      lineSimplifyEpsilonOnCanvas: lineSimplifyEpsilonOnCanvas,
+    );
+    final int undoCountAtStart =
+        _interactiveLineSimplificationUndoCountAtStart!;
+    final bool hasPreviewUndo =
+        _th2FileEditController.undoCount > undoCountAtStart;
+
+    if (!didApplyPreview && hasPreviewUndo) {
+      _th2FileEditController.revertLastUndoWithoutRedo();
+      _isFirstLineSimplification = true;
+      _th2FileEditController.stateController.state.updateStatusBarMessage();
+    }
+  }
+
+  void finishInteractiveLineSimplification({required bool saveParameters}) {
+    if (saveParameters) {
+      _lineSimplificationMethod = _interactiveLineSimplificationMethod;
+    }
+
+    _interactiveLineSimplificationUndoCountAtStart = null;
+    resetOriginalFileForLineSimplification();
+  }
+
+  void cancelInteractiveLineSimplification() {
+    final int? undoCountAtStart =
+        _interactiveLineSimplificationUndoCountAtStart;
+
+    if ((undoCountAtStart != null) &&
+        (_th2FileEditController.undoCount > undoCountAtStart)) {
+      _th2FileEditController.revertLastUndoWithoutRedo();
+    }
+
+    _interactiveLineSimplificationUndoCountAtStart = null;
+    resetOriginalFileForLineSimplification();
+    _th2FileEditController.stateController.state.updateStatusBarMessage();
+  }
+
+  bool _simplifySelectedLinesWithParameters({
+    required MPLineSimplificationMethod lineSimplificationMethod,
+    required double lineSimplifyEpsilonOnCanvas,
+  }) {
     final List<MPCommand> simplifyCommands = [];
     final Iterable<MPSelectedElement> mpSelectedElements =
         _th2FileEditController
@@ -1555,8 +1644,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _th2FileEditController.currentDecimalPositions;
 
     int lineCount = 0;
-
-    prepareLineSimplificationInfo();
 
     for (final MPSelectedElement mpSelectedElement in mpSelectedElements) {
       if (mpSelectedElement is! MPSelectedLine) {
@@ -1620,7 +1707,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
         switch (typeLineSegments.type) {
           case THElementType.bezierCurveLineSegment:
-            if (_lineSimplificationMethod ==
+            if (lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceStraight) {
               simplifiedLineSegmentsList =
                   MPElementEditAux.mpSimplifyBezierCurveLineSegmentsToStraightLineSegments(
@@ -1629,7 +1716,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                     originalLineSegmentsList: originalPerTypeLineSegmentsList,
                     convertToStraightRefTolerance:
                         getLineSimplifyEpsilonOnCanvasIncrease(),
-                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    accuracy: lineSimplifyEpsilonOnCanvas,
                     decimalPositions: currentDecimalPositions,
                   );
 
@@ -1639,18 +1726,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
             } else {
               simplifiedLineSegmentsList = mpSimplifyTHBezierLineSegments(
                 originalPerTypeLineSegmentsList,
-                accuracy: _lineSimplifyEpsilonOnCanvas,
+                accuracy: lineSimplifyEpsilonOnCanvas,
                 decimalPositions: currentDecimalPositions,
               );
             }
           case THElementType.straightLineSegment:
-            if (_lineSimplificationMethod ==
+            if (lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceBezier) {
               simplifiedLineSegmentsList =
                   mpConvertTHStraightToTHBezierLineSegments(
                     originalStraightLineSegmentsList:
                         originalPerTypeLineSegmentsList,
-                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    accuracy: lineSimplifyEpsilonOnCanvas,
                     decimalPositions: currentDecimalPositions,
                   );
 
@@ -1662,7 +1749,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
                   MPStraightLineSimplificationAux.raumerDouglasPeuckerIterative(
                     originalStraightLineSegments:
                         originalPerTypeLineSegmentsList,
-                    accuracy: _lineSimplifyEpsilonOnCanvas,
+                    accuracy: lineSimplifyEpsilonOnCanvas,
                   );
             }
           default:
@@ -1683,9 +1770,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
         final bool isForceConversion =
-            (_lineSimplificationMethod ==
+            (lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceBezier) ||
-            (_lineSimplificationMethod ==
+            (lineSimplificationMethod ==
                 MPLineSimplificationMethod.forceStraight);
 
         if (isForceConversion ||
@@ -1731,6 +1818,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     updateControllersAfterElementEditFinal();
 
     _th2FileEditController.stateController.state.updateStatusBarMessage();
+
+    return simplifyCommands.isNotEmpty;
   }
 
   List<MPSingleTypeLineSegmentList> groupLineSegmentsForSimplification({
@@ -1799,6 +1888,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   void resetOriginalFileForLineSimplification() {
     _originalFileForLineSimplification = null;
+    _isFirstLineSimplification = true;
   }
 
   double getLineSimplifyEpsilonOnCanvasIncrease() {

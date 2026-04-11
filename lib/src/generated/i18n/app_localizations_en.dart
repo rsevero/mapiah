@@ -254,6 +254,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpButtonResetAllSettings => 'Reset all settings';
 
   @override
+  String get mpButtonSave => 'Save';
+
+  @override
   String get mpButtonSaveAndClose => 'Save & Close';
 
   @override
@@ -1381,6 +1384,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageImageVisibilityTooltip => 'Toggle image visibility';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLines =>
+      'Interactive simplify lines (Ctrl+Alt+Shift+L)';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesCanvasToleranceLabel =>
+      'Canvas tolerance';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesDescription =>
+      'Preview the selected lines while adjusting the simplification method and intensity.';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesForceBezier =>
+      'Force Bézier curves';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesForceStraight =>
+      'Force straight segments';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesIntensityLabel =>
+      'Intensity';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesKeepOriginal =>
+      'Keep original segment types';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesMethodLabel => 'Method';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesScreenToleranceLabel =>
+      'Screen tolerance equivalent';
+
+  @override
+  String get th2FileEditPageInteractiveSimplifyLinesTitle =>
+      'Interactive simplify lines';
 
   @override
   String get th2FileEditPageJoinLinesAtCoincidingExtremities =>

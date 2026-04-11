@@ -30,6 +30,7 @@ abstract class MPUndoRedoControllerBase with Store {
 
   bool get hasUndo => _undos.isNotEmpty;
   bool get hasRedo => _redos.isNotEmpty;
+  int get undoCount => _undos.length;
 
   void add(MPCommand command) {
     final MPUndoRedoCommand undo = command.getUndoRedoCommand(
@@ -130,6 +131,19 @@ abstract class MPUndoRedoControllerBase with Store {
     );
 
     _redos.add(redo);
+    _th2FileEditController.triggerAllElementsRedraw();
+  }
+
+  void revertLastUndoWithoutRedo() {
+    if (_undos.isEmpty) {
+      return;
+    }
+
+    final MPUndoRedoCommand lastUndo = _undos.removeLast();
+    final MPCommand command = lastUndo.undoCommand;
+
+    command.execute(_th2FileEditController);
+
     _th2FileEditController.triggerAllElementsRedraw();
   }
 

@@ -44,6 +44,7 @@ import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
+import 'package:mapiah/src/widgets/mp_interactive_line_simplification_dialog_widget.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -589,6 +590,8 @@ abstract class TH2FileEditControllerBase with Store {
   double _dataHeight = 0.0;
 
   final FocusNode th2FileFocusNode = FocusNode();
+  final ValueNotifier<bool> isInteractiveLineSimplificationDialogOpen =
+      ValueNotifier<bool>(false);
 
   final List<String> errorMessages = <String>[];
 
@@ -1588,6 +1591,62 @@ abstract class TH2FileEditControllerBase with Store {
   void redo() {
     undoRedoController.redo();
     _undoRedoDone();
+  }
+
+  int get undoCount => undoRedoController.undoCount;
+
+  void revertLastUndoWithoutRedo() {
+    undoRedoController.revertLastUndoWithoutRedo();
+    updateUndoRedoStatus();
+  }
+
+  Future<void> openInteractiveLineSimplificationDialog() async {
+    if (isInteractiveLineSimplificationDialogOpen.value) {
+      return;
+    }
+
+    final bool canOpen =
+        hasSelectedLines ||
+        (stateController.state is MPTH2FileEditStateEditSingleLine);
+
+    if (!canOpen) {
+      return;
+    }
+
+    overlayWindowController.clearOverlayWindows();
+
+    elementEditController.startInteractiveLineSimplification();
+    isInteractiveLineSimplificationDialogOpen.value = true;
+
+    final BuildContext context = getTH2FileWidgetBuildContext();
+    final MPInteractiveLineSimplificationDialogResult? result =
+        await showDialog<MPInteractiveLineSimplificationDialogResult>(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext dialogContext) {
+            return MPInteractiveLineSimplificationDialogWidget(
+              th2FileEditController: this as TH2FileEditController,
+            );
+          },
+        );
+
+    final MPInteractiveLineSimplificationDialogResult finalResult =
+        result ?? MPInteractiveLineSimplificationDialogResult.close;
+
+    switch (finalResult) {
+      case MPInteractiveLineSimplificationDialogResult.close:
+        elementEditController.finishInteractiveLineSimplification(
+          saveParameters: false,
+        );
+      case MPInteractiveLineSimplificationDialogResult.save:
+        elementEditController.finishInteractiveLineSimplification(
+          saveParameters: true,
+        );
+      case MPInteractiveLineSimplificationDialogResult.cancel:
+        elementEditController.cancelInteractiveLineSimplification();
+    }
+
+    isInteractiveLineSimplificationDialogOpen.value = false;
   }
 
   @action
