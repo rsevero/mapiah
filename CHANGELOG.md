@@ -10,6 +10,7 @@
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.
   * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.
 * Infrastructure maintenance:
+  * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
 
 ## 0.3.5 - 2026-04-09 - The [Dental Nerve](https://xkcd.com/846/) release
 * Highlights:
