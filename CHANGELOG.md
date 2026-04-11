@@ -5,8 +5,9 @@
 ## 0.3.6 - not yet released
 * Highlights:
 * New features:
-  * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage.
+  * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage. [request by Axel Hack]
 * Fixed bugs:
+  * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.
 * Infrastructure maintenance:
 
 ## 0.3.5 - 2026-04-09 - The [Dental Nerve](https://xkcd.com/846/) release

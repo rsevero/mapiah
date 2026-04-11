@@ -75,6 +75,9 @@ Editing modes:
 * th2_file_tabs_page.dart — Main canvas (tabbed)
 * mp_settings_page.dart — Settings
 
+### Dialgos
+* Bottom buttons that should always stay visible, even when the content scrolls, use MPDialogBottomWidget for consistent styling.
+
 ### Localization
 
 .arb editable files in lib/l10n/ and generated files in lib/src/generated/i18n/ → Run flutter gen-l10n → Access via mpLocator.appLocalizations

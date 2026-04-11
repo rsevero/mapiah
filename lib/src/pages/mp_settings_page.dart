@@ -8,6 +8,7 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
+import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 
 class MPSettingsPage extends StatefulWidget {
@@ -44,39 +45,48 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(mpSettingsPageOuterPadding),
+      body: Column(
         children: [
-          for (final String section in sections) ...[
-            _buildSectionCard(
-              appLocalizations: appLocalizations,
-              section: section,
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(mpSettingsPageOuterPadding),
+              children: [
+                for (final String section in sections) ...[
+                  _buildSectionCard(
+                    appLocalizations: appLocalizations,
+                    section: section,
+                  ),
+                  const SizedBox(height: mpSettingsPageSectionSpacing),
+                ],
+              ],
             ),
-            const SizedBox(height: mpSettingsPageSectionSpacing),
-          ],
-          const SizedBox(height: mpSettingsPageSectionSpacing),
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: _closeAndSave,
-                child: Text(appLocalizations.mpButtonSaveAndClose),
+          ),
+          MPDialogBottomWidget(
+            child: SafeArea(
+              top: false,
+              child: Wrap(
+                spacing: mpSettingsPageButtonSpacing,
+                runSpacing: mpSettingsPageButtonSpacing,
+                children: [
+                  ElevatedButton(
+                    onPressed: _closeAndSave,
+                    child: Text(appLocalizations.mpButtonSaveAndClose),
+                  ),
+                  ElevatedButton(
+                    onPressed: _applyChanges,
+                    child: Text(appLocalizations.mpButtonApply),
+                  ),
+                  ElevatedButton(
+                    onPressed: _cancelChanges,
+                    child: Text(appLocalizations.mpButtonCancel),
+                  ),
+                  ElevatedButton(
+                    onPressed: _resetAllSettings,
+                    child: Text(appLocalizations.mpButtonResetAllSettings),
+                  ),
+                ],
               ),
-              const SizedBox(width: mpSettingsPageButtonSpacing),
-              ElevatedButton(
-                onPressed: _applyChanges,
-                child: Text(appLocalizations.mpButtonApply),
-              ),
-              const SizedBox(width: mpSettingsPageButtonSpacing),
-              ElevatedButton(
-                onPressed: _cancelChanges,
-                child: Text(appLocalizations.mpButtonCancel),
-              ),
-              const SizedBox(width: mpSettingsPageButtonSpacing),
-              ElevatedButton(
-                onPressed: _resetAllSettings,
-                child: Text(appLocalizations.mpButtonResetAllSettings),
-              ),
-            ],
+            ),
           ),
         ],
       ),
