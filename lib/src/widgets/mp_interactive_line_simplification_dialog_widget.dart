@@ -163,10 +163,13 @@ class _MPInteractiveLineSimplificationDialogWidgetState
       color: theme.colorScheme.surfaceContainerHigh,
       borderRadius: BorderRadius.circular(28),
       clipBehavior: Clip.antiAlias,
-      child: SizedBox(
-        width: _dialogWidth,
-        height: _maxDialogHeight,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: _dialogWidth,
+          maxHeight: _maxDialogHeight,
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             MouseRegion(
@@ -196,7 +199,7 @@ class _MPInteractiveLineSimplificationDialogWidgetState
               ),
             ),
             const SizedBox(height: mpButtonSpace),
-            Expanded(
+            Flexible(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                 child: Column(

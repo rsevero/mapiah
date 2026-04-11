@@ -13,6 +13,7 @@
 * Fixed bugs:
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.
   * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.
+  * The interactive line simplification dialog no longer grows taller than its content when the main window is resized.
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
 
