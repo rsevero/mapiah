@@ -45,6 +45,7 @@ class MPDialogAux {
   static void newFile(BuildContext context) async {
     MPModalOverlayWidget.show(
       context: context,
+      scrollChild: false,
       childBuilder: (onPressedClose) =>
           MPAddFileDialogWidget(onPressedClose: onPressedClose),
     );

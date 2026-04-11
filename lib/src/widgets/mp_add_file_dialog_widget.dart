@@ -8,6 +8,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_widget.dart';
+import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:mapiah/src/widgets/mp_encoding_widget.dart';
 
 class MPAddFileDialogWidget extends StatefulWidget {
@@ -104,68 +105,79 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          appLocalizations.mpNewScrapDialogCreateNewScrap,
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(height: mpButtonSpace),
+    return SizedBox(
+      width: 520,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    appLocalizations.mpNewScrapDialogCreateNewScrap,
+                    style: theme.textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: mpButtonSpace),
 
-        // 1. Encoding widget (dropdown)
-        Text(
-          appLocalizations.mpEncodingLabel,
-          style: theme.textTheme.titleSmall,
-        ),
-        const SizedBox(height: 4),
-        MPEncodingWidget(
-          key: _encodingKey,
-          currentEncoding: null,
-          showActionButtons: false,
-          onValidOptionChanged: (enc) {
-            if (enc != null) _selectedEncoding = enc;
-          },
-        ),
-
-        // 2. Scrap configuration (id + scale + projection)
-        const SizedBox(height: mpButtonSpace * 2),
-        MPAddScrapDialogWidget(
-          key: _scrapKernelKey,
-          initialScrapTHID: '${mpScrapTHIDPrefix}1',
-          showActionButtons: false,
-          onValidScrapTHIDChanged: (id) => _deferUpdate<String>(
-            id,
-            () => _validScrapTHID,
-            (v) => _validScrapTHID = v,
-          ),
-          onProjectionChanged: (opt) => _projectionOption = opt,
-          onScaleChanged: (opt) => _scaleOption = opt,
-          onValidityChanged: (isValid) => _deferUpdate<bool>(
-            isValid,
-            () => _scrapConfigValid,
-            (v) => _scrapConfigValid = v,
-          ),
-        ),
-
-        // Action buttons
-        const SizedBox(height: mpButtonSpace),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: _onCancelPressed,
-              child: Text(appLocalizations.mpButtonCancel),
+                  Text(
+                    appLocalizations.mpEncodingLabel,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 4),
+                  MPEncodingWidget(
+                    key: _encodingKey,
+                    currentEncoding: null,
+                    showActionButtons: false,
+                    onValidOptionChanged: (enc) {
+                      if (enc != null) {
+                        _selectedEncoding = enc;
+                      }
+                    },
+                  ),
+                  const SizedBox(height: mpButtonSpace * 2),
+                  MPAddScrapDialogWidget(
+                    key: _scrapKernelKey,
+                    initialScrapTHID: '${mpScrapTHIDPrefix}1',
+                    showActionButtons: false,
+                    onValidScrapTHIDChanged: (id) => _deferUpdate<String>(
+                      id,
+                      () => _validScrapTHID,
+                      (v) => _validScrapTHID = v,
+                    ),
+                    onProjectionChanged: (opt) => _projectionOption = opt,
+                    onScaleChanged: (opt) => _scaleOption = opt,
+                    onValidityChanged: (isValid) => _deferUpdate<bool>(
+                      isValid,
+                      () => _scrapConfigValid,
+                      (v) => _scrapConfigValid = v,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: mpButtonSpace),
-            ElevatedButton(
-              onPressed: _isOkEnabled ? _onOkPressed : null,
-              child: Text(appLocalizations.mpButtonOK),
+          ),
+          MPDialogBottomWidget(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _onCancelPressed,
+                  child: Text(appLocalizations.mpButtonCancel),
+                ),
+                const SizedBox(width: mpButtonSpace),
+                ElevatedButton(
+                  onPressed: _isOkEnabled ? _onOkPressed : null,
+                  child: Text(appLocalizations.mpButtonOK),
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

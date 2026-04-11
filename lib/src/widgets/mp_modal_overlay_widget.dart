@@ -10,6 +10,7 @@ class MPModalOverlayWidget {
   static OverlayEntry show({
     required BuildContext context,
     bool dismissOnBarrierTap = true,
+    bool scrollChild = true,
     VoidCallback? onDismissed,
     required MPModalChildBuilder childBuilder,
   }) {
@@ -85,9 +86,11 @@ class MPModalOverlayWidget {
                                         maxDialogHeight -
                                         (mpOverlayWindowPadding * 2),
                                   ),
-                                  child: SingleChildScrollView(
-                                    child: childBuilder(remove),
-                                  ),
+                                  child: scrollChild
+                                      ? SingleChildScrollView(
+                                          child: childBuilder(remove),
+                                        )
+                                      : childBuilder(remove),
                                 ),
                               ),
                             ),
