@@ -7,6 +7,7 @@
 * New features:
   * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage. [request by Axel Hack]
   * Added an interactive line simplification dialog (`Ctrl+Alt+Shift+L`) with a dedicated state-context FAB, live preview for method and intensity changes, close/save/cancel handling with single-step undo semantics, EN/PT help updates, and regression coverage.
+  * The interactive line simplification dialog is now draggable: right-click-drag on the title bar repositions it anywhere on screen, clamped to screen bounds, consistent with overlay window behaviour.
   * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
   * Added a Reset button to the interactive line simplification dialog that restores method and intensity to their hardcoded defaults (`keepOriginalTypes` / intensity 1) and re-applies the preview. Close and Save both now persist the selected method for next use.
 * Fixed bugs:
