@@ -255,9 +255,9 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
                   const SizedBox(width: mpButtonSpace),
                   ElevatedButton(
                     onPressed: () async {
-                      final String? pickedFile = await FilePicker.platform
-                          .pickFiles(type: FileType.image)
-                          .then((result) => result?.files.single.path);
+                      final String? pickedFile = await FilePicker.pickFiles(
+                        type: FileType.image,
+                      ).then((result) => result?.files.single.path);
 
                       if (pickedFile != null) {
                         setState(() {

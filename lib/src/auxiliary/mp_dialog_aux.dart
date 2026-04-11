@@ -86,7 +86,7 @@ class MPDialogAux {
       final FilePickerResult? result;
 
       try {
-        result = await FilePicker.platform.pickFiles(
+        result = await FilePicker.pickFiles(
           dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
           type: FileType.custom,
           allowedExtensions: allowedExtensions,
@@ -1120,7 +1120,7 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.th2] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],
@@ -1197,7 +1197,7 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.thconfig] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         dialogTitle:
             mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
         type: FileType.any,
@@ -1293,7 +1293,7 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.executable] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.pickFiles(
         dialogTitle: dialogTitle,
         type: FileType.any,
         lockParentWindow: true,

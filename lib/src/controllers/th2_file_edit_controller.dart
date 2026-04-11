@@ -1449,7 +1449,7 @@ abstract class TH2FileEditControllerBase with Store {
         ? null
         : p.basename(filename);
 
-    String? filePath = await FilePicker.platform.saveFile(
+    String? filePath = await FilePicker.saveFile(
       dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
       fileName: initialFileName,
       initialDirectory: initialDirectory,
