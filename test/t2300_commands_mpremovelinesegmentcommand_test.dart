@@ -447,4 +447,59 @@ endscrap
       }
     },
   );
+
+  group('command: MPRemoveLineSegmentCommand preserves merged bezier shape', () {
+    setUp(() {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+      mpLocator.mpGeneralController.reset();
+    });
+
+    test(
+      'removing the first half of a split bezier restores the original tangents',
+      () async {
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(
+              filename: THTestAux.testPath(
+                '2026-04-11-001-remove_middle_split_bezier_segment.th2',
+              ),
+            );
+        await controller.load();
+
+        final TH2FileWriter writer = TH2FileWriter();
+        final String serializedBefore = writer.serialize(controller.th2File);
+        final THLine line = controller.th2File.getLines().first;
+        final List<int> lineSegmentMPIDs = line.getLineSegmentMPIDs(
+          controller.th2File,
+        );
+        final MPCommand command =
+            MPCommandFactory.removeLineSegmentFromExisting(
+              toRemoveLineSegmentMPID: lineSegmentMPIDs[2],
+              th2File: controller.th2File,
+            );
+
+        controller.execute(command);
+
+        final THLine changedLine = controller.th2File.getLines().first;
+        final List<THLineSegment> lineSegments = changedLine.getLineSegments(
+          controller.th2File,
+        );
+        final THBezierCurveLineSegment mergedLineSegment =
+            lineSegments[2] as THBezierCurveLineSegment;
+
+        expect(
+          mergedLineSegment.controlPoint1.coordinates,
+          const Offset(14, 0),
+        );
+        expect(
+          mergedLineSegment.controlPoint2.coordinates,
+          const Offset(16, 2),
+        );
+        expect(mergedLineSegment.endPoint.coordinates, const Offset(20, 2));
+
+        controller.undo();
+
+        expect(writer.serialize(controller.th2File), serializedBefore);
+      },
+    );
+  });
 }

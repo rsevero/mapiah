@@ -35,7 +35,7 @@
 [X] - Create a 'split line at selected end point' action in 'single line edit' mode.
 [X] - Allow the user to choose if the grid of a XVI file should be visible or not.
 [x] - Command options that are only a dropdown, should not have 'set/unset' but rather the 'unset' option should be included in the dropdown itself.
-[ ] - When deleting line points, adjust control points so curve is changed as little as possible.
+[X] - When deleting line points, adjust control points so curve is changed as little as possible.
 [X] - Show current position during drag in status bar.
 [ ] - Convert multiline comment into a single element.
 [X] - Reorder images.
@@ -56,13 +56,13 @@
 [X] - When a name option is set on a "point station", use it as reference for future "point station". [request by Axel Hack]
 [X] - BUG: links inside help pages not working. [reported by Axel Hack]
 [X] - BUG: '-stations' with bracketed station lists not parsed correctly. [reported by Axel Hack]
-[ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 
 ## Version 1.0
 [ ] - Raster images tracing.
 [ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 [ ] - Freehand drawing tool. [requested by Edvard]
-[ ] - Show shortcuts related to current state on status bar. [requested by Edvard]
+[X] - Show shortcuts related to current state on status bar. [requested by Edvard]
+[ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 
 ## Version 2.0
 [ ] - Open/edit/save thconfig files.

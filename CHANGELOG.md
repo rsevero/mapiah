@@ -11,6 +11,7 @@
   * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
   * Added a Reset button to the interactive line simplification dialog that restores method and intensity to their hardcoded defaults (`keepOriginalTypes` / intensity 1) and re-applies the preview. Close and Save both now persist the selected method for next use.
 * Fixed bugs:
+  * Deleting a middle line segment in single-line edit mode now preserves the surrounding curve much more closely by rebuilding the merged Bézier segment from the original entry and exit tangents, with regression coverage for the split-curve case.
   * Pasting now zooms just enough to reveal the pasted selection when any part of it lands off screen, while leaving the current zoom unchanged when the pasted result is already fully visible.
   * Subtype option overlays that are pure dropdowns no longer show separate Set/Unset radio buttons; they now include an explicit Unset entry directly in the dropdown, with regression coverage.
   * The Create new TH2 file dialog now keeps its bottom action buttons visible while the dialog body scrolls by reusing `MPDialogBottomWidget`.

@@ -1,0 +1,9 @@
+encoding UTF-8
+scrap test
+  line contour -id split-bezier
+    0 0
+    10 0
+    12 0 13.5 0.5 15 1
+    16.5 1.5 18 2 20 2
+  endline
+endscrap

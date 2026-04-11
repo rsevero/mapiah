@@ -1945,15 +1945,10 @@ class MPCommandFactory {
               )
             : nextLineSegment as THBezierCurveLineSegment;
         final THBezierCurveLineSegment lineSegmentSubstitute =
-            THBezierCurveLineSegment.forCWJM(
-              mpID: nextLineSegmentBezier.mpID,
-              parentMPID: nextLineSegmentBezier.parentMPID,
-              controlPoint1: toRemoveLineSegmentAsBezier.controlPoint1,
-              controlPoint2: nextLineSegmentBezier.controlPoint2,
-              endPoint: nextLineSegmentBezier.endPoint,
-              optionsMap: nextLineSegmentBezier.optionsMap,
-              attrOptionsMap: nextLineSegmentBezier.attrOptionsMap,
-              originalLineInTH2File: '',
+            _getMergedBezierLineSegmentAfterRemovingMiddleSegment(
+              startPoint: previousLineSegment.endPoint.coordinates,
+              toRemoveLineSegmentAsBezier: toRemoveLineSegmentAsBezier,
+              nextLineSegmentBezier: nextLineSegmentBezier,
             );
 
         return MPCommandFactory.removeLineSegmentWithSubstitution(
@@ -1963,6 +1958,41 @@ class MPCommandFactory {
         );
       }
     }
+  }
+
+  static THBezierCurveLineSegment
+  _getMergedBezierLineSegmentAfterRemovingMiddleSegment({
+    required Offset startPoint,
+    required THBezierCurveLineSegment toRemoveLineSegmentAsBezier,
+    required THBezierCurveLineSegment nextLineSegmentBezier,
+  }) {
+    final Offset mergedControlPoint1Coordinates =
+        startPoint +
+        ((toRemoveLineSegmentAsBezier.controlPoint1.coordinates - startPoint) *
+            2);
+    final Offset mergedControlPoint2Coordinates =
+        nextLineSegmentBezier.endPoint.coordinates +
+        ((nextLineSegmentBezier.controlPoint2.coordinates -
+                nextLineSegmentBezier.endPoint.coordinates) *
+            2);
+
+    return THBezierCurveLineSegment.forCWJM(
+      mpID: nextLineSegmentBezier.mpID,
+      parentMPID: nextLineSegmentBezier.parentMPID,
+      controlPoint1: THPositionPart(
+        coordinates: mergedControlPoint1Coordinates,
+        decimalPositions:
+            toRemoveLineSegmentAsBezier.controlPoint1.decimalPositions,
+      ),
+      controlPoint2: THPositionPart(
+        coordinates: mergedControlPoint2Coordinates,
+        decimalPositions: nextLineSegmentBezier.controlPoint2.decimalPositions,
+      ),
+      endPoint: nextLineSegmentBezier.endPoint,
+      optionsMap: nextLineSegmentBezier.optionsMap,
+      attrOptionsMap: nextLineSegmentBezier.attrOptionsMap,
+      originalLineInTH2File: '',
+    );
   }
 
   static MPCommand removeLineSegments({
