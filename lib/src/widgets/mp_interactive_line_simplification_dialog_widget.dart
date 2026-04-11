@@ -287,7 +287,7 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                     },
                     child: Text(_appLocalizations.mpButtonReset),
                   ),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.of(
                         context,
@@ -295,7 +295,7 @@ class _MPInteractiveLineSimplificationDialogWidgetState
                     },
                     child: Text(_appLocalizations.buttonClose),
                   ),
-                  ElevatedButton(
+                  TextButton(
                     onPressed: () {
                       _elementEditController
                           .commitInteractiveLineSimplification();
