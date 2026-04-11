@@ -67,4 +67,36 @@ class MPDirectoryAux {
 
     return resolvedPath;
   }
+
+  /// Rewrites a relative asset path so it still points to the same target
+  /// after the referencing TH2 file is saved elsewhere.
+  static String rebaseRelativePath({
+    required String oldReferencePath,
+    required String newReferencePath,
+    required String filename,
+  }) {
+    if (p.isAbsolute(filename)) {
+      return p.normalize(filename);
+    }
+
+    final String resolvedPath = getResolvedPath(oldReferencePath, filename);
+    final String normalizedResolvedPath = resolvedPath.replaceAll('\\', '/');
+    final String normalizedNewDirectory = p
+        .dirname(newReferencePath)
+        .replaceAll('\\', '/');
+    final String rawRelativePath = p.posix.relative(
+      normalizedResolvedPath,
+      from: normalizedNewDirectory,
+    );
+    final bool isExplicitRelative =
+        filename.startsWith('./') || filename.startsWith('../');
+
+    if (isExplicitRelative ||
+        rawRelativePath.startsWith('./') ||
+        rawRelativePath.startsWith('../')) {
+      return rawRelativePath;
+    }
+
+    return './$rawRelativePath';
+  }
 }

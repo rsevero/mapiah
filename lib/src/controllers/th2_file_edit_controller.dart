@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -1458,6 +1459,16 @@ abstract class TH2FileEditControllerBase with Store {
       if (!filePath.toLowerCase().endsWith('.th2')) {
         filePath += '.th2';
       }
+
+      final String previousFilename = _th2File.filename;
+
+      if (previousFilename.isNotEmpty) {
+        _rebaseImportedImagePathsForSaveAs(
+          oldTH2Filename: previousFilename,
+          newTH2Filename: filePath,
+        );
+      }
+
       mpGeneralController.renameFileController(
         oldFilename: _th2File.filename,
         newFilename: filePath,
@@ -1477,6 +1488,40 @@ abstract class TH2FileEditControllerBase with Store {
       setFilename(_th2File.filename);
 
       overlayWindowController.closeAutoDismissOverlayWindows();
+    }
+  }
+
+  void _rebaseImportedImagePathsForSaveAs({
+    required String oldTH2Filename,
+    required String newTH2Filename,
+  }) {
+    final List<MPRuntimeImageInsertConfigMixin> images = _th2File
+        .getImages()
+        .toList();
+
+    for (final MPRuntimeImageInsertConfigMixin image in images) {
+      final String rebasedFilename = MPDirectoryAux.rebaseRelativePath(
+        oldReferencePath: oldTH2Filename,
+        newReferencePath: newTH2Filename,
+        filename: image.filename,
+      );
+
+      if (rebasedFilename == image.filename) {
+        continue;
+      }
+
+      final MPRuntimeImageInsertConfigMixin updatedImage = image
+          .copyWithImageInsertConfigBase(
+            filename: rebasedFilename,
+            originalLineInTH2File: '',
+          );
+
+      image.copyRuntimeImageCacheTo(
+        targetImage: updatedImage,
+        th2FileEditController: this as TH2FileEditController,
+      );
+
+      _th2File.substituteElement(updatedImage as THElement);
     }
   }
 
