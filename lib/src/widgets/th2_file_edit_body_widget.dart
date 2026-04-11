@@ -843,6 +843,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     final bool hasSelectedLines = th2FileEditController.hasSelectedLines;
     final bool isInteractiveLineSimplificationDialogOpen =
         th2FileEditController.isInteractiveLineSimplificationDialogOpen.value;
+    final bool isElementTransformsEnabled = th2FileEditController
+        .moveScaleRotateElementController
+        .isElementTransformsEnabled;
 
     return [
       _stateContextFABCategoryRow(
@@ -969,6 +972,30 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
             category: _StateContextFABCategory.editTools,
             icon: Icons.blur_on,
             tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
+          ),
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_flip_elements_horizontally',
+            onPressed: isElementTransformsEnabled
+                ? () => th2FileEditController.moveScaleRotateElementController
+                      .flipSelectedElementsHorizontally()
+                : null,
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.flip,
+            tooltip: appLocalizations.th2FileEditPageFlipElementsHorizontally,
+          ),
+          _stateContextFABButton(
+            heroTag: '${heroPrefix}_ctx_flip_elements_vertically',
+            onPressed: isElementTransformsEnabled
+                ? () => th2FileEditController.moveScaleRotateElementController
+                      .flipSelectedElementsVertically()
+                : null,
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.flip_camera_android,
+            child: RotatedBox(
+              quarterTurns: 1,
+              child: Icon(Icons.flip, size: mpFloatingStateActionZoomIconSize),
+            ),
+            tooltip: appLocalizations.th2FileEditPageFlipElementsVertically,
           ),
         ],
       ),

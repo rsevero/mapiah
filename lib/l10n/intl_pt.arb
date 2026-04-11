@@ -426,6 +426,8 @@
   "th2FileEditPageElementRotateStatusBarMessage": "Modo de girar elementos",
   "th2FileEditPageEmptySelectionStatusBarMessage": "Nenhum elemento selecionado",
   "th2FileEditPageEnableImageEditModeButton": "Editar imagem",
+  "th2FileEditPageFlipElementsHorizontally": "Espelhar elementos horizontalmente (H)",
+  "th2FileEditPageFlipElementsVertically": "Espelhar elementos verticalmente (V)",
   "th2FileEditPageFlipImageHorizontally": "Espelhar imagem horizontalmente (H)",
   "th2FileEditPageFlipImageVertically": "Espelhar imagem verticalmente (V)",
   "th2FileEditPageHelpDialogTitle": "Ajuda para edição de arquivo TH2",

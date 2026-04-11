@@ -2126,6 +2126,16 @@
     "description": "Tooltip for enabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
+  "th2FileEditPageFlipElementsHorizontally": "Flip elements horizontally (H)",
+  "@th2FileEditPageFlipElementsHorizontally": {
+    "description": "Tooltip for the flip elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageFlipElementsVertically": "Flip elements vertically (V)",
+  "@th2FileEditPageFlipElementsVertically": {
+    "description": "Tooltip for the flip elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "th2FileEditPageFlipImageHorizontally": "Flip image horizontally (H)",
   "@th2FileEditPageFlipImageHorizontally": {
     "description": "Tooltip for the flip image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",

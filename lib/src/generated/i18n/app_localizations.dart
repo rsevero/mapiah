@@ -2561,6 +2561,18 @@ abstract class AppLocalizations {
   /// **'Edit image'**
   String get th2FileEditPageEnableImageEditModeButton;
 
+  /// Tooltip for the flip elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Flip elements horizontally (H)'**
+  String get th2FileEditPageFlipElementsHorizontally;
+
+  /// Tooltip for the flip elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Flip elements vertically (V)'**
+  String get th2FileEditPageFlipElementsVertically;
+
   /// Tooltip for the flip image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
