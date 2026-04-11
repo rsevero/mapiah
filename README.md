@@ -65,7 +65,9 @@ If that URL returns `404`, wait a few minutes and try again. New releases can ta
 ```bash
 # Option 1: install directly from the generated flatpakref
 flatpak install --user --from https://flatpak.mapiah.org/org.mapiah.mapiah.flatpakref
+```
 
+```bash
 # Option 2: add the generated repository and install from it
 flatpak remote-add --if-not-exists mapiah https://flatpak.mapiah.org/repo/index.flatpakrepo
 flatpak install --user mapiah org.mapiah.mapiah
