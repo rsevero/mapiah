@@ -55,6 +55,8 @@ class MPSVGImagePainter extends CustomPainter {
     canvas.save();
     canvas.transform(matrix);
     canvas.translate(-sourceViewBox.left, -sourceViewBox.top);
+    canvas.translate(0.0, sourceViewBox.height);
+    canvas.scale(1.0, -1.0);
     canvas.drawPicture(pictureInfo.picture);
     canvas.restore();
   }
