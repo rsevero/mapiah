@@ -11,6 +11,7 @@
   * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
   * Added a Reset button to the interactive line simplification dialog that restores method and intensity to their hardcoded defaults (`keepOriginalTypes` / intensity 1) and re-applies the preview. Close and Save both now persist the selected method for next use.
 * Fixed bugs:
+  * Pasting now zooms just enough to reveal the pasted selection when any part of it lands off screen, while leaving the current zoom unchanged when the pasted result is already fully visible.
   * The Create new TH2 file dialog now keeps its bottom action buttons visible while the dialog body scrolls by reusing `MPDialogBottomWidget`.
   * The smooth-line tooltip now correctly advertises the `S` shortcut, and `Ctrl+Shift+S` once again opens the Save As dialog from the TH2 edit page.
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.

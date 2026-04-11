@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
 import 'package:mapiah/src/auxiliary/mp_copy_template.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_thelement_paste_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -10,6 +12,7 @@ import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -215,10 +218,65 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
       );
     }
 
+    _adjustZoomIfPastedElementsArePartiallyOffScreen(pastedElements);
+
     _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
     _th2FileEditController.triggerNonSelectedElementsRedraw();
 
     return pastedMPIDs;
+  }
+
+  void _adjustZoomIfPastedElementsArePartiallyOffScreen(
+    List<THElement> pastedElements,
+  ) {
+    final Rect pastedBoundingBox = _getPastedElementsBoundingBoxOnCanvas(
+      pastedElements,
+    );
+
+    if (pastedBoundingBox == Rect.zero) {
+      return;
+    }
+
+    final Offset topLeftOnScreen = _th2FileEditController.offsetCanvasToScreen(
+      pastedBoundingBox.topLeft,
+    );
+    final Offset bottomRightOnScreen = _th2FileEditController
+        .offsetCanvasToScreen(pastedBoundingBox.bottomRight);
+    final Rect pastedBoundingBoxOnScreen = MPNumericAux.orderedRectFromPoints(
+      point1: topLeftOnScreen,
+      point2: bottomRightOnScreen,
+    );
+    final Rect screenBoundingBox = _th2FileEditController.screenBoundingBox;
+    final bool pastedElementsFullyVisible =
+        screenBoundingBox.contains(pastedBoundingBoxOnScreen.topLeft) &&
+        screenBoundingBox.contains(pastedBoundingBoxOnScreen.bottomRight);
+
+    if (!pastedElementsFullyVisible) {
+      _th2FileEditController.zoomToSelectionWindow(pastedBoundingBox);
+    }
+  }
+
+  Rect _getPastedElementsBoundingBoxOnCanvas(List<THElement> pastedElements) {
+    Rect? boundingBox;
+
+    for (final THElement element in pastedElements) {
+      switch (element) {
+        case THPoint _:
+        case THLine _:
+        case THArea _:
+        case THScrap _:
+          final Rect elementBoundingBox = (element as MPBoundingBoxMixin)
+              .getBoundingBox(_th2FileEditController)!;
+
+          boundingBox =
+              boundingBox?.expandToInclude(elementBoundingBox) ??
+              elementBoundingBox;
+        default:
+          continue;
+      }
+    }
+
+    return boundingBox ?? Rect.zero;
   }
 
   @action
