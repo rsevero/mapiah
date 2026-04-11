@@ -14,6 +14,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mobx/mobx.dart';
+import 'package:path/path.dart' as p;
 
 part 'mp_general_controller.g.dart';
 
@@ -73,28 +74,39 @@ abstract class MPGeneralControllerBase with Store {
     }
   }
 
-  @action
-  void addFileTab(String filename) {
-    _clearActiveTabOverlayWindows();
-
-    final bool isNewFile = !_openFileOrder.contains(filename);
-
-    if (isNewFile) {
-      _openFileOrder.add(filename);
-      MPLocator().mpTelemetryController.recordTH2Opened(filename);
+  String _normalizeFilename(String filename) {
+    if (filename.isEmpty || filename.startsWith(mpNewFilePrefix)) {
+      return filename;
     }
 
-    _activeTabIndex = _openFileOrder.indexOf(filename);
+    return p.normalize(File(filename).absolute.path);
+  }
+
+  @action
+  void addFileTab(String filename) {
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    _clearActiveTabOverlayWindows();
+
+    final bool isNewFile = !_openFileOrder.contains(normalizedFilename);
+
+    if (isNewFile) {
+      _openFileOrder.add(normalizedFilename);
+      MPLocator().mpTelemetryController.recordTH2Opened(normalizedFilename);
+    }
+
+    _activeTabIndex = _openFileOrder.indexOf(normalizedFilename);
   }
 
   @action
   void removeFileTab({required String filename}) {
-    final int indexToRemove = _openFileOrder.indexOf(filename);
+    final String normalizedFilename = _normalizeFilename(filename);
+    final int indexToRemove = _openFileOrder.indexOf(normalizedFilename);
 
     if (indexToRemove != -1) {
       _openFileOrder.removeAt(indexToRemove);
-      MPLocator().mpTelemetryController.recordTH2Closed(filename);
-      removeFileController(filename: filename);
+      MPLocator().mpTelemetryController.recordTH2Closed(normalizedFilename);
+      removeFileController(filename: normalizedFilename);
 
       if (_openFileOrder.isEmpty) {
         _activeTabIndex = 0;
@@ -188,7 +200,9 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {
-    return _t2hFileEditControllers[filename];
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    return _t2hFileEditControllers[normalizedFilename];
   }
 
   TH2FileEditController getTH2FileEditController({
@@ -196,18 +210,23 @@ abstract class MPGeneralControllerBase with Store {
     final Uint8List? fileBytes,
     bool forceNewController = false,
   }) {
-    if (_t2hFileEditControllers.containsKey(filename)) {
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    if (_t2hFileEditControllers.containsKey(normalizedFilename)) {
       if (forceNewController) {
-        _t2hFileEditControllers.remove(filename);
+        _t2hFileEditControllers.remove(normalizedFilename);
       } else {
-        return _t2hFileEditControllers[filename]!;
+        return _t2hFileEditControllers[normalizedFilename]!;
       }
     }
 
     final TH2FileEditController createdController =
-        TH2FileEditControllerBase.create(filename, fileBytes: fileBytes);
+        TH2FileEditControllerBase.create(
+          normalizedFilename,
+          fileBytes: fileBytes,
+        );
 
-    _t2hFileEditControllers[filename] = createdController;
+    _t2hFileEditControllers[normalizedFilename] = createdController;
 
     return createdController;
   }
@@ -269,24 +288,29 @@ abstract class MPGeneralControllerBase with Store {
     required String oldFilename,
     required String newFilename,
   }) {
-    if (_t2hFileEditControllers.containsKey(oldFilename)) {
+    final String normalizedOldFilename = _normalizeFilename(oldFilename);
+    final String normalizedNewFilename = _normalizeFilename(newFilename);
+
+    if (_t2hFileEditControllers.containsKey(normalizedOldFilename)) {
       final TH2FileEditController controller = _t2hFileEditControllers.remove(
-        oldFilename,
+        normalizedOldFilename,
       )!;
 
-      _t2hFileEditControllers[newFilename] = controller;
+      _t2hFileEditControllers[normalizedNewFilename] = controller;
     }
 
-    final int index = _openFileOrder.indexOf(oldFilename);
+    final int index = _openFileOrder.indexOf(normalizedOldFilename);
 
     if (index >= 0) {
-      _openFileOrder[index] = newFilename;
+      _openFileOrder[index] = normalizedNewFilename;
     }
   }
 
   void removeFileController({required String filename}) {
-    if (_t2hFileEditControllers.containsKey(filename)) {
-      _t2hFileEditControllers.remove(filename);
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    if (_t2hFileEditControllers.containsKey(normalizedFilename)) {
+      _t2hFileEditControllers.remove(normalizedFilename);
     }
   }
 
