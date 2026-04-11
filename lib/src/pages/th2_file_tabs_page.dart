@@ -362,6 +362,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         _loadFutures[filename]!;
 
     return TH2FileEditBodyWidget(
+      key: ValueKey<String>(filename),
       th2FileEditController: controller,
       loadFuture: future,
     );
