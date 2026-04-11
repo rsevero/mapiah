@@ -59,12 +59,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         case MPImageTransformHandleType.topLeft:
         case MPImageTransformHandleType.bottomRight:
           th2FileEditController.setCanvasCursor(
-            SystemMouseCursors.resizeUpLeftDownRight,
+            SystemMouseCursors.resizeUpRightDownLeft,
           );
         case MPImageTransformHandleType.topRight:
         case MPImageTransformHandleType.bottomLeft:
           th2FileEditController.setCanvasCursor(
-            SystemMouseCursors.resizeUpRightDownLeft,
+            SystemMouseCursors.resizeUpLeftDownRight,
           );
         case MPImageTransformHandleType.topCenter:
         case MPImageTransformHandleType.bottomCenter:
