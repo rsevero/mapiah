@@ -7,6 +7,7 @@ enum MPTH2FileEditStateType {
   addLine,
   addLineToArea,
   addPoint,
+  elementRotate,
   editSingleLine,
   imageMoveScale,
   imageRotate,

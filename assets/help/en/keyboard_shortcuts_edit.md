@@ -27,6 +27,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Duplicate selected elements                                | Ctrl+D                                  |
 | Flip image horizontally                                    | H                                       |
 | Flip image vertically                                      | V                                       |
+| Flip selected elements horizontally                        | H                                       |
+| Flip selected elements vertically                          | V                                       |
 | Force option setting on non-supporting types               | Ctrl+click on option setting            |
 | Help                                                       | F1                                      |
 | Hide selected elements / Show all hidden elements          | Ctrl+H                                  |
@@ -47,9 +49,15 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Rotate image                                               | drag image rotate handle                |
 | Rotate image with angle snapping                           | Ctrl+drag image rotate handle           |
 | Rotate image while keeping opposite corner fixed           | Shift+drag image rotate handle          |
+| Rotate selected elements                                   | drag selected-elements corner handle    |
+| Rotate selected elements with angle snapping               | Ctrl+drag selected-elements corner handle |
+| Rotate selected elements while keeping opposite corner fixed | Shift+drag selected-elements corner handle |
 | Scale image from handle symmetrically                      | Shift+drag image handle                 |
 | Scale image from handle with aspect ratio preserved        | Ctrl+drag image handle                  |
 | Scale image from handle with finer control                 | Alt+drag image handle                   |
+| Scale selected elements from handle symmetrically          | Shift+drag selected-elements handle     |
+| Scale selected elements from handle with aspect ratio preserved | Ctrl+drag selected-elements handle |
+| Scale selected elements from handle with finer control     | Alt+drag selected-elements handle       |
 | Redo                                                       | Ctrl+Y                                  |
 | Run Therion                                                | T                                       |
 | Save file                                                  | Ctrl+S                                  |

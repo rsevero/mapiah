@@ -12,6 +12,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Seção Principal](#seção-principal)
   - [Idioma](#idioma)
 - [Seção Edição TH2](#seção-edição-th2)
+  - [Ativar transformações de elementos](#ativar-transformações-de-elementos)
   - [Ativar borda especial para ID definido](#ativar-borda-especial-para-id-definido)
   - [Ativar borda especial para linha slope sem l-size](#ativar-borda-especial-para-linha-slope-sem-l-size)
   - [Ativar borda especial para visibility off](#ativar-borda-especial-para-visibility-off)
@@ -45,6 +46,9 @@ Cada configuração possui um botão de redefinição (↺) à sua direita. Clic
 Seleciona o idioma usado em toda a interface do aplicativo. A opção padrão segue o idioma do sistema. A alteração desta configuração tem efeito após aplicar e reabrir as páginas atualmente abertas.
 
 ## Seção Edição TH2
+
+### Ativar transformações de elementos
+Quando ativado, elementos selecionados ganham ações de redimensionar, rotacionar e espelhar no modo de seleção. As alças da seleção podem ser arrastadas para redimensionar, clicar nos elementos selecionados entra no modo de rotação e _H_ / _V_ espelham a seleção atual. O padrão é desativado (`false`).
 
 ### Ativar borda especial para ID definido
 Quando ativado (padrão), elementos com THID/ID definido são pintados com uma borda especial dedicada no canvas. Desative isto se preferir que esses elementos usem apenas sua simbologia normal.

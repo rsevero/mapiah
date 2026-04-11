@@ -1930,6 +1930,12 @@ abstract class AppLocalizations {
   /// **'Therion run parameters'**
   String get mpSettingsSettingMainTherionRunParameters;
 
+  /// The label for the TH2 edit setting that enables scale, rotate and mirror actions for selected elements. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Enable element transforms'**
+  String get mpSettingsSettingTH2EditEnableElementTransforms;
+
   /// Label for enabling the special border used when an element has ID set. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:
@@ -2536,6 +2542,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Duplicate scrap'**
   String get th2FileEditPageDuplicateScrapButton;
+
+  /// The status bar message shown while selected-element rotation mode is active. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_element_rotate.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Element rotate mode'**
+  String get th2FileEditPageElementRotateStatusBarMessage;
 
   /// The status bar message for the empty selection. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_empty_selection.dart
   ///

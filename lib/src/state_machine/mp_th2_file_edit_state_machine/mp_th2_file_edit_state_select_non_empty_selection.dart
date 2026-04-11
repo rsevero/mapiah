@@ -2,6 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 part of 'mp_th2_file_edit_state.dart';
 
+enum _MPSelectedElementsTransformDragMode { none, scale }
+
 class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     with
         MPTH2FileEditPageAltClickMixin,
@@ -14,9 +16,73 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         MPTH2FileEditStateKeyDownMixin,
         MPTH2FileEditStateOptionsEditMixin,
         MPTH2FileEditStateResetAreaBorderCtrlMetaCycleMixin {
+  _MPSelectedElementsTransformDragMode _dragMode =
+      _MPSelectedElementsTransformDragMode.none;
+  Rect? _scaleStartBounds;
+  Offset? _dragStartCanvasPosition;
+  Offset? _scaleStartScreenHandleCenter;
+  MPSelectionHandleType? _scaleHandleType;
+  bool _ignoreNextClick = false;
+
   MPTH2FileEditStateSelectNonEmptySelection({
     required super.th2FileEditController,
   });
+
+  @override
+  void setCursor() {
+    if (_dragMode == _MPSelectedElementsTransformDragMode.scale) {
+      th2FileEditController.setCanvasCursor(SystemMouseCursors.grabbing);
+
+      return;
+    }
+
+    if (!th2FileEditController
+        .moveScaleRotateElementController
+        .isElementTransformsEnabled) {
+      th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
+
+      return;
+    }
+
+    final MPSelectionHandleType? hoveredHandle = th2FileEditController
+        .moveScaleRotateElementController
+        .getSelectionHandleAtScreenPosition(
+          th2FileEditController.mousePosition,
+        );
+
+    if (hoveredHandle != null) {
+      final MPImageTransformHandleType imageHandleType = th2FileEditController
+          .moveScaleRotateElementController
+          .toImageTransformHandleType(hoveredHandle);
+
+      switch (imageHandleType) {
+        case MPImageTransformHandleType.topLeft:
+        case MPImageTransformHandleType.bottomRight:
+          th2FileEditController.setCanvasCursor(
+            SystemMouseCursors.resizeUpLeftDownRight,
+          );
+        case MPImageTransformHandleType.topRight:
+        case MPImageTransformHandleType.bottomLeft:
+          th2FileEditController.setCanvasCursor(
+            SystemMouseCursors.resizeUpRightDownLeft,
+          );
+        case MPImageTransformHandleType.topCenter:
+        case MPImageTransformHandleType.bottomCenter:
+          th2FileEditController.setCanvasCursor(
+            SystemMouseCursors.resizeUpDown,
+          );
+        case MPImageTransformHandleType.centerLeft:
+        case MPImageTransformHandleType.centerRight:
+          th2FileEditController.setCanvasCursor(
+            SystemMouseCursors.resizeLeftRight,
+          );
+      }
+
+      return;
+    }
+
+    th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
+  }
 
   @override
   void onSelectAll() {
@@ -35,6 +101,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
+    if (_dragMode == _MPSelectedElementsTransformDragMode.scale) {
+      th2FileEditController.moveScaleRotateElementController
+          .restoreSelectedElementsFromClones(updateRedraw: false);
+      _resetScalePreview();
+    }
+
     if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
       elementEditController.resetOriginalFileForLineSimplification();
       onStateExitClearSelectionOnExit(nextState);
@@ -58,6 +130,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// [MPTH2FileEditStateType.selectEmptySelection];
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) async {
+    if (_ignoreNextClick) {
+      _ignoreNextClick = false;
+
+      return Future.value();
+    }
+
     if (onAltPrimaryButtonClick(event)) {
       return Future.value();
     }
@@ -95,6 +173,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           selectionController.setSelectedElements(
             clickedElements,
             setState: true,
+          );
+        } else if (th2FileEditController
+            .moveScaleRotateElementController
+            .isElementTransformsEnabled) {
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.elementRotate,
           );
         }
 
@@ -200,6 +284,20 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     );
     selectionController.clearClickedElementsAtPointerDown();
 
+    final MPSelectionHandleType? handleType =
+        th2FileEditController
+            .moveScaleRotateElementController
+            .isElementTransformsEnabled
+        ? th2FileEditController.moveScaleRotateElementController
+              .getSelectionHandleAtScreenPosition(event.localPosition)
+        : null;
+
+    if (handleType != null) {
+      _startScaleDrag(handleType: handleType);
+
+      return;
+    }
+
     // When cycling area-border lines, skip drag-start detection to avoid
     // advancing the cycle index twice (pointer-down + pointer-up).
     if (ctrlOrMetaOnlyPressed || altPressed) {
@@ -233,6 +331,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
   /// Draw the selection window.
   @override
   void onPrimaryButtonDragUpdate(PointerMoveEvent event) {
+    if (_dragMode == _MPSelectedElementsTransformDragMode.scale) {
+      _updateScalePreview(event);
+
+      return;
+    }
+
     selectionController.setSelectionWindowScreenEndCoordinates(
       event.localPosition,
     );
@@ -291,6 +395,12 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
+    if (_dragMode == _MPSelectedElementsTransformDragMode.scale) {
+      _commitScalePreview();
+
+      return;
+    }
+
     final List<THElement> elementsInsideSelectionWindow =
         getSelectedElementsWithLineSegmentsConvertedToLines(
           getObjectsInsideSelectionWindow(event.localPosition),
@@ -440,8 +550,30 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
               .toggleSelectedLinesReverseOption();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyH:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed &&
+            th2FileEditController
+                .moveScaleRotateElementController
+                .isElementTransformsEnabled) {
+          th2FileEditController.moveScaleRotateElementController
+              .flipSelectedElementsHorizontally();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyV:
-        if ((isCtrlPressed || isMetaPressed) &&
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed &&
+            th2FileEditController
+                .moveScaleRotateElementController
+                .isElementTransformsEnabled) {
+          th2FileEditController.moveScaleRotateElementController
+              .flipSelectedElementsVertically();
+          keyProcessed = true;
+        } else if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
             !isShiftPressed) {
           th2FileEditController.copyPasteController.pasteElements();
@@ -500,5 +632,159 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         th2FileEditController.triggerSelectedElementsRedraw(setState: true);
       },
     );
+  }
+
+  void _startScaleDrag({required MPSelectionHandleType handleType}) {
+    _dragMode = _MPSelectedElementsTransformDragMode.scale;
+    _scaleHandleType = handleType;
+    _scaleStartBounds = selectionController.selectedElementsBoundingBox;
+    _dragStartCanvasPosition = th2FileEditController
+        .moveScaleRotateElementController
+        .selectionHandlePointOnBounds(_scaleStartBounds!, handleType);
+    _scaleStartScreenHandleCenter = th2FileEditController.offsetCanvasToScreen(
+      selectionController.getSelectionHandleCenters()[handleType]!,
+    );
+    _ignoreNextClick = true;
+    setCursor();
+  }
+
+  void _updateScalePreview(PointerMoveEvent event) {
+    final Rect? startBounds = _scaleStartBounds;
+    final MPSelectionHandleType? handleType = _scaleHandleType;
+    final Offset? dragStartCanvasPosition = _dragStartCanvasPosition;
+    final Offset? scaleStartScreenHandleCenter = _scaleStartScreenHandleCenter;
+
+    if ((startBounds == null) ||
+        (handleType == null) ||
+        (dragStartCanvasPosition == null) ||
+        (scaleStartScreenHandleCenter == null)) {
+      return;
+    }
+
+    final bool isShiftPressed = MPInteractionAux.isShiftPressed();
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
+    final Offset dragDeltaOnScreen =
+        event.localPosition - scaleStartScreenHandleCenter;
+    final Offset rawCanvasPosition =
+        dragStartCanvasPosition +
+        (th2FileEditController.offsetScreenToCanvas(dragDeltaOnScreen) -
+            th2FileEditController.offsetScreenToCanvas(Offset.zero));
+    final Offset canvasPosition = isAltPressed
+        ? dragStartCanvasPosition +
+              ((rawCanvasPosition - dragStartCanvasPosition) *
+                  mpCanvasMovementFactor)
+        : rawCanvasPosition;
+    final Offset anchorCanvas = isShiftPressed
+        ? startBounds.center
+        : th2FileEditController.moveScaleRotateElementController
+              .selectionHandlePointOnBounds(
+                startBounds,
+                th2FileEditController.moveScaleRotateElementController
+                    .oppositeSelectionHandleType(handleType),
+              );
+    final Offset handleCanvas = th2FileEditController
+        .moveScaleRotateElementController
+        .selectionHandlePointOnBounds(startBounds, handleType);
+    final ({double xScale, double yScale}) resolvedScales = _resolveScales(
+      startBounds: startBounds,
+      handleType: handleType,
+      anchorCanvas: anchorCanvas,
+      handleCanvas: handleCanvas,
+      currentCanvasPosition: canvasPosition,
+      preserveAspectRatio:
+          MPInteractionAux.isCtrlPressed() || MPInteractionAux.isMetaPressed(),
+    );
+
+    th2FileEditController.moveScaleRotateElementController
+        .scaleSelectedElements(
+          anchorCanvas: anchorCanvas,
+          xScaleFactor: resolvedScales.xScale,
+          yScaleFactor: resolvedScales.yScale,
+        );
+  }
+
+  ({double xScale, double yScale}) _resolveScales({
+    required Rect startBounds,
+    required MPSelectionHandleType handleType,
+    required Offset anchorCanvas,
+    required Offset handleCanvas,
+    required Offset currentCanvasPosition,
+    required bool preserveAspectRatio,
+  }) {
+    double xScale = 1.0;
+    double yScale = 1.0;
+    final MPImageTransformHandleType imageHandleType = th2FileEditController
+        .moveScaleRotateElementController
+        .toImageTransformHandleType(handleType);
+
+    if (imageHandleType.affectsX) {
+      final double denominator = handleCanvas.dx - anchorCanvas.dx;
+
+      if (denominator.abs() >= mpDoubleComparisonEpsilon) {
+        xScale = th2FileEditController.moveScaleRotateElementController
+            .avoidZeroScale(
+              (currentCanvasPosition.dx - anchorCanvas.dx) / denominator,
+            );
+      }
+    }
+
+    if (imageHandleType.affectsY) {
+      final double denominator = handleCanvas.dy - anchorCanvas.dy;
+
+      if (denominator.abs() >= mpDoubleComparisonEpsilon) {
+        yScale = th2FileEditController.moveScaleRotateElementController
+            .avoidZeroScale(
+              (currentCanvasPosition.dy - anchorCanvas.dy) / denominator,
+            );
+      }
+    }
+
+    if (!preserveAspectRatio) {
+      return (xScale: xScale, yScale: yScale);
+    }
+
+    final double ratio = _resolveAspectRatio(
+      imageHandleType: imageHandleType,
+      xScale: xScale,
+      yScale: yScale,
+    );
+
+    return (
+      xScale: th2FileEditController.moveScaleRotateElementController
+          .avoidZeroScale(ratio),
+      yScale: th2FileEditController.moveScaleRotateElementController
+          .avoidZeroScale(ratio),
+    );
+  }
+
+  double _resolveAspectRatio({
+    required MPImageTransformHandleType imageHandleType,
+    required double xScale,
+    required double yScale,
+  }) {
+    if (imageHandleType.affectsX && !imageHandleType.affectsY) {
+      return xScale;
+    }
+
+    if (imageHandleType.affectsY && !imageHandleType.affectsX) {
+      return yScale;
+    }
+
+    return ((xScale - 1.0).abs() >= (yScale - 1.0).abs()) ? xScale : yScale;
+  }
+
+  void _commitScalePreview() {
+    _resetScalePreview();
+    th2FileEditController.moveScaleRotateElementController
+        .finalizeSelectedElementsTransform();
+  }
+
+  void _resetScalePreview() {
+    _dragMode = _MPSelectedElementsTransformDragMode.none;
+    _scaleStartBounds = null;
+    _dragStartCanvasPosition = null;
+    _scaleStartScreenHandleCenter = null;
+    _scaleHandleType = null;
+    setCursor();
   }
 }

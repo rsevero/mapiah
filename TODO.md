@@ -40,7 +40,7 @@
 [X] - Reorder images.
 [X] - Create a easy way to find slope lines without lsize.
 [X] - BUG: flatpak version does not open URLs.
-[ ] - Create rotate, scale, mirror and screw scraps modes.
+[X] - Create rotate, scale and mirror selected elements modes.
 [X] - Create "Duplicate selected elements" (Ctrl+D) action.
 [X] - Show full file name at file tab.
 [ ] - Create a way to the user create perfectly 15° multiple angle line segments.

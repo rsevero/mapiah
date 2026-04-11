@@ -59,6 +59,14 @@ void main() {
         final MPSettingsController ctrl = await freshController();
 
         expect(
+          ctrl.isBoolSet(MPSettingID.TH2Edit_EnableElementTransforms),
+          isFalse,
+        );
+        expect(
+          ctrl.getBoolWithDefault(MPSettingID.TH2Edit_EnableElementTransforms),
+          isFalse,
+        );
+        expect(
           ctrl.isBoolSet(MPSettingID.TH2Edit_EnableSpecialBorderForIDSet),
           isFalse,
         );

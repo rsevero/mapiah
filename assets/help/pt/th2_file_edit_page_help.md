@@ -174,6 +174,18 @@ Quando um ou mais elementos estão selecionados no modo de seleção:
 * Mantenha _Ctrl_ pressionado enquanto arrasta para restringir o movimento à direção horizontal ou vertical dominante
 * Mantenha _Shift_ pressionado enquanto arrasta para desativar temporariamente o snap
 
+Se a configuração `TH2Edit_EnableElementTransforms` estiver ativada, a seleção atual também passa a suportar redimensionamento, rotação e espelhamento:
+* Arraste qualquer alça da seleção para redimensionar os elementos selecionados
+* Mantenha _Ctrl_ pressionado enquanto arrasta uma alça da seleção para preservar a proporção atual
+* Mantenha _Shift_ pressionado enquanto arrasta uma alça da seleção para redimensionar de forma simétrica em torno do centro da seleção
+* Mantenha _Alt_ pressionado enquanto arrasta uma alça da seleção para um redimensionamento mais fino e lento
+* Clique nos elementos selecionados para alternar do modo normal de seleção para o modo de rotação de elementos
+* No modo de rotação de elementos, arraste uma alça de canto da seleção para rotacionar a seleção
+* Mantenha _Ctrl_ pressionado enquanto rotaciona para ajustar o ângulo ao valor configurado
+* Mantenha _Shift_ pressionado enquanto rotaciona para manter o canto oposto fixo
+* Pressione _H_ para espelhar a seleção horizontalmente
+* Pressione _V_ para espelhar a seleção verticalmente
+
 ### Pontos finais/controle em edição de linha
 Quando um ou mais pontos finais/controle estão selecionados no modo de edição de linha:
 * Pressione uma tecla de _Seta_ para mover o ponto ou os pontos selecionados pelo fator de ajuste configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas

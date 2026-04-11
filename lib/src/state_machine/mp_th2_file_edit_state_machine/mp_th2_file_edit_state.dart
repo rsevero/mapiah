@@ -39,6 +39,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -51,8 +52,8 @@ part 'mixins/mp_th2_file_edit_state_clear_selection_on_exit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_get_selected_elements_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_key_down_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_line_segment_options_edit_mixin.dart';
-part 'mixins/mp_th2_file_edit_state_move_modifiers_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_move_canvas_mixin.dart';
+part 'mixins/mp_th2_file_edit_state_move_modifiers_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_reset_area_border_ctrl_meta_cycle_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
@@ -60,6 +61,7 @@ part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
 part 'mp_th2_file_edit_state_edit_single_line.dart';
+part 'mp_th2_file_edit_state_element_rotate.dart';
 part 'mp_th2_file_edit_state_image_move_scale.dart';
 part 'mp_th2_file_edit_state_image_operation.dart';
 part 'mp_th2_file_edit_state_image_rotate.dart';
@@ -108,6 +110,10 @@ abstract class MPTH2FileEditState {
         );
       case MPTH2FileEditStateType.addPoint:
         return MPTH2FileEditStateAddPoint(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.elementRotate:
+        return MPTH2FileEditStateElementRotate(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.editSingleLine:

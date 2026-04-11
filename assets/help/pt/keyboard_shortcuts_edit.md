@@ -32,6 +32,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Entrar em editar linha por linha ou segmento de linha                  | Clique duplo                                  |
 | Espelhar imagem horizontalmente                                        | H                                             |
 | Espelhar imagem verticalmente                                          | V                                             |
+| Espelhar elementos selecionados horizontalmente                        | H                                             |
+| Espelhar elementos selecionados verticalmente                          | V                                             |
 | Editar nó/linha                                                        | N                                             |
 | Editar opções (com elementos selecionados)                             | O                                             |
 | Escolher arquivo THConfig e executar Therion                           | Ctrl+T                                        |
@@ -55,9 +57,15 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Rotacionar imagem                                                      | arrastar alça de rotação da imagem            |
 | Rotacionar imagem com snap de ângulo                                   | Ctrl+arrastar alça de rotação da imagem       |
 | Rotacionar imagem mantendo o canto oposto fixo                         | Shift+arrastar alça de rotação da imagem      |
+| Rotacionar elementos selecionados                                      | arrastar alça de canto da seleção             |
+| Rotacionar elementos selecionados com snap de ângulo                   | Ctrl+arrastar alça de canto da seleção        |
+| Rotacionar elementos selecionados mantendo o canto oposto fixo         | Shift+arrastar alça de canto da seleção       |
 | Redimensionar imagem pela alça com controle fino                       | Alt+arrastar alça da imagem                   |
 | Redimensionar imagem pela alça de forma simétrica                      | Shift+arrastar alça da imagem                 |
 | Redimensionar imagem pela alça preservando a proporção                 | Ctrl+arrastar alça da imagem                  |
+| Redimensionar elementos selecionados pela alça com controle fino       | Alt+arrastar alça da seleção                  |
+| Redimensionar elementos selecionados pela alça de forma simétrica      | Shift+arrastar alça da seleção                |
+| Redimensionar elementos selecionados pela alça preservando a proporção | Ctrl+arrastar alça da seleção                 |
 | Refazer                                                                | Ctrl+Y                                        |
 | Rodar o Therion                                                        | T                                             |
 | Salvar arquivo                                                         | Ctrl+S                                        |

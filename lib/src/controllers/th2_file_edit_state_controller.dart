@@ -119,6 +119,7 @@ abstract class TH2FileEditStateControllerBase
   }) {
     const Set<MPTH2FileEditStateType> selectedElementMovementStates =
         <MPTH2FileEditStateType>{
+          MPTH2FileEditStateType.elementRotate,
           MPTH2FileEditStateType.selectNonEmptySelection,
           MPTH2FileEditStateType.movingElements,
         };

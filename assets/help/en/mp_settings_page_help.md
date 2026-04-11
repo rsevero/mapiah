@@ -12,6 +12,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Main section](#main-section)
   - [Language](#language)
 - [TH2 edit section](#th2-edit-section)
+  - [Enable element transforms](#enable-element-transforms)
   - [Enable special border for ID set](#enable-special-border-for-id-set)
   - [Enable special border for slope line without l-size](#enable-special-border-for-slope-line-without-l-size)
   - [Enable special border for visibility off](#enable-special-border-for-visibility-off)
@@ -45,6 +46,9 @@ Each setting has a reset button (↺) on its right side. Clicking it reverts tha
 Selects the language used throughout the app interface. The default option follows the system locale. Changing this setting takes effect after applying and reopening any currently open pages.
 
 ## TH2 edit section
+
+### Enable element transforms
+When enabled, selected elements gain scale, rotate, and mirror actions in selection mode. Selection handles can be dragged to scale, clicking the selected elements enters rotation mode, and _H_ / _V_ mirror the current selection. The default is disabled (`false`).
 
 ### Enable special border for ID set
 When enabled (default), elements with THID/ID set are painted with a dedicated special border on the canvas. Disable this if you prefer those elements to use only their normal symbol styling.

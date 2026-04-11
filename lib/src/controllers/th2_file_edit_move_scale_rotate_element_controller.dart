@@ -3,20 +3,24 @@
 import 'dart:collection';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_image_transform_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
+import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mobx/mobx.dart';
@@ -41,6 +45,12 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
 
   TH2FileEditSelectionController get _selectionController =>
       _th2FileEditController.selectionController;
+
+  bool get isElementTransformsEnabled {
+    return mpLocator.mpSettingsController.getBoolWithDefault(
+      MPSettingID.TH2Edit_EnableElementTransforms,
+    );
+  }
 
   MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
     final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
@@ -292,6 +302,107 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
   }
 
+  MPSelectionHandleType? getSelectionHandleAtScreenPosition(
+    Offset screenPosition,
+  ) {
+    final Map<MPSelectionHandleType, Offset> handleCenters =
+        _selectionController.getSelectionHandleCenters();
+    final double hitRadius =
+        _th2FileEditController.selectionHandleSizeOnCanvas * 2.0;
+    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
+      screenPosition,
+    );
+
+    for (final MapEntry<MPSelectionHandleType, Offset> entry
+        in handleCenters.entries) {
+      if ((entry.value - canvasPosition).distance <= hitRadius) {
+        return entry.key;
+      }
+    }
+
+    return null;
+  }
+
+  Offset selectionHandlePointOnBounds(
+    Rect bounds,
+    MPSelectionHandleType handleType,
+  ) {
+    switch (handleType) {
+      case MPSelectionHandleType.topLeft:
+        return bounds.topLeft;
+      case MPSelectionHandleType.topRight:
+        return bounds.topRight;
+      case MPSelectionHandleType.bottomLeft:
+        return bounds.bottomLeft;
+      case MPSelectionHandleType.bottomRight:
+        return bounds.bottomRight;
+      case MPSelectionHandleType.leftCenter:
+        return bounds.centerLeft;
+      case MPSelectionHandleType.rightCenter:
+        return bounds.centerRight;
+      case MPSelectionHandleType.topCenter:
+        return bounds.topCenter;
+      case MPSelectionHandleType.bottomCenter:
+        return bounds.bottomCenter;
+    }
+  }
+
+  MPSelectionHandleType oppositeSelectionHandleType(
+    MPSelectionHandleType handleType,
+  ) {
+    switch (handleType) {
+      case MPSelectionHandleType.topLeft:
+        return MPSelectionHandleType.bottomRight;
+      case MPSelectionHandleType.topRight:
+        return MPSelectionHandleType.bottomLeft;
+      case MPSelectionHandleType.bottomLeft:
+        return MPSelectionHandleType.topRight;
+      case MPSelectionHandleType.bottomRight:
+        return MPSelectionHandleType.topLeft;
+      case MPSelectionHandleType.leftCenter:
+        return MPSelectionHandleType.rightCenter;
+      case MPSelectionHandleType.rightCenter:
+        return MPSelectionHandleType.leftCenter;
+      case MPSelectionHandleType.topCenter:
+        return MPSelectionHandleType.bottomCenter;
+      case MPSelectionHandleType.bottomCenter:
+        return MPSelectionHandleType.topCenter;
+    }
+  }
+
+  MPImageTransformHandleType toImageTransformHandleType(
+    MPSelectionHandleType handleType,
+  ) {
+    switch (handleType) {
+      case MPSelectionHandleType.topLeft:
+        return MPImageTransformHandleType.topLeft;
+      case MPSelectionHandleType.topRight:
+        return MPImageTransformHandleType.topRight;
+      case MPSelectionHandleType.bottomLeft:
+        return MPImageTransformHandleType.bottomLeft;
+      case MPSelectionHandleType.bottomRight:
+        return MPImageTransformHandleType.bottomRight;
+      case MPSelectionHandleType.leftCenter:
+        return MPImageTransformHandleType.centerLeft;
+      case MPSelectionHandleType.rightCenter:
+        return MPImageTransformHandleType.centerRight;
+      case MPSelectionHandleType.topCenter:
+        return MPImageTransformHandleType.topCenter;
+      case MPSelectionHandleType.bottomCenter:
+        return MPImageTransformHandleType.bottomCenter;
+    }
+  }
+
+  double avoidZeroScale(double value) {
+    if (value.abs() >= mpDoubleComparisonEpsilon) {
+      return value;
+    }
+
+    return value.isNegative
+        ? -mpDoubleComparisonEpsilon
+        : mpDoubleComparisonEpsilon;
+  }
+
   void moveSelectedElementsToScreenCoordinates(
     Offset screenCoordinatesFinalPosition,
   ) {
@@ -328,6 +439,189 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     }
 
     _th2FileEditController.triggerSelectedElementsRedraw();
+  }
+
+  void scaleSelectedElements({
+    required Offset anchorCanvas,
+    required double xScaleFactor,
+    required double yScaleFactor,
+  }) {
+    _transformSelectedElements(
+      transformPoint: (Offset point) {
+        return Offset(
+          anchorCanvas.dx + ((point.dx - anchorCanvas.dx) * xScaleFactor),
+          anchorCanvas.dy + ((point.dy - anchorCanvas.dy) * yScaleFactor),
+        );
+      },
+    );
+  }
+
+  void rotateSelectedElements({
+    required Offset pivotCanvas,
+    required double angleInDeg,
+  }) {
+    final double angleInRad = angleInDeg * mp1DegreeInRads;
+
+    _transformSelectedElements(
+      transformPoint: (Offset point) {
+        return pivotCanvas + _rotateOffset(point - pivotCanvas, angleInRad);
+      },
+    );
+  }
+
+  void flipSelectedElementsHorizontally() {
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    if (selectedElements.isEmpty) {
+      return;
+    }
+
+    final Rect startBounds = _selectionController.selectedElementsBoundingBox;
+
+    scaleSelectedElements(
+      anchorCanvas: startBounds.center,
+      xScaleFactor: -1.0,
+      yScaleFactor: 1.0,
+    );
+    finalizeSelectedElementsTransform();
+  }
+
+  void flipSelectedElementsVertically() {
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    if (selectedElements.isEmpty) {
+      return;
+    }
+
+    final Rect startBounds = _selectionController.selectedElementsBoundingBox;
+
+    scaleSelectedElements(
+      anchorCanvas: startBounds.center,
+      xScaleFactor: 1.0,
+      yScaleFactor: -1.0,
+    );
+    finalizeSelectedElementsTransform();
+  }
+
+  void restoreSelectedElementsFromClones({bool updateRedraw = true}) {
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          _th2FileEditController.elementEditController
+              .substituteElementWithoutAddSelectableElement(
+                selectedElement.originalPointClone,
+              );
+        case MPSelectedLine _:
+          _th2FileEditController.elementEditController.substituteLineSegments(
+            selectedElement.originalLineSegmentsMapClone,
+          );
+        case MPSelectedArea _:
+          for (final MPSelectedLine originalLine
+              in selectedElement.originalLines) {
+            _th2FileEditController.elementEditController.substituteLineSegments(
+              originalLine.originalLineSegmentsMapClone,
+            );
+          }
+
+          _th2File.areaByMPID(selectedElement.mpID).clearBoundingBox();
+      }
+    }
+
+    _selectionController.updateAllSelectedElementsClones();
+
+    if (updateRedraw) {
+      _th2FileEditController.triggerSelectedElementsRedraw();
+    }
+  }
+
+  void finalizeSelectedElementsTransform({
+    MPCommandDescriptionType descriptionType =
+        MPCommandDescriptionType.moveElements,
+  }) {
+    final List<MPCommand> commandsList = <MPCommand>[];
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          final THPoint currentPoint = _th2File.pointByMPID(
+            selectedElement.mpID,
+          );
+          final THPoint originalPoint = selectedElement.originalPointClone;
+
+          if (currentPoint.position == originalPoint.position) {
+            continue;
+          }
+
+          commandsList.add(
+            MPMovePointCommand(
+              pointMPID: currentPoint.mpID,
+              fromPosition: originalPoint.position,
+              toPosition: currentPoint.position,
+              fromOriginalLineInTH2File: originalPoint.originalLineInTH2File,
+              toOriginalLineInTH2File: '',
+              descriptionType: descriptionType,
+            ),
+          );
+        case MPSelectedLine _:
+          final THLine currentLine = _th2File.lineByMPID(selectedElement.mpID);
+          final LinkedHashMap<int, THLineSegment> currentLineSegmentsMap =
+              _th2FileEditController.elementEditController.getLineSegmentsMap(
+                currentLine,
+              );
+
+          if (_lineSegmentMapsMatch(
+            selectedElement.originalLineSegmentsMapClone,
+            currentLineSegmentsMap,
+          )) {
+            continue;
+          }
+
+          commandsList.add(
+            MPMoveLineCommand(
+              lineMPID: currentLine.mpID,
+              fromLineSegmentsMap: selectedElement.originalLineSegmentsMapClone,
+              toLineSegmentsMap: currentLineSegmentsMap,
+              descriptionType: descriptionType,
+            ),
+          );
+        case MPSelectedArea _:
+          final MPCommand? areaCommand = _buildAreaTransformCommand(
+            selectedArea: selectedElement,
+            descriptionType: descriptionType,
+          );
+
+          if (areaCommand != null) {
+            commandsList.add(areaCommand);
+          }
+      }
+    }
+
+    restoreSelectedElementsFromClones(updateRedraw: false);
+
+    if (commandsList.isEmpty) {
+      _th2FileEditController.triggerSelectedElementsRedraw();
+
+      return;
+    }
+
+    final MPCommand transformCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: commandsList,
+          descriptionType: descriptionType,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsEdited,
+        );
+
+    _th2FileEditController.execute(transformCommand);
+    _selectionController.updateAllSelectedElementsClones();
+    _th2FileEditController.triggerSelectedElementsRedraw(setState: true);
   }
 
   void moveSelectedEndControlPointsToScreenCoordinates(
@@ -975,5 +1269,164 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     }
 
     _th2File.areaByMPID(selectedArea.mpID).clearBoundingBox();
+  }
+
+  void _transformSelectedElements({
+    required Offset Function(Offset point) transformPoint,
+  }) {
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    for (final MPSelectedElement selectedElement in selectedElements) {
+      switch (selectedElement) {
+        case MPSelectedPoint _:
+          final THPoint originalPoint = selectedElement.originalPointClone;
+          final THPoint modifiedPoint = originalPoint.copyWith(
+            position: originalPoint.position.copyWith(
+              coordinates: transformPoint(originalPoint.position.coordinates),
+              decimalPositions: _th2FileEditController.currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
+          );
+
+          _th2FileEditController.elementEditController
+              .substituteElementWithoutAddSelectableElement(modifiedPoint);
+        case MPSelectedLine _:
+          _transformSelectedLine(
+            selectedLine: selectedElement,
+            transformPoint: transformPoint,
+          );
+        case MPSelectedArea _:
+          for (final MPSelectedLine areaLine in selectedElement.originalLines) {
+            _transformSelectedLine(
+              selectedLine: areaLine,
+              transformPoint: transformPoint,
+            );
+          }
+
+          _th2File.areaByMPID(selectedElement.mpID).clearBoundingBox();
+      }
+    }
+
+    _th2FileEditController.triggerSelectedElementsRedraw();
+  }
+
+  void _transformSelectedLine({
+    required MPSelectedLine selectedLine,
+    required Offset Function(Offset point) transformPoint,
+  }) {
+    final LinkedHashMap<int, THLineSegment> modifiedLineSegmentsMap =
+        LinkedHashMap<int, THLineSegment>();
+
+    for (final MapEntry<int, THLineSegment> entry
+        in selectedLine.originalLineSegmentsMapClone.entries) {
+      final THLineSegment lineSegment = entry.value;
+
+      switch (lineSegment) {
+        case THStraightLineSegment _:
+          modifiedLineSegmentsMap[entry.key] = lineSegment.copyWith(
+            endPoint: lineSegment.endPoint.copyWith(
+              coordinates: transformPoint(lineSegment.endPoint.coordinates),
+              decimalPositions: _th2FileEditController.currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
+          );
+        case THBezierCurveLineSegment _:
+          modifiedLineSegmentsMap[entry.key] = lineSegment.copyWith(
+            endPoint: lineSegment.endPoint.copyWith(
+              coordinates: transformPoint(lineSegment.endPoint.coordinates),
+              decimalPositions: _th2FileEditController.currentDecimalPositions,
+            ),
+            controlPoint1: lineSegment.controlPoint1.copyWith(
+              coordinates: transformPoint(
+                lineSegment.controlPoint1.coordinates,
+              ),
+              decimalPositions: _th2FileEditController.currentDecimalPositions,
+            ),
+            controlPoint2: lineSegment.controlPoint2.copyWith(
+              coordinates: transformPoint(
+                lineSegment.controlPoint2.coordinates,
+              ),
+              decimalPositions: _th2FileEditController.currentDecimalPositions,
+            ),
+            originalLineInTH2File: '',
+            makeSameLineCommentNull: true,
+          );
+      }
+    }
+
+    _th2FileEditController.elementEditController.substituteLineSegments(
+      modifiedLineSegmentsMap,
+    );
+  }
+
+  MPCommand? _buildAreaTransformCommand({
+    required MPSelectedArea selectedArea,
+    required MPCommandDescriptionType descriptionType,
+  }) {
+    final List<MPCommand> areaLineCommands = <MPCommand>[];
+
+    for (final MPSelectedLine originalLine in selectedArea.originalLines) {
+      final THLine currentLine = _th2File.lineByMPID(originalLine.mpID);
+      final LinkedHashMap<int, THLineSegment> currentLineSegmentsMap =
+          _th2FileEditController.elementEditController.getLineSegmentsMap(
+            currentLine,
+          );
+
+      if (_lineSegmentMapsMatch(
+        originalLine.originalLineSegmentsMapClone,
+        currentLineSegmentsMap,
+      )) {
+        continue;
+      }
+
+      areaLineCommands.add(
+        MPMoveLineCommand(
+          lineMPID: currentLine.mpID,
+          fromLineSegmentsMap: originalLine.originalLineSegmentsMapClone,
+          toLineSegmentsMap: currentLineSegmentsMap,
+          descriptionType: descriptionType,
+        ),
+      );
+    }
+
+    if (areaLineCommands.isEmpty) {
+      return null;
+    }
+
+    final MPCommand linesMoveCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: areaLineCommands,
+          descriptionType: descriptionType,
+          completionType:
+              MPMultipleElementsCommandCompletionType.elementsEdited,
+        );
+
+    return MPMoveAreaCommand.forCWJM(
+      areaMPID: selectedArea.mpID,
+      linesMoveCommand: linesMoveCommand,
+      originalLineInTH2File:
+          selectedArea.originalAreaClone.originalLineInTH2File,
+      descriptionType: descriptionType,
+    );
+  }
+
+  bool _lineSegmentMapsMatch(
+    Map<int, THLineSegment> originalMap,
+    Map<int, THLineSegment> currentMap,
+  ) {
+    if (originalMap.length != currentMap.length) {
+      return false;
+    }
+
+    for (final MapEntry<int, THLineSegment> entry in originalMap.entries) {
+      if (currentMap[entry.key] != entry.value) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

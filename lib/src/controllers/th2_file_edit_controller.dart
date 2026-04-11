@@ -825,6 +825,7 @@ abstract class TH2FileEditControllerBase with Store {
         _isSelectMode =
             ((state is MPTH2FileEditStateSelectEmptySelection) ||
             (state is MPTH2FileEditStateSelectNonEmptySelection) ||
+            (state is MPTH2FileEditStateElementRotate) ||
             (state is MPTH2FileEditStateMovingElements));
       }),
     );

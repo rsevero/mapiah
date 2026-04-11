@@ -6,6 +6,7 @@ mixin MPTH2FileEditStateClearSelectionOnExitMixin on MPTH2FileEditState {
   static const Set<MPTH2FileEditStateType> selectionStatesTypes = {
     MPTH2FileEditStateType.addLineToArea,
     MPTH2FileEditStateType.editSingleLine,
+    MPTH2FileEditStateType.elementRotate,
     MPTH2FileEditStateType.movingElements,
     MPTH2FileEditStateType.movingEndControlPoints,
     MPTH2FileEditStateType.movingSingleControlPoint,

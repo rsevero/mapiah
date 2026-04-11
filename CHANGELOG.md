@@ -11,6 +11,7 @@
   * The Save button in the interactive line simplification dialog now commits the current simplified version as an undoable action without closing the dialog, allowing further adjustments from the committed state.
   * Added a Reset button to the interactive line simplification dialog that restores method and intensity to their hardcoded defaults (`keepOriginalTypes` / intensity 1) and re-applies the preview. Close and Save both now persist the selected method for next use.
   * Double-clicking a line or one of its visible line segments on the canvas now enters single-line edit mode, with widget coverage for both hit paths.
+  * Selection-mode element transforms: selected elements can be rotated and scaled in-place via corner handles, with live preview and finalization producing undoable commands. Keyboard nudging, Alt/Shift/Ctrl modifiers, and selection-handle hit-testing were refined to match image transform controls.
 * Fixed bugs:
   * Slope lines whose line segments do not define any `l-size` are now painted with a dedicated special border, matching the existing visual treatment used for invisible elements and elements with THID set. Added dedicated TH2 edit settings to enable or disable each supported special-border type (`visibility off`, `ID set`, and slope without `l-size`), updated the EN/PT settings help pages, and added regression coverage.
   * Deleting a middle line segment in single-line edit mode now preserves the surrounding curve much more closely by rebuilding the merged Bézier segment from the original entry and exit tangents, with regression coverage for the split-curve case.
@@ -21,12 +22,15 @@
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.
   * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.
   * The interactive line simplification dialog no longer grows taller than its content when the main window is resized.
+  * Updated EN/PT help pages and keyboard-shortcut documentation to include the new element/image transform actions and their modifiers (rotate, scale, flip). Generated localization files (`intl_*.arb` / `app_localizations_*.dart`) were updated accordingly.
   * The Close button is now the default (prominent) button in the interactive line simplification dialog.
   * The interactive line simplification dialog now shows a before/after segment count table (total, Bézier, straight) that updates live as the method and intensity change. The first (anchor) segment of each line is excluded from the counts.
   * Closing a non-visible TH2 tab no longer leaves the editor body showing the wrong file; each tab body now keeps a stable identity, and a regression test covers the close-first-tab flow.
   * Existing TH2 files are now canonicalized to normalized absolute paths inside `MPGeneralController`, so controller lookup, tab identity, telemetry, and rename/remove flows all use one consistent filename key.
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
+  * Added unit/widget test coverage and state-machine refinements for the new element transform states and transform-command finalization paths.
+  * Added `TH2FileEditMoveScaleRotateElementController` and `MPTH2FileEditStateElementRotate` to centralize and enable element/image transform workflows (move, scale, rotate, flip). Selection handles now support drag-to-scale and corner-handle rotation with optional pivot locking (Shift) and angle snapping (Ctrl/Meta). Mirror (flip) actions (`H` / `V`) and undoable transform commands were added, with matching state-machine integration.
 
 ## 0.3.5 - 2026-04-09 - The [Dental Nerve](https://xkcd.com/846/) release
 * Highlights:

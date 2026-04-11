@@ -994,6 +994,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Therion run parameters';
 
   @override
+  String get mpSettingsSettingTH2EditEnableElementTransforms =>
+      'Enable element transforms';
+
+  @override
   String get mpSettingsSettingTH2EditEnableSpecialBorderForIDSet =>
       'Enable special border for ID set';
 
@@ -1359,6 +1363,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileEditPageDuplicateScrapButton => 'Duplicate scrap';
+
+  @override
+  String get th2FileEditPageElementRotateStatusBarMessage =>
+      'Element rotate mode';
 
   @override
   String get th2FileEditPageEmptySelectionStatusBarMessage => 'Empty selection';

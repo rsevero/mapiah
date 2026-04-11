@@ -304,6 +304,18 @@ When one or more elements are selected in selection mode:
 * Hold _Ctrl_ while dragging to constrain the move to the dominant horizontal or vertical direction
 * Hold _Shift_ while dragging to temporarily disable snapping
 
+If the `TH2Edit_EnableElementTransforms` setting is enabled, the current selection also supports scaling, rotation, and mirroring:
+* Drag any selection handle to scale the selected elements
+* Hold _Ctrl_ while dragging a selection handle to preserve the current aspect ratio
+* Hold _Shift_ while dragging a selection handle to scale symmetrically around the selection center
+* Hold _Alt_ while dragging a selection handle for finer, slower scaling
+* Click the selected elements to switch from normal selection mode to element rotation mode
+* In element rotation mode, drag a corner selection handle to rotate the selection
+* Hold _Ctrl_ while rotating to snap the angle to the configured snap angle
+* Hold _Shift_ while rotating to keep the opposite corner fixed in place
+* Press _H_ to mirror the selection horizontally
+* Press _V_ to mirror the selection vertically
+
 ### Single-line end/control points
 When one or more end/control points are selected in line edit mode:
 * Press an _Arrow_ key to move the selected point or points by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels

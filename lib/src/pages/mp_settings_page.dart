@@ -685,6 +685,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingMainTherionExecutablePath;
       case MPSettingID.Therion_RunParameters:
         return appLocalizations.mpSettingsSettingMainTherionRunParameters;
+      case MPSettingID.TH2Edit_EnableElementTransforms:
+        return appLocalizations.mpSettingsSettingTH2EditEnableElementTransforms;
       case MPSettingID.TH2Edit_EnableSpecialBorderForIDSet:
         return appLocalizations
             .mpSettingsSettingTH2EditEnableSpecialBorderForIDSet;

@@ -1558,6 +1558,10 @@
     "description": "Label for Therion run parameters setting. Used on: lib/src/pages/mp_settings_page.dart, lib/src/widgets/mp_run_therion_dialog_widget.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditEnableElementTransforms": "Enable element transforms",
+  "@mpSettingsSettingTH2EditEnableElementTransforms": {
+    "description": "The label for the TH2 edit setting that enables scale, rotate and mirror actions for selected elements. Used on: lib/src/pages/mp_settings_page.dart"
+  },
   "mpSettingsSettingTH2EditEnableSpecialBorderForIDSet": "Enable special border for ID set",
   "@mpSettingsSettingTH2EditEnableSpecialBorderForIDSet": {
     "description": "Label for enabling the special border used when an element has ID set. Used on: lib/src/pages/mp_settings_page.dart",
@@ -2107,6 +2111,10 @@
   "@th2FileEditPageDuplicateScrapButton": {
     "description": "The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build",
     "type": "text"
+  },
+  "th2FileEditPageElementRotateStatusBarMessage": "Element rotate mode",
+  "@th2FileEditPageElementRotateStatusBarMessage": {
+    "description": "The status bar message shown while selected-element rotation mode is active. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_element_rotate.dart"
   },
   "th2FileEditPageEmptySelectionStatusBarMessage": "Empty selection",
   "@th2FileEditPageEmptySelectionStatusBarMessage": {

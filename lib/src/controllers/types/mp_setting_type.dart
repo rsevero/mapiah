@@ -21,6 +21,7 @@ enum MPSettingID {
   Internal_TelemetryPendingRecords,
   Main_LocaleID,
   Main_TelemetryConsent,
+  TH2Edit_EnableElementTransforms,
   TH2Edit_EnableSpecialBorderForIDSet,
   TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
   TH2Edit_EnableSpecialBorderForVisibilityOff,
@@ -53,6 +54,7 @@ enum MPSettingID {
     MPSettingID.Internal_TelemetryPendingRecords: MPSettingType.stringList,
     MPSettingID.Main_LocaleID: MPSettingType.string,
     MPSettingID.Main_TelemetryConsent: MPSettingType.bool,
+    MPSettingID.TH2Edit_EnableElementTransforms: MPSettingType.bool,
     MPSettingID.TH2Edit_EnableSpecialBorderForIDSet: MPSettingType.bool,
     MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize:
         MPSettingType.bool,
