@@ -85,6 +85,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   bool _allImagesVisibility = true;
 
   final List<String> _lastUsedAreaTypes = [];
+  final List<String> _lastUsedAreaLineTypes = [];
   final List<String> _lastUsedLineTypes = [];
   final List<String> _lastUsedPointTypes = [];
   final Map<String, MPTypeUsed> _mostUsedAreaTypes = {};
@@ -96,6 +97,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   bool _lastLinePointSmoothOption = false;
 
   List<String> get lastUsedAreaTypes => _lastUsedAreaTypes;
+
+  List<String> get lastUsedAreaLineTypes => _lastUsedAreaLineTypes;
 
   List<String> get lastUsedLineTypes => _lastUsedLineTypes;
 
@@ -188,6 +191,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _lastUsedAreaTypes.insert(0, areaTypeID);
+    _setLastUsedAreaLineType(typeID: areaTypeID, isLineType: false);
 
     _setMostUsedAreaType(areaType: areaType, areaSubtype: areaSubtype);
   }
@@ -222,8 +226,25 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
 
     _lastUsedLineTypes.insert(0, lineTypeID);
+    _setLastUsedAreaLineType(typeID: lineTypeID, isLineType: true);
 
     _setMostUsedLineType(lineType: lineType, lineSubtype: lineSubtype);
+  }
+
+  void _setLastUsedAreaLineType({
+    required String typeID,
+    required bool isLineType,
+  }) {
+    final String typePrefix = isLineType
+        ? mpLastUsedAreaLineLinePrefix
+        : mpLastUsedAreaLineAreaPrefix;
+    final String combinedTypeID = '$typePrefix$mpSubtypeIDSeparator$typeID';
+
+    if (_lastUsedAreaLineTypes.contains(combinedTypeID)) {
+      _lastUsedAreaLineTypes.remove(combinedTypeID);
+    }
+
+    _lastUsedAreaLineTypes.insert(0, combinedTypeID);
   }
 
   void _setMostUsedLineType({
