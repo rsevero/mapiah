@@ -113,6 +113,8 @@ When drawing lines, each new segment is initially created as a straight line seg
 
 The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold Ctrl while dragging to keep the mirrored control point at a fixed distance.
 
+When drawing with "xTherion cubic smooth", you can also hold _Shift_ while setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node.
+
 When drawing with "xTherion cubic smooth", you can also make the shared node a corner point by separating the two control points. Start dragging normally to define the current segment's control point at the shared end node. Then, without releasing the mouse button, hold _Alt_ and keep dragging to redefine only the next segment's future control point. This keeps the current segment handle fixed while changing the next one independently.
 
 While drawing a line, you can also move the last created node with the keyboard:

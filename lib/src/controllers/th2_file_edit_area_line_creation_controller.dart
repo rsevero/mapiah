@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
@@ -516,6 +517,10 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
 
   @action
   void addNewLineLineSegment(Offset endPointScreenCoordinates) {
+    endPointScreenCoordinates = _maybeConstrainXTherionNewNodeScreenPosition(
+      endPointScreenCoordinates,
+    );
+
     if (_newLine == null) {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
@@ -634,6 +639,76 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     }
 
     _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  /// Constrains a newly placed xTherion node to the nearest snap-angle
+  /// direction relative to the previous node while Shift is held.
+  Offset _maybeConstrainXTherionNewNodeScreenPosition(
+    Offset endPointScreenCoordinates,
+  ) {
+    if (_getNewLineCreationMethod() !=
+        MPNewLineCreationMethod.xTherionCubicSmooth) {
+      return endPointScreenCoordinates;
+    }
+
+    if (!MPInteractionAux.isShiftPressed()) {
+      return endPointScreenCoordinates;
+    }
+
+    final Offset? previousNodeScreenCoordinates =
+        _getPreviousNewLineNodeScreenCoordinates();
+
+    if (previousNodeScreenCoordinates == null) {
+      return endPointScreenCoordinates;
+    }
+
+    final Offset rawDirection =
+        endPointScreenCoordinates - previousNodeScreenCoordinates;
+
+    if (rawDirection == Offset.zero) {
+      return endPointScreenCoordinates;
+    }
+
+    final double snapAngleDegrees = mpLocator.mpSettingsController
+        .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+
+    if (snapAngleDegrees <= 0) {
+      return endPointScreenCoordinates;
+    }
+
+    final double rawAngleRadians = atan2(rawDirection.dy, rawDirection.dx);
+    final double snapAngleRadians = snapAngleDegrees / mp1RadInDegrees;
+    final double snappedAngleRadians =
+        (rawAngleRadians / snapAngleRadians).round() * snapAngleRadians;
+    final double constrainedDistance = rawDirection.distance;
+
+    return previousNodeScreenCoordinates +
+        Offset(
+          cos(snappedAngleRadians) * constrainedDistance,
+          sin(snappedAngleRadians) * constrainedDistance,
+        );
+  }
+
+  /// Returns the previously placed node in screen coordinates while creating a
+  /// new line, or null when there is not yet an anchor to constrain against.
+  Offset? _getPreviousNewLineNodeScreenCoordinates() {
+    if (_newLine == null) {
+      return _lineStartScreenPosition;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+
+    if (lineSegmentMPIDs.isEmpty) {
+      return null;
+    }
+
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
+      lineSegmentMPIDs.last,
+    );
+
+    return _th2FileEditController.offsetCanvasToScreen(
+      lastLineSegment.endPoint.coordinates,
+    );
   }
 
   THLineSegment _createNewLineSegmentFromScreenCoordinates({

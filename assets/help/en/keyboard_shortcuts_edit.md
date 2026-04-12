@@ -14,6 +14,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Click area-border line: select area only                   | Ctrl+Alt+click                          |
 | Convert selected line segments to Bézier curve             | J                                       |
 | Convert selected line segments to straight                 | Shift+J                                 |
+| Constrain a new xTherion cubic smooth node to the snap angle while drawing | Shift+click |
 | Copy selected elements                                     | Ctrl+C                                  |
 | Create area                                                | A                                       |
 | Create line                                                | L                                       |

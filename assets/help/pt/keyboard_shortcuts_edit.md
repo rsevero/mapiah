@@ -71,6 +71,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Redimensionar elementos selecionados pela alça de forma simétrica      | Shift+arrastar alça da seleção                |
 | Redimensionar elementos selecionados pela alça preservando a proporção | Ctrl+arrastar alça da seleção                 |
 | Refazer                                                                | Ctrl+Y                                        |
+| Restringir um novo nó do xTherion cúbico suave ao ângulo de snap ao desenhar | Shift+clique                     |
 | Rodar o Therion                                                        | T                                             |
 | Salvar arquivo                                                         | Ctrl+S                                        |
 | Salvar arquivo como                                                    | Ctrl+Shift+S                                  |
