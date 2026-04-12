@@ -5,6 +5,7 @@
 ## 0.3.6 - not yet released
 * Highlights:
 * New features:
+  * Pressing `Esc` while drawing an unfinished "xTherion cubic smooth" line now cancels the entire in-progress path and returns to the default selection state, with keyboard-shortcut documentation updated (EN/PT) and regression coverage added.
   * The "Mapiah quadratic" new-line creation method now lets you hold Shift while dragging a fresh control point to constrain it to the nearest multiple of the configured snap angle relative to the shared node. Updated PT help pages and widget coverage alongside the existing xTherion behavior.
   * Added an optional bottom-of-canvas strip for last-used point, line, and area element types/subtypes in the TH2 editor, shown behind the existing action buttons, localized with the existing PLA naming helpers, and wired to reuse the regular add-element mode transitions. [request by Axel Hack]
   * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage. [request by Axel Hack]

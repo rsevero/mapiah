@@ -210,6 +210,12 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     return canNudgeLastCreatedLineNode();
   }
 
+  bool canCancelUnfinishedXTherionLineCreation() {
+    return (_getNewLineCreationMethod() ==
+            MPNewLineCreationMethod.xTherionCubicSmooth) &&
+        canNudgeLastCreatedLineNode();
+  }
+
   void removeLastCreatedLineNode() {
     if (!canRemoveLastCreatedLineNode()) {
       return;
@@ -240,6 +246,28 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     }
 
     _removeLastLineSegment(lineSegmentMPIDs.last);
+  }
+
+  void cancelUnfinishedXTherionLineCreation() {
+    if (!canCancelUnfinishedXTherionLineCreation()) {
+      return;
+    }
+
+    if (_newLine == null) {
+      clearNewLine();
+      _th2FileEditController.triggerNewLineRedraw();
+
+      return;
+    }
+
+    final MPCommand removeLineCommand = MPCommandFactory.removeLineFromExisting(
+      existingLineMPID: _newLine!.mpID,
+      isInteractiveLineCreation: true,
+      th2File: _th2File,
+    );
+
+    _th2FileEditController.execute(removeLineCommand);
+    _th2FileEditController.triggerNewLineRedraw();
   }
 
   void nudgeLastCreatedLineNodeByDeltaOnCanvas(Offset deltaOnCanvas) {

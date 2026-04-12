@@ -71,6 +71,21 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
+      case LogicalKeyboardKey.escape:
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed &&
+            th2FileEditController.areaLineCreationController
+                .canCancelUnfinishedXTherionLineCreation()) {
+          th2FileEditController.areaLineCreationController
+              .cancelUnfinishedXTherionLineCreation();
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.selectEmptySelection,
+          );
+
+          return;
+        }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
         if (_canRemoveLastCreatedInteractiveLineNode(

@@ -246,6 +246,8 @@ Ao desenhar com "Cúbico suave do xTherion", você também pode transformar o n�
 
 Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Backspace_ ou _Delete_ para remover o último nó criado. Se esse era o único segmento concluído até então, o Mapiah volta ao nó inicial original para que você possa continuar desenhando a partir dele.
 
+Ao desenhar com "Cúbico suave do xTherion", você pode pressionar _Esc_ para excluir todo o caminho inacabado e sair do modo de criação de linhas.
+
 Ao desenhar uma linha, você também pode mover pelo teclado o último nó criado:
 * Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
 * Pressione _Shift+Seta_ para mover por dez vezes o fator de nudge

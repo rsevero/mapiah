@@ -119,6 +119,8 @@ When drawing with "xTherion cubic smooth", you can also make the shared node a c
 
 When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Backspace_ or _Delete_ to remove the last created node. If that was the only completed segment so far, Mapiah returns to the original start node so you can continue drawing from it.
 
+When drawing with "xTherion cubic smooth", you can press _Esc_ to delete the whole unfinished path and leave line-creation mode.
+
 While drawing a line, you can also move the last created node with the keyboard:
 * Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
 * Press _Shift+Arrow_ to move it by ten times the nudge factor

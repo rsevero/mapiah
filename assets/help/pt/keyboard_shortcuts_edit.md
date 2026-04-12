@@ -25,6 +25,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar ponto                                                                                   | P                                        |
 | Criar segmento de linha entre segmentos de linha selecionados                                 | /                                        |
 | Desfazer                                                                                      | Ctrl+Z                                   |
+| Excluir um caminho inacabado no modo xTherion cúbico suave ao desenhar                        | Esc                                      |
 | Desselecionar tudo                                                                            | Escape                                   |
 | Dividir linha nos pontos de linha selecionados                                                | Ctrl+P                                   |
 | Dividir linhas selecionadas nos cruzamentos de linhas                                         | Ctrl+Shift+X                             |
