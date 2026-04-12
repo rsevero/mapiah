@@ -5,6 +5,7 @@
 ## 0.3.6 - not yet released
 * Highlights:
 * New features:
+  * Added an optional bottom-of-canvas strip for last-used point, line, and area element types/subtypes in the TH2 editor, shown behind the existing action buttons, localized with the existing PLA naming helpers, and wired to reuse the regular add-element mode transitions. [request by Axel Hack]
   * Added Mapiah-only SVG background image support with `MPSVGImageInsertConfig`, on-canvas rendering, metadata persistence, import validation for `viewBox` / `width` / `height`, EN/PT help updates, and regression coverage. [request by Axel Hack]
   * Added an interactive line simplification dialog (`Ctrl+Alt+Shift+L`) with a dedicated state-context FAB, live preview for method and intensity changes, close/save/cancel handling with single-step undo semantics, EN/PT help updates, and regression coverage.
   * The interactive line simplification dialog is now draggable: right-click-drag on the title bar repositions it anywhere on screen, clamped to screen bounds, consistent with overlay window behaviour.

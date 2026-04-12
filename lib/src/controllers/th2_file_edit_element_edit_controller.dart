@@ -26,6 +26,7 @@ import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_add_scrap_dialog_overlay_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mobx/mobx.dart';
@@ -78,7 +79,6 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   String _lastUsedStationName = '';
 
-  @readonly
   MPPLATypeSubtype? _plaTypeSubtypeForNewElement;
 
   THCommandOptionType? _currentOptionTypeBeingEdited;
@@ -187,7 +187,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String areaType,
     required String areaSubtype,
   }) {
-    _plaTypeSubtypeForNewElement = null;
+    setPLATypeSubtypeForNewElement(null);
 
     final MPPLATypeSubtype areaTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.area,
@@ -226,7 +226,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String lineType,
     required String lineSubtype,
   }) {
-    _plaTypeSubtypeForNewElement = null;
+    setPLATypeSubtypeForNewElement(null);
 
     final MPPLATypeSubtype lineTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.line,
@@ -273,7 +273,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String pointType,
     required String pointSubtype,
   }) {
-    _plaTypeSubtypeForNewElement = null;
+    setPLATypeSubtypeForNewElement(null);
 
     final MPPLATypeSubtype pointTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.point,
@@ -307,9 +307,27 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  @action
-  void setPlaTypeSubtypeForNewElement(MPPLATypeSubtype? plaTypeSubtype) {
+  void setPLATypeSubtypeForNewElement(MPPLATypeSubtype? plaTypeSubtype) {
     _plaTypeSubtypeForNewElement = plaTypeSubtype;
+  }
+
+  void activatePLATypeSubtypeForNewElement(MPPLATypeSubtype plaTypeSubtype) {
+    setPLATypeSubtypeForNewElement(plaTypeSubtype);
+
+    switch (plaTypeSubtype.pla) {
+      case MPPLAType.area:
+        _th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.addArea,
+        );
+      case MPPLAType.line:
+        _th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.addLine,
+        );
+      case MPPLAType.point:
+        _th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.addPoint,
+        );
+    }
   }
 
   MPPLATypeSubtype getPointTypeAndSubtypeForNewPoint() {

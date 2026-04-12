@@ -46,7 +46,7 @@
 [ ] - Create a way to the user create perfectly 15° multiple angle line segments.
 [X] - Create rotate, scale and mirror background modes.
 [X] - Create shortcuts to change straight line segments to Bézier curve segments and vice versa. These shortcuts should work either on complete line level when non empty selection state or on line segment level when in single line edit mode. [request by Axel Hack]
-[ ] - Create 10 PLA with type and subtype last used create elements FAB buttons. They should be ordered in last used order. Use the same existing infra structure of the last used elements. [request by Axel Hack]
+[X] - Create 10 PLA with type and subtype last used create elements FAB buttons. They should be ordered in last used order. Use the same existing infra structure of the last used elements. [request by Axel Hack]
 [X] - Support graphic tablet. [request by Axel Hack]
 [X] - Include support for SVG background images. [request by Axel Hack]
 [ ] - Create "last used options" on top of option window. [request by Axel Hack]

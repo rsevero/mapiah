@@ -785,6 +785,26 @@ class MPTextToUser {
     return pointTypeToUser;
   }
 
+  static String getPLATypeSubtype(MPPLATypeSubtype plaTypeSubtype) {
+    switch (plaTypeSubtype.pla) {
+      case MPPLAType.area:
+        return getAreaTypeSubtypeFromTypeSubtype(
+          areaType: plaTypeSubtype.type,
+          areaSubtype: plaTypeSubtype.subtype,
+        );
+      case MPPLAType.line:
+        return getLineTypeSubtypeFromTypeSubtype(
+          lineType: plaTypeSubtype.type,
+          lineSubtype: plaTypeSubtype.subtype,
+        );
+      case MPPLAType.point:
+        return getPointTypeSubtypeFromTypeSubtype(
+          pointType: plaTypeSubtype.type,
+          pointSubtype: plaTypeSubtype.subtype,
+        );
+    }
+  }
+
   static String getPointType(THPointType pointType) {
     return _pointTypeAsString.containsKey(pointType)
         ? _pointTypeAsString[pointType]!
