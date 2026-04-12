@@ -392,33 +392,38 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         _th2FileEditController.offsetScreenToCanvas(
           nextLineSegmentControlPoint1ScreenCoordinates,
         );
+    final bool isAltPressed = MPInteractionAux.isAltPressed();
     final Offset mirroredDirectionControlPoint2 =
         (endPointCoordinates * 2) -
         nextLineSegmentControlPoint1CanvasCoordinates;
     Offset controlPoint2Coordinates = mirroredDirectionControlPoint2;
 
-    if (MPInteractionAux.isCtrlPressed() &&
-        (lastLineSegment is THBezierCurveLineSegment)) {
-      final Offset previousControlPoint2Coordinates =
-          lastLineSegment.controlPoint2.coordinates;
-      final Offset previousControlPoint2Vector =
-          previousControlPoint2Coordinates - endPointCoordinates;
-      final double previousControlPoint2Distance =
-          previousControlPoint2Vector.distance;
-      final Offset mirroredDirectionVector =
-          mirroredDirectionControlPoint2 - endPointCoordinates;
-      final double mirroredDirectionDistance = mirroredDirectionVector.distance;
+    if (lastLineSegment is THBezierCurveLineSegment) {
+      if (isAltPressed) {
+        controlPoint2Coordinates = lastLineSegment.controlPoint2.coordinates;
+      } else if (MPInteractionAux.isCtrlPressed()) {
+        final Offset previousControlPoint2Coordinates =
+            lastLineSegment.controlPoint2.coordinates;
+        final Offset previousControlPoint2Vector =
+            previousControlPoint2Coordinates - endPointCoordinates;
+        final double previousControlPoint2Distance =
+            previousControlPoint2Vector.distance;
+        final Offset mirroredDirectionVector =
+            mirroredDirectionControlPoint2 - endPointCoordinates;
+        final double mirroredDirectionDistance =
+            mirroredDirectionVector.distance;
 
-      if ((previousControlPoint2Distance > 0) &&
-          (mirroredDirectionDistance > 0)) {
-        final Offset mirroredUnitDirection = Offset(
-          mirroredDirectionVector.dx / mirroredDirectionDistance,
-          mirroredDirectionVector.dy / mirroredDirectionDistance,
-        );
+        if ((previousControlPoint2Distance > 0) &&
+            (mirroredDirectionDistance > 0)) {
+          final Offset mirroredUnitDirection = Offset(
+            mirroredDirectionVector.dx / mirroredDirectionDistance,
+            mirroredDirectionVector.dy / mirroredDirectionDistance,
+          );
 
-        controlPoint2Coordinates =
-            endPointCoordinates +
-            (mirroredUnitDirection * previousControlPoint2Distance);
+          controlPoint2Coordinates =
+              endPointCoordinates +
+              (mirroredUnitDirection * previousControlPoint2Distance);
+        }
       }
     }
 

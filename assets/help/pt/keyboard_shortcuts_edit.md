@@ -74,6 +74,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Rodar o Therion                                                        | T                                             |
 | Salvar arquivo                                                         | Ctrl+S                                        |
 | Salvar arquivo como                                                    | Ctrl+Shift+S                                  |
+| Separar a definição do próximo ponto de controle do xTherion cúbico suave ao desenhar | Alt+arrastar após iniciar o arrasto |
 | Selecionar nada                                                        | Esc                                           |
 | Selecionar tudo                                                        | Ctrl+A                                        |
 | Simplificar linha - diálogo interativo                                 | Ctrl+Alt+Shift+L                              |

@@ -240,6 +240,8 @@ Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento d
 
 O comportamento exato desse arrasto depende da opção de configuração "Método de criação de nova linha". "Quadrático do Mapiah" mantém o comportamento atual descrito abaixo. "Cúbico suave do xTherion" usa a posição arrastada como o futuro ponto de controle do próximo segmento, espelha o outro ponto de controle do segmento atual em torno do ponto final compartilhado e permite manter Ctrl pressionado durante o arrasto para fixar a distância do ponto de controle espelhado.
 
+Ao desenhar com "Cúbico suave do xTherion", você também pode transformar o nó compartilhado em um ponto de canto separando os dois pontos de controle. Comece arrastando normalmente para definir o ponto de controle do segmento atual no nó final compartilhado. Depois, sem soltar o botão do mouse, mantenha _Alt_ pressionado e continue arrastando para redefinir apenas o futuro ponto de controle do próximo segmento. Isso mantém fixa a alça do segmento atual enquanto altera a próxima de forma independente.
+
 Ao desenhar uma linha, você também pode mover pelo teclado o último nó criado:
 * Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
 * Pressione _Shift+Seta_ para mover por dez vezes o fator de nudge

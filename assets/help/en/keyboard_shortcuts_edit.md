@@ -66,6 +66,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Run Therion                                                | T                                       |
 | Save file                                                  | Ctrl+S                                  |
 | Save file as                                               | Ctrl+Shift+S                            |
+| Set next xTherion cubic smooth control point separately while drawing | Alt+drag after starting drag |
 | Select all                                                 | Ctrl+A                                  |
 | Select none                                                | Esc                                     |
 | Select tool                                                | C                                       |
