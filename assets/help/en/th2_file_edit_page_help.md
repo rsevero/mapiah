@@ -121,6 +121,8 @@ When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can 
 
 When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Esc_ to delete the whole unfinished path and start a new one.
 
+When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Shift+L_ to convert the last (unfinished) segment from a Bézier curve to a straight line, or _Shift+U_ to convert it from a straight line to a Bézier curve. When converting to a Bézier curve, the control points are placed at one-third and two-thirds of the segment chord.
+
 While drawing a line, you can also move the last created node with the keyboard:
 * Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
 * Press _Shift+Arrow_ to move it by ten times the nudge factor

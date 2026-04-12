@@ -9,6 +9,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Change active scrap                                                              | Alt+K                                      |
 | Change active scrap by clicking inactive scrap                                   | Alt+click inactive scrap                   |
 | Change images                                                                    | Alt+I                                      |
+| Change unfinished drawing segment from curve to line                             | Shift+L                                    |
+| Change unfinished drawing segment from line to curve                             | Shift+U                                    |
 | Choose THConfig file and run Therion                                             | Ctrl+T                                     |
 | Click area-border line: cycle border-line selection                              | Ctrl+click                                 |
 | Click area-border line: select area only                                         | Ctrl+Alt+click                             |

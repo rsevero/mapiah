@@ -248,6 +248,8 @@ Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você po
 
 Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Esc_ para excluir todo o caminho inacabado e iniciar um novo.
 
+Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Shift+L_ para converter o último segmento (inacabado) de uma curva Bézier para uma linha reta, ou _Shift+U_ para convertê-lo de uma linha reta para uma curva Bézier. Ao converter para curva Bézier, os pontos de controle são posicionados em um terço e dois terços da corda do segmento.
+
 Ao desenhar uma linha, você também pode mover pelo teclado o último nó criado:
 * Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
 * Pressione _Shift+Seta_ para mover por dez vezes o fator de nudge

@@ -276,6 +276,106 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         canNudgeLastCreatedLineNode();
   }
 
+  THLineSegment? _getLastLineSegmentIfExists() {
+    if (_newLine == null) {
+      return null;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+
+    if (lineSegmentMPIDs.isEmpty) {
+      return null;
+    }
+
+    return _th2File.lineSegmentByMPID(lineSegmentMPIDs.last);
+  }
+
+  bool canChangeLastSegmentToStraight() =>
+      _getLastLineSegmentIfExists() is THBezierCurveLineSegment;
+
+  bool canChangeLastSegmentToCurve() =>
+      _getLastLineSegmentIfExists() is THStraightLineSegment;
+
+  void changeLastSegmentToStraight() {
+    if (!canChangeLastSegmentToStraight()) {
+      return;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
+      lineSegmentMPIDs.last,
+    );
+    final THStraightLineSegment straightLineSegment =
+        THStraightLineSegment.forCWJM(
+          mpID: lastLineSegment.mpID,
+          parentMPID: _newLine!.mpID,
+          endPoint: lastLineSegment.endPoint.copyWith(),
+          optionsMap: lastLineSegment.optionsMap,
+          attrOptionsMap: lastLineSegment.attrOptionsMap,
+          originalLineInTH2File: '',
+          sameLineComment: lastLineSegment.sameLineComment,
+        );
+    final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+      originalLineSegment: lastLineSegment,
+      newLineSegment: straightLineSegment,
+    );
+
+    _th2FileEditController.execute(command);
+    _newLinePendingControlPoint1CanvasCoordinates = null;
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  void changeLastSegmentToCurve() {
+    if (!canChangeLastSegmentToCurve()) {
+      return;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
+      lineSegmentMPIDs.last,
+    );
+    final Offset endPointCoordinates = lastLineSegment.endPoint.coordinates;
+    Offset startPointCoordinates = endPointCoordinates;
+
+    if (lineSegmentMPIDs.length >= 2) {
+      startPointCoordinates = _th2File
+          .lineSegmentByMPID(lineSegmentMPIDs[lineSegmentMPIDs.length - 2])
+          .endPoint
+          .coordinates;
+    }
+
+    final Offset chord = endPointCoordinates - startPointCoordinates;
+    final Offset controlPoint1Coordinates = startPointCoordinates + chord / 3;
+    final Offset controlPoint2Coordinates =
+        startPointCoordinates + chord * 2 / 3;
+    final THBezierCurveLineSegment bezierCurveLineSegment =
+        THBezierCurveLineSegment.forCWJM(
+          mpID: lastLineSegment.mpID,
+          parentMPID: _newLine!.mpID,
+          endPoint: lastLineSegment.endPoint.copyWith(),
+          controlPoint1: THPositionPart(
+            coordinates: controlPoint1Coordinates,
+            decimalPositions: _th2FileEditController.currentDecimalPositions,
+          ),
+          controlPoint2: THPositionPart(
+            coordinates: controlPoint2Coordinates,
+            decimalPositions: _th2FileEditController.currentDecimalPositions,
+          ),
+          optionsMap: lastLineSegment.optionsMap,
+          attrOptionsMap: lastLineSegment.attrOptionsMap,
+          originalLineInTH2File: '',
+          sameLineComment: lastLineSegment.sameLineComment,
+        );
+    final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+      originalLineSegment: lastLineSegment,
+      newLineSegment: bezierCurveLineSegment,
+    );
+
+    _th2FileEditController.execute(command);
+    _newLinePendingControlPoint1CanvasCoordinates = null;
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
   void cancelUnfinishedQuadraticLineCreation() {
     if (!canCancelUnfinishedQuadraticLineCreation()) {
       return;

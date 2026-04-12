@@ -15,6 +15,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Clicar em linha de borda de área: alternar seleção das linhas de borda                        | Ctrl+clique                              |
 | Clicar em linha de borda de área: selecionar apenas a área                                    | Ctrl+Alt+clique                          |
 | Colar elementos                                                                               | Ctrl+V                                   |
+| Converter segmento inacabado de curva para reta ao desenhar                                   | Shift+L                                  |
+| Converter segmento inacabado de reta para curva ao desenhar                                   | Shift+U                                  |
 | Converter segmentos de linha selecionados para Bézier                                         | J                                        |
 | Converter segmentos de linha selecionados para reta                                           | Shift+J                                  |
 | Copiar elementos selecionados                                                                 | Ctrl+C                                   |

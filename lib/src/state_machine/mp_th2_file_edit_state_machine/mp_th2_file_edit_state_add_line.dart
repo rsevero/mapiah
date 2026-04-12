@@ -116,6 +116,32 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
           return;
         }
+      case LogicalKeyboardKey.keyL:
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            isShiftPressed) {
+          if (th2FileEditController.areaLineCreationController
+              .canChangeLastSegmentToStraight()) {
+            th2FileEditController.areaLineCreationController
+                .changeLastSegmentToStraight();
+
+            return;
+          }
+        }
+      case LogicalKeyboardKey.keyU:
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            isShiftPressed) {
+          if (th2FileEditController.areaLineCreationController
+              .canChangeLastSegmentToCurve()) {
+            th2FileEditController.areaLineCreationController
+                .changeLastSegmentToCurve();
+
+            return;
+          }
+        }
     }
 
     _onKeyDownEvent(event);
