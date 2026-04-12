@@ -71,7 +71,7 @@ void main() {
           screenPosition: Offset(1, 2),
           pointTypeString: controller.elementEditController
               .getPointTypeAndSubtypeForNewPoint()
-              .typeSubtypeID,
+              .type,
           pointSubtypeString: '',
           th2FileEditController: controller,
         );
@@ -141,7 +141,7 @@ void main() {
           screenPosition: Offset(1, 2),
           pointTypeString: controller.elementEditController
               .getPointTypeAndSubtypeForNewPoint()
-              .typeSubtypeID,
+              .type,
           pointSubtypeString: '',
           th2FileEditController: controller,
         );
