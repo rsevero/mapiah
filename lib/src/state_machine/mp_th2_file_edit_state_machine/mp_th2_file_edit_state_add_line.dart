@@ -80,9 +80,6 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
                 .canCancelUnfinishedXTherionLineCreation()) {
           th2FileEditController.areaLineCreationController
               .cancelUnfinishedXTherionLineCreation();
-          th2FileEditController.stateController.setState(
-            MPTH2FileEditStateType.selectEmptySelection,
-          );
 
           return;
         }

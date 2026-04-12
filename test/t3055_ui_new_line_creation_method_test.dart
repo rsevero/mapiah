@@ -1359,7 +1359,7 @@ void main() {
         );
         expect(
           editor.th2Controller.stateController.state.type,
-          MPTH2FileEditStateType.selectEmptySelection,
+          MPTH2FileEditStateType.addLine,
         );
       },
     );
@@ -1405,7 +1405,7 @@ void main() {
       );
       expect(
         editor.th2Controller.stateController.state.type,
-        MPTH2FileEditStateType.selectEmptySelection,
+        MPTH2FileEditStateType.addLine,
       );
     });
 
