@@ -13,9 +13,12 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    final MPPLATypeSubtype lineTypeSubtype = elementEditController
+        .getLineTypeAndSubtypeForNewLine();
+
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddLineStatusBarMessage(
-        elementEditController.lastUsedLineType,
+        lineTypeSubtype.typeSubtypeID,
       ),
     );
   }

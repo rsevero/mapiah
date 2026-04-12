@@ -82,8 +82,9 @@ endscrap
 
             final MPCommand command = MPCommandFactory.addPoint(
               screenPosition: Offset(1, 2),
-              pointTypeString:
-                  controller.elementEditController.lastUsedPointType,
+              pointTypeString: controller.elementEditController
+                  .getPointTypeAndSubtypeForNewPoint()
+                  .typeSubtypeID,
               pointSubtypeString: '',
               th2FileEditController: controller,
             );

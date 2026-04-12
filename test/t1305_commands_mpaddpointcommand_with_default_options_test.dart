@@ -69,7 +69,9 @@ void main() {
         // This should not throw "No element with index '...' in file".
         final MPCommand command = MPCommandFactory.addPoint(
           screenPosition: Offset(1, 2),
-          pointTypeString: controller.elementEditController.lastUsedPointType,
+          pointTypeString: controller.elementEditController
+              .getPointTypeAndSubtypeForNewPoint()
+              .typeSubtypeID,
           pointSubtypeString: '',
           th2FileEditController: controller,
         );
@@ -137,7 +139,9 @@ void main() {
 
         final MPCommand command = MPCommandFactory.addPoint(
           screenPosition: Offset(1, 2),
-          pointTypeString: controller.elementEditController.lastUsedPointType,
+          pointTypeString: controller.elementEditController
+              .getPointTypeAndSubtypeForNewPoint()
+              .typeSubtypeID,
           pointSubtypeString: '',
           th2FileEditController: controller,
         );

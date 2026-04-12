@@ -191,11 +191,52 @@ mixin _$TH2FileEditElementEditController
     );
   }
 
+  late final _$_plaTypeSubtypeForNewElementAtom = Atom(
+    name: 'TH2FileEditElementEditControllerBase._plaTypeSubtypeForNewElement',
+    context: context,
+  );
+
+  MPPLATypeSubtype? get plaTypeSubtypeForNewElement {
+    _$_plaTypeSubtypeForNewElementAtom.reportRead();
+    return super._plaTypeSubtypeForNewElement;
+  }
+
+  @override
+  MPPLATypeSubtype? get _plaTypeSubtypeForNewElement =>
+      plaTypeSubtypeForNewElement;
+
+  @override
+  set _plaTypeSubtypeForNewElement(MPPLATypeSubtype? value) {
+    _$_plaTypeSubtypeForNewElementAtom.reportWrite(
+      value,
+      super._plaTypeSubtypeForNewElement,
+      () {
+        super._plaTypeSubtypeForNewElement = value;
+      },
+    );
+  }
+
   late final _$TH2FileEditElementEditControllerBaseActionController =
       ActionController(
         name: 'TH2FileEditElementEditControllerBase',
         context: context,
       );
+
+  @override
+  void setPlaTypeSubtypeForNewElement(MPPLATypeSubtype? plaTypeSubtype) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.setPlaTypeSubtypeForNewElement',
+        );
+    try {
+      return super.setPlaTypeSubtypeForNewElement(plaTypeSubtype);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
 
   @override
   void executeReplaceLineLineSegments(

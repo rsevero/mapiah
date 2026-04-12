@@ -536,8 +536,7 @@ class MPCommandFactory {
   }) {
     final THPoint newPoint = THPoint.pointTypeFromString(
       parentMPID: th2FileEditController.activeScrapID,
-      pointTypeString:
-          th2FileEditController.elementEditController.lastUsedPointType,
+      pointTypeString: pointTypeString,
       position: THPositionPart(
         coordinates: th2FileEditController.offsetScreenToCanvas(screenPosition),
         decimalPositions: th2FileEditController.currentDecimalPositions,

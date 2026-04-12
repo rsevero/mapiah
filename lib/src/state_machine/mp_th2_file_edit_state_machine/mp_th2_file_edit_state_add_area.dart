@@ -17,9 +17,12 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    final MPPLATypeSubtype areaTypeSubtype = elementEditController
+        .getAreaTypeAndSubtypeForNewArea();
+
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddAreaStatusBarMessage(
-        elementEditController.lastUsedAreaType,
+        areaTypeSubtype.typeSubtypeID,
       ),
     );
   }
@@ -62,10 +65,8 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       return Future.value();
     }
 
-    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
-      pla: MPPLAType.area,
-      typeSubtypeID: elementEditController.lastUsedAreaType,
-    );
+    final MPPLATypeSubtype typeSubtype = elementEditController
+        .getAreaTypeAndSubtypeForNewArea();
 
     final List<MPCommand> posCommands = [];
 

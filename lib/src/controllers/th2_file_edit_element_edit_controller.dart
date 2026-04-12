@@ -78,6 +78,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   @readonly
   String _lastUsedStationName = '';
 
+  @readonly
+  MPPLATypeSubtype? _plaTypeSubtypeForNewElement;
+
   THCommandOptionType? _currentOptionTypeBeingEdited;
 
   final Set<int> _mpIDsOutdatedNonLineSegmentClones = {};
@@ -184,6 +187,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String areaType,
     required String areaSubtype,
   }) {
+    _plaTypeSubtypeForNewElement = null;
+
     final MPPLATypeSubtype areaTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.area,
       type: areaType,
@@ -221,6 +226,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String lineType,
     required String lineSubtype,
   }) {
+    _plaTypeSubtypeForNewElement = null;
+
     final MPPLATypeSubtype lineTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.line,
       type: lineType,
@@ -266,6 +273,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required String pointType,
     required String pointSubtype,
   }) {
+    _plaTypeSubtypeForNewElement = null;
+
     final MPPLATypeSubtype pointTypeSubtype = MPPLATypeSubtype(
       pla: MPPLAType.point,
       type: pointType,
@@ -298,28 +307,48 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
+  @action
+  void setPlaTypeSubtypeForNewElement(MPPLATypeSubtype? plaTypeSubtype) {
+    _plaTypeSubtypeForNewElement = plaTypeSubtype;
+  }
+
   MPPLATypeSubtype getPointTypeAndSubtypeForNewPoint() {
+    if ((_plaTypeSubtypeForNewElement != null) &&
+        (_plaTypeSubtypeForNewElement!.pla == MPPLAType.point)) {
+      return _plaTypeSubtypeForNewElement!;
+    }
+
     return MPCommandOptionAux.getPLATypeSubtype(
       pla: MPPLAType.point,
-      typeSubtypeID: lastUsedPointType,
+      typeSubtypeID: _lastUsedPointType(),
     );
   }
 
   MPPLATypeSubtype getLineTypeAndSubtypeForNewLine() {
+    if ((_plaTypeSubtypeForNewElement != null) &&
+        (_plaTypeSubtypeForNewElement!.pla == MPPLAType.line)) {
+      return _plaTypeSubtypeForNewElement!;
+    }
+
     return MPCommandOptionAux.getPLATypeSubtype(
       pla: MPPLAType.line,
-      typeSubtypeID: lastUsedLineType,
+      typeSubtypeID: _lastUsedLineType(),
     );
   }
 
   MPPLATypeSubtype getAreaTypeAndSubtypeForNewArea() {
+    if ((_plaTypeSubtypeForNewElement != null) &&
+        (_plaTypeSubtypeForNewElement!.pla == MPPLAType.area)) {
+      return _plaTypeSubtypeForNewElement!;
+    }
+
     return MPCommandOptionAux.getPLATypeSubtype(
       pla: MPPLAType.area,
-      typeSubtypeID: lastUsedAreaType,
+      typeSubtypeID: _lastUsedAreaType(),
     );
   }
 
-  String get lastUsedAreaType {
+  String _lastUsedAreaType() {
     if (_lastUsedAreaTypes.isEmpty) {
       return thDefaultAreaType.name;
     }
@@ -329,7 +358,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lastUsedAreaType;
   }
 
-  String get lastUsedLineType {
+  String _lastUsedLineType() {
     if (_lastUsedLineTypes.isEmpty) {
       return thDefaultLineType.name;
     }
@@ -339,7 +368,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return lastUsedLineType;
   }
 
-  String get lastUsedPointType {
+  String _lastUsedPointType() {
     if (_lastUsedPointTypes.isEmpty) {
       return thDefaultPointType.name;
     }

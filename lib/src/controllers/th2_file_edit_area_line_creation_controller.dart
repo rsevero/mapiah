@@ -207,11 +207,9 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
   }
 
   THArea _createNewArea() {
-    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
-      pla: MPPLAType.area,
-      typeSubtypeID:
-          _th2FileEditController.elementEditController.lastUsedAreaType,
-    );
+    final MPPLATypeSubtype typeSubtype = _th2FileEditController
+        .elementEditController
+        .getAreaTypeAndSubtypeForNewArea();
     final THArea newArea = THArea.fromString(
       parentMPID: _th2FileEditController.activeScrapID,
       areaTypeString: typeSubtype.type,
@@ -427,12 +425,9 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
-        final MPPLATypeSubtype typeSubtype =
-            MPCommandOptionAux.getPLATypeSubtype(
-              pla: MPPLAType.line,
-              typeSubtypeID:
-                  _th2FileEditController.elementEditController.lastUsedLineType,
-            );
+        final MPPLATypeSubtype typeSubtype = _th2FileEditController
+            .elementEditController
+            .getLineTypeAndSubtypeForNewLine();
 
         _newLine = THLine.fromString(
           parentMPID: _th2FileEditController.activeScrapID,

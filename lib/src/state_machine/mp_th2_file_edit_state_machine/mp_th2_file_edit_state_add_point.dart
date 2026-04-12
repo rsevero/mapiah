@@ -16,9 +16,12 @@ class MPTH2FileEditStateAddPoint extends MPTH2FileEditState
 
   @override
   void onStateEnter(MPTH2FileEditState previousState) {
+    final MPPLATypeSubtype pointTypeSubtype = elementEditController
+        .getPointTypeAndSubtypeForNewPoint();
+
     th2FileEditController.setStatusBarMessage(
       mpLocator.appLocalizations.th2FileEditPageAddPointStatusBarMessage(
-        elementEditController.lastUsedPointType,
+        pointTypeSubtype.typeSubtypeID,
       ),
     );
   }
