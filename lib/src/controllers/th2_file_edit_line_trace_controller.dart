@@ -47,12 +47,12 @@ class TH2FileEditLineTraceController {
       return;
     }
 
-    final _RGBColor? color = await _sampleRasterColorAtCanvas(
+    final _RGBColor? sampledColor = await _sampleRasterColorAtCanvas(
       lineNodes.last,
       requireVisibleImageOnly: true,
     );
 
-    canStartTracingNotifier.value = color != null;
+    canStartTracingNotifier.value = sampledColor != null;
   }
 
   Future<void> startTracingFromCurrentLine() async {
@@ -376,44 +376,47 @@ class TH2FileEditLineTraceController {
     required ui.Image decodedImage,
     required Offset canvasPoint,
   }) {
-    if (rasterImage is! MPImageInsertConfig) {
+    final double imageWidth = decodedImage.width.toDouble();
+    final double imageHeight = decodedImage.height.toDouble();
+
+    final Offset topLeft = rasterImage.transformWorldPointFromBaseWorldPoint(
+      Offset(rasterImage.xx.value, rasterImage.yy.value - imageHeight),
+    );
+    final Offset topRight = rasterImage.transformWorldPointFromBaseWorldPoint(
+      Offset(
+        rasterImage.xx.value + imageWidth,
+        rasterImage.yy.value - imageHeight,
+      ),
+    );
+    final Offset bottomLeft = rasterImage.transformWorldPointFromBaseWorldPoint(
+      Offset(rasterImage.xx.value, rasterImage.yy.value),
+    );
+
+    final Offset xAxis = topRight - topLeft;
+    final Offset yAxis = bottomLeft - topLeft;
+    final double xAxisLengthSquared =
+        (xAxis.dx * xAxis.dx) + (xAxis.dy * xAxis.dy);
+    final double yAxisLengthSquared =
+        (yAxis.dx * yAxis.dx) + (yAxis.dy * yAxis.dy);
+
+    if (xAxisLengthSquared <= 0.000001 || yAxisLengthSquared <= 0.000001) {
       return null;
     }
 
-    final MPImageInsertConfig rasterImageConfig =
-        rasterImage as MPImageInsertConfig;
-
-    if (rasterImageConfig.xScale.value.abs() < 0.000001 ||
-        rasterImageConfig.yScale.value.abs() < 0.000001) {
-      return null;
-    }
-
-    final Offset translation = Offset(
-      rasterImageConfig.xx.value,
-      rasterImageConfig.yy.value,
-    );
-    final Offset pivot = translation + rasterImageConfig.scaledRotationCenter;
-    final double angleInRad =
-        rasterImageConfig.rotationDeg.value * (pi / 180.0);
-    final double cosValue = cos(angleInRad);
-    final double sinValue = sin(angleInRad);
-    final Offset delta = canvasPoint - pivot;
-    final Offset inverseRotated = Offset(
-      pivot.dx + delta.dx * cosValue + delta.dy * sinValue,
-      pivot.dy - delta.dx * sinValue + delta.dy * cosValue,
-    );
-    final Offset scaledPoint = inverseRotated - translation;
-    final Offset localPoint = Offset(
-      scaledPoint.dx / rasterImageConfig.xScale.value,
-      scaledPoint.dy / rasterImageConfig.yScale.value,
-    );
-    final double imageX = localPoint.dx;
-    final double imageY = localPoint.dy + decodedImage.height.toDouble();
+    final Offset relativePoint = canvasPoint - topLeft;
+    final double imageX =
+        ((relativePoint.dx * xAxis.dx) + (relativePoint.dy * xAxis.dy)) /
+        xAxisLengthSquared *
+        imageWidth;
+    final double imageY =
+        ((relativePoint.dx * yAxis.dx) + (relativePoint.dy * yAxis.dy)) /
+        yAxisLengthSquared *
+        imageHeight;
 
     if (imageX < 0 ||
         imageY < 0 ||
-        imageX >= decodedImage.width ||
-        imageY >= decodedImage.height) {
+        imageX >= imageWidth ||
+        imageY >= imageHeight) {
       return null;
     }
 

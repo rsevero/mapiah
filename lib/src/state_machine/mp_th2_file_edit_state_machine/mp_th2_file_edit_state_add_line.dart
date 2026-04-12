@@ -63,6 +63,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
   void onPrimaryButtonDragEnd(PointerUpEvent event) {
     setCursor();
     th2FileEditController.areaLineCreationController.endNewLineDrag();
+    th2FileEditController.lineTraceController.updateCanStartTracing();
   }
 
   @override
@@ -189,6 +190,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
       onMove: (Offset deltaOnCanvas) {
         th2FileEditController.areaLineCreationController
             .nudgeLastCreatedLineNodeByDeltaOnCanvas(deltaOnCanvas);
+        th2FileEditController.lineTraceController.updateCanStartTracing();
       },
     );
   }
