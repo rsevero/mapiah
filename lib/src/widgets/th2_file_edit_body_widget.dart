@@ -82,9 +82,6 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                                     .getTH2FileWidgetGlobalKey(),
                                 th2FileEditController: th2FileEditController,
                               ),
-                              TH2FileEditLastUsedPLAButtonsWidget(
-                                th2FileEditController: th2FileEditController,
-                              ),
                               TH2FileEditStateActionButtonsWidget(
                                 heroPrefix: heroPrefix,
                                 th2FileEditController: th2FileEditController,
@@ -106,9 +103,6 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                             TH2FileWidget(
                               key: th2FileEditController
                                   .getTH2FileWidgetGlobalKey(),
-                              th2FileEditController: th2FileEditController,
-                            ),
-                            TH2FileEditLastUsedPLAButtonsWidget(
                               th2FileEditController: th2FileEditController,
                             ),
                             TH2FileEditStateActionButtonsWidget(
@@ -150,6 +144,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   }
                 },
           ),
+        ),
+        TH2FileEditLastUsedPLAButtonsWidget(
+          th2FileEditController: th2FileEditController,
         ),
         TH2FileEditBottomStatusBarWidget(
           th2FileEditController: th2FileEditController,

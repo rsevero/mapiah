@@ -42,44 +42,47 @@ class TH2FileEditLastUsedPLAButtonsWidget extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        return Positioned(
-          left: 0,
-          right: 0,
-          bottom: mpButtonSpace,
-          child: IgnorePointer(
-            ignoring: false,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: _TH2FileEditLastUsedPLAButtonsHalfWidget(
-                    plaTypes: lastUsedAreaLineTypes.reversed.toList(),
-                    alignment: Alignment.centerRight,
-                    th2FileEditController: th2FileEditController,
-                  ),
-                ),
-                SizedBox(width: mpButtonSpace, height: 44),
-                SizedBox(
-                  height: 44,
-                  child: Center(
-                    child: Container(
-                      width: 1,
-                      height: 28,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.outlineVariant.withValues(alpha: 0.8),
+        final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+        return Material(
+          color: colorScheme.surfaceContainerHigh,
+          child: SizedBox(
+            height: 48,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: mpButtonSpace),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: _TH2FileEditLastUsedPLAButtonsHalfWidget(
+                      plaTypes: lastUsedAreaLineTypes.reversed.toList(),
+                      alignment: Alignment.centerRight,
+                      th2FileEditController: th2FileEditController,
                     ),
                   ),
-                ),
-                SizedBox(width: mpButtonSpace * 2, height: 44),
-                Expanded(
-                  child: _TH2FileEditLastUsedPLAButtonsHalfWidget(
-                    plaTypes: lastUsedPointTypes,
-                    alignment: Alignment.centerLeft,
-                    th2FileEditController: th2FileEditController,
+                  SizedBox(width: mpButtonSpace, height: 44),
+                  SizedBox(
+                    height: 44,
+                    child: Center(
+                      child: Container(
+                        width: 1,
+                        height: 28,
+                        color: colorScheme.outlineVariant.withValues(
+                          alpha: 0.8,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(width: mpButtonSpace * 2, height: 44),
+                  Expanded(
+                    child: _TH2FileEditLastUsedPLAButtonsHalfWidget(
+                      plaTypes: lastUsedPointTypes,
+                      alignment: Alignment.centerLeft,
+                      th2FileEditController: th2FileEditController,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
