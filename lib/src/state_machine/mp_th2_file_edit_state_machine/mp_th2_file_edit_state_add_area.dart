@@ -62,10 +62,10 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
       return Future.value();
     }
 
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(
-          elementEditController.lastUsedAreaType,
-        );
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.area,
+      typeSubtypeID: elementEditController.lastUsedAreaType,
+    );
 
     final List<MPCommand> posCommands = [];
 

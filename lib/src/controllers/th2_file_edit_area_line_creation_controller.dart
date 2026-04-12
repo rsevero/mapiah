@@ -17,6 +17,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -206,10 +207,11 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
   }
 
   THArea _createNewArea() {
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.area,
+      typeSubtypeID:
           _th2FileEditController.elementEditController.lastUsedAreaType,
-        );
+    );
     final THArea newArea = THArea.fromString(
       parentMPID: _th2FileEditController.activeScrapID,
       areaTypeString: typeSubtype.type,
@@ -425,9 +427,11 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
       if (_lineStartScreenPosition == null) {
         _lineStartScreenPosition = endPointScreenCoordinates;
       } else {
-        final ({String subtype, String type}) typeSubtype =
-            MPCommandOptionAux.getPLATypeSubtypeRecord(
-              _th2FileEditController.elementEditController.lastUsedLineType,
+        final MPPLATypeSubtype typeSubtype =
+            MPCommandOptionAux.getPLATypeSubtype(
+              pla: MPPLAType.line,
+              typeSubtypeID:
+                  _th2FileEditController.elementEditController.lastUsedLineType,
             );
 
         _newLine = THLine.fromString(

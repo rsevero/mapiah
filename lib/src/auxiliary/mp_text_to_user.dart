@@ -12,6 +12,7 @@ import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_scale_multiple_choice_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -750,8 +751,10 @@ class MPTextToUser {
   }
 
   static String getPointTypeSubtypeFromTypeSubtypeID(String pointTypeAsString) {
-    final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(pointTypeAsString);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.point,
+      typeSubtypeID: pointTypeAsString,
+    );
 
     return getPointTypeSubtypeFromTypeSubtype(
       pointType: typeSubtype.type,
@@ -846,8 +849,10 @@ class MPTextToUser {
   }
 
   static String getLineTypeSubtypeFromTypeSubtypeID(String lineTypeAsString) {
-    final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(lineTypeAsString);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.line,
+      typeSubtypeID: lineTypeAsString,
+    );
 
     return getLineTypeSubtypeFromTypeSubtype(
       lineType: typeSubtype.type,
@@ -922,8 +927,10 @@ class MPTextToUser {
   }
 
   static String getAreaTypeSubtypeFromTypeSubtypeID(String areaTypeAsString) {
-    final ({String type, String subtype}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(areaTypeAsString);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.area,
+      typeSubtypeID: areaTypeAsString,
+    );
 
     return getAreaTypeSubtypeFromTypeSubtype(
       areaType: typeSubtype.type,

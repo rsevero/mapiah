@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -830,8 +831,10 @@ class MPCommandFactory {
         MPCommandDescriptionType.editAreasTypeSubtype,
   }) {
     final List<MPCommand> commandsList = [];
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(newAreaTypeSubtype);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.area,
+      typeSubtypeID: newAreaTypeSubtype,
+    );
     final THAreaType newAreaType = THAreaType.fromString(typeSubtype.type);
     final String unknownPLAType = THAreaType.unknownPLATypeFromString(
       typeSubtype.type,
@@ -940,8 +943,10 @@ class MPCommandFactory {
         MPCommandDescriptionType.editLinesTypeSubtype,
   }) {
     final List<MPCommand> commandsList = [];
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(newLineTypeSubtype);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.line,
+      typeSubtypeID: newLineTypeSubtype,
+    );
     final THLineType newLineType = THLineType.fromString(typeSubtype.type);
     final String unknownPLAType = THLineType.unknownPLATypeFromString(
       typeSubtype.type,
@@ -1025,8 +1030,10 @@ class MPCommandFactory {
         MPCommandDescriptionType.editPointsTypeSubtype,
   }) {
     final List<MPCommand> commandsList = [];
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(newPointTypeSubtype);
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.point,
+      typeSubtypeID: newPointTypeSubtype,
+    );
     final THPointType newPointType = THPointType.fromString(typeSubtype.type);
     final String unknownPLAType = THPointType.unknownPLATypeFromString(
       typeSubtype.type,

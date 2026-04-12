@@ -15,6 +15,7 @@ import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -647,8 +648,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             .values;
     final TH2FileEditElementEditController elementEditController =
         _th2FileEditController.elementEditController;
-    final ({String subtype, String type}) typeSubtype =
-        MPCommandOptionAux.getPLATypeSubtypeRecord(newPLAType);
+    final MPPLAType pla = switch (elementType) {
+      THElementType.area => MPPLAType.area,
+      THElementType.line => MPPLAType.line,
+      THElementType.point => MPPLAType.point,
+      _ => throw Exception(
+        'Unsupported element type $elementType in TH2FileEditUserInteractionController.prepareSetPLAType().',
+      ),
+    };
+    final MPPLATypeSubtype typeSubtype = MPCommandOptionAux.getPLATypeSubtype(
+      pla: pla,
+      typeSubtypeID: newPLAType,
+    );
 
     MPCommand setPLATypeCommand;
     List<int> mpIDs = [];

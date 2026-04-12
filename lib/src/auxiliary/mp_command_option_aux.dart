@@ -5,6 +5,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -484,15 +485,20 @@ class MPCommandOptionAux {
         : false;
   }
 
-  static ({String type, String subtype}) getPLATypeSubtypeRecord(
-    String typeSubtypeID,
-  ) {
+  static MPPLATypeSubtype getPLATypeSubtype({
+    required MPPLAType pla,
+    required String typeSubtypeID,
+  }) {
     final int separatorPosition = typeSubtypeID.indexOf(
       mpPLATypeSubtypeSeparator,
     );
 
     if (separatorPosition < 0) {
-      return (type: typeSubtypeID.trim(), subtype: '');
+      return MPPLATypeSubtype(
+        pla: pla,
+        type: typeSubtypeID.trim(),
+        subtype: '',
+      );
     }
 
     final String type = typeSubtypeID.substring(0, separatorPosition).trim();
@@ -500,7 +506,7 @@ class MPCommandOptionAux {
         separatorPosition + mpPLATypeSubtypeSeparator.length;
     final String subtype = typeSubtypeID.substring(subtypeStartPosition).trim();
 
-    return (type: type, subtype: subtype);
+    return MPPLATypeSubtype(pla: pla, type: type, subtype: subtype);
   }
 
   static String getPLATypeAndSubtypeID({

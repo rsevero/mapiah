@@ -22,6 +22,7 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
@@ -297,16 +298,25 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     }
   }
 
-  ({String type, String subtype}) getLastUsedPointTypeAndSubtype() {
-    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedPointType);
+  MPPLATypeSubtype getPointTypeAndSubtypeForNewPoint() {
+    return MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.point,
+      typeSubtypeID: lastUsedPointType,
+    );
   }
 
-  ({String type, String subtype}) getLastUsedLineTypeAndSubtype() {
-    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedLineType);
+  MPPLATypeSubtype getLineTypeAndSubtypeForNewLine() {
+    return MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.line,
+      typeSubtypeID: lastUsedLineType,
+    );
   }
 
-  ({String type, String subtype}) getLastUsedAreaTypeAndSubtype() {
-    return MPCommandOptionAux.getPLATypeSubtypeRecord(lastUsedAreaType);
+  MPPLATypeSubtype getAreaTypeAndSubtypeForNewArea() {
+    return MPCommandOptionAux.getPLATypeSubtype(
+      pla: MPPLAType.area,
+      typeSubtypeID: lastUsedAreaType,
+    );
   }
 
   String get lastUsedAreaType {
