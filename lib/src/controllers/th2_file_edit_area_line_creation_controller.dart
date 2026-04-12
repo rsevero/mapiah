@@ -201,6 +201,98 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     _th2FileEditController.triggerNewLineRedraw();
   }
 
+  bool canNudgeLastCreatedLineNode() {
+    return (_getNewLineCreationMethod() ==
+            MPNewLineCreationMethod.xTherionCubicSmooth) &&
+        ((_lineStartScreenPosition != null) || (_newLine != null));
+  }
+
+  void nudgeLastCreatedLineNodeByDeltaOnCanvas(Offset deltaOnCanvas) {
+    if (!canNudgeLastCreatedLineNode() || (deltaOnCanvas == Offset.zero)) {
+      return;
+    }
+
+    if (_newLine == null) {
+      _nudgePendingLineStartByDeltaOnCanvas(deltaOnCanvas);
+
+      return;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+
+    if (lineSegmentMPIDs.isEmpty) {
+      return;
+    }
+
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
+      lineSegmentMPIDs.last,
+    );
+    final THPositionPart movedEndPoint = THPositionPart(
+      coordinates: lastLineSegment.endPoint.coordinates + deltaOnCanvas,
+      decimalPositions: _th2FileEditController.currentDecimalPositions,
+    );
+    final THLineSegment movedLastLineSegment =
+        _moveLastCreatedLineSegmentWithNode(
+          lastLineSegment: lastLineSegment,
+          movedEndPoint: movedEndPoint,
+          deltaOnCanvas: deltaOnCanvas,
+        );
+    final MPEditLineSegmentCommand command = MPEditLineSegmentCommand(
+      originalLineSegment: lastLineSegment,
+      newLineSegment: movedLastLineSegment,
+    );
+
+    _th2FileEditController.execute(command);
+
+    if (_newLinePendingControlPoint1CanvasCoordinates != null) {
+      _newLinePendingControlPoint1CanvasCoordinates =
+          _newLinePendingControlPoint1CanvasCoordinates! + deltaOnCanvas;
+    }
+
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  void _nudgePendingLineStartByDeltaOnCanvas(Offset deltaOnCanvas) {
+    if (_lineStartScreenPosition == null) {
+      return;
+    }
+
+    final Offset deltaOnScreen = Offset(
+      _th2FileEditController.scaleCanvasToScreen(deltaOnCanvas.dx),
+      -_th2FileEditController.scaleCanvasToScreen(deltaOnCanvas.dy),
+    );
+
+    _lineStartScreenPosition = _lineStartScreenPosition! + deltaOnScreen;
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  THLineSegment _moveLastCreatedLineSegmentWithNode({
+    required THLineSegment lastLineSegment,
+    required THPositionPart movedEndPoint,
+    required Offset deltaOnCanvas,
+  }) {
+    switch (lastLineSegment) {
+      case THStraightLineSegment _:
+        return lastLineSegment.copyWith(
+          endPoint: movedEndPoint,
+          originalLineInTH2File: '',
+        );
+      case THBezierCurveLineSegment _:
+        return lastLineSegment.copyWith(
+          endPoint: movedEndPoint,
+          controlPoint2: lastLineSegment.controlPoint2.copyWith(
+            coordinates:
+                lastLineSegment.controlPoint2.coordinates + deltaOnCanvas,
+          ),
+          originalLineInTH2File: '',
+        );
+    }
+
+    throw Exception(
+      'Unsupported line segment type while moving last created line node: ${lastLineSegment.runtimeType}',
+    );
+  }
+
   @action
   void clearNewArea() {
     _newArea = null;

@@ -3,7 +3,10 @@
 part of 'mp_th2_file_edit_state.dart';
 
 class MPTH2FileEditStateAddLine extends MPTH2FileEditState
-    with MPTH2FileEditStateMoveCanvasMixin, MPTH2FileEditStateKeyDownMixin {
+    with
+        MPTH2FileEditStateMoveCanvasMixin,
+        MPTH2FileEditStateKeyDownMixin,
+        MPTH2FileEditStateMoveModifiersMixin {
   MPTH2FileEditStateAddLine({required super.th2FileEditController});
 
   @override
@@ -58,6 +61,10 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (_handleArrowMoveKey(event.logicalKey)) {
+      return;
+    }
+
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
@@ -78,6 +85,26 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     }
 
     _onKeyDownEvent(event);
+  }
+
+  @override
+  void onKeyRepeatEvent(KeyRepeatEvent event) {
+    _handleArrowMoveKey(event.logicalKey);
+  }
+
+  bool _handleArrowMoveKey(LogicalKeyboardKey logicalKey) {
+    if (!th2FileEditController.areaLineCreationController
+        .canNudgeLastCreatedLineNode()) {
+      return false;
+    }
+
+    return handleArrowMoveKey(
+      logicalKey: logicalKey,
+      onMove: (Offset deltaOnCanvas) {
+        th2FileEditController.areaLineCreationController
+            .nudgeLastCreatedLineNodeByDeltaOnCanvas(deltaOnCanvas);
+      },
+    );
   }
 
   @override

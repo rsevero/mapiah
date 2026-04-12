@@ -113,6 +113,12 @@ When drawing lines, each new segment is initially created as a straight line seg
 
 The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold Ctrl while dragging to keep the mirrored control point at a fixed distance.
 
+While drawing with "xTherion cubic smooth", you can also move the last created node with the keyboard:
+* Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
+* Press _Shift+Arrow_ to move it by ten times the nudge factor
+* Press _Alt+Arrow_ to move it by 1 screen pixel
+* Press _Alt+Shift+Arrow_ to move it by 10 screen pixels
+
 Bézier Curves on Therion (and Mapiah) are cubic curves, i.e., they have 2 control points for each segment. Just on line segment creation Mapiah pretends that the Bézier Curve being created is a quadratic Bézier Curve (with only one control point) so the user has flexibility to create the line segment.
 
 Observe that despite the fact that Mapiah is simulating the existance of only one control point, an actual cubic Bézier Curve is being created with two control points as expected.

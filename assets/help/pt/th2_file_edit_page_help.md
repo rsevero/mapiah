@@ -240,6 +240,12 @@ Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento d
 
 O comportamento exato desse arrasto depende da opção de configuração "Método de criação de nova linha". "Quadrático do Mapiah" mantém o comportamento atual descrito abaixo. "Cúbico suave do xTherion" usa a posição arrastada como o futuro ponto de controle do próximo segmento, espelha o outro ponto de controle do segmento atual em torno do ponto final compartilhado e permite manter Ctrl pressionado durante o arrasto para fixar a distância do ponto de controle espelhado.
 
+Ao desenhar com "Cúbico suave do xTherion", você também pode mover pelo teclado o último nó criado:
+* Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
+* Pressione _Shift+Seta_ para mover por dez vezes o fator de nudge
+* Pressione _Alt+Seta_ para mover por 1 pixel de tela
+* Pressione _Alt+Shift+Seta_ para mover por 10 pixels de tela
+
 Curvas Bézier no Therion (e no Mapiah) são curvas cúbicas, isto é, têm 2 pontos de controle para cada segmento. Apenas durante a criação do segmento, o Mapiah finge que a curva Bézier sendo criada é uma Bézier quadrática (com apenas um ponto de controle) para dar flexibilidade ao usuário na criação do segmento.
 
 Observe que, apesar de o Mapiah simular a existência de apenas um ponto de controle, uma curva Bézier cúbica real é criada com dois pontos de controle, como esperado.

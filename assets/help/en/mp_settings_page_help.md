@@ -65,7 +65,7 @@ Controls the visual thickness (in pixels) of lines drawn on the canvas. This is 
 ### New line creation method
 Controls the behavior when creating a new line segment by clicking and dragging:
 * **Mapiah quadratic**: the drag position is used as the single control point of a quadratic Bézier curve approximation.
-* **xTherion cubic smooth**: the drag position becomes the next segment's future control point; the current segment's other control point is mirrored around the shared endpoint. Hold _Ctrl_ while dragging to lock the mirrored control point at a fixed distance. It tries to reproduce XTherion behaviour.
+* **xTherion cubic smooth**: the drag position becomes the next segment's future control point; the current segment's other control point is mirrored around the shared endpoint. Hold _Ctrl_ while dragging to lock the mirrored control point at a fixed distance. While drawing, the last created node can also be nudged with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_. It tries to reproduce XTherion behaviour.
 
 ### Point radius
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.

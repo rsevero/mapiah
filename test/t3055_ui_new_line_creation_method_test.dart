@@ -265,6 +265,300 @@ void main() {
     });
 
     testWidgets(
+      'Arrow moves the last created xTherion node by the nudge factor',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalNudgeFactor = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 3.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1 = origin + const Offset(120, 120);
+          final Offset p2 = origin + const Offset(240, 160);
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await _clickMouse(tester, mouse, p2);
+
+          final THLineSegment originalLastSegment = _getLastLineSegment(
+            editor.th2File,
+          );
+
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowRight);
+          await tester.pump();
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.arrowRight);
+          await tester.pump();
+
+          final THLineSegment movedLastSegment = _getLastLineSegment(
+            editor.th2File,
+          );
+
+          expect(
+            movedLastSegment.endPoint.coordinates.dx,
+            closeTo(
+              originalLastSegment.endPoint.coordinates.dx + nudgeFactor,
+              1e-9,
+            ),
+          );
+          expect(
+            movedLastSegment.endPoint.coordinates.dy,
+            closeTo(originalLastSegment.endPoint.coordinates.dy, 1e-9),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalNudgeFactor,
+          );
+        }
+      },
+    );
+
+    testWidgets(
+      'Shift+Arrow moves the last created xTherion node by ten times the nudge factor',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalNudgeFactor = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 2.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1 = origin + const Offset(120, 120);
+          final Offset p2 = origin + const Offset(240, 160);
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await _clickMouse(tester, mouse, p2);
+
+          final THLineSegment originalLastSegment = _getLastLineSegment(
+            editor.th2File,
+          );
+
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowUp);
+          await tester.pump();
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.arrowUp);
+          await tester.pump();
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+
+          final THLineSegment movedLastSegment = _getLastLineSegment(
+            editor.th2File,
+          );
+
+          expect(
+            movedLastSegment.endPoint.coordinates.dx,
+            closeTo(originalLastSegment.endPoint.coordinates.dx, 1e-9),
+          );
+          expect(
+            movedLastSegment.endPoint.coordinates.dy,
+            closeTo(
+              originalLastSegment.endPoint.coordinates.dy +
+                  (nudgeFactor * 10.0),
+              1e-9,
+            ),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalNudgeFactor,
+          );
+        }
+      },
+    );
+
+    testWidgets(
+      'Alt+Arrow moves the last created xTherion node by one screen pixel',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1 = origin + const Offset(120, 120);
+        final Offset p2 = origin + const Offset(240, 160);
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+        final double expectedCanvasStep = editor.th2Controller
+            .scaleScreenToCanvas(1.0);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+        await _clickMouse(tester, mouse, p2);
+
+        final THLineSegment originalLastSegment = _getLastLineSegment(
+          editor.th2File,
+        );
+
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.altLeft);
+        await tester.pump();
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowLeft);
+        await tester.pump();
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.arrowLeft);
+        await tester.pump();
+        await tester.sendKeyUpEvent(LogicalKeyboardKey.altLeft);
+        await tester.pump();
+
+        final THLineSegment movedLastSegment = _getLastLineSegment(
+          editor.th2File,
+        );
+
+        expect(
+          movedLastSegment.endPoint.coordinates.dx,
+          closeTo(
+            originalLastSegment.endPoint.coordinates.dx - expectedCanvasStep,
+            1e-9,
+          ),
+        );
+        expect(
+          movedLastSegment.endPoint.coordinates.dy,
+          closeTo(originalLastSegment.endPoint.coordinates.dy, 1e-9),
+        );
+      },
+    );
+
+    testWidgets(
+      'Arrow moves the last xTherion node together with its smooth handles',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalNudgeFactor = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_NudgeFactor);
+        const double nudgeFactor = 2.5;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_NudgeFactor,
+          nudgeFactor,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1 = origin + const Offset(120, 120);
+          final Offset p2 = origin + const Offset(240, 160);
+          final Offset p3 = origin + const Offset(300, 200);
+          final Offset dragPoint = origin + const Offset(350, 220);
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await _clickMouse(tester, mouse, p2);
+
+          await tester.sendEventToBinding(
+            mouse.down(p3, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+          await tester.sendEventToBinding(
+            mouse.move(dragPoint, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+          await tester.sendEventToBinding(mouse.up());
+          await tester.pumpAndSettle();
+
+          final THBezierCurveLineSegment originalLastSegment =
+              _getLastBezierSegment(editor.th2File);
+          final Offset originalPendingControlPoint1 = editor
+              .th2Controller
+              .areaLineCreationController
+              .newLinePendingControlPoint1CanvasCoordinates!;
+
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.arrowRight);
+          await tester.pump();
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.arrowRight);
+          await tester.pump();
+
+          final THBezierCurveLineSegment movedLastSegment =
+              _getLastBezierSegment(editor.th2File);
+          final Offset movedPendingControlPoint1 = editor
+              .th2Controller
+              .areaLineCreationController
+              .newLinePendingControlPoint1CanvasCoordinates!;
+
+          expect(
+            movedLastSegment.endPoint.coordinates.dx,
+            closeTo(
+              originalLastSegment.endPoint.coordinates.dx + nudgeFactor,
+              1e-9,
+            ),
+          );
+          expect(
+            movedLastSegment.controlPoint2.coordinates.dx,
+            closeTo(
+              originalLastSegment.controlPoint2.coordinates.dx + nudgeFactor,
+              1e-9,
+            ),
+          );
+          expect(
+            movedPendingControlPoint1.dx,
+            closeTo(originalPendingControlPoint1.dx + nudgeFactor, 1e-9),
+          );
+          expect(
+            movedLastSegment.endPoint.coordinates.dy,
+            closeTo(originalLastSegment.endPoint.coordinates.dy, 1e-9),
+          );
+          expect(
+            movedLastSegment.controlPoint2.coordinates.dy,
+            closeTo(originalLastSegment.controlPoint2.coordinates.dy, 1e-9),
+          );
+          expect(
+            movedPendingControlPoint1.dy,
+            closeTo(originalPendingControlPoint1.dy, 1e-9),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_NudgeFactor,
+            originalNudgeFactor,
+          );
+        }
+      },
+    );
+
+    testWidgets(
       'xTherion mode allows dragging two consecutive segments after many updates',
       (WidgetTester tester) async {
         await _configureTestSurface(tester);
@@ -406,4 +700,11 @@ THBezierCurveLineSegment _getLastBezierSegment(TH2File th2File) {
   final List<THLineSegment> lineSegments = line.getLineSegments(th2File);
 
   return lineSegments.last as THBezierCurveLineSegment;
+}
+
+THLineSegment _getLastLineSegment(TH2File th2File) {
+  final THLine line = th2File.getLines().first;
+  final List<THLineSegment> lineSegments = line.getLineSegments(th2File);
+
+  return lineSegments.last;
 }

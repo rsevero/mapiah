@@ -43,6 +43,7 @@
   * Existing TH2 files are now canonicalized to normalized absolute paths inside `MPGeneralController`, so controller lookup, tab identity, telemetry, and rename/remove flows all use one consistent filename key.
   * Cross-file paste and duplicate workflows no longer crash when auto-zoom tries to fit a zero-size selection or runs before the destination canvas has a valid viewport; selection-window zoom now guards against zero or non-finite scales.
   * Added widget coverage for xTherion cubic smooth Ctrl-drag line creation, checking both the fixed mirrored-handle distance on the current segment and the seeded control point carried into the next segment.
+  * xTherion cubic smooth line creation now supports nudging the last created node with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_ while drawing. The in-progress smooth handles move together with the node, and EN/PT help plus regression coverage were updated accordingly.
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.
