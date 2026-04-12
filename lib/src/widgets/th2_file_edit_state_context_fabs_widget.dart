@@ -39,10 +39,20 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           final List<Widget> buttonRows = [];
 
           if (th2FileEditController.isInEditSingleLineState) {
-            buttonRows.addAll(_editSingleLineContextFABs(context));
+            buttonRows.addAll(
+              _TH2FileEditSingleLineContextFABsBuilder(
+                heroPrefix: heroPrefix,
+                th2FileEditController: th2FileEditController,
+              ).build(context),
+            );
           } else if (th2FileEditController.isInSelectNonEmptySelectionState ||
               th2FileEditController.isInElementRotateState) {
-            buttonRows.addAll(_selectNonEmptySelectionContextFABs(context));
+            buttonRows.addAll(
+              _TH2FileEditNonEmptySelectionContextFABsBuilder(
+                heroPrefix: heroPrefix,
+                th2FileEditController: th2FileEditController,
+              ).build(context),
+            );
           } else if (th2FileEditController.isInSelectEmptySelectionState) {
             buttonRows.addAll(_selectEmptySelectionContextFABs(context));
           } else if (th2FileEditController.isInAddElementState) {
@@ -75,9 +85,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return <Widget>[
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_select_all_elements',
             onPressed: th2FileEditController.enableSelectButton
@@ -89,9 +99,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_paste_elements',
             onPressed: th2FileEditController.hasClipboardContent
@@ -106,162 +116,13 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     ];
   }
 
-  List<Widget> _editSingleLineContextFABs(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-    final bool allEndPointsSelected =
-        th2FileEditController.areAllEndPointsSelected;
-    final bool hasSelectedEndPoints =
-        th2FileEditController.hasSelectedEndPoints;
-    final bool hasSelectedNonStartEndPoints =
-        th2FileEditController.hasSelectedNonStartEndPoints;
-    final bool isInteractiveLineSimplificationDialogOpen =
-        th2FileEditController.isInteractiveLineSimplificationDialogOpen.value;
-
-    return <Widget>[
-      _stateContextFABCategoryRow(
-        buttons: <Widget>[
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_select_all_end_points',
-            onPressed: () => _onButtonPressed(MPButtonType.selectAllEndPoints),
-            category: _StateContextFABCategory.selection,
-            icon: allEndPointsSelected ? Icons.deselect : Icons.select_all,
-            tooltip: allEndPointsSelected
-                ? appLocalizations.th2FileEditPageDeselectAllEndPoints
-                : appLocalizations.th2FileEditPageSelectAllEndPoints,
-          ),
-        ],
-      ),
-      _stateContextFABCategoryRow(
-        buttons: <Widget>[
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_simplify_lines',
-            onPressed: () => _onButtonPressed(MPButtonType.simplifyLines),
-            category: _StateContextFABCategory.simplification,
-            icon: Icons.auto_fix_normal,
-            tooltip: appLocalizations.th2FileEditPageSimplifyLines,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_simplify_lines_straight',
-            onPressed: () =>
-                _onButtonPressed(MPButtonType.simplifyLinesForcingStraight),
-            category: _StateContextFABCategory.simplification,
-            icon: Icons.straighten,
-            tooltip:
-                appLocalizations.th2FileEditPageSimplifyLinesForcingStraight,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_simplify_lines_bezier',
-            onPressed: () =>
-                _onButtonPressed(MPButtonType.simplifyLinesForcingBezier),
-            category: _StateContextFABCategory.simplification,
-            icon: Icons.gesture,
-            tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_simplify_lines_interactive',
-            onPressed: () {
-              th2FileEditController.openInteractiveLineSimplificationDialog();
-            },
-            category: _StateContextFABCategory.simplification,
-            icon: Icons.tune,
-            tooltip: appLocalizations.th2FileEditPageInteractiveSimplifyLines,
-            isActive: isInteractiveLineSimplificationDialogOpen,
-          ),
-        ],
-      ),
-      _stateContextFABCategoryRow(
-        buttons: <Widget>[
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_convert_line_segments_straight',
-            onPressed: hasSelectedNonStartEndPoints
-                ? () => _onButtonPressed(
-                    MPButtonType.convertLineSegmentsToStraight,
-                  )
-                : null,
-            category: _StateContextFABCategory.lineSegmentConversion,
-            icon: Icons.linear_scale,
-            tooltip:
-                appLocalizations.th2FileEditPageConvertLineSegmentsToStraight,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_convert_line_segments_bezier',
-            onPressed: hasSelectedNonStartEndPoints
-                ? () =>
-                      _onButtonPressed(MPButtonType.convertLineSegmentsToBezier)
-                : null,
-            category: _StateContextFABCategory.lineSegmentConversion,
-            icon: Icons.draw,
-            tooltip:
-                appLocalizations.th2FileEditPageConvertLineSegmentsToBezier,
-          ),
-        ],
-      ),
-      _stateContextFABCategoryRow(
-        buttons: <Widget>[
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_open_option_window',
-            onPressed: hasSelectedEndPoints
-                ? () => _onButtonPressed(MPButtonType.openOptionWindow)
-                : null,
-            category: _StateContextFABCategory.editTools,
-            icon: Icons.tune,
-            tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_reverse_line',
-            onPressed: () => _onButtonPressed(MPButtonType.reverseLine),
-            category: _StateContextFABCategory.editTools,
-            icon: Icons.compare_arrows,
-            tooltip: appLocalizations.th2FileEditPageReverseLine,
-          ),
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_smooth_line_segments',
-            onPressed: hasSelectedEndPoints
-                ? () => _onButtonPressed(MPButtonType.smoothLineSegments)
-                : null,
-            category: _StateContextFABCategory.editTools,
-            icon: Icons.blur_on,
-            tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
-          ),
-        ],
-      ),
-      _stateContextFABCategoryRow(
-        buttons: <Widget>[
-          _stateContextFABButton(
-            context: context,
-            heroTag: '${heroPrefix}_ctx_split_line',
-            onPressed: hasSelectedEndPoints
-                ? () => _onButtonPressed(
-                    MPButtonType.splitLineAtSelectedEndPoints,
-                  )
-                : null,
-            category: _StateContextFABCategory.splitJoinMerge,
-            icon: Icons.call_split,
-            tooltip:
-                appLocalizations.th2FileEditPageSplitLineAtSelectedEndPoints,
-          ),
-        ],
-      ),
-    ];
-  }
-
   List<Widget> _imageOperationContextFABs(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
 
     return <Widget>[
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_flip_image_horizontally',
             onPressed: () =>
@@ -270,7 +131,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.flip,
             tooltip: appLocalizations.th2FileEditPageFlipImageHorizontally,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_flip_image_vertically',
             onPressed: () => _onButtonPressed(MPButtonType.flipImageVertically),
@@ -294,9 +155,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     final bool hasSelectableElements = th2FileEditController.enableSelectButton;
 
     return <Widget>[
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_select_all_elements',
             onPressed: hasSelectableElements
@@ -310,9 +171,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_paste_elements',
             onPressed: th2FileEditController.hasClipboardContent
@@ -327,7 +188,184 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     ];
   }
 
-  List<Widget> _selectNonEmptySelectionContextFABs(BuildContext context) {
+  void _onButtonPressed(MPButtonType buttonType) {
+    th2FileEditController.stateController.onButtonPressed(buttonType);
+  }
+}
+
+class _TH2FileEditSingleLineContextFABsBuilder {
+  final String heroPrefix;
+  final TH2FileEditController th2FileEditController;
+
+  const _TH2FileEditSingleLineContextFABsBuilder({
+    required this.heroPrefix,
+    required this.th2FileEditController,
+  });
+
+  List<Widget> build(BuildContext context) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final bool allEndPointsSelected =
+        th2FileEditController.areAllEndPointsSelected;
+    final bool hasSelectedEndPoints =
+        th2FileEditController.hasSelectedEndPoints;
+    final bool hasSelectedNonStartEndPoints =
+        th2FileEditController.hasSelectedNonStartEndPoints;
+    final bool isInteractiveLineSimplificationDialogOpen =
+        th2FileEditController.isInteractiveLineSimplificationDialogOpen.value;
+
+    return <Widget>[
+      _TH2FileEditStateContextFABCategoryRow(
+        buttons: <Widget>[
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_select_all_end_points',
+            onPressed: () => _onButtonPressed(MPButtonType.selectAllEndPoints),
+            category: _StateContextFABCategory.selection,
+            icon: allEndPointsSelected ? Icons.deselect : Icons.select_all,
+            tooltip: allEndPointsSelected
+                ? appLocalizations.th2FileEditPageDeselectAllEndPoints
+                : appLocalizations.th2FileEditPageSelectAllEndPoints,
+          ),
+        ],
+      ),
+      _TH2FileEditStateContextFABCategoryRow(
+        buttons: <Widget>[
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_simplify_lines',
+            onPressed: () => _onButtonPressed(MPButtonType.simplifyLines),
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.auto_fix_normal,
+            tooltip: appLocalizations.th2FileEditPageSimplifyLines,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_simplify_lines_straight',
+            onPressed: () =>
+                _onButtonPressed(MPButtonType.simplifyLinesForcingStraight),
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.straighten,
+            tooltip:
+                appLocalizations.th2FileEditPageSimplifyLinesForcingStraight,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_simplify_lines_bezier',
+            onPressed: () =>
+                _onButtonPressed(MPButtonType.simplifyLinesForcingBezier),
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.gesture,
+            tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_simplify_lines_interactive',
+            onPressed: () {
+              th2FileEditController.openInteractiveLineSimplificationDialog();
+            },
+            category: _StateContextFABCategory.simplification,
+            icon: Icons.tune,
+            tooltip: appLocalizations.th2FileEditPageInteractiveSimplifyLines,
+            isActive: isInteractiveLineSimplificationDialogOpen,
+          ),
+        ],
+      ),
+      _TH2FileEditStateContextFABCategoryRow(
+        buttons: <Widget>[
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_convert_line_segments_straight',
+            onPressed: hasSelectedNonStartEndPoints
+                ? () => _onButtonPressed(
+                    MPButtonType.convertLineSegmentsToStraight,
+                  )
+                : null,
+            category: _StateContextFABCategory.lineSegmentConversion,
+            icon: Icons.linear_scale,
+            tooltip:
+                appLocalizations.th2FileEditPageConvertLineSegmentsToStraight,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_convert_line_segments_bezier',
+            onPressed: hasSelectedNonStartEndPoints
+                ? () =>
+                      _onButtonPressed(MPButtonType.convertLineSegmentsToBezier)
+                : null,
+            category: _StateContextFABCategory.lineSegmentConversion,
+            icon: Icons.draw,
+            tooltip:
+                appLocalizations.th2FileEditPageConvertLineSegmentsToBezier,
+          ),
+        ],
+      ),
+      _TH2FileEditStateContextFABCategoryRow(
+        buttons: <Widget>[
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_open_option_window',
+            onPressed: hasSelectedEndPoints
+                ? () => _onButtonPressed(MPButtonType.openOptionWindow)
+                : null,
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.tune,
+            tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_reverse_line',
+            onPressed: () => _onButtonPressed(MPButtonType.reverseLine),
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.compare_arrows,
+            tooltip: appLocalizations.th2FileEditPageReverseLine,
+          ),
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_smooth_line_segments',
+            onPressed: hasSelectedEndPoints
+                ? () => _onButtonPressed(MPButtonType.smoothLineSegments)
+                : null,
+            category: _StateContextFABCategory.editTools,
+            icon: Icons.blur_on,
+            tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
+          ),
+        ],
+      ),
+      _TH2FileEditStateContextFABCategoryRow(
+        buttons: <Widget>[
+          _TH2FileEditStateContextFABButton(
+            context: context,
+            heroTag: '${heroPrefix}_ctx_split_line',
+            onPressed: hasSelectedEndPoints
+                ? () => _onButtonPressed(
+                    MPButtonType.splitLineAtSelectedEndPoints,
+                  )
+                : null,
+            category: _StateContextFABCategory.splitJoinMerge,
+            icon: Icons.call_split,
+            tooltip:
+                appLocalizations.th2FileEditPageSplitLineAtSelectedEndPoints,
+          ),
+        ],
+      ),
+    ];
+  }
+
+  void _onButtonPressed(MPButtonType buttonType) {
+    th2FileEditController.stateController.onButtonPressed(buttonType);
+  }
+}
+
+class _TH2FileEditNonEmptySelectionContextFABsBuilder {
+  final String heroPrefix;
+  final TH2FileEditController th2FileEditController;
+
+  const _TH2FileEditNonEmptySelectionContextFABsBuilder({
+    required this.heroPrefix,
+    required this.th2FileEditController,
+  });
+
+  List<Widget> build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final bool allElementsSelected =
         th2FileEditController.areAllElementsSelected;
@@ -339,9 +377,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
         .isElementTransformsEnabled;
 
     return <Widget>[
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_select_all_elements',
             onPressed: () => _onButtonPressed(MPButtonType.selectAllElements),
@@ -353,9 +391,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_simplify_lines',
             onPressed: hasSelectedLines
@@ -365,7 +403,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.auto_fix_normal,
             tooltip: appLocalizations.th2FileEditPageSimplifyLines,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_simplify_lines_straight',
             onPressed: hasSelectedLines
@@ -378,7 +416,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             tooltip:
                 appLocalizations.th2FileEditPageSimplifyLinesForcingStraight,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_simplify_lines_bezier',
             onPressed: hasSelectedLines
@@ -389,7 +427,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.gesture,
             tooltip: appLocalizations.th2FileEditPageSimplifyLinesForcingBezier,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_simplify_lines_interactive',
             onPressed: hasSelectedLines
@@ -405,9 +443,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_convert_line_segments_straight',
             onPressed: hasSelectedLines
@@ -420,7 +458,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             tooltip:
                 appLocalizations.th2FileEditPageConvertLineSegmentsToStraight,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_convert_line_segments_bezier',
             onPressed: hasSelectedLines
@@ -434,9 +472,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_open_option_window',
             onPressed: () => _onButtonPressed(MPButtonType.openOptionWindow),
@@ -444,7 +482,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.tune,
             tooltip: appLocalizations.th2FileEditPageOpenOptionWindow,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_reverse_line',
             onPressed: hasSelectedLines
@@ -454,7 +492,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.compare_arrows,
             tooltip: appLocalizations.th2FileEditPageReverseLine,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_smooth_line_segments',
             onPressed: hasSelectedLines
@@ -464,7 +502,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.blur_on,
             tooltip: appLocalizations.th2FileEditPageSmoothLineSegments,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_flip_elements_horizontally',
             onPressed: isElementTransformsEnabled
@@ -475,7 +513,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.flip,
             tooltip: appLocalizations.th2FileEditPageFlipElementsHorizontally,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_flip_elements_vertically',
             onPressed: isElementTransformsEnabled
@@ -492,9 +530,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_split_lines_at_crossings',
             onPressed: th2FileEditController.hasAtLeastTwoSelectedLines
@@ -504,7 +542,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.call_split,
             tooltip: appLocalizations.th2FileEditPageSplitLinesAtCrossings,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_join_lines_at_coinciding_extremities',
             onPressed: th2FileEditController.hasAtLeastTwoSelectedLines
@@ -517,7 +555,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             tooltip: appLocalizations
                 .th2FileEditPageJoinLinesAtCoincidingExtremities,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_merge_areas',
             onPressed: th2FileEditController.canMergeAreas
@@ -529,9 +567,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_copy_elements',
             onPressed: () => _onButtonPressed(MPButtonType.copyElements),
@@ -539,7 +577,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.content_copy,
             tooltip: appLocalizations.th2FileEditPageCopyElements,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_cut_elements',
             onPressed: () => _onButtonPressed(MPButtonType.cutElements),
@@ -547,7 +585,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.content_cut,
             tooltip: appLocalizations.th2FileEditPageCutElements,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_paste_elements',
             onPressed: th2FileEditController.hasClipboardContent
@@ -557,7 +595,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
             icon: Icons.content_paste,
             tooltip: appLocalizations.th2FileEditPagePasteElements,
           ),
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_duplicate_elements',
             onPressed: () => _onButtonPressed(MPButtonType.duplicateElements),
@@ -567,9 +605,9 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
           ),
         ],
       ),
-      _stateContextFABCategoryRow(
+      _TH2FileEditStateContextFABCategoryRow(
         buttons: <Widget>[
-          _stateContextFABButton(
+          _TH2FileEditStateContextFABButton(
             context: context,
             heroTag: '${heroPrefix}_ctx_create_map_connection_lines',
             onPressed: null,
@@ -582,24 +620,44 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     ];
   }
 
-  Widget _stateContextFABButton({
-    required BuildContext context,
-    required String heroTag,
-    required VoidCallback? onPressed,
-    required IconData icon,
-    required String tooltip,
-    required _StateContextFABCategory category,
-    bool isActive = false,
-    Widget? child,
-  }) {
+  void _onButtonPressed(MPButtonType buttonType) {
+    th2FileEditController.stateController.onButtonPressed(buttonType);
+  }
+}
+
+class _TH2FileEditStateContextFABButton extends StatelessWidget {
+  final _StateContextFABCategory category;
+  final Widget? child;
+  final String heroTag;
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback? onPressed;
+  final String tooltip;
+
+  const _TH2FileEditStateContextFABButton({
+    required this.category,
+    required this.context,
+    required this.heroTag,
+    required this.icon,
+    required this.onPressed,
+    required this.tooltip,
+    this.child,
+    this.isActive = false,
+  });
+
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext buildContext) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final bool isEnabled = onPressed != null;
-    final Color categoryBackgroundColor = _getStateContextFABCategoryColor(
-      colorScheme: colorScheme,
-      category: category,
-    );
+    final Color categoryBackgroundColor =
+        _TH2FileEditStateContextFABColors.background(
+          colorScheme: colorScheme,
+          category: category,
+        );
     final Color categoryForegroundColor =
-        _getStateContextFABCategoryForegroundColor(
+        _TH2FileEditStateContextFABColors.foreground(
           colorScheme: colorScheme,
           category: category,
         );
@@ -626,8 +684,15 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _stateContextFABCategoryRow({required List<Widget> buttons}) {
+class _TH2FileEditStateContextFABCategoryRow extends StatelessWidget {
+  final List<Widget> buttons;
+
+  const _TH2FileEditStateContextFABCategoryRow({required this.buttons});
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -641,8 +706,10 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
       ],
     );
   }
+}
 
-  Color _getStateContextFABCategoryColor({
+class _TH2FileEditStateContextFABColors {
+  static Color background({
     required ColorScheme colorScheme,
     required _StateContextFABCategory category,
   }) {
@@ -664,7 +731,7 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
     }
   }
 
-  Color _getStateContextFABCategoryForegroundColor({
+  static Color foreground({
     required ColorScheme colorScheme,
     required _StateContextFABCategory category,
   }) {
@@ -684,9 +751,5 @@ class TH2FileEditStateContextFABsWidget extends StatelessWidget {
       case _StateContextFABCategory.clipboard:
         return colorScheme.onTertiaryFixed;
     }
-  }
-
-  void _onButtonPressed(MPButtonType buttonType) {
-    th2FileEditController.stateController.onButtonPressed(buttonType);
   }
 }
