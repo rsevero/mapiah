@@ -1044,6 +1044,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Mostrar marcas de direção em linhas não selecionadas';
 
   @override
+  String get mpSettingsSettingTH2EditShowLastUsedPLATypeButtons =>
+      'Mostrar botões dos últimos tipos PLA usados';
+
+  @override
   String get mpSettingsSettingTH2EditSnapAngle => 'Ângulo preferencial';
 
   @override

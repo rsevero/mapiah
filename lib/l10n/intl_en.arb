@@ -1607,6 +1607,11 @@
     "description": "Label for TH2 show direction ticks on non-selected lines setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditShowLastUsedPLATypeButtons": "Show last used PLA type buttons",
+  "@mpSettingsSettingTH2EditShowLastUsedPLATypeButtons": {
+    "description": "Label for TH2 show last used PLA type buttons setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSettingTH2EditSnapAngle": "Snap angle",
   "@mpSettingsSettingTH2EditSnapAngle": {
     "description": "Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart",

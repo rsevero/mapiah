@@ -1991,6 +1991,12 @@ abstract class AppLocalizations {
   /// **'Show direction ticks on non-selected lines'**
   String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
 
+  /// Label for TH2 show last used PLA type buttons setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Show last used PLA type buttons'**
+  String get mpSettingsSettingTH2EditShowLastUsedPLATypeButtons;
+
   /// Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

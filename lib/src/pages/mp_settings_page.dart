@@ -709,6 +709,9 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
       case MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         return appLocalizations
             .mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
+      case MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons:
+        return appLocalizations
+            .mpSettingsSettingTH2EditShowLastUsedPLATypeButtons;
       case MPSettingID.TH2Edit_SnapAngle:
         return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
       default:

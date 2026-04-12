@@ -259,18 +259,18 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   }
 
   List<Widget> _addElementButton({
-    required MPButtonType type,
+    required MPButtonType pla,
     required bool isTypeButton,
     required String heroPrefix,
   }) {
-    final String typeName = type.name;
-    final String heroTag = '${heroPrefix}_add_element_$typeName';
-    final String buttonIcon = 'assets/icons/add_element-$typeName.png';
+    final String plaName = pla.name;
+    final String heroTag = '${heroPrefix}_add_element_$plaName';
+    final String buttonIcon = 'assets/icons/add_element-$plaName.png';
     final bool isPressedButton =
         th2FileEditController.isAddElementMode && !isTypeButton;
     late String tooltip;
 
-    switch (type) {
+    switch (pla) {
       case MPButtonType.addArea:
         tooltip = appLocalizations.th2FileEditPageAddArea;
       case MPButtonType.addElement:
@@ -286,7 +286,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     return [
       FloatingActionButton(
         heroTag: heroTag,
-        onPressed: () => _onAddElementButtonPressed(type),
+        onPressed: () => _onAddElementButtonPressed(pla),
         tooltip: tooltip,
         child: Image.asset(
           buttonIcon,
@@ -335,23 +335,23 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   ),
                   SizedBox(width: mpButtonSpace),
                   ..._addElementButton(
-                    type: MPButtonType.addArea,
+                    pla: MPButtonType.addArea,
                     isTypeButton: true,
                     heroPrefix: heroPrefix,
                   ),
                   ..._addElementButton(
-                    type: MPButtonType.addLine,
+                    pla: MPButtonType.addLine,
                     isTypeButton: true,
                     heroPrefix: heroPrefix,
                   ),
                   ..._addElementButton(
-                    type: MPButtonType.addPoint,
+                    pla: MPButtonType.addPoint,
                     isTypeButton: true,
                     heroPrefix: heroPrefix,
                   ),
                 ],
                 ..._addElementButton(
-                  type: th2FileEditController.activeAddElementButton,
+                  pla: th2FileEditController.activeAddElementButton,
                   isTypeButton: false,
                   heroPrefix: heroPrefix,
                 ),

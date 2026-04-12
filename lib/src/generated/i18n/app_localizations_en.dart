@@ -1032,6 +1032,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Show direction ticks on non-selected lines';
 
   @override
+  String get mpSettingsSettingTH2EditShowLastUsedPLATypeButtons =>
+      'Show last used PLA type buttons';
+
+  @override
   String get mpSettingsSettingTH2EditSnapAngle => 'Snap angle';
 
   @override
