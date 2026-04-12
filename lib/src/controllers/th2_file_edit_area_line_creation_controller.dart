@@ -517,7 +517,7 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
 
   @action
   void addNewLineLineSegment(Offset endPointScreenCoordinates) {
-    endPointScreenCoordinates = _maybeConstrainXTherionNewNodeScreenPosition(
+    endPointScreenCoordinates = _maybeConstrainNewNodeScreenPosition(
       endPointScreenCoordinates,
     );
 
@@ -641,16 +641,11 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     _th2FileEditController.triggerNewLineRedraw();
   }
 
-  /// Constrains a newly placed xTherion node to the nearest snap-angle
-  /// direction relative to the previous node while Shift is held.
-  Offset _maybeConstrainXTherionNewNodeScreenPosition(
+  /// Constrains a newly placed line node to the nearest snap-angle direction
+  /// relative to the previous node while Shift is held.
+  Offset _maybeConstrainNewNodeScreenPosition(
     Offset endPointScreenCoordinates,
   ) {
-    if (_getNewLineCreationMethod() !=
-        MPNewLineCreationMethod.xTherionCubicSmooth) {
-      return endPointScreenCoordinates;
-    }
-
     if (!MPInteractionAux.isShiftPressed()) {
       return endPointScreenCoordinates;
     }

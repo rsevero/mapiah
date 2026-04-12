@@ -550,6 +550,148 @@ void main() {
     });
 
     testWidgets(
+      'Shift constrains the first Mapiah quadratic segment to the snap angle',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalSnapAngle = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+        const double snapAngle = 45.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_SnapAngle,
+          snapAngle,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1Local = const Offset(120, 120);
+          final Offset unconstrainedP2Local = const Offset(250, 240);
+          final Offset p1 = origin + p1Local;
+          final Offset unconstrainedP2 = origin + unconstrainedP2Local;
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await _clickMouse(tester, mouse, unconstrainedP2);
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+
+          final THLineSegment lastLineSegment = _getLastLineSegment(
+            editor.th2File,
+          );
+          final Offset constrainedP2 = editor.th2Controller
+              .offsetCanvasToScreen(lastLineSegment.endPoint.coordinates);
+          final Offset constrainedDirection = constrainedP2 - p1Local;
+          final double constrainedAngleDegrees =
+              math.atan2(constrainedDirection.dy, constrainedDirection.dx) *
+              180 /
+              math.pi;
+
+          expect(
+            constrainedDirection.distance,
+            closeTo((unconstrainedP2Local - p1Local).distance, 1e-6),
+          );
+          expect(constrainedAngleDegrees, closeTo(45.0, 1e-6));
+          expect(
+            (constrainedP2.dx - unconstrainedP2Local.dx).abs(),
+            greaterThan(1e-6),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_SnapAngle,
+            originalSnapAngle,
+          );
+        }
+      },
+    );
+
+    testWidgets(
+      'Shift constrains later Mapiah quadratic nodes relative to the previous node',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalSnapAngle = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+        const double snapAngle = 45.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_SnapAngle,
+          snapAngle,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1Local = const Offset(120, 120);
+          final Offset unconstrainedP2Local = const Offset(250, 240);
+          final Offset unconstrainedP3Local = const Offset(280, 380);
+          final Offset p1 = origin + p1Local;
+          final Offset unconstrainedP2 = origin + unconstrainedP2Local;
+          final Offset unconstrainedP3 = origin + unconstrainedP3Local;
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await _clickMouse(tester, mouse, unconstrainedP2);
+          await _clickMouse(tester, mouse, unconstrainedP3);
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+
+          final THLine line = editor.th2File.getLines().first;
+          final List<THLineSegment> lineSegments = line.getLineSegments(
+            editor.th2File,
+          );
+          final THLineSegment secondSegment = lineSegments[1];
+          final THLineSegment thirdSegment = lineSegments[2];
+          final Offset constrainedP2 = editor.th2Controller
+              .offsetCanvasToScreen(secondSegment.endPoint.coordinates);
+          final Offset constrainedP3 = editor.th2Controller
+              .offsetCanvasToScreen(thirdSegment.endPoint.coordinates);
+          final Offset constrainedDirection = constrainedP3 - constrainedP2;
+          final double constrainedAngleDegrees =
+              math.atan2(constrainedDirection.dy, constrainedDirection.dx) *
+              180 /
+              math.pi;
+
+          expect(
+            constrainedDirection.distance,
+            closeTo((unconstrainedP3Local - constrainedP2).distance, 1e-6),
+          );
+          expect(constrainedAngleDegrees, closeTo(90.0, 1e-6));
+          expect(
+            (constrainedP3.dx - unconstrainedP3Local.dx).abs(),
+            greaterThan(1e-6),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_SnapAngle,
+            originalSnapAngle,
+          );
+        }
+      },
+    );
+
+    testWidgets(
       'Shift constrains the first xTherion segment to the snap angle',
       (WidgetTester tester) async {
         await _configureTestSurface(tester);
