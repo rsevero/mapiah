@@ -105,6 +105,129 @@ void main() {
       );
     });
 
+    testWidgets(
+      'Mapiah quadratic drag converts the current segment to Bézier',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1 = origin + const Offset(120, 120);
+        final Offset p2 = origin + const Offset(240, 160);
+        final Offset p3 = origin + const Offset(320, 210);
+        final Offset dragPoint = origin + const Offset(360, 260);
+        final Offset localDragPoint = dragPoint - origin;
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+        await _clickMouse(tester, mouse, p2);
+
+        await tester.sendEventToBinding(
+          mouse.down(p3, buttons: kPrimaryButton),
+        );
+        await tester.pump();
+        await tester.sendEventToBinding(
+          mouse.move(dragPoint, buttons: kPrimaryButton),
+        );
+        await tester.pump();
+
+        final THLine line = editor.th2File.getLines().first;
+        final List<THLineSegment> lineSegments = line.getLineSegments(
+          editor.th2File,
+        );
+        final THBezierCurveLineSegment convertedSegment =
+            lineSegments.last as THBezierCurveLineSegment;
+        final Offset startPointCoordinates =
+            lineSegments[lineSegments.length - 2].endPoint.coordinates;
+        final Offset endPointCoordinates =
+            convertedSegment.endPoint.coordinates;
+        final Offset quadraticControlPointCanvasCoordinates = editor
+            .th2Controller
+            .offsetScreenToCanvas(localDragPoint);
+        final Offset twoThirdsControlPoint =
+            quadraticControlPointCanvasCoordinates * (2 / 3);
+        final Offset expectedControlPoint1 =
+            (startPointCoordinates / 3) + twoThirdsControlPoint;
+        final Offset expectedControlPoint2 =
+            (endPointCoordinates / 3) + twoThirdsControlPoint;
+
+        expect(lineSegments.length, 3);
+        expect(lineSegments.last, isA<THBezierCurveLineSegment>());
+        expect(
+          editor
+              .th2Controller
+              .areaLineCreationController
+              .newLinePendingControlPoint1CanvasCoordinates,
+          isNull,
+        );
+        expect(
+          convertedSegment.controlPoint1.coordinates.dx,
+          closeTo(expectedControlPoint1.dx, 1e-9),
+        );
+        expect(
+          convertedSegment.controlPoint1.coordinates.dy,
+          closeTo(expectedControlPoint1.dy, 1e-9),
+        );
+        expect(
+          convertedSegment.controlPoint2.coordinates.dx,
+          closeTo(expectedControlPoint2.dx, 1e-9),
+        );
+        expect(
+          convertedSegment.controlPoint2.coordinates.dy,
+          closeTo(expectedControlPoint2.dy, 1e-9),
+        );
+
+        await tester.sendEventToBinding(mouse.up());
+        await tester.pumpAndSettle();
+      },
+    );
+
+    testWidgets(
+      'Mapiah quadratic drag keeps the converted Bézier segment after release and finalize',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1 = origin + const Offset(120, 120);
+        final Offset p2 = origin + const Offset(240, 160);
+        final Offset p3 = origin + const Offset(320, 210);
+        final Offset dragPoint = origin + const Offset(360, 260);
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+        await _clickMouse(tester, mouse, p2);
+        await _dragMouse(tester, mouse, p3, <Offset>[dragPoint]);
+        await _finalizeLineCreation(tester);
+
+        final THLine line = editor.th2File.getLines().first;
+        final List<THLineSegment> lineSegments = line.getLineSegments(
+          editor.th2File,
+        );
+
+        expect(lineSegments.length, 3);
+        expect(lineSegments.last, isA<THBezierCurveLineSegment>());
+      },
+    );
+
     testWidgets('Ctrl-drag keeps previous control point distance fixed', (
       WidgetTester tester,
     ) async {
