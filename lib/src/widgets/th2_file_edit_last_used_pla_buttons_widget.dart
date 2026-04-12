@@ -57,6 +57,20 @@ class TH2FileEditLastUsedPLAButtonsWidget extends StatelessWidget {
                     th2FileEditController: th2FileEditController,
                   ),
                 ),
+                SizedBox(width: mpButtonSpace, height: 44),
+                SizedBox(
+                  height: 44,
+                  child: Center(
+                    child: Container(
+                      width: 1,
+                      height: 28,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.outlineVariant.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ),
+                SizedBox(width: mpButtonSpace * 2, height: 44),
                 Expanded(
                   child: _TH2FileEditLastUsedPLAButtonsHalfWidget(
                     plaTypes: lastUsedPointTypes,
