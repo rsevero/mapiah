@@ -64,8 +64,8 @@ Controla a espessura visual (em pixels) das linhas desenhadas no canvas. Esta é
 
 ### Método de criação de nova linha
 Controla o comportamento ao criar um novo segmento de linha clicando e arrastando:
-* **Quadrático do Mapiah**: a posição do arrasto é usada como o único ponto de controle de uma aproximação de curva Bézier quadrática.
-* **Cúbico suave do xTherion**: a posição do arrasto torna-se o futuro ponto de controle do próximo segmento; o outro ponto de controle do segmento atual é espelhado em torno do ponto final compartilhado. Mantenha _Ctrl_ pressionado durante o arrasto para fixar a distância do ponto de controle espelhado, mantenha _Shift_ pressionado ao definir um nó para restringi-lo ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó anterior, e mantenha _Alt_ pressionado depois de iniciar o arrasto para redefinir apenas o futuro ponto de controle do próximo segmento. Este método tenta reproduzir o comportamento do XTherion.
+* **Quadrático do Mapiah**: a posição do arrasto é usada como o único ponto de controle de uma aproximação de curva Bézier quadrática. Mantenha _Shift_ pressionado durante o arrasto para restringir esse ponto de controle ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó compartilhado.
+* **Cúbico suave do xTherion**: a posição do arrasto torna-se o futuro ponto de controle do próximo segmento; o outro ponto de controle do segmento atual é espelhado em torno do ponto final compartilhado. Mantenha _Ctrl_ pressionado durante o arrasto para fixar a distância do ponto de controle espelhado, mantenha _Shift_ pressionado durante o arrasto para restringir esse futuro ponto de controle ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó compartilhado, mantenha _Shift_ pressionado ao definir um nó para restringi-lo ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó anterior, e mantenha _Alt_ pressionado depois de iniciar o arrasto para redefinir apenas o futuro ponto de controle do próximo segmento. Neste modo, _Shift_ também pode ser combinado com _Alt_. Este método tenta reproduzir o comportamento do XTherion.
 
 Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser ajustado com _Seta_, _Shift+Seta_, _Alt+Seta_ e _Alt+Shift+Seta_.
 
@@ -73,7 +73,7 @@ Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser 
 Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
 
 ### Ângulo preferencial
-Controla o incremento angular (em graus) usado no ajuste da rotação da imagem. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com _Ctrl_ pressionado.
+Controla o incremento angular (em graus) usado no ajuste da rotação da imagem e nas restrições ao desenhar novas linhas. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Ao desenhar uma linha, mantenha _Shift_ pressionado para restringir um novo nó ou um ponto de controle arrastado a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com a tecla modificadora pressionada.
 
 ### Tolerância de seleção
 Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.

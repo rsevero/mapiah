@@ -349,10 +349,17 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     final THPositionPart endPoint = lastLineSegment.endPoint;
     final Offset startPointCoordinates = startPoint.coordinates;
     final Offset endPointCoordinates = endPoint.coordinates;
-    final Offset quadraticControlPointPositionCanvasCoordinates =
+    final Offset rawQuadraticControlPointPositionCanvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(
           quadraticControlPointPositionScreenCoordinates,
         );
+    final Offset quadraticControlPointPositionCanvasCoordinates =
+        MPInteractionAux.isShiftPressed()
+        ? _constrainPointToSnapAngle(
+            pointCoordinates: rawQuadraticControlPointPositionCanvasCoordinates,
+            anchorCoordinates: endPointCoordinates,
+          )
+        : rawQuadraticControlPointPositionCanvasCoordinates;
     final Offset twoThirdsControlPoint =
         quadraticControlPointPositionCanvasCoordinates * (2 / 3);
 

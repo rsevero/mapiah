@@ -64,8 +64,8 @@ Controls the visual thickness (in pixels) of lines drawn on the canvas. This is 
 
 ### New line creation method
 Controls the behavior when creating a new line segment by clicking and dragging:
-* **Mapiah quadratic**: the drag position is used as the single control point of a quadratic Bézier curve approximation.
-* **xTherion cubic smooth**: the drag position becomes the next segment's future control point; the current segment's other control point is mirrored around the shared endpoint. Hold _Ctrl_ while dragging to lock the mirrored control point at a fixed distance, hold _Shift_ while setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node, and hold _Alt_ after starting the drag to redefine only the next segment's future control point. It tries to reproduce XTherion behaviour.
+* **Mapiah quadratic**: the drag position is used as the single control point of a quadratic Bézier curve approximation. Hold _Shift_ while dragging to constrain that control point to the nearest multiple of the configured snap angle relative to the shared node.
+* **xTherion cubic smooth**: the drag position becomes the next segment's future control point; the current segment's other control point is mirrored around the shared endpoint. Hold _Ctrl_ while dragging to lock the mirrored control point at a fixed distance, hold _Shift_ while dragging to constrain that future control point to the nearest multiple of the configured snap angle relative to the shared node, hold _Shift_ while setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node, and hold _Alt_ after starting the drag to redefine only the next segment's future control point. In this mode, _Shift_ can also be combined with _Alt_. It tries to reproduce XTherion behaviour.
 
 While drawing with either method, the last created node can also be nudged with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_.
 
@@ -73,7 +73,7 @@ While drawing with either method, the last created node can also be nudged with 
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.
 
 ### Snap angle
-Controls the angular increment (in degrees) used when snapping image rotation. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. Set it to `0` to disable snapping even while _Ctrl_ is held.
+Controls the angular increment (in degrees) used when snapping image rotation and new-line drawing constraints. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. While drawing a line, hold _Shift_ to constrain a new node or a dragged control point to multiples of this value. Set it to `0` to disable snapping even while the modifier is held.
 
 ### Selection tolerance
 Controls how close the mouse cursor must be to an element (in pixels) for it to be considered clicked and selected. Increasing this value makes elements easier to click.

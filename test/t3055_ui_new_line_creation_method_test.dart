@@ -230,6 +230,122 @@ void main() {
       },
     );
 
+    testWidgets(
+      'Shift-drag constrains the Mapiah quadratic control point to the snap angle',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalSnapAngle = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+        const double snapAngle = 45.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_SnapAngle,
+          snapAngle,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1 = origin + const Offset(120, 120);
+          final Offset p2 = origin + const Offset(240, 160);
+          final Offset p3 = origin + const Offset(300, 200);
+          final Offset unconstrainedDragPoint = origin + const Offset(360, 230);
+          final Offset unconstrainedLocalDragPoint =
+              unconstrainedDragPoint - origin;
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await _clickMouse(tester, mouse, p2);
+
+          await tester.sendEventToBinding(
+            mouse.down(p3, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await tester.sendEventToBinding(
+            mouse.move(unconstrainedDragPoint, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+
+          final THLine line = editor.th2File.getLines().first;
+          final List<THLineSegment> lineSegments = line.getLineSegments(
+            editor.th2File,
+          );
+          final THBezierCurveLineSegment convertedSegment =
+              lineSegments.last as THBezierCurveLineSegment;
+          final Offset sharedEndPoint = convertedSegment.endPoint.coordinates;
+          final Offset startPointCoordinates =
+              lineSegments[lineSegments.length - 2].endPoint.coordinates;
+          final Offset unconstrainedControlPoint = editor.th2Controller
+              .offsetScreenToCanvas(unconstrainedLocalDragPoint);
+          final Offset constrainedControlPoint = _constrainPointToSnapAngle(
+            pointCoordinates: unconstrainedControlPoint,
+            anchorCoordinates: sharedEndPoint,
+            snapAngleDegrees: snapAngle,
+          );
+          final Offset constrainedDirection =
+              constrainedControlPoint - sharedEndPoint;
+          final double constrainedAngleDegrees =
+              math.atan2(constrainedDirection.dy, constrainedDirection.dx) *
+              180 /
+              math.pi;
+          final Offset expectedControlPoint1 =
+              (startPointCoordinates / 3) + (constrainedControlPoint * (2 / 3));
+          final Offset expectedControlPoint2 =
+              (sharedEndPoint / 3) + (constrainedControlPoint * (2 / 3));
+
+          expect(
+            constrainedDirection.distance,
+            closeTo(
+              (unconstrainedControlPoint - sharedEndPoint).distance,
+              1e-6,
+            ),
+          );
+          expect(constrainedAngleDegrees.abs(), closeTo(45.0, 1e-6));
+          expect(
+            (constrainedControlPoint.dx - unconstrainedControlPoint.dx).abs(),
+            greaterThan(1e-6),
+          );
+          expect(
+            convertedSegment.controlPoint1.coordinates.dx,
+            closeTo(expectedControlPoint1.dx, 1e-9),
+          );
+          expect(
+            convertedSegment.controlPoint1.coordinates.dy,
+            closeTo(expectedControlPoint1.dy, 1e-9),
+          );
+          expect(
+            convertedSegment.controlPoint2.coordinates.dx,
+            closeTo(expectedControlPoint2.dx, 1e-9),
+          );
+          expect(
+            convertedSegment.controlPoint2.coordinates.dy,
+            closeTo(expectedControlPoint2.dy, 1e-9),
+          );
+
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await tester.sendEventToBinding(mouse.up());
+          await tester.pumpAndSettle();
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_SnapAngle,
+            originalSnapAngle,
+          );
+        }
+      },
+    );
+
     testWidgets('Ctrl-drag keeps previous control point distance fixed', (
       WidgetTester tester,
     ) async {
@@ -1570,4 +1686,27 @@ THLineSegment _getLastLineSegment(TH2File th2File) {
   final List<THLineSegment> lineSegments = line.getLineSegments(th2File);
 
   return lineSegments.last;
+}
+
+Offset _constrainPointToSnapAngle({
+  required Offset pointCoordinates,
+  required Offset anchorCoordinates,
+  required double snapAngleDegrees,
+}) {
+  final Offset rawDirection = pointCoordinates - anchorCoordinates;
+
+  if ((rawDirection == Offset.zero) || (snapAngleDegrees <= 0)) {
+    return pointCoordinates;
+  }
+
+  final double rawAngleRadians = math.atan2(rawDirection.dy, rawDirection.dx);
+  final double snapAngleRadians = snapAngleDegrees * (math.pi / 180);
+  final double snappedAngleRadians =
+      (rawAngleRadians / snapAngleRadians).round() * snapAngleRadians;
+
+  return anchorCoordinates +
+      Offset(
+        math.cos(snappedAngleRadians) * rawDirection.distance,
+        math.sin(snappedAngleRadians) * rawDirection.distance,
+      );
 }
