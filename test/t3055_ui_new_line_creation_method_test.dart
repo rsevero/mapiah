@@ -389,6 +389,109 @@ void main() {
       expect(directionDotProduct, lessThan(0));
     });
 
+    testWidgets(
+      'Shift-drag constrains the xTherion control point to the snap angle',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        final double originalSnapAngle = mpLocator.mpSettingsController
+            .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+        const double snapAngle = 45.0;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.xTherionCubicSmooth,
+        );
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_SnapAngle,
+          snapAngle,
+        );
+
+        try {
+          final ({TH2File th2File, TH2FileEditController th2Controller})
+          editor = await _pumpEditor(tester, mpLocator);
+          final Finder listenerFinder = find.byKey(
+            ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+          );
+          final Offset origin = tester.getTopLeft(listenerFinder);
+          final Offset p1 = origin + const Offset(120, 120);
+          final Offset p2 = origin + const Offset(240, 160);
+          final Offset p3 = origin + const Offset(300, 200);
+          final Offset unconstrainedDragPoint = origin + const Offset(360, 230);
+          final Offset unconstrainedLocalDragPoint =
+              unconstrainedDragPoint - origin;
+          final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+          await _enterAddLineMode(tester, editor.th2Controller);
+          await _clickMouse(tester, mouse, p1);
+          await _clickMouse(tester, mouse, p2);
+
+          await tester.sendEventToBinding(
+            mouse.down(p3, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+          await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await tester.sendEventToBinding(
+            mouse.move(unconstrainedDragPoint, buttons: kPrimaryButton),
+          );
+          await tester.pump();
+          await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+          await tester.pump();
+          await tester.sendEventToBinding(mouse.up());
+          await tester.pumpAndSettle();
+
+          final THBezierCurveLineSegment currentSegment = _getLastBezierSegment(
+            editor.th2File,
+          );
+          final Offset sharedEndPoint = currentSegment.endPoint.coordinates;
+          final Offset constrainedNextControlPoint = editor
+              .th2Controller
+              .areaLineCreationController
+              .newLinePendingControlPoint1CanvasCoordinates!;
+          final Offset constrainedDirection =
+              constrainedNextControlPoint - sharedEndPoint;
+          final Offset unconstrainedNextControlPoint = editor.th2Controller
+              .offsetScreenToCanvas(unconstrainedLocalDragPoint);
+          final Offset unconstrainedDirection =
+              unconstrainedNextControlPoint - sharedEndPoint;
+          final double constrainedAngleDegrees =
+              math.atan2(constrainedDirection.dy, constrainedDirection.dx) *
+              180 /
+              math.pi;
+
+          expect(
+            constrainedDirection.distance,
+            closeTo(unconstrainedDirection.distance, 1e-6),
+          );
+          expect(constrainedAngleDegrees.abs(), closeTo(45.0, 1e-6));
+          expect(
+            (constrainedNextControlPoint.dx - unconstrainedNextControlPoint.dx)
+                .abs(),
+            greaterThan(1e-6),
+          );
+          expect(
+            currentSegment.controlPoint2.coordinates.dx,
+            closeTo(
+              (sharedEndPoint.dx * 2) - constrainedNextControlPoint.dx,
+              1e-9,
+            ),
+          );
+          expect(
+            currentSegment.controlPoint2.coordinates.dy,
+            closeTo(
+              (sharedEndPoint.dy * 2) - constrainedNextControlPoint.dy,
+              1e-9,
+            ),
+          );
+        } finally {
+          mpLocator.mpSettingsController.setDouble(
+            MPSettingID.TH2Edit_SnapAngle,
+            originalSnapAngle,
+          );
+        }
+      },
+    );
+
     testWidgets('Alt-drag keeps the current xTherion control point fixed', (
       WidgetTester tester,
     ) async {

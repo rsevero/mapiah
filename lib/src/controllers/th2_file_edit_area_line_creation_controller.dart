@@ -389,10 +389,17 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     final THPositionPart endPoint = lastLineSegment.endPoint;
     final Offset startPointCoordinates = startPoint.coordinates;
     final Offset endPointCoordinates = endPoint.coordinates;
-    final Offset nextLineSegmentControlPoint1CanvasCoordinates =
+    final Offset rawNextLineSegmentControlPoint1CanvasCoordinates =
         _th2FileEditController.offsetScreenToCanvas(
           nextLineSegmentControlPoint1ScreenCoordinates,
         );
+    final Offset nextLineSegmentControlPoint1CanvasCoordinates =
+        MPInteractionAux.isShiftPressed()
+        ? _constrainPointToSnapAngle(
+            pointCoordinates: rawNextLineSegmentControlPoint1CanvasCoordinates,
+            anchorCoordinates: endPointCoordinates,
+          )
+        : rawNextLineSegmentControlPoint1CanvasCoordinates;
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final Offset mirroredDirectionControlPoint2 =
         (endPointCoordinates * 2) -
@@ -664,24 +671,10 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
       return endPointScreenCoordinates;
     }
 
-    final double snapAngleDegrees = mpLocator.mpSettingsController
-        .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
-
-    if (snapAngleDegrees <= 0) {
-      return endPointScreenCoordinates;
-    }
-
-    final double rawAngleRadians = atan2(rawDirection.dy, rawDirection.dx);
-    final double snapAngleRadians = snapAngleDegrees / mp1RadInDegrees;
-    final double snappedAngleRadians =
-        (rawAngleRadians / snapAngleRadians).round() * snapAngleRadians;
-    final double constrainedDistance = rawDirection.distance;
-
-    return previousNodeScreenCoordinates +
-        Offset(
-          cos(snappedAngleRadians) * constrainedDistance,
-          sin(snappedAngleRadians) * constrainedDistance,
-        );
+    return _constrainPointToSnapAngle(
+      pointCoordinates: endPointScreenCoordinates,
+      anchorCoordinates: previousNodeScreenCoordinates,
+    );
   }
 
   /// Returns the previously placed node in screen coordinates while creating a
@@ -704,6 +697,38 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     return _th2FileEditController.offsetCanvasToScreen(
       lastLineSegment.endPoint.coordinates,
     );
+  }
+
+  /// Constrains a point to the nearest snap-angle direction relative to an
+  /// anchor while preserving the original distance.
+  Offset _constrainPointToSnapAngle({
+    required Offset pointCoordinates,
+    required Offset anchorCoordinates,
+  }) {
+    final Offset rawDirection = pointCoordinates - anchorCoordinates;
+
+    if (rawDirection == Offset.zero) {
+      return pointCoordinates;
+    }
+
+    final double snapAngleDegrees = mpLocator.mpSettingsController
+        .getDoubleWithDefault(MPSettingID.TH2Edit_SnapAngle);
+
+    if (snapAngleDegrees <= 0) {
+      return pointCoordinates;
+    }
+
+    final double rawAngleRadians = atan2(rawDirection.dy, rawDirection.dx);
+    final double snapAngleRadians = snapAngleDegrees / mp1RadInDegrees;
+    final double snappedAngleRadians =
+        (rawAngleRadians / snapAngleRadians).round() * snapAngleRadians;
+    final double constrainedDistance = rawDirection.distance;
+
+    return anchorCoordinates +
+        Offset(
+          cos(snappedAngleRadians) * constrainedDistance,
+          sin(snappedAngleRadians) * constrainedDistance,
+        );
   }
 
   THLineSegment _createNewLineSegmentFromScreenCoordinates({

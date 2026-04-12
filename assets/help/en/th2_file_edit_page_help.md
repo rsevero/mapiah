@@ -111,7 +111,7 @@ In case there are available redoes when a new edit operation is performed, the r
 ## Drawing lines
 When drawing lines, each new segment is initially created as a straight line segment. To convert it to a Bézier Curve line segment, do not release the mouse button and drag. The mouse position will be treated as the position of the single control point of a quadratic Bézier Curve.
 
-The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold Ctrl while dragging to keep the mirrored control point at a fixed distance.
+The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold _Ctrl_ while dragging to keep the mirrored control point at a fixed distance. While setting that control point in "xTherion cubic smooth" mode, you can also hold _Shift_ during the drag to constrain it to the nearest multiple of the configured snap angle relative to the shared node.
 
 When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can also hold _Shift_ while setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node.
 
