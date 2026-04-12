@@ -4,19 +4,18 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
-import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
-import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
-import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_search_select_dialog_widget.dart';
 import 'package:mapiah/src/widgets/th_file_widget.dart';
+import 'package:mapiah/src/widgets/th2_file_edit_bottom_status_bar_widget.dart';
+import 'package:mapiah/src/widgets/th2_file_edit_last_used_pla_buttons_widget.dart';
 
 enum _StateContextFABCategory {
   clipboard,
@@ -100,7 +99,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                                     .getTH2FileWidgetGlobalKey(),
                                 th2FileEditController: th2FileEditController,
                               ),
-                              _lastUsedPLAButtons(),
+                              TH2FileEditLastUsedPLAButtonsWidget(
+                                th2FileEditController: th2FileEditController,
+                              ),
                               _stateActionButtons(heroPrefix),
                               _actionButtons(heroPrefix),
                               _stateContextFABs(heroPrefix),
@@ -115,7 +116,9 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                                   .getTH2FileWidgetGlobalKey(),
                               th2FileEditController: th2FileEditController,
                             ),
-                            _lastUsedPLAButtons(),
+                            TH2FileEditLastUsedPLAButtonsWidget(
+                              th2FileEditController: th2FileEditController,
+                            ),
                             _stateActionButtons(heroPrefix),
                             _actionButtons(heroPrefix),
                             _stateContextFABs(heroPrefix),
@@ -147,90 +150,8 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 },
           ),
         ),
-        BottomAppBar(
-          height: 40,
-          color: colorScheme.secondary,
-          child: Observer(
-            builder: (_) {
-              final TextStyle statusBarTextStyle = TextStyle(
-                color: colorScheme.onSecondary,
-                fontStyle: FontStyle.italic,
-              );
-              final TextStyle statusBarInfoStyle = TextStyle(
-                color: colorScheme.onSecondary,
-              );
-              final String currentScrapName =
-                  th2FileEditController.currentScrapName;
-              final String statusBarMessage =
-                  th2FileEditController.statusBarMessage;
-              final String canvasScaleAsPercentageText =
-                  th2FileEditController.canvasScaleAsPercentageText;
-              final Offset? movingMousePosition =
-                  th2FileEditController.movingMousePosition;
-              final String movingMousePositionText =
-                  (movingMousePosition == null)
-                  ? ''
-                  : appLocalizations.mpTH2FileEditPageMousePosition(
-                      movingMousePosition.dx.toStringAsFixed(1),
-                      movingMousePosition.dy.toStringAsFixed(1),
-                    );
-
-              return LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  final double maxScrapNameWidth = constraints.maxWidth / 5;
-
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: maxScrapNameWidth,
-                        ),
-                        child: Text(
-                          currentScrapName,
-                          style: statusBarInfoStyle,
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: mpButtonMargin),
-                      Expanded(
-                        child: Text(
-                          statusBarMessage,
-                          style: statusBarTextStyle,
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (movingMousePositionText.isNotEmpty) ...[
-                        const SizedBox(width: mpButtonMargin),
-                        Text(
-                          movingMousePositionText,
-                          style: statusBarInfoStyle,
-                          textAlign: TextAlign.right,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      const SizedBox(width: mpButtonMargin),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "🔍 $canvasScaleAsPercentageText",
-                          style: statusBarInfoStyle,
-                          textAlign: TextAlign.right,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+        TH2FileEditBottomStatusBarWidget(
+          th2FileEditController: th2FileEditController,
         ),
       ],
     );
@@ -261,143 +182,6 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         );
       },
     );
-  }
-
-  Widget _lastUsedPLAButtons() {
-    return Observer(
-      builder: (BuildContext context) {
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons,
-        );
-
-        final bool showLastUsedPLAButtons = mpLocator.mpSettingsController
-            .getBoolWithDefault(MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons);
-
-        if (!showLastUsedPLAButtons) {
-          return const SizedBox.shrink();
-        }
-
-        final List<MPPLATypeSubtype> lastUsedAreaLineTypes =
-            th2FileEditController.elementEditController.lastUsedAreaLineTypes;
-        final List<MPPLATypeSubtype> lastUsedPointTypes =
-            th2FileEditController.elementEditController.lastUsedPointTypes;
-
-        if (lastUsedAreaLineTypes.isEmpty && lastUsedPointTypes.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return Positioned(
-          left: 0,
-          right: 0,
-          bottom: mpButtonSpace,
-          child: IgnorePointer(
-            ignoring: false,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: _lastUsedPLAButtonsHalf(
-                    plaTypes: lastUsedAreaLineTypes.reversed.toList(),
-                    alignment: Alignment.centerRight,
-                  ),
-                ),
-                Expanded(
-                  child: _lastUsedPLAButtonsHalf(
-                    plaTypes: lastUsedPointTypes,
-                    alignment: Alignment.centerLeft,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _lastUsedPLAButtonsHalf({
-    required List<MPPLATypeSubtype> plaTypes,
-    required Alignment alignment,
-  }) {
-    if (plaTypes.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return SizedBox(
-      height: 44,
-      child: ClipRect(
-        child: Align(
-          alignment: alignment,
-          child: UnconstrainedBox(
-            constrainedAxis: Axis.vertical,
-            alignment: alignment,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final MPPLATypeSubtype plaType in plaTypes) ...[
-                  _lastUsedPLAButton(plaType),
-                  const SizedBox(width: mpButtonSpace),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _lastUsedPLAButton(MPPLATypeSubtype plaTypeSubtype) {
-    final String buttonIcon = _lastUsedPLAButtonIconPath(plaTypeSubtype.pla);
-    final String label = MPTextToUser.getPLATypeSubtype(plaTypeSubtype);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Material(
-        color: colorScheme.secondaryContainer.withValues(alpha: 0.94),
-        elevation: 1,
-        borderRadius: BorderRadius.circular(999),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => th2FileEditController.elementEditController
-              .activatePLATypeSubtypeForNewElement(plaTypeSubtype),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  buttonIcon,
-                  width: 18,
-                  height: 18,
-                  color: colorScheme.onSecondaryContainer,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                    color: colorScheme.onSecondaryContainer,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _lastUsedPLAButtonIconPath(MPPLAType plaType) {
-    switch (plaType) {
-      case MPPLAType.area:
-        return 'assets/icons/add_element-addArea.png';
-      case MPPLAType.line:
-        return 'assets/icons/add_element-addLine.png';
-      case MPPLAType.point:
-        return 'assets/icons/add_element-addPoint.png';
-    }
   }
 
   List<Widget> _addElementButton({
