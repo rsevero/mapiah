@@ -178,6 +178,92 @@ void main() {
       );
     });
 
+    testWidgets('Ctrl-drag still seeds the next segment control point', (
+      WidgetTester tester,
+    ) async {
+      await _configureTestSurface(tester);
+      mpLocator.mpSettingsController.setEnum(
+        MPSettingID.TH2Edit_NewLineCreationMethod,
+        MPNewLineCreationMethod.xTherionCubicSmooth,
+      );
+
+      final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+          await _pumpEditor(tester, mpLocator);
+      final Finder listenerFinder = find.byKey(
+        ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+      );
+      final Offset origin = tester.getTopLeft(listenerFinder);
+      final Offset p1 = origin + const Offset(120, 120);
+      final Offset p2 = origin + const Offset(240, 160);
+      final Offset p3 = origin + const Offset(300, 200);
+      final Offset p4 = origin + const Offset(400, 250);
+      final Offset firstDragPoint = origin + const Offset(335, 210);
+      final Offset ctrlDragPoint = origin + const Offset(390, 255);
+      final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+      await _enterAddLineMode(tester, editor.th2Controller);
+      await _clickMouse(tester, mouse, p1);
+      await _clickMouse(tester, mouse, p2);
+
+      await tester.sendEventToBinding(mouse.down(p3, buttons: kPrimaryButton));
+      await tester.pump();
+      await tester.sendEventToBinding(
+        mouse.move(firstDragPoint, buttons: kPrimaryButton),
+      );
+      await tester.pump();
+
+      final THBezierCurveLineSegment initialBezierSegment =
+          _getLastBezierSegment(editor.th2File);
+      final Offset sharedEndPoint = initialBezierSegment.endPoint.coordinates;
+      final double initialControlPointDistance =
+          (initialBezierSegment.controlPoint2.coordinates - sharedEndPoint)
+              .distance;
+
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+      await tester.pump();
+      await tester.sendEventToBinding(
+        mouse.move(ctrlDragPoint, buttons: kPrimaryButton),
+      );
+      await tester.pump();
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+      await tester.pump();
+      await tester.sendEventToBinding(mouse.up());
+      await tester.pumpAndSettle();
+
+      await _clickMouse(tester, mouse, p4);
+      await _finalizeLineCreation(tester);
+
+      final THLine line = editor.th2File.getLines().first;
+      final List<THLineSegment> lineSegments = line.getLineSegments(
+        editor.th2File,
+      );
+      final THBezierCurveLineSegment smoothedCurrentSegment =
+          lineSegments[2] as THBezierCurveLineSegment;
+      final THBezierCurveLineSegment seededNextSegment =
+          lineSegments[3] as THBezierCurveLineSegment;
+      final double lockedControlPointDistance =
+          (smoothedCurrentSegment.controlPoint2.coordinates - sharedEndPoint)
+              .distance;
+      final Offset nextControlPointVector =
+          seededNextSegment.controlPoint1.coordinates - sharedEndPoint;
+      final Offset lockedControlPointVector =
+          smoothedCurrentSegment.controlPoint2.coordinates - sharedEndPoint;
+      final double nextControlPointDistance = nextControlPointVector.distance;
+      final double directionDotProduct =
+          (nextControlPointVector.dx * lockedControlPointVector.dx) +
+          (nextControlPointVector.dy * lockedControlPointVector.dy);
+
+      expect(
+        lockedControlPointDistance,
+        closeTo(initialControlPointDistance, 1e-9),
+      );
+      expect(
+        nextControlPointDistance,
+        greaterThan(lockedControlPointDistance + 1e-6),
+      );
+      expect(directionDotProduct, lessThan(0));
+    });
+
     testWidgets(
       'xTherion mode allows dragging two consecutive segments after many updates',
       (WidgetTester tester) async {

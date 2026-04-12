@@ -57,7 +57,6 @@
 
 ## Version 1.0
 [ ] - Raster images tracing.
-[ ] - Create configurable list of element types and/or subtypes to prevent them from being selected, edited or deleted. The 'u:splay' lines should be on this list by default.
 [ ] - Freehand drawing tool. [requested by Edvard]
 [X] - Show shortcuts related to current state on status bar. [requested by Edvard]
 [ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
