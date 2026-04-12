@@ -25,7 +25,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar ponto                                                                                   | P                                        |
 | Criar segmento de linha entre segmentos de linha selecionados                                 | /                                        |
 | Desfazer                                                                                      | Ctrl+Z                                   |
-| Excluir um caminho inacabado no modo xTherion cúbico suave ao desenhar                        | Esc                                      |
+| Excluir um caminho inacabado ao desenhar                                                      | Esc                                      |
 | Desselecionar tudo                                                                            | Escape                                   |
 | Dividir linha nos pontos de linha selecionados                                                | Ctrl+P                                   |
 | Dividir linhas selecionadas nos cruzamentos de linhas                                         | Ctrl+Shift+X                             |
@@ -39,8 +39,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Editar opções (com elementos selecionados)                                                    | O                                        |
 | Escolher arquivo THConfig e executar Therion                                                  | Ctrl+T                                   |
 | Esconder elementos selecionados / Mostrar todos os ocultos                                    | Ctrl+H                                   |
-| Excluir o último nó criado ao desenhar no modo Quadrático do Mapiah                           | Del ou Backspace                         |
-| Excluir o último nó criado ao desenhar no modo xTherion cúbico suave                          | Del ou Backspace                         |
+| Excluir o último nó criado ao desenhar                                                        | Del ou Backspace                         |
 | Excluir ponto, linha, área ou segmento de linha                                               | Del ou Backspace                         |
 | Ferramenta de seleção                                                                         | C                                        |
 | Forçar definição de opção em tipos não suportados                                             | Ctrl+clique na configuração da opção     |

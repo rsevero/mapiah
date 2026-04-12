@@ -75,13 +75,22 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
         if (!isAltPressed &&
             !isCtrlPressed &&
             !isMetaPressed &&
-            !isShiftPressed &&
+            !isShiftPressed) {
+          if (th2FileEditController.areaLineCreationController
+              .canCancelUnfinishedXTherionLineCreation()) {
             th2FileEditController.areaLineCreationController
-                .canCancelUnfinishedXTherionLineCreation()) {
-          th2FileEditController.areaLineCreationController
-              .cancelUnfinishedXTherionLineCreation();
+                .cancelUnfinishedXTherionLineCreation();
 
-          return;
+            return;
+          }
+
+          if (th2FileEditController.areaLineCreationController
+              .canCancelUnfinishedQuadraticLineCreation()) {
+            th2FileEditController.areaLineCreationController
+                .cancelUnfinishedQuadraticLineCreation();
+
+            return;
+          }
         }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:

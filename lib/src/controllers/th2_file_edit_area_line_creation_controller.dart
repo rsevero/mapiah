@@ -270,6 +270,34 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     _th2FileEditController.triggerNewLineRedraw();
   }
 
+  bool canCancelUnfinishedQuadraticLineCreation() {
+    return (_getNewLineCreationMethod() ==
+            MPNewLineCreationMethod.mapiahQuadratic) &&
+        canNudgeLastCreatedLineNode();
+  }
+
+  void cancelUnfinishedQuadraticLineCreation() {
+    if (!canCancelUnfinishedQuadraticLineCreation()) {
+      return;
+    }
+
+    if (_newLine == null) {
+      clearNewLine();
+      _th2FileEditController.triggerNewLineRedraw();
+
+      return;
+    }
+
+    final MPCommand removeLineCommand = MPCommandFactory.removeLineFromExisting(
+      existingLineMPID: _newLine!.mpID,
+      isInteractiveLineCreation: true,
+      th2File: _th2File,
+    );
+
+    _th2FileEditController.execute(removeLineCommand);
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
   void nudgeLastCreatedLineNodeByDeltaOnCanvas(Offset deltaOnCanvas) {
     if (!canNudgeLastCreatedLineNode() || (deltaOnCanvas == Offset.zero)) {
       return;

@@ -1410,6 +1410,95 @@ void main() {
     });
 
     testWidgets(
+      'Escape clears an unfinished quadratic path after only the start node',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1 = origin + const Offset(120, 120);
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+
+        expect(editor.th2File.getLines(), isEmpty);
+        expect(
+          editor.th2Controller.areaLineCreationController
+              .canCancelUnfinishedQuadraticLineCreation(),
+          isTrue,
+        );
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+        await tester.pumpAndSettle();
+
+        expect(editor.th2File.getLines(), isEmpty);
+        expect(
+          editor.th2Controller.areaLineCreationController
+              .canCancelUnfinishedQuadraticLineCreation(),
+          isFalse,
+        );
+        expect(
+          editor.th2Controller.stateController.state.type,
+          MPTH2FileEditStateType.addLine,
+        );
+      },
+    );
+
+    testWidgets('Escape removes an unfinished quadratic path', (
+      WidgetTester tester,
+    ) async {
+      await _configureTestSurface(tester);
+      mpLocator.mpSettingsController.setEnum(
+        MPSettingID.TH2Edit_NewLineCreationMethod,
+        MPNewLineCreationMethod.mapiahQuadratic,
+      );
+
+      final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+          await _pumpEditor(tester, mpLocator);
+      final Finder listenerFinder = find.byKey(
+        ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+      );
+      final Offset origin = tester.getTopLeft(listenerFinder);
+      final Offset p1 = origin + const Offset(120, 120);
+      final Offset p2 = origin + const Offset(240, 160);
+      final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+      await _enterAddLineMode(tester, editor.th2Controller);
+      await _clickMouse(tester, mouse, p1);
+      await _clickMouse(tester, mouse, p2);
+
+      expect(editor.th2File.getLines(), hasLength(1));
+      expect(
+        editor.th2Controller.areaLineCreationController
+            .canCancelUnfinishedQuadraticLineCreation(),
+        isTrue,
+      );
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+
+      expect(editor.th2File.getLines(), isEmpty);
+      expect(
+        editor.th2Controller.areaLineCreationController
+            .canCancelUnfinishedQuadraticLineCreation(),
+        isFalse,
+      );
+      expect(
+        editor.th2Controller.stateController.state.type,
+        MPTH2FileEditStateType.addLine,
+      );
+    });
+
+    testWidgets(
       'Arrow moves the last created xTherion node by the nudge factor',
       (WidgetTester tester) async {
         await _configureTestSurface(tester);
