@@ -45,10 +45,10 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Inverter visibilidade de todas as imagens                              | Ctrl+I                                        |
 | Juntar linhas em pontos de início/fim coincidentes                     | Ctrl+J                                        |
 | Mesclar áreas                                                          | Ctrl+M                                        |
-| Mover o último nó criado no modo cúbico suave do xTherion em 1 pixel de tela | Alt+Seta                              |
-| Mover o último nó criado no modo cúbico suave do xTherion em 10 pixels de tela | Alt+Shift+Seta                      |
-| Mover o último nó criado no modo cúbico suave do xTherion pelo fator de ajuste | Seta                               |
-| Mover o último nó criado no modo cúbico suave do xTherion por 10 vezes o fator de ajuste | Shift+Seta               |
+| Mover o último nó criado ao desenhar uma linha em 1 pixel de tela | Alt+Seta                              |
+| Mover o último nó criado ao desenhar uma linha em 10 pixels de tela | Alt+Shift+Seta                      |
+| Mover o último nó criado ao desenhar uma linha pelo fator de ajuste | Seta                               |
+| Mover o último nó criado ao desenhar uma linha por 10 vezes o fator de ajuste | Shift+Seta               |
 | Mover imagem / elementos / pontos finais-controle selecionados em 1 pixel de tela | Alt+Seta                   |
 | Mover imagem / elementos / pontos finais-controle selecionados em 10 pixels de tela | Alt+Shift+Seta             |
 | Mover imagem / elementos / pontos finais-controle selecionados de qualquer lugar | Alt+arrastar                        |

@@ -65,7 +65,9 @@ Controla a espessura visual (em pixels) das linhas desenhadas no canvas. Esta é
 ### Método de criação de nova linha
 Controla o comportamento ao criar um novo segmento de linha clicando e arrastando:
 * **Quadrático do Mapiah**: a posição do arrasto é usada como o único ponto de controle de uma aproximação de curva Bézier quadrática.
-* **Cúbico suave do xTherion**: a posição do arrasto torna-se o futuro ponto de controle do próximo segmento; o outro ponto de controle do segmento atual é espelhado em torno do ponto final compartilhado. Mantenha _Ctrl_ pressionado durante o arrasto para fixar a distância do ponto de controle espelhado. Durante o desenho, o último nó criado também pode ser ajustado com _Seta_, _Shift+Seta_, _Alt+Seta_ e _Alt+Shift+Seta_. Este método tenta reproduzir o comportamento do XTherion.
+* **Cúbico suave do xTherion**: a posição do arrasto torna-se o futuro ponto de controle do próximo segmento; o outro ponto de controle do segmento atual é espelhado em torno do ponto final compartilhado. Mantenha _Ctrl_ pressionado durante o arrasto para fixar a distância do ponto de controle espelhado. Este método tenta reproduzir o comportamento do XTherion.
+
+Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser ajustado com _Seta_, _Shift+Seta_, _Alt+Seta_ e _Alt+Shift+Seta_.
 
 ### Raio do ponto
 Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.

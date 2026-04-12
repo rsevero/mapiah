@@ -37,10 +37,10 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Line or line segment: enter line edit                      | Double-click                            |
 | Node/line edit                                             | N                                       |
 | Merge areas                                                | Ctrl+M                                  |
-| Move last created xTherion cubic smooth node by 1 screen pixel | Alt+Arrow                         |
-| Move last created xTherion cubic smooth node by 10 screen pixels | Alt+Shift+Arrow                 |
-| Move last created xTherion cubic smooth node by nudge factor | Arrow                             |
-| Move last created xTherion cubic smooth node by 10 times the nudge factor | Shift+Arrow             |
+| Move last created line-drawing node by 1 screen pixel | Alt+Arrow                         |
+| Move last created line-drawing node by 10 screen pixels | Alt+Shift+Arrow                 |
+| Move last created line-drawing node by nudge factor | Arrow                             |
+| Move last created line-drawing node by 10 times the nudge factor | Shift+Arrow             |
 | Move selected image / elements / end-control points by 1 screen pixel | Alt+Arrow                    |
 | Move selected image / elements / end-control points by 10 screen pixels | Alt+Shift+Arrow              |
 | Move selected image / elements / end-control points from anywhere | Alt+drag                          |

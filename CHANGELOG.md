@@ -45,6 +45,7 @@
   * Added widget coverage for xTherion cubic smooth Ctrl-drag line creation, checking both the fixed mirrored-handle distance on the current segment and the seeded control point carried into the next segment.
   * Added widget coverage for the Mapiah quadratic line-creation drag flow, verifying that dragging a newly placed node converts the current segment into a Bézier curve with the expected quadratic-to-cubic control-point geometry and that the conversion persists after release/finalization.
   * xTherion cubic smooth line creation now supports nudging the last created node with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_ while drawing. The in-progress smooth handles move together with the node, and EN/PT help plus regression coverage were updated accordingly.
+  * Mapiah quadratic line creation now supports the same keyboard nudging shortcuts while drawing (`Arrow`, `Shift+Arrow`, `Alt+Arrow`, `Alt+Shift+Arrow`) for the last created node, with matching EN/PT help updates and regression coverage.
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.

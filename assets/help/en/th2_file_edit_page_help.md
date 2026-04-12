@@ -113,7 +113,7 @@ When drawing lines, each new segment is initially created as a straight line seg
 
 The exact drag behavior depends on the settings option "New line creation method". "Mapiah quadratic" keeps the current behavior described below. "xTherion cubic smooth" uses the dragged position as the next segment's future control point, mirrors the current segment's other control point around the shared end point, and lets you hold Ctrl while dragging to keep the mirrored control point at a fixed distance.
 
-While drawing with "xTherion cubic smooth", you can also move the last created node with the keyboard:
+While drawing a line, you can also move the last created node with the keyboard:
 * Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels
 * Press _Shift+Arrow_ to move it by ten times the nudge factor
 * Press _Alt+Arrow_ to move it by 1 screen pixel

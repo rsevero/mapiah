@@ -202,9 +202,7 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
   }
 
   bool canNudgeLastCreatedLineNode() {
-    return (_getNewLineCreationMethod() ==
-            MPNewLineCreationMethod.xTherionCubicSmooth) &&
-        ((_lineStartScreenPosition != null) || (_newLine != null));
+    return ((_lineStartScreenPosition != null) || (_newLine != null));
   }
 
   void nudgeLastCreatedLineNodeByDeltaOnCanvas(Offset deltaOnCanvas) {
