@@ -20,6 +20,7 @@
   * The element-rotate state now shows the same context FAB panel as the scale (non-empty selection) state, giving access to simplify, convert, edit-tools, split/join/merge, clipboard, and select-all buttons while in rotate mode.
   * Clicking an already-selected element in scale mode no longer shows the "multiple elements clicked" dialog before switching to rotate mode; a fast path now checks selection state without a dialog and transitions immediately.
   * H/V flip FAB buttons are now shown in both element scale and rotate modes, allowing elements to be mirrored horizontally or vertically directly from either transform state.
+  * When a single selected element is a point, the element-transform scale and rotate handles are now hidden even if `TH2Edit_EnableElementTransforms` is enabled.
   * The bottom strip of last-used PLA type buttons now refreshes immediately when the tracked area/line and point last-used lists change, including point-type edits from the options overlay.
   * The bottom strip of last-used PLA type buttons now shows a centered divider between the area/line and point groups, with tuned asymmetric spacing so the split reads clearly without crowding either side.
   * Opening an existing TH2 file now seeds the last-used PLA tracking from the file contents as well as the most-used counters, so the last-used PLA strip is populated immediately from the existing drawing instead of staying on defaults until a later edit.

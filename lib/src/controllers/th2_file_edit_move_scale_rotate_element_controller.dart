@@ -52,6 +52,22 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
   }
 
+  bool get shouldShowElementTransformHandles {
+    if (!isElementTransformsEnabled) {
+      return false;
+    }
+
+    final Iterable<MPSelectedElement> selectedElements =
+        _selectionController.mpSelectedElementsLogical.values;
+
+    if (selectedElements.length != 1) {
+      return true;
+    }
+
+    return selectedElements.first.originalElementClone.elementType !=
+        THElementType.point;
+  }
+
   MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
     final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
       imageMPID,

@@ -30,11 +30,11 @@ class MPSelectionHandlesWidget extends StatelessWidget {
           th2FileEditController.redrawTriggerSelectedElements;
           th2FileEditController.redrawTriggerSelectedElementsListChanged;
 
-          final bool isElementTransformsEnabled = th2FileEditController
+          final bool shouldShowElementTransformHandles = th2FileEditController
               .moveScaleRotateElementController
-              .isElementTransformsEnabled;
+              .shouldShowElementTransformHandles;
 
-          if (isElementTransformsEnabled) {
+          if (shouldShowElementTransformHandles) {
             final Offset hoverScreenPosition =
                 th2FileEditController.mousePosition;
             final MPTH2FileEditStateType stateType =

@@ -38,7 +38,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
     if (!th2FileEditController
         .moveScaleRotateElementController
-        .isElementTransformsEnabled) {
+        .shouldShowElementTransformHandles) {
       th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
 
       return;
@@ -152,7 +152,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     // selected. If so, switch to rotate mode immediately — no dialog needed.
     if (th2FileEditController
             .moveScaleRotateElementController
-            .isElementTransformsEnabled &&
+            .shouldShowElementTransformHandles &&
         !shiftPressed &&
         !ctrlOrMetaOnlyPressed) {
       final List<THElement> quickClicked = selectionController
@@ -309,7 +309,7 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
     final MPSelectionHandleType? handleType =
         th2FileEditController
             .moveScaleRotateElementController
-            .isElementTransformsEnabled
+            .shouldShowElementTransformHandles
         ? th2FileEditController.moveScaleRotateElementController
               .getSelectionHandleAtScreenPosition(event.localPosition)
         : null;
