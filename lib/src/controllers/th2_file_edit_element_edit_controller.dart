@@ -88,10 +88,14 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   bool _allImagesVisibility = true;
 
-  final List<MPPLATypeSubtype> _lastUsedAreaTypes = [];
-  final List<MPPLATypeSubtype> _lastUsedAreaLineTypes = [];
-  final List<MPPLATypeSubtype> _lastUsedLineTypes = [];
-  final List<MPPLATypeSubtype> _lastUsedPointTypes = [];
+  final ObservableList<MPPLATypeSubtype> _lastUsedAreaTypes =
+      ObservableList<MPPLATypeSubtype>();
+  final ObservableList<MPPLATypeSubtype> _lastUsedAreaLineTypes =
+      ObservableList<MPPLATypeSubtype>();
+  final ObservableList<MPPLATypeSubtype> _lastUsedLineTypes =
+      ObservableList<MPPLATypeSubtype>();
+  final ObservableList<MPPLATypeSubtype> _lastUsedPointTypes =
+      ObservableList<MPPLATypeSubtype>();
   final Map<MPPLATypeSubtype, MPTypeUsed> _mostUsedAreaTypes = {};
   final Map<MPPLATypeSubtype, MPTypeUsed> _mostUsedLineTypes = {};
   final Map<MPPLATypeSubtype, MPTypeUsed> _mostUsedPointTypes = {};

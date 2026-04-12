@@ -30,9 +30,12 @@ class TH2FileEditLastUsedPLAButtonsWidget extends StatelessWidget {
         }
 
         final List<MPPLATypeSubtype> lastUsedAreaLineTypes =
-            th2FileEditController.elementEditController.lastUsedAreaLineTypes;
-        final List<MPPLATypeSubtype> lastUsedPointTypes =
-            th2FileEditController.elementEditController.lastUsedPointTypes;
+            th2FileEditController.elementEditController.lastUsedAreaLineTypes
+                .toList(growable: false);
+        final List<MPPLATypeSubtype> lastUsedPointTypes = th2FileEditController
+            .elementEditController
+            .lastUsedPointTypes
+            .toList(growable: false);
 
         if (lastUsedAreaLineTypes.isEmpty && lastUsedPointTypes.isEmpty) {
           return const SizedBox.shrink();
