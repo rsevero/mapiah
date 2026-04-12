@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_widget.dart';
@@ -85,9 +86,9 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
         th2FileEditController.elementEditController;
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     late Map<String, String> choices;
-    late List<String> lastUsedChoices;
+    late List<MPPLATypeSubtype> lastUsedChoices;
     final List<String> lastUsedChoicesReduced = [];
-    late List<String> mostUsedChoices;
+    late List<MPPLATypeSubtype> mostUsedChoices;
     final List<String> mostUsedChoicesReduced = [];
     late String title;
     final String selectedPLATypeForUser;
@@ -152,25 +153,25 @@ class _MPPLATypeOptionsOverlayWindowWidgetState
       _validateUnknown();
     }
 
-    for (final String choice in lastUsedChoices) {
-      if (choice == selectedPLAType) {
+    for (final MPPLATypeSubtype choice in lastUsedChoices) {
+      if (choice.typeSubtypeID == selectedPLAType) {
         continue;
       }
 
-      lastUsedChoicesReduced.add(choice);
+      lastUsedChoicesReduced.add(choice.typeSubtypeID);
 
       if (lastUsedChoicesReduced.length >= mpMaxLastUsedTypes) {
         break;
       }
     }
 
-    for (final String choice in mostUsedChoices) {
-      if (lastUsedChoicesReduced.contains(choice) ||
-          (choice == selectedPLAType)) {
+    for (final MPPLATypeSubtype choice in mostUsedChoices) {
+      if (lastUsedChoicesReduced.contains(choice.typeSubtypeID) ||
+          (choice.typeSubtypeID == selectedPLAType)) {
         continue;
       }
 
-      mostUsedChoicesReduced.add(choice);
+      mostUsedChoicesReduced.add(choice.typeSubtypeID);
 
       if (mostUsedChoicesReduced.length >= mpMaxMostUsedTypes) {
         break;

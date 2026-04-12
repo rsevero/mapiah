@@ -1483,14 +1483,22 @@ class MPTextToUser {
     }
 
     if (elementEditController != null) {
-      for (final String extraType in elementEditController.lastUsedAreaTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getAreaTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.lastUsedAreaTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getAreaTypeSubtypeFromTypeSubtype(
+            areaType: extraType.type,
+            areaSubtype: extraType.subtype,
+          );
         }
       }
-      for (final String extraType in elementEditController.mostUsedAreaTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getAreaTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.mostUsedAreaTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getAreaTypeSubtypeFromTypeSubtype(
+            areaType: extraType.type,
+            areaSubtype: extraType.subtype,
+          );
         }
       }
     }
@@ -1510,14 +1518,22 @@ class MPTextToUser {
     }
 
     if (elementEditController != null) {
-      for (final String extraType in elementEditController.lastUsedLineTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getLineTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.lastUsedLineTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getLineTypeSubtypeFromTypeSubtype(
+            lineType: extraType.type,
+            lineSubtype: extraType.subtype,
+          );
         }
       }
-      for (final String extraType in elementEditController.mostUsedLineTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getLineTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.mostUsedLineTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getLineTypeSubtypeFromTypeSubtype(
+            lineType: extraType.type,
+            lineSubtype: extraType.subtype,
+          );
         }
       }
     }
@@ -1548,14 +1564,22 @@ class MPTextToUser {
     }
 
     if (elementEditController != null) {
-      for (final String extraType in elementEditController.lastUsedPointTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getPointTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.lastUsedPointTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getPointTypeSubtypeFromTypeSubtype(
+            pointType: extraType.type,
+            pointSubtype: extraType.subtype,
+          );
         }
       }
-      for (final String extraType in elementEditController.mostUsedPointTypes) {
-        if (!choices.containsKey(extraType)) {
-          choices[extraType] = getPointTypeSubtypeFromTypeSubtypeID(extraType);
+      for (final MPPLATypeSubtype extraType
+          in elementEditController.mostUsedPointTypes) {
+        if (!choices.containsKey(extraType.typeSubtypeID)) {
+          choices[extraType.typeSubtypeID] = getPointTypeSubtypeFromTypeSubtype(
+            pointType: extraType.type,
+            pointSubtype: extraType.subtype,
+          );
         }
       }
     }
