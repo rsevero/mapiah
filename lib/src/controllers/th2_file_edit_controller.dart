@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_line_trace_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_move_scale_rotate_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -62,6 +63,7 @@ abstract class TH2FileEditControllerBase with Store {
   late final MPVisualController visualController;
   late final TH2FileEditCopyPasteController copyPasteController;
   late final TH2FileEditElementEditController elementEditController;
+  late final TH2FileEditLineTraceController lineTraceController;
   late final TH2FileEditMoveScaleRotateElementController
   moveScaleRotateElementController;
   late final TH2FileEditSplitMergeController splitMergeController;
@@ -354,6 +356,10 @@ abstract class TH2FileEditControllerBase with Store {
       (stateController.state is MPTH2FileEditStateAddPoint);
 
   @computed
+  bool get isInAddLineState =>
+      stateController.state is MPTH2FileEditStateAddLine;
+
+  @computed
   bool get hasSelectedEndPoints =>
       selectionController.selectedEndControlPoints.isNotEmpty;
 
@@ -641,6 +647,9 @@ abstract class TH2FileEditControllerBase with Store {
       this as TH2FileEditController,
     );
     elementEditController = TH2FileEditElementEditController(
+      this as TH2FileEditController,
+    );
+    lineTraceController = TH2FileEditLineTraceController(
       this as TH2FileEditController,
     );
     moveScaleRotateElementController =
@@ -1304,6 +1313,12 @@ abstract class TH2FileEditControllerBase with Store {
 
     _setCanvasCenter(selectionWindow.center);
     setCanvasScale(MPNumericAux.roundScale(targetScale));
+  }
+
+  @action
+  void centerCanvasOn(Offset canvasPoint) {
+    _setCanvasCenter(canvasPoint);
+    _changedCanvasTransform();
   }
 
   void _changedCanvasTransform() {

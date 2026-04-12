@@ -19,6 +19,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Converter segmento inacabado de reta para curva ao desenhar                                   | Shift+U                                  |
 | Converter segmentos de linha selecionados para Bézier                                         | J                                        |
 | Converter segmentos de linha selecionados para reta                                           | Shift+J                                  |
+| Continuar/parar traçado semiautomático por cor de imagens raster ao desenhar linha            | Ctrl+Shift+T                             |
 | Copiar elementos selecionados                                                                 | Ctrl+C                                   |
 | Criar área                                                                                    | A                                        |
 | Criar croqui                                                                                  | K                                        |

@@ -183,6 +183,13 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.isInAddElementState,
         name: 'TH2FileEditControllerBase.isInAddElementState',
       )).value;
+  Computed<bool>? _$isInAddLineStateComputed;
+
+  @override
+  bool get isInAddLineState => (_$isInAddLineStateComputed ??= Computed<bool>(
+    () => super.isInAddLineState,
+    name: 'TH2FileEditControllerBase.isInAddLineState',
+  )).value;
   Computed<bool>? _$hasSelectedEndPointsComputed;
 
   @override
@@ -1847,6 +1854,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void centerCanvasOn(Offset canvasPoint) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.centerCanvasOn');
+    try {
+      return super.centerCanvasOn(canvasPoint);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _calculateCanvasOffset() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._calculateCanvasOffset');
@@ -2021,6 +2039,7 @@ isInSelectNonEmptySelectionState: ${isInSelectNonEmptySelectionState},
 isInElementRotateState: ${isInElementRotateState},
 isInSelectEmptySelectionState: ${isInSelectEmptySelectionState},
 isInAddElementState: ${isInAddElementState},
+isInAddLineState: ${isInAddLineState},
 hasSelectedEndPoints: ${hasSelectedEndPoints},
 areAllEndPointsSelected: ${areAllEndPointsSelected},
 hasSelectedLines: ${hasSelectedLines},

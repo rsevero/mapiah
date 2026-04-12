@@ -16,6 +16,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Click area-border line: select area only                                         | Ctrl+Alt+click                             |
 | Convert selected line segments to Bézier curve                                   | J                                          |
 | Convert selected line segments to straight                                       | Shift+J                                    |
+| Continue/stop semi-automatic raster image tracing by color while drawing a line  | Ctrl+Shift+T                               |
 | Constrain a new line-drawing node to the snap angle while drawing                | Shift+click                                |
 | Copy selected elements                                                           | Ctrl+C                                     |
 | Create area                                                                      | A                                          |

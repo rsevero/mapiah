@@ -23,11 +23,11 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Save](#save)
   - [Original file format](#original-file-format)
 - [Images](#images)
+  - [Image visibility](#image-visibility)
   - [Image transform mode](#image-transform-mode)
   - [Image moving](#image-moving)
   - [Image scaling](#image-scaling)
   - [Image rotation](#image-rotation)
-  - [Image visibility](#image-visibility)
   - [Grid visibility](#grid-visibility)
   - [Image reordering](#image-reordering)
 - [Drag modifiers](#drag-modifiers)
@@ -122,6 +122,10 @@ When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can 
 When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Esc_ to delete the whole unfinished path and start a new one.
 
 When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Shift+L_ to convert the last (unfinished) segment from a Bézier curve to a straight line, or _Shift+U_ to convert it from a straight line to a Bézier curve. When converting to a Bézier curve, the control points are placed at one-third and two-thirds of the segment chord.
+
+When the file has inserted images, line add mode also shows a _Continue tracing_ button. Place at least two seed nodes on the feature to follow, then click that button (or press _Ctrl+Shift+T_) to start semi-automatic pixel-color (also works on black and white images) tracing. While tracing is active, the same control becomes _Stop tracing_.
+
+Tracing uses the pixel color under the current endpoint as target and tries to add new nodes ahead of the last segment direction. The step distance is the distance between your two latest seed nodes (minimum 1.0), computed once at trace start and kept fixed for the whole tracing session. For each step, Mapiah tries this fixed distance first, then local fallbacks using half and double that distance. If no color match arc is found, tracing stops.
 
 While drawing a line, you can also move the last created node with the keyboard:
 * Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels

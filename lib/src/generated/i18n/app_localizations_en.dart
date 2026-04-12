@@ -1327,6 +1327,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageChangeImageTool => 'Change image (Alt+I)';
 
   @override
+  String get th2FileEditPageContinueTracing =>
+      'Continue tracing (Ctrl+Shift+T)';
+
+  @override
   String get th2FileEditPageConvertLineSegmentsToBezier =>
       'Convert line segments to Bézier (J)';
 
@@ -1650,6 +1654,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get th2FileEditPageSplitLinesAtCrossings =>
       'Split selected lines at crossings (Ctrl+Shift+X)';
+
+  @override
+  String get th2FileEditPageStopTracing => 'Stop tracing (Ctrl+Shift+T)';
 
   @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>

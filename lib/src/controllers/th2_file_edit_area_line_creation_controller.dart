@@ -196,6 +196,36 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     _isNewLineDragging = false;
   }
 
+  List<Offset> getCurrentInteractiveLineNodeCanvasCoordinates() {
+    if (_newLine == null) {
+      if (_lineStartScreenPosition == null) {
+        return <Offset>[];
+      }
+
+      return <Offset>[
+        _th2FileEditController.offsetScreenToCanvas(_lineStartScreenPosition!),
+      ];
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+
+    if (lineSegmentMPIDs.isEmpty) {
+      return <Offset>[];
+    }
+
+    final List<Offset> coordinates = <Offset>[];
+
+    for (final int lineSegmentMPID in lineSegmentMPIDs) {
+      final THLineSegment lineSegment = _th2File.lineSegmentByMPID(
+        lineSegmentMPID,
+      );
+
+      coordinates.add(lineSegment.endPoint.coordinates);
+    }
+
+    return coordinates;
+  }
+
   @action
   void endNewLineDrag() {
     _isNewLineDragging = false;

@@ -2057,6 +2057,11 @@
     "description": "The label for the change image tool button. Used on: _TH2FileEditPageState._changeImageButton",
     "type": "text"
   },
+  "th2FileEditPageContinueTracing": "Continue tracing (Ctrl+Shift+T)",
+  "@th2FileEditPageContinueTracing": {
+    "description": "Tooltip for starting semi-automatic line tracing in add line mode. Used on: TH2FileEditAddElementContextFABsPanel",
+    "type": "text"
+  },
   "th2FileEditPageConvertLineSegmentsToBezier": "Convert line segments to Bézier (J)",
   "@th2FileEditPageConvertLineSegmentsToBezier": {
     "description": "Tooltip for the convert line segments to Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
@@ -2537,6 +2542,11 @@
   "th2FileEditPageSplitLinesAtCrossings": "Split selected lines at crossings (Ctrl+Shift+X)",
   "@th2FileEditPageSplitLinesAtCrossings": {
     "description": "Tooltip for the split selected lines at crossings FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
+  "th2FileEditPageStopTracing": "Stop tracing (Ctrl+Shift+T)",
+  "@th2FileEditPageStopTracing": {
+    "description": "Tooltip for stopping semi-automatic line tracing in add line mode. Used on: TH2FileEditAddElementContextFABsPanel",
     "type": "text"
   },
   "th2FileEditPageToggleAllGridsVisibilityHideAllTooltip": "Hide all grids (Ctrl+G)",

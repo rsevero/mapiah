@@ -9,11 +9,11 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
 - [Imagens](#imagens)
+  - [Visibilidade da imagem](#visibilidade-da-imagem)
   - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
   - [Movimento da imagem](#movimento-da-imagem)
   - [Redimensionamento da imagem](#redimensionamento-da-imagem)
   - [Rotação da imagem](#rotação-da-imagem)
-  - [Visibilidade da imagem](#visibilidade-da-imagem)
   - [Visibilidade da grade](#visibilidade-da-grade)
   - [Reordenação de imagens](#reordenação-de-imagens)
 - [Modificadores de arrasto](#modificadores-de-arrasto)
@@ -249,6 +249,10 @@ Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você po
 Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Esc_ para excluir todo o caminho inacabado e iniciar um novo.
 
 Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Shift+L_ para converter o último segmento (inacabado) de uma curva Bézier para uma linha reta, ou _Shift+U_ para convertê-lo de uma linha reta para uma curva Bézier. Ao converter para curva Bézier, os pontos de controle são posicionados em um terço e dois terços da corda do segmento.
+
+Quando o arquivo tem imagens inseridas, o modo de criação de linha também mostra o botão _Continuar traçado_. Coloque pelo menos dois nós de referência sobre a feição que deseja seguir e, então, clique nesse botão (ou pressione _Ctrl+Shift+T_) para iniciar o traçado semiautomático por cor de pixel (também funciona em imagens preto e branco). Enquanto o traçado estiver ativo, o mesmo controle passa a ser _Parar traçado_.
+
+O traçado usa como alvo a cor do pixel sob o ponto final atual e tenta adicionar novos nós à frente da direção do último segmento. A distância de passo é a distância entre os dois últimos nós-semente (mínimo 1.0), calculada uma única vez no início e mantida fixa durante toda a sessão de traçado. Em cada passo, o Mapiah tenta primeiro essa distância fixa e, em seguida, fallback local com metade e dobro dessa distância. Se nenhum arco de correspondência de cor for encontrado, o traçado para.
 
 Ao desenhar uma linha, você também pode mover pelo teclado o último nó criado:
 * Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas

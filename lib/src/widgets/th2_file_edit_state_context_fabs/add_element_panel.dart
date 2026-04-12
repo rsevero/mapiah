@@ -20,6 +20,9 @@ class TH2FileEditAddElementContextFABsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final bool showLineTraceButton =
+        th2FileEditController.isInAddLineState &&
+        th2FileEditController.lineTraceController.hasAnyImage;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -53,6 +56,38 @@ class TH2FileEditAddElementContextFABsPanel extends StatelessWidget {
             ),
           ],
         ),
+        if (showLineTraceButton)
+          TH2FileEditStateContextFABCategoryRow(
+            buttons: <Widget>[
+              ValueListenableBuilder<bool>(
+                valueListenable:
+                    th2FileEditController.lineTraceController.isTracingNotifier,
+                builder: (context, isTracing, child) {
+                  return ValueListenableBuilder<bool>(
+                    valueListenable: th2FileEditController
+                        .lineTraceController
+                        .canStartTracingNotifier,
+                    builder: (context, canStartTracing, _) {
+                      return TH2FileEditStateContextFABButton(
+                        context: context,
+                        heroTag: '${heroPrefix}_ctx_toggle_line_tracing',
+                        onPressed: isTracing || canStartTracing
+                            ? () => th2FileEditController.lineTraceController
+                                  .toggleTracing()
+                            : null,
+                        category: TH2FileEditStateContextFABCategory.editTools,
+                        icon: isTracing ? Icons.stop : Icons.play_arrow,
+                        tooltip: isTracing
+                            ? appLocalizations.th2FileEditPageStopTracing
+                            : appLocalizations.th2FileEditPageContinueTracing,
+                        isActive: isTracing,
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
       ],
     );
   }

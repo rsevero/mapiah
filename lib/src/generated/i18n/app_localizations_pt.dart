@@ -1340,6 +1340,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageChangeImageTool => 'Alterar imagem (Alt+I)';
 
   @override
+  String get th2FileEditPageContinueTracing =>
+      'Continuar traçado (Ctrl+Shift+T)';
+
+  @override
   String get th2FileEditPageConvertLineSegmentsToBezier =>
       'Converter segmentos de linha para Bézier (J)';
 
@@ -1674,6 +1678,9 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2FileEditPageSplitLinesAtCrossings =>
       'Dividir linhas selecionadas nos cruzamentos (Ctrl+Shift+X)';
+
+  @override
+  String get th2FileEditPageStopTracing => 'Parar traçado (Ctrl+Shift+T)';
 
   @override
   String get th2FileEditPageToggleAllGridsVisibilityHideAllTooltip =>

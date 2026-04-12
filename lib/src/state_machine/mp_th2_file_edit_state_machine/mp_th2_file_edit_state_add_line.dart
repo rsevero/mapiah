@@ -24,10 +24,15 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
         lineTypeSubtype.typeSubtypeID,
       ),
     );
+
+    th2FileEditController.lineTraceController.reset();
+    th2FileEditController.lineTraceController.updateCanStartTracing();
   }
 
   @override
   void onStateExit(MPTH2FileEditState nextState) {
+    th2FileEditController.lineTraceController.stopTracing();
+
     if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
       th2FileEditController.areaLineCreationController
           .finalizeNewLineCreation();
@@ -43,6 +48,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     th2FileEditController.areaLineCreationController.addNewLineLineSegment(
       snapedScreenOffset,
     );
+    th2FileEditController.lineTraceController.updateCanStartTracing();
   }
 
   @override
@@ -80,6 +86,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
               .canCancelUnfinishedXTherionLineCreation()) {
             th2FileEditController.areaLineCreationController
                 .cancelUnfinishedXTherionLineCreation();
+            th2FileEditController.lineTraceController.reset();
 
             return;
           }
@@ -88,6 +95,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
               .canCancelUnfinishedQuadraticLineCreation()) {
             th2FileEditController.areaLineCreationController
                 .cancelUnfinishedQuadraticLineCreation();
+            th2FileEditController.lineTraceController.reset();
 
             return;
           }
@@ -102,6 +110,8 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
         )) {
           th2FileEditController.areaLineCreationController
               .removeLastCreatedLineNode();
+          th2FileEditController.lineTraceController.stopTracing();
+          th2FileEditController.lineTraceController.updateCanStartTracing();
 
           return;
         }
@@ -113,6 +123,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
             !isShiftPressed) {
           th2FileEditController.areaLineCreationController
               .finalizeNewLineCreation();
+          th2FileEditController.lineTraceController.reset();
 
           return;
         }
@@ -138,6 +149,21 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
               .canChangeLastSegmentToCurve()) {
             th2FileEditController.areaLineCreationController
                 .changeLastSegmentToCurve();
+
+            return;
+          }
+        }
+      case LogicalKeyboardKey.keyT:
+        if (!isAltPressed &&
+            !isMetaPressed &&
+            isCtrlPressed &&
+            isShiftPressed) {
+          if (th2FileEditController.lineTraceController.isTracing ||
+              th2FileEditController
+                  .lineTraceController
+                  .canStartTracingNotifier
+                  .value) {
+            th2FileEditController.lineTraceController.toggleTracing();
 
             return;
           }

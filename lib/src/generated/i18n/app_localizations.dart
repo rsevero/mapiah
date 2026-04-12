@@ -2477,6 +2477,12 @@ abstract class AppLocalizations {
   /// **'Change image (Alt+I)'**
   String get th2FileEditPageChangeImageTool;
 
+  /// Tooltip for starting semi-automatic line tracing in add line mode. Used on: TH2FileEditAddElementContextFABsPanel
+  ///
+  /// In en, this message translates to:
+  /// **'Continue tracing (Ctrl+Shift+T)'**
+  String get th2FileEditPageContinueTracing;
+
   /// Tooltip for the convert line segments to Bézier FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
@@ -3046,6 +3052,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Split selected lines at crossings (Ctrl+Shift+X)'**
   String get th2FileEditPageSplitLinesAtCrossings;
+
+  /// Tooltip for stopping semi-automatic line tracing in add line mode. Used on: TH2FileEditAddElementContextFABsPanel
+  ///
+  /// In en, this message translates to:
+  /// **'Stop tracing (Ctrl+Shift+T)'**
+  String get th2FileEditPageStopTracing;
 
   /// Tooltip for the toggle-all grid visibility button when all grids are visible (clicking will hide all). Used on: _MPAvailableImagesWidgetState.build
   ///
