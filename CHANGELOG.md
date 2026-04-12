@@ -26,6 +26,7 @@
   * The Create new TH2 file dialog now keeps its bottom action buttons visible while the dialog body scrolls by reusing `MPDialogBottomWidget`.
   * The smooth-line tooltip now correctly advertises the `S` shortcut, and `Ctrl+Shift+S` once again opens the Save As dialog from the TH2 edit page.
   * `Save as` now rebases imported image paths relative to the new TH2 location before writing the file, so moved SVG background images stay visible both immediately after saving and after reopening the saved file.
+  * Adding background images now stores paths relative to the TH2 file consistently even when tests or callers provide workspace-relative filenames, preventing `PathException` failures during image-insert command creation.
   * Settings page action buttons now stay visible at the bottom while the settings list scrolls, and the footer now reuses `MPDialogBottomWidget` for consistent dialog-style actions.
   * The interactive line simplification dialog no longer grows taller than its content when the main window is resized.
   * Updated EN/PT help pages and keyboard-shortcut documentation to include the new element/image transform actions and their modifiers (rotate, scale, flip). Generated localization files (`intl_*.arb` / `app_localizations_*.dart`) were updated accordingly.

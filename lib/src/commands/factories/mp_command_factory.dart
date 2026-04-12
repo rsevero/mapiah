@@ -736,18 +736,15 @@ class MPCommandFactory {
     MPSVGIntrinsicSizeInfo? svgIntrinsicSizeInfo,
   }) {
     final TH2File th2File = th2FileEditController.th2File;
-    final String fromPath = p.dirname(th2File.filename);
-    final String normalizedImageFilename = imageFilename.replaceAll(
-      mpWindowsBackslashPair,
-      mpWindowsForwardSlash,
-    );
-    final String normalizedFromPath = fromPath.replaceAll(
-      mpWindowsBackslashPair,
-      mpWindowsForwardSlash,
-    );
+    final String absoluteTH2Filename = p
+        .absolute(th2File.filename)
+        .replaceAll(mpWindowsBackslashPair, mpWindowsForwardSlash);
+    final String absoluteImageFilename = p
+        .absolute(imageFilename)
+        .replaceAll(mpWindowsBackslashPair, mpWindowsForwardSlash);
     final String rawRelativeImagePath = p.posix.relative(
-      normalizedImageFilename,
-      from: normalizedFromPath,
+      absoluteImageFilename,
+      from: p.posix.dirname(absoluteTH2Filename),
     );
     final String relativeImagePath =
         (rawRelativeImagePath.startsWith('./') ||
