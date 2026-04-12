@@ -71,6 +71,19 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
     switch (event.logicalKey) {
+      case LogicalKeyboardKey.backspace:
+      case LogicalKeyboardKey.delete:
+        if (_canRemoveLastCreatedXTherionNode(
+          isAltPressed: isAltPressed,
+          isCtrlPressed: isCtrlPressed,
+          isMetaPressed: isMetaPressed,
+          isShiftPressed: isShiftPressed,
+        )) {
+          th2FileEditController.areaLineCreationController
+              .removeLastCreatedLineNode();
+
+          return;
+        }
       case LogicalKeyboardKey.enter:
       case LogicalKeyboardKey.numpadEnter:
         if (!isAltPressed &&
@@ -105,6 +118,27 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
             .nudgeLastCreatedLineNodeByDeltaOnCanvas(deltaOnCanvas);
       },
     );
+  }
+
+  bool _canRemoveLastCreatedXTherionNode({
+    required bool isAltPressed,
+    required bool isCtrlPressed,
+    required bool isMetaPressed,
+    required bool isShiftPressed,
+  }) {
+    if (isAltPressed || isCtrlPressed || isMetaPressed || isShiftPressed) {
+      return false;
+    }
+
+    if (!th2FileEditController.areaLineCreationController
+        .canRemoveLastCreatedLineNode()) {
+      return false;
+    }
+
+    final Enum creationMethod = mpLocator.mpSettingsController
+        .getEnumWithDefault(MPSettingID.TH2Edit_NewLineCreationMethod);
+
+    return creationMethod == MPNewLineCreationMethod.xTherionCubicSmooth;
   }
 
   @override

@@ -26,6 +26,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';

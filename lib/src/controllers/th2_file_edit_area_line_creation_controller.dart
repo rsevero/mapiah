@@ -206,6 +206,42 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     return ((_lineStartScreenPosition != null) || (_newLine != null));
   }
 
+  bool canRemoveLastCreatedLineNode() {
+    return canNudgeLastCreatedLineNode();
+  }
+
+  void removeLastCreatedLineNode() {
+    if (!canRemoveLastCreatedLineNode()) {
+      return;
+    }
+
+    if (_newLine == null) {
+      clearNewLine();
+      _th2FileEditController.triggerNewLineRedraw();
+
+      return;
+    }
+
+    final List<int> lineSegmentMPIDs = _newLine!.getLineSegmentMPIDs(_th2File);
+
+    if (lineSegmentMPIDs.isEmpty) {
+      clearNewLine();
+      _th2FileEditController.triggerNewLineRedraw();
+
+      return;
+    }
+
+    if (lineSegmentMPIDs.length <= 2) {
+      _removeInteractiveLineKeepingOnlyStartNode(
+        firstLineSegmentMPID: lineSegmentMPIDs.first,
+      );
+
+      return;
+    }
+
+    _removeLastLineSegment(lineSegmentMPIDs.last);
+  }
+
   void nudgeLastCreatedLineNodeByDeltaOnCanvas(Offset deltaOnCanvas) {
     if (!canNudgeLastCreatedLineNode() || (deltaOnCanvas == Offset.zero)) {
       return;
@@ -263,6 +299,63 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
 
     _lineStartScreenPosition = _lineStartScreenPosition! + deltaOnScreen;
     _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  void _removeInteractiveLineKeepingOnlyStartNode({
+    required int firstLineSegmentMPID,
+  }) {
+    final THLineSegment firstLineSegment = _th2File.lineSegmentByMPID(
+      firstLineSegmentMPID,
+    );
+    final Offset restoredStartScreenPosition = _th2FileEditController
+        .offsetCanvasToScreen(firstLineSegment.endPoint.coordinates);
+    final MPCommand removeLineCommand = MPCommandFactory.removeLineFromExisting(
+      existingLineMPID: _newLine!.mpID,
+      isInteractiveLineCreation: true,
+      th2File: _th2File,
+    );
+
+    _th2FileEditController.execute(removeLineCommand);
+
+    _lineStartScreenPosition = restoredStartScreenPosition;
+    _newLinePendingControlPoint1CanvasCoordinates = null;
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  void _removeLastLineSegment(int lastLineSegmentMPID) {
+    final THLineSegment lastLineSegment = _th2File.lineSegmentByMPID(
+      lastLineSegmentMPID,
+    );
+    final Offset? restoredPendingControlPoint1 =
+        _getRestoredPendingControlPoint1(lastLineSegment);
+    final MPCommand removeLineSegmentCommand =
+        MPCommandFactory.removeLineSegmentFromExisting(
+          toRemoveLineSegmentMPID: lastLineSegmentMPID,
+          th2File: _th2File,
+        );
+
+    _th2FileEditController.execute(removeLineSegmentCommand);
+
+    _newLinePendingControlPoint1CanvasCoordinates =
+        restoredPendingControlPoint1;
+    _th2FileEditController.triggerNewLineRedraw();
+  }
+
+  Offset? _getRestoredPendingControlPoint1(THLineSegment lastLineSegment) {
+    if (_newLinePendingControlPoint1CanvasCoordinates != null) {
+      return null;
+    }
+
+    if (lastLineSegment is! THBezierCurveLineSegment) {
+      return null;
+    }
+
+    if (lastLineSegment.controlPoint2.coordinates !=
+        lastLineSegment.endPoint.coordinates) {
+      return null;
+    }
+
+    return lastLineSegment.controlPoint1.coordinates;
   }
 
   THLineSegment _moveLastCreatedLineSegmentWithNode({
