@@ -118,6 +118,8 @@ void main() {
         expect(mpTileWidgetVisibilityPre.backgroundColor, unsetExpectedColor);
 
         // tap the MPTileWidget and verify MPMultipleOptionWidget opens
+        await tester.ensureVisible(mpTileWidgetWithVisibilityFinder);
+        await tester.pumpAndSettle();
         await tester.tap(mpTileWidgetWithVisibilityFinder);
         await tester.pumpAndSettle();
 
@@ -155,6 +157,8 @@ void main() {
         expect(find.byType(MPMultipleChoicesWidget), findsNothing);
 
         // tap the MPTileWidget and verify MPMultipleOptionWidget opens
+        await tester.ensureVisible(mpTileWidgetWithVisibilityFinder);
+        await tester.pumpAndSettle();
         await tester.tap(mpTileWidgetWithVisibilityFinder);
         await tester.pumpAndSettle();
 

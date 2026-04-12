@@ -48,6 +48,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       (int length) {
         if (length == 0) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) {
+              return;
+            }
+
             Navigator.pop(context);
           });
         }

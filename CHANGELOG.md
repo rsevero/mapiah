@@ -254,6 +254,7 @@
   * Change active scrap shortcut corrected to Alt+K (was incorrectly implemented as Alt+S); tooltip and help pages updated.
   * Options edit overlay stays open when pressing "Add area border" button and while clicking lines in addLineToArea state: added keepOverlayOpenOnCanvasClick virtual property to base state (default false), overridden to true in MPTH2FileEditStateAddLineToArea; MPButtonType.addLineToArea added to _noAutoCloseButtonTypes.
   * Area borders panel now refreshes after every border addition: MPAddAreaBorderTHIDCommand._actualExecute calls addOutdatedCloneMPID and triggerOptionsListRedraw so the selection clone and overlay update for both lines with and without pre-existing THIDs.
+  * Fixed tabbed-editor widget test instability: TH2FileTabsPage now checks `mounted` before running the deferred auto-pop when the last tab closes, the select-all FAB panels now rebuild reactively when the all-selected state changes, and the multiple-choice option overlay test now scrolls the target option tile into view before tapping it. This restores the failing `t3300` and `t3730` suites and keeps the full `flutter test` run green.
 
 ## 0.3.2 - 2026-03-19 - The [Claude](https://en.wikipedia.org/wiki/Claude_(language_model)) release
 * New features:
