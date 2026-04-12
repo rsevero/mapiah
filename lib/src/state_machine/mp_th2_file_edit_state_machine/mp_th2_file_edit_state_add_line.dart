@@ -73,7 +73,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     switch (event.logicalKey) {
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
-        if (_canRemoveLastCreatedXTherionNode(
+        if (_canRemoveLastCreatedInteractiveLineNode(
           isAltPressed: isAltPressed,
           isCtrlPressed: isCtrlPressed,
           isMetaPressed: isMetaPressed,
@@ -120,7 +120,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     );
   }
 
-  bool _canRemoveLastCreatedXTherionNode({
+  bool _canRemoveLastCreatedInteractiveLineNode({
     required bool isAltPressed,
     required bool isCtrlPressed,
     required bool isMetaPressed,
@@ -135,10 +135,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
       return false;
     }
 
-    final Enum creationMethod = mpLocator.mpSettingsController
-        .getEnumWithDefault(MPSettingID.TH2Edit_NewLineCreationMethod);
-
-    return creationMethod == MPNewLineCreationMethod.xTherionCubicSmooth;
+    return true;
   }
 
   @override

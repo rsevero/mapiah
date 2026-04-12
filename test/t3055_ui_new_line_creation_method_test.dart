@@ -1053,6 +1053,76 @@ void main() {
     );
 
     testWidgets(
+      'Delete removes the last created Mapiah quadratic node and keeps the start node active',
+      (WidgetTester tester) async {
+        await _configureTestSurface(tester);
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_NewLineCreationMethod,
+          MPNewLineCreationMethod.mapiahQuadratic,
+        );
+
+        final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+            await _pumpEditor(tester, mpLocator);
+        final Finder listenerFinder = find.byKey(
+          ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder);
+        final Offset p1Local = const Offset(120, 120);
+        final Offset p2Local = const Offset(240, 160);
+        final Offset p3Local = const Offset(300, 210);
+        final Offset p1 = origin + p1Local;
+        final Offset p2 = origin + p2Local;
+        final Offset p3 = origin + p3Local;
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+        await _enterAddLineMode(tester, editor.th2Controller);
+        await _clickMouse(tester, mouse, p1);
+        await _clickMouse(tester, mouse, p2);
+
+        expect(editor.th2File.getLines(), hasLength(1));
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.delete);
+        await tester.pumpAndSettle();
+
+        expect(editor.th2File.getLines(), isEmpty);
+        expect(
+          editor.th2Controller.areaLineCreationController
+              .canRemoveLastCreatedLineNode(),
+          isTrue,
+        );
+
+        await _clickMouse(tester, mouse, p3);
+        await _finalizeLineCreation(tester);
+
+        final THLine recreatedLine = editor.th2File.getLines().first;
+        final List<THLineSegment> recreatedLineSegments = recreatedLine
+            .getLineSegments(editor.th2File);
+        final Offset expectedStartPoint = editor.th2Controller
+            .offsetScreenToCanvas(p1Local);
+        final Offset expectedEndPoint = editor.th2Controller
+            .offsetScreenToCanvas(p3Local);
+
+        expect(recreatedLineSegments, hasLength(2));
+        expect(
+          recreatedLineSegments.first.endPoint.coordinates.dx,
+          closeTo(expectedStartPoint.dx, 1e-9),
+        );
+        expect(
+          recreatedLineSegments.first.endPoint.coordinates.dy,
+          closeTo(expectedStartPoint.dy, 1e-9),
+        );
+        expect(
+          recreatedLineSegments.last.endPoint.coordinates.dx,
+          closeTo(expectedEndPoint.dx, 1e-9),
+        );
+        expect(
+          recreatedLineSegments.last.endPoint.coordinates.dy,
+          closeTo(expectedEndPoint.dy, 1e-9),
+        );
+      },
+    );
+
+    testWidgets(
       'Delete removes the last created xTherion node and keeps the start node active',
       (WidgetTester tester) async {
         await _configureTestSurface(tester);
@@ -1121,6 +1191,66 @@ void main() {
         );
       },
     );
+
+    testWidgets('Backspace removes the last dragged Mapiah quadratic node', (
+      WidgetTester tester,
+    ) async {
+      await _configureTestSurface(tester);
+      mpLocator.mpSettingsController.setEnum(
+        MPSettingID.TH2Edit_NewLineCreationMethod,
+        MPNewLineCreationMethod.mapiahQuadratic,
+      );
+
+      final ({TH2File th2File, TH2FileEditController th2Controller}) editor =
+          await _pumpEditor(tester, mpLocator);
+      final Finder listenerFinder = find.byKey(
+        ValueKey('MPListenerWidget|${editor.th2File.mpID}'),
+      );
+      final Offset origin = tester.getTopLeft(listenerFinder);
+      final Offset p1Local = const Offset(120, 120);
+      final Offset p2Local = const Offset(240, 160);
+      final Offset p3Local = const Offset(300, 200);
+      final Offset p1 = origin + p1Local;
+      final Offset p2 = origin + p2Local;
+      final Offset p3 = origin + p3Local;
+      final Offset dragPoint = origin + const Offset(350, 220);
+      final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+
+      await _enterAddLineMode(tester, editor.th2Controller);
+      await _clickMouse(tester, mouse, p1);
+      await _clickMouse(tester, mouse, p2);
+      await _dragMouse(tester, mouse, p3, <Offset>[dragPoint]);
+
+      expect(editor.th2File.getLines(), hasLength(1));
+      expect(_getOnlyLineSegments(editor.th2File), hasLength(3));
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+      await tester.pumpAndSettle();
+
+      final List<THLineSegment> remainingLineSegments = _getOnlyLineSegments(
+        editor.th2File,
+      );
+      final Offset expectedRemainingEndPoint = editor.th2Controller
+          .offsetScreenToCanvas(p2Local);
+
+      expect(remainingLineSegments, hasLength(2));
+      expect(remainingLineSegments.last, isA<THStraightLineSegment>());
+      expect(
+        remainingLineSegments.last.endPoint.coordinates.dx,
+        closeTo(expectedRemainingEndPoint.dx, 1e-9),
+      );
+      expect(
+        remainingLineSegments.last.endPoint.coordinates.dy,
+        closeTo(expectedRemainingEndPoint.dy, 1e-9),
+      );
+      expect(
+        editor
+            .th2Controller
+            .areaLineCreationController
+            .newLinePendingControlPoint1CanvasCoordinates,
+        isNull,
+      );
+    });
 
     testWidgets(
       'Backspace removes the last dragged xTherion node and its pending smooth continuation',

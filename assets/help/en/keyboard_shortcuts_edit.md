@@ -22,6 +22,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Create point                                               | P                                       |
 | Create scrap                                               | K                                       |
 | Cut selected elements                                      | Ctrl+X                                  |
+| Delete last created Mapiah quadratic node while drawing     | Del or Backspace                        |
 | Delete last created xTherion cubic smooth node while drawing | Del or Backspace                      |
 | Default options (no elements selected)                     | O                                       |
 | Delete point, line, area or line segment                   | Del or Backspace                        |

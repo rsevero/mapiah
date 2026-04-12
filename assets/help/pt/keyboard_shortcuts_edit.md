@@ -38,6 +38,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Editar opções (com elementos selecionados)                                                    | O                                        |
 | Escolher arquivo THConfig e executar Therion                                                  | Ctrl+T                                   |
 | Esconder elementos selecionados / Mostrar todos os ocultos                                    | Ctrl+H                                   |
+| Excluir o último nó criado ao desenhar no modo Quadrático do Mapiah                           | Del ou Backspace                         |
 | Excluir o último nó criado ao desenhar no modo xTherion cúbico suave                          | Del ou Backspace                         |
 | Excluir ponto, linha, área ou segmento de linha                                               | Del ou Backspace                         |
 | Ferramenta de seleção                                                                         | C                                        |

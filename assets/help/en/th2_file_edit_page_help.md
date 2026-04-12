@@ -117,7 +117,7 @@ When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can 
 
 When drawing with "xTherion cubic smooth", you can also make the shared node a corner point by separating the two control points. Start dragging normally to define the current segment's control point at the shared end node. Then, without releasing the mouse button, hold _Alt_ and keep dragging to redefine only the next segment's future control point. This keeps the current segment handle fixed while changing the next one independently.
 
-When drawing with "xTherion cubic smooth", you can press _Backspace_ or _Delete_ to remove the last created node. If that was the only completed segment so far, Mapiah returns to the original start node so you can continue drawing from it.
+When drawing with either "Mapiah quadratic" or "xTherion cubic smooth", you can press _Backspace_ or _Delete_ to remove the last created node. If that was the only completed segment so far, Mapiah returns to the original start node so you can continue drawing from it.
 
 While drawing a line, you can also move the last created node with the keyboard:
 * Press an _Arrow_ key to move it by the configured nudge factor (`TH2Edit_NudgeFactor`), measured in canvas pixels

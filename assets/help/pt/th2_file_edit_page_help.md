@@ -244,7 +244,7 @@ Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você ta
 
 Ao desenhar com "Cúbico suave do xTherion", você também pode transformar o nó compartilhado em um ponto de canto separando os dois pontos de controle. Comece arrastando normalmente para definir o ponto de controle do segmento atual no nó final compartilhado. Depois, sem soltar o botão do mouse, mantenha _Alt_ pressionado e continue arrastando para redefinir apenas o futuro ponto de controle do próximo segmento. Isso mantém fixa a alça do segmento atual enquanto altera a próxima de forma independente.
 
-Ao desenhar com "Cúbico suave do xTherion", você pode pressionar _Backspace_ ou _Delete_ para remover o último nó criado. Se esse era o único segmento concluído até então, o Mapiah volta ao nó inicial original para que você possa continuar desenhando a partir dele.
+Ao desenhar com "Quadrático do Mapiah" ou "Cúbico suave do xTherion", você pode pressionar _Backspace_ ou _Delete_ para remover o último nó criado. Se esse era o único segmento concluído até então, o Mapiah volta ao nó inicial original para que você possa continuar desenhando a partir dele.
 
 Ao desenhar uma linha, você também pode mover pelo teclado o último nó criado:
 * Pressione uma tecla _Seta_ para movê-lo pelo fator de nudge configurado (`TH2Edit_NudgeFactor`), medido em pixels do canvas
