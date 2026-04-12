@@ -128,23 +128,23 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return _interactiveLineSimplificationIntensity;
   }
 
-  void initializeMostUsedTypes() {
+  void initializeUsedTypes() {
     final Iterable<THElement> elements = _th2File.elements.values;
 
     for (final THElement element in elements) {
       switch (element) {
         case THArea _:
-          _setMostUsedAreaType(
+          setUsedAreaType(
             areaType: element.areaType.name,
             areaSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
           );
         case THLine _:
-          _setMostUsedLineType(
+          setUsedLineType(
             lineType: element.lineType.name,
             lineSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
           );
         case THPoint _:
-          _setMostUsedPointType(
+          setUsedPointType(
             pointType: element.pointType.name,
             pointSubtype: MPCommandOptionAux.getSubtype(element) ?? '',
           );

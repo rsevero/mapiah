@@ -733,7 +733,7 @@ abstract class TH2FileEditControllerBase with Store {
     selectionController.resetSelectableElements();
     updateEnableSelectButton();
 
-    elementEditController.initializeMostUsedTypes();
+    elementEditController.initializeUsedTypes();
 
     setFilename(_th2File.filename);
 
