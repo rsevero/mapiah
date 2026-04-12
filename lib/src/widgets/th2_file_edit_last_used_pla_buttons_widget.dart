@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:flutter/gestures.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
@@ -93,7 +94,7 @@ class TH2FileEditLastUsedPLAButtonsWidget extends StatelessWidget {
   }
 }
 
-class _TH2FileEditLastUsedPLAButtonsHalfWidget extends StatelessWidget {
+class _TH2FileEditLastUsedPLAButtonsHalfWidget extends StatefulWidget {
   final Alignment alignment;
   final List<MPPLATypeSubtype> plaTypes;
   final TH2FileEditController th2FileEditController;
@@ -105,35 +106,118 @@ class _TH2FileEditLastUsedPLAButtonsHalfWidget extends StatelessWidget {
   });
 
   @override
+  State<_TH2FileEditLastUsedPLAButtonsHalfWidget> createState() =>
+      _TH2FileEditLastUsedPLAButtonsHalfWidgetState();
+}
+
+class _TH2FileEditLastUsedPLAButtonsHalfWidgetState
+    extends State<_TH2FileEditLastUsedPLAButtonsHalfWidget> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (plaTypes.isEmpty) {
+    if (widget.plaTypes.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    return SizedBox(
-      height: 44,
-      child: ClipRect(
-        child: Align(
-          alignment: alignment,
-          child: UnconstrainedBox(
-            constrainedAxis: Axis.vertical,
-            alignment: alignment,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final MPPLATypeSubtype plaType in plaTypes) ...[
-                  _TH2FileEditLastUsedPLAButtonWidget(
-                    plaTypeSubtype: plaType,
-                    th2FileEditController: th2FileEditController,
+    final bool shouldReverseScroll =
+        (widget.alignment == Alignment.centerRight);
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SizedBox(
+          height: 44,
+          child: Listener(
+            onPointerSignal: _onPointerSignal,
+            child: ScrollConfiguration(
+              behavior: const MaterialScrollBehavior().copyWith(
+                dragDevices: <PointerDeviceKind>{
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.stylus,
+                  PointerDeviceKind.invertedStylus,
+                  PointerDeviceKind.trackpad,
+                  PointerDeviceKind.unknown,
+                },
+              ),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                reverse: shouldReverseScroll,
+                clipBehavior: Clip.hardEdge,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: Align(
+                    alignment: widget.alignment,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (final MPPLATypeSubtype plaType
+                            in widget.plaTypes) ...[
+                          _TH2FileEditLastUsedPLAButtonWidget(
+                            plaTypeSubtype: plaType,
+                            th2FileEditController: widget.th2FileEditController,
+                          ),
+                          const SizedBox(width: mpButtonSpace),
+                        ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: mpButtonSpace),
-                ],
-              ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  void _onPointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent) {
+      return;
+    }
+
+    if (!_scrollController.hasClients) {
+      return;
+    }
+
+    final double delta = _pointerScrollDelta(event);
+
+    if (delta == 0) {
+      return;
+    }
+
+    final double targetOffset = (_scrollController.offset + delta).clamp(
+      _scrollController.position.minScrollExtent,
+      _scrollController.position.maxScrollExtent,
+    );
+
+    _scrollController.jumpTo(targetOffset);
+  }
+
+  double _pointerScrollDelta(PointerScrollEvent event) {
+    final double deltaX = event.scrollDelta.dx;
+    final double deltaY = event.scrollDelta.dy;
+
+    if (deltaX != 0) {
+      return deltaX;
+    }
+
+    return deltaY;
   }
 }
 
