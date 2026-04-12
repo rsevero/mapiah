@@ -46,6 +46,7 @@
   * Extracted the TH2 edit top-right state action buttons into `TH2FileEditStateActionButtonsWidget`, moving search/select, snap, default-options, remove, and undo/redo actions out of `TH2FileEditBodyWidget` while preserving their existing behavior.
   * Extracted the TH2 edit state-context FAB panel into a dedicated widget, moving the top-left mode-specific button groups out of `TH2FileEditBodyWidget` while keeping the existing state-based behavior unchanged.
   * Reorganized `TH2FileEditStateContextFABsWidget` internally by splitting the single-line and non-empty-selection FAB builders apart and keeping the shared FAB styling and row helpers in a smaller reusable section.
+  * Split the TH2 edit state-context FAB implementation into dedicated panel files plus shared FAB helpers under `lib/src/widgets/th2_file_edit_state_context_fabs/`, leaving `TH2FileEditStateContextFABsWidget` as a small state-based router.
   * Added unit/widget test coverage and state-machine refinements for the new element transform states and transform-command finalization paths.
   * Added `TH2FileEditMoveScaleRotateElementController` and `MPTH2FileEditStateElementRotate` to centralize and enable element/image transform workflows (move, scale, rotate, flip). Selection handles now support drag-to-scale and corner-handle rotation with optional pivot locking (Shift) and angle snapping (Ctrl/Meta). Mirror (flip) actions (`H` / `V`) and undoable transform commands were added, with matching state-machine integration.
 
