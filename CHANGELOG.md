@@ -34,6 +34,7 @@
   * The interactive line simplification dialog now shows a before/after segment count table (total, Bézier, straight) that updates live as the method and intensity change. The first (anchor) segment of each line is excluded from the counts.
   * Closing a non-visible TH2 tab no longer leaves the editor body showing the wrong file; each tab body now keeps a stable identity, and a regression test covers the close-first-tab flow.
   * Existing TH2 files are now canonicalized to normalized absolute paths inside `MPGeneralController`, so controller lookup, tab identity, telemetry, and rename/remove flows all use one consistent filename key.
+  * Cross-file paste and duplicate workflows no longer crash when auto-zoom tries to fit a zero-size selection or runs before the destination canvas has a valid viewport; selection-window zoom now guards against zero or non-finite scales.
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.

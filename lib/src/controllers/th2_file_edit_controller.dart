@@ -1289,17 +1289,33 @@ abstract class TH2FileEditControllerBase with Store {
   void zoomToSelectionWindow(Rect selectionWindow) {
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
+
+    if ((screenWidth <= 0) || (screenHeight <= 0)) {
+      return;
+    }
+
+    final double selectionWidth =
+        (selectionWindow.width < mpMinimumSizeForDrawing)
+        ? mpMinimumSizeForDrawing
+        : selectionWindow.width;
+    final double selectionHeight =
+        (selectionWindow.height < mpMinimumSizeForDrawing)
+        ? mpMinimumSizeForDrawing
+        : selectionWindow.height;
     final double scaleWidth =
-        (screenWidth * (1.0 - mpCanvasVisibleMargin)) / selectionWindow.width;
+        (screenWidth * (1.0 - mpCanvasVisibleMargin)) / selectionWidth;
     final double scaleHeight =
-        (screenHeight * (1.0 - mpCanvasVisibleMargin)) / selectionWindow.height;
+        (screenHeight * (1.0 - mpCanvasVisibleMargin)) / selectionHeight;
+    final double targetScale = (scaleWidth < scaleHeight)
+        ? scaleWidth
+        : scaleHeight;
+
+    if (!targetScale.isFinite || (targetScale <= 0)) {
+      return;
+    }
 
     _setCanvasCenter(selectionWindow.center);
-    setCanvasScale(
-      MPNumericAux.roundScale(
-        (scaleWidth < scaleHeight) ? scaleWidth : scaleHeight,
-      ),
-    );
+    setCanvasScale(MPNumericAux.roundScale(targetScale));
   }
 
   void _changedCanvasTransform() {
