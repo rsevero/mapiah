@@ -735,26 +735,34 @@ class MPCommandFactory {
     MPSVGIntrinsicSizeInfo? svgIntrinsicSizeInfo,
   }) {
     final TH2File th2File = th2FileEditController.th2File;
-    final String absoluteTH2Filename = p
-        .absolute(th2File.filename)
-        .replaceAll(mpWindowsBackslashPair, mpWindowsForwardSlash);
     final String absoluteImageFilename = p
         .absolute(imageFilename)
         .replaceAll(mpWindowsBackslashPair, mpWindowsForwardSlash);
-    final String rawRelativeImagePath = p.posix.relative(
-      absoluteImageFilename,
-      from: p.posix.dirname(absoluteTH2Filename),
-    );
-    final String relativeImagePath =
-        (rawRelativeImagePath.startsWith('./') ||
-            rawRelativeImagePath.startsWith('../'))
-        ? rawRelativeImagePath
-        : './$rawRelativeImagePath';
+    final String imagePathInTH2;
+
+    if (th2File.isNewFile) {
+      imagePathInTH2 = absoluteImageFilename;
+    } else {
+      final String absoluteTH2Filename = p
+          .absolute(th2File.filename)
+          .replaceAll(mpWindowsBackslashPair, mpWindowsForwardSlash);
+      final String rawRelativeImagePath = p.posix.relative(
+        absoluteImageFilename,
+        from: p.posix.dirname(absoluteTH2Filename),
+      );
+
+      imagePathInTH2 =
+          (rawRelativeImagePath.startsWith('./') ||
+              rawRelativeImagePath.startsWith('../'))
+          ? rawRelativeImagePath
+          : './$rawRelativeImagePath';
+    }
+
     final Rect fileBoundingBox = th2File.getBoundingBox(th2FileEditController)!;
     final THElement newImage = (svgIntrinsicSizeInfo == null)
         ? THXTherionImageInsertConfig.adjustPosition(
             parentMPID: th2File.mpID,
-            filename: relativeImagePath,
+            filename: imagePathInTH2,
             xx: THDoublePart(value: fileBoundingBox.left),
             // For Flutter's canvas, the top is 0 and positive values of Y go
             // down but in the TH2 format, the top is the maximum Y value.
@@ -766,7 +774,7 @@ class MPCommandFactory {
           )
         : MPSVGImageInsertConfig(
             parentMPID: th2File.mpID,
-            filename: relativeImagePath,
+            filename: imagePathInTH2,
             xx: fileBoundingBox.left,
             yy: fileBoundingBox.bottom,
             intrinsicSizeInfo: svgIntrinsicSizeInfo,

@@ -7,10 +7,12 @@ import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
 
@@ -136,5 +138,31 @@ void main() {
         },
       );
     }
+
+    test(
+      'new unsaved file keeps inserted raster image path absolute until first save',
+      () {
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditControllerForNewFile(
+              scrapTHID: 'scrap-1',
+              scrapOptions: const [],
+              encoding: 'utf-8',
+            );
+        final String imagePath = THTestAux.testPath('jpg/2025-10-07-001.jpg');
+        final MPCommand addImageCommand = MPCommandFactory.addImageInsertConfig(
+          imageFilename: imagePath,
+          th2FileEditController: controller,
+        );
+
+        controller.execute(addImageCommand);
+
+        final List<MPRuntimeImageInsertConfigMixin> images = controller.th2File
+            .getImages()
+            .toList();
+
+        expect(images, hasLength(1));
+        expect(images.first.filename, p.absolute(imagePath));
+      },
+    );
   });
 }

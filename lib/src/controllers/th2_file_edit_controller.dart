@@ -1486,20 +1486,20 @@ abstract class TH2FileEditControllerBase with Store {
         filePath += '.th2';
       }
 
-      final String previousFilename = _th2File.filename;
-
-      if (previousFilename.isNotEmpty) {
-        _rebaseImportedImagePathsForSaveAs(
-          oldTH2Filename: previousFilename,
-          newTH2Filename: filePath,
-        );
-      }
+      final String previousFilename = _th2File.isNewFile
+          ? ''
+          : _th2File.filename;
 
       mpGeneralController.renameFileController(
         oldFilename: _th2File.filename,
         newFilename: filePath,
       );
       _th2File.filename = filePath;
+
+      _rebaseImportedImagePathsForSaveAs(
+        oldTH2Filename: previousFilename,
+        newTH2Filename: filePath,
+      );
 
       String directoryPath = p.dirname(filePath);
 
@@ -1526,11 +1526,16 @@ abstract class TH2FileEditControllerBase with Store {
         .toList();
 
     for (final MPRuntimeImageInsertConfigMixin image in images) {
-      final String rebasedFilename = MPDirectoryAux.rebaseRelativePath(
-        oldReferencePath: oldTH2Filename,
-        newReferencePath: newTH2Filename,
-        filename: image.filename,
-      );
+      final String rebasedFilename = oldTH2Filename.isEmpty
+          ? MPDirectoryAux.relativePathFromReferencePath(
+              referencePath: newTH2Filename,
+              targetPath: image.filename,
+            )
+          : MPDirectoryAux.rebaseRelativePath(
+              oldReferencePath: oldTH2Filename,
+              newReferencePath: newTH2Filename,
+              filename: image.filename,
+            );
 
       if (rebasedFilename == image.filename) {
         continue;

@@ -27,5 +27,25 @@ void main() {
 
       expect(rebasedPath, '/shared/assets/plan.svg');
     });
+
+    test('converts absolute asset paths to relative during first SaveAs', () {
+      final String rebasedPath = MPDirectoryAux.rebaseRelativePath(
+        oldReferencePath: 'new_file_42',
+        newReferencePath: '/home/rodrigo/temp/project/croqui.th2',
+        filename: '/home/rodrigo/temp/croqui.jpg',
+      );
+
+      expect(rebasedPath, '../croqui.jpg');
+    });
+
+    test('rebases malformed relative paths created before first SaveAs', () {
+      final String rebasedPath = MPDirectoryAux.rebaseRelativePath(
+        oldReferencePath: 'new_file_42',
+        newReferencePath: '/home/rodrigo/temp/project/croqui.th2',
+        filename: './../../home/rodrigo/temp/croqui.jpg',
+      );
+
+      expect(rebasedPath, '../croqui.jpg');
+    });
   });
 }

@@ -59,7 +59,7 @@ class MPDirectoryAux {
   }
 
   static String getResolvedPath(String referencePath, String filename) {
-    final String resolvedPath = p.normalize(
+    final String resolvedPath = p.canonicalize(
       p.isAbsolute(filename)
           ? filename
           : p.join(p.dirname(referencePath), filename),
@@ -76,24 +76,43 @@ class MPDirectoryAux {
     required String filename,
   }) {
     if (p.isAbsolute(filename)) {
-      return p.normalize(filename);
+      if (!p.isAbsolute(oldReferencePath)) {
+        return relativePathFromReferencePath(
+          targetPath: filename,
+          referencePath: newReferencePath,
+        );
+      }
+
+      return p.canonicalize(filename);
     }
 
     final String resolvedPath = getResolvedPath(oldReferencePath, filename);
-    final String normalizedResolvedPath = resolvedPath.replaceAll('\\', '/');
-    final String normalizedNewDirectory = p
-        .dirname(newReferencePath)
-        .replaceAll('\\', '/');
-    final String rawRelativePath = p.posix.relative(
-      normalizedResolvedPath,
-      from: normalizedNewDirectory,
-    );
-    final bool isExplicitRelative =
-        filename.startsWith('./') || filename.startsWith('../');
+    final String absoluteResolvedPath = p.isAbsolute(resolvedPath)
+        ? p.canonicalize(resolvedPath)
+        : p.canonicalize(p.absolute(resolvedPath));
 
-    if (isExplicitRelative ||
-        rawRelativePath.startsWith('./') ||
-        rawRelativePath.startsWith('../')) {
+    return relativePathFromReferencePath(
+      targetPath: absoluteResolvedPath,
+      referencePath: newReferencePath,
+    );
+  }
+
+  static String relativePathFromReferencePath({
+    required String targetPath,
+    required String referencePath,
+  }) {
+    final String normalizedTargetPath = p.posix.canonicalize(
+      targetPath.replaceAll('\\', '/'),
+    );
+    final String normalizedReferenceDirectory = p.posix.canonicalize(
+      p.dirname(referencePath).replaceAll('\\', '/'),
+    );
+    final String rawRelativePath = p.posix.relative(
+      normalizedTargetPath,
+      from: normalizedReferenceDirectory,
+    );
+
+    if (rawRelativePath.startsWith('./') || rawRelativePath.startsWith('../')) {
       return rawRelativePath;
     }
 
