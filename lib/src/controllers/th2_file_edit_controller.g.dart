@@ -1229,23 +1229,23 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
-  late final _$_shouldShowImagesAtom = Atom(
-    name: 'TH2FileEditControllerBase._shouldShowImages',
+  late final _$_showImagesAtom = Atom(
+    name: 'TH2FileEditControllerBase._showImages',
     context: context,
   );
 
-  bool get shouldShowImages {
-    _$_shouldShowImagesAtom.reportRead();
-    return super._shouldShowImages;
+  bool get showImages {
+    _$_showImagesAtom.reportRead();
+    return super._showImages;
   }
 
   @override
-  bool get _shouldShowImages => shouldShowImages;
+  bool get _showImages => showImages;
 
   @override
-  set _shouldShowImages(bool value) {
-    _$_shouldShowImagesAtom.reportWrite(value, super._shouldShowImages, () {
-      super._shouldShowImages = value;
+  set _showImages(bool value) {
+    _$_showImagesAtom.reportWrite(value, super._showImages, () {
+      super._showImages = value;
     });
   }
 
@@ -1552,11 +1552,11 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   );
 
   @override
-  void _updateShowImages() {
+  void setShowImages(bool shouldShow) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase._updateShowImages');
+        .startAction(name: 'TH2FileEditControllerBase.setShowImages');
     try {
-      return super._updateShowImages();
+      return super.setShowImages(shouldShow);
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

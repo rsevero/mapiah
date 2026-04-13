@@ -11,6 +11,7 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/widgets/mp_raster_image_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'th2_file_tabs_page_test_aux.dart';
@@ -244,6 +245,50 @@ void main() {
 
           expect(controller.canvasScale, initialScale);
           expect(controller.canvasTranslation, initialTranslation);
+        },
+      );
+
+      testWidgets(
+        'inserted jpeg is shown without requiring an unrelated redraw',
+        (WidgetTester tester) async {
+          tester.view.physicalSize = const Size(1280, 720);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+
+          final TH2FileEditController controller = mpLocator.mpGeneralController
+              .getTH2FileEditControllerForNewFile(
+                scrapTHID: 'scrap-1',
+                scrapOptions: const [],
+                encoding: 'utf-8',
+              );
+          final String imagePath = THTestAux.testPath('jpg/2025-10-07-001.jpg');
+          final MPCommand addImageCommand =
+              MPCommandFactory.addImageInsertConfig(
+                imageFilename: imagePath,
+                th2FileEditController: controller,
+              );
+
+          controller.execute(addImageCommand);
+
+          await tester.runAsync(() async {
+            final MPRuntimeImageInsertConfigMixin image = controller.th2File
+                .getImages()
+                .first;
+
+            if (image is MPRuntimeRasterImageInsertConfigMixin) {
+              await image.getRasterImageFrameInfo(controller);
+            }
+          });
+
+          await tester.pumpWidget(
+            buildTH2FileTabsPageTestApp(th2FileEditController: controller),
+          );
+          await tester.pump();
+
+          expect(find.byType(MPRasterImageWidget), findsOneWidget);
         },
       );
     },

@@ -73,11 +73,10 @@ class TH2FileWidget extends StatelessWidget {
                 child: Stack(
                   key: ValueKey("TH2FileWidgetStack|$thFileMPID"),
                   children: [
-                    if (th2FileEditController.showImages)
-                      MPImagesWidget(
-                        key: ValueKey("MPImagesWidget|$thFileMPID"),
-                        th2FileEditController: th2FileEditController,
-                      ),
+                    MPImagesWidget(
+                      key: ValueKey("MPImagesWidget|$thFileMPID"),
+                      th2FileEditController: th2FileEditController,
+                    ),
                     MPNonSelectedScrapsWidget(
                       key: ValueKey("MPNonSelectedScrapsWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,

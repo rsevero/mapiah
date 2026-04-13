@@ -422,9 +422,6 @@ class TH2File
         if (element is THXTherionImageInsertConfig) {
           _xtherionSettingMPIDs = null;
         }
-        mpLocator.mpGeneralController
-            .getTH2FileEditControllerIfExists(filename)
-            ?.resetShowImages();
     }
   }
 
@@ -517,9 +514,6 @@ class TH2File
             _xtherionSettingMPIDs = null;
           }
         }
-        mpLocator.mpGeneralController
-            .getTH2FileEditControllerIfExists(filename)
-            ?.resetShowImages();
     }
 
     final THIsParentMixin parent = element.parent(th2File: this);
@@ -787,9 +781,6 @@ class TH2File
     _scrapMPIDs = null;
     _imageMPIDs = null;
     _xtherionSettingMPIDs = null;
-    mpLocator.mpGeneralController
-        .getTH2FileEditControllerIfExists(filename)
-        ?.resetShowImages();
     _areaMPIDByLineMPID = null;
     _areaMPIDByLineTHID = null;
     filename = '';

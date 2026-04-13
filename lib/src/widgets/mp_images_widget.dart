@@ -21,9 +21,17 @@ class MPImagesWidget extends StatelessWidget {
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerImages;
 
+        if (!th2FileEditController.showImages) {
+          return const SizedBox.shrink();
+        }
+
         final List<Widget> widgets = [];
         final Iterable<MPRuntimeImageInsertConfigMixin> images =
             th2FileEditController.th2File.getImages();
+
+        if (images.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
         for (final MPRuntimeImageInsertConfigMixin image in images) {
           final MPRuntimeImageInsertConfigMixin renderedImage =
