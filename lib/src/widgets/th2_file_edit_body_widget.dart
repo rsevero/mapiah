@@ -6,7 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/widgets/th_file_widget.dart';
+import 'package:mapiah/src/widgets/th2_file_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_action_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_bottom_status_bar_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_last_used_pla_buttons_widget.dart';
