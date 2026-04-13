@@ -364,15 +364,13 @@ class TH2File
       _thIDByMPID[mpID] = newTHID;
     }
 
-    if ((newElement is THPoint) ||
-        (newElement is THLine) ||
-        (newElement is THLineSegment)) {
-      if (newElement is MPBoundingBoxMixin) {
-        (newElement as MPBoundingBoxMixin).clearBoundingBox();
-      }
-    }
-
     newElement.setTH2File(this);
+
+    if (newElement is MPBoundingBoxMixin) {
+      (newElement as MPBoundingBoxMixin).clearBoundingBox();
+    } else {
+      clearBoundingBox();
+    }
   }
 
   bool hasOption(THElement element, THCommandOptionType optionType) {
@@ -386,6 +384,7 @@ class TH2File
     element.setTH2File(this);
 
     _updateSupportMaps(element);
+    clearBoundingBox();
   }
 
   void _updateSupportMaps(THElement element) {
@@ -520,6 +519,7 @@ class TH2File
 
     parent.removeElementFromParent(element);
     _elementByMPID.remove(elementMPID);
+    clearBoundingBox();
   }
 
   bool hasElementByMPID(int mpID) {

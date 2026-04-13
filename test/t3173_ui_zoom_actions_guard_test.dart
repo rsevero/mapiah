@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -198,7 +197,7 @@ void main() {
       );
 
       testWidgets(
-        'new file with inserted jpeg keeps viewport unchanged when pressing 5',
+        'new file with inserted jpeg zooms out to fit the full image',
         (WidgetTester tester) async {
           tester.view.physicalSize = const Size(1280, 720);
           tester.view.devicePixelRatio = 1.0;
@@ -220,6 +219,12 @@ void main() {
                 th2FileEditController: controller,
               );
 
+          controller.updateScreenSize(const Size(1280.0, 720.0));
+          controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+
+          final double initialScale = controller.canvasScale;
+          final Offset initialTranslation = controller.canvasTranslation;
+
           controller.execute(addImageCommand);
 
           await tester.runAsync(() async {
@@ -232,19 +237,10 @@ void main() {
             }
           });
 
-          await tester.pumpWidget(
-            buildTH2FileTabsPageTestApp(th2FileEditController: controller),
-          );
-          await tester.pump();
+          controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
 
-          final double initialScale = controller.canvasScale;
-          final Offset initialTranslation = controller.canvasTranslation;
-
-          await tester.sendKeyEvent(LogicalKeyboardKey.digit5);
-          await tester.pump();
-
-          expect(controller.canvasScale, initialScale);
-          expect(controller.canvasTranslation, initialTranslation);
+          expect(controller.canvasScale, lessThan(initialScale));
+          expect(controller.canvasTranslation, isNot(initialTranslation));
         },
       );
 
