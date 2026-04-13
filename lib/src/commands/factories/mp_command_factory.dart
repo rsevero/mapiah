@@ -729,7 +729,7 @@ class MPCommandFactory {
     );
   }
 
-  static MPCommand addImageInsertConfig({
+  static MPAddImageInsertConfigCommand addImageInsertConfig({
     required String imageFilename,
     required TH2FileEditController th2FileEditController,
     MPSVGIntrinsicSizeInfo? svgIntrinsicSizeInfo,

@@ -1242,14 +1242,25 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       return;
     }
 
-    final MPCommand addImageCommand = MPCommandFactory.addImageInsertConfig(
-      imageFilename: imageResult.filename!,
-      th2FileEditController: _th2FileEditController,
-      svgIntrinsicSizeInfo: imageResult.svgIntrinsicSizeInfo,
-    );
+    final MPAddImageInsertConfigCommand addImageCommand =
+        MPCommandFactory.addImageInsertConfig(
+          imageFilename: imageResult.filename!,
+          th2FileEditController: _th2FileEditController,
+          svgIntrinsicSizeInfo: imageResult.svgIntrinsicSizeInfo,
+        );
+
+    await _warmAddedImageBounds(addImageCommand.newImageInsertConfig);
 
     _th2FileEditController.execute(addImageCommand);
     _th2FileEditController.triggerImagesRedraw();
+  }
+
+  Future<void> _warmAddedImageBounds(THElement newImageInsertConfig) async {
+    if (newImageInsertConfig is! MPRuntimeRasterImageInsertConfigMixin) {
+      return;
+    }
+
+    await newImageInsertConfig.getRasterImageFrameInfo(_th2FileEditController);
   }
 
   void removeImage(int mpID) {

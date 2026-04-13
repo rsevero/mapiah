@@ -385,7 +385,7 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
                     FloatingActionButton(
                       heroTag: '${heroPrefix}_zoom_selection_window',
                       onPressed: () =>
-                          _onButtonPressed(MPButtonType.zoomSelection),
+                          _onButtonPressed(MPButtonType.zoomSelectionWindow),
                       tooltip:
                           appLocalizations.th2FileEditPageZoomToSelectionWindow,
                       child: Image.asset(

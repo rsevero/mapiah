@@ -1269,6 +1269,11 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void zoomToFit({required MPZoomToFitType zoomFitToType}) {
+    if ((zoomFitToType == MPZoomToFitType.selection) &&
+        selectionController.mpSelectedElementsLogical.isEmpty) {
+      return;
+    }
+
     final double screenWidth = _screenSize.width;
     final double screenHeight = _screenSize.height;
 
