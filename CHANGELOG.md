@@ -61,6 +61,7 @@
   * xTherion cubic smooth line creation now supports nudging the last created node with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_ while drawing. The in-progress smooth handles move together with the node, and EN/PT help plus regression coverage were updated accordingly.
   * Mapiah quadratic line creation now supports the same keyboard nudging shortcuts while drawing (`Arrow`, `Shift+Arrow`, `Alt+Arrow`, `Alt+Shift+Arrow`) for the last created node, with matching EN/PT help updates and regression coverage.
 * Infrastructure maintenance:
+  * Added a second raster line-tracing strategy using a bounded A* cost-map search, with priority-ordered strategy selection and fallback from the existing local color-guided tracer.
   * Extracted the raster line-trace strategy boundary into a pluggable strategy/session layer, keeping the current color-guided behavior and add-line flow intact.
   * Extracted shared raster-image preprocessing into `TH2FileEditTraceImagePreprocessor` and `TH2FileEditTracePreprocessorCache`; per-image decoding, RGBA extraction, and canvas-to-pixel transform computation now happen once during session preparation so that pixel sampling and the arc-search loop are fully synchronous with no async work in the hot path.
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).

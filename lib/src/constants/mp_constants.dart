@@ -107,6 +107,13 @@ const int mpDefaultDecimalPositionsAzimuth = 1;
 const double mpDefaultSnapOnScreenDistance = 9;
 const double mpSnapGridCellSizeFactor = 1.1;
 
+const double mpLineTraceAStarLookaheadMultiplier = 6.0;
+const double mpLineTraceAStarSearchPaddingFactor = 2.0;
+const double mpLineTraceAStarMinimumCellSizeOnCanvas = 1.0;
+const int mpLineTraceAStarMaximumGridDimension = 72;
+const int mpLineTraceAStarMaximumIterations = 4096;
+const int mpLineTraceAStarBlockedCost = 255;
+
 const String mpDefaultEncoding = 'UTF-8';
 
 const String mpNullValueAsString = '!!! property has null value !!!';

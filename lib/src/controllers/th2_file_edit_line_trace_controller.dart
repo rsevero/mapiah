@@ -9,7 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_line_trace_strategy.dart';
 class TH2FileEditLineTraceController {
   final TH2FileEditController _th2FileEditController;
 
-  final TH2FileEditLineTraceStrategy _traceStrategy;
+  final TH2FileEditLineTraceStrategyRegistry _traceStrategyRegistry;
 
   final ValueNotifier<bool> isTracingNotifier = ValueNotifier<bool>(false);
 
@@ -21,10 +21,10 @@ class TH2FileEditLineTraceController {
   bool _shouldContinueTracing = false;
 
   TH2FileEditLineTraceSession? _traceSession;
+  TH2FileEditLineTraceStrategy? _activeTraceStrategy;
 
   TH2FileEditLineTraceController(this._th2FileEditController)
-    : _traceStrategy = TH2FileEditLineTraceStrategyRegistry()
-          .resolveDefaultStrategy();
+    : _traceStrategyRegistry = TH2FileEditLineTraceStrategyRegistry();
 
   bool get isTracing => isTracingNotifier.value;
 
@@ -35,16 +35,18 @@ class TH2FileEditLineTraceController {
   Future<void> updateCanStartTracing() async {
     if (!hasAnyImage || !_th2FileEditController.isInAddLineState) {
       _traceSession = null;
+      _activeTraceStrategy = null;
       canStartTracingNotifier.value = false;
 
       return;
     }
 
-    final TH2FileEditLineTraceSession? session = await _traceStrategy
-        .prepareSession(context: _createTraceContext(session: _traceSession));
+    final _PreparedTraceStrategy? preparedTraceStrategy =
+        await _prepareFirstAvailableStrategy();
 
-    _traceSession = session;
-    canStartTracingNotifier.value = session != null;
+    _traceSession = preparedTraceStrategy?.session;
+    _activeTraceStrategy = preparedTraceStrategy?.strategy;
+    canStartTracingNotifier.value = preparedTraceStrategy != null;
   }
 
   Future<void> startTracingFromCurrentLine() async {
@@ -52,16 +54,19 @@ class TH2FileEditLineTraceController {
       return;
     }
 
-    final TH2FileEditLineTraceSession? preparedSession = await _traceStrategy
-        .prepareSession(context: _createTraceContext(session: _traceSession));
+    final _PreparedTraceStrategy? preparedTraceStrategy =
+        await _prepareFirstAvailableStrategy();
 
-    if (preparedSession == null) {
+    if (preparedTraceStrategy == null) {
+      _traceSession = null;
+      _activeTraceStrategy = null;
       canStartTracingNotifier.value = false;
 
       return;
     }
 
-    _traceSession = preparedSession;
+    _traceSession = preparedTraceStrategy.session;
+    _activeTraceStrategy = preparedTraceStrategy.strategy;
     _shouldContinueTracing = true;
     isTracingNotifier.value = true;
 
@@ -99,18 +104,35 @@ class TH2FileEditLineTraceController {
   void reset() {
     stopTracing();
     _traceSession = null;
+    _activeTraceStrategy = null;
     canStartTracingNotifier.value = false;
-    _traceStrategy.reset();
+    _traceStrategyRegistry.reset();
   }
 
   Future<void> _runTraceLoop() async {
     while (_shouldContinueTracing && _th2FileEditController.isInAddLineState) {
-      final TH2FileEditLineTraceStepResult stepResult = await _traceStrategy
+      final TH2FileEditLineTraceStrategy? activeStrategy = _activeTraceStrategy;
+
+      if (activeStrategy == null) {
+        stopTracing();
+
+        return;
+      }
+
+      final TH2FileEditLineTraceStepResult stepResult = await activeStrategy
           .traceSingleStep(
             context: _createTraceContext(session: _traceSession),
           );
 
       if (!stepResult.didProgress) {
+        final bool switchedToFallbackStrategy = await _switchToFallbackStrategy(
+          currentStrategy: activeStrategy,
+        );
+
+        if (switchedToFallbackStrategy) {
+          continue;
+        }
+
         stopTracing();
 
         return;
@@ -125,6 +147,52 @@ class TH2FileEditLineTraceController {
     }
   }
 
+  Future<_PreparedTraceStrategy?> _prepareFirstAvailableStrategy() async {
+    for (final TH2FileEditLineTraceStrategy strategy
+        in _traceStrategyRegistry.resolveStrategies()) {
+      final TH2FileEditLineTraceSession? session = await strategy
+          .prepareSession(context: _createTraceContext(session: _traceSession));
+
+      if (session == null) {
+        continue;
+      }
+
+      return _PreparedTraceStrategy(strategy: strategy, session: session);
+    }
+
+    return null;
+  }
+
+  Future<bool> _switchToFallbackStrategy({
+    required TH2FileEditLineTraceStrategy currentStrategy,
+  }) async {
+    final List<TH2FileEditLineTraceStrategy> strategies = _traceStrategyRegistry
+        .resolveStrategies();
+    final int currentIndex = strategies.indexOf(currentStrategy);
+
+    if (currentIndex < 0) {
+      return false;
+    }
+
+    for (final TH2FileEditLineTraceStrategy strategy in strategies.skip(
+      currentIndex + 1,
+    )) {
+      final TH2FileEditLineTraceSession? session = await strategy
+          .prepareSession(context: _createTraceContext(session: _traceSession));
+
+      if (session == null) {
+        continue;
+      }
+
+      _traceSession = session;
+      _activeTraceStrategy = strategy;
+
+      return true;
+    }
+
+    return false;
+  }
+
   TH2FileEditLineTraceContext _createTraceContext({
     required TH2FileEditLineTraceSession? session,
   }) {
@@ -133,4 +201,12 @@ class TH2FileEditLineTraceController {
       session: session,
     );
   }
+}
+
+class _PreparedTraceStrategy {
+  final TH2FileEditLineTraceStrategy strategy;
+
+  final TH2FileEditLineTraceSession session;
+
+  _PreparedTraceStrategy({required this.strategy, required this.session});
 }
