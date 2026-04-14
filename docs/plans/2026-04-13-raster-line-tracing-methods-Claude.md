@@ -130,14 +130,14 @@ Run a pre-trained model (U-Net style or CRAFT-style line detector) over the imag
 
 ## Comparison
 
-| Method | User Interaction | Thick Lines | Noise Tolerance | Crossings | Effort |
-|---|---|---|---|---|---|
-| Arc Sampling (current) | Fully automatic | Poor | Poor | Poor | — |
-| A\* Pathfinding | Waypoints | Good | Good | Good | Medium |
-| Intelligent Scissors | Magnetic cursor | Good | Good | Moderate | Medium-High |
-| Skeletonization | Region + branch pick | Excellent | Moderate | Moderate | Medium |
-| Gradient Following | Fully automatic | Moderate | Moderate | Poor | Low |
-| ML Probability Map | One-time setup | Excellent | Excellent | Excellent | Very High |
+| Method                 | User Interaction     | Thick Lines | Noise Tolerance | Crossings | Effort      |
+| ---------------------- | -------------------- | ----------- | --------------- | --------- | ----------- |
+| Arc Sampling (current) | Fully automatic      | Poor        | Poor            | Poor      | —           |
+| A\* Pathfinding        | Waypoints            | Good        | Good            | Good      | Medium      |
+| Intelligent Scissors   | Magnetic cursor      | Good        | Good            | Moderate  | Medium-High |
+| Skeletonization        | Region + branch pick | Excellent   | Moderate        | Moderate  | Medium      |
+| Gradient Following     | Fully automatic      | Moderate    | Moderate        | Poor      | Low         |
+| ML Probability Map     | One-time setup       | Excellent   | Excellent       | Excellent | Very High   |
 
 ---
 
