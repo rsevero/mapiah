@@ -108,11 +108,21 @@ const double mpDefaultSnapOnScreenDistance = 9;
 const double mpSnapGridCellSizeFactor = 1.1;
 
 const double mpLineTraceAStarLookaheadMultiplier = 6.0;
+const double mpLineTraceAStarLookaheadRetryDivisor = 2.0;
+const double mpLineTraceAStarLookaheadExpansionFactor = 1.5;
 const double mpLineTraceAStarSearchPaddingFactor = 2.0;
 const double mpLineTraceAStarMinimumCellSizeOnCanvas = 1.0;
+const double mpLineTraceAStarCellSizeStepDivisor = 2.0;
+const double mpLineTraceAStarCellCenterOffset = 0.5;
+const double mpLineTraceAStarMinimumProgressOnCanvas = 0.5;
+const double mpLineTraceAStarDirectionEpsilon = 0.000001;
 const int mpLineTraceAStarMaximumGridDimension = 72;
 const int mpLineTraceAStarMaximumIterations = 4096;
 const int mpLineTraceAStarBlockedCost = 255;
+const double mpLineTraceAStarDiagonalMoveCost = math.sqrt2;
+const double mpLineTraceAStarTargetColorCostFactor = 220.0;
+const double mpLineTraceAStarEdgePreferenceCostFactor = 40.0;
+const double mpLineTraceAStarMaximumSquaredColorDistance = 195075.0;
 
 const String mpDefaultEncoding = 'UTF-8';
 

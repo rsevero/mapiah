@@ -45,7 +45,7 @@ class TH2FileEditLineTraceAStarPathFinder {
       height: costMap.height,
     );
 
-    if (startCell == null || goalCell == null) {
+    if ((startCell == null) || (goalCell == null)) {
       return null;
     }
 
@@ -60,8 +60,8 @@ class TH2FileEditLineTraceAStarPathFinder {
       width: costMap.width,
     );
 
-    if (costMap.costAt(startCell.x, startCell.y) >= costMap.blockedCost ||
-        costMap.costAt(goalCell.x, goalCell.y) >= costMap.blockedCost) {
+    if ((costMap.costAt(startCell.x, startCell.y) >= costMap.blockedCost) ||
+        (costMap.costAt(goalCell.x, goalCell.y) >= costMap.blockedCost)) {
       return null;
     }
 
@@ -103,7 +103,7 @@ class TH2FileEditLineTraceAStarPathFinder {
     int iterations = 0;
 
     while (openSet.isNotEmpty &&
-        iterations < mpLineTraceAStarMaximumIterations) {
+        (iterations < mpLineTraceAStarMaximumIterations)) {
       final _AStarQueueEntry current = openSet.removeFirst();
 
       if (closed[current.index]) {
@@ -209,7 +209,7 @@ class TH2FileEditLineTraceAStarPathFinder {
     final int cellX = point.dx.round();
     final int cellY = point.dy.round();
 
-    if (cellX < 0 || cellX >= width || cellY < 0 || cellY >= height) {
+    if ((cellX < 0) || (cellX >= width) || (cellY < 0) || (cellY >= height)) {
       return null;
     }
 
@@ -244,21 +244,21 @@ class TH2FileEditLineTraceAStarPathFinder {
   }) sync* {
     const List<({int dx, int dy, double moveCost})> deltas =
         <({int dx, int dy, double moveCost})>[
-          (dx: -1, dy: -1, moveCost: 1.4142135623730951),
+          (dx: -1, dy: -1, moveCost: mpLineTraceAStarDiagonalMoveCost),
           (dx: 0, dy: -1, moveCost: 1.0),
-          (dx: 1, dy: -1, moveCost: 1.4142135623730951),
+          (dx: 1, dy: -1, moveCost: mpLineTraceAStarDiagonalMoveCost),
           (dx: -1, dy: 0, moveCost: 1.0),
           (dx: 1, dy: 0, moveCost: 1.0),
-          (dx: -1, dy: 1, moveCost: 1.4142135623730951),
+          (dx: -1, dy: 1, moveCost: mpLineTraceAStarDiagonalMoveCost),
           (dx: 0, dy: 1, moveCost: 1.0),
-          (dx: 1, dy: 1, moveCost: 1.4142135623730951),
+          (dx: 1, dy: 1, moveCost: mpLineTraceAStarDiagonalMoveCost),
         ];
 
     for (final ({int dx, int dy, double moveCost}) delta in deltas) {
       final int nextX = x + delta.dx;
       final int nextY = y + delta.dy;
 
-      if (nextX < 0 || nextX >= width || nextY < 0 || nextY >= height) {
+      if ((nextX < 0) || (nextX >= width) || (nextY < 0) || (nextY >= height)) {
         continue;
       }
 
@@ -365,8 +365,8 @@ class TH2FileEditLineTraceCostMapAStarStrategy
 
     final List<double> lookaheadAttempts = <double>[
       traceContext.lookaheadDistance,
-      traceContext.lookaheadDistance / 2.0,
-      traceContext.lookaheadDistance * 1.5,
+      traceContext.lookaheadDistance / mpLineTraceAStarLookaheadRetryDivisor,
+      traceContext.lookaheadDistance * mpLineTraceAStarLookaheadExpansionFactor,
     ];
 
     for (final double lookaheadDistance in lookaheadAttempts) {
@@ -389,7 +389,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
         goal: searchWindow.goalCell,
       );
 
-      if (gridPath == null || gridPath.length < 2) {
+      if ((gridPath == null) || (gridPath.length < 2)) {
         continue;
       }
 
@@ -399,7 +399,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
       final double tracedDistanceFromCurrent =
           (nextCanvasPoint - traceContext.currentPoint).distance;
 
-      if (tracedDistanceFromCurrent < 0.5) {
+      if (tracedDistanceFromCurrent < mpLineTraceAStarMinimumProgressOnCanvas) {
         continue;
       }
 
@@ -455,7 +455,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final Offset currentPoint = lineNodes.last;
     final Offset direction = currentPoint - previousPoint;
 
-    if (direction.distance <= 0.000001) {
+    if (direction.distance <= mpLineTraceAStarDirectionEpsilon) {
       return null;
     }
 
@@ -491,7 +491,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final Rect searchBounds = baseBounds.inflate(padding);
     final double cellSizeOnCanvas = max(
       mpLineTraceAStarMinimumCellSizeOnCanvas,
-      traceContext.stepDistance / 2.0,
+      traceContext.stepDistance / mpLineTraceAStarCellSizeStepDivisor,
     );
     final int width = min(
       mpLineTraceAStarMaximumGridDimension,
@@ -510,8 +510,10 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final Offset canvasPoint = Offset(
-          origin.dx + ((x + 0.5) * cellSizeOnCanvas),
-          origin.dy + ((y + 0.5) * cellSizeOnCanvas),
+          origin.dx +
+              ((x + mpLineTraceAStarCellCenterOffset) * cellSizeOnCanvas),
+          origin.dy +
+              ((y + mpLineTraceAStarCellCenterOffset) * cellSizeOnCanvas),
         );
         final int cost = _estimateCellCost(
           canvasPoint: canvasPoint,
@@ -537,7 +539,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
       height: height,
     );
 
-    if (startCell == null || goalCell == null) {
+    if ((startCell == null) || (goalCell == null)) {
       return null;
     }
 
@@ -623,7 +625,9 @@ class TH2FileEditLineTraceCostMapAStarStrategy
       targetColor,
     );
     final double edgePreference = 1.0 - averageNeighborDifference;
-    final double rawCost = (targetColorMatch * 220.0) - (edgePreference * 40.0);
+    final double rawCost =
+        (targetColorMatch * mpLineTraceAStarTargetColorCostFactor) -
+        (edgePreference * mpLineTraceAStarEdgePreferenceCostFactor);
 
     return rawCost.round().clamp(1, mpLineTraceAStarBlockedCost - 1);
   }
@@ -638,7 +642,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final int cellX = ((point.dx - origin.dx) / cellSizeOnCanvas).round();
     final int cellY = ((point.dy - origin.dy) / cellSizeOnCanvas).round();
 
-    if (cellX < 0 || cellX >= width || cellY < 0 || cellY >= height) {
+    if ((cellX < 0) || (cellX >= width) || (cellY < 0) || (cellY >= height)) {
       return null;
     }
 
@@ -654,9 +658,7 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final int db = a.blue - b.blue;
     final double squaredDistance = ((dr * dr) + (dg * dg) + (db * db))
         .toDouble();
-    const double maxSquaredDistance = 195075.0;
-
-    return squaredDistance / maxSquaredDistance;
+    return squaredDistance / mpLineTraceAStarMaximumSquaredColorDistance;
   }
 
   void _appendCanvasNode({
@@ -700,8 +702,10 @@ class _AStarSearchWindow {
 
   Offset gridCellCenterToCanvas(Offset gridCell) {
     return Offset(
-      origin.dx + ((gridCell.dx + 0.5) * cellSizeOnCanvas),
-      origin.dy + ((gridCell.dy + 0.5) * cellSizeOnCanvas),
+      origin.dx +
+          ((gridCell.dx + mpLineTraceAStarCellCenterOffset) * cellSizeOnCanvas),
+      origin.dy +
+          ((gridCell.dy + mpLineTraceAStarCellCenterOffset) * cellSizeOnCanvas),
     );
   }
 }

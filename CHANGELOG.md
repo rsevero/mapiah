@@ -63,6 +63,7 @@
 * Infrastructure maintenance:
   * Split the line-trace strategy implementation into dedicated files for the shared strategy registry, color-guided tracer, and A* cost-map tracer, while keeping the existing import surface intact.
   * Added a second raster line-tracing strategy using a bounded A* cost-map search, with priority-ordered strategy selection and fallback from the existing local color-guided tracer.
+  * Moved the remaining A* raster line-tracing tuning literals into `mp_constants.dart`, replacing hard-coded cost-map and pathfinding numbers with named constants.
   * Extracted the raster line-trace strategy boundary into a pluggable strategy/session layer, keeping the current color-guided behavior and add-line flow intact.
   * Extracted shared raster-image preprocessing into `TH2FileEditTraceImagePreprocessor` and `TH2FileEditTracePreprocessorCache`; per-image decoding, RGBA extraction, and canvas-to-pixel transform computation now happen once during session preparation so that pixel sampling and the arc-search loop are fully synchronous with no async work in the hot path.
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
