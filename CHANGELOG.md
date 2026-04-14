@@ -61,6 +61,7 @@
   * xTherion cubic smooth line creation now supports nudging the last created node with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_ while drawing. The in-progress smooth handles move together with the node, and EN/PT help plus regression coverage were updated accordingly.
   * Mapiah quadratic line creation now supports the same keyboard nudging shortcuts while drawing (`Arrow`, `Shift+Arrow`, `Alt+Arrow`, `Alt+Shift+Arrow`) for the last created node, with matching EN/PT help updates and regression coverage.
 * Infrastructure maintenance:
+  * Extracted the raster line-trace strategy boundary into a pluggable strategy/session layer, keeping the current color-guided behavior and add-line flow intact.
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.
   * Added `_lastUsedAreaLineTypes` to `TH2FileEditElementEditController`, keeping a shared last-used list for area and line PLA type/subtype values. The last-used and most-used PLA tracking now stores dedicated `MPPLATypeSubtype` objects instead of string IDs, and `MPTypeUsed` now tracks the same typed value.
