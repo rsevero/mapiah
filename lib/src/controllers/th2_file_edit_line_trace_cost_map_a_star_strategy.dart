@@ -34,6 +34,52 @@ class TH2FileEditLineTraceAStarPathFinder {
     required Offset start,
     required Offset goal,
   }) {
+    final _AStarEndpoints? endpoints = _resolveEndpoints(
+      costMap: costMap,
+      start: start,
+      goal: goal,
+    );
+
+    if (endpoints == null) {
+      return null;
+    }
+
+    if (endpoints.startIndex == endpoints.goalIndex) {
+      return <Offset>[
+        Offset(
+          endpoints.startCell.x.toDouble(),
+          endpoints.startCell.y.toDouble(),
+        ),
+      ];
+    }
+
+    final _AStarSearchState state = _createSearchState(
+      costMap: costMap,
+      endpoints: endpoints,
+    );
+
+    final int? endIndex = _runSearch(
+      costMap: costMap,
+      endpoints: endpoints,
+      state: state,
+    );
+
+    if (endIndex == null) {
+      return null;
+    }
+
+    return _reconstructPath(
+      cameFrom: state.cameFrom,
+      endIndex: endIndex,
+      width: costMap.width,
+    );
+  }
+
+  _AStarEndpoints? _resolveEndpoints({
+    required TH2FileEditLineTraceGridCostMap costMap,
+    required Offset start,
+    required Offset goal,
+  }) {
     final ({int x, int y})? startCell = _pointToCell(
       point: start,
       width: costMap.width,
@@ -49,26 +95,31 @@ class TH2FileEditLineTraceAStarPathFinder {
       return null;
     }
 
-    final int startIndex = _cellToIndex(
-      x: startCell.x,
-      y: startCell.y,
-      width: costMap.width,
-    );
-    final int goalIndex = _cellToIndex(
-      x: goalCell.x,
-      y: goalCell.y,
-      width: costMap.width,
-    );
-
     if ((costMap.costAt(startCell.x, startCell.y) >= costMap.blockedCost) ||
         (costMap.costAt(goalCell.x, goalCell.y) >= costMap.blockedCost)) {
       return null;
     }
 
-    if (startIndex == goalIndex) {
-      return <Offset>[Offset(startCell.x.toDouble(), startCell.y.toDouble())];
-    }
+    return _AStarEndpoints(
+      startCell: startCell,
+      goalCell: goalCell,
+      startIndex: _cellToIndex(
+        x: startCell.x,
+        y: startCell.y,
+        width: costMap.width,
+      ),
+      goalIndex: _cellToIndex(
+        x: goalCell.x,
+        y: goalCell.y,
+        width: costMap.width,
+      ),
+    );
+  }
 
+  _AStarSearchState _createSearchState({
+    required TH2FileEditLineTraceGridCostMap costMap,
+    required _AStarEndpoints endpoints,
+  }) {
     final int totalCells = costMap.width * costMap.height;
     final List<double> gScore = List<double>.filled(
       totalCells,
@@ -78,111 +129,135 @@ class TH2FileEditLineTraceAStarPathFinder {
     final List<bool> closed = List<bool>.filled(totalCells, false);
     final HeapPriorityQueue<_AStarQueueEntry> openSet =
         HeapPriorityQueue<_AStarQueueEntry>(_compareQueueEntry);
+    final double startHeuristic = _heuristic(
+      x: endpoints.startCell.x,
+      y: endpoints.startCell.y,
+      goalX: endpoints.goalCell.x,
+      goalY: endpoints.goalCell.y,
+    );
 
-    gScore[startIndex] = 0.0;
+    gScore[endpoints.startIndex] = 0.0;
     openSet.add(
       _AStarQueueEntry(
-        index: startIndex,
+        index: endpoints.startIndex,
         gScore: 0.0,
-        hScore: _heuristic(
-          x: startCell.x,
-          y: startCell.y,
-          goalX: goalCell.x,
-          goalY: goalCell.y,
-        ),
+        hScore: startHeuristic,
       ),
     );
 
-    int bestIndex = startIndex;
-    double bestHeuristic = _heuristic(
-      x: startCell.x,
-      y: startCell.y,
-      goalX: goalCell.x,
-      goalY: goalCell.y,
+    return _AStarSearchState(
+      gScore: gScore,
+      cameFrom: cameFrom,
+      closed: closed,
+      openSet: openSet,
+      bestIndex: endpoints.startIndex,
+      bestHeuristic: startHeuristic,
     );
+  }
+
+  int? _runSearch({
+    required TH2FileEditLineTraceGridCostMap costMap,
+    required _AStarEndpoints endpoints,
+    required _AStarSearchState state,
+  }) {
     int iterations = 0;
 
-    while (openSet.isNotEmpty &&
+    while (state.openSet.isNotEmpty &&
         (iterations < mpLineTraceAStarMaximumIterations)) {
-      final _AStarQueueEntry current = openSet.removeFirst();
+      final _AStarQueueEntry current = state.openSet.removeFirst();
 
-      if (closed[current.index]) {
+      if (state.closed[current.index]) {
         continue;
       }
 
-      closed[current.index] = true;
+      state.closed[current.index] = true;
       iterations++;
 
-      if (current.index == goalIndex) {
-        return _reconstructPath(
-          cameFrom: cameFrom,
-          endIndex: current.index,
-          width: costMap.width,
-        );
+      if (current.index == endpoints.goalIndex) {
+        return current.index;
       }
 
-      final int currentX = current.index % costMap.width;
-      final int currentY = current.index ~/ costMap.width;
-
-      for (final ({int x, int y, double moveCost}) neighbor
-          in _neighborsForCell(
-            x: currentX,
-            y: currentY,
-            width: costMap.width,
-            height: costMap.height,
-          )) {
-        final int neighborCost = costMap.costAt(neighbor.x, neighbor.y);
-
-        if (neighborCost >= costMap.blockedCost) {
-          continue;
-        }
-
-        final int neighborIndex = _cellToIndex(
-          x: neighbor.x,
-          y: neighbor.y,
-          width: costMap.width,
-        );
-        final double tentativeG =
-            gScore[current.index] + (neighbor.moveCost * neighborCost);
-
-        if (tentativeG >= gScore[neighborIndex]) {
-          continue;
-        }
-
-        cameFrom[neighborIndex] = current.index;
-        gScore[neighborIndex] = tentativeG;
-
-        final double heuristic = _heuristic(
-          x: neighbor.x,
-          y: neighbor.y,
-          goalX: goalCell.x,
-          goalY: goalCell.y,
-        );
-
-        openSet.add(
-          _AStarQueueEntry(
-            index: neighborIndex,
-            gScore: tentativeG,
-            hScore: heuristic,
-          ),
-        );
-
-        if (heuristic < bestHeuristic) {
-          bestHeuristic = heuristic;
-          bestIndex = neighborIndex;
-        }
-      }
+      _visitNeighbors(
+        costMap: costMap,
+        endpoints: endpoints,
+        state: state,
+        currentIndex: current.index,
+      );
     }
 
-    if (bestIndex == startIndex) {
+    if (state.bestIndex == endpoints.startIndex) {
       return null;
     }
 
-    return _reconstructPath(
-      cameFrom: cameFrom,
-      endIndex: bestIndex,
+    return state.bestIndex;
+  }
+
+  void _visitNeighbors({
+    required TH2FileEditLineTraceGridCostMap costMap,
+    required _AStarEndpoints endpoints,
+    required _AStarSearchState state,
+    required int currentIndex,
+  }) {
+    final int currentX = currentIndex % costMap.width;
+    final int currentY = currentIndex ~/ costMap.width;
+
+    for (final ({int x, int y, double moveCost}) neighbor in _neighborsForCell(
+      x: currentX,
+      y: currentY,
       width: costMap.width,
-    );
+      height: costMap.height,
+    )) {
+      final int neighborCost = costMap.costAt(neighbor.x, neighbor.y);
+
+      if (neighborCost >= costMap.blockedCost) {
+        continue;
+      }
+
+      final int neighborIndex = _cellToIndex(
+        x: neighbor.x,
+        y: neighbor.y,
+        width: costMap.width,
+      );
+      final double tentativeG =
+          state.gScore[currentIndex] + (neighbor.moveCost * neighborCost);
+
+      if (tentativeG >= state.gScore[neighborIndex]) {
+        continue;
+      }
+
+      final double heuristic = _heuristic(
+        x: neighbor.x,
+        y: neighbor.y,
+        goalX: endpoints.goalCell.x,
+        goalY: endpoints.goalCell.y,
+      );
+
+      state.cameFrom[neighborIndex] = currentIndex;
+      state.gScore[neighborIndex] = tentativeG;
+      state.openSet.add(
+        _AStarQueueEntry(
+          index: neighborIndex,
+          gScore: tentativeG,
+          hScore: heuristic,
+        ),
+      );
+      _updateBestCandidate(
+        state: state,
+        candidateIndex: neighborIndex,
+        heuristic: heuristic,
+      );
+    }
+  }
+
+  void _updateBestCandidate({
+    required _AStarSearchState state,
+    required int candidateIndex,
+    required double heuristic,
+  }) {
+    if (heuristic < state.bestHeuristic) {
+      state.bestHeuristic = heuristic;
+      state.bestIndex = candidateIndex;
+    }
   }
 
   int _cellToIndex({required int x, required int y, required int width}) {
@@ -275,6 +350,46 @@ class TH2FileEditLineTraceAStarPathFinder {
 
     return a.hScore.compareTo(b.hScore);
   }
+}
+
+class _AStarEndpoints {
+  final ({int x, int y}) startCell;
+
+  final ({int x, int y}) goalCell;
+
+  final int startIndex;
+
+  final int goalIndex;
+
+  _AStarEndpoints({
+    required this.startCell,
+    required this.goalCell,
+    required this.startIndex,
+    required this.goalIndex,
+  });
+}
+
+class _AStarSearchState {
+  final List<double> gScore;
+
+  final List<int> cameFrom;
+
+  final List<bool> closed;
+
+  final HeapPriorityQueue<_AStarQueueEntry> openSet;
+
+  int bestIndex;
+
+  double bestHeuristic;
+
+  _AStarSearchState({
+    required this.gScore,
+    required this.cameFrom,
+    required this.closed,
+    required this.openSet,
+    required this.bestIndex,
+    required this.bestHeuristic,
+  });
 }
 
 class _AStarQueueEntry implements Comparable<_AStarQueueEntry> {
