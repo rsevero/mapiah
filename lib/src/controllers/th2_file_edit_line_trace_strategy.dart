@@ -3,11 +3,9 @@
 
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_trace_image_preprocessor.dart';
 
 /// Coordinates the tracing strategy boundary used by the line-trace controller.
 class TH2FileEditLineTraceContext {
@@ -40,21 +38,6 @@ class TH2FileEditLineTraceSession {
   const TH2FileEditLineTraceSession({
     required this.stepDistanceOnCanvas,
     required this.targetColor,
-  });
-}
-
-/// Represents a sampled RGB color from a raster image.
-class TH2FileEditLineTraceColor {
-  final int red;
-
-  final int green;
-
-  final int blue;
-
-  const TH2FileEditLineTraceColor({
-    required this.red,
-    required this.green,
-    required this.blue,
   });
 }
 
@@ -107,7 +90,8 @@ class TH2FileEditLineTraceLocalColorStrategy
   static const int _maxArcSampleCount = 48;
   static const double _minTraceProgressOnCanvas = 0.75;
 
-  final Map<ui.Image, Uint8List> _rawRgbaCacheByImage = <ui.Image, Uint8List>{};
+  final TH2FileEditTracePreprocessorCache _preprocessorCache =
+      TH2FileEditTracePreprocessorCache();
 
   @override
   Future<TH2FileEditLineTraceSession?> prepareSession({
@@ -123,12 +107,13 @@ class TH2FileEditLineTraceLocalColorStrategy
       return null;
     }
 
-    final TH2FileEditLineTraceColor? sampledColor =
-        await _sampleRasterColorAtCanvas(
-          context: context,
-          canvasPoint: lineNodes.last,
-          requireVisibleImageOnly: true,
-        );
+    await _preprocessorCache.warmUp(
+      th2FileEditController: context.th2FileEditController,
+    );
+
+    final TH2FileEditLineTraceColor? sampledColor = _sampleRasterColorAtCanvas(
+      lineNodes.last,
+    );
 
     if (sampledColor == null) {
       return null;
@@ -166,7 +151,7 @@ class TH2FileEditLineTraceLocalColorStrategy
         continue;
       }
 
-      final Offset? tracedPoint = await _findNextPoint(
+      final Offset? tracedPoint = _findNextPoint(
         context: context,
         traceContext: traceContext,
         localStepDistance: localStepDistance,
@@ -214,7 +199,7 @@ class TH2FileEditLineTraceLocalColorStrategy
 
   @override
   void reset() {
-    _rawRgbaCacheByImage.clear();
+    _preprocessorCache.clear();
   }
 
   _TraceContext? _createTraceContext(TH2FileEditLineTraceContext context) {
@@ -250,11 +235,11 @@ class TH2FileEditLineTraceLocalColorStrategy
     );
   }
 
-  Future<Offset?> _findNextPoint({
+  Offset? _findNextPoint({
     required TH2FileEditLineTraceContext context,
     required _TraceContext traceContext,
     required double localStepDistance,
-  }) async {
+  }) {
     final Offset arcCenter =
         traceContext.currentPoint +
         (traceContext.unitDirection * localStepDistance);
@@ -291,11 +276,7 @@ class TH2FileEditLineTraceLocalColorStrategy
       }
 
       final TH2FileEditLineTraceColor? candidateColor =
-          await _sampleRasterColorAtCanvas(
-            context: context,
-            canvasPoint: candidate,
-            requireVisibleImageOnly: true,
-          );
+          _sampleRasterColorAtCanvas(candidate);
 
       if (candidateColor != null) {
         final int distance = _squaredRGBDistance(
@@ -350,154 +331,24 @@ class TH2FileEditLineTraceLocalColorStrategy
     return centroid / longestArc.length.toDouble();
   }
 
-  Future<TH2FileEditLineTraceColor?> _sampleRasterColorAtCanvas({
-    required TH2FileEditLineTraceContext context,
-    required Offset canvasPoint,
-    required bool requireVisibleImageOnly,
-  }) async {
-    final List<MPRuntimeImageInsertConfigMixin> images = context
-        .th2FileEditController
-        .th2File
-        .getImages()
-        .toList();
-
-    for (final MPRuntimeImageInsertConfigMixin image in images.reversed) {
-      if (requireVisibleImageOnly && !image.isVisible) {
-        continue;
-      }
-
-      final MPRuntimeRasterImageInsertConfigMixin? rasterImage =
-          image.asRasterImage;
-
-      if (rasterImage == null) {
-        continue;
-      }
-
-      final ui.Image? decodedImage = await _ensureDecodedRasterImageLoaded(
-        context: context,
-        rasterImage: rasterImage,
+  /// Returns the RGB color at [canvasPoint] from the topmost visible raster
+  /// image that covers that point, or null if no loaded image covers it.
+  ///
+  /// This method is synchronous because all images are pre-loaded by
+  /// [TH2FileEditTracePreprocessorCache.warmUp] during session preparation.
+  TH2FileEditLineTraceColor? _sampleRasterColorAtCanvas(Offset canvasPoint) {
+    for (final TH2FileEditTraceImagePreprocessor preprocessor
+        in _preprocessorCache.orderedPreprocessors) {
+      final TH2FileEditLineTraceColor? color = preprocessor.sampleAtCanvas(
+        canvasPoint,
       );
 
-      if (decodedImage == null) {
-        continue;
+      if (color != null) {
+        return color;
       }
-
-      final ({int x, int y})? pixelPosition = _canvasToRasterPixel(
-        rasterImage: rasterImage,
-        decodedImage: decodedImage,
-        canvasPoint: canvasPoint,
-      );
-
-      if (pixelPosition == null) {
-        continue;
-      }
-
-      Uint8List? rgba = _rawRgbaCacheByImage[decodedImage];
-
-      if (rgba == null) {
-        final ByteData? byteData = await decodedImage.toByteData(
-          format: ui.ImageByteFormat.rawRgba,
-        );
-
-        if (byteData == null) {
-          continue;
-        }
-
-        rgba = byteData.buffer.asUint8List();
-        _rawRgbaCacheByImage[decodedImage] = rgba;
-      }
-
-      final int index =
-          ((pixelPosition.y * decodedImage.width) + pixelPosition.x) * 4;
-
-      if (index < 0 || (index + 2) >= rgba.length) {
-        continue;
-      }
-
-      return TH2FileEditLineTraceColor(
-        red: rgba[index],
-        green: rgba[index + 1],
-        blue: rgba[index + 2],
-      );
     }
 
     return null;
-  }
-
-  Future<ui.Image?> _ensureDecodedRasterImageLoaded({
-    required TH2FileEditLineTraceContext context,
-    required MPRuntimeRasterImageInsertConfigMixin rasterImage,
-  }) async {
-    final ui.Image? cachedImage = rasterImage.decodedRasterImage;
-
-    if (cachedImage != null) {
-      return cachedImage;
-    }
-
-    final Future<ui.Image>? loading = rasterImage.getRasterImageFrameInfo(
-      context.th2FileEditController,
-    );
-
-    if (loading == null) {
-      return null;
-    }
-
-    return loading;
-  }
-
-  ({int x, int y})? _canvasToRasterPixel({
-    required MPRuntimeRasterImageInsertConfigMixin rasterImage,
-    required ui.Image decodedImage,
-    required Offset canvasPoint,
-  }) {
-    final double imageWidth = decodedImage.width.toDouble();
-    final double imageHeight = decodedImage.height.toDouble();
-
-    final Offset topLeft = rasterImage.transformWorldPointFromBaseWorldPoint(
-      Offset(rasterImage.xx.value, rasterImage.yy.value - imageHeight),
-    );
-    final Offset topRight = rasterImage.transformWorldPointFromBaseWorldPoint(
-      Offset(
-        rasterImage.xx.value + imageWidth,
-        rasterImage.yy.value - imageHeight,
-      ),
-    );
-    final Offset bottomLeft = rasterImage.transformWorldPointFromBaseWorldPoint(
-      Offset(rasterImage.xx.value, rasterImage.yy.value),
-    );
-
-    final Offset xAxis = topRight - topLeft;
-    final Offset yAxis = bottomLeft - topLeft;
-    final double xAxisLengthSquared =
-        (xAxis.dx * xAxis.dx) + (xAxis.dy * xAxis.dy);
-    final double yAxisLengthSquared =
-        (yAxis.dx * yAxis.dx) + (yAxis.dy * yAxis.dy);
-
-    if (xAxisLengthSquared <= 0.000001 || yAxisLengthSquared <= 0.000001) {
-      return null;
-    }
-
-    final Offset relativePoint = canvasPoint - topLeft;
-    final double imageX =
-        ((relativePoint.dx * xAxis.dx) + (relativePoint.dy * xAxis.dy)) /
-        xAxisLengthSquared *
-        imageWidth;
-    final double imageY =
-        ((relativePoint.dx * yAxis.dx) + (relativePoint.dy * yAxis.dy)) /
-        yAxisLengthSquared *
-        imageHeight;
-
-    if (imageX < 0 ||
-        imageY < 0 ||
-        imageX >= imageWidth ||
-        imageY >= imageHeight) {
-      return null;
-    }
-
-    final int pixelX = imageX.floor();
-    final int pixelY = (imageHeight - 1.0 - imageY).floor();
-
-    return (x: pixelX, y: pixelY);
   }
 
   int _squaredRGBDistance(

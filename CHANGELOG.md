@@ -62,6 +62,7 @@
   * Mapiah quadratic line creation now supports the same keyboard nudging shortcuts while drawing (`Arrow`, `Shift+Arrow`, `Alt+Arrow`, `Alt+Shift+Arrow`) for the last created node, with matching EN/PT help updates and regression coverage.
 * Infrastructure maintenance:
   * Extracted the raster line-trace strategy boundary into a pluggable strategy/session layer, keeping the current color-guided behavior and add-line flow intact.
+  * Extracted shared raster-image preprocessing into `TH2FileEditTraceImagePreprocessor` and `TH2FileEditTracePreprocessorCache`; per-image decoding, RGBA extraction, and canvas-to-pixel transform computation now happen once during session preparation so that pixel sampling and the arc-search loop are fully synchronous with no async work in the hot path.
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.
   * Added `_lastUsedAreaLineTypes` to `TH2FileEditElementEditController`, keeping a shared last-used list for area and line PLA type/subtype values. The last-used and most-used PLA tracking now stores dedicated `MPPLATypeSubtype` objects instead of string IDs, and `MPTypeUsed` now tracks the same typed value.
