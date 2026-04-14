@@ -164,6 +164,12 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         final Enum currentValue = enumValues.contains(_draftValues[type])
             ? _draftValues[type] as Enum
             : defaultValue;
+        final Widget? suffixIcon = type == MPSettingID.TH2Edit_TraceStrategy
+            ? Tooltip(
+                message: appLocalizations.mpSettingsTraceStrategyTooltip,
+                child: const Icon(Icons.help_outline),
+              )
+            : null;
 
         return _buildSettingFieldWithReset(
           appLocalizations: appLocalizations,
@@ -172,7 +178,10 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
             DropdownButtonFormField<Enum>(
               key: ValueKey<int>(_fieldRebuildCounters[type] ?? 0),
               initialValue: currentValue,
-              decoration: InputDecoration(labelText: settingLabel),
+              decoration: InputDecoration(
+                labelText: settingLabel,
+                suffixIcon: suffixIcon,
+              ),
               items: enumValues
                   .map(
                     (Enum value) => DropdownMenuItem<Enum>(
@@ -700,6 +709,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditLineThickness;
       case MPSettingID.TH2Edit_NewLineCreationMethod:
         return appLocalizations.mpSettingsSettingTH2EditNewLineCreationMethod;
+      case MPSettingID.TH2Edit_TraceStrategy:
+        return appLocalizations.mpSettingsSettingTH2EditTraceStrategy;
       case MPSettingID.TH2Edit_NudgeFactor:
         return appLocalizations.mpSettingsSettingTH2EditNudgeFactor;
       case MPSettingID.TH2Edit_PointRadius:

@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 // ignore_for_file: constant_identifier_names
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
 import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
 
@@ -33,6 +34,7 @@ enum MPSettingID {
   TH2Edit_ShowDirectionTicksOnNonSelectedLines,
   TH2Edit_ShowLastUsedPLATypeButtons,
   TH2Edit_SnapAngle,
+  TH2Edit_TraceStrategy,
   Therion_DebugLog1,
   Therion_ExecutablePath,
   Therion_RunParameters;
@@ -65,6 +67,7 @@ enum MPSettingID {
     MPSettingID.TH2Edit_NudgeFactor: MPSettingType.double,
     MPSettingID.TH2Edit_PointRadius: MPSettingType.double,
     MPSettingID.TH2Edit_SelectionTolerance: MPSettingType.double,
+    MPSettingID.TH2Edit_TraceStrategy: MPSettingType.enumeration,
     MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines:
         MPSettingType.bool,
     MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons: MPSettingType.bool,
@@ -100,6 +103,28 @@ enum MPSettingID {
                   case MPNewLineCreationMethod.xTherionCubicSmooth:
                     return appLocalizations
                         .mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
+                }
+              },
+        ),
+    MPSettingID.TH2Edit_TraceStrategy:
+        MPSettingEnumDefinitionImpl<MPLineTraceStrategyType>(
+          enumValues: MPLineTraceStrategyType.values,
+          parser: (String storedValue) {
+            try {
+              return MPLineTraceStrategyType.values.byName(storedValue);
+            } on ArgumentError {
+              return null;
+            }
+          },
+          localizedLabelBuilder:
+              (appLocalizations, MPLineTraceStrategyType value) {
+                switch (value) {
+                  case MPLineTraceStrategyType.localColorGuided:
+                    return appLocalizations
+                        .mpSettingsEnumTraceStrategyLocalColorGuided;
+                  case MPLineTraceStrategyType.costMapAStar:
+                    return appLocalizations
+                        .mpSettingsEnumTraceStrategyCostMapAStar;
                 }
               },
         ),

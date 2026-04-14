@@ -19,6 +19,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
   - [Raio do ponto](#raio-do-ponto)
+  - [Estratégia de traçado](#estratégia-de-traçado)
   - [Ângulo preferencial](#ângulo-preferencial)
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
@@ -71,6 +72,13 @@ Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser 
 
 ### Raio do ponto
 Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
+
+### Estratégia de traçado
+Controla qual algoritmo de traçado raster o Mapiah usa quando você inicia o traçado no modo de adicionar linha.
+* **Cor local guiada**: melhor para rasters coloridos, esboços mais limpos e o fluxo interativo normal de traçado. É a escolha padrão.
+* **A* do mapa de custo**: melhor para imagens mais ruidosas, linhas quebradas ou casos em que a orientação por cor local fica instável.
+
+Se estiver em dúvida, comece com a cor local guiada e mude para o A* do mapa de custo quando o traçado travar ou se afastar da linha raster.
 
 ### Ângulo preferencial
 Controla o incremento angular (em graus) usado no ajuste da rotação da imagem e nas restrições ao desenhar novas linhas. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Ao desenhar uma linha, mantenha _Shift_ pressionado para restringir um novo nó ou um ponto de controle arrastado a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com a tecla modificadora pressionada.

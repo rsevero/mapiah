@@ -8,6 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_trace_image_preprocessor.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
 
 /// Coordinates the tracing strategy boundary used by the line-trace controller.
 class TH2FileEditLineTraceContext {
@@ -79,7 +80,7 @@ abstract class TH2FileEditLineTraceStrategy {
   void reset();
 }
 
-/// Resolves the default line-trace strategy.
+/// Resolves the available line-trace strategies.
 class TH2FileEditLineTraceStrategyRegistry {
   final TH2FileEditLineTraceLocalColorStrategy _localColorStrategy =
       TH2FileEditLineTraceLocalColorStrategy();
@@ -95,9 +96,21 @@ class TH2FileEditLineTraceStrategyRegistry {
     ];
   }
 
+  /// Returns the tracing strategy selected by settings.
+  TH2FileEditLineTraceStrategy resolveStrategy(
+    MPLineTraceStrategyType strategyType,
+  ) {
+    switch (strategyType) {
+      case MPLineTraceStrategyType.localColorGuided:
+        return _localColorStrategy;
+      case MPLineTraceStrategyType.costMapAStar:
+        return _costMapAStarStrategy;
+    }
+  }
+
   /// Returns the default tracing strategy.
   TH2FileEditLineTraceStrategy resolveDefaultStrategy() {
-    return _localColorStrategy;
+    return resolveStrategy(MPLineTraceStrategyType.localColorGuided);
   }
 
   /// Clears every strategy-local cache.

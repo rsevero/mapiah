@@ -19,6 +19,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
   - [Point radius](#point-radius)
+  - [Tracing strategy](#tracing-strategy)
   - [Snap angle](#snap-angle)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
@@ -71,6 +72,13 @@ While drawing with either method, the last created node can also be nudged with 
 
 ### Point radius
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.
+
+### Tracing strategy
+Controls which raster tracing algorithm Mapiah uses when you start tracing in add-line mode.
+* **Local color-guided**: best for colored rasters, cleaner sketches, and the usual interactive tracing flow. It is the default choice.
+* **Cost-map A\***: best for noisier images, broken lines, or cases where local color guidance becomes unstable.
+
+If you are unsure, start with local color-guided tracing and switch to cost-map A* when the trace gets stuck or drifts away from the raster line.
 
 ### Snap angle
 Controls the angular increment (in degrees) used when snapping image rotation and new-line drawing constraints. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. While drawing a line, hold _Shift_ to constrain a new node or a dragged control point to multiples of this value. Set it to `0` to disable snapping even while the modifier is held.

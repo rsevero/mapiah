@@ -1870,6 +1870,18 @@ abstract class AppLocalizations {
   /// **'xTherion cubic smooth'**
   String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
 
+  /// Label for the cost-map A* tracing strategy. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'Cost-map A*'**
+  String get mpSettingsEnumTraceStrategyCostMapAStar;
+
+  /// Label for the local color-guided tracing strategy. Used on: enum-backed settings UI
+  ///
+  /// In en, this message translates to:
+  /// **'Local color-guided'**
+  String get mpSettingsEnumTraceStrategyLocalColorGuided;
+
   /// Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:
@@ -2003,11 +2015,23 @@ abstract class AppLocalizations {
   /// **'Snap angle'**
   String get mpSettingsSettingTH2EditSnapAngle;
 
+  /// Label for the TH2 tracing strategy setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Tracing strategy'**
+  String get mpSettingsSettingTH2EditTraceStrategy;
+
   /// Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:
   /// **'Debug log 1'**
   String get mpSettingsSettingTherionDebugLog1;
+
+  /// Tooltip for the tracing strategy setting in the settings page. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the tracing algorithm. Local color-guided is the default; cost-map A* is better for noisy or broken rasters.'**
+  String get mpSettingsTraceStrategyTooltip;
 
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///

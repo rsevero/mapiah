@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
@@ -77,7 +78,10 @@ abstract class MPSettingsControllerBase with Store {
   };
 
   static final Map<MPSettingID, Enum> _enumDefaultSettings =
-      <MPSettingID, Enum>{};
+      <MPSettingID, Enum>{
+        MPSettingID.TH2Edit_TraceStrategy:
+            MPLineTraceStrategyType.localColorGuided,
+      };
 
   /// The default default value for ints is mpDefaultDefaultIntSetting. Only
   /// settings that differ from that should be included here.

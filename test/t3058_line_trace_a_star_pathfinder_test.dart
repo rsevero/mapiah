@@ -4,10 +4,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_line_trace_strategy.dart';
+import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
 
 void main() {
   group('TH2FileEditLineTraceStrategyRegistry', () {
-    test('returns the local color strategy before the A* strategy', () {
+    test('returns strategies in enum order', () {
       final TH2FileEditLineTraceStrategyRegistry registry =
           TH2FileEditLineTraceStrategyRegistry();
       final List<TH2FileEditLineTraceStrategy> strategies = registry
@@ -16,6 +17,20 @@ void main() {
       expect(strategies, hasLength(2));
       expect(strategies.first, isA<TH2FileEditLineTraceLocalColorStrategy>());
       expect(strategies.last, isA<TH2FileEditLineTraceCostMapAStarStrategy>());
+    });
+
+    test('resolves the selected strategy type', () {
+      final TH2FileEditLineTraceStrategyRegistry registry =
+          TH2FileEditLineTraceStrategyRegistry();
+
+      expect(
+        registry.resolveStrategy(MPLineTraceStrategyType.localColorGuided),
+        isA<TH2FileEditLineTraceLocalColorStrategy>(),
+      );
+      expect(
+        registry.resolveStrategy(MPLineTraceStrategyType.costMapAStar),
+        isA<TH2FileEditLineTraceCostMapAStarStrategy>(),
+      );
     });
   });
 

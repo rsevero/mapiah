@@ -3,8 +3,11 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_line_trace_strategy.dart';
+import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 
 class TH2FileEditLineTraceController {
   final TH2FileEditController _th2FileEditController;
@@ -42,7 +45,7 @@ class TH2FileEditLineTraceController {
     }
 
     final _PreparedTraceStrategy? preparedTraceStrategy =
-        await _prepareFirstAvailableStrategy();
+        await _prepareSelectedStrategy();
 
     _traceSession = preparedTraceStrategy?.session;
     _activeTraceStrategy = preparedTraceStrategy?.strategy;
@@ -55,7 +58,7 @@ class TH2FileEditLineTraceController {
     }
 
     final _PreparedTraceStrategy? preparedTraceStrategy =
-        await _prepareFirstAvailableStrategy();
+        await _prepareSelectedStrategy();
 
     if (preparedTraceStrategy == null) {
       _traceSession = null;
@@ -125,14 +128,6 @@ class TH2FileEditLineTraceController {
           );
 
       if (!stepResult.didProgress) {
-        final bool switchedToFallbackStrategy = await _switchToFallbackStrategy(
-          currentStrategy: activeStrategy,
-        );
-
-        if (switchedToFallbackStrategy) {
-          continue;
-        }
-
         stopTracing();
 
         return;
@@ -147,50 +142,23 @@ class TH2FileEditLineTraceController {
     }
   }
 
-  Future<_PreparedTraceStrategy?> _prepareFirstAvailableStrategy() async {
-    for (final TH2FileEditLineTraceStrategy strategy
-        in _traceStrategyRegistry.resolveStrategies()) {
-      final TH2FileEditLineTraceSession? session = await strategy
-          .prepareSession(context: _createTraceContext(session: _traceSession));
+  Future<_PreparedTraceStrategy?> _prepareSelectedStrategy() async {
+    final MPLineTraceStrategyType strategyType =
+        mpLocator.mpSettingsController.getEnumWithDefault(
+              MPSettingID.TH2Edit_TraceStrategy,
+            )
+            as MPLineTraceStrategyType;
+    final TH2FileEditLineTraceStrategy strategy = _traceStrategyRegistry
+        .resolveStrategy(strategyType);
+    final TH2FileEditLineTraceSession? session = await strategy.prepareSession(
+      context: _createTraceContext(session: _traceSession),
+    );
 
-      if (session == null) {
-        continue;
-      }
-
-      return _PreparedTraceStrategy(strategy: strategy, session: session);
+    if (session == null) {
+      return null;
     }
 
-    return null;
-  }
-
-  Future<bool> _switchToFallbackStrategy({
-    required TH2FileEditLineTraceStrategy currentStrategy,
-  }) async {
-    final List<TH2FileEditLineTraceStrategy> strategies = _traceStrategyRegistry
-        .resolveStrategies();
-    final int currentIndex = strategies.indexOf(currentStrategy);
-
-    if (currentIndex < 0) {
-      return false;
-    }
-
-    for (final TH2FileEditLineTraceStrategy strategy in strategies.skip(
-      currentIndex + 1,
-    )) {
-      final TH2FileEditLineTraceSession? session = await strategy
-          .prepareSession(context: _createTraceContext(session: _traceSession));
-
-      if (session == null) {
-        continue;
-      }
-
-      _traceSession = session;
-      _activeTraceStrategy = strategy;
-
-      return true;
-    }
-
-    return false;
+    return _PreparedTraceStrategy(strategy: strategy, session: session);
   }
 
   TH2FileEditLineTraceContext _createTraceContext({

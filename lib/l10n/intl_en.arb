@@ -1508,6 +1508,16 @@
     "description": "Label for the xTherion cubic smooth new line creation method. Used on: enum-backed settings UI",
     "type": "text"
   },
+  "mpSettingsEnumTraceStrategyCostMapAStar": "Cost-map A*",
+  "@mpSettingsEnumTraceStrategyCostMapAStar": {
+    "description": "Label for the cost-map A* tracing strategy. Used on: enum-backed settings UI",
+    "type": "text"
+  },
+  "mpSettingsEnumTraceStrategyLocalColorGuided": "Local color-guided",
+  "@mpSettingsEnumTraceStrategyLocalColorGuided": {
+    "description": "Label for the local color-guided tracing strategy. Used on: enum-backed settings UI",
+    "type": "text"
+  },
   "mpSettingsInvalidInteger": "Invalid integer",
   "@mpSettingsInvalidInteger": {
     "description": "Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart",
@@ -1617,9 +1627,19 @@
     "description": "Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditTraceStrategy": "Tracing strategy",
+  "@mpSettingsSettingTH2EditTraceStrategy": {
+    "description": "Label for the TH2 tracing strategy setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSettingTherionDebugLog1": "Debug log 1",
   "@mpSettingsSettingTherionDebugLog1": {
     "description": "Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "mpSettingsTraceStrategyTooltip": "Choose the tracing algorithm. Local color-guided is the default; cost-map A* is better for noisy or broken rasters.",
+  "@mpSettingsTraceStrategyTooltip": {
+    "description": "Tooltip for the tracing strategy setting in the settings page. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
   "mpSketchChooseFileButtonLabel": "Choose file",

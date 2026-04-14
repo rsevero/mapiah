@@ -962,6 +962,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'xTherion cubic smooth';
 
   @override
+  String get mpSettingsEnumTraceStrategyCostMapAStar => 'Cost-map A*';
+
+  @override
+  String get mpSettingsEnumTraceStrategyLocalColorGuided =>
+      'Local color-guided';
+
+  @override
   String get mpSettingsInvalidInteger => 'Invalid integer';
 
   @override
@@ -1039,7 +1046,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditSnapAngle => 'Snap angle';
 
   @override
+  String get mpSettingsSettingTH2EditTraceStrategy => 'Tracing strategy';
+
+  @override
   String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
+
+  @override
+  String get mpSettingsTraceStrategyTooltip =>
+      'Choose the tracing algorithm. Local color-guided is the default; cost-map A* is better for noisy or broken rasters.';
 
   @override
   String get mpSketchChooseFileButtonLabel => 'Choose file';

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:file_picker/file_picker.dart';
@@ -908,6 +909,19 @@ abstract class TH2FileEditControllerBase with Store {
       autorun((_) {
         _selectionHandleLineThicknessOnCanvas =
             mpSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
+      }),
+    );
+
+    _disposers.add(
+      autorun((_) {
+        mpLocator.mpSettingsController.getTrigger(
+          MPSettingID.TH2Edit_TraceStrategy,
+        );
+
+        if (stateController.state is MPTH2FileEditStateAddLine &&
+            !lineTraceController.isTracing) {
+          unawaited(lineTraceController.updateCanStartTracing());
+        }
       }),
     );
   }

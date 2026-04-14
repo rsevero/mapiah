@@ -974,6 +974,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'Cúbico suave do xTherion';
 
   @override
+  String get mpSettingsEnumTraceStrategyCostMapAStar => 'A* do mapa de custo';
+
+  @override
+  String get mpSettingsEnumTraceStrategyLocalColorGuided => 'Cor local guiada';
+
+  @override
   String get mpSettingsInvalidInteger => 'Inteiro inválido';
 
   @override
@@ -1051,7 +1057,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTH2EditSnapAngle => 'Ângulo preferencial';
 
   @override
+  String get mpSettingsSettingTH2EditTraceStrategy => 'Estratégia de traçado';
+
+  @override
   String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
+
+  @override
+  String get mpSettingsTraceStrategyTooltip =>
+      'Escolha o algoritmo de traçado. Cor local guiada é o padrão; A* do mapa de custo ajuda em imagens mais ruidosas ou quebradas.';
 
   @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
