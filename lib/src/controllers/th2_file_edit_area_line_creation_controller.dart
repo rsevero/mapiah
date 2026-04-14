@@ -232,6 +232,40 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
     _th2FileEditController.triggerNewLineRedraw();
   }
 
+  void appendInteractiveLineNodesFromCanvas(List<Offset> canvasPoints) {
+    final List<Offset> currentLineNodes =
+        getCurrentInteractiveLineNodeCanvasCoordinates();
+    final Offset? currentLastNode = currentLineNodes.isEmpty
+        ? null
+        : currentLineNodes.last;
+    bool shouldSkipFirstPoint = false;
+
+    if ((currentLastNode != null) &&
+        canvasPoints.isNotEmpty &&
+        ((currentLastNode - canvasPoints.first).distance <=
+            mpLineTraceAStarMinimumProgressOnCanvas)) {
+      shouldSkipFirstPoint = true;
+    }
+
+    final int startIndex = shouldSkipFirstPoint ? 1 : 0;
+
+    for (int i = startIndex; i < canvasPoints.length; i++) {
+      final Offset canvasPoint = canvasPoints[i];
+
+      if ((i > startIndex) &&
+          ((canvasPoint - canvasPoints[i - 1]).distance <=
+              mpLineTraceAStarMinimumProgressOnCanvas)) {
+        continue;
+      }
+
+      final Offset screenPoint = _th2FileEditController.offsetCanvasToScreen(
+        canvasPoint,
+      );
+
+      addNewLineLineSegment(screenPoint);
+    }
+  }
+
   bool canNudgeLastCreatedLineNode() {
     return ((_lineStartScreenPosition != null) || (_newLine != null));
   }

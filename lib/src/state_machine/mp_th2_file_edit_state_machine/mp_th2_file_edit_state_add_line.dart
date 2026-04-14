@@ -45,6 +45,16 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
     final Offset snapedScreenOffset = snapController
         .getScreenSnapedOffsetFromScreenOffset(event.localPosition);
 
+    if (th2FileEditController.lineTraceController.isWaypointTracing) {
+      final Offset canvasOffset = th2FileEditController.offsetScreenToCanvas(
+        snapedScreenOffset,
+      );
+
+      th2FileEditController.lineTraceController.setTraceAnchor(canvasOffset);
+
+      return;
+    }
+
     th2FileEditController.areaLineCreationController.addNewLineLineSegment(
       snapedScreenOffset,
     );
@@ -100,9 +110,27 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
 
             return;
           }
+
+          if (th2FileEditController.lineTraceController.hasTracePreview) {
+            th2FileEditController.lineTraceController.cancelWaypointTarget();
+
+            return;
+          }
+
+          if (th2FileEditController.lineTraceController.isWaypointTracing) {
+            th2FileEditController.lineTraceController.stopTracing();
+
+            return;
+          }
         }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:
+        if (th2FileEditController.lineTraceController.hasTracePreview) {
+          th2FileEditController.lineTraceController.cancelWaypointTarget();
+
+          return;
+        }
+
         if (_canRemoveLastCreatedInteractiveLineNode(
           isAltPressed: isAltPressed,
           isCtrlPressed: isCtrlPressed,
@@ -122,6 +150,12 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
             !isCtrlPressed &&
             !isMetaPressed &&
             !isShiftPressed) {
+          if (th2FileEditController.lineTraceController.hasTracePreview) {
+            th2FileEditController.lineTraceController.confirmTracePreview();
+
+            return;
+          }
+
           th2FileEditController.areaLineCreationController
               .finalizeNewLineCreation();
           th2FileEditController.lineTraceController.reset();
@@ -160,10 +194,7 @@ class MPTH2FileEditStateAddLine extends MPTH2FileEditState
             isCtrlPressed &&
             isShiftPressed) {
           if (th2FileEditController.lineTraceController.isTracing ||
-              th2FileEditController
-                  .lineTraceController
-                  .canStartTracingNotifier
-                  .value) {
+              th2FileEditController.lineTraceController.canStartTracing) {
             th2FileEditController.lineTraceController.toggleTracing();
 
             return;

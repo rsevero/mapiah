@@ -15,6 +15,10 @@ class TH2FileEditLineTraceLocalColorStrategy
       TH2FileEditTracePreprocessorCache();
 
   @override
+  MPLineTraceInteractionType get interactionType =>
+      MPLineTraceInteractionType.continuous;
+
+  @override
   Future<TH2FileEditLineTraceSession?> prepareSession({
     required TH2FileEditLineTraceContext context,
   }) async {
@@ -122,6 +126,15 @@ class TH2FileEditLineTraceLocalColorStrategy
   }
 
   @override
+  Future<List<Offset>?> buildPreviewPath({
+    required TH2FileEditLineTraceContext context,
+    required Offset startAnchor,
+    required Offset goalAnchor,
+  }) async {
+    return null;
+  }
+
+  @override
   void reset() {
     _preprocessorCache.clear();
   }
@@ -156,7 +169,7 @@ class TH2FileEditLineTraceLocalColorStrategy
       goalPoint:
           currentPoint + (unitDirection * session.lookaheadDistanceOnCanvas),
       stepDistance: session.stepDistanceOnCanvas,
-      targetColor: session.targetColor,
+      targetColor: session.targetColor!,
       unitDirection: unitDirection,
       lookaheadDistance: session.lookaheadDistanceOnCanvas,
     );

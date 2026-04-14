@@ -46,6 +46,10 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
             .getSelectedControlPointPaint();
         final Paint controlPointLinePaint = visualController
             .getControlPointLinePaint();
+        final List<Offset> tracePreviewPath = th2FileEditController
+            .lineTraceController
+            .previewPath
+            .toList(growable: false);
         final List<CustomPainter> painters = [];
 
         if (areaLineCreationController.newLine == null) {
@@ -172,6 +176,15 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
           painters.addAll(endPointPainters);
         }
 
+        if (tracePreviewPath.length >= 2) {
+          painters.add(
+            _TracePreviewPainter(
+              previewPath: tracePreviewPath,
+              th2FileEditController: th2FileEditController,
+            ),
+          );
+        }
+
         return RepaintBoundary(
           child: CustomPaint(
             painter: THElementsPainter(
@@ -183,5 +196,48 @@ class MPAddLineWidget extends StatelessWidget with MPLinePaintingMixin {
         );
       },
     );
+  }
+}
+
+class _TracePreviewPainter extends CustomPainter {
+  final List<Offset> previewPath;
+
+  final TH2FileEditController th2FileEditController;
+
+  _TracePreviewPainter({
+    required this.previewPath,
+    required this.th2FileEditController,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Path path = Path();
+    final Offset firstPoint = th2FileEditController.offsetCanvasToScreen(
+      previewPath.first,
+    );
+
+    path.moveTo(firstPoint.dx, firstPoint.dy);
+
+    for (final Offset canvasPoint in previewPath.skip(1)) {
+      final Offset screenPoint = th2FileEditController.offsetCanvasToScreen(
+        canvasPoint,
+      );
+
+      path.lineTo(screenPoint.dx, screenPoint.dy);
+    }
+
+    final Paint previewPaint = Paint()
+      ..color = Colors.orange.withAlpha(230)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    canvas.drawPath(path, previewPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _TracePreviewPainter oldDelegate) {
+    return oldDelegate.previewPath != previewPath;
   }
 }

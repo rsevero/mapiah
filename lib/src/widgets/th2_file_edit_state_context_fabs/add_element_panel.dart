@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -59,30 +60,26 @@ class TH2FileEditAddElementContextFABsPanel extends StatelessWidget {
         if (showLineTraceButton)
           TH2FileEditStateContextFABCategoryRow(
             buttons: <Widget>[
-              ValueListenableBuilder<bool>(
-                valueListenable:
-                    th2FileEditController.lineTraceController.isTracingNotifier,
-                builder: (context, isTracing, child) {
-                  return ValueListenableBuilder<bool>(
-                    valueListenable: th2FileEditController
-                        .lineTraceController
-                        .canStartTracingNotifier,
-                    builder: (context, canStartTracing, _) {
-                      return TH2FileEditStateContextFABButton(
-                        context: context,
-                        heroTag: '${heroPrefix}_ctx_toggle_line_tracing',
-                        onPressed: isTracing || canStartTracing
-                            ? () => th2FileEditController.lineTraceController
-                                  .toggleTracing()
-                            : null,
-                        category: TH2FileEditStateContextFABCategory.editTools,
-                        icon: isTracing ? Icons.stop : Icons.play_arrow,
-                        tooltip: isTracing
-                            ? appLocalizations.th2FileEditPageStopTracing
-                            : appLocalizations.th2FileEditPageContinueTracing,
-                        isActive: isTracing,
-                      );
-                    },
+              Observer(
+                builder: (context) {
+                  final bool isTracing =
+                      th2FileEditController.lineTraceController.isTracing;
+                  final bool canStartTracing =
+                      th2FileEditController.lineTraceController.canStartTracing;
+
+                  return TH2FileEditStateContextFABButton(
+                    context: context,
+                    heroTag: '${heroPrefix}_ctx_toggle_line_tracing',
+                    onPressed: isTracing || canStartTracing
+                        ? () => th2FileEditController.lineTraceController
+                              .toggleTracing()
+                        : null,
+                    category: TH2FileEditStateContextFABCategory.editTools,
+                    icon: isTracing ? Icons.stop : Icons.play_arrow,
+                    tooltip: isTracing
+                        ? appLocalizations.th2FileEditPageStopTracing
+                        : appLocalizations.th2FileEditPageContinueTracing,
+                    isActive: isTracing,
                   );
                 },
               ),

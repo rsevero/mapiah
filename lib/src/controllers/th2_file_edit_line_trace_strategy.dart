@@ -41,7 +41,7 @@ class TH2FileEditLineTraceSession {
 
   final double lookaheadDistanceOnCanvas;
 
-  final TH2FileEditLineTraceColor targetColor;
+  final TH2FileEditLineTraceColor? targetColor;
 
   const TH2FileEditLineTraceSession({
     required this.stepDistanceOnCanvas,
@@ -67,8 +67,12 @@ class TH2FileEditLineTraceStepResult {
       shouldStopTracing = false;
 }
 
+enum MPLineTraceInteractionType { continuous, waypointAnchored }
+
 /// Defines the contract for a line-tracing algorithm.
 abstract class TH2FileEditLineTraceStrategy {
+  MPLineTraceInteractionType get interactionType;
+
   /// Prepares a trace session for the current interactive line.
   Future<TH2FileEditLineTraceSession?> prepareSession({
     required TH2FileEditLineTraceContext context,
@@ -78,6 +82,15 @@ abstract class TH2FileEditLineTraceStrategy {
   Future<TH2FileEditLineTraceStepResult> traceSingleStep({
     required TH2FileEditLineTraceContext context,
   });
+
+  /// Builds a preview path between two user-selected anchors.
+  Future<List<Offset>?> buildPreviewPath({
+    required TH2FileEditLineTraceContext context,
+    required Offset startAnchor,
+    required Offset goalAnchor,
+  }) async {
+    return null;
+  }
 
   /// Clears strategy-local caches.
   void reset();

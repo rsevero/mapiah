@@ -429,6 +429,10 @@ class TH2FileEditLineTraceCostMapAStarStrategy
       TH2FileEditLineTraceAStarPathFinder();
 
   @override
+  MPLineTraceInteractionType get interactionType =>
+      MPLineTraceInteractionType.waypointAnchored;
+
+  @override
   Future<TH2FileEditLineTraceSession?> prepareSession({
     required TH2FileEditLineTraceContext context,
   }) async {
@@ -436,35 +440,14 @@ class TH2FileEditLineTraceCostMapAStarStrategy
       return null;
     }
 
-    final List<Offset> lineNodes = context.lineNodes;
-
-    if (lineNodes.length < 2) {
-      return null;
-    }
-
     await _preprocessorCache.warmUp(
       th2FileEditController: context.th2FileEditController,
     );
 
-    final TH2FileEditLineTraceColor? sampledColor = _sampleRasterColorAtCanvas(
-      preprocessorCache: _preprocessorCache,
-      canvasPoint: lineNodes.last,
-    );
-
-    if (sampledColor == null) {
-      return null;
-    }
-
-    final double fixedStepDistance = max(
-      1.0,
-      (lineNodes.last - lineNodes[lineNodes.length - 2]).distance,
-    );
-
     return TH2FileEditLineTraceSession(
-      stepDistanceOnCanvas: fixedStepDistance,
-      lookaheadDistanceOnCanvas:
-          fixedStepDistance * mpLineTraceAStarLookaheadMultiplier,
-      targetColor: sampledColor,
+      stepDistanceOnCanvas: mpLineTraceAStarMinimumCellSizeOnCanvas,
+      lookaheadDistanceOnCanvas: mpLineTraceAStarMinimumCellSizeOnCanvas,
+      targetColor: null,
     );
   }
 
@@ -472,79 +455,54 @@ class TH2FileEditLineTraceCostMapAStarStrategy
   Future<TH2FileEditLineTraceStepResult> traceSingleStep({
     required TH2FileEditLineTraceContext context,
   }) async {
-    final _TraceContext? traceContext = _createTraceContext(context);
+    return const TH2FileEditLineTraceStepResult.failed();
+  }
 
-    if (traceContext == null) {
-      return const TH2FileEditLineTraceStepResult.failed();
+  @override
+  Future<List<Offset>?> buildPreviewPath({
+    required TH2FileEditLineTraceContext context,
+    required Offset startAnchor,
+    required Offset goalAnchor,
+  }) async {
+    final TH2FileEditLineTraceColor? sampledColor = _sampleRasterColorAtCanvas(
+      preprocessorCache: _preprocessorCache,
+      canvasPoint: startAnchor,
+    );
+
+    if (sampledColor == null) {
+      return null;
     }
 
-    final List<double> lookaheadAttempts = <double>[
-      traceContext.lookaheadDistance,
-      traceContext.lookaheadDistance / mpLineTraceAStarLookaheadRetryDivisor,
-      traceContext.lookaheadDistance * mpLineTraceAStarLookaheadExpansionFactor,
+    final _AStarSearchWindow? searchWindow = _buildSearchWindowForAnchors(
+      startAnchor: startAnchor,
+      goalAnchor: goalAnchor,
+      targetColor: sampledColor,
+    );
+
+    if (searchWindow == null) {
+      return null;
+    }
+
+    final List<Offset>? gridPath = _pathFinder.findPath(
+      costMap: searchWindow.costMap,
+      start: searchWindow.startCell,
+      goal: searchWindow.goalCell,
+    );
+
+    if ((gridPath == null) || gridPath.isEmpty) {
+      return null;
+    }
+
+    final List<Offset> previewPath = <Offset>[
+      startAnchor,
+      ...gridPath
+          .skip(1)
+          .take(max(0, gridPath.length - 2))
+          .map(searchWindow.gridCellCenterToCanvas),
+      goalAnchor,
     ];
 
-    for (final double lookaheadDistance in lookaheadAttempts) {
-      if (lookaheadDistance < mpLineTraceAStarMinimumCellSizeOnCanvas) {
-        continue;
-      }
-
-      final _AStarSearchWindow? searchWindow = _buildSearchWindow(
-        traceContext: traceContext,
-        lookaheadDistance: lookaheadDistance,
-      );
-
-      if (searchWindow == null) {
-        continue;
-      }
-
-      final List<Offset>? gridPath = _pathFinder.findPath(
-        costMap: searchWindow.costMap,
-        start: searchWindow.startCell,
-        goal: searchWindow.goalCell,
-      );
-
-      if ((gridPath == null) || (gridPath.length < 2)) {
-        continue;
-      }
-
-      final Offset nextCanvasPoint = searchWindow.gridCellCenterToCanvas(
-        gridPath[1],
-      );
-      final double tracedDistanceFromCurrent =
-          (nextCanvasPoint - traceContext.currentPoint).distance;
-
-      if (tracedDistanceFromCurrent < mpLineTraceAStarMinimumProgressOnCanvas) {
-        continue;
-      }
-
-      final bool shouldAutoClose =
-          (nextCanvasPoint - traceContext.startPoint).distance <=
-          traceContext.stepDistance;
-
-      if (shouldAutoClose) {
-        _appendCanvasNode(
-          context: context,
-          canvasPoint: traceContext.startPoint,
-        );
-        context.th2FileEditController.lineTraceController.stopTracing();
-
-        return const TH2FileEditLineTraceStepResult(
-          didProgress: true,
-          shouldStopTracing: true,
-        );
-      }
-
-      _appendCanvasNode(context: context, canvasPoint: nextCanvasPoint);
-      _scrollCanvasToFollow(context: context, canvasPoint: nextCanvasPoint);
-
-      return const TH2FileEditLineTraceStepResult(
-        didProgress: true,
-        shouldStopTracing: false,
-      );
-    }
-
-    return const TH2FileEditLineTraceStepResult.failed();
+    return previewPath;
   }
 
   @override
@@ -552,61 +510,21 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     _preprocessorCache.clear();
   }
 
-  _TraceContext? _createTraceContext(TH2FileEditLineTraceContext context) {
-    final TH2FileEditLineTraceSession? session = context.session;
-
-    if (session == null) {
-      return null;
-    }
-
-    final List<Offset> lineNodes = context.lineNodes;
-
-    if (lineNodes.length < 2) {
-      return null;
-    }
-
-    final Offset startPoint = lineNodes.first;
-    final Offset previousPoint = lineNodes[lineNodes.length - 2];
-    final Offset currentPoint = lineNodes.last;
-    final Offset direction = currentPoint - previousPoint;
-
-    if (direction.distance <= mpLineTraceAStarDirectionEpsilon) {
-      return null;
-    }
-
-    final Offset unitDirection = direction / direction.distance;
-
-    return _TraceContext(
-      currentPoint: currentPoint,
-      startPoint: startPoint,
-      goalPoint:
-          currentPoint + (unitDirection * session.lookaheadDistanceOnCanvas),
-      stepDistance: session.stepDistanceOnCanvas,
-      targetColor: session.targetColor,
-      unitDirection: unitDirection,
-      lookaheadDistance: session.lookaheadDistanceOnCanvas,
-    );
-  }
-
-  _AStarSearchWindow? _buildSearchWindow({
-    required _TraceContext traceContext,
-    required double lookaheadDistance,
+  _AStarSearchWindow? _buildSearchWindowForAnchors({
+    required Offset startAnchor,
+    required Offset goalAnchor,
+    required TH2FileEditLineTraceColor targetColor,
   }) {
-    final Offset lookaheadPoint =
-        traceContext.currentPoint +
-        (traceContext.unitDirection * lookaheadDistance);
+    final double anchorDistance = (goalAnchor - startAnchor).distance;
     final double padding = max(
-      traceContext.stepDistance,
-      lookaheadDistance * mpLineTraceAStarSearchPaddingFactor,
+      mpLineTraceAStarMinimumCellSizeOnCanvas,
+      anchorDistance * mpLineTraceAStarSearchPaddingFactor,
     );
-    final Rect baseBounds = Rect.fromPoints(
-      traceContext.currentPoint,
-      lookaheadPoint,
-    );
+    final Rect baseBounds = Rect.fromPoints(startAnchor, goalAnchor);
     final Rect searchBounds = baseBounds.inflate(padding);
     final double cellSizeOnCanvas = max(
       mpLineTraceAStarMinimumCellSizeOnCanvas,
-      traceContext.stepDistance / mpLineTraceAStarCellSizeStepDivisor,
+      anchorDistance / mpLineTraceAStarMaximumGridDimension,
     );
     final int width = min(
       mpLineTraceAStarMaximumGridDimension,
@@ -633,21 +551,21 @@ class TH2FileEditLineTraceCostMapAStarStrategy
         final int cost = _estimateCellCost(
           canvasPoint: canvasPoint,
           cellSizeOnCanvas: cellSizeOnCanvas,
-          targetColor: traceContext.targetColor,
+          targetColor: targetColor,
         );
         costs[(y * width) + x] = cost;
       }
     }
 
     final ({int x, int y})? startCell = _gridPointForCanvasPoint(
-      point: traceContext.currentPoint,
+      point: startAnchor,
       origin: origin,
       cellSizeOnCanvas: cellSizeOnCanvas,
       width: width,
       height: height,
     );
     final ({int x, int y})? goalCell = _gridPointForCanvasPoint(
-      point: lookaheadPoint,
+      point: goalAnchor,
       origin: origin,
       cellSizeOnCanvas: cellSizeOnCanvas,
       width: width,
@@ -669,14 +587,14 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final int startIndex = (startCell.y * width) + startCell.x;
     final int goalIndex = (goalCell.y * width) + goalCell.x;
     final int startCost = _estimateCellCost(
-      canvasPoint: traceContext.currentPoint,
+      canvasPoint: startAnchor,
       cellSizeOnCanvas: cellSizeOnCanvas,
-      targetColor: traceContext.targetColor,
+      targetColor: targetColor,
     );
     final int goalCost = _estimateCellCost(
-      canvasPoint: lookaheadPoint,
+      canvasPoint: goalAnchor,
       cellSizeOnCanvas: cellSizeOnCanvas,
-      targetColor: traceContext.targetColor,
+      targetColor: targetColor,
     );
 
     costs[startIndex] = min(costs[startIndex], startCost);
@@ -774,24 +692,6 @@ class TH2FileEditLineTraceCostMapAStarStrategy
     final double squaredDistance = ((dr * dr) + (dg * dg) + (db * db))
         .toDouble();
     return squaredDistance / mpLineTraceAStarMaximumSquaredColorDistance;
-  }
-
-  void _appendCanvasNode({
-    required TH2FileEditLineTraceContext context,
-    required Offset canvasPoint,
-  }) {
-    final Offset screenPoint = context.th2FileEditController
-        .offsetCanvasToScreen(canvasPoint);
-
-    context.th2FileEditController.areaLineCreationController
-        .addNewLineLineSegment(screenPoint);
-  }
-
-  void _scrollCanvasToFollow({
-    required TH2FileEditLineTraceContext context,
-    required Offset canvasPoint,
-  }) {
-    context.th2FileEditController.centerCanvasOn(canvasPoint);
   }
 }
 

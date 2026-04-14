@@ -8,17 +8,22 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_line_trace_strategy.dart';
 import 'package:mapiah/src/controllers/types/mp_line_trace_strategy_type.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mobx/mobx.dart';
 
-class TH2FileEditLineTraceController {
+class TH2FileEditLineTraceController with Store {
   final TH2FileEditController _th2FileEditController;
 
   final TH2FileEditLineTraceStrategyRegistry _traceStrategyRegistry;
 
-  final ValueNotifier<bool> isTracingNotifier = ValueNotifier<bool>(false);
+  final Observable<bool> _isTracing = Observable<bool>(false);
 
-  final ValueNotifier<bool> canStartTracingNotifier = ValueNotifier<bool>(
-    false,
-  );
+  final Observable<bool> _canStartTracing = Observable<bool>(false);
+
+  final ObservableList<Offset> _previewPath = ObservableList<Offset>();
+
+  final Observable<Offset?> _startAnchor = Observable<Offset?>(null);
+
+  final Observable<Offset?> _goalAnchor = Observable<Offset?>(null);
 
   bool _isTraceLoopRunning = false;
   bool _shouldContinueTracing = false;
@@ -29,17 +34,32 @@ class TH2FileEditLineTraceController {
   TH2FileEditLineTraceController(this._th2FileEditController)
     : _traceStrategyRegistry = TH2FileEditLineTraceStrategyRegistry();
 
-  bool get isTracing => isTracingNotifier.value;
+  bool get isTracing => _isTracing.value;
+
+  bool get canStartTracing => _canStartTracing.value;
 
   double? get stepDistanceOnCanvas => _traceSession?.stepDistanceOnCanvas;
 
+  ObservableList<Offset> get previewPath => _previewPath;
+
+  bool get hasTracePreview => _previewPath.isNotEmpty;
+
+  Offset? get startAnchor => _startAnchor.value;
+
+  Offset? get goalAnchor => _goalAnchor.value;
+
   bool get hasAnyImage => _th2FileEditController.th2File.getImages().isNotEmpty;
+
+  bool get isWaypointTracing =>
+      (_activeTraceStrategy?.interactionType ==
+          MPLineTraceInteractionType.waypointAnchored) &&
+      isTracing;
 
   Future<void> updateCanStartTracing() async {
     if (!hasAnyImage || !_th2FileEditController.isInAddLineState) {
       _traceSession = null;
       _activeTraceStrategy = null;
-      canStartTracingNotifier.value = false;
+      _setCanStartTracing(false);
 
       return;
     }
@@ -49,11 +69,11 @@ class TH2FileEditLineTraceController {
 
     _traceSession = preparedTraceStrategy?.session;
     _activeTraceStrategy = preparedTraceStrategy?.strategy;
-    canStartTracingNotifier.value = preparedTraceStrategy != null;
+    _setCanStartTracing(preparedTraceStrategy != null);
   }
 
-  Future<void> startTracingFromCurrentLine() async {
-    if (isTracingNotifier.value) {
+  Future<void> startTracing() async {
+    if (isTracing) {
       return;
     }
 
@@ -63,15 +83,23 @@ class TH2FileEditLineTraceController {
     if (preparedTraceStrategy == null) {
       _traceSession = null;
       _activeTraceStrategy = null;
-      canStartTracingNotifier.value = false;
+      _setCanStartTracing(false);
 
       return;
     }
 
     _traceSession = preparedTraceStrategy.session;
     _activeTraceStrategy = preparedTraceStrategy.strategy;
+    _setIsTracing(true);
+
+    if (_activeTraceStrategy?.interactionType !=
+        MPLineTraceInteractionType.continuous) {
+      _shouldContinueTracing = false;
+
+      return;
+    }
+
     _shouldContinueTracing = true;
-    isTracingNotifier.value = true;
 
     if (_isTraceLoopRunning) {
       return;
@@ -84,31 +112,95 @@ class TH2FileEditLineTraceController {
     } finally {
       _isTraceLoopRunning = false;
       _shouldContinueTracing = false;
-      isTracingNotifier.value = false;
+      _setIsTracing(false);
       await updateCanStartTracing();
     }
   }
 
   Future<void> toggleTracing() async {
-    if (isTracingNotifier.value) {
+    if (isTracing) {
       stopTracing();
 
       return;
     }
 
-    await startTracingFromCurrentLine();
+    await startTracing();
   }
 
   void stopTracing() {
     _shouldContinueTracing = false;
-    isTracingNotifier.value = false;
+    _setIsTracing(false);
+    clearTracePreview();
+    _setStartAnchor(null);
+    _setGoalAnchor(null);
+  }
+
+  Future<void> setTraceAnchor(Offset canvasPoint) async {
+    if (!isWaypointTracing) {
+      return;
+    }
+
+    if (startAnchor == null) {
+      _setStartAnchor(canvasPoint);
+      _setGoalAnchor(null);
+      clearTracePreview();
+      _th2FileEditController.centerCanvasOn(canvasPoint);
+
+      return;
+    }
+
+    _setGoalAnchor(canvasPoint);
+
+    final TH2FileEditLineTraceStrategy? activeStrategy = _activeTraceStrategy;
+
+    if (activeStrategy == null) {
+      clearTracePreview();
+
+      return;
+    }
+
+    final List<Offset>? nextPreviewPath = await activeStrategy.buildPreviewPath(
+      context: _createTraceContext(session: _traceSession),
+      startAnchor: startAnchor!,
+      goalAnchor: canvasPoint,
+    );
+
+    if ((nextPreviewPath == null) || nextPreviewPath.isEmpty) {
+      clearTracePreview();
+
+      return;
+    }
+
+    _setPreviewPath(nextPreviewPath);
+    _th2FileEditController.centerCanvasOn(canvasPoint);
+  }
+
+  Future<void> confirmTracePreview() async {
+    if (!hasTracePreview) {
+      return;
+    }
+
+    _th2FileEditController.areaLineCreationController
+        .appendInteractiveLineNodesFromCanvas(_previewPath);
+    _setStartAnchor(goalAnchor);
+    _setGoalAnchor(null);
+    clearTracePreview();
+  }
+
+  void cancelWaypointTarget() {
+    if (!isWaypointTracing) {
+      return;
+    }
+
+    _setGoalAnchor(null);
+    clearTracePreview();
   }
 
   void reset() {
     stopTracing();
     _traceSession = null;
     _activeTraceStrategy = null;
-    canStartTracingNotifier.value = false;
+    _setCanStartTracing(false);
     _traceStrategyRegistry.reset();
   }
 
@@ -137,7 +229,6 @@ class TH2FileEditLineTraceController {
         return;
       }
 
-      // Yield to the event loop so UI events (including Stop) are processed.
       await Future<void>.delayed(const Duration(milliseconds: 16));
     }
   }
@@ -168,6 +259,48 @@ class TH2FileEditLineTraceController {
       th2FileEditController: _th2FileEditController,
       session: session,
     );
+  }
+
+  void clearTracePreview() {
+    if (_previewPath.isEmpty) {
+      return;
+    }
+
+    runInAction(() {
+      _previewPath.clear();
+    });
+  }
+
+  void _setCanStartTracing(bool value) {
+    runInAction(() {
+      _canStartTracing.value = value;
+    });
+  }
+
+  void _setGoalAnchor(Offset? value) {
+    runInAction(() {
+      _goalAnchor.value = value;
+    });
+  }
+
+  void _setIsTracing(bool value) {
+    runInAction(() {
+      _isTracing.value = value;
+    });
+  }
+
+  void _setPreviewPath(List<Offset> previewPath) {
+    runInAction(() {
+      _previewPath
+        ..clear()
+        ..addAll(previewPath);
+    });
+  }
+
+  void _setStartAnchor(Offset? value) {
+    runInAction(() {
+      _startAnchor.value = value;
+    });
   }
 }
 
