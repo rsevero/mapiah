@@ -110,5 +110,42 @@ void main() {
         expect(outputTextFinder, findsOneWidget);
       },
     );
+
+    testWidgets('stops the elapsed timer when the first run finishes quickly', (
+      WidgetTester tester,
+    ) async {
+      mpLocator.appLocalizations = AppLocalizationsEn();
+
+      final _FakeTherionRunner fakeRunner = _FakeTherionRunner();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: MPRunTherionDialogWidget(
+              therionExecutablePath: 'therion',
+              thConfigFilePath: '/tmp/dummy',
+              therionRunner: fakeRunner,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Elapsed time:'), findsOneWidget);
+
+      final Text initialElapsedText = tester.widget<Text>(
+        find.textContaining('Elapsed time:'),
+      );
+      final String initialElapsedValue = initialElapsedText.data!;
+
+      await tester.pump(const Duration(seconds: 2));
+
+      final Text finalElapsedText = tester.widget<Text>(
+        find.textContaining('Elapsed time:'),
+      );
+      final String finalElapsedValue = finalElapsedText.data!;
+
+      expect(finalElapsedValue, initialElapsedValue);
+    });
   });
 }

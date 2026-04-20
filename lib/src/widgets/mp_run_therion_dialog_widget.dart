@@ -51,7 +51,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   StreamSubscription<String>? _outputSubscription;
   Timer? _elapsedTimer;
   DateTime? _startTime;
-  VoidCallback? _statusListener;
   bool _hasAppendedPostRunOutput = false;
   bool _isProcessingPostRun = false;
 
@@ -85,30 +84,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     }
 
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
-
-    _therionRunner.start();
-    _startElapsedTimer();
-
-    // Stop the timer only when the runner stops running (process exit).
-    _statusListener = () {
-      final bool isRunning = _therionRunner.isRunningNotifier.value;
-
-      if (!isRunning) {
-        setState(() {
-          _isProcessingPostRun = true;
-        });
-
-        _onTherionRunFinished().whenComplete(() {
-          if (mounted) {
-            setState(() {
-              _isProcessingPostRun = false;
-            });
-          }
-        });
-      }
-    };
-
-    _therionRunner.isRunningNotifier.addListener(_statusListener!);
+    unawaited(_startTherionRun());
   }
 
   Future<void> _onTherionRunFinished() async {
@@ -171,14 +147,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       _therionRunner.appendOutputLines(postRunOutputLines);
     }
 
-    _elapsedTimer?.cancel();
-    _elapsedTimer = null;
-
-    final DateTime? startTime = _startTime;
-
-    if (startTime != null) {
-      _elapsedNotifier.value = DateTime.now().difference(startTime);
-    }
+    _syncElapsedWithNow();
   }
 
   List<String> _buildSectionLines({
@@ -310,12 +279,50 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   void _startElapsedTimer() {
     _elapsedTimer?.cancel();
     _elapsedTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final DateTime? startTime = _startTime;
-
-      if (startTime != null) {
-        _elapsedNotifier.value = DateTime.now().difference(startTime);
-      }
+      _syncElapsedWithNow();
     });
+  }
+
+  void _stopElapsedTimer() {
+    _elapsedTimer?.cancel();
+    _elapsedTimer = null;
+    _syncElapsedWithNow();
+  }
+
+  void _syncElapsedWithNow() {
+    final DateTime? startTime = _startTime;
+
+    if (startTime != null) {
+      _elapsedNotifier.value = DateTime.now().difference(startTime);
+    }
+  }
+
+  Future<void> _startTherionRun() async {
+    _startElapsedTimer();
+    await _therionRunner.start();
+    _stopElapsedTimer();
+
+    if (_isProcessingPostRun || _hasAppendedPostRunOutput) {
+      return;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isProcessingPostRun = true;
+      });
+    } else {
+      _isProcessingPostRun = true;
+    }
+
+    await _onTherionRunFinished();
+
+    if (mounted) {
+      setState(() {
+        _isProcessingPostRun = false;
+      });
+    } else {
+      _isProcessingPostRun = false;
+    }
   }
 
   @override
@@ -324,9 +331,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _elapsedNotifier.dispose();
     _runParametersController.dispose();
     _outputSubscription?.cancel();
-    if (_statusListener != null) {
-      _therionRunner.isRunningNotifier.removeListener(_statusListener!);
-    }
 
     _therionRunner.dispose();
     _scrollController.dispose();
@@ -353,9 +357,9 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _therionRunner.outputLinesNotifier.value = <String>[];
     _therionRunner.issuesNotifier.value = <MPTherionIssue>[];
     _hasAppendedPostRunOutput = false;
+    _isProcessingPostRun = false;
     _elapsedNotifier.value = Duration.zero;
-    _therionRunner.start();
-    _startElapsedTimer();
+    unawaited(_startTherionRun());
   }
 
   void _closeDialog() {
@@ -426,8 +430,8 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                                 Widget? child,
                               ) {
                                 return ValueListenableBuilder<
-                                  MPTherionRunStatus
-                                >(
+                                        MPTherionRunStatus
+                                      >(
                                   valueListenable:
                                       _therionRunner.statusNotifier,
                                   builder:
@@ -437,7 +441,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                                         Widget? child,
                                       ) {
                                         final MPTherionRunStatus displayStatus =
-                                            (isRunning || _isProcessingPostRun)
+                                            isRunning
                                             ? MPTherionRunStatus.running
                                             : runStatus;
                                         final String statusText = _statusText(

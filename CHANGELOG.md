@@ -58,6 +58,7 @@
   * Mapiah quadratic line creation now also supports Inkscape-style Shift-constrained node placement while drawing: hold Shift when setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node. Updated EN/PT help pages and keyboard-shortcut documentation, and added widget coverage.
   * xTherion cubic smooth line creation now supports nudging the last created node with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_ while drawing. The in-progress smooth handles move together with the node, and EN/PT help plus regression coverage were updated accordingly.
   * Mapiah quadratic line creation now supports the same keyboard nudging shortcuts while drawing (`Arrow`, `Shift+Arrow`, `Alt+Arrow`, `Alt+Shift+Arrow`) for the last created node, with matching EN/PT help updates and regression coverage.
+  * When Therion exits with an error, the Run Therion dialog now stops the elapsed timer immediately and switches from the yellow running status to the final warning/error result without waiting for post-run log collation. Added widget regression coverage for the quick-finish path reported on Windows 11. [reported by CaverBruce]
 * Infrastructure maintenance:
   * Removed unsupported iOS and web project scaffolding plus the debug web release workflow, keeping the repository aligned with the desktop-only release targets (Linux, macOS, Windows).
   * Added the persisted `TH2Edit_ShowLastUsedPLATypeButtons` boolean setting with default `true`, including EN/PT settings-page labels and generated localization updates. The setting is not wired into UI behavior yet.
@@ -72,3 +73,4 @@
   * Made the last-used PLA tracking lists reactive with `ObservableList`, and updated the last-used PLA button widget to snapshot those lists inside its `Observer` so content and ordering changes trigger rebuilds reliably.
   * Added unit/widget test coverage and state-machine refinements for the new element transform states and transform-command finalization paths.
   * Added `TH2FileEditMoveScaleRotateElementController` and `MPTH2FileEditStateElementRotate` to centralize and enable element/image transform workflows (move, scale, rotate, flip). Selection handles now support drag-to-scale and corner-handle rotation with optional pivot locking (Shift) and angle snapping (Ctrl/Meta). Mirror (flip) actions (`H` / `V`) and undoable transform commands were added, with matching state-machine integration.
+  * flutter upgraded to 3.41.7
