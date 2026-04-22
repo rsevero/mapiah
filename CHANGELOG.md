@@ -2,8 +2,13 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.4.0 - not yet released
+## 0.4.0 - 2026-04-22 - The [Pains](https://www.instagram.com/epapains?igsh=MXdvYXprbGFkc245ZA==) release
 * Highlights:
+  * Drawing and editing lines is much more fluid: Mapiah quadratic and xTherion cubic smooth creation gained straights↔curves conversion, constrained placement/dragging, node deletion, keyboard nudging, full-path cancel, and quicker entry into single-line edit mode.
+  * Element transforms became a major new editing workflow: selected elements can now be scaled, rotated, and flipped in place with live preview, undoable finalization, improved Inkscape-style handles, and better state-context tools.
+  * Background-image workflows are stronger with Mapiah-only SVG image support, safer path handling during insert and Save as, and immediate zoom/bounds refresh so imported images behave correctly in both new and existing TH2 files.
+  * Repeated drawing tasks are faster thanks to the new last-used point/line/area type strip, which is localized, seeded from existing files, reacts live to edits, and stays accessible in its own scrollable bar above the status area.
+  * The release also rounds out many editor papercuts, including the interactive line simplification dialog, more reliable paste/zoom/tab behavior, persistent bottom action areas in dialogs/settings, and a desktop-only repository cleanup aligned with supported targets.
 * New features:
   * While drawing a "Mapiah quadratic" or "xTherion cubic smooth" line, `Shift+L` converts the last (unfinished) segment from a Bézier curve to a straight line and `Shift+U` converts it from a straight line to a Bézier curve (control points placed at one-third and two-thirds of the chord). EN/PT help pages and keyboard-shortcut documentation updated, and widget coverage added.
   * Pressing `Esc` while drawing an unfinished "Mapiah quadratic" or "xTherion cubic smooth" line now cancels the entire in-progress path and resets to a fresh start within line-creation mode, with help pages and keyboard-shortcut documentation updated (EN/PT) and regression coverage added.

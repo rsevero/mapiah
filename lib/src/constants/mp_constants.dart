@@ -10,8 +10,8 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = 'Dental Nerve';
-const String mpReleaseURL = 'https://xkcd.com/846/';
+const String mpReleaseName = 'Pains';
+const String mpReleaseURL = 'https://www.instagram.com/epapains?igsh=MXdvYXprbGFkc245ZA==';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
