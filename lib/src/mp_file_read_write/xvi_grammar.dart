@@ -81,10 +81,7 @@ class XVIGrammar extends GrammarDefinition {
       xviNumber().trim() & xviNumber().trim() & xviStationName().trim();
 
   Parser xviStationName() =>
-      ((letter() | digit()) &
-              ((letter() | digit()) | (char('.') & char('.').not())).star())
-          .trim()
-          .flatten();
+      ((whitespace() | char('}')).not() & any()).plus().flatten();
 
   Parser xviShots() => xviSet(
     'XVIshots',

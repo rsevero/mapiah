@@ -115,6 +115,18 @@ void main() {
         'file': '2025-07-09-006-xvi-xvistations',
         'stations': [stationA1, station5_22],
       },
+      {
+        'file': '2026-04-23-001-xvi-station_name_with_underscore_and_accent',
+        'stations': [
+          XVIStation(
+            position: THPositionPart.fromStrings(
+              xAsString: '10.0',
+              yAsString: '-20.0',
+            ),
+            name: '3R9_nó_agua',
+          ),
+        ],
+      },
     ];
 
     for (final testFile in testFiles) {

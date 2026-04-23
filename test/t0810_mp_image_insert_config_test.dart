@@ -358,6 +358,32 @@ void main() {
       expect(xviFile.isGridVisible, isTrue);
     });
 
+    test(
+      'XVI image loads when station names include underscore and accent',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final String path = THTestAux.testPath(
+          '2026-04-23-001-xvi_station_name_with_underscore_and_accent.th2',
+        );
+        final (_, isSuccessful, errors) = await parser.parse(
+          path,
+          forceNewController: true,
+        );
+
+        expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
+
+        final TH2FileEditController controller = mpLocator.mpGeneralController
+            .getTH2FileEditController(filename: path);
+        final MPRuntimeXVIImageInsertConfigMixin image =
+            controller.th2File.getImages().single.asXVIImage!;
+
+        final XVIFile? xviFile = image.getXVIFile(controller);
+
+        expect(xviFile, isNotNull);
+        expect(xviFile!.stations.single.name, '3R9_nó_agua');
+      },
+    );
+
     test('conversion from XTherion keeps runtime image semantics', () {
       final THXTherionImageInsertConfig raster = THXTherionImageInsertConfig(
         parentMPID: mpParentMPIDPlaceholder,

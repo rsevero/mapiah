@@ -2,6 +2,13 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.4.1 - not yet released
+* Highlights:
+* New features:
+* Fixed bugs:
+  * XVI background files now load correctly when station names contain underscores or UTF-8 characters such as `3R9_nó_agua`, fixing invisible XVI overlays for TopoDroid exports like `Esqueceram_de_mim-1p.xvi` and adding parser/runtime regression coverage.
+* Infrastructure maintenance:
+
 ## 0.4.0 - 2026-04-22 - The [Pains](https://www.instagram.com/epapains?igsh=MXdvYXprbGFkc245ZA==) release
 * Highlights:
   * Drawing and editing lines is much more fluid: Mapiah quadratic and xTherion cubic smooth creation gained straights↔curves conversion, constrained placement/dragging, node deletion, keyboard nudging, full-path cancel, and quicker entry into single-line edit mode.

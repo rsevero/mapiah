@@ -1,0 +1,11 @@
+set XVIgrids {1.0 m}
+
+set XVIstations {
+  { 10.0 -20.0 3R9_nó_agua }
+}
+
+set XVIgrid { 0.0 0.0 39.37 0.0 0.0 39.37 1 1 }
+
+set XVIshots {
+  { 10.0 -20.0 30.0 -40.0 }
+}
