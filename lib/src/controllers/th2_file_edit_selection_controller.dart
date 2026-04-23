@@ -999,6 +999,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     final Offset canvasCoordinates = _th2FileEditController
         .offsetScreenToCanvas(screenCoordinates);
     final List<MPSelectableEndControlPoint> clickedControlPoints = [];
+    final List<MPSelectableEndControlPoint> clickedEndPoints = [];
 
     clickedEndControlPoints.clear();
 
@@ -1007,11 +1008,22 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       if (endControlPoint.contains(canvasCoordinates)) {
         if (MPElementEditAux.isEndPoint(endControlPoint.type)) {
           clickedEndControlPoints.add(endControlPoint);
+          clickedEndPoints.add(endControlPoint);
         } else if (includeControlPoints &&
             MPElementEditAux.isControlPoint(endControlPoint.type)) {
           clickedControlPoints.add(endControlPoint);
         }
       }
+    }
+
+    if (includeControlPoints && clickedEndPoints.isNotEmpty) {
+      final List<MPSelectableEndControlPoint> nearbyControlPoints =
+          _getNearbyControlPointsOfClickedEndPoints(
+            clickedEndPoints: clickedEndPoints,
+            clickedControlPoints: clickedControlPoints,
+          );
+
+      clickedControlPoints.addAll(nearbyControlPoints);
     }
 
     if (clickedControlPoints.isNotEmpty) {
@@ -1042,6 +1054,55 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
 
     return clickedEndControlPoints;
+  }
+
+  List<MPSelectableEndControlPoint> _getNearbyControlPointsOfClickedEndPoints({
+    required List<MPSelectableEndControlPoint> clickedEndPoints,
+    required List<MPSelectableEndControlPoint> clickedControlPoints,
+  }) {
+    final List<MPSelectableEndControlPoint> nearbyControlPoints =
+        <MPSelectableEndControlPoint>[];
+
+    for (final MPSelectableEndControlPoint selectableEndControlPoint
+        in _selectableEndControlPoints) {
+      if (!MPElementEditAux.isControlPoint(selectableEndControlPoint.type)) {
+        continue;
+      }
+
+      if (_containsSelectableEndControlPoint(
+        clickedControlPoints,
+        selectableEndControlPoint,
+      )) {
+        continue;
+      }
+
+      for (final MPSelectableEndControlPoint clickedEndPoint
+          in clickedEndPoints) {
+        if (_th2FileEditController.offsetsInSelectionTolerance(
+          clickedEndPoint.position,
+          selectableEndControlPoint.position,
+        )) {
+          nearbyControlPoints.add(selectableEndControlPoint);
+          break;
+        }
+      }
+    }
+
+    return nearbyControlPoints;
+  }
+
+  bool _containsSelectableEndControlPoint(
+    List<MPSelectableEndControlPoint> points,
+    MPSelectableEndControlPoint candidate,
+  ) {
+    for (final MPSelectableEndControlPoint point in points) {
+      if ((point.element.mpID == candidate.element.mpID) &&
+          (point.type == candidate.type)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   List<THLineSegment> selectableEndPointsInsideWindow(
