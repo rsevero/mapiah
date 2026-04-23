@@ -16,7 +16,14 @@ class MPSelectableEndControlPoint extends MPSelectable
 
   @override
   Rect _calculateBoundingBox() {
-    return _calculatePointBoundingBox(position);
+    final double halfLength =
+        (type == MPEndControlPointType.controlPoint1) ||
+            (type == MPEndControlPointType.controlPoint2)
+        ? th2fileEditController.selectionToleranceOnCanvas *
+              mpControlPointSelectionToleranceFactor
+        : th2fileEditController.selectionToleranceOnCanvas;
+
+    return _calculatePointBoundingBox(position, halfLength: halfLength);
   }
 
   THLineSegment get lineSegment => element as THLineSegment;

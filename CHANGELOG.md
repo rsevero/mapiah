@@ -9,6 +9,7 @@
   * XVI background files now load correctly when station names contain underscores or UTF-8 characters such as `3R9_nó_agua`, fixing invisible XVI overlays for TopoDroid exports like `Esqueceram_de_mim-1p.xvi` and adding parser/runtime regression coverage.
   * Reversing a selected line, undoing it, and reversing it again no longer crashes with `Bad state: Parent element does not have option of type THCommandOptionType.reverse`; the toggle now uses the live line state instead of a stale selection clone, and a regression test covers the undo-and-repeat flow.
   * In single-line edit mode, clicking the endpoint hit area of a Bézier segment whose last control point sits under that endpoint now opens the "Multiple points clicked" chooser so either the endpoint or the control point can be selected reliably, with widget regression coverage for the reported fixture.
+  * Control points in single-line edit mode now use a larger click area than endpoints, making it easier to select a control point near the last endpoint of a Bézier segment in tight layouts such as the reported overlap fixture, with additional widget regression coverage.
 * Infrastructure maintenance:
   * Updated the malformed pre-first-`Save as` path regression in `t0816_mp_directory_aux_test.dart` to assert the normalized `relativePathFromReferencePath()` flow directly, keeping the coverage aligned with the current helper contract.
 

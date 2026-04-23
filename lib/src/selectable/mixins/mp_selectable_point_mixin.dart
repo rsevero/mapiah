@@ -3,11 +3,17 @@
 part of '../mp_selectable.dart';
 
 mixin MPSelectablePointMixin on MPSelectable {
-  Rect _calculatePointBoundingBox(Offset position) {
+  Rect _calculatePointBoundingBox(
+    Offset position, {
+    double? halfLength,
+  }) {
+    final double resolvedHalfLength =
+        halfLength ?? th2fileEditController.selectionToleranceOnCanvas;
+
     return MPNumericAux.orderedRectFromCenterHalfLength(
       center: position,
-      halfHeight: th2fileEditController.selectionToleranceOnCanvas,
-      halfWidth: th2fileEditController.selectionToleranceOnCanvas,
+      halfHeight: resolvedHalfLength,
+      halfWidth: resolvedHalfLength,
     );
   }
 

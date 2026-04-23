@@ -360,6 +360,7 @@ const double mpDefaultLineThickness = 2.0;
 const double mpDefaultSnapAngle = 15.0;
 const double mpControlLineThicknessFactor = 0.5;
 const double mpControlPointRadiusFactor = 1.5;
+const double mpControlPointSelectionToleranceFactor = 1.5;
 const double mpSelectedEndControlPointFactor = 1.25;
 const double xviPointFactor = 0.5;
 const double mpSelectionWindowBorderPaintDashInterval = 5.0;
