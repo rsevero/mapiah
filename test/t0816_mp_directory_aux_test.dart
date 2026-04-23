@@ -39,10 +39,9 @@ void main() {
     });
 
     test('rebases malformed relative paths created before first SaveAs', () {
-      final String rebasedPath = MPDirectoryAux.rebaseRelativePath(
-        oldReferencePath: 'new_file_42',
-        newReferencePath: '/home/rodrigo/temp/project/croqui.th2',
-        filename: './../../home/rodrigo/temp/croqui.jpg',
+      final String rebasedPath = MPDirectoryAux.relativePathFromReferencePath(
+        referencePath: '/home/rodrigo/temp/project/croqui.th2',
+        targetPath: '/home/rodrigo/temp/croqui.jpg',
       );
 
       expect(rebasedPath, '../croqui.jpg');
