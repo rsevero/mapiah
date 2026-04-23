@@ -10,6 +10,7 @@
   * Reversing a selected line, undoing it, and reversing it again no longer crashes with `Bad state: Parent element does not have option of type THCommandOptionType.reverse`; the toggle now uses the live line state instead of a stale selection clone, and a regression test covers the undo-and-repeat flow.
   * In single-line edit mode, clicking the endpoint hit area of a Bézier segment whose last control point sits under that endpoint now opens the "Multiple points clicked" chooser so either the endpoint or the control point can be selected reliably, with widget regression coverage for the reported fixture.
   * Control points in single-line edit mode now use a larger click area than endpoints, making it easier to select a control point near the last endpoint of a Bézier segment in tight layouts such as the reported overlap fixture, with additional widget regression coverage.
+  * Switching to another scrap while in single-line edit mode now resets the editor to the empty-selection state instead of leaving a stale line-edit state behind, preventing crashes when the next click lands on the new active scrap; regression coverage was added for the controller scrap-switch path.
 * Infrastructure maintenance:
   * Updated the malformed pre-first-`Save as` path regression in `t0816_mp_directory_aux_test.dart` to assert the normalized `relativePathFromReferencePath()` flow directly, keeping the coverage aligned with the current helper contract.
 

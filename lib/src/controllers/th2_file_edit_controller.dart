@@ -968,7 +968,16 @@ abstract class TH2FileEditControllerBase with Store {
 
     _activeScrapID = scrapMPID;
     selectionController.resetSelectableElements();
-    selectionController.clearSelectedElements();
+    final bool stateChanged = stateController.setState(
+      MPTH2FileEditStateType.selectEmptySelection,
+    );
+
+    if (!stateChanged) {
+      selectionController.clearSelectedElements();
+      selectionController.clearSelectedEndControlPoints();
+      selectionController.clearSelectedLineSegments();
+    }
+
     updateEnableSelectButton();
   }
 
