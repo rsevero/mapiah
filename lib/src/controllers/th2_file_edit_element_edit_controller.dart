@@ -1424,6 +1424,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void toggleSelectedLinesReverseOption() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
+    final TH2File th2File = _th2FileEditController.th2File;
     final List<MPCommand> toggleCommands = [];
 
     for (final MPSelectedElement selectedElement
@@ -1431,11 +1432,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       if (selectedElement is! MPSelectedLine) {
         continue;
       }
-      final THLine originalLine =
-          selectedElement.originalElementClone as THLine;
-      final int lineMPID = originalLine.mpID;
+      final int lineMPID = selectedElement.mpID;
+      final THLine currentLine = th2File.lineByMPID(lineMPID);
       final THReverseCommandOption? reverseOption =
-          MPCommandOptionAux.isReversed(originalLine)
+          MPCommandOptionAux.isReversed(currentLine)
           ? null
           : THReverseCommandOption(
               parentMPID: lineMPID,
