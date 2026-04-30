@@ -19,6 +19,9 @@ final List<String> targetFiles = [
   'codemagic.yaml',
 ];
 
+const String releaseConstantsPath = 'lib/src/constants/mp_constants.dart';
+const String releaseSummaryPath = 'assets/releases/releases_summary.json';
+
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
   final String? mapiahVersion = await getMapiahVersion();
@@ -46,7 +49,7 @@ Future<int> main(List<String> args) async {
   stdout.writeln('Detected release name: "${releaseInfo.name}"');
   stdout.writeln('Detected release URL: "${releaseInfo.url}"');
 
-  List<String> changedFiles = <String>[];
+  final List<String> changedFiles = <String>[];
 
   final RegExp flutterVersionRegex = RegExp(
     r"""(^\s*flutter-version:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
@@ -91,13 +94,34 @@ Future<int> main(List<String> args) async {
   );
 
   if (constantsUpdated) {
+    changedFiles.add(releaseConstantsPath);
     stdout.writeln(
-      'Updated: lib/src/constants/mp_constants.dart (mpReleaseName, mpReleaseURL)',
+      'Updated: $releaseConstantsPath (mpReleaseName, mpReleaseURL)',
     );
   } else {
     stdout.writeln(
-      'No change: lib/src/constants/mp_constants.dart (mpReleaseName, mpReleaseURL)',
+      'No change: $releaseConstantsPath (mpReleaseName, mpReleaseURL)',
     );
+  }
+
+  final String? releaseSummaryBefore = await readFileIfExists(
+    releaseSummaryPath,
+  );
+  final int releaseBriefExitCode = await runReleaseBriefGenerator();
+
+  if (releaseBriefExitCode != 0) {
+    return releaseBriefExitCode;
+  }
+
+  final String? releaseSummaryAfter = await readFileIfExists(
+    releaseSummaryPath,
+  );
+
+  if (releaseSummaryAfter != releaseSummaryBefore) {
+    changedFiles.add(releaseSummaryPath);
+    stdout.writeln('Updated: $releaseSummaryPath');
+  } else {
+    stdout.writeln('No change: $releaseSummaryPath');
   }
 
   stdout.writeln('\nSummary:');
@@ -108,27 +132,50 @@ Future<int> main(List<String> args) async {
   stdout.writeln(
     'Files updated: ${changedFiles.isEmpty ? 'none' : changedFiles.join(', ')}',
   );
-  // Run the release brief generator as the last step
+
+  return 0;
+}
+
+Future<String?> readFileIfExists(String path) async {
+  final File file = File(path);
+
+  if (!await file.exists()) {
+    return null;
+  }
+
+  return file.readAsString();
+}
+
+/// Runs the release brief generator and returns its exit code.
+Future<int> runReleaseBriefGenerator() async {
   try {
     final ProcessResult genResult = await Process.run('dart', [
       'run',
       'scripts/generate_releases_brief.dart',
     ]);
 
+    final String output = genResult.stdout.toString().trim();
+
+    if (output.isNotEmpty) {
+      stdout.writeln(output);
+    }
+
     if (genResult.exitCode != 0) {
       stderr.writeln(
         'scripts/generate_releases_brief.dart failed:\n${genResult.stderr}',
       );
+
       return genResult.exitCode;
     }
 
     stdout.writeln('Ran scripts/generate_releases_brief.dart successfully.');
+
+    return 0;
   } catch (e) {
     stderr.writeln('Failed to run scripts/generate_releases_brief.dart: $e');
+
     return 2;
   }
-
-  return 0;
 }
 
 Future<String?> getMapiahVersion() async {
@@ -240,10 +287,10 @@ Future<bool> updateReleaseConstants({
   required String releaseName,
   required String releaseURL,
 }) async {
-  final File constantsFile = File('lib/src/constants/mp_constants.dart');
+  final File constantsFile = File(releaseConstantsPath);
 
   if (!await constantsFile.exists()) {
-    stderr.writeln('Could not find lib/src/constants/mp_constants.dart.');
+    stderr.writeln('Could not find $releaseConstantsPath.');
 
     return false;
   }

@@ -2,9 +2,7 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.4.1 - not yet released
-* Highlights:
-* New features:
+## 0.4.1 - 2026-04-30 - The [Barbosilândia](https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas) release
 * Fixed bugs:
   * XVI background files now load correctly when station names contain underscores or UTF-8 characters such as `3R9_nó_agua`, fixing invisible XVI overlays for TopoDroid exports like `Esqueceram_de_mim-1p.xvi` and adding parser/runtime regression coverage.
   * Reversing a selected line, undoing it, and reversing it again no longer crashes with `Bad state: Parent element does not have option of type THCommandOptionType.reverse`; the toggle now uses the live line state instead of a stale selection clone, and a regression test covers the undo-and-repeat flow.
@@ -13,6 +11,7 @@
   * Switching to another scrap while in single-line edit mode now resets the editor to the empty-selection state instead of leaving a stale line-edit state behind, preventing crashes when the next click lands on the new active scrap; regression coverage was added for the controller scrap-switch path.
 * Infrastructure maintenance:
   * Updated the malformed pre-first-`Save as` path regression in `t0816_mp_directory_aux_test.dart` to assert the normalized `relativePathFromReferencePath()` flow directly, keeping the coverage aligned with the current helper contract.
+  * Fixed `scripts/update_flutter_and_mapiah_version.dart` so its final summary reports release constant and generated release-summary updates instead of saying no files were updated.
 
 ## 0.4.0 - 2026-04-22 - The [Pains](https://www.instagram.com/epapains?igsh=MXdvYXprbGFkc245ZA==) release
 * Highlights:
