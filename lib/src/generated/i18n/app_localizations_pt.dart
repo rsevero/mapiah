@@ -2294,6 +2294,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointBones => 'Ossos';
 
   @override
+  String get thPointBorehole => 'Furo de sondagem';
+
+  @override
   String get thPointBreakdownChoke => 'Bloqueio de desmoronamento';
 
   @override

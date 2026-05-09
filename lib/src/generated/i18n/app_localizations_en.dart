@@ -2268,6 +2268,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thPointBones => 'Bones';
 
   @override
+  String get thPointBorehole => 'Borehole';
+
+  @override
   String get thPointBreakdownChoke => 'Breakdown Choke';
 
   @override

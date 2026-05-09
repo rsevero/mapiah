@@ -2,6 +2,13 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.4.2 - not yet released
+* Highlights:
+* New features:
+  * Added the `borehole` point type, localized in Portuguese as `Furo de sondagem`.
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.4.1 - 2026-04-30 - The [Barbosilândia](https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas) release
 * Fixed bugs:
   * XVI background files now load correctly when station names contain underscores or UTF-8 characters such as `3R9_nó_agua`, fixing invisible XVI overlays for TopoDroid exports like `Esqueceram_de_mim-1p.xvi` and adding parser/runtime regression coverage.

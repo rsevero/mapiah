@@ -4253,6 +4253,12 @@ abstract class AppLocalizations {
   /// **'Bones'**
   String get thPointBones;
 
+  /// The label for the borehole point type. Used on: MPTextToUser._initializePointTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Borehole'**
+  String get thPointBorehole;
+
   /// The label for the breakdown choke point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
   /// In en, this message translates to:

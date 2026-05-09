@@ -17,6 +17,7 @@ enum THPointType {
   bedrock,
   blocks,
   bones,
+  borehole,
   breakdownChoke,
   bridge,
   camp,

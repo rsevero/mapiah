@@ -91,6 +91,11 @@ abstract class MPVisualControllerBase with Store {
       border: THPaint.thPaint8,
       fill: THPaint.thPaint1008,
     ),
+    THPointType.borehole: THPointPaint(
+      type: MPPointShapeType.circle,
+      border: THPaint.thPaint7,
+      fill: THPaint.thPaint1007,
+    ),
     THPointType.breakdownChoke: THPointPaint(
       type: MPPointShapeType.invertedT,
       border: THPaint.thPaint1,

@@ -3547,6 +3547,11 @@
     "description": "The label for the bones point type. Used on: MPTextToUser._initializePointTypeAsString",
     "type": "text"
   },
+  "thPointBorehole": "Borehole",
+  "@thPointBorehole": {
+    "description": "The label for the borehole point type. Used on: MPTextToUser._initializePointTypeAsString",
+    "type": "text"
+  },
   "thPointBreakdownChoke": "Breakdown Choke",
   "@thPointBreakdownChoke": {
     "description": "The label for the breakdown choke point type. Used on: MPTextToUser._initializePointTypeAsString",

@@ -598,6 +598,7 @@ class MPTextToUser {
     _pointTypeAsString[THPointType.bedrock] = localizations.thPointBedrock;
     _pointTypeAsString[THPointType.blocks] = localizations.thPointBlocks;
     _pointTypeAsString[THPointType.bones] = localizations.thPointBones;
+    _pointTypeAsString[THPointType.borehole] = localizations.thPointBorehole;
     _pointTypeAsString[THPointType.breakdownChoke] =
         localizations.thPointBreakdownChoke;
     _pointTypeAsString[THPointType.bridge] = localizations.thPointBridge;
