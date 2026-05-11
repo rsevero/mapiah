@@ -43,7 +43,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   Path _compassPath = Path();
   bool _stationPointNameCoordinateCacheIsDirty = true;
-  List<MPStationPointNameCoordinateRecord> _stationPointNameCoordinateCache =
+  List<MPStationPointNameCoordinateRecord>
+  _therionStationPointNameCoordinateCache =
+      <MPStationPointNameCoordinateRecord>[];
+  List<MPStationPointNameCoordinateRecord> _xviStationPointNameCoordinateCache =
       <MPStationPointNameCoordinateRecord>[];
 
   void setCompassPath(Path path) {
@@ -59,7 +62,32 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     return List<MPStationPointNameCoordinateRecord>.unmodifiable(
-      _stationPointNameCoordinateCache,
+      <MPStationPointNameCoordinateRecord>[
+        ..._therionStationPointNameCoordinateCache,
+        ..._xviStationPointNameCoordinateCache,
+      ],
+    );
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  getTherionStationPointNameCoordinateCache() {
+    if (_stationPointNameCoordinateCacheIsDirty) {
+      updateStationPointNameCoordinateCache();
+    }
+
+    return List<MPStationPointNameCoordinateRecord>.unmodifiable(
+      _therionStationPointNameCoordinateCache,
+    );
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  getXVIStationPointNameCoordinateCache() {
+    if (_stationPointNameCoordinateCacheIsDirty) {
+      updateStationPointNameCoordinateCache();
+    }
+
+    return List<MPStationPointNameCoordinateRecord>.unmodifiable(
+      _xviStationPointNameCoordinateCache,
     );
   }
 
@@ -76,13 +104,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _sortStationPointNameCoordinateRecordsByName(therionStationRecords);
     _sortStationPointNameCoordinateRecordsByName(xviStationRecords);
 
-    final List<MPStationPointNameCoordinateRecord> stationRecords =
-        <MPStationPointNameCoordinateRecord>[
-          ...therionStationRecords,
-          ...xviStationRecords,
-        ];
-
-    _stationPointNameCoordinateCache = stationRecords;
+    _therionStationPointNameCoordinateCache = therionStationRecords;
+    _xviStationPointNameCoordinateCache = xviStationRecords;
     _stationPointNameCoordinateCacheIsDirty = false;
   }
 

@@ -10,6 +10,7 @@
   * The station hover tooltip now shows a localized title above the station name list.
   * Station hover tooltips now use a controller cache covering all visible scraps and visible XVI files, including non-active scraps.
   * Station hover tooltip entries now list Therion stations first and XVI stations second, with each group sorted alphabetically.
+  * Station hover name caches are now available separately for Therion and XVI sources as well as through the merged tooltip list.
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
 * Infrastructure maintenance:

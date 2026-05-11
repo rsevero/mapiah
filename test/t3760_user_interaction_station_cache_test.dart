@@ -38,7 +38,7 @@ endscrap
 
       final List<MPStationPointNameCoordinateRecord> allVisibleRecords =
           controller.userInteractionController
-              .getStationPointNameCoordinateCache();
+              .getTherionStationPointNameCoordinateCache();
       final List<String> allVisibleStationNames = allVisibleRecords
           .map((MPStationPointNameCoordinateRecord record) => record.name)
           .toList();
@@ -53,7 +53,7 @@ endscrap
 
       final List<MPStationPointNameCoordinateRecord> afterHideRecords =
           controller.userInteractionController
-              .getStationPointNameCoordinateCache();
+              .getTherionStationPointNameCoordinateCache();
       final List<String> afterHideStationNames = afterHideRecords
           .map((MPStationPointNameCoordinateRecord record) => record.name)
           .toList();
@@ -77,12 +77,43 @@ endscrap
           .getTH2FileEditController(filename: filename);
       final List<MPStationPointNameCoordinateRecord> records = controller
           .userInteractionController
-          .getStationPointNameCoordinateCache();
+          .getXVIStationPointNameCoordinateCache();
       final Set<String> stationNames = records
           .map((MPStationPointNameCoordinateRecord record) => record.name)
           .toSet();
 
       expect(stationNames, contains('3R9_nó_agua'));
+    });
+
+    test('exposes Therion and XVI caches separately', () async {
+      final String filename = THTestAux.testPath(
+        'mapiah_station_cache_separate_sources.th2',
+      );
+      const String th2Content = '''
+encoding utf-8
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
+scrap first_scrap
+  point 10 20 station -name TherionZ
+  point 15 25 station -name TherionA
+endscrap
+''';
+
+      final TH2FileEditController controller = await _parseController(
+        filename: filename,
+        th2Content: th2Content,
+      );
+      final List<String> therionStationNames = controller
+          .userInteractionController
+          .getTherionStationPointNameCoordinateCache()
+          .map((MPStationPointNameCoordinateRecord record) => record.name)
+          .toList();
+      final List<String> xviStationNames = controller.userInteractionController
+          .getXVIStationPointNameCoordinateCache()
+          .map((MPStationPointNameCoordinateRecord record) => record.name)
+          .toList();
+
+      expect(therionStationNames, <String>['TherionA', 'TherionZ']);
+      expect(xviStationNames, <String>['3R9_nó_agua']);
     });
 
     test('orders Therion stations before alphabetically sorted XVI stations', () async {
