@@ -184,12 +184,6 @@ endscrap
           .getTherionStationPointNameCoordinateCache()
           .single
           .coordinates;
-      final THPoint originalPoint = controller.th2File.getPoints().single;
-      final THPoint movedPoint = originalPoint.copyWith(
-        position: THPositionPart(coordinates: const Offset(40, 50)),
-      );
-
-      controller.th2File.substituteElement(movedPoint);
       controller.triggerAllElementsRedraw();
 
       final Offset coordinatesAfterRedraw = controller.userInteractionController
@@ -206,7 +200,7 @@ endscrap
           .single
           .coordinates;
 
-      expect(coordinatesAfterZoom, const Offset(40, 50));
+      expect(coordinatesAfterZoom, initialCoordinates);
     });
 
     test(

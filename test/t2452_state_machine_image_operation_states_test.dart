@@ -808,6 +808,13 @@ void main() {
 
     test('Shift drag disables snapping while moving image', () async {
       final TH2FileEditController controller = await loadController();
+      controller.elementEditController.createScrap(thID: 'snap_test');
+      controller.snapController.setSnapTargets(
+        pointTarget: MPSnapPointTarget.none,
+        linePointTarget: MPSnapLinePointTarget.none,
+        xviTargets: <MPSnapXVIFileTarget>[MPSnapXVIFileTarget.shot],
+      );
+
       final int imageMPID = controller.th2File.imageMPIDs.first;
       final THXVIXTherionImageInsertConfig image =
           controller.moveScaleRotateElementController.prepareImageMoveState(
@@ -833,13 +840,6 @@ void main() {
       );
       final Offset dragEndScreenPosition = controller.offsetCanvasToScreen(
         dragEndCanvasPosition,
-      );
-
-      controller.elementEditController.createScrap(thID: 'snap_test');
-      controller.snapController.setSnapTargets(
-        pointTarget: MPSnapPointTarget.none,
-        linePointTarget: MPSnapLinePointTarget.none,
-        xviTargets: <MPSnapXVIFileTarget>[MPSnapXVIFileTarget.shot],
       );
 
       expect(
