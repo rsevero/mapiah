@@ -68,13 +68,37 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void updateStationPointNameCoordinateCache() {
-    final List<MPStationPointNameCoordinateRecord> stationRecords =
-        <MPStationPointNameCoordinateRecord>[];
+    final List<MPStationPointNameCoordinateRecord> therionStationRecords =
+        _getVisibleTherionStationPointRecords();
+    final List<MPStationPointNameCoordinateRecord> xviStationRecords =
+        _getVisibleXVIStationPointRecords();
 
-    stationRecords.addAll(_getVisibleTherionStationPointRecords());
-    stationRecords.addAll(_getVisibleXVIStationPointRecords());
+    _sortStationPointNameCoordinateRecordsByName(therionStationRecords);
+    _sortStationPointNameCoordinateRecordsByName(xviStationRecords);
+
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[
+          ...therionStationRecords,
+          ...xviStationRecords,
+        ];
+
     _stationPointNameCoordinateCache = stationRecords;
     _stationPointNameCoordinateCacheIsDirty = false;
+  }
+
+  void _sortStationPointNameCoordinateRecordsByName(
+    List<MPStationPointNameCoordinateRecord> stationRecords,
+  ) {
+    stationRecords.sort(
+      (
+        MPStationPointNameCoordinateRecord firstRecord,
+        MPStationPointNameCoordinateRecord secondRecord,
+      ) {
+        return firstRecord.name.toLowerCase().compareTo(
+          secondRecord.name.toLowerCase(),
+        );
+      },
+    );
   }
 
   @action

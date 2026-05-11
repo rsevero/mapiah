@@ -22,11 +22,12 @@ void main() {
       const String th2Content = '''
 encoding utf-8
 scrap first_scrap
-  point 10 20 station -name A1
+  point 10 20 station -name Z9
+  point 15 25 station -name A1
 endscrap
 
 scrap second_scrap
-  point 30 40 station -name B2
+  point 30 40 station -name M5
 endscrap
 ''';
 
@@ -38,11 +39,11 @@ endscrap
       final List<MPStationPointNameCoordinateRecord> allVisibleRecords =
           controller.userInteractionController
               .getStationPointNameCoordinateCache();
-      final Set<String> allVisibleStationNames = allVisibleRecords
+      final List<String> allVisibleStationNames = allVisibleRecords
           .map((MPStationPointNameCoordinateRecord record) => record.name)
-          .toSet();
+          .toList();
 
-      expect(allVisibleStationNames, <String>{'A1', 'B2'});
+      expect(allVisibleStationNames, <String>['A1', 'M5', 'Z9']);
 
       final THScrap secondScrap = controller.th2File.getScraps().firstWhere(
         (THScrap scrap) => scrap.thID == 'second_scrap',
@@ -53,11 +54,11 @@ endscrap
       final List<MPStationPointNameCoordinateRecord> afterHideRecords =
           controller.userInteractionController
               .getStationPointNameCoordinateCache();
-      final Set<String> afterHideStationNames = afterHideRecords
+      final List<String> afterHideStationNames = afterHideRecords
           .map((MPStationPointNameCoordinateRecord record) => record.name)
-          .toSet();
+          .toList();
 
-      expect(afterHideStationNames, <String>{'A1'});
+      expect(afterHideStationNames, <String>['A1', 'Z9']);
     });
 
     test('includes visible XVI stations', () async {
@@ -82,6 +83,43 @@ endscrap
           .toSet();
 
       expect(stationNames, contains('3R9_nó_agua'));
+    });
+
+    test('orders Therion stations before alphabetically sorted XVI stations', () async {
+      final String filename = THTestAux.testPath(
+        'mapiah_station_cache_sorted_sources.th2',
+      );
+      const String th2Content = '''
+encoding utf-8
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
+scrap first_scrap
+  point 10 20 station -name TherionZ
+  point 15 25 station -name TherionA
+endscrap
+''';
+
+      final TH2FileEditController controller = await _parseController(
+        filename: filename,
+        th2Content: th2Content,
+      );
+      final List<MPStationPointNameCoordinateRecord> records = controller
+          .userInteractionController
+          .getStationPointNameCoordinateCache();
+      final List<String> stationNames = records
+          .map(
+            (MPStationPointNameCoordinateRecord record) =>
+                '${record.source}:${record.name}',
+          )
+          .toList();
+
+      expect(
+        stationNames,
+        <String>[
+          'Therion:TherionA',
+          'Therion:TherionZ',
+          'XVI:3R9_nó_agua',
+        ],
+      );
     });
   });
 }
