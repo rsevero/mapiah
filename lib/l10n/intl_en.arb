@@ -133,6 +133,11 @@
     "description": "The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
+  "mapiahStationHoverTooltipTitle": "Station point names",
+  "@mapiahStationHoverTooltipTitle": {
+    "description": "Title shown in the canvas hover tooltip listing station point names. Used on: MPStationHoverTooltipWidget.build",
+    "type": "text"
+  },
   "mapiahRunTherionHelpDialogTitle": "Run Therion dialog",
   "@mapiahRunTherionHelpDialogTitle": {
     "description": "Title for the Run Therion help dialog. Used on: _MPRunTherionDialogWidgetState.build",

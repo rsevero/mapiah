@@ -43,6 +43,7 @@
   "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Abrir arquivo THConfig e executar Therion (Ctrl+T)",
   "mapiahRunTherionButtonLabel": "Reexecutar Therion",
   "mapiahRunTherionButtonTooltip": "Executar Therion (T)",
+  "mapiahStationHoverTooltipTitle": "Nomes das bases",
   "mapiahRunTherionHelpDialogTitle": "Diálogo executar Therion",
   "mapiahTherionRunCloseButtonTooltip": "Fechar (Esc)",
   "mapiahTherionRunDialogTitle": "Saída do Therion",

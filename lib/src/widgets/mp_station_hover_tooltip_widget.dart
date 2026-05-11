@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -66,23 +67,9 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(
                     mpStationHoverTooltipPadding,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: stations
-                        .map(
-                          (MPStationHoverRecord station) => Text(
-                            '${station.source}: ${station.name}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: colorScheme.onInverseSurface,
-                              fontSize: mpStationHoverTooltipFontSize,
-                              height: mpStationHoverTooltipTextHeight,
-                            ),
-                          ),
-                        )
-                        .toList(),
+                  child: _buildTooltipContent(
+                    colorScheme: colorScheme,
+                    stations: stations,
                   ),
                 ),
               ),
@@ -90,6 +77,50 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildTooltipContent({
+    required ColorScheme colorScheme,
+    required List<MPStationHoverRecord> stations,
+  }) {
+    final TextStyle textStyle = TextStyle(
+      color: colorScheme.onInverseSurface,
+      fontSize: mpStationHoverTooltipFontSize,
+      height: mpStationHoverTooltipTextHeight,
+    );
+    final TextStyle titleTextStyle = textStyle.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+    final List<Widget> children = <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(
+          bottom: mpStationHoverTooltipTitleBottomPadding,
+        ),
+        child: Text(
+          mpLocator.appLocalizations.mapiahStationHoverTooltipTitle,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: titleTextStyle,
+        ),
+      ),
+    ];
+
+    children.addAll(
+      stations.map(
+        (MPStationHoverRecord station) => Text(
+          '${station.source}: ${station.name}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle,
+        ),
+      ),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
     );
   }
 

@@ -362,6 +362,7 @@ const double mpStationHoverTooltipBorderRadius = 4.0;
 const double mpStationHoverTooltipOpacity = 0.92;
 const double mpStationHoverTooltipFontSize = 12.0;
 const double mpStationHoverTooltipTextHeight = 1.2;
+const double mpStationHoverTooltipTitleBottomPadding = 4.0;
 const double mpDefaultSelectionTolerance = 7.0;
 const double mpDefaultNudgeFactor = 2.0;
 const double mpDefaultPointRadius = 7.0;

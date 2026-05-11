@@ -242,6 +242,12 @@ abstract class AppLocalizations {
   /// **'Run Therion (T)'**
   String get mapiahRunTherionButtonTooltip;
 
+  /// Title shown in the canvas hover tooltip listing station point names. Used on: MPStationHoverTooltipWidget.build
+  ///
+  /// In en, this message translates to:
+  /// **'Station point names'**
+  String get mapiahStationHoverTooltipTitle;
+
   /// Title for the Run Therion help dialog. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:
