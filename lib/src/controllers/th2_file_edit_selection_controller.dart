@@ -1643,6 +1643,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @action
   void setImageVisibility(int imageMPID, bool isVisible) {
     _th2FileEditController.th2File.imageByMPID(imageMPID).isVisible = isVisible;
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerImagesRedraw();
   }
 
@@ -1677,6 +1679,8 @@ abstract class TH2FileEditSelectionControllerBase with Store {
       image.isVisible = !allVisible;
     }
 
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerImagesRedraw();
   }
 

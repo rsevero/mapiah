@@ -632,6 +632,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newElement,
       elementPositionInParent: childPositionInParent,
     );
+
+    _markStationCacheDirtyForAddedElement(newElement);
   }
 
   @action
@@ -655,6 +657,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         _removeElement(child);
       }
     }
+
+    _markStationCacheDirtyForRemovedElement(element);
 
     selectionController.removeElementFromSelectable(elementMPID);
     selectionController.removeElementFromSelectedLogical(
@@ -781,8 +785,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     if (option is THStationNameCommandOption) {
       _lastUsedStationName = option.name;
-      _th2FileEditController.userInteractionController
-          .markStationPointNameCoordinateCacheDirty();
+      _markStationPointNameCoordinateCacheDirty();
     }
 
     final int parentMPID = option.parentMPID;
@@ -837,8 +840,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2File.substituteElement(newParentElement);
 
     if (optionType == THCommandOptionType.station) {
-      _th2FileEditController.userInteractionController
-          .markStationPointNameCoordinateCacheDirty();
+      _markStationPointNameCoordinateCacheDirty();
     }
 
     if (parentElement is THLineSegment) {
@@ -2075,6 +2077,53 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   double getLineSimplifyEpsilonOnCanvasIncrease() {
     return mpLineSimplifyEpsilonOnScreen / _th2FileEditController.canvasScale;
+  }
+
+  void _markStationCacheDirtyForAddedElement(THElement newElement) {
+    if (_isVisibleTherionStationPoint(newElement)) {
+      _markStationPointNameCoordinateCacheDirty();
+    }
+  }
+
+  void _markStationCacheDirtyForRemovedElement(THElement removedElement) {
+    if (_isVisibleTherionStationPoint(removedElement)) {
+      _markStationPointNameCoordinateCacheDirty();
+    }
+  }
+
+  bool _isVisibleTherionStationPoint(THElement element) {
+    if (element is! THPoint) {
+      return false;
+    }
+
+    if (element.pointType != THPointType.station) {
+      return false;
+    }
+
+    final String? stationName = MPCommandOptionAux.getName(element);
+
+    if ((stationName == null) || stationName.isEmpty) {
+      return false;
+    }
+
+    if (!_th2FileEditController.hideElementController.isElementVisible(
+      element.mpID,
+    )) {
+      return false;
+    }
+
+    if (!_th2FileEditController.hideElementController.isScrapVisible(
+      element.parentMPID,
+    )) {
+      return false;
+    }
+
+    return true;
+  }
+
+  void _markStationPointNameCoordinateCacheDirty() {
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
   }
 
   void prepareLineSimplificationInfo() {

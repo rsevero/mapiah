@@ -913,7 +913,6 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void setShowImages(bool shouldShow) {
     _showImages = shouldShow;
-    userInteractionController.markStationPointNameCoordinateCacheDirty();
   }
 
   @action
@@ -1148,7 +1147,6 @@ abstract class TH2FileEditControllerBase with Store {
   void triggerAllElementsRedraw() {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
-    userInteractionController.markStationPointNameCoordinateCacheDirty();
     _redrawTriggerAllElements++;
   }
 
@@ -1156,7 +1154,6 @@ abstract class TH2FileEditControllerBase with Store {
   void triggerSelectedElementsRedraw({bool setState = false}) {
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
-    userInteractionController.markStationPointNameCoordinateCacheDirty();
     _redrawTriggerSelectedElements++;
 
     if (setState) {
@@ -1166,7 +1163,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void triggerNonSelectedElementsRedraw() {
-    userInteractionController.markStationPointNameCoordinateCacheDirty();
     _redrawTriggerNonSelectedElements++;
   }
 
@@ -1194,7 +1190,6 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void triggerImagesRedraw() {
-    userInteractionController.markStationPointNameCoordinateCacheDirty();
     _redrawTriggerImages++;
   }
 
@@ -1331,6 +1326,7 @@ abstract class TH2FileEditControllerBase with Store {
     _canvasSize = _screenSize / _canvasScale;
     _calculateCanvasOffset();
     _canvasScaleTranslationUndefined = false;
+    userInteractionController.markStationPointNameCoordinateCacheDirty();
     selectionController.warmSelectableElementsCanvasScaleChanged();
     selectionController
         .clearSelectedElementsBoundingBoxAndSelectionHandleCenters();

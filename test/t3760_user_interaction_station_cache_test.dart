@@ -167,9 +167,55 @@ endscrap
       },
     );
 
-    test('keeps only stations visible on the current screen', () async {
-      const String filename = '/tmp/mapiah_station_cache_visible_screen.th2';
+    test('does not invalidate cache on redraw but does on zoom', () async {
+      const String filename = '/tmp/mapiah_station_cache_redraw_zoom.th2';
       const String th2Content = '''
+encoding utf-8
+scrap first_scrap
+  point 10 20 station -name A1
+endscrap
+''';
+
+      final TH2FileEditController controller = await _parseController(
+        filename: filename,
+        th2Content: th2Content,
+      );
+      final Offset initialCoordinates = controller.userInteractionController
+          .getTherionStationPointNameCoordinateCache()
+          .single
+          .coordinates;
+      final THPoint originalPoint = controller.th2File.getPoints().single;
+      final THPoint movedPoint = originalPoint.copyWith(
+        position: THPositionPart(coordinates: const Offset(40, 50)),
+      );
+
+      controller.th2File.substituteElement(movedPoint);
+      controller.triggerAllElementsRedraw();
+
+      final Offset coordinatesAfterRedraw = controller.userInteractionController
+          .getTherionStationPointNameCoordinateCache()
+          .single
+          .coordinates;
+
+      expect(coordinatesAfterRedraw, initialCoordinates);
+
+      controller.zoomIn();
+
+      final Offset coordinatesAfterZoom = controller.userInteractionController
+          .getTherionStationPointNameCoordinateCache()
+          .single
+          .coordinates;
+
+      expect(coordinatesAfterZoom, const Offset(40, 50));
+    });
+
+    test(
+      'uses the only unused XVI station under a new station point',
+      () async {
+        final String filename = THTestAux.testPath(
+          'mapiah_station_cache_use_xvi_station_name.th2',
+        );
+        const String th2Content = '''
 encoding utf-8
 scrap first_scrap
   point 10 20 station -name Visible
@@ -177,21 +223,22 @@ scrap first_scrap
 endscrap
 ''';
 
-      final TH2FileEditController controller = await _parseController(
-        filename: filename,
-        th2Content: th2Content,
-        prepareVisibleScreen: false,
-      );
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+          prepareVisibleScreen: false,
+        );
 
-      controller.updateScreenSize(const Size(1280.0, 720.0));
+        controller.updateScreenSize(const Size(1280.0, 720.0));
 
-      final List<String> stationNames = controller.userInteractionController
-          .getTherionStationPointNameCoordinateCache()
-          .map((MPStationPointNameCoordinateRecord record) => record.name)
-          .toList();
+        final List<String> stationNames = controller.userInteractionController
+            .getTherionStationPointNameCoordinateCache()
+            .map((MPStationPointNameCoordinateRecord record) => record.name)
+            .toList();
 
-      expect(stationNames, <String>['Visible']);
-    });
+        expect(stationNames, <String>['Visible']);
+      },
+    );
 
     test('finds stations on sector borders under the cursor', () async {
       const String filename = '/tmp/mapiah_station_cache_sector_border.th2';
@@ -337,6 +384,86 @@ endscrap
 
         expect(stationNameOption, isNotNull);
         expect(stationNameOption!.name, isNot('3R9_nó_agua'));
+      },
+    );
+
+    test(
+      'reflects station option edit create and delete in Therion cache',
+      () async {
+        const String filename =
+            '/tmp/mapiah_station_cache_station_option_ops.th2';
+        const String th2Content = '''
+encoding utf-8
+scrap first_scrap
+  point 10 20 station -name A1
+  point 30 40 station
+endscrap
+''';
+
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+        );
+        final List<THPoint> points = controller.th2File.getPoints().toList();
+        final THPoint namedStationPoint = points.first;
+        final THPoint unnamedStationPoint = points.last;
+
+        expect(
+          controller.userInteractionController
+              .getTherionStationPointNameCoordinateCache()
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['A1'],
+        );
+
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
+              parentMPID: namedStationPoint.mpID,
+              name: 'B2',
+            ),
+          ),
+        );
+
+        expect(
+          controller.userInteractionController
+              .getTherionStationPointNameCoordinateCache()
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['B2'],
+        );
+
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
+              parentMPID: unnamedStationPoint.mpID,
+              name: 'C3',
+            ),
+          ),
+        );
+
+        expect(
+          controller.userInteractionController
+              .getTherionStationPointNameCoordinateCache()
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['B2', 'C3'],
+        );
+
+        controller.execute(
+          MPRemoveOptionFromElementCommand(
+            optionType: THCommandOptionType.station,
+            parentMPID: namedStationPoint.mpID,
+          ),
+        );
+
+        expect(
+          controller.userInteractionController
+              .getTherionStationPointNameCoordinateCache()
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['C3'],
+        );
       },
     );
   });

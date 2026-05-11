@@ -54,6 +54,8 @@ abstract class TH2FileHideElementControllerBase with Store {
       _hiddenScrapMPIDs.clear();
     }
 
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
@@ -66,6 +68,8 @@ abstract class TH2FileHideElementControllerBase with Store {
       _setActiveScrapForVisibilityHide(scrapMPID);
     }
 
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
@@ -138,6 +142,8 @@ abstract class TH2FileHideElementControllerBase with Store {
     }
 
     _th2FileEditController.selectionController.resetSelectableElements();
+    _th2FileEditController.userInteractionController
+        .markStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 }
