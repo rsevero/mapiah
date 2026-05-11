@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/painting.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -12,6 +13,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -48,6 +50,24 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       <MPStationPointNameCoordinateRecord>[];
   List<MPStationPointNameCoordinateRecord> _xviStationPointNameCoordinateCache =
       <MPStationPointNameCoordinateRecord>[];
+  Map<
+    MPStationPointNameCoordinateSector,
+    List<MPStationPointNameCoordinateRecord>
+  >
+  _therionStationPointNameCoordinateSectorCache =
+      <
+        MPStationPointNameCoordinateSector,
+        List<MPStationPointNameCoordinateRecord>
+      >{};
+  Map<
+    MPStationPointNameCoordinateSector,
+    List<MPStationPointNameCoordinateRecord>
+  >
+  _xviStationPointNameCoordinateSectorCache =
+      <
+        MPStationPointNameCoordinateSector,
+        List<MPStationPointNameCoordinateRecord>
+      >{};
 
   void setCompassPath(Path path) {
     _compassPath = path;
@@ -66,6 +86,21 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         ..._therionStationPointNameCoordinateCache,
         ..._xviStationPointNameCoordinateCache,
       ],
+    );
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  getStationPointNameCoordinateCacheUnderScreenPosition(Offset screenPosition) {
+    if (_stationPointNameCoordinateCacheIsDirty) {
+      updateStationPointNameCoordinateCache();
+    }
+
+    return List<MPStationPointNameCoordinateRecord>.unmodifiable(
+      _getStationPointNameCoordinateCacheUnderScreenPosition(
+        screenPosition: screenPosition,
+        includeTherion: true,
+        includeXVI: true,
+      ),
     );
   }
 
@@ -98,25 +133,12 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       updateStationPointNameCoordinateCache();
     }
 
-    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
-      screenPosition,
-    );
-    final double toleranceSquared =
-        _th2FileEditController.selectionToleranceSquaredOnCanvas;
     final List<MPStationPointNameCoordinateRecord> xviStationsUnderCursor =
-        <MPStationPointNameCoordinateRecord>[];
-
-    for (final MPStationPointNameCoordinateRecord xviStation
-        in _xviStationPointNameCoordinateCache) {
-      final double distanceSquared =
-          (xviStation.coordinates - canvasPosition).distanceSquared;
-
-      if (distanceSquared > toleranceSquared) {
-        continue;
-      }
-
-      xviStationsUnderCursor.add(xviStation);
-    }
+        _getStationPointNameCoordinateCacheUnderScreenPosition(
+          screenPosition: screenPosition,
+          includeTherion: false,
+          includeXVI: true,
+        );
 
     if (xviStationsUnderCursor.length != 1) {
       return null;
@@ -169,22 +191,157 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
     _therionStationPointNameCoordinateCache = therionStationRecords;
     _xviStationPointNameCoordinateCache = xviStationRecords;
+    _therionStationPointNameCoordinateSectorCache =
+        _createStationPointNameCoordinateSectorCache(therionStationRecords);
+    _xviStationPointNameCoordinateSectorCache =
+        _createStationPointNameCoordinateSectorCache(xviStationRecords);
     _stationPointNameCoordinateCacheIsDirty = false;
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  _getStationPointNameCoordinateCacheUnderScreenPosition({
+    required Offset screenPosition,
+    required bool includeTherion,
+    required bool includeXVI,
+  }) {
+    final MPStationPointNameCoordinateSector mouseSector =
+        _getStationPointNameCoordinateSector(screenPosition);
+    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
+      screenPosition,
+    );
+    final double toleranceSquared =
+        _th2FileEditController.selectionToleranceSquaredOnCanvas;
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[];
+
+    for (final MPStationPointNameCoordinateSector sector
+        in mouseSector.getSectorAndAdjacentSectors()) {
+      if (includeTherion) {
+        _addStationPointNameCoordinateRecordsUnderCursor(
+          stationRecords: stationRecords,
+          candidateStationRecords:
+              _therionStationPointNameCoordinateSectorCache[sector] ??
+              <MPStationPointNameCoordinateRecord>[],
+          canvasPosition: canvasPosition,
+          toleranceSquared: toleranceSquared,
+        );
+      }
+
+      if (includeXVI) {
+        _addStationPointNameCoordinateRecordsUnderCursor(
+          stationRecords: stationRecords,
+          candidateStationRecords:
+              _xviStationPointNameCoordinateSectorCache[sector] ??
+              <MPStationPointNameCoordinateRecord>[],
+          canvasPosition: canvasPosition,
+          toleranceSquared: toleranceSquared,
+        );
+      }
+    }
+
+    _sortStationPointNameCoordinateRecordsBySourceAndName(stationRecords);
+
+    return stationRecords;
+  }
+
+  void _addStationPointNameCoordinateRecordsUnderCursor({
+    required List<MPStationPointNameCoordinateRecord> stationRecords,
+    required List<MPStationPointNameCoordinateRecord> candidateStationRecords,
+    required Offset canvasPosition,
+    required double toleranceSquared,
+  }) {
+    for (final MPStationPointNameCoordinateRecord station
+        in candidateStationRecords) {
+      final double distanceSquared =
+          (station.coordinates - canvasPosition).distanceSquared;
+
+      if (distanceSquared > toleranceSquared) {
+        continue;
+      }
+
+      stationRecords.add(station);
+    }
+  }
+
+  Map<
+    MPStationPointNameCoordinateSector,
+    List<MPStationPointNameCoordinateRecord>
+  >
+  _createStationPointNameCoordinateSectorCache(
+    List<MPStationPointNameCoordinateRecord> stationRecords,
+  ) {
+    final Map<
+      MPStationPointNameCoordinateSector,
+      List<MPStationPointNameCoordinateRecord>
+    >
+    sectorCache =
+        <
+          MPStationPointNameCoordinateSector,
+          List<MPStationPointNameCoordinateRecord>
+        >{};
+
+    for (final MPStationPointNameCoordinateRecord stationRecord
+        in stationRecords) {
+      final Offset screenPosition = _th2FileEditController.offsetCanvasToScreen(
+        stationRecord.coordinates,
+      );
+      final MPStationPointNameCoordinateSector sector =
+          _getStationPointNameCoordinateSector(screenPosition);
+
+      sectorCache
+          .putIfAbsent(sector, () => <MPStationPointNameCoordinateRecord>[])
+          .add(stationRecord);
+    }
+
+    return sectorCache;
+  }
+
+  MPStationPointNameCoordinateSector _getStationPointNameCoordinateSector(
+    Offset screenPosition,
+  ) {
+    final Rect screenBoundingBox = _th2FileEditController.screenBoundingBox;
+    final double sectorWidth = mpLocator.mpSettingsController
+        .getDoubleWithDefault(MPSettingID.TH2Edit_SelectionTolerance);
+    final Offset sectorRelativePosition =
+        screenPosition - screenBoundingBox.topLeft;
+    final int column = (sectorRelativePosition.dx / sectorWidth).floor();
+    final int row = (sectorRelativePosition.dy / sectorWidth).floor();
+
+    return MPStationPointNameCoordinateSector(column: column, row: row);
   }
 
   void _sortStationPointNameCoordinateRecordsByName(
     List<MPStationPointNameCoordinateRecord> stationRecords,
   ) {
-    stationRecords.sort(
-      (
-        MPStationPointNameCoordinateRecord firstRecord,
-        MPStationPointNameCoordinateRecord secondRecord,
-      ) {
-        return firstRecord.name.toLowerCase().compareTo(
-          secondRecord.name.toLowerCase(),
-        );
-      },
-    );
+    stationRecords.sort((
+      MPStationPointNameCoordinateRecord firstRecord,
+      MPStationPointNameCoordinateRecord secondRecord,
+    ) {
+      return firstRecord.name.toLowerCase().compareTo(
+        secondRecord.name.toLowerCase(),
+      );
+    });
+  }
+
+  void _sortStationPointNameCoordinateRecordsBySourceAndName(
+    List<MPStationPointNameCoordinateRecord> stationRecords,
+  ) {
+    stationRecords.sort((
+      MPStationPointNameCoordinateRecord firstRecord,
+      MPStationPointNameCoordinateRecord secondRecord,
+    ) {
+      final int sourceComparison = firstRecord.source.compareTo(
+        secondRecord.source,
+      );
+
+      if (sourceComparison != 0) {
+        return sourceComparison;
+      }
+
+      return firstRecord.name.toLowerCase().compareTo(
+        secondRecord.name.toLowerCase(),
+      );
+    });
   }
 
   @action
@@ -325,6 +482,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
           continue;
         }
 
+        if (!_isCanvasPointVisible(element.position.coordinates)) {
+          continue;
+        }
+
         stationRecords.add(
           MPStationPointNameCoordinateRecord(
             source: mpStationSourceTherion,
@@ -393,10 +554,14 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         continue;
       }
 
-      final Offset stationCoordinates =
-          xviImage.transformWorldPointFromBaseWorldPoint(
+      final Offset stationCoordinates = xviImage
+          .transformWorldPointFromBaseWorldPoint(
             station.position.coordinates + imageOffset,
           );
+
+      if (!_isCanvasPointVisible(stationCoordinates)) {
+        continue;
+      }
 
       stationRecords.add(
         MPStationPointNameCoordinateRecord(
@@ -408,6 +573,18 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     }
 
     return stationRecords;
+  }
+
+  bool _isCanvasPointVisible(Offset canvasPoint) {
+    final Offset screenPoint = _th2FileEditController.offsetCanvasToScreen(
+      canvasPoint,
+    );
+    final Rect screenBoundingBox = _th2FileEditController.screenBoundingBox;
+
+    return (screenPoint.dx >= screenBoundingBox.left) &&
+        (screenPoint.dx <= screenBoundingBox.right) &&
+        (screenPoint.dy >= screenBoundingBox.top) &&
+        (screenPoint.dy <= screenBoundingBox.bottom);
   }
 
   void _setLastPLATypeSubtypeFromElementAndSubtype({
@@ -1101,4 +1278,47 @@ class MPStationPointNameCoordinateRecord {
     required this.name,
     required this.coordinates,
   });
+}
+
+class MPStationPointNameCoordinateSector {
+  final int column;
+  final int row;
+
+  const MPStationPointNameCoordinateSector({
+    required this.column,
+    required this.row,
+  });
+
+  List<MPStationPointNameCoordinateSector> getSectorAndAdjacentSectors() {
+    final List<MPStationPointNameCoordinateSector> sectors =
+        <MPStationPointNameCoordinateSector>[];
+
+    for (
+      int currentColumn = column - 1;
+      currentColumn <= column + 1;
+      currentColumn++
+    ) {
+      for (int currentRow = row - 1; currentRow <= row + 1; currentRow++) {
+        sectors.add(
+          MPStationPointNameCoordinateSector(
+            column: currentColumn,
+            row: currentRow,
+          ),
+        );
+      }
+    }
+
+    return sectors;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        ((other is MPStationPointNameCoordinateSector) &&
+            (other.column == column) &&
+            (other.row == row));
+  }
+
+  @override
+  int get hashCode => Object.hash(column, row);
 }

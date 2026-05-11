@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:convert';
+import 'dart:ui' show Offset, Size;
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +10,7 @@ import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -84,6 +86,9 @@ endscrap
 
       final TH2FileEditController controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: filename);
+
+      _prepareVisibleScreen(controller);
+
       final List<MPStationPointNameCoordinateRecord> records = controller
           .userInteractionController
           .getXVIStationPointNameCoordinateCache();
@@ -125,11 +130,13 @@ endscrap
       expect(xviStationNames, <String>['3R9_nó_agua']);
     });
 
-    test('orders Therion stations before alphabetically sorted XVI stations', () async {
-      final String filename = THTestAux.testPath(
-        'mapiah_station_cache_sorted_sources.th2',
-      );
-      const String th2Content = '''
+    test(
+      'orders Therion stations before alphabetically sorted XVI stations',
+      () async {
+        final String filename = THTestAux.testPath(
+          'mapiah_station_cache_sorted_sources.th2',
+        );
+        const String th2Content = '''
 encoding utf-8
 ##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
 scrap first_scrap
@@ -138,149 +145,207 @@ scrap first_scrap
 endscrap
 ''';
 
-      final TH2FileEditController controller = await _parseController(
-        filename: filename,
-        th2Content: th2Content,
-      );
-      final List<MPStationPointNameCoordinateRecord> records = controller
-          .userInteractionController
-          .getStationPointNameCoordinateCache();
-      final List<String> stationNames = records
-          .map(
-            (MPStationPointNameCoordinateRecord record) =>
-                '${record.source}:${record.name}',
-          )
-          .toList();
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+        );
+        final List<MPStationPointNameCoordinateRecord> records = controller
+            .userInteractionController
+            .getStationPointNameCoordinateCache();
+        final List<String> stationNames = records
+            .map(
+              (MPStationPointNameCoordinateRecord record) =>
+                  '${record.source}:${record.name}',
+            )
+            .toList();
 
-      expect(
-        stationNames,
-        <String>[
+        expect(stationNames, <String>[
           'Therion:TherionA',
           'Therion:TherionZ',
           'XVI:3R9_nó_agua',
-        ],
-      );
-    });
+        ]);
+      },
+    );
 
-    test('uses the only unused XVI station under a new station point', () async {
-      final String filename = THTestAux.testPath(
-        'mapiah_station_cache_use_xvi_station_name.th2',
-      );
+    test('keeps only stations visible on the current screen', () async {
+      const String filename = '/tmp/mapiah_station_cache_visible_screen.th2';
       const String th2Content = '''
 encoding utf-8
-##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
 scrap first_scrap
+  point 10 20 station -name Visible
+  point 2000 2000 station -name Outside
 endscrap
 ''';
 
       final TH2FileEditController controller = await _parseController(
         filename: filename,
         th2Content: th2Content,
+        prepareVisibleScreen: false,
       );
 
-      controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
+      controller.updateScreenSize(const Size(1280.0, 720.0));
 
-      final MPStationPointNameCoordinateRecord xviStation = controller
-          .userInteractionController
-          .getXVIStationPointNameCoordinateCache()
-          .firstWhere(
-            (MPStationPointNameCoordinateRecord record) =>
-                record.name == '3R9_nó_agua',
-          );
-      final Offset screenPosition = controller.offsetCanvasToScreen(
-        xviStation.coordinates,
-      );
-      final MPCommand command = MPCommandFactory.addPoint(
-        screenPosition: screenPosition,
-        pointTypeString: 'station',
-        pointSubtypeString: '',
-        th2FileEditController: controller,
-      );
+      final List<String> stationNames = controller.userInteractionController
+          .getTherionStationPointNameCoordinateCache()
+          .map((MPStationPointNameCoordinateRecord record) => record.name)
+          .toList();
 
-      controller.execute(command);
-
-      final THPoint newStationPoint = controller.th2File.getPoints().last;
-      final THStationNameCommandOption? stationNameOption =
-          newStationPoint.getOption(THCommandOptionType.station)
-              as THStationNameCommandOption?;
-
-      expect(stationNameOption, isNotNull);
-      expect(stationNameOption!.name, '3R9_nó_agua');
-      expect(
-        controller.elementEditController.lastUsedStationName,
-        '3R9_nó_agua',
-      );
+      expect(stationNames, <String>['Visible']);
     });
 
-    test('does not reuse an XVI station name already used by Therion', () async {
-      final String filename = THTestAux.testPath(
-        'mapiah_station_cache_skip_used_xvi_station_name.th2',
-      );
+    test('finds stations on sector borders under the cursor', () async {
+      const String filename = '/tmp/mapiah_station_cache_sector_border.th2';
       const String th2Content = '''
 encoding utf-8
-##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
 scrap first_scrap
+  point 7 0 station -name Border
 endscrap
 ''';
 
       final TH2FileEditController controller = await _parseController(
         filename: filename,
         th2Content: th2Content,
+        prepareVisibleScreen: false,
       );
 
-      controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
+      controller.updateScreenSize(const Size(1280.0, 720.0));
 
-      final THPoint existingStationPoint = THPoint.pointTypeFromString(
-        parentMPID: controller.activeScrapID,
-        pointTypeString: 'station',
-        position: THPositionPart(coordinates: const Offset(10, 20)),
-      );
+      final List<String> stationNames = controller.userInteractionController
+          .getStationPointNameCoordinateCacheUnderScreenPosition(
+            controller.offsetCanvasToScreen(Offset.zero),
+          )
+          .map((MPStationPointNameCoordinateRecord record) => record.name)
+          .toList();
 
-      controller.execute(
-        MPAddPointCommand(newPoint: existingStationPoint, posCommand: null),
-      );
-      controller.execute(
-        MPSetOptionToElementCommand(
-          toOption: THStationNameCommandOption.fromStringWithParentMPID(
-            parentMPID: existingStationPoint.mpID,
-            name: '3R9_nó_agua',
+      expect(stationNames, <String>['Border']);
+    });
+
+    test(
+      'uses the only unused XVI station under a new station point',
+      () async {
+        final String filename = THTestAux.testPath(
+          'mapiah_station_cache_use_xvi_station_name.th2',
+        );
+        const String th2Content = '''
+encoding utf-8
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
+scrap first_scrap
+endscrap
+''';
+
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+        );
+
+        controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
+
+        final MPStationPointNameCoordinateRecord xviStation = controller
+            .userInteractionController
+            .getXVIStationPointNameCoordinateCache()
+            .firstWhere(
+              (MPStationPointNameCoordinateRecord record) =>
+                  record.name == '3R9_nó_agua',
+            );
+        final Offset screenPosition = controller.offsetCanvasToScreen(
+          xviStation.coordinates,
+        );
+        final MPCommand command = MPCommandFactory.addPoint(
+          screenPosition: screenPosition,
+          pointTypeString: 'station',
+          pointSubtypeString: '',
+          th2FileEditController: controller,
+        );
+
+        controller.execute(command);
+
+        final THPoint newStationPoint = controller.th2File.getPoints().last;
+        final THStationNameCommandOption? stationNameOption =
+            newStationPoint.getOption(THCommandOptionType.station)
+                as THStationNameCommandOption?;
+
+        expect(stationNameOption, isNotNull);
+        expect(stationNameOption!.name, '3R9_nó_agua');
+        expect(
+          controller.elementEditController.lastUsedStationName,
+          '3R9_nó_agua',
+        );
+      },
+    );
+
+    test(
+      'does not reuse an XVI station name already used by Therion',
+      () async {
+        final String filename = THTestAux.testPath(
+          'mapiah_station_cache_skip_used_xvi_station_name.th2',
+        );
+        const String th2Content = '''
+encoding utf-8
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
+scrap first_scrap
+endscrap
+''';
+
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+        );
+
+        controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
+
+        final THPoint existingStationPoint = THPoint.pointTypeFromString(
+          parentMPID: controller.activeScrapID,
+          pointTypeString: 'station',
+          position: THPositionPart(coordinates: const Offset(10, 20)),
+        );
+
+        controller.execute(
+          MPAddPointCommand(newPoint: existingStationPoint, posCommand: null),
+        );
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
+              parentMPID: existingStationPoint.mpID,
+              name: '3R9_nó_agua',
+            ),
           ),
-        ),
-      );
+        );
 
-      final MPStationPointNameCoordinateRecord xviStation = controller
-          .userInteractionController
-          .getXVIStationPointNameCoordinateCache()
-          .firstWhere(
-            (MPStationPointNameCoordinateRecord record) =>
-                record.name == '3R9_nó_agua',
-          );
-      final Offset screenPosition = controller.offsetCanvasToScreen(
-        xviStation.coordinates,
-      );
-      final MPCommand command = MPCommandFactory.addPoint(
-        screenPosition: screenPosition,
-        pointTypeString: 'station',
-        pointSubtypeString: '',
-        th2FileEditController: controller,
-      );
+        final MPStationPointNameCoordinateRecord xviStation = controller
+            .userInteractionController
+            .getXVIStationPointNameCoordinateCache()
+            .firstWhere(
+              (MPStationPointNameCoordinateRecord record) =>
+                  record.name == '3R9_nó_agua',
+            );
+        final Offset screenPosition = controller.offsetCanvasToScreen(
+          xviStation.coordinates,
+        );
+        final MPCommand command = MPCommandFactory.addPoint(
+          screenPosition: screenPosition,
+          pointTypeString: 'station',
+          pointSubtypeString: '',
+          th2FileEditController: controller,
+        );
 
-      controller.execute(command);
+        controller.execute(command);
 
-      final THPoint newStationPoint = controller.th2File.getPoints().last;
-      final THStationNameCommandOption? stationNameOption =
-          newStationPoint.getOption(THCommandOptionType.station)
-              as THStationNameCommandOption?;
+        final THPoint newStationPoint = controller.th2File.getPoints().last;
+        final THStationNameCommandOption? stationNameOption =
+            newStationPoint.getOption(THCommandOptionType.station)
+                as THStationNameCommandOption?;
 
-      expect(stationNameOption, isNotNull);
-      expect(stationNameOption!.name, isNot('3R9_nó_agua'));
-    });
+        expect(stationNameOption, isNotNull);
+        expect(stationNameOption!.name, isNot('3R9_nó_agua'));
+      },
+    );
   });
 }
 
 Future<TH2FileEditController> _parseController({
   required String filename,
   required String th2Content,
+  bool prepareVisibleScreen = true,
 }) async {
   final TH2FileParser parser = TH2FileParser();
   final Uint8List fileBytes = utf8.encode(th2Content);
@@ -291,7 +356,17 @@ Future<TH2FileEditController> _parseController({
 
   expect(isSuccessful, isTrue, reason: 'Parser errors: $errors');
 
-  return mpLocator.mpGeneralController.getTH2FileEditController(
-    filename: filename,
-  );
+  final TH2FileEditController controller = mpLocator.mpGeneralController
+      .getTH2FileEditController(filename: filename);
+
+  if (prepareVisibleScreen) {
+    _prepareVisibleScreen(controller);
+  }
+
+  return controller;
+}
+
+void _prepareVisibleScreen(TH2FileEditController controller) {
+  controller.updateScreenSize(const Size(1280.0, 720.0));
+  controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
 }

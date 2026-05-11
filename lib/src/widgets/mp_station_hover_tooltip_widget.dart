@@ -25,9 +25,7 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
         th2FileEditController.redrawTriggerImages;
         th2FileEditController.redrawTriggerNonSelectedElements;
 
-        if (!th2FileEditController.screenBoundingBox.contains(
-          screenPosition,
-        )) {
+        if (!th2FileEditController.screenBoundingBox.contains(screenPosition)) {
           return const SizedBox.shrink();
         }
 
@@ -59,9 +57,7 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                    mpStationHoverTooltipPadding,
-                  ),
+                  padding: const EdgeInsets.all(mpStationHoverTooltipPadding),
                   child: _buildTooltipContent(
                     colorScheme: colorScheme,
                     stations: stations,
@@ -128,9 +124,10 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
     final double toleranceSquared =
         th2FileEditController.selectionToleranceSquaredOnCanvas;
     final List<MPStationPointNameCoordinateRecord> stationRecords =
-        th2FileEditController
-            .userInteractionController
-            .getStationPointNameCoordinateCache();
+        th2FileEditController.userInteractionController
+            .getStationPointNameCoordinateCacheUnderScreenPosition(
+              screenPosition,
+            );
     final List<MPStationPointNameCoordinateRecord> stations =
         <MPStationPointNameCoordinateRecord>[];
 

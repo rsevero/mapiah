@@ -1054,8 +1054,15 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void _updateScreenSize(Size newSize) {
     _screenSize = newSize;
+    _screenBoundingBox = MPNumericAux.orderedRectFromLTWH(
+      top: 0,
+      left: 0,
+      width: _screenSize.width,
+      height: _screenSize.height,
+    );
     _canvasSize = newSize / _canvasScale;
     _calculateCanvasOffset();
+    userInteractionController.markStationPointNameCoordinateCacheDirty();
   }
 
   Offset offsetScaleScreenToCanvas(Offset screenCoordinate) {

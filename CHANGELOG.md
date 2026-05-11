@@ -15,6 +15,7 @@
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
 * Infrastructure maintenance:
+  * Therion and XVI station point names caches sectorized to reduce amount of comparisons necessary for mouse over and station point creation.
 
 ## 0.4.1 - 2026-04-30 - The [Barbosilândia](https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas) release
 * Fixed bugs:
