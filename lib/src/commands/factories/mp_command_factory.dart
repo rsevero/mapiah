@@ -550,12 +550,18 @@ class MPCommandFactory {
     final List<MPCommand> optionCommandsList = [];
 
     if (THPointType.fromString(pointTypeString) == THPointType.station) {
-      final String nextStationName = th2FileEditController.elementEditController
-          .getAndReserveNextAvailableStationName();
+      final String stationName =
+          th2FileEditController
+              .userInteractionController
+              .getUniqueUnusedXVIStationNameUnderScreenPosition(
+                screenPosition,
+              ) ??
+          th2FileEditController.elementEditController
+              .getAndReserveNextAvailableStationName();
       final THStationNameCommandOption stationNameOption =
           THStationNameCommandOption.fromStringWithParentMPID(
             parentMPID: newPoint.mpID,
-            name: nextStationName,
+            name: stationName,
           );
 
       optionCommandsList.add(

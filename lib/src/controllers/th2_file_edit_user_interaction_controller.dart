@@ -91,6 +91,69 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     );
   }
 
+  String? getUniqueUnusedXVIStationNameUnderScreenPosition(
+    Offset screenPosition,
+  ) {
+    if (_stationPointNameCoordinateCacheIsDirty) {
+      updateStationPointNameCoordinateCache();
+    }
+
+    final Offset canvasPosition = _th2FileEditController.offsetScreenToCanvas(
+      screenPosition,
+    );
+    final double toleranceSquared =
+        _th2FileEditController.selectionToleranceSquaredOnCanvas;
+    final List<MPStationPointNameCoordinateRecord> xviStationsUnderCursor =
+        <MPStationPointNameCoordinateRecord>[];
+
+    for (final MPStationPointNameCoordinateRecord xviStation
+        in _xviStationPointNameCoordinateCache) {
+      final double distanceSquared =
+          (xviStation.coordinates - canvasPosition).distanceSquared;
+
+      if (distanceSquared > toleranceSquared) {
+        continue;
+      }
+
+      xviStationsUnderCursor.add(xviStation);
+    }
+
+    if (xviStationsUnderCursor.length != 1) {
+      return null;
+    }
+
+    final String xviStationName = xviStationsUnderCursor.first.name;
+
+    if (_hasTherionStationName(xviStationName)) {
+      return null;
+    }
+
+    return xviStationName;
+  }
+
+  bool _hasTherionStationName(String stationName) {
+    for (final MPStationPointNameCoordinateRecord therionStation
+        in _therionStationPointNameCoordinateCache) {
+      if (therionStation.name == stationName) {
+        return true;
+      }
+    }
+
+    for (final THPoint point in _th2File.getPoints()) {
+      if (point.pointType != THPointType.station) {
+        continue;
+      }
+
+      final String? therionStationName = MPCommandOptionAux.getName(point);
+
+      if (therionStationName == stationName) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void markStationPointNameCoordinateCacheDirty() {
     _stationPointNameCoordinateCacheIsDirty = true;
   }
