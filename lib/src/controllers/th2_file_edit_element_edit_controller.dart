@@ -2180,6 +2180,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     THElement? originalElement,
     THElement? modifiedElement,
   }) {
+    final bool isAddOnlyChange =
+        (originalElement == null) && (modifiedElement != null);
+    final bool isRemoveOnlyChange =
+        (originalElement != null) && (modifiedElement == null);
     final bool synced = _th2FileEditController.userInteractionController
         .syncTherionStationCacheForElementChange(
           originalElement: originalElement,
@@ -2187,6 +2191,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
     if (!synced) {
+      if (isAddOnlyChange || isRemoveOnlyChange) {
+        return;
+      }
       _markTherionStationPointNameCoordinateCacheDirty();
     }
   }

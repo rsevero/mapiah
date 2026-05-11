@@ -8,17 +8,17 @@
   * Added the `borehole` point type, localized in Portuguese as `Furo de sondagem`.
   * Hovering over Therion or XVI station points on the canvas now shows a cursor-following tooltip listing every station under the pointer with its source.
   * The station hover tooltip now shows a localized title above the station name list.
-  * Station hover tooltips now use a controller cache covering all visible scraps and visible XVI files, including non-active scraps.
   * Station hover tooltip entries now list Therion stations first and XVI stations second, with each group sorted alphabetically.
-  * Station hover name caches are now available separately for Therion and XVI sources as well as through the merged tooltip list.
   * Creating a Therion station point over a single unused XVI station now automatically reuses the XVI station name.
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
-  * Therion/XVI station-name hover caches no longer invalidate on generic redraw triggers; they now invalidate only on canvas pan/zoom and scrap/image visibility changes, and Therion `-station` option edit/create/delete flows now update the Therion station cache with dedicated regression coverage.
-  * Station-name hover cache invalidation is now source-specific: image visibility toggles invalidate only the XVI station cache, while Therion visibility and Therion station point/name edits invalidate only the Therion station cache, with regression coverage for both directions.
 * Infrastructure maintenance:
   * Therion and XVI station point names caches sectorized to reduce amount of comparisons necessary for mouse over and station point creation.
-
+  * Therion/XVI station-name hover caches no longer invalidate on generic redraw triggers; they now invalidate only on canvas pan/zoom and scrap/image visibility changes, and Therion `-station` option edit/create/delete flows now update the Therion station cache with dedicated regression coverage.
+  * Station-name hover cache invalidation is now source-specific: image visibility toggles invalidate only the XVI station cache, while Therion visibility and Therion station point/name edits invalidate only the Therion station cache, with regression coverage for both directions.
+  * Station hover tooltips now use a controller cache covering all visible scraps and visible XVI files, including non-active scraps.
+  * Station hover name caches are now available separately for Therion and XVI sources as well as through the merged tooltip list.
+  
 ## 0.4.1 - 2026-04-30 - The [Barbosilândia](https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas) release
 * Fixed bugs:
   * XVI background files now load correctly when station names contain underscores or UTF-8 characters such as `3R9_nó_agua`, fixing invisible XVI overlays for TopoDroid exports like `Esqueceram_de_mim-1p.xvi` and adding parser/runtime regression coverage.
