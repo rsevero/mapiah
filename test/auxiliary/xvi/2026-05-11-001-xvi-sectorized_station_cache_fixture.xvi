@@ -1,0 +1,7 @@
+set XVIgrids {1.0 m}
+set XVIstations {
+  {0 0 A1}
+  {5000 0 B2}
+  {-5000 0 C3}
+}
+set XVIgrid {0 0 1 0 0 1 0 0}
