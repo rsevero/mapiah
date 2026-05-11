@@ -790,9 +790,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required THCommandOption option,
     required String plaOriginalLineInTH2File,
   }) {
+    final THElement? originalParentElement = _th2File.tryElementByMPID(
+      option.parentMPID,
+    );
+
     if (option is THStationNameCommandOption) {
       _lastUsedStationName = option.name;
-      _markTherionStationPointNameCoordinateCacheDirty();
     }
 
     final int parentMPID = option.parentMPID;
@@ -812,6 +815,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (parentMPID >= 0) {
       _th2File.substituteElement(parentElement);
+
+      if (option is THStationNameCommandOption) {
+        _syncTherionStationCacheOrMarkDirty(
+          originalElement: originalParentElement,
+          modifiedElement: parentElement,
+        );
+      }
     }
 
     if (parentElement is THLineSegment) {
@@ -847,7 +857,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2File.substituteElement(newParentElement);
 
     if (optionType == THCommandOptionType.station) {
-      _markTherionStationPointNameCoordinateCacheDirty();
+      _syncTherionStationCacheOrMarkDirty(
+        originalElement: parentElement as THElement,
+        modifiedElement: newParentElement as THElement,
+      );
     }
 
     if (parentElement is THLineSegment) {
@@ -2088,13 +2101,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   void _markStationCacheDirtyForAddedElement(THElement newElement) {
     if (_isVisibleTherionStationPoint(newElement)) {
-      _markTherionStationPointNameCoordinateCacheDirty();
+      _syncTherionStationCacheOrMarkDirty(modifiedElement: newElement);
     }
   }
 
   void _markStationCacheDirtyForRemovedElement(THElement removedElement) {
     if (_isVisibleTherionStationPoint(removedElement)) {
-      _markTherionStationPointNameCoordinateCacheDirty();
+      _syncTherionStationCacheOrMarkDirty(originalElement: removedElement);
     }
   }
 
@@ -2104,7 +2117,10 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     if (_isVisibleTherionStationPoint(originalElement) ||
         _isVisibleTherionStationPoint(modifiedElement)) {
-      _markTherionStationPointNameCoordinateCacheDirty();
+      _syncTherionStationCacheOrMarkDirty(
+        originalElement: originalElement,
+        modifiedElement: modifiedElement,
+      );
     }
 
     final MPRuntimeXVIImageInsertConfigMixin? originalXVIImage =
@@ -2158,6 +2174,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   void _markTherionStationPointNameCoordinateCacheDirty() {
     _th2FileEditController.userInteractionController
         .markTherionStationPointNameCoordinateCacheDirty();
+  }
+
+  void _syncTherionStationCacheOrMarkDirty({
+    THElement? originalElement,
+    THElement? modifiedElement,
+  }) {
+    final bool synced = _th2FileEditController.userInteractionController
+        .syncTherionStationCacheForElementChange(
+          originalElement: originalElement,
+          modifiedElement: modifiedElement,
+        );
+
+    if (!synced) {
+      _markTherionStationPointNameCoordinateCacheDirty();
+    }
   }
 
   void _markXVIStationPointNameCoordinateCacheDirty() {

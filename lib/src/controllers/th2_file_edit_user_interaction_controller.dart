@@ -199,6 +199,55 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _therionStationPointNameCoordinateCacheIsDirty = false;
   }
 
+  bool syncTherionStationCacheForElementChange({
+    THElement? originalElement,
+    THElement? modifiedElement,
+  }) {
+    if (_therionStationPointNameCoordinateCacheIsDirty) {
+      return false;
+    }
+
+    if ((originalElement is! THPoint) && (modifiedElement is! THPoint)) {
+      return false;
+    }
+
+    final int? originalMPID = (originalElement is THPoint)
+        ? originalElement.mpID
+        : null;
+    final int? modifiedMPID = (modifiedElement is THPoint)
+        ? modifiedElement.mpID
+        : null;
+    final int? targetMPID = modifiedMPID ?? originalMPID;
+
+    if (targetMPID == null) {
+      return false;
+    }
+
+    _therionStationPointNameCoordinateCache.removeWhere(
+      (MPStationPointNameCoordinateRecord record) =>
+          (record.source == mpStationSourceTherion) &&
+          (record.elementMPID == targetMPID),
+    );
+
+    final THElement? candidateElement = modifiedElement ?? originalElement;
+    final MPStationPointNameCoordinateRecord? newRecord =
+        _createVisibleTherionStationRecord(candidateElement);
+
+    if (newRecord != null) {
+      _therionStationPointNameCoordinateCache.add(newRecord);
+    }
+
+    _sortStationPointNameCoordinateRecordsByName(
+      _therionStationPointNameCoordinateCache,
+    );
+    _therionStationPointNameCoordinateSectorCache =
+        _createStationPointNameCoordinateSectorCache(
+          _therionStationPointNameCoordinateCache,
+        );
+
+    return true;
+  }
+
   void _updateXVIStationPointNameCoordinateCacheIfDirty() {
     if (!_xviStationPointNameCoordinateCacheIsDirty) {
       return;
@@ -504,6 +553,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
             source: mpStationSourceTherion,
             name: stationName,
             coordinates: element.position.coordinates,
+            elementMPID: element.mpID,
           ),
         );
       }
@@ -598,6 +648,47 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         (screenPoint.dx <= screenBoundingBox.right) &&
         (screenPoint.dy >= screenBoundingBox.top) &&
         (screenPoint.dy <= screenBoundingBox.bottom);
+  }
+
+  MPStationPointNameCoordinateRecord? _createVisibleTherionStationRecord(
+    THElement? element,
+  ) {
+    if (element is! THPoint) {
+      return null;
+    }
+
+    if (element.pointType != THPointType.station) {
+      return null;
+    }
+
+    final String? stationName = MPCommandOptionAux.getName(element);
+
+    if ((stationName == null) || stationName.isEmpty) {
+      return null;
+    }
+
+    if (!_th2FileEditController.hideElementController.isElementVisible(
+      element.mpID,
+    )) {
+      return null;
+    }
+
+    if (!_th2FileEditController.hideElementController.isScrapVisible(
+      element.parentMPID,
+    )) {
+      return null;
+    }
+
+    if (!_isCanvasPointVisible(element.position.coordinates)) {
+      return null;
+    }
+
+    return MPStationPointNameCoordinateRecord(
+      source: mpStationSourceTherion,
+      name: stationName,
+      coordinates: element.position.coordinates,
+      elementMPID: element.mpID,
+    );
   }
 
   void _setLastPLATypeSubtypeFromElementAndSubtype({
@@ -1285,11 +1376,13 @@ class MPStationPointNameCoordinateRecord {
   final String source;
   final String name;
   final Offset coordinates;
+  final int? elementMPID;
 
   const MPStationPointNameCoordinateRecord({
     required this.source,
     required this.name,
     required this.coordinates,
+    this.elementMPID,
   });
 }
 
