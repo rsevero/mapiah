@@ -91,9 +91,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   List<MPStationPointNameCoordinateRecord>
   getStationPointNameCoordinateCacheUnderScreenPosition(Offset screenPosition) {
-    if (_stationPointNameCoordinateCacheIsDirty) {
-      updateStationPointNameCoordinateCache();
-    }
+    _updateTherionStationPointNameCoordinateCacheIfDirty();
+    _updateXVIStationPointNameCoordinateCacheIfDirty();
 
     return List<MPStationPointNameCoordinateRecord>.unmodifiable(
       _getStationPointNameCoordinateCacheUnderScreenPosition(
@@ -195,6 +194,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _sortStationPointNameCoordinateRecordsByName(therionStationRecords);
 
     _therionStationPointNameCoordinateCache = therionStationRecords;
+    _therionStationPointNameCoordinateSectorCache =
+        _createStationPointNameCoordinateSectorCache(therionStationRecords);
     _therionStationPointNameCoordinateCacheIsDirty = false;
   }
 
@@ -209,11 +210,9 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     _sortStationPointNameCoordinateRecordsByName(xviStationRecords);
 
     _xviStationPointNameCoordinateCache = xviStationRecords;
-    _therionStationPointNameCoordinateSectorCache =
-        _createStationPointNameCoordinateSectorCache(therionStationRecords);
     _xviStationPointNameCoordinateSectorCache =
         _createStationPointNameCoordinateSectorCache(xviStationRecords);
-    _stationPointNameCoordinateCacheIsDirty = false;
+    _xviStationPointNameCoordinateCacheIsDirty = false;
   }
 
   List<MPStationPointNameCoordinateRecord>
