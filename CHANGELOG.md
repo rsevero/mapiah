@@ -15,6 +15,7 @@
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
   * Therion/XVI station-name hover caches no longer invalidate on generic redraw triggers; they now invalidate only on canvas pan/zoom and scrap/image visibility changes, and Therion `-station` option edit/create/delete flows now update the Therion station cache with dedicated regression coverage.
+  * Station-name hover cache invalidation is now source-specific: image visibility toggles invalidate only the XVI station cache, while Therion visibility and Therion station point/name edits invalidate only the Therion station cache, with regression coverage for both directions.
 * Infrastructure maintenance:
   * Therion and XVI station point names caches sectorized to reduce amount of comparisons necessary for mouse over and station point creation.
 

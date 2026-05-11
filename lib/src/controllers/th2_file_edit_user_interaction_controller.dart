@@ -44,7 +44,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     : _th2File = _th2FileEditController.th2File;
 
   Path _compassPath = Path();
-  bool _stationPointNameCoordinateCacheIsDirty = true;
+  bool _therionStationPointNameCoordinateCacheIsDirty = true;
+  bool _xviStationPointNameCoordinateCacheIsDirty = true;
   List<MPStationPointNameCoordinateRecord>
   _therionStationPointNameCoordinateCache =
       <MPStationPointNameCoordinateRecord>[];
@@ -77,9 +78,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   List<MPStationPointNameCoordinateRecord>
   getStationPointNameCoordinateCache() {
-    if (_stationPointNameCoordinateCacheIsDirty) {
-      updateStationPointNameCoordinateCache();
-    }
+    _updateTherionStationPointNameCoordinateCacheIfDirty();
+    _updateXVIStationPointNameCoordinateCacheIfDirty();
 
     return List<MPStationPointNameCoordinateRecord>.unmodifiable(
       <MPStationPointNameCoordinateRecord>[
@@ -106,9 +106,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   List<MPStationPointNameCoordinateRecord>
   getTherionStationPointNameCoordinateCache() {
-    if (_stationPointNameCoordinateCacheIsDirty) {
-      updateStationPointNameCoordinateCache();
-    }
+    _updateTherionStationPointNameCoordinateCacheIfDirty();
 
     return List<MPStationPointNameCoordinateRecord>.unmodifiable(
       _therionStationPointNameCoordinateCache,
@@ -117,9 +115,7 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   List<MPStationPointNameCoordinateRecord>
   getXVIStationPointNameCoordinateCache() {
-    if (_stationPointNameCoordinateCacheIsDirty) {
-      updateStationPointNameCoordinateCache();
-    }
+    _updateXVIStationPointNameCoordinateCacheIfDirty();
 
     return List<MPStationPointNameCoordinateRecord>.unmodifiable(
       _xviStationPointNameCoordinateCache,
@@ -129,9 +125,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   String? getUniqueUnusedXVIStationNameUnderScreenPosition(
     Offset screenPosition,
   ) {
-    if (_stationPointNameCoordinateCacheIsDirty) {
-      updateStationPointNameCoordinateCache();
-    }
+    _updateTherionStationPointNameCoordinateCacheIfDirty();
+    _updateXVIStationPointNameCoordinateCacheIfDirty();
 
     final List<MPStationPointNameCoordinateRecord> xviStationsUnderCursor =
         _getStationPointNameCoordinateCacheUnderScreenPosition(
@@ -177,19 +172,42 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void markStationPointNameCoordinateCacheDirty() {
-    _stationPointNameCoordinateCacheIsDirty = true;
+    markTherionStationPointNameCoordinateCacheDirty();
+    markXVIStationPointNameCoordinateCacheDirty();
   }
 
-  void updateStationPointNameCoordinateCache() {
+  void markTherionStationPointNameCoordinateCacheDirty() {
+    _therionStationPointNameCoordinateCacheIsDirty = true;
+  }
+
+  void markXVIStationPointNameCoordinateCacheDirty() {
+    _xviStationPointNameCoordinateCacheIsDirty = true;
+  }
+
+  void _updateTherionStationPointNameCoordinateCacheIfDirty() {
+    if (!_therionStationPointNameCoordinateCacheIsDirty) {
+      return;
+    }
+
     final List<MPStationPointNameCoordinateRecord> therionStationRecords =
         _getVisibleTherionStationPointRecords();
+
+    _sortStationPointNameCoordinateRecordsByName(therionStationRecords);
+
+    _therionStationPointNameCoordinateCache = therionStationRecords;
+    _therionStationPointNameCoordinateCacheIsDirty = false;
+  }
+
+  void _updateXVIStationPointNameCoordinateCacheIfDirty() {
+    if (!_xviStationPointNameCoordinateCacheIsDirty) {
+      return;
+    }
+
     final List<MPStationPointNameCoordinateRecord> xviStationRecords =
         _getVisibleXVIStationPointRecords();
 
-    _sortStationPointNameCoordinateRecordsByName(therionStationRecords);
     _sortStationPointNameCoordinateRecordsByName(xviStationRecords);
 
-    _therionStationPointNameCoordinateCache = therionStationRecords;
     _xviStationPointNameCoordinateCache = xviStationRecords;
     _therionStationPointNameCoordinateSectorCache =
         _createStationPointNameCoordinateSectorCache(therionStationRecords);

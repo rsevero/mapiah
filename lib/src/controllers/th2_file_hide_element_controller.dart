@@ -55,7 +55,7 @@ abstract class TH2FileHideElementControllerBase with Store {
     }
 
     _th2FileEditController.userInteractionController
-        .markStationPointNameCoordinateCacheDirty();
+        .markTherionStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
@@ -69,7 +69,7 @@ abstract class TH2FileHideElementControllerBase with Store {
     }
 
     _th2FileEditController.userInteractionController
-        .markStationPointNameCoordinateCacheDirty();
+        .markTherionStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
@@ -143,7 +143,7 @@ abstract class TH2FileHideElementControllerBase with Store {
 
     _th2FileEditController.selectionController.resetSelectableElements();
     _th2FileEditController.userInteractionController
-        .markStationPointNameCoordinateCacheDirty();
+        .markTherionStationPointNameCoordinateCacheDirty();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 }
