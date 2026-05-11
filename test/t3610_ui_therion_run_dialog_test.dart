@@ -8,7 +8,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
+import 'package:mapiah/src/widgets/mp_therion_run_dialog_widget.dart';
 
 class _FakeTherionRunner extends MPTherionRunner {
   _FakeTherionRunner() : super(thConfigFilePath: '/tmp/dummy');

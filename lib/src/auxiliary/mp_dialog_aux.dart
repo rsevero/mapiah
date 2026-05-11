@@ -24,7 +24,7 @@ import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
-import 'package:mapiah/src/widgets/mp_run_therion_dialog_widget.dart';
+import 'package:mapiah/src/widgets/mp_therion_run_dialog_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
