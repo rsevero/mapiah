@@ -353,6 +353,15 @@ const int mpUTMMax = 60;
 const double mpClickDragThreshold = 2.0;
 const double mpClickDragThresholdSquared =
     mpClickDragThreshold * mpClickDragThreshold;
+const double mpStationHoverTooltipCursorDistance = 12.0;
+const double mpStationHoverTooltipScreenMargin = 8.0;
+const double mpStationHoverTooltipMaxWidth = 260.0;
+const double mpStationHoverTooltipEstimatedMaxHeight = 180.0;
+const double mpStationHoverTooltipPadding = 8.0;
+const double mpStationHoverTooltipBorderRadius = 4.0;
+const double mpStationHoverTooltipOpacity = 0.92;
+const double mpStationHoverTooltipFontSize = 12.0;
+const double mpStationHoverTooltipTextHeight = 1.2;
 const double mpDefaultSelectionTolerance = 7.0;
 const double mpDefaultNudgeFactor = 2.0;
 const double mpDefaultPointRadius = 7.0;
@@ -542,6 +551,8 @@ const String mpMapiahConfigID = '##MAPIAH##';
 const String mpImageInsertFormatRaster = 'raster';
 const String mpImageInsertFormatSVG = 'svg';
 const String mpImageInsertFormatXVI = 'xvi';
+const String mpStationSourceTherion = 'Therion';
+const String mpStationSourceXVI = 'XVI';
 
 const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';

@@ -21,6 +21,7 @@ import 'package:mapiah/src/widgets/mp_scrap_scale_widget.dart';
 import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
+import 'package:mapiah/src/widgets/mp_station_hover_tooltip_widget.dart';
 
 class TH2FileWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
@@ -192,6 +193,12 @@ class TH2FileWidget extends StatelessWidget {
                           return SizedBox.shrink();
                         }
                       },
+                    ),
+                    MPStationHoverTooltipWidget(
+                      key: ValueKey(
+                        "MPStationHoverTooltipWidget|$thFileMPID",
+                      ),
+                      th2FileEditController: th2FileEditController,
                     ),
                     if (mpDebugMousePosition)
                       Positioned(
