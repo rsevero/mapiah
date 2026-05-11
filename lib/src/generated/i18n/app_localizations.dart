@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Run parameters:'**
   String get mapiahTherionRunParametersLabel;
 
+  /// Label showing the THConfig file being processed in the Therion run dialog. Used on: _MPRunTherionDialogWidgetState.build
+  ///
+  /// In en, this message translates to:
+  /// **'THConfig file: {fileName}'**
+  String mapiahTherionRunTHConfigFileLabel(Object fileName);
+
   /// Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished
   ///
   /// In en, this message translates to:

@@ -179,6 +179,14 @@
     "description": "Label for the run parameters field in the Therion run dialog. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart",
     "type": "text"
   },
+  "mapiahTherionRunTHConfigFileLabel": "THConfig file: {fileName}",
+  "@mapiahTherionRunTHConfigFileLabel": {
+    "description": "Label showing the THConfig file being processed in the Therion run dialog. Used on: _MPRunTherionDialogWidgetState.build",
+    "type": "text",
+    "placeholders": {
+      "fileName": {}
+    }
+  },
   "mapiahTherionRunStartTime": "Start: {time}",
   "@mapiahTherionRunStartTime": {
     "description": "Line that shows the Therion run start time before the Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished",

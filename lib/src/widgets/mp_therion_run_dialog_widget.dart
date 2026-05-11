@@ -371,6 +371,7 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = mpLocator.appLocalizations;
     final ThemeData theme = Theme.of(context);
+    final String thConfigFileName = p.basename(widget.thConfigFilePath);
 
     return Shortcuts(
       shortcuts: const <ShortcutActivator, Intent>{
@@ -410,7 +411,20 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         child: Focus(
           autofocus: true,
           child: AlertDialog(
-            title: Text(appLocalizations.mapiahTherionRunDialogTitle),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(appLocalizations.mapiahTherionRunDialogTitle),
+                Text(
+                  appLocalizations.mapiahTherionRunTHConfigFileLabel(
+                    thConfigFileName,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleSmall,
+                ),
+              ],
+            ),
             content: SizedBox(
               width: mpTherionRunDialogWidth,
               height: mpTherionRunDialogHeight,

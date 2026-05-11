@@ -51,6 +51,7 @@
   "mapiahTherionRunNoTherionOutputFound": "Saída do Therion não encontrada",
   "mapiahTherionRunOutputLabel": "Saída:",
   "mapiahTherionRunParametersLabel": "Parâmetros de execução:",
+  "mapiahTherionRunTHConfigFileLabel": "Arquivo THConfig: {fileName}",
   "mapiahTherionRunStartTime": "Início: {time}",
   "mapiahTherionRunStatusError": "erro",
   "mapiahTherionRunStatusLabel": "Situação:",

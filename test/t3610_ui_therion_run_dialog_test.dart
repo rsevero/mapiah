@@ -56,7 +56,7 @@ void main() {
             home: Scaffold(
               body: MPRunTherionDialogWidget(
                 therionExecutablePath: 'therion',
-                thConfigFilePath: '/tmp/dummy',
+                thConfigFilePath: '/tmp/test-project.thconfig',
                 therionRunner: fakeRunner,
               ),
             ),
@@ -64,6 +64,10 @@ void main() {
         );
         await tester.pumpAndSettle();
 
+        expect(
+          find.text('THConfig file: test-project.thconfig'),
+          findsOneWidget,
+        );
         expect(find.byType(SelectionArea), findsOneWidget);
         expect(find.byType(SelectableText), findsNothing);
 

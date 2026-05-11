@@ -127,6 +127,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionRunParametersLabel => 'Run parameters:';
 
   @override
+  String mapiahTherionRunTHConfigFileLabel(Object fileName) {
+    return 'THConfig file: $fileName';
+  }
+
+  @override
   String mapiahTherionRunStartTime(Object time) {
     return 'Start: $time';
   }

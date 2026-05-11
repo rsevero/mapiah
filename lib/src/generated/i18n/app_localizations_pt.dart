@@ -128,6 +128,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahTherionRunParametersLabel => 'Parâmetros de execução:';
 
   @override
+  String mapiahTherionRunTHConfigFileLabel(Object fileName) {
+    return 'Arquivo THConfig: $fileName';
+  }
+
+  @override
   String mapiahTherionRunStartTime(Object time) {
     return 'Início: $time';
   }
