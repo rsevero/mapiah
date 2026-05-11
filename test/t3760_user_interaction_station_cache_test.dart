@@ -262,6 +262,110 @@ endscrap
     });
 
     test(
+      'updates sectorized Therion cache after Therion station name change',
+      () async {
+        const String filename =
+            '/tmp/mapiah_station_cache_sectorized_therion_update.th2';
+        const String th2Content = '''
+encoding utf-8
+scrap first_scrap
+  point 7 0 station -name Border
+endscrap
+''';
+
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+          prepareVisibleScreen: false,
+        );
+
+        controller.updateScreenSize(const Size(1280.0, 720.0));
+
+        final Offset cursorScreenPosition = controller.offsetCanvasToScreen(
+          Offset.zero,
+        );
+        final THPoint stationPoint = controller.th2File.getPoints().single;
+
+        expect(
+          controller.userInteractionController
+              .getStationPointNameCoordinateCacheUnderScreenPosition(
+                cursorScreenPosition,
+              )
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['Border'],
+        );
+
+        controller.execute(
+          MPSetOptionToElementCommand(
+            toOption: THStationNameCommandOption.fromStringWithParentMPID(
+              parentMPID: stationPoint.mpID,
+              name: 'Border2',
+            ),
+          ),
+        );
+
+        expect(
+          controller.userInteractionController
+              .getStationPointNameCoordinateCacheUnderScreenPosition(
+                cursorScreenPosition,
+              )
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>['Border2'],
+        );
+      },
+    );
+
+    test('updates sectorized XVI cache after image visibility toggle', () async {
+      final String filename = THTestAux.testPath(
+        'mapiah_station_cache_sectorized_xvi_visibility.th2',
+      );
+      const String th2Content = '''
+encoding utf-8
+##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-04-23-001-xvi-station_name_with_underscore_and_accent.xvi" 0 {}
+scrap first_scrap
+endscrap
+''';
+
+      final TH2FileEditController controller = await _parseController(
+        filename: filename,
+        th2Content: th2Content,
+      );
+
+      final MPStationPointNameCoordinateRecord xviStation = controller
+          .userInteractionController
+          .getXVIStationPointNameCoordinateCache()
+          .single;
+      final Offset xviStationScreenPosition = controller.offsetCanvasToScreen(
+        xviStation.coordinates,
+      );
+
+      expect(
+        controller.userInteractionController
+            .getStationPointNameCoordinateCacheUnderScreenPosition(
+              xviStationScreenPosition,
+            )
+            .map((MPStationPointNameCoordinateRecord record) => record.name)
+            .toList(),
+        <String>['3R9_nó_agua'],
+      );
+
+      final int imageMPID = controller.th2File.getImages().single.mpID;
+      controller.selectionController.setImageVisibility(imageMPID, false);
+
+      expect(
+        controller.userInteractionController
+            .getStationPointNameCoordinateCacheUnderScreenPosition(
+              xviStationScreenPosition,
+            )
+            .map((MPStationPointNameCoordinateRecord record) => record.name)
+            .toList(),
+        isEmpty,
+      );
+    });
+
+    test(
       'uses the only unused XVI station under a new station point',
       () async {
         final String filename = THTestAux.testPath(
