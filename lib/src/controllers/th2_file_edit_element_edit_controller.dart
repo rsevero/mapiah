@@ -781,6 +781,8 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }) {
     if (option is THStationNameCommandOption) {
       _lastUsedStationName = option.name;
+      _th2FileEditController.userInteractionController
+          .markStationPointNameCoordinateCacheDirty();
     }
 
     final int parentMPID = option.parentMPID;
@@ -833,6 +835,11 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeOption(optionType);
     _th2File.substituteElement(newParentElement);
+
+    if (optionType == THCommandOptionType.station) {
+      _th2FileEditController.userInteractionController
+          .markStationPointNameCoordinateCacheDirty();
+    }
 
     if (parentElement is THLineSegment) {
       _th2FileEditController.elementEditController

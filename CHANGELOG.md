@@ -8,6 +8,7 @@
   * Added the `borehole` point type, localized in Portuguese as `Furo de sondagem`.
   * Hovering over Therion or XVI station points on the canvas now shows a cursor-following tooltip listing every station under the pointer with its source.
   * The station hover tooltip now shows a localized title above the station name list.
+  * Station hover tooltips now use a controller cache covering all visible scraps and visible XVI files, including non-active scraps.
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
 * Infrastructure maintenance:

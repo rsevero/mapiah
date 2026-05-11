@@ -17,6 +17,8 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/elements/xvi/xvi_file.dart';
+import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mobx/mobx.dart';
@@ -40,12 +42,40 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     : _th2File = _th2FileEditController.th2File;
 
   Path _compassPath = Path();
+  bool _stationPointNameCoordinateCacheIsDirty = true;
+  List<MPStationPointNameCoordinateRecord> _stationPointNameCoordinateCache =
+      <MPStationPointNameCoordinateRecord>[];
 
   void setCompassPath(Path path) {
     _compassPath = path;
   }
 
   Path get compassPath => _compassPath;
+
+  List<MPStationPointNameCoordinateRecord>
+  getStationPointNameCoordinateCache() {
+    if (_stationPointNameCoordinateCacheIsDirty) {
+      updateStationPointNameCoordinateCache();
+    }
+
+    return List<MPStationPointNameCoordinateRecord>.unmodifiable(
+      _stationPointNameCoordinateCache,
+    );
+  }
+
+  void markStationPointNameCoordinateCacheDirty() {
+    _stationPointNameCoordinateCacheIsDirty = true;
+  }
+
+  void updateStationPointNameCoordinateCache() {
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[];
+
+    stationRecords.addAll(_getVisibleTherionStationPointRecords());
+    stationRecords.addAll(_getVisibleXVIStationPointRecords());
+    _stationPointNameCoordinateCache = stationRecords;
+    _stationPointNameCoordinateCacheIsDirty = false;
+  }
 
   @action
   void prepareSetOption({
@@ -56,6 +86,10 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       _prepareUnsetOption(optionType);
     } else {
       _prepareSetOption(option);
+    }
+
+    if (optionType == THCommandOptionType.station) {
+      updateStationPointNameCoordinateCache();
     }
 
     _th2FileEditController.stateController.state.updateStatusBarMessage();
@@ -144,6 +178,126 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
         }
       }
     }
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  _getVisibleTherionStationPointRecords() {
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[];
+
+    for (final THScrap scrap in _th2File.getScraps()) {
+      if (!_th2FileEditController.hideElementController.isScrapVisible(
+        scrap.mpID,
+      )) {
+        continue;
+      }
+
+      for (final int elementMPID in scrap.childrenMPIDs) {
+        if (!_th2FileEditController.hideElementController.isElementVisible(
+          elementMPID,
+        )) {
+          continue;
+        }
+
+        final THElement element = _th2File.elementByMPID(elementMPID);
+
+        if (element is! THPoint) {
+          continue;
+        }
+
+        if (element.pointType != THPointType.station) {
+          continue;
+        }
+
+        final String? stationName = MPCommandOptionAux.getName(element);
+
+        if ((stationName == null) || stationName.isEmpty) {
+          continue;
+        }
+
+        stationRecords.add(
+          MPStationPointNameCoordinateRecord(
+            source: mpStationSourceTherion,
+            name: stationName,
+            coordinates: element.position.coordinates,
+          ),
+        );
+      }
+    }
+
+    return stationRecords;
+  }
+
+  List<MPStationPointNameCoordinateRecord> _getVisibleXVIStationPointRecords() {
+    if (!_th2FileEditController.showImages) {
+      return <MPStationPointNameCoordinateRecord>[];
+    }
+
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[];
+
+    for (final MPRuntimeImageInsertConfigMixin image in _th2File.getImages()) {
+      final MPRuntimeImageInsertConfigMixin renderedImage =
+          _th2FileEditController.stateController
+              .getImageOperationRenderedImageForImage(image.mpID) ??
+          image;
+
+      if (!renderedImage.isVisible) {
+        continue;
+      }
+
+      final MPRuntimeXVIImageInsertConfigMixin? xviImage =
+          renderedImage.asXVIImage;
+
+      if (xviImage == null) {
+        continue;
+      }
+
+      stationRecords.addAll(_getVisibleXVIImageStationPointRecords(xviImage));
+    }
+
+    return stationRecords;
+  }
+
+  List<MPStationPointNameCoordinateRecord>
+  _getVisibleXVIImageStationPointRecords(
+    MPRuntimeXVIImageInsertConfigMixin xviImage,
+  ) {
+    final XVIFile? xviFile = xviImage.getXVIFile(_th2FileEditController);
+
+    if (xviFile == null) {
+      return <MPStationPointNameCoordinateRecord>[];
+    }
+
+    final Offset imageGridOffset = Offset(
+      xviImage.xviRootedXX,
+      xviImage.xviRootedYY,
+    );
+    final Offset imageOffset =
+        imageGridOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        <MPStationPointNameCoordinateRecord>[];
+
+    for (final XVIStation station in xviFile.stations) {
+      if (station.name.isEmpty) {
+        continue;
+      }
+
+      final Offset stationCoordinates =
+          xviImage.transformWorldPointFromBaseWorldPoint(
+            station.position.coordinates + imageOffset,
+          );
+
+      stationRecords.add(
+        MPStationPointNameCoordinateRecord(
+          source: mpStationSourceXVI,
+          name: station.name,
+          coordinates: stationCoordinates,
+        ),
+      );
+    }
+
+    return stationRecords;
   }
 
   void _setLastPLATypeSubtypeFromElementAndSubtype({
@@ -825,4 +979,16 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
       MPButtonType.addLineToArea,
     );
   }
+}
+
+class MPStationPointNameCoordinateRecord {
+  final String source;
+  final String name;
+  final Offset coordinates;
+
+  const MPStationPointNameCoordinateRecord({
+    required this.source,
+    required this.name,
+    required this.coordinates,
+  });
 }

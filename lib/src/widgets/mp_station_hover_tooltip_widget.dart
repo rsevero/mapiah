@@ -3,14 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/elements/th_element.dart';
-import 'package:mapiah/src/elements/types/th_point_type.dart';
-import 'package:mapiah/src/elements/xvi/xvi_file.dart';
-import 'package:mapiah/src/elements/xvi/xvi_station.dart';
-import 'package:mapiah/src/selectable/mp_selectable.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 
 class MPStationHoverTooltipWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
@@ -36,7 +31,7 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        final List<MPStationHoverRecord> stations =
+        final List<MPStationPointNameCoordinateRecord> stations =
             _getStationsUnderCursor(screenPosition);
 
         if (stations.isEmpty) {
@@ -82,7 +77,7 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
 
   Widget _buildTooltipContent({
     required ColorScheme colorScheme,
-    required List<MPStationHoverRecord> stations,
+    required List<MPStationPointNameCoordinateRecord> stations,
   }) {
     final TextStyle textStyle = TextStyle(
       color: colorScheme.onInverseSurface,
@@ -108,7 +103,7 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
 
     children.addAll(
       stations.map(
-        (MPStationHoverRecord station) => Text(
+        (MPStationPointNameCoordinateRecord station) => Text(
           '${station.source}: ${station.name}',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -124,129 +119,30 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
     );
   }
 
-  List<MPStationHoverRecord> _getStationsUnderCursor(Offset screenPosition) {
+  List<MPStationPointNameCoordinateRecord> _getStationsUnderCursor(
+    Offset screenPosition,
+  ) {
     final Offset canvasPosition = th2FileEditController.offsetScreenToCanvas(
       screenPosition,
     );
-    final List<MPStationHoverRecord> stations = <MPStationHoverRecord>[];
-
-    stations.addAll(_getTherionStationsUnderCursor(canvasPosition));
-    stations.addAll(_getXVIStationsUnderCursor(canvasPosition));
-
-    return stations;
-  }
-
-  List<MPStationHoverRecord> _getTherionStationsUnderCursor(
-    Offset canvasPosition,
-  ) {
-    final Iterable<MPSelectable> selectableElements = th2FileEditController
-        .selectionController
-        .getMPSelectableElements()
-        .values;
-    final List<MPStationHoverRecord> stations = <MPStationHoverRecord>[];
-
-    for (final MPSelectable selectableElement in selectableElements) {
-      if ((selectableElement is! MPSelectablePoint) ||
-          !selectableElement.contains(canvasPosition)) {
-        continue;
-      }
-
-      final THPoint point = selectableElement.element as THPoint;
-
-      if (point.pointType != THPointType.station) {
-        continue;
-      }
-
-      final String? stationName = MPCommandOptionAux.getName(point);
-
-      if ((stationName == null) || stationName.isEmpty) {
-        continue;
-      }
-
-      stations.add(
-        MPStationHoverRecord(source: mpStationSourceTherion, name: stationName),
-      );
-    }
-
-    return stations;
-  }
-
-  List<MPStationHoverRecord> _getXVIStationsUnderCursor(Offset canvasPosition) {
-    if (!th2FileEditController.showImages) {
-      return <MPStationHoverRecord>[];
-    }
-
-    final Iterable<MPRuntimeImageInsertConfigMixin> images =
-        th2FileEditController.th2File.getImages();
-    final List<MPStationHoverRecord> stations = <MPStationHoverRecord>[];
-
-    for (final MPRuntimeImageInsertConfigMixin image in images) {
-      final MPRuntimeImageInsertConfigMixin renderedImage =
-          th2FileEditController.stateController
-              .getImageOperationRenderedImageForImage(image.mpID) ??
-          image;
-
-      if (!renderedImage.isVisible) {
-        continue;
-      }
-
-      final MPRuntimeXVIImageInsertConfigMixin? xviImage =
-          renderedImage.asXVIImage;
-
-      if (xviImage == null) {
-        continue;
-      }
-
-      stations.addAll(
-        _getXVIImageStationsUnderCursor(
-          xviImage: xviImage,
-          canvasPosition: canvasPosition,
-        ),
-      );
-    }
-
-    return stations;
-  }
-
-  List<MPStationHoverRecord> _getXVIImageStationsUnderCursor({
-    required MPRuntimeXVIImageInsertConfigMixin xviImage,
-    required Offset canvasPosition,
-  }) {
-    final XVIFile? xviFile = xviImage.getXVIFile(th2FileEditController);
-
-    if (xviFile == null) {
-      return <MPStationHoverRecord>[];
-    }
-
-    final Offset imageGridOffset = Offset(
-      xviImage.xviRootedXX,
-      xviImage.xviRootedYY,
-    );
-    final Offset imageOffset =
-        imageGridOffset - Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
     final double toleranceSquared =
         th2FileEditController.selectionToleranceSquaredOnCanvas;
-    final List<MPStationHoverRecord> stations = <MPStationHoverRecord>[];
+    final List<MPStationPointNameCoordinateRecord> stationRecords =
+        th2FileEditController
+            .userInteractionController
+            .getStationPointNameCoordinateCache();
+    final List<MPStationPointNameCoordinateRecord> stations =
+        <MPStationPointNameCoordinateRecord>[];
 
-    for (final XVIStation station in xviFile.stations) {
-      final Offset stationPosition =
-          xviImage.transformWorldPointFromBaseWorldPoint(
-            station.position.coordinates + imageOffset,
-          );
+    for (final MPStationPointNameCoordinateRecord station in stationRecords) {
       final double distanceSquared =
-          (stationPosition - canvasPosition).distanceSquared;
+          (station.coordinates - canvasPosition).distanceSquared;
 
       if (distanceSquared > toleranceSquared) {
         continue;
       }
 
-      if (station.name.isEmpty) {
-        continue;
-      }
-
-      stations.add(
-        MPStationHoverRecord(source: mpStationSourceXVI, name: station.name),
-      );
+      stations.add(station);
     }
 
     return stations;
@@ -293,11 +189,4 @@ class MPStationHoverTooltipWidget extends StatelessWidget {
 
     return clampedValue.toDouble();
   }
-}
-
-class MPStationHoverRecord {
-  final String source;
-  final String name;
-
-  const MPStationHoverRecord({required this.source, required this.name});
 }

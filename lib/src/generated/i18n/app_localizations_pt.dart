@@ -99,7 +99,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahRunTherionButtonTooltip => 'Executar Therion (T)';
 
   @override
-  String get mapiahStationHoverTooltipTitle => 'Nomes das bases';
+  String get mapiahStationHoverTooltipTitle => 'Nome(s) da(s) base(s)';
 
   @override
   String get mapiahRunTherionHelpDialogTitle => 'Diálogo executar Therion';
