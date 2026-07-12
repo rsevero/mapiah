@@ -278,6 +278,53 @@ void main(List<String> arguments) {
       }
     });
 
+    test('drains warning output emitted right before process exit', () async {
+      const int warningCount = 4000;
+      final String scriptSource = '''
+import 'dart:io';
+
+void main(List<String> arguments) {
+  for (int index = 0; index < $warningCount; index++) {
+    stderr.writeln('warning: late issue \$index');
+  }
+}
+''';
+
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_runner_test_',
+      );
+
+      try {
+        final String scriptPath = await _createScriptFile(
+          directory: tempDirectory,
+          filename: 'runner_late_warning_burst.dart',
+          source: scriptSource,
+        );
+
+        final MPTherionRunner runner = MPTherionRunner(
+          thConfigFilePath: scriptPath,
+        );
+
+        try {
+          await runner.start();
+
+          final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+          final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+          final List<String> outputLines = runner.outputLinesNotifier.value;
+
+          expect(finalStatus, MPTherionRunStatus.warning);
+          expect(issues.length, warningCount);
+          expect(outputLines.length, warningCount);
+          expect(issues.last.lineIndex, warningCount - 1);
+          expect(outputLines.last, 'warning: late issue ${warningCount - 1}');
+        } finally {
+          runner.dispose();
+        }
+      } finally {
+        await tempDirectory.delete(recursive: true);
+      }
+    });
+
     test('parses carriage return as line break without blank lines', () async {
       final String scriptSource = '''
 import 'dart:io';

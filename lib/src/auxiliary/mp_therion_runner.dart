@@ -178,6 +178,7 @@ class MPTherionRunner {
 
   Future<void> start() async {
     _runAttemptCount++;
+    _resetRunParsingState();
 
     final String workingDirectory = p.dirname(thConfigFilePath);
     final String absoluteThConfigFilePath = p.absolute(thConfigFilePath);
@@ -235,6 +236,11 @@ class MPTherionRunner {
       _finalizeRunStatus(hasExecutionFailure: hasExecutionFailure);
       mpLocator.mpTelemetryController.recordTherionStopped();
     }
+  }
+
+  void _resetRunParsingState() {
+    _pendingLine = '';
+    _isInsideLoopErrorsSection = false;
   }
 
   List<String> _buildRunDiagnosticLines({
@@ -622,6 +628,8 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
   }) async {
     final StringBuffer standardOutputBuffer = StringBuffer();
     final StringBuffer standardErrorBuffer = StringBuffer();
+    final Completer<void> stdoutDoneCompleter = Completer<void>();
+    final Completer<void> stderrDoneCompleter = Completer<void>();
     final String? trimmedExecutablePath = executablePath?.trim();
     final bool hasExecutablePath =
         trimmedExecutablePath != null && trimmedExecutablePath.isNotEmpty;
@@ -666,6 +674,11 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
               onOutput('$errorText\n');
               onError?.call(error, stackTrace);
             },
+            onDone: () {
+              if (!stdoutDoneCompleter.isCompleted) {
+                stdoutDoneCompleter.complete();
+              }
+            },
           );
 
       final StreamSubscription<String> stderrSubscription = utf8.decoder
@@ -681,9 +694,17 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
               onOutput('$errorText\n');
               onError?.call(error, stackTrace);
             },
+            onDone: () {
+              if (!stderrDoneCompleter.isCompleted) {
+                stderrDoneCompleter.complete();
+              }
+            },
           );
 
       final int processExitCode = await process.exitCode;
+
+      await stdoutDoneCompleter.future;
+      await stderrDoneCompleter.future;
 
       await stdoutSubscription.cancel();
       await stderrSubscription.cancel();
@@ -734,6 +755,8 @@ class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
   }) async {
     final StringBuffer standardOutputBuffer = StringBuffer();
     final StringBuffer standardErrorBuffer = StringBuffer();
+    final Completer<void> stdoutDoneCompleter = Completer<void>();
+    final Completer<void> stderrDoneCompleter = Completer<void>();
     final String? trimmedExecutablePath = executablePath?.trim();
     final bool hasExecutablePath =
         trimmedExecutablePath != null && trimmedExecutablePath.isNotEmpty;
@@ -765,6 +788,11 @@ class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
               onOutput('$errorText\n');
               onError?.call(error, stackTrace);
             },
+            onDone: () {
+              if (!stdoutDoneCompleter.isCompleted) {
+                stdoutDoneCompleter.complete();
+              }
+            },
           );
 
       final StreamSubscription<String> stderrSubscription = utf8.decoder
@@ -780,9 +808,17 @@ class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
               onOutput('$errorText\n');
               onError?.call(error, stackTrace);
             },
+            onDone: () {
+              if (!stderrDoneCompleter.isCompleted) {
+                stderrDoneCompleter.complete();
+              }
+            },
           );
 
       final int processExitCode = await process.exitCode;
+
+      await stdoutDoneCompleter.future;
+      await stderrDoneCompleter.future;
 
       await stdoutSubscription.cancel();
       await stderrSubscription.cancel();

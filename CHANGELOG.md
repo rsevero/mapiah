@@ -12,6 +12,7 @@
   * Creating a Therion station point over a single unused XVI station now automatically reuses the XVI station name.
 * Fixed bugs:
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
+  * Therion reruns now wait for stdout/stderr to finish draining before finalizing the result, preventing longer compiles from sometimes dropping late warning/error lines and incorrectly ending as `ok` or with stale rerun parsing state. Added runner regression coverage for the shutdown-output race. [reported by CaverBruce]
 * Infrastructure maintenance:
   * Therion and XVI station point names caches sectorized to reduce amount of comparisons necessary for mouse over and station point creation.
   * Therion/XVI station-name hover caches no longer invalidate on generic redraw triggers; they now invalidate only on canvas pan/zoom and scrap/image visibility changes, and Therion `-station` option edit/create/delete flows now update the Therion station cache with dedicated regression coverage.
