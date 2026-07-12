@@ -138,11 +138,11 @@ class MPTherionRunner {
   int _runAttemptCount = 0;
 
   static final RegExp _warningRegex = RegExp(
-    '\\b$mpTherionWarningWord\\b',
+    '\\b$mpTherionWarningWord\\b\\s*(?::|--)',
     caseSensitive: false,
   );
   static final RegExp _errorRegex = RegExp(
-    '\\b$mpTherionErrorWord\\b',
+    '\\b$mpTherionErrorWord\\b\\s*(?::|--)',
     caseSensitive: false,
   );
   static final RegExp _loopErrorsSectionHeaderRegex = RegExp(

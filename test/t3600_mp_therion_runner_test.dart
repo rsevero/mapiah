@@ -278,6 +278,163 @@ void main(List<String> arguments) {
       }
     });
 
+    test('does not treat error in a source file path as an error', () async {
+      final String scriptSource = r'''
+void main(List<String> arguments) {
+  print(r'reading source files ... C:\surveys\error\cave.th');
+}
+''';
+
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_runner_test_',
+      );
+
+      try {
+        final String scriptPath = await _createScriptFile(
+          directory: tempDirectory,
+          filename: 'runner_error_in_path.dart',
+          source: scriptSource,
+        );
+
+        final MPTherionRunner runner = MPTherionRunner(
+          thConfigFilePath: scriptPath,
+        );
+
+        try {
+          await runner.start();
+
+          final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+          final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+
+          expect(finalStatus, MPTherionRunStatus.ok);
+          expect(issues, isEmpty);
+        } finally {
+          runner.dispose();
+        }
+      } finally {
+        await tempDirectory.delete(recursive: true);
+      }
+    });
+
+    test(
+      'does not treat warning in a source file path as a warning',
+      () async {
+        final String scriptSource = r'''
+void main(List<String> arguments) {
+  print(r'reading source files ... C:\surveys\warning\cave.th');
+}
+''';
+
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_runner_test_',
+        );
+
+        try {
+          final String scriptPath = await _createScriptFile(
+            directory: tempDirectory,
+            filename: 'runner_warning_in_path.dart',
+            source: scriptSource,
+          );
+
+          final MPTherionRunner runner = MPTherionRunner(
+            thConfigFilePath: scriptPath,
+          );
+
+          try {
+            await runner.start();
+
+            final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+            final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+
+            expect(finalStatus, MPTherionRunStatus.ok);
+            expect(issues, isEmpty);
+          } finally {
+            runner.dispose();
+          }
+        } finally {
+          await tempDirectory.delete(recursive: true);
+        }
+      },
+    );
+
+    test('recognizes Therion error marker using double hyphen', () async {
+      final String scriptSource = '''
+void main(List<String> arguments) {
+  print('therion: error -- source file not found');
+}
+''';
+
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_runner_test_',
+      );
+
+      try {
+        final String scriptPath = await _createScriptFile(
+          directory: tempDirectory,
+          filename: 'runner_therion_error_marker.dart',
+          source: scriptSource,
+        );
+
+        final MPTherionRunner runner = MPTherionRunner(
+          thConfigFilePath: scriptPath,
+        );
+
+        try {
+          await runner.start();
+
+          final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+          final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+
+          expect(finalStatus, MPTherionRunStatus.error);
+          expect(issues.length, 1);
+          expect(issues.single.kind, MPTherionIssueKind.error);
+        } finally {
+          runner.dispose();
+        }
+      } finally {
+        await tempDirectory.delete(recursive: true);
+      }
+    });
+
+    test('recognizes Therion warning marker using double hyphen', () async {
+      final String scriptSource = '''
+void main(List<String> arguments) {
+  print('therion: warning -- source file is deprecated');
+}
+''';
+
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_runner_test_',
+      );
+
+      try {
+        final String scriptPath = await _createScriptFile(
+          directory: tempDirectory,
+          filename: 'runner_therion_warning_marker.dart',
+          source: scriptSource,
+        );
+
+        final MPTherionRunner runner = MPTherionRunner(
+          thConfigFilePath: scriptPath,
+        );
+
+        try {
+          await runner.start();
+
+          final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+          final List<MPTherionIssue> issues = runner.issuesNotifier.value;
+
+          expect(finalStatus, MPTherionRunStatus.warning);
+          expect(issues.length, 1);
+          expect(issues.single.kind, MPTherionIssueKind.warning);
+        } finally {
+          runner.dispose();
+        }
+      } finally {
+        await tempDirectory.delete(recursive: true);
+      }
+    });
+
     test('drains warning output emitted right before process exit', () async {
       const int warningCount = 4000;
       final String scriptSource = '''
