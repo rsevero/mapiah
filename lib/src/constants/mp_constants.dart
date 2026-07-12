@@ -11,7 +11,8 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
 const String mpReleaseName = 'Barbosilândia';
-const String mpReleaseURL = 'https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas';
+const String mpReleaseURL =
+    'https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
@@ -569,6 +570,7 @@ const String mpHelpPageTh2FileEdit = 'th2_file_edit_page_help';
 
 const int mpAddChildAtEndMinusOneOfParentChildrenList = -1;
 const int mpAddChildAtEndOfParentChildrenList = -2;
+const int mpAddChildAtStartOfParentChildrenList = 0;
 
 const int mpCreateNewMPIDForElement = 0;
 

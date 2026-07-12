@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -95,6 +96,17 @@ endscrap
             );
             controller.areaLineCreationController.addNewLineLineSegment(
               Offset(3, 4),
+            );
+
+            expect(
+              parsedFile.getScraps().first.childrenMPIDs.first,
+              parsedFile.getLines().first.mpID,
+            );
+            expect(
+              parsedFile.getScraps().first.getChildPosition(
+                parsedFile.getLines().first,
+              ),
+              mpAddChildAtStartOfParentChildrenList,
             );
 
             final TH2File snapshotIntermediate1 = TH2File.fromMap(

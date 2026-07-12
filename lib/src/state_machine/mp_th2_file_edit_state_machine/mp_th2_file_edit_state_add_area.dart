@@ -121,7 +121,7 @@ class MPTH2FileEditStateAddArea extends MPTH2FileEditState
     final MPCommand addAreaCommand = MPAddAreaCommand.forCWJM(
       newArea: area,
       areaChildren: areaChildren,
-      areaPositionInParent: mpAddChildAtEndMinusOneOfParentChildrenList,
+      areaPositionInParent: mpAddChildAtStartOfParentChildrenList,
       posCommand: posCommand,
     );
     final List<MPCommand> commands = [

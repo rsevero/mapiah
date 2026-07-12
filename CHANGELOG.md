@@ -11,6 +11,7 @@
   * Station hover tooltip entries now list Therion stations first and XVI stations second, with each group sorted alphabetically.
   * Creating a Therion station point over a single unused XVI station now automatically reuses the XVI station name.
 * Fixed bugs:
+  * Newly drawn points, lines, and areas are now inserted at the start of their scrap so they render on top of older elements, matching XTherion and Therion drawing-stack order. Added regression coverage for the new-element insertion position. [reported by CaverBruce]
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
   * Therion reruns now wait for stdout/stderr to finish draining before finalizing the result, preventing longer compiles from sometimes dropping late warning/error lines and incorrectly ending as `ok` or with stale rerun parsing state. Added runner regression coverage for the shutdown-output race. [reported by CaverBruce]
 * Infrastructure maintenance:

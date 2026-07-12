@@ -20,7 +20,7 @@ class MPAddPointCommand extends MPCommand with MPPosCommandMixin {
 
   MPAddPointCommand({
     required this.newPoint,
-    this.pointPositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    this.pointPositionInParent = mpAddChildAtStartOfParentChildrenList,
     required MPCommand? posCommand,
     super.descriptionType = defaultDescriptionType,
   }) : super() {

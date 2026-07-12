@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -87,6 +88,11 @@ endscrap
                   .type,
               pointSubtypeString: '',
               th2FileEditController: controller,
+            );
+
+            expect(
+              (command as MPAddPointCommand).pointPositionInParent,
+              mpAddChildAtStartOfParentChildrenList,
             );
 
             controller.execute(command);

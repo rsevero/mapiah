@@ -29,7 +29,7 @@ class MPAddLineCommand extends MPCommand
 
   MPAddLineCommand({
     required this.newLine,
-    this.linePositionInParent = mpAddChildAtEndMinusOneOfParentChildrenList,
+    this.linePositionInParent = mpAddChildAtStartOfParentChildrenList,
     required this.lineChildren,
     this.lineStartScreenPosition,
     this.addAreaTHIDCommand,
