@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -117,23 +116,13 @@ class MPDialogAux {
       final String filename = picked.path ?? picked.name;
       final String lowerName = filename.toLowerCase();
 
-      Uint8List? bytes = picked.bytes;
-      String? pickedPath = picked.path;
-
-      if ((bytes == null) && (pickedPath != null)) {
-        bytes = await File(pickedPath).readAsBytes();
-      }
+      final Uint8List bytes = await picked.readAsBytes();
+      final String? pickedPath = picked.path;
 
       if (pickedPath != null) {
         mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
           pickedPath,
         );
-      }
-
-      if (bytes == null) {
-        mpLocator.mpLog.e('Picked file has no bytes available.');
-
-        return PickImageFileReturn(type: PickImageFileReturnType.empty);
       }
 
       if (lowerName.endsWith('.xvi')) {
@@ -1125,7 +1114,6 @@ class MPDialogAux {
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],
-        allowMultiple: true,
         lockParentWindow: true,
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty

@@ -1474,19 +1474,29 @@ abstract class TH2FileEditControllerBase with Store {
         mpGeneralController.lastAccessedDirectory.isEmpty
         ? (filename.isEmpty ? null : p.dirname(filename))
         : mpGeneralController.lastAccessedDirectory;
-    final String? initialFileName = filename.isEmpty
-        ? null
+    final String initialFileName = filename.isEmpty
+        ? 'untitled.th2'
         : p.basename(filename);
 
     String? filePath = await FilePicker.saveFile(
       dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
       fileName: initialFileName,
       initialDirectory: initialDirectory,
+      type: FileType.custom,
+      allowedExtensions: <String>['th2'],
+      bytes: Uint8List(0),
     );
 
     if (filePath != null) {
       if (!filePath.toLowerCase().endsWith('.th2')) {
-        filePath += '.th2';
+        final String renamedFilePath = '$filePath.th2';
+        final File selectedFile = File(filePath);
+
+        if (selectedFile.existsSync()) {
+          selectedFile.renameSync(renamedFilePath);
+        }
+
+        filePath = renamedFilePath;
       }
 
       final String previousFilename = _th2File.isNewFile
@@ -1504,7 +1514,7 @@ abstract class TH2FileEditControllerBase with Store {
         newTH2Filename: filePath,
       );
 
-      String directoryPath = p.dirname(filePath);
+      final String directoryPath = p.dirname(filePath);
 
       mpGeneralController.lastAccessedDirectory = directoryPath;
 

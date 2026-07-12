@@ -18,6 +18,8 @@
   * Station-name hover cache invalidation is now source-specific: image visibility toggles invalidate only the XVI station cache, while Therion visibility and Therion station point/name edits invalidate only the Therion station cache, with regression coverage for both directions.
   * Station hover tooltips now use a controller cache covering all visible scraps and visible XVI files, including non-active scraps.
   * Station hover name caches are now available separately for Therion and XVI sources as well as through the merged tooltip list.
+  * Upgraded dependency constraints to the current desktop-compatible package set, including `analyzer` 12.x, `file_picker` 12 beta, `open_file` 4.x, `package_info_plus` 10.x, `window_size` 0.2.x, and `xml` 7.x.
+  * Updated the TH2 save and file-picking flows for `file_picker` 12: `Save as` now uses the package's new save API contract, keeps the `.th2` extension when the chooser omits it, and image/XVI imports now load file bytes through `PlatformFile.readAsBytes()`, restoring a clean `flutter analyze` run after the dependency upgrade.
   
 ## 0.4.1 - 2026-04-30 - The [Barbosilândia](https://wikimapia.org/13035906/pt/Barbosil%C3%A2ndia-ou-Branquinhas) release
 * Fixed bugs:

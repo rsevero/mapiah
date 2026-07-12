@@ -118,5 +118,6 @@ android/app/.cxx/
 .xtherion.dat
 
 .vscode/
+.zed/
 
 .claude/
