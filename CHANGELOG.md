@@ -2,8 +2,12 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.4.2 - not yet released
+## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release
 * Highlights:
+  * Station-aware editing is substantially faster: hovering now identifies every visible Therion and XVI station under the pointer, grouped and sorted by source, while new Therion station points automatically reuse an available XVI station name.
+  * Canvas editing is clearer and more predictable with always-visible line-point markers, newly drawn elements placed on top of older geometry, and the new `borehole` point type.
+  * Therion integration is more reliable: station names are written using the canonical `-name` option, diagnostic detection no longer mistakes file-path text for warnings or errors, reruns retain late output, and the run dialog identifies the active THConfig file.
+  * Release stability and desktop compatibility improved through fixes for scrap status updates and scrap duplication, more efficient station-name caches, and refreshed desktop dependencies with `file_picker` 12 support.
 * New features:
   * Added an enabled-by-default setting that keeps line points visible as black circles on selected, non-selected, and inactive-scrap lines; each circle's diameter is 1.5 times the configured line thickness for improved visibility. [reported by CaverBruce]
   * Added the `borehole` point type, localized in Portuguese as `Furo de sondagem`.
