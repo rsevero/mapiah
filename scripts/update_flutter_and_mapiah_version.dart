@@ -5,20 +5,21 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Script: update_flutter_version.dart
-/// Usage: dart run scripts/update_flutter_version.dart
+/// Script: update_flutter_and_mapiah_version.dart
+/// Usage: dart run scripts/update_flutter_and_mapiah_version.dart
 ///
 /// Detects the installed Flutter SDK framework version and replaces
-/// occurrences of `flutter-version:` and `flutter:` in workflow and
-/// CI files listed below.
+/// Flutter SDK version pins in the workflow, CI, and Flatpak files listed
+/// below.
 
 final List<String> targetFiles = [
   '.github/workflows/linux-appimage.yml',
-  '.github/workflows/linux-flatpak.yml',
   '.github/workflows/windows.yml',
   'codemagic.yaml',
 ];
 
+const String flatpakManifestPath =
+    'packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml';
 const String releaseConstantsPath = 'lib/src/constants/mp_constants.dart';
 const String releaseSummaryPath = 'assets/releases/releases_summary.json';
 
@@ -51,15 +52,6 @@ Future<int> main(List<String> args) async {
 
   final List<String> changedFiles = <String>[];
 
-  final RegExp flutterVersionRegex = RegExp(
-    r"""(^\s*flutter-version:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
-    multiLine: true,
-  );
-  final RegExp flutterSimpleRegex = RegExp(
-    r"""(^\s*flutter:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
-    multiLine: true,
-  );
-
   for (final path in targetFiles) {
     final File file = File(path);
 
@@ -67,17 +59,8 @@ Future<int> main(List<String> args) async {
       continue;
     }
 
-    String content = await file.readAsString();
-    String newContent = content;
-
-    newContent = newContent.replaceAllMapped(
-      flutterVersionRegex,
-      (m) => '${m[1]}$version',
-    );
-    newContent = newContent.replaceAllMapped(
-      flutterSimpleRegex,
-      (m) => '${m[1]}$version',
-    );
+    final String content = await file.readAsString();
+    final String newContent = updateFlutterCiContent(content, version);
 
     if (newContent != content) {
       await file.writeAsString(newContent);
@@ -86,6 +69,15 @@ Future<int> main(List<String> args) async {
     } else {
       stdout.writeln('No change: $path');
     }
+  }
+
+  final bool flatpakManifestUpdated = await updateFlatpakManifest(version);
+
+  if (flatpakManifestUpdated) {
+    changedFiles.add(flatpakManifestPath);
+    stdout.writeln('Updated: $flatpakManifestPath');
+  } else {
+    stdout.writeln('No change: $flatpakManifestPath');
   }
 
   final bool constantsUpdated = await updateReleaseConstants(
@@ -134,6 +126,68 @@ Future<int> main(List<String> args) async {
   );
 
   return 0;
+}
+
+/// Replaces Flutter SDK version pins used by workflow and CI configuration.
+String updateFlutterCiContent(String content, String version) {
+  final RegExp flutterVersionRegex = RegExp(
+    r"""(^\s*flutter-version:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
+    multiLine: true,
+  );
+  final RegExp flutterSimpleRegex = RegExp(
+    r"""(^\s*flutter:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
+    multiLine: true,
+  );
+  String newContent = content;
+
+  newContent = newContent.replaceAllMapped(
+    flutterVersionRegex,
+    (Match match) => '${match[1]}${match[2]}$version${match[3]}',
+  );
+  newContent = newContent.replaceAllMapped(
+    flutterSimpleRegex,
+    (Match match) => '${match[1]}${match[2]}$version${match[3]}',
+  );
+
+  return newContent;
+}
+
+/// Replaces the Flutter Git tag in the local Flatpak build manifest.
+String updateFlutterFlatpakManifestContent(String content, String version) {
+  final RegExp flutterTagRegex = RegExp(
+    r"""(^\s*url:\s*https://github\.com/flutter/flutter\.git\s*\n\s*tag:\s*)(["\']?)[0-9]+(?:\.[0-9]+)*(["\']?)""",
+    multiLine: true,
+  );
+
+  return content.replaceAllMapped(
+    flutterTagRegex,
+    (Match match) => '${match[1]}${match[2]}$version${match[3]}',
+  );
+}
+
+/// Updates the Flutter SDK pin in the local Flatpak build manifest.
+Future<bool> updateFlatpakManifest(String version) async {
+  final File manifestFile = File(flatpakManifestPath);
+
+  if (!await manifestFile.exists()) {
+    stderr.writeln('Could not find $flatpakManifestPath.');
+
+    return false;
+  }
+
+  final String content = await manifestFile.readAsString();
+  final String newContent = updateFlutterFlatpakManifestContent(
+    content,
+    version,
+  );
+
+  if (newContent == content) {
+    return false;
+  }
+
+  await manifestFile.writeAsString(newContent);
+
+  return true;
 }
 
 Future<String?> readFileIfExists(String path) async {

@@ -2,6 +2,12 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.4.3 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+  * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
+
 ## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release
 * Highlights:
   * Station-aware editing is substantially faster: hovering now identifies every visible Therion and XVI station under the pointer, grouped and sorted by source, while new Therion station points automatically reuse an available XVI station name.
