@@ -15,16 +15,12 @@ class THDatetimePart extends THPart {
   late final bool isRange;
   late final bool isEmpty;
 
-  THDatetimePart({
-    required String datetime,
-    required this.isRange,
-    required this.isEmpty,
-  }) : super() {
-    this.datetime = datetime;
+  THDatetimePart({required String datetime}) : super() {
+    _setDatetime(datetime);
   }
 
   THDatetimePart.fromString({required String datetime}) {
-    this.datetime = datetime;
+    _setDatetime(datetime);
   }
 
   @override
@@ -41,11 +37,7 @@ class THDatetimePart extends THPart {
   }
 
   factory THDatetimePart.fromMap(Map<String, dynamic> map) {
-    return THDatetimePart(
-      datetime: map['datetime'],
-      isRange: map['isRange'],
-      isEmpty: map['isEmpty'],
-    );
+    return THDatetimePart(datetime: map['datetime']);
   }
 
   factory THDatetimePart.fromJson(String jsonString) {
@@ -53,12 +45,8 @@ class THDatetimePart extends THPart {
   }
 
   @override
-  THDatetimePart copyWith({String? datetime, bool? isRange, bool? isEmpty}) {
-    return THDatetimePart(
-      datetime: datetime ?? _datetime,
-      isRange: isRange ?? this.isRange,
-      isEmpty: isEmpty ?? this.isEmpty,
-    );
+  THDatetimePart copyWith({String? datetime}) {
+    return THDatetimePart(datetime: datetime ?? _datetime);
   }
 
   @override
@@ -74,7 +62,7 @@ class THDatetimePart extends THPart {
   @override
   int get hashCode => Object.hash(_datetime, isRange, isEmpty);
 
-  set datetime(String date) {
+  void _setDatetime(String date) {
     date = date.trim();
 
     bool tempIsRange = false;

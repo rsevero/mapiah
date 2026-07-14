@@ -15,6 +15,7 @@
   * Newly drawn points, lines, and areas are now inserted at the start of their scrap so they render on top of older elements, matching XTherion and Therion drawing-stack order. Added regression coverage for the new-element insertion position. [reported by CaverBruce]
   * The Run Therion dialog now shows the THConfig file name being processed at the top, with EN/PT localization and widget coverage.
   * Therion reruns now wait for stdout/stderr to finish draining before finalizing the result, preventing longer compiles from sometimes dropping late warning/error lines and incorrectly ending as `ok` or with stale rerun parsing state. Added runner regression coverage for the shutdown-output race. [reported by CaverBruce]
+  * Duplicating scraps with author options no longer crashes while rebuilding their date/time values from serialized data. Added regression coverage for the duplicate-scrap flow.
 * Infrastructure maintenance:
   * Therion and XVI station point names caches sectorized to reduce amount of comparisons necessary for mouse over and station point creation.
   * Therion/XVI station-name hover caches no longer invalidate on generic redraw triggers; they now invalidate only on canvas pan/zoom and scrap/image visibility changes, and Therion `-station` option edit/create/delete flows now update the Therion station cache with dedicated regression coverage.
