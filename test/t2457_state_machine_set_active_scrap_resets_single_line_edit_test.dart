@@ -95,5 +95,26 @@ void main() {
         isTrue,
       );
     });
+
+    test('switching scraps updates the current scrap name', () async {
+      final TH2FileEditController controller = await loadController();
+      final List<THScrap> scraps = controller.th2File.getScraps().toList();
+      final THScrap secondScrap = scraps[1];
+
+      expect(controller.currentScrapName, 'first_scrap');
+
+      controller.setActiveScrap(secondScrap.mpID);
+
+      expect(controller.currentScrapName, 'second_scrap');
+    });
+
+    test('adding a scrap updates the current scrap name', () async {
+      final TH2FileEditController controller = await loadController();
+
+      controller.elementEditController.createScrap(thID: 'new_scrap');
+
+      expect(controller.getActiveScrap().thID, 'new_scrap');
+      expect(controller.currentScrapName, 'new_scrap');
+    });
   });
 }

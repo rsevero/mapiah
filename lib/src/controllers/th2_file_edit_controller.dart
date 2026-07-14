@@ -967,6 +967,7 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _activeScrapID = scrapMPID;
+    _updateCurrentScrapName();
     selectionController.resetSelectableElements();
     final bool stateChanged = stateController.setState(
       MPTH2FileEditStateType.selectEmptySelection,
@@ -1712,8 +1713,14 @@ abstract class TH2FileEditControllerBase with Store {
   void setFilename(String filename) {
     _th2File.filename = filename;
 
+    _updateCurrentScrapName();
+  }
+
+  /// Updates the displayed scrap name to match the active scrap.
+  void _updateCurrentScrapName() {
     if (_activeScrapID > 0) {
       final THScrap scrap = _th2File.scrapByMPID(_activeScrapID);
+
       _currentScrapName = scrap.thID;
     } else {
       _currentScrapName = '';
