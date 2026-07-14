@@ -703,7 +703,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station -station A2@final_de_semana
+  point 782 -1740 station -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -713,7 +713,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station:fixed -id A2 -station A2@final_de_semana
+  point 782 -1740 station:fixed -id A2 -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -723,7 +723,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station:fixed -id A2 -station A2@final_de_semana
+  point 782 -1740 station:fixed -id A2 -name A2@final_de_semana
 endscrap
 ''',
       },
@@ -733,7 +733,7 @@ endscrap
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
-  point 782 -1740 station:fixed -id A2 -station A2@final_de_semana
+  point 782 -1740 station:fixed -id A2 -name A2@final_de_semana
 endscrap
 ''',
       },

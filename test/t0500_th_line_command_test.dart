@@ -91,8 +91,8 @@ scrap scrap1 -scale [ 0 0 1600 0 0 0 40.64 0 m ]
     1139 1079
     355 1065
   endline
-  point 1050 900 station -station a2
-  point 450 900 station -station a1
+  point 1050 900 station -name a2
+  point 450 900 station -name a1
   line chimney
     450 900
     450 600

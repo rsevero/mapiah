@@ -62,7 +62,7 @@ endscrap
         'countElements': 4,
         'asFile': r"""encoding UTF-8
 scrap poco_surubim_SCP01
-  point 2374 -482 station:fixed -station E15@final_de_semana_31_de_julho_de_2016 \
+  point 2374 -482 station:fixed -name E15@final_de_semana_31_de_julho_de_2016 \
       -visibility off
 endscrap
 """,
@@ -409,7 +409,7 @@ And this one also
 scrap test2
 
   endcomment
-  point 322.4 431.7 station -station A1
+  point 322.4 431.7 station -name A1
 endscrap
 """,
       'asFile2': r"""encoding UTF-8
@@ -432,7 +432,7 @@ And this one also
 scrap test2
 
   endcomment
-  point 322.4 431.7 station -station A1
+  point 322.4 431.7 station -name A1
 endscrap
 """,
       'asFile3': r"""encoding UTF-8
@@ -441,7 +441,7 @@ The scrap below is really complex.
 Take care!!
 endcomment
 scrap poco_surubim_SCP01 -scale [ -164 -2396 3308 -2396 0 0 88.1888 0 m ]
-  point 322.4 431.7 station -station A1
+  point 322.4 431.7 station -name A1
 endscrap
 """,
       'asFile4': r"""encoding UTF-8
@@ -563,7 +563,7 @@ scrap test2
 
   endcomment
 
-  point 322.4 431.7 station -station A1
+  point 322.4 431.7 station -name A1
 endscrap
 """,
     };

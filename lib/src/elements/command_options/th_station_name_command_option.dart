@@ -29,6 +29,9 @@ class THStationNameCommandOption extends THCommandOption {
   THCommandOptionType get type => THCommandOptionType.station;
 
   @override
+  String typeToFile() => 'name';
+
+  @override
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 

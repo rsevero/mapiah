@@ -41,7 +41,7 @@ endscrap
 ''',
         'asFileChanged': r'''encoding UTF-8
 scrap test
-  point 2 -4 station -station 0
+  point 2 -4 station -name 0
 endscrap
 ''',
       },

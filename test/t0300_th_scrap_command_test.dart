@@ -676,7 +676,7 @@ endscrap
         'asFile': r'''encoding UTF-8
 scrap s8-1p -author 2016.05.29 "Adolpho Milhommen" -projection plan -scale [ 0 0 \
     96 0 0 0 200 0 in ]
-  point 1705.3152 344.59 station -station 47@39.2002-08
+  point 1705.3152 344.59 station -name 47@39.2002-08
 endscrap
 ''',
       },
