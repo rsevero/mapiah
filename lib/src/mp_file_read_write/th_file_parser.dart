@@ -2093,7 +2093,7 @@ class TH2FileParser {
       option: THCopyrightCommandOption.fromString(
         parentMPID: _currentHasOptions.mpID,
         datetime: _currentSpec[0],
-        copyrightMessage: message,
+        message: message,
         originalLineInTH2File: _currentOriginalLine,
       ),
       element: _currentHasOptions,

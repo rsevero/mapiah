@@ -64,7 +64,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget>
 
         _date = currentOption.datetime.toString();
         _messageController = TextEditingController(
-          text: currentOption.copyright.content.toString(),
+          text: currentOption.message.content.toString(),
         );
         _selectedChoice = mpNonMultipleChoiceSetID;
       case MPOptionStateType.setMixed:
@@ -111,7 +111,7 @@ class _MPCopyrightOptionWidgetState extends State<MPCopyrightOptionWidget>
       newOption = THCopyrightCommandOption.fromStringWithParentMPID(
         parentMPID: mpParentMPIDPlaceholder,
         datetime: _date,
-        copyrightMessage: _messageController.text.trim(),
+        message: _messageController.text.trim(),
       );
     }
 
