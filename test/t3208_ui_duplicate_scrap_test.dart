@@ -79,5 +79,15 @@ void main() {
         fixtureFilename: 'th_file_parser-00260-scrap_with_author_option.th2',
       );
     });
+
+    testWidgets('duplicating a scrap with a copyright option does not throw', (
+      WidgetTester tester,
+    ) async {
+      await _expectScrapDuplicationSucceeds(
+        tester: tester,
+        mpLocator: mpLocator,
+        fixtureFilename: 'th_file_parser-00270-scrap_with_copyright_option.th2',
+      );
+    });
   });
 }

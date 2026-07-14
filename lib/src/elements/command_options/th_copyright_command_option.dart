@@ -50,7 +50,10 @@ class THCopyrightCommandOption extends THCommandOption {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = super.toMap();
 
-    map.addAll({'datetime': datetime.toMap(), 'copyright': copyright.toMap()});
+    map.addAll({
+      'datetime': datetime.toMap(),
+      'copyrightMessage': copyright.toMap(),
+    });
 
     return map;
   }
