@@ -22,6 +22,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Snap angle](#snap-angle)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
+  - [Show line points](#show-line-points)
 - [Therion section](#therion-section)
   - [Debug log 1](#debug-log-1)
   - [Therion executable path](#therion-executable-path)
@@ -80,6 +81,9 @@ Controls how close the mouse cursor must be to an element (in pixels) for it to 
 
 ### Show direction ticks on non-selected lines
 When enabled, direction ticks are drawn on all lines in the active scrap, regardless of selection. When disabled (default), only selected lines show direction ticks. Can also be toggled with **Ctrl+Alt+R**.
+
+### Show line points
+When enabled (default), every line point is drawn as a black circle whose diameter is 1.5 times the configured line thickness. The points remain visible on selected and non-selected lines, including lines in inactive scraps. Disable this setting to draw lines without these persistent points.
 
 ## Therion section
 

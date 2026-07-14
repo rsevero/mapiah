@@ -54,7 +54,7 @@ void main() {
     );
 
     test(
-      'special border bool settings default to true before any explicit write',
+      'enabled-by-default bool settings are true before any explicit write',
       () async {
         final MPSettingsController ctrl = await freshController();
 
@@ -86,6 +86,11 @@ void main() {
           ctrl.getBoolWithDefault(
             MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
           ),
+          isTrue,
+        );
+        expect(ctrl.isBoolSet(MPSettingID.TH2Edit_ShowLinePoints), isFalse);
+        expect(
+          ctrl.getBoolWithDefault(MPSettingID.TH2Edit_ShowLinePoints),
           isTrue,
         );
       },

@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
@@ -88,6 +90,8 @@ mixin MPLinePaintingMixin {
     final TH2File th2File = th2FileEditController.th2File;
     final MPVisualController visualController =
         th2FileEditController.visualController;
+    final bool showLinePoints = mpLocator.mpSettingsController
+        .getBoolWithDefault(MPSettingID.TH2Edit_ShowLinePoints);
     final (
       LinkedHashMap<int, THLinePainterLineSegment> segmentsMap,
       _,
@@ -153,6 +157,7 @@ mixin MPLinePaintingMixin {
         lineInfo: lineInfo,
         lineSegmentsMap: segmentsMap,
         linePaint: linePaint,
+        showLinePoints: showLinePoints,
         th2FileEditController: th2FileEditController,
       );
 
@@ -220,6 +225,7 @@ mixin MPLinePaintingMixin {
             lineInfo: lineInfo,
             lineSegmentsMap: lineSegmentSubsetMap,
             linePaint: linePaint,
+            showLinePoints: showLinePoints,
             th2FileEditController: th2FileEditController,
           ),
         );

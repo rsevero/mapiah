@@ -1052,6 +1052,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Mostrar marcas de direção em linhas não selecionadas';
 
   @override
+  String get mpSettingsSettingTH2EditShowLinePoints =>
+      'Mostrar pontos das linhas';
+
+  @override
   String get mpSettingsSettingTH2EditShowLastUsedPLATypeButtons =>
       'Mostrar botões dos últimos tipos PLA usados';
 

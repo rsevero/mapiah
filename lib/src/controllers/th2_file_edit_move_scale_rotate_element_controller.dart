@@ -25,10 +25,13 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mobx/mobx.dart';
 
+part 'th2_file_edit_move_scale_rotate_element_controller.g.dart';
+
 /// Centralizes element and image transform workflows such as move, scale, and
 /// rotate, keeping those responsibilities outside the generic edit controller.
 class TH2FileEditMoveScaleRotateElementController
-    extends TH2FileEditMoveScaleRotateElementControllerBase {
+    extends TH2FileEditMoveScaleRotateElementControllerBase
+    with _$TH2FileEditMoveScaleRotateElementController {
   TH2FileEditMoveScaleRotateElementController(super.th2FileEditController);
 }
 

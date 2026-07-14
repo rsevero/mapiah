@@ -44,6 +44,7 @@ abstract class MPSettingsControllerBase with Store {
     MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize: true,
     MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff: true,
     MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons: true,
+    MPSettingID.TH2Edit_ShowLinePoints: true,
   };
 
   bool get isTherionDebugLog1Enabled {

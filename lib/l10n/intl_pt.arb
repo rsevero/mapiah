@@ -335,6 +335,7 @@
   "mpSettingsSettingTH2EditPointRadius": "Raio do ponto",
   "mpSettingsSettingTH2EditSelectionTolerance": "Tolerância de seleção",
   "mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines": "Mostrar marcas de direção em linhas não selecionadas",
+  "mpSettingsSettingTH2EditShowLinePoints": "Mostrar pontos das linhas",
   "mpSettingsSettingTH2EditShowLastUsedPLATypeButtons": "Mostrar botões dos últimos tipos PLA usados",
   "mpSettingsSettingTH2EditSnapAngle": "Ângulo preferencial",
   "mpSettingsSettingTherionDebugLog1": "Debug log 1",

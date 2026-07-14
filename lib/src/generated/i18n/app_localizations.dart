@@ -2003,6 +2003,12 @@ abstract class AppLocalizations {
   /// **'Show direction ticks on non-selected lines'**
   String get mpSettingsSettingTH2EditShowDirectionTicksOnNonSelectedLines;
 
+  /// Label for the setting that shows line points on the canvas. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Show line points'**
+  String get mpSettingsSettingTH2EditShowLinePoints;
+
   /// Label for TH2 show last used PLA type buttons setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

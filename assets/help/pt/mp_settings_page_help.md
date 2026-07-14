@@ -22,6 +22,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Ângulo preferencial](#ângulo-preferencial)
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
+  - [Mostrar pontos das linhas](#mostrar-pontos-das-linhas)
 - [Seção Therion](#seção-therion)
   - [Debug log 1](#debug-log-1)
   - [Caminho do executável do Therion](#caminho-do-executável-do-therion)
@@ -80,6 +81,9 @@ Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels
 
 ### Mostrar marcas de direção em linhas não selecionadas
 Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.
+
+### Mostrar pontos das linhas
+Quando ativado (padrão), cada ponto de linha é desenhado como um círculo preto cujo diâmetro é 1,5 vezes a espessura de linha configurada. Os pontos permanecem visíveis em linhas selecionadas e não selecionadas, inclusive em linhas de croquis inativos. Desative esta configuração para desenhar as linhas sem esses pontos persistentes.
 
 ## Seção Therion
 

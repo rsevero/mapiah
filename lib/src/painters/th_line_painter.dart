@@ -19,6 +19,7 @@ class THLinePainter extends CustomPainter {
   final THLinePainterLineInfo lineInfo;
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
+  final bool showLinePoints;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
@@ -26,6 +27,7 @@ class THLinePainter extends CustomPainter {
     required this.lineInfo,
     required this.lineSegmentsMap,
     required this.linePaint,
+    this.showLinePoints = false,
     required this.th2FileEditController,
   });
 
@@ -244,6 +246,20 @@ class THLinePainter extends CustomPainter {
         lineInfo.lineDirectionTicksPaint.primaryPaint!,
       );
     }
+
+    if (showLinePoints) {
+      final double linePointRadius =
+          th2FileEditController.lineThicknessOnCanvas *
+          mpLinePointRadiusToLineThicknessFactor;
+
+      for (final THLinePainterLineSegment lineSegment in lineSegments) {
+        canvas.drawCircle(
+          Offset(lineSegment.x, lineSegment.y),
+          linePointRadius,
+          mpLinePointPaint,
+        );
+      }
+    }
   }
 
   @override
@@ -251,6 +267,7 @@ class THLinePainter extends CustomPainter {
     if (identical(this, oldDelegate)) return false;
 
     return linePaint != oldDelegate.linePaint ||
+        showLinePoints != oldDelegate.showLinePoints ||
         !const MapEquality<int, THLinePainterLineSegment>().equals(
           lineSegmentsMap,
           oldDelegate.lineSegmentsMap,
