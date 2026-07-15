@@ -4,6 +4,7 @@
 
 ## 0.4.3 - not yet released
 * New features:
+  * Mapiah now starts maximized on Linux, macOS, and Windows.
 * Fixed bugs:
 * Infrastructure maintenance:
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
