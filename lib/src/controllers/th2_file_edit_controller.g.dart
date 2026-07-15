@@ -1414,6 +1414,30 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     );
   }
 
+  late final _$_redrawTriggerFreehandLineAtom = Atom(
+    name: 'TH2FileEditControllerBase._redrawTriggerFreehandLine',
+    context: context,
+  );
+
+  int get redrawTriggerFreehandLine {
+    _$_redrawTriggerFreehandLineAtom.reportRead();
+    return super._redrawTriggerFreehandLine;
+  }
+
+  @override
+  int get _redrawTriggerFreehandLine => redrawTriggerFreehandLine;
+
+  @override
+  set _redrawTriggerFreehandLine(int value) {
+    _$_redrawTriggerFreehandLineAtom.reportWrite(
+      value,
+      super._redrawTriggerFreehandLine,
+      () {
+        super._redrawTriggerFreehandLine = value;
+      },
+    );
+  }
+
   late final _$_redrawTriggerEditLineAtom = Atom(
     name: 'TH2FileEditControllerBase._redrawTriggerEditLine',
     context: context,
@@ -1727,6 +1751,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.triggerNewLineRedraw');
     try {
       return super.triggerNewLineRedraw();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void triggerFreehandLineRedraw() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.triggerFreehandLineRedraw',
+        );
+    try {
+      return super.triggerFreehandLineRedraw();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -404,6 +404,7 @@
   "th2FileEditPageAddArea": "Criar área (A)",
   "th2FileEditPageAddAreaStatusBarMessage": "Selecione uma linha para ser incluída como borda da nova área do tipo {type}",
   "th2FileEditPageAddElementOptions": "Criar elemento",
+  "th2FileEditPageAddFreehandLineStatusBarMessage": "Desenhe uma linha {type} à mão livre como uma série de segmentos retos",
   "th2FileEditPageAddImageButton": "Adicionar imagem (I)",
   "th2FileEditPageAddLine": "Criar linha (L)",
   "th2FileEditPageAddLineStatusBarMessage": "Clique para criar uma linha do tipo {type}",

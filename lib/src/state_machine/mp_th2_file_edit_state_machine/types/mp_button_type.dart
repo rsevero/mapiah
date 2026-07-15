@@ -3,6 +3,7 @@
 enum MPButtonType {
   addArea,
   addElement,
+  addFreehandLine,
   addImage,
   addLine,
   addLineToArea,

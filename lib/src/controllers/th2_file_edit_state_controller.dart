@@ -238,6 +238,11 @@ abstract class TH2FileEditStateControllerBase
   }
 
   @override
+  void onPrimaryButtonPointerCancel(PointerCancelEvent event) {
+    _state.onPrimaryButtonPointerCancel(event);
+  }
+
+  @override
   void onSecondaryButtonDragEnd(PointerUpEvent event) {
     _state.onSecondaryButtonDragEnd(event);
   }

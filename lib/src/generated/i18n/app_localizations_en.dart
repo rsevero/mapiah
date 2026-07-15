@@ -1298,6 +1298,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageAddElementOptions => 'Add element';
 
   @override
+  String th2FileEditPageAddFreehandLineStatusBarMessage(Object type) {
+    return 'Draw a freehand $type line as a series of straight segments';
+  }
+
+  @override
   String get th2FileEditPageAddImageButton => 'Add image (I)';
 
   @override

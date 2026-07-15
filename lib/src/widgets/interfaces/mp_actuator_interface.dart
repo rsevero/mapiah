@@ -23,6 +23,12 @@ abstract interface class MPActuatorInterface {
 
   void onPrimaryButtonDragEnd(PointerUpEvent event);
 
+  /// Called when the primary pointer is cancelled (focus loss, gesture-arena
+  /// cancellation, interrupted touch/stylus input) instead of reaching a
+  /// normal pointer-up. Implementations must not treat this as a click or
+  /// commit any partial action.
+  void onPrimaryButtonPointerCancel(PointerCancelEvent event) {}
+
   void onSecondaryButtonDragEnd(PointerUpEvent event);
 
   void onTertiaryButtonDragEnd(PointerUpEvent event);

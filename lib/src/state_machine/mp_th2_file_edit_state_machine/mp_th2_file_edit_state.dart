@@ -58,6 +58,7 @@ part 'mixins/mp_th2_file_edit_state_move_modifiers_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_options_edit_mixin.dart';
 part 'mixins/mp_th2_file_edit_state_reset_area_border_ctrl_meta_cycle_mixin.dart';
 part 'mp_th2_file_edit_state_add_area.dart';
+part 'mp_th2_file_edit_state_add_freehand_line.dart';
 part 'mp_th2_file_edit_state_add_line_to_area.dart';
 part 'mp_th2_file_edit_state_add_line.dart';
 part 'mp_th2_file_edit_state_add_point.dart';
@@ -99,6 +100,10 @@ abstract class MPTH2FileEditState {
     switch (type) {
       case MPTH2FileEditStateType.addArea:
         return MPTH2FileEditStateAddArea(
+          th2FileEditController: th2FileEditController,
+        );
+      case MPTH2FileEditStateType.addFreehandLine:
+        return MPTH2FileEditStateAddFreehandLine(
           th2FileEditController: th2FileEditController,
         );
       case MPTH2FileEditStateType.addLine:
@@ -197,6 +202,13 @@ abstract class MPTH2FileEditState {
 
   void onPrimaryButtonDragEnd(PointerUpEvent event) {}
 
+  /// Called when the primary pointer is cancelled instead of reaching a
+  /// normal pointer-up (focus loss, gesture-arena cancellation, interrupted
+  /// touch/stylus input). Default no-op; states with a transient in-progress
+  /// action (e.g. freehand line capture) must override this to abandon it
+  /// without committing a partial result.
+  void onPrimaryButtonPointerCancel(PointerCancelEvent event) {}
+
   void onSecondaryButtonDragEnd(PointerUpEvent event) {}
 
   void onTertiaryButtonDragEnd(PointerUpEvent event) {}
@@ -239,6 +251,11 @@ abstract class MPTH2FileEditState {
       case MPButtonType.addArea:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.addArea,
+        );
+        return true;
+      case MPButtonType.addFreehandLine:
+        th2FileEditController.stateController.setState(
+          MPTH2FileEditStateType.addFreehandLine,
         );
         return true;
       case MPButtonType.addImage:

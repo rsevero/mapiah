@@ -1312,6 +1312,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddElementOptions => 'Criar elemento';
 
   @override
+  String th2FileEditPageAddFreehandLineStatusBarMessage(Object type) {
+    return 'Desenhe uma linha $type à mão livre como uma série de segmentos retos';
+  }
+
+  @override
   String get th2FileEditPageAddImageButton => 'Adicionar imagem (I)';
 
   @override

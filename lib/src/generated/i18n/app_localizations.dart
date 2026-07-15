@@ -2429,6 +2429,12 @@ abstract class AppLocalizations {
   /// **'Add element'**
   String get th2FileEditPageAddElementOptions;
 
+  /// The status bar message for the freehand line tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_add_freehand_line.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Draw a freehand {type} line as a series of straight segments'**
+  String th2FileEditPageAddFreehandLineStatusBarMessage(Object type);
+
   /// The label for the add image button. Used on: _MPAvailableImagesWidgetState.build, _TH2FileEditPageState._addElementButtons
   ///
   /// In en, this message translates to:

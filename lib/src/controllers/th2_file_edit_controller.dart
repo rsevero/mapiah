@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_area_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_copy_paste_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_freehand_line_creation_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_move_scale_rotate_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -57,6 +58,8 @@ abstract class TH2FileEditControllerBase with Store {
   late final MPDefaultOptionsController defaultOptionsController;
   late final TH2FilePropertiesController propertiesController;
   late final TH2FileEditAreaLineCreationController areaLineCreationController;
+  late final TH2FileEditFreehandLineCreationController
+  freehandLineCreationController;
   late final TH2FileHideElementController hideElementController;
   late final MPUndoRedoController undoRedoController;
   late final MPVisualController visualController;
@@ -572,6 +575,9 @@ abstract class TH2FileEditControllerBase with Store {
   int _redrawTriggerNewLine = mpMinimumInt;
 
   @readonly
+  int _redrawTriggerFreehandLine = mpMinimumInt;
+
+  @readonly
   int _redrawTriggerEditLine = mpMinimumInt;
 
   @readonly
@@ -632,6 +638,9 @@ abstract class TH2FileEditControllerBase with Store {
       this as TH2FileEditController,
     );
     areaLineCreationController = TH2FileEditAreaLineCreationController(
+      this as TH2FileEditController,
+    );
+    freehandLineCreationController = TH2FileEditFreehandLineCreationController(
       this as TH2FileEditController,
     );
     hideElementController = TH2FileHideElementController(
@@ -1177,6 +1186,11 @@ abstract class TH2FileEditControllerBase with Store {
   @action
   void triggerNewLineRedraw() {
     _redrawTriggerNewLine++;
+  }
+
+  @action
+  void triggerFreehandLineRedraw() {
+    _redrawTriggerFreehandLine++;
   }
 
   @action

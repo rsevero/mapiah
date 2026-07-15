@@ -2011,6 +2011,14 @@
     "description": "The label for the add element options button. Used on: lib/src/pages/th2_file_edit_page.dart",
     "type": "text"
   },
+  "th2FileEditPageAddFreehandLineStatusBarMessage": "Draw a freehand {type} line as a series of straight segments",
+  "@th2FileEditPageAddFreehandLineStatusBarMessage": {
+    "description": "The status bar message for the freehand line tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_add_freehand_line.dart",
+    "type": "text",
+    "placeholders": {
+      "type": {}
+    }
+  },
   "th2FileEditPageAddImageButton": "Add image (I)",
   "@th2FileEditPageAddImageButton": {
     "description": "The label for the add image button. Used on: _MPAvailableImagesWidgetState.build, _TH2FileEditPageState._addElementButtons",

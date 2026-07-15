@@ -180,6 +180,20 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
           widget.actuator.onTertiaryButtonScroll(event);
         }
       },
+      onPointerCancel: (PointerCancelEvent event) {
+        switch (currentPressedMouseButton) {
+          case kPrimaryButton:
+            currentPressedMouseButton = 0;
+            isPrimaryButtonDragging = false;
+            widget.actuator.onPrimaryButtonPointerCancel(event);
+          case kSecondaryButton:
+            currentPressedMouseButton = 0;
+            isSecondaryButtonDragging = false;
+          case kTertiaryButton:
+            currentPressedMouseButton = 0;
+            isTertiaryButtonDragging = false;
+        }
+      },
       child: Focus(
         autofocus: true,
         focusNode: _focusNode,
