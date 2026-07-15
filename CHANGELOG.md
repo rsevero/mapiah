@@ -9,6 +9,7 @@
 * Infrastructure maintenance:
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
   * Added a phased implementation roadmap for Therion-faithful symbol rendering, covering UIS point, line, area, and text symbols; shared rendering infrastructure; additional symbol sets; settings integration; and visual validation.
+  * Added an implementation plan for a SexyTopo-inspired freehand line drawing mode that previews bounded pointer samples, simplifies completed strokes with SexyTopo's extent-relative epsilon, and commits each stroke as one undoable series of straight Therion line segments.
 
 ## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release
 * Highlights:
