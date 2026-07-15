@@ -362,6 +362,91 @@ class MPCommandFactory {
     return addLineCommand;
   }
 
+  /// Builds an [MPAddLineCommand] for a brand new [line] given its already
+  /// prepared [lineChildren] (line segments plus the trailing [THEndline]),
+  /// applying [typeSubtype]'s subtype option and any applicable default
+  /// options. Shared by the click-based line tool and freehand line capture
+  /// so both create lines with identical subtype/default-option semantics;
+  /// callers only need to build the line-segment geometry themselves.
+  static MPAddLineCommand addLineFromLineChildren({
+    required THLine line,
+    required MPPLATypeSubtype typeSubtype,
+    required List<THElement> lineChildren,
+    required TH2FileEditController th2FileEditController,
+    Offset? lineStartScreenPosition,
+    bool applyDefaultOptions = true,
+    bool setUsedLinetype = true,
+  }) {
+    final TH2File th2File = th2FileEditController.th2File;
+    final List<MPCommand> posCommands = [];
+
+    if (typeSubtype.subtype.isNotEmpty) {
+      final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
+        parentMPID: line.mpID,
+        subtype: typeSubtype.subtype,
+      );
+
+      posCommands.add(
+        MPCommandFactory.setOptionOnElements(
+          elements: [line],
+          th2File: th2File,
+          toOption: lineSubtypeOption,
+        ),
+      );
+    }
+
+    if (applyDefaultOptions) {
+      final List<THCommandOption> defaultOptions = th2FileEditController
+          .defaultOptionsController
+          .getApplicableDefaults(
+            elementType: THElementType.line,
+            typeString: typeSubtype.type,
+          );
+
+      for (final THCommandOption defaultOption in defaultOptions) {
+        if (defaultOption.type == THCommandOptionType.subtype) {
+          continue;
+        }
+        posCommands.add(
+          MPCommandFactory.setOptionOnElements(
+            elements: [line],
+            th2File: th2File,
+            toOption: defaultOption.copyWith(
+              parentMPID: line.mpID,
+              originalLineInTH2File: '',
+            ),
+          ),
+        );
+      }
+    }
+
+    final MPCommand? posCommand = posCommands.isEmpty
+        ? null
+        : MPCommandFactory.multipleCommandsFromList(
+            commandsList: posCommands,
+            descriptionType: MPCommandDescriptionType.addLine,
+            completionType:
+                MPMultipleElementsCommandCompletionType.elementsListChanged,
+          );
+
+    final MPAddLineCommand addLineCommand = MPAddLineCommand(
+      newLine: line,
+      lineChildren: lineChildren,
+      lineStartScreenPosition: lineStartScreenPosition,
+      preCommand: null,
+      posCommand: posCommand,
+    );
+
+    if (setUsedLinetype) {
+      th2FileEditController.elementEditController.setUsedLineType(
+        lineType: typeSubtype.type,
+        lineSubtype: typeSubtype.subtype,
+      );
+    }
+
+    return addLineCommand;
+  }
+
   static MPAddLineCommand addLineFromExisting({
     required THLine existingLine,
     int? linePositionInParent,

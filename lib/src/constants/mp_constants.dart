@@ -11,8 +11,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
 const String mpReleaseName = 'Back to the Future';
-const String mpReleaseURL =
-    'https://en.wikipedia.org/wiki/Back_to_the_Future';
+const String mpReleaseURL = 'https://en.wikipedia.org/wiki/Back_to_the_Future';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
@@ -194,6 +193,35 @@ const int mpInteractiveLineSimplificationMaxIntensity = 40;
 const double mpJoinLineExtremityToleranceOnScreen = 3.0;
 const double mpJoinLineExtremityToleranceOnScreenSquared =
     mpJoinLineExtremityToleranceOnScreen * mpJoinLineExtremityToleranceOnScreen;
+
+/// Minimum distance, in logical screen pixels, between two consecutive
+/// accepted samples while capturing a freehand line stroke. This is an
+/// input-gesture concern and intentionally stays in screen space regardless
+/// of the current zoom.
+const double mpFreehandMinimumSampleSpacingOnScreen = 1.0;
+
+/// Minimum length, in logical screen pixels, a committed freehand stroke's
+/// raw bounding diagonal must reach for a line to be created. Shorter
+/// drags are treated as an accidental tap and create nothing.
+const double mpFreehandMinimumCommittedStrokeLengthOnScreen = 5.0;
+
+/// Maximum number of samples retained in a freehand stroke's in-memory
+/// buffer. When reached, the buffer is compacted (see
+/// `TH2FileEditFreehandLineCreationController`) rather than truncating the
+/// stroke, keeping every compaction loop bounded for arbitrarily long
+/// stylus gestures.
+const int mpFreehandMaximumSampleCount = 200000;
+
+/// Divisor applied to a freehand stroke's raw bounding-box largest
+/// dimension to obtain the Douglas-Peucker simplification epsilon, matching
+/// SexyTopo's `Space2DUtils` behavior. Deliberately independent of zoom.
+const double mpFreehandSimplificationExtentDivisor = 500.0;
+
+/// Absolute floor, in canvas/data units, for the freehand simplification
+/// epsilon, matching SexyTopo's `Space2DUtils` behavior. Prevents a
+/// vanishingly small or empty bounding box from producing a near-zero
+/// epsilon that keeps every raw sample.
+const double mpFreehandMinimumSimplificationEpsilon = 0.001;
 
 const double mpMinimumSizeForDrawing = 10.0;
 

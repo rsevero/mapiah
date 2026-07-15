@@ -14,7 +14,6 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
-import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -822,67 +821,14 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
-        final List<MPCommand> posCommands = [];
-
-        if (typeSubtype.subtype.isNotEmpty) {
-          final THCommandOption lineSubtypeOption = THSubtypeCommandOption(
-            parentMPID: _newLine!.mpID,
-            subtype: typeSubtype.subtype,
-          );
-
-          posCommands.add(
-            MPCommandFactory.setOptionOnElements(
-              elements: [_newLine!],
-              th2File: _th2File,
-              toOption: lineSubtypeOption,
-            ),
-          );
-        }
-
-        final List<THCommandOption> defaultOptions = _th2FileEditController
-            .defaultOptionsController
-            .getApplicableDefaults(
-              elementType: THElementType.line,
-              typeString: typeSubtype.type,
+        final MPAddLineCommand addLineCommand = MPCommandFactory
+            .addLineFromLineChildren(
+              line: _newLine!,
+              typeSubtype: typeSubtype,
+              lineChildren: lineChildren,
+              th2FileEditController: _th2FileEditController,
+              lineStartScreenPosition: _lineStartScreenPosition,
             );
-
-        for (final THCommandOption defaultOption in defaultOptions) {
-          if (defaultOption.type == THCommandOptionType.subtype) {
-            continue;
-          }
-          posCommands.add(
-            MPCommandFactory.setOptionOnElements(
-              elements: [_newLine!],
-              th2File: _th2File,
-              toOption: defaultOption.copyWith(
-                parentMPID: _newLine!.mpID,
-                originalLineInTH2File: '',
-              ),
-            ),
-          );
-        }
-
-        final MPCommand? posCommand = posCommands.isEmpty
-            ? null
-            : MPCommandFactory.multipleCommandsFromList(
-                commandsList: posCommands,
-                descriptionType: MPCommandDescriptionType.addLine,
-                completionType:
-                    MPMultipleElementsCommandCompletionType.elementsListChanged,
-              );
-
-        final MPAddLineCommand addLineCommand = MPAddLineCommand(
-          newLine: _newLine!,
-          lineChildren: lineChildren,
-          lineStartScreenPosition: _lineStartScreenPosition,
-          preCommand: null,
-          posCommand: posCommand,
-        );
-
-        _th2FileEditController.elementEditController.setUsedLineType(
-          lineType: typeSubtype.type,
-          lineSubtype: typeSubtype.subtype,
-        );
 
         _th2FileEditController.execute(addLineCommand);
       }
