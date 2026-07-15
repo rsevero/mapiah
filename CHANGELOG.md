@@ -5,6 +5,7 @@
 ## 0.4.3 - not yet released
 * New features:
   * Mapiah now starts maximized on Linux, macOS, and Windows.
+  * Added a freehand line drawing tool: press and drag (mouse, touch, or stylus) to draw, see the raw stroke previewed live, and release to commit one editable line made of straight segments in a single undoable action. Discoverable via the add-element toolbar row and the `F` shortcut. [requested by Edvard]
 * Fixed bugs:
 * Infrastructure maintenance:
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
@@ -12,6 +13,7 @@
   * Added an implementation plan for a SexyTopo-inspired freehand line drawing mode that previews bounded pointer samples, simplifies completed strokes with SexyTopo's extent-relative epsilon, and commits each stroke as one undoable series of straight Therion line segments.
   * Implemented Phase 1 (pure capture/conversion logic) of the freehand line drawing plan: added `MPFreehandLineAux` with sample-spacing, minimum-stroke-length, bounded-buffer compaction, duplicate-removal, and SexyTopo-style extent-relative epsilon/Douglas-Peucker simplification helpers, plus regression coverage; extracted the shared new-line/subtype/default-options command builder from the click-based line tool into `MPCommandFactory.addLineFromLineChildren()` so freehand line creation can reuse it.
   * Implemented Phase 2 (state and pointer lifecycle) of the freehand line drawing plan: added the `addFreehandLine` state/button types and `MPTH2FileEditStateAddFreehandLine`, a new `TH2FileEditFreehandLineCreationController` that captures a transient stroke and commits it as one undoable `THLine` on release, canvas pointer-cancel propagation through `MPActuatorInterface`/`MPListenerWidget`/the state machine, and EN/PT status-bar localization, with widget-test coverage for preview-only dragging, commit/undo/redo, repeated strokes, and Escape/cancel/state-change/no-drag abandonment.
+  * Implemented Phase 3 (preview and discoverability) of the freehand line drawing plan: added the live-preview `MPAddFreehandLineWidget`, the `F` keyboard shortcut, a toolbar button (with a new placeholder icon) alongside the other add-element tools, EN/PT button-label localization, updated EN/PT help pages and keyboard-shortcut tables, and widget-test coverage for the shortcut and preview mount/unmount.
 
 ## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release
 * Highlights:

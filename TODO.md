@@ -4,7 +4,7 @@
 
 ## Version 1.0
 [ ] - Raster images tracing.
-[ ] - Freehand drawing tool. [requested by Edvard]
+[X] - Freehand drawing tool. [requested by Edvard]
 [X] - Show shortcuts related to current state on status bar. [requested by Edvard]
 [ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 

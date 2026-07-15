@@ -57,6 +57,14 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     () => super.showAddLine,
     name: 'TH2FileEditControllerBase.showAddLine',
   )).value;
+  Computed<bool>? _$showAddFreehandLineComputed;
+
+  @override
+  bool get showAddFreehandLine =>
+      (_$showAddFreehandLineComputed ??= Computed<bool>(
+        () => super.showAddFreehandLine,
+        name: 'TH2FileEditControllerBase.showAddFreehandLine',
+      )).value;
   Computed<bool>? _$showEditLineSegmentComputed;
 
   @override
@@ -2042,6 +2050,7 @@ selectionWindowBorderPaintComplete: ${selectionWindowBorderPaintComplete},
 selectionWindowBorderPaintDashIntervalOnCanvas: ${selectionWindowBorderPaintDashIntervalOnCanvas},
 selectionHandlePaint: ${selectionHandlePaint},
 showAddLine: ${showAddLine},
+showAddFreehandLine: ${showAddFreehandLine},
 showEditLineSegment: ${showEditLineSegment},
 showMultipleElementsClickedHighlight: ${showMultipleElementsClickedHighlight},
 showMultipleEndControlPointsClickedHighlight: ${showMultipleEndControlPointsClickedHighlight},

@@ -23,6 +23,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar área                                                                                    | A                                        |
 | Criar croqui                                                                                  | K                                        |
 | Criar linha                                                                                   | L                                        |
+| Criar linha à mão livre                                                                       | F                                        |
 | Criar linha de conexão de mapa de ponto Corte para Base                                       | Ctrl+Alt+X                               |
 | Criar ponto                                                                                   | P                                        |
 | Criar segmento de linha entre segmentos de linha selecionados                                 | /                                        |

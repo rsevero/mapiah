@@ -64,6 +64,8 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
         tooltip = appLocalizations.th2FileEditPageAddArea;
       case MPButtonType.addElement:
         tooltip = appLocalizations.th2FileEditPageAddElementOptions;
+      case MPButtonType.addFreehandLine:
+        tooltip = appLocalizations.th2FileEditPageAddFreehandLine;
       case MPButtonType.addLine:
         tooltip = appLocalizations.th2FileEditPageAddLine;
       case MPButtonType.addPoint:
@@ -135,6 +137,11 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
                   ..._addElementButton(
                     context: context,
                     pla: MPButtonType.addLine,
+                    isTypeButton: true,
+                  ),
+                  ..._addElementButton(
+                    context: context,
+                    pla: MPButtonType.addFreehandLine,
                     isTypeButton: true,
                   ),
                   ..._addElementButton(

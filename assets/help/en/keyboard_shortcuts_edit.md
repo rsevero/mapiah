@@ -19,6 +19,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Constrain a new line-drawing node to the snap angle while drawing                | Shift+click                                |
 | Copy selected elements                                                           | Ctrl+C                                     |
 | Create area                                                                      | A                                          |
+| Create freehand line                                                             | F                                          |
 | Create line                                                                      | L                                          |
 | Create map connection line from point X-Section to Station                       | Ctrl+Alt+X                                 |
 | Create point                                                                     | P                                          |

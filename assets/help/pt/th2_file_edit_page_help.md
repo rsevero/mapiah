@@ -284,6 +284,7 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
 * ![Botão adicionar elemento](assets/help/images/buttonAddElement.png "Adicionar elemento")  _Adicionar elemento_: permite adicionar novos elementos ao arquivo TH2. Ao passar o mouse, os botões abaixo são mostrados:
   * ![Botão adicionar ponto](assets/help/images/buttonAddPoint.png "Adicionar ponto")  _Adicionar ponto_: adiciona um novo ponto ao arquivo TH2. (P)
   * ![Botão adicionar linha](assets/help/images/buttonAddLine.png "Adicionar linha")  _Adicionar linha_: adiciona uma nova linha ao arquivo TH2. (L)
+  * ![Botão adicionar linha à mão livre](assets/help/images/buttonAddFreehandLine.png "Adicionar linha à mão livre")  _Adicionar linha à mão livre_: desenha uma nova linha arrastando o ponteiro; o traço é simplificado e armazenado como uma série de segmentos retos. (F)
   * ![Botão adicionar área](assets/help/images/buttonAddArea.png "Adicionar área")  _Adicionar área_: adiciona uma nova área ao arquivo TH2. (A)
 * ![Botão opções de zoom](assets/help/images/buttonZoomOptions.png "Opções de zoom")  _Opções de zoom_: apresenta as opções de zoom. Ao passar o mouse, os botões abaixo são mostrados:
   * ![Botão zoom in](assets/help/images/buttonZoomIn.png "Aproximar")  _Aproximar_: dá zoom in na visualização do arquivo TH2. (+)

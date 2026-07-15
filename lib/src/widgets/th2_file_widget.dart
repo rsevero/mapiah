@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.d
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/widgets/mp_add_freehand_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_line_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_images_widget.dart';
@@ -117,6 +118,20 @@ class TH2FileWidget extends StatelessWidget {
                         if (th2FileEditController.showAddLine) {
                           return MPAddLineWidget(
                             key: ValueKey("MPAddLineWidget|$thFileMPID"),
+                            th2FileEditController: th2FileEditController,
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Observer(
+                      builder: (_) {
+                        if (th2FileEditController.showAddFreehandLine) {
+                          return MPAddFreehandLineWidget(
+                            key: ValueKey(
+                              "MPAddFreehandLineWidget|$thFileMPID",
+                            ),
                             th2FileEditController: th2FileEditController,
                           );
                         } else {

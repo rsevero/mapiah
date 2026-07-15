@@ -1312,6 +1312,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddElementOptions => 'Criar elemento';
 
   @override
+  String get th2FileEditPageAddFreehandLine => 'Criar linha à mão livre (F)';
+
+  @override
   String th2FileEditPageAddFreehandLineStatusBarMessage(Object type) {
     return 'Desenhe uma linha $type à mão livre como uma série de segmentos retos';
   }

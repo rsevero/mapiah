@@ -172,6 +172,8 @@ abstract class TH2FileEditControllerBase with Store {
         return MPButtonType.addLine;
       case MPTH2FileEditStateAddArea _:
         return MPButtonType.addArea;
+      case MPTH2FileEditStateAddFreehandLine _:
+        return MPButtonType.addFreehandLine;
       default:
         return MPButtonType.addElement;
     }
@@ -271,6 +273,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool get showAddLine =>
       (areaLineCreationController.newLine != null) ||
       (areaLineCreationController.lineStartScreenPosition != null);
+
+  @computed
+  bool get showAddFreehandLine => freehandLineCreationController.isCapturing;
 
   @computed
   bool get showEditLineSegment => _isEditLineMode;
@@ -802,6 +807,7 @@ abstract class TH2FileEditControllerBase with Store {
 
         _isAddElementMode =
             ((state is MPTH2FileEditStateAddArea) ||
+            (state is MPTH2FileEditStateAddFreehandLine) ||
             (state is MPTH2FileEditStateAddLine) ||
             (state is MPTH2FileEditStateAddPoint));
       }),

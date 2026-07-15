@@ -2429,6 +2429,12 @@ abstract class AppLocalizations {
   /// **'Add element'**
   String get th2FileEditPageAddElementOptions;
 
+  /// The label for the add freehand line button. Used on: lib/src/pages/th2_file_edit_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Add freehand line (F)'**
+  String get th2FileEditPageAddFreehandLine;
+
   /// The status bar message for the freehand line tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_add_freehand_line.dart
   ///
   /// In en, this message translates to:

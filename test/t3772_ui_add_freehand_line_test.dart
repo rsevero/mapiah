@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:mapiah/src/widgets/mp_add_freehand_line_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'th2_file_tabs_page_test_aux.dart';
@@ -26,7 +27,7 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  Future<TH2FileEditController> buildFreehandEditor(WidgetTester tester) async {
+  Future<TH2FileEditController> buildEditor(WidgetTester tester) async {
     tester.view.physicalSize = const Size(1280, 720);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() {
@@ -47,6 +48,13 @@ void main() {
     await tester.pumpAndSettle();
 
     th2Controller.zoomOneToOne();
+
+    return th2Controller;
+  }
+
+  Future<TH2FileEditController> buildFreehandEditor(WidgetTester tester) async {
+    final TH2FileEditController th2Controller = await buildEditor(tester);
+
     th2Controller.stateController.setState(
       MPTH2FileEditStateType.addFreehandLine,
     );
@@ -427,6 +435,64 @@ void main() {
 
         expect(relativeGeometries[1], relativeGeometries[0]);
         expect(relativeGeometries[2], relativeGeometries[0]);
+      },
+    );
+
+    testWidgets('F enters freehand mode and the action button is shown as active', (
+      tester,
+    ) async {
+      final TH2FileEditController th2Controller = await buildEditor(tester);
+      final String heroPrefix = th2Controller.th2FileMPID.toString();
+
+      expect(
+        th2Controller.stateController.state.type,
+        isNot(MPTH2FileEditStateType.addFreehandLine),
+      );
+
+      await tester.sendKeyEvent(LogicalKeyboardKey.keyF);
+      await tester.pumpAndSettle();
+
+      expect(
+        th2Controller.stateController.state.type,
+        MPTH2FileEditStateType.addFreehandLine,
+      );
+
+      final Finder addFreehandLineHero = find.byWidgetPredicate(
+        (w) =>
+            w is Hero &&
+            w.tag == '${heroPrefix}_add_element_addFreehandLine',
+        description:
+            'Hero(tag: ${heroPrefix}_add_element_addFreehandLine)',
+      );
+
+      expect(addFreehandLineHero, findsOneWidget);
+    });
+
+    testWidgets(
+      'the preview widget renders while dragging and clears after release',
+      (tester) async {
+        final TH2FileEditController th2Controller = await buildFreehandEditor(
+          tester,
+        );
+        final Offset origin = tester.getTopLeft(listenerFinder(th2Controller));
+        final TestPointer mouse = TestPointer(1, PointerDeviceKind.mouse);
+        final List<Offset> points = strokePoints(origin + const Offset(50, 50));
+
+        expect(find.byType(MPAddFreehandLineWidget), findsNothing);
+
+        await tester.sendEventToBinding(
+          mouse.down(points[0], buttons: kPrimaryButton),
+        );
+        await tester.pump();
+        await tester.sendEventToBinding(mouse.move(points[1]));
+        await tester.pump(const Duration(milliseconds: 16));
+
+        expect(find.byType(MPAddFreehandLineWidget), findsOneWidget);
+
+        await tester.sendEventToBinding(mouse.up());
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MPAddFreehandLineWidget), findsNothing);
       },
     );
   });

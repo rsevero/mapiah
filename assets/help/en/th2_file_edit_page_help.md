@@ -98,6 +98,7 @@ In case there are available redoes when a new edit operation is performed, the r
 * ![Add element button](assets/help/images/buttonAddElement.png "Add element")  _Add element_: allows to add new elements to the TH2 file. On mouse over the following buttons are shown:
   * ![Add point button](assets/help/images/buttonAddPoint.png "Add point")  _Add point_: adds a new point to the TH2 file. (P)
   * ![Add line button](assets/help/images/buttonAddLine.png "Add line")  _Add line_: adds a new line to the TH2 file. (L)
+  * ![Add freehand line button](assets/help/images/buttonAddFreehandLine.png "Add freehand line")  _Add freehand line_: draws a new line by dragging the pointer; the stroke is simplified and stored as a series of straight segments. (F)
   * ![Add area button](assets/help/images/buttonAddArea.png "Add area")  _Add area_: adds a new area to the TH2 file. (A)
 * ![Zoom options button](assets/help/images/buttonZoomOptions.png "Zoom options")  _Zoom options_: presents the zoom options. On mouse over the following buttons are shown:
   * ![Zoom in button](assets/help/images/buttonZoomIn.png "Zoom in")  _Zoom in_: zooms in the TH2 file view. (+)

@@ -71,6 +71,16 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
             keyProcessed = true;
           }
         }
+      case LogicalKeyboardKey.keyF:
+        if (!isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed) {
+          th2FileEditController.stateController.setState(
+            MPTH2FileEditStateType.addFreehandLine,
+          );
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyG:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&
