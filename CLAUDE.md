@@ -113,7 +113,7 @@ Full rules in coding-guidelines.md. Critical rules:
 * No all-caps in UI text
 * Update help pages (EN/PT) + keyboard shortcuts (alphabetical order)
 * URLs → MPURLTextWidget
-* Formatting handled automatically on commit
+* Formatting handled automatically on commit: never run "dart format".
 
 ### For every prompt:
 1. Run 'flutter analyze'

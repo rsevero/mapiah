@@ -56,6 +56,7 @@ abstract class TH2FileHideElementControllerBase with Store {
 
     _th2FileEditController.userInteractionController
         .markTherionStationPointNameCoordinateCacheDirty();
+    _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
@@ -70,6 +71,7 @@ abstract class TH2FileHideElementControllerBase with Store {
 
     _th2FileEditController.userInteractionController
         .markTherionStationPointNameCoordinateCacheDirty();
+    _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 

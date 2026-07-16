@@ -51,6 +51,14 @@ abstract class TH2FileEditSnapControllerBase with Store {
   @readonly
   Set<MPSnapXVIFileTarget> _snapXVIFileTargets = {};
 
+  bool _snapPointToInactiveScraps = false;
+
+  bool _snapLinePointToInactiveScraps = false;
+
+  bool get snapPointToInactiveScraps => _snapPointToInactiveScraps;
+
+  bool get snapLinePointToInactiveScraps => _snapLinePointToInactiveScraps;
+
   @readonly
   Map<MPSnapGridCell, List<THPositionPart>> _snapPointTargetsGrid = {};
 
@@ -125,6 +133,8 @@ abstract class TH2FileEditSnapControllerBase with Store {
     _pointTargetPLATypes = {};
     _linePointTargetPLATypes = {};
     _snapXVIFileTargets = {};
+    _snapPointToInactiveScraps = false;
+    _snapLinePointToInactiveScraps = false;
     updateSnapTargets();
     _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }
@@ -167,35 +177,52 @@ abstract class TH2FileEditSnapControllerBase with Store {
       return;
     }
 
-    final List<int> elementMPIDs = _th2File
-        .scrapByMPID(_th2FileEditController.activeScrapID)
-        .childrenMPIDs;
+    for (final THScrap scrap in _th2File.getScraps()) {
+      final bool isActiveScrap =
+          scrap.mpID == _th2FileEditController.activeScrapID;
+      final bool isInactiveScrapEnabled =
+          _snapPointToInactiveScraps || _snapLinePointToInactiveScraps;
+      final bool isVisibleScrap = _th2FileEditController.hideElementController
+          .isScrapVisible(scrap.mpID);
 
-    for (final int elementMPID in elementMPIDs) {
-      final THElement element = _th2File.elementByMPID(elementMPID);
+      if (!isActiveScrap && (!isInactiveScrapEnabled || !isVisibleScrap)) {
+        continue;
+      }
 
-      if (element is THPoint) {
-        if ((_snapPointTargetType == MPSnapPointTarget.none) ||
-            (_snapPointTargetType == MPSnapPointTarget.pointByType &&
-                !_pointTargetPLATypes.contains(element.plaType))) {
-          continue;
-        }
+      for (final int elementMPID in scrap.childrenMPIDs) {
+        final THElement element = _th2File.elementByMPID(elementMPID);
 
-        _snapPointTargets.add(element.position);
-      } else if (element is THLine) {
-        if ((_snapLinePointTargetType == MPSnapLinePointTarget.none) ||
-            (_snapLinePointTargetType ==
-                    MPSnapLinePointTarget.linePointByType &&
-                !_linePointTargetPLATypes.contains(element.plaType))) {
-          continue;
-        }
+        if (element is THPoint) {
+          if (!isActiveScrap && !_snapPointToInactiveScraps) {
+            continue;
+          }
 
-        final List<THLineSegment> lineSegments = element.getLineSegments(
-          _th2File,
-        );
+          if ((_snapPointTargetType == MPSnapPointTarget.none) ||
+              (_snapPointTargetType == MPSnapPointTarget.pointByType &&
+                  !_pointTargetPLATypes.contains(element.plaType))) {
+            continue;
+          }
 
-        for (final THLineSegment lineSegment in lineSegments) {
-          _snapPointTargets.add(lineSegment.endPoint);
+          _snapPointTargets.add(element.position);
+        } else if (element is THLine) {
+          if (!isActiveScrap && !_snapLinePointToInactiveScraps) {
+            continue;
+          }
+
+          if ((_snapLinePointTargetType == MPSnapLinePointTarget.none) ||
+              (_snapLinePointTargetType ==
+                      MPSnapLinePointTarget.linePointByType &&
+                  !_linePointTargetPLATypes.contains(element.plaType))) {
+            continue;
+          }
+
+          final List<THLineSegment> lineSegments = element.getLineSegments(
+            _th2File,
+          );
+
+          for (final THLineSegment lineSegment in lineSegments) {
+            _snapPointTargets.add(lineSegment.endPoint);
+          }
         }
       }
     }
@@ -701,6 +728,18 @@ abstract class TH2FileEditSnapControllerBase with Store {
 
   void setSnapXVITargets(Iterable<MPSnapXVIFileTarget> targets) {
     _snapXVIFileTargets = targets.toSet();
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  void setSnapPointToInactiveScraps(bool enabled) {
+    _snapPointToInactiveScraps = enabled;
+    updateSnapTargets();
+    _th2FileEditController.triggerSnapTargetsWindowRedraw();
+  }
+
+  void setSnapLinePointToInactiveScraps(bool enabled) {
+    _snapLinePointToInactiveScraps = enabled;
     updateSnapTargets();
     _th2FileEditController.triggerSnapTargetsWindowRedraw();
   }

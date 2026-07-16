@@ -537,10 +537,12 @@ Há várias opções de snap disponíveis que podem ser controladas na janela ap
   * __Nenhum__: não fazer snap em pontos do arquivo TH2.
   * __Pontos__: snap em todos os pontos definidos no arquivo TH2.
   * __Pontos por tipo__: snap somente nos tipos de ponto selecionados no arquivo TH2.
+  * __Ajustar a scraps inativos__: também usar pontos correspondentes de scraps inativos visíveis.
 * Snap de pontos de linha (opção única):
   * __Pontos de linha__: snap em todos os pontos de linha no arquivo TH2.
   * __Pontos de linha por tipo__: snap somente nos pontos de linha dos tipos de linha selecionados.
   * __Nenhum__: não fazer snap em pontos de linha.
+  * __Ajustar a scraps inativos__: também usar pontos de linha correspondentes de scraps inativos visíveis.
 
 ## Zoom e pan
 A visualização do arquivo TH2 pode ser aproximada e afastada usando os botões de zoom ou a roda do mouse.

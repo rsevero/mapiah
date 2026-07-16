@@ -2075,6 +2075,12 @@ abstract class AppLocalizations {
   /// **'Point snap'**
   String get mpSnapPointTargetsLabel;
 
+  /// The label for enabling snap targets from visible inactive scraps. Used on: _MPSnapTargetsWidgetState._buildInactiveScrapsCheckbox
+  ///
+  /// In en, this message translates to:
+  /// **'Snap to inactive scraps'**
+  String get mpSnapToInactiveScraps;
+
   /// The label for the line point snap target option. Used on: MPTextToUser._initializeSnapLinePointTargetAsString
   ///
   /// In en, this message translates to:

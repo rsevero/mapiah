@@ -87,28 +87,30 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
             th2FileEditController.redrawSnapTargetsWindow;
 
             return Column(
-              children: choices.entries.map((entry) {
-                return CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(entry.value),
-                  value: snapController.snapXVIFileTargets.contains(
-                    MPSnapXVIFileTarget.values.byName(entry.key),
-                  ),
-                  onChanged: (checked) {
-                    if (checked == true) {
-                      snapController.addSnapXVITarget(
-                        MPSnapXVIFileTarget.values.byName(entry.key),
-                      );
-                    } else {
-                      snapController.removeSnapXVITarget(
-                        MPSnapXVIFileTarget.values.byName(entry.key),
-                      );
-                    }
-                  },
-                );
-              }).toList(),
+              children: [
+                ...choices.entries.map((entry) {
+                  return CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(entry.value),
+                    value: snapController.snapXVIFileTargets.contains(
+                      MPSnapXVIFileTarget.values.byName(entry.key),
+                    ),
+                    onChanged: (checked) {
+                      if (checked == true) {
+                        snapController.addSnapXVITarget(
+                          MPSnapXVIFileTarget.values.byName(entry.key),
+                        );
+                      } else {
+                        snapController.removeSnapXVITarget(
+                          MPSnapXVIFileTarget.values.byName(entry.key),
+                        );
+                      }
+                    },
+                  );
+                }),
+              ],
             );
           },
         ),
@@ -231,6 +233,10 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
 
                     return tile;
                   }),
+                  _buildInactiveScrapsCheckbox(
+                    value: snapController.snapPointToInactiveScraps,
+                    onChanged: snapController.setSnapPointToInactiveScraps,
+                  ),
                 ],
               ),
             );
@@ -361,12 +367,32 @@ class _MPSnapTargetsWidgetState extends State<MPSnapTargetsWidget> {
 
                     return tile;
                   }),
+                  _buildInactiveScrapsCheckbox(
+                    value: snapController.snapLinePointToInactiveScraps,
+                    onChanged: snapController.setSnapLinePointToInactiveScraps,
+                  ),
                 ],
               ),
             );
           },
         ),
       ],
+    );
+  }
+
+  Widget _buildInactiveScrapsCheckbox({
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      title: Text(appLocalizations.mpSnapToInactiveScraps),
+      value: value,
+      onChanged: (bool? checked) {
+        onChanged(checked == true);
+      },
     );
   }
 }

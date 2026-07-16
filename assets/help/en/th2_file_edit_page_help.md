@@ -537,10 +537,12 @@ There are several snap options available that can be controled on the window pre
   * __None__: no snaping to points in the TH2 file.
   * __Points__: snap to all defined points in the TH2 file.
   * __Points by type__: snap only to the selected point types in the TH2 file.
+  * __Snap to inactive scraps__: also use matching points from visible inactive scraps.
 * Line point snap (single option):
   * __Lines point__: snap to all line points in the TH2 file.
   * __Lines point by type__: snap only to the line points of the line types selcted.
   * __None__: no snaping to line points.
+  * __Snap to inactive scraps__: also use matching line points from visible inactive scraps.
 
 ## Zoom and panning
 The TH2 file view can be zoomed in and out using the zoom buttons or the mouse wheel.

@@ -994,6 +994,7 @@ abstract class TH2FileEditControllerBase with Store {
       selectionController.clearSelectedLineSegments();
     }
 
+    snapController.updateSnapTargets();
     updateEnableSelectButton();
   }
 

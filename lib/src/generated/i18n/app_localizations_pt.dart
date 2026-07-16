@@ -1090,6 +1090,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSnapPointTargetsLabel => 'Ajuste a pontos';
 
   @override
+  String get mpSnapToInactiveScraps => 'Ajustar a scraps inativos';
+
+  @override
   String get mpSnapTargetLinePoint => 'Pontos de linha';
 
   @override

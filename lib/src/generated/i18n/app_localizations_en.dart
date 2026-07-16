@@ -1077,6 +1077,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSnapPointTargetsLabel => 'Point snap';
 
   @override
+  String get mpSnapToInactiveScraps => 'Snap to inactive scraps';
+
+  @override
   String get mpSnapTargetLinePoint => 'Line points';
 
   @override

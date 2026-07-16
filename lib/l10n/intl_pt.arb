@@ -347,6 +347,7 @@
   "mpSketchYLabel": "Y",
   "mpSnapLinePointTargetsLabel": "Ajuste a pontos de linha",
   "mpSnapPointTargetsLabel": "Ajuste a pontos",
+  "mpSnapToInactiveScraps": "Ajustar a scraps inativos",
   "mpSnapTargetLinePoint": "Pontos de linha",
   "mpSnapTargetLinePointByType": "Pontos de linha por tipo de linha",
   "mpSnapTargetNone": "Nenhum",
