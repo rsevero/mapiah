@@ -108,9 +108,9 @@
     "description": "The label for the open file button. Used on: _MapiahHomeState.build",
     "type": "text"
   },
-  "mapiahHomeMoreActionsTooltip": "More actions",
-  "@mapiahHomeMoreActionsTooltip": {
-    "description": "Tooltip for the collapsed home app bar actions menu. Used on: _MapiahHomeState.build",
+  "mpMoreActionsTooltip": "More actions",
+  "@mpMoreActionsTooltip": {
+    "description": "Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build",
     "type": "text"
   },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",

@@ -63,4 +63,42 @@ void main() {
     );
     expect(find.byKey(const ValueKey('MapiahHomeNewFileButton')), findsNothing);
   });
+
+  testWidgets('file editor app bar uses an overflow menu when narrow', (
+    WidgetTester tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(800, 600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MapiahApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('MapiahHomeNewFileButton')));
+    await tester.pumpAndSettle();
+
+    final Finder okButton = find.widgetWithText(ElevatedButton, 'OK');
+
+    await tester.ensureVisible(okButton);
+    await tester.tap(okButton);
+    await tester.pumpAndSettle();
+    await tester.binding.setSurfaceSize(const Size(380, 600));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(
+      find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('TH2FileTabsPageNewFileButton')),
+      findsNothing,
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Save as (Shift+Ctrl+S)'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }

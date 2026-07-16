@@ -18,8 +18,21 @@ import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_properties_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
+import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
 import 'package:mobx/mobx.dart' hide Listener;
+
+enum _TH2FileTabsAction {
+  newFile,
+  openFile,
+  save,
+  saveAs,
+  openTHConfig,
+  runTherion,
+  settings,
+  keyboardShortcuts,
+  help,
+}
 
 class TH2FileTabsPage extends StatefulWidget {
   const TH2FileTabsPage({super.key});
@@ -111,11 +124,15 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     unawaited(mpSetWindowTitleIfAvailable(appLocalizations.appTitle));
 
     final Scaffold scaffold = Scaffold(
-      appBar: AppBar(
+      appBar: MPResponsiveAppBar(
         automaticallyImplyLeading: false,
         elevation: 4,
         title: const SizedBox.shrink(),
-        actions: <Widget>[
+        compactAction: _buildOverflowMenu(
+          appLocalizations: appLocalizations,
+          mpSettingsController: mpSettingsController,
+        ),
+        expandedActions: <Widget>[
           IconButton(
             key: const ValueKey('TH2FileTabsPageNewFileButton'),
             icon: const Icon(Icons.insert_drive_file_outlined),
@@ -342,6 +359,175 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     );
 
     return _withShortcuts(scaffold);
+  }
+
+  /// Builds the compact menu used when the file editor app bar is narrow.
+  Widget _buildOverflowMenu({
+    required AppLocalizations appLocalizations,
+    required MPSettingsController mpSettingsController,
+  }) {
+    return Observer(
+      builder: (BuildContext context) {
+        final TH2FileEditController? controller = _getActiveController();
+        final bool therionAvailable = mpSettingsController.isTherionAvailable;
+        final bool hasTHConfig =
+            mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
+
+        return PopupMenuButton<_TH2FileTabsAction>(
+          key: const ValueKey('TH2FileTabsPageMoreActionsButton'),
+          icon: Icon(
+            Icons.more_vert_outlined,
+            color: therionAvailable
+                ? Theme.of(context).colorScheme.onSecondaryContainer
+                : mpTherionRunStatusBackgroundErrorColor,
+          ),
+          tooltip: appLocalizations.mpMoreActionsTooltip,
+          onSelected: _handleOverflowMenuAction,
+          itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<_TH2FileTabsAction>>[
+                ..._buildFileMenuEntries(appLocalizations, controller),
+                const PopupMenuDivider(),
+                ..._buildTherionMenuEntries(appLocalizations, hasTHConfig),
+                const PopupMenuDivider(),
+                ..._buildSupportMenuEntries(appLocalizations),
+              ],
+        );
+      },
+    );
+  }
+
+  /// Creates the file-related entries for the compact app bar menu.
+  List<PopupMenuEntry<_TH2FileTabsAction>> _buildFileMenuEntries(
+    AppLocalizations appLocalizations,
+    TH2FileEditController? controller,
+  ) {
+    return <PopupMenuEntry<_TH2FileTabsAction>>[
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.newFile,
+        label: appLocalizations.mapiahHomeNewFileButtonTooltip,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.openFile,
+        label: appLocalizations.mapiahHomeOpenFile,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.save,
+        label: appLocalizations.th2FileEditPageSave,
+        enabled: controller?.enableSaveButton ?? false,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.saveAs,
+        label: appLocalizations.th2FileEditPageSaveAs,
+        enabled: controller != null,
+      ),
+    ];
+  }
+
+  /// Creates the Therion entries for the compact app bar menu.
+  List<PopupMenuEntry<_TH2FileTabsAction>> _buildTherionMenuEntries(
+    AppLocalizations appLocalizations,
+    bool hasTHConfig,
+  ) {
+    return <PopupMenuEntry<_TH2FileTabsAction>>[
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.openTHConfig,
+        label: appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.runTherion,
+        label: appLocalizations.mapiahRunTherionButtonTooltip,
+        enabled: hasTHConfig,
+      ),
+    ];
+  }
+
+  /// Creates the support entries for the compact app bar menu.
+  List<PopupMenuEntry<_TH2FileTabsAction>> _buildSupportMenuEntries(
+    AppLocalizations appLocalizations,
+  ) {
+    return <PopupMenuEntry<_TH2FileTabsAction>>[
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.settings,
+        label: appLocalizations.mpSettingsPageTitle,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.keyboardShortcuts,
+        label: appLocalizations.mapiahKeyboardShortcutsTooltip,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.help,
+        label: appLocalizations.helpDialogTooltip,
+      ),
+    ];
+  }
+
+  /// Builds one compact file editor app bar menu entry.
+  PopupMenuItem<_TH2FileTabsAction> _overflowMenuItem({
+    required _TH2FileTabsAction action,
+    required String label,
+    bool enabled = true,
+  }) {
+    return PopupMenuItem<_TH2FileTabsAction>(
+      value: action,
+      enabled: enabled,
+      child: Text(label),
+    );
+  }
+
+  /// Returns the active file controller when the active tab is valid.
+  TH2FileEditController? _getActiveController() {
+    final List<String> openFileOrder =
+        mpLocator.mpGeneralController.openFileOrder;
+    final int activeTabIndex = mpLocator.mpGeneralController.activeTabIndex;
+
+    if (openFileOrder.isEmpty ||
+        (activeTabIndex < 0) ||
+        (activeTabIndex >= openFileOrder.length)) {
+      return null;
+    }
+
+    return mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+      openFileOrder[activeTabIndex],
+    );
+  }
+
+  /// Runs the action selected from the compact file editor app bar menu.
+  void _handleOverflowMenuAction(_TH2FileTabsAction action) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+    final TH2FileEditController? controller = _getActiveController();
+
+    switch (action) {
+      case _TH2FileTabsAction.newFile:
+        MPDialogAux.newFile(context);
+      case _TH2FileTabsAction.openFile:
+        MPDialogAux.pickTH2File(context);
+      case _TH2FileTabsAction.save:
+        controller?.saveTH2File();
+      case _TH2FileTabsAction.saveAs:
+        controller?.saveAsTH2File();
+      case _TH2FileTabsAction.openTHConfig:
+        MPDialogAux.chooseTHConfigAndRunTherion(context);
+      case _TH2FileTabsAction.runTherion:
+        MPDialogAux.runTherionWithLastTHConfig(context);
+      case _TH2FileTabsAction.settings:
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const MPSettingsPage(),
+          ),
+        );
+      case _TH2FileTabsAction.keyboardShortcuts:
+        MPDialogAux.showHelpDialog(
+          context,
+          mpHelpPageKeyboardShortcutsEdit,
+          appLocalizations.mapiahKeyboardShortcutsTitle,
+        );
+      case _TH2FileTabsAction.help:
+        MPDialogAux.showHelpDialog(
+          context,
+          mpHelpPageTh2FileEdit,
+          appLocalizations.th2FileEditPageHelpDialogTitle,
+        );
+    }
   }
 
   Widget _buildTabContentWidget(String filename) {

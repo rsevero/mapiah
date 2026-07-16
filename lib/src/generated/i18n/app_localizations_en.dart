@@ -83,7 +83,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahHomeOpenFile => 'Open file (Ctrl+O or Ctrl+Shift+O)';
 
   @override
-  String get mapiahHomeMoreActionsTooltip => 'More actions';
+  String get mpMoreActionsTooltip => 'More actions';
 
   @override
   String get mapiahKeyboardShortcutsTitle => 'Keyboard Shortcuts';

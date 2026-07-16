@@ -212,11 +212,11 @@ abstract class AppLocalizations {
   /// **'Open file (Ctrl+O or Ctrl+Shift+O)'**
   String get mapiahHomeOpenFile;
 
-  /// Tooltip for the collapsed home app bar actions menu. Used on: _MapiahHomeState.build
+  /// Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build
   ///
   /// In en, this message translates to:
   /// **'More actions'**
-  String get mapiahHomeMoreActionsTooltip;
+  String get mpMoreActionsTooltip;
 
   /// The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts
   ///
