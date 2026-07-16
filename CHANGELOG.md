@@ -7,6 +7,7 @@
   * Mapiah now starts maximized on Linux, macOS, and Windows.
   * Added a freehand line drawing tool: press and drag (mouse, touch, or stylus) to draw, see the raw stroke previewed live via `MPAddFreehandLineWidget`, and release to commit one editable `THLine` made of straight segments in a single undoable action, with SexyTopo-style bounded/compacted sample capture and extent-relative Douglas-Peucker simplification. Endpoint snapping, the current line type/subtype, applicable default options, and the active scrap are all respected, and the result round-trips through `.th2` save/reload. Discoverable via the add-element toolbar row and the `F` shortcut, with updated EN/PT help pages and keyboard-shortcut tables. [requested by Edvard]
 * Fixed bugs:
+  * PocketTopo and TopParser XVI sketch lines named `red` now render in red instead of falling back to gray; the PocketTopo palette is covered by regression tests, including both gray spellings. [reported by CaverBruce]
 * Infrastructure maintenance:
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
   * Added a phased implementation roadmap for Therion-faithful symbol rendering, covering UIS point, line, area, and text symbols; shared rendering infrastructure; additional symbol sets; settings integration; and visual validation.

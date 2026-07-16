@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/constants/tk_color_map.dart';
 import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
@@ -29,6 +30,33 @@ class FakePathProviderPlatform extends PathProviderPlatform {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = FakePathProviderPlatform();
+
+  group('XVI sketch line colors', () {
+    final Map<String, int> expectedColors = {
+      'black': 0xFF000000,
+      'blue': 0xFF0000FF,
+      'brown': 0xFFA52A2A,
+      'gray': 0xFF808080,
+      'green': 0xFF008000,
+      'orange': 0xFFFF8000,
+      'red': 0xFFFF0000,
+    };
+
+    for (final MapEntry<String, int> expectedColor
+        in expectedColors.entries) {
+      test('renders ${expectedColor.key} with its named color', () {
+        expect(
+          TKColorMap.getColor(expectedColor.key).toARGB32(),
+          expectedColor.value,
+        );
+      });
+    }
+
+    test('accepts the grey spelling used in PocketTopo descriptions', () {
+      expect(TKColorMap.getColor('grey'), TKColorMap.getColor('gray'));
+    });
+  });
+
   group('XVIGrid', () {
     final List<String> fileNames = [
       '2025-07-04-001-xvi-xvigrid_without_space_around_curly_braces',
