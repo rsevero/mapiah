@@ -19,6 +19,17 @@ import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+enum _MapiahHomeAction {
+  newFile,
+  openFile,
+  openTHConfig,
+  runTherion,
+  settings,
+  keyboardShortcuts,
+  help,
+  about,
+}
+
 class MapiahHome extends StatefulWidget {
   final String? mainFilePath;
   final List<String> th2FilePaths;
@@ -142,102 +153,131 @@ class _MapiahHomeState extends State<MapiahHome> {
     initializeMPCommandLocalizations(context);
 
     final Scaffold scaffold = Scaffold(
-      appBar: AppBar(
-        elevation: 4,
-        title: Text(appLocalizations.appTitle),
-        actions: <Widget>[
-          IconButton(
-            key: ValueKey('MapiahHomeNewFileButton'),
-            icon: Icon(Icons.insert_drive_file_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.newFile(context),
-            tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
-          ),
-          IconButton(
-            key: ValueKey('MapiahHomeOpenFileButton'),
-            icon: Icon(Icons.file_open_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.pickTH2File(context),
-            tooltip: appLocalizations.mapiahHomeOpenFile,
-          ),
-          actionsSeparator,
-          Observer(
-            builder: (_) {
-              final bool therionAvailable =
-                  mpSettingsController.isTherionAvailable;
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final double appBarWidth = constraints.maxWidth;
 
-              return IconButton(
-                key: ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
-                icon: Icon(Icons.playlist_add_check_outlined),
-                color: therionAvailable
-                    ? colorScheme.onSecondaryContainer
-                    : mpTherionRunStatusBackgroundErrorColor,
-                onPressed: () =>
-                    MPDialogAux.chooseTHConfigAndRunTherion(context),
-                tooltip: therionAvailable
-                    ? appLocalizations
-                          .mapiahOpenTHConfigAndRunTherionButtonTooltip
-                    : appLocalizations.mpNoTherionFound,
-              );
-            },
-          ),
-          Observer(
-            builder: (_) {
-              final bool therionAvailable =
-                  mpSettingsController.isTherionAvailable;
-              final bool hasTHConfig =
-                  mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
-              final VoidCallback? onPressed = hasTHConfig
-                  ? () => MPDialogAux.runTherionWithLastTHConfig(context)
-                  : null;
+            return AppBar(
+              elevation: 4,
+              title: Text(appLocalizations.appTitle),
+              actions: appBarWidth < mpHomeAppBarOverflowMenuMinWidth
+                  ? <Widget>[]
+                  : appBarWidth < mpHomeAppBarExpandedActionsMinWidth
+                  ? <Widget>[
+                      _buildOverflowMenu(
+                        appLocalizations: appLocalizations,
+                        mpSettingsController: mpSettingsController,
+                      ),
+                    ]
+                  : <Widget>[
+                      IconButton(
+                        key: ValueKey('MapiahHomeNewFileButton'),
+                        icon: Icon(Icons.insert_drive_file_outlined),
+                        color: colorScheme.onSecondaryContainer,
+                        onPressed: () => MPDialogAux.newFile(context),
+                        tooltip:
+                            appLocalizations.mapiahHomeNewFileButtonTooltip,
+                      ),
+                      IconButton(
+                        key: ValueKey('MapiahHomeOpenFileButton'),
+                        icon: Icon(Icons.file_open_outlined),
+                        color: colorScheme.onSecondaryContainer,
+                        onPressed: () => MPDialogAux.pickTH2File(context),
+                        tooltip: appLocalizations.mapiahHomeOpenFile,
+                      ),
+                      actionsSeparator,
+                      Observer(
+                        builder: (_) {
+                          final bool therionAvailable =
+                              mpSettingsController.isTherionAvailable;
 
-              return IconButton(
-                key: ValueKey('MapiahHomeRunTherionButton'),
-                icon: Icon(Icons.play_arrow_outlined),
-                color: therionAvailable
-                    ? colorScheme.onSecondaryContainer
-                    : mpTherionRunStatusBackgroundErrorColor,
-                onPressed: onPressed,
-                tooltip: therionAvailable
-                    ? appLocalizations.mapiahRunTherionButtonTooltip
-                    : appLocalizations.mpNoTherionFound,
-              );
-            },
-          ),
-          actionsSeparator,
-          IconButton(
-            key: ValueKey('MapiahHomeSettingsButton'),
-            icon: Icon(Icons.settings_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const MPSettingsPage(),
-                ),
-              );
-            },
-            tooltip: appLocalizations.mpSettingsPageTitle,
-          ),
-          MPHelpButtonWidget(
-            context,
-            mpHelpPageKeyboardShortcutsMain,
-            appLocalizations.mapiahKeyboardShortcutsTitle,
-            iconData: Icons.keyboard_alt_outlined,
-            tooltip: appLocalizations.mapiahKeyboardShortcutsTooltip,
-          ),
-          MPHelpButtonWidget(
-            context,
-            mpHelpPageMapiahHome,
-            appLocalizations.mapiahHomeHelpDialogTitle,
-          ),
-          IconButton(
-            key: ValueKey('MapiahHomeAboutButton'),
-            icon: Icon(Icons.info_outline),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => showAboutDialog(context),
-            tooltip: appLocalizations.mapiahHomeAboutMapiahDialog,
-          ),
-        ],
+                          return IconButton(
+                            key: ValueKey(
+                              'MapiahHomeOpenTHConfigAndRunTherionButton',
+                            ),
+                            icon: Icon(Icons.playlist_add_check_outlined),
+                            color: therionAvailable
+                                ? colorScheme.onSecondaryContainer
+                                : mpTherionRunStatusBackgroundErrorColor,
+                            onPressed: () =>
+                                MPDialogAux.chooseTHConfigAndRunTherion(
+                                  context,
+                                ),
+                            tooltip: therionAvailable
+                                ? appLocalizations
+                                      .mapiahOpenTHConfigAndRunTherionButtonTooltip
+                                : appLocalizations.mpNoTherionFound,
+                          );
+                        },
+                      ),
+                      Observer(
+                        builder: (_) {
+                          final bool therionAvailable =
+                              mpSettingsController.isTherionAvailable;
+                          final bool hasTHConfig = mpLocator
+                              .mpGeneralController
+                              .thConfigFilePath
+                              .isNotEmpty;
+                          final VoidCallback? onPressed = hasTHConfig
+                              ? () => MPDialogAux.runTherionWithLastTHConfig(
+                                  context,
+                                )
+                              : null;
+
+                          return IconButton(
+                            key: ValueKey('MapiahHomeRunTherionButton'),
+                            icon: Icon(Icons.play_arrow_outlined),
+                            color: therionAvailable
+                                ? colorScheme.onSecondaryContainer
+                                : mpTherionRunStatusBackgroundErrorColor,
+                            onPressed: onPressed,
+                            tooltip: therionAvailable
+                                ? appLocalizations.mapiahRunTherionButtonTooltip
+                                : appLocalizations.mpNoTherionFound,
+                          );
+                        },
+                      ),
+                      actionsSeparator,
+                      IconButton(
+                        key: ValueKey('MapiahHomeSettingsButton'),
+                        icon: Icon(Icons.settings_outlined),
+                        color: colorScheme.onSecondaryContainer,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const MPSettingsPage(),
+                            ),
+                          );
+                        },
+                        tooltip: appLocalizations.mpSettingsPageTitle,
+                      ),
+                      MPHelpButtonWidget(
+                        context,
+                        mpHelpPageKeyboardShortcutsMain,
+                        appLocalizations.mapiahKeyboardShortcutsTitle,
+                        iconData: Icons.keyboard_alt_outlined,
+                        tooltip:
+                            appLocalizations.mapiahKeyboardShortcutsTooltip,
+                      ),
+                      MPHelpButtonWidget(
+                        context,
+                        mpHelpPageMapiahHome,
+                        appLocalizations.mapiahHomeHelpDialogTitle,
+                      ),
+                      IconButton(
+                        key: ValueKey('MapiahHomeAboutButton'),
+                        icon: Icon(Icons.info_outline),
+                        color: colorScheme.onSecondaryContainer,
+                        onPressed: () => showAboutDialog(context),
+                        tooltip: appLocalizations.mapiahHomeAboutMapiahDialog,
+                      ),
+                    ],
+            );
+          },
+        ),
       ),
       body: Center(
         child: Text(
@@ -248,6 +288,127 @@ class _MapiahHomeState extends State<MapiahHome> {
     );
 
     return _withShortcuts(scaffold);
+  }
+
+  /// Builds the compact menu used when the home app bar is narrow.
+  Widget _buildOverflowMenu({
+    required AppLocalizations appLocalizations,
+    required MPSettingsController mpSettingsController,
+  }) {
+    return Observer(
+      builder: (BuildContext context) {
+        final bool therionAvailable = mpSettingsController.isTherionAvailable;
+        final bool hasTHConfig =
+            mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
+
+        return PopupMenuButton<_MapiahHomeAction>(
+          key: ValueKey('MapiahHomeMoreActionsButton'),
+          icon: Icon(
+            Icons.more_vert_outlined,
+            color: therionAvailable
+                ? Theme.of(context).colorScheme.onSecondaryContainer
+                : mpTherionRunStatusBackgroundErrorColor,
+          ),
+          tooltip: appLocalizations.mapiahHomeMoreActionsTooltip,
+          onSelected: _handleOverflowMenuAction,
+          itemBuilder: (BuildContext context) =>
+              _buildOverflowMenuEntries(appLocalizations, hasTHConfig),
+        );
+      },
+    );
+  }
+
+  /// Creates the entries for the compact home app bar menu.
+  List<PopupMenuEntry<_MapiahHomeAction>> _buildOverflowMenuEntries(
+    AppLocalizations appLocalizations,
+    bool hasTHConfig,
+  ) {
+    return <PopupMenuEntry<_MapiahHomeAction>>[
+      _overflowMenuItem(
+        action: _MapiahHomeAction.newFile,
+        label: appLocalizations.mapiahHomeNewFileButtonTooltip,
+      ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.openFile,
+        label: appLocalizations.mapiahHomeOpenFile,
+      ),
+      const PopupMenuDivider(),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.openTHConfig,
+        label: appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
+      ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.runTherion,
+        label: appLocalizations.mapiahRunTherionButtonTooltip,
+        enabled: hasTHConfig,
+      ),
+      const PopupMenuDivider(),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.settings,
+        label: appLocalizations.mpSettingsPageTitle,
+      ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.keyboardShortcuts,
+        label: appLocalizations.mapiahKeyboardShortcutsTooltip,
+      ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.help,
+        label: appLocalizations.helpDialogTooltip,
+      ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.about,
+        label: appLocalizations.mapiahHomeAboutMapiahDialog,
+      ),
+    ];
+  }
+
+  /// Builds one compact home app bar menu entry.
+  PopupMenuItem<_MapiahHomeAction> _overflowMenuItem({
+    required _MapiahHomeAction action,
+    required String label,
+    bool enabled = true,
+  }) {
+    return PopupMenuItem<_MapiahHomeAction>(
+      value: action,
+      enabled: enabled,
+      child: Text(label),
+    );
+  }
+
+  /// Runs the action selected from the compact home app bar menu.
+  void _handleOverflowMenuAction(_MapiahHomeAction action) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    switch (action) {
+      case _MapiahHomeAction.newFile:
+        MPDialogAux.newFile(context);
+      case _MapiahHomeAction.openFile:
+        MPDialogAux.pickTH2File(context);
+      case _MapiahHomeAction.openTHConfig:
+        MPDialogAux.chooseTHConfigAndRunTherion(context);
+      case _MapiahHomeAction.runTherion:
+        MPDialogAux.runTherionWithLastTHConfig(context);
+      case _MapiahHomeAction.settings:
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const MPSettingsPage(),
+          ),
+        );
+      case _MapiahHomeAction.keyboardShortcuts:
+        MPDialogAux.showHelpDialog(
+          context,
+          mpHelpPageKeyboardShortcutsMain,
+          appLocalizations.mapiahKeyboardShortcutsTitle,
+        );
+      case _MapiahHomeAction.help:
+        MPDialogAux.showHelpDialog(
+          context,
+          mpHelpPageMapiahHome,
+          appLocalizations.mapiahHomeHelpDialogTitle,
+        );
+      case _MapiahHomeAction.about:
+        showAboutDialog(context);
+    }
   }
 
   void initializeMPCommandLocalizations(BuildContext context) {

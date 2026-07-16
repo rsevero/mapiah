@@ -108,6 +108,11 @@
     "description": "The label for the open file button. Used on: _MapiahHomeState.build",
     "type": "text"
   },
+  "mapiahHomeMoreActionsTooltip": "More actions",
+  "@mapiahHomeMoreActionsTooltip": {
+    "description": "Tooltip for the collapsed home app bar actions menu. Used on: _MapiahHomeState.build",
+    "type": "text"
+  },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
     "description": "The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts",
