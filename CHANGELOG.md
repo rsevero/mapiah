@@ -13,6 +13,7 @@
 * Infrastructure maintenance:
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
   * Added a phased implementation roadmap for Therion-faithful symbol rendering, covering UIS point, line, area, and text symbols; shared rendering infrastructure; additional symbol sets; settings integration; and visual validation.
+  * Implemented the shared Phase 0 infrastructure for Therion-faithful symbol rendering: a persisted visualization-method setting for Mapiah placeholders and all Therion symbol sets, scale-aware symbol units and transforms, direction-aware line path walking and decorators, cached area-pattern tiles, deterministic procedural randomness, documented `thclean` behavior, and a side-by-side golden-test harness. Added EN/PT settings labels, help documentation, and regression coverage.
 
 ## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release
 * Highlights:

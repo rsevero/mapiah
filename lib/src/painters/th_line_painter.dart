@@ -11,6 +11,8 @@ import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
 import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
+import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
@@ -20,6 +22,7 @@ class THLinePainter extends CustomPainter {
   final LinkedHashMap<int, THLinePainterLineSegment> lineSegmentsMap;
   final THLinePaint linePaint;
   final bool showLinePoints;
+  final MPLineDecorator? lineDecorator;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
@@ -28,6 +31,7 @@ class THLinePainter extends CustomPainter {
     required this.lineSegmentsMap,
     required this.linePaint,
     this.showLinePoints = false,
+    this.lineDecorator,
     required this.th2FileEditController,
   });
 
@@ -247,6 +251,17 @@ class THLinePainter extends CustomPainter {
       );
     }
 
+    lineDecorator?.decorate(
+      canvas: canvas,
+      path: path,
+      linePaint: linePaint,
+      symbolUnit: MPSymbolUnit(
+        canvasScale: th2FileEditController.canvasScale,
+        devicePixelRatio: th2FileEditController.devicePixelRatio,
+      ),
+      isReversed: lineInfo.isReversed,
+    );
+
     if (showLinePoints) {
       final double linePointRadius =
           th2FileEditController.lineThicknessOnCanvas *
@@ -268,6 +283,7 @@ class THLinePainter extends CustomPainter {
 
     return linePaint != oldDelegate.linePaint ||
         showLinePoints != oldDelegate.showLinePoints ||
+        lineDecorator != oldDelegate.lineDecorator ||
         !const MapEquality<int, THLinePainterLineSegment>().equals(
           lineSegmentsMap,
           oldDelegate.lineSegmentsMap,

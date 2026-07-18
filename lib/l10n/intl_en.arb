@@ -1526,6 +1526,16 @@
     "description": "Label for the xTherion cubic smooth new line creation method. Used on: enum-backed settings UI",
     "type": "text"
   },
+  "mpSettingsEnumVisualizationMethodMapiahPlaceholder": "Mapiah placeholder",
+  "mpSettingsEnumVisualizationMethodTherionUIS": "Therion UIS",
+  "mpSettingsEnumVisualizationMethodTherionAUT": "Therion AUT",
+  "mpSettingsEnumVisualizationMethodTherionSBE": "Therion SBE",
+  "mpSettingsEnumVisualizationMethodTherionSKBB": "Therion SKBB",
+  "mpSettingsEnumVisualizationMethodTherionBCRA": "Therion BCRA",
+  "mpSettingsEnumVisualizationMethodTherionNSS": "Therion NSS",
+  "mpSettingsEnumVisualizationMethodTherionNZSS": "Therion NZSS",
+  "mpSettingsEnumVisualizationMethodTherionASF": "Therion ASF",
+  "mpSettingsEnumVisualizationMethodTherionSM": "Therion SM",
   "mpSettingsInvalidInteger": "Invalid integer",
   "@mpSettingsInvalidInteger": {
     "description": "Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart",
@@ -1603,6 +1613,11 @@
   "mpSettingsSettingTH2EditNewLineCreationMethod": "New line creation method",
   "@mpSettingsSettingTH2EditNewLineCreationMethod": {
     "description": "Label for the TH2 new line creation method setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "mpSettingsSettingTH2EditVisualizationMethod": "Visualization method",
+  "@mpSettingsSettingTH2EditVisualizationMethod": {
+    "description": "Label for the TH2 visualization method setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
   "mpSettingsSettingTH2EditNudgeFactor": "Nudge factor",

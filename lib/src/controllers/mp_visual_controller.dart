@@ -18,6 +18,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
+import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_visual_controller.g.dart';
@@ -25,6 +26,8 @@ part 'mp_visual_controller.g.dart';
 class MPVisualController = MPVisualControllerBase with _$MPVisualController;
 
 abstract class MPVisualControllerBase with Store {
+  final MPPatternCache patternCache = MPPatternCache();
+
   @readonly
   TH2File _th2File;
 

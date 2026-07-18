@@ -716,6 +716,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditShowLinePoints;
       case MPSettingID.TH2Edit_SnapAngle:
         return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
+      case MPSettingID.TH2Edit_VisualizationMethod:
+        return appLocalizations.mpSettingsSettingTH2EditVisualizationMethod;
       default:
         throw UnimplementedError(
           'At MPSettingsPage._localizedSettingName(): no localized name defined for setting type "$type"',

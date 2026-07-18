@@ -1888,6 +1888,66 @@ abstract class AppLocalizations {
   /// **'xTherion cubic smooth'**
   String get mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
 
+  /// No description provided for @mpSettingsEnumVisualizationMethodMapiahPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah placeholder'**
+  String get mpSettingsEnumVisualizationMethodMapiahPlaceholder;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionUIS.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion UIS'**
+  String get mpSettingsEnumVisualizationMethodTherionUIS;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionAUT.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion AUT'**
+  String get mpSettingsEnumVisualizationMethodTherionAUT;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionSBE.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion SBE'**
+  String get mpSettingsEnumVisualizationMethodTherionSBE;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionSKBB.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion SKBB'**
+  String get mpSettingsEnumVisualizationMethodTherionSKBB;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionBCRA.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion BCRA'**
+  String get mpSettingsEnumVisualizationMethodTherionBCRA;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionNSS.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion NSS'**
+  String get mpSettingsEnumVisualizationMethodTherionNSS;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionNZSS.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion NZSS'**
+  String get mpSettingsEnumVisualizationMethodTherionNZSS;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionASF.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion ASF'**
+  String get mpSettingsEnumVisualizationMethodTherionASF;
+
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionSM.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion SM'**
+  String get mpSettingsEnumVisualizationMethodTherionSM;
+
   /// Validation message for invalid integer values in settings. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:
@@ -1984,6 +2044,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New line creation method'**
   String get mpSettingsSettingTH2EditNewLineCreationMethod;
+
+  /// Label for the TH2 visualization method setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Visualization method'**
+  String get mpSettingsSettingTH2EditVisualizationMethod;
 
   /// Label for TH2 edit nudge factor setting. Used on: lib/src/pages/mp_settings_page.dart
   ///

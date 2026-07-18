@@ -1357,6 +1357,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   void close() {
     overlayWindowController.clearOverlayWindows();
+    visualController.patternCache.clear();
     _disposeReactions();
     mpLocator.mpGeneralController.removeFileTab(filename: _th2File.filename);
   }

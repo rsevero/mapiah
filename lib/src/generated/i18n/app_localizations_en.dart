@@ -973,6 +973,37 @@ class AppLocalizationsEn extends AppLocalizations {
       'xTherion cubic smooth';
 
   @override
+  String get mpSettingsEnumVisualizationMethodMapiahPlaceholder =>
+      'Mapiah placeholder';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionUIS => 'Therion UIS';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionAUT => 'Therion AUT';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionSBE => 'Therion SBE';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionSKBB => 'Therion SKBB';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionBCRA => 'Therion BCRA';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionNSS => 'Therion NSS';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionNZSS => 'Therion NZSS';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionASF => 'Therion ASF';
+
+  @override
+  String get mpSettingsEnumVisualizationMethodTherionSM => 'Therion SM';
+
+  @override
   String get mpSettingsInvalidInteger => 'Invalid integer';
 
   @override
@@ -1027,6 +1058,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mpSettingsSettingTH2EditNewLineCreationMethod =>
       'New line creation method';
+
+  @override
+  String get mpSettingsSettingTH2EditVisualizationMethod =>
+      'Visualization method';
 
   @override
   String get mpSettingsSettingTH2EditNudgeFactor => 'Nudge factor';

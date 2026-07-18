@@ -18,6 +18,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Enable special border for visibility off](#enable-special-border-for-visibility-off)
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
+  - [Visualization method](#visualization-method)
   - [Point radius](#point-radius)
   - [Snap angle](#snap-angle)
   - [Selection tolerance](#selection-tolerance)
@@ -69,6 +70,9 @@ Controls the behavior when creating a new line segment by clicking and dragging:
 * **xTherion cubic smooth**: the drag position becomes the next segment's future control point; the current segment's other control point is mirrored around the shared endpoint. Hold _Ctrl_ while dragging to lock the mirrored control point at a fixed distance, hold _Shift_ while dragging to constrain that future control point to the nearest multiple of the configured snap angle relative to the shared node, hold _Shift_ while setting a node to constrain it to the nearest multiple of the configured snap angle relative to the previous node, and hold _Alt_ after starting the drag to redefine only the next segment's future control point. In this mode, _Shift_ can also be combined with _Alt_. It tries to reproduce XTherion behaviour.
 
 While drawing with either method, the last created node can also be nudged with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_.
+
+### Visualization method
+Selects how TH2 point, line, and area symbols are drawn. **Mapiah placeholder** preserves the existing geometric rendering and is the default. The Therion symbol-set choices prepare the renderer for faithful UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF, and SM symbols as those sets are implemented.
 
 ### Point radius
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.

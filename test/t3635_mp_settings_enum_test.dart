@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_pt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +38,12 @@ void main() {
       expect(
         settingsController.isEnumSet(MPSettingID.TH2Edit_NewLineCreationMethod),
         isFalse,
+      );
+      expect(
+        settingsController.getEnumWithDefault(
+          MPSettingID.TH2Edit_VisualizationMethod,
+        ),
+        MPTH2EditVisualizationMethod.mapiahPlaceholder,
       );
     });
 
@@ -145,6 +152,27 @@ void main() {
           MPNewLineCreationMethod.xTherionCubicSmooth,
         ),
         'Cúbico suave do xTherion',
+      );
+    });
+
+    test('defines every Therion visualization method', () {
+      final MPSettingEnumDefinition enumDefinition =
+          MPSettingID.TH2Edit_VisualizationMethod.enumDefinition();
+
+      expect(enumDefinition.values, MPTH2EditVisualizationMethod.values);
+      expect(
+        enumDefinition.localizedLabel(
+          AppLocalizationsEn(),
+          MPTH2EditVisualizationMethod.therionUIS,
+        ),
+        'Therion UIS',
+      );
+      expect(
+        enumDefinition.localizedLabel(
+          AppLocalizationsPt(),
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        ),
+        'Marcador do Mapiah',
       );
     });
   });

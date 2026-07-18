@@ -36,6 +36,10 @@ Nine symbol sets exist (UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF, SM). The UIS 
 
 The rendering abstraction is well-structured (`MPPointShapeType`, `MPLinePaintType`, `MPVisualController`, `THPointPaint`, `THLinePaint`). Adding Therion symbols means extending these systems, not restructuring them.
 
+### Therion code availability
+
+Therion code is locally available at ~/devel/therion-rsevero.
+
 ---
 
 ## Chosen Approach: Phased Manual Dart Port (UIS First)
@@ -209,15 +213,15 @@ For the **`a_sand_UIS`** complex pattern (randomized point cloud), seed `Random`
 
 Before drawing any symbols, establish the shared foundations:
 
-- [ ] Create `TH2Edit_VisualizationMethod` MPSetting as a enum with the following options: `MapiahPlaceholder`, `TherionUIS`, `TherionAUT`, `TherionSBE`, `TherionSKBB`, `TherionBCRA`, `TherionNSS`, `TherionNZSS`, `TherionASF`, `TherionSM`. Default value is `MapiahPlaceholder`.
-- [ ] Define base unit `u` as a canvas-scale-aware constant (e.g., `MPSymbolUnit`) accessible from all painters
-- [ ] Add `Matrix4`-based symbol transform helper (position + rotation + scale in one call)
-- [ ] Add `PathMetric` walker utility for line decorators (wraps `getTangentForOffset`, handles path direction)
-- [ ] Add `MPLineDecorator` abstract class and hook it into `THLinePainter`
-- [ ] Add area pattern tile cache (`Map<THAreaType, ui.Image>`) in `MPVisualController` or a dedicated `MPPatternCache`
-- [ ] Add seeded-random helper for stable procedural patterns (seed = element MPID)
-- [ ] Prototype `thclean` erase behavior: evaluate `BlendMode.clear` (requires a `saveLayer`/`restoreLayer` pair so clearing only affects the current layer, not the canvas background) vs. `canvas.clipPath` (clips subsequent draws to the shape boundary). Determine which approach matches Therion's hole-punching semantics and document the decision for use in Phase 1+
-- [ ] Establish visual test harness: a debug page or golden test that renders all symbols side-by-side for comparison against Therion output
+- [x] Create `TH2Edit_VisualizationMethod` MPSetting as a enum with the following options: `MapiahPlaceholder`, `TherionUIS`, `TherionAUT`, `TherionSBE`, `TherionSKBB`, `TherionBCRA`, `TherionNSS`, `TherionNZSS`, `TherionASF`, `TherionSM`. Default value is `MapiahPlaceholder`.
+- [x] Define base unit `u` as a canvas-scale-aware constant (e.g., `MPSymbolUnit`) accessible from all painters
+- [x] Add `Matrix4`-based symbol transform helper (position + rotation + scale in one call)
+- [x] Add `PathMetric` walker utility for line decorators (wraps `getTangentForOffset`, handles path direction)
+- [x] Add `MPLineDecorator` abstract class and hook it into `THLinePainter`
+- [x] Add area pattern tile cache (`Map<THAreaType, ui.Image>`) in `MPVisualController` or a dedicated `MPPatternCache`
+- [x] Add seeded-random helper for stable procedural patterns (seed = element MPID)
+- [x] Prototype `thclean` erase behavior: evaluate `BlendMode.clear` (requires a `saveLayer`/`restoreLayer` pair so clearing only affects the current layer, not the canvas background) vs. `canvas.clipPath` (clips subsequent draws to the shape boundary). Determine which approach matches Therion's hole-punching semantics and document the decision for use in Phase 1+
+- [x] Establish visual test harness: a debug page or golden test that renders all symbols side-by-side for comparison against Therion output
 
 ### Phase 1 — Simple UIS Symbols
 

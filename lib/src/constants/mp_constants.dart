@@ -230,6 +230,13 @@ const int mpFirstMPIDForElements = 1;
 
 const double mpDesiredSegmentLengthOnScreen = 15.0;
 
+/// Therion's base symbol unit in logical screen pixels at every zoom level.
+const double mpSymbolUnitOnScreen = 10.0;
+const int mpMaximumPathMetricContours = 10000;
+const int mpMaximumPathMetricSamplesPerContour = 100000;
+const double mpRandomMinimumNonZeroValue = 1e-12;
+const int mpMaximumRandomSeed = 0x3fffffff;
+
 const Set<String> mpImageTransformHandleTypesWithoutXScaling = <String>{
   'topCenter',
   'bottomCenter',

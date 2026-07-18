@@ -18,6 +18,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Ativar borda especial para visibility off](#ativar-borda-especial-para-visibility-off)
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
+  - [Método de visualização](#método-de-visualização)
   - [Raio do ponto](#raio-do-ponto)
   - [Ângulo preferencial](#ângulo-preferencial)
   - [Tolerância de seleção](#tolerância-de-seleção)
@@ -69,6 +70,9 @@ Controla o comportamento ao criar um novo segmento de linha clicando e arrastand
 * **Cúbico suave do xTherion**: a posição do arrasto torna-se o futuro ponto de controle do próximo segmento; o outro ponto de controle do segmento atual é espelhado em torno do ponto final compartilhado. Mantenha _Ctrl_ pressionado durante o arrasto para fixar a distância do ponto de controle espelhado, mantenha _Shift_ pressionado durante o arrasto para restringir esse futuro ponto de controle ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó compartilhado, mantenha _Shift_ pressionado ao definir um nó para restringi-lo ao múltiplo mais próximo do ângulo de snap configurado em relação ao nó anterior, e mantenha _Alt_ pressionado depois de iniciar o arrasto para redefinir apenas o futuro ponto de controle do próximo segmento. Neste modo, _Shift_ também pode ser combinado com _Alt_. Este método tenta reproduzir o comportamento do XTherion.
 
 Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser ajustado com _Seta_, _Shift+Seta_, _Alt+Seta_ e _Alt+Shift+Seta_.
+
+### Método de visualização
+Seleciona como os símbolos de pontos, linhas e áreas TH2 são desenhados. **Marcador do Mapiah** preserva a renderização geométrica existente e é o padrão. As opções de conjuntos de símbolos do Therion preparam o renderizador para os símbolos UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF e SM à medida que esses conjuntos forem implementados.
 
 ### Raio do ponto
 Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.

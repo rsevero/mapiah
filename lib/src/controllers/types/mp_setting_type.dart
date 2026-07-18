@@ -4,6 +4,7 @@
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_enum_definition.dart';
+import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 
 enum MPSettingID {
   Internal_DefaultAreaOptions,
@@ -34,6 +35,7 @@ enum MPSettingID {
   TH2Edit_ShowLastUsedPLATypeButtons,
   TH2Edit_ShowLinePoints,
   TH2Edit_SnapAngle,
+  TH2Edit_VisualizationMethod,
   Therion_DebugLog1,
   Therion_ExecutablePath,
   Therion_RunParameters;
@@ -71,6 +73,7 @@ enum MPSettingID {
     MPSettingID.TH2Edit_ShowLastUsedPLATypeButtons: MPSettingType.bool,
     MPSettingID.TH2Edit_ShowLinePoints: MPSettingType.bool,
     MPSettingID.TH2Edit_SnapAngle: MPSettingType.double,
+    MPSettingID.TH2Edit_VisualizationMethod: MPSettingType.enumeration,
     MPSettingID.Therion_DebugLog1: MPSettingType.bool,
     MPSettingID.Therion_ExecutablePath: MPSettingType.filePickerExec,
     MPSettingID.Therion_RunParameters: MPSettingType.string,
@@ -102,6 +105,52 @@ enum MPSettingID {
                   case MPNewLineCreationMethod.xTherionCubicSmooth:
                     return appLocalizations
                         .mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth;
+                }
+              },
+        ),
+    MPSettingID.TH2Edit_VisualizationMethod:
+        MPSettingEnumDefinitionImpl<MPTH2EditVisualizationMethod>(
+          enumValues: MPTH2EditVisualizationMethod.values,
+          parser: (String storedValue) {
+            try {
+              return MPTH2EditVisualizationMethod.values.byName(storedValue);
+            } on ArgumentError {
+              return null;
+            }
+          },
+          localizedLabelBuilder:
+              (appLocalizations, MPTH2EditVisualizationMethod value) {
+                switch (value) {
+                  case MPTH2EditVisualizationMethod.mapiahPlaceholder:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodMapiahPlaceholder;
+                  case MPTH2EditVisualizationMethod.therionUIS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionUIS;
+                  case MPTH2EditVisualizationMethod.therionAUT:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionAUT;
+                  case MPTH2EditVisualizationMethod.therionSBE:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSBE;
+                  case MPTH2EditVisualizationMethod.therionSKBB:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSKBB;
+                  case MPTH2EditVisualizationMethod.therionBCRA:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionBCRA;
+                  case MPTH2EditVisualizationMethod.therionNSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNSS;
+                  case MPTH2EditVisualizationMethod.therionNZSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNZSS;
+                  case MPTH2EditVisualizationMethod.therionASF:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionASF;
+                  case MPTH2EditVisualizationMethod.therionSM:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSM;
                 }
               },
         ),
