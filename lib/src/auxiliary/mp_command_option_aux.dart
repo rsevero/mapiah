@@ -429,6 +429,15 @@ class MPCommandOptionAux {
         : null;
   }
 
+  static THOptionChoicesAlignType? getAlign(THElement element) {
+    return ((element is THHasOptionsMixin) &&
+            element.hasOption(THCommandOptionType.align))
+        ? (element.getOption(THCommandOptionType.align)
+                  as THAlignCommandOption)
+              .choice
+        : null;
+  }
+
   static double? getOrientation(THElement element) {
     return ((element is THHasOptionsMixin) &&
             element.hasOption(THCommandOptionType.orientation))

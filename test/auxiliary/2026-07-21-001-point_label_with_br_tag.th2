@@ -1,0 +1,4 @@
+encoding utf-8
+scrap test
+point 0 0 label -text "First line<br>Second line"
+endscrap

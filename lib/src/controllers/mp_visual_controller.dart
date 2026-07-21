@@ -5,9 +5,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_label_text_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/constants/tk_color_map.dart';
+import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
+import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
@@ -1071,8 +1074,8 @@ abstract class MPVisualControllerBase with Store {
   }
 
   MPLineDecorator? getLineDecorator(THLineType lineType, {String? subtype}) {
-    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
-        MPTH2EditVisualizationMethod.therionUIS) {
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+        MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       return null;
     }
 
@@ -1243,8 +1246,8 @@ abstract class MPVisualControllerBase with Store {
           type: MPLinePaintType.medium,
         );
 
-    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
-        MPTH2EditVisualizationMethod.therionUIS) {
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
+        MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       final Paint? patternPaint = _getTherionUISAreaPatternPaint(areaType);
 
       if (patternPaint != null) {
@@ -1398,8 +1401,8 @@ abstract class MPVisualControllerBase with Store {
 
     pointPaint = pointPaint.copyWith(rotation: orientation * math.pi / 180);
 
-    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
-        MPTH2EditVisualizationMethod.therionUIS) {
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
+        MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       final String pointSubtype = MPCommandOptionAux.getSubtype(point) ??
           mpNoSubtypeID;
       final MPTherionPointSymbol? therionSymbol = getTherionUISPointSymbol(
@@ -1409,6 +1412,24 @@ abstract class MPVisualControllerBase with Store {
 
       if (therionSymbol != null) {
         pointPaint = pointPaint.copyWith(therionSymbol: therionSymbol);
+      } else {
+        final MPLabelData? labelData = MPLabelTextAux.resolve(point);
+
+        if (labelData != null) {
+          final THOptionChoicesAlignType align =
+              MPCommandOptionAux.getAlign(point) ??
+              THOptionChoicesAlignType.center;
+
+          pointPaint = pointPaint.copyWith(
+            labelPaint: MPLabelPaint(
+              data: labelData,
+              align: align,
+              backgroundFill: THPaint.thPaintWhiteBackground,
+              backgroundBorder: THPaint.thPaintBlackBorder,
+              textColor: Colors.black,
+            ),
+          );
+        }
       }
     }
 
