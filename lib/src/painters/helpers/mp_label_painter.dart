@@ -93,10 +93,6 @@ abstract final class MPLabelPainter {
       RRect.fromRectAndRadius(box, Radius.circular(marginY)),
       labelPaint.backgroundFill,
     );
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(box, Radius.circular(marginY)),
-      labelPaint.backgroundBorder,
-    );
     block.paint(canvas, Offset(box.left + marginX, box.top + marginY));
   }
 
@@ -116,10 +112,6 @@ abstract final class MPLabelPainter {
       _topRoundedContainer(box),
       labelPaint.backgroundFill,
     );
-    canvas.drawPath(
-      _topRoundedContainer(box),
-      labelPaint.backgroundBorder,
-    );
     block.paintCentered(canvas, box);
   }
 
@@ -138,10 +130,6 @@ abstract final class MPLabelPainter {
     canvas.drawPath(
       _bottomRoundedContainer(box),
       labelPaint.backgroundFill,
-    );
-    canvas.drawPath(
-      _bottomRoundedContainer(box),
-      labelPaint.backgroundBorder,
     );
     block.paintCentered(canvas, box);
   }
@@ -175,11 +163,10 @@ abstract final class MPLabelPainter {
     final Rect box = boxOrigin & boxSize;
 
     canvas.drawOval(box, labelPaint.backgroundFill);
-    canvas.drawOval(box, labelPaint.backgroundBorder);
     canvas.drawLine(
       Offset(box.left, box.center.dy),
       Offset(box.right, box.center.dy),
-      labelPaint.backgroundBorder,
+      labelPaint.divider,
     );
 
     plusBlock.paintCentered(canvas, Rect.fromLTRB(box.left, box.top, box.right, box.center.dy));
@@ -209,7 +196,6 @@ abstract final class MPLabelPainter {
     final Rect box = boxOrigin & boxSize;
 
     canvas.drawRect(box, labelPaint.backgroundFill);
-    canvas.drawRect(box, labelPaint.backgroundBorder);
     block.paint(canvas, Offset(box.left + marginX, box.top + marginY));
   }
 

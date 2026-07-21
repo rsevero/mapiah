@@ -229,7 +229,7 @@ void main() {
         align: THOptionChoicesAlignType.center,
         size: THLabelSize.normal,
         backgroundFill: THPaint.thPaintWhiteBackground,
-        backgroundBorder: THPaint.thPaintBlackBorder,
+        divider: THPaint.thPaintBlackBorder,
         textColor: Colors.black,
       );
 

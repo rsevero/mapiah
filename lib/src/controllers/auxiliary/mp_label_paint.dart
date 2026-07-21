@@ -8,13 +8,15 @@ import 'package:mapiah/src/painters/types/th_label_size.dart';
 /// Carries everything [MPLabelPainter.drawTherionLabel] needs to render a
 /// text-mode point's label: the resolved text/container [data], where to
 /// anchor it, how big to draw it, and the paints for its background box and
-/// glyphs.
+/// glyphs. Background boxes are unbordered (Therion draws plain labels
+/// without a frame); [divider] is only used to separate the plus/minus
+/// halves of a [MPLabelMode.passageHeightPosNeg] container.
 class MPLabelPaint {
   final MPLabelData data;
   final THOptionChoicesAlignType align;
   final THLabelSize size;
   final Paint backgroundFill;
-  final Paint backgroundBorder;
+  final Paint divider;
   final Color textColor;
 
   const MPLabelPaint({
@@ -22,7 +24,7 @@ class MPLabelPaint {
     this.align = THOptionChoicesAlignType.center,
     this.size = THLabelSize.normal,
     required this.backgroundFill,
-    required this.backgroundBorder,
+    required this.divider,
     required this.textColor,
   });
 
@@ -31,7 +33,7 @@ class MPLabelPaint {
     THOptionChoicesAlignType? align,
     THLabelSize? size,
     Paint? backgroundFill,
-    Paint? backgroundBorder,
+    Paint? divider,
     Color? textColor,
   }) {
     return MPLabelPaint(
@@ -39,7 +41,7 @@ class MPLabelPaint {
       align: align ?? this.align,
       size: size ?? this.size,
       backgroundFill: backgroundFill ?? this.backgroundFill,
-      backgroundBorder: backgroundBorder ?? this.backgroundBorder,
+      divider: divider ?? this.divider,
       textColor: textColor ?? this.textColor,
     );
   }

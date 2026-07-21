@@ -1425,7 +1425,7 @@ abstract class MPVisualControllerBase with Store {
               data: labelData,
               align: align,
               backgroundFill: THPaint.thPaintWhiteBackground,
-              backgroundBorder: THPaint.thPaintBlackBorder,
+              divider: THPaint.thPaintBlackBorder,
               textColor: Colors.black,
             ),
           );
