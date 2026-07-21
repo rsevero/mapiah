@@ -233,65 +233,91 @@ void main() {
         textColor: Colors.black,
       );
 
+      /// [TH2FileEditController.transformCanvas] always applies a
+      /// `canvas.scale(1, -1)` Y-flip before any element painter runs.
+      /// Simulate that here (pivoted at the cell center, same as the real
+      /// painter's own coordinate origin) so this golden exercises the same
+      /// double-flip cancellation `MPLabelPainter.drawTherionLabel` relies
+      /// on in the running app, instead of only the unflipped canvas a bare
+      /// `PictureRecorder` would give it.
+      MPSymbolGoldenDraw underAmbientYFlip(MPSymbolGoldenDraw draw) {
+        return (Canvas canvas, Offset center) {
+          canvas.save();
+          canvas.translate(center.dx, center.dy);
+          canvas.scale(1, -1);
+          canvas.translate(-center.dx, -center.dy);
+          draw(canvas, center);
+          canvas.restore();
+        };
+      }
+
       final List<MPSymbolGoldenEntry> entries = [
         MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
-            canvas: canvas,
-            labelPaint: paintFor(
-              const MPLabelData.plain(['Station1']),
+          draw: underAmbientYFlip(
+            (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
+              canvas: canvas,
+              labelPaint: paintFor(const MPLabelData.plain(['Station1'])),
+              anchor: center,
+              symbolUnit: symbolUnit,
             ),
-            anchor: center,
-            symbolUnit: symbolUnit,
           ),
         ),
         MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
-            canvas: canvas,
-            labelPaint: paintFor(
-              const MPLabelData.plain(['First line', 'Second line']),
-            ),
-            anchor: center,
-            symbolUnit: symbolUnit,
-          ),
-        ),
-        MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
-            canvas: canvas,
-            labelPaint: paintFor(
-              const MPLabelData.passageHeight(
-                mode: MPLabelMode.passageHeightPos,
-                plusText: '2.5 m',
+          draw: underAmbientYFlip(
+            (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
+              canvas: canvas,
+              labelPaint: paintFor(
+                const MPLabelData.plain(['First line', 'Second line']),
               ),
+              anchor: center,
+              symbolUnit: symbolUnit,
             ),
-            anchor: center,
-            symbolUnit: symbolUnit,
           ),
         ),
         MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
-            canvas: canvas,
-            labelPaint: paintFor(
-              const MPLabelData.passageHeight(
-                mode: MPLabelMode.passageHeightNeg,
-                minusText: '-1.2 m',
+          draw: underAmbientYFlip(
+            (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
+              canvas: canvas,
+              labelPaint: paintFor(
+                const MPLabelData.passageHeight(
+                  mode: MPLabelMode.passageHeightPos,
+                  plusText: '2.5 m',
+                ),
               ),
+              anchor: center,
+              symbolUnit: symbolUnit,
             ),
-            anchor: center,
-            symbolUnit: symbolUnit,
           ),
         ),
         MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
-            canvas: canvas,
-            labelPaint: paintFor(
-              const MPLabelData.passageHeight(
-                mode: MPLabelMode.passageHeightPosNeg,
-                plusText: '2.5 m',
-                minusText: '-1.2 m',
+          draw: underAmbientYFlip(
+            (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
+              canvas: canvas,
+              labelPaint: paintFor(
+                const MPLabelData.passageHeight(
+                  mode: MPLabelMode.passageHeightNeg,
+                  minusText: '-1.2 m',
+                ),
               ),
+              anchor: center,
+              symbolUnit: symbolUnit,
             ),
-            anchor: center,
-            symbolUnit: symbolUnit,
+          ),
+        ),
+        MPSymbolGoldenEntry(
+          draw: underAmbientYFlip(
+            (Canvas canvas, Offset center) => MPLabelPainter.drawTherionLabel(
+              canvas: canvas,
+              labelPaint: paintFor(
+                const MPLabelData.passageHeight(
+                  mode: MPLabelMode.passageHeightPosNeg,
+                  plusText: '2.5 m',
+                  minusText: '-1.2 m',
+                ),
+              ),
+              anchor: center,
+              symbolUnit: symbolUnit,
+            ),
           ),
         ),
         // Demonstrates horiz_labels: the red guide line is drawn under an
@@ -299,7 +325,7 @@ void main() {
         // apply to a Therion symbol), but the label itself always stays
         // horizontal regardless of that ambient rotation.
         MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) {
+          draw: underAmbientYFlip((Canvas canvas, Offset center) {
             canvas.save();
             canvas.translate(center.dx, center.dy);
             canvas.rotate(1.0);
@@ -320,7 +346,7 @@ void main() {
               anchor: center,
               symbolUnit: symbolUnit,
             );
-          },
+          }),
         ),
       ];
 

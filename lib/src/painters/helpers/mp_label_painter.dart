@@ -26,6 +26,14 @@ abstract final class MPLabelPainter {
   /// in `canvas.rotate(pointPaint.rotation)`), so simply not rotating here
   /// already reproduces Therion's `horiz_labels` behaviour: labels always
   /// stay upright regardless of the point's orientation option.
+  ///
+  /// [TH2FileEditController.transformCanvas] applies a `canvas.scale(1, -1)`
+  /// Y-flip ahead of every element painter (Mapiah keeps Therion's Y-down
+  /// convention on top of Flutter's Y-down screen space). Symbols and
+  /// geometric shapes don't care about that mirroring, but glyph rendering
+  /// does — left uncorrected, text paints upside down. Undo it locally for
+  /// this subtree only, so label geometry can be authored in normal
+  /// (non-flipped) coordinates.
   static void drawTherionLabel({
     required Canvas canvas,
     required MPLabelPaint labelPaint,
@@ -36,6 +44,7 @@ abstract final class MPLabelPainter {
 
     canvas.save();
     canvas.translate(anchor.dx, anchor.dy);
+    canvas.scale(1, -1);
 
     switch (labelPaint.data.mode) {
       case MPLabelMode.plain:
