@@ -12,22 +12,22 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Seção Principal](#seção-principal)
   - [Idioma](#idioma)
 - [Seção Edição TH2](#seção-edição-th2)
-  - [Ativar transformações de elementos](#ativar-transformações-de-elementos)
+  - [Ângulo preferencial](#ângulo-preferencial)
   - [Ativar borda especial para ID definido](#ativar-borda-especial-para-id-definido)
   - [Ativar borda especial para linha slope sem l-size](#ativar-borda-especial-para-linha-slope-sem-l-size)
   - [Ativar borda especial para visibility off](#ativar-borda-especial-para-visibility-off)
+  - [Ativar transformações de elementos](#ativar-transformações-de-elementos)
   - [Espessura da linha](#espessura-da-linha)
   - [Método de criação de nova linha](#método-de-criação-de-nova-linha)
   - [Método de visualização](#método-de-visualização)
-  - [Raio do ponto](#raio-do-ponto)
-  - [Ângulo preferencial](#ângulo-preferencial)
-  - [Unidade do símbolo](#unidade-do-símbolo)
-  - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
   - [Mostrar pontos das linhas](#mostrar-pontos-das-linhas)
+  - [Raio do ponto](#raio-do-ponto)
+  - [Tolerância de seleção](#tolerância-de-seleção)
+  - [Unidade do símbolo](#unidade-do-símbolo)
 - [Seção Therion](#seção-therion)
-  - [Debug log 1](#debug-log-1)
   - [Caminho do executável do Therion](#caminho-do-executável-do-therion)
+  - [Debug log 1](#debug-log-1)
   - [Parâmetros de execução do Therion](#parâmetros-de-execução-do-therion)
 
 ## Usando as configurações
@@ -50,8 +50,8 @@ Seleciona o idioma usado em toda a interface do aplicativo. A opção padrão se
 
 ## Seção Edição TH2
 
-### Ativar transformações de elementos
-Quando ativado, elementos selecionados ganham ações de redimensionar, rotacionar e espelhar no modo de seleção. As alças da seleção podem ser arrastadas para redimensionar, clicar nos elementos selecionados entra no modo de rotação e _H_ / _V_ espelham a seleção atual. O padrão é desativado (`false`).
+### Ângulo preferencial
+Controla o incremento angular (em graus) usado no ajuste da rotação da imagem e nas restrições ao desenhar novas linhas. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Ao desenhar uma linha, mantenha _Shift_ pressionado para restringir um novo nó ou um ponto de controle arrastado a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com a tecla modificadora pressionada.
 
 ### Ativar borda especial para ID definido
 Quando ativado (padrão), elementos com THID/ID definido são pintados com uma borda especial dedicada no canvas. Desative isto se preferir que esses elementos usem apenas sua simbologia normal.
@@ -61,6 +61,9 @@ Quando ativado (padrão), linhas do tipo slope cujos segmentos de linha não def
 
 ### Ativar borda especial para visibility off
 Quando ativado (padrão), elementos com `visibility off` são pintados com uma borda especial dedicada no canvas. Desative isto se preferir que elementos invisíveis não recebam ênfase visual extra durante a edição.
+
+### Ativar transformações de elementos
+Quando ativado, elementos selecionados ganham ações de redimensionar, rotacionar e espelhar no modo de seleção. As alças da seleção podem ser arrastadas para redimensionar, clicar nos elementos selecionados entra no modo de rotação e _H_ / _V_ espelham a seleção atual. O padrão é desativado (`false`).
 
 ### Espessura da linha
 Controla a espessura visual (em pixels) das linhas desenhadas no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
@@ -75,31 +78,28 @@ Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser 
 ### Método de visualização
 Seleciona como os símbolos de pontos, linhas e áreas TH2 são desenhados. **Marcador do Mapiah** preserva a renderização geométrica existente e é o padrão. As opções de conjuntos de símbolos do Therion preparam o renderizador para os símbolos UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF e SM à medida que esses conjuntos forem implementados.
 
-### Raio do ponto
-Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
-
-### Ângulo preferencial
-Controla o incremento angular (em graus) usado no ajuste da rotação da imagem e nas restrições ao desenhar novas linhas. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Ao desenhar uma linha, mantenha _Shift_ pressionado para restringir um novo nó ou um ponto de controle arrastado a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com a tecla modificadora pressionada.
-
-### Unidade do símbolo
-Controla o tamanho base (em pixels) da renderização dos conjuntos de símbolos do Therion, ou seja, a unidade `u` usada em toda a definição de símbolos do Therion. Só afeta o canvas quando um método de visualização do Therion (diferente de **Marcador do Mapiah**) está selecionado. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
-
-### Tolerância de seleção
-Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.
-
 ### Mostrar marcas de direção em linhas não selecionadas
 Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.
 
 ### Mostrar pontos das linhas
 Quando ativado (padrão), cada ponto de linha é desenhado como um círculo preto cujo diâmetro é 1,5 vezes a espessura de linha configurada. Os pontos permanecem visíveis em linhas selecionadas e não selecionadas, inclusive em linhas de croquis inativos. Desative esta configuração para desenhar as linhas sem esses pontos persistentes.
 
-## Seção Therion
+### Raio do ponto
+Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
 
-### Debug log 1
-Quando ativado, o Mapiah mostra diagnósticos extras de inicialização e execução do Therion. O padrão é desativado (`false`).
+### Tolerância de seleção
+Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.
+
+### Unidade do símbolo
+Controla o tamanho base (em pixels) da renderização dos conjuntos de símbolos do Therion, ou seja, a unidade `u` usada em toda a definição de símbolos do Therion. Só afeta o canvas quando um método de visualização do Therion (diferente de **Marcador do Mapiah**) está selecionado. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
+
+## Seção Therion
 
 ### Caminho do executável do Therion
 O caminho completo para o executável do Therion no seu sistema. Necessário para que o recurso _Executar Therion_ funcione. Clique no ícone de pasta ou toque no campo para abrir um seletor de arquivo e navegar até o binário do Therion.
+
+### Debug log 1
+Quando ativado, o Mapiah mostra diagnósticos extras de inicialização e execução do Therion. O padrão é desativado (`false`).
 
 ### Parâmetros de execução do Therion
 Opções extras opcionais de linha de comando passadas ao Therion a cada execução (ex.: `-d` para modo de depuração, `-q` para modo silencioso). Múltiplas opções podem ser inseridas separadas por espaço. O valor também pode ser editado diretamente no diálogo Executar Therion e pode ser predefinido pelo argumento de linha de comando `--therion_run_parameters` do Mapiah. O padrão é vazio (sem opções extras).

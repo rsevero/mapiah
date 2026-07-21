@@ -18,13 +18,13 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Enable special border for visibility off](#enable-special-border-for-visibility-off)
   - [Line thickness](#line-thickness)
   - [New line creation method](#new-line-creation-method)
-  - [Visualization method](#visualization-method)
   - [Point radius](#point-radius)
-  - [Snap angle](#snap-angle)
-  - [Symbol unit](#symbol-unit)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
   - [Show line points](#show-line-points)
+  - [Snap angle](#snap-angle)
+  - [Symbol unit](#symbol-unit)
+  - [Visualization method](#visualization-method)
 - [Therion section](#therion-section)
   - [Debug log 1](#debug-log-1)
   - [Therion executable path](#therion-executable-path)
@@ -72,17 +72,8 @@ Controls the behavior when creating a new line segment by clicking and dragging:
 
 While drawing with either method, the last created node can also be nudged with _Arrow_, _Shift+Arrow_, _Alt+Arrow_, and _Alt+Shift+Arrow_.
 
-### Visualization method
-Selects how TH2 point, line, and area symbols are drawn. **Mapiah placeholder** preserves the existing geometric rendering and is the default. The Therion symbol-set choices prepare the renderer for faithful UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF, and SM symbols as those sets are implemented.
-
 ### Point radius
 Controls the visual radius (in pixels) of points drawn on the canvas. This is a display-only setting and does not affect the data stored in the TH2 file.
-
-### Snap angle
-Controls the angular increment (in degrees) used when snapping image rotation and new-line drawing constraints. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. While drawing a line, hold _Shift_ to constrain a new node or a dragged control point to multiples of this value. Set it to `0` to disable snapping even while the modifier is held.
-
-### Symbol unit
-Controls the base size (in pixels) of Therion symbol-set renderings, i.e. the `u` unit used throughout Therion's symbol definitions. Only affects the canvas when a Therion visualization method (not **Mapiah placeholder**) is selected. This is a display-only setting and does not affect the data stored in the TH2 file.
 
 ### Selection tolerance
 Controls how close the mouse cursor must be to an element (in pixels) for it to be considered clicked and selected. Increasing this value makes elements easier to click.
@@ -92,6 +83,15 @@ When enabled, direction ticks are drawn on all lines in the active scrap, regard
 
 ### Show line points
 When enabled (default), every line point is drawn as a black circle whose diameter is 1.5 times the configured line thickness. The points remain visible on selected and non-selected lines, including lines in inactive scraps. Disable this setting to draw lines without these persistent points.
+
+### Snap angle
+Controls the angular increment (in degrees) used when snapping image rotation and new-line drawing constraints. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. While drawing a line, hold _Shift_ to constrain a new node or a dragged control point to multiples of this value. Set it to `0` to disable snapping even while the modifier is held.
+
+### Symbol unit
+Controls the base size (in pixels) of Therion symbol-set renderings, i.e. the `u` unit used throughout Therion's symbol definitions. Only affects the canvas when a Therion visualization method (not **Mapiah placeholder**) is selected. This is a display-only setting and does not affect the data stored in the TH2 file.
+
+### Visualization method
+Selects how TH2 point, line, and area symbols are drawn. **Mapiah placeholder** preserves the existing geometric rendering and is the default. The Therion symbol-set choices prepare the renderer for faithful UIS, AUT, SBE, SKBB, BCRA, NSS, NZSS, ASF, and SM symbols as those sets are implemented.
 
 ## Therion section
 
