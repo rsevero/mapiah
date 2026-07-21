@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
 class THPointPainter extends CustomPainter {
   final Offset position;
@@ -29,6 +30,10 @@ class THPointPainter extends CustomPainter {
       canvas: canvas,
       position: position,
       pointPaint: pointPaint,
+      symbolUnit: MPSymbolUnit(
+        canvasScale: th2FileEditController.canvasScale,
+        devicePixelRatio: th2FileEditController.devicePixelRatio,
+      ),
     );
   }
 

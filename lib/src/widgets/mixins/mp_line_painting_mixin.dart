@@ -158,6 +158,7 @@ mixin MPLinePaintingMixin {
         lineSegmentsMap: segmentsMap,
         linePaint: linePaint,
         showLinePoints: showLinePoints,
+        lineDecorator: visualController.getLineDecorator(lineType),
         th2FileEditController: th2FileEditController,
       );
 
@@ -226,6 +227,7 @@ mixin MPLinePaintingMixin {
             lineSegmentsMap: lineSegmentSubsetMap,
             linePaint: linePaint,
             showLinePoints: showLinePoints,
+            lineDecorator: visualController.getLineDecorator(lineType),
             th2FileEditController: th2FileEditController,
           ),
         );

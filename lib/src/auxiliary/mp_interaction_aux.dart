@@ -9,7 +9,10 @@ import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
+import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_overlay_window_block_type.dart';
 
@@ -206,7 +209,22 @@ class MPInteractionAux {
     required Canvas canvas,
     required Offset position,
     required THPointPaint pointPaint,
+    MPSymbolUnit? symbolUnit,
   }) {
+    final MPTherionPointSymbol? therionSymbol = pointPaint.therionSymbol;
+
+    if ((therionSymbol != null) && (symbolUnit != null)) {
+      _drawTherionPoint(
+        canvas: canvas,
+        position: position,
+        pointPaint: pointPaint,
+        therionSymbol: therionSymbol,
+        symbolUnit: symbolUnit,
+      );
+
+      return;
+    }
+
     final void Function(Canvas, Offset, double, Paint) customDrawMethod =
         _pointShapeDrawMethods.containsKey(pointPaint.type)
         ? _pointShapeDrawMethods[pointPaint.type]!
@@ -218,6 +236,47 @@ class MPInteractionAux {
       pointPaint: pointPaint,
       customDrawMethod: customDrawMethod,
     );
+  }
+
+  /// Draws a Therion symbol: highlight halos still use a plain circle at
+  /// [THPointPaint.radius] (a symbol-shaped halo isn't meaningful for
+  /// arbitrary custom paths), while the actual fill/border passes dispatch
+  /// to the faithful [MPTherionPointSymbolsUIS] drawing.
+  static void _drawTherionPoint({
+    required Canvas canvas,
+    required Offset position,
+    required THPointPaint pointPaint,
+    required MPTherionPointSymbol therionSymbol,
+    required MPSymbolUnit symbolUnit,
+  }) {
+    if (pointPaint.highlightBorders.isNotEmpty) {
+      int highlightBorderCount = pointPaint.highlightBorders.length;
+
+      for (final Paint highlightBorder in pointPaint.highlightBorders.reversed) {
+        _drawCirclePoint(
+          canvas,
+          position,
+          pointPaint.radius,
+          highlightBorder
+            ..strokeWidth =
+                highlightBorder.strokeWidth * ((highlightBorderCount * 2) + 1),
+        );
+
+        highlightBorderCount--;
+      }
+    }
+
+    final void Function(Canvas, Offset, double, Paint) drawMethod =
+        MPTherionPointSymbolsUIS.drawMethods[therionSymbol]!;
+    final double u = symbolUnit.canvasValue;
+
+    if (pointPaint.fill != null) {
+      drawMethod(canvas, position, u, pointPaint.fill!);
+    }
+
+    if (pointPaint.border != null) {
+      drawMethod(canvas, position, u, pointPaint.border!);
+    }
   }
 
   static void _drawStarPoint(

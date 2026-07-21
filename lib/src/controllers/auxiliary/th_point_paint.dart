@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
+import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 class THPointPaint {
   final double radius;
@@ -11,12 +12,17 @@ class THPointPaint {
   final Paint? fill;
   final List<Paint> highlightBorders;
 
+  /// Non-null when the Therion visualization method should draw a faithful
+  /// symbol instead of [type]'s abstract placeholder shape.
+  final MPTherionPointSymbol? therionSymbol;
+
   THPointPaint({
     this.radius = mpDefaultPointRadius,
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,
     this.highlightBorders = const [],
+    this.therionSymbol,
   }) : assert(radius > 0, "Radius must be greater than 0"),
        assert(
          (border != null) || (fill != null),
@@ -31,6 +37,8 @@ class THPointPaint {
     Paint? fill,
     bool makeFillPaintNull = false,
     List<Paint>? highlightBorders,
+    MPTherionPointSymbol? therionSymbol,
+    bool makeTherionSymbolNull = false,
   }) {
     return THPointPaint(
       radius: radius ?? this.radius,
@@ -38,6 +46,9 @@ class THPointPaint {
       border: makeBorderPaintNull ? null : (border ?? this.border),
       fill: makeFillPaintNull ? null : (fill ?? this.fill),
       highlightBorders: highlightBorders ?? this.highlightBorders,
+      therionSymbol: makeTherionSymbolNull
+          ? null
+          : (therionSymbol ?? this.therionSymbol),
     );
   }
 }

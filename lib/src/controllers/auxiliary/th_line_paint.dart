@@ -10,12 +10,19 @@ class THLinePaint {
   final List<Paint> highlightBorders;
   final MPLinePaintType type;
 
+  /// True for Therion area patterns whose `.mp` macro calls `thclean`
+  /// before filling with the pattern (e.g. `a_water_UIS`), so the erased
+  /// background shows through gaps in the pattern instead of whatever was
+  /// drawn underneath.
+  final bool cleanBeforeFill;
+
   THLinePaint({
     this.primaryPaint,
     this.secondaryPaint,
     this.fillPaint,
     this.highlightBorders = const [],
     this.type = MPLinePaintType.continuous,
+    this.cleanBeforeFill = false,
   });
 
   THLinePaint copyWith({
@@ -27,6 +34,7 @@ class THLinePaint {
     bool makeFillPaintNull = false,
     List<Paint>? highlightBorders,
     MPLinePaintType? type,
+    bool? cleanBeforeFill,
   }) {
     return THLinePaint(
       primaryPaint: makePrimaryPaintNull
@@ -38,6 +46,7 @@ class THLinePaint {
       fillPaint: makeFillPaintNull ? null : (fillPaint ?? this.fillPaint),
       highlightBorders: highlightBorders ?? this.highlightBorders,
       type: type ?? this.type,
+      cleanBeforeFill: cleanBeforeFill ?? this.cleanBeforeFill,
     );
   }
 }

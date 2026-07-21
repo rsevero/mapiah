@@ -235,6 +235,14 @@ const double mpSymbolUnitOnScreen = 10.0;
 const int mpMaximumPathMetricContours = 10000;
 const int mpMaximumPathMetricSamplesPerContour = 100000;
 const double mpRandomMinimumNonZeroValue = 1e-12;
+
+/// Therion MetaPost pen widths, expressed as a fraction of one symbol unit
+/// (`u`). See `PenA`..`PenX` in therion-mpost/therion.mp.
+const double mpTherionPenA = 0.1;
+const double mpTherionPenB = 0.07;
+const double mpTherionPenC = 0.05;
+const double mpTherionPenD = 0.035;
+const double mpTherionPenX = 0.12;
 const int mpMaximumRandomSeed = 0x3fffffff;
 
 const Set<String> mpImageTransformHandleTypesWithoutXScaling = <String>{

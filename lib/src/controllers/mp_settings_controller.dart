@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
@@ -49,6 +50,11 @@ abstract class MPSettingsControllerBase with Store {
 
   bool get isTherionDebugLog1Enabled {
     return getBoolWithDefault(MPSettingID.Therion_DebugLog1);
+  }
+
+  MPTH2EditVisualizationMethod get tH2EditVisualizationMethod {
+    return getEnumWithDefault(MPSettingID.TH2Edit_VisualizationMethod)
+        as MPTH2EditVisualizationMethod;
   }
 
   bool get isTH2EditSpecialBorderForIDSetEnabled {

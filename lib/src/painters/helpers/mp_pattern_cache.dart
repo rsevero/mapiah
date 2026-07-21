@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'dart:ui' as ui;
-
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 
 /// Owns generated area pattern tiles and releases replaced images.

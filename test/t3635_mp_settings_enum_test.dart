@@ -9,7 +9,6 @@ import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.da
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_pt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'th_test_aux.dart';
 
 void main() {
@@ -44,6 +43,25 @@ void main() {
           MPSettingID.TH2Edit_VisualizationMethod,
         ),
         MPTH2EditVisualizationMethod.mapiahPlaceholder,
+      );
+      expect(
+        settingsController.tH2EditVisualizationMethod,
+        MPTH2EditVisualizationMethod.mapiahPlaceholder,
+      );
+    });
+
+    test('tH2EditVisualizationMethod reflects a stored value', () async {
+      final MPSettingsController settingsController = MPSettingsController();
+
+      await settingsController.initialized;
+      settingsController.setEnum(
+        MPSettingID.TH2Edit_VisualizationMethod,
+        MPTH2EditVisualizationMethod.therionUIS,
+      );
+
+      expect(
+        settingsController.tH2EditVisualizationMethod,
+        MPTH2EditVisualizationMethod.therionUIS,
       );
     });
 

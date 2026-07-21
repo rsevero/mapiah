@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
@@ -10,15 +11,22 @@ import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
+import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
-import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
+import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_visual_controller.g.dart';
@@ -1060,6 +1068,16 @@ abstract class MPVisualControllerBase with Store {
     return scrapPaint;
   }
 
+  MPLineDecorator? getLineDecorator(THLineType lineType) {
+    if ((mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+            MPTH2EditVisualizationMethod.therionUIS) &&
+        (lineType == THLineType.gradient)) {
+      return const MPGradientLineDecorator();
+    }
+
+    return null;
+  }
+
   THLinePaint getSelectedLinePaint({
     required THLineType lineType,
     String? subtype,
@@ -1207,12 +1225,75 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getDefaultAreaPaint({required THAreaType areaType}) {
-    return areaTypePaints[areaType] ??
+    final THLinePaint areaPaint =
+        areaTypePaints[areaType] ??
         THLinePaint(
           primaryPaint: THPaint.thPaint0,
           fillPaint: THPaint.thPaint3001,
           type: MPLinePaintType.medium,
         );
+
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+        MPTH2EditVisualizationMethod.therionUIS) {
+      final Paint? patternPaint = _getTherionUISAreaPatternPaint(areaType);
+
+      if (patternPaint != null) {
+        return areaPaint.copyWith(
+          fillPaint: patternPaint,
+          cleanBeforeFill: areaType != THAreaType.debris,
+        );
+      }
+    }
+
+    return areaPaint;
+  }
+
+  /// Builds (once, via [patternCache]) and scales the Therion UIS pattern
+  /// tile fill for the area types ported in Phase 1. Returns null for any
+  /// other area type, leaving the plain solid/semi-transparent fill in place.
+  Paint? _getTherionUISAreaPatternPaint(THAreaType areaType) {
+    final Paint? primaryPaint = areaTypePaints[areaType]?.primaryPaint;
+
+    if (primaryPaint == null) {
+      return null;
+    }
+
+    final Color color = primaryPaint.color;
+    ui.Image? tile = patternCache.imageFor(areaType);
+
+    if (tile == null) {
+      switch (areaType) {
+        case THAreaType.water:
+          tile = MPTherionAreaPatternTilesUIS.buildWaterTile(color);
+        case THAreaType.sump:
+          tile = MPTherionAreaPatternTilesUIS.buildSumpTile(color);
+        case THAreaType.debris:
+          tile = MPTherionAreaPatternTilesUIS.buildDebrisTile(color);
+        case THAreaType.flowstone:
+          tile = MPTherionAreaPatternTilesUIS.buildFlowstoneTile(color);
+        case THAreaType.moonmilk:
+          tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(color);
+        default:
+          return null;
+      }
+
+      patternCache.store(areaType, tile);
+    }
+
+    final MPSymbolUnit symbolUnit = MPSymbolUnit(
+      canvasScale: _th2FileEditController.canvasScale,
+      devicePixelRatio: _th2FileEditController.devicePixelRatio,
+    );
+    final double scale =
+        symbolUnit.canvasValue / MPTherionAreaPatternTilesUIS.tileUnitPixels;
+
+    return Paint()
+      ..shader = ui.ImageShader(
+        tile,
+        ui.TileMode.repeated,
+        ui.TileMode.repeated,
+        Matrix4.diagonal3Values(scale, scale, 1.0).storage,
+      );
   }
 
   THLinePaint getUnselectedAreaPaint({
@@ -1301,6 +1382,16 @@ abstract class MPVisualControllerBase with Store {
         border: pointPaint.border!
           ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
       );
+    }
+
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+        MPTH2EditVisualizationMethod.therionUIS) {
+      final MPTherionPointSymbol? therionSymbol =
+          therionUISPointSymbols[pointType];
+
+      if (therionSymbol != null) {
+        pointPaint = pointPaint.copyWith(therionSymbol: therionSymbol);
+      }
     }
 
     return pointPaint;
