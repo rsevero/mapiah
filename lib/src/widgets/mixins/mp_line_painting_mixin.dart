@@ -120,10 +120,11 @@ mixin MPLinePaintingMixin {
 
     if (line.subtypeLineSegmentMPIDsByLineSegmentIndex.isEmpty) {
       final THLinePaint linePaint;
+      final String? subtype = lineInfo.parentArea == null
+          ? MPCommandOptionAux.getSubtype(line)
+          : null;
 
       if (lineInfo.parentArea == null) {
-        final String? subtype = MPCommandOptionAux.getSubtype(line);
-
         linePaint = isLineSelected
             ? visualController.getSelectedLinePaint(
                 lineType: lineType,
@@ -158,7 +159,10 @@ mixin MPLinePaintingMixin {
         lineSegmentsMap: segmentsMap,
         linePaint: linePaint,
         showLinePoints: showLinePoints,
-        lineDecorator: visualController.getLineDecorator(lineType),
+        lineDecorator: visualController.getLineDecorator(
+          lineType,
+          subtype: subtype,
+        ),
         th2FileEditController: th2FileEditController,
       );
 
@@ -182,16 +186,17 @@ mixin MPLinePaintingMixin {
               segmentsMap.entries.toList().sublist(startIndex, endIndex + 1),
             );
         final THLinePaint linePaint;
+        final String? subtype = lineInfo.parentArea == null
+            ? MPCommandOptionAux.getSubtype(
+                (i == 0)
+                    ? line
+                    : th2File.elementByMPID(
+                        subtypeLineSegmentsMap.values.elementAt(i - 1),
+                      ),
+              )
+            : null;
 
         if (lineInfo.parentArea == null) {
-          final String? subtype = MPCommandOptionAux.getSubtype(
-            (i == 0)
-                ? line
-                : th2File.elementByMPID(
-                    subtypeLineSegmentsMap.values.elementAt(i - 1),
-                  ),
-          );
-
           linePaint = isLineSelected
               ? visualController.getSelectedLinePaint(
                   lineType: lineType,
@@ -227,7 +232,10 @@ mixin MPLinePaintingMixin {
             lineSegmentsMap: lineSegmentSubsetMap,
             linePaint: linePaint,
             showLinePoints: showLinePoints,
-            lineDecorator: visualController.getLineDecorator(lineType),
+            lineDecorator: visualController.getLineDecorator(
+              lineType,
+              subtype: subtype,
+            ),
             th2FileEditController: th2FileEditController,
           ),
         );

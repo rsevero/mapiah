@@ -7,6 +7,7 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 class THPointPaint {
   final double radius;
+  final double rotation;
   final MPPointShapeType type;
   final Paint? border;
   final Paint? fill;
@@ -18,6 +19,7 @@ class THPointPaint {
 
   THPointPaint({
     this.radius = mpDefaultPointRadius,
+    this.rotation = 0,
     this.type = MPPointShapeType.circle,
     this.border,
     this.fill,
@@ -31,6 +33,7 @@ class THPointPaint {
 
   THPointPaint copyWith({
     double? radius,
+    double? rotation,
     MPPointShapeType? type,
     Paint? border,
     bool makeBorderPaintNull = false,
@@ -42,6 +45,7 @@ class THPointPaint {
   }) {
     return THPointPaint(
       radius: radius ?? this.radius,
+      rotation: rotation ?? this.rotation,
       type: type ?? this.type,
       border: makeBorderPaintNull ? null : (border ?? this.border),
       fill: makeFillPaintNull ? null : (fill ?? this.fill),

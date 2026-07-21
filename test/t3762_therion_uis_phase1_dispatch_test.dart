@@ -11,6 +11,7 @@ import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -74,7 +75,10 @@ void main() {
           reason: '$pointType should have a UIS symbol',
         );
       }
-      expect(therionUISPointSymbols, hasLength(phase1Types.length));
+      expect(
+        therionUISPointSymbols.length,
+        greaterThanOrEqualTo(phase1Types.length),
+      );
     });
 
     test(
@@ -170,7 +174,33 @@ void main() {
           th2Controller.visualController.getLineDecorator(THLineType.wall),
           isNull,
         );
+        expect(
+          th2Controller.visualController.getLineDecorator(
+            THLineType.survey,
+            subtype: 'cave',
+          ),
+          isA<MPSurveyCaveLineDecorator>(),
+        );
+        expect(
+          th2Controller.visualController.getLineDecorator(
+            THLineType.survey,
+            subtype: 'surface',
+          ),
+          isNull,
+        );
       },
     );
+
+    test('point orientation is carried into Therion point paint', () async {
+      final TH2FileEditController th2Controller = await loadController(
+        'th_file_parser-00126-point_with_orientation_option.th2',
+      );
+      final THPoint point = th2Controller.th2File.getPoints().single;
+      final therionPaint = th2Controller.visualController.getDefaultPointPaint(
+        point,
+      );
+
+      expect(therionPaint.rotation, closeTo(3.0234, 0.0001));
+    });
   });
 }

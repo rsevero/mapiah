@@ -270,13 +270,19 @@ class MPInteractionAux {
         MPTherionPointSymbolsUIS.drawMethods[therionSymbol]!;
     final double u = symbolUnit.canvasValue;
 
+    canvas.save();
+    canvas.translate(position.dx, position.dy);
+    canvas.rotate(pointPaint.rotation);
+
     if (pointPaint.fill != null) {
-      drawMethod(canvas, position, u, pointPaint.fill!);
+      drawMethod(canvas, Offset.zero, u, pointPaint.fill!);
     }
 
     if (pointPaint.border != null) {
-      drawMethod(canvas, position, u, pointPaint.border!);
+      drawMethod(canvas, Offset.zero, u, pointPaint.border!);
     }
+
+    canvas.restore();
   }
 
   static void _drawStarPoint(

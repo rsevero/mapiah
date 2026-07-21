@@ -75,12 +75,14 @@ class THLinePainter extends CustomPainter {
     final List<double> distances = [];
     final Path lineDirectionTicksPath = Path();
     final Path path = Path();
+    final List<Offset> vertices = <Offset>[];
 
     bool isFirst = true;
     int i = 0;
 
     for (THLinePainterLineSegment lineSegment in lineSegments) {
       i++;
+      vertices.add(Offset(lineSegment.x, lineSegment.y));
 
       if (isFirst) {
         path.moveTo(lineSegment.x, lineSegment.y);
@@ -216,16 +218,22 @@ class THLinePainter extends CustomPainter {
       }
     }
 
+    final Path basePath = lineDecorator?.buildBasePath(
+          path: path,
+          vertices: vertices,
+        ) ??
+        path;
+
     if (linePaint.fillPaint != null) {
       if (linePaint.cleanBeforeFill) {
         MPThClean.drawPath(
           canvas: canvas,
-          path: path,
+          path: basePath,
           backgroundColor: THPaint.thPaintWhiteBackground.color,
         );
       }
 
-      canvas.drawPath(path, linePaint.fillPaint!);
+      canvas.drawPath(basePath, linePaint.fillPaint!);
     }
 
     if (linePaint.type == MPLinePaintType.continuous) {
@@ -235,7 +243,7 @@ class THLinePainter extends CustomPainter {
         for (final Paint highlightBorder
             in linePaint.highlightBorders.reversed) {
           canvas.drawPath(
-            path,
+            basePath,
             highlightBorder
               ..strokeWidth =
                   highlightBorder.strokeWidth *
@@ -246,12 +254,12 @@ class THLinePainter extends CustomPainter {
         }
       }
       if (linePaint.primaryPaint != null) {
-        canvas.drawPath(path, linePaint.primaryPaint!);
+        canvas.drawPath(basePath, linePaint.primaryPaint!);
       } else if (linePaint.secondaryPaint != null) {
-        canvas.drawPath(path, linePaint.secondaryPaint!);
+        canvas.drawPath(basePath, linePaint.secondaryPaint!);
       }
     } else {
-      _drawDashedPath(canvas, path);
+      _drawDashedPath(canvas, basePath);
     }
 
     if (lineInfo.addLineDirectionTicks) {
@@ -263,7 +271,7 @@ class THLinePainter extends CustomPainter {
 
     lineDecorator?.decorate(
       canvas: canvas,
-      path: path,
+      path: basePath,
       linePaint: linePaint,
       symbolUnit: MPSymbolUnit(
         canvasScale: th2FileEditController.canvasScale,

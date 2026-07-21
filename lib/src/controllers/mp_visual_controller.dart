@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:ui' as ui;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
@@ -23,6 +24,7 @@ import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
@@ -1068,11 +1070,19 @@ abstract class MPVisualControllerBase with Store {
     return scrapPaint;
   }
 
-  MPLineDecorator? getLineDecorator(THLineType lineType) {
-    if ((mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
-            MPTH2EditVisualizationMethod.therionUIS) &&
-        (lineType == THLineType.gradient)) {
+  MPLineDecorator? getLineDecorator(THLineType lineType, {String? subtype}) {
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
+        MPTH2EditVisualizationMethod.therionUIS) {
+      return null;
+    }
+
+    if (lineType == THLineType.gradient) {
       return const MPGradientLineDecorator();
+    }
+
+    if ((lineType == THLineType.survey) &&
+        ((subtype == null) || (subtype == 'cave'))) {
+      return const MPSurveyCaveLineDecorator();
     }
 
     return null;
@@ -1384,10 +1394,18 @@ abstract class MPVisualControllerBase with Store {
       );
     }
 
+    final double orientation = MPCommandOptionAux.getOrientation(point) ?? 0;
+
+    pointPaint = pointPaint.copyWith(rotation: orientation * math.pi / 180);
+
     if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
         MPTH2EditVisualizationMethod.therionUIS) {
-      final MPTherionPointSymbol? therionSymbol =
-          therionUISPointSymbols[pointType];
+      final String pointSubtype = MPCommandOptionAux.getSubtype(point) ??
+          mpNoSubtypeID;
+      final MPTherionPointSymbol? therionSymbol = getTherionUISPointSymbol(
+        pointType: pointType,
+        subtype: pointSubtype,
+      );
 
       if (therionSymbol != null) {
         pointPaint = pointPaint.copyWith(therionSymbol: therionSymbol);

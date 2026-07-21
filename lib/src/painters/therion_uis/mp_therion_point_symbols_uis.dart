@@ -20,22 +20,39 @@ abstract final class MPTherionPointSymbolsUIS {
     void Function(Canvas, Offset, double, Paint)
   >
   drawMethods = {
+    MPTherionPointSymbol.anastomosisUIS: _drawAnastomosisUIS,
+    MPTherionPointSymbol.archeoMaterialUIS: _drawArcheoMaterialUIS,
+    MPTherionPointSymbol.campUIS: _drawCampUIS,
     MPTherionPointSymbol.continuationUIS: _drawContinuationUIS,
     MPTherionPointSymbol.crystalUIS: _drawCrystalUIS,
+    MPTherionPointSymbol.curtainUIS: _drawCurtainUIS,
+    MPTherionPointSymbol.diskUIS: _drawDiskUIS,
     MPTherionPointSymbol.digUIS: _drawDigUIS,
     MPTherionPointSymbol.entranceUIS: _drawEntranceUIS,
     MPTherionPointSymbol.flowstoneUIS: _drawFlowstoneUIS,
     MPTherionPointSymbol.fluteUIS: _drawFluteUIS,
+    MPTherionPointSymbol.gradientUIS: _drawGradientUIS,
+    MPTherionPointSymbol.guanoUIS: _drawGuanoUIS,
+    MPTherionPointSymbol.helictiteUIS: _drawHelictiteUIS,
     MPTherionPointSymbol.iceUIS: _drawIceUIS,
     MPTherionPointSymbol.karrenUIS: _drawKarrenUIS,
     MPTherionPointSymbol.lowEndUIS: _drawLowEndUIS,
+    MPTherionPointSymbol.moonmilkUIS: _drawMoonmilkUIS,
     MPTherionPointSymbol.narrowEndUIS: _drawNarrowEndUIS,
+    MPTherionPointSymbol.paleoMaterialUIS: _drawPaleoMaterialUIS,
+    MPTherionPointSymbol.pebblesUIS: _drawPebblesUIS,
     MPTherionPointSymbol.pillarUIS: _drawPillarUIS,
+    MPTherionPointSymbol.popcornUIS: _drawPopcornUIS,
     MPTherionPointSymbol.sandUIS: _drawSandUIS,
+    MPTherionPointSymbol.scallopUIS: _drawScallopUIS,
     MPTherionPointSymbol.sodaStrawUIS: _drawSodaStrawUIS,
     MPTherionPointSymbol.stalactiteUIS: _drawStalactiteUIS,
     MPTherionPointSymbol.stalagmiteUIS: _drawStalagmiteUIS,
     MPTherionPointSymbol.wallCalciteUIS: _drawWallCalciteUIS,
+    MPTherionPointSymbol.waterFlowIntermittentUIS:
+        _drawWaterFlowIntermittentUIS,
+    MPTherionPointSymbol.waterFlowPaleoUIS: _drawWaterFlowPaleoUIS,
+    MPTherionPointSymbol.waterFlowPermanentUIS: _drawWaterFlowPermanentUIS,
   };
 
   static Paint _withPenWidth(Paint paint, double penFactor) {
@@ -44,6 +61,341 @@ abstract final class MPTherionPointSymbolsUIS {
     }
 
     return Paint.from(paint)..strokeWidth = penFactor;
+  }
+
+  static bool _isFill(Paint paint) => paint.style == PaintingStyle.fill;
+
+  static void _drawUnitPath({
+    required Canvas canvas,
+    required Offset position,
+    required double u,
+    required Paint paint,
+    required Path path,
+    double penFactor = mpTherionPenC,
+  }) {
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, _withPenWidth(paint, penFactor));
+      },
+    );
+  }
+
+  static void _drawCurtainUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.15, -0.4)
+      ..lineTo(0, -0.15)
+      ..lineTo(0.15, -0.4)
+      ..moveTo(0, -0.15)
+      ..lineTo(0, 0)
+      ..cubicTo(-0.08, 0, -0.15, 0.11, -0.12, 0.11)
+      ..cubicTo(-0.08, 0.11, -0.04, 0.22, 0, 0.22)
+      ..lineTo(0, 0.4);
+
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawHelictiteUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(0, -0.4)
+      ..lineTo(0, 0.4)
+      ..moveTo(-0.2, -0.4)
+      ..lineTo(-0.2, -0.1)
+      ..cubicTo(-0.2, -0.04, -0.15, -0.02, -0.1, -0.02)
+      ..lineTo(0, 0)
+      ..moveTo(0.2, 0.4)
+      ..lineTo(0.2, 0.1)
+      ..cubicTo(0.2, 0.04, 0.15, 0.02, 0.1, 0.02)
+      ..lineTo(0, 0);
+
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawMoonmilkUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.5, 0.2)
+      ..cubicTo(-0.5, 0.02, -0.28, 0.02, -0.18, 0.105)
+      ..cubicTo(-0.08, 0.19, 0.08, 0.19, 0.18, 0.105)
+      ..cubicTo(0.28, 0.02, 0.5, 0.02, 0.5, 0.2);
+
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawAnastomosisUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.5, 0.3)
+      ..cubicTo(-0.49, 0.18, -0.34, 0.18, -0.32, 0.3)
+      ..cubicTo(-0.3, 0.15, -0.3, -0.15, -0.28, -0.3)
+      ..cubicTo(-0.26, -0.18, -0.14, -0.18, -0.12, -0.3)
+      ..cubicTo(-0.1, -0.15, -0.1, 0.15, -0.08, 0.3)
+      ..cubicTo(-0.06, 0.18, 0.06, 0.18, 0.08, 0.3)
+      ..cubicTo(0.1, 0.15, 0.1, -0.15, 0.12, -0.3)
+      ..cubicTo(0.14, -0.18, 0.26, -0.18, 0.28, -0.3)
+      ..cubicTo(0.3, -0.15, 0.3, 0.15, 0.32, 0.3)
+      ..cubicTo(0.34, 0.18, 0.49, 0.18, 0.5, 0.3);
+
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawScallopUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(0, 0.4)
+      ..cubicTo(-0.15, 0.18, -0.2, 0.02, -0.2, -0.1)
+      ..cubicTo(-0.2, -0.3, 0.2, -0.3, 0.2, -0.1)
+      ..cubicTo(0.2, 0.02, 0.15, 0.18, 0, 0.4);
+
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawPopcornUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        if (_isFill(paint)) {
+          for (final double x in const <double>[-0.3, 0, 0.3]) {
+            canvas.drawCircle(Offset(x, -0.1), 0.1, paint);
+          }
+          return;
+        }
+
+        final Path path = Path()..moveTo(-0.5, 0.2)..lineTo(0.5, 0.2);
+        for (final double x in const <double>[-0.3, 0, 0.3]) {
+          path..moveTo(x, 0.2)..lineTo(x, -0.1);
+        }
+        canvas.drawPath(path, _withPenWidth(paint, mpTherionPenC));
+      },
+    );
+  }
+
+  static void _drawDiskUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.2, 0.3)
+      ..lineTo(0, 0)
+      ..lineTo(0.2, 0.3)
+      ..addOval(Rect.fromCircle(center: const Offset(0, -0.15), radius: 0.15));
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawPebblesUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Paint pen = _withPenWidth(paint, mpTherionPenC);
+        const List<(Offset, double)> pebbles = <(Offset, double)>[
+          (Offset(0, -0.25), -20),
+          (Offset(0.25, 0.25), 37),
+          (Offset(-0.25, 0.25), 62),
+        ];
+        for (final (Offset center, double degrees) in pebbles) {
+          canvas.save();
+          canvas.translate(center.dx, center.dy);
+          canvas.rotate(degrees * math.pi / 180);
+          canvas.drawOval(const Rect.fromLTRB(-0.2, -0.1, 0.2, 0.1), pen);
+          canvas.restore();
+        }
+      },
+    );
+  }
+
+  static void _drawArcheoMaterialUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.5, 0.5)..lineTo(-0.2828, 0.2828)
+      ..moveTo(-0.5, -0.5)..lineTo(-0.2828, -0.2828)
+      ..moveTo(0, 0)..lineTo(0.4, 0)
+      ..addOval(Rect.fromCircle(center: Offset.zero, radius: 0.4));
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawPaleoMaterialUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (!_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.4, 0.2)
+      ..cubicTo(-0.32, 0.18, -0.24, 0.1, -0.2, 0.08)
+      ..lineTo(0, -0.2)
+      ..cubicTo(0.03, -0.4, 0.2, -0.3, 0.35, -0.25)
+      ..cubicTo(0.48, -0.2, 0.2, -0.2, 0, 0)
+      ..lineTo(-0.1, 0.17)
+      ..cubicTo(-0.05, 0.3, -0.2, 0.2, -0.3, 0.23)
+      ..close();
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawGuanoUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Path path = Path()
+      ..moveTo(-0.4, -0.2)
+      ..cubicTo(-0.18, -0.38, -0.18, 0.35, 0, 0.35)
+      ..cubicTo(0.18, 0.35, 0.18, -0.38, 0.4, -0.2);
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawArrowPoint(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint, {
+    required bool paleo,
+  }) {
+    final Path arrow = Path()
+      ..moveTo(-0.15, -0.6)..lineTo(0, -1)..lineTo(0.15, -0.6)..close();
+    final Path stroke = Path()..moveTo(0, 1)..lineTo(0, -1);
+    if (paleo) {
+      stroke.addArc(const Rect.fromLTRB(-0.2, 0.2, 0.2, 0.6), math.pi, math.pi);
+    }
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint,
+      path: _isFill(paint) ? arrow : (stroke..addPath(arrow, Offset.zero)),
+    );
+  }
+
+  static void _drawWaterFlowPaleoUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    _drawArrowPoint(canvas, position, u, paint, paleo: true);
+  }
+
+  static void _drawGradientUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    _drawArrowPoint(canvas, position, u, paint, paleo: false);
+  }
+
+  static Path _waterFlowPath() => Path()
+    ..moveTo(0, 0.5)
+    ..cubicTo(-0.02, 0.4, -0.12, 0.3, -0.12, 0.3)
+    ..cubicTo(-0.12, 0.23, 0.15, 0.18, 0.15, 0.15)
+    ..cubicTo(0.15, 0.08, -0.13, 0.04, -0.13, 0)
+    ..cubicTo(-0.13, -0.08, 0.08, -0.14, 0.08, -0.2)
+    ..cubicTo(0.08, -0.32, 0, -0.42, 0, -0.5);
+
+  static void _drawWaterFlowPermanentUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    final Path arrow = Path()
+      ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
+    final Path path = _isFill(paint) ? arrow : (_waterFlowPath()..addPath(arrow, Offset.zero));
+    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+  }
+
+  static void _drawWaterFlowIntermittentUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    if (_isFill(paint)) {
+      _drawWaterFlowPermanentUIS(canvas, position, u, paint);
+      return;
+    }
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = _waterFlowPath();
+        final PathMetric metric = path.computeMetrics().first;
+        final Path dashed = Path();
+        const double dash = 0.08;
+        const double gap = 0.06;
+        double distance = 0;
+        while (distance < metric.length) {
+          dashed.addPath(metric.extractPath(distance, math.min(distance + dash, metric.length)), Offset.zero);
+          distance += dash + gap;
+        }
+        canvas.drawPath(dashed, _withPenWidth(paint, mpTherionPenC));
+        final Path arrow = Path()
+          ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
+        canvas.drawPath(arrow, _withPenWidth(paint, mpTherionPenC));
+      },
+    );
+  }
+
+  static void _drawCampUIS(Canvas canvas, Offset position, double u, Paint paint) {
+    final Path filled = Path()
+      ..moveTo(-0.3, 0.4)..lineTo(0, -0.3)..lineTo(0.3, 0.4)..close()
+      ..moveTo(0, -0.5)..lineTo(0.35, -0.45)..lineTo(0.07, -0.35)..close();
+    final Path stroked = Path()
+      ..moveTo(-0.5, 0.4)..lineTo(0.5, 0.4)
+      ..moveTo(-0.4, 0.4)..lineTo(0, -0.5)..lineTo(0.4, 0.4);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint,
+      path: _isFill(paint) ? filled : stroked,
+      penFactor: _isFill(paint) ? mpTherionPenC : mpTherionPenD,
+    );
   }
 
   static void _drawStalactiteUIS(

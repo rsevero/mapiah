@@ -10,6 +10,11 @@ import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 abstract class MPLineDecorator {
   const MPLineDecorator();
 
+  /// Returns the path that should receive the line's normal paint.
+  Path buildBasePath({required Path path, required List<Offset> vertices}) {
+    return path;
+  }
+
   void decorate({
     required Canvas canvas,
     required Path path,

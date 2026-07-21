@@ -34,7 +34,26 @@ void main() {
       final Paint fillPaint = Paint()
         ..color = const Color(0xFF000000)
         ..style = PaintingStyle.fill;
+      const Set<MPTherionPointSymbol> phase1Symbols = <MPTherionPointSymbol>{
+        MPTherionPointSymbol.continuationUIS,
+        MPTherionPointSymbol.crystalUIS,
+        MPTherionPointSymbol.digUIS,
+        MPTherionPointSymbol.entranceUIS,
+        MPTherionPointSymbol.flowstoneUIS,
+        MPTherionPointSymbol.fluteUIS,
+        MPTherionPointSymbol.iceUIS,
+        MPTherionPointSymbol.karrenUIS,
+        MPTherionPointSymbol.lowEndUIS,
+        MPTherionPointSymbol.narrowEndUIS,
+        MPTherionPointSymbol.pillarUIS,
+        MPTherionPointSymbol.sandUIS,
+        MPTherionPointSymbol.sodaStrawUIS,
+        MPTherionPointSymbol.stalactiteUIS,
+        MPTherionPointSymbol.stalagmiteUIS,
+        MPTherionPointSymbol.wallCalciteUIS,
+      };
       final List<MPSymbolGoldenEntry> entries = MPTherionPointSymbol.values
+          .where(phase1Symbols.contains)
           .map(
             (MPTherionPointSymbol symbol) => MPSymbolGoldenEntry(
               draw: (Canvas canvas, Offset center) {
