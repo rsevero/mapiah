@@ -21,6 +21,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Método de visualização](#método-de-visualização)
   - [Raio do ponto](#raio-do-ponto)
   - [Ângulo preferencial](#ângulo-preferencial)
+  - [Unidade do símbolo](#unidade-do-símbolo)
   - [Tolerância de seleção](#tolerância-de-seleção)
   - [Mostrar marcas de direção em linhas não selecionadas](#mostrar-marcas-de-direção-em-linhas-não-selecionadas)
   - [Mostrar pontos das linhas](#mostrar-pontos-das-linhas)
@@ -79,6 +80,9 @@ Controla o raio visual (em pixels) dos pontos desenhados no canvas. Esta é uma 
 
 ### Ângulo preferencial
 Controla o incremento angular (em graus) usado no ajuste da rotação da imagem e nas restrições ao desenhar novas linhas. Ao rotacionar uma imagem, mantenha _Ctrl_ pressionado para ajustar o ângulo a múltiplos deste valor. Ao desenhar uma linha, mantenha _Shift_ pressionado para restringir um novo nó ou um ponto de controle arrastado a múltiplos deste valor. Defina como `0` para desativar o ajuste mesmo com a tecla modificadora pressionada.
+
+### Unidade do símbolo
+Controla o tamanho base (em pixels) da renderização dos conjuntos de símbolos do Therion, ou seja, a unidade `u` usada em toda a definição de símbolos do Therion. Só afeta o canvas quando um método de visualização do Therion (diferente de **Marcador do Mapiah**) está selecionado. Esta é uma configuração apenas de exibição e não afeta os dados armazenados no arquivo TH2.
 
 ### Tolerância de seleção
 Controla o quão próximo o cursor do mouse deve estar de um elemento (em pixels) para que ele seja considerado clicado e selecionado. Aumentar este valor torna os elementos mais fáceis de clicar.

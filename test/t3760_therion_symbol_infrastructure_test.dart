@@ -4,6 +4,9 @@
 import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_path_metric_walker.dart';
 import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
@@ -120,20 +123,42 @@ void main() {
       );
     });
 
-    test('keeps the base symbol unit constant in screen pixels', () {
-      const MPSymbolUnit unitAtOneToOne = MPSymbolUnit(
-        canvasScale: 1,
-        devicePixelRatio: 2,
-      );
-      const MPSymbolUnit unitAtZoom = MPSymbolUnit(
-        canvasScale: 4,
-        devicePixelRatio: 2,
-      );
+    test(
+      'derives the base symbol unit from the TH2Edit_SymbolUnit setting',
+      () async {
+        addTearDown(
+          () => mpLocator.mpSettingsController.resetDouble(
+            MPSettingID.TH2Edit_SymbolUnit,
+          ),
+        );
 
-      expect(unitAtOneToOne.canvasValue, 5);
-      expect(unitAtZoom.canvasValue, 1.25);
-      expect(unitAtZoom.canvasValue * 4 * 2, 10);
-    });
+        await mpLocator.mpSettingsController.initialized;
+        mpLocator.mpSettingsController.resetDouble(
+          MPSettingID.TH2Edit_SymbolUnit,
+        );
+
+        const MPSymbolUnit unitAtOneToOne = MPSymbolUnit(
+          canvasScale: 1,
+          devicePixelRatio: 2,
+        );
+        const MPSymbolUnit unitAtZoom = MPSymbolUnit(
+          canvasScale: 4,
+          devicePixelRatio: 2,
+        );
+
+        expect(mpDefaultSymbolUnitOnScreen, 10);
+        expect(unitAtOneToOne.canvasValue, 5);
+        expect(unitAtZoom.canvasValue, 1.25);
+        expect(unitAtZoom.canvasValue * 4 * 2, 10);
+
+        mpLocator.mpSettingsController.setDouble(
+          MPSettingID.TH2Edit_SymbolUnit,
+          20,
+        );
+
+        expect(unitAtOneToOne.canvasValue, 10);
+      },
+    );
 
     test('transforms a unit path with scale rotation and position', () {
       final Path unitPath = Path()

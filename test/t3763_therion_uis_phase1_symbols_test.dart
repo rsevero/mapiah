@@ -5,6 +5,7 @@ import 'auxiliary/mp_symbol_golden_harness.dart';
 import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
@@ -13,6 +14,15 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dar
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 void main() {
+  // MPSymbolUnit.canvasValue reads the symbol-unit setting, so the settings
+  // controller (with its async Therion-availability check) must finish
+  // initializing before any testWidgets() runs, or its still-pending
+  // process-spawn future trips the "timer pending after dispose" assertion.
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await mpLocator.mpSettingsController.initialized;
+  });
+
   group('Therion UIS Phase 1 symbols', () {
     testWidgets('renders every Phase 1 point symbol', (
       WidgetTester tester,

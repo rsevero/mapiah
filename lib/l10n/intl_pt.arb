@@ -350,6 +350,7 @@
   "mpSettingsSettingTH2EditShowLinePoints": "Mostrar pontos das linhas",
   "mpSettingsSettingTH2EditShowLastUsedPLATypeButtons": "Mostrar botões dos últimos tipos PLA usados",
   "mpSettingsSettingTH2EditSnapAngle": "Ângulo preferencial",
+  "mpSettingsSettingTH2EditSymbolUnit": "Unidade do símbolo",
   "mpSettingsSettingTherionDebugLog1": "Debug log 1",
   "mpSketchChooseFileButtonLabel": "Escolher arquivo",
   "mpSketchCoordinateInvalid": "Coordenada inválida",

@@ -1655,6 +1655,11 @@
     "description": "Label for TH2 snap angle setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSettingTH2EditSymbolUnit": "Symbol unit",
+  "@mpSettingsSettingTH2EditSymbolUnit": {
+    "description": "Label for the TH2 Therion symbol unit setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSettingTherionDebugLog1": "Debug log 1",
   "@mpSettingsSettingTherionDebugLog1": {
     "description": "Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart",

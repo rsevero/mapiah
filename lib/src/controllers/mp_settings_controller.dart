@@ -81,6 +81,7 @@ abstract class MPSettingsControllerBase with Store {
     MPSettingID.TH2Edit_PointRadius: mpDefaultPointRadius,
     MPSettingID.TH2Edit_SnapAngle: mpDefaultSnapAngle,
     MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
+    MPSettingID.TH2Edit_SymbolUnit: mpDefaultSymbolUnitOnScreen,
   };
 
   static final Map<MPSettingID, Enum> _enumDefaultSettings =

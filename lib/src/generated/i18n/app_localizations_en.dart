@@ -1088,6 +1088,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSettingTH2EditSnapAngle => 'Snap angle';
 
   @override
+  String get mpSettingsSettingTH2EditSymbolUnit => 'Symbol unit';
+
+  @override
   String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
 
   @override

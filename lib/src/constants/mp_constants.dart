@@ -230,8 +230,6 @@ const int mpFirstMPIDForElements = 1;
 
 const double mpDesiredSegmentLengthOnScreen = 15.0;
 
-/// Therion's base symbol unit in logical screen pixels at every zoom level.
-const double mpSymbolUnitOnScreen = 10.0;
 const int mpMaximumPathMetricContours = 10000;
 const int mpMaximumPathMetricSamplesPerContour = 100000;
 const double mpRandomMinimumNonZeroValue = 1e-12;
@@ -415,6 +413,8 @@ const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
 const double mpLinePointRadiusToLineThicknessFactor = 0.75;
 const double mpDefaultSnapAngle = 15.0;
+/// Therion's base symbol unit in logical screen pixels at every zoom level.
+const double mpDefaultSymbolUnitOnScreen = 10.0;
 const double mpControlLineThicknessFactor = 0.5;
 const double mpControlPointRadiusFactor = 1.5;
 const double mpControlPointSelectionToleranceFactor = 1.5;

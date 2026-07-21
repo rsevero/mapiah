@@ -2093,6 +2093,12 @@ abstract class AppLocalizations {
   /// **'Snap angle'**
   String get mpSettingsSettingTH2EditSnapAngle;
 
+  /// Label for the TH2 Therion symbol unit setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol unit'**
+  String get mpSettingsSettingTH2EditSymbolUnit;
+
   /// Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

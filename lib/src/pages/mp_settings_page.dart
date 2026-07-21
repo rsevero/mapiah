@@ -716,6 +716,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditShowLinePoints;
       case MPSettingID.TH2Edit_SnapAngle:
         return appLocalizations.mpSettingsSettingTH2EditSnapAngle;
+      case MPSettingID.TH2Edit_SymbolUnit:
+        return appLocalizations.mpSettingsSettingTH2EditSymbolUnit;
       case MPSettingID.TH2Edit_VisualizationMethod:
         return appLocalizations.mpSettingsSettingTH2EditVisualizationMethod;
       default:

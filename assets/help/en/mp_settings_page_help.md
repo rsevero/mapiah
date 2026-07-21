@@ -21,6 +21,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Visualization method](#visualization-method)
   - [Point radius](#point-radius)
   - [Snap angle](#snap-angle)
+  - [Symbol unit](#symbol-unit)
   - [Selection tolerance](#selection-tolerance)
   - [Show direction ticks on non-selected lines](#show-direction-ticks-on-non-selected-lines)
   - [Show line points](#show-line-points)
@@ -79,6 +80,9 @@ Controls the visual radius (in pixels) of points drawn on the canvas. This is a 
 
 ### Snap angle
 Controls the angular increment (in degrees) used when snapping image rotation and new-line drawing constraints. While rotating an image, hold _Ctrl_ to snap the angle to multiples of this value. While drawing a line, hold _Shift_ to constrain a new node or a dragged control point to multiples of this value. Set it to `0` to disable snapping even while the modifier is held.
+
+### Symbol unit
+Controls the base size (in pixels) of Therion symbol-set renderings, i.e. the `u` unit used throughout Therion's symbol definitions. Only affects the canvas when a Therion visualization method (not **Mapiah placeholder**) is selected. This is a display-only setting and does not affect the data stored in the TH2 file.
 
 ### Selection tolerance
 Controls how close the mouse cursor must be to an element (in pixels) for it to be considered clicked and selected. Increasing this value makes elements easier to click.
