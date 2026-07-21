@@ -413,8 +413,9 @@ const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
 const double mpLinePointRadiusToLineThicknessFactor = 0.75;
 const double mpDefaultSnapAngle = 15.0;
+
 /// Therion's base symbol unit in logical screen pixels at every zoom level.
-const double mpDefaultSymbolUnitOnScreen = 10.0;
+const double mpDefaultSymbolUnitOnScreen = 25.0;
 const double mpControlLineThicknessFactor = 0.5;
 const double mpControlPointRadiusFactor = 1.5;
 const double mpControlPointSelectionToleranceFactor = 1.5;

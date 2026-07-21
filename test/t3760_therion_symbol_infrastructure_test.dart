@@ -146,10 +146,15 @@ void main() {
           devicePixelRatio: 2,
         );
 
-        expect(mpDefaultSymbolUnitOnScreen, 10);
-        expect(unitAtOneToOne.canvasValue, 5);
-        expect(unitAtZoom.canvasValue, 1.25);
-        expect(unitAtZoom.canvasValue * 4 * 2, 10);
+        final double expectedAtOneToOne = mpDefaultSymbolUnitOnScreen / 2;
+        final double expectedAtZoom = mpDefaultSymbolUnitOnScreen / (4 * 2);
+
+        expect(unitAtOneToOne.canvasValue, expectedAtOneToOne);
+        expect(unitAtZoom.canvasValue, expectedAtZoom);
+        expect(
+          unitAtZoom.canvasValue * 4 * 2,
+          mpDefaultSymbolUnitOnScreen,
+        );
 
         mpLocator.mpSettingsController.setDouble(
           MPSettingID.TH2Edit_SymbolUnit,

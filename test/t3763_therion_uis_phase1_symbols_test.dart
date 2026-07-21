@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
@@ -99,6 +100,18 @@ void main() {
     testWidgets('renders the gradient line arrowhead decorator', (
       WidgetTester tester,
     ) async {
+      const double goldenSymbolUnitOnScreen = 10;
+
+      mpLocator.mpSettingsController.setDouble(
+        MPSettingID.TH2Edit_SymbolUnit,
+        goldenSymbolUnitOnScreen,
+      );
+      addTearDown(
+        () => mpLocator.mpSettingsController.resetDouble(
+          MPSettingID.TH2Edit_SymbolUnit,
+        ),
+      );
+
       const MPGradientLineDecorator decorator = MPGradientLineDecorator();
       final Paint linePaint = Paint()
         ..color = const Color(0xFF000000)

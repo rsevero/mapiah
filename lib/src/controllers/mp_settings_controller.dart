@@ -76,11 +76,11 @@ abstract class MPSettingsControllerBase with Store {
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
   static const Map<MPSettingID, double> _doubleDefaultSettings = {
-    MPSettingID.TH2Edit_NudgeFactor: mpDefaultNudgeFactor,
     MPSettingID.TH2Edit_LineThickness: mpDefaultLineThickness,
+    MPSettingID.TH2Edit_NudgeFactor: mpDefaultNudgeFactor,
     MPSettingID.TH2Edit_PointRadius: mpDefaultPointRadius,
-    MPSettingID.TH2Edit_SnapAngle: mpDefaultSnapAngle,
     MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
+    MPSettingID.TH2Edit_SnapAngle: mpDefaultSnapAngle,
     MPSettingID.TH2Edit_SymbolUnit: mpDefaultSymbolUnitOnScreen,
   };
 
