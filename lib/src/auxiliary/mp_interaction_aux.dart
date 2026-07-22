@@ -288,6 +288,10 @@ class MPInteractionAux {
 
     canvas.save();
     canvas.translate(position.dx, position.dy);
+    // Faithful symbol paths already convert MetaPost's Y-up coordinates to
+    // Flutter's Y-down coordinates. Cancel the editor canvas's ambient Y
+    // reflection so orientation rotates the converted symbol without mirroring.
+    canvas.scale(1, -1);
     canvas.rotate(pointPaint.rotation);
 
     if (pointPaint.fill != null) {

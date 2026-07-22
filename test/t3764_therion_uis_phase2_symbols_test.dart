@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/widgets.dart' hide Path;
+import 'package:flutter/widgets.dart' hide Image, Path;
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
@@ -157,6 +161,62 @@ void main() {
         MPTherionPointSymbol.waterFlowPermanentUIS,
       );
     });
+
+    test(
+      'keeps oriented symbols upright on the reflected editor canvas',
+      () async {
+        const int imageSize = 100;
+        const double center = imageSize / 2;
+        final PictureRecorder recorder = PictureRecorder();
+        final Canvas canvas = Canvas(recorder);
+        final THPointPaint pointPaint = THPointPaint(
+          rotation: mp45DegreesInRad,
+          fill: Paint()
+            ..color = const Color(0xFF000000)
+            ..style = PaintingStyle.fill,
+          therionSymbol: MPTherionPointSymbol.waterFlowPermanentUIS,
+        );
+
+        canvas.translate(center, center);
+        canvas.scale(1, -1);
+        MPInteractionAux.drawPoint(
+          canvas: canvas,
+          position: Offset.zero,
+          pointPaint: pointPaint,
+          symbolUnit: const MPSymbolUnit(
+            canvasScale: 1,
+            devicePixelRatio: 1,
+          ),
+        );
+
+        final Picture picture = recorder.endRecording();
+        final Image image = await picture.toImage(imageSize, imageSize);
+        final ByteData pixels = (await image.toByteData())!;
+        int opaquePixelCount = 0;
+        double opaquePixelsYTotal = 0;
+
+        for (int y = 0; y < imageSize; y++) {
+          for (int x = 0; x < imageSize; x++) {
+            final int alphaIndex = ((y * imageSize) + x) * 4 + 3;
+
+            if (pixels.getUint8(alphaIndex) > 0) {
+              opaquePixelCount++;
+              opaquePixelsYTotal += y;
+            }
+          }
+        }
+
+        expect(opaquePixelCount, greaterThan(0));
+
+        final double opaquePixelsYCenter =
+            opaquePixelsYTotal / opaquePixelCount;
+
+        expect(opaquePixelsYCenter, lessThan(center));
+
+        image.dispose();
+        picture.dispose();
+      },
+    );
 
     test('survey cave replaces curves with knot-to-knot segments', () {
       const MPSurveyCaveLineDecorator decorator =
