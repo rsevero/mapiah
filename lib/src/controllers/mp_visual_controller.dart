@@ -1424,6 +1424,11 @@ abstract class MPVisualControllerBase with Store {
             labelPaint: MPLabelPaint(
               data: labelData,
               align: align,
+              anchorRadius:
+                  _th2FileEditController.lineThicknessOnCanvas *
+                  mpLinePointRadiusToLineThicknessFactor *
+                  mpTherionLabelAnchorRadiusToLinePointRadiusFactor,
+              anchorFill: mpTherionLabelAnchorPaint,
               backgroundFill: THPaint.thPaintWhiteBackground,
               divider: THPaint.thPaintBlackBorder,
               textColor: Colors.black,

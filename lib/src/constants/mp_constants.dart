@@ -412,6 +412,7 @@ const double mpDefaultNudgeFactor = 2.0;
 const double mpDefaultPointRadius = 7.0;
 const double mpDefaultLineThickness = 2.0;
 const double mpLinePointRadiusToLineThicknessFactor = 0.75;
+const double mpTherionLabelAnchorRadiusToLinePointRadiusFactor = 2.0;
 const double mpDefaultSnapAngle = 15.0;
 
 /// Therion's base symbol unit in logical screen pixels at every zoom level.
@@ -432,6 +433,9 @@ final Paint mpSelectionHandleFillPaint = Paint()
   ..style = PaintingStyle.stroke;
 final Paint mpLinePointPaint = Paint()
   ..color = Colors.black
+  ..style = PaintingStyle.fill;
+final Paint mpTherionLabelAnchorPaint = Paint()
+  ..color = Colors.orange
   ..style = PaintingStyle.fill;
 const double mpWhiteBackgroundIncrease = 1.5;
 const double mpOverlayWindowOuterAnchorMargin = 15.0;

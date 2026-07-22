@@ -222,6 +222,11 @@ class MPInteractionAux {
         anchor: position,
         symbolUnit: symbolUnit,
       );
+      canvas.drawCircle(
+        position,
+        labelPaint.anchorRadius,
+        labelPaint.anchorFill,
+      );
 
       return;
     }

@@ -1,10 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart' hide Path;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_label_text_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
@@ -236,16 +241,74 @@ void main() {
         therionPaint.labelPaint!.align,
         THOptionChoicesAlignType.bottomLeft,
       );
+      final double expectedAnchorRadius =
+          th2Controller.lineThicknessOnCanvas *
+          mpLinePointRadiusToLineThicknessFactor *
+          mpTherionLabelAnchorRadiusToLinePointRadiusFactor;
+
+      expect(therionPaint.labelPaint!.anchorRadius, expectedAnchorRadius);
+      expect(
+        therionPaint.labelPaint!.anchorFill,
+        same(mpTherionLabelAnchorPaint),
+      );
     });
   });
 
   group('Therion Phase 2.5 label rendering', () {
+    test('draws an orange circle over the exact label anchor', () async {
+      const int imageSize = 100;
+      const double center = imageSize / 2;
+      const double markerRadius = 3;
+      final ui.PictureRecorder recorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(recorder);
+      final MPLabelPaint labelPaint = MPLabelPaint(
+        data: const MPLabelData.plain(['Anchor']),
+        anchorRadius: markerRadius,
+        anchorFill: mpTherionLabelAnchorPaint,
+        backgroundFill: THPaint.thPaintWhiteBackground,
+        divider: THPaint.thPaintBlackBorder,
+        textColor: Colors.black,
+      );
+
+      canvas.translate(center, center);
+      canvas.scale(1, -1);
+      MPInteractionAux.drawPoint(
+        canvas: canvas,
+        position: Offset.zero,
+        pointPaint: THPointPaint(labelPaint: labelPaint, fill: Paint()),
+        symbolUnit: const MPSymbolUnit(
+          canvasScale: 1,
+          devicePixelRatio: 1,
+        ),
+      );
+
+      final ui.Picture picture = recorder.endRecording();
+      final ui.Image image = await picture.toImage(imageSize, imageSize);
+      final ByteData pixels = (await image.toByteData())!;
+      final int centerPixelIndex =
+          (((center.toInt() * imageSize) + center.toInt()) * 4);
+      final int markerColor = mpTherionLabelAnchorPaint.color.toARGB32();
+      final int markerRed = (markerColor >> 16) & 0xFF;
+      final int markerGreen = (markerColor >> 8) & 0xFF;
+      final int markerBlue = markerColor & 0xFF;
+      final int markerAlpha = (markerColor >> 24) & 0xFF;
+
+      expect(pixels.getUint8(centerPixelIndex), markerRed);
+      expect(pixels.getUint8(centerPixelIndex + 1), markerGreen);
+      expect(pixels.getUint8(centerPixelIndex + 2), markerBlue);
+      expect(pixels.getUint8(centerPixelIndex + 3), markerAlpha);
+
+      image.dispose();
+      picture.dispose();
+    });
+
     testWidgets('renders every label mode side by side', (
       WidgetTester tester,
     ) async {
       mpLocator.appLocalizations = AppLocalizationsEn();
 
       const double cellSize = 160;
+      const double markerRadius = 3;
       const MPSymbolUnit symbolUnit = MPSymbolUnit(
         canvasScale: 1,
         devicePixelRatio: 1,
@@ -255,6 +318,8 @@ void main() {
         data: data,
         align: THOptionChoicesAlignType.center,
         size: THLabelSize.normal,
+        anchorRadius: markerRadius,
+        anchorFill: mpTherionLabelAnchorPaint,
         backgroundFill: THPaint.thPaintWhiteBackground,
         divider: THPaint.thPaintBlackBorder,
         textColor: Colors.black,
