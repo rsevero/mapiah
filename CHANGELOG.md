@@ -11,6 +11,7 @@
   * Therion-faithful text points now show an orange circle at their exact anchor position, drawn above the label with twice the radius of persistent black line-point markers; added sizing and pixel-rendering regression coverage.
   * Added support for Therion's `pillars` point type (distinct from the existing singular `pillar`), previously unrecognized by Mapiah; it round-trips through `.th2` files and now also renders as a faithful Therion UIS symbol (see Phase 3 below). Added EN/PT labels and regression coverage.
 * Fixed bugs:
+  * Therion-faithful water area hatching now slopes in the correct direction after accounting for Mapiah's reflected Y axis; updated the Phase 1 area-pattern golden coverage.
   * Applying, saving and closing, or resetting all values on the settings page now completely redraws every open TH2 drawing, so visualization-method and other rendering changes are applied consistently across all tabs; added multi-drawing widget regression coverage for all three actions.
   * Station points no longer display their station names as text labels when using a Therion-faithful visualization method; UIS, AUT, and SBE now retain placeholder rendering for station points, with regression coverage.
   * Therion-faithful orientable point symbols now remain upright and follow their configured orientation on Mapiah's reflected editor canvas instead of being mirrored; added pixel-level regression coverage for an oriented water-flow symbol.

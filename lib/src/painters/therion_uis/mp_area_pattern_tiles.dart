@@ -12,8 +12,8 @@ import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 /// time the tile is scaled to the current on-screen `u` through the
 /// `ImageShader`'s transform matrix, so a single raster works at every zoom
 /// level. Coordinates are transcribed directly from the `beginpattern`
-/// blocks in therion-mpost/thArea.mp; unlike point symbols, these textures
-/// have no meaningful up/down orientation, so no Y-negation is needed.
+/// blocks in therion-mpost/thArea.mp. Asymmetric patterns must reflect their Y
+/// coordinates for Mapiah's canvas, which has the opposite Y-axis direction.
 abstract final class MPTherionAreaPatternTilesUIS {
   static const double tileUnitPixels = 100.0;
 
@@ -183,7 +183,7 @@ abstract final class MPTherionAreaPatternTilesUIS {
       ..strokeWidth = penUnits * tileUnitPixels;
     final double side = cellUnits * tileUnitPixels;
 
-    canvas.drawLine(ui.Offset.zero, ui.Offset(side, side), paint);
+    canvas.drawLine(ui.Offset(0, side), ui.Offset(side, 0), paint);
 
     final int size = side.round();
 
