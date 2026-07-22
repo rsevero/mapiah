@@ -156,6 +156,8 @@ MetaPost def p_stalactite_UIS(pos, theta, sc, al)
 
 **Complexity counts**: simple 5 · complex 1
 
+**Known gap**: `THAreaType.blocks` has no entry in this inventory and is not wired to any pattern in `_getTherionUISAreaPatternPaint` — it still renders as Mapiah's plain solid/semi-transparent placeholder fill under every Therion visualization method. In real Therion, `blocks` areas use `a_blocks_SKBB` (jittered, randomly-rotated, "punked"-distorted squares with a background erase under each), aliased as the universal default for every symbol set including UIS via `thTrans.mp`'s `let a_blocks = a_blocks_SKBB;` — so, unlike the rest of this table, it was never a UIS-specific macro to begin with. Left unimplemented for now; a future phase should port it as a new repeating tile, following the same `MPPatternCache`/`ImageShader` approach as the other 6 patterns.
+
 ---
 
 ## Architecture Plan

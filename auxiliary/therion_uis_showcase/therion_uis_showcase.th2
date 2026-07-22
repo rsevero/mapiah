@@ -1,0 +1,230 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -50.0 -50.0 1250.0 2250.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Showcases every point, line, and area element with a Therion-faithful
+# UIS rendering implemented so far (Phases 0-3 of
+# docs/plans/2026-07-15-therion-symbol-rendering-roadmap.md). Open this
+# file and select Settings > Visualization method > Therion UIS to see
+# faithful symbols instead of Mapiah's abstract placeholders. Known gap:
+# "blocks" areas have no UIS pattern yet and keep the placeholder fill.
+
+scrap therion_uis_showcase -scale [0.0 0.0 1000.0 0.0 0.0 0.0 40.64 0.0 m]
+
+# --- Point symbols: simple + medium complexity (Phases 1-2) ---
+point 0.0 0.0 anastomosis
+point 120.0 0.0 archeo-material
+point 240.0 0.0 camp
+point 360.0 0.0 continuation
+point 480.0 0.0 crystal
+point 600.0 0.0 curtain
+point 720.0 0.0 disk
+point 840.0 0.0 dig
+
+point 0.0 120.0 entrance
+point 120.0 120.0 flowstone
+point 240.0 120.0 flute
+point 360.0 120.0 gradient
+point 480.0 120.0 guano
+point 600.0 120.0 helictite
+point 720.0 120.0 ice
+point 840.0 120.0 karren
+
+point 0.0 240.0 low-end
+point 120.0 240.0 moonmilk
+point 240.0 240.0 narrow-end
+point 360.0 240.0 paleo-material
+point 480.0 240.0 pebbles
+point 600.0 240.0 pillar
+point 720.0 240.0 popcorn
+point 840.0 240.0 sand
+
+point 0.0 360.0 scallop
+point 120.0 360.0 soda-straw
+point 240.0 360.0 stalactite
+point 360.0 360.0 stalagmite
+point 480.0 360.0 wall-calcite
+point 600.0 360.0 water-flow
+point 720.0 360.0 water-flow -subtype intermittent
+point 840.0 360.0 water-flow -subtype paleo
+
+# --- Point symbols: complex, Phase 3 (loops, subtypes, repeated instances) ---
+point 0.0 480.0 blocks
+point 120.0 480.0 water
+point 240.0 480.0 air-draught
+point 360.0 480.0 air-draught -subtype winter
+point 480.0 480.0 air-draught -subtype summer
+point 600.0 480.0 stalagmites
+point 720.0 480.0 stalactites
+point 840.0 480.0 pillars
+
+# --- Text/label point symbols, Phase 2.5 ---
+point 0.0 600.0 label -text "Label text"
+point 120.0 600.0 remark -text "Remark text"
+point 240.0 600.0 date -value "2026-07-22"
+point 360.0 600.0 altitude -value 1234
+point 480.0 600.0 height -value 12
+point 600.0 600.0 dimensions -value [7 3.3]
+point 720.0 600.0 passage-height -value +4
+point 840.0 600.0 passage-height -value -4
+
+point 0.0 720.0 passage-height -value [+6 -4]
+point 120.0 720.0 passage-height -value [7]
+
+# --- Line decorators, Phases 1-3 ---
+line gradient
+  0.0 900.0
+  150.0 880.0
+  300.0 920.0
+  450.0 880.0
+  600.0 900.0
+endline
+
+line survey
+  0.0 1000.0
+  150.0 980.0
+  300.0 1020.0
+  450.0 980.0
+  600.0 1000.0
+endline
+
+line pit
+  0.0 1100.0
+  150.0 1080.0
+  300.0 1120.0
+  450.0 1080.0
+  600.0 1100.0
+endline
+
+line floor-step
+  0.0 1200.0
+  150.0 1180.0
+  300.0 1220.0
+  450.0 1180.0
+  600.0 1200.0
+endline
+
+line chimney
+  0.0 1300.0
+  150.0 1280.0
+  300.0 1320.0
+  450.0 1280.0
+  600.0 1300.0
+endline
+
+line ceiling-step
+  0.0 1400.0
+  150.0 1380.0
+  300.0 1420.0
+  450.0 1380.0
+  600.0 1400.0
+endline
+
+line ceiling-meander
+  0.0 1500.0
+  150.0 1480.0
+  300.0 1520.0
+  450.0 1480.0
+  600.0 1500.0
+endline
+
+line contour
+  0.0 1600.0
+  150.0 1580.0
+  300.0 1620.0
+  450.0 1580.0
+  600.0 1600.0
+endline
+
+line flowstone
+  0.0 1700.0
+  150.0 1680.0
+  300.0 1720.0
+  450.0 1680.0
+  600.0 1700.0
+endline
+
+line moonmilk
+  0.0 1800.0
+  150.0 1780.0
+  300.0 1820.0
+  450.0 1780.0
+  600.0 1800.0
+endline
+
+line water-flow
+  0.0 1900.0
+  150.0 1880.0
+  300.0 1920.0
+  450.0 1880.0
+  600.0 1900.0
+endline
+
+# --- Area fill patterns, Phase 1 & Phase 3 ---
+area water
+  l-water-border
+endarea
+line border -id l-water-border -close on -visibility off
+  0.0 2000.0
+  150.0 2000.0
+  150.0 2150.0
+  0.0 2150.0
+  0.0 2000.0
+endline
+
+area sump
+  l-sump-border
+endarea
+line border -id l-sump-border -close on -visibility off
+  200.0 2000.0
+  350.0 2000.0
+  350.0 2150.0
+  200.0 2150.0
+  200.0 2000.0
+endline
+
+area debris
+  l-debris-border
+endarea
+line border -id l-debris-border -close on -visibility off
+  400.0 2000.0
+  550.0 2000.0
+  550.0 2150.0
+  400.0 2150.0
+  400.0 2000.0
+endline
+
+area flowstone
+  l-flowstone-border
+endarea
+line border -id l-flowstone-border -close on -visibility off
+  600.0 2000.0
+  750.0 2000.0
+  750.0 2150.0
+  600.0 2150.0
+  600.0 2000.0
+endline
+
+area moonmilk
+  l-moonmilk-border
+endarea
+line border -id l-moonmilk-border -close on -visibility off
+  800.0 2000.0
+  950.0 2000.0
+  950.0 2150.0
+  800.0 2150.0
+  800.0 2000.0
+endline
+
+area sand
+  l-sand-border
+endarea
+line border -id l-sand-border -close on -visibility off
+  1000.0 2000.0
+  1150.0 2000.0
+  1150.0 2150.0
+  1000.0 2150.0
+  1000.0 2000.0
+endline
+
+endscrap
