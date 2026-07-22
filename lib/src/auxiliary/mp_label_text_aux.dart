@@ -20,19 +20,19 @@ abstract final class MPLabelTextAux {
 
   static MPLabelData? resolve(THPoint point) {
     switch (point.pointType) {
+      case THPointType.altitude:
+        return _fromAltitude(point);
+      case THPointType.date:
+        return _fromDate(point);
+      case THPointType.dimensions:
+        return _fromDimensions(point);
+      case THPointType.height:
+        return _fromHeight(point);
       case THPointType.label:
       case THPointType.remark:
         return _fromText(point);
-      case THPointType.date:
-        return _fromDate(point);
-      case THPointType.altitude:
-        return _fromAltitude(point);
-      case THPointType.height:
-        return _fromHeight(point);
       case THPointType.passageHeight:
         return _fromPassageHeight(point);
-      case THPointType.dimensions:
-        return _fromDimensions(point);
       case THPointType.station:
         return _fromStation(point);
       default:

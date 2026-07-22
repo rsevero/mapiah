@@ -267,7 +267,8 @@ class MPInteractionAux {
     if (pointPaint.highlightBorders.isNotEmpty) {
       int highlightBorderCount = pointPaint.highlightBorders.length;
 
-      for (final Paint highlightBorder in pointPaint.highlightBorders.reversed) {
+      for (final Paint highlightBorder
+          in pointPaint.highlightBorders.reversed) {
         _drawCirclePoint(
           canvas,
           position,
