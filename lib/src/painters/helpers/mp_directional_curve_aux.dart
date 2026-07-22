@@ -9,6 +9,31 @@ import 'dart:ui';
 /// and `l_moonmilk_UIS` to draw curls that leave/arrive at a fixed angle
 /// offset from the underlying path's tangent.
 abstract final class MPDirectionalCurveAux {
+  /// Builds one cubic approximation between two points with fixed endpoint
+  /// directions, equivalent to MetaPost's `{dir A}..{dir B}` syntax.
+  static Path buildCurvePath({
+    required Offset start,
+    required Offset end,
+    required double startDirectionDegrees,
+    required double endDirectionDegrees,
+    double handleLengthFactor = 1 / 3,
+  }) {
+    final Path path = Path()..moveTo(start.dx, start.dy);
+    final double startAngle = startDirectionDegrees * math.pi / 180;
+    final double endAngle = endDirectionDegrees * math.pi / 180;
+
+    _appendDirectionalCurve(
+      path: path,
+      start: start,
+      end: end,
+      startAngle: startAngle,
+      endAngle: endAngle,
+      handleLengthFactor: handleLengthFactor,
+    );
+
+    return path;
+  }
+
   static Path buildCurlPath({
     required Path sourcePath,
     required double step,
@@ -46,23 +71,13 @@ abstract final class MPDirectionalCurveAux {
         } else {
           final double startAngle = previousAngle + angleOffset;
           final double endAngle = angle - angleOffset;
-          final double handleLength =
-              (tangent.position - previousPoint).distance / 3;
-          final Offset controlPoint1 =
-              previousPoint +
-              Offset(math.cos(startAngle), math.sin(startAngle)) *
-                  handleLength;
-          final Offset controlPoint2 =
-              tangent.position -
-              Offset(math.cos(endAngle), math.sin(endAngle)) * handleLength;
-
-          result.cubicTo(
-            controlPoint1.dx,
-            controlPoint1.dy,
-            controlPoint2.dx,
-            controlPoint2.dy,
-            tangent.position.dx,
-            tangent.position.dy,
+          _appendDirectionalCurve(
+            path: result,
+            start: previousPoint,
+            end: tangent.position,
+            startAngle: startAngle,
+            endAngle: endAngle,
+            handleLengthFactor: 1 / 3,
           );
         }
 
@@ -72,5 +87,32 @@ abstract final class MPDirectionalCurveAux {
     }
 
     return result;
+  }
+
+  static void _appendDirectionalCurve({
+    required Path path,
+    required Offset start,
+    required Offset end,
+    required double startAngle,
+    required double endAngle,
+    required double handleLengthFactor,
+  }) {
+    assert(handleLengthFactor > 0);
+
+    final double handleLength = (end - start).distance * handleLengthFactor;
+    final Offset controlPoint1 =
+        start +
+        Offset(math.cos(startAngle), math.sin(startAngle)) * handleLength;
+    final Offset controlPoint2 =
+        end - Offset(math.cos(endAngle), math.sin(endAngle)) * handleLength;
+
+    path.cubicTo(
+      controlPoint1.dx,
+      controlPoint1.dy,
+      controlPoint2.dx,
+      controlPoint2.dy,
+      end.dx,
+      end.dy,
+    );
   }
 }

@@ -3,6 +3,7 @@
 
 import 'dart:ui' as ui;
 
+import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 
 /// Builds the Phase 1 Therion UIS area fill pattern tiles.
@@ -61,8 +62,12 @@ abstract final class MPTherionAreaPatternTilesUIS {
   }
 
   static ui.Image buildFlowstoneTile(ui.Color lineColor) {
-    const double cellXUnits = 1.0;
-    const double cellYUnits = 0.8;
+    const double cellXUnits = 0.75;
+    const double cellYUnits = 0.6;
+    const double curveHalfWidthUnits = 0.25;
+    const double curveHandleLengthFactor = 0.4;
+    const double staggerXUnits = 0.3;
+    const double staggerYUnits = 0.3;
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
     final ui.Paint paint = ui.Paint()
@@ -71,18 +76,26 @@ abstract final class MPTherionAreaPatternTilesUIS {
       ..strokeWidth = 0.05 * tileUnitPixels;
 
     ui.Path curve(double dx, double dy) {
-      return ui.Path()
-        ..moveTo((-0.35 + dx) * tileUnitPixels, dy * tileUnitPixels)
-        ..quadraticBezierTo(
-          dx * tileUnitPixels,
-          (dy - 0.3) * tileUnitPixels,
-          (0.35 + dx) * tileUnitPixels,
+      return MPDirectionalCurveAux.buildCurvePath(
+        start: ui.Offset(
+          (-curveHalfWidthUnits + dx) * tileUnitPixels,
           dy * tileUnitPixels,
-        );
+        ),
+        end: ui.Offset(
+          (curveHalfWidthUnits + dx) * tileUnitPixels,
+          dy * tileUnitPixels,
+        ),
+        startDirectionDegrees: -60,
+        endDirectionDegrees: 60,
+        handleLengthFactor: curveHandleLengthFactor,
+      );
     }
 
     canvas.drawPath(curve(0, 0), paint);
-    canvas.drawPath(curve(0.35, 0.4), paint);
+    canvas.drawPath(curve(cellXUnits, 0), paint);
+    canvas.drawPath(curve(staggerXUnits, staggerYUnits), paint);
+    canvas.drawPath(curve(0, cellYUnits), paint);
+    canvas.drawPath(curve(cellXUnits, cellYUnits), paint);
 
     return recorder.endRecording().toImageSync(
       (cellXUnits * tileUnitPixels).round(),
