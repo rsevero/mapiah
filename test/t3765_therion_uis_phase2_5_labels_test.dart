@@ -8,6 +8,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
@@ -119,15 +120,14 @@ void main() {
       expect(data!.lines.single, contains('/'));
     });
 
-    test('station point uses its station name', () async {
+    test('station points are left unhandled (placeholder rendering)', () async {
       final TH2FileEditController th2Controller = await loadController(
         '2026-04-06-002-point_with_station_option.th2',
       );
       final THPoint point = th2Controller.th2File.getPoints().single;
-      final MPLabelData? data = MPLabelTextAux.resolve(point);
 
-      expect(data, isNotNull);
-      expect(data!.lines, ['A2@final_de_semana']);
+      expect(point.pointType, THPointType.station);
+      expect(MPLabelTextAux.resolve(point), isNull);
     });
 
     test('station-name points are left unhandled (placeholder rendering)', () async {
@@ -188,6 +188,33 @@ void main() {
         }
       },
     );
+
+    test('station point does not get a Therion label paint', () async {
+      final TH2FileEditController th2Controller = await loadController(
+        '2026-04-06-002-point_with_station_option.th2',
+      );
+      final THPoint point = th2Controller.th2File.getPoints().single;
+
+      for (final MPTH2EditVisualizationMethod method in [
+        MPTH2EditVisualizationMethod.therionUIS,
+        MPTH2EditVisualizationMethod.therionAUT,
+        MPTH2EditVisualizationMethod.therionSBE,
+      ]) {
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          method,
+        );
+
+        final THPointPaint pointPaint = th2Controller.visualController
+            .getDefaultPointPaint(point);
+
+        expect(
+          pointPaint.labelPaint,
+          isNull,
+          reason: '$method should not attach a station labelPaint',
+        );
+      }
+    });
 
     test('point align option is carried into the labelPaint', () async {
       final TH2FileEditController th2Controller = await loadController(

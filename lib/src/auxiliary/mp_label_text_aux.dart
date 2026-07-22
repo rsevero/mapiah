@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
@@ -33,8 +32,6 @@ abstract final class MPLabelTextAux {
         return _fromText(point);
       case THPointType.passageHeight:
         return _fromPassageHeight(point);
-      case THPointType.station:
-        return _fromStation(point);
       default:
         return null;
     }
@@ -177,13 +174,4 @@ abstract final class MPLabelTextAux {
     ]);
   }
 
-  static MPLabelData? _fromStation(THPoint point) {
-    final String? name = MPCommandOptionAux.getName(point);
-
-    if (name == null) {
-      return null;
-    }
-
-    return MPLabelData.plain([name]);
-  }
 }
