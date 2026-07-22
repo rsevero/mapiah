@@ -2523,6 +2523,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thPointPillar => 'Pillar';
 
   @override
+  String get thPointPillars => 'Pillars';
+
+  @override
   String get thPointPillarWithCurtains => 'Pillar With Curtains';
 
   @override

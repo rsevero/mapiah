@@ -4751,6 +4751,12 @@ abstract class AppLocalizations {
   /// **'Pillar'**
   String get thPointPillar;
 
+  /// The label for the pillars point type. Used on: MPTextToUser._initializePointTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Pillars'**
+  String get thPointPillars;
+
   /// The label for the pillar with curtains point type. Used on: MPTextToUser._initializePointTypeAsString
   ///
   /// In en, this message translates to:

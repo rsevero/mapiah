@@ -81,6 +81,7 @@ enum THPointType {
   pendant,
   photo,
   pillar,
+  pillars,
   pillarsWithCurtains,
   pillarWithCurtains,
   popcorn,

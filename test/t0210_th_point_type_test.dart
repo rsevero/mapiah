@@ -12,5 +12,13 @@ void main() {
       expect(THPointType.hasPointType('borehole'), isTrue);
       expect(pointType.toFileString(), 'borehole');
     });
+
+    test('recognizes and serializes pillars point type', () {
+      final THPointType pointType = THPointType.fromString('pillars');
+
+      expect(pointType, THPointType.pillars);
+      expect(THPointType.hasPointType('pillars'), isTrue);
+      expect(pointType.toFileString(), 'pillars');
+    });
   });
 }

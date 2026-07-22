@@ -684,6 +684,7 @@ class MPTextToUser {
     _pointTypeAsString[THPointType.pendant] = localizations.thPointPendant;
     _pointTypeAsString[THPointType.photo] = localizations.thPointPhoto;
     _pointTypeAsString[THPointType.pillar] = localizations.thPointPillar;
+    _pointTypeAsString[THPointType.pillars] = localizations.thPointPillars;
     _pointTypeAsString[THPointType.pillarsWithCurtains] =
         localizations.thPointPillarsWithCurtains;
     _pointTypeAsString[THPointType.pillarWithCurtains] =

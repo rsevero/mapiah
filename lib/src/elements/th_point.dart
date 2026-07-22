@@ -17,7 +17,7 @@ part of 'th_element.dart';
 // curtain, disc-pillar, disc-stalactite, disc-stalagmite, disc-pillars, disc-
 // stalactites, disc-stalagmites, disk, flowstone, flute, gypsum-flower, gyp-
 // sum, helictites, helictite, karren, moonmilk, pendant, pillar-with-curtains,
-// pillars-with-curtains, pillar, popcorn, raft-cone, rimstone-dam, rimstone-
+// pillars-with-curtains, pillar, pillars, popcorn, raft-cone, rimstone-dam, rimstone-
 // pool, scallop, soda-straw, stalactite-stalagmite, stalactites-stalagmites,
 // stalactite, stalactites, stalagmite, stalagmites, volcano, wall-calcite;
 // equipment: anchor, bridge, camp, fixed-ladder, gate, handrail, masonry, name-

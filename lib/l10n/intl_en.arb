@@ -3928,6 +3928,11 @@
     "description": "The label for the pillar point type. Used on: MPTextToUser._initializePointTypeAsString",
     "type": "text"
   },
+  "thPointPillars": "Pillars",
+  "@thPointPillars": {
+    "description": "The label for the pillars point type. Used on: MPTextToUser._initializePointTypeAsString",
+    "type": "text"
+  },
   "thPointPillarWithCurtains": "Pillar With Curtains",
   "@thPointPillarWithCurtains": {
     "description": "The label for the pillar with curtains point type. Used on: MPTextToUser._initializePointTypeAsString",

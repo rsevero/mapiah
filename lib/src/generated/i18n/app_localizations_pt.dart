@@ -2550,6 +2550,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thPointPillar => 'Pilar';
 
   @override
+  String get thPointPillars => 'Pilares';
+
+  @override
   String get thPointPillarWithCurtains => 'Pilar com cortinas';
 
   @override

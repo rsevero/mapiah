@@ -385,6 +385,11 @@ abstract class MPVisualControllerBase with Store {
       border: THPaint.thPaint11,
       fill: THPaint.thPaint1011,
     ),
+    THPointType.pillars: THPointPaint(
+      type: MPPointShapeType.square,
+      border: THPaint.thPaint11,
+      fill: THPaint.thPaint1011,
+    ),
     THPointType.pillarWithCurtains: THPointPaint(
       type: MPPointShapeType.horizontalDiamond,
       border: THPaint.thPaint11,
