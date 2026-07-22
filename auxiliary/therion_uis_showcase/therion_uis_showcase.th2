@@ -10,6 +10,13 @@ encoding  utf-8
 # "blocks" areas have no UIS pattern yet and keep the placeholder fill.
 
 scrap therion_uis_showcase -scale [0.0 0.0 1000.0 0.0 0.0 0.0 40.64 0.0 m]
+  line wall -reverse on
+    -170 2240
+    1330 2240
+    1330 -300
+    -170 -300
+    -170 2240
+  endline
 
 # --- Point symbols: simple + medium complexity (Phases 1-2) ---
 point 0.0 0.0 anastomosis
@@ -61,8 +68,8 @@ point 840.0 480.0 pillars
 # --- Text/label point symbols, Phase 2.5 ---
 point 0.0 600.0 label -text "Label text"
 point 120.0 600.0 remark -text "Remark text"
-point 240.0 600.0 date -value "2026-07-22"
-point 360.0 600.0 altitude -value 1234
+point 240.0 600.0 date -value "2026.07.22"
+point 360.0 600.0 altitude -value [fix 1234]
 point 480.0 600.0 height -value 12
 point 600.0 600.0 dimensions -value [7 3.3]
 point 720.0 600.0 passage-height -value +4
