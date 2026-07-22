@@ -26,8 +26,16 @@ import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_ceiling_meander_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_ceiling_step_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_pit_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
@@ -1093,6 +1101,39 @@ abstract class MPVisualControllerBase with Store {
       return const MPSurveyCaveLineDecorator();
     }
 
+    if ((lineType == THLineType.pit) || (lineType == THLineType.floorStep)) {
+      return const MPPitLineDecorator();
+    }
+
+    if (lineType == THLineType.chimney) {
+      return const MPChimneyLineDecorator();
+    }
+
+    if (lineType == THLineType.ceilingStep) {
+      return const MPCeilingStepLineDecorator();
+    }
+
+    if (lineType == THLineType.ceilingMeander) {
+      return const MPCeilingMeanderLineDecorator();
+    }
+
+    if (lineType == THLineType.contour) {
+      return const MPContourLineDecorator();
+    }
+
+    if (lineType == THLineType.flowstone) {
+      return const MPFlowstoneLineDecorator();
+    }
+
+    if (lineType == THLineType.moonmilk) {
+      return const MPMoonmilkLineDecorator();
+    }
+
+    if ((lineType == THLineType.waterFlow) &&
+        ((subtype == null) || (subtype == 'permanent'))) {
+      return const MPWaterFlowPermanentLineDecorator();
+    }
+
     return null;
   }
 
@@ -1258,7 +1299,8 @@ abstract class MPVisualControllerBase with Store {
       if (patternPaint != null) {
         return areaPaint.copyWith(
           fillPaint: patternPaint,
-          cleanBeforeFill: areaType != THAreaType.debris,
+          cleanBeforeFill:
+              (areaType != THAreaType.debris) && (areaType != THAreaType.sand),
         );
       }
     }
@@ -1291,6 +1333,8 @@ abstract class MPVisualControllerBase with Store {
           tile = MPTherionAreaPatternTilesUIS.buildFlowstoneTile(color);
         case THAreaType.moonmilk:
           tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(color);
+        case THAreaType.sand:
+          tile = MPTherionAreaPatternTilesUIS.buildSandTile(color);
         default:
           return null;
       }

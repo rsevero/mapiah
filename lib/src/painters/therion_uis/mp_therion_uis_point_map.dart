@@ -11,6 +11,7 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.anastomosis: MPTherionPointSymbol.anastomosisUIS,
   THPointType.archeoMaterial: MPTherionPointSymbol.archeoMaterialUIS,
+  THPointType.blocks: MPTherionPointSymbol.blocksUIS,
   THPointType.camp: MPTherionPointSymbol.campUIS,
   THPointType.continuation: MPTherionPointSymbol.continuationUIS,
   THPointType.crystal: MPTherionPointSymbol.crystalUIS,
@@ -31,13 +32,17 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.paleoMaterial: MPTherionPointSymbol.paleoMaterialUIS,
   THPointType.pebbles: MPTherionPointSymbol.pebblesUIS,
   THPointType.pillar: MPTherionPointSymbol.pillarUIS,
+  THPointType.pillars: MPTherionPointSymbol.pillarsUIS,
   THPointType.popcorn: MPTherionPointSymbol.popcornUIS,
   THPointType.sand: MPTherionPointSymbol.sandUIS,
   THPointType.scallop: MPTherionPointSymbol.scallopUIS,
   THPointType.sodaStraw: MPTherionPointSymbol.sodaStrawUIS,
   THPointType.stalactite: MPTherionPointSymbol.stalactiteUIS,
+  THPointType.stalactites: MPTherionPointSymbol.stalactitesUIS,
   THPointType.stalagmite: MPTherionPointSymbol.stalagmiteUIS,
+  THPointType.stalagmites: MPTherionPointSymbol.stalagmitesUIS,
   THPointType.wallCalcite: MPTherionPointSymbol.wallCalciteUIS,
+  THPointType.water: MPTherionPointSymbol.waterUIS,
 };
 
 /// Resolves symbols whose Therion macro depends on a point subtype.
@@ -45,6 +50,18 @@ MPTherionPointSymbol? getTherionUISPointSymbol({
   required THPointType pointType,
   required String subtype,
 }) {
+  if (pointType == THPointType.airDraught) {
+    switch (subtype) {
+      case 'winter':
+        return MPTherionPointSymbol.airDraughtWinterUIS;
+      case 'summer':
+        return MPTherionPointSymbol.airDraughtSummerUIS;
+      case 'undefined':
+      default:
+        return MPTherionPointSymbol.airDraughtUIS;
+    }
+  }
+
   if (pointType != THPointType.waterFlow) {
     return therionUISPointSymbols[pointType];
   }

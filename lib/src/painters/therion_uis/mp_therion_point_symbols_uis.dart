@@ -4,7 +4,9 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
+import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 /// Faithful Dart ports of Therion's `p_*_UIS` MetaPost point symbols.
@@ -20,8 +22,12 @@ abstract final class MPTherionPointSymbolsUIS {
     void Function(Canvas, Offset, double, Paint)
   >
   drawMethods = {
+    MPTherionPointSymbol.airDraughtSummerUIS: _drawAirDraughtSummerUIS,
+    MPTherionPointSymbol.airDraughtUIS: _drawAirDraughtUIS,
+    MPTherionPointSymbol.airDraughtWinterUIS: _drawAirDraughtWinterUIS,
     MPTherionPointSymbol.anastomosisUIS: _drawAnastomosisUIS,
     MPTherionPointSymbol.archeoMaterialUIS: _drawArcheoMaterialUIS,
+    MPTherionPointSymbol.blocksUIS: _drawBlocksUIS,
     MPTherionPointSymbol.campUIS: _drawCampUIS,
     MPTherionPointSymbol.continuationUIS: _drawContinuationUIS,
     MPTherionPointSymbol.crystalUIS: _drawCrystalUIS,
@@ -42,17 +48,21 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.paleoMaterialUIS: _drawPaleoMaterialUIS,
     MPTherionPointSymbol.pebblesUIS: _drawPebblesUIS,
     MPTherionPointSymbol.pillarUIS: _drawPillarUIS,
+    MPTherionPointSymbol.pillarsUIS: _drawPillarsUIS,
     MPTherionPointSymbol.popcornUIS: _drawPopcornUIS,
     MPTherionPointSymbol.sandUIS: _drawSandUIS,
     MPTherionPointSymbol.scallopUIS: _drawScallopUIS,
     MPTherionPointSymbol.sodaStrawUIS: _drawSodaStrawUIS,
     MPTherionPointSymbol.stalactiteUIS: _drawStalactiteUIS,
+    MPTherionPointSymbol.stalactitesUIS: _drawStalactitesUIS,
     MPTherionPointSymbol.stalagmiteUIS: _drawStalagmiteUIS,
+    MPTherionPointSymbol.stalagmitesUIS: _drawStalagmitesUIS,
     MPTherionPointSymbol.wallCalciteUIS: _drawWallCalciteUIS,
     MPTherionPointSymbol.waterFlowIntermittentUIS:
         _drawWaterFlowIntermittentUIS,
     MPTherionPointSymbol.waterFlowPaleoUIS: _drawWaterFlowPaleoUIS,
     MPTherionPointSymbol.waterFlowPermanentUIS: _drawWaterFlowPermanentUIS,
+    MPTherionPointSymbol.waterUIS: _drawWaterUIS,
   };
 
   static Paint _withPenWidth(Paint paint, double penFactor) {
@@ -849,6 +859,337 @@ abstract final class MPTherionPointSymbolsUIS {
 
         canvas.drawPath(curve, pen);
         canvas.drawLine(const Offset(0, 0.2), const Offset(0, 0.2), dotPen);
+      },
+    );
+  }
+
+  static void _drawBlocksUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Paint outlinePen = _withPenWidth(paint, mpTherionPenC);
+    final Paint detailPen = _withPenWidth(paint, mpTherionPenD);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path outline = Path()
+          ..moveTo(-0.5, 0.5)
+          ..lineTo(0.3, 0.4)
+          ..lineTo(-0.17, -0.2)
+          ..close()
+          ..moveTo(0.25, 0.25)
+          ..lineTo(0.5, 0.15)
+          ..lineTo(0.3, -0.5)
+          ..lineTo(-0.1, -0.5)
+          ..close()
+          ..moveTo(-0.27, 0)
+          ..lineTo(-0.1, -0.3)
+          ..lineTo(-0.5, -0.35)
+          ..close();
+        final Path detail = Path()
+          ..moveTo(-0.5, 0.5)
+          ..lineTo(-0.1, 0.2)
+          ..lineTo(-0.17, -0.2)
+          ..moveTo(-0.1, 0.2)
+          ..lineTo(0.3, 0.4)
+          ..moveTo(0.25, 0.25)
+          ..lineTo(0.3, 0)
+          ..lineTo(0.2, -0.2)
+          ..lineTo(-0.1, -0.5)
+          ..moveTo(0.3, -0.5)
+          ..lineTo(0.2, -0.2)
+          ..moveTo(0.5, 0.15)
+          ..lineTo(0.3, 0);
+
+        canvas.drawPath(outline, outlinePen);
+        canvas.drawPath(detail, detailPen);
+      },
+    );
+  }
+
+  static void _drawWaterUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    const Rect ellipseRect = Rect.fromLTRB(-0.425, -0.3, 0.425, 0.3);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        if (_isFill(paint)) {
+          final Paint hatchPen = Paint()
+            ..color = paint.color
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = mpTherionPenD;
+
+          canvas.save();
+          canvas.clipPath(Path()..addOval(ellipseRect));
+          for (double offset = -0.8; offset <= 0.8; offset += 0.18) {
+            canvas.drawLine(
+              Offset(offset - 1, -1),
+              Offset(offset + 1, 1),
+              hatchPen,
+            );
+          }
+          canvas.restore();
+          return;
+        }
+
+        canvas.drawOval(ellipseRect, _withPenWidth(paint, mpTherionPenD));
+      },
+    );
+  }
+
+  /// Shared geometry for `p_airdraught_UIS` and its winter/summer variants:
+  /// a vertical stem, symmetric wing curves, and three ascending hash marks.
+  /// The hash-mark count depends on Therion's per-symbol `sc` scale factor
+  /// (`round(3 + 2*log2(sc))`); Mapiah has no equivalent per-point scale
+  /// knob beyond the global symbol unit, so `sc` is treated as always 1
+  /// (matching every other ported symbol), which fixes the count at 3.
+  static Path _airDraughtBasePath() {
+    final Path path = Path()
+      ..moveTo(0, -1)
+      ..lineTo(0, 0.8)
+      ..moveTo(-0.2, -0.65)
+      ..quadraticBezierTo(-0.25, -0.85, 0, -1)
+      ..moveTo(0.2, -0.65)
+      ..quadraticBezierTo(0.25, -0.85, 0, -1);
+
+    for (int i = 1; i <= 3; i++) {
+      final double y1 = 1 - (0.2 * i);
+      final double y2 = 1 - (0.2 * (i - 1));
+
+      path
+        ..moveTo(0, y1)
+        ..lineTo(0.2, y2);
+    }
+
+    return path;
+  }
+
+  static void _drawAirDraughtUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint,
+      path: _airDraughtBasePath(),
+    );
+  }
+
+  static void _drawAirDraughtWinterUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(_airDraughtBasePath(), pen);
+        MPThClean.drawPath(
+          canvas: canvas,
+          path: Path()..addOval(
+            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
+          ),
+          backgroundColor: THPaint.thPaintWhiteBackground.color,
+        );
+
+        final Path cross = Path()
+          ..moveTo(-0.1732, 0.05)
+          ..lineTo(0.1732, -0.15)
+          ..moveTo(0.1732, 0.05)
+          ..lineTo(-0.1732, -0.15)
+          ..moveTo(0, 0.15)
+          ..lineTo(0, -0.25);
+
+        canvas.drawPath(cross, pen);
+      },
+    );
+  }
+
+  static void _drawAirDraughtSummerUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
+    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(_airDraughtBasePath(), pen);
+        MPThClean.drawPath(
+          canvas: canvas,
+          path: Path()..addOval(
+            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
+          ),
+          backgroundColor: THPaint.thPaintWhiteBackground.color,
+        );
+
+        final Path cross = Path()
+          ..moveTo(-0.1732, 0.05)
+          ..lineTo(0.1732, -0.15)
+          ..moveTo(0.1732, 0.05)
+          ..lineTo(-0.1732, -0.15)
+          ..moveTo(0, 0.15)
+          ..lineTo(0, -0.25);
+
+        canvas.drawPath(cross, pen);
+        MPThClean.drawPath(
+          canvas: canvas,
+          path: Path()..addOval(
+            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.15),
+          ),
+          backgroundColor: THPaint.thPaintWhiteBackground.color,
+        );
+        canvas.drawOval(
+          Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.1),
+          pen,
+        );
+      },
+    );
+  }
+
+  /// Shared geometry for a group of three `0.7`-scaled sub-symbols spaced
+  /// `0.3u` apart, matching `p_stalagmites_UIS`/`p_stalactites_UIS`/
+  /// `p_pillars_UIS`'s loops. Therion's `pickup PenC` fixes the pen at an
+  /// absolute width unaffected by the sub-symbols' `sc*0.7` scale, so the
+  /// sub-shape geometry itself (not the ambient canvas transform) is
+  /// pre-scaled by 0.7, keeping the stroke width constant across instances.
+  static Path _repeatedSubSymbolsPath(
+    void Function(Path path, double dx) buildInstance,
+  ) {
+    final Path path = Path();
+
+    for (final double index in const <double>[-1, 0, 1]) {
+      buildInstance(path, index * 0.3);
+    }
+
+    return path;
+  }
+
+  static void _drawStalagmitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+      path
+        ..moveTo(dx, -0.28)
+        ..lineTo(dx, 0.105)
+        ..lineTo(dx - 0.105, 0.28)
+        ..moveTo(dx, 0.105)
+        ..lineTo(dx + 0.105, 0.28);
+    });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  static void _drawStalactitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+      path
+        ..moveTo(dx, 0.28)
+        ..lineTo(dx, -0.105)
+        ..lineTo(dx - 0.105, -0.28)
+        ..moveTo(dx, -0.105)
+        ..lineTo(dx + 0.105, -0.28);
+    });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  static void _drawPillarsUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    Paint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+      path
+        ..moveTo(dx, -0.105)
+        ..lineTo(dx, 0.105)
+        ..moveTo(dx - 0.105, 0.28)
+        ..lineTo(dx, 0.105)
+        ..lineTo(dx + 0.105, 0.28)
+        ..moveTo(dx - 0.105, -0.28)
+        ..lineTo(dx, -0.105)
+        ..lineTo(dx + 0.105, -0.28);
+    });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
       },
     );
   }

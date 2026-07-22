@@ -3,6 +3,8 @@
 
 import 'dart:ui' as ui;
 
+import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
+
 /// Builds the Phase 1 Therion UIS area fill pattern tiles.
 ///
 /// Every tile is rasterized once, at a fixed resolution ([tileUnitPixels]
@@ -86,6 +88,44 @@ abstract final class MPTherionAreaPatternTilesUIS {
       (cellXUnits * tileUnitPixels).round(),
       (cellYUnits * tileUnitPixels).round(),
     );
+  }
+
+  /// Ports `a_sand_UIS`'s `beginpattern`-free, nested-loop dot cloud as a
+  /// repeating tile: a 3x3 grid of dots, each jittered within `0.35u` of its
+  /// cell center. A fixed (not per-element) seed keeps the pattern stable
+  /// across repaints, per the roadmap's Architecture Plan.
+  static ui.Image buildSandTile(ui.Color lineColor) {
+    const int gridSize = 3;
+    const double cellUnits = 1.0;
+    const double jitterUnits = 0.35;
+    const double dotRadiusUnits = 0.025;
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final ui.Canvas canvas = ui.Canvas(recorder);
+    final ui.Paint paint = ui.Paint()
+      ..color = lineColor
+      ..style = ui.PaintingStyle.fill;
+    final MPSeededRandom random = MPSeededRandom(mpID: 0, salt: 0);
+
+    for (int gridX = 0; gridX < gridSize; gridX++) {
+      for (int gridY = 0; gridY < gridSize; gridY++) {
+        final double jitterX = ((random.nextDouble() * 2) - 1) * jitterUnits;
+        final double jitterY = ((random.nextDouble() * 2) - 1) * jitterUnits;
+        final double x =
+            (gridX + 0.5 + jitterX) * cellUnits * tileUnitPixels;
+        final double y =
+            (gridY + 0.5 + jitterY) * cellUnits * tileUnitPixels;
+
+        canvas.drawCircle(
+          ui.Offset(x, y),
+          dotRadiusUnits * tileUnitPixels,
+          paint,
+        );
+      }
+    }
+
+    final int size = (gridSize * cellUnits * tileUnitPixels).round();
+
+    return recorder.endRecording().toImageSync(size, size);
   }
 
   static ui.Image buildMoonmilkTile(ui.Color lineColor) {

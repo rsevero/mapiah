@@ -278,6 +278,7 @@ class THLinePainter extends CustomPainter {
         devicePixelRatio: th2FileEditController.devicePixelRatio,
       ),
       isReversed: lineInfo.isReversed,
+      mpID: lineInfo.mpID,
     );
 
     if (showLinePoints) {

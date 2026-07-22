@@ -4,8 +4,12 @@
 /// Therion UIS point symbols implemented as faithful vector drawings, one
 /// value per `p_*_UIS` MetaPost macro ported to Dart.
 enum MPTherionPointSymbol {
+  airDraughtSummerUIS,
+  airDraughtUIS,
+  airDraughtWinterUIS,
   anastomosisUIS,
   archeoMaterialUIS,
+  blocksUIS,
   campUIS,
   continuationUIS,
   crystalUIS,
@@ -26,14 +30,18 @@ enum MPTherionPointSymbol {
   paleoMaterialUIS,
   pebblesUIS,
   pillarUIS,
+  pillarsUIS,
   popcornUIS,
   sandUIS,
   scallopUIS,
   sodaStrawUIS,
   stalactiteUIS,
+  stalactitesUIS,
   stalagmiteUIS,
+  stalagmitesUIS,
   wallCalciteUIS,
   waterFlowIntermittentUIS,
   waterFlowPaleoUIS,
   waterFlowPermanentUIS,
+  waterUIS,
 }

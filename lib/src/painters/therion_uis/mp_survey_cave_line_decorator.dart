@@ -35,5 +35,6 @@ class MPSurveyCaveLineDecorator extends MPLineDecorator {
     required THLinePaint linePaint,
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
+    int mpID = 0,
   }) {}
 }

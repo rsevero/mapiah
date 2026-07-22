@@ -371,33 +371,33 @@ These containers are drawn with `canvas.drawPath()` before the text.
 
 **Deliverable**: All text-based point types render their actual content (text strings) on the canvas with correct alignment, white background, font sizing, and decorated containers for passage heights. Station names appear next to station dots.
 
-### Phase 3 — Complex UIS Symbols
+### Phase 3 — Complex UIS Symbols ✅
 
 **Goal**: Symbols requiring loops, randomness, or `adjust_step`-equivalent path walking.
 
 **Points (9)**:
-- `blocks` — triangles with inner lines, multiple iterations
-- `water` (point) — ellipse with embedded water fill pattern
-- `airdraught`, `airdraught_winter`, `airdraught_summer` — loops with logarithmic (`mlog`) scaling
-- `stalagmites`, `stalactites`, `pillars` — repeated sub-symbol placement
+- [x] `blocks` — triangles with inner lines, multiple iterations
+- [x] `water` (point) — ellipse with embedded water fill pattern (clipped diagonal hatch, drawn directly rather than via the area-pattern tile cache)
+- [x] `airdraught`, `airdraught_winter`, `airdraught_summer` — resolved via the point's `subtype` option (`undefined`/`winter`/`summer`), the same mechanism as `waterFlow`'s subtypes; the wing hash-mark count uses Therion's `round(3 + 2*log2(sc))` formula with `sc` fixed at 1, since Mapiah has no per-point scale knob beyond the global symbol unit (matching every other ported symbol)
+- [x] `stalagmites`, `stalactites`, `pillars` — repeated sub-symbol placement (3 instances at 0.7x scale, geometry pre-scaled rather than the ambient canvas scale, so the pen width stays constant like Therion's fixed-width `pickup PenC`)
 
 **Lines (8)**:
-- `pit` — perpendicular ticks at regular arc intervals
-- `chimney` — reversed ceiling step
-- `ceilingmeander` — paired marks along path
-- `ceilingstep` — direction-aware ticks
-- `contour` — midpoint tick
-- `flowstone` (line) — bezier curls along path
-- `moonmilk` (line) — tight curved loops along path
-- `waterflow_permanent` — meandering noise path
+- [x] `pit` (and its Therion alias `floorstep`, mapped to `THLineType.floorStep`) — perpendicular ticks at regular arc intervals
+- [x] `chimney` — `l_ceilingstep_SKBB(reverse P)`: same tick pattern as `ceilingstep` but measured from the path's end, ticks on the opposite side
+- [x] `ceilingmeander` — paired radial+crossbar marks along path
+- [x] `ceilingstep` — ticks on a fixed side (no direction-awareness beyond what Therion's own macro encodes)
+- [x] `contour` — midpoint tick (Therion's `pnt = -2` default case only; per-knot tick positions from the C++ layer's `txt` list have no Mapiah equivalent)
+- [x] `flowstone` (line) — bezier curls along path (directional-curve approximation, see below)
+- [x] `moonmilk` (line) — tight curved loops along path (same approximation, narrower angle)
+- [x] `waterflow_permanent` — meandering path with seeded pseudo-random noise (`MPSeededRandom`, seeded by element `mpID`) plus an arrowhead
 
 **Areas (1)**:
-- `sand` — randomized dot cloud (seeded random, nested loop)
+- [x] `sand` — randomized dot cloud, implemented as a repeating 3x3-grid tile (fixed seed, not per-element, per this document's own Architecture Plan guidance) rather than a live per-area nested loop, reusing the existing `MPPatternCache`/`ImageShader` infrastructure
 
-**`thclean` full implementation**: Phase 3 symbols make heavy use of `thclean` — for example, `l_flowstone_UIS` and `l_moonmilk_UIS` punch through previously drawn wall lines, and complex point symbols like `p_blocks_UIS` erase interior areas. Implement the complete erase strategy using the approach validated in Phase 0/1:
-- Wrap affected draw calls in `canvas.saveLayer(bounds, paint)` / `canvas.restoreToCount()` to isolate the layer
-- Use `Paint()..blendMode = BlendMode.clear` for erase operations within that layer
-- Identify all Phase 3 symbols that call `thclean` and apply consistently
+**Deviations from this document's original Phase 3 sketch, decided with the user before implementation**:
+- **`thclean`**: Phase 0/1 already established `MPThClean.drawPath` (flat background-color fill) instead of `canvas.saveLayer`/`BlendMode.clear`, and that mechanism is correct for Mapiah's flat-color canvas. Rather than introduce a second, unused erase mechanism, `MPThClean.drawPath` gained an optional `opacity` parameter (mirroring `thclean`'s `withalpha` transparency branch) and Phase 3's `airdraught_winter`/`airdraught_summer` reuse it as-is (full opacity).
+- **Line decorators stay additive**: like every Phase 1/2 decorator, Phase 3's line decorators add marks on top of Mapiah's existing placeholder dash-styled base line rather than replacing it with Therion's exact solid-line-plus-gap rendering; `waterflow_permanent`'s meander is likewise drawn as an overlay instead of replacing the line's base path (which would need threading `MPSymbolUnit`/`mpID` into `MPLineDecorator.buildBasePath`, not just `decorate`).
+- **`pillars` point type**: while auditing Phase 3, discovered Therion has a standalone `pillars` point type (`TT_POINT_TYPE_PILLARS`) that Mapiah never supported at all (only `pillar`, `pillarWithCurtains`, `pillarsWithCurtains`). Added full support (grammar recognition is generic and needed no changes; added the enum member, placeholder shape, EN/PT labels, and tests) as a separate prerequisite commit before porting `p_pillars_UIS`.
 
 **Deliverable**: Complete UIS symbol set. All Therion UIS files render faithfully.
 

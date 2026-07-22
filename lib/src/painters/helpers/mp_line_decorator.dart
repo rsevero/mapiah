@@ -15,11 +15,15 @@ abstract class MPLineDecorator {
     return path;
   }
 
+  /// [mpID] seeds procedural randomness (e.g. `l_waterflow_permanent_UIS`'s
+  /// meander noise) so a given element's decoration is stable across
+  /// repaints; defaults to 0 for decorators that don't need it.
   void decorate({
     required Canvas canvas,
     required Path path,
     required THLinePaint linePaint,
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
+    int mpID = 0,
   });
 }
