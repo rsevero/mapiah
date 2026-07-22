@@ -314,6 +314,14 @@ abstract class MPGeneralControllerBase with Store {
     }
   }
 
+  /// Triggers a complete redraw of every open TH2 drawing.
+  void triggerAllOpenTH2FilesRedraw() {
+    for (final TH2FileEditController controller
+        in _t2hFileEditControllers.values) {
+      controller.triggerAllElementsRedraw();
+    }
+  }
+
   List<String> getAvailableEncodings() {
     return _availableEncodings;
   }

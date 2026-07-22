@@ -487,6 +487,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         _incrementFieldRebuildCounter(type);
       }
     });
+
+    mpLocator.mpGeneralController.triggerAllOpenTH2FilesRedraw();
   }
 
   void _incrementFieldRebuildCounter(MPSettingID type) {
@@ -602,7 +604,13 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         ..addAll(newErrors);
     });
 
-    return newErrors.isEmpty;
+    final bool isApplied = newErrors.isEmpty;
+
+    if (isApplied) {
+      mpLocator.mpGeneralController.triggerAllOpenTH2FilesRedraw();
+    }
+
+    return isApplied;
   }
 
   List<String> _sortedSections(AppLocalizations appLocalizations) {
