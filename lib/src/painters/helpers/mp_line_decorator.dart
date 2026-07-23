@@ -6,11 +6,11 @@ import 'dart:ui';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
-/// Adds Therion decorations such as ticks or curls to an already built line.
+/// Draws a Therion line representation along an already built geometry path.
 abstract class MPLineDecorator {
   const MPLineDecorator();
 
-  /// Returns the path that should receive the line's normal paint.
+  /// Returns the geometry path that should be passed to [decorate].
   Path buildBasePath({required Path path, required List<Offset> vertices}) {
     return path;
   }

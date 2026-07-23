@@ -42,6 +42,9 @@ class MPNonSelectedScrapsWidget extends StatelessWidget
         mpLocator.mpSettingsController.getTrigger(
           MPSettingID.TH2Edit_ShowLinePoints,
         );
+        mpLocator.mpSettingsController.getTrigger(
+          MPSettingID.TH2Edit_VisualizationMethod,
+        );
 
         final List<CustomPainter> painters = [];
 

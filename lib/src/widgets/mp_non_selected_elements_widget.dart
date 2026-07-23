@@ -55,6 +55,9 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         mpLocator.mpSettingsController.getTrigger(
           MPSettingID.TH2Edit_ShowLinePoints,
         );
+        mpLocator.mpSettingsController.getTrigger(
+          MPSettingID.TH2Edit_VisualizationMethod,
+        );
 
         final bool showDirectionTicksOnNonSelected = mpLocator
             .mpSettingsController

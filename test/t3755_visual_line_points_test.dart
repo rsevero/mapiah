@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
@@ -38,9 +39,14 @@ void main() {
       mpLocator.mpSettingsController.resetBool(
         MPSettingID.TH2Edit_ShowLinePoints,
       );
+      mpLocator.mpSettingsController.resetEnum(
+        MPSettingID.TH2Edit_VisualizationMethod,
+      );
 
       th2Controller = mpLocator.mpGeneralController.getTH2FileEditController(
-        filename: THTestAux.testPath('2026-02-17-001-slope_straight_line.th2'),
+        filename: THTestAux.testPath(
+          'th_file_parser-03020-line_with_clip_option.th2',
+        ),
       );
       await th2Controller.load();
       line = th2Controller.th2File.getLines().single;
@@ -75,6 +81,31 @@ void main() {
       final List<THLinePainter> painters = createPainters();
 
       expect(painters, isNotEmpty);
+      expect(
+        painters.every((THLinePainter painter) => !painter.showLinePoints),
+        isTrue,
+      );
+    });
+
+    test('Therion-faithful lines respect hidden line points', () {
+      mpLocator.mpSettingsController.setEnum(
+        MPSettingID.TH2Edit_VisualizationMethod,
+        MPTH2EditVisualizationMethod.therionUIS,
+      );
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.TH2Edit_ShowLinePoints,
+        false,
+      );
+
+      final List<THLinePainter> painters = createPainters();
+
+      expect(painters, isNotEmpty);
+      expect(
+        painters.every(
+          (THLinePainter painter) => painter.lineDecorator != null,
+        ),
+        isTrue,
+      );
       expect(
         painters.every((THLinePainter painter) => !painter.showLinePoints),
         isTrue,

@@ -224,42 +224,44 @@ class THLinePainter extends CustomPainter {
         ) ??
         path;
 
-    if (linePaint.fillPaint != null) {
-      if (linePaint.cleanBeforeFill) {
-        MPThClean.drawPath(
-          canvas: canvas,
-          path: basePath,
-          backgroundColor: THPaint.thPaintWhiteBackground.color,
-        );
-      }
-
-      canvas.drawPath(basePath, linePaint.fillPaint!);
-    }
-
-    if (linePaint.type == MPLinePaintType.continuous) {
-      if (linePaint.highlightBorders.isNotEmpty) {
-        int highlightBorderCount = linePaint.highlightBorders.length;
-
-        for (final Paint highlightBorder
-            in linePaint.highlightBorders.reversed) {
-          canvas.drawPath(
-            basePath,
-            highlightBorder
-              ..strokeWidth =
-                  highlightBorder.strokeWidth *
-                  ((highlightBorderCount * 2) + 1),
+    if (lineDecorator == null) {
+      if (linePaint.fillPaint != null) {
+        if (linePaint.cleanBeforeFill) {
+          MPThClean.drawPath(
+            canvas: canvas,
+            path: basePath,
+            backgroundColor: THPaint.thPaintWhiteBackground.color,
           );
-
-          highlightBorderCount--;
         }
+
+        canvas.drawPath(basePath, linePaint.fillPaint!);
       }
-      if (linePaint.primaryPaint != null) {
-        canvas.drawPath(basePath, linePaint.primaryPaint!);
-      } else if (linePaint.secondaryPaint != null) {
-        canvas.drawPath(basePath, linePaint.secondaryPaint!);
+
+      if (linePaint.type == MPLinePaintType.continuous) {
+        if (linePaint.highlightBorders.isNotEmpty) {
+          int highlightBorderCount = linePaint.highlightBorders.length;
+
+          for (final Paint highlightBorder
+              in linePaint.highlightBorders.reversed) {
+            canvas.drawPath(
+              basePath,
+              highlightBorder
+                ..strokeWidth =
+                    highlightBorder.strokeWidth *
+                    ((highlightBorderCount * 2) + 1),
+            );
+
+            highlightBorderCount--;
+          }
+        }
+        if (linePaint.primaryPaint != null) {
+          canvas.drawPath(basePath, linePaint.primaryPaint!);
+        } else if (linePaint.secondaryPaint != null) {
+          canvas.drawPath(basePath, linePaint.secondaryPaint!);
+        }
+      } else {
+        _drawDashedPath(canvas, basePath);
       }
-    } else {
-      _drawDashedPath(canvas, basePath);
     }
 
     if (lineInfo.addLineDirectionTicks) {

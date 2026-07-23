@@ -11,13 +11,9 @@ import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
-/// Ports `l_waterflow_permanent_UIS`: a meandering overlay whose bends
+/// Ports `l_waterflow_permanent_UIS`: a meandering line whose bends
 /// alternate side every `0.5u` with a randomized angle (`50 ± 15` degrees,
 /// seeded per element for repaint stability), ending in an arrowhead.
-///
-/// Therion replaces the line's geometry itself with this meander (`thdraw
-/// ppp`); Mapiah instead draws it as an overlay on top of the normal line
-/// stroke, matching every other Phase 1-3 decorator's additive convention.
 class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
   const MPWaterFlowPermanentLineDecorator();
 
