@@ -40,24 +40,6 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
         th2FileEditController.activeScrapID;
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_EnableSpecialBorderForIDSet,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_EnableSpecialBorderForVisibilityOff,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_ShowLinePoints,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_VisualizationMethod,
-        );
 
         final bool showDirectionTicksOnNonSelected = mpLocator
             .mpSettingsController

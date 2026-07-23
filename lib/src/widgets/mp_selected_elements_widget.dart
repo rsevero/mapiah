@@ -2,11 +2,9 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
-import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
-import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
@@ -33,12 +31,6 @@ class MPSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_ShowLinePoints,
-        );
-        mpLocator.mpSettingsController.getTrigger(
-          MPSettingID.TH2Edit_VisualizationMethod,
-        );
 
         final List<CustomPainter> painters = [];
         final Iterable<MPSelectedElement> mpSelectedElements =
