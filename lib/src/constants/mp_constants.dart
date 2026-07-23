@@ -20,6 +20,9 @@ const bool mpDebugMousePosition = bool.fromEnvironment(
   defaultValue: false,
 );
 
+const int mpMaximumRestoredWindowDisplayCount = 64;
+const double mpMinimumRestoredWindowVisibleLength = 64;
+
 // Compile-time flag to indicate we built the app for Flathub (set with
 // `--dart-define=isFlathub=true` when building). Defaults to false.
 const bool mpIsFlathub = bool.fromEnvironment('isFlathub', defaultValue: false);

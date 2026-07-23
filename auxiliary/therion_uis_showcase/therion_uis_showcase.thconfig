@@ -10,7 +10,7 @@ source therion_uis_showcase.th
 layout exploracao
   scale 1 250
   #debug station-names
-  symbol-hide group centerline
+  #symbol-hide group centerline
   language pt
   #grid bottom
   #grid-size 100 100 10 m

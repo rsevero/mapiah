@@ -6,10 +6,11 @@ import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
+import 'package:mapiah/src/controllers/types/mp_window_placement.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'mp_settings_controller.g.dart';
 
@@ -57,6 +58,15 @@ abstract class MPSettingsControllerBase with Store {
         as MPTH2EditVisualizationMethod;
   }
 
+  MPWindowPlacement get windowPlacement {
+    final String storedValue = getStringWithDefault(
+      MPSettingID.Internal_WindowPlacement,
+    );
+
+    return MPWindowPlacement.tryParse(storedValue) ??
+        const MPWindowPlacement.maximized();
+  }
+
   bool get isTH2EditSpecialBorderForIDSetEnabled {
     return getBoolWithDefault(MPSettingID.TH2Edit_EnableSpecialBorderForIDSet);
   }
@@ -94,6 +104,8 @@ abstract class MPSettingsControllerBase with Store {
   /// The default default value for strings is mpDefaultDefaultStringSetting.
   /// Only settings that differ from that should be included here.
   static const Map<MPSettingID, String> _stringDefaultSettings = {
+    MPSettingID.Internal_WindowPlacement:
+        MPWindowPlacement.maximizedSettingValue,
     MPSettingID.Main_LocaleID: mpDefaultLocaleID,
   };
 
@@ -753,6 +765,21 @@ abstract class MPSettingsControllerBase with Store {
     }
 
     return isChanged;
+  }
+
+  /// Persists the desktop window placement before the process exits.
+  Future<void> setWindowPlacement(MPWindowPlacement placement) async {
+    const MPSettingID id = MPSettingID.Internal_WindowPlacement;
+    final String value = placement.toSettingValue();
+    final String oldValue = getStringWithDefault(id);
+    final bool isChanged = (oldValue != value);
+
+    _stringSettings[id] = value;
+    await prefs.setString(id.name, value);
+
+    if (isChanged) {
+      trigger(id);
+    }
   }
 
   bool isStringSet(MPSettingID id) {

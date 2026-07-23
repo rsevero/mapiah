@@ -8,6 +8,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/mp_window_placement_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -19,6 +20,42 @@ import 'package:mapiah/src/pages/mapiah_home.dart';
 MPLocator? _mpLocator;
 
 MPLocator get mpLocator => _mpLocator ??= MPLocator();
+
+/// Restores the desktop window before building Mapiah's widget tree.
+Future<void> _initializeDesktopWindow() async {
+  if (!Platform.isLinux && !Platform.isMacOS && !Platform.isWindows) {
+    return;
+  }
+
+  final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform();
+  final MPWindowPlacementController controller = MPWindowPlacementController(
+    settingsController: mpLocator.mpSettingsController,
+    platformWindow: platformWindow,
+    onError: (String message, Object error, StackTrace stackTrace) {
+      mpLocator.mpLog.e(message, error: error, stackTrace: stackTrace);
+    },
+  );
+
+  try {
+    await controller.initialize();
+  } on Object catch (error, stackTrace) {
+    mpLocator.mpLog.e(
+      'Failed to restore the desktop window placement',
+      error: error,
+      stackTrace: stackTrace,
+    );
+
+    try {
+      await platformWindow.maximize();
+    } on Object catch (fallbackError, fallbackStackTrace) {
+      mpLocator.mpLog.e(
+        'Failed to apply the default maximized window state',
+        error: fallbackError,
+        stackTrace: fallbackStackTrace,
+      );
+    }
+  }
+}
 
 void main(List<String> arguments) {
   String? fileToRead;
@@ -102,6 +139,7 @@ void main(List<String> arguments) {
       WidgetsFlutterBinding.ensureInitialized();
       // Wait for settings initialization (reads config file and SharedPreferences)
       await mpLocator.mpSettingsController.initialized;
+      await _initializeDesktopWindow();
 
       final bool isTherionDebugLog1Enabled =
           mpLocator.mpSettingsController.isTherionDebugLog1Enabled;

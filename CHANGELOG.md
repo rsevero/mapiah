@@ -4,7 +4,7 @@
 
 ## 0.4.3 - not yet released
 * New features:
-  * Mapiah now starts maximized on Linux, macOS, and Windows.
+  * Mapiah now remembers its window size, position, and maximized state when closed on Linux, macOS, and Windows, and restores that placement the next time it opens. New installations default to maximized, and saved placements that are incompatible with the current display layout fall back to maximized.
   * Added a freehand line drawing tool: press and drag (mouse, touch, or stylus) to draw, see the raw stroke previewed live via `MPAddFreehandLineWidget`, and release to commit one editable `THLine` made of straight segments in a single undoable action, with SexyTopo-style bounded/compacted sample capture and extent-relative Douglas-Peucker simplification. Endpoint snapping, the current line type/subtype, applicable default options, and the active scrap are all respected, and the result round-trips through `.th2` save/reload. Discoverable via the add-element toolbar row and the `F` shortcut, with updated EN/PT help pages and keyboard-shortcut tables. [requested by Edvard]
   * Added independent "Snap to inactive scraps" options for point and line-point targets, allowing edits in the active scrap to snap to matching targets in visible inactive scraps while excluding hidden scraps. Snap targets now refresh when the active scrap or scrap visibility changes, with EN/PT help updates and regression coverage. [requested by CaverBruce]
   * Added a "Symbol unit" setting controlling the base pixel size (`u`) of Therion symbol-set renderings, defaulting to the previous fixed value; only affects the canvas when a Therion visualization method is selected. Added EN/PT settings labels, help documentation, and regression coverage.
