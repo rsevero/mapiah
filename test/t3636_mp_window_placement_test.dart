@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:ui';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/mp_window_placement_controller.dart';
@@ -21,8 +20,8 @@ class _FakePlatformWindow implements MPPlatformWindow {
   Future<void> Function()? closeHandler;
 
   @override
-  Future<void> destroy() async {
-    calls.add('destroy');
+  Future<void> closeApplication() async {
+    calls.add('closeApplication');
   }
 
   @override
@@ -293,7 +292,7 @@ void main() {
       'isMaximized',
       'isFullScreen',
       'getBounds',
-      'destroy',
+      'closeApplication',
     ]);
   });
 
@@ -314,6 +313,30 @@ void main() {
     await controller.saveAndClose();
 
     expect(settingsController.windowPlacement.isMaximized, isTrue);
-    expect(platformWindow.calls, <String>['isMaximized', 'destroy']);
+    expect(platformWindow.calls, <String>['isMaximized', 'closeApplication']);
+  });
+
+  test('desktop shutdown uses Flutter application exit', () async {
+    MethodCall? receivedCall;
+    final TestDefaultBinaryMessenger messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+
+    messenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (MethodCall call) async {
+        receivedCall = call;
+
+        return null;
+      },
+    );
+    addTearDown(() {
+      messenger.setMockMethodCallHandler(SystemChannels.platform, null);
+    });
+
+    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform();
+
+    await platformWindow.closeApplication();
+
+    expect(receivedCall?.method, 'SystemNavigator.pop');
   });
 }

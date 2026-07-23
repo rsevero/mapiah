@@ -2,8 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_placement.dart';
@@ -33,7 +33,7 @@ abstract interface class MPPlatformWindow {
 
   Future<void> setPreventClose(bool preventClose);
 
-  Future<void> destroy();
+  Future<void> closeApplication();
 
   void setCloseHandler(Future<void> Function() closeHandler);
 }
@@ -91,7 +91,7 @@ class MPWindowManagerPlatform with WindowListener implements MPPlatformWindow {
       windowManager.setPreventClose(preventClose);
 
   @override
-  Future<void> destroy() => windowManager.destroy();
+  Future<void> closeApplication() => SystemNavigator.pop();
 
   @override
   void setCloseHandler(Future<void> Function() closeHandler) {
@@ -239,7 +239,7 @@ class MPWindowPlacementController {
     }
 
     try {
-      await platformWindow.destroy();
+      await platformWindow.closeApplication();
     } on Object catch (error, stackTrace) {
       onError('Failed to close the desktop window', error, stackTrace);
     }
