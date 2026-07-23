@@ -172,7 +172,7 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
             MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
             !current,
           );
-          th2FileEditController.triggerNonSelectedElementsRedraw();
+          mpLocator.mpGeneralController.triggerAllOpenTH2FilesRedraw();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyS:

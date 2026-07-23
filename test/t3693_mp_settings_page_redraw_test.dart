@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 
+import 'th2_file_tabs_page_test_aux.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -99,6 +102,59 @@ void main() {
     );
     await tester.pump();
 
+    expect(
+      firstController.redrawTriggerAllElements,
+      firstRedrawTrigger + 1,
+    );
+    expect(
+      secondController.redrawTriggerAllElements,
+      secondRedrawTrigger + 1,
+    );
+  });
+
+  testWidgets('direction-tick shortcut redraws every open TH2 drawing', (
+    WidgetTester tester,
+  ) async {
+    final TH2FileEditController firstController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditController(
+          filename: THTestAux.testPath(
+            '2026-02-17-001-slope_straight_line.th2',
+          ),
+        );
+    final TH2FileEditController secondController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditController(filename: 'shortcut-redraw-second.th2');
+
+    await tester.runAsync(() async {
+      await firstController.load();
+    });
+    await tester.pumpWidget(
+      buildTH2FileTabsPageTestApp(th2FileEditController: firstController),
+    );
+    await tester.pump();
+
+    final bool initialSetting = mpLocator.mpSettingsController
+        .getBoolWithDefault(
+          MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+        );
+    final int firstRedrawTrigger = firstController.redrawTriggerAllElements;
+    final int secondRedrawTrigger = secondController.redrawTriggerAllElements;
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.altLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyR);
+    await tester.pump();
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyR);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.altLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+
+    expect(
+      mpLocator.mpSettingsController.getBoolWithDefault(
+        MPSettingID.TH2Edit_ShowDirectionTicksOnNonSelectedLines,
+      ),
+      !initialSetting,
+    );
     expect(
       firstController.redrawTriggerAllElements,
       firstRedrawTrigger + 1,
