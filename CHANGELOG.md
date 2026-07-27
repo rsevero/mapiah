@@ -22,6 +22,7 @@
   * PocketTopo and TopParser XVI sketch lines named `red` now render in red instead of falling back to gray; the PocketTopo palette is covered by regression tests, including both gray spellings. [reported by CaverBruce]
   * Closing Mapiah on Linux now exits through Flutter's application shutdown channel instead of directly destroying the native window, avoiding the invalid implicit-view removal error while preserving window placement.
 * Infrastructure maintenance:
+  * `flutter upgrade` and `flutter pub upgrade --major-versions`
   * Removed redundant per-setting MobX trigger subscriptions from selected, non-selected, and inactive-scrap canvas element layers; settings changes now rely on the centralized all-open-files redraw flow.
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
   * Added a phased implementation roadmap for Therion-faithful symbol rendering, covering UIS point, line, area, and text symbols; shared rendering infrastructure; additional symbol sets; settings integration; and visual validation.
