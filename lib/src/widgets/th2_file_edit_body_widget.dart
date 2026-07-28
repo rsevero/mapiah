@@ -16,10 +16,12 @@ import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs_widget.dart'
 class TH2FileEditBodyWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Future<TH2FileEditControllerCreateResult> loadFuture;
+  final VoidCallback onLoadFailed;
 
   const TH2FileEditBodyWidget({
     required this.th2FileEditController,
     required this.loadFuture,
+    required this.onLoadFailed,
     super.key,
   });
 
@@ -31,6 +33,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   late final TH2FileEditController th2FileEditController;
   late AppLocalizations appLocalizations;
   late ColorScheme colorScheme;
+  bool _loadFailureHandled = false;
 
   @override
   void initState() {
@@ -66,7 +69,13 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                       ),
                     );
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
+                    _handleLoadFailure(
+                      errorMessages: <String>[snapshot.error.toString()],
+                      error: snapshot.error,
+                      stackTrace: snapshot.stackTrace,
+                    );
+
+                    return Container();
                   } else if (snapshot.hasData) {
                     final List<String> errorMessages = snapshot.data!.errors;
 
@@ -121,19 +130,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                         );
                       }
                     } else {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return MPErrorDialog(
-                              errorMessages: errorMessages,
-                              filename: th2FileEditController.th2File.filename,
-                            );
-                          },
-                        ).then((_) {
-                          th2FileEditController.close();
-                        });
-                      });
+                      _handleLoadFailure(errorMessages: errorMessages);
 
                       return Container();
                     }
@@ -153,5 +150,46 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
         ),
       ],
     );
+  }
+
+  /// Evicts a failed load and presents its diagnostic exactly once.
+  void _handleLoadFailure({
+    required List<String> errorMessages,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    if (_loadFailureHandled) {
+      return;
+    }
+
+    _loadFailureHandled = true;
+
+    if (error != null) {
+      mpLocator.mpLog.e(
+        'Failed to load TH2 file',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    widget.onLoadFailed();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return MPErrorDialog(
+            errorMessages: errorMessages,
+            filename: th2FileEditController.th2File.filename,
+          );
+        },
+      ).then((_) {
+        th2FileEditController.close();
+      });
+    });
   }
 }

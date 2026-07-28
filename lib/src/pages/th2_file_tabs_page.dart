@@ -570,7 +570,32 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       key: ValueKey<String>(filename),
       th2FileEditController: controller,
       loadFuture: future,
+      onLoadFailed: () => _discardFailedFileLoad(
+        filename: filename,
+        controller: controller,
+      ),
     );
+  }
+
+  /// Evicts only the load state owned by the controller that failed.
+  void _discardFailedFileLoad({
+    required String filename,
+    required TH2FileEditController controller,
+  }) {
+    final _TH2FileLoad? failedLoad = _fileLoads[filename];
+
+    if ((failedLoad != null) &&
+        identical(failedLoad.controller, controller)) {
+      _fileLoads.remove(filename);
+    }
+
+    final TH2FileEditController? cachedController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditControllerIfExists(filename);
+
+    if (identical(cachedController, controller)) {
+      mpLocator.mpGeneralController.removeFileController(filename: filename);
+    }
   }
 
   Widget _buildDraggableTab({

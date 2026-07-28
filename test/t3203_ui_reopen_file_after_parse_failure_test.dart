@@ -89,6 +89,12 @@ void main() {
 
     expect(find.byType(MPErrorDialog), findsOneWidget);
     expect(failedController.errorMessages, isNotEmpty);
+    expect(
+      mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+        filename,
+      ),
+      isNull,
+    );
 
     await tester.tap(find.text(mpLocator.appLocalizations.buttonClose));
     await tester.pump();
@@ -117,5 +123,96 @@ void main() {
     expect(correctedController.isFileLoaded, isTrue);
     expect(correctedController.errorMessages, isEmpty);
     expect(correctedController.currentScrapName, 'corrected');
+  });
+
+  testWidgets('thrown parse failures discard partially parsed contents', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 720);
+    tester.view.devicePixelRatio = 1.0;
+
+    const String filename =
+        '/tmp/mapiah-reopen-after-thrown-parse-failure.th2';
+    final Uint8List duplicateScrapFileBytes = Uint8List.fromList(
+      utf8.encode(
+        'encoding utf-8\n'
+        'scrap repeated\n'
+        'endscrap\n'
+        'scrap repeated\n'
+        'endscrap\n',
+      ),
+    );
+    final Uint8List correctedFileBytes = Uint8List.fromList(
+      utf8.encode(
+        'encoding utf-8\n'
+        'scrap repeated\n'
+        'endscrap\n',
+      ),
+    );
+
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final TH2FileEditController persistentController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditControllerForNewFile(
+          scrapTHID: 'persistent',
+          scrapOptions: const [],
+          encoding: mpDefaultEncoding,
+        );
+    final TH2FileEditController failedController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditController(
+          filename: filename,
+          fileBytes: duplicateScrapFileBytes,
+        );
+
+    mpLocator.mpGeneralController.addFileTab(
+      persistentController.th2File.filename,
+    );
+    mpLocator.mpGeneralController.addFileTab(filename);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('en'),
+        home: const TH2FileTabsPage(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.byType(MPErrorDialog), findsOneWidget);
+    expect(failedController.isFileLoaded, isFalse);
+    expect(
+      mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+        filename,
+      ),
+      isNull,
+    );
+
+    await tester.tap(find.text(mpLocator.appLocalizations.buttonClose));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    final TH2FileEditController correctedController = mpLocator
+        .mpGeneralController
+        .getTH2FileEditController(
+          filename: filename,
+          fileBytes: correctedFileBytes,
+        );
+
+    mpLocator.mpGeneralController.addFileTab(filename);
+    await tester.pump();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.byType(MPErrorDialog), findsNothing);
+    expect(correctedController.isFileLoaded, isTrue);
+    expect(correctedController.currentScrapName, 'repeated');
   });
 }
