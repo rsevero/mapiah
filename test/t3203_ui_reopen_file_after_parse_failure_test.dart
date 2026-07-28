@@ -30,6 +30,38 @@ void main() {
     await mpLocator.mpSettingsController.initialized;
   });
 
+  test('multiple requests to load one controller share one parse', () async {
+    const String filename = '/tmp/mapiah-single-flight-load.th2';
+    final Uint8List fileBytes = Uint8List.fromList(
+      utf8.encode(
+        'encoding utf-8\n'
+        'scrap 119-PutaPlan-s2\n'
+        'endscrap\n',
+      ),
+    );
+    final TH2FileEditController controller = mpLocator.mpGeneralController
+        .getTH2FileEditController(
+          filename: filename,
+          fileBytes: fileBytes,
+        );
+
+    final Future<TH2FileEditControllerCreateResult> firstLoad = controller
+        .load();
+    final Future<TH2FileEditControllerCreateResult> secondLoad = controller
+        .load();
+
+    expect(identical(firstLoad, secondLoad), isTrue);
+
+    final List<TH2FileEditControllerCreateResult> results = await Future.wait(
+      <Future<TH2FileEditControllerCreateResult>>[firstLoad, secondLoad],
+    );
+
+    expect(results, hasLength(2));
+    expect(results.every((result) => result.isSuccessful), isTrue);
+    expect(controller.currentScrapName, '119-PutaPlan-s2');
+    expect(controller.th2File.getScraps(), hasLength(1));
+  });
+
   testWidgets('reopening a corrected file parses its current contents', (
     WidgetTester tester,
   ) async {

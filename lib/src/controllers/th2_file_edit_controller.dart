@@ -115,6 +115,8 @@ abstract class TH2FileEditControllerBase with Store {
 
   bool get isFileLoaded => _isFileLoaded;
 
+  Future<TH2FileEditControllerCreateResult>? _loadFuture;
+
   @readonly
   late TH2File _th2File;
 
@@ -691,7 +693,24 @@ abstract class TH2FileEditControllerBase with Store {
     errorMessages.clear();
   }
 
-  Future<TH2FileEditControllerCreateResult> load() async {
+  /// Returns the controller's single shared file-load operation.
+  Future<TH2FileEditControllerCreateResult> load() {
+    final Future<TH2FileEditControllerCreateResult>? existingLoad =
+        _loadFuture;
+
+    if (existingLoad != null) {
+      return existingLoad;
+    }
+
+    final Future<TH2FileEditControllerCreateResult> newLoad = _loadOnce();
+
+    _loadFuture = newLoad;
+
+    return newLoad;
+  }
+
+  /// Parses and initializes this controller once.
+  Future<TH2FileEditControllerCreateResult> _loadOnce() async {
     _preParseInitialize();
 
     final TH2FileParser parser = TH2FileParser();
