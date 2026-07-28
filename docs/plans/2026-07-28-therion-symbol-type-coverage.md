@@ -7,7 +7,9 @@
 This inventory covers every user-facing point, line, and area type token in
 Therion's `thtt_point_types`, `thtt_line_types`, and `thtt_area_types` tables.
 It excludes only the internal `UNKNOWN` sentinels. The `pitch` line token is
-included because Therion accepts it as an alias of `pit`.
+included because Therion accepts it as an alias of `pit`. The parent `wall`
+line-type row is followed by one detail row for each of its 15 accepted
+subtypes.
 
 The symbol-set column lists sets that directly define a MetaPost macro for the
 type, including `let` aliases. `Built-in label system` means that Therion
@@ -189,7 +191,22 @@ simple/medium/complex inventory; it is not an assessment of the symbol itself.
 | `u` | universal/custom (`l_u`) | not classified | No (placeholder) | No |
 | `via-ferrata` | SKBB | not classified | No (placeholder) | No |
 | `walkway` | SBE | not classified | No (placeholder) | No |
-| `wall` | UIS, SKBB, NZSS, AUT | simple (UIS subtypes) | Yes (shared base strokes)[^wall-subtypes] | Yes[^showcase-helpers] |
+| `wall` | UIS, SKBB, NZSS, AUT | varies by subtype | Partial (3 of 15)[^wall-subtypes] | Partial (3 of 15)[^showcase-helpers] |
+| `wall:bedrock` | UIS | simple | Yes (shared base stroke) | Yes |
+| `wall:blocks` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:clay` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:debris` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:flowstone` | AUT | not classified | No (placeholder) | No |
+| `wall:ice` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:invisible` | universal (`l_invisible`) | not classified | No (placeholder) | No |
+| `wall:moonmilk` | AUT | not classified | No (placeholder) | No |
+| `wall:overlying` | AUT | not classified | No (placeholder) | No |
+| `wall:pebbles` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:pit` | AUT | not classified | No (placeholder) | No |
+| `wall:presumed` | UIS, NZSS | simple | Yes (shared base stroke) | Yes |
+| `wall:sand` | SKBB, AUT | not classified | No (placeholder) | No |
+| `wall:underlying` | UIS, AUT | simple | Yes (shared base stroke) | Yes |
+| `wall:unsurveyed` | SKBB | not classified | No (placeholder) | No |
 | `water-flow` | UIS, SKBB | complex | Yes (permanent subtype) | Yes |
 
 ## Area types
@@ -227,6 +244,7 @@ simple/medium/complex inventory; it is not an assessment of the symbol itself.
     occurrences of those Therion types.
 [^wall-subtypes]: The roadmap classifies the UIS `bedrock`, `underlying`, and
     `presumed` wall macros as simple. Mapiah uses its shared base-stroke
-    rendering for them rather than a line decorator.
+    rendering for them rather than a line decorator. The other 12 accepted
+    wall subtypes still use Mapiah placeholders under `TherionUIS`.
 [^area-dimensions]: Therion defines an `area dimensions` type, but
     `THAreaType` has no `dimensions` member, so Mapiah parses it as unknown.

@@ -13,7 +13,7 @@ encoding  utf-8
 # Therion does not accept their commented-out point type tokens in a .th2 file.
 
 scrap therion_uis_showcase -scale [0.0 0.0 1000.0 0.0 0.0 0.0 40.64 0.0 m]
-  # The enclosing wall also showcases the default UIS bedrock wall subtype.
+  # The enclosing wall uses the default UIS bedrock wall subtype.
   line wall -reverse on
     -170 2240
     1810 2240
@@ -98,7 +98,15 @@ point 840.0 600.0 passage-height -value -4
 point 0.0 720.0 passage-height -value [+6 -4]
 point 120.0 720.0 passage-height -value [7]
 
-# --- Line decorators, Phases 1-3 ---
+# --- Line symbols and decorators, Phases 1-3 ---
+  line wall:bedrock -outline none
+  750.0 800.0
+  975.0 780.0
+  1200.0 820.0
+  1425.0 780.0
+  1650.0 800.0
+endline
+
 line gradient
   0.0 900.0
   150.0 880.0
@@ -107,7 +115,7 @@ line gradient
   600.0 900.0
 endline
 
-line wall -subtype underlying
+  line wall:underlying -outline none
   750.0 900.0
   975.0 880.0
   1200.0 920.0
@@ -123,7 +131,7 @@ line survey
   600.0 1000.0
 endline
 
-line wall -subtype presumed
+  line wall:presumed -outline none
   750.0 1000.0
   975.0 980.0
   1200.0 1020.0
