@@ -1,0 +1,168 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 1700.0 1750.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Symbols directly defined by the SBE set.
+scrap therion_sbe_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 1650
+    1550 1650
+    1550 -200
+    -50 -200
+    -50 1650
+  endline
+
+  point 0 0 altar
+  point 120 0 archeo-excavation
+  point 240 0 audio
+  point 360 0 bat
+  point 480 0 bones
+  point 600 0 danger
+  point 720 0 electric-light
+  point 840 0 ex-voto
+  point 960 0 gate
+  point 1080 0 human-bones
+  point 1200 0 masonry
+  point 1320 0 mud
+
+  point 0 120 mudcrack
+  point 120 120 nameplate
+  point 240 120 no-wheelchair
+  point 360 120 pendant
+  point 480 120 photo
+  point 600 120 seed-germination
+  point 720 120 tree-trunk
+  point 840 120 volcano
+  point 960 120 walkway
+  point 1080 120 water-drip
+  point 1200 120 wheelchair
+
+  line abyss-entrance
+    0 400
+    200 380
+    400 420
+    600 400
+  endline
+
+  line dripline
+    0 500
+    200 480
+    400 520
+    600 500
+  endline
+
+  line fault
+    0 600
+    200 580
+    400 620
+    600 600
+  endline
+
+  line joint
+    0 700
+    200 680
+    400 720
+    600 700
+  endline
+
+  line low-ceiling
+    800 400
+    1000 380
+    1200 420
+    1400 400
+  endline
+
+  line pit-chimney
+    800 500
+    1000 480
+    1200 520
+    1400 500
+  endline
+
+  line rimstone-dam
+    800 600
+    1000 580
+    1200 620
+    1400 600
+  endline
+
+  line rimstone-pool
+    800 700
+    1000 680
+    1200 720
+    1400 700
+  endline
+
+  line walkway
+    0 800
+    200 780
+    400 820
+    600 800
+  endline
+
+  area mudcrack
+    l-sbe-mudcrack
+  endarea
+  line border -id l-sbe-mudcrack -close on -visibility off
+    0 1000
+    180 1000
+    180 1180
+    0 1180
+    0 1000
+  endline
+
+  area pillar
+    l-sbe-pillar
+  endarea
+  line border -id l-sbe-pillar -close on -visibility off
+    220 1000
+    400 1000
+    400 1180
+    220 1180
+    220 1000
+  endline
+
+  area pillar-with-curtains
+    l-sbe-pillar-curtains
+  endarea
+  line border -id l-sbe-pillar-curtains -close on -visibility off
+    440 1000
+    620 1000
+    620 1180
+    440 1180
+    440 1000
+  endline
+
+  area stalactite
+    l-sbe-stalactite
+  endarea
+  line border -id l-sbe-stalactite -close on -visibility off
+    660 1000
+    840 1000
+    840 1180
+    660 1180
+    660 1000
+  endline
+
+  area stalactite-stalagmite
+    l-sbe-stalactite-stalagmite
+  endarea
+  line border -id l-sbe-stalactite-stalagmite -close on -visibility off
+    880 1000
+    1060 1000
+    1060 1180
+    880 1180
+    880 1000
+  endline
+
+  area stalagmite
+    l-sbe-stalagmite
+  endarea
+  line border -id l-sbe-stalagmite -close on -visibility off
+    1100 1000
+    1280 1000
+    1280 1180
+    1100 1180
+    1100 1000
+  endline
+endscrap

@@ -1,0 +1,34 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 1100.0 650.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Symbols directly defined by the ASF set.
+scrap therion_asf_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 550
+    950 550
+    950 -200
+    -50 -200
+    -50 550
+  endline
+
+  point 0 0 bedrock
+  point 120 0 rimstone-dam
+  point 240 0 rimstone-pool
+  point 360 0 root
+  point 480 0 station:fixed
+  point 600 0 station:natural
+  point 720 0 station:temporary
+  point 840 0 vegetable-debris
+
+  area flowstone
+    l-asf-flowstone
+  endarea
+  line border -id l-asf-flowstone -close on -visibility off
+    0 200
+    160 200
+    160 360
+    0 360
+    0 200
+  endline
+endscrap

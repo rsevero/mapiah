@@ -1,0 +1,14 @@
+encoding UTF-8
+
+source therion_showcase.th
+select therion_nzss_showcase@therion_showcase_SRV
+
+layout showcase
+  scale 1 250
+  symbol-set NZSS
+  language en
+  legend on
+  legend-columns 3
+endlayout
+
+export map -projection plan -layout showcase -output therion_nzss_showcase.pdf

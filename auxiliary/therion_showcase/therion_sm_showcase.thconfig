@@ -1,0 +1,16 @@
+encoding UTF-8
+
+source therion_showcase.th
+select therion_sm_showcase@therion_showcase_SRV
+
+layout showcase
+  scale 1 250
+  symbol-set SM
+  language en
+  grid bottom
+  grid-size 10 10 1 m
+  scale-bar 10 m
+  legend on
+endlayout
+
+export map -projection plan -layout showcase -output therion_sm_showcase.pdf

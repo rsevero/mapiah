@@ -1,0 +1,15 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 900.0 650.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# SM defines only special map symbols (grid and scale bar), enabled by its
+# THConfig layout. This scrap supplies the map extent under those symbols.
+scrap therion_sm_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 500
+    750 500
+    750 -150
+    -50 -150
+    -50 500
+  endline
+endscrap

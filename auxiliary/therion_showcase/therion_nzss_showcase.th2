@@ -1,0 +1,42 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 1000.0 750.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Symbols directly defined or aliased by the NZSS set.
+scrap therion_nzss_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 650
+    850 650
+    850 -200
+    -50 -200
+    -50 650
+  endline
+
+  line ceiling-meander
+    0 0
+    200 -20
+    400 20
+    600 0
+  endline
+
+  line ceiling-step
+    0 150
+    200 130
+    400 170
+    600 150
+  endline
+
+  line chimney
+    0 300
+    200 280
+    400 320
+    600 300
+  endline
+
+  line wall:presumed -outline none
+    0 450
+    200 430
+    400 470
+    600 450
+  endline
+endscrap

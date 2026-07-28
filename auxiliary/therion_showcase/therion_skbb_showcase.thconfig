@@ -1,0 +1,17 @@
+encoding UTF-8
+
+source therion_showcase.th
+select therion_skbb_showcase@therion_showcase_SRV
+
+layout showcase
+  scale 1 250
+  symbol-set SKBB
+  language en
+  grid bottom
+  grid-size 10 10 1 m
+  scale-bar 10 m
+  legend on
+  legend-columns 3
+endlayout
+
+export map -projection plan -layout showcase -output therion_skbb_showcase.pdf

@@ -1,0 +1,24 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 1200.0 450.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Symbols directly defined by the NSS set.
+scrap therion_nss_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 300
+    1070 300
+    1070 -200
+    -50 -200
+    -50 300
+  endline
+
+  point 0 0 aragonite
+  point 120 0 breakdown-choke
+  point 240 0 flowstone-choke
+  point 360 0 gradient
+  point 480 0 gypsum
+  point 600 0 gypsum-flower
+  point 720 0 low-end
+  point 840 0 raft
+  point 960 0 raft-cone
+endscrap

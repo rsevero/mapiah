@@ -1,0 +1,31 @@
+encoding utf-8
+##XTHERION## xth_me_area_adjust -100.0 -100.0 900.0 650.0
+##XTHERION## xth_me_area_zoom_to 50
+
+# Symbols directly defined by the BCRA set.
+scrap therion_bcra_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
+  line wall -reverse on
+    -50 550
+    750 550
+    750 -200
+    -50 -200
+    -50 550
+  endline
+
+  point 0 0 gradient
+
+  line gradient
+    0 200
+    200 180
+    400 220
+    600 200
+  endline
+
+  line slope
+    0 350
+    l-size 30
+    200 330
+    400 370
+    600 350
+  endline
+endscrap

@@ -4,11 +4,14 @@ cs UTM21S # trocar pelo número UTM apropriado
 
 language pt
 
-# Arquivo .th raiz da árvore de arquivos
-source therion_uis_showcase.th
+# Root source shared by every symbol-set showcase.
+source therion_showcase.th
+
+select therion_uis_showcase@therion_showcase_SRV
 
 layout exploracao
   scale 1 250
+  symbol-set UIS
   #debug station-names
   #symbol-hide group centerline
   language pt
