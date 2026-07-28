@@ -34,6 +34,11 @@ enum _TH2FileTabsAction {
   help,
 }
 
+typedef _TH2FileLoad = ({
+  TH2FileEditController controller,
+  Future<TH2FileEditControllerCreateResult> future,
+});
+
 class TH2FileTabsPage extends StatefulWidget {
   const TH2FileTabsPage({super.key});
 
@@ -44,8 +49,7 @@ class TH2FileTabsPage extends StatefulWidget {
 class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   late ReactionDisposer _openFileOrderReaction;
   late ReactionDisposer _activeTabFocusReaction;
-  final Map<String, Future<TH2FileEditControllerCreateResult>> _loadFutures =
-      <String, Future<TH2FileEditControllerCreateResult>>{};
+  final Map<String, _TH2FileLoad> _fileLoads = <String, _TH2FileLoad>{};
   late final ScrollController _tabScrollController;
 
   int _dragOverTabIndex = -1;
@@ -538,19 +542,29 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       return const Center(child: Text('Controller not found'));
     }
 
-    if (!_loadFutures.containsKey(filename)) {
+    final _TH2FileLoad? existingLoad = _fileLoads[filename];
+
+    if ((existingLoad == null) ||
+        !identical(existingLoad.controller, controller)) {
+      final Future<TH2FileEditControllerCreateResult> loadFuture;
+
       if (filename.startsWith(mpNewFilePrefix) || controller.isFileLoaded) {
-        _loadFutures[filename] =
+        loadFuture =
             Future<TH2FileEditControllerCreateResult>.value(
               TH2FileEditControllerCreateResult(true, <String>[]),
             );
       } else {
-        _loadFutures[filename] = controller.load();
+        loadFuture = controller.load();
       }
+
+      _fileLoads[filename] = (
+        controller: controller,
+        future: loadFuture,
+      );
     }
 
     final Future<TH2FileEditControllerCreateResult> future =
-        _loadFutures[filename]!;
+        _fileLoads[filename]!.future;
 
     return TH2FileEditBodyWidget(
       key: ValueKey<String>(filename),
