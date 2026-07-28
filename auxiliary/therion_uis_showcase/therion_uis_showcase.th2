@@ -1,19 +1,23 @@
 encoding  utf-8
-##XTHERION## xth_me_area_adjust -50.0 -50.0 1250.0 2250.0
+##XTHERION## xth_me_area_adjust -50.0 -50.0 1850.0 2250.0
 ##XTHERION## xth_me_area_zoom_to 50
 
-# Showcases every point, line, and area element with a Therion-faithful
-# UIS rendering implemented so far (Phases 0-3 of
-# docs/plans/2026-07-15-therion-symbol-rendering-roadmap.md). Open this
-# file and select Settings > Visualization method > Therion UIS to see
-# faithful symbols instead of Mapiah's abstract placeholders. Known gap:
-# "blocks" areas have no UIS pattern yet and keep the placeholder fill.
+# Showcases every point, line, and area type or subtype directly defined by
+# Therion's UIS symbol set, plus the fallback and text elements with a
+# Therion-faithful rendering implemented in Phases 0-3 of
+# docs/plans/2026-07-15-therion-symbol-rendering-roadmap.md. Open this file and
+# select Settings > Visualization method > Therion UIS to compare faithful
+# symbols with the types that still use Mapiah's abstract placeholders. Known
+# gap: "blocks" areas have no UIS pattern yet and keep the placeholder fill.
+# The UIS plus, minus, and plus-minus point macros are excluded because current
+# Therion does not accept their commented-out point type tokens in a .th2 file.
 
 scrap therion_uis_showcase -scale [0.0 0.0 1000.0 0.0 0.0 0.0 40.64 0.0 m]
+  # The enclosing wall also showcases the default UIS bedrock wall subtype.
   line wall -reverse on
     -170 2240
-    1330 2240
-    1330 -300
+    1810 2240
+    1810 -300
     -170 -300
     -170 2240
   endline
@@ -65,6 +69,22 @@ point 600.0 480.0 stalagmites
 point 720.0 480.0 stalactites
 point 840.0 480.0 pillars
 
+# --- Additional point types directly defined by the UIS symbol set ---
+point 960.0 0.0 debris
+point 1080.0 0.0 curtains
+point 1200.0 0.0 disc-pillar
+point 1320.0 0.0 disc-pillars
+point 1440.0 0.0 disc-stalactite
+point 1560.0 0.0 disc-stalactites
+point 1680.0 0.0 disc-stalagmite
+
+point 960.0 120.0 disc-stalagmites
+point 1080.0 120.0 helictites
+point 1200.0 120.0 pillar-with-curtains
+point 1320.0 120.0 pillars-with-curtains
+point 1440.0 120.0 stalactite-stalagmite
+point 1560.0 120.0 stalactites-stalagmites
+
 # --- Text/label point symbols, Phase 2.5 ---
 point 0.0 600.0 label -text "Label text"
 point 120.0 600.0 remark -text "Remark text"
@@ -87,12 +107,28 @@ line gradient
   600.0 900.0
 endline
 
+line wall -subtype underlying
+  750.0 900.0
+  975.0 880.0
+  1200.0 920.0
+  1425.0 880.0
+  1650.0 900.0
+endline
+
 line survey
   0.0 1000.0
   150.0 980.0
   300.0 1020.0
   450.0 980.0
   600.0 1000.0
+endline
+
+line wall -subtype presumed
+  750.0 1000.0
+  975.0 980.0
+  1200.0 1020.0
+  1425.0 980.0
+  1650.0 1000.0
 endline
 
 line pit
@@ -103,6 +139,14 @@ line pit
   600.0 1100.0
 endline
 
+line rock-border
+  750.0 1100.0
+  975.0 1080.0
+  1200.0 1120.0
+  1425.0 1080.0
+  1650.0 1100.0
+endline
+
 line floor-step
   0.0 1200.0
   150.0 1180.0
@@ -111,12 +155,29 @@ line floor-step
   600.0 1200.0
 endline
 
+line rock-edge
+  750.0 1200.0
+  975.0 1180.0
+  1200.0 1220.0
+  1425.0 1180.0
+  1650.0 1200.0
+endline
+
 line chimney
   0.0 1300.0
   150.0 1280.0
   300.0 1320.0
   450.0 1280.0
   600.0 1300.0
+endline
+
+# "pitch" is Therion's accepted input alias for the UIS "pit" symbol.
+line pitch
+  750.0 1300.0
+  975.0 1280.0
+  1200.0 1320.0
+  1425.0 1280.0
+  1650.0 1300.0
 endline
 
 line ceiling-step
