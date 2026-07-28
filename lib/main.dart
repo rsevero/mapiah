@@ -10,7 +10,6 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_window_placement_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
-import 'package:mapiah/src/exceptions/th_base_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
 
@@ -165,28 +164,17 @@ void main(List<String> arguments) {
 
       unawaited(mpLocator.mpTelemetryController.initialize());
 
-      THBaseException.registerUnhandledReporter((error, stack) {
-        MPDialogAux.showUnhandledErrorDialog(error, stack);
-      });
-
       // /// For layout debugging.
       // debugPaintSizeEnabled = true;
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
-        if (details.exception is! THBaseException) {
-          MPDialogAux.showUnhandledErrorDialog(
-            details.exception,
-            details.stack,
-          );
-        }
+        MPDialogAux.showUnhandledErrorDialog(details.exception, details.stack);
       };
 
       ui.PlatformDispatcher.instance.onError =
           (Object error, StackTrace stack) {
-            if (error is! THBaseException) {
-              MPDialogAux.showUnhandledErrorDialog(error, stack);
-            }
+            MPDialogAux.showUnhandledErrorDialog(error, stack);
             return true;
           };
 
@@ -199,9 +187,7 @@ void main(List<String> arguments) {
       );
     },
     (Object error, StackTrace stack) {
-      if (error is! THBaseException) {
-        MPDialogAux.showUnhandledErrorDialog(error, stack);
-      }
+      MPDialogAux.showUnhandledErrorDialog(error, stack);
     },
   );
 }
