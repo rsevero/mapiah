@@ -2447,6 +2447,12 @@ abstract class AppLocalizations {
   /// **'Parsing errors'**
   String get parsingErrors;
 
+  /// The label for the non-blocking parsing warnings dialog shown when a file opens despite some content being skipped. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Parsing warnings'**
+  String get parsingWarnings;
+
   /// Accept button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart
   ///
   /// In en, this message translates to:

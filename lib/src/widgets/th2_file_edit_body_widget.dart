@@ -34,6 +34,7 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   late AppLocalizations appLocalizations;
   late ColorScheme colorScheme;
   bool _loadFailureHandled = false;
+  bool _softLoadWarningHandled = false;
 
   @override
   void initState() {
@@ -79,61 +80,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                   } else if (snapshot.hasData) {
                     final List<String> errorMessages = snapshot.data!.errors;
 
-                    if (snapshot.data!.isSuccessful) {
-                      if (mpDebugMousePosition) {
-                        return MouseRegion(
-                          onHover: (event) => th2FileEditController
-                              .performSetMousePosition(event.localPosition),
-                          child: Stack(
-                            children: [
-                              TH2FileWidget(
-                                key: th2FileEditController
-                                    .getTH2FileWidgetGlobalKey(),
-                                th2FileEditController: th2FileEditController,
-                              ),
-                              TH2FileEditStateActionButtonsWidget(
-                                heroPrefix: heroPrefix,
-                                th2FileEditController: th2FileEditController,
-                              ),
-                              TH2FileEditActionButtonsWidget(
-                                heroPrefix: heroPrefix,
-                                th2FileEditController: th2FileEditController,
-                              ),
-                              TH2FileEditStateContextFABsWidget(
-                                heroPrefix: heroPrefix,
-                                th2FileEditController: th2FileEditController,
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Stack(
-                          children: [
-                            TH2FileWidget(
-                              key: th2FileEditController
-                                  .getTH2FileWidgetGlobalKey(),
-                              th2FileEditController: th2FileEditController,
-                            ),
-                            TH2FileEditStateActionButtonsWidget(
-                              heroPrefix: heroPrefix,
-                              th2FileEditController: th2FileEditController,
-                            ),
-                            TH2FileEditActionButtonsWidget(
-                              heroPrefix: heroPrefix,
-                              th2FileEditController: th2FileEditController,
-                            ),
-                            TH2FileEditStateContextFABsWidget(
-                              heroPrefix: heroPrefix,
-                              th2FileEditController: th2FileEditController,
-                            ),
-                          ],
-                        );
-                      }
-                    } else {
-                      _handleLoadFailure(errorMessages: errorMessages);
-
-                      return Container();
+                    if (!snapshot.data!.isSuccessful) {
+                      _handleSoftLoadFailure(errorMessages: errorMessages);
                     }
+
+                    return _buildEditor(heroPrefix);
                   } else {
                     throw Exception(
                       'Unexpected snapshot state: ${snapshot.connectionState}',
@@ -149,6 +100,39 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
           th2FileEditController: th2FileEditController,
         ),
       ],
+    );
+  }
+
+  Widget _buildEditor(String heroPrefix) {
+    final Widget editorStack = Stack(
+      children: [
+        TH2FileWidget(
+          key: th2FileEditController.getTH2FileWidgetGlobalKey(),
+          th2FileEditController: th2FileEditController,
+        ),
+        TH2FileEditStateActionButtonsWidget(
+          heroPrefix: heroPrefix,
+          th2FileEditController: th2FileEditController,
+        ),
+        TH2FileEditActionButtonsWidget(
+          heroPrefix: heroPrefix,
+          th2FileEditController: th2FileEditController,
+        ),
+        TH2FileEditStateContextFABsWidget(
+          heroPrefix: heroPrefix,
+          th2FileEditController: th2FileEditController,
+        ),
+      ],
+    );
+
+    if (!mpDebugMousePosition) {
+      return editorStack;
+    }
+
+    return MouseRegion(
+      onHover: (event) =>
+          th2FileEditController.performSetMousePosition(event.localPosition),
+      child: editorStack,
     );
   }
 
@@ -190,6 +174,33 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
       ).then((_) {
         th2FileEditController.close();
       });
+    });
+  }
+
+  /// Presents a non-blocking diagnostic for a load that completed with
+  /// caught, non-fatal parsing errors; the file stays open.
+  void _handleSoftLoadFailure({required List<String> errorMessages}) {
+    if (_softLoadWarningHandled) {
+      return;
+    }
+
+    _softLoadWarningHandled = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return MPErrorDialog(
+            title: appLocalizations.parsingWarnings,
+            errorMessages: errorMessages,
+            filename: th2FileEditController.th2File.filename,
+          );
+        },
+      );
     });
   }
 }

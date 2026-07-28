@@ -1983,6 +1983,11 @@
     "description": "The label for the parsing errors dialog. Used on: MPErrorDialog.build",
     "type": "text"
   },
+  "parsingWarnings": "Parsing warnings",
+  "@parsingWarnings": {
+    "description": "The label for the non-blocking parsing warnings dialog shown when a file opens despite some content being skipped. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+    "type": "text"
+  },
   "telemetryConsentDialogAccept": "Yes, participate",
   "@telemetryConsentDialogAccept": {
     "description": "Accept button label in the telemetry consent dialog. Used on: lib/src/widgets/mp_telemetry_consent_dialog.dart",

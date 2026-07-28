@@ -1317,6 +1317,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get parsingErrors => 'Erros na interpretação do arquivo';
 
   @override
+  String get parsingWarnings => 'Avisos na interpretação do arquivo';
+
+  @override
   String get telemetryConsentDialogAccept => 'Sim, participar';
 
   @override

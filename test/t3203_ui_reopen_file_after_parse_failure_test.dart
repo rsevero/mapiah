@@ -12,6 +12,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
+import 'package:mapiah/src/widgets/th2_file_widget.dart';
 
 import 'th_test_aux.dart';
 
@@ -62,100 +63,82 @@ void main() {
     expect(controller.th2File.getScraps(), hasLength(1));
   });
 
-  testWidgets('reopening a corrected file parses its current contents', (
-    WidgetTester tester,
-  ) async {
-    tester.view.physicalSize = const Size(1280, 720);
-    tester.view.devicePixelRatio = 1.0;
+  testWidgets(
+    'soft parse failures open the file with a non-blocking warning',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1280, 720);
+      tester.view.devicePixelRatio = 1.0;
 
-    final String filename = '/tmp/mapiah-reopen-after-parse-failure.th2';
-    final Uint8List invalidFileBytes = Uint8List.fromList(
-      utf8.encode(
-        'encoding utf-8\n'
-        'point 42 91 scallop:winter\n',
-      ),
-    );
-    final Uint8List correctedFileBytes = Uint8List.fromList(
-      utf8.encode(
-        'encoding utf-8\n'
-        'scrap corrected\n'
-        'endscrap\n',
-      ),
-    );
+      final String filename = '/tmp/mapiah-soft-parse-failure.th2';
+      final Uint8List invalidFileBytes = Uint8List.fromList(
+        utf8.encode(
+          'encoding utf-8\n'
+          'scrap araras9 -author 2023.12-17 "B Mutton"\n'
+          'endscrap\n',
+        ),
+      );
 
-    addTearDown(() {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
-    });
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
-    final TH2FileEditController persistentController = mpLocator
-        .mpGeneralController
-        .getTH2FileEditControllerForNewFile(
-          scrapTHID: 'persistent',
-          scrapOptions: const [],
-          encoding: mpDefaultEncoding,
-        );
-    final TH2FileEditController failedController = mpLocator
-        .mpGeneralController
-        .getTH2FileEditController(
-          filename: filename,
-          fileBytes: invalidFileBytes,
-        );
+      final TH2FileEditController persistentController = mpLocator
+          .mpGeneralController
+          .getTH2FileEditControllerForNewFile(
+            scrapTHID: 'persistent',
+            scrapOptions: const [],
+            encoding: mpDefaultEncoding,
+          );
+      final TH2FileEditController failedController = mpLocator
+          .mpGeneralController
+          .getTH2FileEditController(
+            filename: filename,
+            fileBytes: invalidFileBytes,
+          );
 
-    mpLocator.mpGeneralController.addFileTab(
-      persistentController.th2File.filename,
-    );
-    mpLocator.mpGeneralController.addFileTab(filename);
+      mpLocator.mpGeneralController.addFileTab(
+        persistentController.th2File.filename,
+      );
+      mpLocator.mpGeneralController.addFileTab(filename);
 
-    await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('en'),
-        home: const TH2FileTabsPage(),
-      ),
-    );
-    await tester.pump();
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('en'),
+          home: const TH2FileTabsPage(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.byType(MPErrorDialog), findsOneWidget);
-    expect(failedController.errorMessages, isNotEmpty);
-    expect(
-      mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
-        filename,
-      ),
-      isNull,
-    );
+      expect(find.byType(MPErrorDialog), findsOneWidget);
+      expect(find.byType(TH2FileWidget), findsOneWidget);
+      expect(failedController.isFileLoaded, isTrue);
+      expect(failedController.errorMessages, isNotEmpty);
+      expect(
+        mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+          filename,
+        ),
+        same(failedController),
+      );
 
-    await tester.tap(find.text(mpLocator.appLocalizations.buttonClose));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text(mpLocator.appLocalizations.buttonClose));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
 
-    expect(
-      mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
-        filename,
-      ),
-      isNull,
-    );
-
-    final TH2FileEditController correctedController = mpLocator
-        .mpGeneralController
-        .getTH2FileEditController(
-          filename: filename,
-          fileBytes: correctedFileBytes,
-        );
-
-    mpLocator.mpGeneralController.addFileTab(filename);
-    await tester.pump();
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-
-    expect(find.byType(MPErrorDialog), findsNothing);
-    expect(correctedController.isFileLoaded, isTrue);
-    expect(correctedController.errorMessages, isEmpty);
-    expect(correctedController.currentScrapName, 'corrected');
-  });
+      expect(find.byType(MPErrorDialog), findsNothing);
+      expect(find.byType(TH2FileWidget), findsOneWidget);
+      expect(
+        mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+          filename,
+        ),
+        same(failedController),
+      );
+    },
+  );
 
   testWidgets('thrown parse failures discard partially parsed contents', (
     WidgetTester tester,

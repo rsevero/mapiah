@@ -1304,6 +1304,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parsingErrors => 'Parsing errors';
 
   @override
+  String get parsingWarnings => 'Parsing warnings';
+
+  @override
   String get telemetryConsentDialogAccept => 'Yes, participate';
 
   @override
