@@ -264,6 +264,13 @@ void main() {
       '2021.12.23@08:30:01 - 2022.02.09@02:30:07':
           '2021.12.23@08:30:01 - 2022.02.09@02:30:07',
       '2021.12.23 - 2022.02.09@02:30 ': '2021.12.23 - 2022.02.09@02:30',
+      // Malformed range (second half isn't a valid 4-digit-year date,
+      // e.g. a typo like "2023.12.17" written as "2023.12-17"). The
+      // grammar still fully consumes it as one token so that semantic
+      // validation (THDatetimePart/mpDatetimeRegex) can reject it with a
+      // clear, specific error instead of leaking the leftover "-17" into
+      // the following person() parser.
+      '2023.12-17': '2023.12-17',
     };
 
     int id = 1;

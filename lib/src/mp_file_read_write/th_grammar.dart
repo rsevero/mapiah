@@ -177,8 +177,10 @@ class THGrammar extends GrammarDefinition {
                           .optional())
                   .optional())
           .optional());
-  Parser dateTimeRange() =>
-      (singleDateTimeBase() & char('-').trim() & singleDateTimeBase());
+  Parser looseDateLikeToken() => pattern('0-9.:@').plus();
+  Parser dateTimeRange() => (singleDateTimeBase() &
+      char('-').trim() &
+      (singleDateTimeBase() | looseDateLikeToken()));
   Parser dateTimeAllVariations() =>
       dateTimeRange().flatten().trim() | singleDateTime() | noDateTime();
   Parser dateTimeNoNoDateTime() =>

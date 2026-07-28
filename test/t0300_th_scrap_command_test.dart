@@ -102,6 +102,25 @@ endscrap
         expect(asFile, success['asFile']);
       });
     }
+
+    var failures = [
+      'th_file_parser-00266-scrap_with_author_option_with_malformed_date_range_failure.th2',
+    ];
+
+    for (var failure in failures) {
+      test(failure, () async {
+        final parser = TH2FileParser();
+        mpLocator.mpGeneralController.reset();
+        final (_, isSuccessful, errors) = await parser.parse(
+          THTestAux.testPath(failure),
+        );
+        expect(isSuccessful, false);
+        // A single, specific error -- not a generic PetitParser grammar
+        // failure, and no cascading second error on the following line.
+        expect(errors.length, 1);
+        expect(errors[0], contains("Can´t parse end of datetime range"));
+      });
+    }
   });
 
   group('scrap -copyright', () {
