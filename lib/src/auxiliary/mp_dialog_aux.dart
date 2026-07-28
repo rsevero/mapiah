@@ -36,6 +36,7 @@ class MPDialogAux {
   static bool _isUnhandledErrorDialogOpen = false;
   static bool _isUpdateDialogOpen = false;
   static bool _isUpdateCheckRunning = false;
+  static Future<void>? _th2FileTabsPageRouteFuture;
 
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
@@ -1171,11 +1172,42 @@ class MPDialogAux {
     final int openFileCount =
         mpLocator.mpGeneralController.openFileOrder.length;
 
-    if (openFileCount > 0) {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const TH2FileTabsPage()));
+    if ((openFileCount == 0) || (_th2FileTabsPageRouteFuture != null)) {
+      return;
     }
+
+    final NavigatorState navigator = Navigator.of(context);
+    final MaterialPageRoute<void> route = MaterialPageRoute<void>(
+      builder: (_) => const TH2FileTabsPage(),
+    );
+    final Future<void> routeFuture = route.completed;
+
+    _th2FileTabsPageRouteFuture = routeFuture;
+    unawaited(navigator.push<void>(route));
+
+    unawaited(
+      routeFuture.whenComplete(() {
+        if (!identical(_th2FileTabsPageRouteFuture, routeFuture)) {
+          return;
+        }
+
+        _th2FileTabsPageRouteFuture = null;
+
+        if (mpLocator.mpGeneralController.openFileOrder.isEmpty) {
+          return;
+        }
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final BuildContext? navigatorContext =
+              mpLocator.mpNavigatorKey.currentContext;
+
+          if (navigatorContext != null) {
+            ensureTabsPageOpen(navigatorContext);
+          }
+        });
+        WidgetsBinding.instance.scheduleFrame();
+      }),
+    );
   }
 
   static Future<bool> pickTHConfigFile(BuildContext context) async {

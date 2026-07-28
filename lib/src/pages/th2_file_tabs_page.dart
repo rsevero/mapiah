@@ -65,7 +65,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       (int length) {
         if (length == 0) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) {
+            if (!mounted ||
+                mpLocator.mpGeneralController.openFileOrder.isNotEmpty) {
               return;
             }
 

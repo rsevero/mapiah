@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -89,6 +93,70 @@ void main() {
 
         /// Both files should be registered as open tabs
         expect(mpLocator.mpGeneralController.openFileOrder.length, 2);
+      },
+    );
+
+    testWidgets(
+      'reopening while the previous tabs route closes keeps one tabs page',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(1280, 720);
+        tester.view.devicePixelRatio = 1.0;
+
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        await tester.pumpWidget(const MapiahApp());
+        await tester.pumpAndSettle();
+
+        const String filename = '/tmp/mapiah-route-overlap.th2';
+        final Uint8List fileBytes = Uint8List.fromList(
+          utf8.encode(
+            'encoding utf-8\n'
+            'scrap route-overlap\n'
+            'endscrap\n',
+          ),
+        );
+        final TH2FileEditController firstController = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(
+              filename: filename,
+              fileBytes: fileBytes,
+            );
+        final BuildContext initialContext =
+            mpLocator.mpNavigatorKey.currentContext!;
+
+        mpLocator.mpGeneralController.addFileTab(filename);
+        MPDialogAux.ensureTabsPageOpen(initialContext);
+        await tester.pumpAndSettle();
+
+        firstController.close();
+        await tester.pump();
+
+        final TH2FileEditController secondController = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(
+              filename: filename,
+              fileBytes: fileBytes,
+            );
+        final BuildContext reopenContext =
+            mpLocator.mpNavigatorKey.currentContext!;
+
+        mpLocator.mpGeneralController.addFileTab(filename);
+        MPDialogAux.ensureTabsPageOpen(reopenContext);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(TH2FileTabsPage), findsOneWidget);
+        expect(
+          mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+            filename,
+          ),
+          same(secondController),
+        );
+
+        secondController.close();
+        await tester.pumpAndSettle();
       },
     );
   });
