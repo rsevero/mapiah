@@ -168,29 +168,19 @@ void main() {
 
         expect(placeholderPaint.labelPaint, isNull);
 
-        for (final MPTH2EditVisualizationMethod method in [
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
           MPTH2EditVisualizationMethod.therionUIS,
-          MPTH2EditVisualizationMethod.therionAUT,
-          MPTH2EditVisualizationMethod.therionSBE,
-        ]) {
-          mpLocator.mpSettingsController.setEnum(
-            MPSettingID.TH2Edit_VisualizationMethod,
-            method,
-          );
+        );
 
-          final therionPaint = th2Controller.visualController
-              .getDefaultPointPaint(point);
+        final therionPaint = th2Controller.visualController
+            .getDefaultPointPaint(point);
 
-          expect(
-            therionPaint.labelPaint,
-            isNotNull,
-            reason: '$method should attach a labelPaint',
-          );
-          expect(therionPaint.labelPaint!.data.lines, [
-            'First line',
-            'Second line',
-          ]);
-        }
+        expect(therionPaint.labelPaint, isNotNull);
+        expect(therionPaint.labelPaint!.data.lines, [
+          'First line',
+          'Second line',
+        ]);
       },
     );
 
@@ -200,25 +190,15 @@ void main() {
       );
       final THPoint point = th2Controller.th2File.getPoints().single;
 
-      for (final MPTH2EditVisualizationMethod method in [
+      mpLocator.mpSettingsController.setEnum(
+        MPSettingID.TH2Edit_VisualizationMethod,
         MPTH2EditVisualizationMethod.therionUIS,
-        MPTH2EditVisualizationMethod.therionAUT,
-        MPTH2EditVisualizationMethod.therionSBE,
-      ]) {
-        mpLocator.mpSettingsController.setEnum(
-          MPSettingID.TH2Edit_VisualizationMethod,
-          method,
-        );
+      );
 
-        final THPointPaint pointPaint = th2Controller.visualController
-            .getDefaultPointPaint(point);
+      final THPointPaint pointPaint = th2Controller.visualController
+          .getDefaultPointPaint(point);
 
-        expect(
-          pointPaint.labelPaint,
-          isNull,
-          reason: '$method should not attach a station labelPaint',
-        );
-      }
+      expect(pointPaint.labelPaint, isNull);
     });
 
     test('point align option is carried into the labelPaint', () async {

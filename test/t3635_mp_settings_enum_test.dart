@@ -173,7 +173,7 @@ void main() {
       );
     });
 
-    test('defines every Therion visualization method', () {
+    test('defines every implemented visualization method', () {
       final MPSettingEnumDefinition enumDefinition =
           MPSettingID.TH2Edit_VisualizationMethod.enumDefinition();
 
