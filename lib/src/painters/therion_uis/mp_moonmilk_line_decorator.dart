@@ -32,8 +32,9 @@ class MPMoonmilkLineDecorator extends MPLineDecorator {
     final double u = symbolUnit.canvasValue;
     final Path curls = MPDirectionalCurveAux.buildCurlPath(
       sourcePath: path,
-      step: 0.3 * u,
-      angleOffsetDegrees: 80,
+      step: mpTherionUISMoonmilkLineStepUnits * u,
+      angleOffsetDegrees: mpTherionUISMoonmilkLineAngleOffsetDegrees,
+      handleLengthFactor: mpTherionUISMoonmilkLineHandleLengthFactor,
     );
 
     canvas.drawPath(

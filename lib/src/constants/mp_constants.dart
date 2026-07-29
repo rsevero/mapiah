@@ -257,6 +257,9 @@ const double mpTherionUISMoonmilkCellYUnits = 0.6;
 const double mpTherionUISMoonmilkStaggerXUnits = 0.5;
 const double mpTherionUISMoonmilkStaggerYUnits = 0.3;
 const double mpTherionUISMoonmilkControlLengthFactor = 2 / 3;
+const double mpTherionUISMoonmilkLineStepUnits = 0.3;
+const double mpTherionUISMoonmilkLineAngleOffsetDegrees = 80;
+const double mpTherionUISMoonmilkLineHandleLengthFactor = 0.568;
 const List<double> mpTherionUISMoonmilkScallopXUnits = <double>[
   -0.5,
   -0.1666,

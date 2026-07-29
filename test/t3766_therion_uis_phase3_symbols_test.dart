@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_ceiling_meander_line_decorator.dart';
@@ -299,6 +300,60 @@ void main() {
         isReversed: false,
       );
       recorder.endRecording().dispose();
+    });
+
+    test('moonmilk curls use the Therion control amplitude', () {
+      const double symbolUnit = 100;
+      final Path sourcePath = Path()
+        ..moveTo(0, 0)
+        ..lineTo(mpTherionUISMoonmilkLineStepUnits * symbolUnit, 0);
+      final Path curls = MPDirectionalCurveAux.buildCurlPath(
+        sourcePath: sourcePath,
+        step: mpTherionUISMoonmilkLineStepUnits * symbolUnit,
+        angleOffsetDegrees: mpTherionUISMoonmilkLineAngleOffsetDegrees,
+        handleLengthFactor: mpTherionUISMoonmilkLineHandleLengthFactor,
+      );
+
+      expect(curls.getBounds().height, closeTo(16.78, 0.02));
+    });
+
+    testWidgets('renders the more visible moonmilk waves', (
+      WidgetTester tester,
+    ) async {
+      const MPMoonmilkLineDecorator decorator = MPMoonmilkLineDecorator();
+      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            final Path path = Path()
+              ..moveTo(center.dx - 65, center.dy)
+              ..lineTo(center.dx + 65, center.dy);
+
+            decorator.decorate(
+              canvas: canvas,
+              path: path,
+              linePaint: THLinePaint(
+                primaryPaint: Paint()..color = const Color(0xFF000000),
+              ),
+              symbolUnit: symbolUnit,
+              isReversed: false,
+            );
+          },
+        ),
+      ];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Center(
+            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+          ),
+        ),
+      );
+
+      await expectLater(
+        find.byType(MPSymbolGoldenHarness),
+        matchesGoldenFile('goldens/therion_uis_moonmilk_line.png'),
+      );
     });
 
     test(

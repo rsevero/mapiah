@@ -38,8 +38,10 @@ abstract final class MPDirectionalCurveAux {
     required Path sourcePath,
     required double step,
     required double angleOffsetDegrees,
+    double handleLengthFactor = 1 / 3,
   }) {
     assert(step > 0);
+    assert(handleLengthFactor > 0);
 
     final Path result = Path();
     final double angleOffset = angleOffsetDegrees * math.pi / 180;
@@ -77,7 +79,7 @@ abstract final class MPDirectionalCurveAux {
             end: tangent.position,
             startAngle: startAngle,
             endAngle: endAngle,
-            handleLengthFactor: 1 / 3,
+            handleLengthFactor: handleLengthFactor,
           );
         }
 
