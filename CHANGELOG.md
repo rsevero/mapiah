@@ -2,6 +2,11 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.4.4 - not yet released
+* New features:
+* Fixed bugs:
+* Infrastructure maintenance:
+
 ## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:
   * Added the Therion UIS visualization method, with scalable vector point symbols, text labels, line decorations, and area patterns that can be compared directly with Mapiah's placeholder representation.
