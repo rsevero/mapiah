@@ -3,6 +3,7 @@
 
 import 'dart:ui';
 
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -36,5 +37,20 @@ class MPSurveyCaveLineDecorator extends MPLineDecorator {
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
-  }) {}
+  }) {
+    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
+
+    if (basePaint == null) {
+      return;
+    }
+
+    final double u = symbolUnit.canvasValue;
+
+    canvas.drawPath(
+      path,
+      Paint.from(basePaint)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = mpTherionPenC * u,
+    );
+  }
 }

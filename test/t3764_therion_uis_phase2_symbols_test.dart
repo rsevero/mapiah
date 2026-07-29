@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart' hide Image, Path;
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -246,6 +247,50 @@ void main() {
         isReversed: false,
       );
       recorder.endRecording().dispose();
+    });
+
+    testWidgets('renders a continuous placeholder-colored survey line', (
+      WidgetTester tester,
+    ) async {
+      const MPSurveyCaveLineDecorator decorator =
+          MPSurveyCaveLineDecorator();
+      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            final Path path = Path()
+              ..moveTo(center.dx - 60, center.dy + 15)
+              ..lineTo(center.dx, center.dy - 15)
+              ..lineTo(center.dx + 60, center.dy + 15);
+
+            decorator.decorate(
+              canvas: canvas,
+              path: path,
+              linePaint: THLinePaint(
+                primaryPaint: Paint.from(THPaint.thPaint14),
+              ),
+              symbolUnit: const MPSymbolUnit(
+                canvasScale: 1,
+                devicePixelRatio: 1,
+              ),
+              isReversed: false,
+            );
+          },
+        ),
+      ];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Center(
+            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+          ),
+        ),
+      );
+
+      await expectLater(
+        find.byType(MPSymbolGoldenHarness),
+        matchesGoldenFile('goldens/therion_uis_survey_line.png'),
+      );
     });
   });
 }
