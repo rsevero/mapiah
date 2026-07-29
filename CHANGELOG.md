@@ -43,6 +43,7 @@
   * Implemented Phase 2.5 of Therion-faithful symbol rendering: text-mode point types (label, remark, date, altitude, height, passage-height, dimensions, station) now render their actual content instead of an abstract placeholder shape, with per-point alignment, an unbordered white background box (matching Therion, which doesn't frame plain labels), and decorated top/bottom/split-oval/framed containers for the four passage-height forms; label text correctly counters the canvas's Therion-Y-down mirroring so glyphs render upright instead of flipped. Therion UIS activates label, symbol, line-decorator, and area-pattern rendering. Added golden-image, text-resolution, and dispatch regression coverage.
   * Made the Therion UIS showcase directly compilable by adding a root survey file, THConfig export setup, ignored generated PDFs, and an enclosing wall; corrected the showcase date and fixed-altitude syntax so Therion accepts the full fixture.
   * Renamed the auxiliary showcase directory to `therion_showcase` and expanded it with directly compilable `.th2` and `.thconfig` fixtures covering the ASF, AUT, BCRA, NSS, NZSS, SBE, SKBB, and SM symbol sets alongside UIS.
+  * Split the Therion showcase's aggregate root survey into one `.th` file per symbol set, so each generated PDF loads only its corresponding fixture and symbol set.
   * Updated the desktop window placement dependencies to their latest compatible patch releases.
 
 ## 0.4.2 - 2026-07-14 - The [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future) release

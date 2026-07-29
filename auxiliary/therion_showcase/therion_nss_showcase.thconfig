@@ -1,7 +1,7 @@
 encoding UTF-8
 
-source therion_showcase.th
-select therion_nss_showcase@therion_showcase_SRV
+source therion_nss_showcase.th
+select therion_nss_showcase@therion_nss_showcase_SRV
 
 layout showcase
   scale 1 250

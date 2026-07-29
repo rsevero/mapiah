@@ -4,10 +4,10 @@ cs UTM21S # trocar pelo número UTM apropriado
 
 language pt
 
-# Root source shared by every symbol-set showcase.
-source therion_showcase.th
+# Root source for the UIS symbol-set showcase.
+source therion_uis_showcase.th
 
-select therion_uis_showcase@therion_showcase_SRV
+select therion_uis_showcase@therion_uis_showcase_SRV
 
 layout exploracao
   scale 1 250

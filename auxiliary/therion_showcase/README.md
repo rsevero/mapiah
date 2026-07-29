@@ -15,8 +15,10 @@ Therion symbol set:
 - SM
 - UIS
 
-All configurations source the shared `therion_showcase.th` survey. Run Therion
-from this directory, passing the configuration for the symbol set to inspect:
+Each configuration sources only its matching `.th` survey, which in turn
+inputs only that symbol set's `.th2` fixture. This keeps every generated PDF
+isolated from the other showcase symbol sets. Run Therion from this directory,
+passing the configuration for the symbol set to inspect:
 
 ```sh
 therion therion_uis_showcase.thconfig

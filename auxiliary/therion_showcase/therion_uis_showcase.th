@@ -1,0 +1,5 @@
+encoding utf-8
+
+survey therion_uis_showcase_SRV -title "Therion UIS Symbol Set Showcase"
+  input therion_uis_showcase.th2
+endsurvey

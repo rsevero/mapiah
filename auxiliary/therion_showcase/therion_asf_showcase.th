@@ -1,0 +1,5 @@
+encoding utf-8
+
+survey therion_asf_showcase_SRV -title "Therion ASF Symbol Set Showcase"
+  input therion_asf_showcase.th2
+endsurvey
