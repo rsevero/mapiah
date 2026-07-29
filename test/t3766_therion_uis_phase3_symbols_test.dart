@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -257,7 +258,7 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    test('contour decorator draws a midpoint tick without crashing', () {
+    test('contour decorator draws a continuous line without crashing', () {
       const MPContourLineDecorator decorator = MPContourLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
@@ -270,6 +271,50 @@ void main() {
         isReversed: false,
       );
       recorder.endRecording().dispose();
+    });
+
+    testWidgets('renders a continuous placeholder-colored contour', (
+      WidgetTester tester,
+    ) async {
+      const MPContourLineDecorator decorator = MPContourLineDecorator();
+      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            final Path path = Path()
+              ..moveTo(center.dx - 65, center.dy + 15)
+              ..quadraticBezierTo(
+                center.dx,
+                center.dy - 15,
+                center.dx + 65,
+                center.dy + 15,
+              );
+
+            decorator.decorate(
+              canvas: canvas,
+              path: path,
+              linePaint: THLinePaint(
+                primaryPaint: Paint.from(THPaint.thPaint6),
+              ),
+              symbolUnit: symbolUnit,
+              isReversed: false,
+            );
+          },
+        ),
+      ];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Center(
+            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+          ),
+        ),
+      );
+
+      await expectLater(
+        find.byType(MPSymbolGoldenHarness),
+        matchesGoldenFile('goldens/therion_uis_contour_line.png'),
+      );
     });
 
     test('flowstone decorator draws curls without crashing', () {
