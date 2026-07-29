@@ -9,10 +9,10 @@ import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_path_metric_walker.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
-/// Ports `l_pit_UIS` (also aliased in Therion as `l_floorstep_UIS`): short
-/// perpendicular ticks stamped every `0.25u` along the line.
-class MPPitLineDecorator extends MPLineDecorator {
-  const MPPitLineDecorator();
+/// Ports `l_pit_UIS` and its `l_floorstep_UIS` alias: a continuous `PenC`
+/// line with short `PenD` perpendicular ticks stamped every `0.25u`.
+class MPPitFloorStepLineDecorator extends MPLineDecorator {
+  const MPPitFloorStepLineDecorator();
 
   @override
   void decorate({
@@ -34,7 +34,7 @@ class MPPitLineDecorator extends MPLineDecorator {
 
     MPPathMetricWalker.walk(
       path: path,
-      desiredStep: 0.25 * u,
+      desiredStep: mpTherionUISPitFloorStepTickStepUnits * u,
       reverse: false,
       visit: (MPPathMetricSample sample) {
         final Offset direction = sample.direction;
@@ -47,7 +47,9 @@ class MPPitLineDecorator extends MPLineDecorator {
         final Offset unit = direction / directionLength;
         final Offset perpendicular = Offset(-unit.dy, unit.dx);
         final Offset position = sample.tangent.position;
-        final Offset end = position + (perpendicular * (0.2 * u));
+        final Offset end =
+            position +
+            (perpendicular * (mpTherionUISPitFloorStepTickLengthUnits * u));
 
         ticks
           ..moveTo(position.dx, position.dy)
@@ -60,6 +62,12 @@ class MPPitLineDecorator extends MPLineDecorator {
       Paint.from(basePaint)
         ..style = PaintingStyle.stroke
         ..strokeWidth = mpTherionPenD * u,
+    );
+    canvas.drawPath(
+      path,
+      Paint.from(basePaint)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = mpTherionPenC * u,
     );
   }
 }

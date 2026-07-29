@@ -263,6 +263,8 @@ const double mpTherionUISMoonmilkLineHandleLengthFactor = 0.568;
 const double mpTherionUISSmallTStepUnits = 0.8;
 const double mpTherionUISSmallTStemLengthUnits = 0.2;
 const double mpTherionUISSmallTCapHalfStepFactor = 0.3;
+const double mpTherionUISPitFloorStepTickStepUnits = 0.25;
+const double mpTherionUISPitFloorStepTickLengthUnits = 0.2;
 const List<double> mpTherionUISMoonmilkScallopXUnits = <double>[
   -0.5,
   -0.1666,

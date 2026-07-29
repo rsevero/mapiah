@@ -33,7 +33,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_pit_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
@@ -1102,7 +1102,7 @@ abstract class MPVisualControllerBase with Store {
     }
 
     if ((lineType == THLineType.pit) || (lineType == THLineType.floorStep)) {
-      return const MPPitLineDecorator();
+      return const MPPitFloorStepLineDecorator();
     }
 
     if (lineType == THLineType.chimney) {

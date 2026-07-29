@@ -26,7 +26,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_pit_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
@@ -197,7 +197,8 @@ void main() {
     );
 
     test('pit decorator draws ticks without crashing', () {
-      const MPPitLineDecorator decorator = MPPitLineDecorator();
+      const MPPitFloorStepLineDecorator decorator =
+          MPPitFloorStepLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
 
@@ -209,6 +210,75 @@ void main() {
         isReversed: false,
       );
       recorder.endRecording().dispose();
+    });
+
+    testWidgets('renders pit and floor step with colored lines and upper ticks', (
+      WidgetTester tester,
+    ) async {
+      const MPPitFloorStepLineDecorator decorator =
+          MPPitFloorStepLineDecorator();
+
+      void drawLine({
+        required Canvas canvas,
+        required Offset center,
+        required Paint placeholderPaint,
+      }) {
+        final Path path = Path()
+          ..moveTo(center.dx - 65, center.dy + 10)
+          ..quadraticBezierTo(
+            center.dx,
+            center.dy - 10,
+            center.dx + 65,
+            center.dy + 10,
+          );
+
+        decorator.decorate(
+          canvas: canvas,
+          path: path,
+          linePaint: THLinePaint(
+            primaryPaint: Paint.from(placeholderPaint),
+          ),
+          symbolUnit: symbolUnit,
+          isReversed: false,
+        );
+      }
+
+      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            drawLine(
+              canvas: canvas,
+              center: center,
+              placeholderPaint: THPaint.thPaint13,
+            );
+          },
+        ),
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            drawLine(
+              canvas: canvas,
+              center: center,
+              placeholderPaint: THPaint.thPaint5,
+            );
+          },
+        ),
+      ];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Center(
+            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+          ),
+        ),
+      );
+
+      await expectLater(
+        find.byType(MPSymbolGoldenHarness),
+        matchesGoldenFile(
+          'goldens/therion_uis_pit_floor_step_lines.png',
+        ),
+      );
     });
 
     test('chimney decorator draws small Ts without crashing', () {
@@ -588,13 +658,13 @@ void main() {
 
         expect(
           th2Controller.visualController.getLineDecorator(THLineType.pit),
-          isA<MPPitLineDecorator>(),
+          isA<MPPitFloorStepLineDecorator>(),
         );
         expect(
           th2Controller.visualController.getLineDecorator(
             THLineType.floorStep,
           ),
-          isA<MPPitLineDecorator>(),
+          isA<MPPitFloorStepLineDecorator>(),
         );
         expect(
           th2Controller.visualController.getLineDecorator(THLineType.chimney),
