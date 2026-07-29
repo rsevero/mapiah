@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -25,6 +26,19 @@ void main() {
   });
 
   group('Therion UIS Phase 1 symbols', () {
+    test('water hatch uses the increased line spacing', () {
+      final ui.Image tile = MPTherionAreaPatternTilesUIS.buildWaterTile(
+        const Color(0xFF0000FF),
+      );
+
+      final int expectedTileSize =
+          (mpTherionUISWaterCellUnits * mpTherionAreaPatternTileUnitPixels)
+              .round();
+
+      expect(tile.width, expectedTileSize);
+      expect(tile.height, expectedTileSize);
+    });
+
     testWidgets('renders every Phase 1 point symbol', (
       WidgetTester tester,
     ) async {

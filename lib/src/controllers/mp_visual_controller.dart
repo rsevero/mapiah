@@ -1347,7 +1347,7 @@ abstract class MPVisualControllerBase with Store {
       devicePixelRatio: _th2FileEditController.devicePixelRatio,
     );
     final double scale =
-        symbolUnit.canvasValue / MPTherionAreaPatternTilesUIS.tileUnitPixels;
+        symbolUnit.canvasValue / mpTherionAreaPatternTileUnitPixels;
 
     return Paint()
       ..shader = ui.ImageShader(

@@ -244,6 +244,9 @@ const double mpTherionPenB = 0.07;
 const double mpTherionPenC = 0.05;
 const double mpTherionPenD = 0.035;
 const double mpTherionPenX = 0.12;
+const double mpTherionAreaPatternTileUnitPixels = 100.0;
+const double mpTherionUISWaterCellUnits = 0.4;
+const double mpTherionUISWaterPenUnits = 0.025;
 const int mpMaximumRandomSeed = 0x3fffffff;
 
 const Set<String> mpImageTransformHandleTypesWithoutXScaling = <String>{

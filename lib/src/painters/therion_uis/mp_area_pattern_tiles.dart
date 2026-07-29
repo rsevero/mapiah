@@ -3,31 +3,35 @@
 
 import 'dart:ui' as ui;
 
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 
 /// Builds the Phase 1 Therion UIS area fill pattern tiles.
 ///
-/// Every tile is rasterized once, at a fixed resolution ([tileUnitPixels]
-/// pixels per symbol unit `u`), and reused via [MPPatternCache]. At paint
-/// time the tile is scaled to the current on-screen `u` through the
-/// `ImageShader`'s transform matrix, so a single raster works at every zoom
-/// level. Coordinates are transcribed directly from the `beginpattern`
-/// blocks in therion-mpost/thArea.mp. Asymmetric patterns must reflect their Y
-/// coordinates for Mapiah's canvas, which has the opposite Y-axis direction.
+/// Every tile is rasterized once, at a fixed resolution
+/// ([mpTherionAreaPatternTileUnitPixels] pixels per symbol unit `u`), and
+/// reused via [MPPatternCache]. At paint time the tile is scaled to the
+/// current on-screen `u` through the `ImageShader`'s transform matrix, so a
+/// single raster works at every zoom level. Coordinates are transcribed
+/// directly from the `beginpattern` blocks in therion-mpost/thArea.mp.
+/// Asymmetric patterns must reflect their Y coordinates for Mapiah's canvas,
+/// which has the opposite Y-axis direction.
 abstract final class MPTherionAreaPatternTilesUIS {
-  static const double tileUnitPixels = 100.0;
-
   static ui.Image buildWaterTile(ui.Color lineColor) {
     return _diagonalHatchTile(
-      cellUnits: 0.18,
-      penUnits: 0.02,
+      cellUnits: mpTherionUISWaterCellUnits,
+      penUnits: mpTherionUISWaterPenUnits,
       color: lineColor,
     );
   }
 
   static ui.Image buildSumpTile(ui.Color lineColor) {
-    return _crossHatchTile(cellUnits: 0.25, penUnits: 0.02, color: lineColor);
+    return _crossHatchTile(
+      cellUnits: mpTherionUISWaterCellUnits,
+      penUnits: mpTherionUISWaterPenUnits,
+      color: lineColor,
+    );
   }
 
   static ui.Image buildDebrisTile(ui.Color lineColor) {
@@ -37,7 +41,7 @@ abstract final class MPTherionAreaPatternTilesUIS {
     final ui.Paint paint = ui.Paint()
       ..color = lineColor
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.05 * tileUnitPixels;
+      ..strokeWidth = 0.05 * mpTherionAreaPatternTileUnitPixels;
 
     for (final (double angleDeg, double dx, double dy) tick in const [
       (-40.0, 0.2, 0.3),
@@ -45,19 +49,22 @@ abstract final class MPTherionAreaPatternTilesUIS {
       (20.0, 1.5, 0.8),
     ]) {
       canvas.save();
-      canvas.translate(tick.$2 * tileUnitPixels, tick.$3 * tileUnitPixels);
+      canvas.translate(
+        tick.$2 * mpTherionAreaPatternTileUnitPixels,
+        tick.$3 * mpTherionAreaPatternTileUnitPixels,
+      );
       canvas.rotate(tick.$1 * (3.14159265358979 / 180));
       canvas.drawLine(
-        ui.Offset(-0.15 * tileUnitPixels, 0),
-        ui.Offset(0.15 * tileUnitPixels, 0),
+        ui.Offset(-0.15 * mpTherionAreaPatternTileUnitPixels, 0),
+        ui.Offset(0.15 * mpTherionAreaPatternTileUnitPixels, 0),
         paint,
       );
       canvas.restore();
     }
 
     return recorder.endRecording().toImageSync(
-      (cellUnits * tileUnitPixels).round(),
-      (cellUnits * tileUnitPixels).round(),
+      (cellUnits * mpTherionAreaPatternTileUnitPixels).round(),
+      (cellUnits * mpTherionAreaPatternTileUnitPixels).round(),
     );
   }
 
@@ -73,17 +80,17 @@ abstract final class MPTherionAreaPatternTilesUIS {
     final ui.Paint paint = ui.Paint()
       ..color = lineColor
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.05 * tileUnitPixels;
+      ..strokeWidth = 0.05 * mpTherionAreaPatternTileUnitPixels;
 
     ui.Path curve(double dx, double dy) {
       return MPDirectionalCurveAux.buildCurvePath(
         start: ui.Offset(
-          (-curveHalfWidthUnits + dx) * tileUnitPixels,
-          dy * tileUnitPixels,
+          (-curveHalfWidthUnits + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
         ),
         end: ui.Offset(
-          (curveHalfWidthUnits + dx) * tileUnitPixels,
-          dy * tileUnitPixels,
+          (curveHalfWidthUnits + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
         ),
         startDirectionDegrees: -60,
         endDirectionDegrees: 60,
@@ -98,8 +105,8 @@ abstract final class MPTherionAreaPatternTilesUIS {
     canvas.drawPath(curve(cellXUnits, cellYUnits), paint);
 
     return recorder.endRecording().toImageSync(
-      (cellXUnits * tileUnitPixels).round(),
-      (cellYUnits * tileUnitPixels).round(),
+      (cellXUnits * mpTherionAreaPatternTileUnitPixels).round(),
+      (cellYUnits * mpTherionAreaPatternTileUnitPixels).round(),
     );
   }
 
@@ -124,19 +131,24 @@ abstract final class MPTherionAreaPatternTilesUIS {
         final double jitterX = ((random.nextDouble() * 2) - 1) * jitterUnits;
         final double jitterY = ((random.nextDouble() * 2) - 1) * jitterUnits;
         final double x =
-            (gridX + 0.5 + jitterX) * cellUnits * tileUnitPixels;
+            (gridX + 0.5 + jitterX) *
+            cellUnits *
+            mpTherionAreaPatternTileUnitPixels;
         final double y =
-            (gridY + 0.5 + jitterY) * cellUnits * tileUnitPixels;
+            (gridY + 0.5 + jitterY) *
+            cellUnits *
+            mpTherionAreaPatternTileUnitPixels;
 
         canvas.drawCircle(
           ui.Offset(x, y),
-          dotRadiusUnits * tileUnitPixels,
+          dotRadiusUnits * mpTherionAreaPatternTileUnitPixels,
           paint,
         );
       }
     }
 
-    final int size = (gridSize * cellUnits * tileUnitPixels).round();
+    final int size = (gridSize * cellUnits * mpTherionAreaPatternTileUnitPixels)
+        .round();
 
     return recorder.endRecording().toImageSync(size, size);
   }
@@ -149,28 +161,31 @@ abstract final class MPTherionAreaPatternTilesUIS {
     final ui.Paint paint = ui.Paint()
       ..color = lineColor
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.05 * tileUnitPixels;
+      ..strokeWidth = 0.05 * mpTherionAreaPatternTileUnitPixels;
 
     ui.Path wave(double dx, double dy) {
       return ui.Path()
-        ..moveTo((-0.5 + dx) * tileUnitPixels, dy * tileUnitPixels)
-        ..quadraticBezierTo(
-          (-0.333 + dx) * tileUnitPixels,
-          (dy + 0.12) * tileUnitPixels,
-          (-0.1666 + dx) * tileUnitPixels,
-          dy * tileUnitPixels,
+        ..moveTo(
+          (-0.5 + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
         )
         ..quadraticBezierTo(
-          (0 + dx) * tileUnitPixels,
-          (dy - 0.12) * tileUnitPixels,
-          (0.1666 + dx) * tileUnitPixels,
-          dy * tileUnitPixels,
+          (-0.333 + dx) * mpTherionAreaPatternTileUnitPixels,
+          (dy + 0.12) * mpTherionAreaPatternTileUnitPixels,
+          (-0.1666 + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
         )
         ..quadraticBezierTo(
-          (0.333 + dx) * tileUnitPixels,
-          (dy + 0.12) * tileUnitPixels,
-          (0.5 + dx) * tileUnitPixels,
-          dy * tileUnitPixels,
+          (0 + dx) * mpTherionAreaPatternTileUnitPixels,
+          (dy - 0.12) * mpTherionAreaPatternTileUnitPixels,
+          (0.1666 + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
+        )
+        ..quadraticBezierTo(
+          (0.333 + dx) * mpTherionAreaPatternTileUnitPixels,
+          (dy + 0.12) * mpTherionAreaPatternTileUnitPixels,
+          (0.5 + dx) * mpTherionAreaPatternTileUnitPixels,
+          dy * mpTherionAreaPatternTileUnitPixels,
         );
     }
 
@@ -178,8 +193,8 @@ abstract final class MPTherionAreaPatternTilesUIS {
     canvas.drawPath(wave(0.5, 0.6), paint);
 
     return recorder.endRecording().toImageSync(
-      (cellXUnits * tileUnitPixels).round(),
-      (cellYUnits * tileUnitPixels).round(),
+      (cellXUnits * mpTherionAreaPatternTileUnitPixels).round(),
+      (cellYUnits * mpTherionAreaPatternTileUnitPixels).round(),
     );
   }
 
@@ -193,8 +208,8 @@ abstract final class MPTherionAreaPatternTilesUIS {
     final ui.Paint paint = ui.Paint()
       ..color = color
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = penUnits * tileUnitPixels;
-    final double side = cellUnits * tileUnitPixels;
+      ..strokeWidth = penUnits * mpTherionAreaPatternTileUnitPixels;
+    final double side = cellUnits * mpTherionAreaPatternTileUnitPixels;
 
     canvas.drawLine(ui.Offset(0, side), ui.Offset(side, 0), paint);
 
@@ -213,8 +228,8 @@ abstract final class MPTherionAreaPatternTilesUIS {
     final ui.Paint paint = ui.Paint()
       ..color = color
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = penUnits * tileUnitPixels;
-    final double side = cellUnits * tileUnitPixels;
+      ..strokeWidth = penUnits * mpTherionAreaPatternTileUnitPixels;
+    final double side = cellUnits * mpTherionAreaPatternTileUnitPixels;
 
     canvas.drawLine(ui.Offset.zero, ui.Offset(side, side), paint);
     canvas.drawLine(ui.Offset(side, 0), ui.Offset(0, side), paint);
