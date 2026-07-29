@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -135,7 +136,7 @@ void main() {
       );
     });
 
-    testWidgets('renders the gradient line arrowhead decorator', (
+    testWidgets('renders the continuous gradient line and arrowhead', (
       WidgetTester tester,
     ) async {
       const double goldenSymbolUnitOnScreen = 10;
@@ -151,10 +152,7 @@ void main() {
       );
 
       const MPGradientLineDecorator decorator = MPGradientLineDecorator();
-      final Paint linePaint = Paint()
-        ..color = const Color(0xFF000000)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2;
+      final Paint linePaint = Paint.from(THPaint.thPaint12);
       final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
         MPSymbolGoldenEntry(
           draw: (Canvas canvas, Offset center) {
@@ -162,7 +160,6 @@ void main() {
               ..moveTo(center.dx - 25, center.dy + 25)
               ..lineTo(center.dx + 25, center.dy - 25);
 
-            canvas.drawPath(path, linePaint);
             decorator.decorate(
               canvas: canvas,
               path: path,

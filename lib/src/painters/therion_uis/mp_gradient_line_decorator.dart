@@ -23,6 +23,21 @@ class MPGradientLineDecorator extends MPLineDecorator {
     required bool isReversed,
     int mpID = 0,
   }) {
+    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
+
+    if (basePaint == null) {
+      return;
+    }
+
+    final double u = symbolUnit.canvasValue;
+
+    canvas.drawPath(
+      path,
+      Paint.from(basePaint)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = mpTherionPenC * u,
+    );
+
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
     if (metrics.isEmpty) {
@@ -33,12 +48,6 @@ class MPGradientLineDecorator extends MPLineDecorator {
     final Tangent? tangent = metric.getTangentForOffset(metric.length);
 
     if (tangent == null) {
-      return;
-    }
-
-    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
-
-    if (basePaint == null) {
       return;
     }
 

@@ -3,6 +3,14 @@
 # Changelog
 
 ## 0.4.3 - not yet released
+* Highlights:
+  * Added the Therion UIS visualization method, with scalable vector point symbols, text labels, line decorations, and area patterns that can be compared directly with Mapiah's placeholder representation.
+    * Reviewed and corrected to match Therion: gradient, survey (cave), pit/pitch, floor-step, chimney, ceiling-step, contour, and moonmilk lines; and water, debris, flowstone, moonmilk, and sand areas.
+    * Implemented but not yet individually revised against the Therion showcase: air-draught (including winter/summer), anastomosis, archeo-material, blocks, camp, continuation, crystal, curtain, disk, dig, entrance, flowstone, flute, gradient, guano, helictite, ice, karren, low-end, moonmilk, narrow-end, paleo-material, pebbles, pillar/pillars, popcorn, sand, scallop, soda-straw, stalactite/stalactites, stalagmite/stalagmites, wall-calcite, water, and water-flow point symbols; altitude, date, dimensions, height, label, passage-height, and remark text points; ceiling-meander, flowstone, rock-border, rock-edge, wall:bedrock, wall:underlying, wall:presumed, and water-flow lines; and the sump area.
+    * Not yet ported and still using placeholders: the UIS debris, curtains, disc-pillar/disc-pillars, disc-stalactite/disc-stalactites, disc-stalagmite/disc-stalagmites, helictites, pillar-with-curtains, pillars-with-curtains, stalactite-stalagmite, and stalactites-stalagmites point symbols, plus the default blocks area pattern.
+  * Added freehand line drawing with live previews, endpoint snapping, configurable line types, undo/redo, and bounded Douglas-Peucker simplification.
+  * Added optional snapping to points and line points in visible inactive scraps.
+  * Improved desktop and file-opening reliability by restoring window placement, handling non-fatal parsing errors as warnings, and safely discarding failed or overlapping file loads.
 * New features:
   * Mapiah now remembers its window size, position, and maximized state when closed on Linux, macOS, and Windows, and restores that placement the next time it opens. New installations default to maximized, and saved placements that are incompatible with the current display layout fall back to maximized.
   * Added a freehand line drawing tool: press and drag (mouse, touch, or stylus) to draw, see the raw stroke previewed live via `MPAddFreehandLineWidget`, and release to commit one editable `THLine` made of straight segments in a single undoable action, with SexyTopo-style bounded/compacted sample capture and extent-relative Douglas-Peucker simplification. Endpoint snapping, the current line type/subtype, applicable default options, and the active scrap are all respected, and the result round-trips through `.th2` save/reload. Discoverable via the add-element toolbar row and the `F` shortcut, with updated EN/PT help pages and keyboard-shortcut tables. [requested by Edvard]
