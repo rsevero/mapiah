@@ -37,7 +37,7 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
       path: path,
       step: 0.8 * u,
       reverseOrigin: false,
-      visit: (Offset position, Offset tangent) {
+      visit: (Offset position, Offset tangent, double _) {
         final double tangentLength = tangent.distance;
 
         if (tangentLength == 0) {

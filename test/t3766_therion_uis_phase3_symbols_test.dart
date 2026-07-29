@@ -211,7 +211,7 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    test('chimney decorator draws ticks without crashing', () {
+    test('chimney decorator draws small Ts without crashing', () {
       const MPChimneyLineDecorator decorator = MPChimneyLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
@@ -226,7 +226,7 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    test('ceiling step decorator draws ticks without crashing', () {
+    test('ceiling step decorator draws small Ts without crashing', () {
       const MPCeilingStepLineDecorator decorator =
           MPCeilingStepLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
@@ -256,6 +256,63 @@ void main() {
         isReversed: false,
       );
       recorder.endRecording().dispose();
+    });
+
+    testWidgets('renders chimney and ceiling step as separate-colored small Ts', (
+      WidgetTester tester,
+    ) async {
+      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            final Path path = Path()
+              ..moveTo(center.dx - 65, center.dy)
+              ..lineTo(center.dx + 65, center.dy);
+
+            const MPChimneyLineDecorator().decorate(
+              canvas: canvas,
+              path: path,
+              linePaint: THLinePaint(
+                primaryPaint: Paint.from(THPaint.thPaint13),
+              ),
+              symbolUnit: symbolUnit,
+              isReversed: false,
+            );
+          },
+        ),
+        MPSymbolGoldenEntry(
+          draw: (Canvas canvas, Offset center) {
+            final Path path = Path()
+              ..moveTo(center.dx - 65, center.dy)
+              ..lineTo(center.dx + 65, center.dy);
+
+            const MPCeilingStepLineDecorator().decorate(
+              canvas: canvas,
+              path: path,
+              linePaint: THLinePaint(
+                primaryPaint: Paint.from(THPaint.thPaint5),
+              ),
+              symbolUnit: symbolUnit,
+              isReversed: false,
+            );
+          },
+        ),
+      ];
+
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Center(
+            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+          ),
+        ),
+      );
+
+      await expectLater(
+        find.byType(MPSymbolGoldenHarness),
+        matchesGoldenFile(
+          'goldens/therion_uis_chimney_ceiling_step_lines.png',
+        ),
+      );
     });
 
     test('contour decorator draws a continuous line without crashing', () {

@@ -17,7 +17,12 @@ abstract final class MPLineTickAux {
     required Path path,
     required double step,
     required bool reverseOrigin,
-    required void Function(Offset position, Offset tangent) visit,
+    required void Function(
+      Offset position,
+      Offset tangent,
+      double adjustedStep,
+    )
+    visit,
   }) {
     assert(step > 0);
 
@@ -50,7 +55,7 @@ abstract final class MPLineTickAux {
         continue;
       }
 
-      visit(tangent.position, tangent.vector);
+      visit(tangent.position, tangent.vector, adjustedStep);
     }
   }
 

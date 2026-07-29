@@ -260,6 +260,9 @@ const double mpTherionUISMoonmilkControlLengthFactor = 2 / 3;
 const double mpTherionUISMoonmilkLineStepUnits = 0.3;
 const double mpTherionUISMoonmilkLineAngleOffsetDegrees = 80;
 const double mpTherionUISMoonmilkLineHandleLengthFactor = 0.568;
+const double mpTherionUISSmallTStepUnits = 0.8;
+const double mpTherionUISSmallTStemLengthUnits = 0.2;
+const double mpTherionUISSmallTCapHalfStepFactor = 0.3;
 const List<double> mpTherionUISMoonmilkScallopXUnits = <double>[
   -0.5,
   -0.1666,

@@ -11,8 +11,8 @@ import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
 /// Ports `l_chimney_UIS`, which Therion defines as
 /// `l_ceilingstep_SKBB(reverse P)`: like [MPCeilingStepLineDecorator], but
-/// segments are measured from the path's end and the tick points to the
-/// opposite (right-hand) side.
+/// segments are measured from the path's end. Reversing the path also reverses
+/// the perpendicular so the small T retains Therion's visual orientation.
 class MPChimneyLineDecorator extends MPLineDecorator {
   const MPChimneyLineDecorator();
 
@@ -36,9 +36,9 @@ class MPChimneyLineDecorator extends MPLineDecorator {
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
-      step: 0.8 * u,
+      step: mpTherionUISSmallTStepUnits * u,
       reverseOrigin: true,
-      visit: (Offset position, Offset tangent) {
+      visit: (Offset position, Offset tangent, double adjustedStep) {
         final double tangentLength = tangent.distance;
 
         if (tangentLength == 0) {
@@ -47,11 +47,21 @@ class MPChimneyLineDecorator extends MPLineDecorator {
 
         final Offset unit = tangent / tangentLength;
         final Offset perpendicular = Offset(-unit.dy, unit.dx);
-        final Offset end = position + (perpendicular * (0.2 * u));
+        final Offset capStart =
+            position -
+            (unit * (mpTherionUISSmallTCapHalfStepFactor * adjustedStep));
+        final Offset capEnd =
+            position +
+            (unit * (mpTherionUISSmallTCapHalfStepFactor * adjustedStep));
+        final Offset stemEnd =
+            position -
+            (perpendicular * (mpTherionUISSmallTStemLengthUnits * u));
 
         ticks
+          ..moveTo(capStart.dx, capStart.dy)
+          ..lineTo(capEnd.dx, capEnd.dy)
           ..moveTo(position.dx, position.dy)
-          ..lineTo(end.dx, end.dy);
+          ..lineTo(stemEnd.dx, stemEnd.dy);
       },
     );
 

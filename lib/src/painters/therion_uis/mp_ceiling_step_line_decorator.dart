@@ -9,8 +9,8 @@ import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_tick_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
-/// Ports `l_ceilingstep_UIS`: one perpendicular tick, pointing to the line's
-/// left-hand side, stamped at the center of each `0.8u` segment.
+/// Ports `l_ceilingstep_UIS`: a small T pointing to the line's left-hand side,
+/// stamped at the center of each `0.8u` segment.
 class MPCeilingStepLineDecorator extends MPLineDecorator {
   const MPCeilingStepLineDecorator();
 
@@ -34,9 +34,9 @@ class MPCeilingStepLineDecorator extends MPLineDecorator {
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
-      step: 0.8 * u,
+      step: mpTherionUISSmallTStepUnits * u,
       reverseOrigin: false,
-      visit: (Offset position, Offset tangent) {
+      visit: (Offset position, Offset tangent, double adjustedStep) {
         final double tangentLength = tangent.distance;
 
         if (tangentLength == 0) {
@@ -45,11 +45,21 @@ class MPCeilingStepLineDecorator extends MPLineDecorator {
 
         final Offset unit = tangent / tangentLength;
         final Offset perpendicular = Offset(-unit.dy, unit.dx);
-        final Offset end = position - (perpendicular * (0.2 * u));
+        final Offset capStart =
+            position -
+            (unit * (mpTherionUISSmallTCapHalfStepFactor * adjustedStep));
+        final Offset capEnd =
+            position +
+            (unit * (mpTherionUISSmallTCapHalfStepFactor * adjustedStep));
+        final Offset stemEnd =
+            position -
+            (perpendicular * (mpTherionUISSmallTStemLengthUnits * u));
 
         ticks
+          ..moveTo(capStart.dx, capStart.dy)
+          ..lineTo(capEnd.dx, capEnd.dy)
           ..moveTo(position.dx, position.dy)
-          ..lineTo(end.dx, end.dy);
+          ..lineTo(stemEnd.dx, stemEnd.dy);
       },
     );
 
