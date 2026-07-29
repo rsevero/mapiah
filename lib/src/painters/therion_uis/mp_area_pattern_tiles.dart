@@ -151,8 +151,6 @@ abstract final class MPTherionAreaPatternTilesUIS {
   }
 
   static ui.Image buildMoonmilkTile(ui.Color lineColor) {
-    const double cellXUnits = 1.0;
-    const double cellYUnits = 0.6;
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
     final ui.Paint paint = ui.Paint()
@@ -160,38 +158,94 @@ abstract final class MPTherionAreaPatternTilesUIS {
       ..style = ui.PaintingStyle.stroke
       ..strokeWidth = 0.05 * mpTherionAreaPatternTileUnitPixels;
 
-    ui.Path wave(double dx, double dy) {
-      return ui.Path()
-        ..moveTo(
-          (-0.5 + dx) * mpTherionAreaPatternTileUnitPixels,
-          dy * mpTherionAreaPatternTileUnitPixels,
-        )
-        ..quadraticBezierTo(
-          (-0.333 + dx) * mpTherionAreaPatternTileUnitPixels,
-          (dy + 0.12) * mpTherionAreaPatternTileUnitPixels,
-          (-0.1666 + dx) * mpTherionAreaPatternTileUnitPixels,
-          dy * mpTherionAreaPatternTileUnitPixels,
-        )
-        ..quadraticBezierTo(
-          (0 + dx) * mpTherionAreaPatternTileUnitPixels,
-          (dy - 0.12) * mpTherionAreaPatternTileUnitPixels,
-          (0.1666 + dx) * mpTherionAreaPatternTileUnitPixels,
-          dy * mpTherionAreaPatternTileUnitPixels,
-        )
-        ..quadraticBezierTo(
-          (0.333 + dx) * mpTherionAreaPatternTileUnitPixels,
-          (dy + 0.12) * mpTherionAreaPatternTileUnitPixels,
-          (0.5 + dx) * mpTherionAreaPatternTileUnitPixels,
-          dy * mpTherionAreaPatternTileUnitPixels,
-        );
-    }
-
-    canvas.drawPath(wave(0, 0.3), paint);
-    canvas.drawPath(wave(0.5, 0.6), paint);
+    canvas.drawPath(
+      _buildMoonmilkScallops(
+        dx: 0,
+        dy: mpTherionUISMoonmilkStaggerYUnits,
+      ),
+      paint,
+    );
+    canvas.drawPath(
+      _buildMoonmilkScallops(
+        dx: mpTherionUISMoonmilkCellXUnits,
+        dy: mpTherionUISMoonmilkStaggerYUnits,
+      ),
+      paint,
+    );
+    canvas.drawPath(
+      _buildMoonmilkScallops(
+        dx: mpTherionUISMoonmilkStaggerXUnits,
+        dy: mpTherionUISMoonmilkCellYUnits,
+      ),
+      paint,
+    );
 
     return recorder.endRecording().toImageSync(
-      (cellXUnits * mpTherionAreaPatternTileUnitPixels).round(),
-      (cellYUnits * mpTherionAreaPatternTileUnitPixels).round(),
+      (mpTherionUISMoonmilkCellXUnits *
+              mpTherionAreaPatternTileUnitPixels)
+          .round(),
+      (mpTherionUISMoonmilkCellYUnits *
+              mpTherionAreaPatternTileUnitPixels)
+          .round(),
+    );
+  }
+
+  static ui.Path _buildMoonmilkScallops({
+    required double dx,
+    required double dy,
+  }) {
+    final ui.Path path = ui.Path()
+      ..moveTo(
+        (mpTherionUISMoonmilkScallopXUnits.first + dx) *
+            mpTherionAreaPatternTileUnitPixels,
+        dy * mpTherionAreaPatternTileUnitPixels,
+      );
+
+    _addMoonmilkScallop(
+      path: path,
+      startXUnits: mpTherionUISMoonmilkScallopXUnits[0],
+      endXUnits: mpTherionUISMoonmilkScallopXUnits[1],
+      dx: dx,
+      dy: dy,
+    );
+    _addMoonmilkScallop(
+      path: path,
+      startXUnits: mpTherionUISMoonmilkScallopXUnits[1],
+      endXUnits: mpTherionUISMoonmilkScallopXUnits[2],
+      dx: dx,
+      dy: dy,
+    );
+    _addMoonmilkScallop(
+      path: path,
+      startXUnits: mpTherionUISMoonmilkScallopXUnits[2],
+      endXUnits: mpTherionUISMoonmilkScallopXUnits[3],
+      dx: dx,
+      dy: dy,
+    );
+
+    return path;
+  }
+
+  static void _addMoonmilkScallop({
+    required ui.Path path,
+    required double startXUnits,
+    required double endXUnits,
+    required double dx,
+    required double dy,
+  }) {
+    final double controlLengthUnits =
+        (endXUnits - startXUnits) *
+        mpTherionUISMoonmilkControlLengthFactor;
+    final double controlY =
+        (dy - controlLengthUnits) * mpTherionAreaPatternTileUnitPixels;
+
+    path.cubicTo(
+      (startXUnits + dx) * mpTherionAreaPatternTileUnitPixels,
+      controlY,
+      (endXUnits + dx) * mpTherionAreaPatternTileUnitPixels,
+      controlY,
+      (endXUnits + dx) * mpTherionAreaPatternTileUnitPixels,
+      dy * mpTherionAreaPatternTileUnitPixels,
     );
   }
 

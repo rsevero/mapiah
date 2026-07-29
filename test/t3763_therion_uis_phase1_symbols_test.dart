@@ -43,6 +43,26 @@ void main() {
       expect(mpTherionUISDebrisTicks, hasLength(6));
     });
 
+    test('moonmilk pattern uses the Therion tile dimensions', () {
+      final ui.Image tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(
+        const Color(0xFF804000),
+      );
+
+      expect(
+        tile.width,
+        (mpTherionUISMoonmilkCellXUnits *
+                mpTherionAreaPatternTileUnitPixels)
+            .round(),
+      );
+      expect(
+        tile.height,
+        (mpTherionUISMoonmilkCellYUnits *
+                mpTherionAreaPatternTileUnitPixels)
+            .round(),
+      );
+      expect(mpTherionUISMoonmilkScallopXUnits, hasLength(4));
+    });
+
     testWidgets('renders every Phase 1 point symbol', (
       WidgetTester tester,
     ) async {

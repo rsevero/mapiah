@@ -247,6 +247,17 @@ const double mpTherionPenX = 0.12;
 const double mpTherionAreaPatternTileUnitPixels = 100.0;
 const double mpTherionUISWaterCellUnits = 0.4;
 const double mpTherionUISWaterPenUnits = 0.025;
+const double mpTherionUISMoonmilkCellXUnits = 1.0;
+const double mpTherionUISMoonmilkCellYUnits = 0.6;
+const double mpTherionUISMoonmilkStaggerXUnits = 0.5;
+const double mpTherionUISMoonmilkStaggerYUnits = 0.3;
+const double mpTherionUISMoonmilkControlLengthFactor = 2 / 3;
+const List<double> mpTherionUISMoonmilkScallopXUnits = <double>[
+  -0.5,
+  -0.1666,
+  0.1666,
+  0.5,
+];
 const List<(double, double, double)> mpTherionUISDebrisTicks =
     <(double, double, double)>[
       (-40.0, 0.2, 0.3),
