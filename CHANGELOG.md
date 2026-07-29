@@ -37,6 +37,7 @@
 * Infrastructure maintenance:
   * `flutter upgrade` and `flutter pub upgrade --major-versions`
   * Removed redundant per-setting MobX trigger subscriptions from selected, non-selected, and inactive-scrap canvas element layers; settings changes now rely on the centralized all-open-files redraw flow.
+  * Extracted the duplicated Therion UIS chimney and ceiling-step rendering into a shared small-T line decorator, leaving thin semantic wrappers and preserving identical golden output.
   * Updated the release version automation to synchronize the Flutter SDK Git tag used by the active Flatpak manifest, preserve quoted CI version values, and ignore unrelated Flatpak dependency tags; aligned the Flatpak build with Flutter 3.44.6 and added regression coverage.
   * Added a phased implementation roadmap for Therion-faithful symbol rendering, covering UIS point, line, area, and text symbols; shared rendering infrastructure; additional symbol sets; settings integration; and visual validation.
   * `flutter upgrade` and `flutter pub upgrade --major-versions`.
