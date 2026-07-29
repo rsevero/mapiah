@@ -2,7 +2,7 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.4.3 - not yet released
+## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:
   * Added the Therion UIS visualization method, with scalable vector point symbols, text labels, line decorations, and area patterns that can be compared directly with Mapiah's placeholder representation.
     * Reviewed and corrected to match Therion: gradient, survey (cave), pit/pitch, floor-step, chimney, ceiling-step, contour, and moonmilk lines; and water, debris, flowstone, moonmilk, and sand areas.

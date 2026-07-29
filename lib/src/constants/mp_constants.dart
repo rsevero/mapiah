@@ -10,8 +10,8 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = 'Back to the Future';
-const String mpReleaseURL = 'https://en.wikipedia.org/wiki/Back_to_the_Future';
+const String mpReleaseName = 'Therion Symbology';
+const String mpReleaseURL = 'https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
