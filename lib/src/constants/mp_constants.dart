@@ -247,6 +247,15 @@ const double mpTherionPenX = 0.12;
 const double mpTherionAreaPatternTileUnitPixels = 100.0;
 const double mpTherionUISWaterCellUnits = 0.4;
 const double mpTherionUISWaterPenUnits = 0.025;
+const List<(double, double, double)> mpTherionUISDebrisTicks =
+    <(double, double, double)>[
+      (-40.0, 0.2, 0.3),
+      (45.0, 0.45, 1.15),
+      (70.0, 0.9, 1.5),
+      (-70.0, 1.25, 0.25),
+      (20.0, 1.5, 0.8),
+      (-10.0, 1.75, 1.65),
+    ];
 const int mpMaximumRandomSeed = 0x3fffffff;
 
 const Set<String> mpImageTransformHandleTypesWithoutXScaling = <String>{

@@ -39,6 +39,10 @@ void main() {
       expect(tile.height, expectedTileSize);
     });
 
+    test('debris pattern uses the increased tick count', () {
+      expect(mpTherionUISDebrisTicks, hasLength(6));
+    });
+
     testWidgets('renders every Phase 1 point symbol', (
       WidgetTester tester,
     ) async {

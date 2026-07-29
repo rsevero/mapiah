@@ -43,11 +43,8 @@ abstract final class MPTherionAreaPatternTilesUIS {
       ..style = ui.PaintingStyle.stroke
       ..strokeWidth = 0.05 * mpTherionAreaPatternTileUnitPixels;
 
-    for (final (double angleDeg, double dx, double dy) tick in const [
-      (-40.0, 0.2, 0.3),
-      (70.0, 0.9, 1.5),
-      (20.0, 1.5, 0.8),
-    ]) {
+    for (final (double angleDeg, double dx, double dy) tick
+        in mpTherionUISDebrisTicks) {
       canvas.save();
       canvas.translate(
         tick.$2 * mpTherionAreaPatternTileUnitPixels,
