@@ -1334,7 +1334,9 @@ abstract class MPVisualControllerBase with Store {
         case THAreaType.moonmilk:
           tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(color);
         case THAreaType.sand:
-          tile = MPTherionAreaPatternTilesUIS.buildSandTile(color);
+          tile = MPTherionAreaPatternTilesUIS.buildSandTile(
+            mpTherionUISSandDotColor,
+          );
         default:
           return null;
       }

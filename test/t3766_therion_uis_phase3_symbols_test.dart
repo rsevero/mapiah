@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -342,6 +343,10 @@ void main() {
   });
 
   group('Therion UIS Phase 3 sand area pattern', () {
+    test('uses the increased sand dot density', () {
+      expect(mpTherionUISSandCellUnits, 0.7);
+    });
+
     testWidgets('renders the sand area pattern tile', (
       WidgetTester tester,
     ) async {
@@ -349,7 +354,7 @@ void main() {
         MPSymbolGoldenEntry(
           draw: (Canvas canvas, Offset center) {
             final ui.Image tile = MPTherionAreaPatternTilesUIS.buildSandTile(
-              const Color(0xFF7F5500),
+              mpTherionUISSandDotColor,
             );
             final Paint paint = Paint()
               ..shader = ImageShader(
