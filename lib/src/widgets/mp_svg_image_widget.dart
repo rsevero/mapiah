@@ -2,11 +2,11 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart' as svg;
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/mp_svg_image_painter.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPSVGImageWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;

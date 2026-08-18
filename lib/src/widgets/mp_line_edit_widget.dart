@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
@@ -12,20 +11,21 @@ import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dar
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/painters/th_control_point_painter.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_lsize_orientation_painter.dart';
 import 'package:mapiah/src/painters/types/mp_lsize_orientation_info.dart';
 import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 import 'package:mapiah/src/widgets/mixins/mp_line_painting_mixin.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPLineEditWidget extends StatelessWidget with MPLinePaintingMixin {
   final TH2FileEditController th2FileEditController;

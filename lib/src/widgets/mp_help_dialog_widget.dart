@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey, rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
@@ -10,6 +9,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum MPHelpPageSource { asset, githubRaw }
 

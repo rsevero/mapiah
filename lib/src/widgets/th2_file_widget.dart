@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
-import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/widgets/mp_add_freehand_line_widget.dart';
 import 'package:mapiah/src/widgets/mp_add_line_widget.dart';
-import 'package:mapiah/src/widgets/mp_line_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_images_widget.dart';
+import 'package:mapiah/src/widgets/mp_line_edit_widget.dart';
 import 'package:mapiah/src/widgets/mp_listener_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_elements_clicked_highlight_widget.dart';
 import 'package:mapiah/src/widgets/mp_multiple_end_control_points_clicked_highlight_widget.dart';
@@ -23,6 +22,7 @@ import 'package:mapiah/src/widgets/mp_selected_elements_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_handles_widget.dart';
 import 'package:mapiah/src/widgets/mp_selection_window_widget.dart';
 import 'package:mapiah/src/widgets/mp_station_hover_tooltip_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TH2FileWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;
@@ -210,9 +210,7 @@ class TH2FileWidget extends StatelessWidget {
                       },
                     ),
                     MPStationHoverTooltipWidget(
-                      key: ValueKey(
-                        "MPStationHoverTooltipWidget|$thFileMPID",
-                      ),
+                      key: ValueKey("MPStationHoverTooltipWidget|$thFileMPID"),
                       th2FileEditController: th2FileEditController,
                     ),
                     if (mpDebugMousePosition)

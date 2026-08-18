@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_snap_grid_cell.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_grid.dart';
@@ -13,6 +12,7 @@ import 'package:mapiah/src/elements/xvi/xvi_shot.dart';
 import 'package:mapiah/src/elements/xvi/xvi_sketchline.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_snap_controller.g.dart';

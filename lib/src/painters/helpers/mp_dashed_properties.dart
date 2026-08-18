@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:ui' as ui;
 import 'dart:math' as math;
-
-import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
+import 'package:material_ui/material_ui.dart';
 
 class MPDashedPathProperties {
   final List<double> dashLengths;

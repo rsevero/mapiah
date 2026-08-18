@@ -2,9 +2,9 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPRasterImagePainter extends CustomPainter {
   final ui.Image uiImage;

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
@@ -9,6 +8,7 @@ import 'package:mapiah/src/painters/mp_element_transform_handles_painter.dart';
 import 'package:mapiah/src/painters/mp_selection_handles_painter.dart';
 import 'package:mapiah/src/painters/types/mp_selection_handle_type.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPSelectionHandlesWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;

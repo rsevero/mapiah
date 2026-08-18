@@ -3,7 +3,6 @@
 import 'dart:collection';
 import 'dart:ui';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
@@ -18,6 +17,7 @@ import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THLinePainter extends CustomPainter {
   final THLinePainterLineInfo lineInfo;
@@ -218,11 +218,8 @@ class THLinePainter extends CustomPainter {
       }
     }
 
-    final Path basePath = lineDecorator?.buildBasePath(
-          path: path,
-          vertices: vertices,
-        ) ??
-        path;
+    final Path basePath =
+        lineDecorator?.buildBasePath(path: path, vertices: vertices) ?? path;
 
     if (lineDecorator == null) {
       if (linePaint.fillPaint != null) {

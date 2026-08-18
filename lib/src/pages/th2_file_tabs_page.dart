@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
@@ -20,6 +19,7 @@ import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart' hide Listener;
 
 enum _TH2FileTabsAction {
@@ -550,18 +550,14 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       final Future<TH2FileEditControllerCreateResult> loadFuture;
 
       if (filename.startsWith(mpNewFilePrefix) || controller.isFileLoaded) {
-        loadFuture =
-            Future<TH2FileEditControllerCreateResult>.value(
-              TH2FileEditControllerCreateResult(true, <String>[]),
-            );
+        loadFuture = Future<TH2FileEditControllerCreateResult>.value(
+          TH2FileEditControllerCreateResult(true, <String>[]),
+        );
       } else {
         loadFuture = controller.load();
       }
 
-      _fileLoads[filename] = (
-        controller: controller,
-        future: loadFuture,
-      );
+      _fileLoads[filename] = (controller: controller, future: loadFuture);
     }
 
     final Future<TH2FileEditControllerCreateResult> future =
@@ -571,10 +567,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       key: ValueKey<String>(filename),
       th2FileEditController: controller,
       loadFuture: future,
-      onLoadFailed: () => _discardFailedFileLoad(
-        filename: filename,
-        controller: controller,
-      ),
+      onLoadFailed: () =>
+          _discardFailedFileLoad(filename: filename, controller: controller),
     );
   }
 
@@ -585,8 +579,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   }) {
     final _TH2FileLoad? failedLoad = _fileLoads[filename];
 
-    if ((failedLoad != null) &&
-        identical(failedLoad.controller, controller)) {
+    if ((failedLoad != null) && identical(failedLoad.controller, controller)) {
       _fileLoads.remove(filename);
     }
 

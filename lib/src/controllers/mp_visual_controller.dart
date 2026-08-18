@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:ui' as ui;
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_label_text_aux.dart';
@@ -17,8 +16,8 @@ import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -35,11 +34,12 @@ import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart'
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
 
 part 'mp_visual_controller.g.dart';
@@ -1454,8 +1454,8 @@ abstract class MPVisualControllerBase with Store {
 
     if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
-      final String pointSubtype = MPCommandOptionAux.getSubtype(point) ??
-          mpNoSubtypeID;
+      final String pointSubtype =
+          MPCommandOptionAux.getSubtype(point) ?? mpNoSubtypeID;
       final MPTherionPointSymbol? therionSymbol = getTherionUISPointSymbol(
         pointType: pointType,
         subtype: pointSubtype,

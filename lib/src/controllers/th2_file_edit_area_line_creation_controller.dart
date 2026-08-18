@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
@@ -15,12 +14,13 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_new_line_creation_method.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_area_line_creation_controller.g.dart';
@@ -821,8 +821,8 @@ abstract class TH2FileEditAreaLineCreationControllerBase with Store {
         );
         lineChildren.add(THEndline(parentMPID: newLineMPID));
 
-        final MPAddLineCommand addLineCommand = MPCommandFactory
-            .addLineFromLineChildren(
+        final MPAddLineCommand addLineCommand =
+            MPCommandFactory.addLineFromLineChildren(
               line: _newLine!,
               typeSubtype: typeSubtype,
               lineChildren: lineChildren,

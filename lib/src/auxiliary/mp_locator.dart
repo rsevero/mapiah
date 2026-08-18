@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
-import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/mp_telemetry_controller.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPLocator {
   static final MPLocator _instance = MPLocator._internal();

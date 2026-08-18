@@ -2,10 +2,10 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:ui' as ui;
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/mp_raster_image_painter.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPRasterImageWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;

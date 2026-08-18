@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THLinePaint {
   final Paint? primaryPaint;

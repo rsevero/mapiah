@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THLineSegmentPainter extends CustomPainter {
   final THLineSegment previousLineSegment;

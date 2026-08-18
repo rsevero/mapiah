@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/widgets/th2_file_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_action_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_bottom_status_bar_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_last_used_pla_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_state_action_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs_widget.dart';
+import 'package:mapiah/src/widgets/th2_file_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TH2FileEditBodyWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;

@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_flatpak_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_linux_therion_runner.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
@@ -13,7 +12,7 @@ import 'package:mapiah/src/auxiliary/mp_therion_cache.dart';
 import 'package:mapiah/src/auxiliary/mp_windows_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
-
+import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart' as p;
 
 typedef MPTherionRunnerErrorCallback =

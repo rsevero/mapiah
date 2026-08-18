@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPURLTextWidget extends StatelessWidget {
   final String url;

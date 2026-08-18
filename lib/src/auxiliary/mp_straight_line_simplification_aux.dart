@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPStraightLineSimplificationAux {
   /// Douglas–Peucker line simplification (iterative).

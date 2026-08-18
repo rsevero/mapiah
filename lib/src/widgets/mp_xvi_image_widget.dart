@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/mp_visual_controller.dart';
@@ -17,6 +16,7 @@ import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_point_painter.dart';
 import 'package:mapiah/src/painters/xvi_line_painter.dart';
 import 'package:mapiah/src/painters/xvi_sketchline_painter.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPXVIImageWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;

@@ -7,10 +7,9 @@
 // differences (notably root finding and arclength inversion).
 
 import 'dart:math' as math;
-
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:material_ui/material_ui.dart';
 
 // -----------------------------
 // Math/Geometry primitives

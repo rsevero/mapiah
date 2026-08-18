@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/widgets/mp_tile_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget representing a single option in a list of command options.
 class MPOptionWidget extends StatelessWidget {

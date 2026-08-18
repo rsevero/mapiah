@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
-import 'package:mapiah/src/painters/mp_scrap_scale_painter.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/painters/mp_scrap_scale_painter.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPScrapScaleWidget extends StatelessWidget {
   final TH2FileEditController th2FileEditController;

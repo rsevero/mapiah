@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_freehand_line_aux.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -10,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
 
 part 'th2_file_edit_freehand_line_creation_controller.g.dart';
@@ -141,8 +141,8 @@ abstract class TH2FileEditFreehandLineCreationControllerBase with Store {
         ...straightLineSegments,
         THEndline(parentMPID: newLine.mpID),
       ];
-      final MPAddLineCommand addLineCommand = MPCommandFactory
-          .addLineFromLineChildren(
+      final MPAddLineCommand addLineCommand =
+          MPCommandFactory.addLineFromLineChildren(
             line: newLine,
             typeSubtype: typeSubtype,
             lineChildren: lineChildren,
@@ -206,8 +206,7 @@ abstract class TH2FileEditFreehandLineCreationControllerBase with Store {
   }
 
   Offset _snapedCanvasPositionFromScreenPosition(Offset screenPosition) {
-    final THPositionPart? snapedPosition = _th2FileEditController
-        .snapController
+    final THPositionPart? snapedPosition = _th2FileEditController.snapController
         .getCanvasSnapedPositionFromScreenOffset(screenPosition);
 
     return snapedPosition?.coordinates ??

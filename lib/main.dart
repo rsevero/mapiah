@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
@@ -12,6 +11,7 @@ import 'package:mapiah/src/controllers/mp_window_placement_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mapiah_home.dart';
+import 'package:material_ui/material_ui.dart';
 
 // /// For mobx debugging with spy().
 // import 'package:mobx/mobx.dart';
@@ -232,9 +232,17 @@ class MapiahApp extends StatelessWidget {
           //   colorScheme: MaterialTheme.darkScheme().toColorScheme(),
           // ),
           onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
           locale: mpLocator.mpSettingsController.locale,
           supportedLocales: AppLocalizations.supportedLocales,
+          builder: (BuildContext context, Widget? child) {
+            // markdown_widget still imports package:flutter/material.dart.
+            // ignore: deprecated_member_use
+            return MaterialUiCompatibilityBridge(child: child!);
+          },
           home: MapiahHome(
             mainFilePath: mainFilePath,
             th2FilePaths: th2FilePaths,

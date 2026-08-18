@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/types/th_label_size.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Draws Phase 2.5 text-mode point labels: plain text with a white
 /// background box, and the passage-height decorated containers
@@ -65,7 +65,8 @@ abstract final class MPLabelPainter {
   static double _resolveFontSize(THLabelSize size, MPSymbolUnit symbolUnit) {
     final double fontSize = symbolUnit.canvasValue * size.multiplier;
     final double minFontSize =
-        _minFontSizePixels / (symbolUnit.canvasScale * symbolUnit.devicePixelRatio);
+        _minFontSizePixels /
+        (symbolUnit.canvasScale * symbolUnit.devicePixelRatio);
 
     return fontSize < minFontSize ? minFontSize : fontSize;
   }
@@ -108,10 +109,7 @@ abstract final class MPLabelPainter {
     );
     final Rect box = _containerBox(labelPaint.align, block, fontSize);
 
-    canvas.drawPath(
-      _topRoundedContainer(box),
-      labelPaint.backgroundFill,
-    );
+    canvas.drawPath(_topRoundedContainer(box), labelPaint.backgroundFill);
     block.paintCentered(canvas, box);
   }
 
@@ -127,10 +125,7 @@ abstract final class MPLabelPainter {
     );
     final Rect box = _containerBox(labelPaint.align, block, fontSize);
 
-    canvas.drawPath(
-      _bottomRoundedContainer(box),
-      labelPaint.backgroundFill,
-    );
+    canvas.drawPath(_bottomRoundedContainer(box), labelPaint.backgroundFill);
     block.paintCentered(canvas, box);
   }
 
@@ -151,12 +146,15 @@ abstract final class MPLabelPainter {
     );
     final double marginX = fontSize * _horizontalMarginFactor;
     final double marginY = fontSize * _verticalMarginFactor;
-    final double halfHeight = (plusBlock.height > minusBlock.height
+    final double halfHeight =
+        (plusBlock.height > minusBlock.height
             ? plusBlock.height
             : minusBlock.height) +
         marginY;
     final double width =
-        (plusBlock.width > minusBlock.width ? plusBlock.width : minusBlock.width) +
+        (plusBlock.width > minusBlock.width
+            ? plusBlock.width
+            : minusBlock.width) +
         (marginX * 2);
     final Size boxSize = Size(width, halfHeight * 2);
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
@@ -169,7 +167,10 @@ abstract final class MPLabelPainter {
       labelPaint.divider,
     );
 
-    plusBlock.paintCentered(canvas, Rect.fromLTRB(box.left, box.top, box.right, box.center.dy));
+    plusBlock.paintCentered(
+      canvas,
+      Rect.fromLTRB(box.left, box.top, box.right, box.center.dy),
+    );
     minusBlock.paintCentered(
       canvas,
       Rect.fromLTRB(box.left, box.center.dy, box.right, box.bottom),
@@ -207,7 +208,10 @@ abstract final class MPLabelPainter {
     final double marginX = fontSize * _horizontalMarginFactor;
     final double marginY = fontSize * _verticalMarginFactor;
     final double radius = (block.width + (marginX * 2)) / 2;
-    final Size boxSize = Size(radius * 2, block.height + (marginY * 2) + radius);
+    final Size boxSize = Size(
+      radius * 2,
+      block.height + (marginY * 2) + radius,
+    );
     final Offset boxOrigin = _boxOrigin(align, boxSize);
 
     return boxOrigin & boxSize;
@@ -329,12 +333,18 @@ class _TextBlock {
         : painters.first.height * MPLabelPainter._lineSpacingFactor;
 
     for (final TextPainter painter in painters) {
-      painter.paint(canvas, Offset(topLeft.dx + ((width - painter.width) / 2), dy));
+      painter.paint(
+        canvas,
+        Offset(topLeft.dx + ((width - painter.width) / 2), dy),
+      );
       dy += painter.height + lineSpacing;
     }
   }
 
   void paintCentered(Canvas canvas, Rect box) {
-    paint(canvas, Offset(box.center.dx - (width / 2), box.center.dy - (height / 2)));
+    paint(
+      canvas,
+      Offset(box.center.dx - (width / 2), box.center.dy - (height / 2)),
+    );
   }
 }

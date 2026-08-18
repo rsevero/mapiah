@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
@@ -9,6 +8,7 @@ import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs/empty_select
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs/image_operation_panel.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs/non_empty_selection_panel.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs/single_line_panel.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TH2FileEditStateContextFABsWidget extends StatelessWidget {
   final String heroPrefix;

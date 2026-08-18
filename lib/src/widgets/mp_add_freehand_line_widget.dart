@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
@@ -10,6 +9,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_freehand_line_creation_controller.dart';
 import 'package:mapiah/src/painters/th_elements_painter.dart';
 import 'package:mapiah/src/painters/th_end_point_painter.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Live preview of an in-progress freehand line stroke: the raw accepted
 /// samples as one continuous polyline, plus the snapped start point.
@@ -20,9 +20,11 @@ class MPAddFreehandLineWidget extends StatelessWidget {
   final TH2FileEditFreehandLineCreationController
   freehandLineCreationController;
 
-  MPAddFreehandLineWidget({required this.th2FileEditController, required super.key})
-    : freehandLineCreationController =
-          th2FileEditController.freehandLineCreationController;
+  MPAddFreehandLineWidget({
+    required this.th2FileEditController,
+    required super.key,
+  }) : freehandLineCreationController =
+           th2FileEditController.freehandLineCreationController;
 
   @override
   Widget build(BuildContext context) {

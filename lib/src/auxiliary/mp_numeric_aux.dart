@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_bezier_curve.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_segment.dart';
@@ -11,9 +10,10 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_string_exception.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPNumericAux {
   static RegExp endingZeroes = RegExp(r'0*$');

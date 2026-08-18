@@ -6,6 +6,7 @@
 * New features:
 * Fixed bugs:
 * Infrastructure maintenance:
+  * Replaced `package:flutter/material.dart` with `package:material_ui/material_ui.dart` throughout the app (kept in `main.dart` only, where `markdown_widget` still requires it), bridged via `MaterialUiCompatibilityBridge` in the app's `builder`. Bumped the Dart SDK constraint to `^3.12.0`, added `prefer_initializing_formals: false` and build/platform directory exclusions to `analysis_options.yaml`, and ran `flutter pub upgrade`.
 
 ## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:

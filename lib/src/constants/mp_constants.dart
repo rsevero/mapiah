@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/elements/parts/th_angle_unit_part.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:material_ui/material_ui.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
 const String mpReleaseName = 'Therion Symbology';
-const String mpReleaseURL = 'https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm';
+const String mpReleaseURL =
+    'https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';

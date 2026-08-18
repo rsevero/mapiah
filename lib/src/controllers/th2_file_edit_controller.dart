@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
@@ -36,8 +35,8 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
-import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
@@ -46,6 +45,7 @@ import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/mp_interactive_line_simplification_dialog_widget.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -695,8 +695,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   /// Returns the controller's single shared file-load operation.
   Future<TH2FileEditControllerCreateResult> load() {
-    final Future<TH2FileEditControllerCreateResult>? existingLoad =
-        _loadFuture;
+    final Future<TH2FileEditControllerCreateResult>? existingLoad = _loadFuture;
 
     if (existingLoad != null) {
       return existingLoad;

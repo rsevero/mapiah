@@ -4,7 +4,6 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -18,6 +17,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// TH2File represents the complete contents of a .th or .th2 file.
 ///

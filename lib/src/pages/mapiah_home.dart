@@ -2,9 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
@@ -15,9 +14,10 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
-import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
+import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 enum _MapiahHomeAction {

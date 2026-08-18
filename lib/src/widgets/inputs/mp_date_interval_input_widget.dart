@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPDateIntervalInputWidget extends StatefulWidget {
   final String? initialValue;

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/painters/mp_compass_painter.dart';
 import 'package:mapiah/src/painters/types/mp_lsize_orientation_info.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THLSizeOrientationPainter extends CustomPainter {
   static const double _compassDiameterFactor = 8.0;

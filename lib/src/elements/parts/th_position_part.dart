@@ -3,12 +3,12 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/parts/th_part.dart';
 import 'package:mapiah/src/exceptions/th_convert_from_list_exception.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THPositionPart extends THPart {
   late final Offset coordinates;

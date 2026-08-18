@@ -5,7 +5,7 @@
 // This file provides a mechanism to create and retrieve TK Color objects on
 // demand, with caching for reuse. It also exposes a map of these colors.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TKColorMap {
   // Private map to store hexadecimal values for each color.

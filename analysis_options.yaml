@@ -17,7 +17,10 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
-    - always_use_package_imports
+    always_use_package_imports: true
+    # Public constructors keep descriptive parameter names rather than
+    # exposing private backing-field names solely to satisfy this lint.
+    prefer_initializing_formals: false
 
 # analyzer:
 #   exclude:
@@ -26,6 +29,14 @@ linter:
 analyzer:
   errors:
     invalid_annotation_target: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints

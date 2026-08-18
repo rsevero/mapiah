@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
+import 'package:material_ui/material_ui.dart';
 
 class THPointPaint {
   final double radius;

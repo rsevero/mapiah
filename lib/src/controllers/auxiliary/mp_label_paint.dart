@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/types/th_label_size.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Carries everything [MPLabelPainter.drawTherionLabel] needs to render a
 /// text-mode point's label: the resolved text/container [data], where to

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPTelemetryConsentDialog extends StatefulWidget {
   const MPTelemetryConsentDialog({super.key});

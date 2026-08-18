@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MPTextFieldInputWidget extends StatelessWidget {
   final TextEditingController controller;

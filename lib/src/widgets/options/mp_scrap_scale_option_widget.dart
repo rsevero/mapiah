@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
@@ -12,6 +11,7 @@ import 'package:mapiah/src/elements/parts/th_length_unit_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_option_state_type.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Kernel (re-usable) scrap scale option widget (no overlay window chrome).
 class MPScrapScaleOptionWidget extends StatefulWidget {
