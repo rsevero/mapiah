@@ -84,14 +84,15 @@ class MPDialogAux {
     ).toList();
 
     try {
-      final FilePickerResult? result;
+      final PlatformFile? picked;
 
       try {
-        result = await FilePicker.pickFiles(
+        picked = await FilePicker.pickFile(
           dialogTitle: mpLocator.appLocalizations.th2FilePickSelectImageFile,
           type: FileType.custom,
           allowedExtensions: allowedExtensions,
-          lockParentWindow: true,
+          linuxOptions: const LinuxOptions(lockParentWindow: true),
+          windowsOptions: const WindowsOptions(lockParentWindow: true),
           initialDirectory:
               mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
               ? (kDebugMode ? thDebugPath : './')
@@ -107,13 +108,12 @@ class MPDialogAux {
         return PickImageFileReturn(type: PickImageFileReturnType.empty);
       }
 
-      if (result == null) {
+      if (picked == null) {
         mpLocator.mpLog.i('No file selected (image/XVI).');
 
         return PickImageFileReturn(type: PickImageFileReturnType.empty);
       }
 
-      final PlatformFile picked = result.files.single;
       final String filename = picked.path ?? picked.name;
       final String lowerName = filename.toLowerCase();
 
@@ -1111,21 +1111,22 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.th2] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.pickFiles(
+      final List<PlatformFile> pickedFiles = await FilePicker.pickFiles(
         dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
         type: FileType.custom,
         allowedExtensions: ['th2', 'TH2'],
-        lockParentWindow: true,
+        linuxOptions: const LinuxOptions(lockParentWindow: true),
+        windowsOptions: const WindowsOptions(lockParentWindow: true),
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
             ? (kDebugMode ? thDebugPath : './')
             : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
-      if ((result != null) && result.files.isNotEmpty) {
+      if (pickedFiles.isNotEmpty) {
         final List<String> pickedFilePaths = <String>[];
 
-        for (final file in result.files) {
+        for (final file in pickedFiles) {
           final String? filePath = file.path;
 
           if (filePath != null) {
@@ -1218,19 +1219,20 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.thconfig] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.pickFiles(
+      final PlatformFile? picked = await FilePicker.pickFile(
         dialogTitle:
             mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
         type: FileType.any,
-        lockParentWindow: true,
+        linuxOptions: const LinuxOptions(lockParentWindow: true),
+        windowsOptions: const WindowsOptions(lockParentWindow: true),
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
             ? (kDebugMode ? thDebugPath : './')
             : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
-      if (result != null) {
-        final String? pickedFilePath = result.files.single.path;
+      if (picked != null) {
+        final String? pickedFilePath = picked.path;
 
         if (pickedFilePath == null) {
           return false;
@@ -1314,23 +1316,24 @@ class MPDialogAux {
     _isFilePickerOpen[MPFilePickerType.executable] = true;
 
     try {
-      final FilePickerResult? result = await FilePicker.pickFiles(
+      final PlatformFile? picked = await FilePicker.pickFile(
         dialogTitle: dialogTitle,
         type: FileType.any,
-        lockParentWindow: true,
+        linuxOptions: const LinuxOptions(lockParentWindow: true),
+        windowsOptions: const WindowsOptions(lockParentWindow: true),
         initialDirectory:
             mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
             ? (kDebugMode ? thDebugPath : './')
             : mpLocator.mpGeneralController.lastAccessedDirectory,
       );
 
-      if (result == null) {
+      if (picked == null) {
         mpLocator.mpLog.i('No executable selected.');
 
         return null;
       }
 
-      final String? pickedFilePath = result.files.single.path;
+      final String? pickedFilePath = picked.path;
 
       if (pickedFilePath == null) {
         return null;

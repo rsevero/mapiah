@@ -1519,7 +1519,7 @@ abstract class TH2FileEditControllerBase with Store {
         ? 'untitled.th2'
         : p.basename(filename);
 
-    String? filePath = await FilePicker.saveFile(
+    final Uri? savedFileUri = await FilePicker.saveFile(
       dialogTitle: mpLocator.appLocalizations.th2FileEditPageSaveAsDialogTitle,
       fileName: initialFileName,
       initialDirectory: initialDirectory,
@@ -1527,6 +1527,7 @@ abstract class TH2FileEditControllerBase with Store {
       allowedExtensions: <String>['th2'],
       bytes: Uint8List(0),
     );
+    String? filePath = savedFileUri?.toFilePath();
 
     if (filePath != null) {
       if (!filePath.toLowerCase().endsWith('.th2')) {

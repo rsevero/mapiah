@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import file_picker
+import file_picker_darwin
 import open_file_mac
 import package_info_plus
 import screen_retriever_macos
