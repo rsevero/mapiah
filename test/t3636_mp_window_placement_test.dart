@@ -316,27 +316,27 @@ void main() {
     expect(platformWindow.calls, <String>['isMaximized', 'closeApplication']);
   });
 
-  test('desktop shutdown uses Flutter application exit', () async {
+  test('desktop shutdown force closes the native window', () async {
     MethodCall? receivedCall;
+    const MethodChannel windowManagerChannel = MethodChannel('window_manager');
     final TestDefaultBinaryMessenger messenger =
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
-    messenger.setMockMethodCallHandler(
-      SystemChannels.platform,
-      (MethodCall call) async {
-        receivedCall = call;
+    messenger.setMockMethodCallHandler(windowManagerChannel, (
+      MethodCall call,
+    ) async {
+      receivedCall = call;
 
-        return null;
-      },
-    );
+      return null;
+    });
     addTearDown(() {
-      messenger.setMockMethodCallHandler(SystemChannels.platform, null);
+      messenger.setMockMethodCallHandler(windowManagerChannel, null);
     });
 
     final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform();
 
     await platformWindow.closeApplication();
 
-    expect(receivedCall?.method, 'SystemNavigator.pop');
+    expect(receivedCall?.method, 'destroy');
   });
 }

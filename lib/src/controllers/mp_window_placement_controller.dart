@@ -91,7 +91,7 @@ class MPWindowManagerPlatform with WindowListener implements MPPlatformWindow {
       windowManager.setPreventClose(preventClose);
 
   @override
-  Future<void> closeApplication() => SystemNavigator.pop();
+  Future<void> closeApplication() => windowManager.destroy();
 
   @override
   void setCloseHandler(Future<void> Function() closeHandler) {

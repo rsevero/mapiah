@@ -5,6 +5,7 @@
 ## 0.4.4 - not yet released
 * New features:
 * Fixed bugs:
+  * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer silently does nothing; the desktop close handler now force-closes the native window with `windowManager.destroy()` after persisting window placement, instead of the mobile-oriented `SystemNavigator.pop()`, which doesn't reliably terminate a desktop window once native close interception is enabled. [reported by CaverBruce]
 * Infrastructure maintenance:
   * Replaced `package:flutter/material.dart` with `package:material_ui/material_ui.dart` throughout the app (kept in `main.dart` only, where `markdown_widget` still requires it), bridged via `MaterialUiCompatibilityBridge` in the app's `builder`. Bumped the Dart SDK constraint to `^3.12.0`, added `prefer_initializing_formals: false` and build/platform directory exclusions to `analysis_options.yaml`, and ran `flutter pub upgrade`.
   * flutter upgrade to 3.47.0
