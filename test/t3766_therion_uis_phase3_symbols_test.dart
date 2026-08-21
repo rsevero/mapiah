@@ -27,6 +27,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_rock_edge_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
@@ -444,6 +445,21 @@ void main() {
       );
     });
 
+    test('rock edge decorator draws a continuous PenD line without crashing', () {
+      const MPRockEdgeLineDecorator decorator = MPRockEdgeLineDecorator();
+      final ui.PictureRecorder recorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(recorder);
+
+      decorator.decorate(
+        canvas: canvas,
+        path: diagonalTestPath(),
+        linePaint: THLinePaint(primaryPaint: Paint()),
+        symbolUnit: symbolUnit,
+        isReversed: false,
+      );
+      recorder.endRecording().dispose();
+    });
+
     test('flowstone decorator draws curls without crashing', () {
       const MPFlowstoneLineDecorator decorator = MPFlowstoneLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
@@ -654,6 +670,12 @@ void main() {
           th2Controller.visualController.getLineDecorator(THLineType.pitch),
           isNull,
         );
+        expect(
+          th2Controller.visualController.getLineDecorator(
+            THLineType.rockEdge,
+          ),
+          isNull,
+        );
 
         mpLocator.mpSettingsController.setEnum(
           MPSettingID.TH2Edit_VisualizationMethod,
@@ -695,6 +717,12 @@ void main() {
             THLineType.contour,
           ),
           isA<MPContourLineDecorator>(),
+        );
+        expect(
+          th2Controller.visualController.getLineDecorator(
+            THLineType.rockEdge,
+          ),
+          isA<MPRockEdgeLineDecorator>(),
         );
         expect(
           th2Controller.visualController.getLineDecorator(

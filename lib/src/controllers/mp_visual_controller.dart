@@ -33,6 +33,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_rock_edge_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
@@ -1121,6 +1122,10 @@ abstract class MPVisualControllerBase with Store {
 
     if (lineType == THLineType.contour) {
       return const MPContourLineDecorator();
+    }
+
+    if (lineType == THLineType.rockEdge) {
+      return const MPRockEdgeLineDecorator();
     }
 
     if (lineType == THLineType.flowstone) {
