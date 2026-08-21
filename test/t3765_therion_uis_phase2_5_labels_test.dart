@@ -232,6 +232,39 @@ void main() {
         same(mpTherionLabelAnchorPaint),
       );
     });
+
+    test(
+      'passage-height gets the small label size, unlike plain labels',
+      () async {
+        final TH2FileEditController th2Controller = await loadController(
+          '2026-01-05-002-passage-height-point_with_positive_value.th2',
+        );
+        final THPoint passageHeightPoint = th2Controller.th2File
+            .getPoints()
+            .single;
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.therionUIS,
+        );
+
+        final THPointPaint passageHeightPaint = th2Controller.visualController
+            .getDefaultPointPaint(passageHeightPoint);
+
+        expect(passageHeightPaint.labelPaint, isNotNull);
+        expect(passageHeightPaint.labelPaint!.size, THLabelSize.tiny);
+
+        final TH2FileEditController plainController = await loadController(
+          'th_file_parser-00381-point_of_type_date_with_date_value_and_other_options.th2',
+        );
+        final THPoint datePoint = plainController.th2File.getPoints().single;
+        final THPointPaint datePaint = plainController.visualController
+            .getDefaultPointPaint(datePoint);
+
+        expect(datePaint.labelPaint, isNotNull);
+        expect(datePaint.labelPaint!.size, THLabelSize.normal);
+      },
+    );
   });
 
   group('Therion Phase 2.5 label rendering', () {

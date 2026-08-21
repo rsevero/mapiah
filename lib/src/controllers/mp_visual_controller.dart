@@ -10,6 +10,7 @@ import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/constants/tk_color_map.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
+import 'package:mapiah/src/painters/types/th_label_size.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_scrap_paint.dart';
@@ -1458,11 +1459,19 @@ abstract class MPVisualControllerBase with Store {
           final THOptionChoicesAlignType align =
               MPCommandOptionAux.getAlign(point) ??
               THOptionChoicesAlignType.center;
+          final THLabelSize size = switch (labelData.mode) {
+            MPLabelMode.passageHeightPos ||
+            MPLabelMode.passageHeightNeg ||
+            MPLabelMode.passageHeightPosNeg ||
+            MPLabelMode.passageHeightUnsigned => THLabelSize.tiny,
+            MPLabelMode.plain => THLabelSize.normal,
+          };
 
           pointPaint = pointPaint.copyWith(
             labelPaint: MPLabelPaint(
               data: labelData,
               align: align,
+              size: size,
               anchorRadius:
                   _th2FileEditController.lineThicknessOnCanvas *
                   mpLinePointRadiusToLineThicknessFactor *

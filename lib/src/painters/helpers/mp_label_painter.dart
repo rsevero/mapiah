@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/auxiliary/mp_label_paint.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -9,7 +10,10 @@ import 'package:material_ui/material_ui.dart';
 
 /// Draws Phase 2.5 text-mode point labels: plain text with a white
 /// background box, and the passage-height decorated containers
-/// (`process_uplabel`/`process_downlabel`/`process_updownlabel` in Therion).
+/// (`process_uplabel`/`process_downlabel`/`process_updownlabel`/
+/// `process_circledlabel` in Therion). Therion strokes these containers with
+/// its thinnest pen (`PenD`) and never fills them, so they're drawn as
+/// outlines here too, unlike the filled plain-text background box.
 abstract final class MPLabelPainter {
   /// Readability floor from the roadmap: font size never shrinks below this
   /// many logical screen pixels, unlike geometric symbols which keep
@@ -50,13 +54,13 @@ abstract final class MPLabelPainter {
       case MPLabelMode.plain:
         _drawPlain(canvas, labelPaint, fontSize);
       case MPLabelMode.passageHeightPos:
-        _drawPassageHeightPos(canvas, labelPaint, fontSize);
+        _drawPassageHeightPos(canvas, labelPaint, fontSize, symbolUnit);
       case MPLabelMode.passageHeightNeg:
-        _drawPassageHeightNeg(canvas, labelPaint, fontSize);
+        _drawPassageHeightNeg(canvas, labelPaint, fontSize, symbolUnit);
       case MPLabelMode.passageHeightPosNeg:
-        _drawPassageHeightPosNeg(canvas, labelPaint, fontSize);
+        _drawPassageHeightPosNeg(canvas, labelPaint, fontSize, symbolUnit);
       case MPLabelMode.passageHeightUnsigned:
-        _drawPassageHeightUnsigned(canvas, labelPaint, fontSize);
+        _drawPassageHeightUnsigned(canvas, labelPaint, fontSize, symbolUnit);
     }
 
     canvas.restore();
@@ -101,6 +105,7 @@ abstract final class MPLabelPainter {
     Canvas canvas,
     MPLabelPaint labelPaint,
     double fontSize,
+    MPSymbolUnit symbolUnit,
   ) {
     final _TextBlock block = _TextBlock.layOut(
       lines: [labelPaint.data.plusText ?? ''],
@@ -109,7 +114,10 @@ abstract final class MPLabelPainter {
     );
     final Rect box = _containerBox(labelPaint.align, block, fontSize);
 
-    canvas.drawPath(_topRoundedContainer(box), labelPaint.backgroundFill);
+    canvas.drawPath(
+      _topRoundedContainer(box),
+      _containerStroke(labelPaint, symbolUnit),
+    );
     block.paintCentered(canvas, box);
   }
 
@@ -117,6 +125,7 @@ abstract final class MPLabelPainter {
     Canvas canvas,
     MPLabelPaint labelPaint,
     double fontSize,
+    MPSymbolUnit symbolUnit,
   ) {
     final _TextBlock block = _TextBlock.layOut(
       lines: [labelPaint.data.minusText ?? ''],
@@ -125,7 +134,10 @@ abstract final class MPLabelPainter {
     );
     final Rect box = _containerBox(labelPaint.align, block, fontSize);
 
-    canvas.drawPath(_bottomRoundedContainer(box), labelPaint.backgroundFill);
+    canvas.drawPath(
+      _bottomRoundedContainer(box),
+      _containerStroke(labelPaint, symbolUnit),
+    );
     block.paintCentered(canvas, box);
   }
 
@@ -133,6 +145,7 @@ abstract final class MPLabelPainter {
     Canvas canvas,
     MPLabelPaint labelPaint,
     double fontSize,
+    MPSymbolUnit symbolUnit,
   ) {
     final _TextBlock plusBlock = _TextBlock.layOut(
       lines: [labelPaint.data.plusText ?? ''],
@@ -159,12 +172,13 @@ abstract final class MPLabelPainter {
     final Size boxSize = Size(width, halfHeight * 2);
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
     final Rect box = boxOrigin & boxSize;
+    final Paint containerStroke = _containerStroke(labelPaint, symbolUnit);
 
-    canvas.drawOval(box, labelPaint.backgroundFill);
+    canvas.drawOval(box, containerStroke);
     canvas.drawLine(
       Offset(box.left, box.center.dy),
       Offset(box.right, box.center.dy),
-      labelPaint.divider,
+      containerStroke,
     );
 
     plusBlock.paintCentered(
@@ -181,6 +195,7 @@ abstract final class MPLabelPainter {
     Canvas canvas,
     MPLabelPaint labelPaint,
     double fontSize,
+    MPSymbolUnit symbolUnit,
   ) {
     final _TextBlock block = _TextBlock.layOut(
       lines: [labelPaint.data.plusText ?? ''],
@@ -196,8 +211,18 @@ abstract final class MPLabelPainter {
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
     final Rect box = boxOrigin & boxSize;
 
-    canvas.drawRect(box, labelPaint.backgroundFill);
+    canvas.drawOval(box, _containerStroke(labelPaint, symbolUnit));
     block.paint(canvas, Offset(box.left + marginX, box.top + marginY));
+  }
+
+  /// Therion's `p_label` dispatcher (`thText.mp`) picks up `PenD`, its
+  /// thinnest pen, before stroking any passage-height container.
+  static Paint _containerStroke(
+    MPLabelPaint labelPaint,
+    MPSymbolUnit symbolUnit,
+  ) {
+    return Paint.from(labelPaint.divider)
+      ..strokeWidth = mpTherionPenD * symbolUnit.canvasValue;
   }
 
   static Rect _containerBox(
