@@ -858,7 +858,7 @@ abstract class MPVisualControllerBase with Store {
     ),
     'presumed': THLinePaint(
       primaryPaint: THPaint.thPaint0,
-      type: MPLinePaintType.mediumDot,
+      type: MPLinePaintType.mediumEven,
     ),
     'sand': THLinePaint(
       primaryPaint: THPaint.thPaint0,

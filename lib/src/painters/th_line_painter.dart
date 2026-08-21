@@ -40,20 +40,21 @@ class THLinePainter extends CustomPainter {
   static final Map<MPLinePaintType, List<int>> linePaintTypeToDashLengths =
       <MPLinePaintType, List<int>>{
         MPLinePaintType.dot: <int>[2, -6],
-        MPLinePaintType.long: <int>[18, -6],
         MPLinePaintType.long2Dots: <int>[18, -6, 2, -6, 2, -6],
         MPLinePaintType.long3Dots: <int>[18, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.long: <int>[18, -6],
         MPLinePaintType.longDot: <int>[18, -6, 2, -6],
-        MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
-        MPLinePaintType.medium: <int>[12, -6],
         MPLinePaintType.medium2Dots: <int>[12, -6, 2, -6, 2, -6],
         MPLinePaintType.medium3Dots: <int>[12, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.medium: <int>[12, -6],
         MPLinePaintType.mediumDot: <int>[12, -6, 2, -6],
+        MPLinePaintType.mediumEven: <int>[12, -12],
         MPLinePaintType.mediumLongMedium: <int>[12, -6, 18, -6, 12, -12],
-        MPLinePaintType.short: <int>[6, -6],
         MPLinePaintType.short2Dots: <int>[6, -6, 2, -6, 2, -6],
         MPLinePaintType.short3Dots: <int>[6, -6, 2, -6, 2, -6, 2, -6],
+        MPLinePaintType.short: <int>[6, -6],
         MPLinePaintType.shortDot: <int>[6, -6, 2, -6],
+        MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
         MPLinePaintType.shortMediumShort: <int>[6, -6, 12, -6, 6, -12],
       };
 

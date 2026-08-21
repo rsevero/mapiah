@@ -2,6 +2,8 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
+import 'package:mapiah/src/controllers/mp_visual_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
@@ -13,6 +15,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
+import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
@@ -188,6 +191,19 @@ void main() {
           ),
           isNull,
         );
+      },
+    );
+
+    test(
+      'wall:presumed uses a plain evenly-dashed pattern, not a dash-dot one',
+      () {
+        final THLinePaint presumedPaint =
+            MPVisualControllerBase.wallSubtypesPaints['presumed']!;
+        final THLinePaint underlyingPaint =
+            MPVisualControllerBase.wallSubtypesPaints['underlying']!;
+
+        expect(presumedPaint.type, MPLinePaintType.mediumEven);
+        expect(underlyingPaint.type, MPLinePaintType.short);
       },
     );
 

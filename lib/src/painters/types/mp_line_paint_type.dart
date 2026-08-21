@@ -11,6 +11,7 @@ enum MPLinePaintType {
   medium2Dots,
   medium3Dots,
   mediumDot,
+  mediumEven,
   mediumLongMedium,
   short,
   short2Dots,
