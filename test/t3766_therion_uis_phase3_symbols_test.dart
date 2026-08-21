@@ -650,6 +650,10 @@ void main() {
           th2Controller.visualController.getLineDecorator(THLineType.pit),
           isNull,
         );
+        expect(
+          th2Controller.visualController.getLineDecorator(THLineType.pitch),
+          isNull,
+        );
 
         mpLocator.mpSettingsController.setEnum(
           MPSettingID.TH2Edit_VisualizationMethod,
@@ -664,6 +668,10 @@ void main() {
           th2Controller.visualController.getLineDecorator(
             THLineType.floorStep,
           ),
+          isA<MPPitFloorStepLineDecorator>(),
+        );
+        expect(
+          th2Controller.visualController.getLineDecorator(THLineType.pitch),
           isA<MPPitFloorStepLineDecorator>(),
         );
         expect(

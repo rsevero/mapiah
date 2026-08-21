@@ -1101,7 +1101,9 @@ abstract class MPVisualControllerBase with Store {
       return const MPSurveyCaveLineDecorator();
     }
 
-    if ((lineType == THLineType.pit) || (lineType == THLineType.floorStep)) {
+    if ((lineType == THLineType.floorStep) ||
+        (lineType == THLineType.pit) ||
+        (lineType == THLineType.pitch)) {
       return const MPPitFloorStepLineDecorator();
     }
 
