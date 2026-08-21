@@ -1093,55 +1093,36 @@ abstract class MPVisualControllerBase with Store {
       return null;
     }
 
-    if (lineType == THLineType.gradient) {
-      return const MPGradientLineDecorator();
+    switch (lineType) {
+      case THLineType.ceilingMeander:
+        return const MPCeilingMeanderLineDecorator();
+      case THLineType.ceilingStep:
+        return const MPCeilingStepLineDecorator();
+      case THLineType.chimney:
+        return const MPChimneyLineDecorator();
+      case THLineType.contour:
+        return const MPContourLineDecorator();
+      case THLineType.floorStep:
+      case THLineType.pit:
+      case THLineType.pitch:
+        return const MPPitFloorStepLineDecorator();
+      case THLineType.flowstone:
+        return const MPFlowstoneLineDecorator();
+      case THLineType.gradient:
+        return const MPGradientLineDecorator();
+      case THLineType.moonmilk:
+        return const MPMoonmilkLineDecorator();
+      case THLineType.rockEdge:
+        return const MPRockEdgeLineDecorator();
+      case THLineType.survey
+          when (subtype == null) || (subtype == 'cave'):
+        return const MPSurveyCaveLineDecorator();
+      case THLineType.waterFlow
+          when (subtype == null) || (subtype == 'permanent'):
+        return const MPWaterFlowPermanentLineDecorator();
+      default:
+        return null;
     }
-
-    if ((lineType == THLineType.survey) &&
-        ((subtype == null) || (subtype == 'cave'))) {
-      return const MPSurveyCaveLineDecorator();
-    }
-
-    if ((lineType == THLineType.floorStep) ||
-        (lineType == THLineType.pit) ||
-        (lineType == THLineType.pitch)) {
-      return const MPPitFloorStepLineDecorator();
-    }
-
-    if (lineType == THLineType.chimney) {
-      return const MPChimneyLineDecorator();
-    }
-
-    if (lineType == THLineType.ceilingStep) {
-      return const MPCeilingStepLineDecorator();
-    }
-
-    if (lineType == THLineType.ceilingMeander) {
-      return const MPCeilingMeanderLineDecorator();
-    }
-
-    if (lineType == THLineType.contour) {
-      return const MPContourLineDecorator();
-    }
-
-    if (lineType == THLineType.rockEdge) {
-      return const MPRockEdgeLineDecorator();
-    }
-
-    if (lineType == THLineType.flowstone) {
-      return const MPFlowstoneLineDecorator();
-    }
-
-    if (lineType == THLineType.moonmilk) {
-      return const MPMoonmilkLineDecorator();
-    }
-
-    if ((lineType == THLineType.waterFlow) &&
-        ((subtype == null) || (subtype == 'permanent'))) {
-      return const MPWaterFlowPermanentLineDecorator();
-    }
-
-    return null;
   }
 
   THLinePaint getSelectedLinePaint({
