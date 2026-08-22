@@ -3,9 +3,10 @@
 
 /// Mirrors Therion's five `\th*size` label font sizes as multipliers of the
 /// base symbol unit `u` ([MPSymbolUnit]). Phase 2.5 resolves [THLabelSize.
-/// tiny] for `passage-height` containers, kept small enough to fit inside
-/// their tight decorated boxes, and [THLabelSize.normal] for everything
-/// else; `<size:S>` tag parsing is not implemented yet, so no other value is
+/// tiny] for every text-mode point label (`passage-height` containers as
+/// well as `label`, `remark`, `date`, `altitude`, `height`, and
+/// `dimensions`' plain text boxes), matching Therion's default label size;
+/// `<size:S>` tag parsing is not implemented yet, so no other value is
 /// resolved. The remaining members exist so a later phase can wire that
 /// parsing up without touching call sites.
 enum THLabelSize {

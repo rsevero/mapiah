@@ -1463,8 +1463,8 @@ abstract class MPVisualControllerBase with Store {
             MPLabelMode.passageHeightPos ||
             MPLabelMode.passageHeightNeg ||
             MPLabelMode.passageHeightPosNeg ||
-            MPLabelMode.passageHeightUnsigned => THLabelSize.tiny,
-            MPLabelMode.plain => THLabelSize.normal,
+            MPLabelMode.passageHeightUnsigned ||
+            MPLabelMode.plain => THLabelSize.tiny,
           };
 
           pointPaint = pointPaint.copyWith(
