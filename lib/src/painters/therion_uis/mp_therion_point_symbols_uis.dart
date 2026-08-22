@@ -155,7 +155,7 @@ abstract final class MPTherionPointSymbolsUIS {
     final Path path = Path()
       ..moveTo(-0.5, 0.2)
       ..cubicTo(-0.5, 0.02, -0.28, 0.02, -0.18, 0.105)
-      ..cubicTo(-0.08, 0.19, 0.08, 0.19, 0.18, 0.105)
+      ..cubicTo(-0.08, -0.08, 0.08, -0.08, 0.18, 0.105)
       ..cubicTo(0.28, 0.02, 0.5, 0.02, 0.5, 0.2);
 
     _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
