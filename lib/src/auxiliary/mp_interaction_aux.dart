@@ -216,7 +216,7 @@ class MPInteractionAux {
     final MPLabelPaint? labelPaint = pointPaint.labelPaint;
 
     if ((labelPaint != null) && (symbolUnit != null)) {
-      MPLabelPainter.drawTherionLabel(
+      MPLabelPainter.drawBackground(
         canvas: canvas,
         labelPaint: labelPaint,
         anchor: position,
@@ -226,6 +226,12 @@ class MPInteractionAux {
         position,
         labelPaint.anchorRadius,
         labelPaint.anchorFill,
+      );
+      MPLabelPainter.drawForeground(
+        canvas: canvas,
+        labelPaint: labelPaint,
+        anchor: position,
+        symbolUnit: symbolUnit,
       );
 
       return;

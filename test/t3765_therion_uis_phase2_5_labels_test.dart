@@ -240,7 +240,7 @@ void main() {
     });
 
     test(
-      'passage-height gets the small label size, unlike plain labels',
+      'passage-height and plain labels both get the small label size',
       () async {
         final TH2FileEditController th2Controller = await loadController(
           '2026-01-05-002-passage-height-point_with_positive_value.th2',
@@ -268,20 +268,22 @@ void main() {
             .getDefaultPointPaint(datePoint);
 
         expect(datePaint.labelPaint, isNotNull);
-        expect(datePaint.labelPaint!.size, THLabelSize.normal);
+        expect(datePaint.labelPaint!.size, THLabelSize.tiny);
       },
     );
   });
 
   group('Therion Phase 2.5 label rendering', () {
-    test('draws an orange circle over the exact label anchor', () async {
-      const int imageSize = 100;
-      const double center = imageSize / 2;
-      const double markerRadius = 3;
+    Future<ByteData> renderAnchor({
+      required MPLabelData data,
+      required double markerRadius,
+      required int imageSize,
+    }) async {
+      final double center = imageSize / 2;
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
       final MPLabelPaint labelPaint = MPLabelPaint(
-        data: const MPLabelData.plain(['Anchor']),
+        data: data,
         anchorRadius: markerRadius,
         anchorFill: mpTherionLabelAnchorPaint,
         backgroundFill: THPaint.thPaintWhiteBackground,
@@ -295,30 +297,68 @@ void main() {
         canvas: canvas,
         position: Offset.zero,
         pointPaint: THPointPaint(labelPaint: labelPaint, fill: Paint()),
-        symbolUnit: const MPSymbolUnit(
-          canvasScale: 1,
-          devicePixelRatio: 1,
-        ),
+        symbolUnit: const MPSymbolUnit(canvasScale: 1, devicePixelRatio: 1),
       );
 
       final ui.Picture picture = recorder.endRecording();
       final ui.Image image = await picture.toImage(imageSize, imageSize);
       final ByteData pixels = (await image.toByteData())!;
-      final int centerPixelIndex =
-          (((center.toInt() * imageSize) + center.toInt()) * 4);
-      final int markerColor = mpTherionLabelAnchorPaint.color.toARGB32();
-      final int markerRed = (markerColor >> 16) & 0xFF;
-      final int markerGreen = (markerColor >> 8) & 0xFF;
-      final int markerBlue = markerColor & 0xFF;
-      final int markerAlpha = (markerColor >> 24) & 0xFF;
-
-      expect(pixels.getUint8(centerPixelIndex), markerRed);
-      expect(pixels.getUint8(centerPixelIndex + 1), markerGreen);
-      expect(pixels.getUint8(centerPixelIndex + 2), markerBlue);
-      expect(pixels.getUint8(centerPixelIndex + 3), markerAlpha);
 
       image.dispose();
       picture.dispose();
+
+      return pixels;
+    }
+
+    /// Plain labels fill a background box (`process_...`'s equivalent never
+    /// applies to `passage-height`, see [MPLabelPaint]'s doc), so the anchor
+    /// circle must sit above that fill — otherwise the background would
+    /// paint over and hide it entirely, unlike the passage-height containers
+    /// covered by the next test, which are stroked outlines with nothing to
+    /// hide the circle.
+    test('draws the anchor circle over a plain label\'s background', () async {
+      const int imageSize = 100;
+      const double markerRadius = 3;
+      // Empty text keeps the background box's fill in place (the margins
+      // alone still produce a box) without any glyph at the anchor that
+      // could otherwise paint over the circle and confound this assertion.
+      final ByteData pixels = await renderAnchor(
+        data: const MPLabelData.plain(['']),
+        markerRadius: markerRadius,
+        imageSize: imageSize,
+      );
+      final int center = imageSize ~/ 2;
+      final int centerPixelIndex = (((center * imageSize) + center) * 4);
+      final int markerColor = mpTherionLabelAnchorPaint.color.toARGB32();
+
+      expect(pixels.getUint8(centerPixelIndex), (markerColor >> 16) & 0xFF);
+      expect(pixels.getUint8(centerPixelIndex + 1), (markerColor >> 8) & 0xFF);
+      expect(pixels.getUint8(centerPixelIndex + 2), markerColor & 0xFF);
+      expect(
+        pixels.getUint8(centerPixelIndex + 3),
+        (markerColor >> 24) & 0xFF,
+      );
+    });
+
+    /// The anchor circle must stay below the label text itself: for a
+    /// non-empty plain label whose text covers the anchor point, the text's
+    /// own color — not the marker's — wins at that pixel.
+    test('draws the anchor circle below a plain label\'s text', () async {
+      const int imageSize = 100;
+      const double markerRadius = 3;
+      final ByteData pixels = await renderAnchor(
+        data: const MPLabelData.plain(['MMMMMMMM']),
+        markerRadius: markerRadius,
+        imageSize: imageSize,
+      );
+      final int center = imageSize ~/ 2;
+      final int centerPixelIndex = (((center * imageSize) + center) * 4);
+      final int markerColor = mpTherionLabelAnchorPaint.color.toARGB32();
+
+      expect(
+        pixels.getUint8(centerPixelIndex),
+        isNot((markerColor >> 16) & 0xFF),
+      );
     });
 
     testWidgets('renders every label mode side by side', (

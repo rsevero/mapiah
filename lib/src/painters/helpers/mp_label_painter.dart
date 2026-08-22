@@ -46,6 +46,60 @@ abstract final class MPLabelPainter {
     required Offset anchor,
     required MPSymbolUnit symbolUnit,
   }) {
+    drawBackground(
+      canvas: canvas,
+      labelPaint: labelPaint,
+      anchor: anchor,
+      symbolUnit: symbolUnit,
+    );
+    drawForeground(
+      canvas: canvas,
+      labelPaint: labelPaint,
+      anchor: anchor,
+      symbolUnit: symbolUnit,
+    );
+  }
+
+  /// Draws only the filled background box that [MPLabelMode.plain] labels
+  /// sit on. The other modes never fill their containers (see the class
+  /// doc), so this is a no-op for them; callers that want the anchor circle
+  /// to sit above a filled background but below the container outlines and
+  /// text (which have no filled background to sit above) call this first,
+  /// then draw the circle, then [drawForeground].
+  static void drawBackground({
+    required Canvas canvas,
+    required MPLabelPaint labelPaint,
+    required Offset anchor,
+    required MPSymbolUnit symbolUnit,
+  }) {
+    if (labelPaint.data.mode != MPLabelMode.plain) {
+      return;
+    }
+
+    final double fontSize = _resolveFontSize(labelPaint.size, symbolUnit);
+
+    canvas.save();
+    canvas.translate(anchor.dx, anchor.dy);
+    canvas.scale(1, -1);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        _plainBox(labelPaint, fontSize),
+        Radius.circular(fontSize * _verticalMarginFactor),
+      ),
+      labelPaint.backgroundFill,
+    );
+    canvas.restore();
+  }
+
+  /// Draws everything except [MPLabelMode.plain]'s filled background box:
+  /// the label text, and, for the passage-height modes, their stroked
+  /// containers (which have no separate background to draw first).
+  static void drawForeground({
+    required Canvas canvas,
+    required MPLabelPaint labelPaint,
+    required Offset anchor,
+    required MPSymbolUnit symbolUnit,
+  }) {
     final double fontSize = _resolveFontSize(labelPaint.size, symbolUnit);
 
     canvas.save();
@@ -54,7 +108,7 @@ abstract final class MPLabelPainter {
 
     switch (labelPaint.data.mode) {
       case MPLabelMode.plain:
-        _drawPlain(canvas, labelPaint, fontSize);
+        _drawPlainText(canvas, labelPaint, fontSize);
       case MPLabelMode.passageHeightPos:
         _drawPassageHeightPos(canvas, labelPaint, fontSize, symbolUnit);
       case MPLabelMode.passageHeightNeg:
@@ -77,11 +131,7 @@ abstract final class MPLabelPainter {
     return fontSize < minFontSize ? minFontSize : fontSize;
   }
 
-  static void _drawPlain(
-    Canvas canvas,
-    MPLabelPaint labelPaint,
-    double fontSize,
-  ) {
+  static Rect _plainBox(MPLabelPaint labelPaint, double fontSize) {
     final _TextBlock block = _TextBlock.layOut(
       lines: labelPaint.data.lines,
       fontSize: fontSize,
@@ -94,12 +144,24 @@ abstract final class MPLabelPainter {
       block.height + (marginY * 2),
     );
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
-    final Rect box = boxOrigin & boxSize;
 
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(box, Radius.circular(marginY)),
-      labelPaint.backgroundFill,
+    return boxOrigin & boxSize;
+  }
+
+  static void _drawPlainText(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+  ) {
+    final _TextBlock block = _TextBlock.layOut(
+      lines: labelPaint.data.lines,
+      fontSize: fontSize,
+      color: labelPaint.textColor,
     );
+    final double marginX = fontSize * _horizontalMarginFactor;
+    final double marginY = fontSize * _verticalMarginFactor;
+    final Rect box = _plainBox(labelPaint, fontSize);
+
     block.paint(canvas, Offset(box.left + marginX, box.top + marginY));
   }
 
