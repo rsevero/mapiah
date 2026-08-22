@@ -576,6 +576,7 @@ abstract class MPVisualControllerBase with Store {
     'paleo': THPointPaint(
       type: MPPointShapeType.triangle,
       border: THPaint.thPaint14,
+      fill: THPaint.thPaint1014,
     ),
     'permanent': THPointPaint(
       type: MPPointShapeType.arrow,

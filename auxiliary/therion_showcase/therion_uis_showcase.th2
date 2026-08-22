@@ -303,4 +303,5 @@ line border -id l-sand-border -close on -visibility off
   1000.0 2000.0
 endline
 
+  point 228.7 718.9 passage-height -value [ 7 ft ]
 endscrap
