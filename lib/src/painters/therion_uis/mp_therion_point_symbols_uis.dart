@@ -292,15 +292,33 @@ abstract final class MPTherionPointSymbolsUIS {
       return;
     }
 
+    // A bone silhouette: a shaft strip plus two pairs of round knuckles, all
+    // four knuckles the same size and sitting right on top of the shaft's
+    // two ends (so the shaft disappears under them), on one path relying on
+    // the default nonZero fill to merge the overlaps — closer to
+    // p_paleomaterial_UIS's own shape (each end of its node sequence bulges
+    // into two close humps, not one) than either a single smooth knob per
+    // end or Therion's raw node sequence hand-ported as one pinched Bezier
+    // chain.
     final Path path = Path()
-      ..moveTo(-0.4, 0.2)
-      ..cubicTo(-0.32, 0.18, -0.24, 0.1, -0.2, 0.08)
-      ..lineTo(0, -0.2)
-      ..cubicTo(0.03, -0.4, 0.2, -0.3, 0.35, -0.25)
-      ..cubicTo(0.48, -0.2, 0.2, -0.2, 0, 0)
-      ..lineTo(-0.1, 0.17)
-      ..cubicTo(-0.05, 0.3, -0.2, 0.2, -0.3, 0.23)
-      ..close();
+      ..moveTo(-0.2276, 0.2336)
+      ..lineTo(-0.3324, 0.1264)
+      ..lineTo(0.1276, -0.3236)
+      ..lineTo(0.2324, -0.2164)
+      ..close()
+      ..addOval(
+        Rect.fromCircle(center: const Offset(-0.2101, 0.2515), radius: 0.105),
+      )
+      ..addOval(
+        Rect.fromCircle(center: const Offset(-0.3499, 0.1085), radius: 0.105),
+      )
+      ..addOval(
+        Rect.fromCircle(center: const Offset(0.2499, -0.1985), radius: 0.105),
+      )
+      ..addOval(
+        Rect.fromCircle(center: const Offset(0.1101, -0.3415), radius: 0.105),
+      );
+
     _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
   }
 
