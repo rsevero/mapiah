@@ -9,12 +9,13 @@ import 'package:material_ui/material_ui.dart';
 /// text-mode point's label: the resolved text/container [data], where to
 /// anchor it, how big to draw it, and the paints for its background box and
 /// glyphs. [anchorRadius] and [anchorFill] define the circle that identifies
-/// the point's exact position. [backgroundFill] is a filled box, used only
-/// for [MPLabelMode.plain] (Therion draws plain labels without a frame);
-/// [divider] supplies both the stroke color for the passage-height container
-/// outlines and the line separating the plus/minus halves of a
-/// [MPLabelMode.passageHeightPosNeg] container — Therion strokes all of these
-/// with the same thin pen and never fills them.
+/// the point's exact position. [backgroundFill] fills every mode's
+/// container shape (box, circle, half-capsule, or capsule) purely for
+/// on-canvas readability — Therion itself either draws plain labels without
+/// any frame, or strokes the passage-height containers with a thin pen and
+/// never fills them. [divider] supplies both the stroke color for the
+/// passage-height container outlines and the line separating the plus/minus
+/// halves of a [MPLabelMode.passageHeightPosNeg] container.
 class MPLabelPaint {
   final MPLabelData data;
   final THOptionChoicesAlignType align;

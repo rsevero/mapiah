@@ -14,8 +14,11 @@ import 'package:material_ui/material_ui.dart';
 /// signed single number (`process_uplabel`/`process_downlabel`) gets half of
 /// that same capsule, rounded on its sign's side; an unsigned single number
 /// (`process_circledlabel`) gets a circle. Therion strokes these containers
-/// with its thinnest pen (`PenD`) and never fills them, so they're drawn as
-/// outlines here too, unlike the filled plain-text background box.
+/// with its thinnest pen (`PenD`) and never fills them; Mapiah fills them
+/// with the same white background as plain-text labels anyway, purely for
+/// on-canvas readability over busy scrap content — like the plain-text
+/// background box itself, this fill has no equivalent in Therion's own
+/// (frameless) output.
 abstract final class MPLabelPainter {
   /// Readability floor from the roadmap: font size never shrinks below this
   /// many logical screen pixels, unlike geometric symbols which keep
@@ -60,40 +63,71 @@ abstract final class MPLabelPainter {
     );
   }
 
-  /// Draws only the filled background box that [MPLabelMode.plain] labels
-  /// sit on. The other modes never fill their containers (see the class
-  /// doc), so this is a no-op for them; callers that want the anchor circle
-  /// to sit above a filled background but below the container outlines and
-  /// text (which have no filled background to sit above) call this first,
-  /// then draw the circle, then [drawForeground].
+  /// Draws only the filled white background every label mode sits on
+  /// (readability, not Therion-faithfulness — see the class doc). Callers
+  /// that want the anchor circle to sit above this fill but below the
+  /// container outlines and text call this first, then draw the circle,
+  /// then [drawForeground].
   static void drawBackground({
     required Canvas canvas,
     required MPLabelPaint labelPaint,
     required Offset anchor,
     required MPSymbolUnit symbolUnit,
   }) {
-    if (labelPaint.data.mode != MPLabelMode.plain) {
-      return;
-    }
-
     final double fontSize = _resolveFontSize(labelPaint.size, symbolUnit);
 
     canvas.save();
     canvas.translate(anchor.dx, anchor.dy);
     canvas.scale(1, -1);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        _plainBox(labelPaint, fontSize),
-        Radius.circular(fontSize * _verticalMarginFactor),
-      ),
-      labelPaint.backgroundFill,
-    );
+
+    switch (labelPaint.data.mode) {
+      case MPLabelMode.plain:
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            _plainBox(labelPaint, fontSize),
+            Radius.circular(fontSize * _verticalMarginFactor),
+          ),
+          labelPaint.backgroundFill,
+        );
+      case MPLabelMode.passageHeightUnsigned:
+        canvas.drawOval(
+          _circleBox(labelPaint, fontSize, labelPaint.data.plusText ?? ''),
+          labelPaint.backgroundFill,
+        );
+      case MPLabelMode.passageHeightPos:
+        canvas.drawPath(
+          _halfCapsuleShape(
+            labelPaint,
+            fontSize,
+            labelPaint.data.plusText ?? '',
+            roundedTop: true,
+          ),
+          labelPaint.backgroundFill,
+        );
+      case MPLabelMode.passageHeightNeg:
+        canvas.drawPath(
+          _halfCapsuleShape(
+            labelPaint,
+            fontSize,
+            labelPaint.data.minusText ?? '',
+            roundedTop: false,
+          ),
+          labelPaint.backgroundFill,
+        );
+      case MPLabelMode.passageHeightPosNeg:
+        final Rect box = _passageHeightPosNegBox(labelPaint, fontSize);
+
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(box, Radius.circular(box.width / 2)),
+          labelPaint.backgroundFill,
+        );
+    }
+
     canvas.restore();
   }
 
-  /// Draws everything except [MPLabelMode.plain]'s filled background box:
-  /// the label text, and, for the passage-height modes, their stroked
-  /// containers (which have no separate background to draw first).
+  /// Draws everything except the filled background: the label text and, for
+  /// the passage-height modes, their stroked containers.
   static void drawForeground({
     required Canvas canvas,
     required MPLabelPaint labelPaint,
@@ -216,15 +250,7 @@ abstract final class MPLabelPainter {
     );
   }
 
-  /// An unsigned single passage-height number gets a circle just large
-  /// enough to hold its (usually square-ish) text block.
-  static void _drawSingleNumberCircle(
-    Canvas canvas,
-    MPLabelPaint labelPaint,
-    double fontSize,
-    MPSymbolUnit symbolUnit,
-    String text,
-  ) {
+  static Rect _circleBox(MPLabelPaint labelPaint, double fontSize, String text) {
     final _TextBlock block = _TextBlock.layOut(
       lines: [text],
       fontSize: fontSize,
@@ -239,7 +265,25 @@ abstract final class MPLabelPainter {
         : markedHeight;
     final Size boxSize = Size(diameter, diameter);
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
-    final Rect box = boxOrigin & boxSize;
+
+    return boxOrigin & boxSize;
+  }
+
+  /// An unsigned single passage-height number gets a circle just large
+  /// enough to hold its (usually square-ish) text block.
+  static void _drawSingleNumberCircle(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+    MPSymbolUnit symbolUnit,
+    String text,
+  ) {
+    final _TextBlock block = _TextBlock.layOut(
+      lines: [text],
+      fontSize: fontSize,
+      color: labelPaint.textColor,
+    );
+    final Rect box = _circleBox(labelPaint, fontSize, text);
 
     canvas.drawOval(box, _containerStroke(labelPaint, symbolUnit));
     block.paintCentered(canvas, box);
@@ -256,14 +300,11 @@ abstract final class MPLabelPainter {
   /// well past its own text.
   static const double _halfCapsuleStraightMarginFactor = 0.02;
 
-  static void _drawSingleNumberHalfCapsule(
-    Canvas canvas,
+  static Rect _halfCapsuleBox(
     MPLabelPaint labelPaint,
     double fontSize,
-    MPSymbolUnit symbolUnit,
-    String text, {
-    required bool roundedTop,
-  }) {
+    String text,
+  ) {
     final _TextBlock block = _TextBlock.layOut(
       lines: [text],
       fontSize: fontSize,
@@ -277,7 +318,35 @@ abstract final class MPLabelPainter {
       block.height + (straightMarginY * 2) + radius,
     );
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
-    final Rect box = boxOrigin & boxSize;
+
+    return boxOrigin & boxSize;
+  }
+
+  static Path _halfCapsuleShape(
+    MPLabelPaint labelPaint,
+    double fontSize,
+    String text, {
+    required bool roundedTop,
+  }) {
+    final Rect box = _halfCapsuleBox(labelPaint, fontSize, text);
+
+    return roundedTop ? _capsuleTopHalf(box) : _capsuleBottomHalf(box);
+  }
+
+  static void _drawSingleNumberHalfCapsule(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+    MPSymbolUnit symbolUnit,
+    String text, {
+    required bool roundedTop,
+  }) {
+    final _TextBlock block = _TextBlock.layOut(
+      lines: [text],
+      fontSize: fontSize,
+      color: labelPaint.textColor,
+    );
+    final Rect box = _halfCapsuleBox(labelPaint, fontSize, text);
     final Path shape = roundedTop
         ? _capsuleTopHalf(box)
         : _capsuleBottomHalf(box);
@@ -324,12 +393,7 @@ abstract final class MPLabelPainter {
   /// Two passage-height numbers (ceiling above, floor below) share a
   /// capsule (a stadium: straight sides, semicircular top and bottom caps),
   /// split by a horizontal divider.
-  static void _drawPassageHeightPosNeg(
-    Canvas canvas,
-    MPLabelPaint labelPaint,
-    double fontSize,
-    MPSymbolUnit symbolUnit,
-  ) {
+  static Rect _passageHeightPosNegBox(MPLabelPaint labelPaint, double fontSize) {
     final _TextBlock plusBlock = _TextBlock.layOut(
       lines: [labelPaint.data.plusText ?? ''],
       fontSize: fontSize,
@@ -354,7 +418,27 @@ abstract final class MPLabelPainter {
         (marginX * 2);
     final Size boxSize = Size(width, halfHeight * 2);
     final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
-    final Rect box = boxOrigin & boxSize;
+
+    return boxOrigin & boxSize;
+  }
+
+  static void _drawPassageHeightPosNeg(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+    MPSymbolUnit symbolUnit,
+  ) {
+    final _TextBlock plusBlock = _TextBlock.layOut(
+      lines: [labelPaint.data.plusText ?? ''],
+      fontSize: fontSize,
+      color: labelPaint.textColor,
+    );
+    final _TextBlock minusBlock = _TextBlock.layOut(
+      lines: [labelPaint.data.minusText ?? ''],
+      fontSize: fontSize,
+      color: labelPaint.textColor,
+    );
+    final Rect box = _passageHeightPosNegBox(labelPaint, fontSize);
     final Paint containerStroke = _containerStroke(labelPaint, symbolUnit);
 
     canvas.drawRRect(
