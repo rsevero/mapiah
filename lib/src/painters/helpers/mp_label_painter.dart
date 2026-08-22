@@ -9,11 +9,12 @@ import 'package:mapiah/src/painters/types/th_label_size.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Draws Phase 2.5 text-mode point labels: plain text with a white
-/// background box, and the passage-height decorated containers
-/// (`process_uplabel`/`process_downlabel`/`process_updownlabel`/
-/// `process_circledlabel` in Therion). Therion strokes these containers with
-/// its thinnest pen (`PenD`) and never fills them, so they're drawn as
-/// outlines here too, unlike the filled plain-text background box.
+/// background box, and the passage-height decorated containers. A single
+/// number (`process_uplabel`/`process_downlabel`/`process_circledlabel` in
+/// Therion) gets a circle; two numbers (`process_updownlabel`) share a
+/// capsule split by a divider. Therion strokes these containers with its
+/// thinnest pen (`PenD`) and never fills them, so they're drawn as outlines
+/// here too, unlike the filled plain-text background box.
 abstract final class MPLabelPainter {
   /// Readability floor from the roadmap: font size never shrinks below this
   /// many logical screen pixels, unlike geometric symbols which keep
@@ -107,18 +108,13 @@ abstract final class MPLabelPainter {
     double fontSize,
     MPSymbolUnit symbolUnit,
   ) {
-    final _TextBlock block = _TextBlock.layOut(
-      lines: [labelPaint.data.plusText ?? ''],
-      fontSize: fontSize,
-      color: labelPaint.textColor,
+    _drawSingleNumberCircle(
+      canvas,
+      labelPaint,
+      fontSize,
+      symbolUnit,
+      labelPaint.data.plusText ?? '',
     );
-    final Rect box = _containerBox(labelPaint.align, block, fontSize);
-
-    canvas.drawPath(
-      _topRoundedContainer(box),
-      _containerStroke(labelPaint, symbolUnit),
-    );
-    block.paintCentered(canvas, box);
   }
 
   static void _drawPassageHeightNeg(
@@ -127,20 +123,62 @@ abstract final class MPLabelPainter {
     double fontSize,
     MPSymbolUnit symbolUnit,
   ) {
+    _drawSingleNumberCircle(
+      canvas,
+      labelPaint,
+      fontSize,
+      symbolUnit,
+      labelPaint.data.minusText ?? '',
+    );
+  }
+
+  static void _drawPassageHeightUnsigned(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+    MPSymbolUnit symbolUnit,
+  ) {
+    _drawSingleNumberCircle(
+      canvas,
+      labelPaint,
+      fontSize,
+      symbolUnit,
+      labelPaint.data.plusText ?? '',
+    );
+  }
+
+  /// A single passage-height number gets a circle just large enough to hold
+  /// its (usually square-ish) text block.
+  static void _drawSingleNumberCircle(
+    Canvas canvas,
+    MPLabelPaint labelPaint,
+    double fontSize,
+    MPSymbolUnit symbolUnit,
+    String text,
+  ) {
     final _TextBlock block = _TextBlock.layOut(
-      lines: [labelPaint.data.minusText ?? ''],
+      lines: [text],
       fontSize: fontSize,
       color: labelPaint.textColor,
     );
-    final Rect box = _containerBox(labelPaint.align, block, fontSize);
+    final double marginX = fontSize * _horizontalMarginFactor;
+    final double marginY = fontSize * _verticalMarginFactor;
+    final double markedWidth = block.width + (marginX * 2);
+    final double markedHeight = block.height + (marginY * 2);
+    final double diameter = markedWidth > markedHeight
+        ? markedWidth
+        : markedHeight;
+    final Size boxSize = Size(diameter, diameter);
+    final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
+    final Rect box = boxOrigin & boxSize;
 
-    canvas.drawPath(
-      _bottomRoundedContainer(box),
-      _containerStroke(labelPaint, symbolUnit),
-    );
+    canvas.drawOval(box, _containerStroke(labelPaint, symbolUnit));
     block.paintCentered(canvas, box);
   }
 
+  /// Two passage-height numbers (ceiling above, floor below) share a
+  /// capsule (a stadium: straight sides, semicircular top and bottom caps),
+  /// split by a horizontal divider.
   static void _drawPassageHeightPosNeg(
     Canvas canvas,
     MPLabelPaint labelPaint,
@@ -174,7 +212,10 @@ abstract final class MPLabelPainter {
     final Rect box = boxOrigin & boxSize;
     final Paint containerStroke = _containerStroke(labelPaint, symbolUnit);
 
-    canvas.drawOval(box, containerStroke);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(box, Radius.circular(box.width / 2)),
+      containerStroke,
+    );
     canvas.drawLine(
       Offset(box.left, box.center.dy),
       Offset(box.right, box.center.dy),
@@ -191,30 +232,6 @@ abstract final class MPLabelPainter {
     );
   }
 
-  static void _drawPassageHeightUnsigned(
-    Canvas canvas,
-    MPLabelPaint labelPaint,
-    double fontSize,
-    MPSymbolUnit symbolUnit,
-  ) {
-    final _TextBlock block = _TextBlock.layOut(
-      lines: [labelPaint.data.plusText ?? ''],
-      fontSize: fontSize,
-      color: labelPaint.textColor,
-    );
-    final double marginX = fontSize * _horizontalMarginFactor;
-    final double marginY = fontSize * _verticalMarginFactor;
-    final Size boxSize = Size(
-      block.width + (marginX * 2),
-      block.height + (marginY * 2),
-    );
-    final Offset boxOrigin = _boxOrigin(labelPaint.align, boxSize);
-    final Rect box = boxOrigin & boxSize;
-
-    canvas.drawOval(box, _containerStroke(labelPaint, symbolUnit));
-    block.paint(canvas, Offset(box.left + marginX, box.top + marginY));
-  }
-
   /// Therion's `p_label` dispatcher (`thText.mp`) picks up `PenD`, its
   /// thinnest pen, before stroking any passage-height container.
   static Paint _containerStroke(
@@ -223,58 +240,6 @@ abstract final class MPLabelPainter {
   ) {
     return Paint.from(labelPaint.divider)
       ..strokeWidth = mpTherionPenD * symbolUnit.canvasValue;
-  }
-
-  static Rect _containerBox(
-    THOptionChoicesAlignType align,
-    _TextBlock block,
-    double fontSize,
-  ) {
-    final double marginX = fontSize * _horizontalMarginFactor;
-    final double marginY = fontSize * _verticalMarginFactor;
-    final double radius = (block.width + (marginX * 2)) / 2;
-    final Size boxSize = Size(
-      radius * 2,
-      block.height + (marginY * 2) + radius,
-    );
-    final Offset boxOrigin = _boxOrigin(align, boxSize);
-
-    return boxOrigin & boxSize;
-  }
-
-  /// A semicircular bulge on top (radius = half the box width), flat bottom.
-  static Path _topRoundedContainer(Rect box) {
-    final double radius = box.width / 2;
-    final double straightTop = box.top + radius;
-
-    return Path()
-      ..moveTo(box.left, box.bottom)
-      ..lineTo(box.left, straightTop)
-      ..arcToPoint(
-        Offset(box.right, straightTop),
-        radius: Radius.circular(radius),
-        clockwise: true,
-      )
-      ..lineTo(box.right, box.bottom)
-      ..close();
-  }
-
-  /// A semicircular bulge on the bottom (radius = half the box width), flat
-  /// top.
-  static Path _bottomRoundedContainer(Rect box) {
-    final double radius = box.width / 2;
-    final double straightBottom = box.bottom - radius;
-
-    return Path()
-      ..moveTo(box.left, box.top)
-      ..lineTo(box.left, straightBottom)
-      ..arcToPoint(
-        Offset(box.right, straightBottom),
-        radius: Radius.circular(radius),
-        clockwise: false,
-      )
-      ..lineTo(box.right, box.top)
-      ..close();
   }
 
   /// Returns the top-left corner of a box of [boxSize] such that the corner
