@@ -118,10 +118,6 @@ abstract final class MPLabelTextAux {
       asString += '?';
     }
 
-    if (option.unitSet) {
-      asString += ' ${option.unit}';
-    }
-
     return MPLabelData.plain([asString]);
   }
 
@@ -133,29 +129,28 @@ abstract final class MPLabelTextAux {
     final THPassageHeightValueCommandOption option =
         point.getOption(THCommandOptionType.passageHeightValue)
             as THPassageHeightValueCommandOption;
-    final String unit = option.unit.toString();
 
     switch (option.mode) {
       case THPassageHeightModes.height:
         return MPLabelData.passageHeight(
           mode: MPLabelMode.passageHeightPos,
-          plusText: '${option.plusNumber} $unit',
+          plusText: '${option.plusNumber}',
         );
       case THPassageHeightModes.depth:
         return MPLabelData.passageHeight(
           mode: MPLabelMode.passageHeightNeg,
-          minusText: '${option.minusNumber} $unit',
+          minusText: '${option.minusNumber}',
         );
       case THPassageHeightModes.distanceToCeilingAndDistanceToFloor:
         return MPLabelData.passageHeight(
           mode: MPLabelMode.passageHeightPosNeg,
-          plusText: '${option.plusNumber} $unit',
-          minusText: '${option.minusNumber} $unit',
+          plusText: '${option.plusNumber}',
+          minusText: '${option.minusNumber}',
         );
       case THPassageHeightModes.distanceBetweenFloorAndCeiling:
         return MPLabelData.passageHeight(
           mode: MPLabelMode.passageHeightUnsigned,
-          plusText: '${option.plusNumber} $unit',
+          plusText: '${option.plusNumber}',
         );
     }
   }

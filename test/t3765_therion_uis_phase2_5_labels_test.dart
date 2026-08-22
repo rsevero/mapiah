@@ -90,29 +90,35 @@ void main() {
       expect(data.lines.single, contains('1300'));
     });
 
-    test('height point carries the chimney/pit sign', () async {
-      final TH2FileEditController th2Controller = await loadController(
-        'th_file_parser-02350-height_point_with_value_option.th2',
-      );
-      final THPoint point = th2Controller.th2File.getPoints().single;
-      final MPLabelData? data = MPLabelTextAux.resolve(point);
+    test(
+      'height point carries the chimney/pit sign and drops the unit',
+      () async {
+        final TH2FileEditController th2Controller = await loadController(
+          'th_file_parser-02350-height_point_with_value_option.th2',
+        );
+        final THPoint point = th2Controller.th2File.getPoints().single;
+        final MPLabelData? data = MPLabelTextAux.resolve(point);
 
-      expect(data, isNotNull);
-      expect(data!.lines.single, startsWith('40?'));
-    });
+        expect(data, isNotNull);
+        expect(data!.lines.single, '40?');
+      },
+    );
 
-    test('passage-height point resolves to the positive container', () async {
-      final TH2FileEditController th2Controller = await loadController(
-        '2026-01-05-002-passage-height-point_with_positive_value.th2',
-      );
-      final THPoint point = th2Controller.th2File.getPoints().single;
-      final MPLabelData? data = MPLabelTextAux.resolve(point);
+    test(
+      'passage-height point resolves to the positive container and drops the unit',
+      () async {
+        final TH2FileEditController th2Controller = await loadController(
+          'th_file_parser-00196-passage_height_point_with_value_option_with_unit_with_plus.th2',
+        );
+        final THPoint point = th2Controller.th2File.getPoints().single;
+        final MPLabelData? data = MPLabelTextAux.resolve(point);
 
-      expect(data, isNotNull);
-      expect(data!.mode, MPLabelMode.passageHeightPos);
-      expect(data.plusText, isNotNull);
-      expect(data.minusText, isNull);
-    });
+        expect(data, isNotNull);
+        expect(data!.mode, MPLabelMode.passageHeightPos);
+        expect(data.plusText, '7');
+        expect(data.minusText, isNull);
+      },
+    );
 
     test('dimensions point combines above/below and unit', () async {
       final TH2FileEditController th2Controller = await loadController(
