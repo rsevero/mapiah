@@ -16,6 +16,7 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.continuation: MPTherionPointSymbol.continuationUIS,
   THPointType.crystal: MPTherionPointSymbol.crystalUIS,
   THPointType.curtain: MPTherionPointSymbol.curtainUIS,
+  THPointType.discStalagmites: MPTherionPointSymbol.discStalagmitesUIS,
   THPointType.disk: MPTherionPointSymbol.diskUIS,
   THPointType.dig: MPTherionPointSymbol.digUIS,
   THPointType.entrance: MPTherionPointSymbol.entranceUIS,

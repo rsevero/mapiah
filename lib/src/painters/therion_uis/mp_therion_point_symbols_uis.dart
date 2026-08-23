@@ -39,6 +39,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.continuationUIS: _drawContinuationUIS,
     MPTherionPointSymbol.crystalUIS: _drawCrystalUIS,
     MPTherionPointSymbol.curtainUIS: _drawCurtainUIS,
+    MPTherionPointSymbol.discStalagmitesUIS: _drawDiscStalagmitesUIS,
     MPTherionPointSymbol.diskUIS: _drawDiskUIS,
     MPTherionPointSymbol.digUIS: _drawDigUIS,
     MPTherionPointSymbol.entranceUIS: _drawEntranceUIS,
@@ -1335,6 +1336,38 @@ abstract final class MPTherionPointSymbolsUIS {
         ..lineTo(dx - 0.105, 0.28)
         ..moveTo(dx, 0.105)
         ..lineTo(dx + 0.105, 0.28);
+    });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_discstalagmites_UIS` is `p_stalagmites_UIS` plus one horizontal bar
+  /// per instance: `(-.15u,.1u) -- (.15u,.1u)` (Y-negated and `0.7`-scaled
+  /// to `(-0.105,-0.07) -- (0.105,-0.07)`), the "disc" the stems grow from.
+  static void _drawDiscStalagmitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+      path
+        ..moveTo(dx, -0.28)
+        ..lineTo(dx, 0.105)
+        ..lineTo(dx - 0.105, 0.28)
+        ..moveTo(dx, 0.105)
+        ..lineTo(dx + 0.105, 0.28)
+        ..moveTo(dx - 0.105, -0.07)
+        ..lineTo(dx + 0.105, -0.07);
     });
 
     MPSymbolTransform.draw(

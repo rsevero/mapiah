@@ -59,6 +59,7 @@ void main() {
       MPTherionPointSymbol.airDraughtWinterUIS,
       MPTherionPointSymbol.airDraughtSummerUIS,
       MPTherionPointSymbol.blocksUIS,
+      MPTherionPointSymbol.discStalagmitesUIS,
       MPTherionPointSymbol.pillarsUIS,
       MPTherionPointSymbol.stalactitesUIS,
       MPTherionPointSymbol.stalagmitesUIS,
@@ -155,6 +156,8 @@ void main() {
       const Map<THPointType, MPTherionPointSymbol> expected =
           <THPointType, MPTherionPointSymbol>{
             THPointType.blocks: MPTherionPointSymbol.blocksUIS,
+            THPointType.discStalagmites:
+                MPTherionPointSymbol.discStalagmitesUIS,
             THPointType.pillars: MPTherionPointSymbol.pillarsUIS,
             THPointType.stalactites: MPTherionPointSymbol.stalactitesUIS,
             THPointType.stalagmites: MPTherionPointSymbol.stalagmitesUIS,
@@ -200,11 +203,10 @@ void main() {
   });
 
   group('Therion UIS Phase 3 line decorators', () {
-    Path diagonalTestPath() =>
-        Path()
-          ..moveTo(0, 0)
-          ..lineTo(80, 0)
-          ..lineTo(80, 80);
+    Path diagonalTestPath() => Path()
+      ..moveTo(0, 0)
+      ..lineTo(80, 0)
+      ..lineTo(80, 80);
 
     const MPSymbolUnit symbolUnit = MPSymbolUnit(
       canvasScale: 1,
@@ -227,72 +229,71 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    testWidgets('renders pit and floor step with colored lines and upper ticks', (
-      WidgetTester tester,
-    ) async {
-      const MPPitFloorStepLineDecorator decorator =
-          MPPitFloorStepLineDecorator();
+    testWidgets(
+      'renders pit and floor step with colored lines and upper ticks',
+      (WidgetTester tester) async {
+        const MPPitFloorStepLineDecorator decorator =
+            MPPitFloorStepLineDecorator();
 
-      void drawLine({
-        required Canvas canvas,
-        required Offset center,
-        required Paint placeholderPaint,
-      }) {
-        final Path path = Path()
-          ..moveTo(center.dx - 65, center.dy + 10)
-          ..quadraticBezierTo(
-            center.dx,
-            center.dy - 10,
-            center.dx + 65,
-            center.dy + 10,
+        void drawLine({
+          required Canvas canvas,
+          required Offset center,
+          required Paint placeholderPaint,
+        }) {
+          final Path path = Path()
+            ..moveTo(center.dx - 65, center.dy + 10)
+            ..quadraticBezierTo(
+              center.dx,
+              center.dy - 10,
+              center.dx + 65,
+              center.dy + 10,
+            );
+
+          decorator.decorate(
+            canvas: canvas,
+            path: path,
+            color: Paint.from(placeholderPaint),
+            symbolUnit: symbolUnit,
+            isReversed: false,
           );
+        }
 
-        decorator.decorate(
-          canvas: canvas,
-          path: path,
-          color: Paint.from(placeholderPaint),
-          symbolUnit: symbolUnit,
-          isReversed: false,
-        );
-      }
-
-      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
-        MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) {
-            drawLine(
-              canvas: canvas,
-              center: center,
-              placeholderPaint: THPaint.thPaint13,
-            );
-          },
-        ),
-        MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) {
-            drawLine(
-              canvas: canvas,
-              center: center,
-              placeholderPaint: THPaint.thPaint5,
-            );
-          },
-        ),
-      ];
-
-      await tester.pumpWidget(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Center(
-            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+        final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+          MPSymbolGoldenEntry(
+            draw: (Canvas canvas, Offset center) {
+              drawLine(
+                canvas: canvas,
+                center: center,
+                placeholderPaint: THPaint.thPaint13,
+              );
+            },
           ),
-        ),
-      );
+          MPSymbolGoldenEntry(
+            draw: (Canvas canvas, Offset center) {
+              drawLine(
+                canvas: canvas,
+                center: center,
+                placeholderPaint: THPaint.thPaint5,
+              );
+            },
+          ),
+        ];
 
-      await expectLater(
-        find.byType(MPSymbolGoldenHarness),
-        matchesGoldenFile(
-          'goldens/therion_uis_pit_floor_step_lines.png',
-        ),
-      );
-    });
+        await tester.pumpWidget(
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: Center(
+              child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+            ),
+          ),
+        );
+
+        await expectLater(
+          find.byType(MPSymbolGoldenHarness),
+          matchesGoldenFile('goldens/therion_uis_pit_floor_step_lines.png'),
+        );
+      },
+    );
 
     test('chimney decorator draws small Ts without crashing', () {
       const MPChimneyLineDecorator decorator = MPChimneyLineDecorator();
@@ -310,8 +311,7 @@ void main() {
     });
 
     test('ceiling step decorator draws small Ts without crashing', () {
-      const MPCeilingStepLineDecorator decorator =
-          MPCeilingStepLineDecorator();
+      const MPCeilingStepLineDecorator decorator = MPCeilingStepLineDecorator();
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
 
@@ -341,58 +341,59 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    testWidgets('renders chimney and ceiling step as separate-colored small Ts', (
-      WidgetTester tester,
-    ) async {
-      final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
-        MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) {
-            final Path path = Path()
-              ..moveTo(center.dx - 65, center.dy)
-              ..lineTo(center.dx + 65, center.dy);
+    testWidgets(
+      'renders chimney and ceiling step as separate-colored small Ts',
+      (WidgetTester tester) async {
+        final List<MPSymbolGoldenEntry> entries = <MPSymbolGoldenEntry>[
+          MPSymbolGoldenEntry(
+            draw: (Canvas canvas, Offset center) {
+              final Path path = Path()
+                ..moveTo(center.dx - 65, center.dy)
+                ..lineTo(center.dx + 65, center.dy);
 
-            const MPChimneyLineDecorator().decorate(
-              canvas: canvas,
-              path: path,
-              color: Paint.from(THPaint.thPaint13),
-              symbolUnit: symbolUnit,
-              isReversed: false,
-            );
-          },
-        ),
-        MPSymbolGoldenEntry(
-          draw: (Canvas canvas, Offset center) {
-            final Path path = Path()
-              ..moveTo(center.dx - 65, center.dy)
-              ..lineTo(center.dx + 65, center.dy);
-
-            const MPCeilingStepLineDecorator().decorate(
-              canvas: canvas,
-              path: path,
-              color: Paint.from(THPaint.thPaint5),
-              symbolUnit: symbolUnit,
-              isReversed: false,
-            );
-          },
-        ),
-      ];
-
-      await tester.pumpWidget(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Center(
-            child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+              const MPChimneyLineDecorator().decorate(
+                canvas: canvas,
+                path: path,
+                color: Paint.from(THPaint.thPaint13),
+                symbolUnit: symbolUnit,
+                isReversed: false,
+              );
+            },
           ),
-        ),
-      );
+          MPSymbolGoldenEntry(
+            draw: (Canvas canvas, Offset center) {
+              final Path path = Path()
+                ..moveTo(center.dx - 65, center.dy)
+                ..lineTo(center.dx + 65, center.dy);
 
-      await expectLater(
-        find.byType(MPSymbolGoldenHarness),
-        matchesGoldenFile(
-          'goldens/therion_uis_chimney_ceiling_step_lines.png',
-        ),
-      );
-    });
+              const MPCeilingStepLineDecorator().decorate(
+                canvas: canvas,
+                path: path,
+                color: Paint.from(THPaint.thPaint5),
+                symbolUnit: symbolUnit,
+                isReversed: false,
+              );
+            },
+          ),
+        ];
+
+        await tester.pumpWidget(
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: Center(
+              child: MPSymbolGoldenHarness(entries: entries, cellSize: 160),
+            ),
+          ),
+        );
+
+        await expectLater(
+          find.byType(MPSymbolGoldenHarness),
+          matchesGoldenFile(
+            'goldens/therion_uis_chimney_ceiling_step_lines.png',
+          ),
+        );
+      },
+    );
 
     test('contour decorator draws a continuous line without crashing', () {
       const MPContourLineDecorator decorator = MPContourLineDecorator();
@@ -451,20 +452,23 @@ void main() {
       );
     });
 
-    test('rock edge decorator draws a continuous PenD line without crashing', () {
-      const MPRockEdgeLineDecorator decorator = MPRockEdgeLineDecorator();
-      final ui.PictureRecorder recorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(recorder);
+    test(
+      'rock edge decorator draws a continuous PenD line without crashing',
+      () {
+        const MPRockEdgeLineDecorator decorator = MPRockEdgeLineDecorator();
+        final ui.PictureRecorder recorder = ui.PictureRecorder();
+        final Canvas canvas = Canvas(recorder);
 
-      decorator.decorate(
-        canvas: canvas,
-        path: diagonalTestPath(),
-        color: Paint(),
-        symbolUnit: symbolUnit,
-        isReversed: false,
-      );
-      recorder.endRecording().dispose();
-    });
+        decorator.decorate(
+          canvas: canvas,
+          path: diagonalTestPath(),
+          color: Paint(),
+          symbolUnit: symbolUnit,
+          isReversed: false,
+        );
+        recorder.endRecording().dispose();
+      },
+    );
 
     test('flowstone decorator draws curls without crashing', () {
       const MPFlowstoneLineDecorator decorator = MPFlowstoneLineDecorator();
@@ -675,9 +679,7 @@ void main() {
           isNull,
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.rockEdge,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.rockEdge),
           isNull,
         );
 
@@ -691,9 +693,7 @@ void main() {
           isA<MPPitFloorStepLineDecorator>(),
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.floorStep,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.floorStep),
           isA<MPPitFloorStepLineDecorator>(),
         );
         expect(
@@ -717,27 +717,19 @@ void main() {
           isA<MPCeilingMeanderLineDecorator>(),
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.contour,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.contour),
           isA<MPContourLineDecorator>(),
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.rockEdge,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.rockEdge),
           isA<MPRockEdgeLineDecorator>(),
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.flowstone,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.flowstone),
           isA<MPFlowstoneLineDecorator>(),
         );
         expect(
-          th2Controller.visualController.getLineDecorator(
-            THLineType.moonmilk,
-          ),
+          th2Controller.visualController.getLineDecorator(THLineType.moonmilk),
           isA<MPMoonmilkLineDecorator>(),
         );
         expect(

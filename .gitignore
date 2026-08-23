@@ -121,3 +121,4 @@ android/app/.cxx/
 .zed/
 
 .claude/
+.aider*

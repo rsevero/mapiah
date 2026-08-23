@@ -66,7 +66,7 @@ simple/medium/complex inventory; it is not an assessment of the symbol itself.
 | `disc-stalactite` | UIS | not classified | No (placeholder) | Yes |
 | `disc-stalactites` | UIS | not classified | No (placeholder) | Yes |
 | `disc-stalagmite` | UIS | not classified | No (placeholder) | Yes |
-| `disc-stalagmites` | UIS | not classified | No (placeholder) | Yes |
+| `disc-stalagmites` | UIS | not classified | Yes | Yes |
 | `disk` | UIS | medium | Yes | Yes |
 | `electric-light` | SBE | not classified | No (placeholder) | No |
 | `entrance` | UIS, AUT | simple | Yes | Yes |
