@@ -39,6 +39,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.continuationUIS: _drawContinuationUIS,
     MPTherionPointSymbol.crystalUIS: _drawCrystalUIS,
     MPTherionPointSymbol.curtainUIS: _drawCurtainUIS,
+    MPTherionPointSymbol.debrisUIS: _drawDebrisUIS,
     MPTherionPointSymbol.discStalagmitesUIS: _drawDiscStalagmitesUIS,
     MPTherionPointSymbol.diskUIS: _drawDiskUIS,
     MPTherionPointSymbol.digUIS: _drawDigUIS,
@@ -1273,6 +1274,39 @@ abstract final class MPTherionPointSymbolsUIS {
 
         canvas.drawPath(curve, pen);
         canvas.drawLine(const Offset(0, 0.2), const Offset(0, 0.2), dotPen);
+      },
+    );
+  }
+
+  static void _drawDebrisUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(-0.3, 0.4)
+          ..lineTo(0, 0.22)
+          ..lineTo(-0.4, 0.1)
+          ..close()
+          ..moveTo(0.2, 0.4)
+          ..lineTo(0.4, 0.1)
+          ..lineTo(0.1, 0.1)
+          ..close()
+          ..moveTo(-0.1, 0)
+          ..lineTo(0.2, -0.3)
+          ..lineTo(-0.2, -0.3)
+          ..close();
+
+        canvas.drawPath(path, pen);
       },
     );
   }
