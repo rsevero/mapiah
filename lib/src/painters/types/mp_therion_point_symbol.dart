@@ -39,6 +39,8 @@ enum MPTherionPointSymbol {
   sodaStrawUIS,
   stalactiteUIS,
   stalactitesUIS,
+  stalactiteStalagmiteUIS,
+  stalactitesStalagmitesUIS,
   stalagmiteUIS,
   stalagmitesUIS,
   wallCalciteUIS,

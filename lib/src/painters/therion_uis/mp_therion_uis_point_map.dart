@@ -41,6 +41,10 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.sodaStraw: MPTherionPointSymbol.sodaStrawUIS,
   THPointType.stalactite: MPTherionPointSymbol.stalactiteUIS,
   THPointType.stalactites: MPTherionPointSymbol.stalactitesUIS,
+  THPointType.stalactiteStalagmite:
+      MPTherionPointSymbol.stalactiteStalagmiteUIS,
+  THPointType.stalactitesStalagmites:
+      MPTherionPointSymbol.stalactitesStalagmitesUIS,
   THPointType.stalagmite: MPTherionPointSymbol.stalagmiteUIS,
   THPointType.stalagmites: MPTherionPointSymbol.stalagmitesUIS,
   THPointType.wallCalcite: MPTherionPointSymbol.wallCalciteUIS,

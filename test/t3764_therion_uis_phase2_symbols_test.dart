@@ -36,6 +36,7 @@ void main() {
       MPTherionPointSymbol.pebblesUIS,
       MPTherionPointSymbol.popcornUIS,
       MPTherionPointSymbol.scallopUIS,
+      MPTherionPointSymbol.stalactiteStalagmiteUIS,
       MPTherionPointSymbol.waterFlowIntermittentUIS,
       MPTherionPointSymbol.waterFlowPaleoUIS,
       MPTherionPointSymbol.waterFlowPermanentUIS,
@@ -146,6 +147,8 @@ void main() {
             THPointType.pebbles: MPTherionPointSymbol.pebblesUIS,
             THPointType.popcorn: MPTherionPointSymbol.popcornUIS,
             THPointType.scallop: MPTherionPointSymbol.scallopUIS,
+            THPointType.stalactiteStalagmite:
+                MPTherionPointSymbol.stalactiteStalagmiteUIS,
           };
 
       for (final MapEntry<THPointType, MPTherionPointSymbol> entry

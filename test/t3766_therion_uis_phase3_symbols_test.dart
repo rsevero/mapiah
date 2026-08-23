@@ -62,6 +62,7 @@ void main() {
       MPTherionPointSymbol.discStalagmitesUIS,
       MPTherionPointSymbol.pillarsUIS,
       MPTherionPointSymbol.stalactitesUIS,
+      MPTherionPointSymbol.stalactitesStalagmitesUIS,
       MPTherionPointSymbol.stalagmitesUIS,
       MPTherionPointSymbol.waterUIS,
     ];
@@ -160,6 +161,8 @@ void main() {
                 MPTherionPointSymbol.discStalagmitesUIS,
             THPointType.pillars: MPTherionPointSymbol.pillarsUIS,
             THPointType.stalactites: MPTherionPointSymbol.stalactitesUIS,
+            THPointType.stalactitesStalagmites:
+                MPTherionPointSymbol.stalactitesStalagmitesUIS,
             THPointType.stalagmites: MPTherionPointSymbol.stalagmitesUIS,
             THPointType.water: MPTherionPointSymbol.waterUIS,
           };

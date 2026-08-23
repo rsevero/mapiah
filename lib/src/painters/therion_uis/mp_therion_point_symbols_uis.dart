@@ -64,6 +64,10 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.sodaStrawUIS: _drawSodaStrawUIS,
     MPTherionPointSymbol.stalactiteUIS: _drawStalactiteUIS,
     MPTherionPointSymbol.stalactitesUIS: _drawStalactitesUIS,
+    MPTherionPointSymbol.stalactiteStalagmiteUIS:
+        _drawStalactiteStalagmiteUIS,
+    MPTherionPointSymbol.stalactitesStalagmitesUIS:
+        _drawStalactitesStalagmitesUIS,
     MPTherionPointSymbol.stalagmiteUIS: _drawStalagmiteUIS,
     MPTherionPointSymbol.stalagmitesUIS: _drawStalagmitesUIS,
     MPTherionPointSymbol.wallCalciteUIS: _drawWallCalciteUIS,
@@ -707,6 +711,41 @@ abstract final class MPTherionPointSymbolsUIS {
           ..lineTo(-0.15, 0.4)
           ..moveTo(0, 0.15)
           ..lineTo(0.15, 0.4);
+
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_stalactitestalagmite_UIS`: a stalactite wedge on top and a
+  /// stalagmite wedge on the bottom, joined by two short vertical stems at
+  /// the pinch point (the singular, non-repeated counterpart of
+  /// `_drawStalactitesStalagmitesUIS`).
+  static void _drawStalactiteStalagmiteUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(-0.15, -0.4)
+          ..lineTo(0, -0.2)
+          ..lineTo(0.15, -0.4)
+          ..moveTo(0.15, 0.4)
+          ..lineTo(0, 0.2)
+          ..lineTo(-0.15, 0.4)
+          ..moveTo(0, 0.2)
+          ..lineTo(0, 0.1)
+          ..moveTo(0, -0.2)
+          ..lineTo(0, -0.1);
 
         canvas.drawPath(path, pen);
       },
@@ -1402,6 +1441,42 @@ abstract final class MPTherionPointSymbolsUIS {
         ..moveTo(dx, 0.105)
         ..lineTo(dx + 0.105, 0.28);
     });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_stalactitesstalagmites_UIS`: three `0.7`-scaled, staggered instances
+  /// of the singular `stalactite-stalagmite` hourglass shape (a stalactite
+  /// wedge on top, a stalagmite wedge on the bottom, joined by two short
+  /// vertical stems at the pinch point).
+  static void _drawStalactitesStalagmitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
+      path
+        ..moveTo(dx - 0.105, dy - 0.28)
+        ..lineTo(dx, dy - 0.14)
+        ..lineTo(dx + 0.105, dy - 0.28)
+        ..moveTo(dx + 0.105, dy + 0.28)
+        ..lineTo(dx, dy + 0.14)
+        ..lineTo(dx - 0.105, dy + 0.28)
+        ..moveTo(dx, dy + 0.14)
+        ..lineTo(dx, dy + 0.07)
+        ..moveTo(dx, dy - 0.14)
+        ..lineTo(dx, dy - 0.07);
+    }, staggered: true);
 
     MPSymbolTransform.draw(
       canvas: canvas,
