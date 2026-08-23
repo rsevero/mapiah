@@ -56,6 +56,12 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.curtainUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint5,
   ),
+  MPTherionPointSymbol.discPillarUIS: MPTherionSymbolPaint(
+    border: THPaint.thPaint11,
+  ),
+  MPTherionPointSymbol.discPillarsUIS: MPTherionSymbolPaint(
+    border: THPaint.thPaint11,
+  ),
   MPTherionPointSymbol.discStalagmitesUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint13,
   ),

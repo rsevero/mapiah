@@ -56,6 +56,8 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.narrowEndUIS: _drawNarrowEndUIS,
     MPTherionPointSymbol.paleoMaterialUIS: _drawPaleoMaterialUIS,
     MPTherionPointSymbol.pebblesUIS: _drawPebblesUIS,
+    MPTherionPointSymbol.discPillarUIS: _drawDiscPillarUIS,
+    MPTherionPointSymbol.discPillarsUIS: _drawDiscPillarsUIS,
     MPTherionPointSymbol.pillarUIS: _drawPillarUIS,
     MPTherionPointSymbol.pillarsUIS: _drawPillarsUIS,
     MPTherionPointSymbol.pillarWithCurtainsUIS: _drawPillarWithCurtainsUIS,
@@ -749,6 +751,39 @@ abstract final class MPTherionPointSymbolsUIS {
           ..lineTo(0, 0.1)
           ..moveTo(0, -0.2)
           ..lineTo(0, -0.1);
+
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_discpillar_UIS` is `p_pillar_UIS` plus one horizontal bar through
+  /// the middle: `(-.15u,0) -- (.15u,0)`, the "disc" the pillar grows from.
+  static void _drawDiscPillarUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(0, -0.15)
+          ..lineTo(0, 0.15)
+          ..moveTo(-0.15, 0.4)
+          ..lineTo(0, 0.15)
+          ..lineTo(0.15, 0.4)
+          ..moveTo(-0.15, -0.4)
+          ..lineTo(0, -0.15)
+          ..lineTo(0.15, -0.4)
+          ..moveTo(-0.15, 0)
+          ..lineTo(0.15, 0);
 
         canvas.drawPath(path, pen);
       },
@@ -1539,6 +1574,42 @@ abstract final class MPTherionPointSymbolsUIS {
         ..moveTo(dx, -0.105)
         ..lineTo(dx + 0.105, -0.28);
     });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_discpillars_UIS` is `p_pillars_UIS` plus one horizontal bar per
+  /// instance: `(-.15u,0) -- (.15u,0)` (`0.7`-scaled to `(-0.105,0) --
+  /// (0.105,0)`), the "disc" each pillar grows from, and is staggered
+  /// like the other `disc-*` group macros.
+  static void _drawDiscPillarsUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
+      path
+        ..moveTo(dx, dy - 0.105)
+        ..lineTo(dx, dy + 0.105)
+        ..moveTo(dx - 0.105, dy + 0.28)
+        ..lineTo(dx, dy + 0.105)
+        ..lineTo(dx + 0.105, dy + 0.28)
+        ..moveTo(dx - 0.105, dy - 0.28)
+        ..lineTo(dx, dy - 0.105)
+        ..lineTo(dx + 0.105, dy - 0.28)
+        ..moveTo(dx - 0.105, dy)
+        ..lineTo(dx + 0.105, dy);
+    }, staggered: true);
 
     MPSymbolTransform.draw(
       canvas: canvas,

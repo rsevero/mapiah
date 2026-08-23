@@ -14,6 +14,8 @@ enum MPTherionPointSymbol {
   continuationUIS,
   crystalUIS,
   curtainUIS,
+  discPillarUIS,
+  discPillarsUIS,
   discStalagmitesUIS,
   diskUIS,
   digUIS,
