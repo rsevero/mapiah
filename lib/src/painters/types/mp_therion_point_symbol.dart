@@ -23,6 +23,7 @@ enum MPTherionPointSymbol {
   gradientUIS,
   guanoUIS,
   helictiteUIS,
+  helictitesUIS,
   iceUIS,
   karrenUIS,
   lowEndUIS,

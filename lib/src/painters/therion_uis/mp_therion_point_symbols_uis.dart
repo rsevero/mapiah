@@ -48,6 +48,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.gradientUIS: _drawGradientUIS,
     MPTherionPointSymbol.guanoUIS: _drawGuanoUIS,
     MPTherionPointSymbol.helictiteUIS: _drawHelictiteUIS,
+    MPTherionPointSymbol.helictitesUIS: _drawHelictitesUIS,
     MPTherionPointSymbol.iceUIS: _drawIceUIS,
     MPTherionPointSymbol.karrenUIS: _drawKarrenUIS,
     MPTherionPointSymbol.lowEndUIS: _drawLowEndUIS,
@@ -144,6 +145,61 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+    );
+  }
+
+  static void _drawHelictitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = Path();
+
+    // p_helictites_UIS shifts each instance by (i * .45u, abs(i) * .15u)
+    // for the left instance (i = -1) but (i * .3u, abs(i) * .15u) for the
+    // center and right ones, unlike Therion's other repeated-instance point
+    // symbols, which use a single uniform x step for all three instances.
+    for (final double index in const <double>[-1, 0, 1]) {
+      final double dx = index < 0 ? index * 0.45 : index * 0.3;
+      final double dy = -index.abs() * 0.15;
+
+      path
+        ..moveTo(dx, dy - 0.28)
+        ..lineTo(dx, dy + 0.28)
+        ..moveTo(dx - 0.14, dy - 0.28)
+        ..lineTo(dx - 0.14, dy - 0.07)
+        ..cubicTo(
+          dx - 0.14,
+          dy - 0.028,
+          dx - 0.105,
+          dy - 0.014,
+          dx - 0.07,
+          dy - 0.014,
+        )
+        ..lineTo(dx, dy)
+        ..moveTo(dx + 0.14, dy + 0.28)
+        ..lineTo(dx + 0.14, dy + 0.07)
+        ..cubicTo(
+          dx + 0.14,
+          dy + 0.028,
+          dx + 0.105,
+          dy + 0.014,
+          dx + 0.07,
+          dy + 0.014,
+        )
+        ..lineTo(dx, dy);
+    }
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
     );
   }
 

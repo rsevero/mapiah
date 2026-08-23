@@ -25,6 +25,7 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.gradient: MPTherionPointSymbol.gradientUIS,
   THPointType.guano: MPTherionPointSymbol.guanoUIS,
   THPointType.helictite: MPTherionPointSymbol.helictiteUIS,
+  THPointType.helictites: MPTherionPointSymbol.helictitesUIS,
   THPointType.ice: MPTherionPointSymbol.iceUIS,
   THPointType.karren: MPTherionPointSymbol.karrenUIS,
   THPointType.lowEnd: MPTherionPointSymbol.lowEndUIS,

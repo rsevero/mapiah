@@ -35,6 +35,7 @@
   * Added `.aiderignore` and `.claudeignore` so aider and Claude Code keep agent session artifacts and generated/build output out of their context and file search; the root `.gitignore` gained a `!.aiderignore` exception so the file itself stays versioned alongside the `.aider*` session files.
   * Regenerated the Therion UIS Phase 1 point-symbol golden, which had drifted by an antialiasing-only 66 pixels in the `pillar` cell (no geometry or code change); the Phase 1 golden test now passes again.
   * Therion UIS `disc-stalagmites` points now render with their middle sub-symbol lower than the two side ones, matching `p_discstalagmites_UIS`'s `abs(i) * .15u` vertical offset (applied to the outer two instances only); Mapiah previously drew all three sub-symbols at the same height. Regenerated the Phase 3 golden coverage.
+  * Therion UIS `helictites` points (plural, a repeated group of three `helictite` sub-symbols) now have their own faithful rendering, matching `p_helictites_UIS`'s staggered layout (left instance offset `-.45u`, center/right offset `0`/`.3u`, outer two raised `.15u` above the middle one); Mapiah previously had no Therion UIS symbol registered for this point type at all. Added Phase 2 dispatch and golden regression coverage.
 
 ## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:

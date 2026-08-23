@@ -82,6 +82,9 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.helictiteUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint5,
   ),
+  MPTherionPointSymbol.helictitesUIS: MPTherionSymbolPaint(
+    border: THPaint.thPaint5,
+  ),
   MPTherionPointSymbol.iceUIS: MPTherionSymbolPaint(border: THPaint.thPaint6),
   MPTherionPointSymbol.karrenUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint1,
