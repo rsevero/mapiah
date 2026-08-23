@@ -15,6 +15,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
@@ -220,6 +221,16 @@ void main() {
         expect(paleoPaint.fill, isNotNull);
         expect(paleoPaint.fill!.style, PaintingStyle.fill);
         expect(paleoPaint.fill!.color, paleoPaint.border!.color);
+
+        // The Therion symbol itself no longer reads pointTypePaints/
+        // waterFlowPointSubtypesPaints at all — it has its own independent
+        // paint definition (mpTherionSymbolPaints), which must agree.
+        final MPTherionSymbolPaint symbolPaint =
+            mpTherionSymbolPaints[MPTherionPointSymbol.waterFlowPaleoUIS]!;
+
+        expect(symbolPaint.fill, isNotNull);
+        expect(symbolPaint.fill!.style, PaintingStyle.fill);
+        expect(symbolPaint.border, isNotNull);
       },
     );
 

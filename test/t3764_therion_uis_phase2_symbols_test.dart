@@ -15,6 +15,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'auxiliary/mp_symbol_golden_harness.dart';
@@ -52,14 +53,18 @@ void main() {
 
       for (int index = 0; index < phase2Symbols.length; index++) {
         final MPTherionPointSymbol symbol = phase2Symbols[index];
-        final void Function(Canvas, Offset, double, Paint)? drawMethod =
-            MPTherionPointSymbolsUIS.drawMethods[symbol];
+        final void Function(Canvas, Offset, double, MPTherionSymbolPaint)?
+        drawMethod = MPTherionPointSymbolsUIS.drawMethods[symbol];
 
         expect(drawMethod, isNotNull, reason: '$symbol has no draw method');
         final Offset position = Offset(index * 40.0, 20);
 
-        drawMethod!(canvas, position, 30, fillPaint);
-        drawMethod(canvas, position, 30, strokePaint);
+        drawMethod!(
+          canvas,
+          position,
+          30,
+          MPTherionSymbolPaint(fill: fillPaint, border: strokePaint),
+        );
       }
 
       final Picture picture = recorder.endRecording();
@@ -83,11 +88,20 @@ void main() {
           .map(
             (MPTherionPointSymbol symbol) => MPSymbolGoldenEntry(
               draw: (Canvas canvas, Offset center) {
-                final void Function(Canvas, Offset, double, Paint) drawMethod =
-                    MPTherionPointSymbolsUIS.drawMethods[symbol]!;
+                final void Function(
+                  Canvas,
+                  Offset,
+                  double,
+                  MPTherionSymbolPaint,
+                )
+                drawMethod = MPTherionPointSymbolsUIS.drawMethods[symbol]!;
 
-                drawMethod(canvas, center, u, fillPaint);
-                drawMethod(canvas, center, u, strokePaint);
+                drawMethod(
+                  canvas,
+                  center,
+                  u,
+                  MPTherionSymbolPaint(fill: fillPaint, border: strokePaint),
+                );
               },
             ),
           )

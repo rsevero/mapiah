@@ -7,6 +7,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 /// Faithful Dart ports of Therion's `p_*_UIS` MetaPost point symbols.
@@ -16,10 +17,16 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 /// with the canvas already translated/rotated/scaled by [MPSymbolTransform].
 /// MetaPost is Y-up while the canvas is Y-down, so every coordinate
 /// transcribed from `thPoint.mp` has its Y negated.
+///
+/// Each draw method is called exactly once per point, with the
+/// [MPTherionSymbolPaint] declared for it in [mpTherionSymbolPaints]:
+/// [MPTherionSymbolPaint.fill] and [MPTherionSymbolPaint.border] are
+/// non-null exactly when that symbol's macro `thfill`s/`thdraw`s, so a
+/// method never has to inspect a paint's style to know what to do with it.
 abstract final class MPTherionPointSymbolsUIS {
   static const Map<
     MPTherionPointSymbol,
-    void Function(Canvas, Offset, double, Paint)
+    void Function(Canvas, Offset, double, MPTherionSymbolPaint)
   >
   drawMethods = {
     MPTherionPointSymbol.airDraughtSummerUIS: _drawAirDraughtSummerUIS,
@@ -65,15 +72,8 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.waterUIS: _drawWaterUIS,
   };
 
-  static Paint _withPenWidth(Paint paint, double penFactor) {
-    if (paint.style == PaintingStyle.fill) {
-      return paint;
-    }
-
-    return Paint.from(paint)..strokeWidth = penFactor;
-  }
-
-  static bool _isFill(Paint paint) => paint.style == PaintingStyle.fill;
+  static Paint _withPenWidth(Paint paint, double penFactor) =>
+      Paint.from(paint)..strokeWidth = penFactor;
 
   static void _drawUnitPath({
     required Canvas canvas,
@@ -98,12 +98,8 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     final Path path = Path()
       ..moveTo(-0.15, -0.4)
       ..lineTo(0, -0.15)
@@ -114,19 +110,21 @@ abstract final class MPTherionPointSymbolsUIS {
       ..cubicTo(-0.08, 0.11, -0.04, 0.22, 0, 0.22)
       ..lineTo(0, 0.4);
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawHelictiteUIS(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     final Path path = Path()
       ..moveTo(0, -0.4)
       ..lineTo(0, 0.4)
@@ -139,38 +137,42 @@ abstract final class MPTherionPointSymbolsUIS {
       ..cubicTo(0.2, 0.04, 0.15, 0.02, 0.1, 0.02)
       ..lineTo(0, 0);
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawMoonmilkUIS(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     final Path path = Path()
       ..moveTo(-0.5, 0.2)
       ..cubicTo(-0.5, 0.02, -0.28, 0.02, -0.18, 0.105)
       ..cubicTo(-0.08, -0.08, 0.08, -0.08, 0.18, 0.105)
       ..cubicTo(0.28, 0.02, 0.5, 0.02, 0.5, 0.2);
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawAnastomosisUIS(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     final Path path = Path()
       ..moveTo(-0.5, 0.3)
       ..cubicTo(-0.49, 0.18, -0.34, 0.18, -0.32, 0.3)
@@ -183,33 +185,41 @@ abstract final class MPTherionPointSymbolsUIS {
       ..cubicTo(0.3, -0.15, 0.3, 0.15, 0.32, 0.3)
       ..cubicTo(0.34, 0.18, 0.49, 0.18, 0.5, 0.3);
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawScallopUIS(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     final Path path = Path()
       ..moveTo(0, 0.4)
       ..cubicTo(-0.15, 0.18, -0.2, 0.02, -0.2, -0.1)
       ..cubicTo(-0.2, -0.3, 0.2, -0.3, 0.2, -0.1)
       ..cubicTo(0.2, 0.02, 0.15, 0.18, 0, 0.4);
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawPopcornUIS(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -217,47 +227,60 @@ abstract final class MPTherionPointSymbolsUIS {
       rotation: 0.0,
       scale: u,
       drawUnitSymbol: () {
-        if (_isFill(paint)) {
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
           for (final double x in const <double>[-0.3, 0, 0.3]) {
-            canvas.drawCircle(Offset(x, -0.1), 0.1, paint);
+            canvas.drawCircle(Offset(x, -0.1), 0.1, fill);
           }
-          return;
         }
 
-        final Path path = Path()..moveTo(-0.5, 0.2)..lineTo(0.5, 0.2);
-        for (final double x in const <double>[-0.3, 0, 0.3]) {
-          path..moveTo(x, 0.2)..lineTo(x, -0.1);
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          final Path path = Path()..moveTo(-0.5, 0.2)..lineTo(0.5, 0.2);
+          for (final double x in const <double>[-0.3, 0, 0.3]) {
+            path..moveTo(x, 0.2)..lineTo(x, -0.1);
+          }
+          canvas.drawPath(path, _withPenWidth(border, mpTherionPenC));
         }
-        canvas.drawPath(path, _withPenWidth(paint, mpTherionPenC));
       },
     );
   }
 
-  static void _drawDiskUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (_isFill(paint)) {
-      return;
-    }
-
+  static void _drawDiskUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     final Path path = Path()
       ..moveTo(-0.2, 0.3)
       ..lineTo(0, 0)
       ..lineTo(0.2, 0.3)
       ..addOval(Rect.fromCircle(center: const Offset(0, -0.15), radius: 0.15));
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
-  static void _drawPebblesUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (_isFill(paint)) {
-      return;
-    }
-
+  static void _drawPebblesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     MPSymbolTransform.draw(
       canvas: canvas,
       position: position,
       rotation: 0.0,
       scale: u,
       drawUnitSymbol: () {
-        final Paint pen = _withPenWidth(paint, mpTherionPenC);
+        final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
         const List<(Offset, double)> pebbles = <(Offset, double)>[
           (Offset(0, -0.25), -20),
           (Offset(0.25, 0.25), 37),
@@ -274,24 +297,32 @@ abstract final class MPTherionPointSymbolsUIS {
     );
   }
 
-  static void _drawArcheoMaterialUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (_isFill(paint)) {
-      return;
-    }
-
+  static void _drawArcheoMaterialUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     final Path path = Path()
       ..moveTo(-0.5, 0.5)..lineTo(-0.2828, 0.2828)
       ..moveTo(-0.5, -0.5)..lineTo(-0.2828, -0.2828)
       ..moveTo(0, 0)..lineTo(0.4, 0)
       ..addOval(Rect.fromCircle(center: Offset.zero, radius: 0.4));
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
-  static void _drawPaleoMaterialUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (!_isFill(paint)) {
-      return;
-    }
-
+  static void _drawPaleoMaterialUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     // A bone silhouette: a shaft strip plus two pairs of round knuckles, all
     // four knuckles the same size and sitting right on top of the shaft's
     // two ends (so the shaft disappears under them), on one path relying on
@@ -319,48 +350,91 @@ abstract final class MPTherionPointSymbolsUIS {
         Rect.fromCircle(center: const Offset(0.1101, -0.3415), radius: 0.105),
       );
 
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.fill!,
+      path: path,
+    );
   }
 
-  static void _drawGuanoUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (_isFill(paint)) {
-      return;
-    }
-
+  static void _drawGuanoUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     final Path path = Path()
       ..moveTo(-0.4, -0.2)
       ..cubicTo(-0.18, -0.38, -0.18, 0.35, 0, 0.35)
       ..cubicTo(0.18, 0.35, 0.18, -0.38, 0.4, -0.2);
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+    _drawUnitPath(
+      canvas: canvas,
+      position: position,
+      u: u,
+      paint: paint.border!,
+      path: path,
+    );
   }
 
   static void _drawArrowPoint(
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint, {
+    MPTherionSymbolPaint paint, {
     required bool paleo,
   }) {
     final Path arrow = Path()
       ..moveTo(-0.15, -0.6)..lineTo(0, -1)..lineTo(0.15, -0.6)..close();
-    final Path stroke = Path()..moveTo(0, 1)..lineTo(0, -1);
-    if (paleo) {
-      stroke.addArc(const Rect.fromLTRB(-0.2, 0.2, 0.2, 0.6), math.pi, math.pi);
-    }
-    _drawUnitPath(
+
+    MPSymbolTransform.draw(
       canvas: canvas,
       position: position,
-      u: u,
-      paint: paint,
-      path: _isFill(paint) ? arrow : (stroke..addPath(arrow, Offset.zero)),
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
+          canvas.drawPath(arrow, fill);
+        }
+
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          final Path stroke = Path()..moveTo(0, 1)..lineTo(0, -1);
+          if (paleo) {
+            stroke.addArc(
+              const Rect.fromLTRB(-0.2, 0.2, 0.2, 0.6),
+              math.pi,
+              math.pi,
+            );
+          }
+          canvas.drawPath(
+            stroke..addPath(arrow, Offset.zero),
+            _withPenWidth(border, mpTherionPenC),
+          );
+        }
+      },
     );
   }
 
-  static void _drawWaterFlowPaleoUIS(Canvas canvas, Offset position, double u, Paint paint) {
+  static void _drawWaterFlowPaleoUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     _drawArrowPoint(canvas, position, u, paint, paleo: true);
   }
 
-  static void _drawGradientUIS(Canvas canvas, Offset position, double u, Paint paint) {
+  static void _drawGradientUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     _drawArrowPoint(canvas, position, u, paint, paleo: false);
   }
 
@@ -372,16 +446,59 @@ abstract final class MPTherionPointSymbolsUIS {
     ..cubicTo(-0.13, -0.08, 0.08, -0.14, 0.08, -0.2)
     ..cubicTo(0.08, -0.32, 0, -0.42, 0, -0.5);
 
-  static void _drawWaterFlowPermanentUIS(Canvas canvas, Offset position, double u, Paint paint) {
+  static void _drawWaterFlowPermanentUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
     final Path arrow = Path()
       ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
-    final Path path = _isFill(paint) ? arrow : (_waterFlowPath()..addPath(arrow, Offset.zero));
-    _drawUnitPath(canvas: canvas, position: position, u: u, paint: paint, path: path);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
+          canvas.drawPath(arrow, fill);
+        }
+
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          canvas.drawPath(
+            _waterFlowPath()..addPath(arrow, Offset.zero),
+            _withPenWidth(border, mpTherionPenC),
+          );
+        }
+      },
+    );
   }
 
-  static void _drawWaterFlowIntermittentUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    if (_isFill(paint)) {
-      _drawWaterFlowPermanentUIS(canvas, position, u, paint);
+  static void _drawWaterFlowIntermittentUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint? fill = paint.fill;
+
+    if (fill != null) {
+      _drawWaterFlowPermanentUIS(
+        canvas,
+        position,
+        u,
+        MPTherionSymbolPaint(fill: fill),
+      );
+    }
+
+    final Paint? border = paint.border;
+
+    if (border == null) {
       return;
     }
 
@@ -398,31 +515,53 @@ abstract final class MPTherionPointSymbolsUIS {
         const double gap = 0.06;
         double distance = 0;
         while (distance < metric.length) {
-          dashed.addPath(metric.extractPath(distance, math.min(distance + dash, metric.length)), Offset.zero);
+          dashed.addPath(
+            metric.extractPath(
+              distance,
+              math.min(distance + dash, metric.length),
+            ),
+            Offset.zero,
+          );
           distance += dash + gap;
         }
-        canvas.drawPath(dashed, _withPenWidth(paint, mpTherionPenC));
+        canvas.drawPath(dashed, _withPenWidth(border, mpTherionPenC));
         final Path arrow = Path()
           ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
-        canvas.drawPath(arrow, _withPenWidth(paint, mpTherionPenC));
+        canvas.drawPath(arrow, _withPenWidth(border, mpTherionPenC));
       },
     );
   }
 
-  static void _drawCampUIS(Canvas canvas, Offset position, double u, Paint paint) {
-    final Path filled = Path()
-      ..moveTo(-0.3, 0.4)..lineTo(0, -0.3)..lineTo(0.3, 0.4)..close()
-      ..moveTo(0, -0.5)..lineTo(0.35, -0.45)..lineTo(0.07, -0.35)..close();
-    final Path stroked = Path()
-      ..moveTo(-0.5, 0.4)..lineTo(0.5, 0.4)
-      ..moveTo(-0.4, 0.4)..lineTo(0, -0.5)..lineTo(0.4, 0.4);
-    _drawUnitPath(
+  static void _drawCampUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    MPSymbolTransform.draw(
       canvas: canvas,
       position: position,
-      u: u,
-      paint: paint,
-      path: _isFill(paint) ? filled : stroked,
-      penFactor: _isFill(paint) ? mpTherionPenC : mpTherionPenD,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
+          final Path filled = Path()
+            ..moveTo(-0.3, 0.4)..lineTo(0, -0.3)..lineTo(0.3, 0.4)..close()
+            ..moveTo(0, -0.5)..lineTo(0.35, -0.45)..lineTo(0.07, -0.35)..close();
+          canvas.drawPath(filled, fill);
+        }
+
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          final Path stroked = Path()
+            ..moveTo(-0.5, 0.4)..lineTo(0.5, 0.4)
+            ..moveTo(-0.4, 0.4)..lineTo(0, -0.5)..lineTo(0.4, 0.4);
+          canvas.drawPath(stroked, _withPenWidth(border, mpTherionPenD));
+        }
+      },
     );
   }
 
@@ -430,13 +569,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -460,13 +595,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -490,13 +621,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -523,14 +650,10 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint topPen = _withPenWidth(paint, mpTherionPenC);
-    final Paint strawPen = _withPenWidth(paint, mpTherionPenD);
+    final Paint topPen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint strawPen = _withPenWidth(paint.border!, mpTherionPenD);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -565,9 +688,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -596,9 +719,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -623,13 +746,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -651,13 +770,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -686,13 +801,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -715,9 +826,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -740,9 +851,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -765,9 +876,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenB);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -796,9 +907,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -828,10 +939,8 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
-
     MPSymbolTransform.draw(
       canvas: canvas,
       position: position,
@@ -844,7 +953,17 @@ abstract final class MPTherionPointSymbolsUIS {
           ..lineTo(0.2, 0.5)
           ..close();
 
-        canvas.drawPath(path, pen);
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
+          canvas.drawPath(path, fill);
+        }
+
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          canvas.drawPath(path, _withPenWidth(border, mpTherionPenC));
+        }
       },
     );
   }
@@ -856,10 +975,8 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
-
     MPSymbolTransform.draw(
       canvas: canvas,
       position: position,
@@ -877,7 +994,17 @@ abstract final class MPTherionPointSymbolsUIS {
           ..lineTo(-0.1591, -0.0530)
           ..close();
 
-        canvas.drawPath(path, pen);
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
+          canvas.drawPath(path, fill);
+        }
+
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          canvas.drawPath(path, _withPenWidth(border, mpTherionPenC));
+        }
       },
     );
   }
@@ -886,14 +1013,10 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
-    final Paint dotPen = _withPenWidth(paint, mpTherionPenX)
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint dotPen = _withPenWidth(paint.border!, mpTherionPenX)
       ..strokeCap = StrokeCap.round;
 
     MPSymbolTransform.draw(
@@ -917,14 +1040,10 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint outlinePen = _withPenWidth(paint, mpTherionPenC);
-    final Paint detailPen = _withPenWidth(paint, mpTherionPenD);
+    final Paint outlinePen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint detailPen = _withPenWidth(paint.border!, mpTherionPenD);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -971,7 +1090,7 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
     const Rect ellipseRect = Rect.fromLTRB(-0.425, -0.3, 0.425, 0.3);
 
@@ -981,9 +1100,11 @@ abstract final class MPTherionPointSymbolsUIS {
       rotation: 0.0,
       scale: u,
       drawUnitSymbol: () {
-        if (_isFill(paint)) {
+        final Paint? fill = paint.fill;
+
+        if (fill != null) {
           final Paint hatchPen = Paint()
-            ..color = paint.color
+            ..color = fill.color
             ..style = PaintingStyle.stroke
             ..strokeWidth = mpTherionPenD;
 
@@ -997,10 +1118,13 @@ abstract final class MPTherionPointSymbolsUIS {
             );
           }
           canvas.restore();
-          return;
         }
 
-        canvas.drawOval(ellipseRect, _withPenWidth(paint, mpTherionPenD));
+        final Paint? border = paint.border;
+
+        if (border != null) {
+          canvas.drawOval(ellipseRect, _withPenWidth(border, mpTherionPenD));
+        }
       },
     );
   }
@@ -1036,17 +1160,13 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
     _drawUnitPath(
       canvas: canvas,
       position: position,
       u: u,
-      paint: paint,
+      paint: paint.border!,
       path: _airDraughtBasePath(),
     );
   }
@@ -1055,13 +1175,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -1095,13 +1211,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -1164,13 +1276,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, -0.28)
@@ -1195,13 +1303,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, 0.28)
@@ -1226,13 +1330,9 @@ abstract final class MPTherionPointSymbolsUIS {
     Canvas canvas,
     Offset position,
     double u,
-    Paint paint,
+    MPTherionSymbolPaint paint,
   ) {
-    if (_isFill(paint)) {
-      return;
-    }
-
-    final Paint pen = _withPenWidth(paint, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, -0.105)

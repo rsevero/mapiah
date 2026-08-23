@@ -12,6 +12,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/helpers/mp_label_painter.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -293,8 +294,10 @@ class MPInteractionAux {
       }
     }
 
-    final void Function(Canvas, Offset, double, Paint) drawMethod =
-        MPTherionPointSymbolsUIS.drawMethods[therionSymbol]!;
+    final void Function(Canvas, Offset, double, MPTherionSymbolPaint)
+    drawMethod = MPTherionPointSymbolsUIS.drawMethods[therionSymbol]!;
+    final MPTherionSymbolPaint symbolPaint =
+        mpTherionSymbolPaints[therionSymbol]!;
     final double u = symbolUnit.canvasValue;
 
     canvas.save();
@@ -305,13 +308,7 @@ class MPInteractionAux {
     canvas.scale(1, -1);
     canvas.rotate(pointPaint.rotation);
 
-    if (pointPaint.fill != null) {
-      drawMethod(canvas, Offset.zero, u, pointPaint.fill!);
-    }
-
-    if (pointPaint.border != null) {
-      drawMethod(canvas, Offset.zero, u, pointPaint.border!);
-    }
+    drawMethod(canvas, Offset.zero, u, symbolPaint);
 
     canvas.restore();
   }

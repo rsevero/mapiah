@@ -2,7 +2,6 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'auxiliary/mp_symbol_golden_harness.dart';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
@@ -15,6 +14,7 @@ import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 void main() {
@@ -98,11 +98,11 @@ void main() {
           .map(
             (MPTherionPointSymbol symbol) => MPSymbolGoldenEntry(
               draw: (Canvas canvas, Offset center) {
-                final Paint paint =
+                final MPTherionSymbolPaint paint =
                     (symbol == MPTherionPointSymbol.entranceUIS ||
                         symbol == MPTherionPointSymbol.digUIS)
-                    ? fillPaint
-                    : strokePaint;
+                    ? MPTherionSymbolPaint(fill: fillPaint)
+                    : MPTherionSymbolPaint(border: strokePaint);
 
                 MPTherionPointSymbolsUIS.drawMethods[symbol]!(
                   canvas,
@@ -138,55 +138,67 @@ void main() {
     });
 
     test(
-      'pillar draws nothing on the fill pass, unlike a fill-and-stroke symbol',
-      () async {
-        // p_pillar_UIS (thPoint.mp) only thdraw's open V-shaped strokes, no
-        // thfill; MPInteractionAux._drawTherionPoint calls every symbol's
-        // draw method once with a fill-style Paint and once with a
-        // stroke-style one, so a symbol with unclosed subpaths must skip
-        // the fill pass itself, or Skia's implicit-close-on-fill turns
-        // those open V's into solid filled triangles.
-        const double imageSize = 100;
-        final void Function(Canvas, Offset, double, Paint) drawMethod =
-            MPTherionPointSymbolsUIS.drawMethods[MPTherionPointSymbol
-                .pillarUIS]!;
+      'mpTherionSymbolPaints has exactly one entry per MPTherionPointSymbol',
+      () {
+        expect(
+          mpTherionSymbolPaints.keys.toSet(),
+          MPTherionPointSymbol.values.toSet(),
+        );
+      },
+    );
 
-        Future<int> countDarkPixels(Paint paint) async {
-          final ui.PictureRecorder recorder = ui.PictureRecorder();
-          final Canvas canvas = Canvas(recorder);
+    test(
+      'mpTherionSymbolPaints only declares a fill for the 10 symbols whose '
+      'macro actually thfills something',
+      () {
+        // p_popcorn_UIS, p_water_UIS, p_paleomaterial_UIS, p_entrance_UIS,
+        // p_waterflow_paleo_UIS, p_gradient_UIS, p_waterflow_permanent_UIS,
+        // p_camp_UIS, and p_dig_UIS all thfill directly;
+        // p_waterflow_intermittent_UIS has no literal thfill but delegates
+        // to p_waterflow_permanent_UIS's fill. Every other p_*_UIS macro
+        // only thdraws, so mpTherionSymbolPaints leaves its fill null for
+        // them — MPTherionPointSymbolsUIS's draw methods rely on that to
+        // know a fill pass never happens for them, with no runtime guard.
+        const Set<MPTherionPointSymbol> fillUsingSymbols =
+            <MPTherionPointSymbol>{
+              MPTherionPointSymbol.campUIS,
+              MPTherionPointSymbol.digUIS,
+              MPTherionPointSymbol.entranceUIS,
+              MPTherionPointSymbol.gradientUIS,
+              MPTherionPointSymbol.paleoMaterialUIS,
+              MPTherionPointSymbol.popcornUIS,
+              MPTherionPointSymbol.waterFlowIntermittentUIS,
+              MPTherionPointSymbol.waterFlowPaleoUIS,
+              MPTherionPointSymbol.waterFlowPermanentUIS,
+              MPTherionPointSymbol.waterUIS,
+            };
 
-          drawMethod(canvas, const Offset(50, 50), 30, paint);
+        for (final MPTherionPointSymbol symbol
+            in MPTherionPointSymbol.values) {
+          final bool hasFill = mpTherionSymbolPaints[symbol]!.fill != null;
 
-          final ui.Picture picture = recorder.endRecording();
-          final ui.Image image = await picture.toImage(
-            imageSize.toInt(),
-            imageSize.toInt(),
+          expect(
+            hasFill,
+            fillUsingSymbols.contains(symbol),
+            reason: '$symbol',
           );
-          final ByteData pixels = (await image.toByteData())!;
-          int darkPixelCount = 0;
-
-          for (int i = 3; i < pixels.lengthInBytes; i += 4) {
-            if (pixels.getUint8(i) > 0) {
-              darkPixelCount++;
-            }
-          }
-
-          image.dispose();
-          picture.dispose();
-
-          return darkPixelCount;
         }
 
-        final Paint fillPaint = Paint()
-          ..color = const Color(0xFF000000)
-          ..style = PaintingStyle.fill;
-        final Paint strokePaint = Paint()
-          ..color = const Color(0xFF000000)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3;
-
-        expect(await countDarkPixels(fillPaint), 0);
-        expect(await countDarkPixels(strokePaint), greaterThan(0));
+        // paleoMaterial is the one fill-only symbol (p_paleomaterial_UIS
+        // has no thdraw at all).
+        expect(
+          mpTherionSymbolPaints[MPTherionPointSymbol.paleoMaterialUIS]!
+              .border,
+          isNull,
+        );
+        expect(
+          mpTherionSymbolPaints[MPTherionPointSymbol.pillarUIS]!.fill,
+          isNull,
+        );
+        expect(
+          mpTherionSymbolPaints[MPTherionPointSymbol.pillarUIS]!.border,
+          isNotNull,
+        );
       },
     );
 
