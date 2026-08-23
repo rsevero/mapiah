@@ -33,6 +33,8 @@ enum MPTherionPointSymbol {
   pebblesUIS,
   pillarUIS,
   pillarsUIS,
+  pillarWithCurtainsUIS,
+  pillarsWithCurtainsUIS,
   popcornUIS,
   sandUIS,
   scallopUIS,

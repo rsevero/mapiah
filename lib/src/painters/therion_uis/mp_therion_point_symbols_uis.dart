@@ -58,6 +58,9 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.pebblesUIS: _drawPebblesUIS,
     MPTherionPointSymbol.pillarUIS: _drawPillarUIS,
     MPTherionPointSymbol.pillarsUIS: _drawPillarsUIS,
+    MPTherionPointSymbol.pillarWithCurtainsUIS: _drawPillarWithCurtainsUIS,
+    MPTherionPointSymbol.pillarsWithCurtainsUIS:
+        _drawPillarsWithCurtainsUIS,
     MPTherionPointSymbol.popcornUIS: _drawPopcornUIS,
     MPTherionPointSymbol.sandUIS: _drawSandUIS,
     MPTherionPointSymbol.scallopUIS: _drawScallopUIS,
@@ -1566,6 +1569,75 @@ abstract final class MPTherionPointSymbolsUIS {
         ..lineTo(dx, -0.105)
         ..lineTo(dx + 0.105, -0.28);
     });
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_pillarwithcurtains_UIS`: `_drawPillarUIS`'s two wedges, but with a
+  /// curtain-like S-curve (mirrored about the horizontal axis) instead of a
+  /// straight stem joining them, matching `(0,.1u){dir 180}..(-.1u,0)..
+  /// {dir 0}(0,-.1u)` (Y-negated).
+  static void _drawPillarWithCurtainsUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(0, -0.25)
+          ..lineTo(0, -0.1)
+          ..cubicTo(-0.07, -0.1, -0.13, 0, -0.1, 0)
+          ..cubicTo(-0.13, 0, -0.07, 0.1, 0, 0.1)
+          ..lineTo(0, 0.25)
+          ..moveTo(-0.15, 0.5)
+          ..lineTo(0, 0.25)
+          ..lineTo(0.15, 0.5)
+          ..moveTo(-0.15, -0.5)
+          ..lineTo(0, -0.25)
+          ..lineTo(0.15, -0.5);
+
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  static void _drawPillarsWithCurtainsUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
+      path
+        ..moveTo(dx, dy - 0.175)
+        ..lineTo(dx, dy - 0.07)
+        ..cubicTo(dx - 0.049, dy - 0.07, dx - 0.091, dy, dx - 0.07, dy)
+        ..cubicTo(dx - 0.091, dy, dx - 0.049, dy + 0.07, dx, dy + 0.07)
+        ..lineTo(dx, dy + 0.175)
+        ..moveTo(dx - 0.105, dy + 0.35)
+        ..lineTo(dx, dy + 0.175)
+        ..lineTo(dx + 0.105, dy + 0.35)
+        ..moveTo(dx - 0.105, dy - 0.35)
+        ..lineTo(dx, dy - 0.175)
+        ..lineTo(dx + 0.105, dy - 0.35);
+    }, staggered: true);
 
     MPSymbolTransform.draw(
       canvas: canvas,

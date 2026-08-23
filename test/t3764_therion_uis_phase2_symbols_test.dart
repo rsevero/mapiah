@@ -34,6 +34,7 @@ void main() {
       MPTherionPointSymbol.moonmilkUIS,
       MPTherionPointSymbol.paleoMaterialUIS,
       MPTherionPointSymbol.pebblesUIS,
+      MPTherionPointSymbol.pillarWithCurtainsUIS,
       MPTherionPointSymbol.popcornUIS,
       MPTherionPointSymbol.scallopUIS,
       MPTherionPointSymbol.stalactiteStalagmiteUIS,
@@ -145,6 +146,8 @@ void main() {
             THPointType.moonmilk: MPTherionPointSymbol.moonmilkUIS,
             THPointType.paleoMaterial: MPTherionPointSymbol.paleoMaterialUIS,
             THPointType.pebbles: MPTherionPointSymbol.pebblesUIS,
+            THPointType.pillarWithCurtains:
+                MPTherionPointSymbol.pillarWithCurtainsUIS,
             THPointType.popcorn: MPTherionPointSymbol.popcornUIS,
             THPointType.scallop: MPTherionPointSymbol.scallopUIS,
             THPointType.stalactiteStalagmite:

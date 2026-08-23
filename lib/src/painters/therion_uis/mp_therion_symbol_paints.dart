@@ -111,6 +111,12 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.pillarsUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint11,
   ),
+  MPTherionPointSymbol.pillarWithCurtainsUIS: MPTherionSymbolPaint(
+    border: THPaint.thPaint11,
+  ),
+  MPTherionPointSymbol.pillarsWithCurtainsUIS: MPTherionSymbolPaint(
+    border: THPaint.thPaint11,
+  ),
   MPTherionPointSymbol.popcornUIS: MPTherionSymbolPaint(
     border: THPaint.thPaint12,
     fill: THPaint.thPaint1012,

@@ -35,6 +35,10 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.pebbles: MPTherionPointSymbol.pebblesUIS,
   THPointType.pillar: MPTherionPointSymbol.pillarUIS,
   THPointType.pillars: MPTherionPointSymbol.pillarsUIS,
+  THPointType.pillarWithCurtains:
+      MPTherionPointSymbol.pillarWithCurtainsUIS,
+  THPointType.pillarsWithCurtains:
+      MPTherionPointSymbol.pillarsWithCurtainsUIS,
   THPointType.popcorn: MPTherionPointSymbol.popcornUIS,
   THPointType.sand: MPTherionPointSymbol.sandUIS,
   THPointType.scallop: MPTherionPointSymbol.scallopUIS,
