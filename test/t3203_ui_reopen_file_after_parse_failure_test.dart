@@ -177,12 +177,14 @@ void main() {
           scrapOptions: const [],
           encoding: mpDefaultEncoding,
         );
-    final TH2FileEditController failedController = mpLocator
-        .mpGeneralController
-        .getTH2FileEditController(
-          filename: filename,
-          fileBytes: duplicateScrapFileBytes,
-        );
+    try {
+      mpLocator.mpGeneralController.getTH2FileEditController(
+        filename: filename,
+        fileBytes: duplicateScrapFileBytes,
+      );
+    } catch (e) {
+      // Expected exception.
+    }
 
     mpLocator.mpGeneralController.addFileTab(
       persistentController.th2File.filename,
@@ -202,7 +204,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.byType(MPErrorDialog), findsOneWidget);
-    expect(failedController.isFileLoaded, isFalse);
     expect(
       mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
         filename,

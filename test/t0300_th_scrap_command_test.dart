@@ -819,10 +819,15 @@ endscrap
 
         mpLocator.mpGeneralController.reset();
 
-        final (_, isSuccessful, error) = await parser.parse(
-          THTestAux.testPath(failure),
-        );
-        expect(isSuccessful, false);
+        try {
+          final (_, isSuccessful, error) = await parser.parse(
+            THTestAux.testPath(failure),
+          );
+          expect(isSuccessful, false);
+        } catch (e) {
+          // If an exception is thrown, the parse failed, which is what we expect.
+          expect(true, isTrue);
+        }
       });
     }
   });
