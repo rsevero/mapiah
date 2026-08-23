@@ -890,7 +890,13 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    // Therion's p_sand_UIS `thdraw`s three zero-length paths with a round
+    // pen, i.e. three dots 0.2u from the center at 0/120/240 degrees, not
+    // radial lines.
+    final Paint dot = Paint()
+      ..color = paint.border!.color
+      ..style = PaintingStyle.fill;
+    final double radius = mpTherionPenB / 2;
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -898,19 +904,13 @@ abstract final class MPTherionPointSymbolsUIS {
       rotation: 0.0,
       scale: u,
       drawUnitSymbol: () {
-        final Path path = Path();
-
         for (final double angleDeg in const <double>[0, 120, 240]) {
           final double angle = angleDeg * (math.pi / 180);
           final double cosA = math.cos(angle);
           final double sinA = math.sin(angle);
 
-          path
-            ..moveTo(0, 0)
-            ..lineTo(-0.2 * sinA, -0.2 * cosA);
+          canvas.drawCircle(Offset(-0.2 * sinA, -0.2 * cosA), radius, dot);
         }
-
-        canvas.drawPath(path, pen);
       },
     );
   }
