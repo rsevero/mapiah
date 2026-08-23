@@ -18,6 +18,8 @@ const Map<THPointType, MPTherionPointSymbol> therionUISPointSymbols = {
   THPointType.curtain: MPTherionPointSymbol.curtainUIS,
   THPointType.discPillar: MPTherionPointSymbol.discPillarUIS,
   THPointType.discPillars: MPTherionPointSymbol.discPillarsUIS,
+  THPointType.discStalactite: MPTherionPointSymbol.discStalactiteUIS,
+  THPointType.discStalactites: MPTherionPointSymbol.discStalactitesUIS,
   THPointType.discStalagmites: MPTherionPointSymbol.discStalagmitesUIS,
   THPointType.disk: MPTherionPointSymbol.diskUIS,
   THPointType.dig: MPTherionPointSymbol.digUIS,

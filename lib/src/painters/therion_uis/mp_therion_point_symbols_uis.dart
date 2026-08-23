@@ -67,6 +67,8 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.sandUIS: _drawSandUIS,
     MPTherionPointSymbol.scallopUIS: _drawScallopUIS,
     MPTherionPointSymbol.sodaStrawUIS: _drawSodaStrawUIS,
+    MPTherionPointSymbol.discStalactiteUIS: _drawDiscStalactiteUIS,
+    MPTherionPointSymbol.discStalactitesUIS: _drawDiscStalactitesUIS,
     MPTherionPointSymbol.stalactiteUIS: _drawStalactiteUIS,
     MPTherionPointSymbol.stalactitesUIS: _drawStalactitesUIS,
     MPTherionPointSymbol.stalactiteStalagmiteUIS:
@@ -666,6 +668,37 @@ abstract final class MPTherionPointSymbolsUIS {
             ..lineTo(0.4, 0.4);
           canvas.drawPath(stroked, _withPenWidth(border, mpTherionPenC));
         }
+      },
+    );
+  }
+
+  /// `p_discstalactite_UIS` is `p_stalactite_UIS` plus one horizontal bar
+  /// through the middle: `(-.15u,-.1u) -- (.15u,-.1u)` (Y-negated to
+  /// `(-0.15,0.1) -- (0.15,0.1)`), the "disc" the stalactite hangs from.
+  static void _drawDiscStalactiteUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(0, 0.4)
+          ..lineTo(0, -0.15)
+          ..lineTo(-0.15, -0.4)
+          ..moveTo(0, -0.15)
+          ..lineTo(0.15, -0.4)
+          ..moveTo(-0.15, 0.1)
+          ..lineTo(0.15, 0.1);
+
+        canvas.drawPath(path, pen);
       },
     );
   }
@@ -1546,6 +1579,40 @@ abstract final class MPTherionPointSymbolsUIS {
         ..lineTo(dx + 0.105, dy + 0.28)
         ..moveTo(dx - 0.105, dy - 0.07)
         ..lineTo(dx + 0.105, dy - 0.07);
+    }, staggered: true);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_discstalactites_UIS` is `p_stalactites_UIS` plus one horizontal bar
+  /// per instance: `(-.15u,-.1u) -- (.15u,-.1u)` (Y-negated and
+  /// `0.7`-scaled to `(-0.105,0.07) -- (0.105,0.07)`), the "disc" the
+  /// stalactites hang from, and is staggered like the other `disc-*` group
+  /// macros.
+  static void _drawDiscStalactitesUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
+      path
+        ..moveTo(dx, dy + 0.28)
+        ..lineTo(dx, dy - 0.105)
+        ..lineTo(dx - 0.105, dy - 0.28)
+        ..moveTo(dx, dy - 0.105)
+        ..lineTo(dx + 0.105, dy - 0.28)
+        ..moveTo(dx - 0.105, dy + 0.07)
+        ..lineTo(dx + 0.105, dy + 0.07);
     }, staggered: true);
 
     MPSymbolTransform.draw(

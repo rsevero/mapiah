@@ -27,6 +27,7 @@ void main() {
       MPTherionPointSymbol.campUIS,
       MPTherionPointSymbol.curtainUIS,
       MPTherionPointSymbol.discPillarUIS,
+      MPTherionPointSymbol.discStalactiteUIS,
       MPTherionPointSymbol.diskUIS,
       MPTherionPointSymbol.gradientUIS,
       MPTherionPointSymbol.guanoUIS,
@@ -140,6 +141,8 @@ void main() {
             THPointType.camp: MPTherionPointSymbol.campUIS,
             THPointType.curtain: MPTherionPointSymbol.curtainUIS,
             THPointType.discPillar: MPTherionPointSymbol.discPillarUIS,
+            THPointType.discStalactite:
+                MPTherionPointSymbol.discStalactiteUIS,
             THPointType.disk: MPTherionPointSymbol.diskUIS,
             THPointType.gradient: MPTherionPointSymbol.gradientUIS,
             THPointType.guano: MPTherionPointSymbol.guanoUIS,
