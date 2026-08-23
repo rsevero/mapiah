@@ -75,6 +75,7 @@ abstract final class MPTherionPointSymbolsUIS {
         _drawStalactiteStalagmiteUIS,
     MPTherionPointSymbol.stalactitesStalagmitesUIS:
         _drawStalactitesStalagmitesUIS,
+    MPTherionPointSymbol.discStalagmiteUIS: _drawDiscStalagmiteUIS,
     MPTherionPointSymbol.stalagmiteUIS: _drawStalagmiteUIS,
     MPTherionPointSymbol.stalagmitesUIS: _drawStalagmitesUIS,
     MPTherionPointSymbol.wallCalciteUIS: _drawWallCalciteUIS,
@@ -723,6 +724,37 @@ abstract final class MPTherionPointSymbolsUIS {
           ..lineTo(-0.15, -0.4)
           ..moveTo(0, -0.15)
           ..lineTo(0.15, -0.4);
+
+        canvas.drawPath(path, pen);
+      },
+    );
+  }
+
+  /// `p_discstalagmite_UIS` is `p_stalagmite_UIS` plus one horizontal bar
+  /// through the middle: `(-.15u,.1u) -- (.15u,.1u)` (Y-negated to
+  /// `(-0.15,-0.1) -- (0.15,-0.1)`), the "disc" the stalagmite grows from.
+  static void _drawDiscStalagmiteUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        final Path path = Path()
+          ..moveTo(0, -0.4)
+          ..lineTo(0, 0.15)
+          ..lineTo(-0.15, 0.4)
+          ..moveTo(0, 0.15)
+          ..lineTo(0.15, 0.4)
+          ..moveTo(-0.15, -0.1)
+          ..lineTo(0.15, -0.1);
 
         canvas.drawPath(path, pen);
       },
