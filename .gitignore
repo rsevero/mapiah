@@ -122,3 +122,4 @@ android/app/.cxx/
 
 .claude/
 .aider*
+!.aiderignore

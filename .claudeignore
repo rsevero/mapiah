@@ -1,0 +1,21 @@
+# AI agent ignore list: keep agent session noise and generated/build
+# artifacts out of the agent's context and file search. Git-wise these
+# are already covered by .gitignore; this file is only about agent
+# tooling (Claude Code reads it as .claudeignore).
+.aider*
+.claude/
+.codex
+.zed/
+build/
+.dart_tool/
+**/flutter/ephemeral/
+AppDir
+appimage-build
+.flatpak-builder
+.tools/
+packaging/linux/flatpak/built-*/
+test/failures/
+auxiliary/**/*.pdf
+**/therion*.log
+.idea/
+.vscode/
