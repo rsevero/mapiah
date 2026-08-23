@@ -241,9 +241,13 @@ abstract final class MPTherionPointSymbolsUIS {
         final Paint? border = paint.border;
 
         if (border != null) {
-          final Path path = Path()..moveTo(-0.5, 0.2)..lineTo(0.5, 0.2);
+          final Path path = Path()
+            ..moveTo(-0.5, 0.2)
+            ..lineTo(0.5, 0.2);
           for (final double x in const <double>[-0.3, 0, 0.3]) {
-            path..moveTo(x, 0.2)..lineTo(x, -0.1);
+            path
+              ..moveTo(x, 0.2)
+              ..lineTo(x, -0.1);
           }
           canvas.drawPath(path, _withPenWidth(border, mpTherionPenC));
         }
@@ -308,9 +312,12 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Path path = Path()
-      ..moveTo(-0.5, 0.5)..lineTo(-0.2828, 0.2828)
-      ..moveTo(-0.5, -0.5)..lineTo(-0.2828, -0.2828)
-      ..moveTo(0, 0)..lineTo(0.4, 0)
+      ..moveTo(-0.5, 0.5)
+      ..lineTo(-0.2828, 0.2828)
+      ..moveTo(-0.5, -0.5)
+      ..lineTo(-0.2828, -0.2828)
+      ..moveTo(0, 0)
+      ..lineTo(0.4, 0)
       ..addOval(Rect.fromCircle(center: Offset.zero, radius: 0.4));
     _drawUnitPath(
       canvas: canvas,
@@ -370,10 +377,13 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
+    // p_guano_UIS: (-.4u,.2u){dir 40}..{down}(0,-.35u){up}..{dir-40}(.4u,.2u),
+    // with MetaPost's resolved control points (Y-up) negated for the canvas;
+    // the vertical tangents at the midpoint give the V bottom.
     final Path path = Path()
       ..moveTo(-0.4, -0.2)
-      ..cubicTo(-0.18, -0.38, -0.18, 0.35, 0, 0.35)
-      ..cubicTo(0.18, 0.35, 0.18, -0.38, 0.4, -0.2);
+      ..cubicTo(-0.2117, -0.3580, 0, -0.0542, 0, 0.35)
+      ..cubicTo(0, -0.0542, 0.2117, -0.3580, 0.4, -0.2);
     _drawUnitPath(
       canvas: canvas,
       position: position,
@@ -392,7 +402,10 @@ abstract final class MPTherionPointSymbolsUIS {
     required bool paleo,
   }) {
     final Path arrow = Path()
-      ..moveTo(-0.15, -0.6)..lineTo(0, -1)..lineTo(0.15, -0.6)..close();
+      ..moveTo(-0.15, -0.6)
+      ..lineTo(0, -1)
+      ..lineTo(0.15, -0.6)
+      ..close();
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -409,7 +422,9 @@ abstract final class MPTherionPointSymbolsUIS {
         final Paint? border = paint.border;
 
         if (border != null) {
-          final Path stroke = Path()..moveTo(0, 1)..lineTo(0, -1);
+          final Path stroke = Path()
+            ..moveTo(0, 1)
+            ..lineTo(0, -1);
           if (paleo) {
             stroke.addArc(
               const Rect.fromLTRB(-0.2, 0.2, 0.2, 0.6),
@@ -459,7 +474,10 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Path arrow = Path()
-      ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
+      ..moveTo(-0.09, -0.35)
+      ..lineTo(0, -0.5)
+      ..lineTo(0.09, -0.35)
+      ..close();
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -535,7 +553,10 @@ abstract final class MPTherionPointSymbolsUIS {
           _withPenWidth(border, mpTherionPenB)..strokeCap = StrokeCap.butt,
         );
         final Path arrow = Path()
-          ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
+          ..moveTo(-0.09, -0.35)
+          ..lineTo(0, -0.5)
+          ..lineTo(0.09, -0.35)
+          ..close();
         canvas.drawPath(arrow, _withPenWidth(border, mpTherionPenB));
       },
     );
@@ -557,8 +578,14 @@ abstract final class MPTherionPointSymbolsUIS {
 
         if (fill != null) {
           final Path filled = Path()
-            ..moveTo(-0.3, 0.4)..lineTo(0, -0.3)..lineTo(0.3, 0.4)..close()
-            ..moveTo(0, -0.5)..lineTo(0.35, -0.45)..lineTo(0.07, -0.35)..close();
+            ..moveTo(-0.3, 0.4)
+            ..lineTo(0, -0.3)
+            ..lineTo(0.3, 0.4)
+            ..close()
+            ..moveTo(0, -0.5)
+            ..lineTo(0.35, -0.45)
+            ..lineTo(0.07, -0.35)
+            ..close();
           canvas.drawPath(filled, fill);
         }
 
@@ -566,8 +593,11 @@ abstract final class MPTherionPointSymbolsUIS {
 
         if (border != null) {
           final Path stroked = Path()
-            ..moveTo(-0.5, 0.4)..lineTo(0.5, 0.4)
-            ..moveTo(-0.4, 0.4)..lineTo(0, -0.5)..lineTo(0.4, 0.4);
+            ..moveTo(-0.5, 0.4)
+            ..lineTo(0.5, 0.4)
+            ..moveTo(-0.4, 0.4)
+            ..lineTo(0, -0.5)
+            ..lineTo(0.4, 0.4);
           canvas.drawPath(stroked, _withPenWidth(border, mpTherionPenC));
         }
       },
@@ -1204,9 +1234,10 @@ abstract final class MPTherionPointSymbolsUIS {
         canvas.drawPath(_airDraughtBasePath(), pen);
         MPThClean.drawPath(
           canvas: canvas,
-          path: Path()..addOval(
-            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
-          ),
+          path: Path()
+            ..addOval(
+              Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
+            ),
           backgroundColor: THPaint.thPaintWhiteBackground.color,
         );
 
@@ -1240,9 +1271,10 @@ abstract final class MPTherionPointSymbolsUIS {
         canvas.drawPath(_airDraughtBasePath(), pen);
         MPThClean.drawPath(
           canvas: canvas,
-          path: Path()..addOval(
-            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
-          ),
+          path: Path()
+            ..addOval(
+              Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.3),
+            ),
           backgroundColor: THPaint.thPaintWhiteBackground.color,
         );
 
@@ -1257,9 +1289,10 @@ abstract final class MPTherionPointSymbolsUIS {
         canvas.drawPath(cross, pen);
         MPThClean.drawPath(
           canvas: canvas,
-          path: Path()..addOval(
-            Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.15),
-          ),
+          path: Path()
+            ..addOval(
+              Rect.fromCircle(center: const Offset(0, -0.05), radius: 0.15),
+            ),
           backgroundColor: THPaint.thPaintWhiteBackground.color,
         );
         canvas.drawOval(
