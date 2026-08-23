@@ -33,6 +33,7 @@
   * `flutter upgrade to 3.47.0` and `flutter pub upgrade --major-versions`
   * Fixed the build breakage from `file_picker` 12.0.0's file-picking API rewrite (introduced by the `flutter pub upgrade --major-versions` above): switched single-file pickers to the new `FilePicker.pickFile()`, multi-file picking to the now non-nullable `List<PlatformFile>` return of `FilePicker.pickFiles()`, "Save As" to resolve a file path from the `Uri?` now returned (and written) by `FilePicker.saveFile()`, and moved the deprecated top-level `lockParentWindow` option into `LinuxOptions`/`WindowsOptions`. Also picked up the resulting federated `file_picker_darwin`/`file_picker_linux`/etc. plugin split, fixing the macOS `GeneratedPluginRegistrant.swift` import.
   * Added `.aiderignore` and `.claudeignore` so aider and Claude Code keep agent session artifacts and generated/build output out of their context and file search; the root `.gitignore` gained a `!.aiderignore` exception so the file itself stays versioned alongside the `.aider*` session files.
+  * Regenerated the Therion UIS Phase 1 point-symbol golden, which had drifted by an antialiasing-only 66 pixels in the `pillar` cell (no geometry or code change); the Phase 1 golden test now passes again.
 
 ## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:
