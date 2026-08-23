@@ -164,6 +164,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -191,6 +192,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -212,6 +214,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -265,6 +268,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -314,6 +318,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -375,6 +380,7 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+      penFactor: mpTherionPenB,
     );
   }
 
@@ -472,7 +478,7 @@ abstract final class MPTherionPointSymbolsUIS {
         if (border != null) {
           canvas.drawPath(
             _waterFlowPath()..addPath(arrow, Offset.zero),
-            _withPenWidth(border, mpTherionPenC),
+            _withPenWidth(border, mpTherionPenB),
           );
         }
       },
@@ -524,10 +530,10 @@ abstract final class MPTherionPointSymbolsUIS {
           );
           distance += dash + gap;
         }
-        canvas.drawPath(dashed, _withPenWidth(border, mpTherionPenC));
+        canvas.drawPath(dashed, _withPenWidth(border, mpTherionPenB));
         final Path arrow = Path()
           ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
-        canvas.drawPath(arrow, _withPenWidth(border, mpTherionPenC));
+        canvas.drawPath(arrow, _withPenWidth(border, mpTherionPenB));
       },
     );
   }
@@ -559,7 +565,7 @@ abstract final class MPTherionPointSymbolsUIS {
           final Path stroked = Path()
             ..moveTo(-0.5, 0.4)..lineTo(0.5, 0.4)
             ..moveTo(-0.4, 0.4)..lineTo(0, -0.5)..lineTo(0.4, 0.4);
-          canvas.drawPath(stroked, _withPenWidth(border, mpTherionPenD));
+          canvas.drawPath(stroked, _withPenWidth(border, mpTherionPenC));
         }
       },
     );
@@ -571,7 +577,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -597,7 +603,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -623,7 +629,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -690,7 +696,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    // p_crystal_UIS actually uses PenC; bumped to PenB here since PenC's
+    // diagonal strokes read as jaggy at typical zoom (a thin line doesn't
+    // give antialiasing enough coverage width to smooth a diagonal edge).
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -748,7 +757,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -803,7 +812,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -1015,7 +1024,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
     final Paint dotPen = _withPenWidth(paint.border!, mpTherionPenX)
       ..strokeCap = StrokeCap.round;
 
@@ -1282,7 +1291,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, -0.28)
@@ -1309,7 +1318,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, 0.28)
@@ -1336,7 +1345,7 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Paint pen = _withPenWidth(paint.border!, mpTherionPenC);
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
         ..moveTo(dx, -0.105)
