@@ -1310,13 +1310,22 @@ abstract final class MPTherionPointSymbolsUIS {
   /// absolute width unaffected by the sub-symbols' `sc*0.7` scale, so the
   /// sub-shape geometry itself (not the ambient canvas transform) is
   /// pre-scaled by 0.7, keeping the stroke width constant across instances.
+  /// [staggered] mirrors the `abs(i) * .15u` vertical offset that Therion's
+  /// `disc-*` group macros (e.g. `p_discstalagmites_UIS`) apply to the outer
+  /// two instances, unlike their non-disc counterparts (`p_stalagmites_UIS`
+  /// and friends), which keep all three instances at the same height.
   static Path _repeatedSubSymbolsPath(
-    void Function(Path path, double dx) buildInstance,
-  ) {
+    void Function(Path path, double dx, double dy) buildInstance, {
+    bool staggered = false,
+  }) {
     final Path path = Path();
 
     for (final double index in const <double>[-1, 0, 1]) {
-      buildInstance(path, index * 0.3);
+      buildInstance(
+        path,
+        index * 0.3,
+        staggered ? -index.abs() * 0.15 : 0,
+      );
     }
 
     return path;
@@ -1329,7 +1338,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
-    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
       path
         ..moveTo(dx, -0.28)
         ..lineTo(dx, 0.105)
@@ -1359,16 +1368,16 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
-    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
       path
-        ..moveTo(dx, -0.28)
-        ..lineTo(dx, 0.105)
-        ..lineTo(dx - 0.105, 0.28)
-        ..moveTo(dx, 0.105)
-        ..lineTo(dx + 0.105, 0.28)
-        ..moveTo(dx - 0.105, -0.07)
-        ..lineTo(dx + 0.105, -0.07);
-    });
+        ..moveTo(dx, dy - 0.28)
+        ..lineTo(dx, dy + 0.105)
+        ..lineTo(dx - 0.105, dy + 0.28)
+        ..moveTo(dx, dy + 0.105)
+        ..lineTo(dx + 0.105, dy + 0.28)
+        ..moveTo(dx - 0.105, dy - 0.07)
+        ..lineTo(dx + 0.105, dy - 0.07);
+    }, staggered: true);
 
     MPSymbolTransform.draw(
       canvas: canvas,
@@ -1388,7 +1397,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
-    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
       path
         ..moveTo(dx, 0.28)
         ..lineTo(dx, -0.105)
@@ -1415,7 +1424,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionSymbolPaint paint,
   ) {
     final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
-    final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
       path
         ..moveTo(dx, -0.105)
         ..lineTo(dx, 0.105)
