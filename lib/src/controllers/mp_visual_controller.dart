@@ -1345,7 +1345,11 @@ abstract class MPVisualControllerBase with Store {
         ui.TileMode.repeated,
         ui.TileMode.repeated,
         Matrix4.diagonal3Values(scale, scale, 1.0).storage,
-      );
+      )
+      // The tile is rasterized once at a fixed resolution and scaled to
+      // match the current zoom; without filtering, that scaling defaults
+      // to nearest-neighbor sampling and looks blocky at most zoom levels.
+      ..filterQuality = ui.FilterQuality.medium;
   }
 
   THLinePaint getUnselectedAreaPaint({
