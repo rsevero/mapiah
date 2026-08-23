@@ -10,9 +10,9 @@ import 'package:material_ui/material_ui.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = 'Therion Symbology';
+const String mpReleaseName = '';
 const String mpReleaseURL =
-    'https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm';
+    '';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';

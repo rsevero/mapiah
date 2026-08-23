@@ -2,7 +2,14 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 0.4.4 - not yet released
+## 0.4.4 - 2026-08-23 - The Cave Rescue release
+* Highlights:
+  * Continued closing the Therion UIS fidelity gap from 0.4.3:
+    * Implemented point symbols for types that previously had no Therion UIS representation at all and fell back to Mapiah's placeholder: `helictites`, `stalactite-stalagmite`/`stalactites-stalagmites`, `pillar-with-curtains`/`pillars-with-curtains`, `disc-pillar`/`disc-pillars`, `disc-stalactite`/`disc-stalactites`, `disc-stalagmite`, `debris`, and `curtains`.
+    * Corrected existing symbols to match Therion's own macros more closely: `moonmilk`'s taller middle bump, `paleo-material`'s bone silhouette, `guano`'s V profile, `sand`'s dot triangle, `disc-stalagmites`' vertical stagger, `air-draught`'s wing curve, and `flute`'s under-belly depth; fixed missing/hollow arrowheads on all three `water-flow` subtypes and restored visible dashes on `-subtype intermittent`; and stopped `pillar`, `continuation`, `pillars`, `stalactites`, `stalagmites`, and other stroke-only symbols from painting stray filled triangles during the fill pass.
+  * Overhauled Therion-faithful `passage-height` point containers and related text points: unfilled, smaller-font outlines matching Therion's `\thframed` styling, then re-filled with the same white background as `label`/`remark`/`date`/`altitude`/`height`/`dimensions` for legibility; dropped the spurious unit suffix from `height`/`passage-height` labels; and unified all faithful text points on the same reduced text size.
+  * Fixed Mapiah not closing on Windows (and other desktop platforms) via the window's close button, taskbar control, or Alt+F4/Ctrl+F4. [reported by CaverBruce]
+  * Decoupled Therion UIS point, line, and area paints from Mapiah's unrelated placeholder renderer, and upgraded to Flutter 3.47.0 (migrating from `package:flutter/material.dart` to `package:material_ui/material_ui.dart` and fixing the `file_picker` 12.0.0 API rewrite).
 * New features:
 * Fixed bugs:
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer silently does nothing; the desktop close handler now force-closes the native window with `windowManager.destroy()` after persisting window placement, instead of the mobile-oriented `SystemNavigator.pop()`, which doesn't reliably terminate a desktop window once native close interception is enabled. [reported by CaverBruce]
