@@ -25,6 +25,7 @@ class THLinePainter extends CustomPainter {
   final THLinePaint linePaint;
   final bool showLinePoints;
   final MPLineDecorator? lineDecorator;
+  final Paint? lineDecoratorColor;
   final TH2FileEditController th2FileEditController;
 
   THLinePainter({
@@ -34,6 +35,7 @@ class THLinePainter extends CustomPainter {
     required this.linePaint,
     this.showLinePoints = false,
     this.lineDecorator,
+    this.lineDecoratorColor,
     required this.th2FileEditController,
   });
 
@@ -272,7 +274,7 @@ class THLinePainter extends CustomPainter {
     lineDecorator?.decorate(
       canvas: canvas,
       path: basePath,
-      linePaint: linePaint,
+      color: lineDecoratorColor!,
       symbolUnit: MPSymbolUnit(
         canvasScale: th2FileEditController.canvasScale,
         devicePixelRatio: th2FileEditController.devicePixelRatio,

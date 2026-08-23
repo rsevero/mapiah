@@ -5,7 +5,6 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
@@ -21,17 +20,11 @@ class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
   void decorate({
     required Canvas canvas,
     required Path path,
-    required THLinePaint linePaint,
+    required Paint color,
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
   }) {
-    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
-
-    if (basePaint == null) {
-      return;
-    }
-
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
     if (metrics.isEmpty) {
@@ -54,7 +47,7 @@ class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
       step: step,
       random: random,
     );
-    final Paint strokePaint = Paint.from(basePaint)
+    final Paint strokePaint = Paint.from(color)
       ..style = PaintingStyle.stroke
       ..strokeWidth = mpTherionPenD * u;
 
@@ -70,7 +63,7 @@ class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
         math.atan2(endTangent.vector.dy, endTangent.vector.dx) +
         (math.pi / 2);
     final Paint arrowFillPaint = Paint()
-      ..color = basePaint.color
+      ..color = color.color
       ..style = PaintingStyle.fill;
 
     MPSymbolTransform.draw(

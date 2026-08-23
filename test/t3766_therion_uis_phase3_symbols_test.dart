@@ -9,7 +9,6 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
@@ -28,6 +27,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart
 import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_rock_edge_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_area_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
@@ -220,7 +220,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -250,9 +250,7 @@ void main() {
         decorator.decorate(
           canvas: canvas,
           path: path,
-          linePaint: THLinePaint(
-            primaryPaint: Paint.from(placeholderPaint),
-          ),
+          color: Paint.from(placeholderPaint),
           symbolUnit: symbolUnit,
           isReversed: false,
         );
@@ -304,7 +302,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -320,7 +318,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -336,7 +334,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -356,9 +354,7 @@ void main() {
             const MPChimneyLineDecorator().decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(
-                primaryPaint: Paint.from(THPaint.thPaint13),
-              ),
+              color: Paint.from(THPaint.thPaint13),
               symbolUnit: symbolUnit,
               isReversed: false,
             );
@@ -373,9 +369,7 @@ void main() {
             const MPCeilingStepLineDecorator().decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(
-                primaryPaint: Paint.from(THPaint.thPaint5),
-              ),
+              color: Paint.from(THPaint.thPaint5),
               symbolUnit: symbolUnit,
               isReversed: false,
             );
@@ -408,7 +402,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -434,9 +428,7 @@ void main() {
             decorator.decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(
-                primaryPaint: Paint.from(THPaint.thPaint6),
-              ),
+              color: Paint.from(THPaint.thPaint6),
               symbolUnit: symbolUnit,
               isReversed: false,
             );
@@ -467,7 +459,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -482,7 +474,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -497,7 +489,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: diagonalTestPath(),
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: symbolUnit,
         isReversed: false,
       );
@@ -533,9 +525,7 @@ void main() {
             decorator.decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(
-                primaryPaint: Paint()..color = const Color(0xFF000000),
-              ),
+              color: Paint()..color = const Color(0xFF000000),
               symbolUnit: symbolUnit,
               isReversed: false,
             );
@@ -569,7 +559,7 @@ void main() {
         decorator.decorate(
           canvas: canvasA,
           path: diagonalTestPath(),
-          linePaint: THLinePaint(primaryPaint: Paint()),
+          color: Paint(),
           symbolUnit: symbolUnit,
           isReversed: false,
           mpID: 42,
@@ -583,7 +573,7 @@ void main() {
         decorator.decorate(
           canvas: canvasB,
           path: diagonalTestPath(),
-          linePaint: THLinePaint(primaryPaint: Paint()),
+          color: Paint(),
           symbolUnit: symbolUnit,
           isReversed: false,
           mpID: 42,
@@ -611,7 +601,7 @@ void main() {
         MPSymbolGoldenEntry(
           draw: (Canvas canvas, Offset center) {
             final ui.Image tile = MPTherionAreaPatternTilesUIS.buildSandTile(
-              mpTherionUISSandDotColor,
+              mpTherionAreaPatternColors[THAreaType.sand]!,
             );
             final Paint paint = Paint()
               ..shader = ImageShader(

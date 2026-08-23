@@ -9,7 +9,6 @@ import 'package:flutter/widgets.dart' hide Image, Path;
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -253,7 +252,7 @@ void main() {
       decorator.decorate(
         canvas: canvas,
         path: segmentedPath,
-        linePaint: THLinePaint(primaryPaint: Paint()),
+        color: Paint(),
         symbolUnit: const MPSymbolUnit(
           canvasScale: 1,
           devicePixelRatio: 1,
@@ -279,9 +278,7 @@ void main() {
             decorator.decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(
-                primaryPaint: Paint.from(THPaint.thPaint14),
-              ),
+              color: Paint.from(THPaint.thPaint14),
               symbolUnit: const MPSymbolUnit(
                 canvasScale: 1,
                 devicePixelRatio: 1,

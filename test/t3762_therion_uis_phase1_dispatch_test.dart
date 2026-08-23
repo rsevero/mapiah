@@ -15,6 +15,7 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_area_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
@@ -148,6 +149,26 @@ void main() {
             .getDefaultAreaPaint(areaType: THAreaType.bedrock);
 
         expect(unaffectedAreaPaint.fillPaint?.shader, isNull);
+      },
+    );
+
+    test(
+      'mpTherionAreaPatternColors has exactly one entry per patterned '
+      'THAreaType',
+      () {
+        // Mirrors the switch inside
+        // MPVisualControllerBase._getTherionUISAreaPatternPaint: every
+        // THAreaType with a Therion pattern tile, and no others.
+        const Set<THAreaType> patternedAreaTypes = <THAreaType>{
+          THAreaType.water,
+          THAreaType.sump,
+          THAreaType.debris,
+          THAreaType.flowstone,
+          THAreaType.moonmilk,
+          THAreaType.sand,
+        };
+
+        expect(mpTherionAreaPatternColors.keys.toSet(), patternedAreaTypes);
       },
     );
 

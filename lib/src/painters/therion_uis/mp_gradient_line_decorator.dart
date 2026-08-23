@@ -4,7 +4,6 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -18,22 +17,16 @@ class MPGradientLineDecorator extends MPLineDecorator {
   void decorate({
     required Canvas canvas,
     required Path path,
-    required THLinePaint linePaint,
+    required Paint color,
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
   }) {
-    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
-
-    if (basePaint == null) {
-      return;
-    }
-
     final double u = symbolUnit.canvasValue;
 
     canvas.drawPath(
       path,
-      Paint.from(basePaint)
+      Paint.from(color)
         ..style = PaintingStyle.stroke
         ..strokeWidth = mpTherionPenC * u,
     );
@@ -57,10 +50,9 @@ class MPGradientLineDecorator extends MPLineDecorator {
     );
     final double rotation = tangentAngle + (math.pi / 2);
     final Paint fillPaint = Paint()
-      ..color = basePaint.color
+      ..color = color.color
       ..style = PaintingStyle.fill;
-    final Paint strokePaint = Paint.from(basePaint)
-      ..strokeWidth = mpTherionPenC;
+    final Paint strokePaint = Paint.from(color)..strokeWidth = mpTherionPenC;
 
     MPSymbolTransform.draw(
       canvas: canvas,

@@ -8,11 +8,12 @@ import 'package:flutter/widgets.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
@@ -202,6 +203,32 @@ void main() {
       },
     );
 
+    test(
+      'mpTherionLineColors has exactly one entry per decorator-covered '
+      'THLineType',
+      () {
+        // Mirrors MPVisualControllerBase.getLineDecorator's switch: every
+        // THLineType a line decorator exists for, and no others.
+        const Set<THLineType> decoratedLineTypes = <THLineType>{
+          THLineType.ceilingMeander,
+          THLineType.ceilingStep,
+          THLineType.chimney,
+          THLineType.contour,
+          THLineType.floorStep,
+          THLineType.pit,
+          THLineType.pitch,
+          THLineType.flowstone,
+          THLineType.gradient,
+          THLineType.moonmilk,
+          THLineType.rockEdge,
+          THLineType.survey,
+          THLineType.waterFlow,
+        };
+
+        expect(mpTherionLineColors.keys.toSet(), decoratedLineTypes);
+      },
+    );
+
     testWidgets('renders the continuous gradient line and arrowhead', (
       WidgetTester tester,
     ) async {
@@ -229,7 +256,7 @@ void main() {
             decorator.decorate(
               canvas: canvas,
               path: path,
-              linePaint: THLinePaint(primaryPaint: linePaint),
+              color: linePaint,
               symbolUnit: const MPSymbolUnit(
                 canvasScale: 1 / 3,
                 devicePixelRatio: 1,

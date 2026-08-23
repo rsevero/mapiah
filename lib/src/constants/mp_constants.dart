@@ -248,7 +248,6 @@ const double mpTherionPenX = 0.12;
 const double mpTherionAreaPatternTileUnitPixels = 100.0;
 const double mpTherionUISWaterCellUnits = 0.4;
 const double mpTherionUISWaterPenUnits = 0.025;
-const Color mpTherionUISSandDotColor = Color(0xFF000000);
 const int mpTherionUISSandGridSize = 3;
 const double mpTherionUISSandCellUnits = 0.7;
 const double mpTherionUISSandJitterCellFactor = 0.35;

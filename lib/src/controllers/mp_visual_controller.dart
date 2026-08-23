@@ -36,6 +36,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart'
 import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_rock_edge_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_uis/mp_therion_area_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
@@ -1302,13 +1303,12 @@ abstract class MPVisualControllerBase with Store {
   /// tile fill for the area types ported in Phase 1. Returns null for any
   /// other area type, leaving the plain solid/semi-transparent fill in place.
   Paint? _getTherionUISAreaPatternPaint(THAreaType areaType) {
-    final Paint? primaryPaint = areaTypePaints[areaType]?.primaryPaint;
+    final Color? color = mpTherionAreaPatternColors[areaType];
 
-    if (primaryPaint == null) {
+    if (color == null) {
       return null;
     }
 
-    final Color color = primaryPaint.color;
     ui.Image? tile = patternCache.imageFor(areaType);
 
     if (tile == null) {
@@ -1324,9 +1324,7 @@ abstract class MPVisualControllerBase with Store {
         case THAreaType.moonmilk:
           tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(color);
         case THAreaType.sand:
-          tile = MPTherionAreaPatternTilesUIS.buildSandTile(
-            mpTherionUISSandDotColor,
-          );
+          tile = MPTherionAreaPatternTilesUIS.buildSandTile(color);
         default:
           return null;
       }

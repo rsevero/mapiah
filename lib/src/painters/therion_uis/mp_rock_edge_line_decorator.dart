@@ -4,7 +4,6 @@
 import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
@@ -17,22 +16,16 @@ class MPRockEdgeLineDecorator extends MPLineDecorator {
   void decorate({
     required Canvas canvas,
     required Path path,
-    required THLinePaint linePaint,
+    required Paint color,
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
   }) {
-    final Paint? basePaint = linePaint.primaryPaint ?? linePaint.secondaryPaint;
-
-    if (basePaint == null) {
-      return;
-    }
-
     final double u = symbolUnit.canvasValue;
 
     canvas.drawPath(
       path,
-      Paint.from(basePaint)
+      Paint.from(color)
         ..style = PaintingStyle.stroke
         ..strokeWidth = mpTherionPenD * u,
     );
