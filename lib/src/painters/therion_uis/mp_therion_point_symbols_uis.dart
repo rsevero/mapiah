@@ -1136,13 +1136,17 @@ abstract final class MPTherionPointSymbolsUIS {
   /// knob beyond the global symbol unit, so `sc` is treated as always 1
   /// (matching every other ported symbol), which fixes the count at 3.
   static Path _airDraughtBasePath() {
+    // The wings ({dir 20}..{dir 90}, mirrored) leave their base moving
+    // mostly horizontally (toward the stem) and only curve up to vertical
+    // near the tip, so each hugs the stem for most of its rise and flares
+    // out to its base near the bottom — not a uniform semicircular bulge.
     final Path path = Path()
       ..moveTo(0, -1)
       ..lineTo(0, 0.8)
       ..moveTo(-0.2, -0.65)
-      ..quadraticBezierTo(-0.25, -0.85, 0, -1)
+      ..cubicTo(-0.0737, -0.696, 0, -0.8656, 0, -1)
       ..moveTo(0.2, -0.65)
-      ..quadraticBezierTo(0.25, -0.85, 0, -1);
+      ..cubicTo(0.0737, -0.696, 0, -0.8656, 0, -1);
 
     for (int i = 1; i <= 3; i++) {
       final double y1 = 1 - (0.2 * i);
