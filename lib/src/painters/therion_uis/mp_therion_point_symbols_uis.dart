@@ -432,6 +432,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -458,6 +462,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -484,6 +492,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -513,6 +525,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint topPen = _withPenWidth(paint, mpTherionPenC);
     final Paint strawPen = _withPenWidth(paint, mpTherionPenD);
 
@@ -609,6 +625,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -633,6 +653,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -664,6 +688,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
 
     MPSymbolTransform.draw(
@@ -860,6 +888,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
     final Paint dotPen = _withPenWidth(paint, mpTherionPenX)
       ..strokeCap = StrokeCap.round;
@@ -1134,6 +1166,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
@@ -1161,6 +1197,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path
@@ -1188,6 +1228,10 @@ abstract final class MPTherionPointSymbolsUIS {
     double u,
     Paint paint,
   ) {
+    if (_isFill(paint)) {
+      return;
+    }
+
     final Paint pen = _withPenWidth(paint, mpTherionPenC);
     final Path path = _repeatedSubSymbolsPath((Path path, double dx) {
       path

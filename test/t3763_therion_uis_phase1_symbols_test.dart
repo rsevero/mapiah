@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'auxiliary/mp_symbol_golden_harness.dart';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/widgets.dart';
@@ -135,6 +136,59 @@ void main() {
         matchesGoldenFile('goldens/therion_uis_phase1_point_symbols.png'),
       );
     });
+
+    test(
+      'pillar draws nothing on the fill pass, unlike a fill-and-stroke symbol',
+      () async {
+        // p_pillar_UIS (thPoint.mp) only thdraw's open V-shaped strokes, no
+        // thfill; MPInteractionAux._drawTherionPoint calls every symbol's
+        // draw method once with a fill-style Paint and once with a
+        // stroke-style one, so a symbol with unclosed subpaths must skip
+        // the fill pass itself, or Skia's implicit-close-on-fill turns
+        // those open V's into solid filled triangles.
+        const double imageSize = 100;
+        final void Function(Canvas, Offset, double, Paint) drawMethod =
+            MPTherionPointSymbolsUIS.drawMethods[MPTherionPointSymbol
+                .pillarUIS]!;
+
+        Future<int> countDarkPixels(Paint paint) async {
+          final ui.PictureRecorder recorder = ui.PictureRecorder();
+          final Canvas canvas = Canvas(recorder);
+
+          drawMethod(canvas, const Offset(50, 50), 30, paint);
+
+          final ui.Picture picture = recorder.endRecording();
+          final ui.Image image = await picture.toImage(
+            imageSize.toInt(),
+            imageSize.toInt(),
+          );
+          final ByteData pixels = (await image.toByteData())!;
+          int darkPixelCount = 0;
+
+          for (int i = 3; i < pixels.lengthInBytes; i += 4) {
+            if (pixels.getUint8(i) > 0) {
+              darkPixelCount++;
+            }
+          }
+
+          image.dispose();
+          picture.dispose();
+
+          return darkPixelCount;
+        }
+
+        final Paint fillPaint = Paint()
+          ..color = const Color(0xFF000000)
+          ..style = PaintingStyle.fill;
+        final Paint strokePaint = Paint()
+          ..color = const Color(0xFF000000)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3;
+
+        expect(await countDarkPixels(fillPaint), 0);
+        expect(await countDarkPixels(strokePaint), greaterThan(0));
+      },
+    );
 
     testWidgets('renders the continuous gradient line and arrowhead', (
       WidgetTester tester,
