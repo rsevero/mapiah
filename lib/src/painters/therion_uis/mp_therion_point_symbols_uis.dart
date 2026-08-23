@@ -530,7 +530,10 @@ abstract final class MPTherionPointSymbolsUIS {
           );
           distance += dash + gap;
         }
-        canvas.drawPath(dashed, _withPenWidth(border, mpTherionPenB));
+        canvas.drawPath(
+          dashed,
+          _withPenWidth(border, mpTherionPenB)..strokeCap = StrokeCap.butt,
+        );
         final Path arrow = Path()
           ..moveTo(-0.09, -0.35)..lineTo(0, -0.5)..lineTo(0.09, -0.35)..close();
         canvas.drawPath(arrow, _withPenWidth(border, mpTherionPenB));
