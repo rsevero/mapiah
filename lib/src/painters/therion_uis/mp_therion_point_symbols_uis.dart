@@ -39,6 +39,7 @@ abstract final class MPTherionPointSymbolsUIS {
     MPTherionPointSymbol.continuationUIS: _drawContinuationUIS,
     MPTherionPointSymbol.crystalUIS: _drawCrystalUIS,
     MPTherionPointSymbol.curtainUIS: _drawCurtainUIS,
+    MPTherionPointSymbol.curtainsUIS: _drawCurtainsUIS,
     MPTherionPointSymbol.debrisUIS: _drawDebrisUIS,
     MPTherionPointSymbol.discStalagmitesUIS: _drawDiscStalagmitesUIS,
     MPTherionPointSymbol.diskUIS: _drawDiskUIS,
@@ -131,6 +132,38 @@ abstract final class MPTherionPointSymbolsUIS {
       u: u,
       paint: paint.border!,
       path: path,
+    );
+  }
+
+  /// `p_curtains_UIS`: three `0.7`-scaled, staggered instances of the
+  /// singular `curtain` shape (`_drawCurtainUIS`'s wedge and S-curve).
+  static void _drawCurtainsUIS(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint pen = _withPenWidth(paint.border!, mpTherionPenB);
+    final Path path = _repeatedSubSymbolsPath((Path path, double dx, double dy) {
+      path
+        ..moveTo(dx - 0.105, dy - 0.28)
+        ..lineTo(dx, dy - 0.105)
+        ..lineTo(dx + 0.105, dy - 0.28)
+        ..moveTo(dx, dy - 0.105)
+        ..lineTo(dx, dy)
+        ..cubicTo(dx - 0.056, dy, dx - 0.105, dy + 0.077, dx - 0.084, dy + 0.077)
+        ..cubicTo(dx - 0.056, dy + 0.077, dx - 0.028, dy + 0.154, dx, dy + 0.154)
+        ..lineTo(dx, dy + 0.28);
+    }, staggered: true);
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        canvas.drawPath(path, pen);
+      },
     );
   }
 

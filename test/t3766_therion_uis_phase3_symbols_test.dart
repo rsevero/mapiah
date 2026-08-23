@@ -59,6 +59,7 @@ void main() {
       MPTherionPointSymbol.airDraughtWinterUIS,
       MPTherionPointSymbol.airDraughtSummerUIS,
       MPTherionPointSymbol.blocksUIS,
+      MPTherionPointSymbol.curtainsUIS,
       MPTherionPointSymbol.debrisUIS,
       MPTherionPointSymbol.discPillarsUIS,
       MPTherionPointSymbol.discStalactitesUIS,
@@ -161,6 +162,7 @@ void main() {
       const Map<THPointType, MPTherionPointSymbol> expected =
           <THPointType, MPTherionPointSymbol>{
             THPointType.blocks: MPTherionPointSymbol.blocksUIS,
+            THPointType.curtains: MPTherionPointSymbol.curtainsUIS,
             THPointType.debris: MPTherionPointSymbol.debrisUIS,
             THPointType.discPillars: MPTherionPointSymbol.discPillarsUIS,
             THPointType.discStalactites:
