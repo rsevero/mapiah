@@ -1090,7 +1090,7 @@ abstract final class MPTherionPointSymbolsUIS {
 
         final Path groove = Path()
           ..moveTo(-0.3, -0.2)
-          ..quadraticBezierTo(0, 0.05, 0.3, -0.2);
+          ..quadraticBezierTo(0, 0.15, 0.3, -0.2);
 
         canvas.drawPath(groove, pen);
       },

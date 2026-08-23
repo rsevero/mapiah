@@ -43,6 +43,7 @@
   * Therion UIS `disc-stalagmite` points now have their own faithful rendering — `stalagmite`'s wedge plus a horizontal bar through the middle — matching `p_discstalagmite_UIS`; Mapiah previously had no Therion UIS symbol registered for this point type at all (the plural `disc-stalagmites` already had one). Added Phase 2 dispatch and golden regression coverage.
   * Therion UIS `debris` points now have their own faithful rendering — three small triangular rock outlines clustered together — matching `p_debris_UIS`; Mapiah previously had no Therion UIS symbol registered for this point type at all. Added Phase 3 dispatch and golden regression coverage.
   * Therion UIS `curtains` points now have their own faithful rendering — three `0.7`-scaled, staggered instances of `curtain`'s wedge-and-S-curve shape — matching `p_curtains_UIS`, and verified against Therion's own legend icon; Mapiah previously had no Therion UIS symbol registered for this point type at all. Added Phase 3 dispatch and golden regression coverage.
+  * Therion UIS `flute` points now have a noticeably deeper under-belly groove, a deliberate departure from `p_flute_UIS`'s literal `{dir -70}..{dir 70}` curve made for better legibility at typical zoom.
 
 ## 0.4.3 - 2026-07-29 - The [Therion Symbology](https://marcocorvi.altervista.org/caving/tbe/m_02/m_025.htm) release
 * Highlights:
