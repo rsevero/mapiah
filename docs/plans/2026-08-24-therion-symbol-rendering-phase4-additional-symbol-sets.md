@@ -308,11 +308,14 @@ MPTherionAreaPatternDefinition? getTherionAreaPatternDefinition({
 });
 ```
 
-`MPPatternCache` currently caches by `THAreaType`. Once multiple sets exist,
-the same `THAreaType` can produce different tiles under different sets, so the
-cache key must become a pair of `(MPTherionSymbolSet, THAreaType)` or a stable
-string id such as `"skbb:blocks"`. The plan is to keep `MPPatternCache` API
-unchanged where possible and introduce a composite key internally.
+`MPPatternCache` currently caches by `THAreaType` (its `imageFor`, `store`,
+`contains`, and `remove` methods all key on a single `THAreaType`). Once
+multiple sets exist, the same `THAreaType` can produce different tiles under
+different sets, so the cache key must become a pair of
+`(MPTherionSymbolSet, THAreaType)` or a stable string id such as
+`"skbb:blocks"`. The plan is to keep `MPPatternCache`'s method names
+(`imageFor`, `store`, `contains`, `remove`, `clear`) unchanged and only widen
+their key parameter to the composite key.
 
 `getDefaultAreaPaint` becomes:
 
@@ -325,7 +328,7 @@ final definition = getTherionAreaPatternDefinition(
 if (definition != null) {
   final tile = patternCache.imageFor(set, areaType);
   if (tile == null) {
-    patternCache.put(set, areaType, definition.tileBuilder(definition.color));
+    patternCache.store(set, areaType, definition.tileBuilder(definition.color));
   }
   return areaPaint.copyWith(
     fillPaint: /* ImageShader built from the tile */,
@@ -385,14 +388,15 @@ the seven members so the enum reads:
 ```dart
 enum MPTH2EditVisualizationMethod {
   mapiahPlaceholder,
-  therionASF,
+  therionUIS,
   therionAUT,
+  therionSBE,
+  therionSKBB,
   therionBCRA,
   therionNSS,
   therionNZSS,
-  therionSBE,
-  therionSKBB,
-  therionUIS,
+  therionASF,
+  // therionSM,
 }
 ```
 
@@ -402,9 +406,9 @@ Then in
 new member, using the already-existing localization getters:
 
 ```dart
-case MPTH2EditVisualizationMethod.therionASF:
-  return appLocalizations.mpSettingsEnumVisualizationMethodTherionASF;
-// ... AUT, BCRA, NSS, NZSS, SBE, SKBB
+case MPTH2EditVisualizationMethod.therionAUT:
+  return appLocalizations.mpSettingsEnumVisualizationMethodTherionAUT;
+// ... SBE, SKBB, BCRA, NSS, NZSS, ASF
 ```
 
 The existing `MPSettingEnumDefinitionImpl` uses `enumValues` and `byName`, so
@@ -413,12 +417,16 @@ and `therionUIS` values. No migration is needed unless an existing install
 stored a different value, which is impossible today because those members did
 not exist.
 
-**Ordering note:** Keep the enum values in the order shown in the roadmap
-(UIS/AUT/SBE/SKBB/BCRA/NSS/NZSS/ASF, with Mapiah placeholder first) or
-re-sort consistently. Changing enum order after release can break `byName`
-persistence only if names change, not if order changes, but the setting UI
-renders `enumValues` in declaration order, so the order should match the
-roadmap/Phase 5 intent.
+**Ordering note:** The enum values above follow the roadmap's declared order
+exactly — `MapiahPlaceholder, TherionUIS, TherionAUT, TherionSBE, TherionSKBB,
+TherionBCRA, TherionNSS, TherionNZSS, TherionASF, TherionSM` (roadmap §"Create
+`TH2Edit_VisualizationMethod`"), with the still-unimplemented `therionSM`
+staying commented out at the end. This replaces the current file's alphabetical
+commented-out order (`ASF, AUT, BCRA, NSS, NZSS, SBE, SKBB, SM` before `UIS`),
+and matches the `MPTherionSymbolSet` enum order in §4.2. Changing enum order
+after release can break `byName` persistence only if names change, not if
+order changes, but the setting UI renders `enumValues` in declaration order, so
+the order should match the roadmap/Phase 5 intent.
 
 ---
 
