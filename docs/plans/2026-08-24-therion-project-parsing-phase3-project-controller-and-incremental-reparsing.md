@@ -36,6 +36,8 @@ lib/src/
  │    └── th_project_reparse_aux.dart         # New: pure re-parse/splice helpers
  ├── auxiliary/
  │    └── mp_locator.dart                     # Existing: gain a THProjectController accessor
+ ├── constants/
+ │    └── mp_constants.dart                   # Existing: add mpProjectReparseDebounceMilliseconds
  ├── elements/
  │    └── th_project/                         # Existing Phase 2 models
  │         ├── th_project_node.dart
@@ -220,7 +222,7 @@ The controller is responsible for debouncing, parsing, and updating the tree. Th
 ### 6.2 Debounce
 
 - A 300 ms timer per canonical file path coalesces rapid keystrokes.
-- The timer value lives in `mp_constants.dart` (`mpProjectReparseDebounceMilliseconds = 300`) rather than being inline.
+- The timer value lives in `lib/src/constants/mp_constants.dart` (`mpProjectReparseDebounceMilliseconds = 300`) rather than being inline.
 - Calling `reparseFile` again before the timer fires cancels and restarts it.
 - `closeProject` and `openProject` cancel all timers.
 
@@ -323,7 +325,7 @@ For a `thconfig`/`.th` canonical path:
 
 ### 7.2 `.th2` Files
 
-`.th2` files are not written by `THProjectController`. `saveProjectFile`/`saveAllModifiedFiles` detect `.th2` paths and delegate to the existing `TH2FileEditController` save flow through `MPGeneralController`.
+`.th2` files are not written by `THProjectController`. `saveProjectFile`/`saveAllModifiedFiles` detect `.th2` paths and delegate to the existing save flow: look up the open editor via `MPGeneralController.getTH2FileEditControllerIfExists(filename)` and call `TH2FileEditController.saveTH2File()` on it. If no controller is open for that path (the `.th2` file is not currently open in a canvas tab), the path is skipped with a logged warning rather than written directly, since `THProjectController` has no independent `.th2` writer.
 
 ### 7.3 `saveAllModifiedFiles`
 
