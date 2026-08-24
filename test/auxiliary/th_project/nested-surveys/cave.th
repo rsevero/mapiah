@@ -1,0 +1,7 @@
+survey cave
+  survey passage
+    survey room
+      input room.th2
+    endsurvey
+  endsurvey
+endsurvey

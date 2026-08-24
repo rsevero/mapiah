@@ -1,0 +1,18 @@
+centreline
+  1 2 10.5 045 0
+endcentreline
+
+survey cave
+  input passage.th2
+
+  map overview
+    plan_map
+  endmap
+
+  map plan_map
+    scrap1@cave
+  endmap
+
+  scrap inline_scrap -projection plan
+  endscrap
+endsurvey

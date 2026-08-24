@@ -383,7 +383,7 @@ class THGrammar extends GrammarDefinition {
       GrammarUtils.stringIgnoreCase('extend') |
       GrammarUtils.stringIgnoreCase('station-names');
 
-  /// Survey leg reading: <from> <to> <length> [<bearing> [<clino>]] [flags]
+  /// Survey leg reading: `<from> <to> <length> [<bearing> [<clino>]] [flags]`
   Parser shotReading() =>
       (GrammarUtils.thWhitespaceOptional() &
               GrammarUtils.unquotedString() &

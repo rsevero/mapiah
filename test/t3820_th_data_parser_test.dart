@@ -5,8 +5,6 @@ import 'package:mapiah/src/elements/th_data/th_centreline.dart';
 import 'package:mapiah/src/elements/th_data/th_data_file.dart';
 import 'package:mapiah/src/elements/th_data/th_data_input.dart';
 import 'package:mapiah/src/elements/th_data/th_equate.dart';
-import 'package:mapiah/src/elements/th_data/th_import.dart';
-import 'package:mapiah/src/elements/th_data/th_join.dart';
 import 'package:mapiah/src/elements/th_data/th_map.dart';
 import 'package:mapiah/src/elements/th_data/th_survey.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';

@@ -13,6 +13,7 @@
   * Implemented PetitParser grammar (`THConfigGrammar`), AST models, parser (`THConfigFileParser`), and lossless writer (`THConfigFileWriter`) for Therion configuration files (`thconfig`), with unit test coverage for directives, layout blocks, line continuations, and round-trip serialization.
   * Implemented PetitParser grammar (`THGrammar`), AST models, parser (`THFileParser`), and lossless writer (`THFileWriter`) for Therion survey data files (`.th`), covering nested surveys, centrelines/shots, maps, scraps, surfaces, equates, joins, and imports, with unit test coverage for hierarchy parsing and round-trip serialization.
   * Added detailed implementation plan for Phase 2 of Therion project parsing, covering the recursive project tree loader (`THProjectParser`), file/logical AST node models, dependency graph, path resolution, and cycle/missing-file handling (`docs/plans/2026-08-24-therion-project-parsing-phase2-project-tree-loader.md`).
+  * Implemented Phase 2 of Therion project parsing: added the `THProjectNode` model family (file nodes for `thconfig`/`.th`/`.th2`/missing files and logical survey/centreline/map/scrap nodes), `THProjectPathResolver`, and `THProjectParser` with recursive `source`/`input` loading, dependency-graph tracking, cycle detection, missing-file handling, and `.th2` leaf linking, plus fixture-based unit tests.
 
 ## 0.4.4 - 2026-08-23 - The Cave Rescue release
 * Highlights:
