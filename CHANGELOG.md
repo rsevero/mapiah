@@ -9,6 +9,7 @@
 * Infrastructure maintenance:
   * Renamed `th_grammar.dart`/`th_file_parser.dart`/`th_file_writer.dart` to `th2_grammar.dart`/`th2_file_parser.dart`/`th2_file_writer.dart`, freeing the `th_*` naming for upcoming Therion project (`thconfig`/`.th`) parsing support, distinct from the existing `.th2` scrap parsing. Also renamed `THGrammar` class to `TH2Grammar`.
   * Added comprehensive design and implementation plan for Therion project parsing, side column project tree view, integrated text editing for thconfig and .th files, and dedicated file writers (`docs/plans/2026-08-24-therion-project-parsing-and-tree-view.md`).
+  * Added detailed implementation plan for Phase 1 of Therion project parsing, covering grammars, AST parsers, and lossless writers for `thconfig` and `.th` files (`docs/plans/2026-08-24-therion-project-parsing-phase1-parsers-and-writers.md`).
 
 ## 0.4.4 - 2026-08-23 - The Cave Rescue release
 * Highlights:
