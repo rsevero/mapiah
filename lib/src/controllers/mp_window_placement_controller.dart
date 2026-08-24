@@ -33,6 +33,8 @@ abstract interface class MPPlatformWindow {
 
   Future<void> setPreventClose(bool preventClose);
 
+  Future<void> hide();
+
   Future<void> closeApplication();
 
   void setCloseHandler(Future<void> Function() closeHandler);
@@ -89,6 +91,9 @@ class MPWindowManagerPlatform with WindowListener implements MPPlatformWindow {
   @override
   Future<void> setPreventClose(bool preventClose) =>
       windowManager.setPreventClose(preventClose);
+
+  @override
+  Future<void> hide() => windowManager.hide();
 
   @override
   Future<void> closeApplication() => windowManager.destroy();
@@ -236,6 +241,12 @@ class MPWindowPlacementController {
         error,
         stackTrace,
       );
+    }
+
+    try {
+      await platformWindow.hide();
+    } on Object catch (error, stackTrace) {
+      onError('Failed to hide the desktop window', error, stackTrace);
     }
 
     try {

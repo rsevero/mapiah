@@ -64,6 +64,11 @@ class _FakePlatformWindow implements MPPlatformWindow {
   }
 
   @override
+  Future<void> hide() async {
+    calls.add('hide');
+  }
+
+  @override
   void setCloseHandler(Future<void> Function() closeHandler) {
     calls.add('setCloseHandler');
     this.closeHandler = closeHandler;
@@ -292,6 +297,7 @@ void main() {
       'isMaximized',
       'isFullScreen',
       'getBounds',
+      'hide',
       'closeApplication',
     ]);
   });
@@ -313,7 +319,11 @@ void main() {
     await controller.saveAndClose();
 
     expect(settingsController.windowPlacement.isMaximized, isTrue);
-    expect(platformWindow.calls, <String>['isMaximized', 'closeApplication']);
+    expect(platformWindow.calls, <String>[
+      'isMaximized',
+      'hide',
+      'closeApplication',
+    ]);
   });
 
   test('desktop shutdown force closes the native window', () async {

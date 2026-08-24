@@ -2,6 +2,12 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 0.4.5 - not yet released
+* New features:
+* Fixed bugs:
+  * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
+* Infrastructure maintenance:
+
 ## 0.4.4 - 2026-08-23 - The Cave Rescue release
 * Highlights:
   * Continued closing the Therion UIS fidelity gap from 0.4.3:
