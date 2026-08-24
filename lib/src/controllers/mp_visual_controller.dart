@@ -25,22 +25,13 @@ import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_pattern_cache.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_ceiling_meander_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_ceiling_step_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_flowstone_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_moonmilk_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_pit_floor_step_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_rock_edge_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_therion_area_paints.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_point_map.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_definition.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_registry.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_line_registry.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.dart';
 import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
+import 'package:mapiah/src/painters/types/mp_therion_symbol_set.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart';
@@ -1090,42 +1081,58 @@ abstract class MPVisualControllerBase with Store {
     return scrapPaint;
   }
 
+  /// The Therion symbol set to draw for the currently selected
+  /// [MPTH2EditVisualizationMethod]. Must not be read when the method is
+  /// [MPTH2EditVisualizationMethod.mapiahPlaceholder]: callers are expected
+  /// to gate on that placeholder check first, as every rendering entry
+  /// point below does.
+  MPTherionSymbolSet get _selectedTherionSymbolSet {
+    final MPTH2EditVisualizationMethod method =
+        mpLocator.mpSettingsController.tH2EditVisualizationMethod;
+
+    return switch (method) {
+      MPTH2EditVisualizationMethod.mapiahPlaceholder => throw StateError(
+        'Placeholder has no Therion symbol set',
+      ),
+      MPTH2EditVisualizationMethod.therionUIS => MPTherionSymbolSet.uis,
+      MPTH2EditVisualizationMethod.therionAUT => MPTherionSymbolSet.aut,
+      MPTH2EditVisualizationMethod.therionSBE => MPTherionSymbolSet.sbe,
+      MPTH2EditVisualizationMethod.therionSKBB => MPTherionSymbolSet.skbb,
+      MPTH2EditVisualizationMethod.therionBCRA => MPTherionSymbolSet.bcra,
+      MPTH2EditVisualizationMethod.therionNSS => MPTherionSymbolSet.nss,
+      MPTH2EditVisualizationMethod.therionNZSS => MPTherionSymbolSet.nzss,
+      MPTH2EditVisualizationMethod.therionASF => MPTherionSymbolSet.asf,
+    };
+  }
+
   MPLineDecorator? getLineDecorator(THLineType lineType, {String? subtype}) {
     if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       return null;
     }
 
-    switch (lineType) {
-      case THLineType.ceilingMeander:
-        return const MPCeilingMeanderLineDecorator();
-      case THLineType.ceilingStep:
-        return const MPCeilingStepLineDecorator();
-      case THLineType.chimney:
-        return const MPChimneyLineDecorator();
-      case THLineType.contour:
-        return const MPContourLineDecorator();
-      case THLineType.floorStep:
-      case THLineType.pit:
-      case THLineType.pitch:
-        return const MPPitFloorStepLineDecorator();
-      case THLineType.flowstone:
-        return const MPFlowstoneLineDecorator();
-      case THLineType.gradient:
-        return const MPGradientLineDecorator();
-      case THLineType.moonmilk:
-        return const MPMoonmilkLineDecorator();
-      case THLineType.rockEdge:
-        return const MPRockEdgeLineDecorator();
-      case THLineType.survey
-          when (subtype == null) || (subtype == 'cave'):
-        return const MPSurveyCaveLineDecorator();
-      case THLineType.waterFlow
-          when (subtype == null) || (subtype == 'permanent'):
-        return const MPWaterFlowPermanentLineDecorator();
-      default:
-        return null;
+    return getTherionLineDefinition(
+      set: _selectedTherionSymbolSet,
+      lineType: lineType,
+      subtype: subtype,
+    )?.decorator;
+  }
+
+  /// Color to pair with [getLineDecorator]'s decorator for [lineType]. Set
+  /// specific: the same [THLineType] can use a different color under a
+  /// different Therion symbol set, so this must be looked up alongside the
+  /// decorator rather than from a single set-neutral map.
+  Paint? getLineDecoratorColor(THLineType lineType, {String? subtype}) {
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+        MPTH2EditVisualizationMethod.mapiahPlaceholder) {
+      return null;
     }
+
+    return getTherionLineDefinition(
+      set: _selectedTherionSymbolSet,
+      lineType: lineType,
+      subtype: subtype,
+    )?.color;
   }
 
   THLinePaint getSelectedLinePaint({
@@ -1283,53 +1290,43 @@ abstract class MPVisualControllerBase with Store {
           type: MPLinePaintType.medium,
         );
 
-    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
+    if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
-      final Paint? patternPaint = _getTherionUISAreaPatternPaint(areaType);
-
-      if (patternPaint != null) {
-        return areaPaint.copyWith(
-          fillPaint: patternPaint,
-          cleanBeforeFill:
-              (areaType != THAreaType.debris) && (areaType != THAreaType.sand),
-        );
-      }
+      return areaPaint;
     }
 
-    return areaPaint;
+    final MPTherionSymbolSet set = _selectedTherionSymbolSet;
+    final MPTherionAreaPatternDefinition? definition =
+        getTherionAreaPatternDefinition(set: set, areaType: areaType);
+
+    if (definition == null) {
+      return areaPaint;
+    }
+
+    return areaPaint.copyWith(
+      fillPaint: _getTherionAreaPatternPaint(
+        set: set,
+        areaType: areaType,
+        definition: definition,
+      ),
+      cleanBeforeFill: definition.cleanBeforeFill,
+    );
   }
 
-  /// Builds (once, via [patternCache]) and scales the Therion UIS pattern
-  /// tile fill for the area types ported in Phase 1. Returns null for any
-  /// other area type, leaving the plain solid/semi-transparent fill in place.
-  Paint? _getTherionUISAreaPatternPaint(THAreaType areaType) {
-    final Color? color = mpTherionAreaPatternColors[areaType];
-
-    if (color == null) {
-      return null;
-    }
-
-    ui.Image? tile = patternCache.imageFor(areaType);
+  /// Builds (once, via [patternCache]) and scales the pattern tile fill
+  /// for [definition]. The tile is cached per `(set, areaType)` because the
+  /// same [THAreaType] can produce a different tile under a different
+  /// Therion symbol set.
+  Paint _getTherionAreaPatternPaint({
+    required MPTherionSymbolSet set,
+    required THAreaType areaType,
+    required MPTherionAreaPatternDefinition definition,
+  }) {
+    ui.Image? tile = patternCache.imageFor(set, areaType);
 
     if (tile == null) {
-      switch (areaType) {
-        case THAreaType.water:
-          tile = MPTherionAreaPatternTilesUIS.buildWaterTile(color);
-        case THAreaType.sump:
-          tile = MPTherionAreaPatternTilesUIS.buildSumpTile(color);
-        case THAreaType.debris:
-          tile = MPTherionAreaPatternTilesUIS.buildDebrisTile(color);
-        case THAreaType.flowstone:
-          tile = MPTherionAreaPatternTilesUIS.buildFlowstoneTile(color);
-        case THAreaType.moonmilk:
-          tile = MPTherionAreaPatternTilesUIS.buildMoonmilkTile(color);
-        case THAreaType.sand:
-          tile = MPTherionAreaPatternTilesUIS.buildSandTile(color);
-        default:
-          return null;
-      }
-
-      patternCache.store(areaType, tile);
+      tile = definition.tileBuilder(definition.color);
+      patternCache.store(set, areaType, tile);
     }
 
     final MPSymbolUnit symbolUnit = MPSymbolUnit(
@@ -1448,7 +1445,8 @@ abstract class MPVisualControllerBase with Store {
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       final String pointSubtype =
           MPCommandOptionAux.getSubtype(point) ?? mpNoSubtypeID;
-      final MPTherionPointSymbol? therionSymbol = getTherionUISPointSymbol(
+      final MPTherionPointSymbol? therionSymbol = getTherionPointSymbol(
+        set: _selectedTherionSymbolSet,
         pointType: pointType,
         subtype: pointSubtype,
       );

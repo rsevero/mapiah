@@ -13,7 +13,6 @@ import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 
 mixin MPLinePaintingMixin {
@@ -164,7 +163,10 @@ mixin MPLinePaintingMixin {
           lineType,
           subtype: subtype,
         ),
-        lineDecoratorColor: mpTherionLineColors[lineType],
+        lineDecoratorColor: visualController.getLineDecoratorColor(
+          lineType,
+          subtype: subtype,
+        ),
         th2FileEditController: th2FileEditController,
       );
 
@@ -238,7 +240,10 @@ mixin MPLinePaintingMixin {
               lineType,
               subtype: subtype,
             ),
-            lineDecoratorColor: mpTherionLineColors[lineType],
+            lineDecoratorColor: visualController.getLineDecoratorColor(
+              lineType,
+              subtype: subtype,
+            ),
             th2FileEditController: th2FileEditController,
           ),
         );

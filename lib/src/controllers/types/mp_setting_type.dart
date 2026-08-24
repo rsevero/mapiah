@@ -131,6 +131,27 @@ enum MPSettingID {
                   case MPTH2EditVisualizationMethod.therionUIS:
                     return appLocalizations
                         .mpSettingsEnumVisualizationMethodTherionUIS;
+                  case MPTH2EditVisualizationMethod.therionAUT:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionAUT;
+                  case MPTH2EditVisualizationMethod.therionSBE:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSBE;
+                  case MPTH2EditVisualizationMethod.therionSKBB:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSKBB;
+                  case MPTH2EditVisualizationMethod.therionBCRA:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionBCRA;
+                  case MPTH2EditVisualizationMethod.therionNSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNSS;
+                  case MPTH2EditVisualizationMethod.therionNZSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNZSS;
+                  case MPTH2EditVisualizationMethod.therionASF:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionASF;
                 }
               },
         ),
