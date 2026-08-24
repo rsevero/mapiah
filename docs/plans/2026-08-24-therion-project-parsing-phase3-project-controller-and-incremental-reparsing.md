@@ -299,7 +299,7 @@ For a non-root file, the controller:
 
 The newly parsed node contains fresh logical children (`THSurveyNode`, `THCentrelineNode`, `THMapNode`, `THScrapNode`). The controller replaces the old logical children on the edited file node while preserving any child file nodes that did not change.
 
-For `THSurveyNode`s, `fullNamespace` is recomputed leaf-to-root using the ancestor survey ids. Because namespaces are encoded in the id string as well as the field, changed namespaces produce changed ids; Phase 4 must treat an id change as a node replacement, not a move.
+For `THSurveyNode`s, `fullNamespace` is recomputed leaf-to-root using the ancestor survey ids. Logical-node ids are derived from file path and defining line number, not from the namespace. A namespace change alone does not change the id; a line-number or path change does. Phase 4 must treat an id change as a node replacement, not a move.
 
 ### 6.7 Error & Dirty-State Refresh
 
@@ -430,4 +430,3 @@ Fixture files for controller/re-parse tests live under `test/auxiliary/th_projec
 - No localization strings, help-page updates, or keyboard-shortcut documentation — Phase 8.
 - No isolate-based parsing, file watching, or large-project performance tuning. The controller API leaves room for these, but this phase intentionally uses the existing synchronous `THProjectParser` with debouncing.
 - `.th2` canvas contents are not re-parsed by this controller; `.th2` editing and saving stay in `TH2FileEditController`.
-
