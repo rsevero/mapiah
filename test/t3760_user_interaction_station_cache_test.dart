@@ -19,7 +19,7 @@ import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/elements/xvi/xvi_station.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 
 import 'th_test_aux.dart';
 
@@ -291,8 +291,7 @@ endscrap
           Offset.zero,
         );
         final THPoint stationPoint = controller.th2File.getPoints().firstWhere(
-          (THPoint point) =>
-              MPCommandOptionAux.getName(point) == 'Border',
+          (THPoint point) => MPCommandOptionAux.getName(point) == 'Border',
         );
         final List<String> initialTherionStationNames = controller
             .userInteractionController
@@ -337,7 +336,11 @@ endscrap
             .map((MPStationPointNameCoordinateRecord record) => record.name)
             .toList();
 
-        expect(therionStationNamesAfterRename, <String>['Border2', 'Edge', 'Mid']);
+        expect(therionStationNamesAfterRename, <String>[
+          'Border2',
+          'Edge',
+          'Mid',
+        ]);
 
         controller.zoomIn();
         controller.zoomIn();
@@ -348,153 +351,168 @@ endscrap
             .getTherionStationPointNameCoordinateCache()
             .map((MPStationPointNameCoordinateRecord record) => record.name)
             .toList();
-        final List<String> expectedVisibleTherionStationNames = controller.th2File
-            .getPoints()
-            .where((THPoint point) => MPCommandOptionAux.getName(point) != null)
-            .where(
-              (THPoint point) => controller.screenBoundingBox.contains(
-                controller.offsetCanvasToScreen(point.position.coordinates),
-              ),
-            )
-            .map((THPoint point) => MPCommandOptionAux.getName(point)!)
-            .toList()
-          ..sort();
+        final List<String> expectedVisibleTherionStationNames =
+            controller.th2File
+                .getPoints()
+                .where(
+                  (THPoint point) => MPCommandOptionAux.getName(point) != null,
+                )
+                .where(
+                  (THPoint point) => controller.screenBoundingBox.contains(
+                    controller.offsetCanvasToScreen(point.position.coordinates),
+                  ),
+                )
+                .map((THPoint point) => MPCommandOptionAux.getName(point)!)
+                .toList()
+              ..sort();
 
-        expect(therionStationNamesAfterZoom, expectedVisibleTherionStationNames);
+        expect(
+          therionStationNamesAfterZoom,
+          expectedVisibleTherionStationNames,
+        );
       },
     );
 
-    test('updates sectorized XVI cache after image visibility toggle', () async {
-      final String filename = THTestAux.testPath(
-        'mapiah_station_cache_sectorized_xvi_visibility.th2',
-      );
-      const String th2Content = '''
+    test(
+      'updates sectorized XVI cache after image visibility toggle',
+      () async {
+        final String filename = THTestAux.testPath(
+          'mapiah_station_cache_sectorized_xvi_visibility.th2',
+        );
+        const String th2Content = '''
 encoding utf-8
 ##XTHERION## xth_me_image_insert {0 1 1.0} {0 0} "./xvi/2026-05-11-001-xvi-sectorized_station_cache_fixture.xvi" 0 {}
 scrap first_scrap
 endscrap
 ''';
 
-      final TH2FileEditController controller = await _parseController(
-        filename: filename,
-        th2Content: th2Content,
-        prepareVisibleScreen: false,
-      );
-      controller.updateScreenSize(const Size(320.0, 240.0));
-      controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
+        final TH2FileEditController controller = await _parseController(
+          filename: filename,
+          th2Content: th2Content,
+          prepareVisibleScreen: false,
+        );
+        controller.updateScreenSize(const Size(320.0, 240.0));
+        controller.zoomToFit(zoomFitToType: MPZoomToFitType.file);
 
-      final MPRuntimeXVIImageInsertConfigMixin xviImage = controller.th2File
-          .getImages()
-          .single
-          .asXVIImage!;
-      final XVIFile xviFile = xviImage.getXVIFile(controller)!;
-      final Offset imageGridOffset = Offset(
-        xviImage.xviRootedXX,
-        xviImage.xviRootedYY,
-      );
-      final Offset imageOffset =
-          imageGridOffset -
-          Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
-      ({XVIStation? visible, Offset? visibleScreen, XVIStation? offscreen, Offset? offscreenScreen})
-      classifyStations() {
-        final Rect screenBoundingBox = controller.screenBoundingBox;
-        XVIStation? visibleStation;
-        Offset? visibleStationScreenPosition;
-        XVIStation? offscreenStation;
-        Offset? offscreenStationScreenPosition;
+        final MPRuntimeXVIImageInsertConfigMixin xviImage = controller.th2File
+            .getImages()
+            .single
+            .asXVIImage!;
+        final XVIFile xviFile = xviImage.getXVIFile(controller)!;
+        final Offset imageGridOffset = Offset(
+          xviImage.xviRootedXX,
+          xviImage.xviRootedYY,
+        );
+        final Offset imageOffset =
+            imageGridOffset -
+            Offset(xviFile.grid.gx.value, xviFile.grid.gy.value);
+        ({
+          XVIStation? visible,
+          Offset? visibleScreen,
+          XVIStation? offscreen,
+          Offset? offscreenScreen,
+        })
+        classifyStations() {
+          final Rect screenBoundingBox = controller.screenBoundingBox;
+          XVIStation? visibleStation;
+          Offset? visibleStationScreenPosition;
+          XVIStation? offscreenStation;
+          Offset? offscreenStationScreenPosition;
 
-        for (final XVIStation station in xviFile.stations) {
-          final Offset stationCanvasPosition = xviImage
-              .transformWorldPointFromBaseWorldPoint(
-                station.position.coordinates + imageOffset,
-              );
-          final Offset stationScreenPosition = controller.offsetCanvasToScreen(
-            stationCanvasPosition,
-          );
+          for (final XVIStation station in xviFile.stations) {
+            final Offset stationCanvasPosition = xviImage
+                .transformWorldPointFromBaseWorldPoint(
+                  station.position.coordinates + imageOffset,
+                );
+            final Offset stationScreenPosition = controller
+                .offsetCanvasToScreen(stationCanvasPosition);
 
-          if (screenBoundingBox.contains(stationScreenPosition) &&
-              visibleStation == null) {
-            visibleStation = station;
-            visibleStationScreenPosition = stationScreenPosition;
-          } else if (!screenBoundingBox.contains(stationScreenPosition) &&
-              offscreenStation == null) {
-            offscreenStation = station;
-            offscreenStationScreenPosition = stationScreenPosition;
+            if (screenBoundingBox.contains(stationScreenPosition) &&
+                visibleStation == null) {
+              visibleStation = station;
+              visibleStationScreenPosition = stationScreenPosition;
+            } else if (!screenBoundingBox.contains(stationScreenPosition) &&
+                offscreenStation == null) {
+              offscreenStation = station;
+              offscreenStationScreenPosition = stationScreenPosition;
+            }
           }
+
+          return (
+            visible: visibleStation,
+            visibleScreen: visibleStationScreenPosition,
+            offscreen: offscreenStation,
+            offscreenScreen: offscreenStationScreenPosition,
+          );
         }
 
-        return (
-          visible: visibleStation,
-          visibleScreen: visibleStationScreenPosition,
-          offscreen: offscreenStation,
-          offscreenScreen: offscreenStationScreenPosition,
+        controller.zoomIn();
+        controller.zoomIn();
+        controller.moveCanvasHorizontally(left: true);
+
+        final ({
+          XVIStation? visible,
+          Offset? visibleScreen,
+          XVIStation? offscreen,
+          Offset? offscreenScreen,
+        })
+        stationClassification = classifyStations();
+
+        final XVIStation? visibleStation = stationClassification.visible;
+        final Offset? visibleStationScreenPosition =
+            stationClassification.visibleScreen;
+        final XVIStation? offscreenStation = stationClassification.offscreen;
+        final Offset? offscreenStationScreenPosition =
+            stationClassification.offscreenScreen;
+
+        expect(visibleStation, isNotNull);
+        expect(offscreenStationScreenPosition, isNotNull);
+        expect(offscreenStation, isNotNull);
+
+        final List<String> visibleXVIStationNamesInCache = controller
+            .userInteractionController
+            .getXVIStationPointNameCoordinateCache()
+            .map((MPStationPointNameCoordinateRecord record) => record.name)
+            .toList();
+
+        expect(visibleXVIStationNamesInCache, contains(visibleStation!.name));
+        expect(
+          visibleXVIStationNamesInCache,
+          isNot(contains(offscreenStation!.name)),
         );
-      }
+        expect(
+          controller.userInteractionController
+              .getStationPointNameCoordinateCacheUnderScreenPosition(
+                visibleStationScreenPosition!,
+              )
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          <String>[visibleStation.name],
+        );
+        expect(
+          controller.userInteractionController
+              .getStationPointNameCoordinateCacheUnderScreenPosition(
+                offscreenStationScreenPosition!,
+              )
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          isNot(contains(offscreenStation.name)),
+        );
 
-      controller.zoomIn();
-      controller.zoomIn();
-      controller.moveCanvasHorizontally(left: true);
+        final int imageMPID = controller.th2File.getImages().single.mpID;
+        controller.selectionController.setImageVisibility(imageMPID, false);
 
-      final ({XVIStation? visible, Offset? visibleScreen, XVIStation? offscreen, Offset? offscreenScreen}) stationClassification =
-          classifyStations();
-
-      final XVIStation? visibleStation = stationClassification.visible;
-      final Offset? visibleStationScreenPosition =
-          stationClassification.visibleScreen;
-      final XVIStation? offscreenStation = stationClassification.offscreen;
-      final Offset? offscreenStationScreenPosition =
-          stationClassification.offscreenScreen;
-
-      expect(visibleStation, isNotNull);
-      expect(offscreenStationScreenPosition, isNotNull);
-      expect(offscreenStation, isNotNull);
-
-      final List<String> visibleXVIStationNamesInCache = controller
-          .userInteractionController
-          .getXVIStationPointNameCoordinateCache()
-          .map((MPStationPointNameCoordinateRecord record) => record.name)
-          .toList();
-
-      expect(
-        visibleXVIStationNamesInCache,
-        contains(visibleStation!.name),
-      );
-      expect(
-        visibleXVIStationNamesInCache,
-        isNot(contains(offscreenStation!.name)),
-      );
-      expect(
-        controller.userInteractionController
-            .getStationPointNameCoordinateCacheUnderScreenPosition(
-              visibleStationScreenPosition!,
-            )
-            .map((MPStationPointNameCoordinateRecord record) => record.name)
-            .toList(),
-        <String>[visibleStation.name],
-      );
-      expect(
-        controller.userInteractionController
-            .getStationPointNameCoordinateCacheUnderScreenPosition(
-              offscreenStationScreenPosition!,
-            )
-            .map((MPStationPointNameCoordinateRecord record) => record.name)
-            .toList(),
-        isNot(contains(offscreenStation.name)),
-      );
-
-      final int imageMPID = controller.th2File.getImages().single.mpID;
-      controller.selectionController.setImageVisibility(imageMPID, false);
-
-      expect(
-        controller.userInteractionController
-            .getStationPointNameCoordinateCacheUnderScreenPosition(
-              visibleStationScreenPosition,
-            )
-            .map((MPStationPointNameCoordinateRecord record) => record.name)
-            .toList(),
-        isEmpty,
-      );
-    });
+        expect(
+          controller.userInteractionController
+              .getStationPointNameCoordinateCacheUnderScreenPosition(
+                visibleStationScreenPosition,
+              )
+              .map((MPStationPointNameCoordinateRecord record) => record.name)
+              .toList(),
+          isEmpty,
+        );
+      },
+    );
 
     test(
       'uses the only unused XVI station under a new station point',

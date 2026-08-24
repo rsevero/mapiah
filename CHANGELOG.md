@@ -7,6 +7,7 @@
 * Fixed bugs:
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
 * Infrastructure maintenance:
+  * Renamed `th_grammar.dart`/`th_file_parser.dart`/`th_file_writer.dart` to `th2_grammar.dart`/`th2_file_parser.dart`/`th2_file_writer.dart`, freeing the `th_*` naming for upcoming Therion project (`thconfig`/`.th`) parsing support, distinct from the existing `.th2` scrap parsing. Also renamed `THGrammar` class to `TH2Grammar`.
 
 ## 0.4.4 - 2026-08-23 - The Cave Rescue release
 * Highlights:

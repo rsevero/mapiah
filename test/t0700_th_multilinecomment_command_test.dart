@@ -3,8 +3,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_writer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'th_test_aux.dart';
 

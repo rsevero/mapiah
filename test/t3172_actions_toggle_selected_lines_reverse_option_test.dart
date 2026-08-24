@@ -6,7 +6,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_writer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'th_test_aux.dart';
@@ -49,8 +49,7 @@ void main() {
         final THLine reversedLine = controller.th2File.getLines().first;
         expect(MPCommandOptionAux.isReversed(reversedLine), isTrue);
 
-        final THElement staleSelectedLine = controller
-            .selectionController
+        final THElement staleSelectedLine = controller.selectionController
             .getSelectedLine();
 
         controller.undo();

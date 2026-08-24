@@ -5,7 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
@@ -49,52 +49,57 @@ void main() {
       return controller;
     }
 
-    test('switching scraps leaves the editor in empty-selection mode', () async {
-      final TH2FileEditController controller = await loadController();
-      final List<THScrap> scraps = controller.th2File.getScraps().toList();
-      final THScrap firstScrap = scraps.first;
-      final THScrap secondScrap = scraps[1];
-      final THLine selectedLine = firstScrap.getLines(controller.th2File).first;
-      final THLineSegment selectedLineSegment = selectedLine
-          .getLineSegments(controller.th2File)
-          .first;
+    test(
+      'switching scraps leaves the editor in empty-selection mode',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final List<THScrap> scraps = controller.th2File.getScraps().toList();
+        final THScrap firstScrap = scraps.first;
+        final THScrap secondScrap = scraps[1];
+        final THLine selectedLine = firstScrap
+            .getLines(controller.th2File)
+            .first;
+        final THLineSegment selectedLineSegment = selectedLine
+            .getLineSegments(controller.th2File)
+            .first;
 
-      controller.selectionController.setSelectedElements(<THElement>[
-        selectedLine,
-      ]);
-      controller.stateController.setState(
-        MPTH2FileEditStateType.editSingleLine,
-      );
-      controller.selectionController.setSelectedEndPoints(<THLineSegment>[
-        selectedLineSegment,
-      ]);
+        controller.selectionController.setSelectedElements(<THElement>[
+          selectedLine,
+        ]);
+        controller.stateController.setState(
+          MPTH2FileEditStateType.editSingleLine,
+        );
+        controller.selectionController.setSelectedEndPoints(<THLineSegment>[
+          selectedLineSegment,
+        ]);
 
-      expect(
-        controller.stateController.state.type,
-        MPTH2FileEditStateType.editSingleLine,
-      );
-      expect(controller.selectionController.isSingleLineSelected(), isTrue);
-      expect(
-        controller.selectionController.selectedEndControlPoints.isNotEmpty,
-        isTrue,
-      );
+        expect(
+          controller.stateController.state.type,
+          MPTH2FileEditStateType.editSingleLine,
+        );
+        expect(controller.selectionController.isSingleLineSelected(), isTrue);
+        expect(
+          controller.selectionController.selectedEndControlPoints.isNotEmpty,
+          isTrue,
+        );
 
-      controller.setActiveScrap(secondScrap.mpID);
+        controller.setActiveScrap(secondScrap.mpID);
 
-      expect(controller.activeScrapID, secondScrap.mpID);
-      expect(
-        controller.stateController.state.type,
-        MPTH2FileEditStateType.selectEmptySelection,
-      );
-      expect(
-        controller.selectionController.mpSelectedElementsLogical.isEmpty,
-        isTrue,
-      );
-      expect(
-        controller.selectionController.selectedEndControlPoints.isEmpty,
-        isTrue,
-      );
-    });
+        expect(controller.activeScrapID, secondScrap.mpID);
+        expect(
+          controller.stateController.state.type,
+          MPTH2FileEditStateType.selectEmptySelection,
+        );
+        expect(
+          controller.selectionController.mpSelectedElementsLogical.isEmpty,
+          isTrue,
+        );
+        expect(
+          controller.selectionController.selectedEndControlPoints.isEmpty,
+          isTrue,
+        );
+      },
+    );
 
     test('switching scraps updates the current scrap name', () async {
       final TH2FileEditController controller = await loadController();

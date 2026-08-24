@@ -20,13 +20,13 @@ import 'package:mapiah/src/errors/th_options_list_wrong_length_error.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception.dart';
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/mp_file_read_write/th_grammar.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_grammar.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
 
 class TH2FileParser {
-  final THGrammar _grammar = THGrammar();
+  final TH2Grammar _grammar = TH2Grammar();
 
   late final Parser _areaContentParser;
   late final Parser _lineContentParser;

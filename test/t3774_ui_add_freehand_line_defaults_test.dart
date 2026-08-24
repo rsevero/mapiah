@@ -9,7 +9,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'th_test_aux.dart';
@@ -71,7 +71,11 @@ void main() {
       final TH2FileEditController controller = buildController();
 
       controller.elementEditController.setPLATypeSubtypeForNewElement(
-        const MPPLATypeSubtype(pla: MPPLAType.line, type: 'wall', subtype: 'pit'),
+        const MPPLATypeSubtype(
+          pla: MPPLAType.line,
+          type: 'wall',
+          subtype: 'pit',
+        ),
       );
 
       drawStroke(controller);
@@ -110,37 +114,40 @@ void main() {
       expect(clipOption!.choice, THOptionChoicesOnOffType.off);
     });
 
-    test('generated segment endpoints use the controller decimal positions', () {
-      final TH2FileEditController controller = buildController();
+    test(
+      'generated segment endpoints use the controller decimal positions',
+      () {
+        final TH2FileEditController controller = buildController();
 
-      // A higher canvas scale drives currentDecimalPositions higher via the
-      // controller's own reaction; read it back rather than hard-coding a
-      // value so this test tracks that reaction instead of duplicating it.
-      controller.setCanvasScale(1000);
+        // A higher canvas scale drives currentDecimalPositions higher via the
+        // controller's own reaction; read it back rather than hard-coding a
+        // value so this test tracks that reaction instead of duplicating it.
+        controller.setCanvasScale(1000);
 
-      final int expectedDecimalPositions = controller.currentDecimalPositions;
+        final int expectedDecimalPositions = controller.currentDecimalPositions;
 
-      expect(expectedDecimalPositions, greaterThan(0));
+        expect(expectedDecimalPositions, greaterThan(0));
 
-      controller.freehandLineCreationController.startStroke(
-        const Offset(0, 0),
-      );
-      controller.freehandLineCreationController.appendStrokeSample(
-        const Offset(20, 0),
-      );
-      controller.freehandLineCreationController.finishStroke(
-        const Offset(60, 20),
-      );
+        controller.freehandLineCreationController.startStroke(
+          const Offset(0, 0),
+        );
+        controller.freehandLineCreationController.appendStrokeSample(
+          const Offset(20, 0),
+        );
+        controller.freehandLineCreationController.finishStroke(
+          const Offset(60, 20),
+        );
 
-      final THLine line = committedLine(controller);
-      final List<THStraightLineSegment> segments = line
-          .getLineSegments(controller.th2File)
-          .cast<THStraightLineSegment>();
+        final THLine line = committedLine(controller);
+        final List<THStraightLineSegment> segments = line
+            .getLineSegments(controller.th2File)
+            .cast<THStraightLineSegment>();
 
-      for (final THStraightLineSegment segment in segments) {
-        expect(segment.endPoint.decimalPositions, expectedDecimalPositions);
-      }
-    });
+        for (final THStraightLineSegment segment in segments) {
+          expect(segment.endPoint.decimalPositions, expectedDecimalPositions);
+        }
+      },
+    );
 
     test('the committed line is added under the active scrap', () async {
       final parser = TH2FileParser();
@@ -175,9 +182,9 @@ void main() {
       controller.setCanvasScale(1);
       drawStroke(controller, origin: const Offset(5000, 5000));
 
-      final THLine newLine = controller.th2File
-          .getLines()
-          .firstWhere((THLine line) => !linesBeforeDraw.contains(line.mpID));
+      final THLine newLine = controller.th2File.getLines().firstWhere(
+        (THLine line) => !linesBeforeDraw.contains(line.mpID),
+      );
 
       expect(newLine.parentMPID, secondScrap.mpID);
     });

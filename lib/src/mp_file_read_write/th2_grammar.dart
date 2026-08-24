@@ -5,7 +5,7 @@ import 'package:mapiah/src/mp_file_read_write/grammar_utils.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// .th file grammar.
-class THGrammar extends GrammarDefinition {
+class TH2Grammar extends GrammarDefinition {
   /// Indicates whether the last normalization step altered the original value.
   bool changedValue = false;
 
@@ -178,7 +178,8 @@ class THGrammar extends GrammarDefinition {
                   .optional())
           .optional());
   Parser looseDateLikeToken() => pattern('0-9.:@').plus();
-  Parser dateTimeRange() => (singleDateTimeBase() &
+  Parser dateTimeRange() =>
+      (singleDateTimeBase() &
       char('-').trim() &
       (singleDateTimeBase() | looseDateLikeToken()));
   Parser dateTimeAllVariations() =>

@@ -3,12 +3,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petitparser/petitparser.dart';
 
-import 'package:mapiah/src/mp_file_read_write/th_grammar.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_grammar.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group('comment', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.endLineComment()).end();
 
     const successes = [
@@ -43,7 +43,7 @@ void main() {
   });
 
   group('keyword', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.keyword()).end();
 
     const successes = [
@@ -80,7 +80,7 @@ void main() {
   });
 
   group('extkeyword', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.extKeyword()).end();
 
     const successes = [
@@ -121,7 +121,7 @@ void main() {
   });
 
   group('noDate', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.noDateTime()).end();
 
     const successes = {'-': '-'};
@@ -145,7 +145,7 @@ void main() {
   });
 
   group('singleDateTime', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.singleDateTime().end());
 
     const successes = {
@@ -185,7 +185,7 @@ void main() {
   });
 
   group('dateTime', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(
       grammar.dateTimeRange().flatten().trim().end(),
     );
@@ -226,7 +226,7 @@ void main() {
   });
 
   group('dateTime empty', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.dateTimeAllVariations().end());
 
     const successes = {'-': '-'};
@@ -250,7 +250,7 @@ void main() {
   });
 
   group('dateTime with data', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.dateTimeAllVariations().end());
 
     const mapSuccesses = {
@@ -285,7 +285,7 @@ void main() {
   });
 
   group('quotedString', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.quotedString()).end();
 
     const successes = {
@@ -313,7 +313,7 @@ void main() {
   });
 
   group('bracketString', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.bracketStringGeneral().end());
 
     const successes = {
@@ -341,7 +341,7 @@ void main() {
   });
 
   group('length units', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.lengthUnit()).end();
 
     const successes = [
@@ -386,7 +386,7 @@ void main() {
   });
 
   group('angle units', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.angleUnit()).end();
 
     const successes = [
@@ -421,7 +421,7 @@ void main() {
   });
 
   group('clino units', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.clinoUnit()).end();
 
     const successes = [
@@ -458,7 +458,7 @@ void main() {
   });
 
   group('coordinate systems', () {
-    final grammar = THGrammar();
+    final grammar = TH2Grammar();
     final parser = grammar.buildFrom(grammar.csSpecs()).end();
 
     const successes = [
