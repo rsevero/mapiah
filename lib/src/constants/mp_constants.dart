@@ -806,3 +806,6 @@ const String mpHelpPageTelemetry = 'telemetry';
 
 // Telemetry consent dialog body markdown asset name (without path or extension).
 const String mpHelpPageTelemetryConsent = 'telemetry_consent';
+
+// Therion project incremental re-parsing.
+const int mpProjectReparseDebounceMilliseconds = 300;

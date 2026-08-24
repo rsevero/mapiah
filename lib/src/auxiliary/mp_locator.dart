@@ -4,6 +4,7 @@ import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/mp_telemetry_controller.dart';
+import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -18,6 +19,7 @@ class MPLocator {
 
   final MPGeneralController mpGeneralController = MPGeneralController();
   final MPTelemetryController mpTelemetryController = MPTelemetryController();
+  final THProjectController thProjectController = THProjectController();
 
   MPSettingsController? _mpSettingsController;
 

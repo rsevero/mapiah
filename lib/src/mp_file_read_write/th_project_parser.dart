@@ -49,6 +49,25 @@ class THProjectLoadResult {
   });
 }
 
+/// Result of splicing a single edited file's children back into an existing
+/// project tree via [THProjectParser.spliceFileNodeChildren].
+class THProjectSpliceResult {
+  final THProjectFileNode node;
+
+  final Map<String, Set<String>> fileDependencies;
+
+  final Map<String, Set<String>> reverseDependencies;
+
+  final List<THProjectParseError> projectErrors;
+
+  THProjectSpliceResult({
+    required this.node,
+    required this.fileDependencies,
+    required this.reverseDependencies,
+    required this.projectErrors,
+  });
+}
+
 /// Recursive project tree loader and dependency-graph builder.
 class THProjectParser {
   final THConfigFileParser _configParser = THConfigFileParser();
@@ -56,6 +75,12 @@ class THProjectParser {
   final THFileParser _fileParser = THFileParser();
 
   final Map<String, THProjectFileNode> _visited = <String, THProjectFileNode>{};
+
+  /// Canonical path -> already-built node to reuse instead of re-reading and
+  /// re-parsing from disk. Populated only when splicing an incremental
+  /// re-parse; empty for a normal full project load.
+  final Map<String, THProjectFileNode> _reuseCache =
+      <String, THProjectFileNode>{};
 
   final Map<String, Set<String>> _forwardDependencies =
       <String, Set<String>>{};
@@ -96,38 +121,145 @@ class THProjectParser {
   /// The root may be a `thconfig` file with any filename, or a `.th` file
   /// when the project has no configuration file.
   static THProjectLoadResult loadProject(String rootFilePath) {
-    final THProjectParser parser = THProjectParser._();
-
-    return parser._loadProject(rootFilePath);
+    return loadFileNode(rootFilePath);
   }
 
-  THProjectLoadResult _loadProject(String rootFilePath) {
-    final String absoluteRootPath = p.absolute(rootFilePath);
+  /// Loads a file and its whole subtree, as if [filePath] were a project
+  /// root. Used both for [loadProject] and for loading a newly added include
+  /// during an incremental re-parse splice.
+  ///
+  /// [projectRootDirectory] controls how descendant
+  /// [THProjectFileNode.relativePathToProjectRoot] values are computed; when
+  /// omitted, [filePath]'s own directory is used, matching a genuine project
+  /// root load.
+  static THProjectLoadResult loadFileNode(
+    String filePath, {
+    THProjectShape? expectedShape,
+    String? projectRootDirectory,
+  }) {
+    final THProjectParser parser = THProjectParser._();
+    final String absoluteRootPath = p.absolute(filePath);
 
-    _projectRootCanonical = THProjectPathResolver.canonicalize(absoluteRootPath);
-    _projectRootDirectory = p.dirname(_projectRootCanonical);
-
-    final THProjectFileNode rootNode = _loadFileNode(
+    parser._projectRootCanonical = THProjectPathResolver.canonicalize(
       absoluteRootPath,
-      rawPath: rootFilePath,
+    );
+    parser._projectRootDirectory =
+        projectRootDirectory ?? p.dirname(parser._projectRootCanonical);
+
+    final THProjectFileNode rootNode = parser._loadFileNode(
+      absoluteRootPath,
+      rawPath: filePath,
+      expectedShape: expectedShape,
     );
 
     return THProjectLoadResult(
       rootNode: rootNode,
-      fileDependencies: _forwardDependencies,
-      reverseDependencies: _reverseDependencies,
-      projectErrors: _projectErrors,
+      fileDependencies: parser._forwardDependencies,
+      reverseDependencies: parser._reverseDependencies,
+      projectErrors: parser._projectErrors,
+    );
+  }
+
+  /// Parses [content] into a shallow [THProjectFileNode]: the file's own
+  /// directives/parse errors are populated, but its children (includes and
+  /// logical nodes) are not built. Used to inspect a freshly edited file's
+  /// shape/content before deciding how to splice it into an existing tree.
+  /// Reads and decodes [absolutePath], detecting its declared Therion
+  /// `encoding` directive the same way a full project load does.
+  static ({String content, String encoding}) readFileContent(
+    String absolutePath,
+  ) {
+    final THProjectParser parser = THProjectParser._();
+
+    return parser._readContent(absolutePath);
+  }
+
+  static THProjectFileNode parseFileContent({
+    required String canonicalPath,
+    required String content,
+    required THProjectShape shape,
+    required String sourceFilePath,
+    required int lineNumber,
+  }) {
+    final THProjectParser parser = THProjectParser._();
+    parser._projectRootCanonical = canonicalPath;
+    parser._projectRootDirectory = p.dirname(canonicalPath);
+
+    final THProjectFileNode node = shape == THProjectShape.config
+        ? parser._createConfigFileNode(
+            content: content,
+            absolutePath: canonicalPath,
+            canonicalPath: canonicalPath,
+            lineNumber: lineNumber,
+            sourceFilePath: sourceFilePath,
+          )
+        : parser._createDataFileNode(
+            content: content,
+            absolutePath: canonicalPath,
+            canonicalPath: canonicalPath,
+            lineNumber: lineNumber,
+            sourceFilePath: sourceFilePath,
+          );
+
+    final List<String> parseErrors = shape == THProjectShape.config
+        ? (node as THConfigFileNode).configFile.parseErrors
+        : (node as THDataFileNode).dataFile.parseErrors;
+    parser._attachParseErrors(node, parseErrors, canonicalPath);
+
+    return node;
+  }
+
+  /// Rebuilds [targetNode]'s children (includes and logical nodes) from its
+  /// already-parsed content, reusing subtrees found in
+  /// [reuseByCanonicalPath] instead of reading/parsing them again, and
+  /// loading only newly referenced includes from disk.
+  ///
+  /// Includes no longer referenced by [targetNode]'s content are simply not
+  /// visited and therefore do not appear in the returned subtree.
+  static THProjectSpliceResult spliceFileNodeChildren({
+    required THProjectFileNode targetNode,
+    required String canonicalPath,
+    required String projectRootDirectory,
+    Map<String, THProjectFileNode> reuseByCanonicalPath =
+        const <String, THProjectFileNode>{},
+  }) {
+    final THProjectParser parser = THProjectParser._();
+
+    parser._projectRootCanonical = canonicalPath;
+    parser._projectRootDirectory = projectRootDirectory;
+    parser._reuseCache.addAll(reuseByCanonicalPath);
+    parser._visited[canonicalPath] = targetNode;
+    parser._forwardDependencies[canonicalPath] = <String>{};
+
+    if (targetNode is THConfigFileNode) {
+      parser._buildConfigChildren(targetNode, canonicalPath);
+    } else if (targetNode is THDataFileNode) {
+      parser._buildDataChildren(targetNode, canonicalPath);
+    }
+
+    return THProjectSpliceResult(
+      node: targetNode,
+      fileDependencies: parser._forwardDependencies,
+      reverseDependencies: parser._reverseDependencies,
+      projectErrors: parser._projectErrors,
     );
   }
 
   THProjectFileNode _loadFileNode(
     String filePath, {
     String? rawPath,
-    _THProjectShape? expectedShape,
+    THProjectShape? expectedShape,
     _THIncludeSite? includeSite,
   }) {
     final String absolutePath = p.absolute(filePath);
     final String canonicalPath = THProjectPathResolver.canonicalize(absolutePath);
+
+    final THProjectFileNode? reusedNode = _reuseCache[canonicalPath];
+    if (reusedNode != null) {
+      _visited[canonicalPath] = reusedNode;
+
+      return reusedNode;
+    }
 
     final THProjectFileNode? existingNode = _visited[canonicalPath];
     if (existingNode != null) {
@@ -169,10 +301,10 @@ class THProjectParser {
     final ({String content, String encoding}) readContent =
         _readContent(absolutePath);
 
-    final _THProjectShape shape =
+    final THProjectShape shape =
         expectedShape ?? _detectRootShape(readContent.content, absolutePath);
 
-    final bool isConfigShape = shape == _THProjectShape.config;
+    final bool isConfigShape = shape == THProjectShape.config;
     final THProjectFileNode node = isConfigShape
         ? _createConfigFileNode(
             content: readContent.content,
@@ -206,9 +338,9 @@ class THProjectParser {
     return node;
   }
 
-  _THProjectShape _detectRootShape(String content, String rootPath) {
+  THProjectShape _detectRootShape(String content, String rootPath) {
     if (p.basename(rootPath).toLowerCase() == 'thconfig') {
-      return _THProjectShape.config;
+      return THProjectShape.config;
     }
 
     final List<String> lines = content.split(RegExp(r'\r?\n'));
@@ -221,13 +353,13 @@ class THProjectParser {
       }
 
       if (_configOnlyDirectiveRegex.hasMatch(line)) {
-        return _THProjectShape.config;
+        return THProjectShape.config;
       }
 
-      return _THProjectShape.data;
+      return THProjectShape.data;
     }
 
-    return _THProjectShape.data;
+    return THProjectShape.data;
   }
 
   THConfigFileNode _createConfigFileNode({
@@ -315,7 +447,7 @@ class THProjectParser {
       final THProjectFileNode childNode = _loadFileNode(
         resolvedPath,
         rawPath: source.filePath,
-        expectedShape: _THProjectShape.data,
+        expectedShape: THProjectShape.data,
         includeSite: _THIncludeSite(
           filePath: canonicalPath,
           lineNumber: source.lineNumber,
@@ -336,7 +468,7 @@ class THProjectParser {
       final THProjectFileNode childNode = _loadFileNode(
         resolvedPath,
         rawPath: input.filePath,
-        expectedShape: _THProjectShape.config,
+        expectedShape: THProjectShape.config,
         includeSite: _THIncludeSite(
           filePath: canonicalPath,
           lineNumber: input.lineNumber,
@@ -506,15 +638,21 @@ class THProjectParser {
 
     final THProjectFileNode childNode;
     if (_isTH2Path(resolvedPath)) {
-      childNode = _createTH2FileNode(
-        resolvedPath: resolvedPath,
-        includeSite: includeSite,
+      final String th2CanonicalPath = THProjectPathResolver.canonicalize(
+        resolvedPath,
       );
+      final THProjectFileNode? reusedTH2Node = _reuseCache[th2CanonicalPath];
+
+      childNode = reusedTH2Node ??
+          _createTH2FileNode(
+            resolvedPath: resolvedPath,
+            includeSite: includeSite,
+          );
     } else {
       childNode = _loadFileNode(
         resolvedPath,
         rawPath: input.rawPath,
-        expectedShape: _THProjectShape.data,
+        expectedShape: THProjectShape.data,
         includeSite: includeSite,
       );
     }
@@ -700,7 +838,7 @@ class THProjectParser {
   }
 }
 
-enum _THProjectShape { config, data }
+enum THProjectShape { config, data }
 
 class _THIncludeSite {
   final String filePath;
