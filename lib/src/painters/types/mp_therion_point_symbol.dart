@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
-/// Therion UIS point symbols implemented as faithful vector drawings, one
-/// value per `p_*_UIS` MetaPost macro ported to Dart.
+/// Therion point symbols implemented as faithful vector drawings, one value
+/// per `p_*_<SET>` MetaPost macro ported to Dart (UIS first, then each
+/// additional set as it's ported).
 enum MPTherionPointSymbol {
   airDraughtSummerUIS,
   airDraughtUIS,
@@ -57,4 +58,23 @@ enum MPTherionPointSymbol {
   waterFlowPaleoUIS,
   waterFlowPermanentUIS,
   waterUIS,
+
+  // SKBB (Phase 4B)
+  anchorSKBB,
+  boreholeSKBB,
+  bridgeSKBB,
+  campSKBB,
+  cavePearlSKBB,
+  claySKBB,
+  fixedLadderSKBB,
+  gradientSKBB,
+  noEquipmentSKBB,
+  ropeLadderSKBB,
+  ropeSKBB,
+  sinkSKBB,
+  snowSKBB,
+  springSKBB,
+  stepsSKBB,
+  traverseSKBB,
+  viaFerrataSKBB,
 }

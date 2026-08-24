@@ -172,6 +172,10 @@ void main() {
               MPTherionPointSymbol.waterFlowPaleoUIS,
               MPTherionPointSymbol.waterFlowPermanentUIS,
               MPTherionPointSymbol.waterUIS,
+              // Phase 4B SKBB: p_borehole_SKBB thfill's its inner circle,
+              // p_noequipment_SKBB thfill's its warning triangle.
+              MPTherionPointSymbol.boreholeSKBB,
+              MPTherionPointSymbol.noEquipmentSKBB,
             };
 
         for (final MPTherionPointSymbol symbol

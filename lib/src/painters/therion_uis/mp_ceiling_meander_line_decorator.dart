@@ -12,7 +12,12 @@ import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 /// crossbars straddling the line, stamped at the center of each `0.8u`
 /// segment.
 class MPCeilingMeanderLineDecorator extends MPLineDecorator {
-  const MPCeilingMeanderLineDecorator();
+  /// Distance (in `u`) from the line to the crossbar/inner tick end. `0.2`
+  /// (the default) reproduces `l_ceilingmeander_UIS`'s `0.2u..0.3u` radial
+  /// ticks exactly; `l_ceilingmeander_SKBB` uses `0.1u..0.2u` instead.
+  final double nearUnits;
+
+  const MPCeilingMeanderLineDecorator({this.nearUnits = 0.2});
 
   @override
   void decorate({
@@ -39,9 +44,9 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
 
         final Offset direction = tangent / tangentLength;
         final Offset perpendicular = Offset(-direction.dy, direction.dx);
-        // Radial ticks span 0.2u..0.3u from the line; crossbars are 0.4u
-        // long, centered on the 0.2u radial point.
-        final Offset near = perpendicular * (0.2 * u);
+        // Radial ticks span nearUnits..(nearUnits+0.1)u from the line;
+        // crossbars are 0.4u long, centered on the nearUnits radial point.
+        final Offset near = perpendicular * (nearUnits * u);
         final Offset radialSpan = perpendicular * (0.1 * u);
         final Offset along = direction * (0.2 * u);
 

@@ -3,18 +3,21 @@
 
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_definition.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_area_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_area_map.dart';
 import 'package:mapiah/src/painters/types/mp_therion_symbol_set.dart';
 
 /// Set-specific area pattern tile lookup. Registered per set as non-UIS
-/// sets are implemented (Phase 4B onward); empty in Phase 4A, so every set
-/// currently falls all the way through to the UIS tile.
+/// sets are implemented (Phase 4B onward); every set without an entry here
+/// falls all the way through to the UIS tile.
 typedef MPTherionSetAreaPatternLookup =
     MPTherionAreaPatternDefinition? Function(THAreaType areaType);
 
 const Map<MPTherionSymbolSet, MPTherionSetAreaPatternLookup>
 _setSpecificAreaPatternLookups =
-    <MPTherionSymbolSet, MPTherionSetAreaPatternLookup>{};
+    <MPTherionSymbolSet, MPTherionSetAreaPatternLookup>{
+      MPTherionSymbolSet.skbb: getTherionSKBBAreaPatternDefinition,
+    };
 
 /// Resolves the area pattern tile definition for [areaType] under [set],
 /// following the fallback order set-specific → UIS. Returns null only when

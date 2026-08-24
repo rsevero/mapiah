@@ -3,12 +3,13 @@
 
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_line_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_uis_line_map.dart';
 import 'package:mapiah/src/painters/types/mp_therion_symbol_set.dart';
 
 /// Set-specific line decorator/color lookup. Registered per set as
-/// non-UIS sets are implemented (Phase 4B onward); empty in Phase 4A, so
-/// every set currently falls all the way through to the UIS decorator.
+/// non-UIS sets are implemented (Phase 4B onward); every set without an
+/// entry here falls all the way through to the UIS decorator.
 typedef MPTherionSetLineLookup =
     MPTherionLineDefinition? Function({
       required THLineType lineType,
@@ -16,7 +17,9 @@ typedef MPTherionSetLineLookup =
     });
 
 const Map<MPTherionSymbolSet, MPTherionSetLineLookup>
-_setSpecificLineLookups = <MPTherionSymbolSet, MPTherionSetLineLookup>{};
+_setSpecificLineLookups = <MPTherionSymbolSet, MPTherionSetLineLookup>{
+  MPTherionSymbolSet.skbb: getTherionSKBBLineDefinition,
+};
 
 /// Resolves the line decorator/color for [lineType]/[subtype] under [set],
 /// following the fallback order set-specific → UIS. Returns null only when

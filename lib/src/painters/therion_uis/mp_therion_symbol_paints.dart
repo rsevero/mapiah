@@ -189,4 +189,55 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
     border: THPaint.thPaint3,
     fill: THPaint.thPaint1003,
   ),
+
+  // SKBB (Phase 4B): border/fill borrowed from each point type's
+  // placeholder paint (mp_visual_controller.dart's pointTypePaints), kept
+  // only where the p_*_SKBB macro actually thdraw/thfill's.
+  MPTherionPointSymbol.anchorSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.boreholeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint7,
+    fill: THPaint.thPaint1007,
+  ),
+  MPTherionPointSymbol.bridgeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.campSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.cavePearlSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint12,
+  ),
+  MPTherionPointSymbol.claySKBB: MPTherionSymbolPaint(border: THPaint.thPaint1),
+  MPTherionPointSymbol.fixedLadderSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.gradientSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.noEquipmentSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint0,
+    fill: THPaint.thPaint1000,
+  ),
+  MPTherionPointSymbol.ropeLadderSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.ropeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.sinkSKBB: MPTherionSymbolPaint(border: THPaint.thPaint3),
+  MPTherionPointSymbol.snowSKBB: MPTherionSymbolPaint(border: THPaint.thPaint6),
+  MPTherionPointSymbol.springSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint3,
+  ),
+  MPTherionPointSymbol.stepsSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.traverseSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.viaFerrataSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
 };
