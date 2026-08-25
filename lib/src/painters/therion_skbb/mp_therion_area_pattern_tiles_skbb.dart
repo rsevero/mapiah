@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
+import 'package:mapiah/src/painters/helpers/mp_clay_s_motif_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 
 /// Builds the Phase 4B Therion SKBB area fill pattern tiles, following the
@@ -57,37 +57,7 @@ abstract final class MPTherionAreaPatternTilesSKBB {
           ..color = color
           ..style = ui.PaintingStyle.stroke
           ..strokeWidth = 0.05 * u;
-        // Therion's `a_clay_SKBB` motif is
-        // `(-.25u,0){up}..origin{down}..{up}(0.25u,0)`: the first segment
-        // leaves the left point heading up and arrives at the origin
-        // heading down (an upward-bulging hump), while the second segment
-        // leaves the origin heading down and arrives at the right point
-        // heading up (a downward-bulging hump) — the two mirrored humps
-        // are what make the motif read as an S, not the two identical
-        // humps drawn here previously.
-        // A high `handleLengthFactor` pulls each curve's control points
-        // well past the endpoints along their up/down direction, turning
-        // the shallow arcs the default 1/3 factor produced into a deep,
-        // rounded U per half — closer to the S's actual loopy look.
-        const double handleLengthFactor = 1.1;
-        final ui.Path curve = MPDirectionalCurveAux.buildCurvePath(
-          start: ui.Offset(-0.15 * u, 0),
-          end: ui.Offset(0, 0),
-          startDirectionDegrees: 90,
-          endDirectionDegrees: -90,
-          handleLengthFactor: handleLengthFactor,
-        );
-
-        curve.addPath(
-          MPDirectionalCurveAux.buildCurvePath(
-            start: ui.Offset(0, 0),
-            end: ui.Offset(0.15 * u, 0),
-            startDirectionDegrees: -90,
-            endDirectionDegrees: 90,
-            handleLengthFactor: handleLengthFactor,
-          ),
-          ui.Offset.zero,
-        );
+        final ui.Path curve = MPClaySMotifAux.buildPath(halfWidth: 0.15 * u);
 
         canvas.drawPath(curve, paint);
       },

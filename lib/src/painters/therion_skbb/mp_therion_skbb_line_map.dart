@@ -9,6 +9,13 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_de
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_clay_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_debris_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_ice_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_pebbles_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_sand_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_unsurveyed_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
@@ -28,14 +35,20 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// [MPWaterFlowIntermittentSKBBLineDecorator]); `permanent`/no-subtype
 /// falls through to that same UIS decorator unchanged.
 ///
-/// Every other SKBB-owned line type this map doesn't cover — wall subtype
-/// lines (already rendered set-neutrally via dash-pattern `THLinePaint`,
-/// not this decorator pipeline), `border` visible/temporary/presumed,
-/// `survey` surface, `arrow`, `mapConnection`, `section`, and the
-/// `rope`/`steps`/`handrail`/`fixedLadder`/`ropeLadder`/`viaFerrata`/
-/// `slope` *line* types (as opposed to the point types of the same name,
-/// which Phase 4B does implement) — falls back to UIS/placeholder until a
-/// follow-up phase.
+/// `wall -subtype sand`/`pebbles`/`clay`/`debris`/`blocks`/`ice`/
+/// `unsurveyed` are also handled below, each porting its own
+/// `l_wall_*_SKBB` macro. Every other `wall` subtype (`bedrock`,
+/// `underlying`, `presumed`, and any without a dedicated SKBB macro at
+/// all) has no SKBB-specific rendering in Therion itself and keeps
+/// falling back to Mapiah's placeholder dash-pattern `THLinePaint`
+/// (`wallSubtypesPaints`), same as before.
+///
+/// Every other SKBB-owned line type this map doesn't cover — `border`
+/// visible/temporary/presumed, `survey` surface, `arrow`,
+/// `mapConnection`, `section`, and the `rope`/`steps`/`handrail`/
+/// `fixedLadder`/`ropeLadder`/`viaFerrata`/`slope` *line* types (as
+/// opposed to the point types of the same name, which Phase 4B does
+/// implement) — falls back to UIS/placeholder until a follow-up phase.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -70,24 +83,34 @@ MPTherionLineDefinition? getTherionSKBBLineDefinition({
   required THLineType lineType,
   String? subtype,
 }) {
-  final MPLineDecorator? waterFlowDecorator =
-      (lineType == THLineType.waterFlow)
-      ? switch (subtype) {
-          'conjectural' => const MPWaterFlowConjecturalSKBBLineDecorator(),
-          'intermittent' => const MPWaterFlowIntermittentSKBBLineDecorator(),
-          _ => null,
-        }
-      : null;
+  final MPLineDecorator? subtypeDecorator = switch (lineType) {
+    THLineType.waterFlow => switch (subtype) {
+      'conjectural' => const MPWaterFlowConjecturalSKBBLineDecorator(),
+      'intermittent' => const MPWaterFlowIntermittentSKBBLineDecorator(),
+      _ => null,
+    },
+    THLineType.wall => switch (subtype) {
+      'sand' => const MPWallSandSKBBLineDecorator(),
+      'pebbles' => const MPWallPebblesSKBBLineDecorator(),
+      'clay' => const MPWallClaySKBBLineDecorator(),
+      'debris' => const MPWallDebrisSKBBLineDecorator(),
+      'blocks' => const MPWallBlocksSKBBLineDecorator(),
+      'ice' => const MPWallIceSKBBLineDecorator(),
+      'unsurveyed' => const MPWallUnsurveyedSKBBLineDecorator(),
+      _ => null,
+    },
+    _ => null,
+  };
 
-  if (waterFlowDecorator != null) {
-    final color = mpTherionLineColors[THLineType.waterFlow];
+  if (subtypeDecorator != null) {
+    final color = mpTherionLineColors[lineType];
 
     if (color == null) {
       return null;
     }
 
     return MPTherionLineDefinition(
-      decorator: waterFlowDecorator,
+      decorator: subtypeDecorator,
       color: color,
     );
   }

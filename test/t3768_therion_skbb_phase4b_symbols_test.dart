@@ -17,6 +17,13 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decor
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_clay_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_debris_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_ice_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_pebbles_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_sand_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_wall_unsurveyed_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
@@ -175,6 +182,45 @@ void main() {
       },
     );
 
+    test(
+      'wall -subtype sand/pebbles/clay/debris/blocks/ice/unsurveyed get '
+      'their SKBB decorators, other wall subtypes fall back to the '
+      'placeholder (no decorator)',
+      () {
+        const Map<String, Type> expectedDecorators = {
+          'sand': MPWallSandSKBBLineDecorator,
+          'pebbles': MPWallPebblesSKBBLineDecorator,
+          'clay': MPWallClaySKBBLineDecorator,
+          'debris': MPWallDebrisSKBBLineDecorator,
+          'blocks': MPWallBlocksSKBBLineDecorator,
+          'ice': MPWallIceSKBBLineDecorator,
+          'unsurveyed': MPWallUnsurveyedSKBBLineDecorator,
+        };
+
+        for (final MapEntry<String, Type> entry
+            in expectedDecorators.entries) {
+          expect(
+            getTherionLineDefinition(
+              set: MPTherionSymbolSet.skbb,
+              lineType: THLineType.wall,
+              subtype: entry.key,
+            )?.decorator.runtimeType,
+            entry.value,
+            reason: 'wall -subtype ${entry.key}',
+          );
+        }
+
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.wall,
+            subtype: 'bedrock',
+          ),
+          isNull,
+        );
+      },
+    );
+
     test('an SKBB-undecorated line type falls back to UIS', () {
       // THLineType.gradient has no SKBB entry, so it must resolve to the
       // same decorator UIS uses.
@@ -198,6 +244,13 @@ void main() {
         const MPOverhangSKBBLineDecorator(),
         const MPWaterFlowConjecturalSKBBLineDecorator(),
         const MPWaterFlowIntermittentSKBBLineDecorator(),
+        const MPWallSandSKBBLineDecorator(),
+        const MPWallPebblesSKBBLineDecorator(),
+        const MPWallClaySKBBLineDecorator(),
+        const MPWallDebrisSKBBLineDecorator(),
+        const MPWallBlocksSKBBLineDecorator(),
+        const MPWallIceSKBBLineDecorator(),
+        const MPWallUnsurveyedSKBBLineDecorator(),
       ]) {
         final ui.PictureRecorder recorder = ui.PictureRecorder();
         final Canvas canvas = Canvas(recorder);

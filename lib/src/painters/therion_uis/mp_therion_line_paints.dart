@@ -14,6 +14,11 @@ import 'package:material_ui/material_ui.dart';
 /// loses nothing. Colors match what each decorator already rendered with
 /// (borrowed from its line type's placeholder paint before this file
 /// existed); this map is now their sole, independent source.
+///
+/// [THLineType.wall] has no UIS decorator of its own (wall subtypes stay
+/// on the placeholder `THLinePaint` under UIS) — its entry here is used
+/// only by the SKBB-specific wall decorators, which share this same map
+/// rather than keeping a second, SKBB-only color table.
 final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.ceilingMeander: THPaint.thPaint5,
   THLineType.ceilingStep: THPaint.thPaint5,
@@ -28,4 +33,5 @@ final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.rockEdge: THPaint.thPaint8,
   THLineType.survey: THPaint.thPaint14,
   THLineType.waterFlow: THPaint.thPaint3,
+  THLineType.wall: THPaint.thPaint0,
 };
