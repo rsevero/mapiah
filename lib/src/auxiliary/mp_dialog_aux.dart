@@ -1258,8 +1258,11 @@ class MPDialogAux {
     }
   }
 
-  /// Picks a Therion project file (`thconfig` or `.th`) and opens it in the
+  /// Picks the Therion project configuration file and opens it in the
   /// project tree without touching the tab lifecycle.
+  ///
+  /// The selected file is always treated as a `thconfig` file, regardless of
+  /// its extension or whether it has one.
   static Future<void> pickProjectFile(BuildContext context) async {
     if (_isFilePickerOpen[MPFilePickerType.project] == true) {
       return;
@@ -1295,7 +1298,10 @@ class MPDialogAux {
       mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
         pickedFilePath,
       );
-      await mpLocator.thProjectController.openProject(pickedFilePath);
+      await mpLocator.thProjectController.openProject(
+        pickedFilePath,
+        forceConfigShape: true,
+      );
     } catch (e) {
       mpLocator.mpLog.e('Error picking project file', error: e);
     } finally {

@@ -120,8 +120,11 @@ class THProjectParser {
   ///
   /// The root may be a `thconfig` file with any filename, or a `.th` file
   /// when the project has no configuration file.
-  static THProjectLoadResult loadProject(String rootFilePath) {
-    return loadFileNode(rootFilePath);
+  static THProjectLoadResult loadProject(
+    String rootFilePath, {
+    THProjectShape? expectedShape,
+  }) {
+    return loadFileNode(rootFilePath, expectedShape: expectedShape);
   }
 
   /// Loads a file and its whole subtree, as if [filePath] were a project
@@ -339,7 +342,9 @@ class THProjectParser {
   }
 
   THProjectShape _detectRootShape(String content, String rootPath) {
-    if (p.basename(rootPath).toLowerCase() == 'thconfig') {
+    if ((p.basename(rootPath).toLowerCase() == 'thconfig') ||
+        (p.extension(rootPath).toLowerCase() ==
+            mpTherionConfigFileExtension)) {
       return THProjectShape.config;
     }
 

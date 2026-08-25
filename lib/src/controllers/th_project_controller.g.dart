@@ -153,9 +153,13 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   );
 
   @override
-  Future<void> openProject(String configFilePath) {
+  Future<void> openProject(
+    String configFilePath, {
+    bool forceConfigShape = false,
+  }) {
     return _$openProjectAsyncAction.run(
-      () => super.openProject(configFilePath),
+      () =>
+          super.openProject(configFilePath, forceConfigShape: forceConfigShape),
     );
   }
 

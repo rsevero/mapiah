@@ -241,7 +241,13 @@ class THProjectParser {
   /// Loads a project starting from [rootFilePath] (a thconfig file, or a
   /// root .th file when there is no thconfig). Reads files synchronously
   /// via dart:io; Phase 3 wraps this in a MobX action / isolate as needed.
-  static THProjectLoadResult loadProject(String rootFilePath);
+  /// [expectedShape] lets callers override automatic root-shape detection,
+  /// which Phase 4's Open Project action uses to open the selected thconfig
+  /// root without any detection.
+  static THProjectLoadResult loadProject(
+    String rootFilePath, {
+    THProjectShape? expectedShape,
+  });
 }
 ```
 
@@ -325,7 +331,7 @@ Key points carried over from the roadmap (§2.3) and made concrete:
 
 ### 5.3 Determining file "shape" (thconfig vs. `.th`)
 
-The root file can be a `thconfig` with an arbitrary filename (per roadmap §1, objective 1: "which can have any filename or extension"), so file type cannot be decided by extension alone for the root. `THProjectParser` decides using the same signal Phase 1's parsers already rely on for fault tolerance: it attempts `THConfigFileParser.parse` first only for the *root* file (the only place ambiguity exists — everything reached via `source` is unambiguously `.th`-shaped per the Therion book's rules in roadmap §2.1, and everything reached via a `thconfig`'s `input` is unambiguously another `thconfig`-shaped file). If the root file contains any `thconfig`-only directive (`layout`, `export`, `select`/`unselect`, or `source`) it is treated as a `thconfig`; otherwise it is treated as a root `.th` file. This mirrors real Therion behavior (a project can be launched directly from a `.th` file with no `thconfig` at all) without needing a new sniffing grammar.
+The root file can be a `thconfig` with an arbitrary filename (per roadmap §1, objective 1: "which can have any filename or extension"), so file type cannot be decided by extension alone for the root. `THProjectParser` decides using the same signal Phase 1's parsers already rely on for fault tolerance: it attempts `THConfigFileParser.parse` first only for the *root* file (the only place ambiguity exists — everything reached via `source` is unambiguously `.th`-shaped per the Therion book's rules in roadmap §2.1, and everything reached via a `thconfig`'s `input` is unambiguously another `thconfig`-shaped file). The root is treated as a `thconfig` when its basename is exactly `thconfig`, when its filename ends in `.thconfig`, or when its first non-comment content contains any `thconfig`-only directive (`layout`, `export`, `select`/`unselect`, or `source`); otherwise it is treated as a root `.th` file. Callers may also pass `expectedShape: THProjectShape.config` to bypass this detection entirely. The Phase 4 Open Project UI always does so: the selected file is unambiguously a `thconfig`, so no root-shape detection is performed. This mirrors real Therion behavior (a project can be launched directly from a `.th` file with no `thconfig` at all) without needing a new sniffing grammar.
 
 ### 5.4 Encoding
 

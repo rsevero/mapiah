@@ -97,7 +97,10 @@ abstract class THProjectControllerBase with Store {
   bool get hasUnsavedChanges => dirtyFilePaths.isNotEmpty;
 
   @action
-  Future<void> openProject(String configFilePath);
+  Future<void> openProject(
+    String configFilePath, {
+    bool forceConfigShape = false,
+  });
 
   @action
   Future<void> reloadProject();
@@ -162,7 +165,7 @@ final Map<String, Timer> _reparseTimers = <String, Timer>{};
 1. Canonicalize `configFilePath` with `p.absolute` and `THProjectPathResolver.canonicalize`.
 2. Cancel any pending re-parse timers and call `closeProject()` to clear stale state.
 3. Set `rootConfigPath` and `isParsing = true`.
-4. Run `THProjectParser.loadProject(rootConfigPath)` inside a `Future`/microtask so the UI remains responsive. For Phase 3, the synchronous parser is acceptable; the call site is isolated so Phase 3.5 or a later optimization can move it to an isolate without changing the controller API.
+4. Run `THProjectParser.loadProject(rootConfigPath, expectedShape: forceConfigShape ? THProjectShape.config : null)` inside a `Future`/microtask so the UI remains responsive. For Phase 3, the synchronous parser is acceptable; the call site is isolated so Phase 3.5 or a later optimization can move it to an isolate without changing the controller API.
 5. Store the result:
    - `projectRootNode = result.rootNode`.
    - `projectErrors` from `result.projectErrors`.
@@ -240,7 +243,7 @@ For a newly added include, shape is derived the same way `THProjectParser` does:
 - Reached from a `thconfig` `input` → config.
 - Reached from a `.th` `input` ending in `.th2` → `.th2` leaf.
 - Other `.th` `input` → data.
-- Root fallback → basename `thconfig` or a config-only directive → config, otherwise data.
+- Root fallback → basename `thconfig`, a `.thconfig` suffix, or a config-only directive → config, otherwise data. The Phase 4 Open Project action does not use this fallback: it always passes `forceConfigShape: true` because the selected file is unambiguously a `thconfig`.
 
 To avoid duplicating Phase 2 logic, Phase 3 includes a small refactor of `THProjectParser` exposing two pure helpers:
 

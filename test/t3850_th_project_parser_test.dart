@@ -262,5 +262,65 @@ void main() {
       final THDataFileNode dataNode = result.rootNode as THDataFileNode;
       expect(dataNode.dataFile.surveys.single.surveyId, 'café');
     });
+
+    test('detects a config root whose filename ends in .thconfig', () async {
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_phase4_thconfig_extension_',
+      );
+      addTearDown(() => tempDirectory.delete(recursive: true));
+
+      final String configPath = p.join(
+        tempDirectory.path,
+        'therion_uis_showcase.thconfig',
+      );
+      final String dataPath = p.join(tempDirectory.path, 'cave.th');
+
+      File(configPath).writeAsStringSync(
+        'encoding UTF-8\nsource cave.th\n',
+      );
+      File(dataPath).writeAsStringSync(
+        'encoding UTF-8\nsurvey cave\nendsurvey\n',
+      );
+
+      final THProjectLoadResult result = THProjectParser.loadProject(
+        configPath,
+      );
+
+      expect(result.rootNode, isA<THConfigFileNode>());
+      expect(result.projectErrors, isEmpty);
+
+      final THDataFileNode dataNode =
+          result.rootNode.children.single as THDataFileNode;
+      expect(dataNode.absolutePath, canonicalPath(dataPath));
+    });
+
+    test('loadProject can force an extensionless config root', () async {
+      final Directory tempDirectory = await Directory.systemTemp.createTemp(
+        'mapiah_phase4_force_config_parser_',
+      );
+      addTearDown(() => tempDirectory.delete(recursive: true));
+
+      final String configPath = p.join(tempDirectory.path, 'showcase');
+      final String dataPath = p.join(tempDirectory.path, 'cave.th');
+
+      File(configPath).writeAsStringSync(
+        'encoding UTF-8\nsource cave.th\n',
+      );
+      File(dataPath).writeAsStringSync(
+        'encoding UTF-8\nsurvey cave\nendsurvey\n',
+      );
+
+      final THProjectLoadResult result = THProjectParser.loadProject(
+        configPath,
+        expectedShape: THProjectShape.config,
+      );
+
+      expect(result.rootNode, isA<THConfigFileNode>());
+      expect(result.projectErrors, isEmpty);
+
+      final THDataFileNode dataNode =
+          result.rootNode.children.single as THDataFileNode;
+      expect(dataNode.absolutePath, canonicalPath(dataPath));
+    });
   });
 }

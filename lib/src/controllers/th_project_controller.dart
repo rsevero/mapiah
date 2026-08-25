@@ -78,7 +78,10 @@ abstract class THProjectControllerBase with Store {
       <THProjectParseError>[];
 
   @action
-  Future<void> openProject(String configFilePath) async {
+  Future<void> openProject(
+    String configFilePath, {
+    bool forceConfigShape = false,
+  }) async {
     final String canonicalRootPath = THProjectPathResolver.canonicalize(
       p.absolute(configFilePath),
     );
@@ -91,7 +94,12 @@ abstract class THProjectControllerBase with Store {
 
     try {
       final THProjectLoadResult result = await Future<THProjectLoadResult>(
-        () => THProjectParser.loadProject(canonicalRootPath),
+        () => THProjectParser.loadProject(
+          canonicalRootPath,
+          expectedShape: forceConfigShape
+              ? THProjectShape.config
+              : null,
+        ),
       );
 
       _applyLoadResult(result);

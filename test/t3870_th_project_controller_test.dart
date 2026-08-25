@@ -151,5 +151,46 @@ void main() {
       expect(controller.projectRootNode, isA<THDataFileNode>());
       expect(controller.rootConfigPath, canonicalPath(rootPath));
     });
+
+    test(
+      'openProject can force an extensionless selected file to config',
+      () async {
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_phase4_force_config_',
+        );
+        addTearDown(() => tempDirectory.delete(recursive: true));
+
+        final String configPath = p.join(
+          tempDirectory.path,
+          'therion_uis_showcase',
+        );
+        final String dataPath = p.join(tempDirectory.path, 'cave.th');
+
+        File(configPath).writeAsStringSync(
+          'encoding UTF-8\nsource cave.th\n',
+        );
+        File(dataPath).writeAsStringSync(
+          'encoding UTF-8\nsurvey cave\nendsurvey\n',
+        );
+
+        await controller.openProject(
+          configPath,
+          forceConfigShape: true,
+        );
+
+        expect(controller.projectRootNode, isA<THConfigFileNode>());
+        expect(controller.projectErrors, isEmpty);
+
+        final THConfigFileNode root =
+            controller.projectRootNode! as THConfigFileNode;
+
+        expect(root.children, hasLength(1));
+        expect(root.children.single, isA<THDataFileNode>());
+        expect(
+          (root.children.single as THDataFileNode).absolutePath,
+          canonicalPath(dataPath),
+        );
+      },
+    );
   });
 }
