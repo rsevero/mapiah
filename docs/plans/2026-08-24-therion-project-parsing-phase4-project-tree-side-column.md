@@ -31,7 +31,7 @@ Phase 4 adds the first visual layer on top of that store: a collapsible, resizab
 
 Verified directly against the codebase (not just prior planning docs):
 
-- `lib/src/pages/th2_file_tabs_page.dart` is a plain `Scaffold` with `MPResponsiveAppBar` + `TH2FileEditBodyWidget` (tab strip via `mp_file_tab_widget.dart`). **No `Drawer`, split view, or side column exists.** Phase 4 is greenfield for layout.
+- `lib/src/pages/th2_file_tabs_page.dart` is a plain `Scaffold` whose `MPResponsiveAppBar.bottom` hosts the draggable tab strip (built via `mp_file_tab_widget.dart`) and whose `body` is an `Observer` returning a centered empty-state `Text` when no tabs are open, otherwise a `PopScope` wrapping an `IndexedStack` of `TH2FileEditBodyWidget` canvases. **No `Drawer`, split view, or side column exists.** Phase 4 is greenfield for layout.
 - `lib/src/widgets/` has **no existing tree/collapsible-list widget** to extend. The closest stylistic precedent is `mp_available_scraps_widget.dart` (simple selectable list rendered inside `MPOverlayWindowWidget`) for row styling conventions only — it has no expand/collapse behavior to reuse.
 - `THProjectNode` (`lib/src/elements/th_project/th_project_node.dart`): `id`, `label`, `sourceFilePath`, `lineNumber`, `children`, `parent`, `parseErrors`, computed `hasErrors`. **No `isExpanded` field** (unlike the aspirational sketch in the top-level roadmap doc §3.1 — that sketch was never implemented as written).
 - `THProjectFileNode` adds `absolutePath`, `relativePathToProjectRoot`, `encoding`, `isLoaded`. **No `isDirty` field on nodes** — dirty state lives only in `THProjectController.dirtyFilePaths`, keyed by canonical path (`node.absolutePath` for file nodes).
@@ -125,7 +125,7 @@ abstract class THProjectTreeUIControllerBase with Store {
 
 | Field | Type | Purpose |
 | :--- | :--- | :--- |
-| `expandedNodeIds` | `ObservableSet<String>` | Node ids currently expanded. Starts empty; populated once by the controller when `THProjectController.projectRootNode` first becomes non-null. After that it is purely user-driven. |
+| `expandedNodeIds` | `ObservableSet<String>` | Node ids currently expanded. Starts empty. The controller populates it with the default expansion whenever `THProjectController.projectRootNode` becomes non-null and the set is empty (i.e. once per project load), and clears it when the root becomes `null`; after that it is purely user-driven. |
 | `filterText` | `String` | Current search box contents, empty = no filtering. |
 | `isSidebarCollapsed` | `bool` | Whether the sidebar is reduced to a thin rail. Initialized from `MPSettingID.ProjectTree_SidebarCollapsed`. |
 | `sidebarWidth` | `double` | Current sidebar width in logical pixels, clamped to `[mpProjectTreeSidebarMinWidth, mpProjectTreeSidebarMaxWidth]`. Initialized from `MPSettingID.ProjectTree_SidebarWidth`. |
@@ -165,6 +165,8 @@ void _handleProjectRootChanged(THProjectFileNode? root) {
 }
 ```
 
+The snippet above shows only the `projectRootNode` reaction. The `sidebarWidth` and `isSidebarCollapsed` field initializers that read `MPSettingID.ProjectTree_SidebarWidth` and `MPSettingID.ProjectTree_SidebarCollapsed` (see §4.1) happen in the same constructor but are elided here for brevity.
+
 The reaction clears `expandedNodeIds` when a project closes and reapplies defaults only when the expansion set is empty on the next project load. Reparses and reloads of the same project do not reapply defaults.
 
 ### 4.2 Node Identity Across Re-parses
@@ -179,6 +181,7 @@ In the current implementation, logical-node ids are synthetic `type:canonicalPat
 
 ```
 THProjectTreeWidget (StatelessWidget, Observer)
+ ├── header row with collapse button (calls setSidebarCollapsed(true))
  ├── search box (_THProjectTreeSearchField, a private stateful widget that owns a TextEditingController and Timer; onChanged cancels/restarts the timer and calls setFilterText after mpProjectTreeFilterDebounceMilliseconds)
  ├── [empty state] when projectRootNode == null (no project open)
  ├── [loading state] Observer on isParsing -> LinearProgressIndicator strip
@@ -233,7 +236,7 @@ The controller registers a MobX reaction on `THProjectController.projectRootNode
 
 ### 6.1 Split Layout
 
-The existing `Scaffold.body` (currently `TH2FileEditBodyWidget` directly) becomes:
+The existing `Scaffold.body` (currently an `Observer` returning a centered empty-state `Text` when no tabs are open, otherwise a `PopScope` wrapping an `IndexedStack` of `TH2FileEditBodyWidget` canvases) becomes:
 
 ```dart
 body: Row(
@@ -332,7 +335,7 @@ Step 10: Widget/unit tests
 Step 11: flutter analyze / flutter test
 ```
 
-Process exceptions for this phase: help pages and keyboard-shortcut documentation are deferred to Phase 8, and tests are intentionally written at Step 10 after the widget APIs exist. Both are approved exceptions to the default "update help pages for new features" and "tests first" rules. The existing MobX watch generates `.g.dart` files; do not manually run `build_runner build`.
+Process exceptions for this phase: help pages and keyboard-shortcut documentation are deferred to Phase 8, and tests are intentionally written at Step 10 after the widget APIs exist. Both are approved exceptions to the default "update help pages for new features" and "tests first" rules; the tests-first deviation is explicitly approved by Rodrigo Severo. The existing MobX watch generates `.g.dart` files; do not manually run `build_runner build`.
 
 ---
 
@@ -390,5 +393,4 @@ Representative scenarios:
 ## 11. Risks & Open Questions
 
 1. **Large-project scroll performance**: `ListView.builder` over a flattened list avoids building offscreen widgets, but the flatten walk itself still runs on every `filterText`/`expandedNodeIds` change. For very large projects this may need memoization keyed on `(projectRootNode identity, expandedNodeIds, filterText)`; not built preemptively in Phase 4 but called out so Step 10 test fixtures include a moderately large synthetic tree (~200 nodes) to catch obviously quadratic behavior early.
-2. **File-picker dependency**: confirm during Step 6 whether an existing package (e.g. already used for `.th2` "Open File") can be reused for picking a `thconfig`/root file, or whether this needs a small separate follow-up outside Phase 4's scope.
-3. **Row highlight vs. Flutter's built-in selection affordances**: decide during Step 5 whether selection highlight uses a plain `Container` color or `Material`/`InkWell` splash, to stay consistent with the rest of the app's list-row conventions (see `mp_available_scraps_widget.dart` for precedent).
+2. **Row highlight vs. Flutter's built-in selection affordances**: decide during Step 5 whether selection highlight uses a plain `Container` color or `Material`/`InkWell` splash, to stay consistent with the rest of the app's list-row conventions (see `mp_available_scraps_widget.dart` for precedent).
