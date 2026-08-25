@@ -11,11 +11,15 @@ import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/helpers/mp_water_flow_meander_aux.dart';
 
-/// Ports `l_waterflow_permanent_UIS`: a meandering line whose bends
-/// alternate side every `0.5u` with a randomized angle (`50 ± 15` degrees,
-/// seeded per element for repaint stability), ending in an arrowhead.
-class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
-  const MPWaterFlowPermanentLineDecorator();
+/// Ports `l_waterflow_conjectural_SKBB`, which draws the exact same
+/// meandering curve as `l_waterflow_permanent_UIS` (bends alternating side
+/// every `0.5u` with a randomized `50 ± 15` degree angle) but with
+/// `thdrawoptions(dashed withdots scaled (0.5 * optical_zoom) withpen
+/// PenB)` instead of a solid stroke — a sparse row of round dots along the
+/// wiggly line — before resetting to solid drawing options for the
+/// trailing arrowhead, same as the permanent variant.
+class MPWaterFlowConjecturalSKBBLineDecorator extends MPLineDecorator {
+  const MPWaterFlowConjecturalSKBBLineDecorator();
 
   @override
   void decorate({
@@ -48,11 +52,8 @@ class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
       step: step,
       random: random,
     );
-    final Paint strokePaint = Paint.from(color)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = mpTherionPenD * u;
 
-    canvas.drawPath(meander, strokePaint);
+    _drawDots(canvas: canvas, meander: meander, color: color, u: u);
 
     final Tangent? endTangent = metric.getTangentForOffset(length);
 
@@ -76,5 +77,37 @@ class MPWaterFlowPermanentLineDecorator extends MPLineDecorator {
         canvas.drawPath(MPWaterFlowMeanderAux.arrowPath(), arrowFillPaint);
       },
     );
+  }
+
+  /// A dash pattern this sparse (period well past the dot's own diameter)
+  /// can't be approximated by a dashed `Paint.strokeWidth` stroke with
+  /// round caps without the dashes reading as short line segments rather
+  /// than dots, so each dot is stamped directly as a filled circle,
+  /// stepping along [meander] at fixed arc-length intervals.
+  void _drawDots({
+    required Canvas canvas,
+    required Path meander,
+    required Paint color,
+    required double u,
+  }) {
+    final double dotRadius = 0.5 * mpTherionPenB * u;
+    final double spacing = 0.3 * u;
+    final Paint dotPaint = Paint()
+      ..color = color.color
+      ..style = PaintingStyle.fill;
+
+    for (final PathMetric metric in meander.computeMetrics()) {
+      double distance = 0;
+
+      while (distance <= metric.length) {
+        final Tangent? tangent = metric.getTangentForOffset(distance);
+
+        if (tangent != null) {
+          canvas.drawCircle(tangent.position, dotRadius, dotPaint);
+        }
+
+        distance += spacing;
+      }
+    }
   }
 }
