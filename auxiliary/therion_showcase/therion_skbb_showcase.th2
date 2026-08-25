@@ -157,9 +157,8 @@ scrap therion_skbb_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
 
   line steps
     800 1200
-    950 1180
-    1100 1160
-    1250 1220
+    1000 1180
+    1200 1220
     1400 1200
   endline
 

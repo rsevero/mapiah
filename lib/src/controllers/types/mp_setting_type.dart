@@ -115,6 +115,25 @@ enum MPSettingID {
     MPSettingID.TH2Edit_VisualizationMethod:
         MPSettingEnumDefinitionImpl<MPTH2EditVisualizationMethod>(
           enumValues: MPTH2EditVisualizationMethod.values,
+          // AUT/SBE/BCRA/NSS/NZSS/ASF have their enum values and dispatch
+          // plumbing in place (Phase 4A), but no set-specific symbol
+          // rendering implemented yet, so they currently render exactly
+          // like UIS — hidden from the settings dropdown until each set
+          // gets its own rendering, rather than offering an option that
+          // looks identical to UIS today; enable them here one by one as
+          // they're actually implemented.
+          enabledPredicate: (MPTH2EditVisualizationMethod value) =>
+              switch (value) {
+                MPTH2EditVisualizationMethod.mapiahPlaceholder ||
+                MPTH2EditVisualizationMethod.therionUIS ||
+                MPTH2EditVisualizationMethod.therionSKBB => true,
+                MPTH2EditVisualizationMethod.therionAUT ||
+                MPTH2EditVisualizationMethod.therionSBE ||
+                MPTH2EditVisualizationMethod.therionBCRA ||
+                MPTH2EditVisualizationMethod.therionNSS ||
+                MPTH2EditVisualizationMethod.therionNZSS ||
+                MPTH2EditVisualizationMethod.therionASF => false,
+              },
           parser: (String storedValue) {
             try {
               return MPTH2EditVisualizationMethod.values.byName(storedValue);
