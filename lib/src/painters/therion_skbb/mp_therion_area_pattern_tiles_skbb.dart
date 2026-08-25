@@ -38,8 +38,8 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   static ui.Image buildClayTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.5,
-      gridSize: 2,
+      cellUnits: 1.0,
+      gridSize: 3,
       jitterFactor: 0.3,
       salt: 1,
       randomizeRotation: false,
@@ -71,8 +71,8 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   static ui.Image buildIceTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.5,
-      gridSize: 2,
+      cellUnits: 1.0,
+      gridSize: 3,
       jitterFactor: 0.4,
       salt: 2,
       randomizeRotation: false,
@@ -98,8 +98,8 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   static ui.Image buildSnowTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 2.0,
-      gridSize: 2,
+      cellUnits: 1.3,
+      gridSize: 3,
       jitterFactor: 0.35,
       salt: 3,
       randomizeRotation: false,
@@ -191,8 +191,8 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   static ui.Image buildPebblesTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.5,
-      gridSize: 3,
+      cellUnits: 1.0,
+      gridSize: 4,
       jitterFactor: 0.3,
       salt: 5,
       randomizeRotation: true,
@@ -216,8 +216,8 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   static ui.Image buildDebrisTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.5,
-      gridSize: 3,
+      cellUnits: 1.0,
+      gridSize: 4,
       jitterFactor: 0.3,
       salt: 6,
       randomizeRotation: true,
