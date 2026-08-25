@@ -127,11 +127,20 @@ abstract final class MPTherionAreaPatternTilesSKBB {
     );
   }
 
+  /// `a_blocks_SKBB` draws `punked (unitsquare-ish, side `uu`, `randomized
+  /// (uu/2)` per corner) rotated uniformdeviate(360) shifted ((i,j)
+  /// randomized 1.6uu)` on a `2uu` grid — a full-side-length square (half
+  /// the grid step), each corner independently displaced by up to half
+  /// that side in a random direction, at a fully random rotation and a
+  /// position jitter comparable to the grid step itself. The previous
+  /// port under-sized the square (quarter, not half, the grid step) and
+  /// under-jittered both the corners and the position, rendering far
+  /// sparser and more regular than Therion's own busy, irregular tiling.
   static ui.Image buildBlocksTile(ui.Color color) {
     return _scatterTile(
       cellUnits: 2.0,
-      gridSize: 2,
-      jitterFactor: 0.35,
+      gridSize: 3,
+      jitterFactor: 0.6,
       salt: 4,
       randomizeRotation: true,
       drawMotif: (canvas, u, random) {
@@ -139,29 +148,38 @@ abstract final class MPTherionAreaPatternTilesSKBB {
           ..color = color
           ..style = ui.PaintingStyle.stroke
           ..strokeWidth = 0.05 * u;
-        final double half = 0.25 * u;
+        final double half = 0.5 * u;
+        final double cornerJitter = 0.5 * u;
+
+        ui.Offset corner(double dx, double dy) {
+          final ui.Offset jitter = _randomOffset(random, cornerJitter);
+
+          return ui.Offset(dx * half + jitter.dx, dy * half + jitter.dy);
+        }
+
+        final ui.Offset p0 = corner(-1, -1);
+        final ui.Offset p1 = corner(1, -1);
+        final ui.Offset p2 = corner(1, 1);
+        final ui.Offset p3 = corner(-1, 1);
         final ui.Path quad = ui.Path()
-          ..moveTo(
-            -half + (random.nextDouble() - 0.5) * 0.1 * u,
-            -half + (random.nextDouble() - 0.5) * 0.1 * u,
-          )
-          ..lineTo(
-            half + (random.nextDouble() - 0.5) * 0.1 * u,
-            -half + (random.nextDouble() - 0.5) * 0.1 * u,
-          )
-          ..lineTo(
-            half + (random.nextDouble() - 0.5) * 0.1 * u,
-            half + (random.nextDouble() - 0.5) * 0.1 * u,
-          )
-          ..lineTo(
-            -half + (random.nextDouble() - 0.5) * 0.1 * u,
-            half + (random.nextDouble() - 0.5) * 0.1 * u,
-          )
+          ..moveTo(p0.dx, p0.dy)
+          ..lineTo(p1.dx, p1.dy)
+          ..lineTo(p2.dx, p2.dy)
+          ..lineTo(p3.dx, p3.dy)
           ..close();
 
         canvas.drawPath(quad, paint);
       },
     );
+  }
+
+  /// Approximates MetaPost's `randomized d`: displaces by a distance
+  /// uniformly distributed in `[0, d]`, in a uniformly random direction.
+  static ui.Offset _randomOffset(MPSeededRandom random, double magnitude) {
+    final double distance = random.nextDouble() * magnitude;
+    final double angle = random.nextDouble() * 2 * math.pi;
+
+    return ui.Offset(distance * math.cos(angle), distance * math.sin(angle));
   }
 
   static ui.Image buildPebblesTile(ui.Color color) {

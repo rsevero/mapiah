@@ -2,8 +2,8 @@ Please check CLAUDE.md, docs/plans/2026-07-15-therion-symbol-rendering-roadmap.m
 
 Therion code is locally available at ~/devel/therion-rsevero
 
-When processing ~/auxiliary/therion-showcase/therion_uis_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_uis_showcase.pdf
+When processing ~/auxiliary/therion-showcase/therion_sbkk_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_sbkk_showcase.pdf
 
-Mapiah presentation of point passage-height is very different from the one we see at ~/auxiliary/therion-showcase/therion_uis_showcase.pdf. they are the 2 points just below the first column of lines in ~/auxiliary/therion-showcase/therion_uis_showcase.pdf.
+Mapiah presentation of area blocks is very different from the one we see at ~/auxiliary/therion-showcase/therion_sbkk_showcase.pdf. Therions has more density of blocks, the blocks shapes and relative positions varies more.
 
-Fix Mapiah Therion UIS presentation of point passage-height to match the one used by Therion.
+Fix Mapiah Therion SBKK presentation of area blocks to match the one used by Therion.
