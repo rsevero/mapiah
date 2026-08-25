@@ -6,6 +6,7 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_missing_file_node.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
@@ -48,6 +49,23 @@ void main() {
       relativePathToProjectRoot: label,
       encoding: 'UTF-8',
       requestedPath: label,
+    );
+  }
+
+  TH2FileNode buildTH2FileNode({
+    required String id,
+    required String label,
+    String absolutePath = '/tmp/passage.th2',
+  }) {
+    return TH2FileNode(
+      id: id,
+      label: label,
+      sourceFilePath: absolutePath,
+      lineNumber: 0,
+      absolutePath: absolutePath,
+      relativePathToProjectRoot: label,
+      encoding: 'UTF-8',
+      isLoaded: false,
     );
   }
 
@@ -141,19 +159,77 @@ void main() {
   });
 
   group('THProjectTreeUIController default expansion', () {
-    test('expands root and direct file children once per project load', () {
+    test('expands all branches down to the shallowest th2 file', () {
       final THProjectController projectController = THProjectController();
-      final THMissingFileNode childNode = buildFileNode(
-        id: 'file:/tmp/passage.th',
-        label: 'passage.th',
-        absolutePath: '/tmp/passage.th',
-      );
       final THMissingFileNode rootNode = buildFileNode(
         id: 'file:/tmp/cave.thconfig',
         label: 'cave.thconfig',
         absolutePath: '/tmp/cave.thconfig',
       );
+      final THMissingFileNode surveyWithTH2 = buildFileNode(
+        id: 'file:/tmp/survey_with_th2.th',
+        label: 'survey_with_th2.th',
+        absolutePath: '/tmp/survey_with_th2.th',
+      );
+      final TH2FileNode th2Node = buildTH2FileNode(
+        id: 'file:/tmp/passage.th2',
+        label: 'passage.th2',
+        absolutePath: '/tmp/passage.th2',
+      );
+      final THMissingFileNode siblingBranch = buildFileNode(
+        id: 'file:/tmp/sibling.th',
+        label: 'sibling.th',
+        absolutePath: '/tmp/sibling.th',
+      );
+      final THMissingFileNode siblingChild = buildFileNode(
+        id: 'file:/tmp/sibling_child.th',
+        label: 'sibling_child.th',
+        absolutePath: '/tmp/sibling_child.th',
+      );
 
+      surveyWithTH2.addChild(th2Node);
+      siblingBranch.addChild(siblingChild);
+      rootNode.addChild(surveyWithTH2);
+      rootNode.addChild(siblingBranch);
+
+      projectController.projectRootNode = rootNode;
+
+      final THProjectTreeUIController controller = THProjectTreeUIController(
+        projectController: projectController,
+      );
+
+      addTearDown(controller.dispose);
+
+      expect(controller.isExpanded(rootNode.id), isTrue);
+      expect(controller.isExpanded(surveyWithTH2.id), isTrue);
+      expect(controller.isExpanded(siblingBranch.id), isTrue);
+      expect(controller.isExpanded(th2Node.id), isFalse);
+      expect(controller.isExpanded(siblingChild.id), isFalse);
+
+      projectController.projectRootNode = null;
+
+      expect(controller.expandedNodeIds, isEmpty);
+    });
+
+    test('expands the whole tree when the project has no th2 file', () {
+      final THProjectController projectController = THProjectController();
+      final THMissingFileNode rootNode = buildFileNode(
+        id: 'file:/tmp/cave.thconfig',
+        label: 'cave.thconfig',
+        absolutePath: '/tmp/cave.thconfig',
+      );
+      final THMissingFileNode childNode = buildFileNode(
+        id: 'file:/tmp/passage.th',
+        label: 'passage.th',
+        absolutePath: '/tmp/passage.th',
+      );
+      final THMissingFileNode grandchildNode = buildFileNode(
+        id: 'file:/tmp/passage_child.th',
+        label: 'passage_child.th',
+        absolutePath: '/tmp/passage_child.th',
+      );
+
+      childNode.addChild(grandchildNode);
       rootNode.addChild(childNode);
       projectController.projectRootNode = rootNode;
 
@@ -165,10 +241,7 @@ void main() {
 
       expect(controller.isExpanded(rootNode.id), isTrue);
       expect(controller.isExpanded(childNode.id), isTrue);
-
-      projectController.projectRootNode = null;
-
-      expect(controller.expandedNodeIds, isEmpty);
+      expect(controller.isExpanded(grandchildNode.id), isTrue);
     });
   });
 }

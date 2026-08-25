@@ -7,6 +7,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mobx/mobx.dart';
@@ -162,12 +163,56 @@ abstract class THProjectTreeUIControllerBase with Store {
       return;
     }
 
-    expandedNodeIds.add(root.id);
+    final int? firstTH2Depth = _firstTH2FileDepth(root, 0);
+    final int expansionDepth =
+        firstTH2Depth ?? _maximumDepth(root, 0) + 1;
 
-    for (final THProjectNode child in root.children) {
-      if (child is THProjectFileNode) {
-        expandedNodeIds.add(child.id);
+    _expandNodesAboveDepth(root, 0, expansionDepth);
+  }
+
+  int? _firstTH2FileDepth(THProjectNode node, int depth) {
+    if (node is TH2FileNode) {
+      return depth;
+    }
+
+    for (final THProjectNode child in node.children) {
+      final int? childDepth = _firstTH2FileDepth(child, depth + 1);
+
+      if (childDepth != null) {
+        return childDepth;
       }
+    }
+
+    return null;
+  }
+
+  int _maximumDepth(THProjectNode node, int depth) {
+    int deepestDepth = depth;
+
+    for (final THProjectNode child in node.children) {
+      final int childDepth = _maximumDepth(child, depth + 1);
+
+      if (childDepth > deepestDepth) {
+        deepestDepth = childDepth;
+      }
+    }
+
+    return deepestDepth;
+  }
+
+  void _expandNodesAboveDepth(
+    THProjectNode node,
+    int depth,
+    int expansionDepth,
+  ) {
+    if (depth >= expansionDepth) {
+      return;
+    }
+
+    expandedNodeIds.add(node.id);
+
+    for (final THProjectNode child in node.children) {
+      _expandNodesAboveDepth(child, depth + 1, expansionDepth);
     }
   }
 

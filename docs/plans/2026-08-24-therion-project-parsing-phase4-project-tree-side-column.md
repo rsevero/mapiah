@@ -156,19 +156,18 @@ void _handleProjectRootChanged(THProjectFileNode? root) {
   }
 
   if (expandedNodeIds.isEmpty) {
-    expandedNodeIds.add(root.id);
-    for (final THProjectNode child in root.children) {
-      if (child is THProjectFileNode) {
-        expandedNodeIds.add(child.id);
-      }
-    }
+    final int? firstTH2Depth = _firstTH2FileDepth(root, 0);
+    final int expansionDepth =
+        firstTH2Depth ?? _maximumDepth(root, 0) + 1;
+
+    _expandNodesAboveDepth(root, 0, expansionDepth);
   }
 }
 ```
 
 The snippet above shows only the `projectRootNode` reaction. The `sidebarWidth` and `isSidebarCollapsed` field initializers that read `MPSettingID.ProjectTree_SidebarWidth` and `MPSettingID.ProjectTree_SidebarCollapsed` (see §4.1) happen in the same constructor but are elided here for brevity.
 
-The reaction clears `expandedNodeIds` when a project closes and reapplies defaults only when the expansion set is empty on the next project load. Reparses and reloads of the same project do not reapply defaults.
+The reaction clears `expandedNodeIds` when a project closes and reapplies defaults only when the expansion set is empty on the next project load. Reparses and reloads of the same project do not reapply defaults. Default expansion walks depth-first to find the shallowest `.th2` file; it then expands every branch down to that `.th2` depth. If the project contains no `.th2` file, the whole tree is expanded.
 
 ### 4.2 Node Identity Across Re-parses
 
@@ -223,7 +222,7 @@ Icon constants (sizes) come from existing `mpSmallIconSize` in `mp_constants.dar
 
 ### 5.4 Default Expansion
 
-The controller registers a MobX reaction on `THProjectController.projectRootNode`. When the root becomes `null`, `expandedNodeIds` is cleared. When a root becomes non-null and `expandedNodeIds` is still empty, the controller expands the root and its direct `THProjectFileNode` children once. Depth-2+ nodes start collapsed. Reparses and reloads do not reapply defaults unless the expansion set was cleared by a project switch. `THProjectTreeWidget` remains a `StatelessWidget` and only observes `expandedNodeIds`.
+The controller registers a MobX reaction on `THProjectController.projectRootNode`. When the root becomes `null`, `expandedNodeIds` is cleared. When a root becomes non-null and `expandedNodeIds` is still empty, the controller finds the shallowest `.th2` file and expands every branch down to that depth, so at least one `.th2` file is visible while sibling branches are opened to the same level. If the project has no `.th2` file, the whole tree is expanded. Reparses and reloads do not reapply defaults unless the expansion set was cleared by a project switch. `THProjectTreeWidget` remains a `StatelessWidget` and only observes `expandedNodeIds`.
 
 ### 5.5 Search/Filter
 

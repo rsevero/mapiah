@@ -106,6 +106,17 @@ void main() {
     );
     expect(
       find.byKey(ValueKey('THProjectTreeNodeWidget|${surveyChild.id}')),
+      findsOneWidget,
+    );
+
+    await tester.tap(
+      find.byKey(ValueKey('THProjectTreeNodeChevron|${surveyNode.id}')),
+    );
+    await tester.pump();
+
+    expect(mpLocator.thProjectTreeUIController.isExpanded(surveyNode.id), isFalse);
+    expect(
+      find.byKey(ValueKey('THProjectTreeNodeWidget|${surveyChild.id}')),
       findsNothing,
     );
 
