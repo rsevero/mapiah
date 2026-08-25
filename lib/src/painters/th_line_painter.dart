@@ -221,8 +221,17 @@ class THLinePainter extends CustomPainter {
       }
     }
 
+    final MPSymbolUnit symbolUnit = MPSymbolUnit(
+      canvasScale: th2FileEditController.canvasScale,
+      devicePixelRatio: th2FileEditController.devicePixelRatio,
+    );
     final Path basePath =
-        lineDecorator?.buildBasePath(path: path, vertices: vertices) ?? path;
+        lineDecorator?.buildBasePath(
+          path: path,
+          vertices: vertices,
+          symbolUnit: symbolUnit,
+        ) ??
+        path;
 
     if (lineDecorator == null) {
       if (linePaint.fillPaint != null) {
@@ -275,10 +284,7 @@ class THLinePainter extends CustomPainter {
       canvas: canvas,
       path: basePath,
       color: lineDecoratorColor!,
-      symbolUnit: MPSymbolUnit(
-        canvasScale: th2FileEditController.canvasScale,
-        devicePixelRatio: th2FileEditController.devicePixelRatio,
-      ),
+      symbolUnit: symbolUnit,
       isReversed: lineInfo.isReversed,
       mpID: lineInfo.mpID,
     );

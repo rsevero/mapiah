@@ -209,11 +209,11 @@ void main() {
 
     test(
       'mpTherionLineColors has exactly one entry per decorator-covered '
-      'THLineType',
+      'THLineType (UIS or SKBB-only)',
       () {
         // Mirrors MPVisualControllerBase.getLineDecorator's switch: every
         // THLineType a line decorator exists for, and no others.
-        const Set<THLineType> decoratedLineTypes = <THLineType>{
+        const Set<THLineType> uisDecoratedLineTypes = <THLineType>{
           THLineType.ceilingMeander,
           THLineType.ceilingStep,
           THLineType.chimney,
@@ -228,8 +228,22 @@ void main() {
           THLineType.survey,
           THLineType.waterFlow,
         };
+        // These have no UIS decorator/macro of their own (Therion aliases
+        // their set-neutral macro straight to the SKBB definition, or —
+        // for `wall` — the placeholder covers UIS while SKBB subtypes get
+        // real decorators), so their color entry is used only by the
+        // SKBB-specific decorators sharing this same map; see
+        // mpTherionLineColors' own doc comment.
+        const Set<THLineType> skbbOnlyDecoratedLineTypes = <THLineType>{
+          THLineType.ropeLadder,
+          THLineType.viaFerrata,
+          THLineType.wall,
+        };
 
-        expect(mpTherionLineColors.keys.toSet(), decoratedLineTypes);
+        expect(
+          mpTherionLineColors.keys.toSet(),
+          uisDecoratedLineTypes.union(skbbOnlyDecoratedLineTypes),
+        );
       },
     );
 

@@ -17,6 +17,8 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decor
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_survey_surface_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_via_ferrata_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
@@ -164,6 +166,71 @@ void main() {
     });
 
     test(
+      'survey -subtype cave/no-subtype and -subtype surface get their '
+      'SKBB decorators',
+      () {
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.survey,
+          )?.decorator,
+          isA<MPSurveyCaveSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.survey,
+            subtype: 'cave',
+          )?.decorator,
+          isA<MPSurveyCaveSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.survey,
+            subtype: 'surface',
+          )?.decorator,
+          isA<MPSurveySurfaceSKBBLineDecorator>(),
+        );
+      },
+    );
+
+    test(
+      'survey cave (SKBB) leaves a bare gap in the middle of long '
+      'segments and draws short segments whole',
+      () {
+        const MPSurveyCaveSKBBLineDecorator decorator =
+            MPSurveyCaveSKBBLineDecorator();
+        const MPSymbolUnit unit = MPSymbolUnit(
+          canvasScale: 1,
+          devicePixelRatio: 1,
+        );
+        final Path longSegmentPath = decorator.buildBasePath(
+          path: Path(),
+          vertices: const <Offset>[Offset(0, 0), Offset(1000, 0)],
+          symbolUnit: unit,
+        );
+        final List<ui.PathMetric> longSegmentMetrics = longSegmentPath
+            .computeMetrics()
+            .toList();
+
+        expect(longSegmentMetrics.length, 2);
+
+        final Path shortSegmentPath = decorator.buildBasePath(
+          path: Path(),
+          vertices: const <Offset>[Offset(0, 0), Offset(10, 0)],
+          symbolUnit: unit,
+        );
+        final List<ui.PathMetric> shortSegmentMetrics = shortSegmentPath
+            .computeMetrics()
+            .toList();
+
+        expect(shortSegmentMetrics.length, 1);
+        expect(shortSegmentMetrics.single.length, closeTo(10, 0.001));
+      },
+    );
+
+    test(
       'waterFlow -subtype conjectural/intermittent get their SKBB '
       'decorators, permanent/no-subtype keep the shared UIS decorator',
       () {
@@ -272,6 +339,8 @@ void main() {
         const MPWallUnsurveyedSKBBLineDecorator(),
         const MPRopeLadderSKBBLineDecorator(),
         const MPViaFerrataSKBBLineDecorator(),
+        const MPSurveyCaveSKBBLineDecorator(),
+        const MPSurveySurfaceSKBBLineDecorator(),
       ]) {
         final ui.PictureRecorder recorder = ui.PictureRecorder();
         final Canvas canvas = Canvas(recorder);

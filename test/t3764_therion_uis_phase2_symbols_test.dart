@@ -257,6 +257,7 @@ void main() {
       final Path segmentedPath = decorator.buildBasePath(
         path: curvedPath,
         vertices: const <Offset>[Offset(0, 0), Offset(30, 0)],
+        symbolUnit: const MPSymbolUnit(canvasScale: 1, devicePixelRatio: 1),
       );
       final PathMetric metric = segmentedPath.computeMetrics().single;
 

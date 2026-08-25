@@ -10,7 +10,11 @@ abstract class MPLineDecorator {
   const MPLineDecorator();
 
   /// Returns the geometry path that should be passed to [decorate].
-  Path buildBasePath({required Path path, required List<Offset> vertices}) {
+  Path buildBasePath({
+    required Path path,
+    required List<Offset> vertices,
+    required MPSymbolUnit symbolUnit,
+  }) {
     return path;
   }
 

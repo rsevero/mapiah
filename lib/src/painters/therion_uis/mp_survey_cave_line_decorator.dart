@@ -13,7 +13,11 @@ class MPSurveyCaveLineDecorator extends MPLineDecorator {
   const MPSurveyCaveLineDecorator();
 
   @override
-  Path buildBasePath({required Path path, required List<Offset> vertices}) {
+  Path buildBasePath({
+    required Path path,
+    required List<Offset> vertices,
+    required MPSymbolUnit symbolUnit,
+  }) {
     final Path segmentedPath = Path();
 
     if (vertices.isEmpty) {

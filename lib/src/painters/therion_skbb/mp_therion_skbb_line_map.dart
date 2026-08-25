@@ -10,6 +10,8 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decor
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_survey_surface_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_via_ferrata_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_clay_skbb_line_decorator.dart';
@@ -52,12 +54,19 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// port that literally rather than inventing a real symbol Therion
 /// doesn't have yet.
 ///
+/// `survey -subtype cave`/no-subtype and `-subtype surface` are also
+/// handled below, porting `l_survey_cave_SKBB`/`l_survey_surface_SKBB` —
+/// notably, Therion aliases the set-neutral `l_survey_cave`/
+/// `l_survey_surface` straight to these SKBB definitions in
+/// `thTrans.mp` (there's no `l_survey_surface_UIS` at all), so these are
+/// what a real Therion run renders under any symbol set, not something
+/// SKBB-specific being invented here.
+///
 /// Every other SKBB-owned line type this map doesn't cover — `border`
-/// visible/temporary/presumed, `survey` surface, `arrow`,
-/// `mapConnection`, `section`, and the `rope`/`steps`/`handrail`/
-/// `fixedLadder`/`slope` *line* types (as opposed to the point types of
-/// the same name, which Phase 4B does implement) — falls back to
-/// UIS/placeholder until a follow-up phase.
+/// visible/temporary/presumed, `arrow`, `mapConnection`, `section`, and
+/// the `rope`/`steps`/`handrail`/`fixedLadder`/`slope` *line* types (as
+/// opposed to the point types of the same name, which Phase 4B does
+/// implement) — falls back to UIS/placeholder until a follow-up phase.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -114,6 +123,11 @@ MPTherionLineDefinition? getTherionSKBBLineDefinition({
       'blocks' => const MPWallBlocksSKBBLineDecorator(),
       'ice' => const MPWallIceSKBBLineDecorator(),
       'unsurveyed' => const MPWallUnsurveyedSKBBLineDecorator(),
+      _ => null,
+    },
+    THLineType.survey => switch (subtype) {
+      null || 'cave' => const MPSurveyCaveSKBBLineDecorator(),
+      'surface' => const MPSurveySurfaceSKBBLineDecorator(),
       _ => null,
     },
     _ => null,
