@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
 import 'package:material_ui/material_ui.dart';
@@ -35,7 +36,7 @@ class THProjectTreeNodeWidget extends StatelessWidget {
       key: ValueKey('THProjectTreeNodeWidget|${node.id}'),
       color: isSelected ? colorScheme.secondaryContainer : Colors.transparent,
       child: InkWell(
-        onTap: () => mpLocator.thProjectController.selectNode(node.id),
+        onTap: _onTap,
         child: SizedBox(
           height: mpProjectTreeRowHeight,
           child: Row(
@@ -59,6 +60,19 @@ class THProjectTreeNodeWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    mpLocator.thProjectController.selectNode(node.id);
+
+    final THProjectNode tappedNode = node;
+
+    if (tappedNode is TH2FileNode) {
+      mpLocator.mpGeneralController.getTH2FileEditController(
+        filename: tappedNode.absolutePath,
+      );
+      mpLocator.mpGeneralController.addFileTab(tappedNode.absolutePath);
+    }
   }
 
   Widget _buildExpandControl(BuildContext context, bool isExpanded) {

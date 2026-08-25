@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
+import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_centreline_node.dart';
 import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
@@ -62,6 +63,7 @@ void main() {
 
   setUp(() async {
     mpLocator.appLocalizations = AppLocalizationsEn();
+    mpLocator.mpGeneralController.reset();
     mpLocator.thProjectController.closeProject();
 
     final THProjectTreeUIController uiController =
@@ -139,6 +141,39 @@ void main() {
     expect(
       mpLocator.thProjectController.activeSelectedNodeId,
       surveyNode.id,
+    );
+  });
+
+  testWidgets('tapping a th2 node opens a canvas tab', (
+    WidgetTester tester,
+  ) async {
+    final THProjectFileNode root =
+        loadFixture('mixed-logical/cave.th').rootNode;
+
+    mpLocator.thProjectController.projectRootNode = root;
+
+    final TH2FileNode th2Node = firstWhere<TH2FileNode>(root) as TH2FileNode;
+
+    await tester.pumpWidget(buildTestApp());
+    await tester.pump();
+
+    expect(
+      mpLocator.mpGeneralController.openFileOrder,
+      isNot(contains(th2Node.absolutePath)),
+    );
+
+    await tester.tap(
+      find.byKey(ValueKey('THProjectTreeNodeWidget|${th2Node.id}')),
+    );
+    await tester.pump();
+
+    expect(
+      mpLocator.mpGeneralController.openFileOrder,
+      contains(th2Node.absolutePath),
+    );
+    expect(
+      mpLocator.mpGeneralController.activeTabIndex,
+      mpLocator.mpGeneralController.openFileOrder.indexOf(th2Node.absolutePath),
     );
   });
 
