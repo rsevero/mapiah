@@ -4397,5 +4397,60 @@
   "@updateCheckFailedTitle": {
     "description": "Title for the update check failure dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text"
+  },
+  "projectTreeCollapseSidebarTooltip": "Collapse project tree",
+  "@projectTreeCollapseSidebarTooltip": {
+    "description": "Tooltip for the button that collapses the project tree sidebar. Used on: THProjectTreeWidget._buildHeader",
+    "type": "text"
+  },
+  "projectTreeEmptyState": "No project open",
+  "@projectTreeEmptyState": {
+    "description": "Message shown in the project tree sidebar when no project is open. Used on: THProjectTreeWidget._buildEmptyState",
+    "type": "text"
+  },
+  "projectTreeErrorSummary": "Project errors: {count}",
+  "@projectTreeErrorSummary": {
+    "description": "Summary text for project parse errors. Used on: _THProjectTreeErrorSummaryState.build",
+    "type": "text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "projectTreeExpandSidebarTooltip": "Expand project tree",
+  "@projectTreeExpandSidebarTooltip": {
+    "description": "Tooltip for the thin rail button that expands the project tree sidebar. Used on: TH2FileTabsPage body",
+    "type": "text"
+  },
+  "projectTreeOpenProjectButton": "Open project",
+  "@projectTreeOpenProjectButton": {
+    "description": "Label for the button that opens a project from the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState",
+    "type": "text"
+  },
+  "projectTreeSearchHint": "Search project",
+  "@projectTreeSearchHint": {
+    "description": "Hint text for the project tree search field. Used on: _THProjectTreeSearchFieldState.build",
+    "type": "text"
+  },
+  "projectTreeSelectProjectDialogTitle": "Select Therion project",
+  "@projectTreeSelectProjectDialogTitle": {
+    "description": "Dialog title for selecting a thconfig or .th project file. Used on: MPDialogAux.pickProjectFile",
+    "type": "text"
+  },
+  "projectTreeTitle": "Project",
+  "@projectTreeTitle": {
+    "description": "Title shown in the project tree sidebar header. Used on: THProjectTreeWidget._buildHeader",
+    "type": "text"
+  },
+  "mpSettingsSettingProjectTreeSidebarCollapsed": "Project tree collapsed",
+  "@mpSettingsSettingProjectTreeSidebarCollapsed": {
+    "description": "Label for the persisted project tree sidebar collapsed setting. Used on: MPSettingsPage._localizedSettingName",
+    "type": "text"
+  },
+  "mpSettingsSettingProjectTreeSidebarWidth": "Project tree sidebar width",
+  "@mpSettingsSettingProjectTreeSidebarWidth": {
+    "description": "Label for the persisted project tree sidebar width setting. Used on: MPSettingsPage._localizedSettingName",
+    "type": "text"
   }
 }

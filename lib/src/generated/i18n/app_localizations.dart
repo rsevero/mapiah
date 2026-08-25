@@ -5289,6 +5289,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update check failed'**
   String get updateCheckFailedTitle;
+
+  /// Tooltip for the button that collapses the project tree sidebar. Used on: THProjectTreeWidget._buildHeader
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse project tree'**
+  String get projectTreeCollapseSidebarTooltip;
+
+  /// Message shown in the project tree sidebar when no project is open. Used on: THProjectTreeWidget._buildEmptyState
+  ///
+  /// In en, this message translates to:
+  /// **'No project open'**
+  String get projectTreeEmptyState;
+
+  /// Summary text for project parse errors. Used on: _THProjectTreeErrorSummaryState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Project errors: {count}'**
+  String projectTreeErrorSummary(int count);
+
+  /// Tooltip for the thin rail button that expands the project tree sidebar. Used on: TH2FileTabsPage body
+  ///
+  /// In en, this message translates to:
+  /// **'Expand project tree'**
+  String get projectTreeExpandSidebarTooltip;
+
+  /// Label for the button that opens a project from the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState
+  ///
+  /// In en, this message translates to:
+  /// **'Open project'**
+  String get projectTreeOpenProjectButton;
+
+  /// Hint text for the project tree search field. Used on: _THProjectTreeSearchFieldState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Search project'**
+  String get projectTreeSearchHint;
+
+  /// Dialog title for selecting a thconfig or .th project file. Used on: MPDialogAux.pickProjectFile
+  ///
+  /// In en, this message translates to:
+  /// **'Select Therion project'**
+  String get projectTreeSelectProjectDialogTitle;
+
+  /// Title shown in the project tree sidebar header. Used on: THProjectTreeWidget._buildHeader
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get projectTreeTitle;
+
+  /// Label for the persisted project tree sidebar collapsed setting. Used on: MPSettingsPage._localizedSettingName
+  ///
+  /// In en, this message translates to:
+  /// **'Project tree collapsed'**
+  String get mpSettingsSettingProjectTreeSidebarCollapsed;
+
+  /// Label for the persisted project tree sidebar width setting. Used on: MPSettingsPage._localizedSettingName
+  ///
+  /// In en, this message translates to:
+  /// **'Project tree sidebar width'**
+  String get mpSettingsSettingProjectTreeSidebarWidth;
 }
 
 class _AppLocalizationsDelegate

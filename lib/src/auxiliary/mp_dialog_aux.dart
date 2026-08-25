@@ -1258,6 +1258,51 @@ class MPDialogAux {
     }
   }
 
+  /// Picks a Therion project file (`thconfig` or `.th`) and opens it in the
+  /// project tree without touching the tab lifecycle.
+  static Future<void> pickProjectFile(BuildContext context) async {
+    if (_isFilePickerOpen[MPFilePickerType.project] == true) {
+      return;
+    }
+
+    _isFilePickerOpen[MPFilePickerType.project] = true;
+
+    try {
+      final PlatformFile? picked = await FilePicker.pickFile(
+        dialogTitle:
+            mpLocator.appLocalizations.projectTreeSelectProjectDialogTitle,
+        type: FileType.any,
+        linuxOptions: const LinuxOptions(lockParentWindow: true),
+        windowsOptions: const WindowsOptions(lockParentWindow: true),
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+
+      if (picked == null) {
+        mpLocator.mpLog.i('No project file selected.');
+
+        return;
+      }
+
+      final String? pickedFilePath = picked.path;
+
+      if (pickedFilePath == null) {
+        return;
+      }
+
+      mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+        pickedFilePath,
+      );
+      await mpLocator.thProjectController.openProject(pickedFilePath);
+    } catch (e) {
+      mpLocator.mpLog.e('Error picking project file', error: e);
+    } finally {
+      _isFilePickerOpen[MPFilePickerType.project] = false;
+    }
+  }
+
   static Future<void> pickTHConfigFileAndRunTherion(
     BuildContext context,
   ) async {
@@ -1422,7 +1467,7 @@ class MPDialogAux {
   }
 }
 
-enum MPFilePickerType { image, th2, thconfig, executable }
+enum MPFilePickerType { image, th2, thconfig, executable, project }
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 

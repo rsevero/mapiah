@@ -23,6 +23,8 @@ enum MPSettingID {
   Internal_WindowPlacement,
   Main_LocaleID,
   Main_TelemetryConsent,
+  ProjectTree_SidebarCollapsed,
+  ProjectTree_SidebarWidth,
   TH2Edit_EnableElementTransforms,
   TH2Edit_EnableSpecialBorderForIDSet,
   TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize,
@@ -61,6 +63,8 @@ enum MPSettingID {
     MPSettingID.Internal_WindowPlacement: MPSettingType.string,
     MPSettingID.Main_LocaleID: MPSettingType.string,
     MPSettingID.Main_TelemetryConsent: MPSettingType.bool,
+    MPSettingID.ProjectTree_SidebarCollapsed: MPSettingType.bool,
+    MPSettingID.ProjectTree_SidebarWidth: MPSettingType.double,
     MPSettingID.TH2Edit_EnableElementTransforms: MPSettingType.bool,
     MPSettingID.TH2Edit_EnableSpecialBorderForIDSet: MPSettingType.bool,
     MPSettingID.TH2Edit_EnableSpecialBorderForSlopeLineWithoutLSize:

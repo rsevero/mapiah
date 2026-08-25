@@ -2850,4 +2850,39 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get updateCheckFailedTitle => 'Falha ao verificar atualização';
+
+  @override
+  String get projectTreeCollapseSidebarTooltip => 'Recolher árvore do projeto';
+
+  @override
+  String get projectTreeEmptyState => 'Nenhum projeto aberto';
+
+  @override
+  String projectTreeErrorSummary(int count) {
+    return 'Erros do projeto: $count';
+  }
+
+  @override
+  String get projectTreeExpandSidebarTooltip => 'Expandir árvore do projeto';
+
+  @override
+  String get projectTreeOpenProjectButton => 'Abrir projeto';
+
+  @override
+  String get projectTreeSearchHint => 'Pesquisar projeto';
+
+  @override
+  String get projectTreeSelectProjectDialogTitle =>
+      'Selecionar projeto Therion';
+
+  @override
+  String get projectTreeTitle => 'Projeto';
+
+  @override
+  String get mpSettingsSettingProjectTreeSidebarCollapsed =>
+      'Árvore do projeto recolhida';
+
+  @override
+  String get mpSettingsSettingProjectTreeSidebarWidth =>
+      'Largura da árvore do projeto';
 }

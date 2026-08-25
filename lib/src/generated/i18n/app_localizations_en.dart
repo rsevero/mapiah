@@ -2823,4 +2823,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateCheckFailedTitle => 'Update check failed';
+
+  @override
+  String get projectTreeCollapseSidebarTooltip => 'Collapse project tree';
+
+  @override
+  String get projectTreeEmptyState => 'No project open';
+
+  @override
+  String projectTreeErrorSummary(int count) {
+    return 'Project errors: $count';
+  }
+
+  @override
+  String get projectTreeExpandSidebarTooltip => 'Expand project tree';
+
+  @override
+  String get projectTreeOpenProjectButton => 'Open project';
+
+  @override
+  String get projectTreeSearchHint => 'Search project';
+
+  @override
+  String get projectTreeSelectProjectDialogTitle => 'Select Therion project';
+
+  @override
+  String get projectTreeTitle => 'Project';
+
+  @override
+  String get mpSettingsSettingProjectTreeSidebarCollapsed =>
+      'Project tree collapsed';
+
+  @override
+  String get mpSettingsSettingProjectTreeSidebarWidth =>
+      'Project tree sidebar width';
 }

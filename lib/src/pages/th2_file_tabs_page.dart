@@ -12,6 +12,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_properties_page.dart';
@@ -19,6 +20,8 @@ import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
+import 'package:mapiah/src/widgets/th_project_tree_resize_divider_widget.dart';
+import 'package:mapiah/src/widgets/th_project_tree_widget.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart' hide Listener;
 
@@ -336,28 +339,66 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
           ),
         ),
       ),
-      body: Observer(
-        builder: (_) {
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Observer(
+            builder: (_) {
           final List<String> openFileOrder =
               mpLocator.mpGeneralController.openFileOrder;
           final int activeTabIndex =
               mpLocator.mpGeneralController.activeTabIndex;
+          final THProjectTreeUIController projectTreeUIController =
+              mpLocator.thProjectTreeUIController;
+          final bool sidebarCollapsed =
+              projectTreeUIController.isSidebarCollapsed ||
+              (constraints.maxWidth <
+                  (mpProjectTreeSidebarMinWidth +
+                      mpProjectTreeMinimumWorkspaceWidth));
+          final Widget workspace;
 
           if (openFileOrder.isEmpty) {
-            return Center(
+            workspace = Center(
               child: Text(appLocalizations.initialPagePresentation),
+            );
+          } else {
+            workspace = PopScope(
+              canPop: false,
+              child: IndexedStack(
+                index: activeTabIndex,
+                children: <Widget>[
+                  for (String filename in openFileOrder)
+                    _buildTabContentWidget(filename),
+                ],
+              ),
             );
           }
 
-          return PopScope(
-            canPop: false,
-            child: IndexedStack(
-              index: activeTabIndex,
-              children: <Widget>[
-                for (String filename in openFileOrder)
-                  _buildTabContentWidget(filename),
-              ],
-            ),
+          return Row(
+            children: <Widget>[
+              if (!sidebarCollapsed)
+                SizedBox(
+                  width: projectTreeUIController.sidebarWidth,
+                  child: const THProjectTreeWidget(),
+                ),
+              if (!sidebarCollapsed)
+                const THProjectTreeResizeDividerWidget(),
+              if (sidebarCollapsed)
+                SizedBox(
+                  width: mpProjectTreeRailWidth,
+                  child: IconButton(
+                    key: const ValueKey('THProjectTreeExpandButton'),
+                    icon: const Icon(Icons.chevron_right),
+                    tooltip: appLocalizations
+                        .projectTreeExpandSidebarTooltip,
+                    onPressed: () {
+                      projectTreeUIController.setSidebarCollapsed(false);
+                    },
+                  ),
+                ),
+              Expanded(child: workspace),
+            ],
+          );
+            },
           );
         },
       ),

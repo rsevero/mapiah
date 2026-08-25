@@ -903,5 +903,15 @@
   "updateCheckFailedNoAnswerBody": "Não foi possível verificar atualizações porque o servidor não respondeu. Verifique sua conexão com a internet.",
   "updateCheckFailedParsingBody": "Não foi possível ler a versão mais recente no servidor de atualizações.",
   "updateCheckFailedParsingWithTagBody": "Não foi possível interpretar a tag da versão mais recente: {tagName}",
-  "updateCheckFailedTitle": "Falha ao verificar atualização"
+  "updateCheckFailedTitle": "Falha ao verificar atualização",
+  "projectTreeCollapseSidebarTooltip": "Recolher árvore do projeto",
+  "projectTreeEmptyState": "Nenhum projeto aberto",
+  "projectTreeErrorSummary": "Erros do projeto: {count}",
+  "projectTreeExpandSidebarTooltip": "Expandir árvore do projeto",
+  "projectTreeOpenProjectButton": "Abrir projeto",
+  "projectTreeSearchHint": "Pesquisar projeto",
+  "projectTreeSelectProjectDialogTitle": "Selecionar projeto Therion",
+  "projectTreeTitle": "Projeto",
+  "mpSettingsSettingProjectTreeSidebarCollapsed": "Árvore do projeto recolhida",
+  "mpSettingsSettingProjectTreeSidebarWidth": "Largura da árvore do projeto"
 }

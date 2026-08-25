@@ -809,3 +809,17 @@ const String mpHelpPageTelemetryConsent = 'telemetry_consent';
 
 // Therion project incremental re-parsing.
 const int mpProjectReparseDebounceMilliseconds = 300;
+
+// Therion project tree sidebar sizing and interaction constants.
+const double mpProjectTreeSidebarDefaultWidth = 280.0;
+const double mpProjectTreeSidebarMinWidth = 180.0;
+const double mpProjectTreeSidebarMaxWidth = 560.0;
+const double mpProjectTreeMinimumWorkspaceWidth = 240.0;
+const double mpProjectTreeResizeDividerWidth = 6.0;
+const double mpProjectTreeRowHeight = 28.0;
+const double mpProjectTreeIndent = 16.0;
+const double mpProjectTreeStatusDotSize = 8.0;
+const double mpProjectTreeRailWidth = 32.0;
+const double mpProjectTreeErrorSummaryMaxHeight = 120.0;
+const int mpProjectTreeFilterDebounceMilliseconds = 150;
+const int mpProjectTreeUIPersistDebounceMilliseconds = 250;

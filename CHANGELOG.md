@@ -4,6 +4,7 @@
 
 ## 0.4.5 - not yet released
 * New features:
+  * Added the Therion project tree side column in the file editor: a collapsible, resizable panel showing the loaded `thconfig`/`.th`/`.th2`/logical-node hierarchy, with expand/collapse, search filtering, dirty and error status dots, a draggable divider, persisted sidebar width/collapsed state, and an empty-state Open Project action wired to `THProjectController.openProject`. Added `THProjectTreeUIController` for view-only expansion/filter/sidebar state and widget/unit coverage (`test/t3880`–`t3884`).
 * Fixed bugs:
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
 * Infrastructure maintenance:
