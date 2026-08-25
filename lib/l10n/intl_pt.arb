@@ -38,6 +38,7 @@
   "mapiahHomeHelpDialogTitle": "Tela inicial",
   "mapiahHomeNewFileButtonTooltip": "Novo arquivo (Ctrl+N ou Ctrl+Shift+N)",
   "mapiahHomeOpenFile": "Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)",
+  "mapiahOpenProjectButtonTooltip": "Abrir projeto (Ctrl+O ou Ctrl+Shift+O)",
   "mpMoreActionsTooltip": "Mais ações",
   "mapiahKeyboardShortcutsTitle": "Atalhos de teclado",
   "mapiahKeyboardShortcutsTooltip": "Atalhos de teclado (Ctrl+K)",

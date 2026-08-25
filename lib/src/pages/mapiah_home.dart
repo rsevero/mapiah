@@ -22,7 +22,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 enum _MapiahHomeAction {
   newFile,
-  openFile,
+  openProject,
   openTHConfig,
   runTherion,
   settings,
@@ -170,11 +170,11 @@ class _MapiahHomeState extends State<MapiahHome> {
             tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
           ),
           IconButton(
-            key: ValueKey('MapiahHomeOpenFileButton'),
-            icon: Icon(Icons.file_open_outlined),
+            key: ValueKey('MapiahHomeOpenProjectButton'),
+            icon: Icon(Icons.folder_open_outlined),
             color: colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.pickTH2File(context),
-            tooltip: appLocalizations.mapiahHomeOpenFile,
+            onPressed: () => MPDialogAux.pickProjectFile(context),
+            tooltip: appLocalizations.mapiahOpenProjectButtonTooltip,
           ),
           actionsSeparator,
           Observer(
@@ -305,8 +305,8 @@ class _MapiahHomeState extends State<MapiahHome> {
         label: appLocalizations.mapiahHomeNewFileButtonTooltip,
       ),
       _overflowMenuItem(
-        action: _MapiahHomeAction.openFile,
-        label: appLocalizations.mapiahHomeOpenFile,
+        action: _MapiahHomeAction.openProject,
+        label: appLocalizations.mapiahOpenProjectButtonTooltip,
       ),
       const PopupMenuDivider(),
       _overflowMenuItem(
@@ -358,8 +358,8 @@ class _MapiahHomeState extends State<MapiahHome> {
     switch (action) {
       case _MapiahHomeAction.newFile:
         MPDialogAux.newFile(context);
-      case _MapiahHomeAction.openFile:
-        MPDialogAux.pickTH2File(context);
+      case _MapiahHomeAction.openProject:
+        MPDialogAux.pickProjectFile(context);
       case _MapiahHomeAction.openTHConfig:
         MPDialogAux.chooseTHConfigAndRunTherion(context);
       case _MapiahHomeAction.runTherion:
@@ -505,24 +505,24 @@ extension on _MapiahHomeState {
             shift: true,
           ): () =>
               MPDialogAux.newFile(context),
-          // Open file: desktop standard Ctrl/Cmd+O
+          // Open project: desktop standard Ctrl/Cmd+O
           const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           const SingleActivator(LogicalKeyboardKey.keyO, meta: true): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           // macOS Cmd+Shift+O
           const SingleActivator(
             LogicalKeyboardKey.keyO,
             meta: true,
             shift: true,
           ): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           const SingleActivator(
             LogicalKeyboardKey.keyO,
             control: true,
             shift: true,
           ): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           // Help
           const SingleActivator(LogicalKeyboardKey.f1): () =>
               MPDialogAux.showHelpDialog(

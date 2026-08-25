@@ -24,6 +24,7 @@ Phase 4 adds the first visual layer on top of that store: a collapsible, resizab
 4. **Resizable, collapsible split layout**: Insert the sidebar into the existing `Scaffold` body in `th2_file_tabs_page.dart` (currently a plain tab strip + canvas, no side column today) as a `Row` with a draggable divider, collapsible to a thin rail.
 5. **Persisted layout preferences**: Sidebar width and collapsed state persisted via `MPSettingsController`/`SharedPreferencesWithCache`, following the existing `MPSettingID` enum pattern.
 6. **Open Project in scope**: The sidebar's empty state provides an Open Project button wired to `THProjectController.openProject(..., forceConfigShape: true)` via the existing `file_picker` package. The selected file is always a `thconfig` file; no root-shape detection is attempted, regardless of its extension or whether it has one. Apart from that explicit entry point, Phase 4 performs no project-content mutation — it never calls `reparseFile` or any writer, and tree-node clicks only call `selectNode`.
+7. **App-bar Open Project button**: The initial-window (`MapiahHome`) app bar's existing Open `.th2` action (expanded action, overflow menu item, and `Ctrl/Cmd+O` / `Ctrl/Cmd+Shift+O` shortcuts) is replaced by Open Project, using `MPDialogAux.pickProjectFile`. The New `.th2` and Open THConfig + Run Therion app-bar actions remain unchanged in this phase; the file-editor app bar is also left unchanged. Selecting a project from the initial window navigates to `TH2FileTabsPage` even when no `.th2` tab is open, so the loaded project tree is immediately visible.
 
 ---
 
@@ -266,6 +267,8 @@ body: Row(
 wrapped in an `Observer` so collapse toggling rebuilds the row. The collapsed branch is a thin rail containing a reopen button; it does not render `THProjectTreeWidget` or the resize divider. When `projectRootNode == null` (no project open — i.e. a lone `.th2` file opened outside any project, which remains fully supported) and the sidebar is expanded, `THProjectTreeWidget` renders its empty state with an Open Project button.
 
 Phase 4 adds `MPDialogAux.pickProjectFile(context)`, which reuses the existing `file_picker` dependency and the existing `pickTHConfigFile`/`pickTH2File` patterns: show a native picker, update `lastAccessedDirectory`, then call `THProjectController.openProject` with the selected path and `forceConfigShape: true`. The selected file is always a `thconfig` file; there is no ambiguity and no root-shape detection, even when it has an arbitrary extension or no extension at all. No new picker dependency or ad-hoc file-choosing code is introduced.
+
+The initial-window app bar's Open `.th2` button and its compact-menu/quick-shortcut equivalents are replaced by this Open Project action. This is intentionally scoped to `mapiah_home.dart`; the file-editor Open `.th2` button and the New `.th2` / Open THConfig + Run Therion actions are not changed in Phase 4.
 
 ### 6.2 Resize Divider
 

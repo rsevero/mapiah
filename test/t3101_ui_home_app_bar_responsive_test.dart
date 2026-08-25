@@ -64,6 +64,26 @@ void main() {
     expect(find.byKey(const ValueKey('MapiahHomeNewFileButton')), findsNothing);
   });
 
+  testWidgets('home app bar exposes the Open project action when wide', (
+    WidgetTester tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(800, 600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(const MapiahApp());
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('MapiahHomeOpenProjectButton')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('MapiahHomeOpenFileButton')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('file editor app bar uses an overflow menu when narrow', (
     WidgetTester tester,
   ) async {
@@ -80,6 +100,7 @@ void main() {
     await tester.ensureVisible(okButton);
     await tester.tap(okButton);
     await tester.pumpAndSettle();
+
     await tester.binding.setSurfaceSize(const Size(380, 600));
     await tester.pumpAndSettle();
 

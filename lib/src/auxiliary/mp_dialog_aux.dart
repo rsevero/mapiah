@@ -1263,7 +1263,10 @@ class MPDialogAux {
   ///
   /// The selected file is always treated as a `thconfig` file, regardless of
   /// its extension or whether it has one.
-  static Future<void> pickProjectFile(BuildContext context) async {
+  static Future<void> pickProjectFile(
+    BuildContext context, {
+    bool openTabsPageAfterLoad = true,
+  }) async {
     if (_isFilePickerOpen[MPFilePickerType.project] == true) {
       return;
     }
@@ -1302,11 +1305,40 @@ class MPDialogAux {
         pickedFilePath,
         forceConfigShape: true,
       );
+
+      if (openTabsPageAfterLoad && context.mounted) {
+        ensureProjectTabsPageOpen(context);
+      }
     } catch (e) {
       mpLocator.mpLog.e('Error picking project file', error: e);
     } finally {
       _isFilePickerOpen[MPFilePickerType.project] = false;
     }
+  }
+
+  /// Opens [TH2FileTabsPage] even when no `.th2` file is open, so a loaded
+  /// project can be shown in the project-tree sidebar.
+  static void ensureProjectTabsPageOpen(BuildContext context) {
+    if (_th2FileTabsPageRouteFuture != null) {
+      return;
+    }
+
+    final NavigatorState navigator = Navigator.of(context);
+    final MaterialPageRoute<void> route = MaterialPageRoute<void>(
+      builder: (_) => const TH2FileTabsPage(),
+    );
+    final Future<void> routeFuture = route.completed;
+
+    _th2FileTabsPageRouteFuture = routeFuture;
+    unawaited(navigator.push<void>(route));
+
+    unawaited(
+      routeFuture.whenComplete(() {
+        if (identical(_th2FileTabsPageRouteFuture, routeFuture)) {
+          _th2FileTabsPageRouteFuture = null;
+        }
+      }),
+    );
   }
 
   static Future<void> pickTHConfigFileAndRunTherion(

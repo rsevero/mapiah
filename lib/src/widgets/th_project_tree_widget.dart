@@ -159,7 +159,10 @@ class THProjectTreeWidget extends StatelessWidget {
               key: const ValueKey('THProjectTreeOpenProjectButton'),
               icon: const Icon(Icons.folder_open_outlined),
               label: Text(appLocalizations.projectTreeOpenProjectButton),
-              onPressed: () => MPDialogAux.pickProjectFile(context),
+              onPressed: () => MPDialogAux.pickProjectFile(
+                context,
+                openTabsPageAfterLoad: false,
+              ),
             ),
           ],
         ),

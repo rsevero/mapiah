@@ -108,6 +108,11 @@
     "description": "The label for the open file button. Used on: _MapiahHomeState.build",
     "type": "text"
   },
+  "mapiahOpenProjectButtonTooltip": "Open project (Ctrl+O or Ctrl+Shift+O)",
+  "@mapiahOpenProjectButtonTooltip": {
+    "description": "The tooltip and menu label for the initial-window Open project button. Used on: _MapiahHomeState.build",
+    "type": "text"
+  },
   "mpMoreActionsTooltip": "More actions",
   "@mpMoreActionsTooltip": {
     "description": "Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build",

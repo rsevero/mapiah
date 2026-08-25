@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'Open file (Ctrl+O or Ctrl+Shift+O)'**
   String get mapiahHomeOpenFile;
 
+  /// The tooltip and menu label for the initial-window Open project button. Used on: _MapiahHomeState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Open project (Ctrl+O or Ctrl+Shift+O)'**
+  String get mapiahOpenProjectButtonTooltip;
+
   /// Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build
   ///
   /// In en, this message translates to:
