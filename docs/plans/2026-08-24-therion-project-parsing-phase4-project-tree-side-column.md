@@ -3,7 +3,7 @@
 # Therion Project Parsing Phase 4: Project Tree Side Column UI — Implementation Plan
 
 **Date:** 2026-08-24
-**Status:** Proposed
+**Status:** Implemented
 
 ---
 
