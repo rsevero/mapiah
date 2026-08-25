@@ -37,11 +37,20 @@ abstract final class MPTherionAreaPatternTilesSKBB {
   }
 
   static ui.Image buildClayTile(ui.Color color) {
+    // `layers: 2` overlays a second, independently-seeded scatter of the
+    // same grid/jitter on top of the first instead of tightening
+    // `cellUnits` or `gridSize`: either of those reduces the spacing (or
+    // physical size, relative to a fixed-size motif) between individual
+    // marks, which is what "too condensed" feedback was about. Layering
+    // keeps each pass's own mark-to-mark spacing exactly as tuned, while
+    // the second pass's marks fall in different (independently random)
+    // spots, filling gaps the first pass happened to leave empty.
     return _scatterTile(
       cellUnits: 1.0,
       gridSize: 3,
-      jitterFactor: 0.3,
+      jitterFactor: 0.85,
       salt: 1,
+      layers: 2,
       randomizeRotation: false,
       drawMotif: (canvas, u, random) {
         final ui.Paint paint = ui.Paint()
@@ -231,11 +240,16 @@ abstract final class MPTherionAreaPatternTilesSKBB {
   }
 
   static ui.Image buildDebrisTile(ui.Color color) {
+    // See [buildClayTile]: `layers: 2` overlays a second, independently
+    // seeded scatter pass to fill in empty gaps instead of tightening
+    // `cellUnits`/`gridSize`, which would just push marks closer
+    // together.
     return _scatterTile(
       cellUnits: 1.0,
       gridSize: 4,
-      jitterFactor: 0.3,
+      jitterFactor: 0.85,
       salt: 6,
+      layers: 2,
       randomizeRotation: true,
       drawMotif: (canvas, u, random) {
         final ui.Paint paint = ui.Paint()
@@ -275,50 +289,64 @@ abstract final class MPTherionAreaPatternTilesSKBB {
     required bool randomizeRotation,
     required void Function(ui.Canvas canvas, double u, MPSeededRandom random)
     drawMotif,
+    int layers = 1,
   }) {
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
-    final MPSeededRandom random = MPSeededRandom(mpID: 0, salt: salt);
     final double cellPixels = cellUnits * mpTherionAreaPatternTileUnitPixels;
     final double tileSize = gridSize * cellPixels;
 
-    for (int gridX = 0; gridX < gridSize; gridX++) {
-      for (int gridY = 0; gridY < gridSize; gridY++) {
-        final double jitterX = ((random.nextDouble() * 2) - 1) * jitterFactor;
-        final double jitterY = ((random.nextDouble() * 2) - 1) * jitterFactor;
-        final double x = (gridX + 0.5 + jitterX) * cellPixels;
-        final double y = (gridY + 0.5 + jitterY) * cellPixels;
-        final double rotation = randomizeRotation
-            ? random.nextDouble() * 2 * math.pi
-            : 0.0;
+    // Each layer gets its own seed (offset from the others by a large,
+    // arbitrary constant so their draw sequences don't just shift by a
+    // few calls and stay correlated) and is scattered independently onto
+    // the same canvas, so extra layers add marks in different spots
+    // rather than changing the spacing within any one layer.
+    for (int layer = 0; layer < layers; layer++) {
+      final MPSeededRandom random = MPSeededRandom(
+        mpID: 0,
+        salt: salt + layer * 7919,
+      );
 
-        // Record the motif's own (possibly randomized) geometry exactly
-        // once per cell, then stamp that identical picture at every wrap
-        // offset — calling drawMotif again per offset would consume more
-        // random draws each time, giving each wrapped copy different
-        // geometry instead of the one motif reappearing whole.
-        final ui.PictureRecorder motifRecorder = ui.PictureRecorder();
-        final ui.Canvas motifCanvas = ui.Canvas(motifRecorder);
+      for (int gridX = 0; gridX < gridSize; gridX++) {
+        for (int gridY = 0; gridY < gridSize; gridY++) {
+          final double jitterX =
+              ((random.nextDouble() * 2) - 1) * jitterFactor;
+          final double jitterY =
+              ((random.nextDouble() * 2) - 1) * jitterFactor;
+          final double x = (gridX + 0.5 + jitterX) * cellPixels;
+          final double y = (gridY + 0.5 + jitterY) * cellPixels;
+          final double rotation = randomizeRotation
+              ? random.nextDouble() * 2 * math.pi
+              : 0.0;
 
-        drawMotif(motifCanvas, mpTherionAreaPatternTileUnitPixels, random);
+          // Record the motif's own (possibly randomized) geometry exactly
+          // once per cell, then stamp that identical picture at every wrap
+          // offset — calling drawMotif again per offset would consume more
+          // random draws each time, giving each wrapped copy different
+          // geometry instead of the one motif reappearing whole.
+          final ui.PictureRecorder motifRecorder = ui.PictureRecorder();
+          final ui.Canvas motifCanvas = ui.Canvas(motifRecorder);
 
-        final ui.Picture motif = motifRecorder.endRecording();
+          drawMotif(motifCanvas, mpTherionAreaPatternTileUnitPixels, random);
 
-        for (final double wrapX in [-tileSize, 0, tileSize]) {
-          for (final double wrapY in [-tileSize, 0, tileSize]) {
-            canvas.save();
-            canvas.translate(x + wrapX, y + wrapY);
+          final ui.Picture motif = motifRecorder.endRecording();
 
-            if (rotation != 0.0) {
-              canvas.rotate(rotation);
+          for (final double wrapX in [-tileSize, 0, tileSize]) {
+            for (final double wrapY in [-tileSize, 0, tileSize]) {
+              canvas.save();
+              canvas.translate(x + wrapX, y + wrapY);
+
+              if (rotation != 0.0) {
+                canvas.rotate(rotation);
+              }
+
+              canvas.drawPicture(motif);
+              canvas.restore();
             }
-
-            canvas.drawPicture(motif);
-            canvas.restore();
           }
-        }
 
-        motif.dispose();
+          motif.dispose();
+        }
       }
     }
 

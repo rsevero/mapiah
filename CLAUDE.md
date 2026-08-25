@@ -102,6 +102,7 @@ MPLocator (global mpLocator) provides:
 
 ### Git Commits
 * Always show the full proposed commit message and wait for explicit approval before running `git commit`, even after a "cc"/"hpcc" prompt.
+* `Signed-off-by` must always be the last trailer line in the commit message (e.g. `Assisted-By` goes above it, not below).
 
 ### Canvas Orientation
 
