@@ -49,7 +49,7 @@ Verified against the codebase:
   - `projectErrors` — tree-attached and project-level parse diagnostics.
   - `nodeByCanonicalPath`, `selectNode`, and `activeSelectedNodeId`.
 - `THProjectParser` exposes `readFileContent` and `parseFileContent`, but the editor should normally read the already-cached content through `THProjectController.fileContentsCache` and let `reparseFile` update the tree.
-- `THConfigFileWriter` and `THFileWriter` are lossless for unchanged content, so save should be called only for `THConfigFileNode`/`THDataFileNode`.
+- `THConfigFileWriter` and `THFileWriter` are lossless for unchanged content. `saveProjectFile` already branches on file type: `.th2` paths delegate to `TH2FileEditController.saveTH2File()`, while `THConfigFileNode`/`THDataFileNode` paths are serialized via `THConfigFileWriter`/`THFileWriter`. Phase 5's editor only ever calls `saveProjectFile` with `thconfig`/`.th` paths, so only the latter branch is exercised.
 - `THProjectTreeWidget` already renders file nodes and `.th2` node clicks open canvas tabs. Phase 5 will later be wired into non-`.th2` node clicks in Phase 6; Phase 5 itself only needs a callable editor surface.
 - Test numbering for `th_project` currently runs through `t3884`. Phase 5 tests start at `t3900`.
 
