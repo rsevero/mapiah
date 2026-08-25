@@ -129,17 +129,19 @@ abstract final class MPTherionAreaPatternTilesSKBB {
 
   /// `a_blocks_SKBB` draws `punked (unitsquare-ish, side `uu`, `randomized
   /// (uu/2)` per corner) rotated uniformdeviate(360) shifted ((i,j)
-  /// randomized 1.6uu)` on a `2uu` grid — a full-side-length square (half
-  /// the grid step), each corner independently displaced by up to half
-  /// that side in a random direction, at a fully random rotation and a
-  /// position jitter comparable to the grid step itself. The previous
-  /// port under-sized the square (quarter, not half, the grid step) and
-  /// under-jittered both the corners and the position, rendering far
-  /// sparser and more regular than Therion's own busy, irregular tiling.
+  /// randomized 1.6uu)` on a `2uu` grid: a fully random rotation and a
+  /// position jitter comparable to the grid step itself. `half`/
+  /// `cornerJitter` below are tuned by eye rather than transcribed
+  /// 1:1 from `uu`/`uu/2` — matching those literally (side = grid step)
+  /// rendered blocks that looked oversized next to the reference PDF, and
+  /// `cornerJitter` anywhere near `half` let a corner jitter past a
+  /// neighboring one, self-intersecting the quad into a bowtie that reads
+  /// as "not closing" even though the path always closes back to its
+  /// start point.
   static ui.Image buildBlocksTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 2.0,
-      gridSize: 3,
+      cellUnits: 1.2,
+      gridSize: 4,
       jitterFactor: 0.6,
       salt: 4,
       randomizeRotation: true,
@@ -148,8 +150,13 @@ abstract final class MPTherionAreaPatternTilesSKBB {
           ..color = color
           ..style = ui.PaintingStyle.stroke
           ..strokeWidth = 0.05 * u;
-        final double half = 0.5 * u;
-        final double cornerJitter = 0.5 * u;
+        final double half = 0.3 * u;
+        // Kept well below `half` so a jittered corner can never cross into
+        // a neighboring quadrant — that crossing is what previously made
+        // some quads self-intersect (a bowtie edge crossing itself reads
+        // as "not closing properly", even though the path always
+        // physically closes back to its start point).
+        final double cornerJitter = 0.1 * u;
 
         ui.Offset corner(double dx, double dy) {
           final ui.Offset jitter = _randomOffset(random, cornerJitter);
@@ -234,6 +241,16 @@ abstract final class MPTherionAreaPatternTilesSKBB {
   /// [randomizeRotation] is set, rotated by a random angle) across a
   /// [gridSize] x [gridSize] grid of [cellUnits]-wide cells, using a
   /// fixed-seed [MPSeededRandom] so the tile is stable across repaints.
+  ///
+  /// [ImageShader] tiles the returned image with [ui.TileMode.repeated],
+  /// which repeats the fixed raster as-is — it does not "wrap" a motif
+  /// that was recorded past the tile's edge back onto the opposite edge.
+  /// A jittered motif near an edge would otherwise be permanently
+  /// truncated by [ui.PictureRecorder.toImageSync]'s clip, and that same
+  /// cut motif would then repeat at every tile boundary. To keep every
+  /// motif whole, each is recorded up to 9 times, offset by every
+  /// combination of `-tileSize`/`0`/`+tileSize` in x and y, so whichever
+  /// copy actually lands within the tile bounds is complete.
   static ui.Image _scatterTile({
     required double cellUnits,
     required int gridSize,
@@ -247,6 +264,7 @@ abstract final class MPTherionAreaPatternTilesSKBB {
     final ui.Canvas canvas = ui.Canvas(recorder);
     final MPSeededRandom random = MPSeededRandom(mpID: 0, salt: salt);
     final double cellPixels = cellUnits * mpTherionAreaPatternTileUnitPixels;
+    final double tileSize = gridSize * cellPixels;
 
     for (int gridX = 0; gridX < gridSize; gridX++) {
       for (int gridY = 0; gridY < gridSize; gridY++) {
@@ -254,20 +272,41 @@ abstract final class MPTherionAreaPatternTilesSKBB {
         final double jitterY = ((random.nextDouble() * 2) - 1) * jitterFactor;
         final double x = (gridX + 0.5 + jitterX) * cellPixels;
         final double y = (gridY + 0.5 + jitterY) * cellPixels;
+        final double rotation = randomizeRotation
+            ? random.nextDouble() * 2 * math.pi
+            : 0.0;
 
-        canvas.save();
-        canvas.translate(x, y);
+        // Record the motif's own (possibly randomized) geometry exactly
+        // once per cell, then stamp that identical picture at every wrap
+        // offset — calling drawMotif again per offset would consume more
+        // random draws each time, giving each wrapped copy different
+        // geometry instead of the one motif reappearing whole.
+        final ui.PictureRecorder motifRecorder = ui.PictureRecorder();
+        final ui.Canvas motifCanvas = ui.Canvas(motifRecorder);
 
-        if (randomizeRotation) {
-          canvas.rotate(random.nextDouble() * 2 * math.pi);
+        drawMotif(motifCanvas, mpTherionAreaPatternTileUnitPixels, random);
+
+        final ui.Picture motif = motifRecorder.endRecording();
+
+        for (final double wrapX in [-tileSize, 0, tileSize]) {
+          for (final double wrapY in [-tileSize, 0, tileSize]) {
+            canvas.save();
+            canvas.translate(x + wrapX, y + wrapY);
+
+            if (rotation != 0.0) {
+              canvas.rotate(rotation);
+            }
+
+            canvas.drawPicture(motif);
+            canvas.restore();
+          }
         }
 
-        drawMotif(canvas, mpTherionAreaPatternTileUnitPixels, random);
-        canvas.restore();
+        motif.dispose();
       }
     }
 
-    final int size = (gridSize * cellPixels).round();
+    final int size = tileSize.round();
 
     return recorder.endRecording().toImageSync(size, size);
   }
