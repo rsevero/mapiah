@@ -18,6 +18,7 @@ import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_deco
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
@@ -137,8 +138,8 @@ void main() {
     );
 
     test(
-      'waterFlow -subtype conjectural gets the SKBB dotted decorator, '
-      'permanent/no-subtype keep the shared UIS decorator',
+      'waterFlow -subtype conjectural/intermittent get their SKBB '
+      'decorators, permanent/no-subtype keep the shared UIS decorator',
       () {
         expect(
           getTherionLineDefinition(
@@ -147,6 +148,14 @@ void main() {
             subtype: 'conjectural',
           )?.decorator,
           isA<MPWaterFlowConjecturalSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.waterFlow,
+            subtype: 'intermittent',
+          )?.decorator,
+          isA<MPWaterFlowIntermittentSKBBLineDecorator>(),
         );
         expect(
           getTherionLineDefinition(
@@ -188,6 +197,7 @@ void main() {
         const MPFloorMeanderSKBBLineDecorator(),
         const MPOverhangSKBBLineDecorator(),
         const MPWaterFlowConjecturalSKBBLineDecorator(),
+        const MPWaterFlowIntermittentSKBBLineDecorator(),
       ]) {
         final ui.PictureRecorder recorder = ui.PictureRecorder();
         final Canvas canvas = Canvas(recorder);

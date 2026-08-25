@@ -10,6 +10,7 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decor
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
@@ -21,19 +22,20 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// (down to the knot markers Mapiah already omits from both), so both reuse
 /// the existing UIS decorator/color instead of a new SKBB class.
 ///
-/// `waterFlow -subtype conjectural` is handled below (a dotted redraw of
-/// the shared `l_waterflow_permanent_UIS` meander, see
-/// [MPWaterFlowConjecturalSKBBLineDecorator]); `permanent`/no-subtype
+/// `waterFlow -subtype conjectural`/`intermittent` are handled below (a
+/// dotted/dashed redraw of the shared `l_waterflow_permanent_UIS` meander,
+/// see [MPWaterFlowConjecturalSKBBLineDecorator]/
+/// [MPWaterFlowIntermittentSKBBLineDecorator]); `permanent`/no-subtype
 /// falls through to that same UIS decorator unchanged.
 ///
 /// Every other SKBB-owned line type this map doesn't cover — wall subtype
 /// lines (already rendered set-neutrally via dash-pattern `THLinePaint`,
 /// not this decorator pipeline), `border` visible/temporary/presumed,
-/// `survey` surface, `waterFlow` intermittent, `arrow`, `mapConnection`,
-/// `section`, and the `rope`/`steps`/`handrail`/`fixedLadder`/
-/// `ropeLadder`/`viaFerrata`/`slope` *line* types (as opposed to the point
-/// types of the same name, which Phase 4B does implement) — falls back to
-/// UIS/placeholder until a follow-up phase.
+/// `survey` surface, `arrow`, `mapConnection`, `section`, and the
+/// `rope`/`steps`/`handrail`/`fixedLadder`/`ropeLadder`/`viaFerrata`/
+/// `slope` *line* types (as opposed to the point types of the same name,
+/// which Phase 4B does implement) — falls back to UIS/placeholder until a
+/// follow-up phase.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -68,16 +70,26 @@ MPTherionLineDefinition? getTherionSKBBLineDefinition({
   required THLineType lineType,
   String? subtype,
 }) {
-  if ((lineType == THLineType.waterFlow) && (subtype == 'conjectural')) {
-    final MPLineDecorator decorator =
-        const MPWaterFlowConjecturalSKBBLineDecorator();
+  final MPLineDecorator? waterFlowDecorator =
+      (lineType == THLineType.waterFlow)
+      ? switch (subtype) {
+          'conjectural' => const MPWaterFlowConjecturalSKBBLineDecorator(),
+          'intermittent' => const MPWaterFlowIntermittentSKBBLineDecorator(),
+          _ => null,
+        }
+      : null;
+
+  if (waterFlowDecorator != null) {
     final color = mpTherionLineColors[THLineType.waterFlow];
 
     if (color == null) {
       return null;
     }
 
-    return MPTherionLineDefinition(decorator: decorator, color: color);
+    return MPTherionLineDefinition(
+      decorator: waterFlowDecorator,
+      color: color,
+    );
   }
 
   return _skbbLineDefinitions[lineType];
