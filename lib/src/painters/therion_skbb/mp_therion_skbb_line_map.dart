@@ -9,6 +9,8 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_de
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_via_ferrata_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_clay_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_debris_skbb_line_decorator.dart';
@@ -43,12 +45,19 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// falling back to Mapiah's placeholder dash-pattern `THLinePaint`
 /// (`wallSubtypesPaints`), same as before.
 ///
+/// `ropeLadder`/`viaFerrata` are also handled below, porting
+/// `l_ropeladder_SKBB`/`l_viaferrata_SKBB` — both currently stubs in
+/// Therion itself (a plain red line, the same "unimplemented" pattern as
+/// `l_u`), so [MPRopeLadderSKBBLineDecorator]/[MPViaFerrataSKBBLineDecorator]
+/// port that literally rather than inventing a real symbol Therion
+/// doesn't have yet.
+///
 /// Every other SKBB-owned line type this map doesn't cover — `border`
 /// visible/temporary/presumed, `survey` surface, `arrow`,
 /// `mapConnection`, `section`, and the `rope`/`steps`/`handrail`/
-/// `fixedLadder`/`ropeLadder`/`viaFerrata`/`slope` *line* types (as
-/// opposed to the point types of the same name, which Phase 4B does
-/// implement) — falls back to UIS/placeholder until a follow-up phase.
+/// `fixedLadder`/`slope` *line* types (as opposed to the point types of
+/// the same name, which Phase 4B does implement) — falls back to
+/// UIS/placeholder until a follow-up phase.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -73,6 +82,14 @@ final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.overhang: MPTherionLineDefinition(
     decorator: const MPOverhangSKBBLineDecorator(),
     color: THPaint.thPaint10,
+  ),
+  THLineType.ropeLadder: MPTherionLineDefinition(
+    decorator: const MPRopeLadderSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.ropeLadder]!,
+  ),
+  THLineType.viaFerrata: MPTherionLineDefinition(
+    decorator: const MPViaFerrataSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.viaFerrata]!,
   ),
 };
 

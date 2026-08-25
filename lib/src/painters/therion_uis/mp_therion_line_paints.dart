@@ -19,6 +19,11 @@ import 'package:material_ui/material_ui.dart';
 /// on the placeholder `THLinePaint` under UIS) — its entry here is used
 /// only by the SKBB-specific wall decorators, which share this same map
 /// rather than keeping a second, SKBB-only color table.
+///
+/// [THLineType.ropeLadder]/[THLineType.viaFerrata] are the same: Therion
+/// has no separate UIS macro for either (`l_ropeladder`/`l_viaferrata`
+/// alias straight to their `_SKBB` definitions in `thTrans.mp`), so these
+/// entries are used only by the SKBB decorators.
 final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.ceilingMeander: THPaint.thPaint5,
   THLineType.ceilingStep: THPaint.thPaint5,
@@ -31,7 +36,9 @@ final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.gradient: THPaint.thPaint12,
   THLineType.moonmilk: THPaint.thPaint10,
   THLineType.rockEdge: THPaint.thPaint8,
+  THLineType.ropeLadder: THPaint.thPaintMetaPostRed,
   THLineType.survey: THPaint.thPaint14,
+  THLineType.viaFerrata: THPaint.thPaintMetaPostRed,
   THLineType.waterFlow: THPaint.thPaint3,
   THLineType.wall: THPaint.thPaint0,
 };

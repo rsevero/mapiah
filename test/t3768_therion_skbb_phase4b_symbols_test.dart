@@ -16,7 +16,9 @@ import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_de
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_via_ferrata_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_blocks_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_clay_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_debris_skbb_line_decorator.dart';
@@ -144,6 +146,23 @@ void main() {
       },
     );
 
+    test('ropeLadder/viaFerrata get their SKBB decorators', () {
+      expect(
+        getTherionLineDefinition(
+          set: MPTherionSymbolSet.skbb,
+          lineType: THLineType.ropeLadder,
+        )?.decorator,
+        isA<MPRopeLadderSKBBLineDecorator>(),
+      );
+      expect(
+        getTherionLineDefinition(
+          set: MPTherionSymbolSet.skbb,
+          lineType: THLineType.viaFerrata,
+        )?.decorator,
+        isA<MPViaFerrataSKBBLineDecorator>(),
+      );
+    });
+
     test(
       'waterFlow -subtype conjectural/intermittent get their SKBB '
       'decorators, permanent/no-subtype keep the shared UIS decorator',
@@ -251,6 +270,8 @@ void main() {
         const MPWallBlocksSKBBLineDecorator(),
         const MPWallIceSKBBLineDecorator(),
         const MPWallUnsurveyedSKBBLineDecorator(),
+        const MPRopeLadderSKBBLineDecorator(),
+        const MPViaFerrataSKBBLineDecorator(),
       ]) {
         final ui.PictureRecorder recorder = ui.PictureRecorder();
         final Canvas canvas = Canvas(recorder);
