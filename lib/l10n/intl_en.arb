@@ -4472,5 +4472,68 @@
   "@textEditorRevertTooltip": {
     "description": "Tooltip for the text editor's revert button. Used on: THTextEditorWidget._buildToolbar",
     "type": "text"
+  },
+  "textEditorFindTooltip": "Find",
+  "@textEditorFindTooltip": {
+    "description": "Tooltip for the button that opens the text editor's find bar. Used on: THTextEditorWidget._buildToolbar",
+    "type": "text"
+  },
+  "textEditorFindHint": "Find",
+  "@textEditorFindHint": {
+    "description": "Hint text for the text editor find bar's search field. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorReplaceHint": "Replace",
+  "@textEditorReplaceHint": {
+    "description": "Hint text for the text editor find bar's replacement field. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindCaseSensitiveTooltip": "Match case",
+  "@textEditorFindCaseSensitiveTooltip": {
+    "description": "Tooltip for the text editor find bar's case-sensitivity toggle. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindPreviousTooltip": "Previous match",
+  "@textEditorFindPreviousTooltip": {
+    "description": "Tooltip for the text editor find bar's previous-match button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindNextTooltip": "Next match",
+  "@textEditorFindNextTooltip": {
+    "description": "Tooltip for the text editor find bar's next-match button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindCloseTooltip": "Close find bar",
+  "@textEditorFindCloseTooltip": {
+    "description": "Tooltip for the text editor find bar's close button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindToggleReplaceTooltip": "Toggle replace",
+  "@textEditorFindToggleReplaceTooltip": {
+    "description": "Tooltip for the text editor find bar's expand/collapse-replace-row button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorReplaceButton": "Replace",
+  "@textEditorReplaceButton": {
+    "description": "Label for the text editor find bar's replace-one button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorReplaceAllButton": "Replace All",
+  "@textEditorReplaceAllButton": {
+    "description": "Label for the text editor find bar's replace-all button. Used on: THTextEditorWidget._buildFindBar",
+    "type": "text"
+  },
+  "textEditorFindMatchCount": "{current}/{total}",
+  "@textEditorFindMatchCount": {
+    "description": "Match position indicator in the text editor find bar, e.g. \"3/12\". Used on: THTextEditorWidget._buildFindBar",
+    "type": "text",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -5373,6 +5373,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Revert unsaved changes'**
   String get textEditorRevertTooltip;
+
+  /// Tooltip for the button that opens the text editor's find bar. Used on: THTextEditorWidget._buildToolbar
+  ///
+  /// In en, this message translates to:
+  /// **'Find'**
+  String get textEditorFindTooltip;
+
+  /// Hint text for the text editor find bar's search field. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Find'**
+  String get textEditorFindHint;
+
+  /// Hint text for the text editor find bar's replacement field. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get textEditorReplaceHint;
+
+  /// Tooltip for the text editor find bar's case-sensitivity toggle. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Match case'**
+  String get textEditorFindCaseSensitiveTooltip;
+
+  /// Tooltip for the text editor find bar's previous-match button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Previous match'**
+  String get textEditorFindPreviousTooltip;
+
+  /// Tooltip for the text editor find bar's next-match button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Next match'**
+  String get textEditorFindNextTooltip;
+
+  /// Tooltip for the text editor find bar's close button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Close find bar'**
+  String get textEditorFindCloseTooltip;
+
+  /// Tooltip for the text editor find bar's expand/collapse-replace-row button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle replace'**
+  String get textEditorFindToggleReplaceTooltip;
+
+  /// Label for the text editor find bar's replace-one button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get textEditorReplaceButton;
+
+  /// Label for the text editor find bar's replace-all button. Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All'**
+  String get textEditorReplaceAllButton;
+
+  /// Match position indicator in the text editor find bar, e.g. "3/12". Used on: THTextEditorWidget._buildFindBar
+  ///
+  /// In en, this message translates to:
+  /// **'{current}/{total}'**
+  String textEditorFindMatchCount(int current, int total);
 }
 
 class _AppLocalizationsDelegate

@@ -35,6 +35,9 @@ const Map<THTextEditorTokenType, Color> _thTextEditorTokenColors =
       THTextEditorTokenType.plain: Color(0xFF000000),
     };
 
+const Color _thTextEditorFindMatchColor = Color(0x554DB6AC);
+const Color _thTextEditorActiveFindMatchColor = Color(0x99FFB300);
+
 /// Editor surface for one `thconfig`/`.th` file: a line-number gutter, an
 /// editable text area with a lexical syntax-highlighting overlay, and
 /// diagnostic markers for [THProjectParseError]s attached to the file.
@@ -54,7 +57,14 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   late final TextEditingController _textEditingController;
   late final ScrollController _textScrollController;
   late final ScrollController _gutterScrollController;
+  late final TextEditingController _findEditingController;
+  late final TextEditingController _replaceEditingController;
+  late final FocusNode _findFieldFocusNode;
   bool _isSyncingFromController = false;
+  bool _isSyncingFindFromController = false;
+  bool _isSyncingReplaceFromController = false;
+  bool _isReplaceRowExpanded = false;
+  int? _lastAppliedActiveMatchIndex;
 
   @override
   void initState() {
@@ -66,6 +76,15 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     _textScrollController = ScrollController();
     _textScrollController.addListener(_onTextScrolled);
     _gutterScrollController = ScrollController();
+    _findEditingController = TextEditingController(
+      text: widget.controller.findQuery,
+    );
+    _findEditingController.addListener(_onFindEditingChanged);
+    _replaceEditingController = TextEditingController(
+      text: widget.controller.replaceQuery,
+    );
+    _replaceEditingController.addListener(_onReplaceEditingChanged);
+    _findFieldFocusNode = FocusNode();
   }
 
   @override
@@ -75,7 +94,28 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     _textScrollController.removeListener(_onTextScrolled);
     _textScrollController.dispose();
     _gutterScrollController.dispose();
+    _findEditingController.removeListener(_onFindEditingChanged);
+    _findEditingController.dispose();
+    _replaceEditingController.removeListener(_onReplaceEditingChanged);
+    _replaceEditingController.dispose();
+    _findFieldFocusNode.dispose();
     super.dispose();
+  }
+
+  void _onFindEditingChanged() {
+    if (_isSyncingFindFromController) {
+      return;
+    }
+
+    widget.controller.setFindQuery(_findEditingController.text);
+  }
+
+  void _onReplaceEditingChanged() {
+    if (_isSyncingReplaceFromController) {
+      return;
+    }
+
+    widget.controller.setReplaceQuery(_replaceEditingController.text);
   }
 
   void _onTextEditingChanged() {
@@ -170,7 +210,21 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       return KeyEventResult.handled;
     }
 
+    if (event.logicalKey == LogicalKeyboardKey.escape &&
+        widget.controller.isFindBarVisible) {
+      widget.controller.closeFindBar();
+
+      return KeyEventResult.handled;
+    }
+
     return KeyEventResult.ignored;
+  }
+
+  void _handleOpenFindBar() {
+    widget.controller.openFindBar();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _findFieldFocusNode.requestFocus();
+    });
   }
 
   void _handleTabKey({required bool outdent}) {
@@ -260,6 +314,38 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     await widget.controller.save();
   }
 
+  /// Moves the text field's selection to [activeMatchIndex]'s range in
+  /// [matches] and scrolls it into view. Selection-only (no text change),
+  /// so the existing text-change listener only updates the reported cursor
+  /// position, which is the desired side effect here too.
+  void _applyActiveMatch(List<TextRange> matches, int? activeMatchIndex) {
+    if (activeMatchIndex == null ||
+        activeMatchIndex < 0 ||
+        activeMatchIndex >= matches.length) {
+      return;
+    }
+
+    final TextRange match = matches[activeMatchIndex];
+    final String content = widget.controller.content;
+
+    _textEditingController.selection = TextSelection(
+      baseOffset: match.start,
+      extentOffset: match.end,
+    );
+
+    final _LineColumn position = _lineColumnAt(content, match.start);
+    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
+
+    if (_textScrollController.hasClients) {
+      _textScrollController.jumpTo(
+        (position.line * lineHeight).clamp(
+          _textScrollController.position.minScrollExtent,
+          _textScrollController.position.maxScrollExtent,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
@@ -281,6 +367,24 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
           _isSyncingFromController = false;
         }
 
+        if (_findEditingController.text != widget.controller.findQuery) {
+          _isSyncingFindFromController = true;
+          _findEditingController.text = widget.controller.findQuery;
+          _findEditingController.selection = TextSelection.collapsed(
+            offset: _findEditingController.text.length,
+          );
+          _isSyncingFindFromController = false;
+        }
+
+        if (_replaceEditingController.text != widget.controller.replaceQuery) {
+          _isSyncingReplaceFromController = true;
+          _replaceEditingController.text = widget.controller.replaceQuery;
+          _replaceEditingController.selection = TextSelection.collapsed(
+            offset: _replaceEditingController.text.length,
+          );
+          _isSyncingReplaceFromController = false;
+        }
+
         final List<THTextEditorToken> tokens = tokenizeTherionText(
           widget.controller.content,
         );
@@ -288,6 +392,15 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
             widget.controller.diagnostics;
         final int lineCount =
             '\n'.allMatches(widget.controller.content).length + 1;
+        final List<TextRange> findMatches = widget.controller.isFindBarVisible
+            ? widget.controller.findMatches
+            : const <TextRange>[];
+
+        if (widget.controller.isFindBarVisible &&
+            widget.controller.activeMatchIndex != _lastAppliedActiveMatchIndex) {
+          _lastAppliedActiveMatchIndex = widget.controller.activeMatchIndex;
+          _applyActiveMatch(findMatches, widget.controller.activeMatchIndex);
+        }
 
         return Shortcuts(
           shortcuts: <ShortcutActivator, Intent>{
@@ -295,6 +408,10 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                 const _THTextEditorSaveIntent(),
             const SingleActivator(LogicalKeyboardKey.keyS, meta: true):
                 const _THTextEditorSaveIntent(),
+            const SingleActivator(LogicalKeyboardKey.keyF, control: true):
+                const _THTextEditorFindIntent(),
+            const SingleActivator(LogicalKeyboardKey.keyF, meta: true):
+                const _THTextEditorFindIntent(),
           },
           child: Actions(
             actions: <Type, Action<Intent>>{
@@ -305,11 +422,20 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                   return null;
                 },
               ),
+              _THTextEditorFindIntent: CallbackAction<_THTextEditorFindIntent>(
+                onInvoke: (_) {
+                  _handleOpenFindBar();
+
+                  return null;
+                },
+              ),
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 _buildToolbar(context, appLocalizations),
+                if (widget.controller.isFindBarVisible)
+                  _buildFindBar(context, appLocalizations, findMatches),
                 Expanded(
                   child: Focus(
                     autofocus: true,
@@ -332,7 +458,11 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                               IgnorePointer(
                                 child: SingleChildScrollView(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  child: _buildSyntaxOverlay(tokens),
+                                  child: _buildSyntaxOverlay(
+                                    tokens,
+                                    findMatches,
+                                    widget.controller.activeMatchIndex,
+                                  ),
                                 ),
                               ),
                               TextField(
@@ -395,6 +525,12 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
               ? widget.controller.revert
               : null,
         ),
+        IconButton(
+          key: const ValueKey('THTextEditorWidget|FindButton'),
+          icon: const Icon(Icons.search),
+          tooltip: appLocalizations.textEditorFindTooltip,
+          onPressed: _handleOpenFindBar,
+        ),
         if (widget.controller.isDirty)
           Container(
             width: mpTextEditorDiagnosticMarkerSize,
@@ -405,6 +541,126 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildFindBar(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+    List<TextRange> findMatches,
+  ) {
+    final int? activeMatchIndex = widget.controller.activeMatchIndex;
+    final int matchCount = findMatches.length;
+    final int matchPosition = (activeMatchIndex ?? -1) + 1;
+
+    return Material(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              IconButton(
+                key: const ValueKey(
+                  'THTextEditorWidget|FindToggleReplaceButton',
+                ),
+                icon: Icon(
+                  _isReplaceRowExpanded
+                      ? Icons.expand_less
+                      : Icons.expand_more,
+                ),
+                tooltip: appLocalizations.textEditorFindToggleReplaceTooltip,
+                onPressed: () {
+                  setState(() {
+                    _isReplaceRowExpanded = !_isReplaceRowExpanded;
+                  });
+                },
+              ),
+              Expanded(
+                child: TextField(
+                  key: const ValueKey('THTextEditorWidget|FindField'),
+                  controller: _findEditingController,
+                  focusNode: _findFieldFocusNode,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    border: InputBorder.none,
+                    hintText: appLocalizations.textEditorFindHint,
+                  ),
+                  onSubmitted: (_) => widget.controller.findNext(),
+                ),
+              ),
+              Text(
+                key: const ValueKey('THTextEditorWidget|FindMatchCountLabel'),
+                appLocalizations.textEditorFindMatchCount(
+                  matchPosition,
+                  matchCount,
+                ),
+              ),
+              IconButton(
+                key: const ValueKey(
+                  'THTextEditorWidget|FindCaseSensitiveToggle',
+                ),
+                icon: Icon(
+                  Icons.text_fields,
+                  color: widget.controller.findCaseSensitive
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
+                ),
+                tooltip: appLocalizations.textEditorFindCaseSensitiveTooltip,
+                onPressed: () {
+                  widget.controller.setFindCaseSensitive(
+                    !widget.controller.findCaseSensitive,
+                  );
+                },
+              ),
+              IconButton(
+                key: const ValueKey('THTextEditorWidget|FindPreviousButton'),
+                icon: const Icon(Icons.keyboard_arrow_up),
+                tooltip: appLocalizations.textEditorFindPreviousTooltip,
+                onPressed: widget.controller.findPrevious,
+              ),
+              IconButton(
+                key: const ValueKey('THTextEditorWidget|FindNextButton'),
+                icon: const Icon(Icons.keyboard_arrow_down),
+                tooltip: appLocalizations.textEditorFindNextTooltip,
+                onPressed: widget.controller.findNext,
+              ),
+              IconButton(
+                key: const ValueKey('THTextEditorWidget|FindCloseButton'),
+                icon: const Icon(Icons.close),
+                tooltip: appLocalizations.textEditorFindCloseTooltip,
+                onPressed: widget.controller.closeFindBar,
+              ),
+            ],
+          ),
+          if (_isReplaceRowExpanded)
+            Row(
+              children: <Widget>[
+                const SizedBox(width: mpTextEditorFoldToggleSize * 2),
+                Expanded(
+                  child: TextField(
+                    key: const ValueKey('THTextEditorWidget|ReplaceField'),
+                    controller: _replaceEditingController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: appLocalizations.textEditorReplaceHint,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  key: const ValueKey('THTextEditorWidget|ReplaceButton'),
+                  onPressed: widget.controller.replaceActiveMatch,
+                  child: Text(appLocalizations.textEditorReplaceButton),
+                ),
+                TextButton(
+                  key: const ValueKey('THTextEditorWidget|ReplaceAllButton'),
+                  onPressed: widget.controller.replaceAllMatches,
+                  child: Text(appLocalizations.textEditorReplaceAllButton),
+                ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 
@@ -439,29 +695,43 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     );
   }
 
-  Widget _buildSyntaxOverlay(List<THTextEditorToken> tokens) {
+  Widget _buildSyntaxOverlay(
+    List<THTextEditorToken> tokens,
+    List<TextRange> findMatches,
+    int? activeMatchIndex,
+  ) {
     final String content = widget.controller.content;
     final List<InlineSpan> spans = <InlineSpan>[];
     int cursor = 0;
 
-    for (final THTextEditorToken token in tokens) {
-      if (token.start > cursor) {
-        spans.add(TextSpan(text: content.substring(cursor, token.start)));
+    void addRange(int start, int end, Color? foregroundColor) {
+      if (start >= end) {
+        return;
       }
 
-      spans.add(
-        TextSpan(
-          text: content.substring(token.start, token.end),
-          style: TextStyle(
-            color: _thTextEditorTokenColors[token.type],
-          ),
+      spans.addAll(
+        _buildHighlightedSpans(
+          content,
+          start,
+          end,
+          foregroundColor,
+          findMatches,
+          activeMatchIndex,
         ),
       );
+    }
+
+    for (final THTextEditorToken token in tokens) {
+      if (token.start > cursor) {
+        addRange(cursor, token.start, null);
+      }
+
+      addRange(token.start, token.end, _thTextEditorTokenColors[token.type]);
       cursor = token.end;
     }
 
     if (cursor < content.length) {
-      spans.add(TextSpan(text: content.substring(cursor)));
+      addRange(cursor, content.length, null);
     }
 
     return RichText(
@@ -475,6 +745,73 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
         children: spans,
       ),
     );
+  }
+
+  /// Splits `content[start, end)` (already known to have [foregroundColor])
+  /// into further spans wherever a find match overlaps it, adding a
+  /// background highlight without disturbing the foreground/syntax color.
+  List<InlineSpan> _buildHighlightedSpans(
+    String content,
+    int start,
+    int end,
+    Color? foregroundColor,
+    List<TextRange> findMatches,
+    int? activeMatchIndex,
+  ) {
+    if (findMatches.isEmpty) {
+      return <InlineSpan>[
+        TextSpan(
+          text: content.substring(start, end),
+          style: TextStyle(color: foregroundColor),
+        ),
+      ];
+    }
+
+    final List<InlineSpan> result = <InlineSpan>[];
+    int position = start;
+
+    for (int index = 0; index < findMatches.length; index++) {
+      final TextRange match = findMatches[index];
+      final int matchStart = match.start.clamp(start, end);
+      final int matchEnd = match.end.clamp(start, end);
+
+      if (matchStart >= matchEnd) {
+        continue;
+      }
+
+      if (matchStart > position) {
+        result.add(
+          TextSpan(
+            text: content.substring(position, matchStart),
+            style: TextStyle(color: foregroundColor),
+          ),
+        );
+      }
+
+      result.add(
+        TextSpan(
+          text: content.substring(matchStart, matchEnd),
+          style: TextStyle(
+            color: foregroundColor,
+            backgroundColor: index == activeMatchIndex
+                ? _thTextEditorActiveFindMatchColor
+                : _thTextEditorFindMatchColor,
+          ),
+        ),
+      );
+      position = matchEnd;
+    }
+
+    if (position < end) {
+      result.add(
+        TextSpan(
+          text: content.substring(position, end),
+          style: TextStyle(color: foregroundColor),
+        ),
+      );
+    }
+
+    return result;
   }
 
   _LineColumn _lineColumnAt(String text, int offset) {
@@ -502,4 +839,8 @@ class _LineColumn {
 
 class _THTextEditorSaveIntent extends Intent {
   const _THTextEditorSaveIntent();
+}
+
+class _THTextEditorFindIntent extends Intent {
+  const _THTextEditorFindIntent();
 }

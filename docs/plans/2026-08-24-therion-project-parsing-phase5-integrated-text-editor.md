@@ -366,7 +366,11 @@ Representative scenarios:
 
 ## 13. Follow-up: Single-File Find/Replace
 
+**Status:** Implemented.
+
 Cut from the initial Phase 5 increment to keep it reviewable; scoped here so it can be picked up without re-deriving the design. Single-file only — it operates on one already-open `THTextEditorWidget`/`THTextEditorController` pair. Searching across multiple project files is a separate, later phase (see the top-level roadmap's Phase 9, added alongside this note).
+
+Implementation note: `setFindQuery`/`openFindBar` auto-select the first match (`activeMatchIndex = 0`) as soon as one exists, rather than leaving selection unset until the first `findNext()`/`findPrevious()` call. This wasn't spelled out in the sketch above but matches how most editors behave and was decided during implementation.
 
 ### 13.1 Controller additions (`THTextEditorController`)
 

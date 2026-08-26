@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
+import 'dart:ui' show TextRange;
 
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
@@ -51,6 +52,21 @@ abstract class THTextEditorControllerBase with Store {
   @observable
   ObservableSet<int> collapsedFoldStarts = ObservableSet<int>();
 
+  @observable
+  String findQuery = '';
+
+  @observable
+  String replaceQuery = '';
+
+  @observable
+  bool findCaseSensitive = false;
+
+  @observable
+  bool isFindBarVisible = false;
+
+  @observable
+  int? activeMatchIndex;
+
   @computed
   List<THProjectParseError> get diagnostics => _projectController.projectErrors
       .where((THProjectParseError error) => error.filePath == canonicalPath)
@@ -58,6 +74,37 @@ abstract class THTextEditorControllerBase with Store {
 
   @computed
   List<THTextEditorFoldRegion> get foldRegions => buildFoldRegions(content);
+
+  /// Non-overlapping, left-to-right occurrences of [findQuery] in [content].
+  /// A plain substring scan — no regex support in this increment.
+  @computed
+  List<TextRange> get findMatches {
+    if (findQuery.isEmpty) {
+      return const <TextRange>[];
+    }
+
+    final String haystack = findCaseSensitive ? content : content.toLowerCase();
+    final String needle = findCaseSensitive
+        ? findQuery
+        : findQuery.toLowerCase();
+    final List<TextRange> matches = <TextRange>[];
+    int searchStart = 0;
+
+    while (searchStart <= haystack.length - needle.length) {
+      final int foundIndex = haystack.indexOf(needle, searchStart);
+
+      if (foundIndex == -1) {
+        break;
+      }
+
+      matches.add(
+        TextRange(start: foundIndex, end: foundIndex + needle.length),
+      );
+      searchStart = foundIndex + needle.length;
+    }
+
+    return matches;
+  }
 
   Timer? _reparseTimer;
 
@@ -113,6 +160,123 @@ abstract class THTextEditorControllerBase with Store {
   void toggleFold(int startLine) {
     if (!collapsedFoldStarts.remove(startLine)) {
       collapsedFoldStarts.add(startLine);
+    }
+  }
+
+  @action
+  void openFindBar() {
+    isFindBarVisible = true;
+    _clampActiveMatchIndex();
+
+    if (activeMatchIndex == null && findMatches.isNotEmpty) {
+      activeMatchIndex = 0;
+    }
+  }
+
+  @action
+  void closeFindBar() {
+    isFindBarVisible = false;
+    findQuery = '';
+    replaceQuery = '';
+    activeMatchIndex = null;
+  }
+
+  @action
+  void setFindQuery(String query) {
+    findQuery = query;
+    _clampActiveMatchIndex();
+
+    if (activeMatchIndex == null && findMatches.isNotEmpty) {
+      activeMatchIndex = 0;
+    }
+  }
+
+  @action
+  void setReplaceQuery(String query) {
+    replaceQuery = query;
+  }
+
+  @action
+  void setFindCaseSensitive(bool value) {
+    findCaseSensitive = value;
+    _clampActiveMatchIndex();
+  }
+
+  @action
+  void findNext() {
+    final List<TextRange> matches = findMatches;
+
+    if (matches.isEmpty) {
+      activeMatchIndex = null;
+
+      return;
+    }
+
+    final int currentIndex = activeMatchIndex ?? -1;
+
+    activeMatchIndex = (currentIndex + 1) % matches.length;
+  }
+
+  @action
+  void findPrevious() {
+    final List<TextRange> matches = findMatches;
+
+    if (matches.isEmpty) {
+      activeMatchIndex = null;
+
+      return;
+    }
+
+    final int currentIndex = activeMatchIndex ?? 0;
+
+    activeMatchIndex = (currentIndex - 1 + matches.length) % matches.length;
+  }
+
+  @action
+  void replaceActiveMatch() {
+    final List<TextRange> matches = findMatches;
+    final int? index = activeMatchIndex;
+
+    if (index == null || index < 0 || index >= matches.length) {
+      return;
+    }
+
+    final TextRange match = matches[index];
+
+    setContent(content.replaceRange(match.start, match.end, replaceQuery));
+    _clampActiveMatchIndex();
+  }
+
+  @action
+  void replaceAllMatches() {
+    final List<TextRange> matches = findMatches;
+
+    if (matches.isEmpty) {
+      return;
+    }
+
+    final StringBuffer buffer = StringBuffer();
+    int cursor = 0;
+
+    for (final TextRange match in matches) {
+      buffer
+        ..write(content.substring(cursor, match.start))
+        ..write(replaceQuery);
+      cursor = match.end;
+    }
+
+    buffer.write(content.substring(cursor));
+    setContent(buffer.toString());
+    activeMatchIndex = null;
+  }
+
+  void _clampActiveMatchIndex() {
+    final List<TextRange> matches = findMatches;
+
+    if (matches.isEmpty) {
+      activeMatchIndex = null;
+    } else if (activeMatchIndex != null && activeMatchIndex! >= matches.length) {
+      activeMatchIndex = matches.length - 1;
     }
   }
 

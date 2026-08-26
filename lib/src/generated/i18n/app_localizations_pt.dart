@@ -2898,4 +2898,40 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get textEditorRevertTooltip => 'Reverter alterações não salvas';
+
+  @override
+  String get textEditorFindTooltip => 'Localizar';
+
+  @override
+  String get textEditorFindHint => 'Localizar';
+
+  @override
+  String get textEditorReplaceHint => 'Substituir';
+
+  @override
+  String get textEditorFindCaseSensitiveTooltip =>
+      'Diferenciar maiúsculas de minúsculas';
+
+  @override
+  String get textEditorFindPreviousTooltip => 'Ocorrência anterior';
+
+  @override
+  String get textEditorFindNextTooltip => 'Próxima ocorrência';
+
+  @override
+  String get textEditorFindCloseTooltip => 'Fechar barra de localização';
+
+  @override
+  String get textEditorFindToggleReplaceTooltip => 'Alternar substituição';
+
+  @override
+  String get textEditorReplaceButton => 'Substituir';
+
+  @override
+  String get textEditorReplaceAllButton => 'Substituir todas';
+
+  @override
+  String textEditorFindMatchCount(int current, int total) {
+    return '$current/$total';
+  }
 }

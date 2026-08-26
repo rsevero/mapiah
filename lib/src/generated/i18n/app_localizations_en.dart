@@ -2870,4 +2870,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get textEditorRevertTooltip => 'Revert unsaved changes';
+
+  @override
+  String get textEditorFindTooltip => 'Find';
+
+  @override
+  String get textEditorFindHint => 'Find';
+
+  @override
+  String get textEditorReplaceHint => 'Replace';
+
+  @override
+  String get textEditorFindCaseSensitiveTooltip => 'Match case';
+
+  @override
+  String get textEditorFindPreviousTooltip => 'Previous match';
+
+  @override
+  String get textEditorFindNextTooltip => 'Next match';
+
+  @override
+  String get textEditorFindCloseTooltip => 'Close find bar';
+
+  @override
+  String get textEditorFindToggleReplaceTooltip => 'Toggle replace';
+
+  @override
+  String get textEditorReplaceButton => 'Replace';
+
+  @override
+  String get textEditorReplaceAllButton => 'Replace All';
+
+  @override
+  String textEditorFindMatchCount(int current, int total) {
+    return '$current/$total';
+  }
 }
