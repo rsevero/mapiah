@@ -4,6 +4,6 @@ Therion code is locally available at ~/devel/therion-rsevero
 
 When processing ~/auxiliary/therion-showcase/therion_sbkk_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_skbb_showcase.pdf
 
-Mapiah presentation of area clay is very different from the one we see at ~/auxiliary/therion-showcase/therion_skbb_showcase.pdf. The shape of the makrs are different: Therions looks more like slightly rotated Ss. Mapiahs looks smaller and have a different shape, not S-like.
+Mapiah presentation of SKBB line types steps, rope, map connection, handrail and fixed ladder are very different from the ones we see at ~/auxiliary/therion-showcase/therion_skbb_showcase.pdf. 
 
-Fix Mapiah Therion SKBB presentation of area clay to match the one used by Therion.
+Fix Mapiah Therion SKBB presentation of SKBB line types steps, rope, map connection, handrail and fixed ladder to match the ones used by Therion.

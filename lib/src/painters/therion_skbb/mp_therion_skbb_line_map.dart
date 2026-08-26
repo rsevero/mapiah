@@ -7,10 +7,15 @@ import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_fixed_ladder_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_handrail_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_line_slope_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_map_connection_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_rope_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_steps_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_surface_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_via_ferrata_skbb_line_decorator.dart';
@@ -67,12 +72,20 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// perpendicular ticks, alternating full/one-third length, with no stroke
 /// of the path itself) — see [MPLineSlopeSKBBLineDecorator].
 ///
+/// `rope`/`steps`/`handrail`/`fixedLadder`/`mapConnection` are also
+/// handled below, porting `l_rope_SKBB`/`l_steps_SKBB`/`l_handrail_SKBB`/
+/// `l_fixedladder_SKBB`/`l_mapconnection_SKBB` — all five are aliased
+/// straight to their SKBB definitions in `thTrans.mp` with no separate
+/// UIS macro at all. See each decorator's own doc comment for the
+/// specific (documented) scope it doesn't cover — mainly `ATTR__elevation`
+/// side views and, for `rope`, the `-anchors`/`-rebelays` line options,
+/// none of which this map or [MPLineDecorator] currently has a way to
+/// plumb through.
+///
 /// Every other SKBB-owned line type this map doesn't cover — `border`
-/// visible/temporary/presumed, `arrow`, `mapConnection`, `section`, and
-/// the `rope`/`steps`/`handrail`/`fixedLadder` *line* types (as opposed to
-/// the point types of the same name, which Phase 4B does implement) — is
-/// `thTrans.mp`'s default here too (see `mp_therion_default_symbol_set.
-/// dart`), but since neither this map nor UIS has a decorator for it yet,
+/// visible/temporary/presumed, `arrow`, and `section` — is `thTrans.mp`'s
+/// default here too (see `mp_therion_default_symbol_set.dart`), but since
+/// neither this map nor UIS has a decorator for it yet,
 /// [getTherionLineDefinition] still ends up at the Mapiah placeholder
 /// until a follow-up phase ports it.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
@@ -111,6 +124,26 @@ final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.slope: MPTherionLineDefinition(
     decorator: const MPLineSlopeSKBBLineDecorator(),
     color: mpTherionLineColors[THLineType.slope]!,
+  ),
+  THLineType.rope: MPTherionLineDefinition(
+    decorator: const MPRopeSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.rope]!,
+  ),
+  THLineType.steps: MPTherionLineDefinition(
+    decorator: const MPStepsSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.steps]!,
+  ),
+  THLineType.handrail: MPTherionLineDefinition(
+    decorator: const MPHandrailSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.handrail]!,
+  ),
+  THLineType.fixedLadder: MPTherionLineDefinition(
+    decorator: const MPFixedLadderSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.fixedLadder]!,
+  ),
+  THLineType.mapConnection: MPTherionLineDefinition(
+    decorator: const MPMapConnectionSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.mapConnection]!,
   ),
 };
 
