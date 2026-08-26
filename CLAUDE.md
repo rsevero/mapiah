@@ -18,14 +18,14 @@ flutter test                       # All tests
 flutter test test/t1200_...        # Single test
 flutter build linux                # Build for Linux
 flutter analyze                    # Static analysis
-dart run build_runner build       # Generate MobX (only if watch not running)
+# Do not run build_runner manually; the watch instance regenerates MobX.
 flutter gen-l10n                   # Generate localizations after .arb edits
 ```
 
 ## Architecture Summary
 
 ### State Management: MobX
-Controllers in lib/src/controllers/ use @observable/@action. Run build_runner after modifications. .g.dart files are auto-generated.
+Controllers in lib/src/controllers/ use @observable/@action. The build_runner watch regenerates `.g.dart` files after modifications; do not run `build_runner` manually.
 
 ### Key Controllers
 
