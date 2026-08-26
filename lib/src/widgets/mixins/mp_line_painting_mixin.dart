@@ -48,10 +48,17 @@ mixin MPLinePaintingMixin {
         lineEndpointsMap[lineSegmentMPID] = lineSegment;
       }
 
+      final double? lSize = MPCommandOptionAux.getLSize(lineSegment);
+      final double? orientation = MPCommandOptionAux.getOrientation(
+        lineSegment,
+      );
+
       if (isFirst) {
         lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
           x: lineSegment.x,
           y: lineSegment.y,
+          lSize: lSize,
+          orientation: orientation,
         );
         isFirst = false;
         continue;
@@ -67,11 +74,15 @@ mixin MPLinePaintingMixin {
                 controlPoint1Y: lineSegment.controlPoint1Y,
                 controlPoint2X: lineSegment.controlPoint2X,
                 controlPoint2Y: lineSegment.controlPoint2Y,
+                lSize: lSize,
+                orientation: orientation,
               );
         case THStraightLineSegment _:
           lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
             x: lineSegment.x,
             y: lineSegment.y,
+            lSize: lSize,
+            orientation: orientation,
           );
       }
     }

@@ -15,6 +15,7 @@ import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.da
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_line_slope_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
@@ -30,6 +31,7 @@ import 'package:mapiah/src/painters/therion_skbb/mp_wall_sand_skbb_line_decorato
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_unsurveyed_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
@@ -147,6 +149,26 @@ void main() {
         );
       },
     );
+
+    test('slope gets the SKBB-specific decorator (l_slope_SKBB)', () {
+      final definition = getTherionLineDefinition(
+        set: MPTherionSymbolSet.skbb,
+        lineType: THLineType.slope,
+      );
+
+      expect(definition?.decorator, isA<MPLineSlopeSKBBLineDecorator>());
+
+      // `l_slope` aliases straight to `l_slope_SKBB` in `thTrans.mp` (no
+      // separate UIS macro), so `thTrans.mp`'s own default already picks
+      // the SKBB decorator, regardless of the explicitly-selected set.
+      expect(
+        getTherionLineDefinition(
+          set: null,
+          lineType: THLineType.slope,
+        )?.decorator,
+        isA<MPLineSlopeSKBBLineDecorator>(),
+      );
+    });
 
     test('ropeLadder/viaFerrata get their SKBB decorators', () {
       expect(
@@ -355,6 +377,74 @@ void main() {
         recorder.endRecording().dispose();
       }
     });
+
+    test(
+      'MPLineSlopeSKBBLineDecorator only strokes the path when showBorder '
+      'is set',
+      () {
+        final List<THLinePainterLineSegment> lineSegments = [
+          THLinePainterStraightLineSegment(x: 0, y: 0, lSize: 20),
+          THLinePainterStraightLineSegment(x: 60, y: 0),
+          THLinePainterStraightLineSegment(x: 120, y: 40),
+          THLinePainterStraightLineSegment(x: 180, y: 40),
+        ];
+
+        for (final bool showBorder in [false, true]) {
+          final ui.PictureRecorder recorder = ui.PictureRecorder();
+          final Canvas canvas = Canvas(recorder);
+
+          const MPLineSlopeSKBBLineDecorator().decorate(
+            canvas: canvas,
+            path: diagonalTestPath(),
+            color: Paint(),
+            symbolUnit: symbolUnit,
+            isReversed: false,
+            lineSegments: lineSegments,
+            showBorder: showBorder,
+          );
+          recorder.endRecording().dispose();
+        }
+      },
+    );
+
+    test(
+      'MPLineSlopeSKBBLineDecorator draws its ticks without crashing, '
+      'both with and without an explicit l-size/orientation',
+      () {
+        final List<THLinePainterLineSegment> lineSegmentsWithLSize = [
+          THLinePainterStraightLineSegment(x: 0, y: 0, lSize: 20),
+          THLinePainterStraightLineSegment(x: 60, y: 0),
+          THLinePainterStraightLineSegment(
+            x: 120,
+            y: 40,
+            orientation: 45,
+          ),
+          THLinePainterStraightLineSegment(x: 180, y: 40),
+        ];
+
+        for (final List<THLinePainterLineSegment> lineSegments in [
+          lineSegmentsWithLSize,
+          [
+            for (final THLinePainterLineSegment segment
+                in lineSegmentsWithLSize)
+              THLinePainterStraightLineSegment(x: segment.x, y: segment.y),
+          ],
+        ]) {
+          final ui.PictureRecorder recorder = ui.PictureRecorder();
+          final Canvas canvas = Canvas(recorder);
+
+          const MPLineSlopeSKBBLineDecorator().decorate(
+            canvas: canvas,
+            path: diagonalTestPath(),
+            color: Paint(),
+            symbolUnit: symbolUnit,
+            isReversed: false,
+            lineSegments: lineSegments,
+          );
+          recorder.endRecording().dispose();
+        }
+      },
+    );
 
     test('every SKBB area pattern tile resolves and builds without '
         'crashing', () {

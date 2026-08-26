@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
 /// Ports `l_survey_cave_UIS` by joining the original knots with straight
@@ -40,6 +41,8 @@ class MPSurveyCaveLineDecorator extends MPLineDecorator {
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
+    List<THLinePainterLineSegment>? lineSegments,
+    bool showBorder = false,
   }) {
     final double u = symbolUnit.canvasValue;
 

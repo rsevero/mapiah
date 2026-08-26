@@ -287,6 +287,8 @@ class THLinePainter extends CustomPainter {
       symbolUnit: symbolUnit,
       isReversed: lineInfo.isReversed,
       mpID: lineInfo.mpID,
+      lineSegments: lineSegmentsMap.values.toList(),
+      showBorder: lineInfo.slopeBorderOn,
     );
 
     if (showLinePoints) {

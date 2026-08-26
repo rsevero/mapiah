@@ -236,6 +236,7 @@ void main() {
         // mpTherionLineColors' own doc comment.
         const Set<THLineType> skbbOnlyDecoratedLineTypes = <THLineType>{
           THLineType.ropeLadder,
+          THLineType.slope,
           THLineType.viaFerrata,
           THLineType.wall,
         };

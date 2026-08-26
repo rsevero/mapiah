@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
 /// Ports `l_moonmilk_UIS`: tight curls (leaving/arriving at an 80-degree
@@ -21,6 +22,8 @@ class MPMoonmilkLineDecorator extends MPLineDecorator {
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
+    List<THLinePainterLineSegment>? lineSegments,
+    bool showBorder = false,
   }) {
     final double u = symbolUnit.canvasValue;
     final Path curls = MPDirectionalCurveAux.buildCurlPath(

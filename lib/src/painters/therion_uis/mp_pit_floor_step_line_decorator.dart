@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_path_metric_walker.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 
@@ -21,6 +22,8 @@ class MPPitFloorStepLineDecorator extends MPLineDecorator {
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
+    List<THLinePainterLineSegment>? lineSegments,
+    bool showBorder = false,
   }) {
     final double u = symbolUnit.canvasValue;
     final Path ticks = Path();

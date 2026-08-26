@@ -4,11 +4,29 @@ abstract class THLinePainterLineSegment {
   double x;
   double y;
 
-  THLinePainterLineSegment({required this.x, required this.y});
+  /// Raw `l-size`/`orientation` line point option values, straight from the
+  /// underlying [THLineSegment] with no defaulting applied — null when the
+  /// option isn't set on this point. Used by `THLineType.slope`'s SKBB
+  /// decorator ([MPLineSlopeSKBBLineDecorator]) to port `l_slope_SKBB`'s
+  /// per-point width/direction; ignored by every other decorator.
+  final double? lSize;
+  final double? orientation;
+
+  THLinePainterLineSegment({
+    required this.x,
+    required this.y,
+    this.lSize,
+    this.orientation,
+  });
 }
 
 class THLinePainterStraightLineSegment extends THLinePainterLineSegment {
-  THLinePainterStraightLineSegment({required super.x, required super.y});
+  THLinePainterStraightLineSegment({
+    required super.x,
+    required super.y,
+    super.lSize,
+    super.orientation,
+  });
 }
 
 class THLinePainterBezierCurveLineSegment extends THLinePainterLineSegment {
@@ -24,5 +42,7 @@ class THLinePainterBezierCurveLineSegment extends THLinePainterLineSegment {
     required this.controlPoint1Y,
     required this.controlPoint2X,
     required this.controlPoint2Y,
+    super.lSize,
+    super.orientation,
   });
 }

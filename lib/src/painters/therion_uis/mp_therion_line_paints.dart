@@ -24,6 +24,10 @@ import 'package:material_ui/material_ui.dart';
 /// has no separate UIS macro for either (`l_ropeladder`/`l_viaferrata`
 /// alias straight to their `_SKBB` definitions in `thTrans.mp`), so these
 /// entries are used only by the SKBB decorators.
+///
+/// [THLineType.slope] is the same again: `l_slope` aliases straight to
+/// `l_slope_SKBB` in `thTrans.mp` with no separate UIS macro, so this entry
+/// is used only by the SKBB decorator.
 final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.ceilingMeander: THPaint.thPaint5,
   THLineType.ceilingStep: THPaint.thPaint5,
@@ -37,6 +41,7 @@ final Map<THLineType, Paint> mpTherionLineColors = {
   THLineType.moonmilk: THPaint.thPaint10,
   THLineType.rockEdge: THPaint.thPaint8,
   THLineType.ropeLadder: THPaint.thPaintMetaPostRed,
+  THLineType.slope: THPaint.thPaint0,
   THLineType.survey: THPaint.thPaint14,
   THLineType.viaFerrata: THPaint.thPaintMetaPostRed,
   THLineType.waterFlow: THPaint.thPaint3,

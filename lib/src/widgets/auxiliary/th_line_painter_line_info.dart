@@ -13,6 +13,7 @@ class THLinePainterLineInfo {
   late final THLinePaint lineDirectionTicksPaint;
   late final bool addLineDirectionTicks;
   late final bool isReversed;
+  late final bool slopeBorderOn;
   late final THArea? parentArea;
   late final Map<int, MPLineSegmentSizeOrientationInfo>
   lineSegmentsWithLSizeOrientation;
@@ -29,6 +30,7 @@ class THLinePainterLineInfo {
   }) {
     mpID = line.mpID;
     isReversed = MPCommandOptionAux.isReversed(line);
+    slopeBorderOn = MPCommandOptionAux.isSlopeBorderOn(line);
     lineDirectionTicksPaint = th2FileEditController.visualController
         .getLineDirectionTickPaint(line: line, reverse: isReversed);
     addLineDirectionTicks =

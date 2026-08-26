@@ -402,6 +402,19 @@ class MPCommandOptionAux {
             THOptionChoicesOnOffType.on;
   }
 
+  /// `line slope -border on`: whether `l_slope_SKBB`'s baseline stroke
+  /// should also be drawn alongside its ticks. Unset (or `-border off`)
+  /// means no baseline stroke — confirmed against a real `therion` run,
+  /// despite `border`'s own doc comment claiming "default is on".
+  static bool isSlopeBorderOn(THElement element) {
+    return (element is THHasOptionsMixin) &&
+        element.hasOption(THCommandOptionType.border) &&
+        (element.getOption(THCommandOptionType.border)
+                    as THBorderCommandOption)
+                .choice ==
+            THOptionChoicesOnOffType.on;
+  }
+
   static bool isTHVisible(THElement element) {
     return (element is THHasOptionsMixin) &&
         (!element.hasOption(THCommandOptionType.visibility) ||

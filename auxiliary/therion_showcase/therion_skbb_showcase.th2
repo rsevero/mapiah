@@ -246,6 +246,14 @@ scrap therion_skbb_showcase -scale [0 0 1000 0 0 0 40.64 0 m]
     1400 1800
   endline
 
+  line slope -border on
+    0 1900
+    l-size 30
+    200 1880
+    400 1920
+    600 1900
+  endline
+
   area bedrock
     l-skbb-bedrock
   endarea

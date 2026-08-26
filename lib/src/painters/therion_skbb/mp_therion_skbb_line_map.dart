@@ -8,6 +8,7 @@ import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.da
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_line_slope_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_rope_ladder_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
@@ -62,14 +63,18 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// what a real Therion run renders under any symbol set, not something
 /// SKBB-specific being invented here.
 ///
+/// `slope` is also handled below, porting `l_slope_SKBB` (a row of
+/// perpendicular ticks, alternating full/one-third length, with no stroke
+/// of the path itself) — see [MPLineSlopeSKBBLineDecorator].
+///
 /// Every other SKBB-owned line type this map doesn't cover — `border`
 /// visible/temporary/presumed, `arrow`, `mapConnection`, `section`, and
-/// the `rope`/`steps`/`handrail`/`fixedLadder`/`slope` *line* types (as
-/// opposed to the point types of the same name, which Phase 4B does
-/// implement) — is `thTrans.mp`'s default here too (see
-/// `mp_therion_default_symbol_set.dart`), but since neither this map nor
-/// UIS has a decorator for it yet, [getTherionLineDefinition] still ends
-/// up at the Mapiah placeholder until a follow-up phase ports it.
+/// the `rope`/`steps`/`handrail`/`fixedLadder` *line* types (as opposed to
+/// the point types of the same name, which Phase 4B does implement) — is
+/// `thTrans.mp`'s default here too (see `mp_therion_default_symbol_set.
+/// dart`), but since neither this map nor UIS has a decorator for it yet,
+/// [getTherionLineDefinition] still ends up at the Mapiah placeholder
+/// until a follow-up phase ports it.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -102,6 +107,10 @@ final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.viaFerrata: MPTherionLineDefinition(
     decorator: const MPViaFerrataSKBBLineDecorator(),
     color: mpTherionLineColors[THLineType.viaFerrata]!,
+  ),
+  THLineType.slope: MPTherionLineDefinition(
+    decorator: const MPLineSlopeSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.slope]!,
   ),
 };
 
