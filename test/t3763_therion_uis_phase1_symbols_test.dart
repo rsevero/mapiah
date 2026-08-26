@@ -235,6 +235,8 @@ void main() {
         // SKBB-specific decorators sharing this same map; see
         // mpTherionLineColors' own doc comment.
         const Set<THLineType> skbbOnlyDecoratedLineTypes = <THLineType>{
+          THLineType.arrow,
+          THLineType.border,
           THLineType.fixedLadder,
           THLineType.handrail,
           THLineType.mapConnection,

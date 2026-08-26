@@ -5,6 +5,9 @@ import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_arrow_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_presumed_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_temporary_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_chimney_skbb_line_decorator.dart';
@@ -89,12 +92,21 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// none of which this map or [MPLineDecorator] currently has a way to
 /// plumb through.
 ///
-/// Every other SKBB-owned line type this map doesn't cover — `border`
-/// visible/temporary/presumed, `arrow`, and `section` — is `thTrans.mp`'s
-/// default here too (see `mp_therion_default_symbol_set.dart`), but since
-/// neither this map nor UIS has a decorator for it yet,
-/// [getTherionLineDefinition] still ends up at the Mapiah placeholder
-/// until a follow-up phase ports it.
+/// `border -subtype temporary`/`presumed` and `arrow` are also handled
+/// below. `l_border_temporary_SKBB`/`l_border_presumed_SKBB` are both a
+/// plain evenly-dashed `PenC` stroke (`presumed` denser than
+/// `temporary`), sharing [MPEvenlyDashedSKBBLineDecorator] with
+/// `chimney`. `l_arrow_SKBB` is a solid stroke plus a chevron mark
+/// gated by the line's `-head` option
+/// ([MPCommandOptionAux.getArrowHead]); `border -subtype visible`
+/// (`l_border_visible_SKBB`, a plain solid stroke with no dashing at
+/// all) isn't ported yet and keeps falling back to the placeholder.
+///
+/// Every other SKBB-owned line type this map doesn't cover — `section`
+/// — is `thTrans.mp`'s default here too (see
+/// `mp_therion_default_symbol_set.dart`), but since neither this map nor
+/// UIS has a decorator for it yet, [getTherionLineDefinition] still ends
+/// up at the Mapiah placeholder until a follow-up phase ports it.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneySKBBLineDecorator(),
@@ -152,6 +164,10 @@ final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
     decorator: const MPMapConnectionSKBBLineDecorator(),
     color: mpTherionLineColors[THLineType.mapConnection]!,
   ),
+  THLineType.arrow: MPTherionLineDefinition(
+    decorator: const MPArrowSKBBLineDecorator(),
+    color: mpTherionLineColors[THLineType.arrow]!,
+  ),
 };
 
 /// Resolves the SKBB-specific line decorator/color for [lineType]/[subtype].
@@ -181,6 +197,11 @@ MPTherionLineDefinition? getTherionSKBBLineDefinition({
     THLineType.survey => switch (subtype) {
       null || 'cave' => const MPSurveyCaveSKBBLineDecorator(),
       'surface' => const MPSurveySurfaceSKBBLineDecorator(),
+      _ => null,
+    },
+    THLineType.border => switch (subtype) {
+      'temporary' => const MPBorderTemporarySKBBLineDecorator(),
+      'presumed' => const MPBorderPresumedSKBBLineDecorator(),
       _ => null,
     },
     _ => null,

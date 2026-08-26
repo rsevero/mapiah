@@ -415,6 +415,20 @@ class MPCommandOptionAux {
             THOptionChoicesOnOffType.on;
   }
 
+  /// `line arrow -head begin/end/both/none`: which end(s) `l_arrow_SKBB`
+  /// draws its chevron head at. Defaults to `end` when unset, matching
+  /// the option's own doc comment.
+  static THOptionChoicesArrowPositionType getArrowHead(THElement element) {
+    if ((element is THHasOptionsMixin) &&
+        element.hasOption(THCommandOptionType.head)) {
+      return (element.getOption(THCommandOptionType.head)
+              as THHeadCommandOption)
+          .choice;
+    }
+
+    return THOptionChoicesArrowPositionType.end;
+  }
+
   static bool isTHVisible(THElement element) {
     return (element is THHasOptionsMixin) &&
         (!element.hasOption(THCommandOptionType.visibility) ||

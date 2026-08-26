@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
+
 import 'dart:math' as math;
 import 'dart:ui';
-
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
 /// Ports `l_overhang_SKBB`: a strip of `0.3u`-wide filled triangles, each
 /// based on a chord of the path with its apex offset `0.3u` perpendicular
@@ -25,6 +26,8 @@ class MPOverhangSKBBLineDecorator extends MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     final double u = symbolUnit.canvasValue;
     final List<PathMetric> metrics = path.computeMetrics().toList();

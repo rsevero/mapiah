@@ -3,6 +3,7 @@
 
 import 'dart:ui';
 
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
@@ -29,7 +30,10 @@ abstract class MPLineDecorator {
   /// point options — only the SKBB `slope` line decorator (`l_slope_SKBB`)
   /// reads it; every other decorator ignores it. [showBorder] mirrors
   /// `line slope -border on` (`l_slope_SKBB`'s baseline stroke); every
-  /// other decorator ignores it too.
+  /// other decorator ignores it too. [arrowHead] mirrors `line arrow
+  /// -head begin/end/both/none` (`l_arrow_SKBB`'s chevron placement);
+  /// only the `arrow`/`mapConnection` decorators read it, defaulting to
+  /// `end` when the line has no `-head` option set, same as Therion.
   void decorate({
     required Canvas canvas,
     required Path path,
@@ -39,5 +43,7 @@ abstract class MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   });
 }

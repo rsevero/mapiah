@@ -5,13 +5,19 @@ import 'dart:ui' as ui;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_registry.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_registry.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_arrow_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_presumed_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_temporary_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_chimney_skbb_line_decorator.dart';
@@ -38,6 +44,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 import 'package:mapiah/src/painters/types/mp_therion_symbol_set.dart';
+import 'th_test_aux.dart';
 
 void main() {
   setUpAll(() async {
@@ -333,6 +340,118 @@ void main() {
       },
     );
 
+    test(
+      'arrow and border -subtype temporary/presumed get their SKBB '
+      'decorators, while border -subtype visible still falls back',
+      () {
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.arrow,
+          )?.decorator,
+          isA<MPArrowSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.border,
+            subtype: 'temporary',
+          )?.decorator,
+          isA<MPBorderTemporarySKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.border,
+            subtype: 'presumed',
+          )?.decorator,
+          isA<MPBorderPresumedSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            set: MPTherionSymbolSet.skbb,
+            lineType: THLineType.border,
+            subtype: 'visible',
+          ),
+          isNull,
+        );
+      },
+    );
+
+    test(
+      'MPCommandOptionAux.getArrowHead reads line -head and defaults to end',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+
+        final (headFile, headParsed, _) = await parser.parse(
+          THTestAux.testPath(
+            'th_file_parser-03030-line_with_head_option.th2',
+          ),
+        );
+
+        expect(headParsed, isTrue);
+
+        final headLine = headFile
+            .getLines()
+            .singleWhere((line) => line.lineType == THLineType.arrow);
+
+        expect(
+          MPCommandOptionAux.getArrowHead(headLine),
+          THOptionChoicesArrowPositionType.both,
+        );
+
+        final (defaultFile, defaultParsed, _) = await parser.parse(
+          THTestAux.testPath(
+            'th_file_parser-03050-line_with_visibility_option.th2',
+          ),
+        );
+
+        expect(defaultParsed, isTrue);
+
+        final defaultLine = defaultFile
+            .getLines()
+            .singleWhere((line) => line.lineType == THLineType.arrow);
+
+        expect(
+          MPCommandOptionAux.getArrowHead(defaultLine),
+          THOptionChoicesArrowPositionType.end,
+        );
+      },
+    );
+
+    test(
+      'arrow SKBB draws for every -head choice and border dash factors differ',
+      () {
+        const MPArrowSKBBLineDecorator arrowDecorator =
+            MPArrowSKBBLineDecorator();
+
+        for (final THOptionChoicesArrowPositionType head
+            in THOptionChoicesArrowPositionType.values) {
+          final ui.PictureRecorder recorder = ui.PictureRecorder();
+          final Canvas canvas = Canvas(recorder);
+
+          arrowDecorator.decorate(
+            canvas: canvas,
+            path: diagonalTestPath(),
+            color: Paint(),
+            symbolUnit: symbolUnit,
+            isReversed: false,
+            arrowHead: head,
+          );
+          recorder.endRecording().dispose();
+        }
+
+        expect(
+          const MPBorderTemporarySKBBLineDecorator().dashScaleFactor,
+          1.0,
+        );
+        expect(
+          const MPBorderPresumedSKBBLineDecorator().dashScaleFactor,
+          0.25,
+        );
+      },
+    );
+
     test('an SKBB-undecorated line type falls back to UIS', () {
       // THLineType.gradient has no SKBB entry, so it must resolve to the
       // same decorator UIS uses.
@@ -350,6 +469,9 @@ void main() {
 
     test('every new SKBB line decorator draws without crashing', () {
       for (final decorator in [
+        const MPArrowSKBBLineDecorator(),
+        const MPBorderTemporarySKBBLineDecorator(),
+        const MPBorderPresumedSKBBLineDecorator(),
         const MPCeilingStepSKBBLineDecorator(),
         const MPCeilingMeanderSKBBLineDecorator(),
         const MPFloorMeanderSKBBLineDecorator(),

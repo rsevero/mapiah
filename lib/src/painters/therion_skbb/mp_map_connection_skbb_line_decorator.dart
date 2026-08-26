@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
+
 import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/painters/helpers/mp_arrow_chevron_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
-import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
@@ -43,6 +45,8 @@ class MPMapConnectionSKBBLineDecorator extends MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
@@ -77,36 +81,17 @@ class MPMapConnectionSKBBLineDecorator extends MPLineDecorator {
       ..style = PaintingStyle.stroke
       ..strokeWidth = mpTherionPenB;
 
-    final Tangent? startTangent = metric.getTangentForOffset(0);
-
-    if (startTangent != null) {
-      final double rotation =
-          math.atan2(-startTangent.vector.dy, -startTangent.vector.dx) +
-          (math.pi / 2);
-
-      MPSymbolTransform.draw(
-        canvas: canvas,
-        position: startTangent.position,
-        rotation: rotation,
-        scale: u,
-        drawUnitSymbol: () => canvas.drawPath(_chevron, chevronPaint),
-      );
-    }
-
-    final Tangent? endTangent = metric.getTangentForOffset(length);
-
-    if (endTangent != null) {
-      final double rotation =
-          math.atan2(endTangent.vector.dy, endTangent.vector.dx) +
-          (math.pi / 2);
-
-      MPSymbolTransform.draw(
-        canvas: canvas,
-        position: endTangent.position,
-        rotation: rotation,
-        scale: u,
-        drawUnitSymbol: () => canvas.drawPath(_chevron, chevronPaint),
-      );
-    }
+    // l_mapconnection_SKBB always calls l_arrow_SKBB(P,3) — both ends,
+    // regardless of any -head option (mapConnection doesn't support one).
+    MPArrowChevronAux.drawAtEnds(
+      canvas: canvas,
+      metric: metric,
+      length: length,
+      scale: u,
+      chevron: _chevron,
+      chevronPaint: chevronPaint,
+      drawStart: true,
+      drawEnd: true,
+    );
   }
 }

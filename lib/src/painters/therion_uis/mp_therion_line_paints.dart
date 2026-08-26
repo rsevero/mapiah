@@ -37,7 +37,16 @@ import 'package:material_ui/material_ui.dart';
 /// [THLineType.wall]. [THLineType.steps]'s own decorator ignores this
 /// entry's color in its "invalid stairs definition" fallback, which is
 /// forced red in `thLine.mp` regardless of the line's assigned color.
+///
+/// [THLineType.border]/[THLineType.arrow] are the same pattern again:
+/// `l_border_temporary_SKBB`/`l_border_presumed_SKBB`/`l_arrow_SKBB` don't
+/// call `withcolor` either, so they use the plain black default too. This
+/// single [THLineType.border] entry also covers `-subtype visible`
+/// whenever that gets its own decorator, since `l_border_visible_SKBB`
+/// doesn't call `withcolor` either.
 final Map<THLineType, Paint> mpTherionLineColors = {
+  THLineType.arrow: THPaint.thPaint0,
+  THLineType.border: THPaint.thPaint0,
   THLineType.ceilingMeander: THPaint.thPaint5,
   THLineType.ceilingStep: THPaint.thPaint5,
   THLineType.chimney: THPaint.thPaint13,

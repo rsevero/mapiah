@@ -14,6 +14,9 @@ import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_regis
 import 'package:mapiah/src/painters/therion_common/mp_therion_default_symbol_set.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_registry.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_arrow_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_presumed_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_border_temporary_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_cave_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_survey_surface_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
@@ -117,6 +120,40 @@ void main() {
           isA<MPSurveyCaveSKBBLineDecorator>(),
         );
         expect(uisDefinition?.decorator, isA<MPSurveyCaveLineDecorator>());
+      },
+    );
+
+    test(
+      'set: null (therionDefault) resolves arrow and border '
+      'temporary/presumed to their SKBB decorators',
+      () {
+        expect(
+          getTherionLineDefinition(
+            lineType: THLineType.arrow,
+          )?.decorator,
+          isA<MPArrowSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            lineType: THLineType.border,
+            subtype: 'temporary',
+          )?.decorator,
+          isA<MPBorderTemporarySKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            lineType: THLineType.border,
+            subtype: 'presumed',
+          )?.decorator,
+          isA<MPBorderPresumedSKBBLineDecorator>(),
+        );
+        expect(
+          getTherionLineDefinition(
+            lineType: THLineType.border,
+            subtype: 'visible',
+          ),
+          isNull,
+        );
       },
     );
 

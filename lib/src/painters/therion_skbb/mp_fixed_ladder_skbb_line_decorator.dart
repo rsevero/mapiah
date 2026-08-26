@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
+
 import 'dart:math' as math;
 import 'dart:ui';
-
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_tick_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
@@ -34,6 +35,8 @@ class MPFixedLadderSKBBLineDecorator extends MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     if ((lineSegments == null) || (lineSegments.length < 2)) {
       return;

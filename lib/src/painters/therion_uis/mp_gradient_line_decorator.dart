@@ -4,10 +4,11 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
 /// Ports `l_gradient_UIS`: an arrowhead stamped at the line's end, pointing
 /// along the path's terminal tangent.
@@ -24,6 +25,8 @@ class MPGradientLineDecorator extends MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     final double u = symbolUnit.canvasValue;
 

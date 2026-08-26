@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
-import 'dart:ui';
 
+import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
-import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
 /// Ports `l_survey_cave_SKBB`'s non-`ATTR__scrap_centerline` branch: each
 /// straight segment between the line's original knots is drawn only as
@@ -78,6 +79,8 @@ class MPSurveyCaveSKBBLineDecorator extends MPLineDecorator {
     int mpID = 0,
     List<THLinePainterLineSegment>? lineSegments,
     bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     canvas.drawPath(
       path,

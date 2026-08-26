@@ -289,6 +289,7 @@ class THLinePainter extends CustomPainter {
       mpID: lineInfo.mpID,
       lineSegments: lineSegmentsMap.values.toList(),
       showBorder: lineInfo.slopeBorderOn,
+      arrowHead: lineInfo.arrowHead,
     );
 
     if (showLinePoints) {

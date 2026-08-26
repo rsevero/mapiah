@@ -5,6 +5,7 @@ import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_size_orientation_info.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 
@@ -14,6 +15,7 @@ class THLinePainterLineInfo {
   late final bool addLineDirectionTicks;
   late final bool isReversed;
   late final bool slopeBorderOn;
+  late final THOptionChoicesArrowPositionType arrowHead;
   late final THArea? parentArea;
   late final Map<int, MPLineSegmentSizeOrientationInfo>
   lineSegmentsWithLSizeOrientation;
@@ -31,6 +33,7 @@ class THLinePainterLineInfo {
     mpID = line.mpID;
     isReversed = MPCommandOptionAux.isReversed(line);
     slopeBorderOn = MPCommandOptionAux.isSlopeBorderOn(line);
+    arrowHead = MPCommandOptionAux.getArrowHead(line);
     lineDirectionTicksPaint = th2FileEditController.visualController
         .getLineDirectionTickPaint(line: line, reverse: isReversed);
     addLineDirectionTicks =
