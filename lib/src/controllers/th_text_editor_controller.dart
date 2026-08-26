@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:ui' show TextRange;
 
+import 'package:flutter/widgets.dart' show FocusNode, visibleForTesting;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -66,6 +67,11 @@ abstract class THTextEditorControllerBase with Store {
 
   @observable
   int? activeMatchIndex;
+
+  @observable
+  int? pendingScrollToLine;
+
+  final FocusNode textEditorFocusNode = FocusNode();
 
   @computed
   List<THProjectParseError> get diagnostics => _projectController.projectErrors
@@ -154,6 +160,16 @@ abstract class THTextEditorControllerBase with Store {
   void setCursorPosition({required int line, required int column}) {
     cursorLine = line;
     cursorColumn = column;
+  }
+
+  @action
+  void scrollToLine(int lineNumber) {
+    pendingScrollToLine = lineNumber - 1; // THProjectNode.lineNumber is 1-based.
+  }
+
+  @action
+  void clearPendingScrollToLine() {
+    pendingScrollToLine = null;
   }
 
   @action
@@ -295,7 +311,24 @@ abstract class THTextEditorControllerBase with Store {
     await loadFile(canonicalPath);
   }
 
+  /// Cancels the pending debounced `reparseFile` call, if any, without
+  /// disposing the rest of the controller (unlike `dispose()`, this leaves
+  /// `textEditorFocusNode` usable). Exists for tests that call `setContent`
+  /// without wanting its debounce to fire later mid-test.
+  @visibleForTesting
+  void cancelPendingReparse() {
+    _reparseTimer?.cancel();
+  }
+
+  /// Closes this tab. `removeFileTab` disposes this controller (via
+  /// `MPGeneralController.removeFileController`), so no separate `dispose()`
+  /// call is needed here.
+  void close() {
+    mpLocator.mpGeneralController.removeFileTab(filename: canonicalPath);
+  }
+
   void dispose() {
     _reparseTimer?.cancel();
+    textEditorFocusNode.dispose();
   }
 }

@@ -928,5 +928,6 @@
   "textEditorFindToggleReplaceTooltip": "Alternar substituição",
   "textEditorReplaceButton": "Substituir",
   "textEditorReplaceAllButton": "Substituir todas",
-  "textEditorFindMatchCount": "{current}/{total}"
+  "textEditorFindMatchCount": "{current}/{total}",
+  "textEditorTabLoadFailedMessage": "Falha ao carregar o arquivo"
 }

@@ -257,9 +257,11 @@ void main() {
       final THTextEditorController controller = buildController(content);
 
       // setContent starts a debounced reparseFile Timer that these tests
-      // don't need; cancel it immediately so testWidgets doesn't fail its
-      // end-of-test "no pending Timer" invariant.
-      controller.dispose();
+      // don't need; cancel it immediately (without disposing the rest of
+      // the controller, since the widget these tests build still needs its
+      // textEditorFocusNode) so testWidgets doesn't fail its end-of-test
+      // "no pending Timer" invariant.
+      controller.cancelPendingReparse();
 
       return controller;
     }

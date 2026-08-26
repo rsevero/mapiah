@@ -2934,4 +2934,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String textEditorFindMatchCount(int current, int total) {
     return '$current/$total';
   }
+
+  @override
+  String get textEditorTabLoadFailedMessage => 'Falha ao carregar o arquivo';
 }

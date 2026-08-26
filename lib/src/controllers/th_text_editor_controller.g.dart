@@ -250,6 +250,24 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     });
   }
 
+  late final _$pendingScrollToLineAtom = Atom(
+    name: 'THTextEditorControllerBase.pendingScrollToLine',
+    context: context,
+  );
+
+  @override
+  int? get pendingScrollToLine {
+    _$pendingScrollToLineAtom.reportRead();
+    return super.pendingScrollToLine;
+  }
+
+  @override
+  set pendingScrollToLine(int? value) {
+    _$pendingScrollToLineAtom.reportWrite(value, super.pendingScrollToLine, () {
+      super.pendingScrollToLine = value;
+    });
+  }
+
   late final _$loadFileAsyncAction = AsyncAction(
     'THTextEditorControllerBase.loadFile',
     context: context,
@@ -302,6 +320,30 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
         .startAction(name: 'THTextEditorControllerBase.setCursorPosition');
     try {
       return super.setCursorPosition(line: line, column: column);
+    } finally {
+      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void scrollToLine(int lineNumber) {
+    final _$actionInfo = _$THTextEditorControllerBaseActionController
+        .startAction(name: 'THTextEditorControllerBase.scrollToLine');
+    try {
+      return super.scrollToLine(lineNumber);
+    } finally {
+      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearPendingScrollToLine() {
+    final _$actionInfo = _$THTextEditorControllerBaseActionController
+        .startAction(
+          name: 'THTextEditorControllerBase.clearPendingScrollToLine',
+        );
+    try {
+      return super.clearPendingScrollToLine();
     } finally {
       _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -432,6 +474,7 @@ replaceQuery: ${replaceQuery},
 findCaseSensitive: ${findCaseSensitive},
 isFindBarVisible: ${isFindBarVisible},
 activeMatchIndex: ${activeMatchIndex},
+pendingScrollToLine: ${pendingScrollToLine},
 diagnostics: ${diagnostics},
 foldRegions: ${foldRegions},
 findMatches: ${findMatches}

@@ -2,8 +2,16 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
+import 'package:mapiah/src/elements/th_project/th_centreline_node.dart';
+import 'package:mapiah/src/elements/th_project/th_config_file_node.dart';
+import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
+import 'package:mapiah/src/elements/th_project/th_map_node.dart';
+import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
+import 'package:mapiah/src/elements/th_project/th_scrap_node.dart';
+import 'package:mapiah/src/elements/th_project/th_survey_node.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -72,6 +80,30 @@ class THProjectTreeNodeWidget extends StatelessWidget {
         filename: tappedNode.absolutePath,
       );
       mpLocator.mpGeneralController.addFileTab(tappedNode.absolutePath);
+    } else if ((tappedNode is THConfigFileNode) ||
+        (tappedNode is THDataFileNode)) {
+      _openTextEditorTab((tappedNode as THProjectFileNode).absolutePath);
+    } else if ((tappedNode is THSurveyNode) ||
+        (tappedNode is THCentrelineNode) ||
+        (tappedNode is THMapNode) ||
+        ((tappedNode is THScrapNode) && !tappedNode.isFromTH2File)) {
+      _openTextEditorTab(
+        tappedNode.sourceFilePath,
+        lineNumber: tappedNode.lineNumber,
+      );
+    }
+    // THMissingFileNode, and THScrapNode.isFromTH2File (always false today):
+    // no-op, matches current behavior.
+  }
+
+  void _openTextEditorTab(String filePath, {int? lineNumber}) {
+    final THTextEditorController controller = mpLocator.mpGeneralController
+        .getTextEditorController(filePath);
+
+    mpLocator.mpGeneralController.addFileTab(filePath);
+
+    if (lineNumber != null) {
+      controller.scrollToLine(lineNumber);
     }
   }
 

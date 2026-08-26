@@ -29,6 +29,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_hide_element_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_properties_controller.dart';
+import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
@@ -41,6 +42,7 @@ import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -933,6 +935,25 @@ abstract class TH2FileEditControllerBase with Store {
         _selectionHandleLineThicknessOnCanvas =
             mpSelectionHandleLineThickness / (_canvasScale * devicePixelRatio);
       }),
+    );
+
+    _disposers.add(
+      reaction(
+        (_) => enableSaveButton,
+        (bool isDirty) {
+          final THProjectController projectController =
+              mpLocator.thProjectController;
+          final String canonicalPath = THProjectPathResolver.canonicalize(
+            p.absolute(_th2File.filename),
+          );
+
+          if (isDirty) {
+            projectController.dirtyFilePaths.add(canonicalPath);
+          } else {
+            projectController.dirtyFilePaths.remove(canonicalPath);
+          }
+        },
+      ),
     );
   }
 

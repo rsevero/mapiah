@@ -9,14 +9,25 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
 part 'mp_general_controller.g.dart';
+
+/// Whether [filename] belongs to a `.th2` canvas tab, as opposed to a
+/// `thconfig`/`.th` text-editor tab. In-memory new files (see
+/// [mpNewFilePrefix]) have no `.th2` extension yet but are always canvas
+/// tabs, matching `MPGeneralControllerBase._normalizeFilename`'s own
+/// special-casing of that prefix.
+bool isTH2Tab(String filename) =>
+    filename.startsWith(mpNewFilePrefix) ||
+    (p.extension(filename).toLowerCase() == '.th2');
 
 class MPGeneralController = MPGeneralControllerBase with _$MPGeneralController;
 
@@ -39,6 +50,9 @@ abstract class MPGeneralControllerBase with Store {
 
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
+
+  final HashMap<String, THTextEditorController> _textEditorControllers =
+      HashMap<String, THTextEditorController>();
 
   List<String> _availableEncodings = ['ASCII', 'UTF-8'];
 
@@ -65,7 +79,9 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   void _clearActiveTabOverlayWindows() {
-    if ((_activeTabIndex >= 0) && (_activeTabIndex < _openFileOrder.length)) {
+    if ((_activeTabIndex >= 0) &&
+        (_activeTabIndex < _openFileOrder.length) &&
+        isTH2Tab(_openFileOrder[_activeTabIndex])) {
       final String outgoingFilename = _openFileOrder[_activeTabIndex];
       final TH2FileEditController? outgoingController =
           _t2hFileEditControllers[outgoingFilename];
@@ -110,8 +126,12 @@ abstract class MPGeneralControllerBase with Store {
 
       if (_openFileOrder.isEmpty) {
         _activeTabIndex = 0;
-      } else if (_activeTabIndex >= _openFileOrder.length) {
-        _activeTabIndex = _openFileOrder.length - 1;
+      } else {
+        if (_activeTabIndex >= _openFileOrder.length) {
+          _activeTabIndex = _openFileOrder.length - 1;
+        }
+
+        _syncProjectTreeSelectionToActiveTab(_openFileOrder[_activeTabIndex]);
       }
     }
   }
@@ -126,17 +146,41 @@ abstract class MPGeneralControllerBase with Store {
 
       _activeTabIndex = index;
 
-      /// Give keyboard focus to the incoming tab's canvas so that shortcuts
-      /// such as Ctrl+V are delivered there and not to an offstage canvas.
-      /// TH2FileTabsPage also reinforces this via a post-frame callback, but
-      /// calling requestFocus here ensures focus is correct even in contexts
-      /// where the page is not yet mounted (e.g. logic-level tests).
+      /// Give keyboard focus to the incoming tab's controller so that
+      /// shortcuts such as Ctrl+V are delivered there and not to an offstage
+      /// controller. TH2FileTabsPage also reinforces this via a post-frame
+      /// callback, but calling requestFocus here ensures focus is correct
+      /// even in contexts where the page is not yet mounted (e.g.
+      /// logic-level tests).
       final String incomingFilename = _openFileOrder[index];
-      final TH2FileEditController? incomingController =
-          _t2hFileEditControllers[incomingFilename];
 
-      incomingController?.th2FileFocusNode.requestFocus();
+      if (isTH2Tab(incomingFilename)) {
+        _t2hFileEditControllers[incomingFilename]?.th2FileFocusNode
+            .requestFocus();
+      } else {
+        _textEditorControllers[incomingFilename]?.textEditorFocusNode
+            .requestFocus();
+      }
+
+      _syncProjectTreeSelectionToActiveTab(incomingFilename);
     }
+  }
+
+  /// Selects and reveals [filename]'s project-tree node, if any, so the
+  /// tree stays in sync with whichever tab is active — via tree clicks, tab
+  /// clicks, drag reorder, or `removeFileTab`'s "select the next tab"
+  /// fallback. A no-op when [filename] has no corresponding tree node (e.g.
+  /// a `.th2` file opened directly, unrelated to any loaded project).
+  void _syncProjectTreeSelectionToActiveTab(String filename) {
+    final THProjectFileNode? node = MPLocator().thProjectController
+        .nodeByCanonicalPath(filename);
+
+    if (node == null) {
+      return;
+    }
+
+    MPLocator().thProjectController.selectNode(node.id);
+    MPLocator().thProjectTreeUIController.expandAncestorsOf(node);
   }
 
   @action
@@ -193,10 +237,32 @@ abstract class MPGeneralControllerBase with Store {
     _nextMPIDForElements = mpFirstMPIDForElements;
     _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
     _t2hFileEditControllers.clear();
+
+    for (final THTextEditorController controller
+        in _textEditorControllers.values) {
+      controller.dispose();
+    }
+    _textEditorControllers.clear();
+
     _thConfigFilePath = '';
     _openFileOrder.clear();
     _activeTabIndex = 0;
     _clipboard = null;
+  }
+
+  THTextEditorController? getTextEditorControllerIfExists(String filename) {
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    return _textEditorControllers[normalizedFilename];
+  }
+
+  THTextEditorController getTextEditorController(String filename) {
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    return _textEditorControllers.putIfAbsent(
+      normalizedFilename,
+      () => THTextEditorController(),
+    );
   }
 
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {
@@ -312,6 +378,8 @@ abstract class MPGeneralControllerBase with Store {
     if (_t2hFileEditControllers.containsKey(normalizedFilename)) {
       _t2hFileEditControllers.remove(normalizedFilename);
     }
+
+    _textEditorControllers.remove(normalizedFilename)?.dispose();
   }
 
   /// Triggers a complete redraw of every open TH2 drawing.

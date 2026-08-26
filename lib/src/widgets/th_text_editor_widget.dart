@@ -314,6 +314,37 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     await widget.controller.save();
   }
 
+  /// Moves the text field's selection to the start of [lineNumber] (0-based)
+  /// and scrolls it into view, mirroring [_applyActiveMatch]'s line-height
+  /// math.
+  void _applyPendingScrollToLine(int lineNumber) {
+    final String content = widget.controller.content;
+    final List<String> lines = content.split('\n');
+
+    if (lineNumber < 0 || lineNumber >= lines.length) {
+      return;
+    }
+
+    int offset = 0;
+
+    for (int index = 0; index < lineNumber; index++) {
+      offset += lines[index].length + 1;
+    }
+
+    _textEditingController.selection = TextSelection.collapsed(offset: offset);
+
+    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
+
+    if (_textScrollController.hasClients) {
+      _textScrollController.jumpTo(
+        (lineNumber * lineHeight).clamp(
+          _textScrollController.position.minScrollExtent,
+          _textScrollController.position.maxScrollExtent,
+        ),
+      );
+    }
+  }
+
   /// Moves the text field's selection to [activeMatchIndex]'s range in
   /// [matches] and scrolls it into view. Selection-only (no text change),
   /// so the existing text-change listener only updates the reported cursor
@@ -402,6 +433,15 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
           _applyActiveMatch(findMatches, widget.controller.activeMatchIndex);
         }
 
+        final int? pendingScrollToLine = widget.controller.pendingScrollToLine;
+
+        if (pendingScrollToLine != null) {
+          _applyPendingScrollToLine(pendingScrollToLine);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            widget.controller.clearPendingScrollToLine();
+          });
+        }
+
         return Shortcuts(
           shortcuts: <ShortcutActivator, Intent>{
             const SingleActivator(LogicalKeyboardKey.keyS, control: true):
@@ -438,7 +478,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                   _buildFindBar(context, appLocalizations, findMatches),
                 Expanded(
                   child: Focus(
-                    autofocus: true,
+                    focusNode: widget.controller.textEditorFocusNode,
                     onKeyEvent: _handleKeyEvent,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -5439,6 +5439,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{current}/{total}'**
   String textEditorFindMatchCount(int current, int total);
+
+  /// Shown in a text-editor tab when its file fails to load (e.g. deleted after the project tree loaded). Used on: THTextEditorTabBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load file'**
+  String get textEditorTabLoadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

@@ -9,13 +9,13 @@ class MPFileTabWidget extends StatelessWidget {
   final String filename;
   final bool isActive;
   final VoidCallback onClose;
-  final VoidCallback onProperties;
+  final VoidCallback? onProperties;
 
   const MPFileTabWidget({
     required this.filename,
     required this.isActive,
     required this.onClose,
-    required this.onProperties,
+    this.onProperties,
     super.key,
   });
 
@@ -71,24 +71,25 @@ class MPFileTabWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4.0),
-          SizedBox(
-            width: mpTabCloseIconSize + 8.0,
-            height: mpTabCloseIconSize + 8.0,
-            child: IconButton(
-              icon: Icon(
-                Icons.info_outline,
-                size: mpTabCloseIconSize,
-                color: textColor,
+          if (onProperties != null)
+            SizedBox(
+              width: mpTabCloseIconSize + 8.0,
+              height: mpTabCloseIconSize + 8.0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.info_outline,
+                  size: mpTabCloseIconSize,
+                  color: textColor,
+                ),
+                constraints: const BoxConstraints(),
+                padding: const EdgeInsets.all(2.0),
+                onPressed: onProperties,
+                tooltip: mpLocator
+                    .appLocalizations
+                    .th2FileTabsPagePropertiesTabTooltip,
+                hoverColor: theme.colorScheme.primary.withAlpha(20),
               ),
-              constraints: const BoxConstraints(),
-              padding: const EdgeInsets.all(2.0),
-              onPressed: onProperties,
-              tooltip: mpLocator
-                  .appLocalizations
-                  .th2FileTabsPagePropertiesTabTooltip,
-              hoverColor: theme.colorScheme.primary.withAlpha(20),
             ),
-          ),
           SizedBox(
             width: mpTabCloseIconSize + 8.0,
             height: mpTabCloseIconSize + 8.0,

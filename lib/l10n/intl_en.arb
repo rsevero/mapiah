@@ -4535,5 +4535,10 @@
         "type": "int"
       }
     }
+  },
+  "textEditorTabLoadFailedMessage": "Failed to load file",
+  "@textEditorTabLoadFailedMessage": {
+    "description": "Shown in a text-editor tab when its file fails to load (e.g. deleted after the project tree loaded). Used on: THTextEditorTabBodyWidget",
+    "type": "text"
   }
 }
