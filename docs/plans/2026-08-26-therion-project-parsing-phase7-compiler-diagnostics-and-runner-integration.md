@@ -442,12 +442,13 @@ if (canonicalRunConfigPath == mpLocator.thProjectController.rootConfigPath) {
     parseTherionRunDiagnostics(
       outputLines: therionOutputLines,
       logLines: therionLogLines,
-      workingDirectory: p.dirname(widget.thConfigFilePath),
+      workingDirectory: p.dirname(p.absolute(widget.thConfigFilePath)),
     ),
   );
 }
 ```
 
+- `workingDirectory` is derived from `p.absolute(widget.thConfigFilePath)`, not the possibly-relative value passed into the dialog. This keeps every parsed `filePath` in the same absolute/canonical space as `THProjectController.rootConfigPath` and the editor's `canonicalPath`, including CLI startup arguments supplied as relative paths.
 - The equality check is what keeps diagnostics scoped to the loaded project (Objective 7): a run whose `thconfig` never becomes (or isn't yet, per §5) the loaded project does not touch `compilerErrors` — there would be no tree/editor tabs to attribute them to anyway.
 - Also call `mpLocator.thProjectController.applyTherionRunDiagnostics(const <THProjectParseError>[])` at the start of a run (in `initState`, right after `_therionRunner` is constructed) so stale diagnostics from a previous run don't linger on screen for the whole duration of a new one that turns out clean — guarded by the same path-equality check, for symmetry.
 - This bridge call sits inside the existing `if (!mpIsFlathub) { ... }` guard in `_onTherionRunFinished` (it needs `therionLogLines`, only computed there) — Flathub builds keep the live status banner but do not get tree/editor compiler diagnostics, an existing platform limitation this phase does not change (see Risk 4).
@@ -623,7 +624,7 @@ Test numbering continues at `t3911`:
 | Test file | Coverage |
 | :--- | :--- |
 | `test/t3911_mp_dialog_aux_run_therion_retargeting_test.dart` | `rerunTherionForOpenProject` no-ops when `THProjectController.rootConfigPath` is empty and runs `MPRunTherionDialogWidget` with that path when set; `pickProjectFileAndRunTherion` uses injected `pickFile`/`launch` seams and passes the picked path to `launch`; `runTherionAndOpenProjectInBackground` uses injected `projectLoader`/`runTherionStarter` seams, calls `projectLoader` before `runTherionStarter`, does not await `projectLoader`, and waits for the `runTherionStarter` future so CLI/picker callers complete when the run dialog closes. |
-| `test/t3912_th_project_therion_diagnostics_aux_test.dart` | `parseTherionRunDiagnostics`: matches the documented `therion: error -- file [line N] -- message` / `warning` shape; ignores unlocated lines; resolves relative paths against `workingDirectory` and canonicalizes them; de-duplicates identical diagnostics seen in both `outputLines` and `logLines`; case-insensitive `error`/`warning` matching. |
+| `test/t3912_th_project_therion_diagnostics_aux_test.dart` | `parseTherionRunDiagnostics`: matches the documented `therion: error -- file [line N] -- message` / `warning` shape; ignores unlocated lines; resolves relative paths against the absolute `workingDirectory` and canonicalizes them; de-duplicates identical diagnostics seen in both `outputLines` and `logLines`; case-insensitive `error`/`warning` matching. |
 | `test/t3913_th_project_controller_compiler_diagnostics_test.dart` | `applyTherionRunDiagnostics` replaces (not appends to) `compilerErrors`; `allDiagnostics` merges `projectErrors` + `compilerErrors`; `compilerErrorsForPath` filters correctly; `closeProject` clears `compilerErrors`. |
 | `test/t3914_th_text_editor_controller_compiler_diagnostics_test.dart` | A `THProjectController.compilerErrors` entry for an open editor's `canonicalPath` appears in `THTextEditorController.diagnostics` and renders via the existing `THTextEditorDiagnosticMarkerWidget` path (mirrors `t3904`'s harness). |
 | `test/t3915_th_project_tree_node_widget_compiler_error_dot_test.dart` | A compiler diagnostic on a `THDataFileNode`/`THConfigFileNode` shows the error dot with the combined (parse + compiler) count; a compiler diagnostic on a file with no static parse errors still shows the dot; a `TH2FileNode` compiler diagnostic does not gain a dot or text-editor navigation; logical child nodes (survey/centreline/map) do not gain a dot from a compiler diagnostic in their file; tapping the dot selects the file node, opens/focuses its text-editor tab, and sets `pendingScrollToLine` to the first compiler diagnostic when one exists, otherwise to the first parse error. |
