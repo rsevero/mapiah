@@ -242,6 +242,12 @@ abstract class AppLocalizations {
   /// **'Open project and run Therion (Ctrl+T)'**
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
 
+  /// The label for the overflow-menu entry that closes the currently loaded project. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
+  ///
+  /// In en, this message translates to:
+  /// **'Close project'**
+  String get mapiahCloseProjectButtonTooltip;
+
   /// Label for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:
@@ -5289,6 +5295,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update check failed'**
   String get updateCheckFailedTitle;
+
+  /// Tooltip for the button that closes the currently loaded project. Used on: THProjectTreeWidget._buildHeader
+  ///
+  /// In en, this message translates to:
+  /// **'Close project'**
+  String get projectTreeCloseProjectTooltip;
 
   /// Tooltip for the button that collapses the project tree sidebar. Used on: THProjectTreeWidget._buildHeader
   ///

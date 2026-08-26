@@ -41,7 +41,12 @@ class THProjectTreeWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _buildHeader(context, appLocalizations),
+            _buildHeader(
+              context,
+              appLocalizations,
+              hasProject:
+                  mpLocator.thProjectController.rootConfigPath.isNotEmpty,
+            ),
             const _THProjectTreeSearchField(),
             if (root == null)
               Expanded(
@@ -109,8 +114,9 @@ class THProjectTreeWidget extends StatelessWidget {
 
   Widget _buildHeader(
     BuildContext context,
-    AppLocalizations appLocalizations,
-  ) {
+    AppLocalizations appLocalizations, {
+    required bool hasProject,
+  }) {
     return SizedBox(
       height: mpProjectTreeRowHeight,
       child: Row(
@@ -138,6 +144,19 @@ class THProjectTreeWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
+          if (hasProject)
+            IconButton(
+              key: const ValueKey('THProjectTreeCloseProjectButton'),
+              icon: const Icon(Icons.close),
+              iconSize: mpSmallIconSize,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: mpProjectTreeRowHeight,
+                minHeight: mpProjectTreeRowHeight,
+              ),
+              onPressed: () => MPDialogAux.closeOpenProject(context),
+              tooltip: appLocalizations.projectTreeCloseProjectTooltip,
+            ),
         ],
       ),
     );

@@ -34,6 +34,7 @@ enum _TH2FileTabsAction {
   saveAs,
   openTHConfig,
   runTherion,
+  closeProject,
   settings,
   keyboardShortcuts,
   help,
@@ -497,6 +498,11 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         label: appLocalizations.mapiahRunTherionButtonTooltip,
         enabled: hasOpenProject,
       ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.closeProject,
+        label: appLocalizations.mapiahCloseProjectButtonTooltip,
+        enabled: hasOpenProject,
+      ),
     ];
   }
 
@@ -568,6 +574,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         MPDialogAux.pickProjectFileAndRunTherion(context);
       case _TH2FileTabsAction.runTherion:
         MPDialogAux.rerunTherionForOpenProject(context);
+      case _TH2FileTabsAction.closeProject:
+        MPDialogAux.closeOpenProject(context);
       case _TH2FileTabsAction.settings:
         Navigator.of(context).push(
           MaterialPageRoute<void>(

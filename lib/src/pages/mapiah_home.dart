@@ -25,6 +25,7 @@ enum _MapiahHomeAction {
   openProject,
   openTHConfig,
   runTherion,
+  closeProject,
   settings,
   keyboardShortcuts,
   help,
@@ -318,6 +319,11 @@ class _MapiahHomeState extends State<MapiahHome> {
         label: appLocalizations.mapiahRunTherionButtonTooltip,
         enabled: hasOpenProject,
       ),
+      _overflowMenuItem(
+        action: _MapiahHomeAction.closeProject,
+        label: appLocalizations.mapiahCloseProjectButtonTooltip,
+        enabled: hasOpenProject,
+      ),
       const PopupMenuDivider(),
       _overflowMenuItem(
         action: _MapiahHomeAction.settings,
@@ -364,6 +370,8 @@ class _MapiahHomeState extends State<MapiahHome> {
         MPDialogAux.pickProjectFileAndRunTherion(context);
       case _MapiahHomeAction.runTherion:
         MPDialogAux.rerunTherionForOpenProject(context);
+      case _MapiahHomeAction.closeProject:
+        MPDialogAux.closeOpenProject(context);
       case _MapiahHomeAction.settings:
         Navigator.of(context).push(
           MaterialPageRoute<void>(

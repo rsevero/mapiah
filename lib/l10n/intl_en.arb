@@ -133,6 +133,11 @@
     "description": "The tooltip for the button that opens a project and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
+  "mapiahCloseProjectButtonTooltip": "Close project",
+  "@mapiahCloseProjectButtonTooltip": {
+    "description": "The label for the overflow-menu entry that closes the currently loaded project. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "type": "text"
+  },
   "mapiahRunTherionButtonLabel": "Rerun Therion",
   "@mapiahRunTherionButtonLabel": {
     "description": "Label for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build",
@@ -4396,6 +4401,11 @@
   "updateCheckFailedTitle": "Update check failed",
   "@updateCheckFailedTitle": {
     "description": "Title for the update check failure dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
+    "type": "text"
+  },
+  "projectTreeCloseProjectTooltip": "Close project",
+  "@projectTreeCloseProjectTooltip": {
+    "description": "Tooltip for the button that closes the currently loaded project. Used on: THProjectTreeWidget._buildHeader",
     "type": "text"
   },
   "projectTreeCollapseSidebarTooltip": "Collapse project tree",

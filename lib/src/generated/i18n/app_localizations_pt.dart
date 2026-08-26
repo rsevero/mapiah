@@ -100,6 +100,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Abrir projeto e executar Therion (Ctrl+T)';
 
   @override
+  String get mapiahCloseProjectButtonTooltip => 'Fechar projeto';
+
+  @override
   String get mapiahRunTherionButtonLabel => 'Reexecutar Therion';
 
   @override
@@ -2850,6 +2853,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get updateCheckFailedTitle => 'Falha ao verificar atualização';
+
+  @override
+  String get projectTreeCloseProjectTooltip => 'Fechar projeto';
 
   @override
   String get projectTreeCollapseSidebarTooltip => 'Recolher árvore do projeto';
