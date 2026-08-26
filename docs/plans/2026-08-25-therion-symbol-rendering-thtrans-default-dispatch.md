@@ -1,8 +1,8 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
-# Therion Symbol Rendering: `thTrans.mp`-Faithful Default Dispatch — Design Doc
+# Therion Symbol Rendering: `thTrans.mp` Default Dispatch and `TherionDefault` — Design Doc
 
-**Date:** 2026-08-25
+**Date:** 2026-08-26
 **Status:** Proposed
 
 ---
@@ -33,20 +33,24 @@ BCRA, NSS, NZSS, ASF, SM) that happens to define that symbol. A single file,
 macro per bare symbol name via unconditional `let` assignments — e.g.
 `let p_clay = p_clay_SKBB;`, `let l_survey_cave = l_survey_cave_SKBB;`,
 `let a_flowstone = a_flowstone_ASF;`. Every other Therion source file calls
-the bare name (`p_clay`, not `p_clay_SKBB`), so **this table is the only
-selection therion actually performs**, for every document, unconditionally.
+the bare name (`p_clay`, not `p_clay_SKBB`).
 
 Checked and confirmed:
 
-- There is no `-symbol-set` command-line flag, `thconfig` option, or other
-  mechanism that swaps `thTrans.mp` out for a different table. It's the one
-  and only mapping compiled into Therion.
+- `thTrans.mp` is Therion's **default translation table**: with no explicit
+  symbol-set selection, it is what every document renders.
+- Therion also exposes a layout option, `symbol-set <set>`, documented in
+  `thbook/ch03.tex` and implemented via `mapsymbol(...)`. It does **not**
+  swap `thTrans.mp` for another file; it emits per-symbol assignments after
+  `input thTrans` and overrides a bare symbol only where the selected set
+  defines that symbol. If the set does not define a symbol, `thTrans.mp`'s
+  default remains in force.
 - `thtrans.h`/`thtrans.cxx` in `therion-core` are unrelated (2D vector/matrix
   math for coordinate transforms), despite the similar name.
 - The `_UIS`/`_SKBB`/`_AUT`/`_SBE`/`_BCRA`/`_NSS`/`_ASF`/`_SM` suffixes are a
   **naming convention** grouping macros by which national/organizational
-  contribution originated them — not a user-selectable rendering profile.
-  Real Therion has exactly one rendering per symbol, period.
+  contribution originated them. A user-selectable rendering profile is then
+  assembled from those suffixes by `symbol-set`.
 
 So "UIS" is not Therion's default/fallback set — it's just the
 best-represented *contributor* in `thTrans.mp` (see §2), because it's the
@@ -61,7 +65,9 @@ Mapiah's `MPTherionSymbolSet` registries (`getTherionPointSymbol`,
 `getTherionLineDefinition`, `getTherionAreaPatternDefinition`) currently
 implement a two-tier chain: **chosen set → hardcoded UIS**. That
 hardcoded UIS terminal case is what's wrong: it should be **whatever
-`thTrans.mp` actually assigns**, which is UIS only about half the time.
+`thTrans.mp` actually assigns**, with the selected set applying only where
+it actually defines a macro. `thTrans.mp` assigns UIS only about half the
+time.
 
 Concretely, today, selecting **"Therion UIS"** in Mapiah's settings does
 *not* reproduce what a real `therion` run outputs for `survey -subtype
@@ -74,25 +80,30 @@ them instead of the correct (non-UIS) symbol.
 ### 1.3 Direction agreed with the user
 
 - Mapiah keeps its symbol-set picker in settings (`mapiahPlaceholder`,
-  `therionUIS`, `therionAUT`, `therionSBE`, `therionSKBB`, `therionBCRA`,
-  `therionNSS`, `therionNZSS`, `therionASF`), rather than collapsing it to a
-  single "Therion" mode.
-- **`therionUIS` becomes "exactly what `thTrans.mp` specifies"** — a pure,
-  unconditional pass-through of Therion's real default table, no
-  UIS-specific override layer on top. Renamed conceptually (not necessarily
-  in code/UI label, TBD — see §6) to "Therion (faithful default)."
-- **Every other set overrides `thTrans.mp`'s default only where it
-  "clashes"** — i.e. only where the chosen set actually defines a macro for
-  that exact symbol type/subtype. Where it doesn't, `thTrans.mp`'s default
-  stands, even if that default is a *different* set than the one the user
-  picked. E.g. picking `therionAUT` still renders `survey -subtype surface`
-  via `l_survey_surface_SKBB`, because AUT has no `l_survey_surface_AUT` to
-  override with.
-- This means picking a non-UIS set is a genuine Mapiah-specific enhancement
-  beyond what real Therion offers (there is no way to "force AUT-style
-  survey lines" in real Therion) — a deliberate, disclosed divergence for
-  users who want to preview/prefer one set's own house style wherever it
-  exists, while staying faithful everywhere else.
+  `therionDefault`, `therionUIS`, `therionAUT`, `therionSBE`, `therionSKBB`,
+  `therionBCRA`, `therionNSS`, `therionNZSS`, `therionASF`), rather than
+  collapsing it to a single "Therion" mode.
+- **`therionDefault` is new and means "exactly what `thTrans.mp` specifies"**
+  — no explicit symbol-set override. It is Mapiah's equivalent of running
+  Therion without a `symbol-set` layout option. **`therionDefault` is also
+  Mapiah's new default visualization method**: new installs and setting
+  resets start with it selected instead of `mapiahPlaceholder`.
+- Existing stored visualization-method values are not rewritten. Users who
+  already have `mapiahPlaceholder`, `therionUIS`, or another value saved keep
+  it; the new default applies only when the setting is absent or reset.
+- **`therionUIS` becomes a true UIS override** — Mapiah's equivalent of
+  `symbol-set UIS`. It overrides `thTrans.mp`'s default to UIS only where a
+  `_UIS` macro exists; elsewhere `thTrans.mp`'s default remains.
+- **Every other set behaves like `symbol-set <set>`**: it overrides
+  `thTrans.mp`'s default only where the chosen set actually defines a macro
+  for that exact symbol type/subtype. Where it doesn't, `thTrans.mp`'s
+  default stands, even if that default is a *different* set than the one the
+  user picked. E.g. picking `therionAUT` still renders `survey -subtype
+  surface` via `l_survey_surface_SKBB`, because AUT has no
+  `l_survey_surface_AUT` to override with.
+- This is **not** a Mapiah-specific divergence: it is the same behavior as
+  Therion's `symbol-set <set>` layout option. Mapiah just exposes it as a
+  live editor preview rather than a compile-time layout setting.
 
 ---
 
@@ -279,8 +290,11 @@ different way, e.g. via subtype-suffixed bare macro names like
 `l_wall_presumed`/`l_border_presumed` which *are* covered above, versus
 truly bare types like `wall`/`border` themselves which aren't real Therion
 macro names). Any symbol type Mapiah currently dispatches on that doesn't
-appear in §2.1–§2.4 keeps today's behavior unchanged (chosen set → UIS →
-placeholder) until it's individually confirmed against Therion's source.
+appear in §2.1–§2.4 has **no `thTrans.mp` default opinion**, so the new
+default tables return `null` and the registry falls through to the existing
+UIS terminal case (`therionUIS`/`therionDefault` both end at UIS, then the
+Mapiah placeholder). Each such type still needs to be individually confirmed
+against Therion's source before assuming this is faithful.
 
 ---
 
@@ -313,6 +327,11 @@ fall straight through to UIS today — which is exactly the bug described in
 §1.2, just currently invisible because none of those six sets has *any*
 ported content yet to differ from UIS in the first place.
 
+`MPTH2EditVisualizationMethod` currently has no way to express "no symbol-set
+override": `therionUIS` is the only non-placeholder option that has been
+given special meaning. §4 adds `therionDefault` and makes the registry API
+nullable-set-aware instead of overloading `therionUIS`.
+
 ---
 
 ## 4. Proposed dispatch
@@ -339,8 +358,31 @@ MPTherionSymbolSet? getTherionDefaultAreaSet(THAreaType areaType) { ... } // mir
 ```
 
 Returns `null` for any type/subtype not covered by §2.1–§2.4 (see §2.5),
-signaling "no `thTrans.mp` opinion — keep today's UIS-terminal behavior for
-this one."
+signaling "no `thTrans.mp` opinion — use the UIS terminal behavior for this
+one."
+
+These functions are keyed by Mapiah's own `TH*Type` enum values and subtype
+strings, so their implementation must contain the explicit Therion-name
+mapping that is currently implicit in Mapiah's camelCase enum names. In
+particular:
+
+- `THPointType.airDraught` subtypes `winter`/`summer`/`NO_SUBTYPE` map to
+  `p_airdraught_winter`/`p_airdraught_summer`/`p_airdraught`.
+- `THPointType.waterFlow` subtypes `paleo`/`permanent`/`intermittent`/
+  `NO_SUBTYPE` map to the corresponding `p_waterflow_*` entries.
+- `THPointType.station` subtypes `fixed`/`painted`/`natural`/`temporary`/
+  `NO_SUBTYPE` map to the `p_station_*`/`p_station` entries.
+- `THLineType.pitch` is a Therion alias for `l_pit`; both `THLineType.pit`
+  and `THLineType.pitch` map to §2.2's `l_pit` entry.
+- `THLineType.pitChimney` maps to `l_pitchimney`, `THLineType.waterFlow` to
+  `l_waterflow`, `THLineType.rockBorder` to `l_rockborder`, and
+  `THLineType.mapConnection` to `l_mapconnection`.
+
+Some §2 entries have no corresponding Mapiah `TH*Type` value at all
+(`p_plus`, `p_minus`, `p_plusminus`, `p_sectionarrow`, `a_dimensions`, the
+`s_*` map furniture). They stay in §2 as the ground-truth inventory, but the
+new functions need only contain reachable Mapiah types/subtypes; unreachable
+`thTrans.mp` entries are not implemented until Mapiah models those types.
 
 These tables are the only new hand-transcribed artifact this design
 introduces; everything else is a change to *how existing lookups compose*,
@@ -348,37 +390,70 @@ not new symbol content.
 
 ### 4.2 New chain, per domain
 
+The visualization-method enum gains a new value before `therionUIS`:
+
+```dart
+// lib/src/controllers/types/mp_th2_edit_visualization_method.dart
+enum MPTH2EditVisualizationMethod {
+  mapiahPlaceholder,
+  therionDefault,
+  therionUIS,
+  therionAUT,
+  therionSBE,
+  therionSKBB,
+  therionBCRA,
+  therionNSS,
+  therionNZSS,
+  therionASF,
+}
+```
+
+`MPSettingEnumDefinitionImpl` currently falls back to `enumValues.first`
+(`mapiahPlaceholder`). The definition for
+`MPSettingID.TH2Edit_VisualizationMethod` must instead pass
+`explicitDefaultValue: MPTH2EditVisualizationMethod.therionDefault` so new
+installs/resets start on `therionDefault`.
+
+`MPVisualController` maps `therionDefault` to `null` and all other Therion
+methods to their corresponding `MPTherionSymbolSet`. The registry functions
+change their `set` parameter from `required MPTherionSymbolSet` to
+`MPTherionSymbolSet?`:
+
 ```dart
 MPTherionPointSymbol? getTherionPointSymbol({
-  required MPTherionSymbolSet set,
+  MPTherionSymbolSet? set,
   required THPointType pointType,
   required String subtype,
 }) {
-  // 1. The user's chosen set overrides thTrans.mp's default wherever it
-  //    actually defines this symbol — but NOT for `uis` itself: selecting
-  //    "Therion UIS" means "exactly thTrans.mp," full stop, no override
-  //    layer (per the user's explicit direction in §1.3).
-  if (set != MPTherionSymbolSet.uis) {
-    final MPTherionPointSymbol? chosenSetSymbol =
-        _setSpecificPointSymbolLookups[set]?.call(pointType: pointType, subtype: subtype);
-    if (chosenSetSymbol != null) return chosenSetSymbol;
+  // 1. If an explicit symbol-set override is selected, try that set first.
+  //    `null` means `therionDefault`: skip this step and use thTrans.mp.
+  if (set != null) {
+    final MPTherionSetPointSymbolLookup? setLookup =
+        _setSpecificPointSymbolLookups[set];
+
+    if (setLookup != null) {
+      final MPTherionPointSymbol? chosenSetSymbol =
+          setLookup(pointType: pointType, subtype: subtype);
+      if (chosenSetSymbol != null) return chosenSetSymbol;
+    }
   }
 
-  // 2. thTrans.mp's real default for this symbol, if we know one and have
-  //    it implemented.
+  // 2. thTrans.mp's real default for this symbol, if known and ported.
   final MPTherionSymbolSet? defaultSet =
       getTherionDefaultPointSet(pointType: pointType, subtype: subtype);
   if (defaultSet != null) {
-    final MPTherionPointSymbol? defaultSetSymbol = defaultSet == MPTherionSymbolSet.uis
-        ? getTherionUISPointSymbol(pointType: pointType, subtype: subtype)
-        : _setSpecificPointSymbolLookups[defaultSet]?.call(pointType: pointType, subtype: subtype);
-    if (defaultSetSymbol != null) return defaultSetSymbol;
+    final MPTherionSetPointSymbolLookup? defaultLookup =
+        _setSpecificPointSymbolLookups[defaultSet];
+
+    if (defaultLookup != null) {
+      final MPTherionPointSymbol? defaultSetSymbol =
+          defaultLookup(pointType: pointType, subtype: subtype);
+      if (defaultSetSymbol != null) return defaultSetSymbol;
+    }
   }
 
   // 3. UIS as a last-resort catch-all: either thTrans.mp has no opinion
-  //    (§2.5) or its assigned set isn't ported in Mapiah yet. UIS is
-  //    Mapiah's only 100%-complete set, so it's the best "at least draw
-  //    something reasonably shaped" fallback available.
+  //    (§2.5) or its assigned set isn't ported in Mapiah yet.
   final MPTherionPointSymbol? uisSymbol =
       getTherionUISPointSymbol(pointType: pointType, subtype: subtype);
   if (uisSymbol != null) return uisSymbol;
@@ -391,34 +466,55 @@ MPTherionPointSymbol? getTherionPointSymbol({
 ```
 
 `getTherionLineDefinition`/`getTherionAreaPatternDefinition` follow the same
-four-step shape, substituting their own per-domain types.
+four-step shape, substituting their own per-domain types. Each
+`_setSpecific*Lookups` map gains a `uis` entry pointing at its existing UIS
+lookup function, so `therionUIS` participates in step 1 like any other set
+and step 2 can resolve a UIS `thTrans.mp` default.
+
+`MPPatternCache` must also become nullable-set-aware: its key changes from
+`(MPTherionSymbolSet, THAreaType)` to `(MPTherionSymbolSet?, THAreaType)`, so
+`therionDefault` does not collide with any real set cache entry.
 
 ### 4.3 Worked examples
 
-- **`survey -subtype surface`, set = `therionUIS`**: step 1 skipped (`uis`
-  case). Step 2: `getTherionDefaultLineSet` → SKBB; SKBB has
-  `MPSurveySurfaceSKBBLineDecorator` → used. **Matches real Therion.**
-  (Today: falls to UIS, which has nothing → Mapiah placeholder. **Bug.**)
+- **`survey -subtype surface`, mode = `therionDefault`**: step 1 skipped
+  (`set == null`). Step 2: `getTherionDefaultLineSet` → SKBB; SKBB has
+  `MPSurveySurfaceSKBBLineDecorator` → used. **Matches real Therion with no
+  `symbol-set` layout option.** (Today: falls to UIS, which has nothing →
+  Mapiah placeholder. **Bug.**)
+- **`survey -subtype surface`, mode = `therionUIS`**: step 1 tries UIS, but
+  UIS has no `l_survey_surface_UIS` → misses. Step 2 still finds the SKBB
+  default. So `therionUIS` and `therionDefault` render this symbol the same
+  way, exactly like `symbol-set UIS` in real Therion.
 - **`survey -subtype surface`, set = `therionSKBB`**: step 1: SKBB defines
   it → used directly (same result, different path).
 - **`survey -subtype surface`, set = `therionAUT`**: step 1: AUT has no
   survey-surface macro → skip. Step 2: thTrans default is SKBB, which is
   ported → used. Picking AUT still renders this symbol correctly, just not
   "in AUT's style" (because AUT has no such style to begin with).
+- **`survey -subtype cave`, mode = `therionDefault`**: step 2 default is SKBB
+  → the SKBB broken-line decorator is used.
+- **`survey -subtype cave`, mode = `therionUIS`**: step 1 finds the existing
+  UIS cave decorator, so `therionUIS` deliberately renders UIS's continuous
+  line here. This is the key visible difference from `therionDefault`.
+- **`point camp`, mode = `therionDefault`**: default `p_camp` is SKBB →
+  `campSKBB`. Mode = `therionUIS`: UIS also defines `p_camp`, so
+  `therionUIS` renders `campUIS`.
 - **`wall -subtype clay`, set = `therionAUT`**: step 1: AUT has no
   `l_wall_clay_AUT` → skip. Step 2: thTrans default SKBB → used
   (`MPWallClaySKBBLineDecorator`).
-- **`wall -subtype pit`, set = `therionUIS`**: step 1 skipped. Step 2:
+- **`wall -subtype pit`, mode = `therionDefault`**: step 1 skipped. Step 2:
   thTrans default is AUT, which Mapiah hasn't ported yet (no
   `l_wall_pit_AUT` decorator exists) → step 2 finds nothing. Step 3: UIS has
   no `l_wall_pit_UIS` either (confirm against Therion source when this gets
   implemented) → Mapiah placeholder, same as today. No regression, and this
   is the honest state until AUT's wall-pit macro is ported.
-- **`area clay`, set = `therionUIS`**: step 2: thTrans default SKBB, ported
-  → `a_clay_SKBB`'s tile is used even under "Therion UIS." This is the
-  headline behavior change: **the "Therion UIS" method will visibly use
-  SKBB-authored tiles/decorators for the ~40% of symbols `thTrans.mp`
-  assigns away from UIS**, once those are ported.
+- **`area debris`, mode = `therionDefault`**: default `a_debris` is SKBB →
+  SKBB tile. Mode = `therionUIS`: UIS has an `a_debris_UIS` tile, so
+  `therionUIS` renders the UIS tile instead.
+- **`area clay`, mode = `therionUIS`**: step 1: UIS has no `a_clay_UIS`.
+  Step 2: thTrans default SKBB, ported → `a_clay_SKBB`'s tile is used. This
+  is the headline behavior change from the old hardcoded-UIS fallback.
 
 ### 4.4 Settings: `isEnabled` gating reconsidered
 
@@ -427,59 +523,81 @@ settings dropdown](../../CHANGELOG.md) reasoned that picking one "rendered
 exactly like UIS with no visible effect." Under the new dispatch, that's
 still true in practice today (none of those six sets has *any* ported
 content, so step 1 always misses and every symbol falls through to
-thTrans-default/UIS exactly as it would under `therionUIS` itself) — so
-**no immediate change needed to `mp_setting_type.dart`'s `enabledPredicate`
-or the hidden sets**. The reasoning in its comment should be updated,
-though: "picking one has no visible effect" is now true because thTrans's
-default dispatch already applies under every set equally, not because the
-set falls back to UIS specifically. Re-enable each set once it has at least
-one ported symbol whose set-specific decorator differs from what thTrans's
-default would already produce.
+thTrans-default/UIS exactly as it would under `therionDefault`) — so the
+hidden sets remain hidden. The reasoning in the `mp_setting_type.dart`
+comment must still be updated: "picking one has no visible effect" is now
+true because thTrans's default dispatch already applies under every set
+equally, not because the set falls back to UIS specifically. Re-enable each
+set once it has at least one ported symbol whose set-specific decorator
+differs from what thTrans's default would already produce.
+
+`therionDefault` and `therionUIS` are both enabled in the dropdown from the
+start, and `therionDefault` is the new default selection. They are no longer
+synonyms:
+
+- `therionDefault` means "no `symbol-set` override."
+- `therionUIS` means "`symbol-set UIS`."
 
 ---
 
 ## 5. Migration plan
 
-This is mechanical but touches every existing set-specific doc comment that
-currently claims "falls back to UIS" as if that were Therion's real
-behavior (at least `mp_therion_skbb_line_map.dart`,
-`mp_therion_symbol_registry.dart`, `mp_therion_line_registry.dart`,
-`mp_therion_area_pattern_registry.dart`, and the Phase 4 plan's own
-"Current State"/rationale sections).
+This is mostly mechanical, but it now includes a small public-surface change:
+the new `therionDefault` visualization method and the nullable-set registry
+signature.
 
-1. **Transcribe `thTrans.mp` into the three lookup tables** (§4.1), each as
-   a straightforward `switch`/`Map` — no clever logic, just data entry
-   double-checked against §2's tables (which were themselves transcribed
-   directly from the live `thTrans.mp`, not from memory).
-2. **Rewrite the three registries** to the four-step chain in §4.2,
-   preserving their existing public signatures (no caller changes needed
-   outside these three files).
-3. **Update doc comments** repo-wide that currently assert "X falls back to
-   UIS, matching Therion" — correct to "X falls back to `thTrans.mp`'s
-   default (§ref), which for this symbol happens to be UIS/SKBB/etc."
-4. **Add regression tests** per registry asserting, for a representative
-   sample of §2's entries (at minimum every symbol already ported under
-   SKBB, plus a few UIS-default and AUT/SBE/NSS/ASF-default-but-unported
-   ones), that `getTherionXSymbol(set: uis, ...)` resolves to the correct
-   `thTrans.mp`-mandated result — not just "the same as before."
-5. **No changes needed** to individual `MPLineDecorator`/point-draw-method/
+1. **Add `therionDefault`** to `MPTH2EditVisualizationMethod` (§4.2) and
+   wire it through `MPVisualController._selectedTherionSymbolSet` as `null`.
+2. **Add EN/PT localization labels** for the new visualization method
+   (e.g. `mpSettingsEnumVisualizationMethodTherionDefault`), enable it in
+   `mp_setting_type.dart`'s `enabledPredicate`, and set
+   `explicitDefaultValue: MPTH2EditVisualizationMethod.therionDefault` for
+   `MPSettingID.TH2Edit_VisualizationMethod`. Do not rewrite already-stored
+   values; the new default applies only to new installs and resets.
+3. **Transcribe `thTrans.mp` into the three lookup tables** (§4.1), including
+   the explicit Mapiah-type/name alias mapping described there.
+4. **Rewrite the three registries** to the nullable-set four-step chain in
+   §4.2, adding a `uis` entry to each `_setSpecific*Lookups` map.
+5. **Make `MPPatternCache` nullable-set-aware** (§4.2) so `therionDefault`
+   has its own cache keys.
+6. **Update existing UIS tests/goldens that will change under the new
+   semantics**, not just add new tests. At minimum:
+   - `test/t3762_therion_uis_phase1_dispatch_test.dart` (UIS `survey cave`
+     and UIS debris currently assume the old hardcoded-UIS path)
+   - `test/t3766_therion_uis_phase3_symbols_test.dart` (UIS
+     `ceiling-meander`/`ceiling-step` currently assume the old path)
+   - `test/t3767_therion_phase4a_registry_test.dart` (it asserts the exact
+     `MPTH2EditVisualizationMethod.values` order, which gains
+     `therionDefault`)
+   - UIS Phase 2/3 point/area goldens involving `camp` and `debris`
+7. **Add regression tests** per registry for both modes: `set: null`
+   (`therionDefault`) must resolve to `thTrans.mp`'s default, and
+   `set: uis` must resolve to the UIS override where a `_UIS` macro exists.
+8. **Update doc comments** repo-wide that currently assert "X falls back to
+   UIS, matching Therion" — including `mp_therion_skbb_line_map.dart`,
+   `mp_therion_skbb_area_map.dart`, `mp_therion_skbb_point_map.dart`, the
+   three registries, the Phase 4 plan, and the CHANGELOG entry that currently
+   says Therion has no `symbol-set` mechanism.
+9. **No changes needed** to individual `MPLineDecorator`/point-draw-method/
    area-tile implementations themselves — every symbol already ported
    (Phase 0–4B) keeps its existing decorator class; only *when it gets
    selected* changes.
-6. **Settings**: no code change per §4.4, just a comment correction.
+10. **Run the full test suite**, including golden tests, before considering
+    the phase done.
 
 ### 5.1 Suggested phase split
 
-Given the amount of doc-comment churn and the value of getting the dispatch
-core right before touching every call site's prose, this likely wants to be
-its own phase (call it **Phase 5**) rather than folded into Phase 4B's
-remaining SKBB work:
+Given the amount of test and doc-comment churn and the value of getting the
+dispatch core right before touching every call site's prose, this likely
+wants to be its own phase (call it **Phase 5**) rather than folded into Phase
+4B's remaining SKBB work:
 
-- **Phase 5a**: the three lookup tables + registry rewrite + core tests
-  (§4.1, §4.2, §5.4). This alone fixes the actual behavior bug.
-- **Phase 5b**: doc-comment sweep across already-landed SKBB files (§5.3),
-  correcting the "falls back to UIS" framing to reference `thTrans.mp`
-  instead, file by file.
+- **Phase 5a**: `therionDefault` enum/localization/settings, the three
+  lookup tables, nullable-set registry rewrite, pattern-cache change, and
+  core dispatch tests (§4.1, §4.2, §5 items 1–5 and 7).
+- **Phase 5b**: update existing UIS tests/goldens and sweep doc comments
+  across already-landed files and affected plan/CHANGELOG prose (§5 items
+  6 and 8), file by file.
 - **Phase 5c** (optional, lower priority): audit symbols *not* yet covered
   by any set-specific decorator against §2's tables to prioritize what to
   port next by "how far current UIS rendering diverges from `thTrans.mp`'s
@@ -492,9 +610,11 @@ remaining SKBB work:
 
 ## 6. Decisions
 
-1. **Naming**: the `therionUIS` enum value / settings label stays `UIS`.
-   Only the underlying dispatch behavior changes (§4); no user-facing
-   rename.
+1. **Naming**: add a new `therionDefault` visualization method. `therionUIS`
+   keeps its existing enum value/settings label, but now means
+   `symbol-set UIS` rather than "the default table." `therionDefault` gets
+   its own distinct user-facing label (e.g. "Therion (default)") and becomes
+   Mapiah's new default visualization method for new installs and resets.
 2. **Scope for this first pass**: Phase 5a covers all three domains —
    points, lines, *and* areas — in one pass, not just the line registry.
    §7 below reflects this as a single combined task rather than a
@@ -504,30 +624,46 @@ remaining SKBB work:
    sand/pebbles/clay/debris/blocks/ice/unsurveyed`, `waterFlow -subtype
    conjectural/intermittent`, `ropeLadder`, `viaFerrata`, and `survey
    -subtype cave/surface` — appears in §2.2, so all of it is covered by the
-   new dispatch with no special-casing needed. Any other in-flight or
-   planned symbol work should still be checked against §2 before assuming
-   today's UIS-terminal behavior is correct for it.
+   new dispatch with no special-casing needed. Six already-ported symbols
+   have both a `_UIS` and a non-UIS `thTrans.mp` default
+   (`p_camp`, `l_ceilingmeander`, `l_ceilingstep`, `l_contour`,
+   `l_survey_cave`, `a_debris`); these are exactly where `therionDefault`
+   and `therionUIS` are expected to differ, and they are the primary
+   regression-test targets. Any other in-flight or planned symbol work
+   should still be checked against §2 before assuming today's UIS-terminal
+   behavior is correct for it.
 
 ## 7. Implementation checklist (Phase 5a)
 
 Single pass, all three domains together:
 
-1. Add `lib/src/painters/therion_common/mp_therion_default_symbol_set.dart`
+1. Add `therionDefault` to `MPTH2EditVisualizationMethod` and update
+   `MPVisualController._selectedTherionSymbolSet` to return `null` for it.
+2. Add EN/PT labels for `therionDefault`, enable it in
+   `mp_setting_type.dart`'s `enabledPredicate`, and set
+   `explicitDefaultValue: MPTH2EditVisualizationMethod.therionDefault` for
+   `MPSettingID.TH2Edit_VisualizationMethod`.
+3. Add `lib/src/painters/therion_common/mp_therion_default_symbol_set.dart`
    with `getTherionDefaultPointSet`/`getTherionDefaultLineSet`/
-   `getTherionDefaultAreaSet` (§4.1), transcribed from §2.1–§2.3.
-2. Rewrite `getTherionPointSymbol` (`mp_therion_symbol_registry.dart`),
+   `getTherionDefaultAreaSet` (§4.1), transcribed from §2.1–§2.3 and using
+   the explicit Mapiah-type/name alias mapping.
+4. Rewrite `getTherionPointSymbol` (`mp_therion_symbol_registry.dart`),
    `getTherionLineDefinition` (`mp_therion_line_registry.dart`), and
    `getTherionAreaPatternDefinition` (`mp_therion_area_pattern_registry.dart`)
-   to the four-step chain in §4.2, keeping their existing public signatures.
-3. Add regression tests per registry per §5's item 4 (sample of SKBB-ported,
-   UIS-default, and AUT/SBE/NSS/ASF-default-but-unported symbols each).
-4. Sweep doc comments per §5's item 3 (start with the files this session
-   already touched: `mp_therion_skbb_line_map.dart`,
-   `mp_therion_symbol_registry.dart`, `mp_therion_line_registry.dart`,
-   `mp_therion_area_pattern_registry.dart`, and the Phase 4 plan's "Current
-   State" wording).
-5. Update `mp_setting_type.dart`'s `enabledPredicate` comment per §4.4 (no
-   behavior change, just correcting the stated reasoning).
-6. Run the full test suite (not just touched files — see the
+   to the nullable-set four-step chain in §4.2, adding a `uis` entry to each
+   `_setSpecific*Lookups` map.
+5. Change `MPPatternCacheKey` to `(MPTherionSymbolSet?, THAreaType)` and make
+   `MPPatternCache` methods accept a nullable set.
+6. Add regression tests per registry for `set: null` and `set: uis`, covering
+   the six `therionDefault`/`therionUIS` difference cases from §6 plus a
+   sample of SKBB-ported, UIS-default, and
+   AUT/SBE/NSS/ASF-default-but-unported symbols.
+7. Update existing UIS tests/goldens listed in §5 item 6.
+8. Sweep doc comments per §5 item 8 (start with `mp_therion_skbb_line_map.dart`,
+   `mp_therion_skbb_area_map.dart`, `mp_therion_skbb_point_map.dart`, the three
+   registries, the Phase 4 plan wording, and CHANGELOG).
+9. Update `mp_setting_type.dart`'s `enabledPredicate` comment per §4.4 (now
+   `therionDefault` and `therionUIS` are both enabled and distinct).
+10. Run the full test suite (not just touched files — see the
    `mpTherionLineColors` regression this session caught by doing exactly
    that) before considering Phase 5a done.

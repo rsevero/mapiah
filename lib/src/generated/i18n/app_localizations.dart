@@ -1894,6 +1894,12 @@ abstract class AppLocalizations {
   /// **'Mapiah placeholder'**
   String get mpSettingsEnumVisualizationMethodMapiahPlaceholder;
 
+  /// No description provided for @mpSettingsEnumVisualizationMethodTherionDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Therion (default)'**
+  String get mpSettingsEnumVisualizationMethodTherionDefault;
+
   /// No description provided for @mpSettingsEnumVisualizationMethodTherionUIS.
   ///
   /// In en, this message translates to:

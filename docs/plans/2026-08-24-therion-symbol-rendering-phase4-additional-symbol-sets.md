@@ -32,9 +32,16 @@ until a future phase that also addresses map furniture.
 The goal is the same as the roadmap's Phase 3 deliverable, now applied to every
 set: for each point, line, and area type that a selected Therion set defines,
 Mapiah draws the faithful set-specific symbol instead of the Mapiah
-placeholder. Types without a symbol in the selected set fall back to UIS,
-matching Therion's own fallback chain. Text/label point types remain set-neutral
-and continue to use the Phase 2.5 label renderer.
+placeholder. Types without a symbol in the selected set fall back to
+`thTrans.mp`'s default assignment; UIS is only a last-resort implementation
+fallback when that default set has not been ported yet. Text/label point types
+remain set-neutral and continue to use the Phase 2.5 label renderer.
+
+Phase 5 also adds a distinct `therionDefault` visualization method for the
+no-`symbol-set` case, makes `therionUIS` mean `symbol-set UIS`, and makes
+`therionDefault` Mapiah's new default visualization method for new installs
+and resets; see
+[the default-dispatch design doc](2026-08-25-therion-symbol-rendering-thtrans-default-dispatch.md).
 
 ### Key objectives
 
@@ -48,10 +55,12 @@ and continue to use the Phase 2.5 label renderer.
    pattern tiles** under new `lib/src/painters/therion_*/` modules, reusing
    the Phase 0 helpers (`MPSymbolTransform`, `MPLineDecorator`,
    `MPPatternCache`, `MPPathMetricWalker`, `MPSeededRandom`, `MPThClean`).
-4. **Implement the UIS fallback chain** exactly once, in the registries, rather
-   than repeating it in every visual-controller method.
-5. **Preserve existing UIS behavior and golden tests**; Phase 4 must not
-   regress the already-complete UIS set.
+4. **Implement the `thTrans.mp` default / selected-set override chain** exactly
+   once, in the registries, rather than repeating it in every
+   visual-controller method. UIS is only the last-resort implementation
+   fallback when the default set has not been ported yet.
+5. **Preserve existing UIS behavior and golden tests during Phase 4**; the
+   later default-dispatch phase may intentionally update those expectations.
 
 ---
 
@@ -365,15 +374,23 @@ registry.
 
 ### 4.6 Fallback policy
 
-The fallback order is set-specific → UIS → placeholder:
+The fallback order is selected-set override → `thTrans.mp` default → UIS
+implementation fallback → placeholder:
 
 - Points: if the selected set has no symbol for a point type/subtype, the
-  registry returns the existing UIS symbol; only if UIS has no symbol does the
-  current placeholder path remain.
-- Lines: if the selected set has no decorator, the registry returns the UIS
-  decorator; `getLineDecorator` returns `null` only when UIS also has none.
-- Areas: if the selected set has no tile, the registry returns the UIS tile;
-  `getDefaultAreaPaint` leaves the placeholder fill only when UIS also has none.
+  registry resolves `thTrans.mp`'s default set; if that set has no ported
+  symbol, the existing UIS symbol is used. Only when UIS also has no symbol
+  does the current placeholder path remain.
+- Lines: if the selected set has no decorator, the registry resolves the
+  `thTrans.mp` default decorator; `getLineDecorator` returns `null` only when
+  that default is not ported and UIS also has none.
+- Areas: if the selected set has no tile, the registry resolves the
+  `thTrans.mp` default tile; `getDefaultAreaPaint` leaves the placeholder fill
+  only when that default is not ported and UIS also has none.
+
+`therionDefault` is the no-selected-set variant of this chain; see the
+default-dispatch design doc. `therionUIS` is a real selected set (`uis`), not
+the terminal fallback.
 
 This satisfies the roadmap's Open Question #3 and its Phase 3 Observations.
 Text labels are not affected by the fallback chain because they are set-neutral.
@@ -507,8 +524,8 @@ Notes:
   text part, keeping the marker/fallback.
 
 **Deliverable:** a `.th2` fixture containing SKBB-owned types renders the SKBB
-forms under `therionSKBB`, and falls back to UIS for every type SKBB does not
-define.
+forms under `therionSKBB`, and falls back to `thTrans.mp`'s default for every
+type SKBB does not define.
 
 ### 6.3 Phase 4C — AUT
 
@@ -565,8 +582,8 @@ Notes:
 - SBE `uSBE.mp` uses image/`btex`/picture construction more heavily than the
   other sets. These are ported as `Path`/`PictureRecorder` constructions where
   possible; any genuinely raster/picture-based symbol that cannot be expressed
-  as paths is documented as a partial symbol and falls back to UIS until a
-  follow-up.
+  as paths is documented as a partial symbol and falls back to the
+  `thTrans.mp` default/UIS fallback until a follow-up.
 - The `pillar_main_SBE` helper is shared by `a_pillar_SBE`,
   `a_pillarwithcurtains_SBE`, `a_stalactite_SBE`,
   `a_stalactitestalagmite_SBE`, and `a_stalagmite_SBE`; port it once and
@@ -616,7 +633,8 @@ Follow the existing `t3762`–`t3766` conventions. For each set add:
 
 - A symbol-map test asserting every `THPointType` the set defines maps to the
   expected set-specific `MPTherionPointSymbol`, and every type it does not
-  define maps to the UIS fallback (when UIS has one).
+  define maps to the `thTrans.mp` default, with UIS as the last-resort
+  fallback when that default is not ported.
 - A line registry test asserting decorator/color resolution for each supported
   `(THLineType, subtype)` and fallback for unsupported ones.
 - An area registry test asserting tile-builder resolution and fallback.

@@ -977,6 +977,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mapiah placeholder';
 
   @override
+  String get mpSettingsEnumVisualizationMethodTherionDefault =>
+      'Therion (default)';
+
+  @override
   String get mpSettingsEnumVisualizationMethodTherionUIS => 'Therion UIS';
 
   @override

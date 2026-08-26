@@ -66,7 +66,10 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// visible/temporary/presumed, `arrow`, `mapConnection`, `section`, and
 /// the `rope`/`steps`/`handrail`/`fixedLadder`/`slope` *line* types (as
 /// opposed to the point types of the same name, which Phase 4B does
-/// implement) — falls back to UIS/placeholder until a follow-up phase.
+/// implement) — is `thTrans.mp`'s default here too (see
+/// `mp_therion_default_symbol_set.dart`), but since neither this map nor
+/// UIS has a decorator for it yet, [getTherionLineDefinition] still ends
+/// up at the Mapiah placeholder until a follow-up phase ports it.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
     decorator: const MPChimneyLineDecorator(),
@@ -104,7 +107,8 @@ final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
 
 /// Resolves the SKBB-specific line decorator/color for [lineType]/[subtype].
 /// Returns null for every line type/subtype not covered above, letting the
-/// caller fall back to UIS.
+/// caller ([getTherionLineDefinition]) fall through to `thTrans.mp`'s own
+/// default set for this line type/subtype, and only then to UIS.
 MPTherionLineDefinition? getTherionSKBBLineDefinition({
   required THLineType lineType,
   String? subtype,

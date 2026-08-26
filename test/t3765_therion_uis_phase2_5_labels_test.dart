@@ -169,6 +169,11 @@ void main() {
         );
         final THPoint point = th2Controller.th2File.getPoints().single;
 
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        );
+
         final placeholderPaint = th2Controller.visualController
             .getDefaultPointPaint(point);
 

@@ -115,16 +115,20 @@ enum MPSettingID {
     MPSettingID.TH2Edit_VisualizationMethod:
         MPSettingEnumDefinitionImpl<MPTH2EditVisualizationMethod>(
           enumValues: MPTH2EditVisualizationMethod.values,
+          explicitDefaultValue: MPTH2EditVisualizationMethod.therionDefault,
           // AUT/SBE/BCRA/NSS/NZSS/ASF have their enum values and dispatch
           // plumbing in place (Phase 4A), but no set-specific symbol
-          // rendering implemented yet, so they currently render exactly
-          // like UIS — hidden from the settings dropdown until each set
-          // gets its own rendering, rather than offering an option that
-          // looks identical to UIS today; enable them here one by one as
-          // they're actually implemented.
+          // rendering implemented yet, so under the thTrans.mp-default
+          // dispatch (Phase 5a) they currently render exactly the same as
+          // `therionDefault` — every symbol falls straight through to
+          // thTrans.mp's own default set — hidden from the settings
+          // dropdown until each set gets its own rendering, rather than
+          // offering an option that looks identical to another one today;
+          // enable them here one by one as they're actually implemented.
           enabledPredicate: (MPTH2EditVisualizationMethod value) =>
               switch (value) {
                 MPTH2EditVisualizationMethod.mapiahPlaceholder ||
+                MPTH2EditVisualizationMethod.therionDefault ||
                 MPTH2EditVisualizationMethod.therionUIS ||
                 MPTH2EditVisualizationMethod.therionSKBB => true,
                 MPTH2EditVisualizationMethod.therionAUT ||
@@ -147,6 +151,9 @@ enum MPSettingID {
                   case MPTH2EditVisualizationMethod.mapiahPlaceholder:
                     return appLocalizations
                         .mpSettingsEnumVisualizationMethodMapiahPlaceholder;
+                  case MPTH2EditVisualizationMethod.therionDefault:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionDefault;
                   case MPTH2EditVisualizationMethod.therionUIS:
                     return appLocalizations
                         .mpSettingsEnumVisualizationMethodTherionUIS;

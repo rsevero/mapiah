@@ -4,6 +4,7 @@
 /// Rendering styles available for TH2 elements.
 enum MPTH2EditVisualizationMethod {
   mapiahPlaceholder,
+  therionDefault,
   therionUIS,
   therionAUT,
   therionSBE,

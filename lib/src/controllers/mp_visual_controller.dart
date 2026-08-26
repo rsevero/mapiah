@@ -1081,12 +1081,14 @@ abstract class MPVisualControllerBase with Store {
     return scrapPaint;
   }
 
-  /// The Therion symbol set to draw for the currently selected
-  /// [MPTH2EditVisualizationMethod]. Must not be read when the method is
-  /// [MPTH2EditVisualizationMethod.mapiahPlaceholder]: callers are expected
-  /// to gate on that placeholder check first, as every rendering entry
-  /// point below does.
-  MPTherionSymbolSet get _selectedTherionSymbolSet {
+  /// The explicit Therion symbol-set override to draw for the currently
+  /// selected [MPTH2EditVisualizationMethod], or null for
+  /// [MPTH2EditVisualizationMethod.therionDefault] ("no `symbol-set`
+  /// override" — `thTrans.mp`'s own default applies). Must not be read
+  /// when the method is [MPTH2EditVisualizationMethod.mapiahPlaceholder]:
+  /// callers are expected to gate on that placeholder check first, as
+  /// every rendering entry point below does.
+  MPTherionSymbolSet? get _selectedTherionSymbolSet {
     final MPTH2EditVisualizationMethod method =
         mpLocator.mpSettingsController.tH2EditVisualizationMethod;
 
@@ -1094,6 +1096,7 @@ abstract class MPVisualControllerBase with Store {
       MPTH2EditVisualizationMethod.mapiahPlaceholder => throw StateError(
         'Placeholder has no Therion symbol set',
       ),
+      MPTH2EditVisualizationMethod.therionDefault => null,
       MPTH2EditVisualizationMethod.therionUIS => MPTherionSymbolSet.uis,
       MPTH2EditVisualizationMethod.therionAUT => MPTherionSymbolSet.aut,
       MPTH2EditVisualizationMethod.therionSBE => MPTherionSymbolSet.sbe,
@@ -1295,7 +1298,7 @@ abstract class MPVisualControllerBase with Store {
       return areaPaint;
     }
 
-    final MPTherionSymbolSet set = _selectedTherionSymbolSet;
+    final MPTherionSymbolSet? set = _selectedTherionSymbolSet;
     final MPTherionAreaPatternDefinition? definition =
         getTherionAreaPatternDefinition(set: set, areaType: areaType);
 
@@ -1318,7 +1321,7 @@ abstract class MPVisualControllerBase with Store {
   /// same [THAreaType] can produce a different tile under a different
   /// Therion symbol set.
   Paint _getTherionAreaPatternPaint({
-    required MPTherionSymbolSet set,
+    required MPTherionSymbolSet? set,
     required THAreaType areaType,
     required MPTherionAreaPatternDefinition definition,
   }) {

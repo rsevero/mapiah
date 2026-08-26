@@ -4,6 +4,7 @@
 import 'dart:ui';
 
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_default_symbol_set.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_point_symbols_skbb.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
@@ -14,7 +15,7 @@ import 'package:mapiah/src/painters/types/mp_therion_symbol_set.dart';
 
 /// Set-specific, subtype-aware point symbol lookup. Registered per set as
 /// non-UIS sets are implemented (Phase 4B onward); every set without an
-/// entry here falls all the way through to the UIS lookup.
+/// entry here has no set-specific symbol of its own to try in step 1.
 typedef MPTherionSetPointSymbolLookup =
     MPTherionPointSymbol? Function({
       required THPointType pointType,
@@ -23,30 +24,57 @@ typedef MPTherionSetPointSymbolLookup =
 
 const Map<MPTherionSymbolSet, MPTherionSetPointSymbolLookup>
 _setSpecificPointSymbolLookups = <MPTherionSymbolSet, MPTherionSetPointSymbolLookup>{
+  MPTherionSymbolSet.uis: getTherionUISPointSymbol,
   MPTherionSymbolSet.skbb: getTherionSKBBPointSymbol,
 };
 
 /// Resolves the point symbol to draw for [pointType]/[subtype] under
-/// [set], following the fallback order set-specific → UIS. Returns null
-/// only when neither the selected set nor UIS defines a symbol for this
-/// point type/subtype, in which case the caller keeps the Mapiah
-/// placeholder rendering.
+/// [set], following `thTrans.mp`'s real dispatch order: (1) an explicit
+/// symbol-set override, if selected and it defines this symbol; (2)
+/// `thTrans.mp`'s own default set for this symbol, if known and ported;
+/// (3) UIS as a last-resort catch-all. [set] is null for
+/// `therionDefault` ("no `symbol-set` override" — skip straight to step
+/// 2). Returns null only when none of the three steps finds a symbol, in
+/// which case the caller keeps the Mapiah placeholder rendering.
 MPTherionPointSymbol? getTherionPointSymbol({
-  required MPTherionSymbolSet set,
+  MPTherionSymbolSet? set,
   required THPointType pointType,
   required String subtype,
 }) {
-  final MPTherionSetPointSymbolLookup? setLookup =
-      _setSpecificPointSymbolLookups[set];
+  if (set != null) {
+    final MPTherionSetPointSymbolLookup? setLookup =
+        _setSpecificPointSymbolLookups[set];
 
-  if (setLookup != null) {
-    final MPTherionPointSymbol? setSymbol = setLookup(
-      pointType: pointType,
-      subtype: subtype,
-    );
+    if (setLookup != null) {
+      final MPTherionPointSymbol? chosenSetSymbol = setLookup(
+        pointType: pointType,
+        subtype: subtype,
+      );
 
-    if (setSymbol != null) {
-      return setSymbol;
+      if (chosenSetSymbol != null) {
+        return chosenSetSymbol;
+      }
+    }
+  }
+
+  final MPTherionSymbolSet? defaultSet = getTherionDefaultPointSet(
+    pointType: pointType,
+    subtype: subtype,
+  );
+
+  if (defaultSet != null) {
+    final MPTherionSetPointSymbolLookup? defaultLookup =
+        _setSpecificPointSymbolLookups[defaultSet];
+
+    if (defaultLookup != null) {
+      final MPTherionPointSymbol? defaultSetSymbol = defaultLookup(
+        pointType: pointType,
+        subtype: subtype,
+      );
+
+      if (defaultSetSymbol != null) {
+        return defaultSetSymbol;
+      }
     }
   }
 

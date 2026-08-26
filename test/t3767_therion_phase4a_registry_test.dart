@@ -58,6 +58,7 @@ void main() {
           MPTH2EditVisualizationMethod
         >[
           MPTH2EditVisualizationMethod.mapiahPlaceholder,
+          MPTH2EditVisualizationMethod.therionDefault,
           MPTH2EditVisualizationMethod.therionUIS,
           MPTH2EditVisualizationMethod.therionAUT,
           MPTH2EditVisualizationMethod.therionSBE,

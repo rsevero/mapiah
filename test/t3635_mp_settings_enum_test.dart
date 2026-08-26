@@ -42,11 +42,11 @@ void main() {
         settingsController.getEnumWithDefault(
           MPSettingID.TH2Edit_VisualizationMethod,
         ),
-        MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        MPTH2EditVisualizationMethod.therionDefault,
       );
       expect(
         settingsController.tH2EditVisualizationMethod,
-        MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        MPTH2EditVisualizationMethod.therionDefault,
       );
     });
 
@@ -205,6 +205,7 @@ void main() {
             in MPTH2EditVisualizationMethod.values) {
           final bool expectedEnabled = switch (value) {
             MPTH2EditVisualizationMethod.mapiahPlaceholder ||
+            MPTH2EditVisualizationMethod.therionDefault ||
             MPTH2EditVisualizationMethod.therionUIS ||
             MPTH2EditVisualizationMethod.therionSKBB => true,
             MPTH2EditVisualizationMethod.therionAUT ||

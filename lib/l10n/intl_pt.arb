@@ -317,6 +317,7 @@
   "mpSettingsEnumNewLineCreationMethodMapiahQuadratic": "Quadrático do Mapiah",
   "mpSettingsEnumNewLineCreationMethodXTherionCubicSmooth": "Cúbico suave do xTherion",
   "mpSettingsEnumVisualizationMethodMapiahPlaceholder": "Marcador do Mapiah",
+  "mpSettingsEnumVisualizationMethodTherionDefault": "Therion (padrão)",
   "mpSettingsEnumVisualizationMethodTherionUIS": "Therion UIS",
   "mpSettingsEnumVisualizationMethodTherionAUT": "Therion AUT",
   "mpSettingsEnumVisualizationMethodTherionSBE": "Therion SBE",

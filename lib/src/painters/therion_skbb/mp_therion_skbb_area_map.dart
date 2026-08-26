@@ -39,7 +39,8 @@ final Map<THAreaType, ui.Color> mpTherionSKBBAreaPatternColors = {
 /// Resolves the SKBB-specific area pattern tile definition for [areaType].
 /// Returns null for every area type SKBB doesn't define its own tile for
 /// (including `bedrock`, which is deliberately unpatterned), letting the
-/// caller fall back to UIS.
+/// caller ([getTherionAreaPatternDefinition]) fall through to `thTrans.mp`'s
+/// own default set for this area type, and only then to UIS.
 MPTherionAreaPatternDefinition? getTherionSKBBAreaPatternDefinition(
   THAreaType areaType,
 ) {

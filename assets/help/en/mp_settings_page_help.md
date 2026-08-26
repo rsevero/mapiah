@@ -91,7 +91,7 @@ Controls the angular increment (in degrees) used when snapping image rotation an
 Controls the base size (in pixels) of Therion symbol-set renderings, i.e. the `u` unit used throughout Therion's symbol definitions. Only affects the canvas when a Therion visualization method (not **Mapiah placeholder**) is selected. This is a display-only setting and does not affect the data stored in the TH2 file.
 
 ### Visualization method
-Selects how TH2 point, line, and area symbols are drawn. **Mapiah placeholder** preserves the existing geometric rendering and is the default. **Therion UIS** uses the implemented faithful UIS symbol set.
+Selects how TH2 point, line, and area symbols are drawn. **Therion (default)** renders exactly what a real Therion run without a `symbol-set` layout option produces (Therion's own `thTrans.mp` default translation table) and is the default for new installs and setting resets. **Therion UIS** is Mapiah's equivalent of Therion's `symbol-set UIS` layout option: it overrides the default to UIS wherever a UIS symbol exists, leaving `thTrans.mp`'s default in force everywhere else. **Mapiah placeholder** preserves the existing geometric rendering instead of any Therion symbol set.
 
 ## Therion section
 

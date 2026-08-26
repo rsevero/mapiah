@@ -8,7 +8,9 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 /// types absent from this map (including `station`/`station-name`, whose
 /// SKBB macro is entangled with Therion's text-flag system, and
 /// `handrail`, whose SKBB macro is sized from the survey's real-world
-/// paper scale rather than the symbol unit) fall back to the UIS lookup.
+/// paper scale rather than the symbol unit) fall through to `thTrans.mp`'s
+/// own default set for that point type (via [getTherionPointSymbol]), and
+/// only then to UIS.
 const Map<THPointType, MPTherionPointSymbol> therionSKBBPointSymbols = {
   THPointType.anchor: MPTherionPointSymbol.anchorSKBB,
   THPointType.borehole: MPTherionPointSymbol.boreholeSKBB,
@@ -32,7 +34,8 @@ const Map<THPointType, MPTherionPointSymbol> therionSKBBPointSymbols = {
 /// Resolves the SKBB-specific point symbol for [pointType]/[subtype].
 /// Returns null for every point type SKBB doesn't define its own symbol
 /// for (including subtyped `air-draught`/`water-flow`, which SKBB doesn't
-/// override), letting the caller fall back to UIS.
+/// override), letting the caller ([getTherionPointSymbol]) fall through to
+/// `thTrans.mp`'s own default set for this symbol, and only then to UIS.
 MPTherionPointSymbol? getTherionSKBBPointSymbol({
   required THPointType pointType,
   required String subtype,
