@@ -4457,5 +4457,20 @@
   "@mpSettingsSettingProjectTreeSidebarWidth": {
     "description": "Label for the persisted project tree sidebar width setting. Used on: MPSettingsPage._localizedSettingName",
     "type": "text"
+  },
+  "textEditorEmptyHint": "Empty file",
+  "@textEditorEmptyHint": {
+    "description": "Hint text shown in the text editor when the file has no content. Used on: THTextEditorWidget.build",
+    "type": "text"
+  },
+  "textEditorSaveTooltip": "Save file",
+  "@textEditorSaveTooltip": {
+    "description": "Tooltip for the text editor's save button. Used on: THTextEditorWidget._buildToolbar",
+    "type": "text"
+  },
+  "textEditorRevertTooltip": "Revert unsaved changes",
+  "@textEditorRevertTooltip": {
+    "description": "Tooltip for the text editor's revert button. Used on: THTextEditorWidget._buildToolbar",
+    "type": "text"
   }
 }

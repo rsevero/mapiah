@@ -2861,4 +2861,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mpSettingsSettingProjectTreeSidebarWidth =>
       'Project tree sidebar width';
+
+  @override
+  String get textEditorEmptyHint => 'Empty file';
+
+  @override
+  String get textEditorSaveTooltip => 'Save file';
+
+  @override
+  String get textEditorRevertTooltip => 'Revert unsaved changes';
 }

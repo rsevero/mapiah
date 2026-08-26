@@ -914,5 +914,8 @@
   "projectTreeSelectProjectDialogTitle": "Selecionar projeto Therion",
   "projectTreeTitle": "Projeto",
   "mpSettingsSettingProjectTreeSidebarCollapsed": "Árvore do projeto recolhida",
-  "mpSettingsSettingProjectTreeSidebarWidth": "Largura da árvore do projeto"
+  "mpSettingsSettingProjectTreeSidebarWidth": "Largura da árvore do projeto",
+  "textEditorEmptyHint": "Arquivo vazio",
+  "textEditorSaveTooltip": "Salvar arquivo",
+  "textEditorRevertTooltip": "Reverter alterações não salvas"
 }

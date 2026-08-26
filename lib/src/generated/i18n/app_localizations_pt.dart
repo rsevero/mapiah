@@ -2889,4 +2889,13 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get mpSettingsSettingProjectTreeSidebarWidth =>
       'Largura da árvore do projeto';
+
+  @override
+  String get textEditorEmptyHint => 'Arquivo vazio';
+
+  @override
+  String get textEditorSaveTooltip => 'Salvar arquivo';
+
+  @override
+  String get textEditorRevertTooltip => 'Reverter alterações não salvas';
 }

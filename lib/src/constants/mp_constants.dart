@@ -823,3 +823,13 @@ const double mpProjectTreeRailWidth = 32.0;
 const double mpProjectTreeErrorSummaryMaxHeight = 120.0;
 const int mpProjectTreeFilterDebounceMilliseconds = 150;
 const int mpProjectTreeUIPersistDebounceMilliseconds = 250;
+
+// Therion text editor (thconfig/.th) sizing, debounce, and interaction
+// constants.
+const int mpTextEditorReparseDebounceMilliseconds = 300;
+const double mpTextEditorFontSize = 13.0;
+const double mpTextEditorLineHeight = 1.4;
+const double mpTextEditorLineNumberGutterMinWidth = 32.0;
+const double mpTextEditorLineNumberGutterPadding = 8.0;
+const double mpTextEditorDiagnosticMarkerSize = 8.0;
+const double mpTextEditorFoldToggleSize = 14.0;

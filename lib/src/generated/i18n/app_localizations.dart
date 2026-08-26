@@ -5355,6 +5355,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Project tree sidebar width'**
   String get mpSettingsSettingProjectTreeSidebarWidth;
+
+  /// Hint text shown in the text editor when the file has no content. Used on: THTextEditorWidget.build
+  ///
+  /// In en, this message translates to:
+  /// **'Empty file'**
+  String get textEditorEmptyHint;
+
+  /// Tooltip for the text editor's save button. Used on: THTextEditorWidget._buildToolbar
+  ///
+  /// In en, this message translates to:
+  /// **'Save file'**
+  String get textEditorSaveTooltip;
+
+  /// Tooltip for the text editor's revert button. Used on: THTextEditorWidget._buildToolbar
+  ///
+  /// In en, this message translates to:
+  /// **'Revert unsaved changes'**
+  String get textEditorRevertTooltip;
 }
 
 class _AppLocalizationsDelegate
