@@ -68,6 +68,7 @@ enum MPTherionPointSymbol {
   claySKBB,
   fixedLadderSKBB,
   gradientSKBB,
+  handrailSKBB,
   noEquipmentSKBB,
   ropeLadderSKBB,
   ropeSKBB,

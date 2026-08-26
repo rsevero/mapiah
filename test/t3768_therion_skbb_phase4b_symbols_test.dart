@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
@@ -56,6 +57,8 @@ void main() {
     const MPSymbolUnit symbolUnit = MPSymbolUnit(
       canvasScale: 1,
       devicePixelRatio: 1,
+      scrapLengthUnitsPerPoint: 1,
+      scrapLengthUnitType: THLengthUnitType.meter,
     );
 
     Path diagonalTestPath() => Path()
@@ -79,15 +82,45 @@ void main() {
       }
     });
 
+    test('station-name falls back to UIS/placeholder under SKBB', () {
+      expect(
+        therionSKBBPointSymbols.containsKey(THPointType.stationName),
+        isFalse,
+      );
+    });
+
     test(
-      'station-name/handrail fall back to UIS/placeholder under SKBB',
+      'handrail resolves to handrailSKBB, drawn via the scale-aware '
+      'dispatch instead of the plain draw-method map',
       () {
-        for (final THPointType pointType in [
-          THPointType.stationName,
-          THPointType.handrail,
-        ]) {
-          expect(therionSKBBPointSymbols.containsKey(pointType), isFalse);
-        }
+        expect(
+          therionSKBBPointSymbols[THPointType.handrail],
+          MPTherionPointSymbol.handrailSKBB,
+        );
+        expect(
+          getTherionPointDrawMethod(MPTherionPointSymbol.handrailSKBB),
+          isNull,
+        );
+        expect(
+          getTherionScaleAwarePointDrawMethod(
+            MPTherionPointSymbol.handrailSKBB,
+          ),
+          isNotNull,
+        );
+
+        final ui.PictureRecorder recorder = ui.PictureRecorder();
+        final Canvas canvas = Canvas(recorder);
+
+        getTherionScaleAwarePointDrawMethod(
+          MPTherionPointSymbol.handrailSKBB,
+        )!(
+          canvas,
+          const Offset(0, 0),
+          30,
+          24.6,
+          mpTherionSymbolPaints[MPTherionPointSymbol.handrailSKBB]!,
+        );
+        recorder.endRecording().dispose();
       },
     );
 
@@ -130,6 +163,14 @@ void main() {
         ...therionSKBBPointSymbols.values,
         MPTherionPointSymbol.stationPaintedSKBB,
       ]) {
+        // handrailSKBB is scale-aware (needs the real-world-meter length
+        // alongside u) and resolves via getTherionScaleAwarePointDrawMethod
+        // instead of the plain per-symbol map; covered by its own test
+        // above.
+        if (symbol == MPTherionPointSymbol.handrailSKBB) {
+          continue;
+        }
+
         final MPTherionSymbolPaint paint = mpTherionSymbolPaints[symbol]!;
         final drawMethod = getTherionPointDrawMethod(symbol);
 
@@ -269,6 +310,8 @@ void main() {
         const MPSymbolUnit unit = MPSymbolUnit(
           canvasScale: 1,
           devicePixelRatio: 1,
+          scrapLengthUnitsPerPoint: 1,
+          scrapLengthUnitType: THLengthUnitType.meter,
         );
         final Path longSegmentPath = decorator.buildBasePath(
           path: Path(),

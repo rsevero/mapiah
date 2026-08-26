@@ -9,6 +9,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
@@ -286,6 +287,8 @@ void main() {
               symbolUnit: const MPSymbolUnit(
                 canvasScale: 1 / 3,
                 devicePixelRatio: 1,
+                scrapLengthUnitsPerPoint: 1,
+                scrapLengthUnitType: THLengthUnitType.meter,
               ),
               isReversed: false,
             );

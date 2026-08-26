@@ -1335,6 +1335,9 @@ abstract class MPVisualControllerBase with Store {
     final MPSymbolUnit symbolUnit = MPSymbolUnit(
       canvasScale: _th2FileEditController.canvasScale,
       devicePixelRatio: _th2FileEditController.devicePixelRatio,
+      scrapLengthUnitsPerPoint:
+          _th2FileEditController.scrapLengthUnitsPerPoint,
+      scrapLengthUnitType: _th2FileEditController.scrapLengthUnitType,
     );
     final double scale =
         symbolUnit.canvasValue / mpTherionAreaPatternTileUnitPixels;

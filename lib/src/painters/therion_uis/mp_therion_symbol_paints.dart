@@ -216,6 +216,9 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.gradientSKBB: MPTherionSymbolPaint(
     border: THPaint.thPaint1,
   ),
+  MPTherionPointSymbol.handrailSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
   MPTherionPointSymbol.noEquipmentSKBB: MPTherionSymbolPaint(
     border: THPaint.thPaint0,
     fill: THPaint.thPaint1000,

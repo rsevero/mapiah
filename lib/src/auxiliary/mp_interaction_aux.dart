@@ -295,11 +295,11 @@ class MPInteractionAux {
       }
     }
 
-    final void Function(Canvas, Offset, double, MPTherionSymbolPaint)
-    drawMethod = getTherionPointDrawMethod(therionSymbol)!;
     final MPTherionSymbolPaint symbolPaint =
         mpTherionSymbolPaints[therionSymbol]!;
     final double u = symbolUnit.canvasValue;
+    final MPTherionScaleAwarePointDrawMethod? scaleAwareDrawMethod =
+        getTherionScaleAwarePointDrawMethod(therionSymbol);
 
     canvas.save();
     canvas.translate(position.dx, position.dy);
@@ -309,7 +309,20 @@ class MPInteractionAux {
     canvas.scale(1, -1);
     canvas.rotate(pointPaint.rotation);
 
-    drawMethod(canvas, Offset.zero, u, symbolPaint);
+    if (scaleAwareDrawMethod != null) {
+      scaleAwareDrawMethod(
+        canvas,
+        Offset.zero,
+        u,
+        symbolUnit.oneMeterInLocalUnits,
+        symbolPaint,
+      );
+    } else {
+      final void Function(Canvas, Offset, double, MPTherionSymbolPaint)
+      drawMethod = getTherionPointDrawMethod(therionSymbol)!;
+
+      drawMethod(canvas, Offset.zero, u, symbolPaint);
+    }
 
     canvas.restore();
   }

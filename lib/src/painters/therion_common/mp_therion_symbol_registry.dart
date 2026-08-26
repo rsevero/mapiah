@@ -82,8 +82,8 @@ MPTherionPointSymbol? getTherionPointSymbol({
 }
 
 /// Set-specific draw method map, merged over [MPTherionPointSymbolsUIS.
-/// drawMethods]. Every [MPTherionPointSymbol] value must resolve here or in
-/// the UIS map.
+/// drawMethods]. Every [MPTherionPointSymbol] value must resolve here, in
+/// the UIS map, or in [_scaleAwareDrawMethods] below.
 const Map<MPTherionPointSymbol, void Function(Canvas, Offset, double, MPTherionSymbolPaint)>
 _setSpecificDrawMethods = <MPTherionPointSymbol, void Function(Canvas, Offset, double, MPTherionSymbolPaint)>{
   ...MPTherionPointSymbolsSKBB.drawMethods,
@@ -91,9 +91,39 @@ _setSpecificDrawMethods = <MPTherionPointSymbol, void Function(Canvas, Offset, d
 
 /// Resolves the draw method for an already-resolved [symbol]. Every
 /// [MPTherionPointSymbol] value must have exactly one entry across the UIS
-/// and set-specific draw method maps.
+/// and set-specific draw method maps, except the handful resolved instead
+/// via [getTherionScaleAwarePointDrawMethod].
 void Function(Canvas, Offset, double, MPTherionSymbolPaint)?
 getTherionPointDrawMethod(MPTherionPointSymbol symbol) {
   return _setSpecificDrawMethods[symbol] ??
       MPTherionPointSymbolsUIS.drawMethods[symbol];
+}
+
+/// Draw signature for the handful of point symbols (currently only
+/// `handrailSKBB`) whose macro needs the drawing-coordinate length of one
+/// real-world meter ([MPSymbolUnit.oneMeterInLocalUnits]) alongside the
+/// regular symbol unit `u`, because their size comes from the survey's
+/// real-world scale rather than the fixed print-space symbol unit — unlike
+/// every other [MPTherionPointSymbol], which only ever needs `u`.
+typedef MPTherionScaleAwarePointDrawMethod =
+    void Function(
+      Canvas canvas,
+      Offset position,
+      double u,
+      double oneMeterInLocalUnits,
+      MPTherionSymbolPaint paint,
+    );
+
+const Map<MPTherionPointSymbol, MPTherionScaleAwarePointDrawMethod>
+_scaleAwareDrawMethods = <MPTherionPointSymbol, MPTherionScaleAwarePointDrawMethod>{
+  MPTherionPointSymbol.handrailSKBB: MPTherionPointSymbolsSKBB.drawHandrailSKBB,
+};
+
+/// Resolves the scale-aware draw method for an already-resolved [symbol],
+/// if it needs one — see [MPTherionScaleAwarePointDrawMethod]. Every other
+/// symbol resolves via [getTherionPointDrawMethod] instead.
+MPTherionScaleAwarePointDrawMethod? getTherionScaleAwarePointDrawMethod(
+  MPTherionPointSymbol symbol,
+) {
+  return _scaleAwareDrawMethods[symbol];
 }

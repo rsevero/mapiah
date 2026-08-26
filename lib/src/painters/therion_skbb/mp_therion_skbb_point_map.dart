@@ -6,11 +6,16 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
 /// Therion SKBB point types with a Phase 4B Dart symbol drawing. Point
 /// types absent from this map (including `station-name`, whose SKBB macro
-/// is entangled with Therion's text-flag system, and `handrail`, whose
-/// SKBB macro is sized from the survey's real-world paper scale rather
-/// than the symbol unit) fall through to `thTrans.mp`'s own default set
-/// for that point type (via [getTherionPointSymbol]), and only then to
-/// UIS. `station` is handled separately, below, since it's subtype-aware.
+/// is entangled with Therion's text-flag system) fall through to
+/// `thTrans.mp`'s own default set for that point type (via
+/// [getTherionPointSymbol]), and only then to UIS. `station` is handled
+/// separately, below, since it's subtype-aware. `handrail`
+/// (`MPTherionPointSymbol.handrailSKBB`) resolves through this map like
+/// any other symbol, but — since its macro is sized from the survey's
+/// real-world scale rather than the symbol unit — is drawn via
+/// `MPInteractionAux`'s scale-aware dispatch instead of the plain
+/// `(Canvas, Offset, double, MPTherionSymbolPaint)` draw methods
+/// registered in [getTherionPointDrawMethod].
 const Map<THPointType, MPTherionPointSymbol> therionSKBBPointSymbols = {
   THPointType.anchor: MPTherionPointSymbol.anchorSKBB,
   THPointType.borehole: MPTherionPointSymbol.boreholeSKBB,
@@ -20,6 +25,7 @@ const Map<THPointType, MPTherionPointSymbol> therionSKBBPointSymbols = {
   THPointType.clay: MPTherionPointSymbol.claySKBB,
   THPointType.fixedLadder: MPTherionPointSymbol.fixedLadderSKBB,
   THPointType.gradient: MPTherionPointSymbol.gradientSKBB,
+  THPointType.handrail: MPTherionPointSymbol.handrailSKBB,
   THPointType.noEquipment: MPTherionPointSymbol.noEquipmentSKBB,
   THPointType.rope: MPTherionPointSymbol.ropeSKBB,
   THPointType.ropeLadder: MPTherionPointSymbol.ropeLadderSKBB,

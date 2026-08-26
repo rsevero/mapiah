@@ -32,9 +32,10 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 /// `therion_skbb_showcase.pdf`). `station:fixed`/`station:natural` have no
 /// SKBB-specific override and keep falling back (`p_station_fixed_ASF`/
 /// `p_station_natural_ASF` are unported).
-/// `p_handrail_SKBB` (sized from the survey's real-world paper scale, not
-/// from the symbol unit `u`) is also intentionally not ported, so
-/// `handrail` keeps falling back too.
+/// `p_handrail_SKBB` (sized from the survey's real-world scale, not the
+/// symbol unit `u`) is ported as [drawHandrailSKBB], resolved separately
+/// via `getTherionScaleAwarePointDrawMethod` instead of [drawMethods]
+/// below, since it needs an extra parameter no other symbol here does.
 abstract final class MPTherionPointSymbolsSKBB {
   static const Map<
     MPTherionPointSymbol,
@@ -272,6 +273,36 @@ abstract final class MPTherionPointSymbolsSKBB {
         );
       },
     );
+  }
+
+  /// `p_handrail_SKBB`: `thdraw (0,0) -- (0,tmph); thdraw (0,tmph) withpen
+  /// pencircle scaled .25u;` — a vertical line whose length is
+  /// [oneMeterInLocalUnits] (Therion's `tmph`, its own comment reading "1 m
+  /// height" at the active scrap's declared scale), topped with a
+  /// `.25u`-wide dot. Unlike every other symbol here, the line's own length
+  /// isn't in `u`-multiples, so this draws directly in the
+  /// already-translated/rotated outer coordinate frame instead of going
+  /// through [MPSymbolTransform]'s automatic `u`-scaling — pen widths are
+  /// scaled by `u` explicitly instead.
+  static void drawHandrailSKBB(
+    Canvas canvas,
+    Offset position,
+    double u,
+    double oneMeterInLocalUnits,
+    MPTherionSymbolPaint paint,
+  ) {
+    final Paint border = paint.border!;
+    final Offset top = position + Offset(0, -oneMeterInLocalUnits);
+
+    canvas.drawLine(
+      position,
+      top,
+      Paint.from(border)..strokeWidth = mpTherionPenC * u,
+    );
+    canvas.drawPoints(PointMode.points, [top],
+        Paint.from(border)
+          ..strokeWidth = 0.25 * u
+          ..strokeCap = StrokeCap.round);
   }
 
   static void _drawFixedLadderSKBB(
