@@ -74,6 +74,7 @@ enum MPTherionPointSymbol {
   sinkSKBB,
   snowSKBB,
   springSKBB,
+  stationPaintedSKBB,
   stepsSKBB,
   traverseSKBB,
   viaFerrataSKBB,

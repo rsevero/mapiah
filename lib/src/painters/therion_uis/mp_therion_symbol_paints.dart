@@ -231,6 +231,9 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.springSKBB: MPTherionSymbolPaint(
     border: THPaint.thPaint3,
   ),
+  MPTherionPointSymbol.stationPaintedSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint4,
+  ),
   MPTherionPointSymbol.stepsSKBB: MPTherionSymbolPaint(
     border: THPaint.thPaint10,
   ),

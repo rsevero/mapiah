@@ -80,10 +80,9 @@ void main() {
     });
 
     test(
-      'station/station-name/handrail fall back to UIS/placeholder under SKBB',
+      'station-name/handrail fall back to UIS/placeholder under SKBB',
       () {
         for (final THPointType pointType in [
-          THPointType.station,
           THPointType.stationName,
           THPointType.handrail,
         ]) {
@@ -92,12 +91,45 @@ void main() {
       },
     );
 
+    test(
+      'station/station:temporary/station:painted resolve to the same '
+      'plain-circle symbol under SKBB (mapsymbol overrides '
+      'p_station_temporary to p_station_painted_SKBB), while '
+      'station:fixed/station:natural fall back',
+      () {
+        for (final String subtype in ['undefined', 'temporary', 'painted']) {
+          expect(
+            getTherionPointSymbol(
+              set: MPTherionSymbolSet.skbb,
+              pointType: THPointType.station,
+              subtype: subtype,
+            ),
+            MPTherionPointSymbol.stationPaintedSKBB,
+            reason: 'station:$subtype should resolve to the SKBB circle',
+          );
+        }
+
+        for (final String subtype in ['fixed', 'natural']) {
+          expect(
+            getTherionSKBBPointSymbol(
+              pointType: THPointType.station,
+              subtype: subtype,
+            ),
+            isNull,
+            reason: 'station:$subtype has no SKBB-specific override',
+          );
+        }
+      },
+    );
+
     test('every SKBB point symbol has a draw method and a paint entry', () {
       final ui.PictureRecorder recorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(recorder);
 
-      for (final MPTherionPointSymbol symbol
-          in therionSKBBPointSymbols.values) {
+      for (final MPTherionPointSymbol symbol in [
+        ...therionSKBBPointSymbols.values,
+        MPTherionPointSymbol.stationPaintedSKBB,
+      ]) {
         final MPTherionSymbolPaint paint = mpTherionSymbolPaints[symbol]!;
         final drawMethod = getTherionPointDrawMethod(symbol);
 

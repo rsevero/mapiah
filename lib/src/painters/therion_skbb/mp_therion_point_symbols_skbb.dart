@@ -5,8 +5,10 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
+import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 
@@ -14,12 +16,24 @@ import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
 /// (Phase 4B). Same conventions as [MPTherionPointSymbolsUIS]: unit space,
 /// canvas pre-translated/rotated/scaled, MetaPost Y-up coordinates negated.
 ///
-/// `p_station_SKBB` (text-flag-driven station marker/entrance/sink/spring
-/// overlays) and `p_handrail_SKBB` (sized from the survey's real-world
-/// paper scale, not from the symbol unit `u`) are intentionally not ported:
-/// both need infrastructure Phase 4B doesn't add (station text integration,
-/// scale-aware symbol sizing), so `station`/`station-name`/`handrail` keep
-/// falling back to UIS/placeholder under `therionSKBB`.
+/// `p_station_SKBB`'s mark-based dispatcher itself (and its `entrance`/
+/// `sink`/`spring`/... text-flag overlays) is intentionally not ported: it
+/// needs infrastructure Phase 4B doesn't add (station text integration), so
+/// `station-name` keeps falling back to UIS/placeholder under
+/// `therionSKBB`. But under an active `symbol-set SKBB`, Therion's
+/// `mapsymbol` mechanism (`therion.mp`) overrides bare `p_station_temporary`
+/// with `p_station_temporary_SKBB`, which `thPoint.mp` aliases to
+/// `p_station_painted_SKBB` (`let p_station_temporary_SKBB =
+/// p_station_painted_SKBB;`) — so under SKBB, `station` (no subtype, which
+/// carries the "temporary" mark by default per `thpoint.cxx`),
+/// `station:temporary`, and `station:painted` all render identically as
+/// the plain circle below (verified against
+/// `therion_skbb_showcase.pdf`). `station:fixed`/`station:natural` have no
+/// SKBB-specific override and keep falling back (`p_station_fixed_ASF`/
+/// `p_station_natural_ASF` are unported).
+/// `p_handrail_SKBB` (sized from the survey's real-world paper scale, not
+/// from the symbol unit `u`) is also intentionally not ported, so
+/// `handrail` keeps falling back too.
 abstract final class MPTherionPointSymbolsSKBB {
   static const Map<
     MPTherionPointSymbol,
@@ -40,6 +54,7 @@ abstract final class MPTherionPointSymbolsSKBB {
     MPTherionPointSymbol.sinkSKBB: _drawSinkSKBB,
     MPTherionPointSymbol.snowSKBB: _drawSnowSKBB,
     MPTherionPointSymbol.springSKBB: _drawSpringSKBB,
+    MPTherionPointSymbol.stationPaintedSKBB: _drawStationPaintedSKBB,
     MPTherionPointSymbol.stepsSKBB: _drawStepsSKBB,
     MPTherionPointSymbol.traverseSKBB: _drawTraverseSKBB,
     MPTherionPointSymbol.viaFerrataSKBB: _drawViaFerrataSKBB,
@@ -233,6 +248,34 @@ abstract final class MPTherionPointSymbolsSKBB {
           Offset.zero,
           0.4,
           _withPenWidth(paint.border!, mpTherionPenD),
+        );
+      },
+    );
+  }
+
+  /// `p_station_painted_SKBB`: `thclean fullcircle scaled 0.25u; thdraw
+  /// fullcircle scaled 0.25u;` — a plain circle outline, background-cleared
+  /// so it stays hollow over whatever it sits on.
+  static void _drawStationPaintedSKBB(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        MPThClean.drawPath(
+          canvas: canvas,
+          path: Path()..addOval(Rect.fromCircle(center: Offset.zero, radius: 0.125)),
+          backgroundColor: THPaint.thPaintWhiteBackground.color,
+        );
+        canvas.drawOval(
+          Rect.fromCircle(center: Offset.zero, radius: 0.125),
+          _withPenWidth(paint.border!, mpTherionPenC),
         );
       },
     );
