@@ -207,8 +207,8 @@ void main() {
             MPTH2EditVisualizationMethod.mapiahPlaceholder ||
             MPTH2EditVisualizationMethod.therionDefault ||
             MPTH2EditVisualizationMethod.therionUIS ||
-            MPTH2EditVisualizationMethod.therionSKBB => true,
-            MPTH2EditVisualizationMethod.therionAUT ||
+            MPTH2EditVisualizationMethod.therionSKBB ||
+            MPTH2EditVisualizationMethod.therionAUT => true,
             MPTH2EditVisualizationMethod.therionSBE ||
             MPTH2EditVisualizationMethod.therionBCRA ||
             MPTH2EditVisualizationMethod.therionNSS ||

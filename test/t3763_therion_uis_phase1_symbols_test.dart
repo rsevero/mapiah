@@ -177,6 +177,20 @@ void main() {
               // p_noequipment_SKBB thfill's its warning triangle.
               MPTherionPointSymbol.boreholeSKBB,
               MPTherionPointSymbol.noEquipmentSKBB,
+              // Phase 4C AUT: p_airdraught_AUT/p_gradient_AUT thfill their
+              // arrowhead triangle, p_entrance_AUT thfills its shaded
+              // triangle, p_stalagmite_AUT/p_icestalagmite_AUT/
+              // p_pillar_AUT/p_icepillar_AUT thfill a circle, and
+              // p_water_AUT thfills its pattern hatch (same as
+              // p_water_UIS).
+              MPTherionPointSymbol.airDraughtAUT,
+              MPTherionPointSymbol.entranceAUT,
+              MPTherionPointSymbol.gradientAUT,
+              MPTherionPointSymbol.icePillarAUT,
+              MPTherionPointSymbol.iceStalagmiteAUT,
+              MPTherionPointSymbol.pillarAUT,
+              MPTherionPointSymbol.stalagmiteAUT,
+              MPTherionPointSymbol.waterAUT,
             };
 
         for (final MPTherionPointSymbol symbol

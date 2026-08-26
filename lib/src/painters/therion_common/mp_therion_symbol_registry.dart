@@ -4,6 +4,8 @@
 import 'dart:ui';
 
 import 'package:mapiah/src/elements/types/th_point_type.dart';
+import 'package:mapiah/src/painters/therion_aut/mp_therion_aut_point_map.dart';
+import 'package:mapiah/src/painters/therion_aut/mp_therion_point_symbols_aut.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_default_symbol_set.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_point_symbols_skbb.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_point_map.dart';
@@ -26,6 +28,7 @@ const Map<MPTherionSymbolSet, MPTherionSetPointSymbolLookup>
 _setSpecificPointSymbolLookups = <MPTherionSymbolSet, MPTherionSetPointSymbolLookup>{
   MPTherionSymbolSet.uis: getTherionUISPointSymbol,
   MPTherionSymbolSet.skbb: getTherionSKBBPointSymbol,
+  MPTherionSymbolSet.aut: getTherionAUTPointSymbol,
 };
 
 /// Resolves the point symbol to draw for [pointType]/[subtype] under
@@ -87,6 +90,7 @@ MPTherionPointSymbol? getTherionPointSymbol({
 const Map<MPTherionPointSymbol, void Function(Canvas, Offset, double, MPTherionSymbolPaint)>
 _setSpecificDrawMethods = <MPTherionPointSymbol, void Function(Canvas, Offset, double, MPTherionSymbolPaint)>{
   ...MPTherionPointSymbolsSKBB.drawMethods,
+  ...MPTherionPointSymbolsAUT.drawMethods,
 };
 
 /// Resolves the draw method for an already-resolved [symbol]. Every

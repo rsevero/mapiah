@@ -189,8 +189,8 @@ void main() {
     );
 
     test(
-      'wall -subtype pit has neither a ported AUT nor a UIS macro yet, so '
-      'therionDefault keeps the Mapiah placeholder, same as today',
+      'wall -subtype pit resolves to the AUT decorator under therionDefault '
+      'now that Phase 4C has ported l_wall_pit_AUT',
       () {
         final definition = getTherionLineDefinition(
           lineType: THLineType.wall,
@@ -198,7 +198,7 @@ void main() {
         );
 
         expect(getTherionDefaultLineSet(lineType: THLineType.wall, subtype: 'pit'), MPTherionSymbolSet.aut);
-        expect(definition, isNull);
+        expect(definition, isNotNull);
       },
     );
 

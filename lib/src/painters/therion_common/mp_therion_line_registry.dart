@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'package:mapiah/src/elements/types/th_line_type.dart';
+import 'package:mapiah/src/painters/therion_aut/mp_therion_aut_line_map.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_default_symbol_set.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_line_map.dart';
@@ -21,6 +22,7 @@ const Map<MPTherionSymbolSet, MPTherionSetLineLookup>
 _setSpecificLineLookups = <MPTherionSymbolSet, MPTherionSetLineLookup>{
   MPTherionSymbolSet.uis: getTherionUISLineDefinition,
   MPTherionSymbolSet.skbb: getTherionSKBBLineDefinition,
+  MPTherionSymbolSet.aut: getTherionAUTLineDefinition,
 };
 
 /// Resolves the line decorator/color for [lineType]/[subtype] under

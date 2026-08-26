@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'package:mapiah/src/elements/types/th_area_type.dart';
+import 'package:mapiah/src/painters/therion_aut/mp_therion_aut_area_map.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_area_pattern_definition.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_default_symbol_set.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_therion_skbb_area_map.dart';
@@ -19,6 +20,7 @@ _setSpecificAreaPatternLookups =
     <MPTherionSymbolSet, MPTherionSetAreaPatternLookup>{
       MPTherionSymbolSet.uis: getTherionUISAreaPatternDefinition,
       MPTherionSymbolSet.skbb: getTherionSKBBAreaPatternDefinition,
+      MPTherionSymbolSet.aut: getTherionAUTAreaPatternDefinition,
     };
 
 /// Resolves the area pattern tile definition for [areaType] under [set],
