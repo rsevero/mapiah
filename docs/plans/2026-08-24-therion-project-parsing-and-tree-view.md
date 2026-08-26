@@ -34,6 +34,10 @@ Mapiah has evolved from a 2D sketch/drawing canvas editor for individual `.th2` 
    - Seamlessly trigger Therion compilation directly from the loaded `thconfig`.
    - Parse compiler log output and link errors directly to the source files and line numbers.
 
+### Single-Project Model
+
+Mapiah is a single-project editing app: only one Therion project (one `thconfig` root and its project tree) can be open at a time, matching `THProjectController`'s existing singleton design (`openProject` replaces any previously-loaded project via `closeProject()`; there is and will be no support for multiple concurrently-open project trees). Within that one open project, multiple *files* — `thconfig`, `.th`, and `.th2` — can be open simultaneously as separate tabs; "multi-tab" (Phase 6) means multiple file tabs inside one project, not multiple projects. This does not, by itself, forbid opening a standalone `.th2` file with no project loaded at all (today's "Open file" toolbar action) or leaving tabs from a project open after a different project is loaded (`pickProjectFile` already documents that it "opens it in the project tree without touching the tab lifecycle") — those remain existing, separate behaviors, not multi-project support.
+
 ---
 
 ## 2. Therion Project Architecture & Specification
