@@ -7,6 +7,7 @@
 [X] - Freehand drawing tool. [requested by Edvard]
 [X] - Show shortcuts related to current state on status bar. [requested by Edvard]
 [ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
+[ ] - Add line segments "/" keyboard shortcut has no button when editing line segments.
 
 ## Version 2.0
 [ ] - Open/edit/save thconfig files.

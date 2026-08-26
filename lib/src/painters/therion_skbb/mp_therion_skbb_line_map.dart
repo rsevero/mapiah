@@ -7,6 +7,7 @@ import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_common/mp_therion_line_definition.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_chimney_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_fixed_ladder_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_handrail_skbb_line_decorator.dart';
@@ -28,16 +29,22 @@ import 'package:mapiah/src/painters/therion_skbb/mp_wall_sand_skbb_line_decorato
 import 'package:mapiah/src/painters/therion_skbb/mp_wall_unsurveyed_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 
 /// Phase 4B Therion SKBB line decorators.
 ///
-/// `l_chimney_UIS` is defined in `thLine.mp` as `l_ceilingstep_SKBB(reverse
-/// P)`, and `l_contour_SKBB` is byte-for-byte identical to `l_contour_UIS`
-/// (down to the knot markers Mapiah already omits from both), so both reuse
-/// the existing UIS decorator/color instead of a new SKBB class.
+/// `chimney` has its own dedicated `l_chimney_SKBB` macro — a plain,
+/// evenly-dashed stroke with no tick marks at all, confirmed against the
+/// SKBB showcase's own legend (a plain dashed oval). This is a
+/// *different* macro from `l_chimney_UIS` (`l_ceilingstep_SKBB(reverse
+/// P)`, tick-marked, still used elsewhere by [MPChimneyLineDecorator]),
+/// so, unlike most of this map, [MPChimneySKBBLineDecorator] does *not*
+/// reuse the UIS class.
+///
+/// `l_contour_SKBB` is byte-for-byte identical to `l_contour_UIS` (down
+/// to the knot markers Mapiah already omits from both), so that one does
+/// reuse the existing UIS decorator/color instead of a new SKBB class.
 ///
 /// `waterFlow -subtype conjectural`/`intermittent` are handled below (a
 /// dotted/dashed redraw of the shared `l_waterflow_permanent_UIS` meander,
@@ -90,7 +97,7 @@ import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 /// until a follow-up phase ports it.
 final Map<THLineType, MPTherionLineDefinition> _skbbLineDefinitions = {
   THLineType.chimney: MPTherionLineDefinition(
-    decorator: const MPChimneyLineDecorator(),
+    decorator: const MPChimneySKBBLineDecorator(),
     color: mpTherionLineColors[THLineType.chimney]!,
   ),
   THLineType.contour: MPTherionLineDefinition(

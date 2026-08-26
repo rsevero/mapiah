@@ -14,6 +14,7 @@ import 'package:mapiah/src/painters/therion_common/mp_therion_line_registry.dart
 import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_ceiling_step_skbb_line_decorator.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_chimney_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_floor_meander_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_line_slope_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_overhang_skbb_line_decorator.dart';
@@ -32,7 +33,6 @@ import 'package:mapiah/src/painters/therion_skbb/mp_wall_unsurveyed_skbb_line_de
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_conjectural_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_chimney_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_contour_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_water_flow_permanent_line_decorator.dart';
@@ -101,19 +101,23 @@ void main() {
       recorder.endRecording().dispose();
     });
 
-    test('chimney and contour reuse the UIS decorator under SKBB', () {
-      final chimney = getTherionLineDefinition(
-        set: MPTherionSymbolSet.skbb,
-        lineType: THLineType.chimney,
-      );
-      final contour = getTherionLineDefinition(
-        set: MPTherionSymbolSet.skbb,
-        lineType: THLineType.contour,
-      );
+    test(
+      'chimney gets its own SKBB decorator (a distinct macro from UIS) '
+      'while contour reuses the UIS decorator under SKBB',
+      () {
+        final chimney = getTherionLineDefinition(
+          set: MPTherionSymbolSet.skbb,
+          lineType: THLineType.chimney,
+        );
+        final contour = getTherionLineDefinition(
+          set: MPTherionSymbolSet.skbb,
+          lineType: THLineType.contour,
+        );
 
-      expect(chimney?.decorator, isA<MPChimneyLineDecorator>());
-      expect(contour?.decorator, isA<MPContourLineDecorator>());
-    });
+        expect(chimney?.decorator, isA<MPChimneySKBBLineDecorator>());
+        expect(contour?.decorator, isA<MPContourLineDecorator>());
+      },
+    );
 
     test(
       'ceilingStep/ceilingMeander/floorMeander/overhang get SKBB-specific '

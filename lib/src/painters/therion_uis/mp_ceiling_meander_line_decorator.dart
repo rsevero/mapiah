@@ -47,8 +47,9 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
 
         final Offset direction = tangent / tangentLength;
         final Offset perpendicular = Offset(-direction.dy, direction.dx);
-        // Radial ticks span nearUnits..(nearUnits+0.1)u from the line;
-        // crossbars are 0.4u long, centered on the nearUnits radial point.
+        // Radial ticks (stems) span nearUnits..(nearUnits+0.1)u from the
+        // line, pointing inward from the crossbar toward the line;
+        // crossbars are 0.4u long, centered on the stem's far (outer) end.
         final Offset near = perpendicular * (nearUnits * u);
         final Offset radialSpan = perpendicular * (0.1 * u);
         final Offset along = direction * (0.2 * u);
@@ -56,20 +57,15 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
         void addRung(double sign) {
           final Offset radial = near * sign;
           final Offset span = radialSpan * sign;
+          final Offset far = radial + span;
 
           rungs
             ..moveTo((position + radial).dx, (position + radial).dy)
+            ..lineTo((position + far).dx, (position + far).dy)
+            ..moveTo((position + far + along).dx, (position + far + along).dy)
             ..lineTo(
-              (position + radial + span).dx,
-              (position + radial + span).dy,
-            )
-            ..moveTo(
-              (position + radial + along).dx,
-              (position + radial + along).dy,
-            )
-            ..lineTo(
-              (position + radial - along).dx,
-              (position + radial - along).dy,
+              (position + far - along).dx,
+              (position + far - along).dy,
             );
         }
 
