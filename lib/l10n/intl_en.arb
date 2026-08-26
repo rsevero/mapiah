@@ -128,9 +128,9 @@
     "description": "The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
-  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Open THConfig file and run Therion (Ctrl+T)",
+  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Open project and run Therion (Ctrl+T)",
   "@mapiahOpenTHConfigAndRunTherionButtonTooltip": {
-    "description": "The tooltip for the button that opens a THConfig file and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "The tooltip for the button that opens a project and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mapiahRunTherionButtonLabel": "Rerun Therion",
@@ -253,11 +253,6 @@
   "mapiahTherionRunTherionOutputEnd": "End Therion output",
   "@mapiahTherionRunTherionOutputEnd": {
     "description": "Header line marking the end of Therion output section. Used on: _MPRunTherionDialogWidgetState._onTherionRunFinished",
-    "type": "text"
-  },
-  "mapiahTherionSelectTHConfigDialogTitle": "Select THConfig file",
-  "@mapiahTherionSelectTHConfigDialogTitle": {
-    "description": "Title for THConfig file picker dialog. Used on: MPDialogAux.pickTHConfigFile",
     "type": "text"
   },
   "mergeAreasLineSegmentsOutsideBoundary": "Merge areas: line segments outside the outer boundary were found — merge aborted",
@@ -1133,7 +1128,7 @@
   },
   "mpNoTherionFound": "No Therion found",
   "@mpNoTherionFound": {
-    "description": "Tooltip shown when no Therion executable is available. Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage": "{pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s) selected",

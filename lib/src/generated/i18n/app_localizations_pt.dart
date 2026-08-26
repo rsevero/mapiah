@@ -97,7 +97,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
-      'Abrir arquivo THConfig e executar Therion (Ctrl+T)';
+      'Abrir projeto e executar Therion (Ctrl+T)';
 
   @override
   String get mapiahRunTherionButtonLabel => 'Reexecutar Therion';
@@ -173,10 +173,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mapiahTherionRunTherionOutputEnd => 'Fim da saída do Therion';
-
-  @override
-  String get mapiahTherionSelectTHConfigDialogTitle =>
-      'Selecionar arquivo THConfig';
 
   @override
   String get mergeAreasLineSegmentsOutsideBoundary =>

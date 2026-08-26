@@ -283,7 +283,7 @@ abstract class MPTH2FileEditState {
         th2FileEditController.toggleToNextAvailableScrap();
         return true;
       case MPButtonType.chooseTHConfigAndRunTherion:
-        MPDialogAux.chooseTHConfigAndRunTherion(
+        MPDialogAux.pickProjectFileAndRunTherion(
           th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;
@@ -356,7 +356,7 @@ abstract class MPTH2FileEditState {
         elementEditController.toggleSelectedLinesReverseOption();
         return true;
       case MPButtonType.runTherion:
-        MPDialogAux.runTherionWithLastTHConfig(
+        MPDialogAux.rerunTherionForOpenProject(
           th2FileEditController.getTH2FileWidgetBuildContext(),
         );
         return true;

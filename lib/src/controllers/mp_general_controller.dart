@@ -40,9 +40,6 @@ abstract class MPGeneralControllerBase with Store {
   String get lastAccessedDirectory => _lastAccessedDirectory;
 
   @readonly
-  String _thConfigFilePath = '';
-
-  @readonly
   ObservableList<String> _openFileOrder = ObservableList<String>();
 
   @readonly
@@ -71,11 +68,6 @@ abstract class MPGeneralControllerBase with Store {
       value += '/';
     }
     _lastAccessedDirectory = value;
-  }
-
-  @action
-  void setTHConfigFilePath(String value) {
-    _thConfigFilePath = value.trim();
   }
 
   void _clearActiveTabOverlayWindows() {
@@ -244,7 +236,6 @@ abstract class MPGeneralControllerBase with Store {
     }
     _textEditorControllers.clear();
 
-    _thConfigFilePath = '';
     _openFileOrder.clear();
     _activeTabIndex = 0;
     _clipboard = null;

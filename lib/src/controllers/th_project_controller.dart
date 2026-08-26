@@ -56,8 +56,36 @@ abstract class THProjectControllerBase with Store {
   @observable
   ObservableSet<String> dirtyFilePaths = ObservableSet<String>();
 
+  /// Diagnostics parsed from a finished Therion run (see
+  /// `th_project_therion_diagnostics_aux.dart`), kept separate from
+  /// [projectErrors] because that list is fully reassigned on every
+  /// `openProject`/`reloadProject`/`reparseFile`, which would silently wipe
+  /// compiler diagnostics on the next keystroke if they were merged into it
+  /// directly.
+  @observable
+  ObservableList<THProjectParseError> compilerErrors =
+      ObservableList<THProjectParseError>();
+
+  @computed
+  List<THProjectParseError> get allDiagnostics =>
+      <THProjectParseError>[...projectErrors, ...compilerErrors];
+
   @computed
   bool get hasUnsavedChanges => dirtyFilePaths.isNotEmpty;
+
+  /// Replaces [compilerErrors] with the diagnostics from a just-finished
+  /// Therion run. Always a full replacement (never an append), so calling
+  /// this with a fresh full parse result at the end of every run naturally
+  /// clears diagnostics that no longer reproduce.
+  @action
+  void applyTherionRunDiagnostics(List<THProjectParseError> diagnostics) {
+    compilerErrors = ObservableList<THProjectParseError>.of(diagnostics);
+  }
+
+  List<THProjectParseError> compilerErrorsForPath(String canonicalPath) =>
+      compilerErrors
+          .where((THProjectParseError error) => error.filePath == canonicalPath)
+          .toList();
 
   final Map<String, Set<String>> _fileDependencies = <String, Set<String>>{};
 
@@ -165,6 +193,7 @@ abstract class THProjectControllerBase with Store {
     rootConfigPath = '';
     projectRootNode = null;
     projectErrors = ObservableList<THProjectParseError>();
+    compilerErrors = ObservableList<THProjectParseError>();
     activeSelectedNodeId = null;
     fileContentsCache = ObservableMap<String, String>();
     dirtyFilePaths = ObservableSet<String>();

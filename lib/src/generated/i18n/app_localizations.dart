@@ -236,10 +236,10 @@ abstract class AppLocalizations {
   /// **'Keyboard Shortcuts (Ctrl+K)'**
   String get mapiahKeyboardShortcutsTooltip;
 
-  /// The tooltip for the button that opens a THConfig file and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// The tooltip for the button that opens a project and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
-  /// **'Open THConfig file and run Therion (Ctrl+T)'**
+  /// **'Open project and run Therion (Ctrl+T)'**
   String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
 
   /// Label for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build
@@ -373,12 +373,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End Therion output'**
   String get mapiahTherionRunTherionOutputEnd;
-
-  /// Title for THConfig file picker dialog. Used on: MPDialogAux.pickTHConfigFile
-  ///
-  /// In en, this message translates to:
-  /// **'Select THConfig file'**
-  String get mapiahTherionSelectTHConfigDialogTitle;
 
   /// Snackbar message shown when merge areas finds segments outside the chosen bounding path. Used on: lib/src/controllers/th2_file_edit_split_merge_controller.dart
   ///
@@ -1416,7 +1410,7 @@ abstract class AppLocalizations {
   /// **'Scrap ID'**
   String get mpNewScrapDialogCreateScrapIDLabel;
 
-  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, _MapiahHomeState.build, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'No Therion found'**

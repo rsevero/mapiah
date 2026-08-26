@@ -21,7 +21,7 @@ class THTextEditorController = THTextEditorControllerBase
 
 /// MobX store owning the state of one open `thconfig`/`.th` text-editor
 /// instance: current text, dirty state, cursor/scroll position, fold state,
-/// and a diagnostics snapshot filtered from [THProjectController.projectErrors].
+/// and a diagnostics snapshot filtered from [THProjectController.allDiagnostics].
 ///
 /// This controller is a UI/data bridge, not a replacement for
 /// [THProjectController]: parsing and tree mutation stay there. One instance
@@ -74,7 +74,8 @@ abstract class THTextEditorControllerBase with Store {
   final FocusNode textEditorFocusNode = FocusNode();
 
   @computed
-  List<THProjectParseError> get diagnostics => _projectController.projectErrors
+  List<THProjectParseError> get diagnostics => _projectController
+      .allDiagnostics
       .where((THProjectParseError error) => error.filePath == canonicalPath)
       .toList();
 

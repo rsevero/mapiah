@@ -10,6 +10,7 @@ import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_map_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
+import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/elements/th_project/th_scrap_node.dart';
 import 'package:mapiah/src/elements/th_project/th_survey_node.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
@@ -39,6 +40,7 @@ class THProjectTreeNodeWidget extends StatelessWidget {
     final bool isExpanded = mpLocator
         .thProjectTreeUIController
         .isExpanded(node.id);
+    final List<THProjectParseError> nodeErrors = _errorsForNode(node);
 
     return Material(
       key: ValueKey('THProjectTreeNodeWidget|${node.id}'),
@@ -61,7 +63,7 @@ class THProjectTreeNodeWidget extends StatelessWidget {
                 ),
               ),
               if (isDirty) _buildStatusDot(colorScheme.tertiary),
-              if (node.hasErrors) _buildErrorDot(context),
+              if (nodeErrors.isNotEmpty) _buildErrorDot(context, nodeErrors),
               const SizedBox(width: 4),
             ],
           ),
@@ -94,6 +96,46 @@ class THProjectTreeNodeWidget extends StatelessWidget {
     }
     // THMissingFileNode, and THScrapNode.isFromTH2File (always false today):
     // no-op, matches current behavior.
+  }
+
+  /// Compiler diagnostics are attached only at text-editor file nodes
+  /// ([THConfigFileNode]/[THDataFileNode]); logical nodes, [TH2FileNode], and
+  /// [THMissingFileNode] keep showing only their own parse-time
+  /// [THProjectNode.parseErrors].
+  List<THProjectParseError> _errorsForNode(THProjectNode currentNode) {
+    if ((currentNode is THConfigFileNode) ||
+        (currentNode is THDataFileNode)) {
+      return <THProjectParseError>[
+        ...currentNode.parseErrors,
+        ...mpLocator.thProjectController.compilerErrorsForPath(
+          (currentNode as THProjectFileNode).absolutePath,
+        ),
+      ];
+    }
+
+    return currentNode.parseErrors;
+  }
+
+  void _onErrorDotTap(List<THProjectParseError> nodeErrors) {
+    mpLocator.thProjectController.selectNode(node.id);
+
+    if ((node is! THConfigFileNode) && (node is! THDataFileNode)) {
+      return;
+    }
+
+    if (nodeErrors.isEmpty) {
+      return;
+    }
+
+    final THProjectFileNode fileNode = node as THProjectFileNode;
+    final List<THProjectParseError> compilerErrors = mpLocator
+        .thProjectController
+        .compilerErrorsForPath(fileNode.absolutePath);
+    final int targetLine = compilerErrors.isNotEmpty
+        ? compilerErrors.first.lineNumber
+        : nodeErrors.first.lineNumber;
+
+    _openTextEditorTab(fileNode.absolutePath, lineNumber: targetLine);
   }
 
   void _openTextEditorTab(String filePath, {int? lineNumber}) {
@@ -142,16 +184,22 @@ class THProjectTreeNodeWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildErrorDot(BuildContext context) {
-    return Tooltip(
-      message: '${node.parseErrors.length}',
-      child: Container(
-        key: ValueKey('THProjectTreeNodeErrorDot|${node.id}'),
-        width: mpProjectTreeStatusDotSize,
-        height: mpProjectTreeStatusDotSize,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.error,
-          shape: BoxShape.circle,
+  Widget _buildErrorDot(
+    BuildContext context,
+    List<THProjectParseError> nodeErrors,
+  ) {
+    return GestureDetector(
+      key: ValueKey('THProjectTreeNodeErrorDot|${node.id}'),
+      onTap: () => _onErrorDotTap(nodeErrors),
+      child: Tooltip(
+        message: '${nodeErrors.length}',
+        child: Container(
+          width: mpProjectTreeStatusDotSize,
+          height: mpProjectTreeStatusDotSize,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.error,
+            shape: BoxShape.circle,
+          ),
         ),
       ),
     );

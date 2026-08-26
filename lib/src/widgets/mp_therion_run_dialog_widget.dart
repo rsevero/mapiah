@@ -8,8 +8,11 @@ import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th_project_therion_diagnostics_aux.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_dialog_bottom_widget.dart';
 import 'package:material_ui/material_ui.dart';
@@ -84,7 +87,27 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     }
 
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
+
+    // Clear stale diagnostics from a previous run so they don't linger on
+    // screen for the whole duration of a new one that turns out clean.
+    // Guarded by the same path-equality check as the finish-of-run bridge,
+    // so a run against a `thconfig` that isn't the loaded project leaves the
+    // tree/editor diagnostics untouched.
+    if (_isRunTargetingLoadedProject()) {
+      mpLocator.thProjectController.applyTherionRunDiagnostics(
+        const <THProjectParseError>[],
+      );
+    }
+
     unawaited(_startTherionRun());
+  }
+
+  bool _isRunTargetingLoadedProject() {
+    final String canonicalRunConfigPath = THProjectPathResolver.canonicalize(
+      p.absolute(widget.thConfigFilePath),
+    );
+
+    return canonicalRunConfigPath == mpLocator.thProjectController.rootConfigPath;
   }
 
   Future<void> _onTherionRunFinished() async {
@@ -106,6 +129,16 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       final List<String> therionLogLines = await _readTherionLogLines(
         appLocalizations,
       );
+
+      if (_isRunTargetingLoadedProject()) {
+        mpLocator.thProjectController.applyTherionRunDiagnostics(
+          parseTherionRunDiagnostics(
+            outputLines: therionOutputLines,
+            logLines: therionLogLines,
+            workingDirectory: p.dirname(p.absolute(widget.thConfigFilePath)),
+          ),
+        );
+      }
 
       final String? formattedStartTime = startTime != null
           ? _formatTimeOfDay(startTime)

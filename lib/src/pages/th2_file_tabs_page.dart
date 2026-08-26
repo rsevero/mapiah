@@ -227,7 +227,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                     ? colorScheme.onSecondaryContainer
                     : mpTherionRunStatusBackgroundErrorColor,
                 onPressed: () =>
-                    MPDialogAux.chooseTHConfigAndRunTherion(context),
+                    MPDialogAux.pickProjectFileAndRunTherion(context),
                 tooltip: therionAvailable
                     ? appLocalizations
                           .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -239,10 +239,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             builder: (_) {
               final bool therionAvailable =
                   mpSettingsController.isTherionAvailable;
-              final bool hasTHConfig =
-                  mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
-              final VoidCallback? onPressed = hasTHConfig
-                  ? () => MPDialogAux.runTherionWithLastTHConfig(context)
+              final bool hasOpenProject =
+                  mpLocator.thProjectController.rootConfigPath.isNotEmpty;
+              final VoidCallback? onPressed = hasOpenProject
+                  ? () => MPDialogAux.rerunTherionForOpenProject(context)
                   : null;
 
               return IconButton(
@@ -429,8 +429,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       builder: (BuildContext context) {
         final TH2FileEditController? controller = _getActiveController();
         final bool therionAvailable = mpSettingsController.isTherionAvailable;
-        final bool hasTHConfig =
-            mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
+        final bool hasOpenProject =
+            mpLocator.thProjectController.rootConfigPath.isNotEmpty;
 
         return PopupMenuButton<_TH2FileTabsAction>(
           key: const ValueKey('TH2FileTabsPageMoreActionsButton'),
@@ -446,7 +446,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               <PopupMenuEntry<_TH2FileTabsAction>>[
                 ..._buildFileMenuEntries(appLocalizations, controller),
                 const PopupMenuDivider(),
-                ..._buildTherionMenuEntries(appLocalizations, hasTHConfig),
+                ..._buildTherionMenuEntries(appLocalizations, hasOpenProject),
                 const PopupMenuDivider(),
                 ..._buildSupportMenuEntries(appLocalizations),
               ],
@@ -485,7 +485,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   /// Creates the Therion entries for the compact app bar menu.
   List<PopupMenuEntry<_TH2FileTabsAction>> _buildTherionMenuEntries(
     AppLocalizations appLocalizations,
-    bool hasTHConfig,
+    bool hasOpenProject,
   ) {
     return <PopupMenuEntry<_TH2FileTabsAction>>[
       _overflowMenuItem(
@@ -495,7 +495,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       _overflowMenuItem(
         action: _TH2FileTabsAction.runTherion,
         label: appLocalizations.mapiahRunTherionButtonTooltip,
-        enabled: hasTHConfig,
+        enabled: hasOpenProject,
       ),
     ];
   }
@@ -565,9 +565,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       case _TH2FileTabsAction.saveAs:
         controller?.saveAsTH2File();
       case _TH2FileTabsAction.openTHConfig:
-        MPDialogAux.chooseTHConfigAndRunTherion(context);
+        MPDialogAux.pickProjectFileAndRunTherion(context);
       case _TH2FileTabsAction.runTherion:
-        MPDialogAux.runTherionWithLastTHConfig(context);
+        MPDialogAux.rerunTherionForOpenProject(context);
       case _TH2FileTabsAction.settings:
         Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -871,12 +871,12 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               ),
           // Therion: Ctrl+T
           const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
-              MPDialogAux.chooseTHConfigAndRunTherion(context),
+              MPDialogAux.pickProjectFileAndRunTherion(context),
           const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
-              MPDialogAux.chooseTHConfigAndRunTherion(context),
+              MPDialogAux.pickProjectFileAndRunTherion(context),
           // Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
-              MPDialogAux.runTherionWithLastTHConfig(context),
+              MPDialogAux.rerunTherionForOpenProject(context),
         };
 
     return CallbackShortcuts(

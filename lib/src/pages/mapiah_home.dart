@@ -98,7 +98,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           'currentDirectory=${Directory.current.path}',
         );
       }
-      await MPDialogAux.runTherionWithTHConfigFile(
+      await MPDialogAux.runTherionAndOpenProjectInBackground(
         context,
         widget.thConfigFilePath!,
       );
@@ -126,7 +126,7 @@ class _MapiahHomeState extends State<MapiahHome> {
             'currentDirectory=${Directory.current.path}',
           );
         }
-        await MPDialogAux.runTherionWithTHConfigFile(
+        await MPDialogAux.runTherionAndOpenProjectInBackground(
           context,
           widget.mainFilePath!,
         );
@@ -189,7 +189,7 @@ class _MapiahHomeState extends State<MapiahHome> {
                     ? colorScheme.onSecondaryContainer
                     : mpTherionRunStatusBackgroundErrorColor,
                 onPressed: () =>
-                    MPDialogAux.chooseTHConfigAndRunTherion(context),
+                    MPDialogAux.pickProjectFileAndRunTherion(context),
                 tooltip: therionAvailable
                     ? appLocalizations
                           .mapiahOpenTHConfigAndRunTherionButtonTooltip
@@ -201,10 +201,10 @@ class _MapiahHomeState extends State<MapiahHome> {
             builder: (_) {
               final bool therionAvailable =
                   mpSettingsController.isTherionAvailable;
-              final bool hasTHConfig =
-                  mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
-              final VoidCallback? onPressed = hasTHConfig
-                  ? () => MPDialogAux.runTherionWithLastTHConfig(context)
+              final bool hasOpenProject =
+                  mpLocator.thProjectController.rootConfigPath.isNotEmpty;
+              final VoidCallback? onPressed = hasOpenProject
+                  ? () => MPDialogAux.rerunTherionForOpenProject(context)
                   : null;
 
               return IconButton(
@@ -274,8 +274,8 @@ class _MapiahHomeState extends State<MapiahHome> {
     return Observer(
       builder: (BuildContext context) {
         final bool therionAvailable = mpSettingsController.isTherionAvailable;
-        final bool hasTHConfig =
-            mpLocator.mpGeneralController.thConfigFilePath.isNotEmpty;
+        final bool hasOpenProject =
+            mpLocator.thProjectController.rootConfigPath.isNotEmpty;
 
         return PopupMenuButton<_MapiahHomeAction>(
           key: ValueKey('MapiahHomeMoreActionsButton'),
@@ -288,7 +288,7 @@ class _MapiahHomeState extends State<MapiahHome> {
           tooltip: appLocalizations.mpMoreActionsTooltip,
           onSelected: _handleOverflowMenuAction,
           itemBuilder: (BuildContext context) =>
-              _buildOverflowMenuEntries(appLocalizations, hasTHConfig),
+              _buildOverflowMenuEntries(appLocalizations, hasOpenProject),
         );
       },
     );
@@ -297,7 +297,7 @@ class _MapiahHomeState extends State<MapiahHome> {
   /// Creates the entries for the compact home app bar menu.
   List<PopupMenuEntry<_MapiahHomeAction>> _buildOverflowMenuEntries(
     AppLocalizations appLocalizations,
-    bool hasTHConfig,
+    bool hasOpenProject,
   ) {
     return <PopupMenuEntry<_MapiahHomeAction>>[
       _overflowMenuItem(
@@ -316,7 +316,7 @@ class _MapiahHomeState extends State<MapiahHome> {
       _overflowMenuItem(
         action: _MapiahHomeAction.runTherion,
         label: appLocalizations.mapiahRunTherionButtonTooltip,
-        enabled: hasTHConfig,
+        enabled: hasOpenProject,
       ),
       const PopupMenuDivider(),
       _overflowMenuItem(
@@ -361,9 +361,9 @@ class _MapiahHomeState extends State<MapiahHome> {
       case _MapiahHomeAction.openProject:
         MPDialogAux.pickProjectFile(context);
       case _MapiahHomeAction.openTHConfig:
-        MPDialogAux.chooseTHConfigAndRunTherion(context);
+        MPDialogAux.pickProjectFileAndRunTherion(context);
       case _MapiahHomeAction.runTherion:
-        MPDialogAux.runTherionWithLastTHConfig(context);
+        MPDialogAux.rerunTherionForOpenProject(context);
       case _MapiahHomeAction.settings:
         Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -539,12 +539,12 @@ extension on _MapiahHomeState {
               ),
           // Therion: Ctrl+T
           const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
-              MPDialogAux.chooseTHConfigAndRunTherion(context),
+              MPDialogAux.pickProjectFileAndRunTherion(context),
           const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
-              MPDialogAux.chooseTHConfigAndRunTherion(context),
+              MPDialogAux.pickProjectFileAndRunTherion(context),
           // Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
-              MPDialogAux.runTherionWithLastTHConfig(context),
+              MPDialogAux.rerunTherionForOpenProject(context),
         };
 
     return CallbackShortcuts(

@@ -27,8 +27,8 @@ class THProjectTreeWidget extends StatelessWidget {
             .thProjectController
             .projectRootNode;
         final bool isParsing = mpLocator.thProjectController.isParsing;
-        final List<THProjectParseError> projectErrors =
-            mpLocator.thProjectController.projectErrors;
+        final List<THProjectParseError> allDiagnostics =
+            mpLocator.thProjectController.allDiagnostics;
         final Set<String> dirtyFilePaths = mpLocator
             .thProjectController
             .dirtyFilePaths
@@ -49,9 +49,9 @@ class THProjectTreeWidget extends StatelessWidget {
               )
             else ...<Widget>[
               if (isParsing) const LinearProgressIndicator(),
-              if (projectErrors.isNotEmpty)
+              if (allDiagnostics.isNotEmpty)
                 _THProjectTreeErrorSummary(
-                  errors: projectErrors,
+                  errors: allDiagnostics,
                   appLocalizations: appLocalizations,
                 ),
               Expanded(

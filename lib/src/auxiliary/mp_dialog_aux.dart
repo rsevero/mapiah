@@ -1211,53 +1211,6 @@ class MPDialogAux {
     );
   }
 
-  static Future<bool> pickTHConfigFile(BuildContext context) async {
-    if (_isFilePickerOpen[MPFilePickerType.thconfig] == true) {
-      return false;
-    }
-
-    _isFilePickerOpen[MPFilePickerType.thconfig] = true;
-
-    try {
-      final PlatformFile? picked = await FilePicker.pickFile(
-        dialogTitle:
-            mpLocator.appLocalizations.mapiahTherionSelectTHConfigDialogTitle,
-        type: FileType.any,
-        linuxOptions: const LinuxOptions(lockParentWindow: true),
-        windowsOptions: const WindowsOptions(lockParentWindow: true),
-        initialDirectory:
-            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-            ? (kDebugMode ? thDebugPath : './')
-            : mpLocator.mpGeneralController.lastAccessedDirectory,
-      );
-
-      if (picked != null) {
-        final String? pickedFilePath = picked.path;
-
-        if (pickedFilePath == null) {
-          return false;
-        }
-
-        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-          pickedFilePath,
-        );
-        mpLocator.mpGeneralController.setTHConfigFilePath(pickedFilePath);
-
-        return true;
-      } else {
-        mpLocator.mpLog.i('No THConfig file selected.');
-
-        return false;
-      }
-    } catch (e) {
-      mpLocator.mpLog.e('Error picking THConfig file', error: e);
-
-      return false;
-    } finally {
-      _isFilePickerOpen[MPFilePickerType.thconfig] = false;
-    }
-  }
-
   /// Picks the Therion project configuration file and opens it in the
   /// project tree without touching the tab lifecycle.
   ///
@@ -1267,8 +1220,31 @@ class MPDialogAux {
     BuildContext context, {
     bool openTabsPageAfterLoad = true,
   }) async {
-    if (_isFilePickerOpen[MPFilePickerType.project] == true) {
+    final PlatformFile? picked = await _pickProjectFilePath();
+
+    if (picked == null) {
       return;
+    }
+
+    final String? pickedFilePath = picked.path;
+
+    if (pickedFilePath == null) {
+      return;
+    }
+
+    await mpLocator.thProjectController.openProject(
+      pickedFilePath,
+      forceConfigShape: true,
+    );
+
+    if (openTabsPageAfterLoad && context.mounted) {
+      ensureProjectTabsPageOpen(context);
+    }
+  }
+
+  static Future<PlatformFile?> _pickProjectFilePath() async {
+    if (_isFilePickerOpen[MPFilePickerType.project] == true) {
+      return null;
     }
 
     _isFilePickerOpen[MPFilePickerType.project] = true;
@@ -1289,28 +1265,24 @@ class MPDialogAux {
       if (picked == null) {
         mpLocator.mpLog.i('No project file selected.');
 
-        return;
+        return null;
       }
 
       final String? pickedFilePath = picked.path;
 
       if (pickedFilePath == null) {
-        return;
+        return null;
       }
 
       mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
         pickedFilePath,
       );
-      await mpLocator.thProjectController.openProject(
-        pickedFilePath,
-        forceConfigShape: true,
-      );
 
-      if (openTabsPageAfterLoad && context.mounted) {
-        ensureProjectTabsPageOpen(context);
-      }
+      return picked;
     } catch (e) {
       mpLocator.mpLog.e('Error picking project file', error: e);
+
+      return null;
     } finally {
       _isFilePickerOpen[MPFilePickerType.project] = false;
     }
@@ -1341,29 +1313,13 @@ class MPDialogAux {
     );
   }
 
-  static Future<void> pickTHConfigFileAndRunTherion(
-    BuildContext context,
-  ) async {
-    final bool isPicked = await pickTHConfigFile(context);
+  static Future<void> runTherion(
+    BuildContext context, {
+    required String thConfigFilePath,
+  }) async {
+    final String trimmedPath = thConfigFilePath.trim();
 
-    if (!isPicked) {
-      return;
-    }
-
-    if (!context.mounted) {
-      return;
-    }
-
-    await runTherion(context);
-  }
-
-  static Future<void> runTherion(BuildContext context) async {
-    final String thConfigFilePath = mpLocator
-        .mpGeneralController
-        .thConfigFilePath
-        .trim();
-
-    if (thConfigFilePath.isEmpty) {
+    if (trimmedPath.isEmpty) {
       return;
     }
 
@@ -1371,21 +1327,123 @@ class MPDialogAux {
         .getStringWithDefault(MPSettingID.Therion_ExecutablePath)
         .trim();
 
-    final bool? shouldChooseTHConfig = await showDialog<bool>(
+    final bool? shouldPickDifferentProject = await showDialog<bool>(
       context: context,
       useRootNavigator: true,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return MPRunTherionDialogWidget(
           therionExecutablePath: configuredExecutablePath,
-          thConfigFilePath: thConfigFilePath,
+          thConfigFilePath: trimmedPath,
         );
       },
     );
 
-    if ((shouldChooseTHConfig == true) && context.mounted) {
-      await chooseTHConfigAndRunTherion(context);
+    if ((shouldPickDifferentProject == true) && context.mounted) {
+      await pickProjectFileAndRunTherion(context);
     }
+  }
+
+  /// Picks a project file, then immediately starts a Therion run against it
+  /// while loading it as the open project in the background (see
+  /// [runTherionAndOpenProjectInBackground]).
+  static Future<void> pickProjectFileAndRunTherion(
+    BuildContext context, {
+    MPProjectFilePicker? pickFile,
+    MPProjectLauncher? launch,
+  }) async {
+    if (!mpLocator.mpSettingsController.isTherionAvailable) {
+      MPDialogAux.showHelpDialog(
+        context,
+        'no_therion_found',
+        mpLocator.appLocalizations.mpNoTherionFound,
+      );
+
+      return;
+    }
+
+    final MPProjectLauncher launchProjectAndRun =
+        launch ?? runTherionAndOpenProjectInBackground;
+    final PlatformFile? picked = await (pickFile ?? _pickProjectFilePath)();
+
+    if (picked == null) {
+      return;
+    }
+
+    final String? pickedFilePath = picked.path;
+
+    if (pickedFilePath == null) {
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+
+    await launchProjectAndRun(context, pickedFilePath);
+  }
+
+  /// Runs Therion against whichever project is currently loaded
+  /// (`THProjectController.rootConfigPath`), replacing the old
+  /// "run with last picked thconfig" flow — the project tree's own state is
+  /// now the single source of truth for what "Rerun Therion" targets.
+  static Future<void> rerunTherionForOpenProject(BuildContext context) async {
+    final String rootConfigPath = mpLocator.thProjectController.rootConfigPath;
+
+    if (rootConfigPath.isEmpty) {
+      return;
+    }
+
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
+      await runTherion(context, thConfigFilePath: rootConfigPath);
+    } else {
+      MPDialogAux.showHelpDialog(
+        context,
+        'no_therion_found',
+        mpLocator.appLocalizations.mpNoTherionFound,
+      );
+    }
+  }
+
+  /// Starts a Therion run against [thConfigFilePath] immediately, without
+  /// waiting for [thConfigFilePath] to also finish loading as the open
+  /// project — the project load is kicked off in the background so the
+  /// project tree populates concurrently with the compile. Shared by the
+  /// "open project and run Therion" picker flow and CLI startup
+  /// (`--thconfig`/positional argument).
+  static Future<void> runTherionAndOpenProjectInBackground(
+    BuildContext context,
+    String thConfigFilePath, {
+    MPProjectLoader? projectLoader,
+    MPRunTherionStarter? runTherionStarter,
+  }) {
+    final MPProjectLoader loadProject =
+        projectLoader ?? mpLocator.thProjectController.openProject;
+    final MPRunTherionStarter startRun = runTherionStarter ?? runTherion;
+
+    // Load the project in the background regardless of Therion availability
+    // (and without waiting for a run that did start to finish), so "Rerun
+    // Therion" becomes enabled the moment the project loads even if Therion
+    // itself isn't available yet.
+    unawaited(
+      loadProject(thConfigFilePath, forceConfigShape: true).then((_) {
+        if (context.mounted) {
+          ensureProjectTabsPageOpen(context);
+        }
+      }),
+    );
+
+    if (mpLocator.mpSettingsController.isTherionAvailable) {
+      return startRun(context, thConfigFilePath: thConfigFilePath);
+    }
+
+    MPDialogAux.showHelpDialog(
+      context,
+      'no_therion_found',
+      mpLocator.appLocalizations.mpNoTherionFound,
+    );
+
+    return Future<void>.value();
   }
 
   static Future<String?> pickExecutableFilePath(
@@ -1436,55 +1494,6 @@ class MPDialogAux {
     }
   }
 
-  static Future<void> chooseTHConfigAndRunTherion(BuildContext context) async {
-    if (mpLocator.mpSettingsController.isTherionAvailable) {
-      await MPDialogAux.pickTHConfigFileAndRunTherion(context);
-    } else {
-      MPDialogAux.showHelpDialog(
-        context,
-        'no_therion_found',
-        mpLocator.appLocalizations.mpNoTherionFound,
-      );
-    }
-  }
-
-  static Future<void> runTherionWithLastTHConfig(BuildContext context) async {
-    if (mpLocator.mpGeneralController.thConfigFilePath.trim().isEmpty) {
-      return;
-    }
-
-    if (mpLocator.mpSettingsController.isTherionAvailable) {
-      MPDialogAux.runTherion(context);
-    } else {
-      MPDialogAux.showHelpDialog(
-        context,
-        'no_therion_found',
-        mpLocator.appLocalizations.mpNoTherionFound,
-      );
-    }
-  }
-
-  static Future<void> runTherionWithTHConfigFile(
-    BuildContext context,
-    String thConfigFilePath,
-  ) async {
-    // Always store the path so 'Rerun Therion' is enabled even if Therion is
-    // currently unavailable (e.g. not yet configured). The user can fix the
-    // Therion path in settings and then use 'Rerun Therion' without having to
-    // pick the file again.
-    mpLocator.mpGeneralController.setTHConfigFilePath(thConfigFilePath);
-
-    if (mpLocator.mpSettingsController.isTherionAvailable) {
-      await runTherion(context);
-    } else {
-      MPDialogAux.showHelpDialog(
-        context,
-        'no_therion_found',
-        mpLocator.appLocalizations.mpNoTherionFound,
-      );
-    }
-  }
-
   static void showHelpDialog(
     BuildContext context,
     String helpPage,
@@ -1505,7 +1514,21 @@ class MPDialogAux {
   }
 }
 
-enum MPFilePickerType { image, th2, thconfig, executable, project }
+enum MPFilePickerType { image, th2, executable, project }
+
+typedef MPProjectFilePicker = Future<PlatformFile?> Function();
+
+typedef MPProjectLauncher =
+    Future<void> Function(BuildContext context, String thConfigFilePath);
+
+typedef MPProjectLoader =
+    Future<void> Function(String configFilePath, {bool forceConfigShape});
+
+typedef MPRunTherionStarter =
+    Future<void> Function(
+      BuildContext context, {
+      required String thConfigFilePath,
+    });
 
 enum MPUpdateCheckFailureType { httpStatus, noAnswer, parsing }
 

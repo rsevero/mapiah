@@ -9,6 +9,14 @@ part of 'th_project_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$THProjectController on THProjectControllerBase, Store {
+  Computed<List<THProjectParseError>>? _$allDiagnosticsComputed;
+
+  @override
+  List<THProjectParseError> get allDiagnostics =>
+      (_$allDiagnosticsComputed ??= Computed<List<THProjectParseError>>(
+        () => super.allDiagnostics,
+        name: 'THProjectControllerBase.allDiagnostics',
+      )).value;
   Computed<bool>? _$hasUnsavedChangesComputed;
 
   @override
@@ -147,6 +155,24 @@ mixin _$THProjectController on THProjectControllerBase, Store {
     });
   }
 
+  late final _$compilerErrorsAtom = Atom(
+    name: 'THProjectControllerBase.compilerErrors',
+    context: context,
+  );
+
+  @override
+  ObservableList<THProjectParseError> get compilerErrors {
+    _$compilerErrorsAtom.reportRead();
+    return super.compilerErrors;
+  }
+
+  @override
+  set compilerErrors(ObservableList<THProjectParseError> value) {
+    _$compilerErrorsAtom.reportWrite(value, super.compilerErrors, () {
+      super.compilerErrors = value;
+    });
+  }
+
   late final _$openProjectAsyncAction = AsyncAction(
     'THProjectControllerBase.openProject',
     context: context,
@@ -231,6 +257,18 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   );
 
   @override
+  void applyTherionRunDiagnostics(List<THProjectParseError> diagnostics) {
+    final _$actionInfo = _$THProjectControllerBaseActionController.startAction(
+      name: 'THProjectControllerBase.applyTherionRunDiagnostics',
+    );
+    try {
+      return super.applyTherionRunDiagnostics(diagnostics);
+    } finally {
+      _$THProjectControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void closeProject() {
     final _$actionInfo = _$THProjectControllerBaseActionController.startAction(
       name: 'THProjectControllerBase.closeProject',
@@ -264,6 +302,8 @@ projectErrors: ${projectErrors},
 activeSelectedNodeId: ${activeSelectedNodeId},
 fileContentsCache: ${fileContentsCache},
 dirtyFilePaths: ${dirtyFilePaths},
+compilerErrors: ${compilerErrors},
+allDiagnostics: ${allDiagnostics},
 hasUnsavedChanges: ${hasUnsavedChanges}
     ''';
   }
