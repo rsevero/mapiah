@@ -407,7 +407,7 @@ The main Mapiah workspace will feature a resizable split view:
   - Code folding for `survey...endsurvey`, `centreline...endcentreline`, `layout...endlayout`.
   - Error squiggles under syntax error tokens with hover tooltip descriptions.
   - Auto-indentation on Enter after block openings (`survey`, `centreline`, `scrap`, `map`, `layout`).
-  - Standard shortcuts: `Ctrl+S` (Save via dedicated writer), `Ctrl+Z` (Undo), `Ctrl+Y` / `Ctrl+Shift+Z` (Redo), `Ctrl+F` (Find/Replace).
+  - Standard shortcuts: `Ctrl+S` (Save via dedicated writer), `Ctrl+Z` (Undo), `Ctrl+Y` / `Ctrl+Shift+Z` (Redo — both provided for free by the text field's built-in editing stack). `Ctrl+F` (single-file Find/Replace) is a Phase 5 follow-up rather than part of the initial Phase 5 increment; searching across multiple project files is its own Phase 9.
   - Quick Go-To Definition: `Ctrl+Click` on `input filename` opens that file immediately.
 
 ---
@@ -456,7 +456,12 @@ Phase 7: Therion Run Diagnostics & Error Linking
    │
    ▼
 Phase 8: Help Pages, Keyboard Shortcuts, Localization (EN/PT) & Tests
+   │
+   ▼
+Phase 9: Multi-File Find/Replace
 ```
+
+Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multiple open text-editor tabs to have files to search across); it's numbered last because the need for it only became concrete after Phase 8 was already planned, not because it depends on Phases 7-8.
 
 ### Phase 1: Core Grammars, Parsers & Writers
 - Implement `THConfigGrammar`, `THConfigFileParser`, and `THConfigFileWriter`.
@@ -493,6 +498,12 @@ Phase 8: Help Pages, Keyboard Shortcuts, Localization (EN/PT) & Tests
 - Add localized strings to `lib/l10n/app_en.arb` and `lib/l10n/app_pt.arb`.
 - Update help pages (`assets/help/en/`, `assets/help/pt/`) and keyboard shortcuts tables.
 - Write comprehensive test suites (unit, widget, and integration tests).
+
+### Phase 9: Multi-File Find/Replace
+- Search across every open `THTextEditorController` (and, optionally, every `thconfig`/`.th` file in the project tree, not just currently-open tabs) for a query, with results grouped by file and a jump-to-match action that opens/focuses the right tab at the right line.
+- Project-wide "Replace All" that writes through each affected file's `THTextEditorController.setContent`/`save`, respecting the same debounce and dirty-tracking semantics as a single-file edit — no bespoke multi-file write path.
+- Builds on the single-file find/replace shipped as a Phase 5 follow-up (§7.1): reuses its match-computation and highlight rendering per file rather than a separate implementation.
+- Depends on Phase 6 for multiple simultaneously-open text-editor tabs to search across.
 
 ---
 

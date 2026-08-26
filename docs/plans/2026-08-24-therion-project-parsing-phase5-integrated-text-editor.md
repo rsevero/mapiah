@@ -32,7 +32,7 @@ Phase 5 adds the first integrated text-editing layer for **`thconfig` and `.th` 
 - **No multi-tab integration**: Phase 5 does not add a second tab type to `MPGeneralController`; that is Phase 6.
 - **No `.th2` text editing**: Canvas files continue to use `TH2FileEditController`.
 - **No Therion compiler log linking**: Therion output diagnostics are Phase 7.
-- **No search-and-replace across multiple project files**: single-file find/replace is acceptable if trivial, but multi-file search is deferred.
+- **No find/replace of any kind in this increment**: single-file find/replace is a Phase 5 follow-up (§13); multi-file search across the project is deferred to its own later phase (see the top-level roadmap's Phase 9).
 - **No LSP/IntelliSense**, type checking, or semantic analysis beyond the existing parser diagnostics.
 
 ---
@@ -276,9 +276,10 @@ Phase 5 implements:
 | `Ctrl/Cmd+Y` / `Ctrl/Cmd+Shift+Z` | Redo text edit |
 | `Tab` / `Shift+Tab` | Indent / outdent selection |
 | `Enter` after a block-opening keyword | Basic auto-indent |
-| `Ctrl/Cmd+F` | Single-file find/replace (optional) |
 
-Undo/redo is initially provided by the text field's built-in editing stack, not the `MPUndoRedoController` used by canvas commands. This keeps Phase 5 text editing isolated from canvas command semantics.
+Undo/redo is provided by the text field's built-in editing stack, not the `MPUndoRedoController` used by canvas commands, and needed no extra implementation: Flutter's default `Shortcuts`/`Actions` bindings already give a multiline `TextField` working `Ctrl/Cmd+Z`/`Ctrl/Cmd+Y`/`Ctrl/Cmd+Shift+Z`. This keeps Phase 5 text editing isolated from canvas command semantics.
+
+`Ctrl/Cmd+F` (single-file find/replace) was cut from this increment; it ships as the Phase 5 follow-up in §13.
 
 ---
 
@@ -360,3 +361,73 @@ Representative scenarios:
 2. **Code folding complexity in a raw `TextField`**: replacing collapsed ranges with placeholders can complicate cursor/selection math. Mitigation: keep fold regions pure and initially fold only at block boundaries; if the UX becomes fragile, defer visual folding and expose fold-region data only.
 3. **Reparse feedback loops**: editor changes trigger re-parse, which can rebuild diagnostics and potentially update `fileContentsCache`. Mitigation: the editor never overwrites its own `TextEditingController` from re-parse output while it owns focus; it only refreshes diagnostics.
 4. **Large files**: tokenizing the entire text on every frame is expensive. Mitigation: tokenize on a debounced content snapshot and cache tokens keyed by `content`; optional incremental tokenization can be added later.
+
+---
+
+## 13. Follow-up: Single-File Find/Replace
+
+Cut from the initial Phase 5 increment to keep it reviewable; scoped here so it can be picked up without re-deriving the design. Single-file only — it operates on one already-open `THTextEditorWidget`/`THTextEditorController` pair. Searching across multiple project files is a separate, later phase (see the top-level roadmap's Phase 9, added alongside this note).
+
+### 13.1 Controller additions (`THTextEditorController`)
+
+```dart
+@observable
+String findQuery = '';
+
+@observable
+String replaceQuery = '';
+
+@observable
+bool findCaseSensitive = false;
+
+@observable
+bool isFindBarVisible = false;
+
+@observable
+int? activeMatchIndex;
+
+@computed
+List<TextRange> get findMatches; // computed from content + findQuery + findCaseSensitive
+
+@action
+void openFindBar();
+
+@action
+void closeFindBar();
+
+@action
+void findNext();
+
+@action
+void findPrevious();
+
+@action
+void replaceActiveMatch();
+
+@action
+void replaceAllMatches();
+```
+
+`findMatches` is a plain substring/case-fold scan over `content` — no regex in this increment. Replacing mutates `content` through the existing `setContent` path, so a replace is indistinguishable from a normal edit to the rest of the controller (same debounce, same dirty tracking).
+
+### 13.2 Widget additions (`THTextEditorWidget`)
+
+- `Ctrl/Cmd+F` opens an in-editor find bar (a `Row` overlay pinned above the text area, not a dialog), with a query field, case-sensitivity toggle, match-count label (`3/12`), next/previous buttons, and `Esc` to close.
+- An optional replace field (revealed by an expand affordance) with "Replace" and "Replace All" buttons.
+- Matches are highlighted in the syntax overlay (an additional `TextSpan` background color layered under the syntax color, keyed off `findMatches`), with the active match visually distinguished from the rest.
+- `findNext`/`findPrevious` also move the `TextField`'s selection/scroll to the active match.
+
+### 13.3 Test plan
+
+`test/t3905_th_text_editor_find_replace_test.dart` (continuing the Phase 5 numbering):
+- `findMatches` computation: case-sensitive/insensitive, overlapping-free matches, empty query, no matches, query longer than content.
+- `findNext`/`findPrevious` wrap around at the ends of the match list.
+- `replaceActiveMatch` replaces only the active match and re-syncs `findMatches` against the new content.
+- `replaceAllMatches` replaces every match in one `setContent` call (not one call per match, to keep a single debounced reparse).
+- Widget test: `Ctrl/Cmd+F` opens the find bar, typing filters matches, `Esc` closes it.
+
+### 13.4 Non-goals (kept from Phase 5)
+
+- No regex search.
+- No search across files — that's the multi-file phase.
+- No persisted find-bar state across editor sessions.
