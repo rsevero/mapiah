@@ -446,8 +446,16 @@ void main() {
           1.0,
         );
         expect(
+          const MPBorderTemporarySKBBLineDecorator().dashGapScaleFactor,
+          1.0,
+        );
+        expect(
           const MPBorderPresumedSKBBLineDecorator().dashScaleFactor,
           0.25,
+        );
+        expect(
+          const MPBorderPresumedSKBBLineDecorator().dashGapScaleFactor,
+          3.0,
         );
       },
     );

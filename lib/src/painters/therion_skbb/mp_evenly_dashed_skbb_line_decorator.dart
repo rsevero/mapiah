@@ -17,15 +17,19 @@ import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 /// (`MPBorderTemporarySKBBLineDecorator`, `factor = 1`, byte-for-byte the
 /// same macro body as chimney's), and `l_border_presumed_SKBB`
 /// (`MPBorderPresumedSKBBLineDecorator`, `factor = 0.25`, a denser dash).
-/// `optical_zoom`'s exact default dash pitch isn't derivable without
-/// running MetaPost itself, so the base `0.15u` dash length here is an
-/// approximation using this set's own established dash-length
-/// conventions rather than a literal port of that constant; `factor`
-/// still scales it the same way the macros scale each other.
+/// `dashScaleFactor` scales the dash length, while `dashGapScaleFactor`
+/// scales only the following gap. The default equal dash/gap behavior
+/// keeps chimney and border-temporary unchanged; border-presumed can use
+/// a larger gap to read as a spaced row of dots without altering the
+/// other two decorators.
 abstract class MPEvenlyDashedSKBBLineDecorator extends MPLineDecorator {
   final double dashScaleFactor;
+  final double dashGapScaleFactor;
 
-  const MPEvenlyDashedSKBBLineDecorator({this.dashScaleFactor = 1.0});
+  const MPEvenlyDashedSKBBLineDecorator({
+    this.dashScaleFactor = 1.0,
+    this.dashGapScaleFactor = 1.0,
+  });
 
   @override
   void decorate({
@@ -42,8 +46,9 @@ abstract class MPEvenlyDashedSKBBLineDecorator extends MPLineDecorator {
   }) {
     final double u = symbolUnit.canvasValue;
     final double dashLength = 0.15 * dashScaleFactor * u;
+    final double dashGapLength = dashLength * dashGapScaleFactor;
     final MPDashedPathProperties dashedPathProperties = MPDashedPathProperties(
-      dashLengths: <double>[dashLength, -dashLength],
+      dashLengths: <double>[dashLength, -dashGapLength],
     );
 
     for (final PathMetric metric in path.computeMetrics()) {
@@ -58,7 +63,8 @@ abstract class MPEvenlyDashedSKBBLineDecorator extends MPLineDecorator {
       dashedPathProperties.path,
       Paint.from(color)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = mpTherionPenC * u,
+        ..strokeWidth = mpTherionPenC * u
+        ..strokeCap = StrokeCap.round,
     );
   }
 }
