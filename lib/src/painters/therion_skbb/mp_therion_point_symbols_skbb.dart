@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
+import 'package:mapiah/src/painters/helpers/mp_clay_s_motif_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_transform.dart';
 import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
@@ -105,27 +106,19 @@ abstract final class MPTherionPointSymbolsSKBB {
     );
   }
 
+  /// `p_clay_SKBB`: `(-.3u,0){up}..origin{down}..{up}(0.3u,0)` — the same
+  /// "S" motif as `area clay`/`wall clay` ([MPClaySMotifAux]), but
+  /// mirrored: a hump on the left followed by a dip on the right, confirmed
+  /// against `therion_skbb_showcase.pdf`.
   static void _drawClaySKBB(
     Canvas canvas,
     Offset position,
     double u,
     MPTherionSymbolPaint paint,
   ) {
-    final Path path = MPDirectionalCurveAux.buildCurvePath(
-      start: const Offset(-0.3, 0),
-      end: const Offset(0, 0),
-      startDirectionDegrees: -90,
-      endDirectionDegrees: 90,
-    );
-
-    path.addPath(
-      MPDirectionalCurveAux.buildCurvePath(
-        start: const Offset(0, 0),
-        end: const Offset(0.3, 0),
-        startDirectionDegrees: -90,
-        endDirectionDegrees: 90,
-      ),
-      Offset.zero,
+    final Path path = MPClaySMotifAux.buildPath(
+      halfWidth: 0.3,
+      mirrored: true,
     );
 
     MPSymbolTransform.draw(
