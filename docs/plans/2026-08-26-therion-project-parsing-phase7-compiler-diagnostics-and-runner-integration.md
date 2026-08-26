@@ -196,14 +196,14 @@ static Future<void> pickProjectFileAndRunTherion(BuildContext context) async {
     return;
   }
 
-  runTherionAndOpenProjectInBackground(context, pickedFilePath);
+  await runTherionAndOpenProjectInBackground(context, pickedFilePath);
 }
 ```
 
 Notes:
 - The Therion-availability gate at the *top* of this method (before the picker even opens) matches today's `chooseTHConfigAndRunTherion`, which avoids bothering the user with a file dialog for a run it already knows can't happen — collapsing three methods (`chooseTHConfigAndRunTherion`/`pickTHConfigFileAndRunTherion`/`pickTHConfigFile`) into one removes a layer of indirection that no longer does anything once the picker is shared with `pickProjectFile`.
 - The actual "start the run, load the project in the background" pair is factored into `runTherionAndOpenProjectInBackground` (§4.4), shared with the CLI-startup path — see that section for why the availability check also has to live there, not just here.
-- `pickProjectFile` (§2, unchanged) keeps awaiting `openProject` before opening the tabs page, because it has no concurrent run to avoid blocking; `runTherionAndOpenProjectInBackground` intentionally does not await it, for the sequencing reason in §4.4, but still opens the tabs page once the load finishes, matching `pickProjectFile`'s own post-load behavior.
+- `pickProjectFile` (§2, unchanged) keeps awaiting `openProject` before opening the tabs page, because it has no concurrent run to avoid blocking; `runTherionAndOpenProjectInBackground` intentionally does not await `openProject`, but awaits `runTherion` so the run dialog still determines when the picker/CLI-startup action completes. It still opens the tabs page once the project load finishes, matching `pickProjectFile`'s own post-load behavior.
 - `_isFilePickerOpen[MPFilePickerType.project]` is reused as the re-entrancy guard (shared with `pickProjectFile`, since both are now "pick a project file" pickers) — `MPFilePickerType.thconfig` and `pickTHConfigFile` are deleted as dead code.
 
 ### 4.4 Rerun and CLI-startup call sites
@@ -233,20 +233,10 @@ Replaces `runTherionWithLastTHConfig`.
 `runTherionWithTHConfigFile(context, path)` (the CLI `--thconfig`/positional-argument startup path, `mapiah_home.dart:101,129`) is replaced by a shared helper, `runTherionAndOpenProjectInBackground`, used both by this CLI path and by §4.3's post-pick step:
 
 ```dart
-static void runTherionAndOpenProjectInBackground(
+static Future<void> runTherionAndOpenProjectInBackground(
   BuildContext context,
   String thConfigFilePath,
 ) {
-  if (mpLocator.mpSettingsController.isTherionAvailable) {
-    unawaited(runTherion(context, thConfigFilePath: thConfigFilePath));
-  } else {
-    MPDialogAux.showHelpDialog(
-      context,
-      'no_therion_found',
-      mpLocator.appLocalizations.mpNoTherionFound,
-    );
-  }
-
   // Load the project in the background regardless of Therion availability
   // (and without waiting for a run that did start to finish), so "Rerun
   // Therion" becomes enabled the moment the project loads even if Therion
@@ -268,10 +258,22 @@ static void runTherionAndOpenProjectInBackground(
           }
         }),
   );
+
+  if (mpLocator.mpSettingsController.isTherionAvailable) {
+    return runTherion(context, thConfigFilePath: thConfigFilePath);
+  }
+
+  MPDialogAux.showHelpDialog(
+    context,
+    'no_therion_found',
+    mpLocator.appLocalizations.mpNoTherionFound,
+  );
+
+  return Future<void>.value();
 }
 ```
 
-For the §4.3 picker flow, Therion availability was already confirmed `true` by `pickProjectFileAndRunTherion`'s own top-of-function gate before the picker even opened, so this helper's `isTherionAvailable` check is redundant-but-harmless there; for the CLI-argument flow (no picker, no prior gate) it is the only place that check happens, exactly replacing what `runTherionWithTHConfigFile` did today. `_runStartupFileActions` in `mapiah_home.dart` calls this helper directly with `widget.thConfigFilePath!`/`widget.mainFilePath!` in place of today's `await MPDialogAux.runTherionWithTHConfigFile(context, ...)` — note the call becomes synchronous (no `await`), matching the method's own `void` return (both of its internal calls are already `unawaited`, so there is nothing left to await).
+For the §4.3 picker flow, Therion availability was already confirmed `true` by `pickProjectFileAndRunTherion`'s own top-of-function gate before the picker even opened, so this helper's `isTherionAvailable` check is redundant-but-harmless there; for the CLI-argument flow (no picker, no prior gate) it is the only place that check happens, exactly replacing what `runTherionWithTHConfigFile` did today. `_runStartupFileActions` in `mapiah_home.dart` keeps using `await`, now as `await MPDialogAux.runTherionAndOpenProjectInBackground(context, widget.thConfigFilePath!)` (and the positional-argument equivalent). The helper returns the `runTherion` future, so CLI startup still waits for the Therion run dialog to close before the post-startup telemetry-consent/update-check block runs — exactly the existing `runTherionWithTHConfigFile` sequencing — while `openProject` still proceeds in the background.
 
 ### 4.5 Button/menu/shortcut call-site updates
 
@@ -442,13 +444,29 @@ List<THProjectParseError> get diagnostics => _projectController.allDiagnostics
 
 ### 10.1 `THProjectTreeWidget` error summary banner
 
-`_THProjectTreeErrorSummary` (`th_project_tree_widget.dart:230-315`) is passed `errors: projectErrors` today (line 54); change the call site to pass `mpLocator.thProjectController.allDiagnostics` instead. The banner's own rendering (count + newline-joined tooltip of messages) needs no changes — it is already list-agnostic.
+`THProjectTreeWidget.build()` (`th_project_tree_widget.dart:30-54`) currently reads `projectErrors` into a local, gates the banner with `if (projectErrors.isNotEmpty)`, and passes that local to `_THProjectTreeErrorSummary`. All three points must switch to `mpLocator.thProjectController.allDiagnostics`, not just the call at line 54. Concretely:
+
+```dart
+final List<THProjectParseError> allDiagnostics =
+    mpLocator.thProjectController.allDiagnostics;
+
+// ...
+
+if (allDiagnostics.isNotEmpty)
+  _THProjectTreeErrorSummary(
+    errors: allDiagnostics,
+    appLocalizations: appLocalizations,
+  ),
+```
+
+Reading `allDiagnostics` in the outer `Observer.build()` is what lets compiler-only diagnostics both show the summary banner and invalidate the tree when `compilerErrors` is reassigned. The banner's own rendering (count + newline-joined tooltip of messages) needs no changes — it is already list-agnostic.
 
 ### 10.2 `THProjectTreeNodeWidget` error dot
 
 ```dart
 List<THProjectParseError> _errorsForNode(THProjectNode currentNode) {
-  if (currentNode is THProjectFileNode) {
+  if ((currentNode is THConfigFileNode) ||
+      (currentNode is THDataFileNode)) {
     return <THProjectParseError>[
       ...currentNode.parseErrors,
       ...mpLocator.thProjectController.compilerErrorsForPath(
@@ -462,7 +480,7 @@ List<THProjectParseError> _errorsForNode(THProjectNode currentNode) {
 ```
 
 - `build()`'s `if (node.hasErrors) _buildErrorDot(context)` becomes `if (nodeErrors.isNotEmpty) _buildErrorDot(context, nodeErrors)` where `nodeErrors = _errorsForNode(node)` is computed once per `build()`.
-- Per §1's non-goal, compiler diagnostics are attached only at the file-node level (`THProjectFileNode`); logical nodes (`THSurveyNode`/`THCentrelineNode`/`THMapNode`/inline `THScrapNode`) keep showing only their existing parse-time `parseErrors` — unchanged from today.
+- Per §1's non-goal, compiler diagnostics are attached only at text-editor file nodes (`THConfigFileNode`/`THDataFileNode`); logical nodes (`THSurveyNode`/`THCentrelineNode`/`THMapNode`/inline `THScrapNode`), `TH2FileNode`, and `THMissingFileNode` keep showing only their existing parse-time `parseErrors` — unchanged from today.
 - `_buildErrorDot` gains its own `onTap`, separate from the row's `_onTap` (which still just opens the file at the top, unchanged for a plain row click):
   ```dart
   Widget _buildErrorDot(BuildContext context, List<THProjectParseError> nodeErrors) {
@@ -477,17 +495,29 @@ List<THProjectParseError> _errorsForNode(THProjectNode currentNode) {
   }
 
   void _onErrorDotTap(List<THProjectParseError> nodeErrors) {
-    if (node is! THProjectFileNode) {
+    mpLocator.thProjectController.selectNode(node.id);
+
+    if ((node is! THConfigFileNode) && (node is! THDataFileNode)) {
+      return;
+    }
+
+    if (nodeErrors.isEmpty) {
       return;
     }
 
     final THProjectFileNode fileNode = node as THProjectFileNode;
-    final int targetLine = nodeErrors.first.lineNumber;
+    final List<THProjectParseError> compilerErrors =
+        mpLocator.thProjectController.compilerErrorsForPath(
+          fileNode.absolutePath,
+        );
+    final int targetLine = compilerErrors.isNotEmpty
+        ? compilerErrors.first.lineNumber
+        : nodeErrors.first.lineNumber;
 
     _openTextEditorTab(fileNode.absolutePath, lineNumber: targetLine);
   }
   ```
-  Reuses the exact `_openTextEditorTab` helper already added in Phase 6 (§6 of that phase's plan) — no new tab/navigation code. `GestureDetector.onTap` intentionally does not call `mpLocator.thProjectController.selectNode(node.id)` itself; the row's outer `InkWell` still handles selection on any tap within the row (including the dot), so tapping the dot both selects the node *and* opens/scrolls, matching how the rest of the row already behaves.
+  Reuses the exact `_openTextEditorTab` helper already added in Phase 6 (§6 of that phase's plan) — no new tab/navigation code. `GestureDetector.onTap` must call `mpLocator.thProjectController.selectNode(node.id)` itself; the row's outer `InkWell` does not reliably fire for a nested dot tap, so the dot handler is responsible for both selecting the node and opening/scrolling to the diagnostic line.
 - The dot's fill color stays `colorScheme.error` regardless of whether the mix contains only warnings (matches today's existing behavior — Phase 7 does not add warning/error color-splitting to the tree dot, only to the text editor's marker, which already had it).
 
 ---
@@ -564,11 +594,11 @@ Test numbering continues at `t3911`:
 
 | Test file | Coverage |
 | :--- | :--- |
-| `test/t3911_mp_dialog_aux_run_therion_retargeting_test.dart` | `rerunTherionForOpenProject` no-ops when `THProjectController.rootConfigPath` is empty and runs `MPRunTherionDialogWidget` with that path when set; `pickProjectFileAndRunTherion` starts the run before `THProjectController.openProject` resolves (ordering assertion via a controllable/delayed fake project loader) and still loads the project in the background; `runTherionAndOpenProjectInBackground` starts both without either awaiting the other. |
+| `test/t3911_mp_dialog_aux_run_therion_retargeting_test.dart` | `rerunTherionForOpenProject` no-ops when `THProjectController.rootConfigPath` is empty and runs `MPRunTherionDialogWidget` with that path when set; `pickProjectFileAndRunTherion` starts the run before `THProjectController.openProject` resolves (ordering assertion via a controllable/delayed fake project loader) and still loads the project in the background; `runTherionAndOpenProjectInBackground` starts `openProject` in the background, then awaits the `runTherion` future so CLI/picker callers complete when the run dialog closes. |
 | `test/t3912_th_project_therion_diagnostics_aux_test.dart` | `parseTherionRunDiagnostics`: matches the documented `therion: error -- file [line N] -- message` / `warning` shape; ignores unlocated lines; resolves relative paths against `workingDirectory` and canonicalizes them; de-duplicates identical diagnostics seen in both `outputLines` and `logLines`; case-insensitive `error`/`warning` matching. |
 | `test/t3913_th_project_controller_compiler_diagnostics_test.dart` | `applyTherionRunDiagnostics` replaces (not appends to) `compilerErrors`; `allDiagnostics` merges `projectErrors` + `compilerErrors`; `compilerErrorsForPath` filters correctly; `closeProject` clears `compilerErrors`. |
 | `test/t3914_th_text_editor_controller_compiler_diagnostics_test.dart` | A `THProjectController.compilerErrors` entry for an open editor's `canonicalPath` appears in `THTextEditorController.diagnostics` and renders via the existing `THTextEditorDiagnosticMarkerWidget` path (mirrors `t3904`'s harness). |
-| `test/t3915_th_project_tree_node_widget_compiler_error_dot_test.dart` | A compiler diagnostic on a `THDataFileNode`/`THConfigFileNode` shows the error dot with the combined (parse + compiler) count; a compiler diagnostic on a file with no static parse errors still shows the dot; logical child nodes (survey/centreline/map) do not gain a dot from a compiler diagnostic in their file; tapping the dot opens/focuses the file's text-editor tab and sets `pendingScrollToLine` to the first diagnostic's line. |
+| `test/t3915_th_project_tree_node_widget_compiler_error_dot_test.dart` | A compiler diagnostic on a `THDataFileNode`/`THConfigFileNode` shows the error dot with the combined (parse + compiler) count; a compiler diagnostic on a file with no static parse errors still shows the dot; a `TH2FileNode` compiler diagnostic does not gain a dot or text-editor navigation; logical child nodes (survey/centreline/map) do not gain a dot from a compiler diagnostic in their file; tapping the dot selects the file node, opens/focuses its text-editor tab, and sets `pendingScrollToLine` to the first compiler diagnostic when one exists, otherwise to the first parse error. |
 | `test/t3916_mp_therion_run_dialog_widget_diagnostics_bridge_test.dart` | Using an injected `MPTherionRunner` (constructor already supports `therionRunner:` injection) that surfaces known output/log lines: when the run's `thConfigFilePath` canonicalizes to the loaded project's `rootConfigPath`, `THProjectController.compilerErrors` is populated after the run finishes; when it does not match (no project loaded, or a different project), `compilerErrors` stays empty; a second run with different diagnostics fully replaces the first run's set. |
 | `test/t3917_mapiah_home_run_therion_buttons_test.dart` | Widget test: "Run Therion" button is disabled with no project loaded and enabled once one is, and calls `rerunTherionForOpenProject`; "Open project and run Therion" button calls `pickProjectFileAndRunTherion`; both the compact overflow menu and the expanded app-bar variants agree. |
 
