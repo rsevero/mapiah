@@ -421,7 +421,7 @@ The main Mapiah workspace will feature a resizable split view:
 1. **Current infrastructure use**:
    - Current infrastructure for Therion compilation will be reusued as much as possible to minimize behaviour changes.
 2. **Compilation Action**:
-   - `Run Therion` action button in the toolbar and shortcut (`Ctrl+R` / `F5`).
+   - `Run Therion` action button in the toolbar and shortcuts `T` / `Ctrl+T`.
    - Automatically uses the currently loaded `thconfig` path.
 3. **Compiler Log Parsing**:
    - Captures `stdout` / `stderr` and Therion `therion.log`.

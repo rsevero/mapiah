@@ -170,50 +170,18 @@ static Future<void> pickProjectFileAndRunTherion(
     return;
   }
 
-  if (_isFilePickerOpen[MPFilePickerType.project] == true) {
+  final MPProjectLauncher launchProjectAndRun =
+      launch ?? runTherionAndOpenProjectInBackground;
+  final PlatformFile? picked = await (pickFile ?? _pickProjectFilePath)();
+
+  if (picked == null) {
     return;
   }
 
-  _isFilePickerOpen[MPFilePickerType.project] = true;
+  final String? pickedFilePath = picked.path;
 
-  final MPProjectFilePicker pickProjectFile =
-      pickFile ??
-      () => FilePicker.pickFile(
-        dialogTitle:
-            mpLocator.appLocalizations.projectTreeSelectProjectDialogTitle,
-        type: FileType.any,
-        linuxOptions: const LinuxOptions(lockParentWindow: true),
-        windowsOptions: const WindowsOptions(lockParentWindow: true),
-        initialDirectory:
-            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-            ? (kDebugMode ? thDebugPath : './')
-            : mpLocator.mpGeneralController.lastAccessedDirectory,
-      );
-  final MPProjectLauncher launchProjectAndRun =
-      launch ?? runTherionAndOpenProjectInBackground;
-
-  final String? pickedFilePath;
-
-  try {
-    final PlatformFile? picked = await pickProjectFile();
-
-    if (picked == null) {
-      mpLocator.mpLog.i('No project file selected.');
-
-      return;
-    }
-
-    pickedFilePath = picked.path;
-
-    if (pickedFilePath == null) {
-      return;
-    }
-
-    mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-      pickedFilePath,
-    );
-  } finally {
-    _isFilePickerOpen[MPFilePickerType.project] = false;
+  if (pickedFilePath == null) {
+    return;
   }
 
   if (!context.mounted) {
@@ -222,12 +190,58 @@ static Future<void> pickProjectFileAndRunTherion(
 
   await launchProjectAndRun(context, pickedFilePath);
 }
+
+static Future<PlatformFile?> _pickProjectFilePath() async {
+  if (_isFilePickerOpen[MPFilePickerType.project] == true) {
+    return null;
+  }
+
+  _isFilePickerOpen[MPFilePickerType.project] = true;
+
+  try {
+    final PlatformFile? picked = await FilePicker.pickFile(
+      dialogTitle:
+          mpLocator.appLocalizations.projectTreeSelectProjectDialogTitle,
+      type: FileType.any,
+      linuxOptions: const LinuxOptions(lockParentWindow: true),
+      windowsOptions: const WindowsOptions(lockParentWindow: true),
+      initialDirectory:
+          mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+          ? (kDebugMode ? thDebugPath : './')
+          : mpLocator.mpGeneralController.lastAccessedDirectory,
+    );
+
+    if (picked == null) {
+      mpLocator.mpLog.i('No project file selected.');
+
+      return null;
+    }
+
+    final String? pickedFilePath = picked.path;
+
+    if (pickedFilePath == null) {
+      return null;
+    }
+
+    mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+      pickedFilePath,
+    );
+
+    return picked;
+  } catch (e) {
+    mpLocator.mpLog.e('Error picking project file', error: e);
+
+    return null;
+  } finally {
+    _isFilePickerOpen[MPFilePickerType.project] = false;
+  }
+}
 ```
 
 Notes:
 - The Therion-availability gate at the *top* of this method (before the picker even opens) matches today's `chooseTHConfigAndRunTherion`, which avoids bothering the user with a file dialog for a run it already knows can't happen — collapsing three methods (`chooseTHConfigAndRunTherion`/`pickTHConfigFileAndRunTherion`/`pickTHConfigFile`) into one removes a layer of indirection that no longer does anything once the picker is shared with `pickProjectFile`.
 - The actual "start the run, load the project in the background" pair is factored into `runTherionAndOpenProjectInBackground` (§4.4), shared with the CLI-startup path — see that section for why the availability check also has to live there, not just here.
-- `pickProjectFile` (§2, unchanged) keeps awaiting `openProject` before opening the tabs page, because it has no concurrent run to avoid blocking; `runTherionAndOpenProjectInBackground` intentionally does not await `openProject`, but awaits `runTherion` so the run dialog still determines when the picker/CLI-startup action completes. It still opens the tabs page once the project load finishes, matching `pickProjectFile`'s own post-load behavior.
+- `pickProjectFile` also switches its inline picker block to `_pickProjectFilePath`, retaining only its `openProject`/`ensureProjectTabsPageOpen` post-pick behavior. It keeps awaiting `openProject` before opening the tabs page because it has no concurrent run to avoid blocking; `runTherionAndOpenProjectInBackground` intentionally does not await `openProject`, but awaits `runTherion` so the run dialog still determines when the picker/CLI-startup action completes. It still opens the tabs page once the project load finishes, matching `pickProjectFile`'s own post-load behavior.
 - `_isFilePickerOpen[MPFilePickerType.project]` is reused as the re-entrancy guard (shared with `pickProjectFile`, since both are now "pick a project file" pickers) — `MPFilePickerType.thconfig` and `pickTHConfigFile` are deleted as dead code.
 
 ### 4.4 Rerun and CLI-startup call sites
@@ -553,7 +567,7 @@ List<THProjectParseError> _errorsForNode(THProjectNode currentNode) {
 
 ## 11. Risks & Open Questions
 
-1. **The exact Therion diagnostic line format is unverified against a real `therion` binary in this environment.** The regex targets the top-level roadmap's own documented example (`therion: error -- filename.th [line 42] -- syntax error`); if real output differs (e.g. no `line ` keyword inside the brackets, a different `--`/`:` separator, or the file path quoted), `t3911`'s fixtures need updating and the regex adjusted — contained entirely to `th_project_therion_diagnostics_aux.dart` and its own test file, touching nothing else. Mitigation: implementation should run `therion` against a real fixture project and capture actual stdout/`therion.log` output before finalizing the regex, rather than relying solely on the roadmap's illustrative example.
+1. **The exact Therion diagnostic line format is unverified against a real `therion` binary in this environment.** The regex targets the top-level roadmap's own documented example (`therion: error -- filename.th [line 42] -- syntax error`); if real output differs (e.g. no `line ` keyword inside the brackets, a different `--`/`:` separator, or the file path quoted), `t3912`'s fixtures need updating and the regex adjusted — contained entirely to `th_project_therion_diagnostics_aux.dart` and its own test file, touching nothing else. Mitigation: implementation should run `therion` against a real fixture project and capture actual stdout/`therion.log` output before finalizing the regex, rather than relying solely on the roadmap's illustrative example.
 2. **File-node-only compiler-diagnostic attribution (§1 non-goal) may feel coarse for a large `.th` file with many surveys.** Mitigation: the text editor's line-accurate gutter marker is the real navigation surface once the tab is open (one click away via the file-node dot); revisit only if user feedback shows the file-level dot isn't enough of a signal to justify opening the file.
 3. **The fast-compile-vs-background-load race (§5).** If real-world use shows Therion regularly finishing before `openProject` (e.g. a trivial one-file `thconfig` with a slow-to-parse but structurally huge `.th` tree), a contained fix is for `_onTherionRunFinished` to also retry the diagnostics bridge once after `THProjectController.isParsing` transitions back to `false`, rather than only checking once at run-finish time — not implemented in this phase since it adds a reaction/listener for a scenario judged unlikely (§5's reasoning).
 4. **`_onTherionRunFinished`'s existing `mpIsFlathub` guard** (see §8) means Flathub builds will not get tree/editor compiler diagnostics from this phase, only the existing live status banner — an existing, pre-Phase-7 platform limitation (Flathub already skips the `therion.log`-derived post-run output section entirely) that this phase does not change.
@@ -586,6 +600,7 @@ Step 4: Update call sites: mapiah_home.dart, th2_file_tabs_page.dart (buttons +
         mp_th2_file_edit_state_key_down_mixin.dart, MPRunTherionDialogWidget's
         in-dialog Ctrl+T handler, mapiah_home.dart's _runStartupFileActions;
         remove the orphaned mapiahTherionSelectTHConfigDialogTitle .arb key
+        and run `flutter gen-l10n` to regenerate the localization files
    │
    ▼
 Step 5: Add th_project_therion_diagnostics_aux.dart (parseTherionRunDiagnostics)
@@ -644,6 +659,6 @@ Representative scenarios:
 ## 14. Localization & Documentation Touches
 
 - `mapiahOpenTHConfigAndRunTherionButtonTooltip`'s en/pt string *values* are reworded from "Choose THConfig file and run Therion"/"Escolher ficheiro THConfig e executar Therion" to reflect the new "open project and run Therion" behavior — same `.arb` keys, no additions/removals, so `AppLocalizations` code generation is unaffected.
-- Deleting `pickTHConfigFile` (§4.3) orphans `mapiahTherionSelectTHConfigDialogTitle` (`lib/l10n/intl_en.arb:258-260`, `intl_pt.arb:68`, whose own doc comment says "Used on: MPDialogAux.pickTHConfigFile"). An unused `.arb` key doesn't break `flutter gen-l10n` or `flutter analyze`, so leaving it is not a correctness issue, but it should be deleted alongside the method it documents rather than left behind as a dangling string nothing references. `mpNoTherionFound`'s doc comment (`intl_en.arb:1136`, "Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, ...") is similarly a doc-comment-only reference that goes stale once those methods are renamed — update it to name `pickProjectFileAndRunTherion`/`rerunTherionForOpenProject` instead, purely cosmetic (doc comments aren't compiled/checked).
+- Deleting `pickTHConfigFile` (§4.3) orphans `mapiahTherionSelectTHConfigDialogTitle` (`lib/l10n/intl_en.arb:258-260`, `intl_pt.arb:68`, whose own doc comment says "Used on: MPDialogAux.pickTHConfigFile"). Delete the orphaned key alongside the method it documents, then run `flutter gen-l10n` so the generated `AppLocalizations` files no longer expose a getter for it. `mpNoTherionFound`'s doc comment (`intl_en.arb:1136`, "Used on: MPDialogAux.chooseTHConfigAndRunTherion, MPDialogAux.runTherionWithLastTHConfig, ...") is similarly a doc-comment-only reference that goes stale once those methods are renamed — update it to name `pickProjectFileAndRunTherion`/`rerunTherionForOpenProject` instead, purely cosmetic (doc comments aren't compiled/checked).
 - The error dot's tooltip and the diagnostic marker's tooltip need no new strings (count and Therion's own message text, respectively, exactly as before).
 - Help pages (`assets/help/en/run_therion_help.md`, `mapiah_home_help.md`, and the keyboard-shortcuts tables' description text for the now-reworded button) are deferred to Phase 8, per the top-level roadmap (same exception already used by Phases 4-6) — the keys `T`/`Ctrl+T` themselves are unchanged, so the shortcut *tables* remain technically accurate even before that pass; only their prose descriptions of what the shortcut does become slightly stale until Phase 8.
