@@ -141,7 +141,25 @@ Behaviorally identical to today's `runTherion`, minus the source of `thConfigFil
 Replaces `pickTHConfigFileAndRunTherion`/`chooseTHConfigAndRunTherion`/`pickTHConfigFile` with a single method that reuses `pickProjectFile`'s own picker shape but does **not** await the project load before starting the run:
 
 ```dart
-static Future<void> pickProjectFileAndRunTherion(BuildContext context) async {
+typedef MPProjectFilePicker = Future<PlatformFile?> Function();
+
+typedef MPProjectLauncher =
+    Future<void> Function(BuildContext context, String thConfigFilePath);
+
+typedef MPProjectLoader =
+    Future<void> Function(String configFilePath, {bool forceConfigShape});
+
+typedef MPRunTherionStarter =
+    Future<void> Function(
+      BuildContext context, {
+      required String thConfigFilePath,
+    });
+
+static Future<void> pickProjectFileAndRunTherion(
+  BuildContext context, {
+  MPProjectFilePicker? pickFile,
+  MPProjectLauncher? launch,
+}) async {
   if (!mpLocator.mpSettingsController.isTherionAvailable) {
     MPDialogAux.showHelpDialog(
       context,
@@ -158,20 +176,26 @@ static Future<void> pickProjectFileAndRunTherion(BuildContext context) async {
 
   _isFilePickerOpen[MPFilePickerType.project] = true;
 
+  final MPProjectFilePicker pickProjectFile =
+      pickFile ??
+      () => FilePicker.pickFile(
+        dialogTitle:
+            mpLocator.appLocalizations.projectTreeSelectProjectDialogTitle,
+        type: FileType.any,
+        linuxOptions: const LinuxOptions(lockParentWindow: true),
+        windowsOptions: const WindowsOptions(lockParentWindow: true),
+        initialDirectory:
+            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+            ? (kDebugMode ? thDebugPath : './')
+            : mpLocator.mpGeneralController.lastAccessedDirectory,
+      );
+  final MPProjectLauncher launchProjectAndRun =
+      launch ?? runTherionAndOpenProjectInBackground;
+
   final String? pickedFilePath;
 
   try {
-    final PlatformFile? picked = await FilePicker.pickFile(
-      dialogTitle:
-          mpLocator.appLocalizations.projectTreeSelectProjectDialogTitle,
-      type: FileType.any,
-      linuxOptions: const LinuxOptions(lockParentWindow: true),
-      windowsOptions: const WindowsOptions(lockParentWindow: true),
-      initialDirectory:
-          mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-          ? (kDebugMode ? thDebugPath : './')
-          : mpLocator.mpGeneralController.lastAccessedDirectory,
-    );
+    final PlatformFile? picked = await pickProjectFile();
 
     if (picked == null) {
       mpLocator.mpLog.i('No project file selected.');
@@ -196,7 +220,7 @@ static Future<void> pickProjectFileAndRunTherion(BuildContext context) async {
     return;
   }
 
-  await runTherionAndOpenProjectInBackground(context, pickedFilePath);
+  await launchProjectAndRun(context, pickedFilePath);
 }
 ```
 
@@ -235,8 +259,14 @@ Replaces `runTherionWithLastTHConfig`.
 ```dart
 static Future<void> runTherionAndOpenProjectInBackground(
   BuildContext context,
-  String thConfigFilePath,
-) {
+  String thConfigFilePath, {
+  MPProjectLoader? projectLoader,
+  MPRunTherionStarter? runTherionStarter,
+}) {
+  final MPProjectLoader loadProject =
+      projectLoader ?? mpLocator.thProjectController.openProject;
+  final MPRunTherionStarter startRun = runTherionStarter ?? runTherion;
+
   // Load the project in the background regardless of Therion availability
   // (and without waiting for a run that did start to finish), so "Rerun
   // Therion" becomes enabled the moment the project loads even if Therion
@@ -250,9 +280,7 @@ static Future<void> runTherionAndOpenProjectInBackground(
   // having to pick the file again"), now via an actually-loaded project
   // rather than a bare remembered path string.
   unawaited(
-    mpLocator.thProjectController
-        .openProject(thConfigFilePath, forceConfigShape: true)
-        .then((_) {
+    loadProject(thConfigFilePath, forceConfigShape: true).then((_) {
           if (context.mounted) {
             ensureProjectTabsPageOpen(context);
           }
@@ -260,7 +288,7 @@ static Future<void> runTherionAndOpenProjectInBackground(
   );
 
   if (mpLocator.mpSettingsController.isTherionAvailable) {
-    return runTherion(context, thConfigFilePath: thConfigFilePath);
+    return startRun(context, thConfigFilePath: thConfigFilePath);
   }
 
   MPDialogAux.showHelpDialog(
@@ -594,7 +622,7 @@ Test numbering continues at `t3911`:
 
 | Test file | Coverage |
 | :--- | :--- |
-| `test/t3911_mp_dialog_aux_run_therion_retargeting_test.dart` | `rerunTherionForOpenProject` no-ops when `THProjectController.rootConfigPath` is empty and runs `MPRunTherionDialogWidget` with that path when set; `pickProjectFileAndRunTherion` starts the run before `THProjectController.openProject` resolves (ordering assertion via a controllable/delayed fake project loader) and still loads the project in the background; `runTherionAndOpenProjectInBackground` starts `openProject` in the background, then awaits the `runTherion` future so CLI/picker callers complete when the run dialog closes. |
+| `test/t3911_mp_dialog_aux_run_therion_retargeting_test.dart` | `rerunTherionForOpenProject` no-ops when `THProjectController.rootConfigPath` is empty and runs `MPRunTherionDialogWidget` with that path when set; `pickProjectFileAndRunTherion` uses injected `pickFile`/`launch` seams and passes the picked path to `launch`; `runTherionAndOpenProjectInBackground` uses injected `projectLoader`/`runTherionStarter` seams, calls `projectLoader` before `runTherionStarter`, does not await `projectLoader`, and waits for the `runTherionStarter` future so CLI/picker callers complete when the run dialog closes. |
 | `test/t3912_th_project_therion_diagnostics_aux_test.dart` | `parseTherionRunDiagnostics`: matches the documented `therion: error -- file [line N] -- message` / `warning` shape; ignores unlocated lines; resolves relative paths against `workingDirectory` and canonicalizes them; de-duplicates identical diagnostics seen in both `outputLines` and `logLines`; case-insensitive `error`/`warning` matching. |
 | `test/t3913_th_project_controller_compiler_diagnostics_test.dart` | `applyTherionRunDiagnostics` replaces (not appends to) `compilerErrors`; `allDiagnostics` merges `projectErrors` + `compilerErrors`; `compilerErrorsForPath` filters correctly; `closeProject` clears `compilerErrors`. |
 | `test/t3914_th_text_editor_controller_compiler_diagnostics_test.dart` | A `THProjectController.compilerErrors` entry for an open editor's `canonicalPath` appears in `THTextEditorController.diagnostics` and renders via the existing `THTextEditorDiagnosticMarkerWidget` path (mirrors `t3904`'s harness). |
