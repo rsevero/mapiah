@@ -97,7 +97,7 @@ MPLocator (global mpLocator) provides:
 * Test files: numeric prefix for ordering (e.g., t1200_commands_MPAddAreaCommand_test.dart)
 
 ### Prompt Abbreviations
-* cc: Update CHANGELOG.md + prepare commit with sign-off (Signed-off-by, Assisted_By)
+* cc: Update CHANGELOG.md + prepare commit with sign-off (first Assisted_By: and then finish with Signed-off-by:). Always asks for confirmation of commit message before actually commiting.
 * hpcc: Update help pages (EN/PT) + keyboard shortcuts + cc above
 
 ### Canvas Orientation
