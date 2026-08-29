@@ -86,33 +86,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     /// the visible canvas and not to an offstage one.
     _activeTabFocusReaction = reaction(
       (_) => mpLocator.mpGeneralController.activeTabIndex,
-      (int index) {
-        final List<String> order = mpLocator.mpGeneralController.openFileOrder;
-
-        if ((index < 0) || (index >= order.length)) {
-          return;
-        }
-
-        final String filename = order[index];
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) {
-            return;
-          }
-
-          if (isTH2Tab(filename)) {
-            mpLocator.mpGeneralController
-                .getTH2FileEditControllerIfExists(filename)
-                ?.th2FileFocusNode
-                .requestFocus();
-          } else {
-            mpLocator.mpGeneralController
-                .getTextEditorControllerIfExists(filename)
-                ?.textEditorFocusNode
-                .requestFocus();
-          }
-        });
-      },
+      (_) => _scheduleActiveTabFocus(),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -122,6 +96,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         return;
       }
 
+      _scheduleActiveTabFocus();
+
       if (mpDebugTelemetryAlwaysShowConsent ||
           !mpLocator.mpSettingsController.isBoolSet(
             MPSettingID.Main_TelemetryConsent,
@@ -130,6 +106,35 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       }
 
       MPDialogAux.checkForUpdates();
+    });
+  }
+
+  void _scheduleActiveTabFocus() {
+    final int index = mpLocator.mpGeneralController.activeTabIndex;
+    final List<String> order = mpLocator.mpGeneralController.openFileOrder;
+
+    if ((index < 0) || (index >= order.length)) {
+      return;
+    }
+
+    final String filename = order[index];
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      if (isTH2Tab(filename)) {
+        mpLocator.mpGeneralController
+            .getTH2FileEditControllerIfExists(filename)
+            ?.th2FileFocusNode
+            .requestFocus();
+      } else {
+        mpLocator.mpGeneralController
+            .getTextEditorControllerIfExists(filename)
+            ?.textEditorFocusNode
+            .requestFocus();
+      }
     });
   }
 

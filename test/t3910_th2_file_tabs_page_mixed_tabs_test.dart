@@ -5,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
@@ -32,6 +33,10 @@ void main() {
       mpLocator.mpGeneralController.reset();
       mpLocator.thProjectController.closeProject();
       await mpLocator.mpSettingsController.initialized;
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.Main_TelemetryConsent,
+        false,
+      );
     });
 
     testWidgets(
@@ -78,21 +83,15 @@ void main() {
         // while its own tab is active. Only one Properties button ever
         // shows, though: the text-editor tab has none regardless of which
         // tab is active.
-        expect(find.byIcon(Icons.info_outline), findsOneWidget);
+        expect(find.byTooltip('File properties'), findsOneWidget);
 
         // The .th tab was added last, so it is active and its body is the
         // one painted onstage. (The activation happened before the page
-        // mounted, so the reaction that routes focus on tab switch never
-        // observed it; re-selecting the same tab, as a tab-strip click
-        // would, is what actually establishes focus here — matching
-        // `setActiveTab`'s own focus routing, which runs regardless of
-        // whether the index actually changed.)
+        // mounted. The page's initial focus routing establishes focus once
+        // the first frame has completed.
         expect(mpLocator.mpGeneralController.activeTabIndex, 1);
         expect(find.byType(THTextEditorWidget), findsOneWidget);
         expect(find.byType(TH2FileWidget, skipOffstage: false), findsOneWidget);
-
-        mpLocator.mpGeneralController.setActiveTab(1);
-        await tester.pumpAndSettle();
 
         expect(textController.textEditorFocusNode.hasFocus, isTrue);
 

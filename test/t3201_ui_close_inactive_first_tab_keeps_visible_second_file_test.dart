@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
@@ -29,6 +30,10 @@ void main() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
       await mpLocator.mpSettingsController.initialized;
+      mpLocator.mpSettingsController.setBool(
+        MPSettingID.Main_TelemetryConsent,
+        false,
+      );
     });
 
     testWidgets('visible file must stay aligned with the remaining tab', (
