@@ -10,14 +10,15 @@ import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 /// Builds the Phase 4C Therion AUT area fill pattern tiles, following the
 /// same fixed-resolution, cached-and-scaled tile strategy as
 /// [MPTherionAreaPatternTilesUIS]/[MPTherionAreaPatternTilesSKBB].
-/// `pattern_water_AUT`/`pattern_sump_AUT`/`pattern_flowstone_AUT` are real
-/// `beginpattern` MetaPost blocks, ported here as literal repeating line
-/// grids ([_hatchTile]/[_gridTile]/[_brickTile]); `a_sand_AUT`
+/// `pattern_water_AUT`/`pattern_sump_AUT`/`pattern_flowstone_AUT`/
+/// `pattern_ice_AUT` are real `beginpattern` MetaPost blocks, ported here as
+/// literal repeating tiles ([_hatchTile]/[_gridTile]/[_brickTile] and
+/// [buildIceTile]'s bespoke `.9u x .5u` tick grid); `a_sand_AUT`
 /// (`a_clay_AUT`'s alias)/`a_pebbles_AUT`/`a_debris_AUT`/`a_blocks_AUT`/
-/// `a_ice_AUT`/`a_snow_AUT` are all literal random-scatter loops (not
-/// `beginpattern` blocks), so each is approximated as a small motif
-/// repeated on a fixed-seed-jittered grid via [_scatterTile], the same
-/// simplification [MPTherionAreaPatternTilesSKBB] already makes.
+/// `a_snow_AUT` are all literal random-scatter loops (not `beginpattern`
+/// blocks), so each is approximated as a small motif repeated on a
+/// fixed-seed-jittered grid via [_scatterTile], the same simplification
+/// [MPTherionAreaPatternTilesSKBB] already makes.
 abstract final class MPTherionAreaPatternTilesAUT {
   /// `pattern_water_AUT`: `draw origin--10up withpen pensquare scaled
   /// .02u; patternxstep(.18u);` then `patterntransform(identity rotated
@@ -131,23 +132,61 @@ abstract final class MPTherionAreaPatternTilesAUT {
     );
   }
 
-  /// `pattern_ice_AUT`/`a_ice_AUT`: a small `+`-shaped tick, scattered.
-  static ui.Image buildIceTile(ui.Color color) {
-    return _scatterTile(
-      cellUnits: 1.0,
-      gridSize: 3,
-      jitterFactor: 0.4,
-      salt: 5,
-      randomizeRotation: false,
-      drawMotif: (canvas, u, random) {
-        final ui.Paint paint = ui.Paint()
-          ..color = color
-          ..style = ui.PaintingStyle.stroke
-          ..strokeWidth = 0.05 * u;
+  /// `pattern_ice_AUT`/`a_ice_AUT`: a real `beginpattern` block, not a
+  /// random-scatter loop. Each `patternxstep(.9u) patternystep(.5u)` cell
+  /// draws four `PenC` (`.05u`) `.3u` ticks — `p := (-.15u,0)--(.15u,0)`
+  /// then `draw p; draw p shifted (.25u,0) rotated 90; draw p shifted
+  /// (.45u,.25u); draw p shifted (0,.45u) rotated 90;` — i.e. a horizontal
+  /// tick at the cell corner, a vertical tick on the mid-height left edge,
+  /// a horizontal tick at the cell centre, and a vertical tick at the
+  /// mid-width corner. Ported as that repeating rectangular tile (was a
+  /// sparse 3u-grid `+` scatter, far lighter than the reference PDF), with
+  /// the cell and tick geometry scaled to [_iceScale] of the literal
+  /// `.9u x .5u` / `.3u` so the repeat reads at the same size as the
+  /// reference PDF; the `.05u` pen keeps its literal weight, matching how
+  /// the sibling `water`/`sump`/`flowstone` tiles are tightened.
+  static const double _iceScale = 0.8;
 
-        canvas.drawLine(ui.Offset(-0.15 * u, 0), ui.Offset(0.15 * u, 0), paint);
-        canvas.drawLine(ui.Offset(0, -0.15 * u), ui.Offset(0, 0.15 * u), paint);
-      },
+  static ui.Image buildIceTile(ui.Color color) {
+    final double u = mpTherionAreaPatternTileUnitPixels;
+    final double cellWidth = 0.9 * _iceScale * u;
+    final double cellHeight = 0.5 * _iceScale * u;
+    final double tickHalf = 0.15 * _iceScale * u;
+    final double tickInset = 0.25 * _iceScale * u;
+    final double tickCentre = 0.45 * _iceScale * u;
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final ui.Canvas canvas = ui.Canvas(recorder);
+    final ui.Paint paint = ui.Paint()
+      ..color = color
+      ..style = ui.PaintingStyle.stroke
+      ..strokeWidth = 0.05 * u
+      ..strokeCap = ui.StrokeCap.round;
+
+    void horizontalTick(double cx, double cy) => canvas.drawLine(
+      ui.Offset(cx - tickHalf, cy),
+      ui.Offset(cx + tickHalf, cy),
+      paint,
+    );
+    void verticalTick(double cx, double cy) => canvas.drawLine(
+      ui.Offset(cx, cy - tickHalf),
+      ui.Offset(cx, cy + tickHalf),
+      paint,
+    );
+
+    // Draw the four ticks plus their wrapped copies so the ticks that sit on
+    // the cell edges/corners join seamlessly under `TileMode.repeated`.
+    for (final double dx in <double>[-cellWidth, 0, cellWidth]) {
+      for (final double dy in <double>[-cellHeight, 0, cellHeight]) {
+        horizontalTick(dx, dy);
+        verticalTick(dx, dy + tickInset);
+        horizontalTick(dx + tickCentre, dy + tickInset);
+        verticalTick(dx + tickCentre, dy);
+      }
+    }
+
+    return recorder.endRecording().toImageSync(
+      cellWidth.round(),
+      cellHeight.round(),
     );
   }
 
