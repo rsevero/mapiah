@@ -190,17 +190,21 @@ abstract final class MPTherionAreaPatternTilesAUT {
     );
   }
 
-  /// `a_snow_AUT`: `for i/j = ... step 1.0u ...` scattering a small six-ray
-  /// `PenC` snowflake every `1.0u`, `randomized 0.5u`. Approximated the same
-  /// way as [MPTherionAreaPatternTilesSKBB.buildSnowTile], but packed far
-  /// denser than uAUT.mp's `1.0u` step so the fill reads as heavy as the
-  /// reference PDF: a `0.4875u` 8x8 grid (was a `1.3u` 3x3 grid) on a
-  /// same-size `3.9u` tile — 64 repeats instead of 9, no bigger raster
-  /// and the same motif size.
+  /// `a_snow_AUT`: `for i/j = ... step 1.0u ...` scattering a `PenC`
+  /// snowflake every `1.0u`, `randomized 0.5u`. The flake is six `.2u`
+  /// radial rays (`origin--(0,.2u)` at `0/60/.../300`) *and* a barbed tip
+  /// on each ray — `((0,.3u)--(0,.2u)--(0.1u,.2u)) rotatedaround
+  /// ((0,.2u),45)`, a small "V" whose vertex sits at the `.2u` ray end,
+  /// one arm running back along the ray and one splayed out at 45° — drawn
+  /// at the same six rotations. Ported as that full motif (the six-ray
+  /// star alone was missing the barbs) on a `0.65u` 6x6 grid (was a
+  /// `1.3u` 3x3 grid), packed denser than uAUT.mp's literal `1.0u` step so
+  /// the fill reads as heavy as `therion_aut_showcase.pdf`; same-size
+  /// `3.9u` tile, no bigger raster.
   static ui.Image buildSnowTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 0.4875,
-      gridSize: 8,
+      cellUnits: 0.65,
+      gridSize: 6,
       jitterFactor: 0.5,
       salt: 6,
       randomizeRotation: false,
@@ -209,14 +213,22 @@ abstract final class MPTherionAreaPatternTilesAUT {
           ..color = color
           ..style = ui.PaintingStyle.stroke
           ..strokeWidth = 0.05 * u;
-        final ui.Path radial = ui.Path()
+        // Y is negated vs uAUT.mp (Therion +y up, Mapiah +y down).
+        final ui.Path ray = ui.Path()
           ..moveTo(0, 0)
           ..lineTo(0, -0.2 * u);
+        // ((0,.3u)--(0,.2u)--(0.1u,.2u)) rotated 45° about (0,.2u):
+        // (-.0707u,.2707u)--(0,.2u)--(.0707u,.2707u).
+        final ui.Path barb = ui.Path()
+          ..moveTo(-0.0707 * u, -0.2707 * u)
+          ..lineTo(0, -0.2 * u)
+          ..lineTo(0.0707 * u, -0.2707 * u);
 
         for (int k = 0; k < 6; k++) {
           canvas.save();
           canvas.rotate(k * math.pi / 3);
-          canvas.drawPath(radial, paint);
+          canvas.drawPath(ray, paint);
+          canvas.drawPath(barb, paint);
           canvas.restore();
         }
       },
