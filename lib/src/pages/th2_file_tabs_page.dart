@@ -48,16 +48,21 @@ typedef _TH2FileLoad = ({
   Future<TH2FileEditControllerCreateResult> future,
 });
 
+typedef MPPickProjectAndRunTherion =
+    Future<void> Function(BuildContext context);
+
 class TH2FileTabsPage extends StatefulWidget {
   final String? mainFilePath;
   final List<String> th2FilePaths;
   final String? thConfigFilePath;
+  final MPPickProjectAndRunTherion? pickProjectAndRunTherion;
 
   const TH2FileTabsPage({
     super.key,
     this.mainFilePath,
     this.th2FilePaths = const <String>[],
     this.thConfigFilePath,
+    this.pickProjectAndRunTherion,
   });
 
   @override
@@ -497,61 +502,61 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         builder: (BuildContext context, BoxConstraints constraints) {
           return Observer(
             builder: (_) {
-          final List<String> openFileOrder =
-              mpLocator.mpGeneralController.openFileOrder;
-          final int activeTabIndex =
-              mpLocator.mpGeneralController.activeTabIndex;
-          final THProjectTreeUIController projectTreeUIController =
-              mpLocator.thProjectTreeUIController;
-          final bool sidebarCollapsed =
-              projectTreeUIController.isSidebarCollapsed ||
-              (constraints.maxWidth <
-                  (mpProjectTreeSidebarMinWidth +
-                      mpProjectTreeMinimumWorkspaceWidth));
-          final Widget workspace;
+              final List<String> openFileOrder =
+                  mpLocator.mpGeneralController.openFileOrder;
+              final int activeTabIndex =
+                  mpLocator.mpGeneralController.activeTabIndex;
+              final THProjectTreeUIController projectTreeUIController =
+                  mpLocator.thProjectTreeUIController;
+              final bool sidebarCollapsed =
+                  projectTreeUIController.isSidebarCollapsed ||
+                  (constraints.maxWidth <
+                      (mpProjectTreeSidebarMinWidth +
+                          mpProjectTreeMinimumWorkspaceWidth));
+              final Widget workspace;
 
-          if (openFileOrder.isEmpty) {
-            workspace = Center(
-              child: Text(appLocalizations.initialPagePresentation),
-            );
-          } else {
-            workspace = PopScope(
-              canPop: false,
-              child: IndexedStack(
-                index: activeTabIndex,
-                children: <Widget>[
-                  for (String filename in openFileOrder)
-                    _buildTabContentWidget(filename),
-                ],
-              ),
-            );
-          }
-
-          return Row(
-            children: <Widget>[
-              if (!sidebarCollapsed)
-                SizedBox(
-                  width: projectTreeUIController.sidebarWidth,
-                  child: const THProjectTreeWidget(),
-                ),
-              if (!sidebarCollapsed)
-                const THProjectTreeResizeDividerWidget(),
-              if (sidebarCollapsed)
-                SizedBox(
-                  width: mpProjectTreeRailWidth,
-                  child: IconButton(
-                    key: const ValueKey('THProjectTreeExpandButton'),
-                    icon: const Icon(Icons.chevron_right),
-                    tooltip: appLocalizations
-                        .projectTreeExpandSidebarTooltip,
-                    onPressed: () {
-                      projectTreeUIController.setSidebarCollapsed(false);
-                    },
+              if (openFileOrder.isEmpty) {
+                workspace = Center(
+                  child: Text(appLocalizations.initialPagePresentation),
+                );
+              } else {
+                workspace = PopScope(
+                  canPop: false,
+                  child: IndexedStack(
+                    index: activeTabIndex,
+                    children: <Widget>[
+                      for (String filename in openFileOrder)
+                        _buildTabContentWidget(filename),
+                    ],
                   ),
-                ),
-              Expanded(child: workspace),
-            ],
-          );
+                );
+              }
+
+              return Row(
+                children: <Widget>[
+                  if (!sidebarCollapsed)
+                    SizedBox(
+                      width: projectTreeUIController.sidebarWidth,
+                      child: const THProjectTreeWidget(),
+                    ),
+                  if (!sidebarCollapsed)
+                    const THProjectTreeResizeDividerWidget(),
+                  if (sidebarCollapsed)
+                    SizedBox(
+                      width: mpProjectTreeRailWidth,
+                      child: IconButton(
+                        key: const ValueKey('THProjectTreeExpandButton'),
+                        icon: const Icon(Icons.chevron_right),
+                        tooltip:
+                            appLocalizations.projectTreeExpandSidebarTooltip,
+                        onPressed: () {
+                          projectTreeUIController.setSidebarCollapsed(false);
+                        },
+                      ),
+                    ),
+                  Expanded(child: workspace),
+                ],
+              );
             },
           );
         },
@@ -986,7 +991,12 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                 mpHelpPageKeyboardShortcutsEdit,
                 appLocalizations.mapiahKeyboardShortcutsTitle,
               ),
-          // Therion: T (no modifiers)
+          // Run Therion and open project: Ctrl/Cmd+T
+          const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
+              _pickProjectAndRunTherion(),
+          const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
+              _pickProjectAndRunTherion(),
+          // Rerun Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
               MPDialogAux.rerunTherionForOpenProject(context),
         };
@@ -994,12 +1004,21 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     return CallbackShortcuts(
       bindings: bindings,
       child: Focus(
+        autofocus: true,
         onKeyEvent: (node, event) {
           return KeyEventResult.ignored;
         },
         child: child,
       ),
     );
+  }
+
+  Future<void> _pickProjectAndRunTherion() {
+    final MPPickProjectAndRunTherion pickProjectAndRunTherion =
+        widget.pickProjectAndRunTherion ??
+        MPDialogAux.pickProjectFileAndRunTherion;
+
+    return pickProjectAndRunTherion(context);
   }
 
   TH2FileEditController? _getActiveTH2FileEditController(

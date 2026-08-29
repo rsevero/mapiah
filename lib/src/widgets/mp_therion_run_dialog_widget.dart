@@ -411,6 +411,8 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
         SingleActivator(LogicalKeyboardKey.keyT): _RerunTherionIntent(),
         SingleActivator(LogicalKeyboardKey.keyT, control: true):
             _ChooseTHConfigAndRunTherionIntent(),
+        SingleActivator(LogicalKeyboardKey.keyT, meta: true):
+            _ChooseTHConfigAndRunTherionIntent(),
         SingleActivator(LogicalKeyboardKey.escape): ActivateIntent(),
       },
       child: Actions(
