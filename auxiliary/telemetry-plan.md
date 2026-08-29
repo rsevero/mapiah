@@ -32,7 +32,7 @@ transmitted, fully user-controlled, and low overhead.
 | `lib/src/controllers/mp_settings_controller.dart` | Default values for all new settings |
 | `lib/src/auxiliary/mp_locator.dart` | `mpTelemetryController` field |
 | `lib/main.dart` | `unawaited(mpLocator.mpTelemetryController.initialize())` after settings load |
-| `lib/src/pages/mapiah_home.dart` | Consent check + sequenced version check |
+| `lib/src/pages/th2_file_tabs_page.dart` | Consent check + sequenced version check |
 | `lib/src/pages/mp_settings_page.dart` | Toggle + "Review" link; consent change routed through controller |
 | `lib/src/controllers/mp_general_controller.dart` | TH2 open/close hooks |
 | `lib/src/auxiliary/mp_therion_runner.dart` | Therion start/stop hooks |
@@ -240,7 +240,7 @@ mpLocator.mpTelemetryController.recordTherionStopped();
 
 ---
 
-## Startup Sequencing (`mapiah_home.dart`)
+## Startup Sequencing (`th2_file_tabs_page.dart`)
 
 On first launch the version-check dialog is held until the user responds to the consent dialog,
 preventing both dialogs from appearing simultaneously:

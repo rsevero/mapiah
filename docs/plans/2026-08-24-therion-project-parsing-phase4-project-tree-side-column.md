@@ -267,7 +267,7 @@ wrapped in an `Observer` so collapse toggling rebuilds the row. The collapsed br
 
 Phase 4 adds `MPDialogAux.pickProjectFile(context)`, which reuses the existing `file_picker` dependency and the existing `pickTHConfigFile`/`pickTH2File` patterns: show a native picker, update `lastAccessedDirectory`, then call `THProjectController.openProject` with the selected path and `forceConfigShape: true`. The selected file is always a `thconfig` file; there is no ambiguity and no root-shape detection, even when it has an arbitrary extension or no extension at all. No new picker dependency or ad-hoc file-choosing code is introduced.
 
-The initial-window app bar's Open `.th2` button and its compact-menu/quick-shortcut equivalents are replaced by this Open Project action. This is intentionally scoped to `mapiah_home.dart`; the file-editor Open `.th2` button and the New `.th2` / Open THConfig + Run Therion actions are not changed in Phase 4.
+The initial-window app bar's Open `.th2` button and its compact-menu/quick-shortcut equivalents are replaced by this Open Project action. This is intentionally scoped to the then-separate `MapiahHome` page; the file-editor Open `.th2` button and the New `.th2` / Open THConfig + Run Therion actions are not changed in Phase 4.
 
 ### 6.2 Resize Divider
 
