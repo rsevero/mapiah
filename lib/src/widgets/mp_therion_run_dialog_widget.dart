@@ -22,10 +22,6 @@ class _RerunTherionIntent extends Intent {
   const _RerunTherionIntent();
 }
 
-class _ChooseTHConfigAndRunTherionIntent extends Intent {
-  const _ChooseTHConfigAndRunTherionIntent();
-}
-
 class MPRunTherionDialogWidget extends StatefulWidget {
   final String therionExecutablePath;
   final String thConfigFilePath;
@@ -409,10 +405,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     return Shortcuts(
       shortcuts: const <ShortcutActivator, Intent>{
         SingleActivator(LogicalKeyboardKey.keyT): _RerunTherionIntent(),
-        SingleActivator(LogicalKeyboardKey.keyT, control: true):
-            _ChooseTHConfigAndRunTherionIntent(),
-        SingleActivator(LogicalKeyboardKey.keyT, meta: true):
-            _ChooseTHConfigAndRunTherionIntent(),
         SingleActivator(LogicalKeyboardKey.escape): ActivateIntent(),
       },
       child: Actions(
@@ -426,15 +418,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
               return null;
             },
           ),
-          _ChooseTHConfigAndRunTherionIntent:
-              CallbackAction<_ChooseTHConfigAndRunTherionIntent>(
-                onInvoke: (_ChooseTHConfigAndRunTherionIntent intent) {
-                  _therionRunner.stop();
-                  Navigator.of(context).pop(true);
-
-                  return null;
-                },
-              ),
           ActivateIntent: CallbackAction<ActivateIntent>(
             onInvoke: (ActivateIntent intent) {
               _closeDialog();

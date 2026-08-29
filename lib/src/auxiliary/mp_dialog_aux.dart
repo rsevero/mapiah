@@ -1179,7 +1179,7 @@ class MPDialogAux {
         .getStringWithDefault(MPSettingID.Therion_ExecutablePath)
         .trim();
 
-    final bool? shouldPickDifferentProject = await showDialog<bool>(
+    await showDialog<void>(
       context: context,
       useRootNavigator: true,
       barrierDismissible: false,
@@ -1190,10 +1190,6 @@ class MPDialogAux {
         );
       },
     );
-
-    if ((shouldPickDifferentProject == true) && context.mounted) {
-      await pickProjectFileAndRunTherion(context);
-    }
   }
 
   /// Picks a project file, then immediately starts a Therion run against it

@@ -3,6 +3,7 @@
 // ignore_for_file: file_names
 
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
@@ -44,6 +45,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('UI: therion run dialog', () {
+    tearDown(() {
+      mpLocator.thProjectController.closeProject();
+    });
+
     testWidgets(
       'keeps multiline selection setup and issue jump list available',
       (WidgetTester tester) async {
@@ -151,5 +156,39 @@ void main() {
 
       expect(finalElapsedValue, initialElapsedValue);
     });
+
+    for (final LogicalKeyboardKey modifier in <LogicalKeyboardKey>[
+      LogicalKeyboardKey.controlLeft,
+      LogicalKeyboardKey.metaLeft,
+    ]) {
+      testWidgets('$modifier+T does not close the dialog', (
+        WidgetTester tester,
+      ) async {
+        mpLocator.appLocalizations = AppLocalizationsEn();
+        mpLocator.thProjectController.rootConfigPath = '/tmp/dummy';
+
+        final _FakeTherionRunner fakeRunner = _FakeTherionRunner();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: MPRunTherionDialogWidget(
+                therionExecutablePath: 'therion',
+                thConfigFilePath: '/tmp/dummy',
+                therionRunner: fakeRunner,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.sendKeyDownEvent(modifier);
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyT);
+        await tester.sendKeyUpEvent(modifier);
+        await tester.pump();
+
+        expect(find.byType(MPRunTherionDialogWidget), findsOneWidget);
+      });
+    }
   });
 }

@@ -993,9 +993,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               ),
           // Run Therion and open project: Ctrl/Cmd+T
           const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
-              _pickProjectAndRunTherion(),
+              _pickProjectAndRunTherionIfNoProject(),
           const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
-              _pickProjectAndRunTherion(),
+              _pickProjectAndRunTherionIfNoProject(),
           // Rerun Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
               MPDialogAux.rerunTherionForOpenProject(context),
@@ -1019,6 +1019,15 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         MPDialogAux.pickProjectFileAndRunTherion;
 
     return pickProjectAndRunTherion(context);
+  }
+
+  /// Opens and runs a project only while the workspace has no loaded project.
+  Future<void> _pickProjectAndRunTherionIfNoProject() {
+    if (mpLocator.thProjectController.rootConfigPath.isNotEmpty) {
+      return Future<void>.value();
+    }
+
+    return _pickProjectAndRunTherion();
   }
 
   TH2FileEditController? _getActiveTH2FileEditController(

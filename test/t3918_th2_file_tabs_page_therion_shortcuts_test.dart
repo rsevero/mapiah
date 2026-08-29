@@ -78,5 +78,33 @@ void main() {
 
       expect(callCount, 2);
     });
+
+    testWidgets('$modifier+T does nothing when a project is loaded', (
+      WidgetTester tester,
+    ) async {
+      int callCount = 0;
+
+      mpLocator.thProjectController.rootConfigPath = '/tmp/loaded/thconfig';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: TH2FileTabsPage(
+            pickProjectAndRunTherion: (BuildContext context) async {
+              callCount++;
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+
+      await tester.sendKeyDownEvent(modifier);
+      await tester.sendKeyEvent(LogicalKeyboardKey.keyT);
+      await tester.sendKeyUpEvent(modifier);
+      await tester.pump();
+
+      expect(callCount, 0);
+    });
   }
 }
