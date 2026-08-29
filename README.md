@@ -43,10 +43,15 @@ Mapiah Flatpak version moved back to manual Flatpak distribution.
 
 This was necessary because running Therion from a Flathub distributed package is a nightmare. I am sorry from the trouble. I really hope this issue is definitely solved now.
 
-To go back to non Flathub packages:
+To remove Flathub packages:
 
 ```bash
 flatpak remove io.github.rsevero.mapiah
+```
+
+To install flatpak version:
+
+```bash
 flatpak install --user --from https://flatpak.mapiah.org/org.mapiah.mapiah.flatpakref
 ```
 
