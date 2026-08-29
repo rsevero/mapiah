@@ -190,13 +190,18 @@ abstract final class MPTherionAreaPatternTilesAUT {
     );
   }
 
-  /// `a_snow_AUT`: a scatter of small six-ray snowflakes, approximated the
-  /// same way as [MPTherionAreaPatternTilesSKBB.buildSnowTile].
+  /// `a_snow_AUT`: `for i/j = ... step 1.0u ...` scattering a small six-ray
+  /// `PenC` snowflake every `1.0u`, `randomized 0.5u`. Approximated the same
+  /// way as [MPTherionAreaPatternTilesSKBB.buildSnowTile], but packed far
+  /// denser than uAUT.mp's `1.0u` step so the fill reads as heavy as the
+  /// reference PDF: a `0.4875u` 8x8 grid (was a `1.3u` 3x3 grid) on a
+  /// same-size `3.9u` tile — 64 repeats instead of 9, no bigger raster
+  /// and the same motif size.
   static ui.Image buildSnowTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.3,
-      gridSize: 3,
-      jitterFactor: 0.35,
+      cellUnits: 0.4875,
+      gridSize: 8,
+      jitterFactor: 0.5,
       salt: 6,
       randomizeRotation: false,
       drawMotif: (canvas, u, random) {
