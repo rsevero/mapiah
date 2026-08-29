@@ -16,7 +16,12 @@ import 'package:material_ui/material_ui.dart';
 
 /// The project-tree side column shown next to the tab workspace.
 class THProjectTreeWidget extends StatelessWidget {
-  const THProjectTreeWidget({super.key});
+  final MPPickProjectAndRunTherion? pickProjectAndRunTherion;
+
+  const THProjectTreeWidget({
+    super.key,
+    this.pickProjectAndRunTherion,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -200,9 +205,13 @@ class THProjectTreeWidget extends StatelessWidget {
               key: const ValueKey('THProjectTreeRunTherionButton'),
               icon: const Icon(Icons.playlist_add_check_outlined),
               label: Text(appLocalizations.projectTreeRunTherionButton),
-              onPressed: () => MPDialogAux.pickProjectFileAndRunTherion(
-                context,
-              ),
+              onPressed: () {
+                final MPPickProjectAndRunTherion openProjectAndRunTherion =
+                    pickProjectAndRunTherion ??
+                    MPDialogAux.pickProjectFileAndRunTherion;
+
+                openProjectAndRunTherion(context);
+              },
             ),
           ],
         ),

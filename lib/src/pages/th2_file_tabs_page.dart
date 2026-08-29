@@ -48,14 +48,12 @@ typedef _TH2FileLoad = ({
   Future<TH2FileEditControllerCreateResult> future,
 });
 
-typedef MPPickProjectAndRunTherion =
-    Future<void> Function(BuildContext context);
-
 class TH2FileTabsPage extends StatefulWidget {
   final String? mainFilePath;
   final List<String> th2FilePaths;
   final String? thConfigFilePath;
   final MPPickProjectAndRunTherion? pickProjectAndRunTherion;
+  final MPRerunTherionForOpenProject? rerunTherionForOpenProject;
 
   const TH2FileTabsPage({
     super.key,
@@ -63,6 +61,7 @@ class TH2FileTabsPage extends StatefulWidget {
     this.th2FilePaths = const <String>[],
     this.thConfigFilePath,
     this.pickProjectAndRunTherion,
+    this.rerunTherionForOpenProject,
   });
 
   @override
@@ -381,7 +380,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               final bool hasOpenProject =
                   mpLocator.thProjectController.rootConfigPath.isNotEmpty;
               final VoidCallback? onPressed = hasOpenProject
-                  ? () => MPDialogAux.rerunTherionForOpenProject(context)
+                  ? _rerunTherionForOpenProject
                   : null;
 
               return IconButton(
@@ -537,7 +536,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                   if (!sidebarCollapsed)
                     SizedBox(
                       width: projectTreeUIController.sidebarWidth,
-                      child: const THProjectTreeWidget(),
+                      child: THProjectTreeWidget(
+                        pickProjectAndRunTherion:
+                            widget.pickProjectAndRunTherion,
+                      ),
                     ),
                   if (!sidebarCollapsed)
                     const THProjectTreeResizeDividerWidget(),
@@ -704,7 +706,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       case _TH2FileTabsAction.saveAs:
         controller?.saveAsTH2File();
       case _TH2FileTabsAction.runTherion:
-        MPDialogAux.rerunTherionForOpenProject(context);
+        _rerunTherionForOpenProject();
       case _TH2FileTabsAction.closeProject:
         MPDialogAux.closeOpenProject(context);
       case _TH2FileTabsAction.settings:
@@ -998,7 +1000,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               _pickProjectAndRunTherionIfNoProject(),
           // Rerun Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
-              MPDialogAux.rerunTherionForOpenProject(context),
+              _rerunTherionForOpenProject(),
         };
 
     return CallbackShortcuts(
@@ -1028,6 +1030,15 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     }
 
     return _pickProjectAndRunTherion();
+  }
+
+  /// Reruns Therion for the loaded project through the configured callback.
+  Future<void> _rerunTherionForOpenProject() {
+    final MPRerunTherionForOpenProject rerunTherionForOpenProject =
+        widget.rerunTherionForOpenProject ??
+        MPDialogAux.rerunTherionForOpenProject;
+
+    return rerunTherionForOpenProject(context);
   }
 
   TH2FileEditController? _getActiveTH2FileEditController(

@@ -139,6 +139,14 @@ Replaces `pickTHConfigFileAndRunTherion`/`chooseTHConfigAndRunTherion`/`pickTHCo
 ```dart
 typedef MPProjectFilePicker = Future<PlatformFile?> Function();
 
+typedef MPPickProjectAndRunTherion =
+    Future<void> Function(BuildContext context);
+
+typedef MPRerunTherionForOpenProject =
+    Future<void> Function(BuildContext context);
+
+typedef MPTherionAvailabilityChecker = bool Function();
+
 typedef MPProjectLauncher =
     Future<void> Function(BuildContext context, String thConfigFilePath);
 
@@ -243,15 +251,25 @@ Notes:
 ### 4.4 Rerun and CLI-startup call sites
 
 ```dart
-static Future<void> rerunTherionForOpenProject(BuildContext context) async {
+static Future<void> rerunTherionForOpenProject(
+  BuildContext context, {
+  MPRunTherionStarter? runTherionStarter,
+  MPTherionAvailabilityChecker? therionAvailabilityChecker,
+}) async {
   final String rootConfigPath = mpLocator.thProjectController.rootConfigPath;
 
   if (rootConfigPath.isEmpty) {
     return;
   }
 
-  if (mpLocator.mpSettingsController.isTherionAvailable) {
-    await runTherion(context, thConfigFilePath: rootConfigPath);
+  final MPTherionAvailabilityChecker isTherionAvailable =
+      therionAvailabilityChecker ??
+      () => mpLocator.mpSettingsController.isTherionAvailable;
+
+  if (isTherionAvailable()) {
+    final MPRunTherionStarter startRun = runTherionStarter ?? runTherion;
+
+    await startRun(context, thConfigFilePath: rootConfigPath);
   } else {
     MPDialogAux.showHelpDialog(
       context,
@@ -262,7 +280,9 @@ static Future<void> rerunTherionForOpenProject(BuildContext context) async {
 }
 ```
 
-Replaces `runTherionWithLastTHConfig`.
+Replaces `runTherionWithLastTHConfig`. The optional starter and availability
+checker are test seams; production callers use `runTherion` and the settings
+controller's real availability state.
 
 `runTherionWithTHConfigFile(context, path)` (the CLI `--thconfig`/positional-argument startup path in `MapiahHome`, lines 101 and 129) is replaced by a shared helper, `runTherionAndOpenProjectInBackground`, used both by this CLI path and by §4.3's post-pick step:
 
@@ -640,7 +660,7 @@ Test numbering continues at `t3911`:
 | `test/t3914_th_text_editor_controller_compiler_diagnostics_test.dart` | A `THProjectController.compilerErrors` entry for an open editor's `canonicalPath` appears in `THTextEditorController.diagnostics` and renders via the existing `THTextEditorDiagnosticMarkerWidget` path (mirrors `t3904`'s harness). |
 | `test/t3915_th_project_tree_node_widget_compiler_error_dot_test.dart` | A compiler diagnostic on a `THDataFileNode`/`THConfigFileNode` shows the error dot with the combined (parse + compiler) count; a compiler diagnostic on a file with no static parse errors still shows the dot; a `TH2FileNode` compiler diagnostic does not gain a dot or text-editor navigation; logical child nodes (survey/centreline/map) do not gain a dot from a compiler diagnostic in their file; tapping the dot selects the file node, opens/focuses its text-editor tab, and sets `pendingScrollToLine` to the first compiler diagnostic when one exists, otherwise to the first parse error. |
 | `test/t3916_mp_therion_run_dialog_widget_diagnostics_bridge_test.dart` | Using an injected `MPTherionRunner` (constructor already supports `therionRunner:` injection) that surfaces known output/log lines: when the run's `thConfigFilePath` canonicalizes to the loaded project's `rootConfigPath`, `THProjectController.compilerErrors` is populated after the run finishes; when it does not match (no project loaded, or a different project), `compilerErrors` stays empty; a second run with different diagnostics fully replaces the first run's set. |
-| `test/t3917_mapiah_home_run_therion_buttons_test.dart` | Widget test: "Run Therion" is disabled with no project loaded and enabled once one is, and calls `rerunTherionForOpenProject`; the empty-project-state "Run Therion (and open project)" button calls `pickProjectFileAndRunTherion`; `Ctrl/Cmd+T` invokes that flow only with no loaded project and is unavailable once a project is loaded; the compact overflow menu and expanded app-bar agree about rerun availability. |
+| `test/t3917_th2_file_tabs_page_run_therion_buttons_test.dart` | Widget test with injected page/tree callbacks: "Run Therion" is disabled with no project loaded and enabled once one is, and the expanded button and compact menu both invoke `rerunTherionForOpenProject`; the empty-project-state "Run Therion (and open project)" button invokes `pickProjectFileAndRunTherion`; `Ctrl/Cmd+T` invokes that flow only with no loaded project and is unavailable once a project is loaded. |
 
 Representative scenarios:
 

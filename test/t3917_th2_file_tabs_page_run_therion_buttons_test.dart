@@ -1,10 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+// Run Therion action routing for the unified tabs workspace.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
@@ -35,6 +39,21 @@ void main() {
   tearDown(() {
     mpLocator.thProjectController.closeProject();
   });
+
+  Widget buildTabsPage({
+    MPPickProjectAndRunTherion? pickProjectAndRunTherion,
+    MPRerunTherionForOpenProject? rerunTherionForOpenProject,
+  }) {
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('en'),
+      home: TH2FileTabsPage(
+        pickProjectAndRunTherion: pickProjectAndRunTherion,
+        rerunTherionForOpenProject: rerunTherionForOpenProject,
+      ),
+    );
+  }
 
   group('Tabs page Run Therion actions (wide layout)', () {
     testWidgets(
@@ -84,6 +103,57 @@ void main() {
         );
       },
     );
+
+    testWidgets('Run Therion button invokes the rerun callback', (
+      WidgetTester tester,
+    ) async {
+      int callCount = 0;
+
+      await tester.binding.setSurfaceSize(const Size(1200, 700));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      mpLocator.thProjectController.rootConfigPath = '/tmp/some/thconfig';
+
+      await tester.pumpWidget(
+        buildTabsPage(
+          rerunTherionForOpenProject: (BuildContext context) async {
+            callCount++;
+          },
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(
+        find.byKey(const ValueKey('TH2FileTabsPageRunTherionButton')),
+      );
+      await tester.pump();
+
+      expect(callCount, 1);
+    });
+
+    testWidgets('project-tree action invokes the open-and-run callback', (
+      WidgetTester tester,
+    ) async {
+      int callCount = 0;
+
+      await tester.binding.setSurfaceSize(const Size(1200, 700));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(
+        buildTabsPage(
+          pickProjectAndRunTherion: (BuildContext context) async {
+            callCount++;
+          },
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(
+        find.byKey(const ValueKey('THProjectTreeRunTherionButton')),
+      );
+      await tester.pump();
+
+      expect(callCount, 1);
+    });
   });
 
   group('Tabs page Run Therion actions (compact overflow menu)', () {
@@ -147,5 +217,33 @@ void main() {
         );
       },
     );
+
+    testWidgets('Run Therion menu item invokes the rerun callback', (
+      WidgetTester tester,
+    ) async {
+      int callCount = 0;
+
+      await tester.binding.setSurfaceSize(const Size(400, 600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      mpLocator.thProjectController.rootConfigPath = '/tmp/some/thconfig';
+
+      await tester.pumpWidget(
+        buildTabsPage(
+          rerunTherionForOpenProject: (BuildContext context) async {
+            callCount++;
+          },
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(
+        find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Run Therion (T)'));
+      await tester.pumpAndSettle();
+
+      expect(callCount, 1);
+    });
   });
 }

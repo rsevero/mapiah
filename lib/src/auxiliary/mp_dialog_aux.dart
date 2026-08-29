@@ -1271,15 +1271,25 @@ class MPDialogAux {
   /// (`THProjectController.rootConfigPath`), replacing the old
   /// "run with last picked thconfig" flow — the project tree's own state is
   /// now the single source of truth for what "Rerun Therion" targets.
-  static Future<void> rerunTherionForOpenProject(BuildContext context) async {
+  static Future<void> rerunTherionForOpenProject(
+    BuildContext context, {
+    MPRunTherionStarter? runTherionStarter,
+    MPTherionAvailabilityChecker? therionAvailabilityChecker,
+  }) async {
     final String rootConfigPath = mpLocator.thProjectController.rootConfigPath;
 
     if (rootConfigPath.isEmpty) {
       return;
     }
 
-    if (mpLocator.mpSettingsController.isTherionAvailable) {
-      await runTherion(context, thConfigFilePath: rootConfigPath);
+    final MPTherionAvailabilityChecker isTherionAvailable =
+        therionAvailabilityChecker ??
+        () => mpLocator.mpSettingsController.isTherionAvailable;
+
+    if (isTherionAvailable()) {
+      final MPRunTherionStarter startRun = runTherionStarter ?? runTherion;
+
+      await startRun(context, thConfigFilePath: rootConfigPath);
     } else {
       MPDialogAux.showHelpDialog(
         context,
@@ -1397,6 +1407,14 @@ class MPDialogAux {
 enum MPFilePickerType { image, th2, executable, project }
 
 typedef MPProjectFilePicker = Future<PlatformFile?> Function();
+
+typedef MPPickProjectAndRunTherion =
+    Future<void> Function(BuildContext context);
+
+typedef MPRerunTherionForOpenProject =
+    Future<void> Function(BuildContext context);
+
+typedef MPTherionAvailabilityChecker = bool Function();
 
 typedef MPProjectLauncher =
     Future<void> Function(BuildContext context, String thConfigFilePath);

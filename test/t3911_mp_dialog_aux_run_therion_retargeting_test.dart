@@ -83,29 +83,50 @@ void main() {
       WidgetTester tester,
     ) async {
       final BuildContext context = await pumpAndGetContext(tester);
+      bool startCalled = false;
 
       expect(mpLocator.thProjectController.rootConfigPath, isEmpty);
 
-      await MPDialogAux.rerunTherionForOpenProject(context);
+      await MPDialogAux.rerunTherionForOpenProject(
+        context,
+        therionAvailabilityChecker: () => true,
+        runTherionStarter:
+            (
+              BuildContext runContext, {
+              required String thConfigFilePath,
+            }) async {
+              startCalled = true;
+            },
+      );
       await tester.pump();
 
+      expect(startCalled, isFalse);
       expect(find.byType(MPRunTherionDialogWidget), findsNothing);
     });
 
-    // NOTE: a "shows MPRunTherionDialogWidget with rootConfigPath when set"
-    // scenario was attempted here (matching the plan's test-plan
-    // description) but dropped: MPDialogAux.runTherion/rerunTherionForOpenProject
-    // have no runner-injection seam (unlike MPRunTherionDialogWidget's own
-    // `therionRunner` constructor parameter, used directly by
-    // t3610_ui_therion_run_dialog_test.dart), so exercising this path means
-    // spawning a real process from inside a `testWidgets` fake-async zone --
-    // which left a periodic Timer (the dialog's own elapsed-time ticker)
-    // reliably still pending at teardown across several mitigation attempts
-    // (tester.runAsync bridging, real short-lived scripts, extra pumps).
-    // The underlying logic (reading THProjectController.rootConfigPath and
-    // gating on emptiness) is otherwise simple and reviewed directly; the
-    // dialog's own behavior given a thConfigFilePath is already covered by
-    // t3610, and MPTherionRunner itself by t3600.
+    testWidgets('passes the loaded rootConfigPath to the run starter', (
+      WidgetTester tester,
+    ) async {
+      const String rootConfigPath = '/tmp/loaded/thconfig';
+      final BuildContext context = await pumpAndGetContext(tester);
+      String? startedPath;
+
+      mpLocator.thProjectController.rootConfigPath = rootConfigPath;
+
+      await MPDialogAux.rerunTherionForOpenProject(
+        context,
+        therionAvailabilityChecker: () => true,
+        runTherionStarter:
+            (
+              BuildContext runContext, {
+              required String thConfigFilePath,
+            }) async {
+              startedPath = thConfigFilePath;
+            },
+      );
+
+      expect(startedPath, rootConfigPath);
+    });
   });
 
   group('MPDialogAux.pickProjectFileAndRunTherion', () {
