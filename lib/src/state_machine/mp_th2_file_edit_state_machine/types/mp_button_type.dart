@@ -11,7 +11,6 @@ enum MPButtonType {
   addScrap,
   addXTherionImageInsertConfig,
   changeScrap,
-  chooseTHConfigAndRunTherion,
   convertLineSegmentsToBezier,
   convertLineSegmentsToStraight,
   copyElements,

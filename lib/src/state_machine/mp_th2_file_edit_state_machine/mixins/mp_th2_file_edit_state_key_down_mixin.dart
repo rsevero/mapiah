@@ -187,16 +187,13 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
           }
         }
       case LogicalKeyboardKey.keyT:
-        if (!isAltPressed && !isShiftPressed) {
-          if (!isCtrlPressed && !isMetaPressed) {
-            th2FileEditController.stateController.onButtonPressed(
-              MPButtonType.runTherion,
-            );
-          } else {
-            th2FileEditController.stateController.onButtonPressed(
-              MPButtonType.chooseTHConfigAndRunTherion,
-            );
-          }
+        if (!isAltPressed &&
+            !isShiftPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed) {
+          th2FileEditController.stateController.onButtonPressed(
+            MPButtonType.runTherion,
+          );
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyV:

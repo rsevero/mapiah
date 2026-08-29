@@ -36,7 +36,7 @@ void main() {
     mpLocator.thProjectController.closeProject();
   });
 
-  group('Home app bar Run Therion buttons (wide layout)', () {
+  group('Tabs page Run Therion actions (wide layout)', () {
     testWidgets(
       'Run Therion button is disabled with no project loaded and enabled '
       'once one is',
@@ -48,7 +48,7 @@ void main() {
         await tester.pump();
 
         final Finder runButtonFinder = find.byKey(
-          const ValueKey('MapiahHomeRunTherionButton'),
+          const ValueKey('TH2FileTabsPageRunTherionButton'),
         );
 
         expect(runButtonFinder, findsOneWidget);
@@ -65,7 +65,7 @@ void main() {
     );
 
     testWidgets(
-      'Open project and run Therion button is always present and enabled',
+      'project tree exposes the Open project and run Therion action',
       (WidgetTester tester) async {
         await tester.binding.setSurfaceSize(const Size(1200, 700));
         addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -74,19 +74,19 @@ void main() {
         await tester.pump();
 
         final Finder openAndRunButtonFinder = find.byKey(
-          const ValueKey('MapiahHomeOpenTHConfigAndRunTherionButton'),
+          const ValueKey('THProjectTreeRunTherionButton'),
         );
 
         expect(openAndRunButtonFinder, findsOneWidget);
         expect(
-          tester.widget<IconButton>(openAndRunButtonFinder).onPressed,
+          tester.widget<OutlinedButton>(openAndRunButtonFinder).onPressed,
           isNotNull,
         );
       },
     );
   });
 
-  group('Home app bar Run Therion actions (compact overflow menu)', () {
+  group('Tabs page Run Therion actions (compact overflow menu)', () {
     testWidgets(
       'the overflow menu Run Therion entry is disabled with no project and '
       'enabled once one is loaded',
@@ -98,12 +98,12 @@ void main() {
         await tester.pump();
 
         expect(
-          find.byKey(const ValueKey('MapiahHomeMoreActionsButton')),
+          find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
           findsOneWidget,
         );
 
         await tester.tap(
-          find.byKey(const ValueKey('MapiahHomeMoreActionsButton')),
+          find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
         );
         await tester.pumpAndSettle();
 
@@ -129,7 +129,7 @@ void main() {
         await tester.pump();
 
         await tester.tap(
-          find.byKey(const ValueKey('MapiahHomeMoreActionsButton')),
+          find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
         );
         await tester.pumpAndSettle();
 

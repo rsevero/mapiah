@@ -93,26 +93,6 @@
     "description": "The label for the about Mapiah dialog. Used on: _MapiahHomeState.build",
     "type": "text"
   },
-  "mapiahHomeHelpDialogTitle": "Main page",
-  "@mapiahHomeHelpDialogTitle": {
-    "description": "The title for the main page of the help dialog. Used on: _MapiahHomeState.build, on._withShortcuts",
-    "type": "text"
-  },
-  "mapiahHomeNewFileButtonTooltip": "New file (Ctrl+N or Ctrl+Shift+N)",
-  "@mapiahHomeNewFileButtonTooltip": {
-    "description": "The tooltip for the new file button on the main page. Used on: _MapiahHomeState.build",
-    "type": "text"
-  },
-  "mapiahHomeOpenFile": "Open file (Ctrl+O or Ctrl+Shift+O)",
-  "@mapiahHomeOpenFile": {
-    "description": "The label for the open file button. Used on: _MapiahHomeState.build",
-    "type": "text"
-  },
-  "mapiahOpenProjectButtonTooltip": "Open project (Ctrl+O or Ctrl+Shift+O)",
-  "@mapiahOpenProjectButtonTooltip": {
-    "description": "The tooltip and menu label for the initial-window Open project button. Used on: _MapiahHomeState.build",
-    "type": "text"
-  },
   "mpMoreActionsTooltip": "More actions",
   "@mpMoreActionsTooltip": {
     "description": "Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build",
@@ -126,11 +106,6 @@
   "mapiahKeyboardShortcutsTooltip": "Keyboard Shortcuts (Ctrl+K)",
   "@mapiahKeyboardShortcutsTooltip": {
     "description": "The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
-    "type": "text"
-  },
-  "mapiahOpenTHConfigAndRunTherionButtonTooltip": "Open project and run Therion (Ctrl+T)",
-  "@mapiahOpenTHConfigAndRunTherionButtonTooltip": {
-    "description": "The tooltip for the button that opens a project and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mapiahCloseProjectButtonTooltip": "Close project",
@@ -2738,11 +2713,6 @@
     "description": "The label for the image file selection dialog. Used on: lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text"
   },
-  "th2FilePickSelectTH2File": "Select a TH2 file",
-  "@th2FilePickSelectTH2File": {
-    "description": "The label for the TH2 file selection dialog. Used on: MPDialogAux.pickTH2File",
-    "type": "text"
-  },
   "th2FilePropertiesPageClose": "Close",
   "@th2FilePropertiesPageClose": {
     "description": "Label for the Close button on the file properties page. Used on: TH2FilePropertiesPage",
@@ -4436,6 +4406,21 @@
   "projectTreeOpenProjectButton": "Open project",
   "@projectTreeOpenProjectButton": {
     "description": "Label for the button that opens a project from the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState",
+    "type": "text"
+  },
+  "projectTreeNewProjectButton": "New project",
+  "@projectTreeNewProjectButton": {
+    "description": "Label for the stub button that will create a new project, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState",
+    "type": "text"
+  },
+  "projectTreeNewProjectNotImplemented": "New project isn't implemented yet.",
+  "@projectTreeNewProjectNotImplemented": {
+    "description": "Snack bar message shown when the New project stub button is pressed. Used on: THProjectTreeWidget._buildEmptyState",
+    "type": "text"
+  },
+  "projectTreeRunTherionButton": "Run Therion (and open project)",
+  "@projectTreeRunTherionButton": {
+    "description": "Label for the button that picks a project file and runs Therion against it, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState",
     "type": "text"
   },
   "projectTreeSearchHint": "Search project",

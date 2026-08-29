@@ -8,6 +8,8 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
+import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
+import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 class _FakePathProviderPlatform extends PathProviderPlatform {
@@ -35,19 +37,24 @@ void main() {
       );
     });
 
-    testWidgets('tapping New file opens modal and OK navigates to editor', (
+    testWidgets('creating a file from the dialog adds it to the root editor', (
       WidgetTester tester,
     ) async {
-      // Pump the full app so we use the real home page and navigator key
+      // Pump the full app so the tabs page is mounted as the root route.
       await tester.pumpWidget(const MapiahApp());
       await tester.pumpAndSettle();
 
-      // Tap the New file button on the home app bar
-      final Finder newFileButton = find.byKey(
-        const ValueKey('MapiahHomeNewFileButton'),
+      final BuildContext tabsPageContext = tester.element(
+        find.byType(TH2FileTabsPage),
       );
-      expect(newFileButton, findsOneWidget);
-      await tester.tap(newFileButton);
+
+      MPModalOverlayWidget.show(
+        context: tabsPageContext,
+        scrollChild: false,
+        childBuilder: (VoidCallback onPressedClose) {
+          return MPAddFileDialogWidget(onPressedClose: onPressedClose);
+        },
+      );
       await tester.pumpAndSettle();
 
       // The modal overlay should be visible; tap the OK button to create the file
@@ -61,15 +68,16 @@ void main() {
       await tester.tap(okButton);
       await tester.pumpAndSettle();
 
-      // Assert we've navigated to the TH2FileTabsPage (which contains TH2FileEditBodyWidget)
+      // The dialog adds a tab without pushing another tabs page route.
       expect(find.byType(TH2FileTabsPage), findsOneWidget);
+      expect(mpLocator.mpGeneralController.openFileOrder, hasLength(1));
 
       // Optionally, press ESC to ensure the page handles it gracefully (no crash)
       // and does not pop the editor unexpectedly (since ESC was for modals).
       await tester.sendKeyEvent(LogicalKeyboardKey.escape);
       await tester.pump();
 
-      // Still on the tabs page
+      // Still on the root tabs page.
       expect(find.byType(TH2FileTabsPage), findsOneWidget);
     });
   });

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,30 +15,32 @@ import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_properties_page.dart';
 import 'package:mapiah/src/widgets/help_button_widget.dart';
 import 'package:mapiah/src/widgets/mp_file_tab_widget.dart';
 import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
+import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
+import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_resize_divider_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_widget.dart';
 import 'package:mapiah/src/widgets/th_text_editor_tab_body_widget.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mobx/mobx.dart' hide Listener;
+import 'package:package_info_plus/package_info_plus.dart';
 
 enum _TH2FileTabsAction {
-  newFile,
-  openFile,
   save,
   saveAs,
-  openTHConfig,
   runTherion,
   closeProject,
   settings,
   keyboardShortcuts,
   help,
+  about,
 }
 
 typedef _TH2FileLoad = ({
@@ -46,14 +49,22 @@ typedef _TH2FileLoad = ({
 });
 
 class TH2FileTabsPage extends StatefulWidget {
-  const TH2FileTabsPage({super.key});
+  final String? mainFilePath;
+  final List<String> th2FilePaths;
+  final String? thConfigFilePath;
+
+  const TH2FileTabsPage({
+    super.key,
+    this.mainFilePath,
+    this.th2FilePaths = const <String>[],
+    this.thConfigFilePath,
+  });
 
   @override
   State<TH2FileTabsPage> createState() => _TH2FileTabsPageState();
 }
 
 class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
-  late ReactionDisposer _openFileOrderReaction;
   late ReactionDisposer _activeTabFocusReaction;
   final Map<String, _TH2FileLoad> _fileLoads = <String, _TH2FileLoad>{};
   late final ScrollController _tabScrollController;
@@ -65,23 +76,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     super.initState();
 
     _tabScrollController = ScrollController();
-
-    _openFileOrderReaction = reaction(
-      (_) => mpLocator.mpGeneralController.openFileOrder.length,
-      (int length) {
-        if (length == 0) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted ||
-                mpLocator.mpGeneralController.openFileOrder.isNotEmpty ||
-                mpLocator.thProjectController.projectRootNode != null) {
-              return;
-            }
-
-            Navigator.pop(context);
-          });
-        }
-      },
-    );
 
     /// Give keyboard focus to the incoming tab's canvas after each tab
     /// switch so that keyboard shortcuts (e.g. Ctrl+V) are delivered to
@@ -116,12 +110,188 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         });
       },
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _runStartupFileActions();
+
+      if (!mounted) {
+        return;
+      }
+
+      if (mpDebugTelemetryAlwaysShowConsent ||
+          !mpLocator.mpSettingsController.isBoolSet(
+            MPSettingID.Main_TelemetryConsent,
+          )) {
+        await MPTelemetryConsentDialog.show(context);
+      }
+
+      MPDialogAux.checkForUpdates();
+    });
+  }
+
+  Future<void> _runStartupFileActions() async {
+    final bool isTherionDebugLog1Enabled =
+        mpLocator.mpSettingsController.isTherionDebugLog1Enabled;
+
+    // Handle --th2 files (named argument)
+    if (widget.th2FilePaths.isNotEmpty) {
+      if (isTherionDebugLog1Enabled) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix opening TH2 files from startup '
+          'arguments: ${widget.th2FilePaths.join(' | ')} '
+          'currentDirectory=${Directory.current.path}',
+        );
+      }
+
+      for (final String filePath in widget.th2FilePaths) {
+        await _openTH2FileFromPath(filePath);
+      }
+    }
+
+    // Handle --thconfig file (named argument)
+    if (widget.thConfigFilePath != null) {
+      if (isTherionDebugLog1Enabled) {
+        mpLocator.mpLog.i(
+          '$mpTherionStartupDebugPrefix startup launch mode=--thconfig '
+          'path=${widget.thConfigFilePath} '
+          'currentDirectory=${Directory.current.path}',
+        );
+      }
+
+      if (!mounted) {
+        return;
+      }
+
+      await MPDialogAux.runTherionAndOpenProjectInBackground(
+        context,
+        widget.thConfigFilePath!,
+      );
+
+      return;
+    }
+
+    // Handle positional argument (backward compatibility)
+    if ((widget.mainFilePath != null) && widget.th2FilePaths.isEmpty) {
+      if (widget.mainFilePath!.toLowerCase().endsWith(".th2")) {
+        if (isTherionDebugLog1Enabled) {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix startup launch mode=positional-th2 '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
+        }
+        await _openTH2FileFromPath(widget.mainFilePath!);
+      } else {
+        if (isTherionDebugLog1Enabled) {
+          mpLocator.mpLog.i(
+            '$mpTherionStartupDebugPrefix '
+            'startup launch mode=positional-thconfig '
+            'path=${widget.mainFilePath} '
+            'currentDirectory=${Directory.current.path}',
+          );
+        }
+
+        if (!mounted) {
+          return;
+        }
+
+        await MPDialogAux.runTherionAndOpenProjectInBackground(
+          context,
+          widget.mainFilePath!,
+        );
+      }
+    }
+  }
+
+  Future<void> _openTH2FileFromPath(String filePath) async {
+    try {
+      // Create the controller for the file before adding the tab
+      mpLocator.mpGeneralController.getTH2FileEditController(
+        filename: filePath,
+      );
+
+      mpLocator.mpGeneralController.addFileTab(filePath);
+    } catch (e) {
+      mpLocator.mpLog.e('Error opening file: $e');
+    }
+  }
+
+  void showAboutDialog(BuildContext context) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    final String version = packageInfo.version;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(appLocalizations.aboutMapiahDialogWindowTitle),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                // Version
+                Text(appLocalizations.aboutMapiahDialogMapiahVersion(version)),
+                SizedBox(height: mpButtonSpace),
+                // Optional release information (handle name-only, url-only, and both)
+                if (mpReleaseName.isNotEmpty && mpReleaseURL.isNotEmpty) ...[
+                  // Show localized release name and a clickable URL in parentheses
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        appLocalizations.aboutMapiahDialogReleaseNoUrl(
+                          mpReleaseName,
+                        ),
+                      ),
+                      Text(' ('),
+                      MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
+                      Text(')'),
+                    ],
+                  ),
+                  SizedBox(height: mpButtonSpace),
+                ] else if (mpReleaseName.isNotEmpty) ...[
+                  Text(
+                    appLocalizations.aboutMapiahDialogReleaseNoUrl(
+                      mpReleaseName,
+                    ),
+                  ),
+                  SizedBox(height: mpButtonSpace),
+                ] else if (mpReleaseURL.isNotEmpty) ...[
+                  // Only URL present: show it as a clickable link
+                  MPURLTextWidget(url: mpReleaseURL, label: mpReleaseURL),
+                  SizedBox(height: mpButtonSpace),
+                ],
+                // Changelog and license links
+                MPURLTextWidget(
+                  url: mpChangelogURL,
+                  label: appLocalizations.aboutMapiahDialogChangelog,
+                ),
+                SizedBox(height: mpButtonSpace),
+                MPURLTextWidget(
+                  url: mpLicenseURL,
+                  label: appLocalizations.aboutMapiahDialogLicense,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(appLocalizations.buttonClose),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   void dispose() {
     _tabScrollController.dispose();
-    _openFileOrderReaction();
     _activeTabFocusReaction();
     super.dispose();
   }
@@ -155,21 +325,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
           mpSettingsController: mpSettingsController,
         ),
         expandedActions: <Widget>[
-          IconButton(
-            key: const ValueKey('TH2FileTabsPageNewFileButton'),
-            icon: const Icon(Icons.insert_drive_file_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.newFile(context),
-            tooltip: appLocalizations.mapiahHomeNewFileButtonTooltip,
-          ),
-          IconButton(
-            key: const ValueKey('TH2FileTabsPageOpenFileButton'),
-            icon: const Icon(Icons.file_open_outlined),
-            color: colorScheme.onSecondaryContainer,
-            onPressed: () => MPDialogAux.pickTH2File(context),
-            tooltip: appLocalizations.mapiahHomeOpenFile,
-          ),
-          actionsSeparator,
           Observer(
             builder: (_) {
               final List<String> openFileOrder =
@@ -218,28 +373,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             builder: (_) {
               final bool therionAvailable =
                   mpSettingsController.isTherionAvailable;
-
-              return IconButton(
-                key: const ValueKey(
-                  'TH2FileTabsPageOpenTHConfigAndRunTherionButton',
-                ),
-                icon: const Icon(Icons.playlist_add_check_outlined),
-                color: therionAvailable
-                    ? colorScheme.onSecondaryContainer
-                    : mpTherionRunStatusBackgroundErrorColor,
-                onPressed: () =>
-                    MPDialogAux.pickProjectFileAndRunTherion(context),
-                tooltip: therionAvailable
-                    ? appLocalizations
-                          .mapiahOpenTHConfigAndRunTherionButtonTooltip
-                    : appLocalizations.mpNoTherionFound,
-              );
-            },
-          ),
-          Observer(
-            builder: (_) {
-              final bool therionAvailable =
-                  mpSettingsController.isTherionAvailable;
               final bool hasOpenProject =
                   mpLocator.thProjectController.rootConfigPath.isNotEmpty;
               final VoidCallback? onPressed = hasOpenProject
@@ -284,6 +417,13 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             context,
             mpHelpPageTh2FileEdit,
             appLocalizations.th2FileEditPageHelpDialogTitle,
+          ),
+          IconButton(
+            key: const ValueKey('TH2FileTabsPageAboutButton'),
+            icon: const Icon(Icons.info_outline),
+            color: colorScheme.onSecondaryContainer,
+            onPressed: () => showAboutDialog(context),
+            tooltip: appLocalizations.mapiahHomeAboutMapiahDialog,
           ),
         ],
         bottom: PreferredSize(
@@ -463,14 +603,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   ) {
     return <PopupMenuEntry<_TH2FileTabsAction>>[
       _overflowMenuItem(
-        action: _TH2FileTabsAction.newFile,
-        label: appLocalizations.mapiahHomeNewFileButtonTooltip,
-      ),
-      _overflowMenuItem(
-        action: _TH2FileTabsAction.openFile,
-        label: appLocalizations.mapiahHomeOpenFile,
-      ),
-      _overflowMenuItem(
         action: _TH2FileTabsAction.save,
         label: appLocalizations.th2FileEditPageSave,
         enabled: controller?.enableSaveButton ?? false,
@@ -489,10 +621,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     bool hasOpenProject,
   ) {
     return <PopupMenuEntry<_TH2FileTabsAction>>[
-      _overflowMenuItem(
-        action: _TH2FileTabsAction.openTHConfig,
-        label: appLocalizations.mapiahOpenTHConfigAndRunTherionButtonTooltip,
-      ),
       _overflowMenuItem(
         action: _TH2FileTabsAction.runTherion,
         label: appLocalizations.mapiahRunTherionButtonTooltip,
@@ -522,6 +650,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       _overflowMenuItem(
         action: _TH2FileTabsAction.help,
         label: appLocalizations.helpDialogTooltip,
+      ),
+      _overflowMenuItem(
+        action: _TH2FileTabsAction.about,
+        label: appLocalizations.mapiahHomeAboutMapiahDialog,
       ),
     ];
   }
@@ -562,16 +694,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     final TH2FileEditController? controller = _getActiveController();
 
     switch (action) {
-      case _TH2FileTabsAction.newFile:
-        MPDialogAux.newFile(context);
-      case _TH2FileTabsAction.openFile:
-        MPDialogAux.pickTH2File(context);
       case _TH2FileTabsAction.save:
         controller?.saveTH2File();
       case _TH2FileTabsAction.saveAs:
         controller?.saveAsTH2File();
-      case _TH2FileTabsAction.openTHConfig:
-        MPDialogAux.pickProjectFileAndRunTherion(context);
       case _TH2FileTabsAction.runTherion:
         MPDialogAux.rerunTherionForOpenProject(context);
       case _TH2FileTabsAction.closeProject:
@@ -594,6 +720,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
           mpHelpPageTh2FileEdit,
           appLocalizations.th2FileEditPageHelpDialogTitle,
         );
+      case _TH2FileTabsAction.about:
+        showAboutDialog(context);
     }
   }
 
@@ -800,43 +928,24 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     final MPGeneralController generalController = mpLocator.mpGeneralController;
     final Map<ShortcutActivator, VoidCallback> bindings =
         <ShortcutActivator, VoidCallback>{
-          // New file
-          const SingleActivator(LogicalKeyboardKey.keyN, control: true): () =>
-              MPDialogAux.newFile(context),
-          const SingleActivator(LogicalKeyboardKey.keyN, meta: true): () =>
-              MPDialogAux.newFile(context),
-          // macOS Cmd+Shift+N
-          const SingleActivator(
-            LogicalKeyboardKey.keyN,
-            meta: true,
-            shift: true,
-          ): () =>
-              MPDialogAux.newFile(context),
-          // Web-safe fallback (Ctrl+Shift+N) since some browsers block Ctrl+N
-          const SingleActivator(
-            LogicalKeyboardKey.keyN,
-            control: true,
-            shift: true,
-          ): () =>
-              MPDialogAux.newFile(context),
-          // Open file: desktop standard Ctrl/Cmd+O
+          // Open project: desktop standard Ctrl/Cmd+O
           const SingleActivator(LogicalKeyboardKey.keyO, control: true): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           const SingleActivator(LogicalKeyboardKey.keyO, meta: true): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           // macOS Cmd+Shift+O
           const SingleActivator(
             LogicalKeyboardKey.keyO,
             meta: true,
             shift: true,
           ): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           const SingleActivator(
             LogicalKeyboardKey.keyO,
             control: true,
             shift: true,
           ): () =>
-              MPDialogAux.pickTH2File(context),
+              MPDialogAux.pickProjectFile(context),
           // Save file
           const SingleActivator(LogicalKeyboardKey.keyS, control: true): () =>
               _saveActiveTab(generalController),
@@ -877,11 +986,6 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                 mpHelpPageKeyboardShortcutsEdit,
                 appLocalizations.mapiahKeyboardShortcutsTitle,
               ),
-          // Therion: Ctrl+T
-          const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
-              MPDialogAux.pickProjectFileAndRunTherion(context),
-          const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
-              MPDialogAux.pickProjectFileAndRunTherion(context),
           // Therion: T (no modifiers)
           const SingleActivator(LogicalKeyboardKey.keyT): () =>
               MPDialogAux.rerunTherionForOpenProject(context),

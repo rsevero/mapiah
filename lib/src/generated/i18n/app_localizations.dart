@@ -194,30 +194,6 @@ abstract class AppLocalizations {
   /// **'About Mapiah'**
   String get mapiahHomeAboutMapiahDialog;
 
-  /// The title for the main page of the help dialog. Used on: _MapiahHomeState.build, on._withShortcuts
-  ///
-  /// In en, this message translates to:
-  /// **'Main page'**
-  String get mapiahHomeHelpDialogTitle;
-
-  /// The tooltip for the new file button on the main page. Used on: _MapiahHomeState.build
-  ///
-  /// In en, this message translates to:
-  /// **'New file (Ctrl+N or Ctrl+Shift+N)'**
-  String get mapiahHomeNewFileButtonTooltip;
-
-  /// The label for the open file button. Used on: _MapiahHomeState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Open file (Ctrl+O or Ctrl+Shift+O)'**
-  String get mapiahHomeOpenFile;
-
-  /// The tooltip and menu label for the initial-window Open project button. Used on: _MapiahHomeState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Open project (Ctrl+O or Ctrl+Shift+O)'**
-  String get mapiahOpenProjectButtonTooltip;
-
   /// Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build
   ///
   /// In en, this message translates to:
@@ -235,12 +211,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keyboard Shortcuts (Ctrl+K)'**
   String get mapiahKeyboardShortcutsTooltip;
-
-  /// The tooltip for the button that opens a project and runs Therion. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Open project and run Therion (Ctrl+T)'**
-  String get mapiahOpenTHConfigAndRunTherionButtonTooltip;
 
   /// The label for the overflow-menu entry that closes the currently loaded project. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
   ///
@@ -3323,12 +3293,6 @@ abstract class AppLocalizations {
   /// **'Select an image file'**
   String get th2FilePickSelectImageFile;
 
-  /// The label for the TH2 file selection dialog. Used on: MPDialogAux.pickTH2File
-  ///
-  /// In en, this message translates to:
-  /// **'Select a TH2 file'**
-  String get th2FilePickSelectTH2File;
-
   /// Label for the Close button on the file properties page. Used on: TH2FilePropertiesPage
   ///
   /// In en, this message translates to:
@@ -5331,6 +5295,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open project'**
   String get projectTreeOpenProjectButton;
+
+  /// Label for the stub button that will create a new project, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState
+  ///
+  /// In en, this message translates to:
+  /// **'New project'**
+  String get projectTreeNewProjectButton;
+
+  /// Snack bar message shown when the New project stub button is pressed. Used on: THProjectTreeWidget._buildEmptyState
+  ///
+  /// In en, this message translates to:
+  /// **'New project isn\'t implemented yet.'**
+  String get projectTreeNewProjectNotImplemented;
+
+  /// Label for the button that picks a project file and runs Therion against it, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState
+  ///
+  /// In en, this message translates to:
+  /// **'Run Therion (and open project)'**
+  String get projectTreeRunTherionButton;
 
   /// Hint text for the project tree search field. Used on: _THProjectTreeSearchFieldState.build
   ///

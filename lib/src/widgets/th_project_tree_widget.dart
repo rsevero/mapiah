@@ -178,9 +178,30 @@ class THProjectTreeWidget extends StatelessWidget {
               key: const ValueKey('THProjectTreeOpenProjectButton'),
               icon: const Icon(Icons.folder_open_outlined),
               label: Text(appLocalizations.projectTreeOpenProjectButton),
-              onPressed: () => MPDialogAux.pickProjectFile(
+              onPressed: () => MPDialogAux.pickProjectFile(context),
+            ),
+            const SizedBox(height: mpButtonSpace),
+            OutlinedButton.icon(
+              key: const ValueKey('THProjectTreeNewProjectButton'),
+              icon: const Icon(Icons.create_new_folder_outlined),
+              label: Text(appLocalizations.projectTreeNewProjectButton),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      appLocalizations.projectTreeNewProjectNotImplemented,
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: mpButtonSpace),
+            OutlinedButton.icon(
+              key: const ValueKey('THProjectTreeRunTherionButton'),
+              icon: const Icon(Icons.playlist_add_check_outlined),
+              label: Text(appLocalizations.projectTreeRunTherionButton),
+              onPressed: () => MPDialogAux.pickProjectFileAndRunTherion(
                 context,
-                openTabsPageAfterLoad: false,
               ),
             ),
           ],

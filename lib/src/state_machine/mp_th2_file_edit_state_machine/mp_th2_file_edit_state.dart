@@ -282,11 +282,6 @@ abstract class MPTH2FileEditState {
       case MPButtonType.changeScrap:
         th2FileEditController.toggleToNextAvailableScrap();
         return true;
-      case MPButtonType.chooseTHConfigAndRunTherion:
-        MPDialogAux.pickProjectFileAndRunTherion(
-          th2FileEditController.getTH2FileWidgetBuildContext(),
-        );
-        return true;
       case MPButtonType.convertLineSegmentsToBezier:
         th2FileEditController.userInteractionController
             .prepareConvertLineSegmentsType(

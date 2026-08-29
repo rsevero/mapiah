@@ -20,8 +20,6 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/xvi_file_parser.dart';
-import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
-import 'package:mapiah/src/widgets/mp_add_file_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_help_dialog_widget.dart';
 import 'package:mapiah/src/widgets/mp_modal_overlay_widget.dart';
 import 'package:mapiah/src/widgets/mp_therion_run_dialog_widget.dart';
@@ -38,20 +36,10 @@ class MPDialogAux {
   static bool _isUnhandledErrorDialogOpen = false;
   static bool _isUpdateDialogOpen = false;
   static bool _isUpdateCheckRunning = false;
-  static Future<void>? _th2FileTabsPageRouteFuture;
 
   static final Map<MPFilePickerType, bool> _isFilePickerOpen = {
     for (var type in MPFilePickerType.values) type: false,
   };
-
-  static void newFile(BuildContext context) async {
-    MPModalOverlayWidget.show(
-      context: context,
-      scrollChild: false,
-      childBuilder: (onPressedClose) =>
-          MPAddFileDialogWidget(onPressedClose: onPressedClose),
-    );
-  }
 
   /// Picks an image or XVI file.
   /// Returns:
@@ -1105,123 +1093,14 @@ class MPDialogAux {
     return missingItems.join(', ');
   }
 
-  static Future<void> pickTH2File(BuildContext context) async {
-    if (_isFilePickerOpen[MPFilePickerType.th2] == true) {
-      return;
-    }
-
-    _isFilePickerOpen[MPFilePickerType.th2] = true;
-
-    try {
-      final List<PlatformFile> pickedFiles = await FilePicker.pickFiles(
-        dialogTitle: mpLocator.appLocalizations.th2FilePickSelectTH2File,
-        type: FileType.custom,
-        allowedExtensions: ['th2', 'TH2'],
-        linuxOptions: const LinuxOptions(lockParentWindow: true),
-        windowsOptions: const WindowsOptions(lockParentWindow: true),
-        initialDirectory:
-            mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
-            ? (kDebugMode ? thDebugPath : './')
-            : mpLocator.mpGeneralController.lastAccessedDirectory,
-      );
-
-      if (pickedFiles.isNotEmpty) {
-        final List<String> pickedFilePaths = <String>[];
-
-        for (final file in pickedFiles) {
-          final String? filePath = file.path;
-
-          if (filePath != null) {
-            pickedFilePaths.add(filePath);
-          }
-        }
-
-        if (pickedFilePaths.isEmpty) {
-          return;
-        }
-
-        // Check if this is the first time opening files
-        final bool wasEmpty =
-            mpLocator.mpGeneralController.openFileOrder.isEmpty;
-
-        // Update last accessed directory from the first file
-        mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
-          pickedFilePaths.first,
-        );
-
-        // Create controllers and add tabs for all selected files
-        for (final String filePath in pickedFilePaths) {
-          mpLocator.mpGeneralController.getTH2FileEditController(
-            filename: filePath,
-          );
-          mpLocator.mpGeneralController.addFileTab(filePath);
-        }
-
-        // Only navigate to tabs page if we went from 0 to some files
-        if (wasEmpty) {
-          ensureTabsPageOpen(context);
-        }
-      } else {
-        mpLocator.mpLog.i('No file selected.');
-      }
-    } catch (e) {
-      mpLocator.mpLog.e('Error picking file', error: e);
-    } finally {
-      _isFilePickerOpen[MPFilePickerType.th2] = false;
-    }
-  }
-
-  static void ensureTabsPageOpen(BuildContext context) {
-    final int openFileCount =
-        mpLocator.mpGeneralController.openFileOrder.length;
-
-    if ((openFileCount == 0) || (_th2FileTabsPageRouteFuture != null)) {
-      return;
-    }
-
-    final NavigatorState navigator = Navigator.of(context);
-    final MaterialPageRoute<void> route = MaterialPageRoute<void>(
-      builder: (_) => const TH2FileTabsPage(),
-    );
-    final Future<void> routeFuture = route.completed;
-
-    _th2FileTabsPageRouteFuture = routeFuture;
-    unawaited(navigator.push<void>(route));
-
-    unawaited(
-      routeFuture.whenComplete(() {
-        if (!identical(_th2FileTabsPageRouteFuture, routeFuture)) {
-          return;
-        }
-
-        _th2FileTabsPageRouteFuture = null;
-
-        if (mpLocator.mpGeneralController.openFileOrder.isEmpty) {
-          return;
-        }
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final BuildContext? navigatorContext =
-              mpLocator.mpNavigatorKey.currentContext;
-
-          if (navigatorContext != null) {
-            ensureTabsPageOpen(navigatorContext);
-          }
-        });
-        WidgetsBinding.instance.scheduleFrame();
-      }),
-    );
-  }
-
   /// Picks the Therion project configuration file and opens it in the
   /// project tree without touching the tab lifecycle.
   ///
   /// The selected file is always treated as a `thconfig` file, regardless of
-  /// its extension or whether it has one.
-  static Future<void> pickProjectFile(
-    BuildContext context, {
-    bool openTabsPageAfterLoad = true,
-  }) async {
+  /// its extension or whether it has one. TH2FileTabsPage (which hosts the
+  /// project tree) is always the app's root route, so no navigation is
+  /// needed after the project loads.
+  static Future<void> pickProjectFile(BuildContext context) async {
     final PlatformFile? picked = await _pickProjectFilePath();
 
     if (picked == null) {
@@ -1238,10 +1117,6 @@ class MPDialogAux {
       pickedFilePath,
       forceConfigShape: true,
     );
-
-    if (openTabsPageAfterLoad && context.mounted) {
-      ensureProjectTabsPageOpen(context);
-    }
   }
 
   static Future<PlatformFile?> _pickProjectFilePath() async {
@@ -1288,31 +1163,6 @@ class MPDialogAux {
     } finally {
       _isFilePickerOpen[MPFilePickerType.project] = false;
     }
-  }
-
-  /// Opens [TH2FileTabsPage] even when no `.th2` file is open, so a loaded
-  /// project can be shown in the project-tree sidebar.
-  static void ensureProjectTabsPageOpen(BuildContext context) {
-    if (_th2FileTabsPageRouteFuture != null) {
-      return;
-    }
-
-    final NavigatorState navigator = Navigator.of(context);
-    final MaterialPageRoute<void> route = MaterialPageRoute<void>(
-      builder: (_) => const TH2FileTabsPage(),
-    );
-    final Future<void> routeFuture = route.completed;
-
-    _th2FileTabsPageRouteFuture = routeFuture;
-    unawaited(navigator.push<void>(route));
-
-    unawaited(
-      routeFuture.whenComplete(() {
-        if (identical(_th2FileTabsPageRouteFuture, routeFuture)) {
-          _th2FileTabsPageRouteFuture = null;
-        }
-      }),
-    );
   }
 
   static Future<void> runTherion(
@@ -1462,14 +1312,10 @@ class MPDialogAux {
     // Load the project in the background regardless of Therion availability
     // (and without waiting for a run that did start to finish), so "Rerun
     // Therion" becomes enabled the moment the project loads even if Therion
-    // itself isn't available yet.
-    unawaited(
-      loadProject(thConfigFilePath, forceConfigShape: true).then((_) {
-        if (context.mounted) {
-          ensureProjectTabsPageOpen(context);
-        }
-      }),
-    );
+    // itself isn't available yet. TH2FileTabsPage (which hosts the project
+    // tree) is always the app's root route, so no navigation is needed once
+    // the load completes.
+    unawaited(loadProject(thConfigFilePath, forceConfigShape: true));
 
     if (mpLocator.mpSettingsController.isTherionAvailable) {
       return startRun(context, thConfigFilePath: thConfigFilePath);

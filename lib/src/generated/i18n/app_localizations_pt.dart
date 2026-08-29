@@ -73,20 +73,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mapiahHomeAboutMapiahDialog => 'Sobre o Mapiah';
 
   @override
-  String get mapiahHomeHelpDialogTitle => 'Tela inicial';
-
-  @override
-  String get mapiahHomeNewFileButtonTooltip =>
-      'Novo arquivo (Ctrl+N ou Ctrl+Shift+N)';
-
-  @override
-  String get mapiahHomeOpenFile => 'Abrir arquivo (Ctrl+O ou Ctrl+Shift+O)';
-
-  @override
-  String get mapiahOpenProjectButtonTooltip =>
-      'Abrir projeto (Ctrl+O ou Ctrl+Shift+O)';
-
-  @override
   String get mpMoreActionsTooltip => 'Mais ações';
 
   @override
@@ -94,10 +80,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mapiahKeyboardShortcutsTooltip => 'Atalhos de teclado (Ctrl+K)';
-
-  @override
-  String get mapiahOpenTHConfigAndRunTherionButtonTooltip =>
-      'Abrir projeto e executar Therion (Ctrl+T)';
 
   @override
   String get mapiahCloseProjectButtonTooltip => 'Fechar projeto';
@@ -1834,9 +1816,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FilePickSelectImageFile => 'Selecione um arquivo de imagem';
 
   @override
-  String get th2FilePickSelectTH2File => 'Selecione um arquivo TH2';
-
-  @override
   String get th2FilePropertiesPageClose => 'Fechar';
 
   @override
@@ -2873,6 +2852,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get projectTreeOpenProjectButton => 'Abrir projeto';
+
+  @override
+  String get projectTreeNewProjectButton => 'Novo projeto';
+
+  @override
+  String get projectTreeNewProjectNotImplemented =>
+      'Novo projeto ainda não está implementado.';
+
+  @override
+  String get projectTreeRunTherionButton =>
+      'Executar Therion (e abrir projeto)';
 
   @override
   String get projectTreeSearchHint => 'Pesquisar projeto';

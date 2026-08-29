@@ -2,11 +2,10 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui' show Size;
 
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -36,7 +35,7 @@ void main() {
     });
 
     testWidgets(
-      'creating new file while a file is already open must not duplicate TH2FileTabsPage',
+      'adding files while one is already open keeps one root tabs page',
       (WidgetTester tester) async {
         tester.view.physicalSize = const Size(1280, 720);
         tester.view.devicePixelRatio = 1.0;
@@ -61,43 +60,40 @@ void main() {
           await th2Controller.load();
         });
 
-        /// Add the file tab and navigate to the tabs page, simulating opening a
-        /// file via the file picker.
+        /// Add the first file tab. The tabs page is already the app root.
         mpLocator.mpGeneralController.addFileTab(testFilename);
-        mpLocator.mpNavigatorKey.currentState?.push(
-          MaterialPageRoute<void>(builder: (_) => const TH2FileTabsPage()),
-        );
         await tester.pumpAndSettle();
 
         expect(find.byType(TH2FileTabsPage), findsOneWidget);
 
-        /// Tap the "New file" button in the TH2FileTabsPage AppBar
-        final Finder newFileButton = find.byKey(
-          const ValueKey('TH2FileTabsPageNewFileButton'),
-        );
-        expect(newFileButton, findsOneWidget);
-        await tester.tap(newFileButton);
+        const String secondFilename = '/tmp/mapiah-second-root-tab.th2';
+        final TH2FileEditController secondController = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(
+              filename: secondFilename,
+              fileBytes: Uint8List.fromList(
+                utf8.encode(
+                  'encoding utf-8\n'
+                  'scrap second-root-tab\n'
+                  'endscrap\n',
+                ),
+              ),
+            );
+
+        mpLocator.mpGeneralController.addFileTab(secondFilename);
         await tester.pumpAndSettle();
 
-        /// Tap OK to create the new file with default values
-        final Finder okButton = find.widgetWithText(ElevatedButton, 'OK');
-        expect(okButton, findsOneWidget);
-        await tester.ensureVisible(okButton);
-        await tester.pump();
-        await tester.tap(okButton);
-        await tester.pumpAndSettle();
-
-        /// There must be exactly one TH2FileTabsPage in the widget tree —
-        /// not two. A second push would cause duplicate GlobalKey errors.
         expect(find.byType(TH2FileTabsPage), findsOneWidget);
-
-        /// Both files should be registered as open tabs
         expect(mpLocator.mpGeneralController.openFileOrder.length, 2);
+
+        secondController.close();
+        th2Controller.close();
+        await tester.pumpAndSettle();
       },
     );
 
     testWidgets(
-      'reopening while the previous tabs route closes keeps one tabs page',
+      'closing and reopening a tab keeps the root tabs page mounted',
       (WidgetTester tester) async {
         tester.view.physicalSize = const Size(1280, 720);
         tester.view.devicePixelRatio = 1.0;
@@ -124,11 +120,7 @@ void main() {
               filename: filename,
               fileBytes: fileBytes,
             );
-        final BuildContext initialContext =
-            mpLocator.mpNavigatorKey.currentContext!;
-
         mpLocator.mpGeneralController.addFileTab(filename);
-        MPDialogAux.ensureTabsPageOpen(initialContext);
         await tester.pumpAndSettle();
 
         firstController.close();
@@ -140,11 +132,7 @@ void main() {
               filename: filename,
               fileBytes: fileBytes,
             );
-        final BuildContext reopenContext =
-            mpLocator.mpNavigatorKey.currentContext!;
-
         mpLocator.mpGeneralController.addFileTab(filename);
-        MPDialogAux.ensureTabsPageOpen(reopenContext);
         await tester.pumpAndSettle();
 
         expect(find.byType(TH2FileTabsPage), findsOneWidget);

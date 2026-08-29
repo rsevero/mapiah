@@ -31,7 +31,7 @@ void main() {
     );
   });
 
-  testWidgets('home app bar does not overflow on a one-pixel surface', (
+  testWidgets('tabs app bar does not overflow on a one-pixel surface', (
     WidgetTester tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(1, 1));
@@ -42,12 +42,12 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(
-      find.byKey(const ValueKey('MapiahHomeMoreActionsButton')),
+      find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
       findsNothing,
     );
   });
 
-  testWidgets('home app bar uses an overflow menu on a narrow surface', (
+  testWidgets('tabs app bar uses an overflow menu on a narrow surface', (
     WidgetTester tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(400, 600));
@@ -58,13 +58,12 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(
-      find.byKey(const ValueKey('MapiahHomeMoreActionsButton')),
+      find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
       findsOneWidget,
     );
-    expect(find.byKey(const ValueKey('MapiahHomeNewFileButton')), findsNothing);
   });
 
-  testWidgets('home app bar exposes the Open project action when wide', (
+  testWidgets('empty project tree exposes project actions when wide', (
     WidgetTester tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(800, 600));
@@ -74,12 +73,12 @@ void main() {
     await tester.pump();
 
     expect(
-      find.byKey(const ValueKey('MapiahHomeOpenProjectButton')),
+      find.byKey(const ValueKey('THProjectTreeOpenProjectButton')),
       findsOneWidget,
     );
     expect(
-      find.byKey(const ValueKey('MapiahHomeOpenFileButton')),
-      findsNothing,
+      find.byKey(const ValueKey('THProjectTreeRunTherionButton')),
+      findsOneWidget,
     );
     expect(tester.takeException(), isNull);
   });
@@ -91,16 +90,6 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(const MapiahApp());
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('MapiahHomeNewFileButton')));
-    await tester.pumpAndSettle();
-
-    final Finder okButton = find.widgetWithText(ElevatedButton, 'OK');
-
-    await tester.ensureVisible(okButton);
-    await tester.tap(okButton);
-    await tester.pumpAndSettle();
-
     await tester.binding.setSurfaceSize(const Size(380, 600));
     await tester.pumpAndSettle();
 
@@ -108,10 +97,6 @@ void main() {
     expect(
       find.byKey(const ValueKey('TH2FileTabsPageMoreActionsButton')),
       findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('TH2FileTabsPageNewFileButton')),
-      findsNothing,
     );
 
     await tester.tap(

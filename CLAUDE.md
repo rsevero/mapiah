@@ -25,6 +25,7 @@ flutter gen-l10n                   # Generate localizations after .arb edits
 ## Architecture Summary
 
 ### State Management: MobX
+
 Controllers in lib/src/controllers/ use @observable/@action. The build_runner watch regenerates `.g.dart` files after modifications; do not run `build_runner` manually.
 
 ### Key Controllers
@@ -36,6 +37,7 @@ Controllers in lib/src/controllers/ use @observable/@action. The build_runner wa
 * MPVisualController — Zoom, pan, viewport
 
 ### Interaction Flow (3 method types)
+
 1. prepare*() — Creates+executes MPCommand (data changes)
 2. apply*() (@action) — Called by commands, modifies THFile
 3. perform*() (@action) — UI state changes only (no command)
@@ -49,6 +51,7 @@ lib/src/commands/ — Each data-altering action extends MPCommand:
 MPMultipleElementsCommand wraps multiple commands into one undoable unit.
 
 ### Data Model (lib/src/elements/)
+
 * THFile — Root container, holds elements by MPID (internal integer ID)
 * THScrap — Sketch container
 * THPoint / THLine / THArea — Editable elements
@@ -57,6 +60,7 @@ MPMultipleElementsCommand wraps multiple commands into one undoable unit.
 * Mixins: THIsParentMixin (children), THHasOptionsMixin (attributes)
 
 ### File Parsing (lib/src/mp_file_read_write/)
+
 * th_grammar.dart / th_file_parser.dart — PetitParser for .th2
 * xvi_grammar.dart / xvi_file_parser.dart — Parser for .xvi files
 * th_file_writer.dart — Preserves original formatting, only changed lines modified
@@ -71,11 +75,12 @@ Editing modes:
 * MPTh2FileEditStateMovingElements — Dragging selected elements
 
 ### Pages (lib/src/pages/)
-* mapiah_home.dart — Open/create files
-* th2_file_tabs_page.dart — Main canvas (tabbed)
+
+* th2_file_tabs_page.dart — Root project workspace with tabbed canvas/text editors
 * mp_settings_page.dart — Settings
 
 ### Dialgos
+
 * Bottom buttons that should always stay visible, even when the content scrolls, use MPDialogBottomWidget for consistent styling.
 
 ### Localization
@@ -91,13 +96,16 @@ MPLocator (global mpLocator) provides:
 * mpNavigatorKey
 
 ### Naming Conventions
+
 * TH* — Therion data structures
 * MP* — Mapiah infrastructure
 * .g.dart — Generated, do not edit
 * Test files: numeric prefix for ordering (e.g., t1200_commands_MPAddAreaCommand_test.dart)
 
 ### Prompt Abbreviations
-* cc: Update CHANGELOG.md + prepare commit with sign-off (first Assisted_By: and then finish with Signed-off-by:). Always asks for confirmation of commit message before actually commiting.
+
+* cc: Update CHANGELOG.md + prepare commit. Always asks for confirmation of commit message before actually commiting.
+* Commit messages should include Assisted_By/Signed-off-by (first Assisted_By: and then finish with Signed-off-by:) when appliable.
 * hpcc: Update help pages (EN/PT) + keyboard shortcuts + cc above
 
 ### Canvas Orientation
@@ -116,6 +124,7 @@ Full rules in coding-guidelines.md. Critical rules:
 * Formatting handled automatically on commit: never run "dart format".
 
 ### For every prompt:
+
 1. Run 'flutter analyze'
 2. Summarize diffs
 

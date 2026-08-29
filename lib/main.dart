@@ -10,7 +10,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_window_placement_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
-import 'package:mapiah/src/pages/mapiah_home.dart';
+import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:material_ui/material_ui.dart';
 
 // /// For mobx debugging with spy().
@@ -243,7 +243,7 @@ class MapiahApp extends StatelessWidget {
             // ignore: deprecated_member_use
             return MaterialUiCompatibilityBridge(child: child!);
           },
-          home: MapiahHome(
+          home: TH2FileTabsPage(
             mainFilePath: mainFilePath,
             th2FilePaths: th2FilePaths,
             thConfigFilePath: thConfigFilePath,

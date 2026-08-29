@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:mapiah/main.dart';
-import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -58,20 +57,9 @@ class _MPAddFileDialogWidgetState extends State<MPAddFileDialogWidget> {
 
     th2FileEditController.setCanvasScale(mpDefaultTH2FileScale);
 
-    /// Capture whether the tabs page is already open before adding the new tab.
-    /// If it is already open, we must not push another TH2FileTabsPage, since
-    /// doing so would put two instances of TH2FileTabsPage in the navigator
-    /// simultaneously. Both instances would then render TH2FileEditBodyWidgets
-    /// for the same files using the same GlobalKey instances, causing a
-    /// "Multiple widgets used the same GlobalKey" error.
-    final bool tabsPageAlreadyOpen =
-        mpLocator.mpGeneralController.openFileOrder.isNotEmpty;
-
+    /// TH2FileTabsPage is always the app's root route, so no navigation is
+    /// needed after adding the tab.
     mpLocator.mpGeneralController.addFileTab(fileName);
-
-    if (!tabsPageAlreadyOpen) {
-      MPDialogAux.ensureTabsPageOpen(context);
-    }
 
     widget.onPressedClose();
   }
