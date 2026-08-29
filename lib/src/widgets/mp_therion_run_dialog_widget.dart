@@ -84,17 +84,6 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
 
     _outputSubscription = _therionRunner.outputStream.listen(_appendOutput);
 
-    // Clear stale diagnostics from a previous run so they don't linger on
-    // screen for the whole duration of a new one that turns out clean.
-    // Guarded by the same path-equality check as the finish-of-run bridge,
-    // so a run against a `thconfig` that isn't the loaded project leaves the
-    // tree/editor diagnostics untouched.
-    if (_isRunTargetingLoadedProject()) {
-      mpLocator.thProjectController.applyTherionRunDiagnostics(
-        const <THProjectParseError>[],
-      );
-    }
-
     unawaited(_startTherionRun());
   }
 
@@ -327,6 +316,15 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   }
 
   Future<void> _startTherionRun() async {
+    // Clear stale diagnostics at the start of both the initial run and every
+    // in-dialog rerun. A run targeting another project must not disturb the
+    // loaded project's diagnostics.
+    if (_isRunTargetingLoadedProject()) {
+      mpLocator.thProjectController.applyTherionRunDiagnostics(
+        const <THProjectParseError>[],
+      );
+    }
+
     _startElapsedTimer();
     await _therionRunner.start();
     _stopElapsedTimer();

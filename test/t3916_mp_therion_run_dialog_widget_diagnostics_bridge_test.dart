@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
@@ -26,6 +29,43 @@ class _FakeTherionRunner extends MPTherionRunner {
 
   @override
   void stop() {}
+}
+
+class _RerunnableFakeTherionRunner extends MPTherionRunner {
+  _RerunnableFakeTherionRunner(String thConfigFilePath)
+    : super(thConfigFilePath: thConfigFilePath);
+
+  final Completer<void> secondRunCompletion = Completer<void>();
+  int startCount = 0;
+
+  @override
+  Future<void> start() async {
+    startCount++;
+    isRunningNotifier.value = true;
+
+    if (startCount == 1) {
+      statusNotifier.value = MPTherionRunStatus.error;
+      outputLinesNotifier.value = <String>[
+        'therion: error -- cave.th [line 3] -- first error',
+      ];
+      isRunningNotifier.value = false;
+
+      return;
+    }
+
+    outputLinesNotifier.value = <String>[];
+    statusNotifier.value = MPTherionRunStatus.running;
+    await secondRunCompletion.future;
+    statusNotifier.value = MPTherionRunStatus.ok;
+    isRunningNotifier.value = false;
+  }
+
+  @override
+  void stop() {
+    if (!secondRunCompletion.isCompleted) {
+      secondRunCompletion.complete();
+    }
+  }
 }
 
 void main() {
@@ -221,6 +261,52 @@ void main() {
           mpLocator.thProjectController.compilerErrors.single.severity,
           THProjectParseErrorSeverity.warning,
         );
+      },
+    );
+
+    testWidgets(
+      'an in-dialog rerun clears stale diagnostics before it finishes',
+      (WidgetTester tester) async {
+        const String thConfigFilePath = '/tmp/mapiah_bridge_test5/thconfig';
+        final String canonicalRootConfigPath =
+            THProjectPathResolver.canonicalize(p.absolute(thConfigFilePath));
+
+        mpLocator.thProjectController.rootConfigPath = canonicalRootConfigPath;
+
+        final _RerunnableFakeTherionRunner fakeRunner =
+            _RerunnableFakeTherionRunner(thConfigFilePath);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: MPRunTherionDialogWidget(
+                therionExecutablePath: 'therion',
+                thConfigFilePath: thConfigFilePath,
+                therionRunner: fakeRunner,
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 300)),
+        );
+        await tester.pump();
+
+        expect(mpLocator.thProjectController.compilerErrors, hasLength(1));
+        expect(fakeRunner.startCount, 1);
+
+        await tester.sendKeyEvent(LogicalKeyboardKey.keyT);
+        await tester.pump();
+
+        expect(fakeRunner.startCount, 2);
+        expect(fakeRunner.secondRunCompletion.isCompleted, isFalse);
+        expect(mpLocator.thProjectController.compilerErrors, isEmpty);
+
+        fakeRunner.secondRunCompletion.complete();
+        await tester.pumpAndSettle();
+
+        expect(mpLocator.thProjectController.compilerErrors, isEmpty);
       },
     );
   });

@@ -459,7 +459,7 @@ if (canonicalRunConfigPath == mpLocator.thProjectController.rootConfigPath) {
 
 - `workingDirectory` is derived from `p.absolute(widget.thConfigFilePath)`, not the possibly-relative value passed into the dialog. This keeps every parsed `filePath` in the same absolute/canonical space as `THProjectController.rootConfigPath` and the editor's `canonicalPath`, including CLI startup arguments supplied as relative paths.
 - The equality check is what keeps diagnostics scoped to the loaded project (Objective 7): a run whose `thconfig` never becomes (or isn't yet, per §5) the loaded project does not touch `compilerErrors` — there would be no tree/editor tabs to attribute them to anyway.
-- Also call `mpLocator.thProjectController.applyTherionRunDiagnostics(const <THProjectParseError>[])` at the start of a run (in `initState`, right after `_therionRunner` is constructed) so stale diagnostics from a previous run don't linger on screen for the whole duration of a new one that turns out clean — guarded by the same path-equality check, for symmetry.
+- Also call `mpLocator.thProjectController.applyTherionRunDiagnostics(const <THProjectParseError>[])` at the start of every run (in the common `_startTherionRun` path used by both the initial run and in-dialog reruns) so stale diagnostics from a previous run don't linger on screen for the whole duration of a new one that turns out clean — guarded by the same path-equality check, for symmetry.
 - This bridge call sits inside the existing `if (!mpIsFlathub) { ... }` guard in `_onTherionRunFinished` (it needs `therionLogLines`, only computed there) — Flathub builds keep the live status banner but do not get tree/editor compiler diagnostics, an existing platform limitation this phase does not change (see Risk 4).
 - This is the only change to `mp_therion_run_dialog_widget.dart` beyond §4.5's removal of the in-dialog `Ctrl/Cmd+T` choose-project path; `MPTherionIssue`/`issuesNotifier`/the dialog's own rendering are untouched.
 
@@ -615,8 +615,9 @@ Step 8: THProjectTreeWidget error summary banner reads allDiagnostics
 Step 9: THProjectTreeNodeWidget: diagnostics-aware error dot + its own tap handler
    │
    ▼
-Step 10: Wire MPRunTherionDialogWidget._onTherionRunFinished (+ initState) to call
-         the diagnostics bridge, gated on rootConfigPath match
+Step 10: Wire MPRunTherionDialogWidget._onTherionRunFinished and the common
+         _startTherionRun path to call the diagnostics bridge, gated on
+         rootConfigPath match
    │
    ▼
 Step 11: Unit and widget tests
