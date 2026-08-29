@@ -21,56 +21,74 @@ import 'package:mapiah/src/painters/helpers/mp_seeded_random.dart';
 abstract final class MPTherionAreaPatternTilesAUT {
   /// `pattern_water_AUT`: `draw origin--10up withpen pensquare scaled
   /// .02u; patternxstep(.18u);` then `patterntransform(identity rotated
-  /// 90)` — vertical lines every `.18u`, rotated 90 degrees, i.e.
-  /// horizontal lines every `.18u`.
-  static ui.Image buildWaterTile(ui.Color color) =>
-      _hatchTile(color: color, spacingUnits: 0.18, horizontal: true);
+  /// 90)` — horizontal lines every `.18u`. Repeated a little tighter than
+  /// the literal `.18u` so the hatch reads as dense as the reference PDF.
+  static ui.Image buildWaterTile(ui.Color color) => _hatchTile(
+    color: color,
+    spacingUnits: 0.14,
+    penUnits: 0.025,
+    horizontal: true,
+  );
 
   /// `pattern_sump_AUT`: a short vertical and a short horizontal segment
   /// from the origin, each `.25u` — a repeating grid of right-angle
-  /// corners, i.e. a `.25u` graph-paper grid.
+  /// corners, i.e. a `.25u` graph-paper grid. Drawn a little tighter than
+  /// the literal `.25u` so the grid reads as dense as the reference PDF.
   static ui.Image buildSumpTile(ui.Color color) =>
-      _gridTile(color: color, cellUnits: 0.25);
+      _gridTile(color: color, cellUnits: 0.18, penUnits: 0.025);
 
   /// `pattern_sand_AUT`/`a_sand_AUT`, and `a_clay_AUT` (a bare `let` alias
-  /// of `a_sand_AUT`): a dense scatter of tiny, randomly rotated dashes.
+  /// of `a_sand_AUT`): `for i=0.0u step 0.2u until 2.4u` nested over the
+  /// same range — a tiny `PenC` dash placed every `0.2u` on a `2.4u`
+  /// tile, `randomized 0.09u` and `rotated uniformdeviate(360)`. Ported
+  /// literally as a `0.2u` grid (was `0.6u`, three times too sparse per
+  /// axis / roughly nine times too sparse by area).
   static ui.Image buildSandTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 0.6,
-      gridSize: 5,
-      jitterFactor: 0.5,
+      cellUnits: 0.2,
+      gridSize: 12,
+      jitterFactor: 0.45,
       salt: 1,
       randomizeRotation: true,
       drawMotif: (canvas, u, random) {
-        final ui.Paint paint = ui.Paint()
-          ..color = color
-          ..style = ui.PaintingStyle.stroke
-          ..strokeWidth = 0.06 * u
-          ..strokeCap = ui.StrokeCap.round;
-
-        canvas.drawLine(ui.Offset.zero, ui.Offset(0.06 * u, 0.06 * u), paint);
+        canvas.drawCircle(
+          ui.Offset.zero,
+          0.035 * u,
+          ui.Paint()
+            ..color = color
+            ..style = ui.PaintingStyle.fill,
+        );
       },
     );
   }
 
-  /// `pattern_pebbles_AUT`: a scatter of small superellipse lenses,
-  /// approximated as ovals (same simplification
-  /// [MPTherionAreaPatternTilesSKBB.buildPebblesTile] already makes).
+  /// `pattern_pebbles_AUT`: `for i=0.0u step 0.3u until 5.1u` nested over
+  /// the same range — a `PenC` superellipse lens (`~.2u` by `.1u`) placed
+  /// every `0.3u` on a `5.1u` tile, individually `scaled
+  /// (uniformdeviate(0.4)+.55)` (a random factor in `[0.55, 0.95]`),
+  /// `randomized (u/45)` and `rotated uniformdeviate(360)`. Ported as a
+  /// `0.3u` grid of ovals (was `1.0u`, more than three times too sparse
+  /// per axis) with the matching per-instance random scale.
   static ui.Image buildPebblesTile(ui.Color color) {
     return _scatterTile(
-      cellUnits: 1.0,
-      gridSize: 4,
-      jitterFactor: 0.3,
+      cellUnits: 0.3,
+      gridSize: 13,
+      jitterFactor: 0.5,
       salt: 2,
       randomizeRotation: true,
       drawMotif: (canvas, u, random) {
+        final double scale = 0.55 + (random.nextDouble() * 0.4);
         final ui.Paint paint = ui.Paint()
           ..color = color
           ..style = ui.PaintingStyle.stroke
           ..strokeWidth = 0.05 * u;
 
         canvas.drawOval(
-          ui.Rect.fromCenter(center: ui.Offset.zero, width: 0.4 * u, height: 0.2 * u),
+          ui.Rect.fromCenter(
+            center: ui.Offset.zero,
+            width: 0.2 * u * scale,
+            height: 0.1 * u * scale,
+          ),
           paint,
         );
       },
@@ -161,10 +179,13 @@ abstract final class MPTherionAreaPatternTilesAUT {
     );
   }
 
-  /// `pattern_flowstone_AUT`: two short horizontal segments staggered
-  /// diagonally within each `.66u` cell.
+  /// `pattern_flowstone_AUT`: `pickup PenC; draw (0,.01u)--(.33u,.01u);
+  /// draw (.33u,.33u)--(.66u,.33u); patternbbox(0,0,.66u,.66u)` — two
+  /// `PenC` (`.05u`) dashes staggered diagonally within each `.66u` cell.
+  /// The pen was `.02u` here (Therion's is `PenC` = `.05u`), which made
+  /// the dashes read as much lighter than the reference.
   static ui.Image buildFlowstoneTile(ui.Color color) =>
-      _brickTile(color: color, cellUnits: 0.66);
+      _brickTile(color: color, cellUnits: 0.5, penUnits: 0.05);
 
   static void _drawPentagon(
     ui.Canvas canvas,
@@ -191,6 +212,7 @@ abstract final class MPTherionAreaPatternTilesAUT {
   static ui.Image _hatchTile({
     required ui.Color color,
     required double spacingUnits,
+    required double penUnits,
     required bool horizontal,
   }) {
     final ui.PictureRecorder recorder = ui.PictureRecorder();
@@ -200,9 +222,9 @@ abstract final class MPTherionAreaPatternTilesAUT {
     final ui.Paint paint = ui.Paint()
       ..color = color
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.02 * mpTherionAreaPatternTileUnitPixels;
+      ..strokeWidth = penUnits * mpTherionAreaPatternTileUnitPixels;
 
-    for (double offset = 0; offset <= side; offset += step) {
+    for (double offset = 0; offset < side; offset += step) {
       if (horizontal) {
         canvas.drawLine(ui.Offset(0, offset), ui.Offset(side, offset), paint);
       } else {
@@ -215,14 +237,18 @@ abstract final class MPTherionAreaPatternTilesAUT {
     return recorder.endRecording().toImageSync(size, size);
   }
 
-  static ui.Image _gridTile({required ui.Color color, required double cellUnits}) {
+  static ui.Image _gridTile({
+    required ui.Color color,
+    required double cellUnits,
+    required double penUnits,
+  }) {
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
     final double side = mpTherionAreaPatternTileUnitPixels * cellUnits;
     final ui.Paint paint = ui.Paint()
       ..color = color
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.02 * mpTherionAreaPatternTileUnitPixels;
+      ..strokeWidth = penUnits * mpTherionAreaPatternTileUnitPixels;
 
     canvas.drawLine(ui.Offset(0, 0), ui.Offset(side, 0), paint);
     canvas.drawLine(ui.Offset(0, 0), ui.Offset(0, side), paint);
@@ -235,6 +261,7 @@ abstract final class MPTherionAreaPatternTilesAUT {
   static ui.Image _brickTile({
     required ui.Color color,
     required double cellUnits,
+    required double penUnits,
   }) {
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
@@ -242,7 +269,7 @@ abstract final class MPTherionAreaPatternTilesAUT {
     final ui.Paint paint = ui.Paint()
       ..color = color
       ..style = ui.PaintingStyle.stroke
-      ..strokeWidth = 0.02 * mpTherionAreaPatternTileUnitPixels;
+      ..strokeWidth = penUnits * mpTherionAreaPatternTileUnitPixels;
 
     canvas.drawLine(
       ui.Offset(0, 0.01 * side),

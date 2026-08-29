@@ -4,6 +4,6 @@ Therion code is locally available at ~/devel/therion-rsevero
 
 When processing ~/auxiliary/therion-showcase/therion_aut_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_aut_showcase.pdf
 
-Mapiah presentation of AUT area type debris is different from the one we see at ~/auxiliary/therion-showcase/therion_aut_showcase.pdf. The debris sizes varies more (there are smaller debris) on Therion representation.
+Mapiah presentation of AUT area types clay, flowstone, pebbles, sand, sump and water have a much lower density than the ones we see at ~/auxiliary/therion-showcase/therion_aut_showcase.pdf. They should be more densily drawn on Therion representation.
 
-Fix Mapiah Therion AUT presentation of AUTarea type debris to match the one used by Therion.
+Fix Mapiah Therion AUT presentation of AUT area types clay, flowstone, pebbles, sand, sump and water to match the ones used by Therion.
