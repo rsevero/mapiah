@@ -77,7 +77,9 @@ abstract final class MPTherionAreaPatternTilesAUT {
     );
   }
 
-  /// `a_debris_AUT`: a scatter of small `punked` pentagon block outlines.
+  /// `a_debris_AUT`: a scatter of small `punked` pentagon block outlines,
+  /// each instance individually scaled by `uniformdeviate(0.4)+0.3` (i.e.
+  /// a random factor in `[0.3, 0.7]`) applied to the base `.5u` pentagon.
   static ui.Image buildDebrisTile(ui.Color color) {
     return _scatterTile(
       cellUnits: 1.0,
@@ -85,12 +87,17 @@ abstract final class MPTherionAreaPatternTilesAUT {
       jitterFactor: 0.7,
       salt: 3,
       randomizeRotation: true,
-      drawMotif: (canvas, u, random) => _drawPentagon(canvas, u, color, 0.3),
+      drawMotif: (canvas, u, random) {
+        final double scale = 0.3 + (random.nextDouble() * 0.4);
+
+        _drawPentagon(canvas, u, color, 0.5 * scale);
+      },
     );
   }
 
-  /// `a_blocks_AUT`: the same pentagon motif as [buildDebrisTile], scaled
-  /// up to `a_blocks_AUT`'s bigger blocks.
+  /// `a_blocks_AUT`: the same pentagon motif as [buildDebrisTile], each
+  /// instance individually scaled by `uniformdeviate(0.7)+0.8` (i.e. a
+  /// random factor in `[0.8, 1.5]`) applied to the base `.5u` pentagon.
   static ui.Image buildBlocksTile(ui.Color color) {
     return _scatterTile(
       cellUnits: 1.3,
@@ -98,7 +105,11 @@ abstract final class MPTherionAreaPatternTilesAUT {
       jitterFactor: 0.6,
       salt: 4,
       randomizeRotation: true,
-      drawMotif: (canvas, u, random) => _drawPentagon(canvas, u, color, 0.5),
+      drawMotif: (canvas, u, random) {
+        final double scale = 0.8 + (random.nextDouble() * 0.7);
+
+        _drawPentagon(canvas, u, color, 0.5 * scale);
+      },
     );
   }
 

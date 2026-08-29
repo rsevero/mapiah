@@ -2,8 +2,8 @@ Please check CLAUDE.md, docs/plans/2026-07-15-therion-symbol-rendering-roadmap.m
 
 Therion code is locally available at ~/devel/therion-rsevero
 
-When processing ~/auxiliary/therion-showcase/therion_sbkk_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_skbb_showcase.pdf
+When processing ~/auxiliary/therion-showcase/therion_aut_showcase.thconfig on therion I got ~/auxiliary/therion-showcase/therion_aut_showcase.pdf
 
-Mapiah presentation of SKBB line types steps, rope, map connection, handrail and fixed ladder are very different from the ones we see at ~/auxiliary/therion-showcase/therion_skbb_showcase.pdf. 
+Mapiah presentation of AUT area type debris is different from the one we see at ~/auxiliary/therion-showcase/therion_aut_showcase.pdf. The debris sizes varies more (there are smaller debris) on Therion representation.
 
-Fix Mapiah Therion SKBB presentation of SKBB line types steps, rope, map connection, handrail and fixed ladder to match the ones used by Therion.
+Fix Mapiah Therion AUT presentation of AUTarea type debris to match the one used by Therion.
