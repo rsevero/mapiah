@@ -24,7 +24,7 @@ All code (app, scripts, tests) must follow these rules.
 
 9. **Update CHANGELOG.md** — For every commit, add entry at end of appropriate section.
 
-10. **Commit signature** — Include `Signed-off-by: Name <email>` (last line) and `Co-Authored-By: AI_MODEL <email>`.
+10. **Commit signature** — Include `Signed-off-by: Name <email>` (last line) and `Assisted-By: AI_MODEL <email>`.
 
 11. **`git add -A` on commit** — Avoid forgetting files.
 
