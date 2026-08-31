@@ -31,14 +31,14 @@ The implementation and existing tests establish the following baseline:
 - `THProjectParseError` is reused for both parser and compiler diagnostics. The text editor already color-splits error and warning markers; the tree uses its diagnostics-aware file indicator.
 - Existing project-related tests run through `t3918`, with two files currently sharing that number (`t3918_mp_dialog_aux_close_open_project_test.dart` and `t3918_th2_file_tabs_page_therion_shortcuts_test.dart`). The next unused numeric prefix is `t3919`. New Phase 8 tests must use names that do not collide; confirm the next unused prefix again immediately before implementation.
 
-The current help pages still contain stale text, including “Choose THConfig file and run Therion” (in EN/PT `mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, `th2_file_edit_page_help.md`, and `telemetry.md`) and the run-dialog description of `Ctrl+T` (EN/PT `run_therion_help.md`). `mapiah_home_help.md` also says that New file creates a project, while the current project-tree action is explicitly a not-implemented stub. Existing Phase 4–7 localization keys are largely present, but the catalogs are not currently exact mirrors, so Phase 8 must verify both missing and orphaned keys rather than assume parity.
+The current help pages still contain stale text. The phrase “Choose THConfig file and run Therion” appears in exactly four EN/PT page pairs — `mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and `th2_file_edit_page_help.md` — and `run_therion_help.md` (EN/PT) still describes `Ctrl+T` as a run-dialog “choose a different THConfig” action. `telemetry.md` is **not** in this set: its only project reference is the privacy-report metric row `THConfig files (unique) | number of distinct THConfig files used` (identical in EN/PT), which is a telemetry counter description, not a stale run instruction. `mapiah_home_help.md` line 8 still shows a “New file” icon whose caption reads “creates new project”, while the only project-creation affordance in the current UI is the project-tree **New project** button, an explicit not-implemented stub (`projectTreeNewProjectButton` / `projectTreeNewProjectNotImplemented` in `th_project_tree_widget.dart`). Existing Phase 4–7 localization keys are largely present, but the catalogs are not currently exact mirrors: `th2FilePickSelectTH2File` exists only in `intl_pt.arb` (885 keys in EN, 886 in PT) with no source or asset reference. Phase 8 must verify both missing and orphaned keys rather than assume parity.
 
 ## 3. Scope and Non-Goals
 
 ### In scope
 
 - Updates to the existing English and Portuguese help pages under `assets/help/en/` and `assets/help/pt/`, including `mapiah_home_help.md`, `run_therion_help.md`, and `th2_file_edit_page_help.md`.
-- Updates to `telemetry.md` in both languages where it repeats the obsolete THConfig action wording, plus correction of any other stale project-workflow claims found by the inventory.
+- A terminology review of `telemetry.md` in both languages. Its only project reference is the metric row `THConfig files (unique)`, which is not stale run-action wording; change the label only if the inventory concludes the metric itself should be renamed, otherwise leave it. Correct any other genuinely stale project-workflow claims the inventory turns up.
 - Updates to `assets/help/en/keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and their Portuguese counterparts.
 - If a help page is added or renamed, update the explicit help-asset list in `pubspec.yaml` for both locales as well as the corresponding page constant and loading path.
 - Audit and changes to `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, followed by `flutter gen-l10n`.
@@ -75,7 +75,7 @@ Use the existing image assets where they still represent the UI. If an icon scre
 This page still documents a `Ctrl+T` toolbar control as _"Choose THConfig file and run Therion"_ and references the `assets/help/images/iconChooseTHConfigAndRunTherion.png` screenshot. Update it to:
 
 - Describe the toolbar action in project terms: opening a project and running Therion when no project is loaded, and rerunning the loaded project otherwise — consistent with the wording used in `mapiah_home_help.md` and `run_therion_help.md`.
-- Replace or remove the `iconChooseTHConfigAndRunTherion.png` reference if the icon, label, or action no longer matches the shipped UI; do not leave a screenshot of an obsolete control.
+- Replace or remove the `iconChooseTHConfigAndRunTherion.png` reference if the icon, label, or action no longer matches the shipped UI; do not leave a screenshot of an obsolete control. If the image is dropped from every help page, also delete its entry from the explicit asset list in `pubspec.yaml` (`assets/help/images/iconChooseTHConfigAndRunTherion.png`, currently listed) so the build has no dangling asset.
 - Keep the rest of the canvas-editing documentation on this page unchanged; only the Therion-run entry is in scope.
 
 Apply the same change to the Portuguese `th2_file_edit_page_help.md`.
@@ -145,7 +145,7 @@ Audit strings used by:
 ### 5.2 Required localization checks
 
 - Search source code for hardcoded user-facing strings in all Phase 4–7 files, including controller-generated load-failure messages such as `THProjectController`'s “Failed to open project…” diagnostic.
-- Reuse an existing key when its meaning is unchanged; remove orphaned keys only when no source or help reference remains.
+- Reuse an existing key when its meaning is unchanged; remove orphaned keys only when no source or help reference remains. The one known catalog divergence today is `th2FilePickSelectTH2File`, present only in `intl_pt.arb` with no source or asset reference — resolve it (remove it, or add it to the template with an EN value) as part of reaching parity.
 - Require exact EN/PT key parity after the audit: every source key has a value in both catalogs, and every locale-only/orphaned key is either removed or deliberately added to the template. Preserve identical placeholder names and plural/select structure in both files.
 - Keep terminology consistent: “project”, “project tree”, “text editor”, “scrap”, “survey”, “centreline”, “warning”, “error”, and “Run Therion”.
 - Check capitalization against the project rule that UI text must not be all-caps.
@@ -192,7 +192,7 @@ Add a lightweight validation step (test or repository script, following existing
 - every help page exists in both languages and every runtime help asset is listed in `pubspec.yaml`;
 - every help-page constant maps to an asset;
 - keyboard shortcut tables contain the documented project/run actions;
-- no obsolete “choose THConfig” wording remains where the action now means opening a project, including `telemetry.md`;
+- no obsolete “choose THConfig” wording remains in the four help-page pairs that carry it (`mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, `th2_file_edit_page_help.md`) or in the `Ctrl+T` description in `run_therion_help.md`;
 - no help text claims that `Ctrl/Cmd+O` opens standalone `.th2` files or that an unavailable standalone-file picker exists.
 
 Do not build a general Markdown linter unless the focused checks cannot be implemented with existing tooling.
@@ -226,7 +226,7 @@ Formatting remains automatic on commit; do not run `dart format` manually.
 ## 9. Deliverables
 
 - Updated `assets/help/en/` and `assets/help/pt/` project, editor, run, home, and keyboard-shortcut documentation.
-- Updated EN/PT telemetry help where it contains obsolete project-run instructions, and updated `pubspec.yaml` when help assets are added or renamed.
+- `telemetry.md` reviewed for terminology consistency in both languages (it carries no obsolete project-run instructions), and updated `pubspec.yaml` when help assets are added, renamed, or removed.
 - Updated `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, plus generated localization output from `flutter gen-l10n`.
 - New Phase 8 unit/widget/integration-level tests using non-colliding numeric prefixes.
 - A passing full validation run and a final diff summary suitable for the release/commit review.
