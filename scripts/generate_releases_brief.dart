@@ -5,7 +5,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Generates `releases/releases_summary.json` from local git tags.
+/// Generates `releases/releases_summary.json` and its asset copy from local
+/// git tags.
 ///
 /// - Considers tags that match `vX.Y.Z` (only three numeric components).
 /// - Uses the tagger date for annotated tags, otherwise the commit date.
@@ -27,14 +28,27 @@ Future<int> main(List<String> args) async {
       out.add(entry);
     }
 
-    final File file = File('releases/releases_summary.json');
-    if (await file.exists()) {
-      await file.delete();
-    }
-    await file.create(recursive: true);
     final String jsonText = const JsonEncoder.withIndent('  ').convert(out);
-    await file.writeAsString(jsonText);
-    stdout.writeln('Wrote ${out.length} releases to ${file.path}');
+    final File releaseFile = File('releases/releases_summary.json');
+    if (await releaseFile.exists()) {
+      await releaseFile.delete();
+    }
+    await releaseFile.create(recursive: true);
+    await releaseFile.writeAsString(jsonText);
+
+    final File assetFile = File('assets/releases/releases_summary.json');
+    if (await FileSystemEntity.type(
+          assetFile.path,
+          followLinks: false,
+        ) !=
+        FileSystemEntityType.notFound) {
+      await assetFile.delete();
+    }
+    await assetFile.create(recursive: true);
+    await assetFile.writeAsString(jsonText);
+
+    stdout.writeln('Wrote ${out.length} releases to ${releaseFile.path}');
+    stdout.writeln('Copied release summary to ${assetFile.path}');
     return 0;
   } catch (e, st) {
     stderr.writeln('Error: $e');
