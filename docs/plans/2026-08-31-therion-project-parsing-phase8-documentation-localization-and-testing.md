@@ -26,18 +26,18 @@ The implementation and existing tests establish the following baseline:
 - `THProjectController` owns one loaded project (`rootConfigPath`), its recursive tree, parse errors, compiler errors, dirty paths, and text-editor navigation state.
 - `THProjectTreeWidget` provides the project sidebar, filtering, open/close actions, project loading, run-project action, diagnostics summary, and navigation into file tabs.
 - `THTextEditorWidget` supports `thconfig`/`.th` content, syntax highlighting, folding, find/replace, save/revert, line navigation, and diagnostic markers.
-- `TH2FileTabsPage` supports mixed `.th2` canvas and project text tabs. `MapiahHome` opens projects from the initial window.
+- `TH2FileTabsPage` is the unified workspace shown from the initial window (`lib/main.dart`); it hosts project loading, mixed `.th2` canvas and project text tabs, and the project actions that an earlier `MapiahHome` widget used to own. That widget no longer exists — only the `mapiah_home_help` help page and the `mpHelpPageMapiahHome` constant remain, and several ARB `@key` descriptions still name a stale `_MapiahHomeState` call site that the localization audit must correct.
 - Therion execution is now project-oriented: opening/running a project selects the project, while rerun uses the currently loaded project. `Ctrl/Cmd+T` is not an in-dialog “choose another config” action once a project is loaded.
 - `THProjectParseError` is reused for both parser and compiler diagnostics. The text editor already color-splits error and warning markers; the tree uses its diagnostics-aware file indicator.
-- Existing project-related tests run through `t3918`, with two files currently sharing that number. New Phase 8 tests must use names that do not collide; begin at the next unused numeric prefix confirmed immediately before implementation.
+- Existing project-related tests run through `t3918`, with two files currently sharing that number (`t3918_mp_dialog_aux_close_open_project_test.dart` and `t3918_th2_file_tabs_page_therion_shortcuts_test.dart`). The next unused numeric prefix is `t3919`. New Phase 8 tests must use names that do not collide; confirm the next unused prefix again immediately before implementation.
 
-The current help pages still contain stale text, including “Choose THConfig file and run Therion” and the run-dialog description of `Ctrl+T`. Existing Phase 4–7 localization keys are largely present, so Phase 8 should prefer auditing and correcting the current catalog over introducing duplicate keys.
+The current help pages still contain stale text, including “Choose THConfig file and run Therion” (in EN/PT `mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and `th2_file_edit_page_help.md`) and the run-dialog description of `Ctrl+T` (EN/PT `run_therion_help.md`). Existing Phase 4–7 localization keys are largely present, so Phase 8 should prefer auditing and correcting the current catalog over introducing duplicate keys.
 
 ## 3. Scope and Non-Goals
 
 ### In scope
 
-- Updates to the existing English and Portuguese help pages under `assets/help/en/` and `assets/help/pt/`.
+- Updates to the existing English and Portuguese help pages under `assets/help/en/` and `assets/help/pt/`, including `mapiah_home_help.md`, `run_therion_help.md`, and `th2_file_edit_page_help.md`.
 - Updates to `assets/help/en/keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and their Portuguese counterparts.
 - Audit and changes to `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, followed by `flutter gen-l10n`.
 - Tests for user-visible project states, localized labels, shortcut behavior, diagnostics navigation, and complete project lifecycle scenarios.
@@ -66,7 +66,17 @@ Update the initial-window workflow to describe:
 
 Use the existing image assets where they still represent the UI. If an icon screenshot no longer matches the final label or action, either update the asset reference as part of this phase or remove the misleading image rather than documenting obsolete controls.
 
-### 4.2 New or expanded project-tree help
+### 4.2 `th2_file_edit_page_help.md`
+
+This page still documents a `Ctrl+T` toolbar control as _"Choose THConfig file and run Therion"_ and references the `assets/help/images/iconChooseTHConfigAndRunTherion.png` screenshot. Update it to:
+
+- Describe the toolbar action in project terms: opening a project and running Therion when no project is loaded, and rerunning the loaded project otherwise — consistent with the wording used in `mapiah_home_help.md` and `run_therion_help.md`.
+- Replace or remove the `iconChooseTHConfigAndRunTherion.png` reference if the icon, label, or action no longer matches the shipped UI; do not leave a screenshot of an obsolete control.
+- Keep the rest of the canvas-editing documentation on this page unchanged; only the Therion-run entry is in scope.
+
+Apply the same change to the Portuguese `th2_file_edit_page_help.md`.
+
+### 4.3 New or expanded project-tree help
 
 Prefer adding a dedicated `project_tree_help.md` in both languages if the existing home page would become difficult to scan. It should cover:
 
@@ -79,7 +89,7 @@ Prefer adding a dedicated `project_tree_help.md` in both languages if the existi
 
 If a dedicated page is added, register its identifier in `mp_constants.dart` and expose it through the same help-button/page-loading path used by the existing help pages. Keep the page names and links synchronized in EN/PT.
 
-### 4.3 `run_therion_help.md`
+### 4.4 `run_therion_help.md`
 
 Correct the run-dialog documentation to explain:
 
@@ -91,21 +101,21 @@ Correct the run-dialog documentation to explain:
 
 Keep the description of the existing output pane, status values, log section, and Therion availability behavior accurate.
 
-### 4.4 Keyboard shortcut tables
+### 4.5 Keyboard shortcut tables
 
-Update both languages while preserving alphabetical ordering and the current keys:
+There are two tables: `keyboard_shortcuts_main.md` (workspace/global actions — currently 6 entries, no save/find rows) and `keyboard_shortcuts_edit.md` (canvas-editing actions). Update both languages while preserving alphabetical ordering and the current keys. Re-sort any row whose label text changes so the alphabetical order still holds (for example, relabeling `Ctrl+T` from “Choose THConfig…” to “Open project…” moves it into the O group).
 
-| Current entry | Required documentation |
-| --- | --- |
-| `Ctrl+T` | “Open project and run Therion” when no project is loaded; explain the unavailable/rebound behavior when a project is already loaded. |
-| `T` | “Run/rerun Therion for the current project” and identify the run-dialog context where applicable. |
-| `Ctrl+O` / `Ctrl+Shift+O` | Describe opening a project in the home/project workflow, while preserving any existing context-specific meaning. |
-| `Ctrl+S` | Include saving the active `thconfig`/`.th` text file where the editor supports it. |
-| `Ctrl+F` | Document the existing single-file text-editor find/replace behavior; do not imply Phase 9 project-wide search. |
+| Current entry | Table | Required documentation |
+| --- | --- | --- |
+| `Ctrl+T` | main + edit | “Open project and run Therion” when no project is loaded; explain the unavailable/rebound behavior when a project is already loaded. |
+| `T` | main | “Run/rerun Therion for the current project” and identify the run-dialog context where applicable. |
+| `Ctrl+O` / `Ctrl+Shift+O` | main | Describe opening a project in the workspace, while preserving any existing context-specific meaning. |
+| `Ctrl+S` | new row in a text-editor section | Saving the active `thconfig`/`.th` text file. This shortcut is text-editor-scoped, so add it under a clearly labeled “Text editor” subsection (in `keyboard_shortcuts_main.md`, or a new shared section) rather than implying it is a global workspace action. |
+| `Ctrl+F` | new row in the same text-editor section | The existing single-file text-editor find/replace behavior; do not imply Phase 9 project-wide search. |
 
-Use “Ctrl” in the tables according to the existing convention and retain the note that Ctrl and Meta/Command are interchangeable.
+`Ctrl+S` and `Ctrl+F` are net-new documentation rows; place them together in one text-editor-scoped block and keep that block consistent between EN and PT. Use “Ctrl” in the tables according to the existing convention and retain the note that Ctrl and Meta/Command are interchangeable.
 
-### 4.5 Text-editor and project diagnostics documentation
+### 4.6 Text-editor and project diagnostics documentation
 
 Add concise sections to the project/editor help page(s) covering syntax highlighting, folding, debounced parsing, save/revert, line-targeted navigation, and the difference between:
 
@@ -122,8 +132,8 @@ The localization sources are `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`. 
 
 Audit strings used by:
 
-- `MapiahHome` and `TH2FileTabsPage` project actions;
-- `THProjectTreeWidget` and `THProjectTreeNodeWidget`;
+- `TH2FileTabsPage` project actions (the unified workspace — there is no separate `MapiahHome` widget; treat any ARB `@key` description that still points at `_MapiahHomeState` as stale and repoint it at the real call site);
+- `THProjectTreeWidget`, `THProjectTreeNodeWidget`, and `THProjectTreeUIController` (sidebar collapsed/width state and any labels it exposes, e.g. the `mpSettingsSettingProjectTreeSidebar*` keys);
 - `THTextEditorWidget` and find/replace controls;
 - `MPRunTherionDialogWidget` and diagnostic markers;
 - project loading, missing-file, error-summary, and load-failure states.
