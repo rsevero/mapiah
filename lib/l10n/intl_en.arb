@@ -2,17 +2,17 @@
   "@@locale": "en",
   "aboutMapiahDialogChangelog": "Changelog",
   "@aboutMapiahDialogChangelog": {
-    "description": "The label for the changelog section in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "The label for the changelog section in the About dialog. Used on: TH2FileTabsPage",
     "type": "text"
   },
   "aboutMapiahDialogLicense": "License",
   "@aboutMapiahDialogLicense": {
-    "description": "The label for the license section in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "The label for the license section in the About dialog. Used on: TH2FileTabsPage",
     "type": "text"
   },
   "aboutMapiahDialogMapiahVersion": "Version {version}",
   "@aboutMapiahDialogMapiahVersion": {
-    "description": "The version of Mapiah for the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "The version of Mapiah for the About dialog. Used on: TH2FileTabsPage",
     "type": "text",
     "placeholders": {
       "version": {}
@@ -20,7 +20,7 @@
   },
   "aboutMapiahDialogRelease": "The {releaseName} release ({releaseUrl})",
   "@aboutMapiahDialogRelease": {
-    "description": "The release name and URL to show in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "The release name and URL to show in the About dialog. Used on: TH2FileTabsPage",
     "type": "text",
     "placeholders": {
       "releaseName": {},
@@ -29,7 +29,7 @@
   },
   "aboutMapiahDialogReleaseNoUrl": "The {releaseName} release",
   "@aboutMapiahDialogReleaseNoUrl": {
-    "description": "Release name without URL for the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "Release name without URL for the About dialog. Used on: TH2FileTabsPage",
     "type": "text",
     "placeholders": {
       "releaseName": {}
@@ -37,22 +37,22 @@
   },
   "aboutMapiahDialogReleaseUrlLabel": "Release page",
   "@aboutMapiahDialogReleaseUrlLabel": {
-    "description": "Label for the release URL link in the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "Label for the release URL link in the About dialog. Used on: TH2FileTabsPage",
     "type": "text"
   },
   "aboutMapiahDialogWindowTitle": "About Mapiah",
   "@aboutMapiahDialogWindowTitle": {
-    "description": "The title for the About dialog. Used on: _MapiahHomeState.showAboutDialog",
+    "description": "The title for the About dialog. Used on: TH2FileTabsPage",
     "type": "text"
   },
   "appTitle": "Mapiah",
   "@appTitle": {
-    "description": "The title of the application. Used on: MapiahApp.build, _MapiahHomeState.build",
+    "description": "The title of the application. Used on: MapiahApp.build, TH2FileTabsPage.build",
     "type": "text"
   },
   "buttonClose": "Close",
   "@buttonClose": {
-    "description": "The label for the close button. Used on: MPErrorDialog.build, MPHelpDialogWidget.build, _MPRunTherionDialogWidgetState.build, _MPSnapTargetsWidgetState.build, _MapiahHomeState.showAboutDialog, lib/src/auxiliary/mp_dialog_aux.dart",
+    "description": "The label for the close button. Used on: MPErrorDialog.build, MPHelpDialogWidget.build, _MPRunTherionDialogWidgetState.build, _MPSnapTargetsWidgetState.build, TH2FileTabsPage, lib/src/auxiliary/mp_dialog_aux.dart",
     "type": "text"
   },
   "cannotSplitAreaBorderLine": "Cannot split a line that is part of an area border",
@@ -77,7 +77,7 @@
   },
   "initialPagePresentation": "Mapiah: an user-friendly graphical interface for cave mapping with Therion",
   "@initialPagePresentation": {
-    "description": "The initial page presentation of the application. Used on: _MapiahHomeState.build",
+    "description": "The initial page presentation of the application. Used on: TH2FileTabsPage.build",
     "type": "text"
   },
   "languageName": "{language, select, sys {System} en {English} pt {Português} other {Unknown}}",
@@ -90,27 +90,27 @@
   },
   "mapiahHomeAboutMapiahDialog": "About Mapiah",
   "@mapiahHomeAboutMapiahDialog": {
-    "description": "The label for the about Mapiah dialog. Used on: _MapiahHomeState.build",
+    "description": "The label for the about Mapiah dialog. Used on: TH2FileTabsPage.build",
     "type": "text"
   },
   "mpMoreActionsTooltip": "More actions",
   "@mpMoreActionsTooltip": {
-    "description": "Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build",
+    "description": "Tooltip for collapsed app bar action menus. Used on: TH2FileTabsPage.build",
     "type": "text"
   },
   "mapiahKeyboardShortcutsTitle": "Keyboard Shortcuts",
   "@mapiahKeyboardShortcutsTitle": {
-    "description": "The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts",
+    "description": "The title for the keyboard shortcuts help dialog. Used on: TH2FileTabsPage, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts",
     "type": "text"
   },
   "mapiahKeyboardShortcutsTooltip": "Keyboard Shortcuts (Ctrl+K)",
   "@mapiahKeyboardShortcutsTooltip": {
-    "description": "The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "The tooltip for the keyboard shortcuts help button. Used on: TH2FileTabsPage, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mapiahCloseProjectButtonTooltip": "Close project",
   "@mapiahCloseProjectButtonTooltip": {
-    "description": "The label for the overflow-menu entry that closes the currently loaded project. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "The label for the overflow-menu entry that closes the currently loaded project. Used on: TH2FileTabsPage, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mapiahRunTherionButtonLabel": "Rerun Therion",
@@ -120,7 +120,7 @@
   },
   "mapiahRunTherionButtonTooltip": "Run Therion (T)",
   "@mapiahRunTherionButtonTooltip": {
-    "description": "The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, TH2FileTabsPage, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mapiahStationHoverTooltipTitle": "Station point name(s)",
@@ -1108,7 +1108,7 @@
   },
   "mpNoTherionFound": "No Therion found",
   "@mpNoTherionFound": {
-    "description": "Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, _MapiahHomeState.build, _TH2FileEditPageState.build",
+    "description": "Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, TH2FileTabsPage, _TH2FileEditPageState.build",
     "type": "text"
   },
   "mpNonEmptySelectionStateAreasLinesAndPointsStatusBarMessage": "{pointsAmount} point(s), {linesAmount} line(s), and {areaAmount} area(s) selected",
@@ -1533,7 +1533,7 @@
   },
   "mpSettingsPageTitle": "Settings",
   "@mpSettingsPageTitle": {
-    "description": "The title for the settings page. Used on: _MPSettingsPageState.build, _MapiahHomeState.build",
+    "description": "The title for the settings page. Used on: _MPSettingsPageState.build, TH2FileTabsPage",
     "type": "text"
   },
   "mpSettingsSectionMain": "Main",
@@ -4530,5 +4530,30 @@
   "@textEditorTabLoadFailedMessage": {
     "description": "Shown in a text-editor tab when its file fails to load (e.g. deleted after the project tree loaded). Used on: THTextEditorTabBodyWidget",
     "type": "text"
+  },
+  "thProjectOpenFailed": "Failed to open project: {error}",
+  "@thProjectOpenFailed": {
+    "description": "Diagnostic shown when a project cannot be opened. Used on: THProjectController.openProject",
+    "type": "text",
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "thProjectReloadFailed": "Failed to reload project: {error}",
+  "@thProjectReloadFailed": {
+    "description": "Diagnostic shown when a project cannot be reloaded. Used on: THProjectController.reloadProject",
+    "type": "text",
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "thProjectSaveFailed": "Failed to save {path}: {error}",
+  "@thProjectSaveFailed": {
+    "description": "Diagnostic shown when a project file cannot be saved. Used on: THProjectController.saveProjectFile",
+    "type": "text",
+    "placeholders": {
+      "path": {},
+      "error": {}
+    }
   }
 }

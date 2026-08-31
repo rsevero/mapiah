@@ -1,55 +1,64 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
-Página inicial do aplicativo, onde são apresentadas as principais funções.
+Página inicial do espaço de trabalho, onde são apresentados a árvore do projeto, as abas de arquivos e as ações principais.
 
 _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
 
+## Fluxo do projeto
+
+**Abrir projeto** é o ponto de entrada normal para um projeto Therion. Selecione qualquer arquivo de configuração raiz, inclusive um arquivo sem a extensão `.thconfig`. O Mapiah carrega esse arquivo e segue recursivamente suas referências `source`, `input` e relacionadas na árvore do projeto. Abrir outro projeto substitui a árvore carregada; o ciclo de vida habitual das abas de arquivo é preservado.
+
+A barra lateral contém nós de arquivos e nós lógicos. Nós de arquivos representam arquivos `thconfig`, `.th` e `.th2`; nós lógicos representam croquis, levantamentos, mapas e centrais encontrados nesses arquivos. Use o campo de pesquisa para filtrar e as setas para expandir ou recolher ramos. A largura e o estado recolhido da barra lateral são persistidos nas configurações. Um marcador de alteração indica alterações não salvas. Indicadores de erro identificam diagnósticos do analisador ou do compilador; arquivos ausentes e referências circulares são relatados como erros do projeto.
+
+Clique em um arquivo `.th2` para abrir sua aba de desenho. Clique em um arquivo `thconfig` ou `.th` para abrir sua aba de texto. Clicar em um croqui, levantamento, mapa ou central seleciona a fonte correspondente e navega até sua posição quando há uma linha de origem.
+
+Use **Executar Therion** para executar a configuração raiz do projeto carregado. No estado vazio, a ação Executar Therion da árvore abre um projeto e o executa. Com um projeto carregado, a ação executa novamente esse projeto. Os diagnósticos do compilador substituem os diagnósticos da execução anterior depois da próxima execução; editar o arquivo, por si só, não os remove.
+
+## Arquivos `.th2` independentes
+
+Desenhos independentes podem ser abertos clicando em um arquivo `.th2` na árvore de um projeto carregado, ou na inicialização usando um caminho posicional ou a opção `--th2`. `Ctrl/Cmd+O` abre um projeto no espaço de trabalho; não é um seletor de arquivos independentes.
+
+```bash
+mapiah arquivo.th2
+mapiah --th2 arquivo.th2
+```
+
 ## Barra superior
-* ![Ícone novo arquivo](assets/help/images/iconNewFile.png "Novo arquivo") _Novo arquivo_: cria um novo projeto.
-* ![Ícone abrir arquivo](assets/help/images/iconOpenFile.png "Abrir arquivo")  _Abrir arquivo_: mostra a caixa de diálogo do sistema para escolher qual arquivo(s) será(ão) aberto(s). Você pode selecionar múltiplos arquivos de uma vez (usando Ctrl+Clique ou Shift+Clique) para abri-los simultaneamente em abas separadas.
-* ![Ícone escolher THConfig e executar Therion](assets/help/images/iconChooseTHConfigAndRunTherion.png "Escolher THConfig e executar Therion") _Escolher THConfig e executar Therion_: mostra a caixa de diálogo do sistema para escolher qual arquivo THConfig será usado para executar o Therion.
-* ![Ícone executar Therion](assets/help/images/iconRunTherion.png "Executar Therion") _Executar Therion_: executa o Therion com o projeto atualmente aberto.
-* ![Ícone página de configurações](assets/help/images/iconSettings.png "Página de configurações") _Página de configurações_: mostra a página de configurações, onde é possível alterar as configurações do aplicativo.
-* ![Ícone página de atalhos de teclado](assets/help/images/iconKeyboardShortcuts.png "Página de atalhos de teclado") _Página de atalhos de teclado_: mostra a página de atalhos de teclado, onde é possível ver todos os atalhos disponíveis.
-* ![Ícone ajuda](assets/help/images/iconHelp.png "Ajuda") _Ajuda_: mostra esta caixa de diálogo.
-* ![Ícone sobre](assets/help/images/iconAbout.png "Sobre") _Sobre_: metainformações do aplicativo.
 
-## Abrindo Múltiplos Arquivos
-
-Você pode abrir múltiplos arquivos TH2 ao mesmo tempo. Quando você clica no botão _Abrir arquivo_, a caixa de diálogo de seleção de arquivo permite que você selecione mais de um arquivo:
-
-* Segure **Ctrl** e clique nos arquivos para selecionar múltiplos arquivos individualmente
-* Segure **Shift** e clique para selecionar um intervalo de arquivos
-* Clique em **Abrir** para abrir todos os arquivos selecionados em abas separadas
-
-Todos os arquivos selecionados serão abertos no editor de arquivo com cada arquivo tendo sua própria aba. Você pode facilmente alternar entre os arquivos abertos clicando em suas abas, ou usar navegação por teclado para se mover entre eles.
+* **Abrir projeto**: abre a configuração de um projeto no espaço de trabalho. `Ctrl/Cmd+O` e `Ctrl/Cmd+Shift+O` usam essa ação.
+* **Executar Therion**: executa o projeto carregado ou, quando nenhum projeto está carregado, abre um projeto e o executa.
+* **Página de configurações**: abre as configurações do aplicativo.
+* **Página de atalhos de teclado**: mostra os atalhos disponíveis.
+* **Ajuda**: mostra esta caixa de diálogo.
+* **Sobre**: mostra informações do aplicativo.
 
 ## Argumentos de Linha de Comando
 
-Mapiah suporta argumentos de linha de comando para abrir arquivos diretamente ao iniciar:
+Mapiah suporta argumentos de linha de comando para abrir arquivos diretamente ao iniciar.
 
-### Argumentos Posicionais (Compatibilidade com Versões Anteriores)
+### Argumentos Posicionais
+
 ```bash
-mapiah /caminho/para/arquivo.th2          # Abre arquivo TH2
-mapiah /caminho/para/therion.cfg          # Executa Therion com config
+mapiah /caminho/para/arquivo.th2          # Abre desenho TH2 independente
+mapiah /caminho/para/therion.cfg          # Carrega o projeto e executa Therion
 ```
 
-Ele detecta arquivos TH2 por sua extensão .th2, e trata qualquer outro arquivo como um THConfig para executar o Therion. Isso permite compatibilidade com versões anteriores do Mapiah que só aceitavam um único argumento posicional.
+O Mapiah detecta arquivos TH2 pela extensão `.th2` e trata qualquer outro arquivo como uma configuração de projeto. A configuração selecionada torna-se a raiz da árvore do projeto.
 
 ### Argumentos Nomeados
 
-#### --th2: Abrir arquivos TH2
-- Pode aparecer múltiplas vezes para abrir vários arquivos
-- Cada arquivo abre em uma aba separada
+#### --th2: Abrir arquivos TH2 independentes
+
+Esta opção pode aparecer várias vezes; cada arquivo abre em uma aba de desenho separada.
 
 ```bash
 mapiah --th2 arquivo1.th2 --th2 arquivo2.th2
 mapiah --th2 /caminho/para/levantamento.th2
 ```
 
-#### --thconfig: Executar Therion com THConfig
-- Máximo de um --thconfig por comando
-- Mostrará erro se múltiplos argumentos --thconfig forem fornecidos
+#### --thconfig: Carregar e executar um projeto
+
+Use no máximo um `--thconfig` por comando. A árvore do projeto é carregada para a configuração selecionada, cujo nome não precisa terminar em `.thconfig`.
 
 ```bash
 mapiah --thconfig projeto.cfg
@@ -57,22 +66,12 @@ mapiah --thconfig /caminho/para/therion.cfg
 ```
 
 #### --therion_run_parameters: Definir opções de linha de comando do Therion
-- Define opções extras passadas ao Therion na compilação (ex.: `-d` para modo de depuração)
-- O valor é persistido como a configuração `Main_TherionRunParameters` (o mesmo campo do diálogo Executar Therion)
-- Se houver um espaço na(s) opção(ões), a string inteira deve ser envolvida em aspas para ser passada como um único argumento
+
+Define opções extras passadas ao Therion na compilação (por exemplo, `-d` para modo de depuração). O valor é persistido como a configuração `Main_TherionRunParameters`.
 
 ```bash
-mapiah --therion_run_parameters "-d"
 mapiah --therion_run_parameters "-d -q"
 mapiah --thconfig projeto.cfg --therion_run_parameters "-d"
 ```
 
-#### Combinando Argumentos
-```bash
-# Abrir múltiplos arquivos TH2 E executar Therion com config
-mapiah --th2 arquivo1.th2 --th2 arquivo2.th2 --thconfig projeto.cfg
-```
-
-### Tratamento de Erros
-- Se múltiplos argumentos `--thconfig` forem fornecidos, Mapiah sairá com uma mensagem de erro
-- Se a flag `--th2`, `--thconfig` ou `--therion_run_parameters` for fornecida sem um valor, Mapiah sairá com uma mensagem de erro
+Se faltar o valor de uma opção obrigatória, ou se mais de um `--thconfig` for fornecido, o Mapiah sairá com um erro.

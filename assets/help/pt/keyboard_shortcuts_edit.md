@@ -40,7 +40,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Espelhar elementos selecionados verticalmente                                                 | V                                        |
 | Editar nó/linha                                                                               | N                                        |
 | Editar opções (com elementos selecionados)                                                    | O                                        |
-| Escolher arquivo THConfig e executar Therion                                                  | Ctrl+T                                   |
+| Abrir projeto e executar Therion quando não há projeto                                      | Ctrl+T                                   |
 | Esconder elementos selecionados / Mostrar todos os ocultos                                    | Ctrl+H                                   |
 | Excluir o último nó criado ao desenhar                                                        | Del ou Backspace                         |
 | Excluir ponto, linha, área ou segmento de linha                                               | Del ou Backspace                         |

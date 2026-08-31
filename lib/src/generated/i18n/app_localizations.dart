@@ -98,55 +98,55 @@ abstract class AppLocalizations {
     Locale('pt'),
   ];
 
-  /// The label for the changelog section in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// The label for the changelog section in the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'Changelog'**
   String get aboutMapiahDialogChangelog;
 
-  /// The label for the license section in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// The label for the license section in the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'License'**
   String get aboutMapiahDialogLicense;
 
-  /// The version of Mapiah for the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// The version of Mapiah for the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'Version {version}'**
   String aboutMapiahDialogMapiahVersion(Object version);
 
-  /// The release name and URL to show in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// The release name and URL to show in the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'The {releaseName} release ({releaseUrl})'**
   String aboutMapiahDialogRelease(Object releaseName, Object releaseUrl);
 
-  /// Release name without URL for the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// Release name without URL for the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'The {releaseName} release'**
   String aboutMapiahDialogReleaseNoUrl(Object releaseName);
 
-  /// Label for the release URL link in the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// Label for the release URL link in the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'Release page'**
   String get aboutMapiahDialogReleaseUrlLabel;
 
-  /// The title for the About dialog. Used on: _MapiahHomeState.showAboutDialog
+  /// The title for the About dialog. Used on: TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'About Mapiah'**
   String get aboutMapiahDialogWindowTitle;
 
-  /// The title of the application. Used on: MapiahApp.build, _MapiahHomeState.build
+  /// The title of the application. Used on: MapiahApp.build, TH2FileTabsPage.build
   ///
   /// In en, this message translates to:
   /// **'Mapiah'**
   String get appTitle;
 
-  /// The label for the close button. Used on: MPErrorDialog.build, MPHelpDialogWidget.build, _MPRunTherionDialogWidgetState.build, _MPSnapTargetsWidgetState.build, _MapiahHomeState.showAboutDialog, lib/src/auxiliary/mp_dialog_aux.dart
+  /// The label for the close button. Used on: MPErrorDialog.build, MPHelpDialogWidget.build, _MPRunTherionDialogWidgetState.build, _MPSnapTargetsWidgetState.build, TH2FileTabsPage, lib/src/auxiliary/mp_dialog_aux.dart
   ///
   /// In en, this message translates to:
   /// **'Close'**
@@ -176,7 +176,7 @@ abstract class AppLocalizations {
   /// **'Help (F1)'**
   String get helpDialogTooltip;
 
-  /// The initial page presentation of the application. Used on: _MapiahHomeState.build
+  /// The initial page presentation of the application. Used on: TH2FileTabsPage.build
   ///
   /// In en, this message translates to:
   /// **'Mapiah: an user-friendly graphical interface for cave mapping with Therion'**
@@ -188,31 +188,31 @@ abstract class AppLocalizations {
   /// **'{language, select, sys {System} en {English} pt {Português} other {Unknown}}'**
   String languageName(String language);
 
-  /// The label for the about Mapiah dialog. Used on: _MapiahHomeState.build
+  /// The label for the about Mapiah dialog. Used on: TH2FileTabsPage.build
   ///
   /// In en, this message translates to:
   /// **'About Mapiah'**
   String get mapiahHomeAboutMapiahDialog;
 
-  /// Tooltip for collapsed app bar action menus. Used on: _MapiahHomeState.build, _TH2FileTabsPageState.build
+  /// Tooltip for collapsed app bar action menus. Used on: TH2FileTabsPage.build
   ///
   /// In en, this message translates to:
   /// **'More actions'**
   String get mpMoreActionsTooltip;
 
-  /// The title for the keyboard shortcuts help dialog. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts
+  /// The title for the keyboard shortcuts help dialog. Used on: TH2FileTabsPage, _TH2FileEditPageState.build, lib/src/state_machine/mp_th2_file_edit_state_machine/mixins/mp_th2_file_edit_state_move_canvas_mixin.dart, on._withShortcuts
   ///
   /// In en, this message translates to:
   /// **'Keyboard Shortcuts'**
   String get mapiahKeyboardShortcutsTitle;
 
-  /// The tooltip for the keyboard shortcuts help button. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// The tooltip for the keyboard shortcuts help button. Used on: TH2FileTabsPage, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'Keyboard Shortcuts (Ctrl+K)'**
   String get mapiahKeyboardShortcutsTooltip;
 
-  /// The label for the overflow-menu entry that closes the currently loaded project. Used on: _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// The label for the overflow-menu entry that closes the currently loaded project. Used on: TH2FileTabsPage, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'Close project'**
@@ -224,7 +224,7 @@ abstract class AppLocalizations {
   /// **'Rerun Therion'**
   String get mapiahRunTherionButtonLabel;
 
-  /// The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// The tooltip for the Run Therion button. Used on: _MPRunTherionDialogWidgetState.build, TH2FileTabsPage, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'Run Therion (T)'**
@@ -1386,7 +1386,7 @@ abstract class AppLocalizations {
   /// **'Scrap ID'**
   String get mpNewScrapDialogCreateScrapIDLabel;
 
-  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, _MapiahHomeState.build, _TH2FileEditPageState.build
+  /// Tooltip shown when no Therion executable is available. Used on: MPDialogAux.pickProjectFileAndRunTherion, MPDialogAux.rerunTherionForOpenProject, TH2FileTabsPage, _TH2FileEditPageState.build
   ///
   /// In en, this message translates to:
   /// **'No Therion found'**
@@ -1942,7 +1942,7 @@ abstract class AppLocalizations {
   /// **'Settings Help'**
   String get mpSettingsPageHelpDialogTitle;
 
-  /// The title for the settings page. Used on: _MPSettingsPageState.build, _MapiahHomeState.build
+  /// The title for the settings page. Used on: _MPSettingsPageState.build, TH2FileTabsPage
   ///
   /// In en, this message translates to:
   /// **'Settings'**
@@ -5433,6 +5433,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load file'**
   String get textEditorTabLoadFailedMessage;
+
+  /// Diagnostic shown when a project cannot be opened. Used on: THProjectController.openProject
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to open project: {error}'**
+  String thProjectOpenFailed(Object error);
+
+  /// Diagnostic shown when a project cannot be reloaded. Used on: THProjectController.reloadProject
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to reload project: {error}'**
+  String thProjectReloadFailed(Object error);
+
+  /// Diagnostic shown when a project file cannot be saved. Used on: THProjectController.saveProjectFile
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save {path}: {error}'**
+  String thProjectSaveFailed(Object path, Object error);
 }
 
 class _AppLocalizationsDelegate

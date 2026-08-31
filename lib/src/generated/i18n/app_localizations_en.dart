@@ -2900,4 +2900,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get textEditorTabLoadFailedMessage => 'Failed to load file';
+
+  @override
+  String thProjectOpenFailed(Object error) {
+    return 'Failed to open project: $error';
+  }
+
+  @override
+  String thProjectReloadFailed(Object error) {
+    return 'Failed to reload project: $error';
+  }
+
+  @override
+  String thProjectSaveFailed(Object path, Object error) {
+    return 'Failed to save $path: $error';
+  }
 }

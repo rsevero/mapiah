@@ -60,7 +60,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 * À direita:
   * ![Ícone salvar](assets/help/images/iconSave.png "Salvar")  _Salvar_: salva as alterações no mesmo arquivo. Só fica habilitado se houver alterações a serem salvas. (Ctrl+S)
   * ![Ícone salvar como](assets/help/images/iconSaveAs.png "Salvar como")  _Salvar como_: salva as alterações em um novo arquivo. (Shift+Ctrl+S)
-  * ![Ícone escolher THConfig e executar Therion](assets/help/images/iconChooseTHConfigAndRunTherion.png "Escolher THConfig e executar Therion") _Escolher THConfig e executar Therion_: mostra a caixa de diálogo do sistema para escolher qual arquivo THConfig será usado para executar o Therion.
+  * _Executar Therion_: quando nenhum projeto está carregado, abre um projeto e o executa; caso contrário, executa novamente o projeto carregado.
   * ![Ícone executar Therion](assets/help/images/iconRunTherion.png "Executar Therion") _Executar Therion_: executa o Therion com o projeto atualmente aberto.
   * ![Ícone ajuda](assets/help/images/iconHelp.png "Ajuda") _Ajuda_: mostra esta caixa de diálogo.
   * ![Ícone fechar](assets/help/images/iconClose.png "Fechar") _Fechar_: fecha a janela de edição do arquivo TH2 sem salvar alterações.
@@ -76,6 +76,12 @@ Quando múltiplos arquivos estão abertos, cada arquivo aparece como uma aba no 
 * **Seleção múltipla**: Use o botão _Abrir arquivo_ na barra superior para selecionar e abrir múltiplos arquivos de uma vez
 
 A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo você está editando. Todos os arquivos abertos mantêm seu estado de edição, para que você possa alternar entre eles sem perder seu trabalho.
+
+## Editor de texto do projeto
+
+Arquivos `thconfig` e `.th` do projeto são abertos em abas de texto. O realce de sintaxe e o recolhimento facilitam a leitura. Durante a edição, a análise é atrasada por alguns instantes e a árvore do projeto é atualizada depois dessa pausa. A aba fica marcada como alterada até ser salva ou revertida. Localizar e substituir se aplicam somente ao arquivo ativo; a pesquisa em todo o projeto não está disponível.
+
+Diagnósticos do analisador são produzidos ao carregar ou analisar novamente a fonte e aparecem no editor e na árvore do projeto. Diagnósticos do compilador são produzidos ao executar o Therion. Os dois tipos podem coexistir. Um diagnóstico com arquivo e linha conhecidos pode ser selecionado para navegar até esse local; sem uma linha de origem, ele permanece na saída da execução e não pode direcionar para uma linha da árvore.
 
 ## Imagens
 A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI, imagens raster e imagens SVG exclusivas do Mapiah) inseridas no arquivo atual.

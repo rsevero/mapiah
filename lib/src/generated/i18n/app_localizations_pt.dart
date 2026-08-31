@@ -2929,4 +2929,19 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get textEditorTabLoadFailedMessage => 'Falha ao carregar o arquivo';
+
+  @override
+  String thProjectOpenFailed(Object error) {
+    return 'Falha ao abrir o projeto: $error';
+  }
+
+  @override
+  String thProjectReloadFailed(Object error) {
+    return 'Falha ao recarregar o projeto: $error';
+  }
+
+  @override
+  String thProjectSaveFailed(Object path, Object error) {
+    return 'Falha ao salvar $path: $error';
+  }
 }

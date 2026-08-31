@@ -11,7 +11,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Change images                                                                    | Alt+I                                      |
 | Change unfinished drawing segment from curve to line                             | Shift+L                                    |
 | Change unfinished drawing segment from line to curve                             | Shift+U                                    |
-| Choose THConfig file and run Therion                                             | Ctrl+T                                     |
+| Open project and run Therion when no project is loaded                           | Ctrl+T                                     |
 | Click area-border line: cycle border-line selection                              | Ctrl+click                                 |
 | Click area-border line: select area only                                         | Ctrl+Alt+click                             |
 | Convert selected line segments to Bézier curve                                   | J                                          |

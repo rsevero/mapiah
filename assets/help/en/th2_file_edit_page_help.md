@@ -60,7 +60,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 * On the right:
   * ![Save icon](assets/help/images/iconSave.png "Save")  _Save_: saves changes in same file. Only enabled if there are changes to be saved. (Ctrl+S)
   * ![Save As icon](assets/help/images/iconSaveAs.png "Save As")  _Save As_: saves changes in new file. (Shift+Ctrl+S)
-  * ![Choose THConfig file and run Therion icon](assets/help/images/iconChooseTHConfigAndRunTherion.png "Choose THConfig file and run Therion") _Choose THConfig file and run Therion_: shows system dialog where its possible to choose which THConfig file should be used to run Therion.
+  * _Run Therion_: when no project is loaded, opens a project and runs it; otherwise, reruns the loaded project.
   * ![Run Therion icon](assets/help/images/iconRunTherion.png "Run Therion")" _Run Therion_: runs Therion with currently opened project.
   * ![Help icon](assets/help/images/iconHelp.png "Help") _Help_: show this dialog box.
   * ![Close icon](assets/help/images/iconClose.png "Close") _Close_: close the TH2 file edit window without saving changes.
@@ -76,6 +76,12 @@ When multiple files are open, each file appears as a tab at the top of the edito
 * **Multiple selection**: Use the _File open_ button on the top bar to select and open multiple files at once
 
 The currently active file's tab is highlighted, making it easy to see which file you're editing. All open files maintain their editing state, so you can switch between them without losing your work.
+
+## Project text editor
+
+Project `thconfig` and `.th` files open in text tabs. Syntax highlighting and folding make the source easier to read. While you edit, parsing is debounced and the project tree is refreshed after the pause. The tab becomes dirty until you save or revert it. Find and replace apply to the active file only; project-wide search is not available.
+
+Parser diagnostics are produced while loading or re-parsing source and are shown in the editor and project tree. Compiler diagnostics are produced by running Therion. Both kinds can coexist. A diagnostic with a known file and line can be selected to navigate to that location; a diagnostic without a source line remains in the run output and cannot target a tree line.
 
 ## Edit window
 

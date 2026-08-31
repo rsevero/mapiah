@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
-Esta caixa de diálogo executa o Therion com o arquivo THConfig selecionado e exibe sua saída em tempo real.
+Esta caixa de diálogo executa o Therion com o arquivo de configuração raiz do projeto carregado e exibe sua saída em tempo real.
 
 ## Status
 
@@ -25,6 +25,7 @@ O texto completo produzido pelo Therion durante a execução. Após o término, 
 * As palavras **Warning** (aviso) e **Error** (erro) são destacadas em cores.
 * A área de saída é rolável e seu texto pode ser selecionado.
 * Clicar em um item da lista de problemas (veja abaixo) rola a saída até a linha correspondente.
+* Um diagnóstico com arquivo do projeto e linha reconhecidos pode abrir essa aba de texto na linha indicada. Diagnósticos sem arquivo ou linha permanecem visíveis aqui, mas não podem ser mapeados para uma linha da árvore.
 
 ## Tempo decorrido
 
@@ -38,4 +39,6 @@ Quando o Therion reporta avisos ou erros, eles aparecem como uma lista rolável 
 
 * **Reexecutar Therion** (teclado: **T**) — executa o Therion novamente com o mesmo THConfig e os parâmetros de execução atuais. Habilitado somente quando o Therion não está em execução.
 * **Fechar** (teclado: **Escape**) — interrompe qualquer execução em andamento e fecha a caixa de diálogo.
-* Teclado: **Ctrl+T** — fecha a caixa de diálogo e reabre o seletor de arquivo THConfig para escolher um arquivo diferente.
+* **Ctrl/Cmd+T** — quando nenhum projeto está carregado, abre um projeto e inicia o Therion. Não fica disponível para trocar de projeto depois que um projeto é carregado ou enquanto esta caixa de diálogo está ativa.
+
+Os diagnósticos do compilador permanecem até que uma execução posterior os substitua; editar um arquivo, por si só, não comprova que o erro foi corrigido.

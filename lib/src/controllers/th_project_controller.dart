@@ -139,7 +139,7 @@ abstract class THProjectControllerBase with Store {
       );
       projectErrors.add(
         THProjectParseError(
-          message: 'Failed to open project: $error',
+          message: mpLocator.appLocalizations.thProjectOpenFailed('$error'),
           severity: THProjectParseErrorSeverity.error,
           filePath: canonicalRootPath,
           lineNumber: 0,
@@ -175,7 +175,7 @@ abstract class THProjectControllerBase with Store {
       );
       projectErrors.add(
         THProjectParseError(
-          message: 'Failed to reload project: $error',
+          message: mpLocator.appLocalizations.thProjectReloadFailed('$error'),
           severity: THProjectParseErrorSeverity.error,
           filePath: canonicalRootPath,
           lineNumber: 0,
@@ -386,7 +386,10 @@ abstract class THProjectControllerBase with Store {
       );
       projectErrors.add(
         THProjectParseError(
-          message: 'Failed to save $canonicalPath: $error',
+          message: mpLocator.appLocalizations.thProjectSaveFailed(
+            canonicalPath,
+            '$error',
+          ),
           severity: THProjectParseErrorSeverity.error,
           filePath: canonicalPath,
           lineNumber: 0,

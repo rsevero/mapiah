@@ -5,7 +5,7 @@
   "aboutMapiahDialogMapiahVersion": "Versão {version}",
   "aboutMapiahDialogRelease": "Versão {releaseName} ({releaseUrl})",
   "@aboutMapiahDialogRelease": {
-    "description": "O nome da release e URL a mostrar na caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "description": "O nome da release e URL a mostrar na caixa Sobre. Usado em: TH2FileTabsPage",
     "type": "text",
     "placeholders": {
       "releaseName": {},
@@ -14,7 +14,7 @@
   },
   "aboutMapiahDialogReleaseNoUrl": "Versão {releaseName}",
   "@aboutMapiahDialogReleaseNoUrl": {
-    "description": "Nome da release sem URL para a caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "description": "Nome da release sem URL para a caixa Sobre. Usado em: TH2FileTabsPage",
     "type": "text",
     "placeholders": {
       "releaseName": {}
@@ -22,7 +22,7 @@
   },
   "aboutMapiahDialogReleaseUrlLabel": "Página da versão",
   "@aboutMapiahDialogReleaseUrlLabel": {
-    "description": "Rótulo para o link da release na caixa Sobre. Usado em: _MapiahHomeState.showAboutDialog",
+    "description": "Rótulo para o link da release na caixa Sobre. Usado em: TH2FileTabsPage",
     "type": "text"
   },
   "aboutMapiahDialogWindowTitle": "Sobre o Mapiah",
@@ -548,7 +548,6 @@
   "th2FilePickSVGWidthHeightLabel": "width/height",
   "th2FilePickSVGWidthLabel": "Largura",
   "th2FilePickSelectImageFile": "Selecione um arquivo de imagem",
-  "th2FilePickSelectTH2File": "Selecione um arquivo TH2",
   "th2FilePropertiesPageClose": "Fechar",
   "@th2FilePropertiesPageClose": {
     "description": "Rótulo do botão de fechar na página de propriedades do arquivo.",
@@ -928,5 +927,8 @@
   "textEditorReplaceButton": "Substituir",
   "textEditorReplaceAllButton": "Substituir todas",
   "textEditorFindMatchCount": "{current}/{total}",
-  "textEditorTabLoadFailedMessage": "Falha ao carregar o arquivo"
+  "textEditorTabLoadFailedMessage": "Falha ao carregar o arquivo",
+  "thProjectOpenFailed": "Falha ao abrir o projeto: {error}",
+  "thProjectReloadFailed": "Falha ao recarregar o projeto: {error}",
+  "thProjectSaveFailed": "Falha ao salvar {path}: {error}"
 }

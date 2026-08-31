@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copyright (C) 2023- Mapiah Ltda -->
-This dialog runs Therion with the selected THConfig file and shows its output in real time.
+This dialog runs Therion with the loaded project's root configuration file and shows its output in real time.
 
 ## Status
 
@@ -25,6 +25,7 @@ The full text output produced by Therion during the run. After the run finishes,
 * **Warning** and **Error** keywords are highlighted in color.
 * The output area is scrollable and its text is selectable.
 * Clicking an item in the issues list (see below) scrolls the output to the corresponding line.
+* A diagnostic with a recognized project file and source line can open that text tab at the line. Diagnostics without a file or line remain visible here but cannot be mapped to a tree line.
 
 ## Elapsed time
 
@@ -38,4 +39,6 @@ When Therion reports warnings or errors, they appear as a scrollable list below 
 
 * **Rerun Therion** (keyboard: **T**) — runs Therion again with the same THConfig and current run parameters. Only enabled when Therion is not running.
 * **Close** (keyboard: **Escape**) — stops any in-progress Therion run and closes the dialog.
-* Keyboard: **Ctrl+T** — closes the dialog and reopens the THConfig file picker so you can choose a different THConfig.
+* **Ctrl/Cmd+T** — when no project is loaded, opens a project and starts Therion. It is unavailable for switching projects once a project is loaded or while this run dialog is active.
+
+Compiler diagnostics remain until a subsequent run replaces them; editing a file does not by itself prove that a compiler error is fixed.
