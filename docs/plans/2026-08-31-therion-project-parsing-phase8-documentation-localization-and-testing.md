@@ -31,14 +31,16 @@ The implementation and existing tests establish the following baseline:
 - `THProjectParseError` is reused for both parser and compiler diagnostics. The text editor already color-splits error and warning markers; the tree uses its diagnostics-aware file indicator.
 - Existing project-related tests run through `t3918`, with two files currently sharing that number (`t3918_mp_dialog_aux_close_open_project_test.dart` and `t3918_th2_file_tabs_page_therion_shortcuts_test.dart`). The next unused numeric prefix is `t3919`. New Phase 8 tests must use names that do not collide; confirm the next unused prefix again immediately before implementation.
 
-The current help pages still contain stale text, including “Choose THConfig file and run Therion” (in EN/PT `mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and `th2_file_edit_page_help.md`) and the run-dialog description of `Ctrl+T` (EN/PT `run_therion_help.md`). Existing Phase 4–7 localization keys are largely present, so Phase 8 should prefer auditing and correcting the current catalog over introducing duplicate keys.
+The current help pages still contain stale text, including “Choose THConfig file and run Therion” (in EN/PT `mapiah_home_help.md`, `keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, `th2_file_edit_page_help.md`, and `telemetry.md`) and the run-dialog description of `Ctrl+T` (EN/PT `run_therion_help.md`). `mapiah_home_help.md` also says that New file creates a project, while the current project-tree action is explicitly a not-implemented stub. Existing Phase 4–7 localization keys are largely present, but the catalogs are not currently exact mirrors, so Phase 8 must verify both missing and orphaned keys rather than assume parity.
 
 ## 3. Scope and Non-Goals
 
 ### In scope
 
 - Updates to the existing English and Portuguese help pages under `assets/help/en/` and `assets/help/pt/`, including `mapiah_home_help.md`, `run_therion_help.md`, and `th2_file_edit_page_help.md`.
+- Updates to `telemetry.md` in both languages where it repeats the obsolete THConfig action wording, plus correction of any other stale project-workflow claims found by the inventory.
 - Updates to `assets/help/en/keyboard_shortcuts_main.md`, `keyboard_shortcuts_edit.md`, and their Portuguese counterparts.
+- If a help page is added or renamed, update the explicit help-asset list in `pubspec.yaml` for both locales as well as the corresponding page constant and loading path.
 - Audit and changes to `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, followed by `flutter gen-l10n`.
 - Tests for user-visible project states, localized labels, shortcut behavior, diagnostics navigation, and complete project lifecycle scenarios.
 - Documentation of platform-neutral behavior and the supported release targets (Linux AppImage/Flatpak, macOS, and Windows).
@@ -59,10 +61,12 @@ Update the initial-window workflow to describe:
 
 - **Open Project** as the entry point for a Therion project, including projects whose root configuration file has no `.thconfig` extension.
 - The distinction between opening a project and opening a standalone `.th2` file.
+- **Opening standalone `.th2` files**: click a `.th2` file node in a loaded project tree, or pass `file.th2`/`--th2 file.th2` at CLI startup. Do not claim that `Ctrl/Cmd+O` opens a standalone file; that shortcut opens a project.
 - The single-project model: loading another project replaces the loaded project tree, while file tabs have their existing lifecycle behavior.
 - The project-aware Run Therion actions: the empty state can open a project and run it; a loaded project is rerun directly.
 - What the sidebar contains and how project/file/logical nodes relate to source files.
 - CLI startup behavior for `--thconfig` and positional configuration paths, including that the project tree is loaded for the selected configuration.
+- The current shortcut split: `Ctrl/Cmd+O` opens a project; standalone `.th2` opening is available through project-tree nodes and the documented CLI forms above. The legacy “Open file” wording must not imply a UI picker that is not present.
 
 Use the existing image assets where they still represent the UI. If an icon screenshot no longer matches the final label or action, either update the asset reference as part of this phase or remove the misleading image rather than documenting obsolete controls.
 
@@ -87,7 +91,7 @@ Prefer adding a dedicated `project_tree_help.md` in both languages if the existi
 - Click behavior for `.th2` files, `thconfig`/`.th` files, scraps, surveys, maps, and centrelines.
 - Missing-file and circular-reference diagnostics.
 
-If a dedicated page is added, register its identifier in `mp_constants.dart` and expose it through the same help-button/page-loading path used by the existing help pages. Keep the page names and links synchronized in EN/PT.
+If a dedicated page is added, register its identifier in `mp_constants.dart`, add both locale assets to the explicit asset list in `pubspec.yaml`, and expose it through the same help-button/page-loading path used by the existing help pages. Keep the page names and links synchronized in EN/PT.
 
 ### 4.4 `run_therion_help.md`
 
@@ -103,7 +107,7 @@ Keep the description of the existing output pane, status values, log section, an
 
 ### 4.5 Keyboard shortcut tables
 
-There are two tables: `keyboard_shortcuts_main.md` (workspace/global actions — currently 6 entries, no save/find rows) and `keyboard_shortcuts_edit.md` (canvas-editing actions). Update both languages while preserving alphabetical ordering and the current keys. Re-sort any row whose label text changes so the alphabetical order still holds (for example, relabeling `Ctrl+T` from “Choose THConfig…” to “Open project…” moves it into the O group).
+There are two tables: `keyboard_shortcuts_main.md` (workspace/global actions — currently 6 entries, no save/find rows) and `keyboard_shortcuts_edit.md` (canvas-editing actions). Update both languages while preserving alphabetical ordering and the current keys. `Ctrl/Cmd+O` currently opens a project in the workspace; standalone `.th2` opening is not a `Ctrl/Cmd+O` action. Re-sort any row whose label text changes so the alphabetical order still holds (for example, relabeling `Ctrl+T` from “Choose THConfig…” to “Open project…” moves it into the O group).
 
 | Current entry | Table | Required documentation |
 | --- | --- | --- |
@@ -140,9 +144,9 @@ Audit strings used by:
 
 ### 5.2 Required localization checks
 
-- Search source code for hardcoded user-facing strings in all Phase 4–7 files.
+- Search source code for hardcoded user-facing strings in all Phase 4–7 files, including controller-generated load-failure messages such as `THProjectController`'s “Failed to open project…” diagnostic.
 - Reuse an existing key when its meaning is unchanged; remove orphaned keys only when no source or help reference remains.
-- Add matching EN/PT values for every new key. Preserve identical placeholder names and plural/select structure in both files.
+- Require exact EN/PT key parity after the audit: every source key has a value in both catalogs, and every locale-only/orphaned key is either removed or deliberately added to the template. Preserve identical placeholder names and plural/select structure in both files.
 - Keep terminology consistent: “project”, “project tree”, “text editor”, “scrap”, “survey”, “centreline”, “warning”, “error”, and “Run Therion”.
 - Check capitalization against the project rule that UI text must not be all-caps.
 - Run `flutter gen-l10n` after ARB edits and verify the generated getters compile.
@@ -175,6 +179,8 @@ Allocate the next unused numeric prefixes at implementation time. Suggested cove
 | Diagnostics integration | Parser and compiler diagnostics coexist, counts/colors are correct, clicking a diagnostic targets the right file/line, and a later run replaces stale compiler diagnostics. |
 | Text editor lifecycle | Edit → debounce/reparse → dirty state → save/revert; localized empty/load-error/find/replace states render in both locales. |
 | Help-page availability | Every registered help-page identifier resolves to EN and PT assets, including any new project-tree page; links do not point to removed pages. |
+| Help-page asset registration | Every help asset loaded at runtime is listed in `pubspec.yaml` for both locales. |
+| Standalone `.th2` opening | Project-tree `.th2` navigation opens a canvas tab, and the documented positional/`--th2` CLI paths remain covered without implying a nonexistent `Ctrl/Cmd+O` file picker. |
 | Full project scenario | Load a root config with nested `.th`, `.th2`, missing, and cyclic references; edit a text file; navigate from tree to editor/canvas; run Therion; observe diagnostics; save and reload. |
 
 Tests should use existing fixture and environment helpers under `test/auxiliary/`, inject runner/picker seams where available, and avoid depending on a locally installed Therion for unit/widget tests. A real Therion fixture run may be added as an opt-in integration test only if the repository’s test conventions support it.
@@ -183,10 +189,11 @@ Tests should use existing fixture and environment helpers under `test/auxiliary/
 
 Add a lightweight validation step (test or repository script, following existing project conventions) that checks:
 
-- every help page exists in both languages;
+- every help page exists in both languages and every runtime help asset is listed in `pubspec.yaml`;
 - every help-page constant maps to an asset;
 - keyboard shortcut tables contain the documented project/run actions;
-- no obsolete “choose THConfig” wording remains where the action now means opening a project.
+- no obsolete “choose THConfig” wording remains where the action now means opening a project, including `telemetry.md`;
+- no help text claims that `Ctrl/Cmd+O` opens standalone `.th2` files or that an unavailable standalone-file picker exists.
 
 Do not build a general Markdown linter unless the focused checks cannot be implemented with existing tooling.
 
@@ -208,7 +215,9 @@ Formatting remains automatic on commit; do not run `dart format` manually.
 
 - A new user can learn how to open a project, navigate its files/logical nodes, edit/save source files, open drawings, and run Therion from the localized help.
 - EN and PT help pages describe the same behavior and contain no stale single-THConfig workflow instructions.
+- EN and PT help pages describe the same `.th2` opening paths and do not advertise a nonexistent standalone-file picker.
 - All Phase 4–7 user-facing strings are localized, have matching placeholders, and compile through generated `AppLocalizations`.
+- The EN and PT ARB catalogs have deliberate exact key parity, with no unexplained locale-only or orphaned entries.
 - Keyboard shortcut tables remain alphabetically ordered, retain the existing key bindings, and accurately describe project-aware behavior.
 - Focused tests cover the empty/loaded project states, mixed tabs, diagnostics navigation, localization, help-page assets, and the full project workflow.
 - `flutter test` passes, `flutter analyze` reports no warnings/errors, and no generated localization file was hand-edited.
@@ -217,6 +226,7 @@ Formatting remains automatic on commit; do not run `dart format` manually.
 ## 9. Deliverables
 
 - Updated `assets/help/en/` and `assets/help/pt/` project, editor, run, home, and keyboard-shortcut documentation.
+- Updated EN/PT telemetry help where it contains obsolete project-run instructions, and updated `pubspec.yaml` when help assets are added or renamed.
 - Updated `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, plus generated localization output from `flutter gen-l10n`.
 - New Phase 8 unit/widget/integration-level tests using non-colliding numeric prefixes.
 - A passing full validation run and a final diff summary suitable for the release/commit review.
