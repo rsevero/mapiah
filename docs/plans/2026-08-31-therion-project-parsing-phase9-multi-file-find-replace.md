@@ -173,11 +173,22 @@ The helper preserves current behavior exactly:
 
 - empty query returns no matches;
 - matches are non-overlapping and left-to-right;
-- case-insensitive mode compares lowercased strings;
 - offsets are UTF-16 offsets compatible with Flutter `TextRange`/`TextSelection`; and
 - the loop is bounded by the content length and advances by the non-empty query length after every match.
 
 `THTextEditorController.findMatches` delegates to this helper. Multi-file search calls the same helper for every source snapshot. Existing `t3905` tests remain the compatibility suite; new pure-helper tests cover line/column and preview derivation.
+
+#### Case-insensitive matching without offset drift
+
+Case-insensitive mode must **not** simply scan a fully lowercased haystack and reuse the lowercase offsets (the current single-file behavior — see §13.4). `String.toLowerCase()` follows Unicode default case mapping, which is not guaranteed 1:1 in UTF-16 code units (`İ` U+0130 → `i` + U+0307, 1 unit → 2). One such character before a match shifts every later offset, so the returned `TextRange` points at the wrong span of the original text.
+
+The helper takes a fast path plus an offset-mapped slow path:
+
+1. Compute `lowerContent = content.toLowerCase()` and `lowerQuery = query.toLowerCase()` (case-insensitive mode already pays one `toLowerCase()` today, so no new cost here).
+2. **Fast path** — when `lowerContent.length == content.length` *and* `lowerQuery.length == query.length`, every fold was 1:1, so run the existing bounded `indexOf` loop over `lowerContent`; its ranges are already valid against `content`. This covers all ASCII and Latin-1 text.
+3. **Slow path** — otherwise, rebuild the lowercase haystack rune-by-rune (iterate code points via `content.runes`, not code units, because Adlam/Deseret are cased and non-BMP), lowercasing each rune and appending to a `StringBuffer` while pushing that rune's original UTF-16 start offset once per produced code unit into a parallel `List<int>` (`toOrig`), with a trailing sentinel of `content.length`. Fold the query the same rune-by-rune way (`_foldPerRune`) for consistency (e.g. Greek sigma). Run `indexOf` over the rebuilt string; for each hit at `found`, emit `TextRange(start: toOrig[found], end: toOrig[found + foldedQuery.length])` and advance `start` by `foldedQuery.length` (non-overlapping).
+
+`toOrig` is transient; use `Uint32List`-backed growth only if profiling on a very large file shows it matters. Case-sensitive mode is unchanged (plain scan over `content`).
 
 ### 5.3 Result models
 
@@ -378,7 +389,7 @@ Add the shortcut to the appropriate keyboard-shortcut table in alphabetical orde
 ## 10. Implementation Sequence
 
 1. Reconfirm the post-Phase-8 source/help layout and the next unused test prefix.
-2. Extract `findPlainTextMatches` and line/preview helpers; redirect single-file find to the shared helper without behavior changes.
+2. Extract `findPlainTextMatches` and line/preview helpers; redirect single-file find to the shared helper. Behavior is unchanged except the case-insensitive path gains the offset-drift fix from §5.2 (fast path is identical to today; slow path only engages on length-changing folds).
 3. Add `THProjectController.flushPendingReparse(canonicalPath)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush); make `save()` await the editor-side flush. Cover immediate-save races across both layers before multi-file replacement work.
 4. Add `pendingSelectionRange`/`revealRange()` and exact-range consumption in `THTextEditorWidget`.
 5. Add immutable search models and `THProjectSearchController` source collection, debounce, generation cancellation, ordering, and project-lifecycle reset.
@@ -399,7 +410,7 @@ Confirm numbering immediately before implementation. With the current tree, use:
 
 | Test file | Required coverage |
 | --- | --- |
-| `test/t3920_th_text_search_aux_test.dart` | Shared plain matcher compatibility, non-overlap, empty/long queries, case modes, Unicode UTF-16 offsets, bounded progression, line/column calculation, preview trimming/highlighting. |
+| `test/t3920_th_text_search_aux_test.dart` | Shared plain matcher compatibility, non-overlap, empty/long queries, case modes, bounded progression, line/column calculation, preview trimming/highlighting. **Offset-drift coverage**: `İ` (U+0130) before the search term — corrected range covers the right span, not shifted by +1; mixed `İ`/`i`/`I` case-insensitive hit/miss and ranges; non-BMP cased text (Adlam U+1E900–U+1E943 or Deseret) case-insensitive to prove rune iteration; ASCII and Latin-1 (`é`, `ñ`, `ç`) identical to pre-refactor `t3905` expectations (fast path untouched). |
 | `test/t3921_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); `flushPendingReparse` drains a pending `reloadProject()` path; timer cancellation; concurrent save coalescing; edit during flush remains dirty and is reparsed later. |
 | `test/t3922_th_text_editor_reveal_range_test.dart` | Pending range survives load, clamps safely, selects and scrolls exact match, takes precedence over line-only navigation, then clears. |
 | `test/t3923_th_project_search_controller_test.dart` | Open-tabs/project source collection, unsaved controller precedence, canonical deduplication, `.th2`/missing exclusion, deterministic ordering, no-project/no-tabs states, file read failures. |
@@ -440,6 +451,6 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 1. **Save semantics after replacement**: the roadmap explicitly calls for `setContent`/`save`, so this plan auto-saves after confirmation. The confirmation must make that behavior unmistakable, especially when an affected open editor already contains unsaved edits.
 2. **Temporary-controller save failure**: disposing a failed temporary controller can discard the only editor-owned replacement snapshot. Resolve this by either retaining the failed content in project dirty/cache state or restoring the original snapshot, then lock the policy with tests before widget work.
 3. **Large-project responsiveness**: full scans are linear in total text plus match count. Debouncing, snapshotting, stale-generation cancellation, and bounded matcher progress are required; isolate extraction waits for profiling evidence.
-4. **Unicode case conversion**: the shipped single-file `findMatches` already lowercases the whole haystack (`content.toLowerCase()`) before matching, so any length-changing case fold already yields `TextRange` offsets that are wrong against the original `content`. Extracting the helper preserves this latent bug rather than introducing it, and the existing `t3905` suite contains no length-changing cases, so it will not catch a regression here. Phase 9 should treat an offset-preserving comparison (lowercase per code unit without concatenating a re-cased string, or compare with `String.matchAsPrefix`/manual scan) as a **fix beyond parity**, gated by new Unicode tests with representative Therion encodings.
+4. **Unicode case conversion**: the shipped single-file `findMatches` lowercases the whole haystack (`content.toLowerCase()`) before matching, so any length-changing case fold (`İ` U+0130 → `i` + U+0307) already yields `TextRange` offsets that are wrong against the original `content`. Extracting the helper preserves this latent bug rather than introducing it, and the existing `t3905` suite contains no length-changing cases, so it will not catch a regression here. Phase 9 fixes it as a **fix beyond parity** using the fast-path + offset-mapped slow-path algorithm specified in §5.2 ("Case-insensitive matching without offset drift"), gated by the offset-drift tests listed for `t3920` in §11 (U+0130 before the term, mixed `İ`/`i`/`I`, non-BMP cased text, ASCII/Latin-1 parity).
 5. **External file changes**: no filesystem watcher is added. Result activation validates its snapshot, and explicit refresh/new query reads current sources; files modified externally after project parsing remain subject to the existing project reload behavior.
 6. **Cross-file undo**: Flutter's per-widget editing history cannot provide an atomic undo across open and temporary controllers. Confirmation, preflight, and explicit automatic-save wording are mandatory until a future command/transaction layer is designed for text files.
