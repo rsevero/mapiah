@@ -3,13 +3,13 @@
 # Therion Project Parsing Phase 9: Multi-File Find/Replace — Implementation Plan
 
 **Date:** 2026-08-31
-**Status:** Proposed — validated against the codebase 2026-08-31 (grounding seams re-checked; two-layer reparse race, missing all-nodes accessor, non-throwing `save()`, and pre-existing Unicode offset bug folded into §2/§6.2/§7.2–7.3/§13).
+**Status:** Proposed — validated against the codebase 2026-08-31 (grounding seams re-checked; two-layer reparse race, in-memory full-reload requirement, explicit revision-aware save results, missing all-nodes accessor, and pre-existing Unicode offset bug folded into §2/§6.2/§7.2–7.3/§13).
 
 ## 1. Overview & Objectives
 
 This document details **Phase 9** of the [Therion Project Parsing, Tree View & Text Editing Roadmap](2026-08-24-therion-project-parsing-and-tree-view.md). It builds directly on Phase 5's implemented single-file find/replace and Phase 6's mixed-tab integration. Phases 7 and 8 are not technical prerequisites, although Phase 9 must follow their localization, help, and testing conventions.
 
-Phase 9 adds one search surface for finding plain-text matches across multiple `thconfig` and `.th` files, grouping results by file, navigating to an exact match, and replacing all matches across the selected scope. It reuses each file's `THTextEditorController` for edits and saving so replacement has the same dirty tracking, debounced parsing, project-tree updates, encoding-aware writers, and error reporting as a normal editor change.
+Phase 9 adds one search surface for finding plain-text matches across multiple `thconfig` and `.th` files, grouping results by file, navigating to an exact match, and replacing all eligible matches across the selected scope. Standalone text tabs outside the loaded project remain searchable and navigable but are excluded from Replace All because the current project-controller writer has no parsed writable node for them. For eligible project files, Phase 9 reuses each file's `THTextEditorController` for edits and saving so replacement has the same dirty tracking, debounced parsing, project-tree updates, encoding-aware writers, and error reporting as a normal editor change.
 
 ### Key objectives
 
@@ -33,8 +33,9 @@ The repository currently provides the following implementation seams:
 - `TH2FileTabsPage` owns the workspace-level shortcut layer and mixed `.th2`/text tab strip. It is the correct place to bind a project-level shortcut without changing the editor-local `Ctrl/Cmd+F` behavior.
 - `THProjectController.fileContentsCache` (public `ObservableMap<String, String>`) contains the latest text for every project `THConfigFileNode`/`THDataFileNode`, keyed by canonical path; `nodeByCanonicalPath()` is a single-path lookup that identifies writable `THConfigFileNode`/`THDataFileNode` nodes, and `saveProjectFile()` serializes the parsed model through the existing lossless writers.
 - `THProjectController` exposes **no public iterator over all file nodes** — `_nodesByCanonicalPath` is private. The project-wide file set must be obtained either by walking `projectRootNode` recursively, by iterating `fileContentsCache.keys` (already populated for exactly the config/data node set by `_populateFileContentsCache`), or by adding a new public accessor. Phase 9 picks one explicitly in §6.2.
-- `saveProjectFile()` does **not** throw on failure: it catches write errors and appends a `THProjectParseError` to `projectErrors`, and it silently returns on an unknown path or a `.th2` file with no open editor. `THTextEditorController.save()` returns `Future<void>` and only clears `isDirty` when the path has left `dirtyFilePaths`. Phase 9 must detect save failures by inspecting state (path still in `dirtyFilePaths` / `controller.isDirty` still true, or a `projectErrors` diff around the call), not by awaiting a throwing future.
+- `saveProjectFile()` does **not** currently report a reliable outcome: it catches write errors and appends a `THProjectParseError` to `projectErrors`, silently returns on an unknown path or a `.th2` file with no open editor, and `THTextEditorController.save()` returns `Future<void>`. Inferring success from `dirtyFilePaths`, `controller.isDirty`, or a before/after `projectErrors` diff is unsafe because full reloads replace those collections, parser diagnostics share `projectErrors`, and a concurrent edit may advance the revision during a write. Phase 9 must add an explicit, revision-aware text-save result and consume it directly (see §7.2–7.3).
 - There are **two** reparse debounce layers, not one. `THTextEditorController.setContent()` schedules an editor-level `_reparseTimer` that calls `THProjectController.reparseFile()`; `reparseFile()` is *itself* debounced — it writes `fileContentsCache`/`dirtyFilePaths` synchronously, then schedules `_performReparse` on a project-level timer and returns. `_performReparse` is what splices the fresh node the writers serialize (and it may `await reloadProject()`). Calling `save()` before both timers drain serializes the stale node. Phase 9 must close this race across both layers before using immediate multi-file replace-and-save (see §7.3).
+- The existing full-reload branches are not safe as a flush mechanism. Root-file, type-change, missing-parent, and reparse-error paths call `reloadProject()`, which reparses from disk; `_applyLoadResult()` then replaces `fileContentsCache` and `dirtyFilePaths` with disk-derived state. Therefore a flush that merely awaits the current `_performReparse()` path can discard the pending revision and any other unsaved files before `saveProjectFile()` serializes them. Phase 9 must add an in-memory full-project reparse path whose parser reads immutable dirty-content overrides and whose result application preserves dirty contents/revisions (see §7.3).
 - Fixed dimensions and debounce durations live in `lib/src/constants/mp_constants.dart` (existing: `mpTextEditorReparseDebounceMilliseconds`, `mpProjectReparseDebounceMilliseconds`).
 - The latest allocated test prefix is `t3919`; Phase 9 should begin at `t3920`, after confirming the number again at implementation time. Note the repo already contains a `t3918` collision (two files share that prefix), so the confirmation step must scan for duplicates, not just take the maximum.
 
@@ -50,6 +51,7 @@ The repository currently provides the following implementation seams:
 - Result navigation that opens/focuses a text tab, expands/selects the corresponding project-tree node through the existing tab synchronization, scrolls to the result, and selects the exact range.
 - Project-wide Replace All with a localized confirmation describing affected file and match counts.
 - Automatic saving of affected files after replacement, as required by the roadmap, through each controller's existing save path.
+- Search and exact-match navigation for standalone open text tabs outside the loaded project; their matches are visibly excluded from Replace All.
 - Partial-failure reporting that identifies files that could not be read, parsed, or saved.
 - `Ctrl/Cmd+Shift+F` for multi-file search while retaining `Ctrl/Cmd+F` for the active editor.
 - EN/PT localization, help-page updates, and shortcut-table updates.
@@ -64,6 +66,7 @@ The repository currently provides the following implementation seams:
 - Filesystem watching or automatically including files that are not represented in the loaded project tree.
 - A background isolate in the first implementation. Search remains asynchronous and debounced; isolate work is a later optimization only if profiling demonstrates a need.
 - Changing single-file `Ctrl/Cmd+F` into multi-file search.
+- Replacing or saving standalone text tabs that do not resolve to a writable `THConfigFileNode`/`THDataFileNode`. Supporting that requires a separate standalone parse/save contract and is not introduced by Phase 9.
 
 ## 4. User Experience
 
@@ -75,7 +78,7 @@ Add a search action to the project sidebar header and bind `Ctrl/Cmd+Shift+F` at
 2. switches the sidebar from tree mode to project-search mode; and
 3. focuses/selects the multi-file query field.
 
-The search view has a back/tree action. Returning to tree mode preserves the current query, options, expansion state, and results for the lifetime of the loaded project. Closing/replacing the project clears project-scope results because their paths are no longer valid; open-files scope may be searched again against whatever text tabs remain open.
+The search view has a back/tree action. Returning to tree mode preserves the current query, options, expansion state, and results for the lifetime of the loaded project. Closing/replacing the project clears the current results regardless of scope because project-backed open-tab results have just changed replacement eligibility; the query/options remain available so open-files scope can immediately search whatever text tabs remain open.
 
 `THProjectTreeUIController` should own the sidebar mode because it already owns sidebar expansion and project-tree presentation state. Search query/results belong to the new search controller, not the tree UI controller.
 
@@ -88,7 +91,7 @@ The search header contains:
 - case-sensitivity toggle;
 - scope selector: **Open text tabs** or **Project files**;
 - refresh/search action;
-- Replace All action, disabled when the query is empty, no matches exist, a search is running, or a replacement is running;
+- Replace All action, disabled when the query is empty, no replace-eligible matches exist, a search is running, or a replacement is running;
 - progress indication while searching/replacing; and
 - a compact summary such as “23 matches in 4 files”.
 
@@ -104,6 +107,8 @@ Results are ordered deterministically:
 2. matches within a file by ascending UTF-16 offset.
 
 Each file group shows its relative path (or canonical path for an open tab outside the project), match count, and an expand/collapse control. Each match row shows one-based line and column plus a trimmed one-line preview. The matching portion of the preview is visually emphasized without altering the source text.
+
+An open text tab whose canonical path does not currently resolve to a `THConfigFileNode` or `THDataFileNode` is a standalone search-only result. Its file group shows a localized search-only indicator/tooltip explaining that navigation is available but Replace All will not modify or save that file. Search totals include these matches; Replace All eligibility and confirmation/completion counts include only matches in writable project nodes. If every match is search-only, Replace All is disabled with the same localized explanation.
 
 Empty and exceptional states are distinct and localized:
 
@@ -145,6 +150,8 @@ lib/src/
  │    ├── th_project_search_match.dart
  │    ├── th_project_search_file_result.dart
  │    └── th_project_search_failure.dart
+ ├── elements/th_project/
+ │    └── th_text_file_save_result.dart            # Explicit revision-aware save outcome
  ├── widgets/
  │    ├── th_project_search_widget.dart            # Controls, grouped results, empty/error states
  │    ├── th_project_search_result_widget.dart     # File group and match rows
@@ -169,12 +176,13 @@ List<TextRange> findPlainTextMatches({
 });
 ```
 
-The helper preserves current behavior exactly:
+The helper preserves the current structural behavior while fixing invalid Unicode source offsets:
 
 - empty query returns no matches;
 - matches are non-overlapping and left-to-right;
 - offsets are UTF-16 offsets compatible with Flutter `TextRange`/`TextSelection`; and
-- the loop is bounded by the content length and advances by the non-empty query length after every match.
+- every returned source range is non-empty, ordered, and non-overlapping; and
+- each scan loop is bounded by the searched representation's UTF-16 length and advances by the non-empty query length after every candidate match.
 
 `THTextEditorController.findMatches` delegates to this helper. Multi-file search calls the same helper for every source snapshot. Existing `t3905` tests remain the compatibility suite; new pure-helper tests cover line/column and preview derivation.
 
@@ -182,13 +190,24 @@ The helper preserves current behavior exactly:
 
 Case-insensitive mode must **not** simply scan a fully lowercased haystack and reuse the lowercase offsets (the current single-file behavior — see §13.4). `String.toLowerCase()` follows Unicode default case mapping, which is not guaranteed 1:1 in UTF-16 code units (`İ` U+0130 → `i` + U+0307, 1 unit → 2). One such character before a match shifts every later offset, so the returned `TextRange` points at the wrong span of the original text.
 
-The helper takes a fast path plus an offset-mapped slow path:
+Use one rune-by-rune lowercase definition for both paths so optimization cannot change semantics:
 
-1. Compute `lowerContent = content.toLowerCase()` and `lowerQuery = query.toLowerCase()` (case-insensitive mode already pays one `toLowerCase()` today, so no new cost here).
-2. **Fast path** — when `lowerContent.length == content.length` *and* `lowerQuery.length == query.length`, every fold was 1:1, so run the existing bounded `indexOf` loop over `lowerContent`; its ranges are already valid against `content`. This covers all ASCII and Latin-1 text.
-3. **Slow path** — otherwise, rebuild the lowercase haystack rune-by-rune (iterate code points via `content.runes`, not code units, because Adlam/Deseret are cased and non-BMP), lowercasing each rune and appending to a `StringBuffer` while pushing that rune's original UTF-16 start offset once per produced code unit into a parallel `List<int>` (`toOrig`), with a trailing sentinel of `content.length`. Fold the query the same rune-by-rune way (`_foldPerRune`) for consistency (e.g. Greek sigma). Run `indexOf` over the rebuilt string; for each hit at `found`, emit `TextRange(start: toOrig[found], end: toOrig[found + foldedQuery.length])` and advance `start` by `foldedQuery.length` (non-overlapping).
+1. Fold both content and query with `_foldPerRune`: iterate Unicode code points via `.runes`, create the string for each complete rune, call Dart's `toLowerCase()` on that rune string, and append the result. This supports cased non-BMP characters such as Adlam/Deseret and gives content/query identical folding rules. If the folded query is empty, return no matches defensively.
+2. While folding, record whether every rune produced exactly the same number of UTF-16 code units as its original rune. A total-string length equality check is **not** sufficient evidence of aligned offsets; length preservation must hold for every rune.
+3. **Fast path** — when both content and query are per-rune length-preserving, run the existing bounded `indexOf` loop over the folded content. Folded offsets then equal original UTF-16 offsets. This covers ASCII, Latin-1, and ordinary non-expanding Unicode mappings.
+4. **Mapped path** — when any content rune changes UTF-16 length, rebuild the folded content together with two parallel arrays. For each UTF-16 code unit produced by an original rune, append that rune's original UTF-16 start to `sourceStarts` and its exclusive original UTF-16 end to `sourceEnds`. For a folded hit `[found, foldedEnd)`, project it back as:
 
-`toOrig` is transient; use `Uint32List`-backed growth only if profiling on a very large file shows it matters. Case-sensitive mode is unchanged (plain scan over `content`).
+   ```dart
+   TextRange(
+     start: sourceStarts[found],
+     end: sourceEnds[foldedEnd - 1],
+   )
+   ```
+
+   Thus searching for plain `i` in original `İ` returns `[0, 1]`, never `[0, 0]`. A candidate that touches only part of a multi-unit lowercase expansion intentionally consumes the complete originating rune for highlighting and replacement.
+5. Advance the folded search cursor by `foldedQuery.length` after every candidate. Because different folded candidates can project onto the same original rune/range, accept a projected range only when it is non-empty and its start is at or after the previous accepted range's end; skip duplicate or overlapping projected ranges. This preserves left-to-right, non-overlapping source ranges safe for `substring`, highlighting, and Replace All.
+
+If only the query changes length, the content's folded offsets still align with original offsets, so no content map is needed; scanning uses the folded query and direct content offsets. `sourceStarts`/`sourceEnds` are transient; use typed-array-backed growth only if profiling on a very large file demonstrates a need. Case-sensitive mode is unchanged (plain scan over `content`).
 
 ### 5.3 Result models
 
@@ -210,6 +229,7 @@ class THProjectSearchFileResult {
   final String canonicalPath;
   final String displayPath;
   final String searchedContent;
+  final bool isReplaceEligible;
   final List<THProjectSearchMatch> matches;
 }
 ```
@@ -244,7 +264,8 @@ For **Open text tabs**:
 - exclude `isTH2Tab(path)` entries;
 - obtain existing controllers without creating new ones;
 - skip/loading-report a controller whose file has not completed loading; and
-- use `controller.content`, which includes unsaved changes.
+- use `controller.content`, which includes unsaved changes; and
+- mark the file result replace-eligible only when `THProjectController.nodeByCanonicalPath(path)` currently returns a `THConfigFileNode` or `THDataFileNode`. Otherwise retain it as a standalone search-only result.
 
 For **Project files**:
 
@@ -268,7 +289,7 @@ The first implementation may scan snapshots on the UI isolate. Publish `isSearch
 
 ### 6.4 Project lifecycle
 
-Expose `clearForClosedProject()` and call it from the same close/open-project flow that clears project-tree state. It cancels pending work, invalidates the generation, clears project results/failures/expanded groups, and switches project scope to open-tabs scope when appropriate.
+Expose `clearForClosedProject()` and call it from the same close/open-project flow that clears project-tree state. It cancels pending work, invalidates the generation, clears results/failures/expanded groups regardless of scope (previously project-backed open-tab results have just become standalone and their replacement eligibility is stale), and switches project scope to open-tabs scope when appropriate. Preserve the query/options so the user can immediately search the remaining open tabs again.
 
 Tests must prove that a late result from project A cannot appear after project B is loaded.
 
@@ -276,25 +297,78 @@ Tests must prove that a late result from project A cannot appear after project B
 
 ### 7.1 Confirmation and preflight
 
-Replace All is available only for a non-empty query and a current, completed result set. Before any mutation:
+Replace All is available only for a non-empty query and a current, completed result set containing at least one replace-eligible match. A file is replace-eligible only when its canonical path currently resolves to a writable `THConfigFileNode` or `THDataFileNode`; merely having an open `THTextEditorController` is not sufficient. Standalone open-tab matches remain in the visible search results but never enter the replacement candidate set.
+
+Before any mutation:
 
 1. re-run search immediately to eliminate stale snapshots;
-2. build every replacement string in memory using the shared non-overlapping ranges, from the end of the file toward the start or via one `StringBuffer` pass;
+2. discard every standalone/search-only file, then build every eligible replacement string in memory using the shared non-overlapping ranges, from the end of the file toward the start or via one `StringBuffer` pass;
 3. discard unchanged files;
-4. verify every affected path still resolves to a writable `THConfigFileNode`/`THDataFileNode` (or an already-open out-of-project text controller when open-tabs scope is selected);
+4. verify every affected path still resolves to a writable `THConfigFileNode`/`THDataFileNode`; if a formerly eligible path became standalone after the refreshed search, exclude it and update the eligibility/counts rather than attempting to save it;
 5. verify unopened project files can be read and every target's parent location is writable according to the repository's existing I/O conventions; and
-6. show a localized confirmation with match count, file count, scope, and a warning that the operation saves the affected files and cannot be undone as one cross-file action.
+6. show a localized confirmation with the **eligible** match count, eligible file count, scope, and a warning that the operation saves the affected project files and cannot be undone as one cross-file action. When the visible result set also contains standalone matches, state how many matches/files are excluded.
 
-Cancellation makes no changes. A preflight failure makes no changes and leaves the current results visible with failure details.
+If the refreshed search contains no eligible matches, stop before confirmation and leave Replace All disabled with the localized search-only explanation. Cancellation makes no changes. A preflight failure makes no changes and leaves the current results visible with failure details.
 
 ### 7.2 Applying through editor controllers
 
 For an already-open file, reuse its registered controller. For an unopened project file, create a temporary `THTextEditorController` injected with the existing `THProjectController`, load it, apply/save, and dispose it in `finally`; do not add hidden controllers to `MPGeneralController` and do not open every changed file as a side effect.
 
+#### Explicit text-save result
+
+Refactor the text-file branch of `THProjectController.saveProjectFile()` into a typed, reusable `saveTextProjectFile(...)` boundary. The existing generic method may delegate to it for compatibility, but `THTextEditorController.save()` and multi-file replacement consume the typed result directly; they never infer success from observable state or diagnostics.
+
+A representative contract is:
+
+```dart
+enum THTextFileSaveStatus {
+  saved,
+  supersededBeforeWrite,
+  savedButSuperseded,
+  reparseFailed,
+  unknownPath,
+  unsupportedNode,
+  serializationFailed,
+  writeFailed,
+}
+
+class THTextFileSaveResult {
+  final String canonicalPath;
+  final int requestedRevision;
+  final int? writtenRevision;
+  final int currentRevision;
+  final THTextFileSaveStatus status;
+
+  bool get isCurrentRevisionSaved => status == THTextFileSaveStatus.saved;
+}
+```
+
+`THTextEditorController.save()` returns `Future<THTextFileSaveResult>`. The contract distinguishes:
+
+- **saved** — the exact requested/flushed revision was written and was still current when the write completed; only this status clears project/controller dirty state and counts as a successful Replace All file;
+- **superseded before write** — a newer revision appeared after flush but before serialization/write, so no stale write is attempted;
+- **saved but superseded** — the requested revision reached disk, but a newer edit appeared while the asynchronous write was in progress; the newer revision remains dirty and the operation is reported as incomplete rather than falsely clean;
+- **reparse failed** — no parsed node representing the requested revision is safe to serialize;
+- **unknown/unsupported target** — the canonical path has no writable config/data node or resolves to another node type; and
+- **serialization/write failure** — writer construction/serialization and filesystem I/O are caught separately, logged with path/stack trace, and returned with the corresponding status.
+
+Raw exceptions remain in logs and existing localized diagnostics may still be appended for the normal project UI, but `projectErrors` is not part of save-result detection. The result is the sole authority for whether the requested revision was written and whether the current editor revision is clean.
+
+`saveTextProjectFile()` validates in this order before causing I/O:
+
+1. resolve the canonical path and return `unknownPath`/`unsupportedNode` explicitly;
+2. verify that the node's recorded parsed revision equals `requestedRevision`, otherwise return `reparseFailed`;
+3. verify that the latest pending revision still equals `requestedRevision`, otherwise return `supersededBeforeWrite`;
+4. serialize synchronously inside its own `try` block, returning `serializationFailed` on error;
+5. write the bytes inside a separate `try` block, returning `writeFailed` on error; and
+6. after the awaited write, compare the latest revision again. Return `saved` and clear dirty state only for an exact match; otherwise return `savedButSuperseded` with `writtenRevision` set and leave the newer revision dirty.
+
+Every return path populates the canonical path and revision fields. No skipped/unknown/unsupported path returns a successful result, and no failure is represented only by a log entry.
+
 For each affected file, in deterministic path order:
 
 1. call `setContent(replacedContent)` exactly once;
-2. call `save()` and await it, then determine success explicitly — `save()` never throws and `saveProjectFile()` swallows write errors into `projectErrors`. Treat the file as failed if its canonical path is still in `THProjectController.dirtyFilePaths` (equivalently `controller.isDirty`) after the await, or if `projectErrors` gained an entry for that path during the call;
+2. call `save()` and await its `THTextFileSaveResult`; count the file as saved only when `isCurrentRevisionSaved` is true, otherwise collect the returned status for localized partial-failure/incomplete reporting;
 3. retain the controller and updated visible content when it belongs to an open tab; and
 4. dispose only temporary controllers.
 
@@ -304,30 +378,59 @@ Do not call `File.writeAsString`, `THConfigFileWriter`, or `THFileWriter` from t
 
 The race spans **two** debounce layers (see §2), so awaiting `THProjectController.reparseFile()` is not sufficient — it only schedules the project-level timer and returns before `_performReparse` runs. Both layers must drain.
 
-Add an awaitable `THProjectController.flushPendingReparse(String canonicalPath)` that:
+#### Revisioned pending content
+
+Track a monotonically increasing content revision for every text path. A normal project load initializes both current-content and parsed-node revisions to `0` for each writable text node; `THTextEditorController.loadFile()` adopts the project's current revision, including for a temporary controller. `THTextEditorController.setContent()` advances from that revision and passes the new revision together with the content to `THProjectController.reparseFile()`.
+
+The project controller keeps current revisions independently from its dirty pending-content records, so a successful save can remove pending content without forgetting the last written revision. It also records the revision represented by every writable parsed node. `reparseFile()` rejects an attempt to replace a path's pending record with an older revision, and a timer always reads the latest record rather than content captured by an older callback. Full-reparse result application tags nodes built from overrides with their override revisions and leaves unchanged disk-backed nodes at their existing/baseline revisions.
+
+Reparse and save completion are revision-specific:
+
+- an older reparse may finish, but it must not remove or overwrite a newer pending revision;
+- the project controller records the revision represented by each parsed writable node, separately from the latest pending revision;
+- `save()` snapshots its requested revision, asks the flush layer for that revision, and calls `saveTextProjectFile(expectedRevision: ...)` only when the parsed-node revision matches;
+- if a newer revision appears before the write begins, return `supersededBeforeWrite` without writing the older revision; and
+- after a successful asynchronous disk write, clear dirty state only when the path's current revision still equals the written revision. Otherwise return `savedButSuperseded`, retain the newer dirty revision, and schedule/follow through with its reparse.
+
+#### In-memory full-project reparse
+
+Do **not** implement a root/type-change flush by calling the existing disk-only `reloadProject()` and then applying `_applyLoadResult()`. Add a dedicated full-reparse path for pending edits:
+
+1. Snapshot every entry currently in the project's dirty-content/revision map, including the target path. The snapshot is immutable for the lifetime of that reparse.
+2. Extend `THProjectParser.loadProject()`/`loadFileNode()` with an optional canonical-path-to-content override map (empty for normal project open/reload). The recursive loader consults the override first and reads from disk only when no override exists. Thus a root-file edit is used to build the root node, and other unsaved included files are parsed from their own pending contents during the same rebuild.
+3. Parse the complete project using that override snapshot. Newly referenced files that have no pending override continue to use the normal encoding-aware disk reader.
+4. Apply the rebuilt tree/indexes/diagnostics through a separate result-application helper that does not reset dirty state. Merge newly discovered disk contents into `fileContentsCache`, then reapply the latest pending contents and revisions so dirty overrides always win. Paths that disappeared from the rebuilt dependency tree remain explicitly dirty until saved, reverted, or otherwise resolved; they must not be silently dropped.
+5. If the full reparse fails, leave the prior tree, all pending contents, revisions, and dirty flags intact, log/surface the failure, and report the target revision as unflushed. `saveTextProjectFile()` must not run for an unflushed revision; `THTextEditorController.save()` returns `reparseFailed`.
+
+This in-memory path is used by every `_performReparse()` fallback that currently requires `reloadProject()` while pending edits exist: root-file changes, detected type changes, missing/detached parents, and error recovery. The existing disk-only `reloadProject()` remains the explicit reload behavior when no pending-edit preservation is requested.
+
+Add an awaitable `THProjectController.flushPendingReparse({required String canonicalPath, required int expectedRevision})` that:
 
 - cancels `_reparseTimers[canonicalPath]` if present;
-- awaits the actual reparse work for that path directly (invoke the same code path `_performReparse` runs, including its possible `await reloadProject()`), using the latest `fileContentsCache[canonicalPath]` / pending content;
+- awaits the actual reparse work needed for `expectedRevision`, unless a newer revision has already superseded it;
+- uses the in-memory full-project reparse above instead of disk-only `reloadProject()` whenever the incremental splice cannot be used;
 - is a no-op when nothing is pending for that path; and
-- coalesces concurrent callers so one content revision is not reparsed twice.
+- coalesces concurrent callers for the same revision while ensuring that a newer revision queues/follows with its own reparse; and
+- returns a typed reparse outcome identifying the parsed revision, supersession, or failure. A returned success guarantees that the writable node is tagged with `expectedRevision`; it does not by itself guarantee that the revision remains current long enough to write.
 
 Then add an awaitable `THTextEditorController.flushPendingReparse()` that:
 
 - cancels the editor-level `_reparseTimer`;
-- if the controller is dirty, pushes current `content` through `THProjectController.reparseFile(...)` **and then** awaits `THProjectController.flushPendingReparse(canonicalPath)` so the project-level timer is drained too; and
-- is awaited at the start of `save()` before `saveProjectFile()` is invoked.
+- accepts/snapshots the requested editor revision;
+- if the controller is dirty, pushes that revision/content through `THProjectController.reparseFile(...)` **and then** awaits `THProjectController.flushPendingReparse(canonicalPath: ..., expectedRevision: ...)` so the project-level timer is drained too; and
+- is awaited at the start of `save()` before `saveTextProjectFile()` is invoked. Saving proceeds only when the typed flush outcome confirms the requested revision; otherwise `save()` returns the corresponding `reparseFailed` or `supersededBeforeWrite` result without attempting serialization.
 
-Track a content revision or pending-content snapshot so an edit that arrives while a flush is running schedules a subsequent reparse instead of being marked saved accidentally. This behavior also fixes immediate single-file edit/replace → `Ctrl/Cmd+S`; add regression coverage there.
+This behavior fixes immediate single-file edit/replace → `Ctrl/Cmd+S`, including the root project file, without discarding another editor's unsaved content; add regression coverage there.
 
 ### 7.4 Failure behavior
 
 Multi-file disk writes are not transactional. All targets are prepared before the first mutation, but a later I/O failure can still occur after earlier files were saved. Therefore:
 
 - continue or stop according to a single documented policy; use **continue and collect failures** so independent files can complete;
-- leave any failed open controller dirty with its replacement content intact;
+- leave any failed, superseded-before-write, or saved-but-superseded open controller dirty with its newest content intact;
 - preserve a failed temporary controller's replacement by keeping the corresponding content in `THProjectController.fileContentsCache`/dirty tracking rather than silently discarding it, or explicitly restore its pre-operation snapshot if that is safer with the final controller implementation;
 - log each exception with path and stack trace;
-- report saved file/match counts and failed file paths in a localized completion dialog; and
+- report exact-saved file/match counts, incomplete (`supersededBeforeWrite`/`savedButSuperseded`) files, and failed file paths/statuses in a localized completion dialog; and
 - re-run search against the resulting in-memory state after all attempts finish.
 
 The implementation must choose and test the exact temporary-controller failure preservation branch before coding the UI; no failure may be swallowed.
@@ -371,7 +474,9 @@ Add EN/PT localization keys for:
 - searching/replacing progress;
 - Replace All confirmation and irreversible multi-file warning;
 - read/preflight/save failure summaries; and
-- completion counts, including partial success.
+- completion counts, including partial success; and
+- explicit save-result summaries for superseded, reparse, unknown/unsupported, serialization, and write outcomes; and
+- standalone/search-only result indicator, exclusion explanation, and Replace All disabled/excluded counts.
 
 Keep placeholder names and plural/select structures identical in `intl_en.arb` and `intl_pt.arb`. Run `flutter gen-l10n`; never edit generated localization files manually.
 
@@ -381,6 +486,7 @@ Update English and Portuguese help pages to explain:
 - `Ctrl/Cmd+Shift+F` searches multiple files;
 - the difference between open-tabs and project scopes;
 - `.th2` exclusion;
+- standalone open tabs being searchable/navigable but excluded from Replace All;
 - navigation and stale-result refresh behavior; and
 - Replace All confirmation, automatic saving, and lack of one-step cross-file undo.
 
@@ -390,9 +496,9 @@ Add the shortcut to the appropriate keyboard-shortcut table in alphabetical orde
 
 1. Reconfirm the post-Phase-8 source/help layout and the next unused test prefix.
 2. Extract `findPlainTextMatches` and line/preview helpers; redirect single-file find to the shared helper. Behavior is unchanged except the case-insensitive path gains the offset-drift fix from §5.2 (fast path is identical to today; slow path only engages on length-changing folds).
-3. Add `THProjectController.flushPendingReparse(canonicalPath)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush); make `save()` await the editor-side flush. Cover immediate-save races across both layers before multi-file replacement work.
+3. Add `THTextFileSaveResult`, revisioned pending/parsed-content tracking, parser content overrides, the dirty-preserving in-memory full-project reparse, `THProjectController.flushPendingReparse(canonicalPath, expectedRevision)` (drains the project-level timer), and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush); refactor the project text-save boundary to return explicit outcomes and make `save()` serialize only the successfully flushed requested revision. Cover immediate-save races, every save status, both debounce layers, and full-reload branches before multi-file replacement work.
 4. Add `pendingSelectionRange`/`revealRange()` and exact-range consumption in `THTextEditorWidget`.
-5. Add immutable search models and `THProjectSearchController` source collection, debounce, generation cancellation, ordering, and project-lifecycle reset.
+5. Add immutable search models and `THProjectSearchController` source collection, standalone/project-backed replacement eligibility, debounce, generation cancellation, ordering, and project-lifecycle reset.
 6. Register the controller lazily in `MPLocator` and add tree/search mode to `THProjectTreeUIController`.
 7. Build grouped-results widgets and integrate them into the project sidebar.
 8. Wire result activation through existing tab opening/focus/tree synchronization.
@@ -410,16 +516,16 @@ Confirm numbering immediately before implementation. With the current tree, use:
 
 | Test file | Required coverage |
 | --- | --- |
-| `test/t3920_th_text_search_aux_test.dart` | Shared plain matcher compatibility, non-overlap, empty/long queries, case modes, bounded progression, line/column calculation, preview trimming/highlighting. **Offset-drift coverage**: `İ` (U+0130) before the search term — corrected range covers the right span, not shifted by +1; mixed `İ`/`i`/`I` case-insensitive hit/miss and ranges; non-BMP cased text (Adlam U+1E900–U+1E943 or Deseret) case-insensitive to prove rune iteration; ASCII and Latin-1 (`é`, `ñ`, `ç`) identical to pre-refactor `t3905` expectations (fast path untouched). |
-| `test/t3921_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); `flushPendingReparse` drains a pending `reloadProject()` path; timer cancellation; concurrent save coalescing; edit during flush remains dirty and is reparsed later. |
+| `test/t3920_th_text_search_aux_test.dart` | Shared plain matcher compatibility, non-overlap, empty/long queries, case modes, bounded progression, line/column calculation, preview trimming/highlighting. **Offset-mapping coverage**: `İ` (U+0130) before the search term — corrected later range is not shifted; searching plain `i` in `İ` returns the non-empty original `[0, 1]` range; searching U+0307 alone in `İ` uses the documented whole-origin-rune range; repeated/adjacent expansions never emit duplicate or overlapping source ranges; replacement using every returned range succeeds; mixed `İ`/`i`/`I` hit/miss and ranges; query-only expansion against decomposed content; non-BMP cased text (Adlam U+1E900–U+1E943 or Deseret) proves rune iteration; ASCII and Latin-1 (`é`, `ñ`, `ç`) remain identical to pre-refactor `t3905` expectations; every returned range satisfies `0 <= start < end <= content.length`. |
+| `test/t3921_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); root-file and type-change flushes rebuild from immutable in-memory overrides rather than stale disk; another file's unsaved content/revision survives that full rebuild; full-reparse failure preserves the old tree and all dirty state and returns `reparseFailed` without serialization; timer cancellation; same-revision save coalescing; explicit `saved`, `supersededBeforeWrite`, `savedButSuperseded`, `unknownPath`, `unsupportedNode`, `serializationFailed`, and `writeFailed` results; edit during flush/write remains dirty and is reparsed later; only exact `saved` marks the controller/project revision clean; result detection does not inspect `projectErrors`. |
 | `test/t3922_th_text_editor_reveal_range_test.dart` | Pending range survives load, clamps safely, selects and scrolls exact match, takes precedence over line-only navigation, then clears. |
-| `test/t3923_th_project_search_controller_test.dart` | Open-tabs/project source collection, unsaved controller precedence, canonical deduplication, `.th2`/missing exclusion, deterministic ordering, no-project/no-tabs states, file read failures. |
+| `test/t3923_th_project_search_controller_test.dart` | Open-tabs/project source collection, unsaved controller precedence, canonical deduplication, `.th2`/missing exclusion, standalone open-tab search results marked ineligible for replacement, eligibility invalidation when a project closes/changes, deterministic ordering, no-project/no-tabs states, file read failures. |
 | `test/t3924_th_project_search_stale_generation_test.dart` | Debounce, immediate submit, superseded async search suppression, query changes, project close/replacement, no result leakage from an old project. |
-| `test/t3925_th_project_search_widget_test.dart` | Controls, scope selection, grouped rows, counts/plurals, expand/collapse, empty/error/loading states, keyboard focus, EN/PT smoke rendering. |
+| `test/t3925_th_project_search_widget_test.dart` | Controls, scope selection, grouped rows, search totals versus replace-eligible totals, localized standalone/search-only indicator and tooltip, Replace All disabled when only standalone matches exist, expand/collapse, empty/error/loading states, keyboard focus, EN/PT smoke rendering. |
 | `test/t3926_th_project_search_navigation_test.dart` | Existing/new tab activation, exact selection, out-of-project open tab, project-tree selection/ancestor expansion, stale-match refresh and disappeared match. |
-| `test/t3927_th_project_search_replace_all_test.dart` | Confirmation/cancel, one setContent per file, open and temporary controllers, flush-before-save, automatic save, case semantics, empty replacement, partial failures, disposal, refreshed results. |
+| `test/t3927_th_project_search_replace_all_test.dart` | Confirmation/cancel, standalone open tabs excluded without `setContent()`/save while project-backed open tabs are replaced, eligible/excluded confirmation counts, eligibility revalidation before mutation, one setContent per eligible file, open and temporary controllers, flush-before-save, root `thconfig` replacement serialized from its in-memory revision, simultaneous dirty included-file contents preserved during a full rebuild, automatic save, case semantics, empty replacement, each non-`saved` typed outcome mapped to incomplete/failure reporting without consulting dirty/error collections, partial failures, disposal, refreshed results. |
 | `test/t3928_th2_file_tabs_page_project_search_shortcut_test.dart` | `Ctrl/Cmd+Shift+F` opens/focuses project search; collapsed sidebar expands; `Ctrl/Cmd+F` remains editor-local; shortcut behavior with canvas/text tabs and dialogs. |
-| `test/t3929_phase9_documentation_localization_test.dart` | EN/PT key parity, registered help assets, both shortcut descriptions, no claim that `.th2` is searched, and documented Replace All save/undo behavior. |
+| `test/t3929_phase9_documentation_localization_test.dart` | EN/PT key parity, registered help assets, both shortcut descriptions, no claim that `.th2` is searched, documented standalone search/navigation versus replacement exclusion, and documented Replace All save/undo behavior. |
 
 Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression suite after extracting the matcher.
 
@@ -430,18 +536,23 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 3. Start a slow project search, close/open another project, and verify no old result or failure appears in the new project.
 4. Replace a case-insensitive query across open and unopened project files, confirm once, save through controllers/writers, refresh the tree/parser state, and observe zero old matches.
 5. Force one target save to fail and verify successful files remain saved, the failed file is clearly reported and recoverable/dirty according to the chosen policy, and no error is swallowed.
+6. Search open-tabs scope with one project-backed editor and one standalone editor containing matches, navigate in both, then Replace All and verify only the project-backed file changes/saves while the standalone controller content and disk file remain untouched.
 
 ## 12. Acceptance Criteria
 
 - `Ctrl/Cmd+Shift+F` opens a localized multi-file search surface without changing single-file `Ctrl/Cmd+F`.
 - Users can search open text tabs or all loaded-project `thconfig`/`.th` files; `.th2` and missing/imported non-text files never appear.
+- Standalone open text tabs appear in search results and support exact navigation, but are visibly search-only, never contribute to Replace All counts, and are never mutated or saved by multi-file replacement.
 - Unsaved open-editor content is searched instead of stale cache/disk content.
 - Results are deterministic, grouped by file, show accurate line/column previews, and navigate to/select the exact current match.
+- Case-insensitive Unicode matches always map to ordered, non-empty, non-overlapping UTF-16 ranges in the original content; highlighting and replacement never use offsets from the folded string directly.
 - Repeated project references are deduplicated by canonical path.
 - Search remains correct when queries change rapidly or a project closes/changes during asynchronous work.
-- Multi-file Replace All requires confirmation, computes all changes before mutation, uses one `setContent()` per affected file, flushes parsing before save, and never introduces a direct writer path in the search controller.
+- Multi-file Replace All requires confirmation, computes all eligible project-file changes before mutation, revalidates node eligibility, uses one `setContent()` per affected project file, flushes parsing before save, and never introduces a direct or standalone writer path in the search controller.
 - Immediate single-file save after editing/replacement also serializes the latest content.
+- Flushing/saving a root or type-changing file reparses from an immutable in-memory dirty-content snapshot; it never restores stale disk text or clears another file's unsaved revision.
 - Read/parse/save failures are logged and surfaced per file; successful and failed counts are unambiguous.
+- Save success is determined only from `THTextFileSaveResult`; observable dirty state and `projectErrors` are never used as proxy return values, and a write superseded by a newer edit is reported without clearing that edit.
 - Open controllers remain open and synchronized; temporary controllers are disposed on every success/failure path.
 - New UI strings and help/shortcut documentation are complete and equivalent in English and Portuguese.
 - Focused tests, the full test suite, and `flutter analyze` pass with no warnings.
@@ -451,6 +562,9 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 1. **Save semantics after replacement**: the roadmap explicitly calls for `setContent`/`save`, so this plan auto-saves after confirmation. The confirmation must make that behavior unmistakable, especially when an affected open editor already contains unsaved edits.
 2. **Temporary-controller save failure**: disposing a failed temporary controller can discard the only editor-owned replacement snapshot. Resolve this by either retaining the failed content in project dirty/cache state or restoring the original snapshot, then lock the policy with tests before widget work.
 3. **Large-project responsiveness**: full scans are linear in total text plus match count. Debouncing, snapshotting, stale-generation cancellation, and bounded matcher progress are required; isolate extraction waits for profiling evidence.
-4. **Unicode case conversion**: the shipped single-file `findMatches` lowercases the whole haystack (`content.toLowerCase()`) before matching, so any length-changing case fold (`İ` U+0130 → `i` + U+0307) already yields `TextRange` offsets that are wrong against the original `content`. Extracting the helper preserves this latent bug rather than introducing it, and the existing `t3905` suite contains no length-changing cases, so it will not catch a regression here. Phase 9 fixes it as a **fix beyond parity** using the fast-path + offset-mapped slow-path algorithm specified in §5.2 ("Case-insensitive matching without offset drift"), gated by the offset-drift tests listed for `t3920` in §11 (U+0130 before the term, mixed `İ`/`i`/`I`, non-BMP cased text, ASCII/Latin-1 parity).
+4. **Unicode case conversion**: the shipped single-file `findMatches` lowercases the whole haystack (`content.toLowerCase()`) before matching, so any length-changing lowercase mapping (`İ` U+0130 → `i` + U+0307) already yields `TextRange` offsets that are wrong against the original `content`. Extracting the helper preserves this latent bug rather than introducing it, and the existing `t3905` suite contains no length-changing cases. Phase 9 fixes it as a **fix beyond parity** using the per-rune semantics and dual `sourceStarts`/`sourceEnds` mapping specified in §5.2. A partial hit inside one expanded lowercase rune deliberately maps to that whole original rune; duplicate/overlapping projected ranges are discarded. The `t3920` tests lock this behavior for plain `i` and U+0307 in `İ`, expansions before later matches, repeated expansions, replacement safety, query-only expansion, non-BMP casing, and ASCII/Latin-1 parity.
 5. **External file changes**: no filesystem watcher is added. Result activation validates its snapshot, and explicit refresh/new query reads current sources; files modified externally after project parsing remain subject to the existing project reload behavior.
 6. **Cross-file undo**: Flutter's per-widget editing history cannot provide an atomic undo across open and temporary controllers. Confirmation, preflight, and explicit automatic-save wording are mandatory until a future command/transaction layer is designed for text files.
+7. **Full-reparse snapshot consistency**: root/type-change/error fallback reparses must use one immutable snapshot of all dirty contents. Applying the rebuilt project must merge against the still-current revision map so edits made while parsing remain dirty; the generic disk-only `_applyLoadResult()` is never used for this path.
+8. **Standalone tabs**: open-tabs scope is broader for search/navigation than for replacement. A tab without a current writable project node is always search-only; Phase 9 must not infer writability from the presence of an editor controller or add a direct disk writer to make it eligible.
+9. **Save-result authority**: logs, diagnostics, and dirty observables remain useful UI state but are not operation return values. Every text save returns the requested/written/current revisions and a status; only exact `saved` counts as complete, while `savedButSuperseded` truthfully records that disk changed but newer editor content remains unsaved.
