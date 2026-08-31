@@ -21,7 +21,7 @@ final List<String> targetFiles = [
 const String flatpakManifestPath =
     'packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml';
 const String releaseConstantsPath = 'lib/src/constants/mp_constants.dart';
-const String releaseSummaryPath = 'assets/releases/releases_summary.json';
+const String releaseSummaryPath = 'releases/releases_summary.json';
 
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();

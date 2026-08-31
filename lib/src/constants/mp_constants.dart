@@ -687,7 +687,7 @@ const String mpMapiahGithubRawContentURLPrefix =
     'https://raw.githubusercontent.com/rsevero/mapiah/main';
 // Relative path under the repository containing the releases summary JSON.
 const String mpMapiahReleasesSummaryRelativePath =
-    'assets/releases/releases_summary.json';
+    'releases/releases_summary.json';
 // Full raw URL to the releases summary JSON on GitHub.
 const String mpMapiahReleasesSummaryRawURL =
     '$mpMapiahGithubRawContentURLPrefix/$mpMapiahReleasesSummaryRelativePath';

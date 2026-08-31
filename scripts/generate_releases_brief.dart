@@ -5,7 +5,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Generates `assets/releases/releases_summary.json` from local git tags.
+/// Generates `releases/releases_summary.json` from local git tags.
 ///
 /// - Considers tags that match `vX.Y.Z` (only three numeric components).
 /// - Uses the tagger date for annotated tags, otherwise the commit date.
@@ -27,7 +27,7 @@ Future<int> main(List<String> args) async {
       out.add(entry);
     }
 
-    final File file = File('assets/releases/releases_summary.json');
+    final File file = File('releases/releases_summary.json');
     if (await file.exists()) {
       await file.delete();
     }
