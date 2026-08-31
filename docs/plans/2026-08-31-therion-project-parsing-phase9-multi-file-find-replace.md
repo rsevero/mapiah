@@ -3,7 +3,7 @@
 # Therion Project Parsing Phase 9: Multi-File Find/Replace — Implementation Plan
 
 **Date:** 2026-08-31
-**Status:** Proposed
+**Status:** Proposed — validated against the codebase 2026-08-31 (grounding seams re-checked; two-layer reparse race, missing all-nodes accessor, non-throwing `save()`, and pre-existing Unicode offset bug folded into §2/§6.2/§7.2–7.3/§13).
 
 ## 1. Overview & Objectives
 
@@ -31,9 +31,12 @@ The repository currently provides the following implementation seams:
 - `THTextEditorWidget` provides the single-file `Ctrl/Cmd+F` bar, match highlighting, active-match scrolling, case sensitivity, replacement controls, and `Esc` handling.
 - `MPGeneralController` keeps normalized paths in `openFileOrder` and a private `THTextEditorController` registry. `getTextEditorController()` creates/reuses a controller, while `getTextEditorControllerIfExists()` supports read-only lookup.
 - `TH2FileTabsPage` owns the workspace-level shortcut layer and mixed `.th2`/text tab strip. It is the correct place to bind a project-level shortcut without changing the editor-local `Ctrl/Cmd+F` behavior.
-- `THProjectController.fileContentsCache` contains the latest parsed text for project files, `nodeByCanonicalPath()` identifies writable `THConfigFileNode`/`THDataFileNode` paths, and `saveProjectFile()` serializes the parsed model through the existing lossless writers.
-- A pending `THTextEditorController.setContent()` reparse is timer-driven. Calling `save()` before that timer fires can serialize the old parsed node. Phase 9 must close this race before using immediate multi-file replace-and-save.
-- The latest allocated test prefix is `t3919`; Phase 9 should begin at `t3920`, after confirming the number again at implementation time.
+- `THProjectController.fileContentsCache` (public `ObservableMap<String, String>`) contains the latest text for every project `THConfigFileNode`/`THDataFileNode`, keyed by canonical path; `nodeByCanonicalPath()` is a single-path lookup that identifies writable `THConfigFileNode`/`THDataFileNode` nodes, and `saveProjectFile()` serializes the parsed model through the existing lossless writers.
+- `THProjectController` exposes **no public iterator over all file nodes** — `_nodesByCanonicalPath` is private. The project-wide file set must be obtained either by walking `projectRootNode` recursively, by iterating `fileContentsCache.keys` (already populated for exactly the config/data node set by `_populateFileContentsCache`), or by adding a new public accessor. Phase 9 picks one explicitly in §6.2.
+- `saveProjectFile()` does **not** throw on failure: it catches write errors and appends a `THProjectParseError` to `projectErrors`, and it silently returns on an unknown path or a `.th2` file with no open editor. `THTextEditorController.save()` returns `Future<void>` and only clears `isDirty` when the path has left `dirtyFilePaths`. Phase 9 must detect save failures by inspecting state (path still in `dirtyFilePaths` / `controller.isDirty` still true, or a `projectErrors` diff around the call), not by awaiting a throwing future.
+- There are **two** reparse debounce layers, not one. `THTextEditorController.setContent()` schedules an editor-level `_reparseTimer` that calls `THProjectController.reparseFile()`; `reparseFile()` is *itself* debounced — it writes `fileContentsCache`/`dirtyFilePaths` synchronously, then schedules `_performReparse` on a project-level timer and returns. `_performReparse` is what splices the fresh node the writers serialize (and it may `await reloadProject()`). Calling `save()` before both timers drain serializes the stale node. Phase 9 must close this race across both layers before using immediate multi-file replace-and-save (see §7.3).
+- Fixed dimensions and debounce durations live in `lib/src/constants/mp_constants.dart` (existing: `mpTextEditorReparseDebounceMilliseconds`, `mpProjectReparseDebounceMilliseconds`).
+- The latest allocated test prefix is `t3919`; Phase 9 should begin at `t3920`, after confirming the number again at implementation time. Note the repo already contains a `t3918` collision (two files share that prefix), so the confirmation step must scan for duplicates, not just take the maximum.
 
 ## 3. Scope and Non-Goals
 
@@ -234,7 +237,8 @@ For **Open text tabs**:
 
 For **Project files**:
 
-- traverse/index unique file nodes from the current project and include only `THConfigFileNode` and `THDataFileNode`;
+- enumerate the project's text-file set. `THProjectController` has no public all-nodes iterator today, so Phase 9 **adds one** — a public accessor returning the canonical paths (or nodes) of every `THConfigFileNode`/`THDataFileNode` — rather than reaching into private state or relying on `fileContentsCache.keys` alone (the cache can lag a freshly added include until its reparse completes). Walking `projectRootNode` recursively is the fallback if a dedicated accessor is rejected in review;
+- include only `THConfigFileNode` and `THDataFileNode`;
 - deduplicate by canonical path because the same included file may appear more than once in the dependency tree;
 - if an open controller exists, use its content first;
 - otherwise use `THProjectController.fileContentsCache`;
@@ -279,7 +283,7 @@ For an already-open file, reuse its registered controller. For an unopened proje
 For each affected file, in deterministic path order:
 
 1. call `setContent(replacedContent)` exactly once;
-2. call `save()` and await completion;
+2. call `save()` and await it, then determine success explicitly — `save()` never throws and `saveProjectFile()` swallows write errors into `projectErrors`. Treat the file as failed if its canonical path is still in `THProjectController.dirtyFilePaths` (equivalently `controller.isDirty`) after the await, or if `projectErrors` gained an entry for that path during the call;
 3. retain the controller and updated visible content when it belongs to an open tab; and
 4. dispose only temporary controllers.
 
@@ -287,12 +291,20 @@ Do not call `File.writeAsString`, `THConfigFileWriter`, or `THFileWriter` from t
 
 ### 7.3 Flush-before-save prerequisite
 
-Add an awaitable `flushPendingReparse()` to `THTextEditorController` and call it at the start of `save()`:
+The race spans **two** debounce layers (see §2), so awaiting `THProjectController.reparseFile()` is not sufficient — it only schedules the project-level timer and returns before `_performReparse` runs. Both layers must drain.
 
-- cancel the pending debounce timer;
-- if the controller is dirty, await `THProjectController.reparseFile(filePath: canonicalPath, updatedContent: content)`;
-- coalesce concurrent flush/save calls so one content revision is not reparsed twice; and
-- only then invoke `saveProjectFile()`.
+Add an awaitable `THProjectController.flushPendingReparse(String canonicalPath)` that:
+
+- cancels `_reparseTimers[canonicalPath]` if present;
+- awaits the actual reparse work for that path directly (invoke the same code path `_performReparse` runs, including its possible `await reloadProject()`), using the latest `fileContentsCache[canonicalPath]` / pending content;
+- is a no-op when nothing is pending for that path; and
+- coalesces concurrent callers so one content revision is not reparsed twice.
+
+Then add an awaitable `THTextEditorController.flushPendingReparse()` that:
+
+- cancels the editor-level `_reparseTimer`;
+- if the controller is dirty, pushes current `content` through `THProjectController.reparseFile(...)` **and then** awaits `THProjectController.flushPendingReparse(canonicalPath)` so the project-level timer is drained too; and
+- is awaited at the start of `save()` before `saveProjectFile()` is invoked.
 
 Track a content revision or pending-content snapshot so an edit that arrives while a flush is running schedules a subsequent reparse instead of being marked saved accidentally. This behavior also fixes immediate single-file edit/replace → `Ctrl/Cmd+S`; add regression coverage there.
 
@@ -367,7 +379,7 @@ Add the shortcut to the appropriate keyboard-shortcut table in alphabetical orde
 
 1. Reconfirm the post-Phase-8 source/help layout and the next unused test prefix.
 2. Extract `findPlainTextMatches` and line/preview helpers; redirect single-file find to the shared helper without behavior changes.
-3. Add `THTextEditorController.flushPendingReparse()` and make `save()` await it; cover immediate-save races before multi-file replacement work.
+3. Add `THProjectController.flushPendingReparse(canonicalPath)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush); make `save()` await the editor-side flush. Cover immediate-save races across both layers before multi-file replacement work.
 4. Add `pendingSelectionRange`/`revealRange()` and exact-range consumption in `THTextEditorWidget`.
 5. Add immutable search models and `THProjectSearchController` source collection, debounce, generation cancellation, ordering, and project-lifecycle reset.
 6. Register the controller lazily in `MPLocator` and add tree/search mode to `THProjectTreeUIController`.
@@ -388,7 +400,7 @@ Confirm numbering immediately before implementation. With the current tree, use:
 | Test file | Required coverage |
 | --- | --- |
 | `test/t3920_th_text_search_aux_test.dart` | Shared plain matcher compatibility, non-overlap, empty/long queries, case modes, Unicode UTF-16 offsets, bounded progression, line/column calculation, preview trimming/highlighting. |
-| `test/t3921_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization; timer cancellation; concurrent save coalescing; edit during flush remains dirty and is reparsed later. |
+| `test/t3921_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); `flushPendingReparse` drains a pending `reloadProject()` path; timer cancellation; concurrent save coalescing; edit during flush remains dirty and is reparsed later. |
 | `test/t3922_th_text_editor_reveal_range_test.dart` | Pending range survives load, clamps safely, selects and scrolls exact match, takes precedence over line-only navigation, then clears. |
 | `test/t3923_th_project_search_controller_test.dart` | Open-tabs/project source collection, unsaved controller precedence, canonical deduplication, `.th2`/missing exclusion, deterministic ordering, no-project/no-tabs states, file read failures. |
 | `test/t3924_th_project_search_stale_generation_test.dart` | Debounce, immediate submit, superseded async search suppression, query changes, project close/replacement, no result leakage from an old project. |
@@ -428,6 +440,6 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 1. **Save semantics after replacement**: the roadmap explicitly calls for `setContent`/`save`, so this plan auto-saves after confirmation. The confirmation must make that behavior unmistakable, especially when an affected open editor already contains unsaved edits.
 2. **Temporary-controller save failure**: disposing a failed temporary controller can discard the only editor-owned replacement snapshot. Resolve this by either retaining the failed content in project dirty/cache state or restoring the original snapshot, then lock the policy with tests before widget work.
 3. **Large-project responsiveness**: full scans are linear in total text plus match count. Debouncing, snapshotting, stale-generation cancellation, and bounded matcher progress are required; isolate extraction waits for profiling evidence.
-4. **Unicode case conversion**: Dart lowercase comparison can change string length for unusual Unicode text, which could make offsets differ from original content. Verify current behavior with representative Therion encodings/Unicode tests. If length-changing case folds occur, replace the helper with an offset-preserving comparison rather than returning incorrect ranges.
+4. **Unicode case conversion**: the shipped single-file `findMatches` already lowercases the whole haystack (`content.toLowerCase()`) before matching, so any length-changing case fold already yields `TextRange` offsets that are wrong against the original `content`. Extracting the helper preserves this latent bug rather than introducing it, and the existing `t3905` suite contains no length-changing cases, so it will not catch a regression here. Phase 9 should treat an offset-preserving comparison (lowercase per code unit without concatenating a re-cased string, or compare with `String.matchAsPrefix`/manual scan) as a **fix beyond parity**, gated by new Unicode tests with representative Therion encodings.
 5. **External file changes**: no filesystem watcher is added. Result activation validates its snapshot, and explicit refresh/new query reads current sources; files modified externally after project parsing remain subject to the existing project reload behavior.
 6. **Cross-file undo**: Flutter's per-widget editing history cannot provide an atomic undo across open and temporary controllers. Confirmation, preflight, and explicit automatic-save wording are mandatory until a future command/transaction layer is designed for text files.
