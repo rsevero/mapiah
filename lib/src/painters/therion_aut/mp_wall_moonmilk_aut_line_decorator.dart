@@ -49,6 +49,12 @@ class MPWallMoonmilkAUTLineDecorator extends MPLineDecorator {
     );
   }
 
+  /// MetaPost's `A{dir d1}..{dir d2}B` with `d1`/`d2` perpendicular to the
+  /// chord traces a near-semicircle; a cubic reproduces that with control
+  /// handles ~0.55 of the chord length rather than the `1/3` default used
+  /// for gentle curls.
+  static const double _semicircleHandleFactor = 0.5523;
+
   /// Shared with [MPWallFlowstoneAUTLineDecorator].
   static List<Path> buildBumps({required Path path, required double u}) {
     final List<PathMetric> metrics = path.computeMetrics().toList();
@@ -104,6 +110,7 @@ class MPWallMoonmilkAUTLineDecorator extends MPLineDecorator {
           end: tangent2.position,
           startDirectionDegrees: (angle1 * 180 / math.pi) + 90,
           endDirectionDegrees: (angle2 * 180 / math.pi) - 90,
+          handleLengthFactor: _semicircleHandleFactor,
         ),
       );
     }

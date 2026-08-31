@@ -72,7 +72,10 @@ class MPWallOverlyingAUTLineDecorator extends MPLineDecorator {
     canvas.drawPath(metric.extractPath(0, inset), endsPaint);
     canvas.drawPath(metric.extractPath(length - inset, length), endsPaint);
 
-    final double bp = 0.05 * u;
+    // Therion's `bp` is an absolute PostScript big point; Mapiah has no
+    // absolute-to-`u` mapping, so `0.1u` is used to keep the dash-dot
+    // pattern visually close to Therion's AUT output at the default scale.
+    final double bp = 0.1 * u;
     final MPDashedPathProperties dashedPathProperties = MPDashedPathProperties(
       dashLengths: <double>[
         2 * bp,
