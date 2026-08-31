@@ -28,6 +28,8 @@ The repository currently provides the following implementation seams:
 - `THTextEditorController` owns one open text file's `content`, local find/replace state, dirty state, reparse debounce timer, save/revert behavior, focus node, and pending line navigation.
 - Its `findMatches` getter performs a case-sensitive or case-insensitive, non-overlapping, left-to-right plain substring scan. Regex, whole-word, and structural search do not exist.
 - `replaceActiveMatch()` and `replaceAllMatches()` already call `setContent()`, preserving the normal dirty/reparse behavior.
+- `THTextEditorController` has **no revision concept today**. `loadFile(String filePath)` takes only a path (reads `fileContentsCache` then falls back to `THProjectParser.readFileContent()`), `setContent(String newContent)` takes only content, `save()` returns `Future<void>` and infers success from `dirtyFilePaths.contains(...)`, and the constructor accepts an optional `THProjectController` for injection. Phase 9 extends `loadFile`/`setContent`/`save` with the revision and project-epoch plumbing described in §7.2–7.3; the current signatures are the baseline being changed, not existing behavior to reuse.
+- `THProjectParser.loadProject()`/`loadFileNode()` are `static` and synchronous (return `THProjectLoadResult`); `THProjectController` runs them inside `Future<THProjectLoadResult>(() => ...)`. The override-map extension in §7.3 adds a parameter to these synchronous methods.
 - `THTextEditorWidget` provides the single-file `Ctrl/Cmd+F` bar, match highlighting, active-match scrolling, case sensitivity, replacement controls, and `Esc` handling.
 - `MPGeneralController` keeps normalized paths in `openFileOrder` and a private `THTextEditorController` registry. `getTextEditorController()` creates/reuses a controller, while `getTextEditorControllerIfExists()` supports read-only lookup.
 - `TH2FileTabsPage` owns the workspace-level shortcut layer and mixed `.th2`/text tab strip. It is the correct place to bind a project-level shortcut without changing the editor-local `Ctrl/Cmd+F` behavior.
@@ -320,7 +322,7 @@ In this plan, “writable node” means a parsed node type supported by the loss
 
 ### 7.2 Applying through editor controllers
 
-For an already-open file, reuse its registered controller. For an unopened project file, create a temporary `THTextEditorController` injected with the existing `THProjectController`, load it, apply/save, and dispose it in `finally`; do not add hidden controllers to `MPGeneralController` and do not open every changed file as a side effect.
+For an already-open file, reuse its registered controller. For an unopened project file, construct a temporary `THTextEditorController(projectController: <existing THProjectController>)`, `await` its `loadFile(canonicalPath)` (which adopts the revision baseline per §7.3), apply/save, and dispose it in `finally`; do not add hidden controllers to `MPGeneralController` and do not open every changed file as a side effect.
 
 #### Explicit text-save result
 
@@ -394,7 +396,7 @@ The race spans **two** debounce layers (see §2), so awaiting `THProjectControll
 
 #### Revisioned pending content
 
-Track a monotonically increasing content revision for every text path. A normal project load initializes both current-content and parsed-node revisions to `0` for each writable text node; `THTextEditorController.loadFile()` adopts the project's current revision, including for a temporary controller. `THTextEditorController.setContent()` advances from that revision and passes the new revision together with the content to `THProjectController.reparseFile()`.
+Track a monotonically increasing content revision for every text path. A normal project load initializes both current-content and parsed-node revisions to `0` for each writable text node. `THTextEditorController.loadFile(String filePath)` today takes only a path and has no revision concept; Phase 9 extends it so that, after it resolves the canonical path and loads content, it reads the project controller's current content revision for that path (`0` when the project tracks none) and stores it as the controller's baseline revision. This applies equally to a temporary controller created for an unopened file. `THTextEditorController.setContent()` today takes only `newContent`; Phase 9 extends it to advance the controller's revision from that baseline and pass the new revision together with the content to `THProjectController.reparseFile()` (whose signature also gains the revision and the captured `(projectEpoch, rootConfigPath)` per §7.3).
 
 The project controller keeps current revisions independently from its dirty pending-content records, so a successful save can remove pending content without forgetting the last written revision. It also records the revision represented by every writable parsed node. `reparseFile()` rejects an attempt to replace a path's pending record with an older revision, and a timer always reads the latest record rather than content captured by an older callback. Full-reparse result application tags nodes built from overrides with their override revisions and leaves unchanged disk-backed nodes at their existing/baseline revisions.
 
