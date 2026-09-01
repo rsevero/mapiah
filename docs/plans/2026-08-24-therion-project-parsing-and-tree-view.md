@@ -463,12 +463,13 @@ Phase 8: Help Pages, Keyboard Shortcuts, Localization (EN/PT) & Tests
    │
    ▼
 Phase 8.5: Project Epoch, Revisioned Content & Explicit Save Result (THProjectController refactor)
-   │
-   ▼
-Phase 9: Multi-File Find/Replace
+   ├──▶ Phase 9: Multi-File Find/Replace
+   └──▶ Phase 10: Save As for thconfig and .th Files
 ```
 
-Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multiple open text-editor tabs to have files to search across) plus Phase 8.5; it's numbered last because the need for it only became concrete after Phase 8 was already planned, not because it depends on Phases 7-8.
+Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multiple open text-editor tabs to have files to search across) plus Phase 8.5; it was numbered after Phase 8 because the need for it only became concrete after Phase 8 was already planned, not because it depends on Phases 7-8.
+
+Phase 10 depends on Phase 6 for mixed-tab identity changes and Phase 8.5 for revision-aware flushing, typed save results, and dirty-preserving full-project reparsing. It does not depend on Phase 9. Save As is project-graph-aware: the active editor adopts the new path, the old disk file is retained, incoming references are retargeted, and relative outgoing references keep resolving to the same canonical files after a cross-directory save.
 
 Phase 8.5 was carved out of the Phase 9 plan: the project-controller lifecycle/save-path rewrite it needs (project epoch isolation, atomic content-revision allocation, explicit `THTextFileSaveResult`, parser content overrides, in-memory dirty-preserving full reparse, two-layer flush-before-save) is infrastructure with a large regression surface in core parsing/saving, so it lands and stabilizes on its own before the multi-file search UI is built on top of it. It ships no user-visible feature.
 
@@ -521,6 +522,19 @@ Phase 8.5 was carved out of the Phase 9 plan: the project-controller lifecycle/s
 - Builds on the single-file find/replace shipped as a Phase 5 follow-up (§7.1): reuses its match-computation and highlight rendering per file rather than a separate implementation.
 - Depends on Phase 6 for multiple simultaneously-open text-editor tabs to search across.
 
+### Phase 10: Save As for `thconfig` and `.th` Files
+
+- Add `THTextEditorController.saveAs()` and a typed `THProjectController.saveTextProjectFileAs(...)` operation. The text editor owns the file-picker interaction; the project controller owns validation, serialization, path/reference migration, reparsing, and the explicit success/failure result. A cancelled picker returns without changing disk, controller identity, dirty state, tab order, selection, or project state.
+- Allow a `thconfig` file to keep any filename or extension, matching Therion's configuration-file rules. Require `.th` for a `THDataFileNode`, appending it when the chosen filename has no extension. Canonicalize the destination before collision checks; choosing the current path delegates to normal Save, while choosing a path already represented by another project node or open tab is rejected with a localized error instead of merging controllers.
+- Flush the editor debounce and project reparse queues before constructing the Save As snapshot. Serialize the exact accepted content revision through `THConfigFileWriter` or `THFileWriter`; a stale completion must not rename a tab, clear a newer dirty revision, or mutate a replacement project.
+- Preserve graph meaning when the destination directory changes. Rewrite this file's relative path-bearing directives (`source`/`input` for configuration files and `input`/`import` for data files) so they continue to resolve to their pre-Save-As canonical targets. Retarget every loaded incoming `source`/`input` reference from the old canonical path to the new one, using a relative path from each referring file and preserving quoting, comments, continuation layout, and unrelated formatting.
+- Keep classic Save As copy semantics: write the destination but do not delete or overwrite the source merely because its identity moved. The active project and editor adopt the destination path. Referencing files changed by retargeting remain visibly dirty and are saved only by their normal Save/Save All flow, so unrelated unsaved edits are never committed as a side effect.
+- Treat the root configuration specially: after a successful Save As, set `rootConfigPath` to the destination and rebuild the project from an immutable in-memory content snapshot. Preserve all other dirty buffers while resolving the root's rewritten relative references from its new directory. Saving an included configuration or data file instead updates every parent reference and performs the same dirty-preserving reparse without changing `rootConfigPath`.
+- Extend `MPGeneralController.renameFileController(...)` (or replace it with a type-neutral tab-identity API) to migrate text-controller map keys and `openFileOrder` atomically while preserving the active index, cursor, selection, folds, scroll position, find state, and focus. Update `THTextEditorController.canonicalPath`, project-tree selection/expanded state, cache and revision keys, dependency/reverse-dependency indexes, diagnostics paths, and dirty-path membership as one successful identity transition.
+- Stage all validation and transformed contents before the destination write. If serialization or writing fails, retain the old editor/project identity and dirty content and return a localized failure. Apply the path transition only after the write succeeds; if the subsequent in-memory graph rebuild fails, report the error without pretending Save As completed and retain enough staged state to restore the old project/editor identity. Never delete a pre-existing destination as rollback.
+- Route the app-bar Save As button, compact overflow action, and `Ctrl/Cmd+Shift+S` through the active tab type: `.th2` continues to use `saveAsTH2File()`, while `thconfig`/`.th` uses `THTextEditorController.saveAs()`. Add localized picker titles, extension/collision/write/reparse errors, and update the English/Portuguese help and keyboard-shortcut pages.
+- Add controller and widget tests for cancellation, same-path Save As, extension handling, overwrite/write failure, open-tab/project-node collisions, root and non-root files, multiple incoming references, same- and cross-directory saves, outgoing-reference rewriting, preservation of dirty sibling/parent buffers, stale revisions/project epochs, tab identity/state preservation, project-tree/index migration, and keyboard/app-bar/overflow routing. Assert that the old source remains on disk and that unchanged text remains byte-identical apart from the minimally rewritten path tokens.
+
 ---
 
 ## 10. Testing Strategy
@@ -538,3 +552,7 @@ Phase 8.5 was carved out of the Phase 9 plan: the project-controller lifecycle/s
    - `test/t1330_th_project_controller_test.dart`: MobX reactions, active node selection, file tab opening, save operations.
    - `test/t1331_th_project_tree_widget_test.dart`: Tree rendering, node expansion, click handling.
    - `test/t1332_th_text_editor_widget_test.dart`: Syntax highlighting, error squiggles, shortcut triggers.
+5. **Text Save As Tests**:
+   - `test/t1360_th_text_editor_save_as_test.dart`: Picker cancellation, extension and collision rules, typed results, revision/epoch races, and text-editor tab identity/state migration.
+   - `test/t1361_th_project_save_as_graph_test.dart`: Root/included `thconfig` and `.th` Save As, incoming/outgoing reference rewrites, dirty-buffer preservation, dependency/index rebuilding, failure rollback, and retention of the old source file.
+   - `test/t1362_th_text_editor_save_as_widget_test.dart`: App-bar, overflow-menu, and `Ctrl/Cmd+Shift+S` routing for text versus `.th2` tabs, including localized errors.
