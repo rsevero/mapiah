@@ -144,6 +144,18 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
   }
 
   @override
+  void closeProjectFileTabs(Iterable<String> canonicalPaths) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.closeProjectFileTabs',
+    );
+    try {
+      return super.closeProjectFileTabs(canonicalPaths);
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 hasClipboardContent: ${hasClipboardContent}

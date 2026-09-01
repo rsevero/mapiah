@@ -31,6 +31,49 @@ import 'package:mapiah/src/mp_file_read_write/th_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:path/path.dart' as p;
 
+/// Where the exact text used to build a writable file node came from during a
+/// project load / full re-parse.
+enum THProjectContentProvenance { disk, override }
+
+/// An immutable pending-content override for one canonical path, consulted by
+/// the recursive loader before it reads that path from disk. Carries the
+/// revision [THProjectController] allocated for the content so the rebuilt
+/// node can be tagged with it.
+class THProjectContentOverride {
+  final String content;
+
+  final int revision;
+
+  const THProjectContentOverride({
+    required this.content,
+    required this.revision,
+  });
+}
+
+/// The exact decoded text, effective encoding, provenance, and (for overrides)
+/// revision used to construct one writable config/data node during a load.
+/// Recorded in the same `_loadFileNode` invocation that builds the node so it
+/// can never be reconstructed from the tree or a second disk read.
+class THProjectParsedContentSnapshot {
+  final String canonicalPath;
+
+  final String content;
+
+  final String encoding;
+
+  final THProjectContentProvenance provenance;
+
+  final int? overrideRevision;
+
+  const THProjectParsedContentSnapshot({
+    required this.canonicalPath,
+    required this.content,
+    required this.encoding,
+    required this.provenance,
+    required this.overrideRevision,
+  });
+}
+
 /// Result of loading a whole Therion project from a root file.
 class THProjectLoadResult {
   final THProjectFileNode rootNode;
@@ -41,11 +84,19 @@ class THProjectLoadResult {
 
   final List<THProjectParseError> projectErrors;
 
+  /// One authoritative content snapshot per writable config/data node reached
+  /// by this load, keyed by canonical path. Missing and `.th2` nodes are not
+  /// represented.
+  final Map<String, THProjectParsedContentSnapshot>
+  contentSnapshotsByCanonicalPath;
+
   THProjectLoadResult({
     required this.rootNode,
     required this.fileDependencies,
     required this.reverseDependencies,
     required this.projectErrors,
+    this.contentSnapshotsByCanonicalPath =
+        const <String, THProjectParsedContentSnapshot>{},
   });
 }
 
@@ -60,11 +111,19 @@ class THProjectSpliceResult {
 
   final List<THProjectParseError> projectErrors;
 
+  /// Canonical path of the first reusable child whose already-parsed runtime
+  /// type conflicts with the reference role its parent now gives it
+  /// (`source` requires a data node, `input` requires a config node). Non-null
+  /// means the caller must discard this provisional splice and run a
+  /// dirty-preserving full-project re-parse instead.
+  final String? shapeConflictPath;
+
   THProjectSpliceResult({
     required this.node,
     required this.fileDependencies,
     required this.reverseDependencies,
     required this.projectErrors,
+    this.shapeConflictPath,
   });
 }
 
@@ -89,6 +148,20 @@ class THProjectParser {
       <String, Set<String>>{};
 
   final List<THProjectParseError> _projectErrors = <THProjectParseError>[];
+
+  /// Canonical path -> pending content to parse instead of reading that path
+  /// from disk. Empty for a normal full project open/reload.
+  final Map<String, THProjectContentOverride> _contentOverrides =
+      <String, THProjectContentOverride>{};
+
+  /// Canonical path -> the authoritative snapshot of the text used to build
+  /// that writable config/data node, recorded as each node is constructed.
+  final Map<String, THProjectParsedContentSnapshot> _contentSnapshots =
+      <String, THProjectParsedContentSnapshot>{};
+
+  /// First reusable child whose runtime type conflicts with the reference role
+  /// its parent now assigns it during a splice, if any.
+  String? _shapeConflictPath;
 
   String _projectRootCanonical = '';
 
@@ -123,8 +196,14 @@ class THProjectParser {
   static THProjectLoadResult loadProject(
     String rootFilePath, {
     THProjectShape? expectedShape,
+    Map<String, THProjectContentOverride> contentOverrides =
+        const <String, THProjectContentOverride>{},
   }) {
-    return loadFileNode(rootFilePath, expectedShape: expectedShape);
+    return loadFileNode(
+      rootFilePath,
+      expectedShape: expectedShape,
+      contentOverrides: contentOverrides,
+    );
   }
 
   /// Loads a file and its whole subtree, as if [filePath] were a project
@@ -139,6 +218,8 @@ class THProjectParser {
     String filePath, {
     THProjectShape? expectedShape,
     String? projectRootDirectory,
+    Map<String, THProjectContentOverride> contentOverrides =
+        const <String, THProjectContentOverride>{},
   }) {
     final THProjectParser parser = THProjectParser._();
     final String absoluteRootPath = p.absolute(filePath);
@@ -148,6 +229,7 @@ class THProjectParser {
     );
     parser._projectRootDirectory =
         projectRootDirectory ?? p.dirname(parser._projectRootCanonical);
+    parser._contentOverrides.addAll(contentOverrides);
 
     final THProjectFileNode rootNode = parser._loadFileNode(
       absoluteRootPath,
@@ -160,6 +242,10 @@ class THProjectParser {
       fileDependencies: parser._forwardDependencies,
       reverseDependencies: parser._reverseDependencies,
       projectErrors: parser._projectErrors,
+      contentSnapshotsByCanonicalPath:
+          Map<String, THProjectParsedContentSnapshot>.unmodifiable(
+            parser._contentSnapshots,
+          ),
     );
   }
 
@@ -245,7 +331,27 @@ class THProjectParser {
       fileDependencies: parser._forwardDependencies,
       reverseDependencies: parser._reverseDependencies,
       projectErrors: parser._projectErrors,
+      shapeConflictPath: parser._shapeConflictPath,
     );
+  }
+
+  /// Whether [reusedNode]'s already-parsed runtime type is incompatible with
+  /// the [expectedShape] its new reference context demands. Only writable
+  /// config/data nodes can conflict; `.th2` and missing nodes are never
+  /// role-checked here.
+  static bool _reuseShapeConflicts(
+    THProjectFileNode reusedNode,
+    THProjectShape expectedShape,
+  ) {
+    if (reusedNode is THConfigFileNode) {
+      return expectedShape != THProjectShape.config;
+    }
+
+    if (reusedNode is THDataFileNode) {
+      return expectedShape != THProjectShape.data;
+    }
+
+    return false;
   }
 
   THProjectFileNode _loadFileNode(
@@ -259,6 +365,11 @@ class THProjectParser {
 
     final THProjectFileNode? reusedNode = _reuseCache[canonicalPath];
     if (reusedNode != null) {
+      if ((expectedShape != null) &&
+          _reuseShapeConflicts(reusedNode, expectedShape)) {
+        _shapeConflictPath ??= canonicalPath;
+      }
+
       _visited[canonicalPath] = reusedNode;
 
       return reusedNode;
@@ -301,8 +412,13 @@ class THProjectParser {
       return missingNode;
     }
 
-    final ({String content, String encoding}) readContent =
-        _readContent(absolutePath);
+    final THProjectContentOverride? override = _contentOverrides[canonicalPath];
+    final ({String content, String encoding}) readContent = override == null
+        ? _readContent(absolutePath)
+        : (
+            content: override.content,
+            encoding: _encodingNameFromString(override.content),
+          );
 
     final THProjectShape shape =
         expectedShape ?? _detectRootShape(readContent.content, absolutePath);
@@ -323,6 +439,16 @@ class THProjectParser {
             lineNumber: errorLineNumber,
             sourceFilePath: errorFilePath,
           );
+
+    _contentSnapshots[canonicalPath] = THProjectParsedContentSnapshot(
+      canonicalPath: canonicalPath,
+      content: readContent.content,
+      encoding: node.encoding,
+      provenance: override == null
+          ? THProjectContentProvenance.disk
+          : THProjectContentProvenance.override,
+      overrideRevision: override?.revision,
+    );
 
     _visited[canonicalPath] = node;
     _forwardDependencies[canonicalPath] = <String>{};
@@ -733,6 +859,30 @@ class THProjectParser {
     final String encoding = _encodingNameFromBytes(bytes);
 
     return (content: _decodeBytes(bytes, encoding), encoding: encoding);
+  }
+
+  /// Detects the declared Therion `encoding` directive from already-decoded
+  /// [content], mirroring [_encodingNameFromBytes] for the override path where
+  /// the pending text is held in memory rather than on disk.
+  String _encodingNameFromString(String content) {
+    final List<String> lines = content.split(RegExp(r'\r?\n'));
+
+    for (final String line in lines) {
+      final String trimmedLine = line.trim();
+
+      if (trimmedLine.isEmpty || trimmedLine.startsWith('#')) {
+        continue;
+      }
+
+      final RegExpMatch? match = _encodingDirectiveRegex.firstMatch(trimmedLine);
+      if (match != null) {
+        return match.group(1)!.toUpperCase();
+      }
+
+      break;
+    }
+
+    return mpDefaultEncoding;
   }
 
   String _encodingNameFromBytes(List<int> bytes) {

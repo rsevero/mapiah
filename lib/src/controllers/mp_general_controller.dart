@@ -9,6 +9,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
@@ -250,10 +251,68 @@ abstract class MPGeneralControllerBase with Store {
   THTextEditorController getTextEditorController(String filename) {
     final String normalizedFilename = _normalizeFilename(filename);
 
+    final THTextEditorController? existing =
+        _textEditorControllers[normalizedFilename];
+
+    // Defensive: Mapiah is single-project and every lifecycle transition
+    // disposes the outgoing project's editor tabs via [closeProjectFileTabs],
+    // but a controller that escaped that cleanup (retained reference, direct
+    // controller-level reset) must never be rebound to the replacement
+    // project. Replace a stale project-bound entry before its buffer is
+    // handed out again.
+    if ((existing != null) &&
+        existing.isProjectBound &&
+        !existing.matchesCurrentProject()) {
+      existing.dispose();
+      _textEditorControllers.remove(normalizedFilename);
+    }
+
     return _textEditorControllers.putIfAbsent(
       normalizedFilename,
       () => THTextEditorController(),
     );
+  }
+
+  /// Removes and disposes every open canvas/text tab whose canonical path is
+  /// in [canonicalPaths], cancelling editor timers. Shared non-UI cleanup
+  /// boundary invoked by every non-no-op `THProjectController` lifecycle
+  /// transition so direct `openProject` / `reloadProject` / `closeProject`
+  /// calls cannot bypass tab cleanup. `.th2`/text tabs opened standalone,
+  /// unrelated to the project, are left untouched.
+  @action
+  void closeProjectFileTabs(Iterable<String> canonicalPaths) {
+    final Set<String> targets = canonicalPaths
+        .map(_normalizeFilename)
+        .toSet();
+
+    for (final String filename in List<String>.of(_openFileOrder)) {
+      if (!targets.contains(filename)) {
+        continue;
+      }
+
+      removeFileTab(filename: filename);
+    }
+  }
+
+  /// The registered text-editor controller for [canonicalPath] if it is a safe
+  /// target for a generic project save: bound to `(epoch, rootPath)` and
+  /// currently representing [revision]. A different / stale / newer editor
+  /// returns `null` and is left untouched.
+  THTextEditorControllerHandle? textEditorHandleForProjectSave(
+    String canonicalPath,
+    int epoch,
+    String rootPath,
+    int revision,
+  ) {
+    final THTextEditorController? controller =
+        _textEditorControllers[_normalizeFilename(canonicalPath)];
+
+    if ((controller != null) &&
+        controller.matchesProjectSaveRequest(epoch, rootPath, revision)) {
+      return controller;
+    }
+
+    return null;
   }
 
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:path/path.dart' as p;
@@ -26,9 +25,6 @@ void main() {
   String canonicalPath(String path) =>
       THProjectPathResolver.canonicalize(p.absolute(path));
 
-  Future<void> waitForDebounce() => Future<void>.delayed(
-    const Duration(milliseconds: mpProjectReparseDebounceMilliseconds + 250),
-  );
 
   tearDown(() {
     controller.closeProject();
@@ -52,11 +48,11 @@ void main() {
         );
 
         await controller.openProject(thconfigPath);
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: caveOneCanonical,
-          updatedContent: 'survey renamed_one\nendsurvey\n',
+          content: 'survey renamed_one\nendsurvey\n',
         );
-        await waitForDebounce();
 
         expect(controller.isFileDirty(caveOneCanonical), isTrue);
 
@@ -86,15 +82,16 @@ void main() {
         );
 
         await controller.openProject(thconfigPath);
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: caveOneCanonical,
-          updatedContent: 'survey renamed_one\nendsurvey\n',
+          content: 'survey renamed_one\nendsurvey\n',
         );
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: caveTwoCanonical,
-          updatedContent: 'survey renamed_two\nendsurvey\n',
+          content: 'survey renamed_two\nendsurvey\n',
         );
-        await waitForDebounce();
 
         expect(controller.hasUnsavedChanges, isTrue);
 

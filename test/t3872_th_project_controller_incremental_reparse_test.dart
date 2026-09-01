@@ -3,7 +3,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
-import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_config_file_node.dart';
@@ -30,10 +29,6 @@ void main() {
 
   String canonicalPath(String path) =>
       THProjectPathResolver.canonicalize(p.absolute(path));
-
-  Future<void> waitForDebounce() => Future<void>.delayed(
-    const Duration(milliseconds: mpProjectReparseDebounceMilliseconds + 250),
-  );
 
   List<T> findAll<T extends THProjectNode>(THProjectNode root) {
     final List<T> result = <T>[];
@@ -114,11 +109,11 @@ void main() {
         final String originalContent =
             controller.fileContentsCache[outerCanonical]!;
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: outerCanonical,
-          updatedContent: originalContent,
+          content: originalContent,
         );
-        await waitForDebounce();
 
         final THDataFileNode newOuter =
             controller.nodeByCanonicalPath(outerCanonical)! as THDataFileNode;
@@ -149,12 +144,11 @@ void main() {
 
         await controller.openProject(thconfigPath);
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: outerCanonical,
-          updatedContent:
-              'input inner_a.th\ninput inner_b.th\ninput inner_c.th\n',
+          content: 'input inner_a.th\ninput inner_b.th\ninput inner_c.th\n',
         );
-        await waitForDebounce();
 
         final String innerCCanonical = canonicalPath(
           p.join(tempDir!.path, 'inner_c.th'),
@@ -187,11 +181,11 @@ void main() {
         await controller.openProject(thconfigPath);
         expect(controller.nodeByCanonicalPath(innerBCanonical), isNotNull);
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: outerCanonical,
-          updatedContent: 'input inner_a.th\n',
+          content: 'input inner_a.th\n',
         );
-        await waitForDebounce();
 
         expect(controller.nodeByCanonicalPath(innerBCanonical), isNull);
         expect(controller.dependentsOf(innerBCanonical), isEmpty);
@@ -222,12 +216,11 @@ void main() {
           p.join(tempDir!.path, 'outer.th'),
         );
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: outerCanonical,
-          updatedContent:
-              'survey cave\n  survey gallery\n  endsurvey\nendsurvey\n',
+          content: 'survey cave\n  survey gallery\n  endsurvey\nendsurvey\n',
         );
-        await waitForDebounce();
 
         final List<THSurveyNode> surveyNodes = findAll<THSurveyNode>(
           controller.projectRootNode!,
@@ -251,12 +244,11 @@ void main() {
 
         await controller.openProject(thconfigPath);
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: outerCanonical,
-          updatedContent:
-              'input inner_a.th\ninput inner_b.th\ninput ghost.th\n',
+          content: 'input inner_a.th\ninput inner_b.th\ninput ghost.th\n',
         );
-        await waitForDebounce();
 
         final List<THMissingFileNode> missingNodes = findAll<
           THMissingFileNode
@@ -278,35 +270,36 @@ void main() {
     );
 
     test(
-      'editing the project root file falls back to a full, disk-reading reload',
+      'editing the project root file rebuilds from the in-memory override '
+      'without discarding the pending edit',
       () async {
         tempDir = THProjectControllerTestAux.copyFixtureToTemp(
           'multiple-sources',
         );
         final String thconfigPath = p.join(tempDir!.path, 'thconfig');
+        final String thconfigCanonical = canonicalPath(thconfigPath);
 
         await controller.openProject(thconfigPath);
 
-        await controller.reparseFile(
+        await THProjectControllerTestAux.editAndFlush(
+          controller,
           filePath: thconfigPath,
-          updatedContent: 'encoding UTF-8\nsource cave_one.th\n',
+          content: 'encoding UTF-8\nsource cave_one.th\n',
         );
-        expect(controller.dirtyFilePaths, isNotEmpty);
 
-        await waitForDebounce();
-
-        // A full reload's _applyLoadResult always resets dirtyFilePaths and
-        // re-reads the root from disk, which was never actually written by
-        // this test, so the tree still reflects both original sources.
-        expect(controller.dirtyFilePaths, isEmpty);
+        // The dirty-preserving full re-parse builds the root node from the
+        // pending in-memory content (one source now), and the pending edit is
+        // kept dirty until it is explicitly saved.
+        expect(controller.dirtyFilePaths, contains(thconfigCanonical));
         expect(
-          (controller.projectRootNode! as THConfigFileNode).children,
-          hasLength(2),
+          (controller.projectRootNode! as THConfigFileNode).children
+              .whereType<THDataFileNode>(),
+          hasLength(1),
         );
       },
     );
 
-    test('rapid successive edits are coalesced by the debounce timer', () async {
+    test('only the latest of rapid successive edits reaches the tree', () async {
       tempDir = buildThreeLevelProject();
       final String thconfigPath = p.join(tempDir!.path, 'thconfig');
       final String innerACanonical = canonicalPath(
@@ -315,19 +308,34 @@ void main() {
 
       await controller.openProject(thconfigPath);
 
-      await controller.reparseFile(
-        filePath: innerACanonical,
-        updatedContent: 'survey alpha\nendsurvey\n',
+      // Register three edits back-to-back; the project controller allocates a
+      // fresh revision for each and always re-parses from the latest pending
+      // record.
+      controller.registerTextContentChange(
+        canonicalPath: innerACanonical,
+        content: 'survey alpha\nendsurvey\n',
+        expectedProjectEpoch: controller.projectEpoch,
+        expectedRootPath: controller.rootConfigPath,
       );
-      await controller.reparseFile(
-        filePath: innerACanonical,
-        updatedContent: 'survey beta\nendsurvey\n',
+      controller.registerTextContentChange(
+        canonicalPath: innerACanonical,
+        content: 'survey beta\nendsurvey\n',
+        expectedProjectEpoch: controller.projectEpoch,
+        expectedRootPath: controller.rootConfigPath,
       );
-      await controller.reparseFile(
-        filePath: innerACanonical,
-        updatedContent: 'survey gamma\nendsurvey\n',
+      final int latestRevision = controller.registerTextContentChange(
+        canonicalPath: innerACanonical,
+        content: 'survey gamma\nendsurvey\n',
+        expectedProjectEpoch: controller.projectEpoch,
+        expectedRootPath: controller.rootConfigPath,
       );
-      await waitForDebounce();
+
+      await controller.flushPendingReparse(
+        canonicalPath: innerACanonical,
+        expectedRevision: latestRevision,
+        expectedProjectEpoch: controller.projectEpoch,
+        expectedRootPath: controller.rootConfigPath,
+      );
 
       final List<THSurveyNode> surveyNodes = findAll<THSurveyNode>(
         controller.projectRootNode!,
@@ -360,11 +368,11 @@ void main() {
       final String originalContent =
           controller.fileContentsCache[caveCanonical]!;
 
-      await controller.reparseFile(
+      await THProjectControllerTestAux.editAndFlush(
+        controller,
         filePath: caveCanonical,
-        updatedContent: originalContent,
+        content: originalContent,
       );
-      await waitForDebounce();
 
       final THDataFileNode newCave =
           controller.nodeByCanonicalPath(caveCanonical)! as THDataFileNode;

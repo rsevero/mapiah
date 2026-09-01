@@ -9,6 +9,7 @@ import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:path/path.dart' as p;
 
+import 'th_project_controller_test_aux.dart';
 import 'th_test_aux.dart';
 
 void main() {
@@ -111,9 +112,10 @@ void main() {
         fixturePath('multiple-sources/cave_one.th'),
       );
 
-      await controller.reparseFile(
+      await THProjectControllerTestAux.editAndFlush(
+        controller,
         filePath: caveOneCanonical,
-        updatedContent: 'survey one\nendsurvey\n',
+        content: 'survey one\nendsurvey\n',
       );
 
       expect(controller.hasUnsavedChanges, isTrue);

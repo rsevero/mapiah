@@ -14,7 +14,6 @@ import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_url_launcher.dart';
 import 'package:mapiah/src/auxiliary/mp_version_check_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/elements/xvi/xvi_file.dart';
@@ -1233,35 +1232,19 @@ class MPDialogAux {
 
   /// Closes whichever project is currently loaded
   /// (`THProjectController.rootConfigPath`). No-ops if no project is open.
-  /// Closes every open tab (canvas or text-editor) that belongs to the
-  /// project first, since `THProjectController.closeProject` clears the
-  /// node/dependency indexes those tabs' controllers rely on (e.g. saving a
-  /// still-open `thconfig`/`.th` text-editor tab would otherwise silently
-  /// no-op once its project node lookup fails). `.th2`/text tabs opened
-  /// standalone, unrelated to this project, are left untouched.
+  ///
+  /// The project-owned canvas/text tab cleanup now lives in
+  /// `THProjectController.closeProject` itself (via
+  /// `MPGeneralController.closeProjectFileTabs`), so direct
+  /// `openProject`/`reloadProject`/`closeProject` calls cannot bypass it.
+  /// `.th2`/text tabs opened standalone, unrelated to this project, are left
+  /// untouched.
   static void closeOpenProject(BuildContext context) {
     final THProjectController projectController =
         mpLocator.thProjectController;
 
     if (projectController.rootConfigPath.isEmpty) {
       return;
-    }
-
-    final MPGeneralController generalController =
-        mpLocator.mpGeneralController;
-
-    for (final String filename in List<String>.of(
-      generalController.openFileOrder,
-    )) {
-      if (projectController.nodeByCanonicalPath(filename) == null) {
-        continue;
-      }
-
-      if (isTH2Tab(filename)) {
-        generalController.getTH2FileEditControllerIfExists(filename)?.close();
-      } else {
-        generalController.getTextEditorControllerIfExists(filename)?.close();
-      }
     }
 
     projectController.closeProject();

@@ -72,26 +72,42 @@ void main() {
       expect(controller.cursorColumn, 0);
     });
 
-    test('loadFile prefers the project controller cache over disk', () async {
-      tempDir = THProjectControllerTestAux.copyFixtureToTemp(
-        'multiple-sources',
-      );
+    test(
+      'loadFile adopts the project-owned pending content of a tracked dirty file',
+      () async {
+        tempDir = THProjectControllerTestAux.copyFixtureToTemp(
+          'multiple-sources',
+        );
 
-      final String caveOnePath = p.join(tempDir!.path, 'cave_one.th');
-      final String caveOneCanonical = canonicalPath(caveOnePath);
+        final String thconfigPath = p.join(tempDir!.path, 'thconfig');
+        final String caveOnePath = p.join(tempDir!.path, 'cave_one.th');
+        final String caveOneCanonical = canonicalPath(caveOnePath);
 
-      mpLocator.thProjectController.fileContentsCache[caveOneCanonical] =
-          'survey cached\nendsurvey';
+        await mpLocator.thProjectController.openProject(thconfigPath);
 
-      final THTextEditorController controller = THTextEditorController(
-        projectController: mpLocator.thProjectController,
-      );
-      activeController = controller;
+        // A pending, unsaved edit registered on the project controller.
+        final int revision = mpLocator.thProjectController
+            .registerTextContentChange(
+              canonicalPath: caveOneCanonical,
+              content: 'survey cached\nendsurvey',
+              expectedProjectEpoch:
+                  mpLocator.thProjectController.projectEpoch,
+              expectedRootPath:
+                  mpLocator.thProjectController.rootConfigPath,
+            );
 
-      await controller.loadFile(caveOnePath);
+        final THTextEditorController controller = THTextEditorController(
+          projectController: mpLocator.thProjectController,
+        );
+        activeController = controller;
 
-      expect(controller.content, 'survey cached\nendsurvey');
-    });
+        await controller.loadFile(caveOnePath);
+
+        expect(controller.content, 'survey cached\nendsurvey');
+        expect(controller.isDirty, isTrue);
+        expect(controller.observedRevision, revision);
+      },
+    );
 
     test('setContent marks the controller dirty', () async {
       tempDir = THProjectControllerTestAux.copyFixtureToTemp(

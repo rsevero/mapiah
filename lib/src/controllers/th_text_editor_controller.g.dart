@@ -268,6 +268,46 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     });
   }
 
+  late final _$observedRevisionAtom = Atom(
+    name: 'THTextEditorControllerBase.observedRevision',
+    context: context,
+  );
+
+  @override
+  int get observedRevision {
+    _$observedRevisionAtom.reportRead();
+    return super.observedRevision;
+  }
+
+  @override
+  set observedRevision(int value) {
+    _$observedRevisionAtom.reportWrite(value, super.observedRevision, () {
+      super.observedRevision = value;
+    });
+  }
+
+  late final _$lastOperationRejectedByProjectChangeAtom = Atom(
+    name: 'THTextEditorControllerBase.lastOperationRejectedByProjectChange',
+    context: context,
+  );
+
+  @override
+  bool get lastOperationRejectedByProjectChange {
+    _$lastOperationRejectedByProjectChangeAtom.reportRead();
+    return super.lastOperationRejectedByProjectChange;
+  }
+
+  @override
+  set lastOperationRejectedByProjectChange(bool value) {
+    _$lastOperationRejectedByProjectChangeAtom.reportWrite(
+      value,
+      super.lastOperationRejectedByProjectChange,
+      () {
+        super.lastOperationRejectedByProjectChange = value;
+      },
+    );
+  }
+
   late final _$loadFileAsyncAction = AsyncAction(
     'THTextEditorControllerBase.loadFile',
     context: context,
@@ -278,13 +318,25 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     return _$loadFileAsyncAction.run(() => super.loadFile(filePath));
   }
 
+  late final _$flushPendingReparseAsyncAction = AsyncAction(
+    'THTextEditorControllerBase.flushPendingReparse',
+    context: context,
+  );
+
+  @override
+  Future<THProjectReparseFlushResult> flushPendingReparse() {
+    return _$flushPendingReparseAsyncAction.run(
+      () => super.flushPendingReparse(),
+    );
+  }
+
   late final _$saveAsyncAction = AsyncAction(
     'THTextEditorControllerBase.save',
     context: context,
   );
 
   @override
-  Future<void> save() {
+  Future<THTextFileSaveResult> save() {
     return _$saveAsyncAction.run(() => super.save());
   }
 
@@ -475,6 +527,8 @@ findCaseSensitive: ${findCaseSensitive},
 isFindBarVisible: ${isFindBarVisible},
 activeMatchIndex: ${activeMatchIndex},
 pendingScrollToLine: ${pendingScrollToLine},
+observedRevision: ${observedRevision},
+lastOperationRejectedByProjectChange: ${lastOperationRejectedByProjectChange},
 diagnostics: ${diagnostics},
 foldRegions: ${foldRegions},
 findMatches: ${findMatches}

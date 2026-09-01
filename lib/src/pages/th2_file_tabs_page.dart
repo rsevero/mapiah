@@ -960,9 +960,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               MPDialogAux.pickProjectFile(context),
           // Save file
           const SingleActivator(LogicalKeyboardKey.keyS, control: true): () =>
-              _saveActiveTab(generalController),
+              unawaited(_saveActiveTab(generalController)),
           const SingleActivator(LogicalKeyboardKey.keyS, meta: true): () =>
-              _saveActiveTab(generalController),
+              unawaited(_saveActiveTab(generalController)),
           // Save file as
           const SingleActivator(
             LogicalKeyboardKey.keyS,
@@ -1066,7 +1066,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
   /// Saves whichever controller type backs the active tab. Save As has no
   /// text-editor equivalent, so it stays TH2-only (see its own bindings
   /// above).
-  void _saveActiveTab(MPGeneralController generalController) {
+  Future<void> _saveActiveTab(MPGeneralController generalController) async {
     final List<String> openFileOrder = generalController.openFileOrder;
     final int activeTabIndex = generalController.activeTabIndex;
 
@@ -1078,15 +1078,25 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
     final String activeFilename = openFileOrder[activeTabIndex];
 
-    if (isTH2Tab(activeFilename)) {
-      final TH2FileEditController? controller = generalController
-          .getTH2FileEditControllerIfExists(activeFilename);
+    try {
+      if (isTH2Tab(activeFilename)) {
+        final TH2FileEditController? controller = generalController
+            .getTH2FileEditControllerIfExists(activeFilename);
 
-      if ((controller != null) && controller.enableSaveButton) {
-        controller.saveTH2File();
+        if ((controller != null) && controller.enableSaveButton) {
+          controller.saveTH2File();
+        }
+      } else {
+        await generalController
+            .getTextEditorControllerIfExists(activeFilename)
+            ?.save();
       }
-    } else {
-      generalController.getTextEditorControllerIfExists(activeFilename)?.save();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[TH2FileTabsPage] _saveActiveTab failed for $activeFilename',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
   }
 }

@@ -155,6 +155,26 @@ mixin _$THProjectController on THProjectControllerBase, Store {
     });
   }
 
+  late final _$_projectEpochAtom = Atom(
+    name: 'THProjectControllerBase._projectEpoch',
+    context: context,
+  );
+
+  int get projectEpoch {
+    _$_projectEpochAtom.reportRead();
+    return super._projectEpoch;
+  }
+
+  @override
+  int get _projectEpoch => projectEpoch;
+
+  @override
+  set _projectEpoch(int value) {
+    _$_projectEpochAtom.reportWrite(value, super._projectEpoch, () {
+      super._projectEpoch = value;
+    });
+  }
+
   late final _$compilerErrorsAtom = Atom(
     name: 'THProjectControllerBase.compilerErrors',
     context: context,
@@ -208,22 +228,84 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   Future<void> reparseFile({
     required String filePath,
     required String updatedContent,
+    required int revision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
   }) {
     return _$reparseFileAsyncAction.run(
-      () =>
-          super.reparseFile(filePath: filePath, updatedContent: updatedContent),
+      () => super.reparseFile(
+        filePath: filePath,
+        updatedContent: updatedContent,
+        revision: revision,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      ),
     );
   }
 
-  late final _$_performReparseAsyncAction = AsyncAction(
-    'THProjectControllerBase._performReparse',
+  late final _$flushPendingReparseAsyncAction = AsyncAction(
+    'THProjectControllerBase.flushPendingReparse',
     context: context,
   );
 
   @override
-  Future<void> _performReparse(String canonicalPath, String updatedContent) {
-    return _$_performReparseAsyncAction.run(
-      () => super._performReparse(canonicalPath, updatedContent),
+  Future<THProjectReparseFlushResult> flushPendingReparse({
+    required String canonicalPath,
+    required int expectedRevision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) {
+    return _$flushPendingReparseAsyncAction.run(
+      () => super.flushPendingReparse(
+        canonicalPath: canonicalPath,
+        expectedRevision: expectedRevision,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      ),
+    );
+  }
+
+  late final _$revertTextProjectFileAsyncAction = AsyncAction(
+    'THProjectControllerBase.revertTextProjectFile',
+    context: context,
+  );
+
+  @override
+  Future<THTextFileRevertResult> revertTextProjectFile({
+    required String canonicalPath,
+    required int requestedRevision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) {
+    return _$revertTextProjectFileAsyncAction.run(
+      () => super.revertTextProjectFile(
+        canonicalPath: canonicalPath,
+        requestedRevision: requestedRevision,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      ),
+    );
+  }
+
+  late final _$saveTextProjectFileAsyncAction = AsyncAction(
+    'THProjectControllerBase.saveTextProjectFile',
+    context: context,
+  );
+
+  @override
+  Future<THTextFileSaveResult> saveTextProjectFile({
+    required String canonicalPath,
+    required int requestedRevision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) {
+    return _$saveTextProjectFileAsyncAction.run(
+      () => super.saveTextProjectFile(
+        canonicalPath: canonicalPath,
+        requestedRevision: requestedRevision,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      ),
     );
   }
 
@@ -233,7 +315,7 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   );
 
   @override
-  Future<void> saveProjectFile(String filePath) {
+  Future<THProjectFileSaveResult> saveProjectFile(String filePath) {
     return _$saveProjectFileAsyncAction.run(
       () => super.saveProjectFile(filePath),
     );
@@ -245,7 +327,7 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   );
 
   @override
-  Future<void> saveAllModifiedFiles() {
+  Future<THSaveAllModifiedFilesResult> saveAllModifiedFiles() {
     return _$saveAllModifiedFilesAsyncAction.run(
       () => super.saveAllModifiedFiles(),
     );
@@ -275,6 +357,28 @@ mixin _$THProjectController on THProjectControllerBase, Store {
     );
     try {
       return super.closeProject();
+    } finally {
+      _$THProjectControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int registerTextContentChange({
+    required String canonicalPath,
+    required String content,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) {
+    final _$actionInfo = _$THProjectControllerBaseActionController.startAction(
+      name: 'THProjectControllerBase.registerTextContentChange',
+    );
+    try {
+      return super.registerTextContentChange(
+        canonicalPath: canonicalPath,
+        content: content,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      );
     } finally {
       _$THProjectControllerBaseActionController.endAction(_$actionInfo);
     }

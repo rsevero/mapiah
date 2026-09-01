@@ -8,6 +8,10 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
+import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
+import 'package:mapiah/src/controllers/th_text_file_revert_result.dart';
+import 'package:mapiah/src/controllers/th_text_file_save_result.dart';
+import 'package:mapiah/src/controllers/th_text_project_content_snapshot.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
@@ -26,7 +30,15 @@ class THTextEditorController = THTextEditorControllerBase
 /// This controller is a UI/data bridge, not a replacement for
 /// [THProjectController]: parsing and tree mutation stay there. One instance
 /// exists per open editor; it is not a locator singleton.
-abstract class THTextEditorControllerBase with Store {
+///
+/// A project-bound controller captures `(projectEpoch, rootPath)` as an
+/// immutable ownership identity for its whole lifetime. Every entry point and
+/// delayed callback checks that identity against the project controller before
+/// mutating either the editor buffer or project state; loading the same path
+/// under a newer epoch requires a fresh controller instance.
+abstract class THTextEditorControllerBase
+    with Store
+    implements THTextEditorControllerHandle {
   final THProjectController _projectController;
 
   THTextEditorControllerBase({THProjectController? projectController})
@@ -70,6 +82,39 @@ abstract class THTextEditorControllerBase with Store {
 
   @observable
   int? pendingScrollToLine;
+
+  /// The project content revision this editor currently represents. `0` for a
+  /// clean disk-backed load or an unbound editor.
+  @observable
+  int observedRevision = 0;
+
+  /// Set true when the last [setContent] / [flushPendingReparse] / [save] /
+  /// [revert] could not act because the project moved to a newer epoch/root.
+  @observable
+  bool lastOperationRejectedByProjectChange = false;
+
+  /// The `(projectEpoch, rootPath)` this controller is bound to, or `null`
+  /// while it is unbound (path not tracked by any open project). Immutable
+  /// once set for the controller's lifetime.
+  int? _ownedProjectEpoch;
+  String? _ownedRootPath;
+
+  bool get isProjectBound => _ownedProjectEpoch != null;
+
+  /// Whether this controller's immutable ownership identity still matches the
+  /// project controller's current epoch/root.
+  bool matchesCurrentProject() =>
+      isProjectBound &&
+      (_ownedProjectEpoch == _projectController.projectEpoch) &&
+      (_ownedRootPath == _projectController.rootConfigPath);
+
+  /// Whether a generic project save for `(epoch, rootPath, revision)` may
+  /// synchronize this controller's dirty state from its typed result.
+  bool matchesProjectSaveRequest(int epoch, String rootPath, int revision) =>
+      isProjectBound &&
+      (_ownedProjectEpoch == epoch) &&
+      (_ownedRootPath == rootPath) &&
+      (observedRevision == revision);
 
   final FocusNode textEditorFocusNode = FocusNode();
 
@@ -121,20 +166,42 @@ abstract class THTextEditorControllerBase with Store {
       p.absolute(filePath),
     );
 
+    final THTextProjectContentSnapshot snapshot = _projectController
+        .textContentSnapshot(resolvedCanonicalPath);
+
+    // A controller already bound to a different project identity must never
+    // rebind or replace its buffer. Loading the same path under a newer epoch
+    // requires a new controller instance.
+    if (isProjectBound &&
+        ((_ownedProjectEpoch != snapshot.projectEpoch) ||
+            (_ownedRootPath != snapshot.rootPath))) {
+      lastOperationRejectedByProjectChange = true;
+
+      return;
+    }
+
     canonicalPath = resolvedCanonicalPath;
     isLoading = true;
 
     try {
-      final String? cachedContent =
-          _projectController.fileContentsCache[resolvedCanonicalPath];
+      if (snapshot.isProjectTracked) {
+        _ownedProjectEpoch = snapshot.projectEpoch;
+        _ownedRootPath = snapshot.rootPath;
+        content = snapshot.content;
+        observedRevision = snapshot.currentRevision;
+        isDirty = snapshot.isDirty;
+      } else {
+        content = THProjectParser.readFileContent(
+          resolvedCanonicalPath,
+        ).content;
+        observedRevision = 0;
+        isDirty = false;
+      }
 
-      content =
-          cachedContent ??
-          THProjectParser.readFileContent(resolvedCanonicalPath).content;
-      isDirty = false;
       cursorLine = 0;
       cursorColumn = 0;
       collapsedFoldStarts = ObservableSet<int>();
+      lastOperationRejectedByProjectChange = false;
     } finally {
       isLoading = false;
     }
@@ -142,16 +209,46 @@ abstract class THTextEditorControllerBase with Store {
 
   @action
   void setContent(String newContent) {
+    if (!isProjectBound) {
+      // Unbound editor: local text buffer only, no project re-parse.
+      content = newContent;
+      isDirty = true;
+
+      return;
+    }
+
+    final int revision = _projectController.registerTextContentChange(
+      canonicalPath: canonicalPath,
+      content: newContent,
+      expectedProjectEpoch: _ownedProjectEpoch!,
+      expectedRootPath: _ownedRootPath!,
+    );
+
+    if (revision == -1) {
+      lastOperationRejectedByProjectChange = true;
+
+      return;
+    }
+
     content = newContent;
     isDirty = true;
+    observedRevision = revision;
+
+    final int capturedEpoch = _ownedProjectEpoch!;
+    final String capturedRoot = _ownedRootPath!;
 
     _reparseTimer?.cancel();
     _reparseTimer = Timer(
       const Duration(milliseconds: mpTextEditorReparseDebounceMilliseconds),
       () {
-        _projectController.reparseFile(
-          filePath: canonicalPath,
-          updatedContent: content,
+        unawaited(
+          _projectController.reparseFile(
+            filePath: canonicalPath,
+            updatedContent: content,
+            revision: revision,
+            expectedProjectEpoch: capturedEpoch,
+            expectedRootPath: capturedRoot,
+          ),
         );
       },
     );
@@ -297,25 +394,196 @@ abstract class THTextEditorControllerBase with Store {
     }
   }
 
+  /// Drains the editor-level `_reparseTimer`, then chains into the
+  /// project-level flush so a stale parsed node can never reach the writers.
+  /// Returns the project-level typed reparse outcome.
   @action
-  Future<void> save() async {
-    await _projectController.saveProjectFile(canonicalPath);
+  Future<THProjectReparseFlushResult> flushPendingReparse() async {
+    _reparseTimer?.cancel();
 
-    if (!_projectController.dirtyFilePaths.contains(canonicalPath)) {
+    if (!isProjectBound) {
+      return THProjectReparseFlushResult(
+        canonicalPath: canonicalPath,
+        projectEpoch: -1,
+        expectedRevision: observedRevision,
+        parsedRevision: observedRevision,
+        status: THProjectReparseFlushStatus.alreadyCurrent,
+      );
+    }
+
+    final int requestedRevision = observedRevision;
+    final int capturedEpoch = _ownedProjectEpoch!;
+    final String capturedRoot = _ownedRootPath!;
+
+    if (isDirty) {
+      await _projectController.reparseFile(
+        filePath: canonicalPath,
+        updatedContent: content,
+        revision: requestedRevision,
+        expectedProjectEpoch: capturedEpoch,
+        expectedRootPath: capturedRoot,
+      );
+    }
+
+    return _projectController.flushPendingReparse(
+      canonicalPath: canonicalPath,
+      expectedRevision: requestedRevision,
+      expectedProjectEpoch: capturedEpoch,
+      expectedRootPath: capturedRoot,
+    );
+  }
+
+  @action
+  Future<THTextFileSaveResult> save() async {
+    if (!isProjectBound) {
+      return THTextFileSaveResult(
+        canonicalPath: canonicalPath,
+        projectEpoch: -1,
+        requestedRevision: observedRevision,
+        writtenRevision: null,
+        currentRevision: observedRevision,
+        status: THTextFileSaveStatus.unknownPath,
+      );
+    }
+
+    final int capturedEpoch = _ownedProjectEpoch!;
+    final String capturedRoot = _ownedRootPath!;
+    final int requestedRevision = observedRevision;
+
+    final THProjectReparseFlushResult flush = await flushPendingReparse();
+
+    if (!flush.canProceedToSave) {
+      final THTextFileSaveStatus status = switch (flush.status) {
+        THProjectReparseFlushStatus.projectChanged =>
+          THTextFileSaveStatus.projectChangedBeforeWrite,
+        THProjectReparseFlushStatus.superseded =>
+          THTextFileSaveStatus.supersededBeforeWrite,
+        _ => THTextFileSaveStatus.reparseFailed,
+      };
+
+      if (status == THTextFileSaveStatus.projectChangedBeforeWrite) {
+        lastOperationRejectedByProjectChange = true;
+      }
+
+      return THTextFileSaveResult(
+        canonicalPath: canonicalPath,
+        projectEpoch: capturedEpoch,
+        requestedRevision: requestedRevision,
+        writtenRevision: null,
+        currentRevision: null,
+        status: status,
+      );
+    }
+
+    final THTextFileSaveResult result = await _projectController
+        .saveTextProjectFile(
+          canonicalPath: canonicalPath,
+          requestedRevision: requestedRevision,
+          expectedProjectEpoch: capturedEpoch,
+          expectedRootPath: capturedRoot,
+        );
+
+    _applySaveResult(result);
+
+    return result;
+  }
+
+  @override
+  void applyExternalSaveResult(THTextFileSaveResult result) {
+    _applySaveResult(result);
+  }
+
+  void _applySaveResult(THTextFileSaveResult result) {
+    if (result.isCurrentRevisionSaved) {
       isDirty = false;
+    } else if (result.status == THTextFileSaveStatus.savedButSuperseded) {
+      isDirty = true;
+    } else if (result.status ==
+        THTextFileSaveStatus.projectChangedBeforeWrite) {
+      lastOperationRejectedByProjectChange = true;
     }
   }
 
   @action
   Future<void> revert() async {
     _reparseTimer?.cancel();
-    await loadFile(canonicalPath);
+
+    if (!isProjectBound) {
+      _revertUntrackedFromDisk();
+
+      return;
+    }
+
+    if (!isDirty) {
+      final THTextProjectContentSnapshot snapshot = _projectController
+          .textContentSnapshot(canonicalPath);
+
+      if (snapshot.isProjectTracked) {
+        content = snapshot.content;
+        observedRevision = snapshot.currentRevision;
+        isDirty = snapshot.isDirty;
+      }
+
+      return;
+    }
+
+    final THTextFileRevertResult result = await _projectController
+        .revertTextProjectFile(
+          canonicalPath: canonicalPath,
+          requestedRevision: observedRevision,
+          expectedProjectEpoch: _ownedProjectEpoch!,
+          expectedRootPath: _ownedRootPath!,
+        );
+
+    final THTextProjectContentSnapshot? snapshot = result.snapshot;
+
+    switch (result.status) {
+      case THTextFileRevertStatus.reverted:
+      case THTextFileRevertStatus.alreadyClean:
+        if (snapshot != null) {
+          content = snapshot.content;
+          observedRevision = snapshot.currentRevision;
+        }
+        isDirty = false;
+      case THTextFileRevertStatus.superseded:
+        if (snapshot != null) {
+          content = snapshot.content;
+          observedRevision = snapshot.currentRevision;
+          isDirty = snapshot.isDirty;
+        }
+      case THTextFileRevertStatus.projectChanged:
+        lastOperationRejectedByProjectChange = true;
+      case THTextFileRevertStatus.readFailed:
+      case THTextFileRevertStatus.reparseFailed:
+      case THTextFileRevertStatus.unknownPath:
+        break;
+    }
+  }
+
+  void _revertUntrackedFromDisk() {
+    if (canonicalPath.isEmpty) {
+      return;
+    }
+
+    try {
+      content = THProjectParser.readFileContent(canonicalPath).content;
+      observedRevision = 0;
+      isDirty = false;
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THTextEditorController] revert disk read failed for $canonicalPath',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   /// Cancels the pending debounced `reparseFile` call, if any, without
   /// disposing the rest of the controller (unlike `dispose()`, this leaves
   /// `textEditorFocusNode` usable). Exists for tests that call `setContent`
-  /// without wanting its debounce to fire later mid-test.
+  /// without wanting its debounce to fire later mid-test, and for the project
+  /// controller's generic save path.
+  @override
   @visibleForTesting
   void cancelPendingReparse() {
     _reparseTimer?.cancel();
