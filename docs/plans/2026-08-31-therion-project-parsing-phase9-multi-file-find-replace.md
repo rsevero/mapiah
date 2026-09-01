@@ -83,7 +83,9 @@ Add a search action to the project sidebar header and bind `Ctrl/Cmd+Shift+F` at
 
 The search view has a back/tree action. Returning to tree mode preserves the current query, options, expansion state, and results for the lifetime of the loaded project. Closing/replacing the project clears the current results regardless of scope because project-backed open-tab results have just changed replacement eligibility; the query/options remain available so open-files scope can immediately search whatever text tabs remain open.
 
-`THProjectTreeUIController` should own the sidebar mode because it already owns sidebar expansion and project-tree presentation state. Search query/results belong to the new search controller, not the tree UI controller.
+`THProjectTreeUIController` is the **only** owner of sidebar visibility/mode because it already owns sidebar expansion and project-tree presentation state. Add `THProjectSidebarMode { tree, projectSearch }`, an observable `sidebarMode` defaulting to `tree`, and actions such as `showProjectSearch()`/`showTree()`. `showProjectSearch()` expands through the existing `setSidebarCollapsed(false)` persistence path, switches the mode, and increments a UI-owned `projectSearchFocusRequestGeneration` even when search mode was already visible. `THProjectSearchWidget` consumes each new focus generation after it is mounted/rendered, requests its query `FocusNode`, selects the query text, and remembers the last consumed value. This makes repeated `Ctrl/Cmd+Shift+F` presses refocus the query without storing a `FocusNode` in a controller.
+
+Search query/results and search/replacement progress belong to `THProjectSearchController`, not the tree UI controller. Conversely, `THProjectSearchController` has no `isSearchVisible` field and never changes sidebar mode or focus-request state. Project close/open/reload may clear search results and adjust scope as described in §6.4, but it does not transfer or duplicate sidebar-mode ownership.
 
 ### 4.2 Search controls
 
@@ -252,7 +254,7 @@ Create a lazy singleton in `MPLocator`, matching the app's single-project model.
 - `query` and `replacement`;
 - `caseSensitive`;
 - `scope`;
-- `isSearchVisible`, `isSearching`, and `isReplacing`;
+- `isSearching` and `isReplacing`;
 - immutable/observable file results and failures;
 - expanded result-file paths;
 - a debounce timer;
@@ -260,7 +262,7 @@ Create a lazy singleton in `MPLocator`, matching the app's single-project model.
 - a monotonically increasing replacement-operation generation; and
 - the project epoch and root path associated with the current result snapshot.
 
-The controller does not own editor widgets, `TextEditingController`s, tabs, parsing, or disk serialization.
+The controller does not own editor widgets, `TextEditingController`s, tabs, parsing, disk serialization, sidebar visibility/mode, or focus requests.
 
 ### 6.2 Source collection
 
@@ -321,7 +323,7 @@ Both helpers are synchronous and are called inside the owning MobX action before
 
 Skipped numeric epoch values would not themselves violate identity comparisons, but the one-transition/one-increment rule prevents capture-order bugs and duplicate lifecycle reactions. In particular, no public lifecycle method calls another public lifecycle method, and no asynchronous operation captures its epoch before `_beginProjectLifecycleTransition()` returns.
 
-Have `THProjectSearchController` react to `(projectEpoch, rootConfigPath)` and call `clearForProjectChange()`, including explicit reloads as well as close/open. It cancels pending work, invalidates both search and replacement-operation generations, clears results/failures/expanded groups regardless of scope (project-backed open-tab eligibility and source snapshots may have changed), and switches project scope to open-tabs scope when no project remains. Preserve the query/options so the user can immediately search again. Dispose this lifecycle reaction in tests/controller disposal.
+Have `THProjectSearchController` react to `(projectEpoch, rootConfigPath)` and call `clearForProjectChange()`, including explicit reloads as well as close/open. It cancels pending work, invalidates both search and replacement-operation generations, clears results/failures/expanded groups regardless of scope (project-backed open-tab eligibility and source snapshots may have changed), and switches project scope to open-tabs scope when no project remains. Preserve the query/options so the user can immediately search again. This reaction does not read or write `THProjectTreeUIController.sidebarMode` or its focus generation. Dispose the lifecycle reaction in tests/controller disposal.
 
 Tests must prove that neither a late search result nor a late load/reparse/flush from project A can mutate any observable, index, dirty/revision map, progress flag, or result after project B is loaded.
 
@@ -516,7 +518,9 @@ The implementation must choose and test the exact temporary-controller failure p
 
 ### 8.1 `THProjectSearchWidget`
 
-Build the search view as a normal sidebar child under an `Observer`. Keep query/replacement `TextEditingController`s and field `FocusNode`s in widget state, synchronized with the MobX controller using the same guarded-listener pattern as `THTextEditorWidget`.
+Have the sidebar observe only `THProjectTreeUIController.sidebarMode` to choose between the existing tree content and `THProjectSearchWidget`; do not infer visibility from search-controller state. Build the search view as a normal sidebar child under an `Observer`. Its back action calls `THProjectTreeUIController.showTree()`. Keep query/replacement `TextEditingController`s and field `FocusNode`s in widget state, synchronized with the search controller using the same guarded-listener pattern as `THTextEditorWidget`.
+
+Observe `THProjectTreeUIController.projectSearchFocusRequestGeneration` separately. After the search widget is mounted and its query controller is synchronized, consume each unhandled generation in a post-frame callback, request query focus, and select all query text. Guard the callback with `mounted` and the generation value so switching back to tree mode or disposing the widget before the frame cannot request focus through a stale `FocusNode`.
 
 Use constants in `mp_constants.dart` for debounce and any new fixed dimensions. All strings come from `mpLocator.appLocalizations`. File paths and source previews are data, not localizable strings.
 
@@ -524,7 +528,7 @@ Keep action buttons visible while result rows scroll. Any confirmation/completio
 
 ### 8.2 Keyboard behavior
 
-- `Ctrl/Cmd+Shift+F`: open/focus multi-file search from anywhere in `TH2FileTabsPage`.
+- `Ctrl/Cmd+Shift+F`: call `THProjectTreeUIController.showProjectSearch()` from anywhere in `TH2FileTabsPage`; this expands/switches the sidebar and issues a fresh query-focus request even when search mode is already active.
 - `Ctrl/Cmd+F`: unchanged; opens the active `THTextEditorWidget`'s single-file bar.
 - `Enter` in the project query field: run immediately.
 - `Escape`: return focus to the search results/editor as appropriate; it must not close unrelated dialogs or the project.
@@ -577,8 +581,8 @@ Add the shortcut to the appropriate keyboard-shortcut table in alphabetical orde
 3. Add `THProjectController.projectEpoch`, `_beginProjectLifecycleTransition()`, the separate non-advancing `_clearProjectState()`, and epoch-scoped async activity/in-flight ownership; remove `openProject()`'s call to public `closeProject()` and give each non-no-op public lifecycle entry point exactly one transition allocation. Then add `THTextFileSaveResult`, revisioned pending/parsed-content tracking, parser content overrides, the dirty-preserving in-memory full-project reparse, `THProjectController.flushPendingReparse(canonicalPath, expectedRevision, expectedProjectEpoch, expectedRootPath)` (drains the matching project-level timer), and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush). Refactor the project text-save boundary to return explicit outcomes and make `save()` serialize only the successfully flushed requested revision for the captured project. Cover immediate-save races, every save status, both debounce layers, lifecycle changes, and full-reload branches before multi-file replacement work.
 4. Add `pendingSelectionRange`/`revealRange()` and exact-range consumption in `THTextEditorWidget`.
 5. Add immutable search models and `THProjectSearchController` source collection, standalone/project-backed replacement eligibility, search-generation plus project-epoch cancellation, ordering, and project-lifecycle reset.
-6. Register the controller lazily in `MPLocator` and add tree/search mode to `THProjectTreeUIController`.
-7. Build grouped-results widgets and integrate them into the project sidebar.
+6. Register the search controller lazily in `MPLocator`; add `THProjectSidebarMode`, `sidebarMode`, `projectSearchFocusRequestGeneration`, `showProjectSearch()`, and `showTree()` to `THProjectTreeUIController` as the sole sidebar visibility/focus-request boundary. Do not add `isSearchVisible` to `THProjectSearchController`.
+7. Build grouped-results widgets and make the project sidebar render tree or search content solely from `THProjectTreeUIController.sidebarMode`; wire the search back action and post-frame focus-generation consumer.
 8. Wire result activation through existing tab opening/focus/tree synchronization.
 9. Implement Replace All preflight, immutable operation snapshots, post-confirmation and immediate pre-target revalidation, temporary-controller handling, sequential setContent/flush/save, topology/content-change outcomes, failure collection, and result refresh.
 10. Add the `Ctrl/Cmd+Shift+F` page shortcut and verify single-file `Ctrl/Cmd+F` remains unchanged.
@@ -599,10 +603,10 @@ Confirm numbering immediately before implementation. With the current tree, use:
 | `test/t3922_th_text_editor_reveal_range_test.dart` | Pending range survives load, clamps safely, selects and scrolls exact match, takes precedence over line-only navigation, then clears. |
 | `test/t3923_th_project_search_controller_test.dart` | Open-tabs/project source collection, unsaved controller precedence, canonical deduplication, `.th2`/missing exclusion, standalone open-tab search results marked ineligible for replacement, eligibility invalidation when a project closes/changes, deterministic ordering, no-project/no-tabs states, file read failures. |
 | `test/t3924_th_project_search_stale_generation_test.dart` | Debounce, immediate submit, superseded async search suppression, query changes, project close/reload/replacement, epoch-reaction cleanup, and no search result/progress leakage from an old project. |
-| `test/t3925_th_project_search_widget_test.dart` | Controls, scope selection, grouped rows, search totals versus replace-eligible totals, localized standalone/search-only indicator and tooltip, Replace All disabled when only standalone matches exist, expand/collapse, empty/error/loading states, keyboard focus, EN/PT smoke rendering. |
+| `test/t3925_th_project_search_widget_test.dart` | Controls, scope selection, grouped rows, search totals versus replace-eligible totals, localized standalone/search-only indicator and tooltip, Replace All disabled when only standalone matches exist, expand/collapse, empty/error/loading states, tree/search rendering driven only by `THProjectTreeUIController.sidebarMode`, back action, focus-generation consumption after mount, stale post-frame focus suppression, query selection, and EN/PT smoke rendering. Prove `THProjectSearchController` exposes no parallel visibility state. |
 | `test/t3926_th_project_search_navigation_test.dart` | Existing/new tab activation, exact selection, out-of-project open tab, project-tree selection/ancestor expansion, stale-match refresh and disappeared match. |
 | `test/t3927_th_project_search_replace_all_test.dart` | Confirmation/cancel, standalone open tabs excluded without `setContent()`/save while project-backed open tabs are replaced, eligible/excluded confirmation counts, immutable replacement snapshot, and full generation/epoch/root/query/options/target-content/revision revalidation after confirmation but before the first mutation; project/query/replacement/content changes while the confirmation future is held abort without any mutation; read-only preflight rejection for a missing/non-regular target, missing/non-directory parent, and unreadable unopened file without any probe write or mutation; a target that passes preflight but fails the actual write returns/reports `writeFailed`; exactly one `setContent()` per still-valid applied file and none for skipped files; per-target revalidation immediately before `setContent()` and after temporary-controller loading; an earlier root/include replacement that removes a later target reports `eligibilityChanged` and leaves it untouched; a concurrent edit reports `contentChanged` and is not overwritten; global operation/project identity changes stop all remaining targets; open and temporary controllers, flush-before-save, root `thconfig` replacement serialized from its in-memory revision, simultaneous dirty included-file contents preserved during a full rebuild, automatic save, case semantics, empty replacement, each non-`saved` typed outcome (including project-changed and pre-save replacement-pipeline statuses) mapped to incomplete/failure reporting without consulting dirty/error collections, partial failures, disposal, refreshed results. |
-| `test/t3928_th2_file_tabs_page_project_search_shortcut_test.dart` | `Ctrl/Cmd+Shift+F` opens/focuses project search; collapsed sidebar expands; `Ctrl/Cmd+F` remains editor-local; shortcut behavior with canvas/text tabs and dialogs. |
+| `test/t3928_th2_file_tabs_page_project_search_shortcut_test.dart` | `Ctrl/Cmd+Shift+F` routes through `THProjectTreeUIController.showProjectSearch()`, opens/focuses project search, and increments the focus request again when search mode is already visible; collapsed sidebar expands; `Ctrl/Cmd+F` remains editor-local; shortcut behavior with canvas/text tabs and dialogs. |
 | `test/t3929_phase9_documentation_localization_test.dart` | EN/PT key parity, registered help assets, both shortcut descriptions, no claim that `.th2` is searched, documented standalone search/navigation versus replacement exclusion, and documented Replace All save/undo behavior. |
 | `test/t3930_th_project_async_epoch_isolation_test.dart` | Verify every `openProject`, non-empty explicit disk `reloadProject`, and `closeProject` invocation advances the epoch by exactly one even when its load later fails; no-project reload is a no-op; opening does not invoke an additional public close transition; and each load captures the epoch returned by `_beginProjectLifecycleTransition()` after allocation. Hold project-A open/load, incremental reparse, full reparse, splice, and flush futures across closing A and loading/reloading project B (including the same root path under a newer epoch); prove late results and `finally` cleanup cannot mutate B's root/children, indexes, dependencies, diagnostics, caches, dirty/current/parsed revision maps, `isParsing` activity ownership, timers, or epoch-scoped in-flight entries. Verify stale entry cleanup cannot remove a newer operation with the same path/revision. |
 
@@ -621,6 +625,7 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 ## 12. Acceptance Criteria
 
 - `Ctrl/Cmd+Shift+F` opens a localized multi-file search surface without changing single-file `Ctrl/Cmd+F`.
+- `THProjectTreeUIController.sidebarMode` is the sole authority for tree/search visibility, and its focus-request generation supports repeated shortcut focusing; `THProjectSearchController` contains no competing visibility or focus state.
 - Users can search open text tabs or all loaded-project `thconfig`/`.th` files; `.th2` and missing/imported non-text files never appear.
 - Standalone open text tabs appear in search results and support exact navigation, but are visibly search-only, never contribute to Replace All counts, and are never mutated or saved by multi-file replacement.
 - Unsaved open-editor content is searched instead of stale cache/disk content.
@@ -656,3 +661,4 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 11. **Filesystem preflight limits**: existence, entity-type, parent-directory, and readability checks catch structural failures without mutation, but no portable preflight can guarantee a later write. Do not probe-write or treat permission bits as authoritative; preserve the all-content-in-memory preparation and confirmation guarantees, then rely on `THTextFileSaveResult.writeFailed` plus §7.4 partial-failure reporting for time-of-check/time-of-use changes.
 12. **Revision allocation ownership**: a controller-local `baseline + 1` scheme is invalid because a temporary Replace All controller and a newly opened registered controller may share the same baseline while holding different content. Only `THProjectController` allocates revisions, and allocation atomically registers the associated pending content under the captured epoch/path. Tests must force this two-controller race and prove unique, ordered revisions and deterministic supersession.
 13. **Confirmation and topology races**: the confirmation dialog is an asynchronous boundary, and each earlier replacement/save may reparse directives that change the project tree before a later target is reached. Replace All therefore revalidates the complete immutable operation snapshot after confirmation and revalidates node eligibility plus exact content/revision before each `setContent()`. Global generation/project changes abort the remainder; a target removed by an earlier include/source edit or superseded by another controller is skipped and reported without mutation.
+14. **Sidebar state ownership**: visibility duplicated between `THProjectTreeUIController` and `THProjectSearchController` can diverge, leaving shortcuts, the back action, and rendered content disagreeing. `THProjectTreeUIController.sidebarMode` is the only visibility authority and also owns a numeric focus-request generation; the search controller owns only search data/progress. Widget focus remains in widget state and consumes requests after mount with stale-callback guards.
