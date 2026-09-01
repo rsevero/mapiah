@@ -1,0 +1,302 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
+# Therion Project Parsing Phase 8.5: Project Epoch, Revisioned Content & Explicit Save Result — Implementation Plan
+
+**Date:** 2026-09-01
+**Status:** Proposed — carved out of the Phase 9 plan (2026-08-31) so the project-controller lifecycle/save refactor lands and stabilizes before the multi-file find/replace UI is built on top of it.
+
+## 1. Overview & Objectives
+
+This document details **Phase 8.5** of the [Therion Project Parsing, Tree View & Text Editing Roadmap](2026-08-24-therion-project-parsing-and-tree-view.md). It is an infrastructure-only refactor of the Phase 3 project-controller lifecycle, re-parsing pipeline, and file-save path. It ships no user-visible feature of its own; its purpose is to make immediate *edit → save* correct for every text file (including the root `thconfig`), to give callers an explicit save outcome instead of an inference from observable state, and to make every asynchronous project operation safe across a project close/open/reload.
+
+It exists because the original Phase 9 plan folded this rewrite into a single implementation step alongside the search UI (`§6.3–6.4`, `§7.2–7.3` there). That coupled a large regression surface in core parsing/saving with new feature code. Phase 8.5 extracts it so it can be reviewed, tested, and merged on its own. **Phase 9 then consumes the contracts defined here** and adds only search-specific generations, source collection, result models, widgets, and the Replace All pipeline.
+
+### Key objectives
+
+1. **Correct immediate save**: an edit or single-file find/replace followed by `Ctrl/Cmd+S` must serialize the just-edited content — including a root project file — without discarding another editor's unsaved content.
+2. **Explicit save result**: `THTextEditorController.save()` and the project text-save boundary return a typed, revision-aware result. Callers never infer success from `dirtyFilePaths`, `isDirty`, or a `projectErrors` diff.
+3. **Two-layer flush**: drain both the editor-level `_reparseTimer` and the project-level `_reparseTimers` entry before serialization so a stale parsed node can never reach the writers.
+4. **Atomic revision allocation**: `THProjectController` is the sole allocator of a monotonically increasing content revision per text path; two controllers (e.g. a temporary one and a freshly opened tab) starting from the same observed revision receive distinct revisions with deterministic supersession.
+5. **Dirty-preserving full reparse**: root-file, type-change, missing-parent, and reparse-error recovery rebuild the project from an immutable in-memory snapshot of all pending contents instead of re-reading disk and dropping unsaved edits.
+6. **Project-epoch isolation**: a monotonically increasing `projectEpoch` is captured by every timer, reparse, flush, and save; no stale post-`await` completion or `finally` block can mutate a newly loaded project.
+7. **No regressions**: the full `flutter test` suite and `flutter analyze` pass; existing tests that call the changed `loadFile`/`setContent`/`save`/`openProject`/`closeProject` surfaces are updated.
+
+## 2. Grounding: Current State
+
+Verified against the codebase on 2026-09-01.
+
+- `THTextEditorController.loadFile(String filePath)` takes only a path. It canonicalizes, reads `THProjectController.fileContentsCache[path]`, falls back to `THProjectParser.readFileContent(path).content`, and **unconditionally** sets `isDirty = false` — even when the cached text is project-owned pending content (`lib/src/controllers/th_text_editor_controller.dart:119-141`).
+- `THTextEditorController.setContent(String newContent)` takes only content. It sets `content`/`isDirty = true`, then schedules an editor-level `_reparseTimer` (`mpTextEditorReparseDebounceMilliseconds`, 300 ms) whose callback calls `THProjectController.reparseFile(filePath:, updatedContent:)` (`:143-158`).
+- `THTextEditorController.save()` returns `Future<void>`. It `await`s `_projectController.saveProjectFile(canonicalPath)`, then clears `isDirty` only if `!_projectController.dirtyFilePaths.contains(canonicalPath)` (`:301-307`). `replaceActiveMatch()`/`replaceAllMatches()` already route through `setContent()` (`:263`, `:286`).
+- The constructor accepts an optional `THProjectController` for injection (`:32`).
+- `THProjectParser.loadProject()` / `loadFileNode()` are `static` and **synchronous**, returning `THProjectLoadResult` (`lib/src/mp_file_read_write/th_project_parser.dart:123,138`). `readFileContent()` returns a `({String content, String encoding})` record (`:172`).
+- `THProjectController` wraps the synchronous loaders in `await Future<THProjectLoadResult>(() => THProjectParser.loadProject(...))` inside `openProject()` and `reloadProject()` (`lib/src/controllers/th_project_controller.dart:124,165`).
+- **Two** debounce layers exist. `setContent()`'s `_reparseTimer` calls `reparseFile()`; `reparseFile()` writes `fileContentsCache`/`dirtyFilePaths` synchronously, then schedules `_reparseTimers[path]` (`mpProjectReparseDebounceMilliseconds`, 300 ms) → `_performReparse(path, content)` and returns (`:209-226`). `_performReparse` is what splices the fresh node the writers serialize, and it may `await reloadProject()`.
+- `_performReparse` falls back to `reloadProject()` for root-file changes, detected type changes, missing/detached parents, and error recovery (`:249,256,284,305,320`). `reloadProject()` re-parses from disk and calls `_applyLoadResult()`, which **reassigns** `fileContentsCache` and `dirtyFilePaths` to fresh disk-derived collections (`:428-462`). A flush that merely awaits the current `_performReparse()` path can therefore discard the pending revision and other unsaved files before serialization.
+- `openProject()` calls `_cancelAllReparseTimers()` then the **public** `closeProject()` as its reset implementation (`:117-118`). `closeProject()` clears root/tree/indexes/caches/dirty state and sets `isParsing = false` (`:190-206`).
+- Project close/open/reload cancels queued `_reparseTimers`, but cannot cancel a `_performReparse()` future already started by a fired timer. Such a future can resume after project B replaces project A and mutate shared indexes, diagnostics, dirty state, or `isParsing`.
+- `THProjectController` has **no revision concept** today, and `isParsing` is a single unowned `bool` toggled in `finally` blocks by whichever operation finishes last.
+- `saveProjectFile(String filePath)` returns `Future<void>`. It silently returns on an unknown path or a `.th2` file with no open editor, catches write errors and appends a `THProjectParseError` to `projectErrors`, and removes the path from `dirtyFilePaths` on some paths (`:327-406`). `projectErrors` is fully reassigned on every full reload and is shared with parser diagnostics, so a before/after diff is not a reliable save signal.
+- `nodeByCanonicalPath(String)` is a single-path lookup returning `THProjectFileNode?`; `_nodesByCanonicalPath` is private (`:95,415`). Writable node types are `THConfigFileNode` / `THDataFileNode` (`lib/src/elements/th_project/`).
+- Debounce durations live in `lib/src/constants/mp_constants.dart` (`mpTextEditorReparseDebounceMilliseconds`, `mpProjectReparseDebounceMilliseconds`).
+- MobX `.g.dart` files are regenerated by an existing `build_runner` watch instance; never run `build_runner` manually (see `AGENTS.md`).
+- The latest allocated test prefix is `t3919`; the repo already contains real prefix collisions (`t3172`, `t3760`, `t3918`). Phase 8.5 should begin at `t3920` after re-scanning for duplicates at implementation time. Phase 9's test table (currently `t3920`–`t3930`) must be renumbered to start after whatever Phase 8.5 consumes.
+
+## 3. Scope and Non-Goals
+
+### In scope
+
+- `THProjectController.projectEpoch` plus the `_beginProjectLifecycleTransition()` / `_clearProjectState()` split, and removal of `openProject()`'s call to public `closeProject()`.
+- Epoch-scoped async activity ownership replacing the single unowned `isParsing` toggle.
+- Revisioned pending-content tracking with `THProjectController` as the sole atomic allocator; a synchronous `@action` registration boundary.
+- Parser content-override map on `THProjectParser.loadProject()` / `loadFileNode()` (empty for normal open/reload).
+- A dedicated dirty-preserving in-memory full-project reparse path and its non-`_applyLoadResult()` result application.
+- `THProjectController.flushPendingReparse(...)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush).
+- A typed flush result and a typed `THTextFileSaveResult`; refactor of the text-file branch of `saveProjectFile()` into a reusable `saveTextProjectFile(...)` boundary.
+- Extended `THTextEditorController.loadFile()` / `setContent()` / `save()` signatures and semantics per §5–§8, and updates to every existing caller and test.
+- Regression coverage for immediate save (including the root file), every save/flush status, both debounce layers, lifecycle epoch isolation, and the full-reload branches.
+
+### Out of scope (stays in Phase 9)
+
+- The multi-file search generation, replacement-operation generation, debounce, and stale-search suppression.
+- `THProjectSearchController`, search models, source collection, result widgets, sidebar search mode, `Ctrl/Cmd+Shift+F`, and the Replace All pipeline.
+- Any new public all-nodes accessor on `THProjectController` (Phase 9 adds that for source enumeration).
+- The pure `findPlainTextMatches` helper extraction and the Unicode offset-drift fix.
+- New user-facing strings, help pages, or shortcut-table entries beyond what a changed diagnostic message requires.
+- A background isolate, a filesystem watcher, or a cross-file undo transaction.
+
+## 4. Project Epoch Model
+
+Expose a read-only, monotonically increasing `THProjectController.projectEpoch`. Every lifecycle transition that clears or replaces the project identity/tree (`openProject`, explicit disk `reloadProject`, `closeProject`) reserves exactly **one** new epoch **before** canceling timers or clearing state. The asynchronous load captures that epoch and its intended canonical root, and applies its result (and clears its own progress state) only if both still match.
+
+Implement ownership with two private synchronous helpers, called inside the owning MobX `@action` before its first `await`, rather than by nesting public lifecycle methods:
+
+```dart
+int _beginProjectLifecycleTransition() {
+  projectEpoch++;
+  _cancelAllReparseTimers();
+  _detachInFlightOperationsFromOlderEpochs();
+  _resetActivityOwnershipForCurrentEpoch();
+
+  return projectEpoch;
+}
+
+void _clearProjectState() {
+  // Clear root/tree, indexes, diagnostics, caches, dirty/revision state,
+  // selection, and loose errors. Do not advance the epoch or cancel work.
+}
+```
+
+Rules:
+
+- `openProject()` canonicalizes the intended root, calls `_beginProjectLifecycleTransition()` **exactly once**, stores the returned epoch, calls `_clearProjectState()`, assigns the new root, and starts the load under the stored epoch. It **must no longer call public `closeProject()`**.
+- `closeProject()` calls `_beginProjectLifecycleTransition()` once, then `_clearProjectState()`.
+- A non-empty explicit disk `reloadProject()` snapshots the current canonical root, calls `_beginProjectLifecycleTransition()` once, retains the current tree while loading, and applies the result only under the returned epoch/root. It does not call `_clearProjectState()` merely to reload.
+- A no-project `reloadProject()` remains a no-op and does not advance the epoch.
+- No public lifecycle method calls another public lifecycle method. No asynchronous operation captures its epoch before `_beginProjectLifecycleTransition()` returns.
+
+Replace the single unowned `isParsing` toggle with epoch-scoped activity ownership (for example, a per-epoch active-operation count). Increment/decrement only for the captured current epoch; derive `isParsing` from the current epoch's count so overlapping work and stale completions cannot clear another operation's progress.
+
+The in-memory full-project reparse in §7 captures the current epoch but does **not** advance it — it is work within the same project.
+
+## 5. Revisioned Pending Content & Atomic Allocation
+
+Track a monotonically increasing content revision for every text path. A normal project load initializes both current-content and parsed-node revisions to `0` for each writable text node. **`THProjectController` is the sole revision allocator**; controllers never derive a new revision by incrementing a locally cached baseline (a temporary Replace All controller and a newly opened registered controller can share the same observed baseline while holding different content — a `baseline + 1` scheme would hand them equal revisions for different text).
+
+Expose a synchronous `@action` boundary:
+
+```dart
+int registerTextContentChange({
+  required String canonicalPath,
+  required String content,
+  required int expectedProjectEpoch,
+  required String expectedRootPath,
+});
+```
+
+In one project-controller mutation it: validates the captured project identity; increments that path's never-decremented allocation counter; stores the new current revision and pending content; updates `fileContentsCache` / dirty tracking; and returns the allocated revision. Dart's single-isolate synchronous execution makes this allocation atomic with respect to every open or temporary controller. Revisions are **not reused** after save, failure, supersession, or revert.
+
+The project controller keeps allocation counters and current revisions independently from its dirty pending-content records, so a successful save can drop pending content without forgetting or reusing the last written revision. It also records the revision represented by every writable parsed node.
+
+### Extended controller signatures
+
+- `THTextEditorController.loadFile(String filePath)` obtains **one** synchronous project-content snapshot: content, current revision, dirty/pending status, project epoch, root path. When the project tracks the path, the controller adopts that snapshot's content, observed revision, and dirty status **together** — it must not reset pending cached content to clean. When the project does not track the path, it falls back to the encoding-aware disk reader with revision `0` and clean state. This applies equally to a temporary controller for an unopened file and to a normal controller materialized after a temporary save failure.
+- `THTextEditorController.setContent(String newContent)` captures the current `(projectEpoch, rootConfigPath)`, synchronously registers the content through `registerTextContentChange(...)`, and stores the returned revision. The editor-level debounce callback carries that already-allocated revision and identity when it requests parsing; it never allocates or reconstructs a revision.
+- `THProjectController.reparseFile(...)` accepts only a revision previously allocated for the same epoch/path, and rejects an attempt to replace a path's pending record with an older revision or different content. A timer always reads the latest registered pending record, not content captured by an older callback.
+
+Reparse and save completion are revision-specific:
+
+- an older reparse may finish, but must not remove or overwrite a newer pending revision;
+- `save()` snapshots its requested revision, asks the flush layer for that revision, and calls `saveTextProjectFile(requestedRevision: ...)` only when the parsed-node revision matches;
+- if a newer revision appears before the write begins, return `supersededBeforeWrite` without writing the older revision;
+- after a successful asynchronous disk write, clear dirty state only when the path's current revision still equals the written revision; otherwise return `savedButSuperseded`, retain the newer dirty revision, and follow through with its reparse.
+
+## 6. Project-Epoch Isolation
+
+Every scheduled timer and asynchronous project operation captures `(projectEpoch, rootConfigPath)` in addition to path/revision: editor debounce callbacks, project reparse timers, in-flight reparse coalescing, incremental parse/splice work, dirty-preserving full reparses, flushes, and text saves.
+
+1. Timer records and in-flight-operation keys include the captured epoch (and revision where applicable), so project B cannot reuse or clear project A's entry for the same canonical path.
+2. Check epoch/root immediately on async-operation entry, after **every** `await`, and immediately before every mutation of `projectRootNode`, child lists, indexes, dependency maps, diagnostics, caches, dirty/revision maps, timer/in-flight maps, and observable progress state.
+3. A stale computation returns a typed `projectChanged` / superseded outcome and discards its parsed/splice/load result. Futures are not force-canceled; they are prevented from committing stale state.
+4. Cleanup in `finally` is guarded by the same epoch and operation identity. An old operation must not set project B's `isParsing`/progress to false or remove a newer in-flight entry.
+5. Epoch-scoped activity ownership (see §4) replaces the single `isParsing` toggle.
+6. `closeProject`, `openProject`, and non-empty explicit disk `reloadProject` each call `_beginProjectLifecycleTransition()` exactly once before state reset/replacement. `openProject()` and `closeProject()` use the separate non-advancing `_clearProjectState()`; no public lifecycle method calls another. Correctness still relies on the guards above because already-running futures may complete.
+
+Use a typed flush result rather than `void`/exceptions, with statuses such as `reparsed`, `alreadyCurrent`, `superseded`, `projectChanged`, and `failed`, plus canonical path, captured epoch, expected revision, and nullable parsed revision. Only `reparsed` / `alreadyCurrent` with `parsedRevision == expectedRevision` permit the save boundary to proceed.
+
+## 7. In-Memory Full-Project Reparse
+
+Do **not** implement a root/type-change flush by calling the existing disk-only `reloadProject()` and then applying `_applyLoadResult()`. Add a dedicated full-reparse path for pending edits:
+
+1. Snapshot every entry currently in the project's dirty-content/revision map, including the target path. The snapshot is immutable for the lifetime of that reparse.
+2. Extend `THProjectParser.loadProject()` / `loadFileNode()` with an optional canonical-path-to-content override map (empty for normal project open/reload). The recursive loader consults the override first and reads from disk only when no override exists. A root-file edit is thus used to build the root node, and other unsaved included files are parsed from their own pending contents during the same rebuild.
+3. Parse the complete project using that override snapshot. Newly referenced files with no pending override use the normal encoding-aware disk reader.
+4. After a final project-epoch/root check, apply the rebuilt tree/indexes/diagnostics through a **separate** result-application helper that does not reset dirty state. Merge newly discovered disk contents into `fileContentsCache`, then reapply the latest pending contents and revisions so dirty overrides always win. Paths that disappeared from the rebuilt dependency tree remain explicitly dirty until saved, reverted, or otherwise resolved; they must not be silently dropped.
+5. If the full reparse fails, leave the prior tree, all pending contents, revisions, and dirty flags intact, log/surface the failure, and report the target revision as unflushed. `saveTextProjectFile()` must not run for an unflushed revision; `THTextEditorController.save()` returns `reparseFailed`.
+
+Full-reparse result application tags nodes built from overrides with their override revisions and leaves unchanged disk-backed nodes at their existing/baseline revisions.
+
+This in-memory path is used by every `_performReparse()` fallback that currently requires `reloadProject()` while pending edits exist. The existing disk-only `reloadProject()` remains the explicit reload behavior when no pending-edit preservation is requested.
+
+## 8. Two-Layer Flush-Before-Save
+
+Add `THProjectController.flushPendingReparse({required String canonicalPath, required int expectedRevision, required int expectedProjectEpoch, required String expectedRootPath})` that:
+
+- cancels the matching epoch/path/revision timer record if present, without removing a newer epoch's timer;
+- returns `projectChanged` without touching current state when the expected epoch/root is stale;
+- awaits the actual reparse work needed for `expectedRevision`, unless a newer revision has already superseded it;
+- uses the in-memory full-project reparse (§7) instead of disk-only `reloadProject()` whenever the incremental splice cannot be used;
+- is a no-op when nothing is pending for that path;
+- coalesces concurrent callers for the same revision while ensuring a newer revision queues/follows with its own reparse; and
+- returns a typed reparse outcome identifying the parsed revision, supersession, or failure. A returned success guarantees the writable node is tagged with `expectedRevision`; it does not guarantee the revision stays current long enough to write.
+
+Add `THTextEditorController.flushPendingReparse()` that:
+
+- cancels the editor-level `_reparseTimer`;
+- snapshots the requested editor revision and captures the current project epoch/root with it;
+- if the controller is dirty, pushes that revision/content and captured identity through `THProjectController.reparseFile(...)` **and then** awaits `THProjectController.flushPendingReparse(...)` so the project-level timer is drained too; and
+- is awaited at the start of `save()` before `saveTextProjectFile()` is invoked. Saving proceeds only when the typed flush outcome confirms the requested revision and project epoch; otherwise `save()` returns the corresponding `reparseFailed`, `supersededBeforeWrite`, or `projectChangedBeforeWrite` result without attempting serialization.
+
+This fixes immediate single-file edit/replace → `Ctrl/Cmd+S`, including the root project file, without discarding another editor's unsaved content. Add regression coverage there.
+
+## 9. Explicit Text-Save Result
+
+Refactor the text-file branch of `THProjectController.saveProjectFile()` into a typed, reusable boundary:
+
+```dart
+saveTextProjectFile({
+  required String canonicalPath,
+  required int requestedRevision,
+  required int expectedProjectEpoch,
+  required String expectedRootPath,
+});
+```
+
+The existing generic `saveProjectFile()` may delegate to it for compatibility, but `THTextEditorController.save()` consumes the typed result directly; it never infers success from observable state or diagnostics.
+
+```dart
+enum THTextFileSaveStatus {
+  saved,
+  supersededBeforeWrite,
+  savedButSuperseded,
+  projectChangedBeforeWrite,
+  writtenAfterProjectChange,
+  reparseFailed,
+  unknownPath,
+  unsupportedNode,
+  serializationFailed,
+  writeFailed,
+}
+
+class THTextFileSaveResult {
+  final String canonicalPath;
+  final int projectEpoch;
+  final int requestedRevision;
+  final int? writtenRevision;
+  final int? currentRevision;
+  final THTextFileSaveStatus status;
+
+  bool get isCurrentRevisionSaved => status == THTextFileSaveStatus.saved;
+}
+```
+
+Status meanings:
+
+- **saved** — the exact requested/flushed revision was written and was still current when the write completed; only this status clears project/controller dirty state.
+- **supersededBeforeWrite** — a newer revision appeared after flush but before serialization/write; no stale write is attempted.
+- **savedButSuperseded** — the requested revision reached disk, but a newer edit appeared while the asynchronous write was in progress; the newer revision remains dirty and the operation is reported as incomplete.
+- **projectChangedBeforeWrite** — the captured epoch/root no longer matches before filesystem I/O starts; no write is attempted and no current-project state is touched.
+- **writtenAfterProjectChange** — the project changed after filesystem I/O had already started and the bytes reached disk; the result records that side effect, but the stale operation does not mutate the new project's dirty/revision/diagnostic state.
+- **reparseFailed** — no parsed node representing the requested revision is safe to serialize.
+- **unknownPath / unsupportedNode** — the canonical path has no writable config/data node or resolves to another node type.
+- **serializationFailed / writeFailed** — writer construction/serialization and filesystem I/O are caught separately, logged with path/stack trace, and returned with the corresponding status.
+
+`saveTextProjectFile()` validates in this order before causing I/O:
+
+1. require captured `expectedProjectEpoch` and canonical root to match, else return `projectChangedBeforeWrite` without consulting or mutating the new project;
+2. resolve the canonical path; return `unknownPath` / `unsupportedNode` explicitly;
+3. verify the node's recorded parsed revision equals `requestedRevision`, else `reparseFailed`;
+4. verify the latest pending revision still equals `requestedRevision`, else `supersededBeforeWrite`;
+5. serialize synchronously in its own `try` (`serializationFailed` on error), then recheck epoch/root immediately before starting I/O;
+6. write bytes in a separate `try`. On error return `writeFailed`; append current-project diagnostics only if epoch/root still match, otherwise log without mutating the new project;
+7. after the awaited write, check epoch/root before reading or mutating controller state. If the project changed, return `writtenAfterProjectChange` with `writtenRevision` set and mutate nothing. Otherwise compare the latest revision: `saved` (clear dirty) on an exact match, else `savedButSuperseded` (leave the newer revision dirty).
+
+Every return path populates canonical path, captured epoch, and requested/written revision; `currentRevision` is nullable when reading it would cross a project-epoch boundary. No skipped/unknown/unsupported/stale-project path returns a successful result, and no failure is represented only by a log entry. `projectErrors` is **not** part of save-result detection.
+
+`THTextEditorController.save()` returns `Future<THTextFileSaveResult>`. Update its existing callers (revert path is unaffected; the editor save control, and any mixed-tab "save all" path) to consume the typed result. `revert()` keeps `loadFile()` semantics but must adopt the new snapshot behavior from §5.
+
+## 10. Implementation Sequence
+
+1. Reconfirm the next unused test prefix (scan for duplicates, not just the max).
+2. Add `THProjectController.projectEpoch`, `_beginProjectLifecycleTransition()`, the non-advancing `_clearProjectState()`, and epoch-scoped activity/in-flight ownership. Remove `openProject()`'s call to public `closeProject()`; give each non-no-op public lifecycle entry point exactly one transition allocation.
+3. Add revisioned pending/parsed-content tracking and the atomic `registerTextContentChange(...)` allocator. Extend `loadFile()` / `setContent()` semantics and signatures; update callers.
+4. Add the parser content-override map to `loadProject()` / `loadFileNode()` (empty default) and the recursive override-first read.
+5. Add the dirty-preserving in-memory full-project reparse and its non-`_applyLoadResult()` result-application helper; route the `_performReparse()` fallbacks through it.
+6. Add `THProjectController.flushPendingReparse(...)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush).
+7. Add `THTextFileSaveResult` / `THTextFileSaveStatus`; refactor the text-file branch of `saveProjectFile()` into `saveTextProjectFile(...)`; make `save()` return the typed result and serialize only the successfully flushed requested revision for the captured project.
+8. Update every existing test that exercises `loadFile` / `setContent` / `save` / `openProject` / `closeProject` / `reparseFile` (audit `t3902`, `t3906`, `t3907`, `t3909`, `t3913`, `t3914`, `t3918`, and any others the audit turns up). Keep `t3905` passing as the find/replace regression suite.
+9. Add the new focused tests in §11.
+10. Run focused tests, the full `flutter test` suite, and `flutter analyze`; resolve every warning/error.
+11. Review the diff for direct file writes outside the project-controller boundary, stale-epoch mutation paths, and changes outside this refactor's scope.
+
+Formatting and `.g.dart` regeneration remain automatic; do not run `dart format` or `build_runner` manually.
+
+## 11. Test Plan
+
+Confirm numbering immediately before implementation; renumber if `t3920` is taken. Representative allocation:
+
+| Test file | Required coverage |
+| --- | --- |
+| `test/t3920_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); project-controller-owned atomic revision allocation; simultaneous temporary and registered controllers starting from the same observed revision receive distinct revisions and cannot associate equal revisions with different content; allocation counters never decremented or reused after save/failure/revert; `loadFile()` atomically adopts project-owned cached content/current revision/dirty status and does not mark pending content clean; disk fallback uses revision `0` and clean state; root-file and type-change flushes rebuild from immutable in-memory overrides rather than stale disk; another file's unsaved content/revision survives that full rebuild; full-reparse failure preserves the old tree and all dirty state and returns `reparseFailed` without serialization; timer cancellation; same-epoch/revision save coalescing; explicit `saved`, `supersededBeforeWrite`, `savedButSuperseded`, `projectChangedBeforeWrite`, `writtenAfterProjectChange`, `unknownPath`, `unsupportedNode`, `serializationFailed`, `writeFailed`; project change before I/O prevents the write; project change during I/O records the old-project disk write without touching new-project state; edit during flush/write remains dirty and is reparsed later; only exact `saved` marks the controller/project revision clean; result detection never inspects `projectErrors`. |
+| `test/t3921_th_project_async_epoch_isolation_test.dart` | Every `openProject`, non-empty explicit disk `reloadProject`, and `closeProject` advances the epoch by exactly one even when its load later fails; no-project reload is a no-op; opening does not invoke an additional public close transition; each load captures the epoch returned by `_beginProjectLifecycleTransition()` after allocation. Hold project-A open/load, incremental reparse, full reparse, splice, and flush futures across closing A and loading/reloading project B (including the same root path under a newer epoch); prove late results and `finally` cleanup cannot mutate B's root/children, indexes, dependencies, diagnostics, caches, dirty/current/parsed revision maps, `isParsing` activity ownership, timers, or epoch-scoped in-flight entries. Stale entry cleanup cannot remove a newer operation with the same path/revision. |
+| `test/t3922_th_project_full_reparse_override_test.dart` | `loadProject()` / `loadFileNode()` with an empty override map behaves exactly as today; a non-empty override map builds the root and included nodes from pending contents while newly referenced files without an override read from disk; the dirty-preserving result-application helper merges new disk contents but lets pending contents/revisions win; paths that leave the rebuilt dependency tree stay explicitly dirty; a failed full reparse leaves prior tree + all dirty state intact and reports the target revision unflushed. |
+
+Retain and run `t3905_th_text_editor_find_replace_test.dart` unchanged.
+
+### End-to-end scenarios
+
+1. Edit an open `.th`, immediately press `Ctrl/Cmd+S`, and confirm the just-typed bytes are on disk while a second dirty editor's content is untouched.
+2. Edit the root `thconfig`, immediately save, and confirm the root node was serialized from the in-memory revision, not stale disk text, and other unsaved included files stay dirty.
+3. Pause project A during incremental/full reparse and during a save write, close it, load project B, then release A's futures; verify B is byte-for-byte and state-for-state unchanged. The pre-write save performs no I/O; an already-started successful write is reported `writtenAfterProjectChange` without updating B.
+4. Start a save, let a newer edit land while the async write is in flight, and confirm the result is `savedButSuperseded`, the newer revision stays dirty, and its reparse follows through.
+
+## 12. Acceptance Criteria
+
+- Each non-no-op public project lifecycle transition advances `projectEpoch` exactly once through `_beginProjectLifecycleTransition()`; `openProject()` never calls public `closeProject()`; `_clearProjectState()` never advances the epoch.
+- No load, reparse, flush, save completion, or `finally` block captured under an older epoch can mutate the current project's tree, indexes, diagnostics, caches, dirty/revision state, in-flight ownership, or progress flags.
+- `THProjectController` atomically allocates every text-content revision; open and temporary controllers can never assign the same revision to different content; revision numbers are never reused.
+- Immediate single-file save after editing/replacement — including the root `thconfig` — serializes the latest content and never restores stale disk text or clears another file's unsaved revision.
+- Flushing/saving a root or type-changing file reparses from an immutable in-memory dirty-content snapshot.
+- `THTextEditorController.save()` and `saveTextProjectFile()` return a typed, revision-aware result. Save success is determined only from `THTextFileSaveResult`; observable dirty state and `projectErrors` are never used as proxy return values; a write superseded by a newer edit is reported without clearing that edit.
+- A project change before text-file I/O prevents the write; a change after I/O starts is reported explicitly and the stale completion never mutates the newly loaded project.
+- `isParsing` is derived from epoch-scoped activity ownership; a stale project-A completion cannot clear project B's progress.
+- The full `flutter test` suite and `flutter analyze` pass with no warnings; all pre-existing controller tests are updated to the new signatures.
+
+## 13. Risks and Decisions to Verify During Implementation
+
+1. **Signature churn.** `loadFile` / `setContent` / `save` gain revision/epoch plumbing and `save()`'s return type changes. Audit and update every caller and test in step 8 before adding new coverage; do not rely on `grep` of production code alone — widget tests construct controllers directly.
+2. **Full-reparse snapshot consistency.** Root/type-change/error fallback reparses must use one immutable snapshot of all dirty contents. Applying the rebuilt project must merge against the still-current revision map so edits made while parsing remain dirty; the generic disk-only `_applyLoadResult()` is never used for this path.
+3. **Project lifecycle races.** Canceling a `Timer` does not cancel a future already started by that timer. Every async project operation carries epoch/root identity and guards all post-`await` mutation and cleanup. A disk write already in progress cannot be recalled, so its explicit `writtenAfterProjectChange` result records the side effect without touching the new project.
+4. **Revision allocation ownership.** A controller-local `baseline + 1` scheme is invalid because a temporary controller and a newly opened registered controller may share the same baseline while holding different content. Only `THProjectController` allocates, and allocation atomically registers the associated pending content under the captured epoch/path. Tests must force the two-controller race and prove unique, ordered revisions with deterministic supersession.
+5. **Save-result authority.** Logs, diagnostics, and dirty observables remain useful UI state but are not operation return values. Only exact `saved` counts as complete; `savedButSuperseded` truthfully records that disk changed but newer editor content remains unsaved.
+6. **Phase 9 coupling.** Phase 9's plan (2026-08-31) still contains the original combined description in its §6.4 / §7.2–7.3 and its §10 step 3. Once Phase 8.5 lands, update Phase 9 to reference this document as a prerequisite and renumber its `t3920`–`t3930` test table.

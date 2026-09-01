@@ -462,10 +462,15 @@ Phase 7: Therion Run Diagnostics & Error Linking
 Phase 8: Help Pages, Keyboard Shortcuts, Localization (EN/PT) & Tests
    │
    ▼
+Phase 8.5: Project Epoch, Revisioned Content & Explicit Save Result (THProjectController refactor)
+   │
+   ▼
 Phase 9: Multi-File Find/Replace
 ```
 
-Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multiple open text-editor tabs to have files to search across); it's numbered last because the need for it only became concrete after Phase 8 was already planned, not because it depends on Phases 7-8.
+Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multiple open text-editor tabs to have files to search across) plus Phase 8.5; it's numbered last because the need for it only became concrete after Phase 8 was already planned, not because it depends on Phases 7-8.
+
+Phase 8.5 was carved out of the Phase 9 plan: the project-controller lifecycle/save-path rewrite it needs (project epoch isolation, atomic content-revision allocation, explicit `THTextFileSaveResult`, parser content overrides, in-memory dirty-preserving full reparse, two-layer flush-before-save) is infrastructure with a large regression surface in core parsing/saving, so it lands and stabilizes on its own before the multi-file search UI is built on top of it. It ships no user-visible feature.
 
 ### Phase 1: Core Grammars, Parsers & Writers
 - Implement `THConfigGrammar`, `THConfigFileParser`, and `THConfigFileWriter`.
@@ -502,6 +507,13 @@ Phase 9 depends only on Phase 6 (it needs `MPGeneralController` managing multipl
 - Add localized strings to `lib/l10n/app_en.arb` and `lib/l10n/app_pt.arb`.
 - Update help pages (`assets/help/en/`, `assets/help/pt/`) and keyboard shortcuts tables.
 - Write comprehensive test suites (unit, widget, and integration tests).
+
+### Phase 8.5: Project Epoch, Revisioned Content & Explicit Save Result
+- Refactor `THProjectController` so every lifecycle transition (`openProject`/disk `reloadProject`/`closeProject`) reserves one monotonically increasing `projectEpoch`; no stale post-`await` completion from a replaced project can mutate the new one. Split `_beginProjectLifecycleTransition()` from a non-advancing `_clearProjectState()` and stop `openProject()` nesting the public `closeProject()`.
+- Make `THProjectController` the sole atomic allocator of a per-path content revision, so a temporary Replace-All controller and a freshly opened tab starting from the same baseline get distinct revisions with deterministic supersession.
+- Add a two-layer flush (editor `_reparseTimer` + project `_reparseTimers`) drained before serialization, and a dirty-preserving in-memory full-project reparse (parser content-override map) for root/type-change/error fallbacks that currently re-read disk and drop unsaved edits.
+- Replace the `Future<void>` save path with a typed, revision-aware `THTextFileSaveResult` / `saveTextProjectFile(...)`; callers stop inferring success from `dirtyFilePaths` / `projectErrors`.
+- Fixes immediate single-file edit/replace → `Ctrl/Cmd+S` (including the root `thconfig`) without discarding another editor's unsaved content. Infrastructure only — no new UI, strings, or shortcuts. See [the Phase 8.5 plan](2026-09-01-therion-project-parsing-phase8_5-epoch-revision-save-result-refactor.md).
 
 ### Phase 9: Multi-File Find/Replace
 - Search across every open `THTextEditorController` (and, optionally, every `thconfig`/`.th` file in the project tree, not just currently-open tabs) for a query, with results grouped by file and a jump-to-match action that opens/focuses the right tab at the right line.
