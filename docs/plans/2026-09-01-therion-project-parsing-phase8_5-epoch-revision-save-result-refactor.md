@@ -52,6 +52,7 @@ Verified against the codebase on 2026-09-01.
 - Parser content-override map on `THProjectParser.loadProject()` / `loadFileNode()` (empty for normal open/reload).
 - A dedicated dirty-preserving in-memory full-project reparse path and its non-`_applyLoadResult()` result application.
 - `THProjectController.flushPendingReparse(...)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush).
+- A project-owned, revision-aware `revertTextProjectFile(...)` boundary that restores disk content without discarding a newer concurrent edit or publishing an unparsed clean revision.
 - A typed flush result and a typed `THTextFileSaveResult`; refactor of the text-file branch of `saveProjectFile()` into a reusable `saveTextProjectFile(...)` boundary.
 - Extended `THTextEditorController.loadFile()` / `setContent()` / `save()` signatures and semantics per §5–§8, and updates to every existing caller and test.
 - Regression coverage for immediate save (including the root file), every save/flush status, both debounce layers, lifecycle epoch isolation, and the full-reload branches.
@@ -120,9 +121,12 @@ The project controller keeps allocation counters and current revisions independe
 
 ### Extended controller signatures
 
+Represent the project-owned state adopted by an editor as one immutable `THTextProjectContentSnapshot` value containing canonical path, content, current revision, dirty/pending status, project epoch, and root path. Snapshot lookup and construction are synchronous so those fields cannot come from different revisions or lifecycle identities.
+
 - `THTextEditorController.loadFile(String filePath)` obtains **one** synchronous project-content snapshot: content, current revision, dirty/pending status, project epoch, root path. When the project tracks the path, the controller adopts that snapshot's content, observed revision, and dirty status **together** — it must not reset pending cached content to clean. When the project does not track the path, it falls back to the encoding-aware disk reader with revision `0` and clean state. This applies equally to a temporary controller for an unopened file and to a normal controller materialized after a temporary save failure.
 - `THTextEditorController.setContent(String newContent)` captures the current `(projectEpoch, rootConfigPath)`, synchronously registers the content through `registerTextContentChange(...)`, and stores the returned revision. The editor-level debounce callback carries that already-allocated revision and identity when it requests parsing; it never allocates or reconstructs a revision.
 - `THProjectController.reparseFile(...)` accepts only a revision previously allocated for the same epoch/path, and rejects an attempt to replace a path's pending record with an older revision or different content. A timer always reads the latest registered pending record, not content captured by an older callback.
+- `THTextEditorController.revert()` does not call `loadFile()` for a project-tracked dirty path. It snapshots the editor's revision and captured project identity, cancels its editor-level timer, and delegates to the revision-aware project revert boundary in §8.1. `loadFile()` remains the operation for adopting the project's current snapshot; revert is the distinct operation for intentionally discarding one pending revision in favor of disk content.
 
 Reparse and save completion are revision-specific:
 
@@ -178,6 +182,49 @@ Add `THTextEditorController.flushPendingReparse()` that:
 - is awaited at the start of `save()` before `saveTextProjectFile()` is invoked. Saving proceeds only when the typed flush outcome confirms the requested revision and project epoch; otherwise `save()` returns the corresponding `reparseFailed`, `supersededBeforeWrite`, or `projectChangedBeforeWrite` result without attempting serialization.
 
 This fixes immediate single-file edit/replace → `Ctrl/Cmd+S`, including the root project file, without discarding another editor's unsaved content. Add regression coverage there.
+
+### 8.1 Revision-aware revert
+
+Add a typed `THProjectController.revertTextProjectFile({required String canonicalPath, required int requestedRevision, required int expectedProjectEpoch, required String expectedRootPath})` boundary:
+
+```dart
+enum THTextFileRevertStatus {
+  reverted,
+  alreadyClean,
+  superseded,
+  projectChanged,
+  unknownPath,
+  readFailed,
+  reparseFailed,
+}
+
+class THTextFileRevertResult {
+  final String canonicalPath;
+  final int projectEpoch;
+  final int requestedRevision;
+  final int? reservedRevision;
+  final THTextFileRevertStatus status;
+  final THTextProjectContentSnapshot? snapshot;
+
+  bool get isCurrentRevisionReverted =>
+      status == THTextFileRevertStatus.reverted ||
+      status == THTextFileRevertStatus.alreadyClean;
+}
+```
+
+The nullable snapshot lets the editor adopt content, revision, dirty status, epoch, and root atomically. `reservedRevision` is non-null once disk content received a candidate revision, including failure or supersession after reservation, which makes the never-reuse rule observable in tests.
+
+For a project-tracked path, revert follows this order:
+
+1. Validate epoch/root and resolve a writable config/data path without mutating state. If the identity changed, return `projectChanged`; if the path is unknown or unsupported, return `unknownPath`.
+2. Compare the project's current revision with `requestedRevision`. If they differ, return `superseded` with the latest project snapshot and do not discard the newer revision. If the requested revision has no pending dirty-content record, return `alreadyClean` with the current clean snapshot without reading or reparsing the file.
+3. Read the file through the encoding-aware disk reader. On failure, log and return `readFailed`, leaving the pending content, parsed tree, revisions, cache, and dirty state unchanged.
+4. Recheck epoch/root and `requestedRevision`, then reserve a fresh revision from the path's project-owned allocation counter for the disk content. Reservation consumes the revision even if the operation later fails or is superseded, but does **not** yet publish that revision as current, replace the pending record, or mark the path clean.
+5. Reparse the disk content under the reserved revision. Use the incremental parse/splice path when safe. For root/type-change/missing-parent recovery, use an immutable full-project override snapshot containing every other pending revision and the target's disk content at the reserved revision; this deliberately replaces only the target's pending override for the candidate rebuild.
+6. After every `await` and immediately before applying the parse result, recheck epoch/root and require the target's current revision still to equal `requestedRevision`. A stale project returns `projectChanged`; a newer edit returns `superseded` with the latest project snapshot. In either case, discard the candidate parse result and do not clear pending state.
+7. Only after a successful guarded parse, atomically apply the rebuilt node/tree, set the target's current and parsed revisions to the reserved revision, cache the disk content, remove the target's pending record and dirty flag, and return `reverted` with the new clean snapshot. Other paths' latest pending contents and revisions still win during a full-reparse merge. If parsing fails, return `reparseFailed` and preserve the pre-revert tree and all pending state.
+
+`THTextEditorController.revert()` adopts the returned snapshot. `reverted` and `alreadyClean` leave the editor clean; `superseded` adopts the newer project-owned content/revision and remains dirty when that snapshot is pending; `projectChanged`, `readFailed`, `reparseFailed`, and `unknownPath` leave the editor buffer and dirty state unchanged. For a path that is not tracked by any open project, retain the existing encoding-aware disk fallback in the editor: cancel the timer, reread disk, reset its local revision to `0`, and mark it clean without mutating project state.
 
 ## 9. Explicit Text-Save Result
 
@@ -247,7 +294,7 @@ Status meanings:
 
 Every return path populates canonical path, captured epoch, and requested/written revision; `currentRevision` is nullable when reading it would cross a project-epoch boundary. No skipped/unknown/unsupported/stale-project path returns a successful result, and no failure is represented only by a log entry. `projectErrors` is **not** part of save-result detection.
 
-`THTextEditorController.save()` returns `Future<THTextFileSaveResult>`. Update its existing callers (revert path is unaffected; the editor save control, and any mixed-tab "save all" path) to consume the typed result. `revert()` keeps `loadFile()` semantics but must adopt the new snapshot behavior from §5.
+`THTextEditorController.save()` returns `Future<THTextFileSaveResult>`. Update its existing callers (the editor save control and any mixed-tab "save all" path) to consume the typed result. Update the revert control to consume the typed §8.1 outcome instead of routing through `loadFile()`.
 
 ## 10. Implementation Sequence
 
@@ -257,11 +304,12 @@ Every return path populates canonical path, captured epoch, and requested/writte
 4. Add the parser content-override map to `loadProject()` / `loadFileNode()` (empty default) and the recursive override-first read.
 5. Add the dirty-preserving in-memory full-project reparse and its non-`_applyLoadResult()` result-application helper; route the `_performReparse()` fallbacks through it.
 6. Add `THProjectController.flushPendingReparse(...)` (drains the project-level timer) and `THTextEditorController.flushPendingReparse()` (drains the editor-level timer, then chains into the project-level flush).
-7. Add `THTextFileSaveResult` / `THTextFileSaveStatus`; refactor the text-file branch of `saveProjectFile()` into `saveTextProjectFile(...)`; make `save()` return the typed result and serialize only the successfully flushed requested revision for the captured project.
-8. Update every existing test that exercises `loadFile` / `setContent` / `save` / `openProject` / `closeProject` / `reparseFile` (audit `t3902`, `t3906`, `t3907`, `t3909`, `t3913`, `t3914`, `t3918`, and any others the audit turns up). Keep `t3905` passing as the find/replace regression suite.
-9. Add the new focused tests in §11.
-10. Run focused tests, the full `flutter test` suite, and `flutter analyze`; resolve every warning/error.
-11. Review the diff for direct file writes outside the project-controller boundary, stale-epoch mutation paths, and changes outside this refactor's scope.
+7. Add the typed `revertTextProjectFile(...)` boundary and update `THTextEditorController.revert()` so a successful revert publishes a freshly allocated, parsed, clean disk revision while stale/failing reverts preserve pending content.
+8. Add `THTextFileSaveResult` / `THTextFileSaveStatus`; refactor the text-file branch of `saveProjectFile()` into `saveTextProjectFile(...)`; make `save()` return the typed result and serialize only the successfully flushed requested revision for the captured project.
+9. Update every existing test that exercises `loadFile` / `setContent` / `save` / `revert` / `openProject` / `closeProject` / `reparseFile` (audit `t3902`, `t3906`, `t3907`, `t3909`, `t3913`, `t3914`, `t3918`, and any others the audit turns up). Keep `t3905` passing as the find/replace regression suite.
+10. Add the new focused tests in §11.
+11. Run focused tests, the full `flutter test` suite, and `flutter analyze`; resolve every warning/error.
+12. Review the diff for direct file writes outside the project-controller boundary, stale-epoch mutation paths, and changes outside this refactor's scope.
 
 Formatting and `.g.dart` regeneration remain automatic; do not run `dart format` or `build_runner` manually.
 
@@ -271,7 +319,7 @@ Confirm numbering immediately before implementation; renumber if `t3920` is take
 
 | Test file | Required coverage |
 | --- | --- |
-| `test/t3920_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); project-controller-owned atomic revision allocation; simultaneous temporary and registered controllers starting from the same observed revision receive distinct revisions and cannot associate equal revisions with different content; allocation counters never decremented or reused after save/failure/revert; `loadFile()` atomically adopts project-owned cached content/current revision/dirty status and does not mark pending content clean; disk fallback uses revision `0` and clean state; root-file and type-change flushes rebuild from immutable in-memory overrides rather than stale disk; another file's unsaved content/revision survives that full rebuild; full-reparse failure preserves the old tree and all dirty state and returns `reparseFailed` without serialization; timer cancellation; same-epoch/revision save coalescing; explicit `saved`, `alreadySaved`, `supersededBeforeWrite`, `savedButSuperseded`, `projectChangedBeforeWrite`, `writtenAfterProjectChange`, `unknownPath`, `unsupportedNode`, `serializationFailed`, `writeFailed`; saving an unchanged loaded or previously saved revision returns `alreadySaved` without serialization or filesystem I/O; project change before I/O prevents the write; project change during I/O records the old-project disk write without touching new-project state; edit during flush/write remains dirty and is reparsed later; only exact `saved` clears pending project dirty state, while `alreadySaved` confirms that no pending state exists and lets the requesting editor become clean; result detection never inspects `projectErrors`. |
+| `test/t3920_th_text_editor_save_flush_test.dart` | Immediate edit/replace then save reparses before serialization across **both** debounce layers (editor `_reparseTimer` and project `_reparseTimers`); project-controller-owned atomic revision allocation; simultaneous temporary and registered controllers starting from the same observed revision receive distinct revisions and cannot associate equal revisions with different content; allocation counters never decremented or reused after save/failure/revert; `loadFile()` atomically adopts project-owned cached content/current revision/dirty status and does not mark pending content clean; disk fallback uses revision `0` and clean state; tracked revert reserves a fresh never-reused revision, reparses disk content before atomically publishing it as clean, preserves every pending edit on read/reparse failure, cannot discard a newer concurrent revision, and uses a dirty-preserving full-project override snapshot for root/type-change fallback; untracked revert retains its local encoding-aware disk fallback; root-file and type-change flushes rebuild from immutable in-memory overrides rather than stale disk; another file's unsaved content/revision survives that full rebuild; full-reparse failure preserves the old tree and all dirty state and returns `reparseFailed` without serialization; timer cancellation; same-epoch/revision save coalescing; explicit `saved`, `alreadySaved`, `supersededBeforeWrite`, `savedButSuperseded`, `projectChangedBeforeWrite`, `writtenAfterProjectChange`, `unknownPath`, `unsupportedNode`, `serializationFailed`, `writeFailed`; saving an unchanged loaded or previously saved revision returns `alreadySaved` without serialization or filesystem I/O; project change before I/O prevents the write; project change during I/O records the old-project disk write without touching new-project state; edit during flush/write remains dirty and is reparsed later; only exact `saved` clears pending project dirty state, while `alreadySaved` confirms that no pending state exists and lets the requesting editor become clean; result detection never inspects `projectErrors`. |
 | `test/t3921_th_project_async_epoch_isolation_test.dart` | Every `openProject`, non-empty explicit disk `reloadProject`, and `closeProject` advances the epoch by exactly one even when its load later fails; no-project reload is a no-op; opening does not invoke an additional public close transition; each load captures the epoch returned by `_beginProjectLifecycleTransition()` after allocation. Hold project-A open/load, incremental reparse, full reparse, splice, and flush futures across closing A and loading/reloading project B (including the same root path under a newer epoch); prove late results and `finally` cleanup cannot mutate B's root/children, indexes, dependencies, diagnostics, caches, dirty/current/parsed revision maps, `isParsing` activity ownership, timers, or epoch-scoped in-flight entries. Stale entry cleanup cannot remove a newer operation with the same path/revision. |
 | `test/t3922_th_project_full_reparse_override_test.dart` | `loadProject()` / `loadFileNode()` with an empty override map behaves exactly as today; a non-empty override map builds the root and included nodes from pending contents while newly referenced files without an override read from disk; the dirty-preserving result-application helper merges new disk contents but lets pending contents/revisions win; paths that leave the rebuilt dependency tree stay explicitly dirty; a failed full reparse leaves prior tree + all dirty state intact and reports the target revision unflushed. |
 
@@ -289,6 +337,7 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` unchanged.
 - Each non-no-op public project lifecycle transition advances `projectEpoch` exactly once through `_beginProjectLifecycleTransition()`; `openProject()` never calls public `closeProject()`; `_clearProjectState()` never advances the epoch.
 - No load, reparse, flush, save completion, or `finally` block captured under an older epoch can mutate the current project's tree, indexes, diagnostics, caches, dirty/revision state, in-flight ownership, or progress flags.
 - `THProjectController` atomically allocates every text-content revision; open and temporary controllers can never assign the same revision to different content; revision numbers are never reused.
+- Reverting a tracked dirty text file is revision-aware: disk content is parsed under a freshly allocated revision and becomes current/clean only if the requested revision is still current; read/reparse failure, project replacement, or a newer edit preserves pending content. Reverting an untracked text file retains the editor-local disk fallback.
 - Immediate single-file save after editing/replacement — including the root `thconfig` — serializes the latest content and never restores stale disk text or clears another file's unsaved revision.
 - Flushing/saving a root or type-changing file reparses from an immutable in-memory dirty-content snapshot.
 - `THTextEditorController.save()` and `saveTextProjectFile()` return a typed, revision-aware result. Save success is determined only from `THTextFileSaveResult`; observable dirty state and `projectErrors` are never used as proxy return values; `saved` records a completed write, `alreadySaved` records a clean current revision without performing I/O, and a write superseded by a newer edit is reported without clearing that edit.
@@ -303,4 +352,5 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` unchanged.
 3. **Project lifecycle races.** Canceling a `Timer` does not cancel a future already started by that timer. Every async project operation carries epoch/root identity and guards all post-`await` mutation and cleanup. A disk write already in progress cannot be recalled, so its explicit `writtenAfterProjectChange` result records the side effect without touching the new project.
 4. **Revision allocation ownership.** A controller-local `baseline + 1` scheme is invalid because a temporary controller and a newly opened registered controller may share the same baseline while holding different content. Only `THProjectController` allocates, and allocation atomically registers the associated pending content under the captured epoch/path. Tests must force the two-controller race and prove unique, ordered revisions with deterministic supersession.
 5. **Save-result authority.** Logs, diagnostics, and dirty observables remain useful UI state but are not operation return values. `saved` and `alreadySaved` count as complete through `isCurrentRevisionSaved`, but only `saved` means filesystem I/O occurred; `savedButSuperseded` truthfully records that disk changed but newer editor content remains unsaved.
-6. **Phase 9 coupling.** Phase 9's plan (2026-08-31) still contains the original combined description in its §6.4 / §7.2–7.3 and its §10 step 3. Once Phase 8.5 lands, update Phase 9 to reference this document as a prerequisite and renumber its `t3920`–`t3930` test table.
+6. **Revert races.** Revert cannot reuse `loadFile()` because project-tracked cached content may itself be the pending edit being discarded. Reserve a new revision for disk content without publishing it, parse under the captured epoch/root, and atomically publish it as clean only while the requested revision remains current. A consumed candidate revision is never reused after failure or supersession.
+7. **Phase 9 coupling.** Phase 9's plan (2026-08-31) still contains the original combined description in its §6.4 / §7.2–7.3 and its §10 step 3. Once Phase 8.5 lands, update Phase 9 to reference this document as a prerequisite and renumber its `t3920`–`t3930` test table.
