@@ -233,12 +233,13 @@ class THProjectSearchFileResult {
   final String canonicalPath;
   final String displayPath;
   final String searchedContent;
+  final int? searchedRevision;
   final bool isReplaceEligible;
   final List<THProjectSearchMatch> matches;
 }
 ```
 
-Keeping the searched content snapshot with each file result enables stale-result validation and one-pass Replace All without rereading a file between preview and replacement. Do not expose mutable controller content through result models.
+Keeping the searched content/revision snapshot with each file result enables stale-result validation and one-pass Replace All without rereading a file between preview and replacement. Do not expose mutable controller content through result models.
 
 Failures carry canonical/display path and a logged technical message. UI text uses localized summaries; raw exception details stay in logs unless the existing error-dialog convention explicitly displays them.
 
@@ -256,6 +257,7 @@ Create a lazy singleton in `MPLocator`, matching the app's single-project model.
 - expanded result-file paths;
 - a debounce timer;
 - a monotonically increasing search generation; and
+- a monotonically increasing replacement-operation generation; and
 - the project epoch and root path associated with the current result snapshot.
 
 The controller does not own editor widgets, `TextEditingController`s, tabs, parsing, or disk serialization.
@@ -281,11 +283,13 @@ For **Project files**:
 - only fall back to `THProjectParser.readFileContent()` when the cache has no entry; and
 - handle one file's read failure as a `THProjectSearchFailure` while continuing with all remaining files.
 
-Source collection must snapshot path/content pairs before matching. A search never reads mutable controller state halfway through scanning a file.
+Source collection must snapshot path/content/revision triples before matching. For a project-tracked file, `searchedRevision` is the project-controller-owned current revision associated with exactly `searchedContent`; standalone results use `null`. Read the content and revision through one synchronous snapshot boundary so a registered edit cannot produce a new revision between the two reads. A search never reads mutable controller state halfway through scanning a file.
 
 ### 6.3 Debounce and stale searches
 
 Increment the search generation whenever a new search starts or state is cleared. At search start, also capture `THProjectController.projectEpoch` and `rootConfigPath`. After each asynchronous source read and before publishing results, require all three identities to remain current: search generation, project epoch, and project root path. A superseded search or changed project exits without modifying visible results, failures, progress state owned by a newer run, or replacement eligibility.
+
+Increment the replacement-operation generation whenever Replace All begins and whenever replacement/search state is cleared or invalidated. Only the run that still owns that generation may mutate a target or clear `isReplacing`; a canceled or stale run cannot clear a newer run's progress in `finally`.
 
 Search query changes use a constant defined in `mp_constants.dart`; submitting runs immediately and cancels the pending timer. Do not use an unbounded periodic task.
 
@@ -295,7 +299,7 @@ The first implementation may scan snapshots on the UI isolate. Publish `isSearch
 
 Expose a read-only monotonically increasing `THProjectController.projectEpoch`. Every lifecycle transition that clears or replaces the project identity/tree (`openProject`, explicit disk `reloadProject`, and `closeProject`) reserves exactly one new epoch **before** canceling timers or clearing state. The asynchronous load captures that epoch and intended canonical root; it applies its result and clears its own progress state only if both still match. The dirty-preserving in-memory full reparse in §7.3 is work within the same project and does not advance the epoch.
 
-Have `THProjectSearchController` react to `(projectEpoch, rootConfigPath)` and call `clearForProjectChange()`, including explicit reloads as well as close/open. It cancels pending work, invalidates the search generation, clears results/failures/expanded groups regardless of scope (project-backed open-tab eligibility and source snapshots may have changed), and switches project scope to open-tabs scope when no project remains. Preserve the query/options so the user can immediately search again. Dispose this lifecycle reaction in tests/controller disposal.
+Have `THProjectSearchController` react to `(projectEpoch, rootConfigPath)` and call `clearForProjectChange()`, including explicit reloads as well as close/open. It cancels pending work, invalidates both search and replacement-operation generations, clears results/failures/expanded groups regardless of scope (project-backed open-tab eligibility and source snapshots may have changed), and switches project scope to open-tabs scope when no project remains. Preserve the query/options so the user can immediately search again. Dispose this lifecycle reaction in tests/controller disposal.
 
 Tests must prove that neither a late search result nor a late load/reparse/flush from project A can mutate any observable, index, dirty/revision map, progress flag, or result after project B is loaded.
 
@@ -312,9 +316,12 @@ Before any mutation:
 3. discard unchanged files;
 4. verify every affected path still resolves to a writable `THConfigFileNode`/`THDataFileNode`; if a formerly eligible path became standalone after the refreshed search, exclude it and update the eligibility/counts rather than attempting to save it;
 5. perform read-only structural I/O checks for every eligible target: the canonical target must still exist and resolve to a regular file, its parent must still exist and resolve to a directory, and an unopened target must still be readable through `THProjectParser.readFileContent()`; and
-6. show a localized confirmation with the **eligible** match count, eligible file count, scope, and a warning that the operation saves the affected project files and cannot be undone as one cross-file action. When the visible result set also contains standalone matches, state how many matches/files are excluded.
+6. create an immutable replacement snapshot containing a newly allocated replacement-operation generation, search generation, project epoch/root, query, replacement, case rule, scope, and every target's canonical path, searched content/revision, replacement content, and match count; and
+7. show a localized confirmation with the **eligible** match count, eligible file count, scope, and a warning that the operation saves the affected project files and cannot be undone as one cross-file action. When the visible result set also contains standalone matches, state how many matches/files are excluded.
 
 If the refreshed search contains no eligible matches, stop before confirmation and leave Replace All disabled with the localized search-only explanation. Cancellation makes no changes. A preflight failure makes no changes and leaves the current results visible with failure details.
+
+After confirmation returns and **before the first `setContent()`**, validate the entire immutable replacement snapshot again. The replacement-operation/search generations, project epoch/root, query/replacement/options, target node eligibility, and each target's current content/revision must still match. If any check fails, abort the whole operation without mutation, invalidate or refresh the stale results, and show a localized reason. Modal UI and disabled controls reduce the likelihood of such a change but are not correctness boundaries; lifecycle calls, tests, or another controller may still change state while the confirmation future is pending.
 
 Preflight does **not** claim to prove filesystem writability. Do not create a probe file, temporarily rewrite a target, or rely on an advisory permission-bit/access check: those approaches either cause side effects or remain subject to a time-of-check/time-of-use race. The authoritative outcome is the typed `saveTextProjectFile()` result from §7.2. A target may pass the read-only checks and still return `writeFailed` because permissions, mounts, locks, disk capacity, or filesystem state changed before/during the write; this is handled by the documented partial-failure policy in §7.4.
 
@@ -322,7 +329,7 @@ In this plan, “writable node” means a parsed node type supported by the loss
 
 ### 7.2 Applying through editor controllers
 
-For an already-open file, reuse its registered controller. For an unopened project file, construct a temporary `THTextEditorController(projectController: <existing THProjectController>)`, `await` its `loadFile(canonicalPath)` (which adopts the revision baseline per §7.3), apply/save, and dispose it in `finally`; do not add hidden controllers to `MPGeneralController` and do not open every changed file as a side effect.
+For an already-open file, reuse its registered controller. For an unopened project file, construct a temporary `THTextEditorController(projectController: <existing THProjectController>)`, `await` its `loadFile(canonicalPath)` (which adopts the observed revision per §7.3), apply/save, and dispose it in `finally`; do not add hidden controllers to `MPGeneralController` and do not open every changed file as a side effect. Create/load that temporary controller only when its target is reached, and repeat the global and per-target checks below after the `await` and immediately before `setContent()`.
 
 #### Explicit text-save result
 
@@ -383,10 +390,16 @@ Every return path populates the canonical path, captured project epoch, and requ
 
 For each affected file, in deterministic path order:
 
-1. call `setContent(replacedContent)` exactly once;
-2. call `save()` and await its `THTextFileSaveResult`; count the file as saved only when `isCurrentRevisionSaved` is true, otherwise collect the returned status for localized partial-failure/incomplete reporting;
-3. retain the controller and updated visible content when it belongs to an open tab; and
-4. dispose only temporary controllers.
+1. recheck the replacement-operation/search generations and project epoch/root before touching the target. If this global identity is stale, stop processing all remaining files without touching the current/new project;
+2. obtain the registered controller or load a temporary controller for this target;
+3. after any controller-loading `await`, recheck the global identity, re-resolve the target node, and re-read its current content/revision through the same synchronous snapshot boundary used by search. This per-target check must be the final operation before `setContent()` because saving an earlier root or included file can change the dependency tree, another editor controller can register a newer revision, or the temporary load itself can yield while state changes;
+4. if the node is no longer a writable `THConfigFileNode`/`THDataFileNode`, or its content/revision no longer equals the immutable replacement snapshot, do **not** call `setContent()` or `save()` for it. Record a typed replacement-pipeline outcome such as `eligibilityChanged` or `contentChanged` and continue with still-independent targets;
+5. call `setContent(replacedContent)` exactly once;
+6. call `save()` and await its `THTextFileSaveResult`; count the file as saved only when `isCurrentRevisionSaved` is true, otherwise collect the returned status for localized partial-failure/incomplete reporting;
+7. retain the controller and updated visible content when it belongs to an open tab; and
+8. dispose only temporary controllers.
+
+Replacement-pipeline outcomes (`searchSuperseded`, `projectChanged`, `eligibilityChanged`, and `contentChanged`) are distinct from `THTextFileSaveStatus`: they describe targets intentionally skipped before `setContent()`/save rather than pretending a save was attempted. If an earlier replacement changes an include/source directive and removes a later target from the current project tree, that later target is reported as `eligibilityChanged` and remains byte-for-byte and controller-content unchanged.
 
 Do not call `File.writeAsString`, `THConfigFileWriter`, or `THFileWriter` from the search controller. All writes remain visible through the existing editor/project-controller boundary.
 
@@ -467,10 +480,12 @@ This behavior fixes immediate single-file edit/replace → `Ctrl/Cmd+S`, includi
 Multi-file disk writes are not transactional. All targets are prepared before the first mutation, but a later I/O failure can still occur after earlier files were saved. Therefore:
 
 - continue or stop according to a single documented policy; use **continue and collect failures** so independent files can complete;
+- stop all remaining work when the replacement/search generation or project epoch/root changes, because no remaining target belongs to the validated operation identity;
+- skip only the affected target and continue when its node eligibility or content/revision changes within the same operation identity; never mutate that stale target;
 - leave any failed, superseded-before-write, saved-but-superseded, or project-changed open controller dirty when it still belongs to the current project; a stale operation never mutates the replacement project's controllers/state;
 - preserve a failed temporary controller's replacement by keeping the corresponding content in `THProjectController.fileContentsCache`/dirty tracking rather than silently discarding it, or explicitly restore its pre-operation snapshot if that is safer with the final controller implementation;
 - log each exception with path and stack trace;
-- report exact-saved file/match counts, incomplete (`supersededBeforeWrite`/`savedButSuperseded`/project-changed) files, and failed file paths/statuses in a localized completion dialog; and
+- report exact-saved file/match counts, incomplete (`supersededBeforeWrite`/`savedButSuperseded`/project/search-changed) files, skipped (`eligibilityChanged`/`contentChanged`) files, and failed file paths/statuses in a localized completion dialog; and
 - re-run search against the resulting in-memory state after all attempts finish.
 
 The implementation must choose and test the exact temporary-controller failure preservation branch before coding the UI; no failure may be swallowed.
@@ -516,6 +531,7 @@ Add EN/PT localization keys for:
 - read/preflight/save failure summaries; and
 - completion counts, including partial success; and
 - explicit save-result summaries for superseded, project-changed, reparse, unknown/unsupported, serialization, and write outcomes; and
+- replacement-pipeline summaries for confirmation-time invalidation, search/project supersession, changed target eligibility, and changed target content; and
 - standalone/search-only result indicator, exclusion explanation, and Replace All disabled/excluded counts.
 
 Keep placeholder names and plural/select structures identical in `intl_en.arb` and `intl_pt.arb`. Run `flutter gen-l10n`; never edit generated localization files manually.
@@ -542,7 +558,7 @@ Add the shortcut to the appropriate keyboard-shortcut table in alphabetical orde
 6. Register the controller lazily in `MPLocator` and add tree/search mode to `THProjectTreeUIController`.
 7. Build grouped-results widgets and integrate them into the project sidebar.
 8. Wire result activation through existing tab opening/focus/tree synchronization.
-9. Implement Replace All preflight, confirmation, temporary-controller handling, sequential setContent/flush/save, failure collection, and result refresh.
+9. Implement Replace All preflight, immutable operation snapshots, post-confirmation and immediate pre-target revalidation, temporary-controller handling, sequential setContent/flush/save, topology/content-change outcomes, failure collection, and result refresh.
 10. Add the `Ctrl/Cmd+Shift+F` page shortcut and verify single-file `Ctrl/Cmd+F` remains unchanged.
 11. Add EN/PT localization, run `flutter gen-l10n`, and update EN/PT help/shortcut documentation.
 12. Run focused tests, the complete `flutter test` suite, and `flutter analyze`; resolve every warning/error.
@@ -563,7 +579,7 @@ Confirm numbering immediately before implementation. With the current tree, use:
 | `test/t3924_th_project_search_stale_generation_test.dart` | Debounce, immediate submit, superseded async search suppression, query changes, project close/reload/replacement, epoch-reaction cleanup, and no search result/progress leakage from an old project. |
 | `test/t3925_th_project_search_widget_test.dart` | Controls, scope selection, grouped rows, search totals versus replace-eligible totals, localized standalone/search-only indicator and tooltip, Replace All disabled when only standalone matches exist, expand/collapse, empty/error/loading states, keyboard focus, EN/PT smoke rendering. |
 | `test/t3926_th_project_search_navigation_test.dart` | Existing/new tab activation, exact selection, out-of-project open tab, project-tree selection/ancestor expansion, stale-match refresh and disappeared match. |
-| `test/t3927_th_project_search_replace_all_test.dart` | Confirmation/cancel, standalone open tabs excluded without `setContent()`/save while project-backed open tabs are replaced, eligible/excluded confirmation counts, eligibility revalidation before mutation, read-only preflight rejection for a missing/non-regular target, missing/non-directory parent, and unreadable unopened file without any probe write or mutation; a target that passes preflight but fails the actual write returns/reports `writeFailed`; one setContent per eligible file, open and temporary controllers, flush-before-save, root `thconfig` replacement serialized from its in-memory revision, simultaneous dirty included-file contents preserved during a full rebuild, automatic save, case semantics, empty replacement, each non-`saved` typed outcome (including project-changed statuses) mapped to incomplete/failure reporting without consulting dirty/error collections, partial failures, disposal, refreshed results. |
+| `test/t3927_th_project_search_replace_all_test.dart` | Confirmation/cancel, standalone open tabs excluded without `setContent()`/save while project-backed open tabs are replaced, eligible/excluded confirmation counts, immutable replacement snapshot, and full generation/epoch/root/query/options/target-content/revision revalidation after confirmation but before the first mutation; project/query/replacement/content changes while the confirmation future is held abort without any mutation; read-only preflight rejection for a missing/non-regular target, missing/non-directory parent, and unreadable unopened file without any probe write or mutation; a target that passes preflight but fails the actual write returns/reports `writeFailed`; exactly one `setContent()` per still-valid applied file and none for skipped files; per-target revalidation immediately before `setContent()` and after temporary-controller loading; an earlier root/include replacement that removes a later target reports `eligibilityChanged` and leaves it untouched; a concurrent edit reports `contentChanged` and is not overwritten; global operation/project identity changes stop all remaining targets; open and temporary controllers, flush-before-save, root `thconfig` replacement serialized from its in-memory revision, simultaneous dirty included-file contents preserved during a full rebuild, automatic save, case semantics, empty replacement, each non-`saved` typed outcome (including project-changed and pre-save replacement-pipeline statuses) mapped to incomplete/failure reporting without consulting dirty/error collections, partial failures, disposal, refreshed results. |
 | `test/t3928_th2_file_tabs_page_project_search_shortcut_test.dart` | `Ctrl/Cmd+Shift+F` opens/focuses project search; collapsed sidebar expands; `Ctrl/Cmd+F` remains editor-local; shortcut behavior with canvas/text tabs and dialogs. |
 | `test/t3929_phase9_documentation_localization_test.dart` | EN/PT key parity, registered help assets, both shortcut descriptions, no claim that `.th2` is searched, documented standalone search/navigation versus replacement exclusion, and documented Replace All save/undo behavior. |
 | `test/t3930_th_project_async_epoch_isolation_test.dart` | Hold project-A open/load, incremental reparse, full reparse, splice, and flush futures across closing A and loading/reloading project B (including the same root path under a newer epoch); prove late results and `finally` cleanup cannot mutate B's root/children, indexes, dependencies, diagnostics, caches, dirty/current/parsed revision maps, `isParsing` activity ownership, timers, or epoch-scoped in-flight entries. Verify stale entry cleanup cannot remove a newer operation with the same path/revision. |
@@ -591,7 +607,7 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 - Repeated project references are deduplicated by canonical path.
 - Search remains correct when queries change rapidly or a project closes/changes during asynchronous work.
 - Project lifecycle transitions advance a project epoch; no load, search, reparse, flush, save completion, or `finally` block captured under an older epoch can mutate the current project's tree, indexes, diagnostics, caches, dirty/revision state, in-flight ownership, or progress flags.
-- Multi-file Replace All requires confirmation, computes all eligible project-file changes before mutation, revalidates node eligibility, uses one `setContent()` per affected project file, flushes parsing before save, and never introduces a direct or standalone writer path in the search controller.
+- Multi-file Replace All requires confirmation, computes all eligible project-file changes before mutation, captures an immutable operation/search/project/content-revision snapshot, revalidates the complete snapshot after confirmation, and revalidates each target immediately before mutation. A stale or no-longer-eligible target is never passed to `setContent()`/save; global identity changes stop all remaining work, while per-target topology/content changes are reported and independent targets may continue.
 - Replace All preflight performs only read-only existence/type/readability checks and makes no claim that a later write will succeed; actual writability is determined exclusively by the typed save result.
 - Immediate single-file save after editing/replacement also serializes the latest content.
 - Flushing/saving a root or type-changing file reparses from an immutable in-memory dirty-content snapshot; it never restores stale disk text or clears another file's unsaved revision.
@@ -617,3 +633,4 @@ Retain and run `t3905_th_text_editor_find_replace_test.dart` as a regression sui
 10. **Project lifecycle races**: canceling a `Timer` does not cancel a future already started by that timer. Every async project operation therefore carries epoch/root identity and guards all post-`await` mutation and cleanup. Epoch-scoped activity/in-flight ownership prevents a stale project-A completion from clearing project B's progress or removing B's work; a disk write already in progress cannot be recalled, so its explicit `writtenAfterProjectChange` result records the side effect without touching B's state.
 11. **Filesystem preflight limits**: existence, entity-type, parent-directory, and readability checks catch structural failures without mutation, but no portable preflight can guarantee a later write. Do not probe-write or treat permission bits as authoritative; preserve the all-content-in-memory preparation and confirmation guarantees, then rely on `THTextFileSaveResult.writeFailed` plus §7.4 partial-failure reporting for time-of-check/time-of-use changes.
 12. **Revision allocation ownership**: a controller-local `baseline + 1` scheme is invalid because a temporary Replace All controller and a newly opened registered controller may share the same baseline while holding different content. Only `THProjectController` allocates revisions, and allocation atomically registers the associated pending content under the captured epoch/path. Tests must force this two-controller race and prove unique, ordered revisions and deterministic supersession.
+13. **Confirmation and topology races**: the confirmation dialog is an asynchronous boundary, and each earlier replacement/save may reparse directives that change the project tree before a later target is reached. Replace All therefore revalidates the complete immutable operation snapshot after confirmation and revalidates node eligibility plus exact content/revision before each `setContent()`. Global generation/project changes abort the remainder; a target removed by an earlier include/source edit or superseded by another controller is skipped and reported without mutation.
