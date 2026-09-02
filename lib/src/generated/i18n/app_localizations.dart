@@ -5451,6 +5451,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save {path}: {error}'**
   String thProjectSaveFailed(Object path, Object error);
+
+  /// Title of the multi-file search sidebar view. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Search in files'**
+  String get projectSearchTitle;
+
+  /// Tooltip for the project sidebar header action that opens multi-file search. Used on: THProjectTreeWidget._buildHeader
+  ///
+  /// In en, this message translates to:
+  /// **'Search in files (Ctrl/Cmd+Shift+F)'**
+  String get projectSearchOpenTooltip;
+
+  /// Tooltip for the back action returning from search mode to the project tree. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Back to project tree'**
+  String get projectSearchBackToTreeTooltip;
+
+  /// Hint text for the multi-file search query field. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get projectSearchQueryHint;
+
+  /// Hint text for the multi-file search replacement field. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get projectSearchReplacementHint;
+
+  /// Tooltip for the multi-file search case-sensitivity toggle. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Match case'**
+  String get projectSearchCaseSensitiveTooltip;
+
+  /// Tooltip for the multi-file search replace-row expand/collapse control. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle replace'**
+  String get projectSearchToggleReplaceTooltip;
+
+  /// Tooltip for the multi-file search refresh/re-run action. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh search'**
+  String get projectSearchRefreshTooltip;
+
+  /// Label for the multi-file search scope selector. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Scope'**
+  String get projectSearchScopeLabel;
+
+  /// Multi-file search scope: all open thconfig/.th text tabs. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Open text tabs'**
+  String get projectSearchScopeOpenTabs;
+
+  /// Multi-file search scope: all writable files in the loaded project. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Project files'**
+  String get projectSearchScopeProjectFiles;
+
+  /// Label for the multi-file Replace All button. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All'**
+  String get projectSearchReplaceAllButton;
+
+  /// Compact result summary for multi-file search. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}'**
+  String projectSearchSummary(int matchCount, int fileCount);
+
+  /// Progress label shown while a multi-file search runs. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Searching…'**
+  String get projectSearchSearching;
+
+  /// Progress label shown while a multi-file Replace All runs. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replacing…'**
+  String get projectSearchReplacing;
+
+  /// Empty state shown when the multi-file search query is empty. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Enter text to search across files.'**
+  String get projectSearchEmptyQuery;
+
+  /// Empty state shown for open-tabs scope when no text tabs are open. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'No open text tabs to search.'**
+  String get projectSearchNoOpenTabs;
+
+  /// Empty state shown for project scope when no project is loaded. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Open a project to search its files.'**
+  String get projectSearchNoProject;
+
+  /// Empty state shown when a multi-file search finds nothing. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'No matches found.'**
+  String get projectSearchNoMatches;
+
+  /// Warning shown when some files could not be read during search. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 file could not be read} other {{count} files could not be read}}.'**
+  String projectSearchReadFailures(int count);
+
+  /// One-based line/column label for a match row. Used on: THProjectSearchResultWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Line {line}, column {column}'**
+  String projectSearchMatchLocation(int line, int column);
+
+  /// Per-file match count shown on a result group header. Used on: THProjectSearchResultWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 match} other {{count} matches}}'**
+  String projectSearchFileMatchCount(int count);
+
+  /// Badge on a result group for a file outside the loaded project. Used on: THProjectSearchResultWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Search only'**
+  String get projectSearchStandaloneIndicator;
+
+  /// Tooltip explaining the search-only indicator. Used on: THProjectSearchResultWidget
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not part of the loaded project. You can open it and navigate to matches, but Replace All will not modify or save it.'**
+  String get projectSearchStandaloneTooltip;
+
+  /// Title of the Replace All confirmation dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All'**
+  String get projectSearchReplaceConfirmTitle;
+
+  /// Body of the Replace All confirmation dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace {matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}? The affected project files will be saved. This cannot be undone as a single action.'**
+  String projectSearchReplaceConfirmBody(int matchCount, int fileCount);
+
+  /// Extra line in the Replace All confirmation dialog when search-only matches are excluded. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{matchCount, plural, one {1 search-only match} other {{matchCount} search-only matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}} will not be changed.'**
+  String projectSearchReplaceConfirmExcluded(int matchCount, int fileCount);
+
+  /// Confirm button of the Replace All confirmation dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All'**
+  String get projectSearchReplaceConfirmButton;
+
+  /// Cancel button of the Replace All confirmation dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get projectSearchReplaceCancelButton;
+
+  /// Explanation shown when Replace All is disabled because every match is search-only. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'All matches are in search-only files, so Replace All is unavailable.'**
+  String get projectSearchReplaceOnlyStandalone;
+
+  /// Message shown when Replace All aborts before mutation due to a stale snapshot. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All was cancelled because the search results or project changed. Nothing was modified.'**
+  String get projectSearchReplaceAborted;
+
+  /// Message shown when Replace All preflight checks fail. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All could not start because one or more files failed pre-checks. Nothing was modified.'**
+  String get projectSearchReplacePreflightFailed;
+
+  /// Title of the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Replace All complete'**
+  String get projectSearchReplaceCompleteTitle;
+
+  /// Success summary in the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}.'**
+  String projectSearchReplaceCompleteSummary(int matchCount, int fileCount);
+
+  /// Incomplete-file line in the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 file was not fully saved} other {{count} files were not fully saved}} because newer edits or a project change intervened.'**
+  String projectSearchReplaceCompleteIncomplete(int count);
+
+  /// Skipped-file line in the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 file was skipped} other {{count} files were skipped}} because its content or project membership changed.'**
+  String projectSearchReplaceCompleteSkipped(int count);
+
+  /// Failed-file line in the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 file could not be saved} other {{count} files could not be saved}}.'**
+  String projectSearchReplaceCompleteFailed(int count);
+
+  /// Recovery-tab line in the Replace All completion dialog, including the standalone/no-current-writer case. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 file with unsaved replacements was left open in an editor tab} other {{count} files with unsaved replacements were left open in editor tabs}} for recovery.'**
+  String projectSearchReplaceCompleteMaterialized(int count);
+
+  /// Close button of the Replace All completion dialog. Used on: THProjectSearchWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get projectSearchReplaceCompleteCloseButton;
 }
 
 class _AppLocalizationsDelegate

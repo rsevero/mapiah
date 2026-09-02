@@ -828,6 +828,13 @@ const int mpProjectTreeUIPersistDebounceMilliseconds = 250;
 // constants.
 const int mpTextEditorReparseDebounceMilliseconds = 300;
 const double mpTextEditorFontSize = 13.0;
+
+// Multi-file project search (Ctrl/Cmd+Shift+F) sizing and debounce constants.
+const int mpProjectSearchQueryDebounceMilliseconds = 300;
+const int mpProjectSearchPreviewMaxLength = 200;
+const double mpProjectSearchResultRowHeight = 24.0;
+const double mpProjectSearchGroupRowHeight = 28.0;
+const double mpProjectSearchHeaderSpacing = 4.0;
 const double mpTextEditorLineHeight = 1.4;
 const double mpTextEditorLineNumberGutterMinWidth = 32.0;
 const double mpTextEditorLineNumberGutterPadding = 8.0;

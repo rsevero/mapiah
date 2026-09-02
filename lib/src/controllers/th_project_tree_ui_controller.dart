@@ -17,6 +17,10 @@ part 'th_project_tree_ui_controller.g.dart';
 class THProjectTreeUIController = THProjectTreeUIControllerBase
     with _$THProjectTreeUIController;
 
+/// Which content the project sidebar shows. Owned solely by
+/// [THProjectTreeUIController]; `THProjectSearchController` never changes it.
+enum THProjectSidebarMode { tree, projectSearch }
+
 /// UI-only view state for the project tree sidebar.
 ///
 /// Expansion, filtering, and sidebar layout state live here rather than in
@@ -31,6 +35,18 @@ abstract class THProjectTreeUIControllerBase with Store {
 
   @observable
   bool isSidebarCollapsed = false;
+
+  /// Whether the sidebar shows the project tree or the multi-file search view.
+  /// This is the only authority for that choice.
+  @observable
+  THProjectSidebarMode sidebarMode = THProjectSidebarMode.tree;
+
+  /// Monotonically increasing counter incremented every time project search is
+  /// (re)requested, even when it is already visible. `THProjectSearchWidget`
+  /// consumes each new value after mount to focus/select its query field,
+  /// which keeps focus-node ownership in widget state.
+  @observable
+  int projectSearchFocusRequestGeneration = 0;
 
   @observable
   double sidebarWidth = mpProjectTreeSidebarDefaultWidth;
@@ -115,6 +131,23 @@ abstract class THProjectTreeUIControllerBase with Store {
     }
 
     filterText = text;
+  }
+
+  /// Expands the sidebar if needed, switches it to project-search mode, and
+  /// issues a fresh query-focus request (even when search mode was already
+  /// visible).
+  @action
+  void showProjectSearch() {
+    setSidebarCollapsed(false);
+    sidebarMode = THProjectSidebarMode.projectSearch;
+    projectSearchFocusRequestGeneration++;
+  }
+
+  /// Returns the sidebar to tree mode. Query/options/results survive in
+  /// [THProjectSearchController] for the lifetime of the loaded project.
+  @action
+  void showTree() {
+    sidebarMode = THProjectSidebarMode.tree;
   }
 
   @action

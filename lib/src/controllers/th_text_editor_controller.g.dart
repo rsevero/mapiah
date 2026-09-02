@@ -268,6 +268,46 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     });
   }
 
+  late final _$pendingSelectionRangeAtom = Atom(
+    name: 'THTextEditorControllerBase.pendingSelectionRange',
+    context: context,
+  );
+
+  @override
+  TextRange? get pendingSelectionRange {
+    _$pendingSelectionRangeAtom.reportRead();
+    return super.pendingSelectionRange;
+  }
+
+  @override
+  set pendingSelectionRange(TextRange? value) {
+    _$pendingSelectionRangeAtom.reportWrite(
+      value,
+      super.pendingSelectionRange,
+      () {
+        super.pendingSelectionRange = value;
+      },
+    );
+  }
+
+  late final _$loadStateAtom = Atom(
+    name: 'THTextEditorControllerBase.loadState',
+    context: context,
+  );
+
+  @override
+  THTextEditorLoadState get loadState {
+    _$loadStateAtom.reportRead();
+    return super.loadState;
+  }
+
+  @override
+  set loadState(THTextEditorLoadState value) {
+    _$loadStateAtom.reportWrite(value, super.loadState, () {
+      super.loadState = value;
+    });
+  }
+
   late final _$observedRevisionAtom = Atom(
     name: 'THTextEditorControllerBase.observedRevision',
     context: context,
@@ -354,6 +394,30 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     name: 'THTextEditorControllerBase',
     context: context,
   );
+
+  @override
+  void revealRange(TextRange range) {
+    final _$actionInfo = _$THTextEditorControllerBaseActionController
+        .startAction(name: 'THTextEditorControllerBase.revealRange');
+    try {
+      return super.revealRange(range);
+    } finally {
+      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void clearPendingSelectionRange() {
+    final _$actionInfo = _$THTextEditorControllerBaseActionController
+        .startAction(
+          name: 'THTextEditorControllerBase.clearPendingSelectionRange',
+        );
+    try {
+      return super.clearPendingSelectionRange();
+    } finally {
+      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setContent(String newContent) {
@@ -527,6 +591,8 @@ findCaseSensitive: ${findCaseSensitive},
 isFindBarVisible: ${isFindBarVisible},
 activeMatchIndex: ${activeMatchIndex},
 pendingScrollToLine: ${pendingScrollToLine},
+pendingSelectionRange: ${pendingSelectionRange},
+loadState: ${loadState},
 observedRevision: ${observedRevision},
 lastOperationRejectedByProjectChange: ${lastOperationRejectedByProjectChange},
 diagnostics: ${diagnostics},

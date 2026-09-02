@@ -2944,4 +2944,239 @@ class AppLocalizationsPt extends AppLocalizations {
   String thProjectSaveFailed(Object path, Object error) {
     return 'Falha ao salvar $path: $error';
   }
+
+  @override
+  String get projectSearchTitle => 'Pesquisar nos arquivos';
+
+  @override
+  String get projectSearchOpenTooltip =>
+      'Pesquisar nos arquivos (Ctrl/Cmd+Shift+F)';
+
+  @override
+  String get projectSearchBackToTreeTooltip => 'Voltar à árvore do projeto';
+
+  @override
+  String get projectSearchQueryHint => 'Pesquisar';
+
+  @override
+  String get projectSearchReplacementHint => 'Substituir';
+
+  @override
+  String get projectSearchCaseSensitiveTooltip =>
+      'Diferenciar maiúsculas de minúsculas';
+
+  @override
+  String get projectSearchToggleReplaceTooltip => 'Alternar substituição';
+
+  @override
+  String get projectSearchRefreshTooltip => 'Atualizar pesquisa';
+
+  @override
+  String get projectSearchScopeLabel => 'Escopo';
+
+  @override
+  String get projectSearchScopeOpenTabs => 'Abas de texto abertas';
+
+  @override
+  String get projectSearchScopeProjectFiles => 'Arquivos do projeto';
+
+  @override
+  String get projectSearchReplaceAllButton => 'Substituir todas';
+
+  @override
+  String projectSearchSummary(int matchCount, int fileCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      matchCount,
+      locale: localeName,
+      other: '$matchCount ocorrências',
+      one: '1 ocorrência',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      fileCount,
+      locale: localeName,
+      other: '$fileCount arquivos',
+      one: '1 arquivo',
+    );
+    return '$_temp0 em $_temp1';
+  }
+
+  @override
+  String get projectSearchSearching => 'Pesquisando…';
+
+  @override
+  String get projectSearchReplacing => 'Substituindo…';
+
+  @override
+  String get projectSearchEmptyQuery =>
+      'Digite um texto para pesquisar em vários arquivos.';
+
+  @override
+  String get projectSearchNoOpenTabs =>
+      'Nenhuma aba de texto aberta para pesquisar.';
+
+  @override
+  String get projectSearchNoProject =>
+      'Abra um projeto para pesquisar seus arquivos.';
+
+  @override
+  String get projectSearchNoMatches => 'Nenhuma ocorrência encontrada.';
+
+  @override
+  String projectSearchReadFailures(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count arquivos não puderam ser lidos',
+      one: '1 arquivo não pôde ser lido',
+    );
+    return '$_temp0.';
+  }
+
+  @override
+  String projectSearchMatchLocation(int line, int column) {
+    return 'Linha $line, coluna $column';
+  }
+
+  @override
+  String projectSearchFileMatchCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ocorrências',
+      one: '1 ocorrência',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get projectSearchStandaloneIndicator => 'Somente pesquisa';
+
+  @override
+  String get projectSearchStandaloneTooltip =>
+      'Este arquivo não faz parte do projeto carregado. Você pode abri-lo e navegar até as ocorrências, mas a substituição em massa não o modificará nem o salvará.';
+
+  @override
+  String get projectSearchReplaceConfirmTitle => 'Substituir todas';
+
+  @override
+  String projectSearchReplaceConfirmBody(int matchCount, int fileCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      matchCount,
+      locale: localeName,
+      other: '$matchCount ocorrências',
+      one: '1 ocorrência',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      fileCount,
+      locale: localeName,
+      other: '$fileCount arquivos',
+      one: '1 arquivo',
+    );
+    return 'Substituir $_temp0 em $_temp1? Os arquivos do projeto afetados serão salvos. Isso não pode ser desfeito como uma única ação.';
+  }
+
+  @override
+  String projectSearchReplaceConfirmExcluded(int matchCount, int fileCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      matchCount,
+      locale: localeName,
+      other: '$matchCount ocorrências somente de pesquisa',
+      one: '1 ocorrência somente de pesquisa',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      fileCount,
+      locale: localeName,
+      other: '$fileCount arquivos',
+      one: '1 arquivo',
+    );
+    return '$_temp0 em $_temp1 não serão alteradas.';
+  }
+
+  @override
+  String get projectSearchReplaceConfirmButton => 'Substituir todas';
+
+  @override
+  String get projectSearchReplaceCancelButton => 'Cancelar';
+
+  @override
+  String get projectSearchReplaceOnlyStandalone =>
+      'Todas as ocorrências estão em arquivos somente de pesquisa, portanto a substituição em massa não está disponível.';
+
+  @override
+  String get projectSearchReplaceAborted =>
+      'A substituição em massa foi cancelada porque os resultados da pesquisa ou o projeto mudaram. Nada foi modificado.';
+
+  @override
+  String get projectSearchReplacePreflightFailed =>
+      'A substituição em massa não pôde iniciar porque um ou mais arquivos falharam nas verificações prévias. Nada foi modificado.';
+
+  @override
+  String get projectSearchReplaceCompleteTitle =>
+      'Substituição em massa concluída';
+
+  @override
+  String projectSearchReplaceCompleteSummary(int matchCount, int fileCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      matchCount,
+      locale: localeName,
+      other: '$matchCount ocorrências',
+      one: '1 ocorrência',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      fileCount,
+      locale: localeName,
+      other: '$fileCount arquivos',
+      one: '1 arquivo',
+    );
+    return 'Salvas $_temp0 em $_temp1.';
+  }
+
+  @override
+  String projectSearchReplaceCompleteIncomplete(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count arquivos não foram totalmente salvos',
+      one: '1 arquivo não foi totalmente salvo',
+    );
+    return '$_temp0 porque edições mais recentes ou uma mudança de projeto interferiram.';
+  }
+
+  @override
+  String projectSearchReplaceCompleteSkipped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count arquivos foram ignorados',
+      one: '1 arquivo foi ignorado',
+    );
+    return '$_temp0 porque seu conteúdo ou vínculo com o projeto mudou.';
+  }
+
+  @override
+  String projectSearchReplaceCompleteFailed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count arquivos não puderam ser salvos',
+      one: '1 arquivo não pôde ser salvo',
+    );
+    return '$_temp0.';
+  }
+
+  @override
+  String projectSearchReplaceCompleteMaterialized(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count arquivos com substituições não salvas foram deixados abertos em abas de editor',
+      one:
+          '1 arquivo com substituições não salvas foi deixado aberto em uma aba de editor',
+    );
+    return '$_temp0 para recuperação.';
+  }
+
+  @override
+  String get projectSearchReplaceCompleteCloseButton => 'Fechar';
 }

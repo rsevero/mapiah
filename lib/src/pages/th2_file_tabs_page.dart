@@ -25,6 +25,7 @@ import 'package:mapiah/src/widgets/mp_responsive_app_bar.dart';
 import 'package:mapiah/src/widgets/mp_telemetry_consent_dialog.dart';
 import 'package:mapiah/src/widgets/mp_url_text_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_body_widget.dart';
+import 'package:mapiah/src/widgets/th_project_search_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_resize_divider_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_widget.dart';
 import 'package:mapiah/src/widgets/th_text_editor_tab_body_widget.dart';
@@ -541,10 +542,13 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                   if (!sidebarCollapsed)
                     SizedBox(
                       width: projectTreeUIController.sidebarWidth,
-                      child: THProjectTreeWidget(
-                        pickProjectAndRunTherion:
-                            widget.pickProjectAndRunTherion,
-                      ),
+                      child: projectTreeUIController.sidebarMode ==
+                              THProjectSidebarMode.projectSearch
+                          ? const THProjectSearchWidget()
+                          : THProjectTreeWidget(
+                              pickProjectAndRunTherion:
+                                  widget.pickProjectAndRunTherion,
+                            ),
                     ),
                   if (!sidebarCollapsed)
                     const THProjectTreeResizeDividerWidget(),
@@ -998,6 +1002,18 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                 mpHelpPageKeyboardShortcutsEdit,
                 appLocalizations.mapiahKeyboardShortcutsTitle,
               ),
+          // Multi-file search: Ctrl/Cmd+Shift+F (single-file Ctrl/Cmd+F stays
+          // editor-local in THTextEditorWidget).
+          const SingleActivator(
+            LogicalKeyboardKey.keyF,
+            control: true,
+            shift: true,
+          ): () => mpLocator.thProjectTreeUIController.showProjectSearch(),
+          const SingleActivator(
+            LogicalKeyboardKey.keyF,
+            meta: true,
+            shift: true,
+          ): () => mpLocator.thProjectTreeUIController.showProjectSearch(),
           // Run Therion and open project: Ctrl/Cmd+T
           const SingleActivator(LogicalKeyboardKey.keyT, control: true): () =>
               _pickProjectAndRunTherionIfNoProject(),

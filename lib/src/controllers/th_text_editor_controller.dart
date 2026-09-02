@@ -6,6 +6,7 @@ import 'dart:ui' show TextRange;
 import 'package:flutter/widgets.dart' show FocusNode, visibleForTesting;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
+import 'package:mapiah/src/auxiliary/th_text_search_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
@@ -22,6 +23,12 @@ part 'th_text_editor_controller.g.dart';
 
 class THTextEditorController = THTextEditorControllerBase
     with _$THTextEditorController;
+
+/// Durable load state of a [THTextEditorController]. Unlike the transient
+/// [THTextEditorControllerBase.isLoading] flag, this distinguishes a controller
+/// that has never loaded from one whose load failed, so multi-file search never
+/// scans an empty/stale buffer as if it were authoritative content.
+enum THTextEditorLoadState { notLoaded, loading, loaded, failed }
 
 /// MobX store owning the state of one open `thconfig`/`.th` text-editor
 /// instance: current text, dirty state, cursor/scroll position, fold state,
@@ -83,6 +90,20 @@ abstract class THTextEditorControllerBase
   @observable
   int? pendingScrollToLine;
 
+  /// A pending exact selection to apply once the widget has synchronized the
+  /// controller content into its `TextEditingController`. Set by multi-file
+  /// search result navigation; consumed and cleared by [THTextEditorWidget].
+  @observable
+  TextRange? pendingSelectionRange;
+
+  /// Durable load state; see [THTextEditorLoadState].
+  @observable
+  THTextEditorLoadState loadState = THTextEditorLoadState.notLoaded;
+
+  /// Logged technical description of the last load failure, or `null`. Not a
+  /// localized, user-facing string.
+  String? loadFailureTechnicalMessage;
+
   /// The project content revision this editor currently represents. `0` for a
   /// clean disk-backed load or an unbound editor.
   @observable
@@ -128,35 +149,15 @@ abstract class THTextEditorControllerBase
   List<THTextEditorFoldRegion> get foldRegions => buildFoldRegions(content);
 
   /// Non-overlapping, left-to-right occurrences of [findQuery] in [content].
-  /// A plain substring scan — no regex support in this increment.
+  /// A plain substring scan — no regex support in this increment. Delegates to
+  /// the shared [findPlainTextMatches] helper so single-file and multi-file
+  /// search have identical semantics.
   @computed
-  List<TextRange> get findMatches {
-    if (findQuery.isEmpty) {
-      return const <TextRange>[];
-    }
-
-    final String haystack = findCaseSensitive ? content : content.toLowerCase();
-    final String needle = findCaseSensitive
-        ? findQuery
-        : findQuery.toLowerCase();
-    final List<TextRange> matches = <TextRange>[];
-    int searchStart = 0;
-
-    while (searchStart <= haystack.length - needle.length) {
-      final int foundIndex = haystack.indexOf(needle, searchStart);
-
-      if (foundIndex == -1) {
-        break;
-      }
-
-      matches.add(
-        TextRange(start: foundIndex, end: foundIndex + needle.length),
-      );
-      searchStart = foundIndex + needle.length;
-    }
-
-    return matches;
-  }
+  List<TextRange> get findMatches => findPlainTextMatches(
+    content: content,
+    query: findQuery,
+    caseSensitive: findCaseSensitive,
+  );
 
   Timer? _reparseTimer;
 
@@ -182,6 +183,7 @@ abstract class THTextEditorControllerBase
 
     canonicalPath = resolvedCanonicalPath;
     isLoading = true;
+    loadState = THTextEditorLoadState.loading;
 
     try {
       if (snapshot.isProjectTracked) {
@@ -202,9 +204,36 @@ abstract class THTextEditorControllerBase
       cursorColumn = 0;
       collapsedFoldStarts = ObservableSet<int>();
       lastOperationRejectedByProjectChange = false;
+      loadFailureTechnicalMessage = null;
+      loadState = THTextEditorLoadState.loaded;
+    } catch (error, stackTrace) {
+      loadFailureTechnicalMessage =
+          '[THTextEditorController] loadFile failed for '
+          '$resolvedCanonicalPath: $error';
+      loadState = THTextEditorLoadState.failed;
+      mpLocator.mpLog.e(
+        loadFailureTechnicalMessage,
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      rethrow;
     } finally {
       isLoading = false;
     }
+  }
+
+  /// Records a pending exact selection to apply after the widget synchronizes
+  /// content. Analogous to [scrollToLine]/[pendingScrollToLine]; used by
+  /// multi-file search result navigation so it never mutates [findQuery].
+  @action
+  void revealRange(TextRange range) {
+    pendingSelectionRange = range;
+  }
+
+  @action
+  void clearPendingSelectionRange() {
+    pendingSelectionRange = null;
   }
 
   @action

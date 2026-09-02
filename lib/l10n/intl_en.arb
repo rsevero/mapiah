@@ -4555,5 +4555,238 @@
       "path": {},
       "error": {}
     }
+  },
+  "projectSearchTitle": "Search in files",
+  "@projectSearchTitle": {
+    "description": "Title of the multi-file search sidebar view. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchOpenTooltip": "Search in files (Ctrl/Cmd+Shift+F)",
+  "@projectSearchOpenTooltip": {
+    "description": "Tooltip for the project sidebar header action that opens multi-file search. Used on: THProjectTreeWidget._buildHeader",
+    "type": "text"
+  },
+  "projectSearchBackToTreeTooltip": "Back to project tree",
+  "@projectSearchBackToTreeTooltip": {
+    "description": "Tooltip for the back action returning from search mode to the project tree. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchQueryHint": "Search",
+  "@projectSearchQueryHint": {
+    "description": "Hint text for the multi-file search query field. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplacementHint": "Replace",
+  "@projectSearchReplacementHint": {
+    "description": "Hint text for the multi-file search replacement field. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchCaseSensitiveTooltip": "Match case",
+  "@projectSearchCaseSensitiveTooltip": {
+    "description": "Tooltip for the multi-file search case-sensitivity toggle. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchToggleReplaceTooltip": "Toggle replace",
+  "@projectSearchToggleReplaceTooltip": {
+    "description": "Tooltip for the multi-file search replace-row expand/collapse control. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchRefreshTooltip": "Refresh search",
+  "@projectSearchRefreshTooltip": {
+    "description": "Tooltip for the multi-file search refresh/re-run action. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchScopeLabel": "Scope",
+  "@projectSearchScopeLabel": {
+    "description": "Label for the multi-file search scope selector. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchScopeOpenTabs": "Open text tabs",
+  "@projectSearchScopeOpenTabs": {
+    "description": "Multi-file search scope: all open thconfig/.th text tabs. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchScopeProjectFiles": "Project files",
+  "@projectSearchScopeProjectFiles": {
+    "description": "Multi-file search scope: all writable files in the loaded project. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceAllButton": "Replace All",
+  "@projectSearchReplaceAllButton": {
+    "description": "Label for the multi-file Replace All button. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchSummary": "{matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}",
+  "@projectSearchSummary": {
+    "description": "Compact result summary for multi-file search. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "matchCount": { "type": "int" },
+      "fileCount": { "type": "int" }
+    }
+  },
+  "projectSearchSearching": "Searching…",
+  "@projectSearchSearching": {
+    "description": "Progress label shown while a multi-file search runs. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplacing": "Replacing…",
+  "@projectSearchReplacing": {
+    "description": "Progress label shown while a multi-file Replace All runs. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchEmptyQuery": "Enter text to search across files.",
+  "@projectSearchEmptyQuery": {
+    "description": "Empty state shown when the multi-file search query is empty. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchNoOpenTabs": "No open text tabs to search.",
+  "@projectSearchNoOpenTabs": {
+    "description": "Empty state shown for open-tabs scope when no text tabs are open. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchNoProject": "Open a project to search its files.",
+  "@projectSearchNoProject": {
+    "description": "Empty state shown for project scope when no project is loaded. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchNoMatches": "No matches found.",
+  "@projectSearchNoMatches": {
+    "description": "Empty state shown when a multi-file search finds nothing. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReadFailures": "{count, plural, one {1 file could not be read} other {{count} files could not be read}}.",
+  "@projectSearchReadFailures": {
+    "description": "Warning shown when some files could not be read during search. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchMatchLocation": "Line {line}, column {column}",
+  "@projectSearchMatchLocation": {
+    "description": "One-based line/column label for a match row. Used on: THProjectSearchResultWidget",
+    "type": "text",
+    "placeholders": {
+      "line": { "type": "int" },
+      "column": { "type": "int" }
+    }
+  },
+  "projectSearchFileMatchCount": "{count, plural, one {1 match} other {{count} matches}}",
+  "@projectSearchFileMatchCount": {
+    "description": "Per-file match count shown on a result group header. Used on: THProjectSearchResultWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchStandaloneIndicator": "Search only",
+  "@projectSearchStandaloneIndicator": {
+    "description": "Badge on a result group for a file outside the loaded project. Used on: THProjectSearchResultWidget",
+    "type": "text"
+  },
+  "projectSearchStandaloneTooltip": "This file is not part of the loaded project. You can open it and navigate to matches, but Replace All will not modify or save it.",
+  "@projectSearchStandaloneTooltip": {
+    "description": "Tooltip explaining the search-only indicator. Used on: THProjectSearchResultWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceConfirmTitle": "Replace All",
+  "@projectSearchReplaceConfirmTitle": {
+    "description": "Title of the Replace All confirmation dialog. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceConfirmBody": "Replace {matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}? The affected project files will be saved. This cannot be undone as a single action.",
+  "@projectSearchReplaceConfirmBody": {
+    "description": "Body of the Replace All confirmation dialog. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "matchCount": { "type": "int" },
+      "fileCount": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceConfirmExcluded": "{matchCount, plural, one {1 search-only match} other {{matchCount} search-only matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}} will not be changed.",
+  "@projectSearchReplaceConfirmExcluded": {
+    "description": "Extra line in the Replace All confirmation dialog when search-only matches are excluded. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "matchCount": { "type": "int" },
+      "fileCount": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceConfirmButton": "Replace All",
+  "@projectSearchReplaceConfirmButton": {
+    "description": "Confirm button of the Replace All confirmation dialog. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceCancelButton": "Cancel",
+  "@projectSearchReplaceCancelButton": {
+    "description": "Cancel button of the Replace All confirmation dialog. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceOnlyStandalone": "All matches are in search-only files, so Replace All is unavailable.",
+  "@projectSearchReplaceOnlyStandalone": {
+    "description": "Explanation shown when Replace All is disabled because every match is search-only. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceAborted": "Replace All was cancelled because the search results or project changed. Nothing was modified.",
+  "@projectSearchReplaceAborted": {
+    "description": "Message shown when Replace All aborts before mutation due to a stale snapshot. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplacePreflightFailed": "Replace All could not start because one or more files failed pre-checks. Nothing was modified.",
+  "@projectSearchReplacePreflightFailed": {
+    "description": "Message shown when Replace All preflight checks fail. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceCompleteTitle": "Replace All complete",
+  "@projectSearchReplaceCompleteTitle": {
+    "description": "Title of the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text"
+  },
+  "projectSearchReplaceCompleteSummary": "Saved {matchCount, plural, one {1 match} other {{matchCount} matches}} in {fileCount, plural, one {1 file} other {{fileCount} files}}.",
+  "@projectSearchReplaceCompleteSummary": {
+    "description": "Success summary in the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "matchCount": { "type": "int" },
+      "fileCount": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceCompleteIncomplete": "{count, plural, one {1 file was not fully saved} other {{count} files were not fully saved}} because newer edits or a project change intervened.",
+  "@projectSearchReplaceCompleteIncomplete": {
+    "description": "Incomplete-file line in the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceCompleteSkipped": "{count, plural, one {1 file was skipped} other {{count} files were skipped}} because its content or project membership changed.",
+  "@projectSearchReplaceCompleteSkipped": {
+    "description": "Skipped-file line in the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceCompleteFailed": "{count, plural, one {1 file could not be saved} other {{count} files could not be saved}}.",
+  "@projectSearchReplaceCompleteFailed": {
+    "description": "Failed-file line in the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceCompleteMaterialized": "{count, plural, one {1 file with unsaved replacements was left open in an editor tab} other {{count} files with unsaved replacements were left open in editor tabs}} for recovery.",
+  "@projectSearchReplaceCompleteMaterialized": {
+    "description": "Recovery-tab line in the Replace All completion dialog, including the standalone/no-current-writer case. Used on: THProjectSearchWidget",
+    "type": "text",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectSearchReplaceCompleteCloseButton": "Close",
+  "@projectSearchReplaceCompleteCloseButton": {
+    "description": "Close button of the Replace All completion dialog. Used on: THProjectSearchWidget",
+    "type": "text"
   }
 }

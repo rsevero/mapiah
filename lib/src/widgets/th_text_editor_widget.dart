@@ -345,6 +345,34 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     }
   }
 
+  /// Applies a pending exact selection from multi-file search navigation:
+  /// clamps the range, selects it, scrolls it into view, and requests editor
+  /// focus. Mirrors [_applyActiveMatch]'s line-height math.
+  void _applyPendingSelectionRange(TextRange range) {
+    final String content = widget.controller.content;
+    final int start = range.start.clamp(0, content.length);
+    final int end = range.end.clamp(start, content.length);
+
+    _textEditingController.selection = TextSelection(
+      baseOffset: start,
+      extentOffset: end,
+    );
+
+    final _LineColumn position = _lineColumnAt(content, start);
+    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
+
+    if (_textScrollController.hasClients) {
+      _textScrollController.jumpTo(
+        (position.line * lineHeight).clamp(
+          _textScrollController.position.minScrollExtent,
+          _textScrollController.position.maxScrollExtent,
+        ),
+      );
+    }
+
+    widget.controller.textEditorFocusNode.requestFocus();
+  }
+
   /// Moves the text field's selection to [activeMatchIndex]'s range in
   /// [matches] and scrolls it into view. Selection-only (no text change),
   /// so the existing text-change listener only updates the reported cursor
@@ -433,9 +461,23 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
           _applyActiveMatch(findMatches, widget.controller.activeMatchIndex);
         }
 
+        final TextRange? pendingSelectionRange =
+            widget.controller.pendingSelectionRange;
         final int? pendingScrollToLine = widget.controller.pendingScrollToLine;
 
-        if (pendingScrollToLine != null) {
+        // Exact-range selection (multi-file search navigation) takes
+        // precedence over line-only navigation and clears only its own
+        // request.
+        if (pendingSelectionRange != null) {
+          _applyPendingSelectionRange(pendingSelectionRange);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            widget.controller.clearPendingSelectionRange();
+            // Exact selection has already positioned the viewport, so discard
+            // any coincident line-only request instead of letting it clobber
+            // the selection on the next build.
+            widget.controller.clearPendingScrollToLine();
+          });
+        } else if (pendingScrollToLine != null) {
           _applyPendingScrollToLine(pendingScrollToLine);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             widget.controller.clearPendingScrollToLine();

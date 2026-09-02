@@ -149,6 +149,19 @@ class THProjectTreeWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
+          IconButton(
+            key: const ValueKey('THProjectTreeSearchButton'),
+            icon: const Icon(Icons.search),
+            iconSize: mpSmallIconSize,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minWidth: mpProjectTreeRowHeight,
+              minHeight: mpProjectTreeRowHeight,
+            ),
+            onPressed: () =>
+                mpLocator.thProjectTreeUIController.showProjectSearch(),
+            tooltip: appLocalizations.projectSearchOpenTooltip,
+          ),
           if (hasProject)
             IconButton(
               key: const ValueKey('THProjectTreeCloseProjectButton'),

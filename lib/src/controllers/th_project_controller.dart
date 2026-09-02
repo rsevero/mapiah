@@ -1303,6 +1303,20 @@ abstract class THProjectControllerBase with Store {
   THProjectFileNode? nodeByCanonicalPath(String canonicalPath) =>
       _nodesByCanonicalPath[canonicalPath];
 
+  /// Canonical paths of every writable `THConfigFileNode`/`THDataFileNode`
+  /// currently in the project tree, deduplicated. This is the authoritative
+  /// "Project files" source set for multi-file search; unlike
+  /// `fileContentsCache.keys`, it never lags a freshly added include waiting
+  /// for its reparse. Empty when no project is loaded.
+  List<String> writableTextFileCanonicalPaths() => _nodesByCanonicalPath.entries
+      .where(
+        (MapEntry<String, THProjectFileNode> entry) =>
+            (entry.value is THConfigFileNode) ||
+            (entry.value is THDataFileNode),
+      )
+      .map((MapEntry<String, THProjectFileNode> entry) => entry.key)
+      .toList(growable: false);
+
   Set<String> dependenciesOf(String canonicalPath) =>
       Set<String>.of(_fileDependencies[canonicalPath] ?? const <String>{});
 

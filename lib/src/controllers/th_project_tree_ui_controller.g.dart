@@ -63,6 +63,46 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
     });
   }
 
+  late final _$sidebarModeAtom = Atom(
+    name: 'THProjectTreeUIControllerBase.sidebarMode',
+    context: context,
+  );
+
+  @override
+  THProjectSidebarMode get sidebarMode {
+    _$sidebarModeAtom.reportRead();
+    return super.sidebarMode;
+  }
+
+  @override
+  set sidebarMode(THProjectSidebarMode value) {
+    _$sidebarModeAtom.reportWrite(value, super.sidebarMode, () {
+      super.sidebarMode = value;
+    });
+  }
+
+  late final _$projectSearchFocusRequestGenerationAtom = Atom(
+    name: 'THProjectTreeUIControllerBase.projectSearchFocusRequestGeneration',
+    context: context,
+  );
+
+  @override
+  int get projectSearchFocusRequestGeneration {
+    _$projectSearchFocusRequestGenerationAtom.reportRead();
+    return super.projectSearchFocusRequestGeneration;
+  }
+
+  @override
+  set projectSearchFocusRequestGeneration(int value) {
+    _$projectSearchFocusRequestGenerationAtom.reportWrite(
+      value,
+      super.projectSearchFocusRequestGeneration,
+      () {
+        super.projectSearchFocusRequestGeneration = value;
+      },
+    );
+  }
+
   late final _$sidebarWidthAtom = Atom(
     name: 'THProjectTreeUIControllerBase.sidebarWidth',
     context: context,
@@ -142,6 +182,28 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   }
 
   @override
+  void showProjectSearch() {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(name: 'THProjectTreeUIControllerBase.showProjectSearch');
+    try {
+      return super.showProjectSearch();
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void showTree() {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(name: 'THProjectTreeUIControllerBase.showTree');
+    try {
+      return super.showTree();
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setSidebarCollapsed(bool collapsed) {
     final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
         .startAction(name: 'THProjectTreeUIControllerBase.setSidebarCollapsed');
@@ -182,6 +244,8 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
 expandedNodeIds: ${expandedNodeIds},
 filterText: ${filterText},
 isSidebarCollapsed: ${isSidebarCollapsed},
+sidebarMode: ${sidebarMode},
+projectSearchFocusRequestGeneration: ${projectSearchFocusRequestGeneration},
 sidebarWidth: ${sidebarWidth}
     ''';
   }

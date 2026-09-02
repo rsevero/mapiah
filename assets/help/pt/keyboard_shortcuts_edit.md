@@ -40,6 +40,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Espelhar elementos selecionados verticalmente                                                 | V                                        |
 | Editar nó/linha                                                                               | N                                        |
 | Editar opções (com elementos selecionados)                                                    | O                                        |
+| Localizar e substituir texto em vários arquivos do projeto                                    | Ctrl+Shift+F                             |
+| Localizar texto no arquivo de texto ativo                                                     | Ctrl+F                                   |
 | Abrir projeto e executar Therion quando não há projeto                                      | Ctrl+T                                   |
 | Esconder elementos selecionados / Mostrar todos os ocultos                                    | Ctrl+H                                   |
 | Excluir o último nó criado ao desenhar                                                        | Del ou Backspace                         |
@@ -96,3 +98,13 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Zoom mais distante                                                                            | -                                        |
 | Zoom mais próximo                                                                             | +                                        |
 | Zoom seleção                                                                                  | 2                                        |
+
+## Pesquisa em arquivos de texto
+
+- **Ctrl+F** pesquisa no arquivo de texto aberto na aba de editor ativa.
+- **Ctrl+Shift+F** abre a pesquisa em vários arquivos na barra lateral do projeto.
+  - O escopo **Abas de texto abertas** pesquisa em todas as abas de texto `thconfig`/`.th` abertas; o escopo **Arquivos do projeto** pesquisa em todos os arquivos `thconfig`/`.th` graváveis do projeto carregado, inclusive nos que não estão abertos.
+  - Desenhos `.th2` nunca são pesquisados; eles pertencem ao canvas.
+  - Uma aba de texto aberta que não faz parte do projeto carregado pode ser pesquisada e navegada, mas é marcada como *Somente pesquisa* e a substituição em massa nunca a modifica nem a salva.
+  - Ativar um resultado abre ou foca a aba do arquivo, revela o arquivo na árvore do projeto e seleciona a ocorrência exata. Se o arquivo mudou desde a pesquisa, a pesquisa é atualizada e a ocorrência atual mais próxima é selecionada.
+  - A substituição em massa pede confirmação, informa quantas ocorrências e arquivos são afetados (e quantos são excluídos), e então substitui e salva os arquivos do projeto afetados. Não há desfazer em uma única etapa entre arquivos.

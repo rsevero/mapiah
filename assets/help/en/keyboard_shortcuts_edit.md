@@ -31,6 +31,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Delete point, line, area or line segment                                         | Del or Backspace                           |
 | Deselect all                                                                     | Escape                                     |
 | Duplicate selected elements                                                      | Ctrl+D                                     |
+| Find and replace text across multiple project files                              | Ctrl+Shift+F                               |
+| Find text in the active text file                                                | Ctrl+F                                     |
 | Flip image horizontally                                                          | H                                          |
 | Flip image vertically                                                            | V                                          |
 | Flip selected elements horizontally                                              | H                                          |
@@ -96,3 +98,13 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Zoom scrap                                                                       | 3                                          |
 | Zoom selection                                                                   | 2                                          |
 | Zoom selection window                                                            | 5                                          |
+
+## Text file search
+
+- **Ctrl+F** searches the text file open in the active editor tab.
+- **Ctrl+Shift+F** opens multi-file search in the project sidebar.
+  - **Open text tabs** scope searches every open `thconfig`/`.th` text tab; **Project files** scope searches every writable `thconfig`/`.th` file in the loaded project, including files that are not open.
+  - `.th2` drawings are never searched; they stay canvas-owned.
+  - A text tab that is open but is not part of the loaded project is searchable and you can navigate to its matches, but it is marked *Search only* and Replace All never modifies or saves it.
+  - Activating a result opens or focuses the file tab, reveals the file in the project tree, and selects the exact match. If the file changed since the search ran, the search is refreshed and the nearest current match is selected.
+  - Replace All asks for confirmation, reports how many matches and files are affected (and how many are excluded), then replaces and saves the affected project files. There is no single-step undo across files.
