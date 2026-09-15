@@ -1970,7 +1970,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get thCommandOptionId => 'ID';
 
   @override
-  String get thCommandOptionLSize => 'Tamanho L';
+  String get thCommandOptionLSize => 'Tamanho';
 
   @override
   String get thCommandOptionLengthUnit => 'Unidade';
