@@ -380,6 +380,16 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     return _$saveAsyncAction.run(() => super.save());
   }
 
+  late final _$saveAsAsyncAction = AsyncAction(
+    'THTextEditorControllerBase.saveAs',
+    context: context,
+  );
+
+  @override
+  Future<THTextFileSaveAsResult> saveAs() {
+    return _$saveAsAsyncAction.run(() => super.saveAs());
+  }
+
   late final _$revertAsyncAction = AsyncAction(
     'THTextEditorControllerBase.revert',
     context: context,

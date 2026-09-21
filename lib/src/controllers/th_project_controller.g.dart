@@ -309,6 +309,30 @@ mixin _$THProjectController on THProjectControllerBase, Store {
     );
   }
 
+  late final _$saveTextProjectFileAsAsyncAction = AsyncAction(
+    'THProjectControllerBase.saveTextProjectFileAs',
+    context: context,
+  );
+
+  @override
+  Future<THTextFileSaveAsResult> saveTextProjectFileAs({
+    required String oldCanonicalPath,
+    required String newCanonicalPath,
+    required int requestedRevision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) {
+    return _$saveTextProjectFileAsAsyncAction.run(
+      () => super.saveTextProjectFileAs(
+        oldCanonicalPath: oldCanonicalPath,
+        newCanonicalPath: newCanonicalPath,
+        requestedRevision: requestedRevision,
+        expectedProjectEpoch: expectedProjectEpoch,
+        expectedRootPath: expectedRootPath,
+      ),
+    );
+  }
+
   late final _$saveProjectFileAsyncAction = AsyncAction(
     'THProjectControllerBase.saveProjectFile',
     context: context,
