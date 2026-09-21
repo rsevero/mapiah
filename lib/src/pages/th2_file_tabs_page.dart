@@ -1056,9 +1056,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               _pickProjectAndRunTherionIfNoProject(),
           const SingleActivator(LogicalKeyboardKey.keyT, meta: true): () =>
               _pickProjectAndRunTherionIfNoProject(),
-          // Rerun Therion: T (no modifiers)
-          const SingleActivator(LogicalKeyboardKey.keyT): () =>
-              _rerunTherionForOpenProject(),
+          // Rerun Therion: T (no modifiers) is handled below, in the outer
+          // Focus's onKeyEvent, so that it only fires when no text field
+          // (e.g. a thconfig editor) has focus; otherwise plain "T" keeps
+          // typing the letter.
         };
 
     return CallbackShortcuts(
@@ -1066,11 +1067,34 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       child: Focus(
         autofocus: true,
         onKeyEvent: (node, event) {
+          if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.keyT &&
+              !HardwareKeyboard.instance.isControlPressed &&
+              !HardwareKeyboard.instance.isMetaPressed &&
+              !HardwareKeyboard.instance.isShiftPressed &&
+              !HardwareKeyboard.instance.isAltPressed &&
+              !_isTextInputFocused()) {
+            _rerunTherionForOpenProject();
+
+            return KeyEventResult.handled;
+          }
+
           return KeyEventResult.ignored;
         },
         child: child,
       ),
     );
+  }
+
+  /// Whether the currently focused widget is a text-editing field (e.g. a
+  /// thconfig editor, a search box, a rename dialog), so that global,
+  /// unmodified single-letter shortcuts (like plain "T") should not fire.
+  bool _isTextInputFocused() {
+    final BuildContext? focusedContext =
+        FocusManager.instance.primaryFocus?.context;
+
+    return focusedContext != null &&
+        focusedContext.findAncestorWidgetOfExactType<EditableText>() != null;
   }
 
   Future<void> _pickProjectAndRunTherion() {
