@@ -124,12 +124,12 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     return prepareImageMoveState(imageMPID);
   }
 
-  void flipImageHorizontally(int imageMPID) {
-    _flipImage(imageMPID: imageMPID, flipX: true, flipY: false);
+  void mirrorImageHorizontally(int imageMPID) {
+    _mirrorImage(imageMPID: imageMPID, mirrorX: true, mirrorY: false);
   }
 
-  void flipImageVertically(int imageMPID) {
-    _flipImage(imageMPID: imageMPID, flipX: false, flipY: true);
+  void mirrorImageVertically(int imageMPID) {
+    _mirrorImage(imageMPID: imageMPID, mirrorX: false, mirrorY: true);
   }
 
   void resetImageTransform(int imageMPID) {
@@ -233,12 +233,12 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     return image;
   }
 
-  void _flipImage({
+  void _mirrorImage({
     required int imageMPID,
-    required bool flipX,
-    required bool flipY,
+    required bool mirrorX,
+    required bool mirrorY,
   }) {
-    assert(flipX != flipY, 'Exactly one flip axis must be enabled.');
+    assert(mirrorX != mirrorY, 'Exactly one mirror axis must be enabled.');
 
     final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
       imageMPID,
@@ -252,11 +252,11 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     final Offset anchorLocal = localBounds.center;
     final Offset anchorCanvas = image.transformLocalPoint(anchorLocal);
     final THDoublePart toXScale = image.xScale.copyWith(
-      value: flipX ? -image.xScale.value : image.xScale.value,
+      value: mirrorX ? -image.xScale.value : image.xScale.value,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
     );
     final THDoublePart toYScale = image.yScale.copyWith(
-      value: flipY ? -image.yScale.value : image.yScale.value,
+      value: mirrorY ? -image.yScale.value : image.yScale.value,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
     );
     final Offset translation = _translationForAnchor(
@@ -274,7 +274,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
       value: translation.dy,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
     );
-    final MPScaleImageInsertConfigCommand flipCommand =
+    final MPScaleImageInsertConfigCommand mirrorCommand =
         MPCommandFactory.scaleImageInsertConfig(
           imageMPID: imageMPID,
           toXX: toXX,
@@ -284,7 +284,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
           th2File: _th2File,
         );
 
-    _th2FileEditController.execute(flipCommand);
+    _th2FileEditController.execute(mirrorCommand);
   }
 
   Offset _translationForAnchor({
@@ -488,7 +488,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
   }
 
-  void flipSelectedElementsHorizontally() {
+  void mirrorSelectedElementsHorizontally() {
     final Iterable<MPSelectedElement> selectedElements =
         _selectionController.mpSelectedElementsLogical.values;
 
@@ -506,7 +506,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     finalizeSelectedElementsTransform();
   }
 
-  void flipSelectedElementsVertically() {
+  void mirrorSelectedElementsVertically() {
     final Iterable<MPSelectedElement> selectedElements =
         _selectionController.mpSelectedElementsLogical.values;
 

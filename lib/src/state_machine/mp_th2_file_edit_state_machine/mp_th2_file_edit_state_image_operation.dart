@@ -71,34 +71,33 @@ abstract class MPTH2FileEditStateImageOperation extends MPTH2FileEditState {
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (event.logicalKey == LogicalKeyboardKey.escape) {
+      th2FileEditController.stateController.setState(
+        MPTH2FileEditStateType.selectEmptySelection,
+      );
+
+      return;
+    }
+
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
     final bool isShiftPressed = MPInteractionAux.isShiftPressed();
 
-    if (isAltPressed || isCtrlPressed || isMetaPressed || isShiftPressed) {
-      if (event.logicalKey == LogicalKeyboardKey.escape) {
-        th2FileEditController.stateController.setState(
-          MPTH2FileEditStateType.selectEmptySelection,
-        );
-      }
-
+    if (event.logicalKey != LogicalKeyboardKey.keyM) {
       return;
     }
 
-    switch (event.logicalKey) {
-      case LogicalKeyboardKey.escape:
-        th2FileEditController.stateController.setState(
-          MPTH2FileEditStateType.selectEmptySelection,
-        );
-      case LogicalKeyboardKey.keyH:
-        th2FileEditController.stateController.onButtonPressed(
-          MPButtonType.flipImageHorizontally,
-        );
-      case LogicalKeyboardKey.keyV:
-        th2FileEditController.stateController.onButtonPressed(
-          MPButtonType.flipImageVertically,
-        );
+    if (isAltPressed && !isCtrlPressed && !isMetaPressed && !isShiftPressed) {
+      th2FileEditController.stateController.onButtonPressed(
+        MPButtonType.mirrorImageHorizontally,
+      );
+    } else if ((isCtrlPressed || isMetaPressed) &&
+        !isAltPressed &&
+        !isShiftPressed) {
+      th2FileEditController.stateController.onButtonPressed(
+        MPButtonType.mirrorImageVertically,
+      );
     }
   }
 }

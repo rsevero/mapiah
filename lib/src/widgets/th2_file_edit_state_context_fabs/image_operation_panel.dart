@@ -29,22 +29,22 @@ class TH2FileEditImageOperationContextFABsPanel extends StatelessWidget {
           buttons: <Widget>[
             TH2FileEditStateContextFABButton(
               context: context,
-              heroTag: '${heroPrefix}_ctx_flip_image_horizontally',
+              heroTag: '${heroPrefix}_ctx_mirror_image_horizontally',
               onPressed: () =>
-                  _onButtonPressed(MPButtonType.flipImageHorizontally),
+                  _onButtonPressed(MPButtonType.mirrorImageHorizontally),
               category: TH2FileEditStateContextFABCategory.editTools,
               icon: Icons.flip,
-              tooltip: appLocalizations.th2FileEditPageFlipImageHorizontally,
+              tooltip: appLocalizations.th2FileEditPageMirrorImageHorizontally,
             ),
             TH2FileEditStateContextFABButton(
               context: context,
-              heroTag: '${heroPrefix}_ctx_flip_image_vertically',
+              heroTag: '${heroPrefix}_ctx_mirror_image_vertically',
               onPressed: () =>
-                  _onButtonPressed(MPButtonType.flipImageVertically),
+                  _onButtonPressed(MPButtonType.mirrorImageVertically),
               category: TH2FileEditStateContextFABCategory.editTools,
               icon: Icons.flip_camera_android,
-              child: const TH2FileEditVerticalFlipFABIcon(),
-              tooltip: appLocalizations.th2FileEditPageFlipImageVertically,
+              child: const TH2FileEditVerticalMirrorFABIcon(),
+              tooltip: appLocalizations.th2FileEditPageMirrorImageVertically,
             ),
           ],
         ),

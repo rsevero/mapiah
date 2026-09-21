@@ -258,9 +258,9 @@ While image transform mode is active:
 * Drag the image itself to move it
 * Drag any black handle to scale it
 * Click the selected image to toggle between move/scale mode and rotate mode
-* Press _H_ to flip the image horizontally
-* Press _V_ to flip the image vertically
-* Use the two flip buttons shown on the left side of the canvas to trigger the same actions with the mouse
+* Press _Alt+M_ to mirror the image horizontally
+* Press _Ctrl+M_ to mirror the image vertically
+* Use the two mirror buttons shown on the left side of the canvas to trigger the same actions with the mouse
 * Press _Esc_ to leave image transform mode
 
 Click the reset button on an image row to set `xx`, `yy`, and the rotation angle back to `0`, `xScale` and `yScale` back to `1`, and image visibility and XVI grid visibility back to their default visible state. The reset keeps the XVI root unchanged.
@@ -282,10 +282,10 @@ The following modifiers can be combined while moving:
 ### Image scaling
 In image transform mode, drag any black handle to scale the selected image.
 
-You can also flip the image instantly without dragging:
-* Press _H_ to negate `xScale`
-* Press _V_ to negate `yScale`
-* The flip actions are undoable with _Ctrl+Z_
+You can also mirror the image instantly without dragging:
+* Press _Alt+M_ to negate `xScale`
+* Press _Ctrl+M_ to negate `yScale`
+* The mirror actions are undoable with _Ctrl+Z_
 
 Scaling modifiers:
 * Hold _Ctrl_ while dragging a handle to preserve the image aspect ratio
@@ -336,8 +336,8 @@ If the `TH2Edit_EnableElementTransforms` setting is enabled, the current selecti
 * In element rotation mode, drag a corner selection handle to rotate the selection
 * Hold _Ctrl_ while rotating to snap the angle to the configured snap angle
 * Hold _Shift_ while rotating to keep the opposite corner fixed in place
-* Press _H_ to mirror the selection horizontally
-* Press _V_ to mirror the selection vertically
+* Press _Alt+M_ to mirror the selection horizontally
+* Press _Ctrl+M_ to mirror the selection vertically
 
 ### Single-line end/control points
 When one or more end/control points are selected in line edit mode:
@@ -472,7 +472,7 @@ If no coinciding extremities are found, Mapiah shows a message and performs no c
 
 ## Merge areas
 
-Press _Ctrl+M_ (or click the **Merge areas** button) to merge the border lines of the selected areas into the fewest possible closed lines, replacing the selected areas with a single merged area.
+Press _Ctrl+Alt+M_ (or click the **Merge areas** button) to merge the border lines of the selected areas into the fewest possible closed lines, replacing the selected areas with a single merged area.
 
 **When is it available:**
 The action is enabled when the total number of distinct border lines across the selected areas is two or more. Areas can be selected directly, or indirectly by selecting one or more of their border lines. This covers two common scenarios:

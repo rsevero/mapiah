@@ -183,7 +183,7 @@ class MPTH2FileEditStateElementRotate extends MPTH2FileEditState {
             !isMetaPressed &&
             !isShiftPressed) {
           th2FileEditController.moveScaleRotateElementController
-              .flipSelectedElementsHorizontally();
+              .mirrorSelectedElementsHorizontally();
         }
       case LogicalKeyboardKey.keyV:
         if (!isAltPressed &&
@@ -191,7 +191,7 @@ class MPTH2FileEditStateElementRotate extends MPTH2FileEditState {
             !isMetaPressed &&
             !isShiftPressed) {
           th2FileEditController.moveScaleRotateElementController
-              .flipSelectedElementsVertically();
+              .mirrorSelectedElementsVertically();
         }
       default:
         return;

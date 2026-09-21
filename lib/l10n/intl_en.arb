@@ -763,6 +763,11 @@
     "description": "The description for the toggle smooth option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionToggleVisibilityOption": "Toggle visibility option",
+  "@mpCommandDescriptionToggleVisibilityOption": {
+    "description": "The description for the toggle visibility option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpContextInvalidValueErrorMessage": "Both fields are mandatory",
   "@mpContextInvalidValueErrorMessage": {
     "description": "The error message for invalid context value. Used on: lib/src/widgets/options/mp_context_option_widget.dart",
@@ -2183,24 +2188,24 @@
     "description": "Tooltip for enabling image edit mode from the available images list. Used on: _MPAvailableImagesWidgetState.build",
     "type": "text"
   },
-  "th2FileEditPageFlipElementsHorizontally": "Flip elements horizontally (H)",
-  "@th2FileEditPageFlipElementsHorizontally": {
-    "description": "Tooltip for the flip elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+  "th2FileEditPageMirrorElementsHorizontally": "Mirror elements horizontally (Alt+M)",
+  "@th2FileEditPageMirrorElementsHorizontally": {
+    "description": "Tooltip for the mirror elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageFlipElementsVertically": "Flip elements vertically (V)",
-  "@th2FileEditPageFlipElementsVertically": {
-    "description": "Tooltip for the flip elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+  "th2FileEditPageMirrorElementsVertically": "Mirror elements vertically (Ctrl+M)",
+  "@th2FileEditPageMirrorElementsVertically": {
+    "description": "Tooltip for the mirror elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageFlipImageHorizontally": "Flip image horizontally (H)",
-  "@th2FileEditPageFlipImageHorizontally": {
-    "description": "Tooltip for the flip image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+  "th2FileEditPageMirrorImageHorizontally": "Mirror image horizontally (Alt+M)",
+  "@th2FileEditPageMirrorImageHorizontally": {
+    "description": "Tooltip for the mirror image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageFlipImageVertically": "Flip image vertically (V)",
-  "@th2FileEditPageFlipImageVertically": {
-    "description": "Tooltip for the flip image vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
+  "th2FileEditPageMirrorImageVertically": "Mirror image vertically (Ctrl+M)",
+  "@th2FileEditPageMirrorImageVertically": {
+    "description": "Tooltip for the mirror image vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
   "th2FileEditPageHelpDialogTitle": "TH2 File Edit Help",

@@ -242,6 +242,15 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
               .toggleSelectedLinePointsSmoothOption();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyV:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedElementsVisibilityOption();
+          keyProcessed = true;
+        }
     }
 
     if (keyProcessed) {

@@ -104,30 +104,30 @@ class TH2FileEditNonEmptySelectionContextFABsPanel extends StatelessWidget {
                 ),
                 TH2FileEditStateContextFABButton(
                   context: context,
-                  heroTag: '${heroPrefix}_ctx_flip_elements_horizontally',
+                  heroTag: '${heroPrefix}_ctx_mirror_elements_horizontally',
                   onPressed: isElementTransformsEnabled
                       ? () => th2FileEditController
                             .moveScaleRotateElementController
-                            .flipSelectedElementsHorizontally()
+                            .mirrorSelectedElementsHorizontally()
                       : null,
                   category: TH2FileEditStateContextFABCategory.editTools,
                   icon: Icons.flip,
-                  tooltip:
-                      appLocalizations.th2FileEditPageFlipElementsHorizontally,
+                  tooltip: appLocalizations
+                      .th2FileEditPageMirrorElementsHorizontally,
                 ),
                 TH2FileEditStateContextFABButton(
                   context: context,
-                  heroTag: '${heroPrefix}_ctx_flip_elements_vertically',
+                  heroTag: '${heroPrefix}_ctx_mirror_elements_vertically',
                   onPressed: isElementTransformsEnabled
                       ? () => th2FileEditController
                             .moveScaleRotateElementController
-                            .flipSelectedElementsVertically()
+                            .mirrorSelectedElementsVertically()
                       : null,
                   category: TH2FileEditStateContextFABCategory.editTools,
                   icon: Icons.flip_camera_android,
-                  child: const TH2FileEditVerticalFlipFABIcon(),
+                  child: const TH2FileEditVerticalMirrorFABIcon(),
                   tooltip:
-                      appLocalizations.th2FileEditPageFlipElementsVertically,
+                      appLocalizations.th2FileEditPageMirrorElementsVertically,
                 ),
               ],
             ),

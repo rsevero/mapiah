@@ -484,6 +484,9 @@ class MPTextToUser {
     _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleSmoothOption] =
         localizations.mpCommandDescriptionToggleSmoothOption;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .toggleVisibilityOption] =
+        localizations.mpCommandDescriptionToggleVisibilityOption;
   }
 
   static String getCommandDescription(

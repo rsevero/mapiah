@@ -552,11 +552,30 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
         }
       case LogicalKeyboardKey.keyM:
         if ((isCtrlPressed || isMetaPressed) &&
-            !isAltPressed &&
+            isAltPressed &&
             !isShiftPressed) {
           th2FileEditController.stateController.onButtonPressed(
             MPButtonType.mergeAreas,
           );
+          keyProcessed = true;
+        } else if (isAltPressed &&
+            !isCtrlPressed &&
+            !isMetaPressed &&
+            !isShiftPressed &&
+            th2FileEditController
+                .moveScaleRotateElementController
+                .isElementTransformsEnabled) {
+          th2FileEditController.moveScaleRotateElementController
+              .mirrorSelectedElementsHorizontally();
+          keyProcessed = true;
+        } else if ((isCtrlPressed || isMetaPressed) &&
+            !isAltPressed &&
+            !isShiftPressed &&
+            th2FileEditController
+                .moveScaleRotateElementController
+                .isElementTransformsEnabled) {
+          th2FileEditController.moveScaleRotateElementController
+              .mirrorSelectedElementsVertically();
           keyProcessed = true;
         }
       case LogicalKeyboardKey.keyL:
@@ -581,28 +600,13 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
               .toggleSelectedLinesReverseOption();
           keyProcessed = true;
         }
-      case LogicalKeyboardKey.keyH:
-        if (!isCtrlPressed &&
-            !isMetaPressed &&
-            !isAltPressed &&
-            !isShiftPressed &&
-            th2FileEditController
-                .moveScaleRotateElementController
-                .isElementTransformsEnabled) {
-          th2FileEditController.moveScaleRotateElementController
-              .flipSelectedElementsHorizontally();
-          keyProcessed = true;
-        }
       case LogicalKeyboardKey.keyV:
         if (!isCtrlPressed &&
             !isMetaPressed &&
             !isAltPressed &&
-            !isShiftPressed &&
-            th2FileEditController
-                .moveScaleRotateElementController
-                .isElementTransformsEnabled) {
-          th2FileEditController.moveScaleRotateElementController
-              .flipSelectedElementsVertically();
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedElementsVisibilityOption();
           keyProcessed = true;
         } else if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&

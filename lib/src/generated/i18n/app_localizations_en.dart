@@ -489,6 +489,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionToggleSmoothOption => 'Toggle smooth option';
 
   @override
+  String get mpCommandDescriptionToggleVisibilityOption =>
+      'Toggle visibility option';
+
+  @override
   String get mpContextInvalidValueErrorMessage => 'Both fields are mandatory';
 
   @override
@@ -1438,19 +1442,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageEnableImageEditModeButton => 'Edit image';
 
   @override
-  String get th2FileEditPageFlipElementsHorizontally =>
-      'Flip elements horizontally (H)';
+  String get th2FileEditPageMirrorElementsHorizontally =>
+      'Mirror elements horizontally (Alt+M)';
 
   @override
-  String get th2FileEditPageFlipElementsVertically =>
-      'Flip elements vertically (V)';
+  String get th2FileEditPageMirrorElementsVertically =>
+      'Mirror elements vertically (Ctrl+M)';
 
   @override
-  String get th2FileEditPageFlipImageHorizontally =>
-      'Flip image horizontally (H)';
+  String get th2FileEditPageMirrorImageHorizontally =>
+      'Mirror image horizontally (Alt+M)';
 
   @override
-  String get th2FileEditPageFlipImageVertically => 'Flip image vertically (V)';
+  String get th2FileEditPageMirrorImageVertically =>
+      'Mirror image vertically (Ctrl+M)';
 
   @override
   String get th2FileEditPageHelpDialogTitle => 'TH2 File Edit Help';

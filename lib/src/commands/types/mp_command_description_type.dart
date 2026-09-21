@@ -74,7 +74,8 @@ enum MPCommandDescriptionType {
   splitLinesAtCrossings,
   toggleBorderOption,
   toggleReverseOption,
-  toggleSmoothOption;
+  toggleSmoothOption,
+  toggleVisibilityOption;
 
   static MPCommandDescriptionType getOppositeDescription(
     MPCommandDescriptionType description,

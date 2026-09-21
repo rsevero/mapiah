@@ -1558,6 +1558,65 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 
   @action
+  void toggleSelectedElementsVisibilityOption() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final TH2File th2File = _th2FileEditController.th2File;
+    final List<MPCommand> toggleCommands = [];
+
+    for (final MPSelectedElement selectedElement
+        in selectionController.mpSelectedElementsLogical.values) {
+      final THElement currentElement;
+
+      if (selectedElement is MPSelectedLine) {
+        currentElement = th2File.lineByMPID(selectedElement.mpID);
+      } else if (selectedElement is MPSelectedPoint) {
+        currentElement = th2File.pointByMPID(selectedElement.mpID);
+      } else if (selectedElement is MPSelectedArea) {
+        currentElement = th2File.areaByMPID(selectedElement.mpID);
+      } else {
+        continue;
+      }
+
+      final int elementMPID = currentElement.mpID;
+      final THVisibilityCommandOption? visibilityOffOption =
+          MPCommandOptionAux.isTHVisible(currentElement)
+          ? THVisibilityCommandOption(
+              parentMPID: elementMPID,
+              choice: THOptionChoicesOnOffType.off,
+            )
+          : null;
+      final MPCommand toggleCommand = (visibilityOffOption == null)
+          ? MPRemoveOptionFromElementCommand(
+              optionType: THCommandOptionType.visibility,
+              parentMPID: elementMPID,
+              descriptionType: MPCommandDescriptionType.toggleVisibilityOption,
+            )
+          : MPSetOptionToElementCommand(
+              toOption: visibilityOffOption,
+              descriptionType: MPCommandDescriptionType.toggleVisibilityOption,
+            );
+
+      toggleCommands.add(toggleCommand);
+    }
+
+    if (toggleCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand toggleAllCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: toggleCommands,
+          completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+          descriptionType: MPCommandDescriptionType.toggleVisibilityOption,
+        );
+
+    _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
   void toggleSelectedLinesSmoothOption() {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;

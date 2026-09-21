@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -194,7 +195,7 @@ void main() {
       }
     }
 
-    test('H and V mirror the selected elements when enabled', () async {
+    test('Alt+M and Ctrl+M mirror the selected elements when enabled', () async {
       final TH2FileEditController controller = await loadController();
       final THLine line = pickTransformLine(controller);
 
@@ -209,13 +210,19 @@ void main() {
       final Offset center = startBounds.center;
       final List<Offset> originalPoints = captureLinePoints(controller, line);
 
-      controller.stateController.onKeyDownEvent(
-        const KeyDownEvent(
-          physicalKey: PhysicalKeyboardKey.keyH,
-          logicalKey: LogicalKeyboardKey.keyH,
-          timeStamp: Duration.zero,
-        ),
-      );
+      MPInteractionAux.debugPressedKeysOverride = {LogicalKeyboardKey.altLeft};
+
+      try {
+        controller.stateController.onKeyDownEvent(
+          const KeyDownEvent(
+            physicalKey: PhysicalKeyboardKey.keyM,
+            logicalKey: LogicalKeyboardKey.keyM,
+            timeStamp: Duration.zero,
+          ),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
 
       expectLineMatchesTransformedPoints(
         controller: controller,
@@ -228,13 +235,21 @@ void main() {
 
       controller.undo();
 
-      controller.stateController.onKeyDownEvent(
-        const KeyDownEvent(
-          physicalKey: PhysicalKeyboardKey.keyV,
-          logicalKey: LogicalKeyboardKey.keyV,
-          timeStamp: Duration.zero,
-        ),
-      );
+      MPInteractionAux.debugPressedKeysOverride = {
+        LogicalKeyboardKey.controlLeft,
+      };
+
+      try {
+        controller.stateController.onKeyDownEvent(
+          const KeyDownEvent(
+            physicalKey: PhysicalKeyboardKey.keyM,
+            logicalKey: LogicalKeyboardKey.keyM,
+            timeStamp: Duration.zero,
+          ),
+        );
+      } finally {
+        MPInteractionAux.debugPressedKeysOverride = null;
+      }
 
       expectLineMatchesTransformedPoints(
         controller: controller,

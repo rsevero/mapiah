@@ -111,8 +111,8 @@ Enquanto o modo de transformação da imagem estiver ativo:
 * Arraste a própria imagem para movê-la
 * Arraste qualquer alça preta para redimensioná-la
 * Clique na imagem selecionada para alternar entre o modo mover/redimensionar e o modo de rotação
-* Pressione _H_ para espelhar a imagem horizontalmente
-* Pressione _V_ para espelhar a imagem verticalmente
+* Pressione _Alt+M_ para espelhar a imagem horizontalmente
+* Pressione _Ctrl+M_ para espelhar a imagem verticalmente
 * Use os dois botões de espelhamento mostrados no lado esquerdo do canvas para executar as mesmas ações com o mouse
 * Pressione _Esc_ para sair do modo de transformação da imagem
 
@@ -136,8 +136,8 @@ Os seguintes modificadores podem ser combinados durante o movimento:
 No modo de transformação da imagem, arraste qualquer alça preta para redimensionar a imagem selecionada.
 
 Você também pode espelhar a imagem instantaneamente sem arrastar:
-* Pressione _H_ para negar `xScale`
-* Pressione _V_ para negar `yScale`
+* Pressione _Alt+M_ para negar `xScale`
+* Pressione _Ctrl+M_ para negar `yScale`
 * As ações de espelhamento podem ser desfeitas com _Ctrl+Z_
 
 Modificadores de redimensionamento:
@@ -189,8 +189,8 @@ Se a configuração `TH2Edit_EnableElementTransforms` estiver ativada, a seleç�
 * No modo de rotação de elementos, arraste uma alça de canto da seleção para rotacionar a seleção
 * Mantenha _Ctrl_ pressionado enquanto rotaciona para ajustar o ângulo ao valor configurado
 * Mantenha _Shift_ pressionado enquanto rotaciona para manter o canto oposto fixo
-* Pressione _H_ para espelhar a seleção horizontalmente
-* Pressione _V_ para espelhar a seleção verticalmente
+* Pressione _Alt+M_ para espelhar a seleção horizontalmente
+* Pressione _Ctrl+M_ para espelhar a seleção verticalmente
 
 ### Pontos finais/controle em edição de linha
 Quando um ou mais pontos finais/controle estão selecionados no modo de edição de linha:
@@ -472,7 +472,7 @@ Se não houver extremidades coincidentes, o Mapiah exibe uma mensagem e não alt
 
 ## Mesclar áreas
 
-Pressione _Ctrl+M_ (ou clique no botão **Mesclar áreas**) para mesclar as linhas de borda das áreas selecionadas no menor número possível de linhas fechadas, substituindo as áreas selecionadas por uma única área mesclada.
+Pressione _Ctrl+Alt+M_ (ou clique no botão **Mesclar áreas**) para mesclar as linhas de borda das áreas selecionadas no menor número possível de linhas fechadas, substituindo as áreas selecionadas por uma única área mesclada.
 
 **Quando está disponível:**
 A ação é habilitada quando o número total de linhas de borda distintas entre as áreas selecionadas for dois ou mais. As áreas podem ser selecionadas diretamente, ou indiretamente pela seleção de uma ou mais de suas linhas de borda. Isso cobre dois cenários comuns:

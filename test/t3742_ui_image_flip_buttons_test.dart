@@ -23,13 +23,13 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: image flip buttons', () {
+  group('UI: image mirror buttons', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
     });
 
-    testWidgets('shows image flip buttons and flips the active image', (
+    testWidgets('shows image mirror buttons and mirrors the active image', (
       WidgetTester tester,
     ) async {
       tester.view.physicalSize = const Size(1280, 720);
@@ -65,10 +65,16 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byTooltip('Flip image horizontally (H)'), findsOneWidget);
-      expect(find.byTooltip('Flip image vertically (V)'), findsOneWidget);
+      expect(
+        find.byTooltip('Mirror image horizontally (Alt+M)'),
+        findsOneWidget,
+      );
+      expect(
+        find.byTooltip('Mirror image vertically (Ctrl+M)'),
+        findsOneWidget,
+      );
 
-      await tester.tap(find.byTooltip('Flip image horizontally (H)'));
+      await tester.tap(find.byTooltip('Mirror image horizontally (Alt+M)'));
       await tester.pumpAndSettle();
 
       final MPImageInsertConfig flippedHorizontally =
@@ -85,7 +91,7 @@ void main() {
         closeTo(originalBoundingBox.center.dy, 0.0001),
       );
 
-      await tester.tap(find.byTooltip('Flip image vertically (V)'));
+      await tester.tap(find.byTooltip('Mirror image vertically (Ctrl+M)'));
       await tester.pumpAndSettle();
 
       final MPImageInsertConfig flippedBothAxes =

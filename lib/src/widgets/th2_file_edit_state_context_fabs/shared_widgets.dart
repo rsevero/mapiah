@@ -214,8 +214,8 @@ class TH2FileEditLineSegmentConversionFABRow extends StatelessWidget {
   }
 }
 
-class TH2FileEditVerticalFlipFABIcon extends StatelessWidget {
-  const TH2FileEditVerticalFlipFABIcon({super.key});
+class TH2FileEditVerticalMirrorFABIcon extends StatelessWidget {
+  const TH2FileEditVerticalMirrorFABIcon({super.key});
 
   @override
   Widget build(BuildContext context) {

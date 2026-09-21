@@ -12,6 +12,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Alternar opção de borda da linha                                                              | B                                        |
 | Alternar direção da linha                                                                     | R                                        |
 | Alternar marcas de direção em linhas não selecionadas                                         | Ctrl+Alt+R                               |
+| Alternar opção de visibilidade                                                                | V                                        |
 | Atalhos de teclado                                                                            | Ctrl+K                                   |
 | Clicar em linha de borda de área: alternar seleção das linhas de borda                        | Ctrl+clique                              |
 | Clicar em linha de borda de área: selecionar apenas a área                                    | Ctrl+Alt+clique                          |
@@ -35,10 +36,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Dividir linhas selecionadas nos cruzamentos de linhas                                         | Ctrl+Shift+X                             |
 | Duplicar elementos selecionados                                                               | Ctrl+D                                   |
 | Entrar em editar linha por linha ou segmento de linha                                         | Clique duplo                             |
-| Espelhar imagem horizontalmente                                                               | H                                        |
-| Espelhar imagem verticalmente                                                                 | V                                        |
-| Espelhar elementos selecionados horizontalmente                                               | H                                        |
-| Espelhar elementos selecionados verticalmente                                                 | V                                        |
+| Espelhar imagem / elementos selecionados horizontalmente                                      | Alt+M                                    |
+| Espelhar imagem / elementos selecionados verticalmente                                        | Ctrl+M                                   |
 | Editar nó/linha                                                                               | N                                        |
 | Editar opções (com elementos selecionados)                                                    | O                                        |
 | Localizar e substituir texto em vários arquivos do projeto                                    | Ctrl+Shift+F                             |
@@ -52,7 +51,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Inverter visibilidade de todas as grades                                                      | Ctrl+G                                   |
 | Inverter visibilidade de todas as imagens                                                     | Ctrl+I                                   |
 | Juntar linhas em pontos de início/fim coincidentes                                            | Ctrl+J                                   |
-| Mesclar áreas                                                                                 | Ctrl+M                                   |
+| Mesclar áreas                                                                                 | Ctrl+Alt+M                               |
 | Mover o último nó criado ao desenhar uma linha em 1 pixel de tela                             | Alt+Seta                                 |
 | Mover o último nó criado ao desenhar uma linha em 10 pixels de tela                           | Alt+Shift+Seta                           |
 | Mover o último nó criado ao desenhar uma linha pelo fator de ajuste                           | Seta                                     |

@@ -980,6 +980,12 @@ abstract class AppLocalizations {
   /// **'Toggle smooth option'**
   String get mpCommandDescriptionToggleSmoothOption;
 
+  /// The description for the toggle visibility option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle visibility option'**
+  String get mpCommandDescriptionToggleVisibilityOption;
+
   /// The error message for invalid context value. Used on: lib/src/widgets/options/mp_context_option_widget.dart
   ///
   /// In en, this message translates to:
@@ -2675,29 +2681,29 @@ abstract class AppLocalizations {
   /// **'Edit image'**
   String get th2FileEditPageEnableImageEditModeButton;
 
-  /// Tooltip for the flip elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  /// Tooltip for the mirror elements horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Flip elements horizontally (H)'**
-  String get th2FileEditPageFlipElementsHorizontally;
+  /// **'Mirror elements horizontally (Alt+M)'**
+  String get th2FileEditPageMirrorElementsHorizontally;
 
-  /// Tooltip for the flip elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  /// Tooltip for the mirror elements vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Flip elements vertically (V)'**
-  String get th2FileEditPageFlipElementsVertically;
+  /// **'Mirror elements vertically (Ctrl+M)'**
+  String get th2FileEditPageMirrorElementsVertically;
 
-  /// Tooltip for the flip image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  /// Tooltip for the mirror image horizontally FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Flip image horizontally (H)'**
-  String get th2FileEditPageFlipImageHorizontally;
+  /// **'Mirror image horizontally (Alt+M)'**
+  String get th2FileEditPageMirrorImageHorizontally;
 
-  /// Tooltip for the flip image vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
+  /// Tooltip for the mirror image vertically FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Flip image vertically (V)'**
-  String get th2FileEditPageFlipImageVertically;
+  /// **'Mirror image vertically (Ctrl+M)'**
+  String get th2FileEditPageMirrorImageVertically;
 
   /// The title for the TH2 File Edit help dialog. Used on: _TH2FileEditPageState.build
   ///

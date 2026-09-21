@@ -33,10 +33,6 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Duplicate selected elements                                                      | Ctrl+D                                     |
 | Find and replace text across multiple project files                              | Ctrl+Shift+F                               |
 | Find text in the active text file                                                | Ctrl+F                                     |
-| Flip image horizontally                                                          | H                                          |
-| Flip image vertically                                                            | V                                          |
-| Flip selected elements horizontally                                              | H                                          |
-| Flip selected elements vertically                                                | V                                          |
 | Force option setting on non-supporting types                                     | Ctrl+click on option setting               |
 | Help                                                                             | F1                                         |
 | Hide selected elements / Show all hidden elements                                | Ctrl+H                                     |
@@ -44,7 +40,9 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Keyboard shortcuts                                                               | Ctrl+K                                     |
 | Line or line segment: enter line edit                                            | Double-click                               |
 | Node/line edit                                                                   | N                                          |
-| Merge areas                                                                      | Ctrl+M                                     |
+| Merge areas                                                                      | Ctrl+Alt+M                                 |
+| Mirror selected image / elements horizontally                                    | Alt+M                                      |
+| Mirror selected image / elements vertically                                      | Ctrl+M                                     |
 | Move last created line-drawing node by 1 screen pixel                            | Alt+Arrow                                  |
 | Move last created line-drawing node by 10 screen pixels                          | Alt+Shift+Arrow                            |
 | Move last created line-drawing node by nudge factor                              | Arrow                                      |
@@ -91,6 +89,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Toggle border line option                                                        | B                                          |
 | Toggle direction ticks on non-selected lines                                     | Ctrl+Alt+R                                 |
 | Toggle reverse line option                                                       | R                                          |
+| Toggle visibility option                                                         | V                                          |
 | Undo                                                                             | Ctrl+Z                                     |
 | Zoom 1:1                                                                         | 1                                          |
 | Zoom file                                                                        | 4                                          |

@@ -498,6 +498,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Alternar opção de suavização de linha';
 
   @override
+  String get mpCommandDescriptionToggleVisibilityOption =>
+      'Alternar opção de visibilidade';
+
+  @override
   String get mpContextInvalidValueErrorMessage =>
       'Ambos os campos são obrigatórios';
 
@@ -1454,20 +1458,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageEnableImageEditModeButton => 'Editar imagem';
 
   @override
-  String get th2FileEditPageFlipElementsHorizontally =>
-      'Espelhar elementos horizontalmente (H)';
+  String get th2FileEditPageMirrorElementsHorizontally =>
+      'Espelhar elementos horizontalmente (Alt+M)';
 
   @override
-  String get th2FileEditPageFlipElementsVertically =>
-      'Espelhar elementos verticalmente (V)';
+  String get th2FileEditPageMirrorElementsVertically =>
+      'Espelhar elementos verticalmente (Ctrl+M)';
 
   @override
-  String get th2FileEditPageFlipImageHorizontally =>
-      'Espelhar imagem horizontalmente (H)';
+  String get th2FileEditPageMirrorImageHorizontally =>
+      'Espelhar imagem horizontalmente (Alt+M)';
 
   @override
-  String get th2FileEditPageFlipImageVertically =>
-      'Espelhar imagem verticalmente (V)';
+  String get th2FileEditPageMirrorImageVertically =>
+      'Espelhar imagem verticalmente (Ctrl+M)';
 
   @override
   String get th2FileEditPageHelpDialogTitle =>
