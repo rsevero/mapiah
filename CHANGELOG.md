@@ -4,6 +4,7 @@
 
 ## 0.4.5 - not yet released
 * New features:
+  * Added a `B` keyboard shortcut to toggle the `border` option on selected slope lines, matching the existing `R`/`S` shortcuts for reverse/smooth. Works both when editing a single line and when a non-empty multi-selection is active; non-slope lines in the selection are left untouched.
   * Added the Therion project tree side column in the file editor: a collapsible, resizable panel showing the loaded `thconfig`/`.th`/`.th2`/logical-node hierarchy, with expand/collapse, search filtering, dirty and error status dots, a draggable divider, persisted sidebar width/collapsed state, and an empty-state Open Project action wired to `THProjectController.openProject`. Added `THProjectTreeUIController` for view-only expansion/filter/sidebar state and widget/unit coverage (`test/t3880`–`t3884`).
   * Project-tree default expansion now walks down branch-by-branch until it reaches the shallowest `.th2` file, then opens every branch to that same depth. Projects without a `.th2` file are fully expanded.
   * Clicking a `.th2` file in the project tree now opens or focuses its canvas tab.

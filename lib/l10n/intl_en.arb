@@ -748,6 +748,11 @@
     "description": "The description for the substitute line segments command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
     "type": "text"
   },
+  "mpCommandDescriptionToggleBorderOption": "Toggle border option",
+  "@mpCommandDescriptionToggleBorderOption": {
+    "description": "The description for the toggle border option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",
+    "type": "text"
+  },
   "mpCommandDescriptionToggleReverseOption": "Toggle reverse option",
   "@mpCommandDescriptionToggleReverseOption": {
     "description": "The description for the toggle reverse option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString",

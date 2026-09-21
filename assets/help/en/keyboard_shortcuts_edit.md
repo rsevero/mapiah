@@ -88,6 +88,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Split selected lines at crossings                                                | Ctrl+Shift+X                               |
 | Toggle all grids visibility                                                      | Ctrl+G                                     |
 | Toggle all images visibility                                                     | Ctrl+I                                     |
+| Toggle border line option                                                        | B                                          |
 | Toggle direction ticks on non-selected lines                                     | Ctrl+Alt+R                                 |
 | Toggle reverse line option                                                       | R                                          |
 | Undo                                                                             | Ctrl+Z                                     |

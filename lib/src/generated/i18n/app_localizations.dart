@@ -962,6 +962,12 @@ abstract class AppLocalizations {
   /// **'Substitute line segments'**
   String get mpCommandDescriptionSubstituteLineSegments;
 
+  /// The description for the toggle border option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle border option'**
+  String get mpCommandDescriptionToggleBorderOption;
+
   /// The description for the toggle reverse option command. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

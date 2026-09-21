@@ -480,6 +480,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Substitute line segments';
 
   @override
+  String get mpCommandDescriptionToggleBorderOption => 'Toggle border option';
+
+  @override
   String get mpCommandDescriptionToggleReverseOption => 'Toggle reverse option';
 
   @override

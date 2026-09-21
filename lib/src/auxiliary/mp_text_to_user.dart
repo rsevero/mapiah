@@ -476,6 +476,9 @@ class MPTextToUser {
             .replaceLineSegments] =
         localizations.mpCommandDescriptionSubstituteLineSegments;
     _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .toggleBorderOption] =
+        localizations.mpCommandDescriptionToggleBorderOption;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
             .toggleReverseOption] =
         localizations.mpCommandDescriptionToggleReverseOption;
     _commandDescriptionTypeAsString[MPCommandDescriptionType

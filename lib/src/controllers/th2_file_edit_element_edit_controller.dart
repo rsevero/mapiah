@@ -22,6 +22,7 @@ import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_pla_type_subtype.dart';
+import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
@@ -1493,6 +1494,62 @@ abstract class TH2FileEditElementEditControllerBase with Store {
           commandsList: toggleCommands,
           completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
           descriptionType: MPCommandDescriptionType.toggleReverseOption,
+        );
+
+    _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.triggerSelectedElementsRedraw();
+    _th2FileEditController.triggerEditLineRedraw();
+  }
+
+  @action
+  void toggleSelectedLinesBorderOption() {
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final TH2File th2File = _th2FileEditController.th2File;
+    final List<MPCommand> toggleCommands = [];
+
+    for (final MPSelectedElement selectedElement
+        in selectionController.mpSelectedElementsLogical.values) {
+      if (selectedElement is! MPSelectedLine) {
+        continue;
+      }
+      final int lineMPID = selectedElement.mpID;
+      final THLine currentLine = th2File.lineByMPID(lineMPID);
+
+      if (currentLine.lineType != THLineType.slope) {
+        continue;
+      }
+
+      final THBorderCommandOption? borderOption =
+          MPCommandOptionAux.isSlopeBorderOn(currentLine)
+          ? null
+          : THBorderCommandOption(
+              parentMPID: lineMPID,
+              choice: THOptionChoicesOnOffType.on,
+            );
+      final MPCommand toggleCommand = (borderOption == null)
+          ? MPRemoveOptionFromElementCommand(
+              optionType: THCommandOptionType.border,
+              parentMPID: lineMPID,
+              descriptionType: MPCommandDescriptionType.toggleBorderOption,
+            )
+          : MPSetOptionToElementCommand(
+              toOption: borderOption,
+              descriptionType: MPCommandDescriptionType.toggleBorderOption,
+            );
+
+      toggleCommands.add(toggleCommand);
+    }
+
+    if (toggleCommands.isEmpty) {
+      return;
+    }
+
+    final MPCommand toggleAllCommand =
+        MPCommandFactory.multipleCommandsFromList(
+          commandsList: toggleCommands,
+          completionType: MPMultipleElementsCommandCompletionType.optionsEdited,
+          descriptionType: MPCommandDescriptionType.toggleBorderOption,
         );
 
     _th2FileEditController.execute(toggleAllCommand);

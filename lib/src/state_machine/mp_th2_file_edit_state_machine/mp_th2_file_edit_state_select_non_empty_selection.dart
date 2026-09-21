@@ -509,6 +509,15 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
           onSelectAll();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyB:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedLinesBorderOption();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyC:
         if ((isCtrlPressed || isMetaPressed) &&
             !isAltPressed &&

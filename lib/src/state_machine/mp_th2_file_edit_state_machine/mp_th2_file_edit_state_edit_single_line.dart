@@ -192,6 +192,15 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
           onSelectAll();
           keyProcessed = true;
         }
+      case LogicalKeyboardKey.keyB:
+        if (!isCtrlPressed &&
+            !isMetaPressed &&
+            !isAltPressed &&
+            !isShiftPressed) {
+          th2FileEditController.elementEditController
+              .toggleSelectedLinesBorderOption();
+          keyProcessed = true;
+        }
       case LogicalKeyboardKey.keyJ:
         if (!isCtrlPressed && !isMetaPressed && !isAltPressed) {
           if (th2FileEditController.hasSelectedNonStartEndPoints) {

@@ -486,6 +486,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Substituir segmentos de linha';
 
   @override
+  String get mpCommandDescriptionToggleBorderOption =>
+      'Alternar opção de borda de linha';
+
+  @override
   String get mpCommandDescriptionToggleReverseOption =>
       'Alternar opção de reversão de linha';
 
