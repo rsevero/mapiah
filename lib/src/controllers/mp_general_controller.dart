@@ -105,6 +105,19 @@ abstract class MPGeneralControllerBase with Store {
     }
 
     _activeTabIndex = _openFileOrder.indexOf(normalizedFilename);
+
+    /// Give keyboard focus to the newly active tab directly: the
+    /// `activeTabIndex` reaction in `TH2FileTabsPage` only fires on a
+    /// value change, which doesn't happen when this is the first tab ever
+    /// opened in a session (index stays `0`), leaving no keyboard focus
+    /// request behind and every shortcut dead until a tab switch occurs.
+    if (isTH2Tab(normalizedFilename)) {
+      _t2hFileEditControllers[normalizedFilename]?.th2FileFocusNode
+          .requestFocus();
+    } else {
+      _textEditorControllers[normalizedFilename]?.textEditorFocusNode
+          .requestFocus();
+    }
   }
 
   @action
