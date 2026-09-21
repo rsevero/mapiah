@@ -33,6 +33,9 @@ base class _FakePlatformFile extends PlatformFile {
   XFile get xFile => XFile(uri.toFilePath(), name: name);
 
   @override
+  int? lengthSync() => 0;
+
+  @override
   Future<int> length() async => 0;
 
   @override
