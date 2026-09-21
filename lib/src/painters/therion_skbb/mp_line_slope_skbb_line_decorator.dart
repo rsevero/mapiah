@@ -122,7 +122,9 @@ class MPLineSlopeSKBBLineDecorator extends MPLineDecorator {
         angle = (90.0 - azimuth) * mp1DegreeInRads;
         anyExplicitDirection = true;
       } else if ((i == 0) || (i == (pointCount - 1))) {
-        angle = tangentAngleAt(vertexArc[i]) + (math.pi / 2);
+        angle =
+            tangentAngleAt(vertexArc[i]) +
+            (isReversed ? -(math.pi / 2) : (math.pi / 2));
       }
 
       if (angle != null) {
@@ -201,7 +203,8 @@ class MPLineSlopeSKBBLineDecorator extends MPLineDecorator {
       if (tangent != null) {
         final double angle = anyExplicitDirection
             ? interpolate(directionArc, directionAngle, clampedDistance)
-            : (tangentAngleAt(clampedDistance) + (math.pi / 2));
+            : (tangentAngleAt(clampedDistance) +
+                  (isReversed ? -(math.pi / 2) : (math.pi / 2)));
         final double length =
             interpolate(lengthArc, lengthValue, clampedDistance) *
             (shortTick ? 0.333 : 1.0);

@@ -34,6 +34,7 @@ class MPMoonmilkLineDecorator extends MPLineDecorator {
       step: mpTherionUISMoonmilkLineStepUnits * u,
       angleOffsetDegrees: mpTherionUISMoonmilkLineAngleOffsetDegrees,
       handleLengthFactor: mpTherionUISMoonmilkLineHandleLengthFactor,
+      isReversed: isReversed,
     );
 
     canvas.drawPath(

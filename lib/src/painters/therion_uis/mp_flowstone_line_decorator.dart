@@ -33,6 +33,7 @@ class MPFlowstoneLineDecorator extends MPLineDecorator {
       sourcePath: path,
       step: 0.7 * u,
       angleOffsetDegrees: 60,
+      isReversed: isReversed,
     );
 
     canvas.drawPath(

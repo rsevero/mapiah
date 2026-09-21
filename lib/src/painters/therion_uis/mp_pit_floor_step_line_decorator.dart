@@ -30,6 +30,7 @@ class MPPitFloorStepLineDecorator extends MPLineDecorator {
   }) {
     final double u = symbolUnit.canvasValue;
     final Path ticks = Path();
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     MPPathMetricWalker.walk(
       path: path,
@@ -48,7 +49,8 @@ class MPPitFloorStepLineDecorator extends MPLineDecorator {
         final Offset position = sample.tangent.position;
         final Offset end =
             position +
-            (perpendicular * (mpTherionUISPitFloorStepTickLengthUnits * u));
+            (perpendicular *
+                (sideSign * mpTherionUISPitFloorStepTickLengthUnits * u));
 
         ticks
           ..moveTo(position.dx, position.dy)

@@ -42,6 +42,7 @@ class MPPitAUTLineDecorator extends MPLineDecorator {
       path: path,
       color: color,
       u: u,
+      isReversed: isReversed,
     );
 
     canvas.drawPath(
@@ -60,7 +61,9 @@ class MPPitAUTLineDecorator extends MPLineDecorator {
     required Path path,
     required Paint color,
     required double u,
+    bool isReversed = false,
   }) {
+    final double sideSign = isReversed ? -1.0 : 1.0;
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
     if (metrics.isEmpty) {
@@ -98,7 +101,8 @@ class MPPitAUTLineDecorator extends MPLineDecorator {
       final Offset unit = midTangent.vector / tangentLength;
       final Offset perpendicular = Offset(-unit.dy, unit.dx);
       final Offset apex =
-          midTangent.position + (perpendicular * (adjustedStep / 2));
+          midTangent.position +
+          (perpendicular * (sideSign * adjustedStep / 2));
       final Path triangle = metric.extractPath(d1, d2);
 
       triangle

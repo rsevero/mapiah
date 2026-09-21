@@ -47,6 +47,7 @@ class MPOverhangSKBBLineDecorator extends MPLineDecorator {
     final int segments = math.max(1, (length / step).round());
     final double adjustedStep = length / segments;
     final Paint fill = Paint.from(color)..style = PaintingStyle.fill;
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     for (int index = 0; index < segments; index++) {
       final double d1 = (adjustedStep * index).clamp(0, length);
@@ -66,7 +67,8 @@ class MPOverhangSKBBLineDecorator extends MPLineDecorator {
 
       final Offset unit = midTangent.vector / tangentLength;
       final Offset perpendicular = Offset(-unit.dy, unit.dx);
-      final Offset apex = midTangent.position + (perpendicular * (0.3 * u));
+      final Offset apex =
+          midTangent.position + (perpendicular * (sideSign * 0.3 * u));
       final Path triangle = metric.extractPath(d1, d2);
 
       triangle

@@ -39,12 +39,16 @@ abstract final class MPDirectionalCurveAux {
     required double step,
     required double angleOffsetDegrees,
     double handleLengthFactor = 1 / 3,
+    bool isReversed = false,
   }) {
     assert(step > 0);
     assert(handleLengthFactor > 0);
 
     final Path result = Path();
-    final double angleOffset = angleOffsetDegrees * math.pi / 180;
+    final double angleOffset =
+        (isReversed ? -angleOffsetDegrees : angleOffsetDegrees) *
+        math.pi /
+        180;
 
     for (final PathMetric metric in sourcePath.computeMetrics()) {
       final double length = metric.length;

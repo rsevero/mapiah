@@ -35,6 +35,7 @@ class MPWallIceAUTLineDecorator extends MPLineDecorator {
     final Paint strokePaint = Paint.from(color)
       ..style = PaintingStyle.stroke
       ..strokeWidth = mpTherionPenC * u;
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
@@ -48,7 +49,7 @@ class MPWallIceAUTLineDecorator extends MPLineDecorator {
         }
 
         final Offset unit = tangent / tangentLength;
-        final Offset outward = Offset(unit.dy, -unit.dx);
+        final Offset outward = Offset(unit.dy, -unit.dx) * sideSign;
         final Offset along = unit;
         final Offset center = position + (outward * (0.25 * u));
 

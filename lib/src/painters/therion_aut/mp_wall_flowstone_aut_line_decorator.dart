@@ -38,6 +38,7 @@ class MPWallFlowstoneAUTLineDecorator extends MPLineDecorator {
     for (final Path bump in MPWallMoonmilkAUTLineDecorator.buildBumps(
       path: path,
       u: u,
+      isReversed: isReversed,
     )) {
       canvas.drawPath(bump, strokePaint);
 

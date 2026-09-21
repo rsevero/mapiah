@@ -35,6 +35,7 @@ class MPWallSandSKBBLineDecorator extends MPLineDecorator {
     final MPSeededRandom random = MPSeededRandom(mpID: mpID, salt: 1);
     final double dotRadius = 0.5 * mpTherionPenB * u;
     final Paint dotPaint = Paint.from(color)..style = PaintingStyle.fill;
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
@@ -49,7 +50,8 @@ class MPWallSandSKBBLineDecorator extends MPLineDecorator {
 
         final Offset unit = tangent / tangentLength;
         final Offset outward = Offset(unit.dy, -unit.dx);
-        final Offset dot = position + (outward * (random.nextDouble() * 0.4 * u));
+        final Offset dot =
+            position + (outward * (sideSign * random.nextDouble() * 0.4 * u));
 
         canvas.drawCircle(dot, dotRadius, dotPaint);
       },

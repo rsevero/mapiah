@@ -44,7 +44,8 @@ class MPWallPitAUTLineDecorator extends MPLineDecorator {
         ..strokeWidth = mpTherionPenA * u,
     );
 
-    final Path? innerPath = _buildOffsetPath(path, 0.125 * u);
+    final double sideSign = isReversed ? -1.0 : 1.0;
+    final Path? innerPath = _buildOffsetPath(path, 0.125 * u, sideSign);
 
     if (innerPath == null) {
       return;
@@ -57,13 +58,19 @@ class MPWallPitAUTLineDecorator extends MPLineDecorator {
         ..strokeWidth = mpTherionPenC * u,
     );
 
-    _drawTriangles(canvas: canvas, path: innerPath, color: color, u: u);
+    _drawTriangles(
+      canvas: canvas,
+      path: innerPath,
+      color: color,
+      u: u,
+      sideSign: sideSign,
+    );
   }
 
   /// Samples [path] and offsets every sample by [offset] toward the pit
-  /// side (tangent rotated +90 degrees), i.e. the same side the triangle
-  /// apexes point to.
-  static Path? _buildOffsetPath(Path path, double offset) {
+  /// side (tangent rotated +90 degrees, or -90 when [sideSign] is -1 for a
+  /// reversed line), i.e. the same side the triangle apexes point to.
+  static Path? _buildOffsetPath(Path path, double offset, double sideSign) {
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
     if (metrics.isEmpty) {
@@ -95,7 +102,7 @@ class MPWallPitAUTLineDecorator extends MPLineDecorator {
       }
 
       final Offset unit = tangent.vector / tangentLength;
-      final Offset side = Offset(-unit.dy, unit.dx);
+      final Offset side = Offset(-unit.dy, unit.dx) * sideSign;
       final Offset point = tangent.position + (side * offset);
 
       if (!started) {
@@ -114,6 +121,7 @@ class MPWallPitAUTLineDecorator extends MPLineDecorator {
     required Path path,
     required Paint color,
     required double u,
+    required double sideSign,
   }) {
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
@@ -159,7 +167,7 @@ class MPWallPitAUTLineDecorator extends MPLineDecorator {
       }
 
       final Offset unit = midTangent.vector / tangentLength;
-      final Offset side = Offset(-unit.dy, unit.dx);
+      final Offset side = Offset(-unit.dy, unit.dx) * sideSign;
       final Offset apex = midTangent.position + (side * height);
       final Path triangle = metric.extractPath(d1, d2)
         ..lineTo(apex.dx, apex.dy)

@@ -40,6 +40,7 @@ abstract class MPSmallTLineDecorator extends MPLineDecorator {
   }) {
     final double u = symbolUnit.canvasValue;
     final Path smallTs = Path();
+    final double effectiveSideSign = isReversed ? -sideSign : sideSign;
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
@@ -52,7 +53,7 @@ abstract class MPSmallTLineDecorator extends MPLineDecorator {
           tangent: tangent,
           adjustedStep: adjustedStep,
           u: u,
-          sideSign: sideSign,
+          sideSign: effectiveSideSign,
         );
       },
     );

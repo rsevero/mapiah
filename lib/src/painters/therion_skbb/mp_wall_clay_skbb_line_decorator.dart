@@ -37,6 +37,7 @@ class MPWallClaySKBBLineDecorator extends MPLineDecorator {
     final Paint strokePaint = Paint.from(color)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.05 * u;
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     MPLineTickAux.walkSegmentMidpoints(
       path: path,
@@ -51,7 +52,7 @@ class MPWallClaySKBBLineDecorator extends MPLineDecorator {
 
         final Offset unit = tangent / tangentLength;
         final Offset outward = Offset(unit.dy, -unit.dx);
-        final Offset center = position + (outward * (0.25 * u));
+        final Offset center = position + (outward * (sideSign * 0.25 * u));
 
         canvas.save();
         canvas.translate(center.dx, center.dy);

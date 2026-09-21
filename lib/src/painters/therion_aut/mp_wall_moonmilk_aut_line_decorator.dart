@@ -37,7 +37,11 @@ class MPWallMoonmilkAUTLineDecorator extends MPLineDecorator {
       ..style = PaintingStyle.stroke
       ..strokeWidth = mpTherionPenC * u;
 
-    for (final Path bump in buildBumps(path: path, u: u)) {
+    for (final Path bump in buildBumps(
+      path: path,
+      u: u,
+      isReversed: isReversed,
+    )) {
       canvas.drawPath(bump, strokePaint);
     }
 
@@ -56,7 +60,12 @@ class MPWallMoonmilkAUTLineDecorator extends MPLineDecorator {
   static const double _semicircleHandleFactor = 0.5523;
 
   /// Shared with [MPWallFlowstoneAUTLineDecorator].
-  static List<Path> buildBumps({required Path path, required double u}) {
+  static List<Path> buildBumps({
+    required Path path,
+    required double u,
+    bool isReversed = false,
+  }) {
+    final double bulgeSign = isReversed ? -1.0 : 1.0;
     final List<PathMetric> metrics = path.computeMetrics().toList();
 
     if (metrics.isEmpty) {
@@ -108,8 +117,8 @@ class MPWallMoonmilkAUTLineDecorator extends MPLineDecorator {
         MPDirectionalCurveAux.buildCurvePath(
           start: tangent1.position,
           end: tangent2.position,
-          startDirectionDegrees: (angle1 * 180 / math.pi) + 90,
-          endDirectionDegrees: (angle2 * 180 / math.pi) - 90,
+          startDirectionDegrees: (angle1 * 180 / math.pi) + (bulgeSign * 90),
+          endDirectionDegrees: (angle2 * 180 / math.pi) - (bulgeSign * 90),
           handleLengthFactor: _semicircleHandleFactor,
         ),
       );

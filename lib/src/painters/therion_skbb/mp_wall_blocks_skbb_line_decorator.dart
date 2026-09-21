@@ -54,6 +54,7 @@ class MPWallBlocksSKBBLineDecorator extends MPLineDecorator {
     final Paint strokePaint = Paint.from(color)
       ..style = PaintingStyle.stroke
       ..strokeWidth = mpTherionPenA * u;
+    final double sideSign = isReversed ? -1.0 : 1.0;
 
     for (int index = 0; index < segments; index++) {
       final double segmentStart = adjustedStep * index;
@@ -86,8 +87,8 @@ class MPWallBlocksSKBBLineDecorator extends MPLineDecorator {
 
       final Offset unit1 = tangent1.vector / tangentLength1;
       final Offset unit2 = tangent2.vector / tangentLength2;
-      final Offset outward1 = Offset(unit1.dy, -unit1.dx);
-      final Offset outward2 = Offset(unit2.dy, -unit2.dx);
+      final Offset outward1 = Offset(unit1.dy, -unit1.dx) * sideSign;
+      final Offset outward2 = Offset(unit2.dy, -unit2.dx) * sideSign;
       final Offset end1 =
           tangent1.position +
           (outward1 * (0.4 * u)) +
