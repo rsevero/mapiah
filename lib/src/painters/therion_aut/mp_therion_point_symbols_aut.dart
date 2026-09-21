@@ -63,6 +63,7 @@ abstract final class MPTherionPointSymbolsAUT {
     MPTherionPointSymbol.stalactiteAUT: _drawStalactiteAUT,
     MPTherionPointSymbol.stalagmiteAUT: _drawStalagmiteAUT,
     MPTherionPointSymbol.stationTemporaryAUT: _drawStationTemporaryAUT,
+    MPTherionPointSymbol.stationFixedASF: _drawStationFixedASF,
     MPTherionPointSymbol.waterAUT: _drawWaterAUT,
   };
 
@@ -679,6 +680,51 @@ abstract final class MPTherionPointSymbolsAUT {
           Offset.zero,
           0.075,
           _withPenWidth(paint.border!, mpTherionPenD),
+        );
+      },
+    );
+  }
+
+  /// `p_station_fixed_ASF`: `pickup PenD; z:=(0,.2u);` then `thclean` /
+  /// `thdraw` of the triangle `z -- (z rotated 120) -- (z rotated 240) --
+  /// cycle`, then `thdraw origin;` — a background-cleared equilateral
+  /// triangle with one vertex up, circumradius `.2u`, `PenD` width, plus a
+  /// centre dot.
+  /// AUT reaches this via `let p_station_fixed_AUT =
+  /// p_station_painted_AUT = p_station_fixed_ASF`, so `station:fixed` and
+  /// `station:painted` both render this way under `symbol-set AUT`.
+  static void _drawStationFixedASF(
+    Canvas canvas,
+    Offset position,
+    double u,
+    MPTherionSymbolPaint paint,
+  ) {
+    // MetaPost `z rotated 120 / 240` of `(0, .2)`, with the y axis negated
+    // for Mapiah's Y-down canvas.
+    const double side = 0.17320508; // .2 * sin(120°)
+    final Path triangle = Path()
+      ..moveTo(0, -0.2)
+      ..lineTo(-side, 0.1)
+      ..lineTo(side, 0.1)
+      ..close();
+
+    MPSymbolTransform.draw(
+      canvas: canvas,
+      position: position,
+      rotation: 0.0,
+      scale: u,
+      drawUnitSymbol: () {
+        MPThClean.drawPath(
+          canvas: canvas,
+          path: triangle,
+          backgroundColor: THPaint.thPaintWhiteBackground.color,
+        );
+        final Paint pen = _withPenWidth(paint.border!, mpTherionPenD);
+        canvas.drawPath(triangle, pen);
+        canvas.drawCircle(
+          Offset.zero,
+          mpTherionPenD / 2,
+          Paint.from(pen)..style = PaintingStyle.fill,
         );
       },
     );

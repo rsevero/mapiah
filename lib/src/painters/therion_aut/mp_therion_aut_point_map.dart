@@ -44,17 +44,21 @@ MPTherionPointSymbol? getTherionAUTPointSymbol({
   required String subtype,
 }) {
   if (pointType == THPointType.station) {
-    // `p_station_temporary_AUT` is AUT's only own station macro;
-    // `p_station_painted_AUT`/`p_station_fixed_AUT` are both `let`-aliased
-    // straight to the unported `p_station_fixed_ASF`, so they fall
-    // through instead (to `thTrans.mp`'s SKBB/ASF default). Bare
+    // AUT defines `p_station_temporary_AUT` (a plain circle) as its only
+    // own station macro, and `let`-aliases `p_station_painted_AUT` and
+    // `p_station_fixed_AUT` both straight to `p_station_fixed_ASF` (a
+    // centre-dotted triangle), ported here as `stationFixedASF`. Bare
     // `station` carries the "temporary" mark by default (see
     // `MPTherionPointSymbolsSKBB`'s station doc comment), so it and the
-    // explicit `temporary` subtype both resolve here.
+    // explicit `temporary` subtype resolve to the circle. `natural` has
+    // no AUT override and falls through to `thTrans.mp`'s ASF default.
     switch (subtype) {
       case mpNoSubtypeID:
       case 'temporary':
         return MPTherionPointSymbol.stationTemporaryAUT;
+      case 'painted':
+      case 'fixed':
+        return MPTherionPointSymbol.stationFixedASF;
       default:
         return null;
     }

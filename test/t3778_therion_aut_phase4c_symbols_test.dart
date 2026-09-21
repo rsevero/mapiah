@@ -73,9 +73,10 @@ void main() {
     });
 
     test(
-      'station/station:temporary resolve to the AUT circle, while '
-      'station:painted/fixed/natural fall through (aliased to the '
-      'unported p_station_fixed_ASF)',
+      'station/station:temporary resolve to the AUT circle, '
+      'station:painted/fixed to the ASF centre-dotted triangle '
+      '(both let-aliased to p_station_fixed_ASF), while station:natural '
+      'falls through',
       () {
         for (final String subtype in [mpNoSubtypeID, 'temporary']) {
           expect(
@@ -88,16 +89,25 @@ void main() {
           );
         }
 
-        for (final String subtype in ['painted', 'fixed', 'natural']) {
+        for (final String subtype in ['painted', 'fixed']) {
           expect(
             getTherionAUTPointSymbol(
               pointType: THPointType.station,
               subtype: subtype,
             ),
-            isNull,
-            reason: 'station:$subtype has no AUT-specific override',
+            MPTherionPointSymbol.stationFixedASF,
+            reason: 'station:$subtype should resolve to p_station_fixed_ASF',
           );
         }
+
+        expect(
+          getTherionAUTPointSymbol(
+            pointType: THPointType.station,
+            subtype: 'natural',
+          ),
+          isNull,
+          reason: 'station:natural has no AUT-specific override',
+        );
       },
     );
 
@@ -108,6 +118,7 @@ void main() {
       for (final MPTherionPointSymbol symbol in [
         ...therionAUTPointSymbols.values,
         MPTherionPointSymbol.stationTemporaryAUT,
+        MPTherionPointSymbol.stationFixedASF,
       ]) {
         final MPTherionSymbolPaint paint = mpTherionSymbolPaints[symbol]!;
         final drawMethod = getTherionPointDrawMethod(symbol);

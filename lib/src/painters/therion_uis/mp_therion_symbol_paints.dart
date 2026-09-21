@@ -312,6 +312,9 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
   MPTherionPointSymbol.stationTemporaryAUT: MPTherionSymbolPaint(
     border: THPaint.thPaint4,
   ),
+  MPTherionPointSymbol.stationFixedASF: MPTherionSymbolPaint(
+    border: THPaint.thPaint4,
+  ),
   MPTherionPointSymbol.waterAUT: MPTherionSymbolPaint(
     border: THPaint.thPaint3,
     fill: THPaint.thPaint1003,

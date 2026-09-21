@@ -103,5 +103,8 @@ enum MPTherionPointSymbol {
   stalactiteAUT,
   stalagmiteAUT,
   stationTemporaryAUT,
+  // `p_station_fixed_ASF`, reached via AUT's `let p_station_fixed_AUT =
+  // p_station_painted_AUT = p_station_fixed_ASF` aliases.
+  stationFixedASF,
   waterAUT,
 }
